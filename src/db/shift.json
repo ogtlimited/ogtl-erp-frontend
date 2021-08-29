@@ -1,0 +1,71 @@
+[{
+    "id": 1,
+    "shift_name": "Training",
+    "start_time": "5:07 PM",
+    "end_time": "2:54 AM",
+    "break_time": "8:25 AM",
+    "status": "Active"
+  }, {
+    "id": 2,
+    "shift_name": "Business Development",
+    "start_time": "4:08 PM",
+    "end_time": "11:52 AM",
+    "break_time": "12:32 PM",
+    "status": "Active"
+  }, {
+    "id": 3,
+    "shift_name": "Marketing",
+    "start_time": "12:25 AM",
+    "end_time": "7:51 PM",
+    "break_time": "2:42 PM",
+    "status": "Active"
+  }, {
+    "id": 4,
+    "shift_name": "Support",
+    "start_time": "8:40 PM",
+    "end_time": "3:08 AM",
+    "break_time": "6:16 PM",
+    "status": "Active"
+  }, {
+    "id": 5,
+    "shift_name": "Accounting",
+    "start_time": "11:33 AM",
+    "end_time": "4:06 PM",
+    "break_time": "10:33 AM",
+    "status": "Active"
+  }, {
+    "id": 6,
+    "shift_name": "Training",
+    "start_time": "4:14 AM",
+    "end_time": "12:31 PM",
+    "break_time": "8:48 AM",
+    "status": "Active"
+  }, {
+    "id": 7,
+    "shift_name": "Sales",
+    "start_time": "9:50 PM",
+    "end_time": "1:10 AM",
+    "break_time": "6:12 PM",
+    "status": "Active"
+  }, {
+    "id": 8,
+    "shift_name": "Training",
+    "start_time": "5:06 AM",
+    "end_time": "7:05 PM",
+    "break_time": "5:36 PM",
+    "status": "Active"
+  }, {
+    "id": 9,
+    "shift_name": "Business Development",
+    "start_time": "10:00 PM",
+    "end_time": "12:25 PM",
+    "break_time": "5:09 AM",
+    "status": "Active"
+  }, {
+    "id": 10,
+    "shift_name": "Legal",
+    "start_time": "3:16 AM",
+    "end_time": "2:02 PM",
+    "break_time": "3:43 PM",
+    "status": "Active"
+  }]

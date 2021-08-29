@@ -1,0 +1,55 @@
+/* .slimscollbar-style {
+  background: rgb(204, 204, 204);
+  width: 7px;
+  position: absolute;
+  top: 0px;
+  opacity: 0.4;
+  display: block;
+  border-radius: 7px;
+  z-index: 99;
+  right: 1px;
+  height: 148.547px;
+}
+.slimscollRail-style {
+  width: 7px;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  display: none;
+  border-radius: 7px;
+  background: rgb(51, 51, 51);
+  opacity: 0.2;
+  z-index: 90;
+  right: 1px;
+}
+.slimScrollDiv-style {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 880px;
+}
+.slimScroll-style {
+    overflow: hidden; 
+    width: 100%;
+    height: 880px;
+} */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: grey; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: grey; 
+}

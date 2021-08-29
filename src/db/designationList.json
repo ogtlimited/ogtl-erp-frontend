@@ -1,0 +1,41 @@
+[{
+    "id": 1,
+    "department_name": "Legal",
+    "designations": "Executive Secretary"
+  }, {
+    "id": 2,
+    "department_name": "Research and Development",
+    "designations": "Physical Therapy Assistant"
+  }, {
+    "id": 3,
+    "department_name": "Human Resources",
+    "designations": "Marketing Manager"
+  }, {
+    "id": 4,
+    "department_name": "Support",
+    "designations": "Structural Engineer"
+  }, {
+    "id": 5,
+    "department_name": "Support",
+    "designations": "Speech Pathologist"
+  }, {
+    "id": 6,
+    "department_name": "Engineering",
+    "designations": "Sales Associate"
+  }, {
+    "id": 7,
+    "department_name": "Engineering",
+    "designations": "Associate Professor"
+  }, {
+    "id": 8,
+    "department_name": "Training",
+    "designations": "Research Assistant IV"
+  }, {
+    "id": 9,
+    "department_name": "Research and Development",
+    "designations": "Social Worker"
+  }, {
+    "id": 10,
+    "department_name": "Support",
+    "designations": "Data Coordiator"
+  }]

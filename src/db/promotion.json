@@ -1,0 +1,71 @@
+[{
+    "id": 1,
+    "employee_name": "Alicea Pressey",
+    "department": "Engineering",
+    "promotion_from": "Safety Technician IV",
+    "promotion_to": "Recruiting Manager",
+    "date": "10/28/2020"
+  }, {
+    "id": 2,
+    "employee_name": "Jennilee Radwell",
+    "department": "Legal",
+    "promotion_from": "Director of Sales",
+    "promotion_to": "VP Quality Control",
+    "date": "8/16/2021"
+  }, {
+    "id": 3,
+    "employee_name": "Valera Wards",
+    "department": "Marketing",
+    "promotion_from": "Help Desk Technician",
+    "promotion_to": "Web Developer II",
+    "date": "3/4/2021"
+  }, {
+    "id": 4,
+    "employee_name": "Jorie Vere",
+    "department": "Accounting",
+    "promotion_from": "Editor",
+    "promotion_to": "General Manager",
+    "date": "3/17/2021"
+  }, {
+    "id": 5,
+    "employee_name": "Leroy Gilbertson",
+    "department": "Services",
+    "promotion_from": "Research Associate",
+    "promotion_to": "Database Administrator III",
+    "date": "3/8/2021"
+  }, {
+    "id": 6,
+    "employee_name": "Kizzie Annear",
+    "department": "Product Management",
+    "promotion_from": "Director of Sales",
+    "promotion_to": "Chief Design Engineer",
+    "date": "4/21/2021"
+  }, {
+    "id": 7,
+    "employee_name": "Giorgia MacCarter",
+    "department": "Product Management",
+    "promotion_from": "Payment Adjustment Coordinator",
+    "promotion_to": "Technical Writer",
+    "date": "3/20/2021"
+  }, {
+    "id": 8,
+    "employee_name": "Vivianne Carlett",
+    "department": "Product Management",
+    "promotion_from": "Payment Adjustment Coordinator",
+    "promotion_to": "Occupational Therapist",
+    "date": "6/29/2021"
+  }, {
+    "id": 9,
+    "employee_name": "Bell Rapp",
+    "department": "Accounting",
+    "promotion_from": "Assistant Professor",
+    "promotion_to": "Recruiter",
+    "date": "9/13/2020"
+  }, {
+    "id": 10,
+    "employee_name": "Cobby Shekle",
+    "department": "Accounting",
+    "promotion_from": "Budget/Accounting Analyst I",
+    "promotion_to": "Computer Systems Analyst I",
+    "date": "2/14/2021"
+  }]

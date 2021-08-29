@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect} from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import Header from "./components/Misc/Header";
+import Sidebar from "./components/Misc/Sidebar";
+import AdminLayout from "./layouts/Admin";
+import AuthLayout from "./layouts/Auth";
+import './assets/script'
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main-wrapper">
+      <BrowserRouter>
+      <Switch>
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/employees" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+        <Redirect from="/" to="/admin/index" />
+      </Switch>
+    </BrowserRouter>
+   
     </div>
   );
 }

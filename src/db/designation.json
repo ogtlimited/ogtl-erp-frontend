@@ -1,0 +1,86 @@
+[
+    {
+        "value": "All",
+        "label": "All"
+    },
+    {
+        "value": "Accounts - OGLS",
+        "label": "Accounts - OGLS"
+    },
+    {
+        "value": "Marketing - OGLS",
+        "label": "Marketing - OGLS"
+    },
+    {
+        "value": "Sales - OGLS",
+        "label": "Sales - OGLS"
+    },
+    {
+        "value": "Purchase - OGLS",
+        "label": "Purchase - OGLS"
+    },
+    {
+        "value": "Operations - OGLS",
+        "label": "Operations - OGLS"
+    },
+    {
+        "value": "Production - OGLS",
+        "label": "Production - OGLS"
+    },
+    {
+        "value": "Dispatch - OGLS",
+        "label": "Dispatch - OGLS"
+    },
+    {
+        "value": "Customer Service - OGLS",
+        "label": "Customer Service - OGLS"
+    },
+    {
+        "value": "Human Resources - OGLS",
+        "label": "Human Resources - OGLS"
+    },
+    {
+        "value": "IT - OGLS",
+        "label": "IT - OGLS"
+    },
+    {
+        "value": "Legal - OGLS",
+        "label": "Legal - OGLS"
+    },
+    {
+        "value": "Management - OGLS",
+        "label": "Management - OGLS"
+    },
+    {
+        "value": "Quality Management - OGLS",
+        "label": "Quality Management - OGLS"
+    },
+    {
+        "value": "Research & Development - OGLS",
+        "label": "Research & Development - OGLS"
+    },
+    {
+        "value": "Software Development - OGLS",
+        "label": "Software Development - OGLS"
+    },
+    {
+        "value": "Medical Record - OGLS",
+        "label": "Medical Record - OGLS"
+    },
+    {
+        "value": "PreQual - OGLS",
+        "label": "PreQual - OGLS"
+    },
+    {
+        "value": "Admin -OGLS",
+        "label": "Admin -OGLS"
+    },
+    {
+        "value": "Paystack - OGLS",
+        "label": "Paystack - OGLS"
+    },
+    {
+        "value": "MMF/HnB - OGLS",
+        "label": "MMF/HnB - OGLS"
+    }
+]

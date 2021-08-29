@@ -1,0 +1,61 @@
+[{
+    "id": 1,
+    "employee_name": "Zelda Fullman",
+    "clock_in": "5:30 PM",
+    "clock_out": "1:08 AM",
+    "date": "8/7/2021"
+  }, {
+    "id": 2,
+    "employee_name": "Dicky Clemmensen",
+    "clock_in": "5:35 PM",
+    "clock_out": "2:40 PM",
+    "date": "9/16/2020"
+  }, {
+    "id": 3,
+    "employee_name": "Phillipp Amer",
+    "clock_in": "5:35 PM",
+    "clock_out": "8:29 AM",
+    "date": "1/23/2021"
+  }, {
+    "id": 4,
+    "employee_name": "Lonni Lemmers",
+    "clock_in": "5:16 PM",
+    "clock_out": "9:31 AM",
+    "date": "7/10/2021"
+  }, {
+    "id": 5,
+    "employee_name": "Jamison Canet",
+    "clock_in": "5:58 PM",
+    "clock_out": "2:16 AM",
+    "date": "8/9/2021"
+  }, {
+    "id": 6,
+    "employee_name": "Emyle Haggett",
+    "clock_in": "5:11 PM",
+    "clock_out": "10:02 AM",
+    "date": "9/12/2020"
+  }, {
+    "id": 7,
+    "employee_name": "Melesa Barrasse",
+    "clock_in": "5:13 PM",
+    "clock_out": "12:13 AM",
+    "date": "3/20/2021"
+  }, {
+    "id": 8,
+    "employee_name": "Bunny Fallon",
+    "clock_in": "5:44 PM",
+    "clock_out": "3:32 PM",
+    "date": "11/12/2020"
+  }, {
+    "id": 9,
+    "employee_name": "Bidget Weekley",
+    "clock_in": "5:17 PM",
+    "clock_out": "10:02 PM",
+    "date": "10/7/2020"
+  }, {
+    "id": 10,
+    "employee_name": "Tarrah Hoodlass",
+    "clock_in": "5:08 PM",
+    "clock_out": "3:05 AM",
+    "date": "8/17/2021"
+  }]

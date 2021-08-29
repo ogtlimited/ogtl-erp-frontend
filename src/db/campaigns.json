@@ -1,0 +1,197 @@
+[{
+    "campaign_id": "Prodder",
+    "campaign_name": "Research and Development",
+    "phone": "23480233857",
+    "email": "mhearthfield7@outsourceglobal.com",
+    "lead": "Brady Hyde",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "7/10/2021",
+    "status": "Active"
+  }, {
+    "campaign_id": "Rank",
+    "campaign_name": "Marketing",
+    "phone": "23470403858",
+    "email": "stillman@outsourceglobal.com",
+    "lead": "Stillman Ewence",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "11/1/2020",
+    "status": "Terminated"
+  }, {
+    "campaign_id": "Sonsing",
+    "campaign_name": "Support",
+    "phone": "23481403851",
+    "email": "zellick@outsourceglobal.com",
+    "lead": "Elita Zellick",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "1/24/2021",
+    "status": "Active"
+  }, {
+    "campaign_id": "Duobam",
+    "campaign_name": "Business Development",
+    "phone": "2347040123458",
+    "email": "regina@outsourceglobal.com",
+    "lead": "Regina Halm",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "8/28/2020",
+    "status": "Active"
+  }, {
+    "campaign_id": "Zamit",
+    "campaign_name": "Human Resources",
+    "phone": "23470839593",
+    "email": "aurelea@outsourceglobal.com",
+    "lead": "Aurelea Lambrook",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "8/22/2021",
+    "status": "Active"
+  }, {
+    "campaign_id": "Bamity",
+    "campaign_name": "Services",
+    "phone": "23470121212",
+    "email": "lionel@outsourceglobal.com",
+    "lead": "Lionel McCahill",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "2/20/2021",
+    "status": "Active"
+  }, {
+    "campaign_id": "Viva",
+    "campaign_name": "Engineering",
+    "phone": "2347045678",
+    "email": "hildegarde@outsourceglobal.com",
+    "lead": "Hildegarde Meachem",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "4/26/2021",
+    "status": "Terminated"
+  }, {
+    "campaign_id": "Ronstring",
+    "campaign_name": "Training",
+    "phone": "2347095763",
+    "email": "castelow@outsourceglobal.com",
+    "lead": "Royal Castelow",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "7/15/2021",
+    "status": "Terminated"
+  }, {
+    "campaign_id": "Temp",
+    "campaign_name": "Marketing",
+    "phone": "23480602018",
+    "email": "meachem@outsourceglobal.com",
+    "lead": "Jory Meachem",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "5/7/2021",
+    "status": "Terminated"
+  }, {
+    "campaign_id": "Zathin",
+    "campaign_name": "Support",
+    "phone": "23470112211",
+    "email": "kymcombe@outsourceglobal.com",
+    "lead": "Kym Mc Combe",
+    "team_member": [
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      },
+      {
+          "employee_name": "Anthony",
+          "img": ""
+      }
+    ],
+    "created": "4/7/2021",
+    "status": "Terminated"
+  }]

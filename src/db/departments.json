@@ -1,0 +1,31 @@
+[{
+    "id": 1,
+    "department_name": "Marketing"
+  }, {
+    "id": 2,
+    "department_name": "Legal"
+  }, {
+    "id": 3,
+    "department_name": "Support"
+  }, {
+    "id": 4,
+    "department_name": "Marketing"
+  }, {
+    "id": 5,
+    "department_name": "Human Resources"
+  }, {
+    "id": 6,
+    "department_name": "Research and Development"
+  }, {
+    "id": 7,
+    "department_name": "Training"
+  }, {
+    "id": 8,
+    "department_name": "Support"
+  }, {
+    "id": 9,
+    "department_name": "Accounting"
+  }, {
+    "id": 10,
+    "department_name": "Accounting"
+  }]
