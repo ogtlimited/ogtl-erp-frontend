@@ -57,28 +57,6 @@ const EmployeeSalary = () => {
             sort: true,
             headerStyle: {minWidth: "150px"},
           },
-
-        {
-          dataField: "status",
-          text: "Status",
-          sort: true,
-          headerStyle: {minWidth: "120px"},
-          formatter: (value, row) => (
-            <>
-            {value == 'Active' ?
-            <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
-            : value == 'Pending' ?
-             <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
-             : value == 'Terminated' ?
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-             :
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-            }
-
-            </>
-          )    ,
-        },
-       
         {
           dataField: "",
           text: "Action",
@@ -115,8 +93,8 @@ const EmployeeSalary = () => {
         <div class="row">
             <div class="col-md-12">
                 <LeavesTable
-                    data
-                    columns
+                    data={data}
+                    columns={columns}
                 />
             </div>
         </div>

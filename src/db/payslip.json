@@ -1,61 +1,61 @@
 [{
     "id": 1,
     "employee_name": "Charlot Rodrigo",
-    "paid_amount": "$847876.71",
+    "paid_amount": "₦847876.71",
     "month": "5/17/2021",
     "designation": "Research Assistant IV"
   }, {
     "id": 2,
     "employee_name": "Weylin Seegar",
-    "paid_amount": "$302597.65",
+    "paid_amount": "₦302597.65",
     "month": "2/4/2021",
     "designation": "Administrative Officer"
   }, {
     "id": 3,
     "employee_name": "Joya Tolwood",
-    "paid_amount": "$821015.15",
+    "paid_amount": "₦821015.15",
     "month": "5/9/2021",
     "designation": "VP Sales"
   }, {
     "id": 4,
     "employee_name": "Alberta O'Fergus",
-    "paid_amount": "$745239.79",
+    "paid_amount": "₦745239.79",
     "month": "11/1/2020",
     "designation": "Editor"
   }, {
     "id": 5,
     "employee_name": "Lauren Clampe",
-    "paid_amount": "$179832.13",
+    "paid_amount": "₦179832.13",
     "month": "6/23/2021",
     "designation": "Database Administrator I"
   }, {
     "id": 6,
     "employee_name": "Rafaelita Goulthorp",
-    "paid_amount": "$135694.87",
+    "paid_amount": "₦135694.87",
     "month": "6/28/2021",
     "designation": "Junior Executive"
   }, {
     "id": 7,
     "employee_name": "Lester McAvey",
-    "paid_amount": "$790544.70",
+    "paid_amount": "₦790544.70",
     "month": "6/22/2021",
     "designation": "Developer II"
   }, {
     "id": 8,
     "employee_name": "Karisa Tidridge",
-    "paid_amount": "$227044.16",
+    "paid_amount": "₦227044.16",
     "month": "9/12/2020",
     "designation": "Automation Specialist III"
   }, {
     "id": 9,
     "employee_name": "Mariejeanne Crellin",
-    "paid_amount": "$288680.25",
+    "paid_amount": "₦288680.25",
     "month": "12/22/2020",
     "designation": "Developer II"
   }, {
     "id": 10,
     "employee_name": "Gare Presland",
-    "paid_amount": "$656102.45",
+    "paid_amount": "₦656102.45",
     "month": "9/14/2020",
     "designation": "Registered Nurse"
   }]

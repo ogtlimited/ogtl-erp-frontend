@@ -8,9 +8,12 @@ import AllEmployeesAdmin from "./pages/HR/Admin/Employees.Admin"
 import LeavesAdmin from "./pages/HR/Admin/Leaves.Admin"
 import Promotion from "./pages/HR/Admin/Promotion"
 import ShiftAdmin from "./pages/HR/Admin/Shift.Admin"
+import Profile from "./pages/HR/Profile"
 import EmployeeAttendance from "./pages/HR/Users/Attendance.Users"
 import EmployeeUser from "./pages/HR/Users/Employee.User"
 import LeavesUser from "./pages/HR/Users/Leaves.User"
+import EmployeeSalary from "./pages/Payroll/EmployeeSalary"
+import PaySlip from "./pages/Payroll/PaySlip"
 import AttendanceReport from "./pages/Reports/AttendanceReport"
 import EmployeeReport from "./pages/Reports/EmployeeReport"
 import PayslipReport from "./pages/Reports/PayslipReport"
@@ -141,6 +144,13 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Profile Dashboard",
+    path: "/profile-dashboard",
+    name: "Dashboard",
+    component: Profile,
+    layout: "/admin",
+  },
+  {
     title: "All Employee",
     path: "/all-employees",
     component: AllEmployeesAdmin,
@@ -227,6 +237,20 @@ const routes = [
     path: "/payslip-reports",
     name: "Dashboard",
     component: PayslipReport,
+    layout: "/admin",
+  },
+  {
+    title: "Employee Salary",
+    path: "/salary",
+    name: "Dashboard",
+    component: EmployeeSalary,
+    layout: "/admin",
+  },
+  {
+    title: "Payslip",
+    path: "/payslip",
+    name: "Dashboard",
+    component: PaySlip,
     layout: "/admin",
   },
   {

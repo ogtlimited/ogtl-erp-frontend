@@ -148,13 +148,13 @@ const Sidebar = () => {
                 </a>
                 <ul style={dNone}>
                   <li>
-                    <Link className="" to="/payroll/_salary">
+                    <Link className="" to="/admin/salary">
                       {" "}
                       Employee Salary{" "}
                     </Link>
                   </li>
                   <li>
-                    <Link className="" to="/payroll/salary-view">
+                    <Link className="" to="/admin/payslip">
                       {" "}
                       Payslip{" "}
                     </Link>
