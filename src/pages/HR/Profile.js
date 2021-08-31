@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import avater from '../../assets/img/anthony.jpg'
+import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
+import FormModal from "../../components/Modal/Modal";
 import ProfileCards from "../../components/Profile/ProfileCards";
+
 const Profile = () => {
   return (
     <>
@@ -110,6 +113,7 @@ const Profile = () => {
         </div>
       </div>
       <ProfileCards />
+      <FormModal  template={PersonalDetailJson} />
     </>
   );
 };

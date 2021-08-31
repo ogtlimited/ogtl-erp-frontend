@@ -43,7 +43,7 @@ const ProfileCards = () => {
                       href="#"
                       class="edit-icon"
                       data-toggle="modal"
-                      data-target="#personal_info_modal"
+                      data-target="#FormModal"
                     >
                       <i class="fa fa-pencil"></i>
                     </a>
