@@ -9,10 +9,13 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Popper from 'popper.js';
 import './assets/css/style.css'
 import './App.css'
+import { AppProvider } from './Context/AppContext';
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <AppProvider>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </AppProvider>,
   document.getElementById('root')
 );
 
