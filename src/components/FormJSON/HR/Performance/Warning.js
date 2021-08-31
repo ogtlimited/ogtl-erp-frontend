@@ -1,5 +1,5 @@
 
-export const template = {
+export const warningLetterFormJson = {
     title: 'Warning Letter Form',
     Fields: [
         {

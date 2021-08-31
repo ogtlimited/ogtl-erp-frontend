@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "AWAITING RESPONSE",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 2,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 3,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 4,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 5,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 6,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 7,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 8,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 9,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  },
+  {
+    "id": 10,
+    "job_applicant_id": "Amir Dbt",
+    "offer_date": "07/10/2020",
+    "designation_id": "Software Developer",
+    "status": "ACCEPTED",
+    "job_offer_terms": "200k salary",
+    "terms_and_conditions": "You must be present"
+  }
+]

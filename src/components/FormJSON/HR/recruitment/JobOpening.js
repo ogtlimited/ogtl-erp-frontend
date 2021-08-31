@@ -1,4 +1,4 @@
-export const template = {
+export const jobOpeningFormJson = {
     title: 'Job Opening Form',
     Fields: [
         {
@@ -31,12 +31,19 @@ export const template = {
         },
         {
             name:'status' ,
-            type:'text',
+            type:'select',
             title:'Status',
-            // required:{
-            //     value:false,
-            //     message:'Status is required'
-            // },
+            options: [
+                {
+                    value: 'CLOSED',
+                    label: 'Closed',
+                },
+                {
+                    value: 'OPEN',
+                    label: 'Open',
+                },
+
+            ]
         },
         {
             name:'description' ,

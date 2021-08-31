@@ -17,6 +17,10 @@ import PaySlip from "./pages/Payroll/PaySlip"
 import AttendanceReport from "./pages/Reports/AttendanceReport"
 import EmployeeReport from "./pages/Reports/EmployeeReport"
 import PayslipReport from "./pages/Reports/PayslipReport"
+import JobOpening from "./pages/HR/Admin/JobOpening.Admin";
+import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
+import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
+import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -205,6 +209,30 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Job Opening",
+    path: "/job-opening",
+    component: JobOpening,
+    layout: "/admin",
+  },
+  {
+    title: "Job Offer",
+    path: "/job-offer",
+    component: JobOffer,
+    layout: "/admin",
+  },
+  {
+    title: "Job Applicants",
+    path: "/job-applicants",
+    component: JobApplicants,
+    layout: "/admin",
+  },
+  {
+    title: "Aptitude Test",
+    path: "/aptitude-test",
+    component: AptitudeTest,
+    layout: "/admin",
+  },
+  {
     title: "Campaigns",
     path: "/campaigns",
     name: "Dashboard",
@@ -259,7 +287,8 @@ const routes = [
     name: "Dashboard",
     component: AttendanceReport,
     layout: "/admin",
-  }
+  },
+
 ]
 
 

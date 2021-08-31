@@ -1,4 +1,4 @@
-export const template = {
+export const shiftAssignmentFormJson = {
     title: 'Shift Assignment Form',
     Fields: [
         {

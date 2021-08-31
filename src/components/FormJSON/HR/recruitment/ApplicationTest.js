@@ -1,14 +1,37 @@
-export const template = {
+export const applicationTestFormJson = {
     title: 'Test Form',
     Fields: [
         {
             name:'test_type' ,
-            type:'text',
+            type:'select',
             title:'Test Type',
             required:{
                 value:true,
                 message:'Test type is required'
             },
+            options: [
+                {
+                    value: 'PHONE_SCREENING',
+                    label: 'Phone Screening'
+                },
+                {
+                    value: 'TYPING_TEST',
+                    label: 'Typing Test'
+                },
+                {
+                    value: 'EXCEL_TEST',
+                    label: 'Excel Test'
+                },
+                {
+                    value: 'FORMAL_WRITING',
+                    label: 'Formal Writing'
+                },
+                {
+                    value: 'SOFT_SKILLS',
+                    label: 'Soft Skills'
+                },
+
+            ]
 
         },
         {
@@ -22,12 +45,18 @@ export const template = {
         },
         {
             name:'status' ,
-            type:'text',
+            type:'select',
             title:'Status',
-            // required:{
-            //     value:true,
-            //     message:'Status is required'
-            // },
+            options: [
+                {
+                    value: 'PASSED',
+                    label: 'Passed'
+                },
+                {
+                    value: 'FAILED',
+                    label: 'Failed'
+                },
+            ]
         },
         {
             name:'hr_user' ,
@@ -42,10 +71,6 @@ export const template = {
             name:'score' ,
             type:'text',
             title:'Score',
-            // required:{
-            //     value:false,
-            //     message:'Score is required'
-            // },
         },
         {
             name:'interview_date' ,
@@ -69,10 +94,6 @@ export const template = {
             name:'notes' ,
             type:'text',
             title:'Notes',
-            // required:{
-            //     value:false,
-            //     message:'Notes is required'
-            // },
         },
     ]
 };

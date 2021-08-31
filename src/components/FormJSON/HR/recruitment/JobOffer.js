@@ -1,4 +1,4 @@
-export const template = {
+export const jobOfferFormJson = {
     title: 'Job Offer Form',
     Fields: [
         {
@@ -13,12 +13,22 @@ export const template = {
         },
         {
             name:'status' ,
-            type:'text',
+            type:'select',
             title:'Status',
-            // required:{
-            //     value:true,
-            //     message:'Status is required'
-            // },
+            options: [
+                {
+                    value: 'AWAITING_RESPONSE',
+                    label: 'Awaiting Response',
+                },
+                {
+                    value: 'ACCEPTED',
+                    label: 'Accepted',
+                },
+                {
+                    value: 'REJECTED',
+                    label: 'Rejected',
+                },
+            ],
         },
         {
             name:'offer_date' ,

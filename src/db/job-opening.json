@@ -1,0 +1,72 @@
+[{
+  "id": 1,
+  "job_title": "Software Development",
+  "designation_id": "Senior",
+  "campaign_id": "Software Development",
+  "status": "CLOSED",
+  "description": "Come work with us"
+}, {
+  "id": 2,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "CLOSED",
+  "description":"We move"
+},  {
+  "id": 3,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 4,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 5,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 6,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 7,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 8,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 9,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "OPEN",
+  "description":"We move"
+},  {
+  "id": 10,
+  "job_title": "Business Development",
+  "designation_id": "Senior",
+  "campaign_id": "Operations",
+  "status": "CLOSED",
+  "description":"We move"
+}
+]
