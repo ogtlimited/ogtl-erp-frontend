@@ -1,11 +1,28 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import avater from '../../assets/img/anthony.jpg'
+import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
+import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
 import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
+import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
 import FormModal from "../../components/Modal/Modal";
 import ProfileCards from "../../components/Profile/ProfileCards";
 
 const Profile = () => {
+    const [formType, setformType] = useState('')
+    const [template, settemplate] = useState(PersonalDetailJson)
+    useEffect(() => {
+        if(formType === 'PersonalDetails'){
+            settemplate(PersonalDetailJson)
+        }else if(formType === 'WorkExperience'){
+            settemplate(WorkExperienceJson)
+        }else if(formType === 'ContactDetails'){
+            settemplate(ContactDetailJson)
+        }else if(formType === 'EmergencyContact'){
+            settemplate(EmergencyDetailJson)
+        }
+        console.log(formType)
+    }, [formType])
   return (
     <>
       <div class="page-header">
@@ -112,8 +129,8 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <ProfileCards />
-      <FormModal  template={PersonalDetailJson} />
+      <ProfileCards setformType={setformType} />
+      <FormModal  template={template} />
     </>
   );
 };

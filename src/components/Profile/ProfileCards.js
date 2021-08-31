@@ -1,6 +1,10 @@
 import React from "react";
 
-const ProfileCards = () => {
+const ProfileCards = ({setformType}) => {
+    const handleChange = (type) =>{
+        console.log(type)
+        setformType(type)
+    }
   return (
     <>
       <div class="card tab-box">
@@ -41,6 +45,7 @@ const ProfileCards = () => {
                     Personal Informations{" "}
                     <a
                       href="#"
+                      onClick={() => handleChange('PersonalDetails')}
                       class="edit-icon"
                       data-toggle="modal"
                       data-target="#FormModal"
@@ -95,8 +100,9 @@ const ProfileCards = () => {
                     <a
                       href="#"
                       class="edit-icon"
+                      onClick={() => handleChange('EmergencyContact')}
                       data-toggle="modal"
-                      data-target="#emergency_contact_modal"
+                      data-target="#FormModal"
                     >
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -166,8 +172,9 @@ const ProfileCards = () => {
                     <a
                       href="#"
                       class="edit-icon"
+                      onClick={() => handleChange('ContactDetails')}
                       data-toggle="modal"
-                      data-target="#family_info_modal"
+                      data-target="#FormModal"
                     >
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -229,7 +236,8 @@ const ProfileCards = () => {
                       href="#"
                       class="edit-icon"
                       data-toggle="modal"
-                      data-target="#education_info"
+                      onClick={() => handleChange('EmployeeEducation')}
+                      data-target="#FormModal"
                     >
                       <i class="fa fa-pencil"></i>
                     </a>
@@ -278,7 +286,8 @@ const ProfileCards = () => {
                       href="#"
                       class="edit-icon"
                       data-toggle="modal"
-                      data-target="#experience_info"
+                      onClick={() => handleChange('WorkExperience')}
+                      data-target="#FormModal"
                     >
                       <i class="fa fa-pencil"></i>
                     </a>
