@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import avater from '../../assets/img/anthony.jpg'
 import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
 import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
+import { EmployeeEducationJson } from "../../components/FormJSON/HR/Employee/EmployeeEducation";
 import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
 import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
 import FormModal from "../../components/Modal/Modal";
@@ -20,6 +21,9 @@ const Profile = () => {
             settemplate(ContactDetailJson)
         }else if(formType === 'EmergencyContact'){
             settemplate(EmergencyDetailJson)
+        }
+        else if(formType === 'EmployeeEducation'){
+            settemplate(EmployeeEducationJson)
         }
         console.log(formType)
     }, [formType])
