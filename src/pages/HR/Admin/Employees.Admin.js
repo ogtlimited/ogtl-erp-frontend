@@ -1,6 +1,7 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee'
 import PageHeader from '../../../components/Misc/PageHeader'
 import FormModal from '../../../components/Modal/Modal'
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable'
@@ -11,6 +12,10 @@ import { employeeList } from '../../../db/employee'
 const AllEmployeesAdmin = () => {
     const breadcrumb = "All Employees"
     const [selectedOption, setSelectedOption] = useState(null);
+    const [formValue, setformValue] = useState({})
+    useEffect(() => {
+     console.log(formValue)
+    }, [formValue])
     const defaultSorted = [
         {
           dataField: "designation",
@@ -43,7 +48,7 @@ const AllEmployeesAdmin = () => {
             defaultSorted={defaultSorted}
             selectedOption={selectedOption}
            />
-           <FormModal />
+           <FormModal setformValue={setformValue} template={employeeFormJson} />
         </>
     )
 }
