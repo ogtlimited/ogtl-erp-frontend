@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import LeaveApproverBtn from "../../../components/Tables/EmployeeTables/Leaves/LeaveApproverBtn";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { leaveList } from "../../../db/leaves";
 import male from '../../../assets/img/male_avater.png'
+import FormModal from "../../../components/Modal/Modal";
+import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/application";
 const LeavesAdmin = () => {
+  const [formValue, setformValue] = useState({})
   const columns = [
     {
       dataField: "employee",
@@ -92,7 +95,7 @@ const LeavesAdmin = () => {
               href="#"
               class="btn add-btn"
               data-toggle="modal"
-              data-target="#add_leave"
+              data-target="#FormModal"
             >
               <i class="fa fa-plus"></i> Add Leave
             </a>
@@ -134,6 +137,7 @@ const LeavesAdmin = () => {
           <LeavesTable columns={columns} data={leaveList} />
           </div>
       </div>
+      <FormModal setformValue={setformValue} template={LeaveApplicationFormJSON} />
     </>
   );
 };

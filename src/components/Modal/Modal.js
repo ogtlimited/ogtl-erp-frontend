@@ -1,19 +1,25 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { template } from '../FormJSON/login';
-import CustomForm from '../Forms/CustomForm'
 
-const FormModal = () => {    
-     const { register, handleSubmit, formState  } = useForm();
+import CustomForm from '../Forms/CustomForm'
+import FieldArray from '../Forms/FieldArray';
+
+const FormModal = ({template, setformValue}) => {    
+     const {  control,
+        register,
+        handleSubmit,
+        getValues,
+        errors,
+        setValue, formState  } = useForm();
       let handleform= {
         register:register,
         errors:formState
      };
-     const onSubmit = (data) => console.log(data); 
+     const onSubmit = (data) => setformValue(data); 
     return (
         <>
            <div class="modal fade" id="FormModal" tabIndex="-1" aria-labelledby="FormModalModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="FormModalLabel">{template.title}</h5>
@@ -29,6 +35,10 @@ const FormModal = () => {
         template={template} 
         handleform={handleform}
        />
+
+       <div class="col-md-12">
+       {/* <FieldArray {...{ control, register, getValues, setValue, errors }} /> */}
+       </div>
        <div class="col-md-12">
      
       <div class="modal-footer">
