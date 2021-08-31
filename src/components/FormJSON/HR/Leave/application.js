@@ -1,4 +1,4 @@
-export const application = {
+export const LeaveApplicationFormJSON = {
     title: 'Application Form',
     Fields: [
        
@@ -13,8 +13,22 @@ export const application = {
         },
         {
             name:'leaveTypeId' ,
-            type:'text',
+            type:'select',
             title:'Leave Type Id',
+            options: [
+                {
+                    value: 'Casual',
+                    label: 'Casual Leave',
+                },
+                {
+                    value: 'Medical',
+                    label: 'Medical Leave',
+                },
+                {
+                    value: 'Maternity',
+                    label: 'Maternity Leave',
+                },
+            ],
             required:{
                 value:true,
                 message:'Leave Type Id is required'

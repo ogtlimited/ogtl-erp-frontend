@@ -107,7 +107,7 @@ const CustomForm = ({ template, data, handleform }) => {
                         {title}
                         <span style={required ? { color: "red" } : {}}>*</span>
                     </label>
-                    <select type="select" {...register(name)} >
+                    <select className="form-control" type="select" {...register(name)} >
                         {renderOptions(options)}
                     </select>
             </div>
