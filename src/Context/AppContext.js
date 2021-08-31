@@ -3,7 +3,7 @@ import axios from "axios";
 import { createBrowserHistory } from 'history';
 
 export default createBrowserHistory();
-const baseURL = "http://15.236.1.91"
+const baseURL = "http://localhost:3000/api"
 export const AppContext = createContext();
 export const AppProvider = (props) => {
     
