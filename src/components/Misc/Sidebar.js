@@ -346,13 +346,31 @@ const Sidebar = () => {
                   <li>
                     <Link className="" to="/administrator/jobs-dashboard">
                       {" "}
-                      Jobs Dasboard{" "}
+                      Jobs Dashboard{" "}
                     </Link>
                   </li>
                   <li>
-                    <Link className="" to="/administrator/jobs">
+                    <Link className="" to="/admin/job-opening">
                       {" "}
-                      Manage Jobs{" "}
+                      Job Opening{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/job-offer">
+                      {" "}
+                      Job Offer{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/job-applicants">
+                      {" "}
+                      Job Applicants
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/aptitude-test">
+                      {" "}
+                      Aptitude Test{" "}
                     </Link>
                   </li>
                   <li>
@@ -379,36 +397,21 @@ const Sidebar = () => {
                       Interview Questions{" "}
                     </Link>
                   </li>
-                  <li>
-                    <Link className="" to="/administrator/offer_approvals">
-                      {" "}
-                      Offer Approvals{" "}
-                    </Link>
-                  </li>
+
                   <li>
                     <Link className="" to="/administrator/experiance-level">
                       {" "}
                       Experience Level{" "}
                     </Link>
                   </li>
-                  <li>
-                    <Link className="" to="/administrator/candidates">
-                      {" "}
-                      Candidates List{" "}
-                    </Link>
-                  </li>
+
                   <li>
                     <Link className="" to="/administrator/schedule-timing">
                       {" "}
                       Schedule timing{" "}
                     </Link>
                   </li>
-                  <li>
-                    <Link className="" to="/administrator/apptitude-result">
-                      {" "}
-                      Aptitude Results{" "}
-                    </Link>
-                  </li>
+
                 </ul>
               </li>
               <li className="">

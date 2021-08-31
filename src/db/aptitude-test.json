@@ -1,0 +1,101 @@
+[{
+  "id": 1,
+  "test_type": "SOFT SKILLS",
+  "job_applicant_id": "Dynah Fretson",
+  "status": "FAILED",
+  "hr_user": "Marcelia Wallentin",
+  "score": 30,
+  "interview_date": "6/6/2021",
+  "phone_number": "166-775-8040",
+  "notes": "Monitored web-enabled initiative"
+}, {
+  "id": 2,
+  "test_type": "SOFT SKILLS",
+  "job_applicant_id": "Kettie Jannaway",
+  "status": "PASSED",
+  "hr_user": "Agretha Gryglewski",
+  "score": 70,
+  "interview_date": "11/21/2020",
+  "phone_number": "514-383-4519",
+  "notes": "Upgradable clear-thinking time-frame"
+}, {
+  "id": 3,
+  "test_type": "FORMAL WRITING",
+  "job_applicant_id": "Lothario Gowthorpe",
+  "status": "PASSED",
+  "hr_user": "Sherlock De Blasiis",
+  "score": 100,
+  "interview_date": "12/23/2020",
+  "phone_number": "465-942-7668",
+  "notes": "Reverse-engineered web-enabled protocol"
+}, {
+  "id": 4,
+  "test_type": "FORMAL WRITING",
+  "job_applicant_id": "Harvey Gisby",
+  "status": "PASSED",
+  "hr_user": "Townie Lygo",
+  "score": 50,
+  "interview_date": "11/17/2020",
+  "phone_number": "807-664-4716",
+  "notes": "Fundamental 5th generation paradigm"
+}, {
+  "id": 5,
+  "test_type": "TYPING TEST",
+  "job_applicant_id": "Pearl Trimmell",
+  "status": "PASSED",
+  "hr_user": "Kerrie Aiston",
+  "score": 80,
+  "interview_date": "4/11/2021",
+  "phone_number": "428-863-5969",
+  "notes": "Total full-range complexity"
+}, {
+  "id": 6,
+  "test_type": "EXCEL TEST",
+  "job_applicant_id": "Mariana Kinnach",
+  "status": "FAILED",
+  "hr_user": "Auria Tavernor",
+  "score": 60,
+  "interview_date": "3/19/2021",
+  "phone_number": "293-220-6117",
+  "notes": "Synchronised zero administration workforce"
+}, {
+  "id": 7,
+  "test_type": "FORMAL WRITING",
+  "job_applicant_id": "Reina Clench",
+  "status": "PASSED",
+  "hr_user": "Stafford Moretto",
+  "score": 40,
+  "interview_date": "10/13/2020",
+  "phone_number": "926-563-1087",
+  "notes": "Self-enabling full-range benchmark"
+}, {
+  "id": 8,
+  "test_type": "PHONE SCREENING",
+  "job_applicant_id": "Lynna Gaitung",
+  "status": "PASSED",
+  "hr_user": "Anabelle Billsberry",
+  "score": 100,
+  "interview_date": "8/4/2021",
+  "phone_number": "641-706-3849",
+  "notes": "Configurable next generation installation"
+}, {
+  "id": 9,
+  "test_type": "SOFT SKILLS",
+  "job_applicant_id": "Merv Downing",
+  "status": "PASSED",
+  "hr_user": "Robinet Beggan",
+  "score": 50,
+  "interview_date": "9/30/2020",
+  "phone_number": "567-966-8433",
+  "notes": "Persevering bandwidth-monitored project"
+}, {
+  "id": 10,
+  "test_type": "EXCEL TEST",
+  "job_applicant_id": "Kennith Tapper",
+  "status": "FAILED",
+  "hr_user": "Gerianna Cowill",
+  "score": 100,
+  "interview_date": "12/25/2020",
+  "phone_number": "777-951-9361",
+  "notes": "Open-source asymmetric capability"
+}]

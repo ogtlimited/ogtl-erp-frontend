@@ -1,9 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import data from '../../../db/shift.json'
+import FormModal from "../../../components/Modal/Modal";
+import {shiftTypeFormJson} from "../../../components/FormJSON/HR/shift/ShiftType";
+import {shiftAssignmentFormJson} from "../../../components/FormJSON/HR/shift/ShiftAssignment";
+
 const ShiftAdmin = () => {
+    const [formType, setFormType] = useState('')
+    const [template, setTemplate] = useState(shiftTypeFormJson)
+    useEffect(()=>{
+        if(formType === 'ShiftType'){
+            setTemplate(shiftTypeFormJson)
+        }else if(formType === 'ShiftAssignment'){
+            setTemplate(shiftAssignmentFormJson)
+        }
+    },[formType])
+
+    const handleChange = (type) =>{
+        console.log(type)
+        setFormType(type)
+    }
+
     const columns = [
         {
           dataField: "shift_name",
@@ -18,9 +37,9 @@ const ShiftAdmin = () => {
          
           formatter: (value, row) => (
               <>
-                <div class="action-label">
-                    <a class="btn btn-white btn-sm btn-rounded" href="">
-                        <i class="fa fa-dot-circle-o text-success"></i> Active
+                <div className="action-label">
+                    <a className="btn btn-white btn-sm btn-rounded" href="">
+                        <i className="fa fa-dot-circle-o text-success"></i> Active
                     </a>
                 </div>
             </>
@@ -62,34 +81,36 @@ const ShiftAdmin = () => {
       ];
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col">
-            <h3 class="page-title">Shift List</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row">
+          <div className="col">
+            <h3 className="page-title">Shift List</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item">
+              <li className="breadcrumb-item">
                 <Link to="/">Employees</Link>
               </li>
-              <li class="breadcrumb-item active">Shift List</li>
+              <li className="breadcrumb-item active">Shift List</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn m-r-5"
+              className="btn add-btn m-r-5"
               data-toggle="modal"
-              data-target="#add_shift"
+              onClick={() => handleChange('ShiftType')}
+              data-target="#FormModal"
             >
               Add Shifts
             </a>
             <a
               href="#"
-              class="btn add-btn m-r-5"
+              className="btn add-btn m-r-5"
               data-toggle="modal"
-              data-target="#add_schedule"
+              data-target="#FormModal"
+              onClick={() => handleChange('ShiftAssignment')}
             >
               {" "}
               Assign Shifts
@@ -97,16 +118,15 @@ const ShiftAdmin = () => {
           </div>
         </div>
       </div>
-      <div class="row">
-      <div class="col-12">
-          <LeavesTable
-            data={data}
-            columns={columns}
-
-          />
-
+      <div className="row">
+          <div className="col-12">
+              <LeavesTable
+                data={data}
+                columns={columns}
+              />
+          </div>
       </div>
-      </div>
+        <FormModal template={template} />
     </>
   );
 };

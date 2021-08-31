@@ -4,8 +4,8 @@ import { createBrowserHistory } from 'history';
 
 export default createBrowserHistory();
 const baseURL = "http://localhost:3000/api"
-export const AppContext = createContext();
-export const AppProvider = (props) => {
+const AppContext = createContext();
+const AppProvider = (props) => {
     
     useEffect(() => {
        
@@ -18,3 +18,13 @@ export const AppProvider = (props) => {
         value= {{ }}
 >{props.children}</AppContext.Provider>
 }
+
+function useAppContext() {
+    const context = React.useContext(AppContext)
+    if(context === undefined){
+        throw new Error("useAppContext must be within an AppProvider")
+    }
+    return context
+}
+
+export {AppProvider, useAppContext}
