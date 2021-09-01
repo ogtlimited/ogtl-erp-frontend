@@ -21,6 +21,7 @@ import JobOpening from "./pages/HR/Admin/JobOpening.Admin";
 import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
 import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
+import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -230,6 +231,12 @@ const routes = [
     title: "Aptitude Test",
     path: "/aptitude-test",
     component: AptitudeTest,
+    layout: "/admin",
+  },
+  {
+    title: "Warning Letter",
+    path: "/warning-letter",
+    component: WarningLetter,
     layout: "/admin",
   },
   {

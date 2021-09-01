@@ -12,15 +12,15 @@ export const warningLetterFormJson = {
             },
 
         },
-        {
-            name:'hr_user_id' ,
-            type:'text',
-            title:'HR User',
-            required:{
-                value:true,
-                message:'Hr user is required'
-            },
-        },
+        // {
+        //     name:'hr_user_id' ,
+        //     type:'text',
+        //     title:'HR User',
+        //     required:{
+        //         value:true,
+        //         message:'Hr user is required'
+        //     },
+        // },
         {
             name:'reason' ,
             type:'text',

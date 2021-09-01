@@ -255,6 +255,14 @@ const Sidebar = () => {
                   <li>
                     <Link
                       className=""
+                      to="/admin/warning-letter"
+                    >
+                      {" "}
+                      Warning Letter
+                    </Link>
+                  </li><li>
+                    <Link
+                      className=""
                       to="/performances/performance-indicator"
                     >
                       {" "}
