@@ -1,6 +1,8 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
 import { withRouter } from "react-router";
 import departments from "../../../db/designationList.json";
+import {designation} from "../../../components/FormJSON/HR/Employee/designation";
+import FormModal from '../../../components/Modal/Modal'
 
 
 
@@ -33,6 +35,7 @@ const Designations = withRouter(({ history }) => {
     "trainer",
   ];
   const [allDepartments, setallDepartments] = useState([]);
+  const [formValue, setformValue] = useState({});
 
   const breadcrumb = "Departments";
 
@@ -83,7 +86,7 @@ const Designations = withRouter(({ history }) => {
               href="#"
               class="btn add-btn"
               data-toggle="modal"
-              data-target="#add_department"
+              data-target="#FormModal"
             >
               <i class="fa fa-plus"></i> Add Designation
             </a>
@@ -97,6 +100,7 @@ const Designations = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
+      <FormModal setformValue={setformValue} template={designation} />
     </>
   );
 });
