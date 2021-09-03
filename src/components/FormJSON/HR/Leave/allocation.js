@@ -13,8 +13,30 @@ export const allocation = {
         },
         {
             name:'leaveTypeId' ,
-            type:'text',
+            type:'select',
             title:'Leave Type Id',
+            options: [
+                {
+                    value: 'Casual',
+                    label: 'Casual Leave',
+                },
+                {
+                    value: 'Sick',
+                    label: 'Sick Leave',
+                },
+                {
+                    value: 'Annual',
+                    label: 'Annual Leave',
+                },
+                {
+                    value: 'Maternity',
+                    label: 'Maternity Leave',
+                },
+                {
+                    value: 'Without Pay',
+                    label: 'Leave Without Pay',
+                },
+            ],
             required:{
                 value:true,
                 message:'Leave Type Id is required'

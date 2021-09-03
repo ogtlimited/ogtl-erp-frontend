@@ -3,8 +3,23 @@ export const SalaryDetailJson = {
     Fields: [
         {
             name:'salary_mode' ,
-            type:'text',
+            type:'select',
             title:'Salary Mode',
+            options: [
+                {
+                    value: 'bank',
+                    label: 'Bank',
+                },
+                {
+                    value: 'cash, "cheque"',
+                    label: 'Cash',
+                },
+                {
+                    value: 'cheque',
+                    label: 'Cheque',
+                },
+            
+            ]
         },
         {
             name:'bank_name' ,
