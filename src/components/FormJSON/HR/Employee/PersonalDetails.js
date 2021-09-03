@@ -1,46 +1,93 @@
 export const PersonalDetailJson = {
     title: 'Personal Details',
     Fields: [
+        
         {
-            name:'passport_number' ,
+            name:'passportNumber' ,
             type:'text',
             title:'Passport Number',
-        },
-        {
-            name:'date_of_issue' ,
-            type:'email',
-            title:'Date of Issue',
-           
-        },
-        {
-            name:'valid_upto' ,
+         },
+
+         {
+            name:'dateOfIssue' ,
             type:'date',
-            title:'Expiry Date',
-
-        },
+            title:'Date Of Issue',
+         },
         {
-            name:'date_of_birth' ,
+            name:'validUpTo' ,
             type:'date',
-            title:'Date of birth',
+            title:'Valid Up To',
+         },
 
-        },
-        {
-            name:'place_of_issue' ,
+         {
+            name:'placeOfIssue' ,
             type:'text',
-            title:'Place of Issue',
-
-        },
-        {
-            name:'marital_status' ,
-            type:'text',
+            title:'Place Of Issue',
+         },
+         {
+            name:'maritalStatus' ,
+            type:'select',
             title:'Marital Status',
+            options: [
+               {
+                   value: 'single',
+                   label: 'Single',
+               },
+               {
+                   value: 'married',
+                   label: 'Married',
+               },
+               {
+                   value: 'divorced',
+                   label: 'Divorced',
+               },
+               {
+                  value: 'widowed',
+                  label: 'Widowed',
+              },
 
-        },
-        {
-            name:'blood_group' ,
-            type:'text',
+               
+           ],  
+            
+         },
+         {
+            name:'bloodGroup' ,
+            type:'select',
             title:'Blood Group',
+            options: [
+               {
+                  value: 'A+',
+                  label: 'A+',
+              },
+              {
+               value: 'A-',
+               label: 'A-',
+             },
+             {
+               value: 'B+',
+               label: 'B+',
+             },
+             {
+               value: 'AB+',
+               label: 'AB+',
+             },
+             {
+               value: 'AB-',
+               label: 'AB-',
+             },
+             {
+               value: 'O+',
+               label: 'O+',
+             },
+             {
+               value: 'O-',
+               label: 'O-',
+             },
 
-        }
+            ]
+         },
+         
+        
+         
     ]
 };

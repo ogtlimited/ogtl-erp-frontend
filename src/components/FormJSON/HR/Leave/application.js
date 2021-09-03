@@ -21,12 +21,20 @@ export const LeaveApplicationFormJSON = {
                     label: 'Casual Leave',
                 },
                 {
-                    value: 'Medical',
-                    label: 'Medical Leave',
+                    value: 'Sick',
+                    label: 'Sick Leave',
+                },
+                {
+                    value: 'Annual',
+                    label: 'Annual Leave',
                 },
                 {
                     value: 'Maternity',
                     label: 'Maternity Leave',
+                },
+                {
+                    value: 'Without Pay',
+                    label: 'Leave Without Pay',
                 },
             ],
             required:{

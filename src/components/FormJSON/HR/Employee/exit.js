@@ -27,12 +27,35 @@ export const exit = {
             name:'reasonForLeaving' ,
             type:'text',
             title:'Reason For Leaving',
+            options: [
+                {
+                    value: 'better_prospects',
+                    label: 'Better Prospects',
+                },
+                {
+                    value: 'health_concern',
+                    label: 'Health Concern',
+                },
+                
+                
+            ],  
             
         },
         {
             name:'leaveEnchashed' ,
             type:'text',
             title:'Reason For Leaving',
+            options: [
+                {
+                    value: 'yes',
+                    label: 'yes',
+                },
+                {
+                    value: 'no',
+                    label: 'no',
+                },
+                                
+            ],  
             
         },
         {
