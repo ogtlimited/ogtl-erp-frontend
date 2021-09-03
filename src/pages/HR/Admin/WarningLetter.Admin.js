@@ -55,8 +55,17 @@ const WarningLetter = () => {
         {
             dataField: "",
             text: "Action",
-            sort: false,
-
+            sort: true,
+            headerStyle: {minWidth: "70px", textAlign:"left"},
+            formatter: (value, row) => (
+                <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+                                                                        aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    <div className="dropdown-menu dropdown-menu-right">
+                        <a className="dropdown-item" onClick={() => {}} href="#" data-toggle="modal"
+                           data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                    </div>
+                </div>
+            )    ,
         },
 
     ];
