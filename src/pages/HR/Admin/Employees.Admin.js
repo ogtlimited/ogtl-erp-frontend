@@ -10,9 +10,10 @@ import { useAppContext } from '../../../Context/AppContext'
 
 import designation from '../../../db/designation.json'
 import { employeeList } from '../../../db/employee'
+import axiosInstance from '../../../services/api'
 const AllEmployeesAdmin = () => {
     const breadcrumb = "All Employees"
-    const {newEmployee, allEmployees, combineRequest} = useAppContext()
+    const {setallEmployees, fetchEmployee, allEmployees, combineRequest} = useAppContext()
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
     const [template, settemplate] = useState(employeeFormJson)
@@ -58,10 +59,12 @@ const AllEmployeesAdmin = () => {
       console.log(submitted)
       if(submitted == true){
         formValue.image = ""
-        newEmployee(formValue).then(res =>{
+        axiosInstance.post('/employees', formValue).then(res =>{
+          fetchEmployee()
           setsubmitted(false);
           console.log(res)
         })
+      
 
       }
      console.log(formValue)

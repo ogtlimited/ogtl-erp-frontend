@@ -15,7 +15,6 @@ const AppProvider = (props) => {
            fetchEmployee()
 
        }
-       
     }, [])
 
     const fetchEmployee = (employee) =>{
@@ -32,7 +31,7 @@ const AppProvider = (props) => {
     }
 
     return <AppContext.Provider
-        value= {{ fetchTypesShift, combineRequest, allEmployees}}
+        value= {{ fetchTypesShift, combineRequest,setallEmployees, fetchEmployee}}
 >{props.children}</AppContext.Provider>
 }
 
