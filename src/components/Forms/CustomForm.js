@@ -22,7 +22,7 @@ const CustomForm = ({ template, data, handleform }) => {
            
                 <div class="col-sm-6">
                 <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <label htmlFor={name} class="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
                 <input
                  {...register(name)}
                  class="form-control" type="text" />
@@ -89,8 +89,10 @@ const CustomForm = ({ template, data, handleform }) => {
            
                 <div class="col-sm-6">
                 <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <input {...register(name)}  type="file" />
+                <label htmlFor={name} class="col-form-label ml-2">{title}</label>
+               
+                <input  id="upload" {...register(name)} hidden type="file" />
+                <label htmlFor="upload" class="form-control btn btn-primary"><i class="fa fa-upload"></i> {title}</label>
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>

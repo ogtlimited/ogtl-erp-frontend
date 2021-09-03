@@ -6,16 +6,66 @@ import PageHeader from '../../../components/Misc/PageHeader'
 import FormModal from '../../../components/Modal/Modal'
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable'
 import GeneralTable from '../../../components/Tables/Table'
+import { useAppContext } from '../../../Context/AppContext'
 
 import designation from '../../../db/designation.json'
 import { employeeList } from '../../../db/employee'
 const AllEmployeesAdmin = () => {
     const breadcrumb = "All Employees"
+    const {newEmployee, allEmployees, combineRequest} = useAppContext()
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
+    const [template, settemplate] = useState(employeeFormJson)
+    const [submitted, setsubmitted] = useState(false)
+    console.log(allEmployees)
+
     useEffect(() => {
+      combineRequest().then(res =>{
+        console.log(res)
+        const {shifts, designations} = res.data.createEmployeeFormSelection
+        const shiftsopts = shifts?.map(e => {
+          return {
+            label: e.shift_name,
+            value: e._id
+          }
+        })
+        const designationOpts = designations?.map(e => {
+          return {
+            label: e.designation,
+            value: e._id
+          }
+        })
+        const finalForm = employeeFormJson.Fields.map(field =>{
+          if(field.name === 'designation'){
+           field.options = designationOpts
+           return field
+          }else if(field.name === 'default_shift'){
+            field.options = shiftsopts
+            return field
+          }
+          return field
+        })
+        settemplate(
+          {
+            title: employeeFormJson.title,
+            Fields: finalForm
+          }
+        )
+        console.log(template)
+      })
+    }, [])
+    useEffect(() => {
+      console.log(submitted)
+      if(submitted == true){
+        formValue.image = ""
+        newEmployee(formValue).then(res =>{
+          setsubmitted(false);
+          console.log(res)
+        })
+
+      }
      console.log(formValue)
-    }, [formValue])
+    }, [submitted])
     const defaultSorted = [
         {
           dataField: "designation",
@@ -43,12 +93,12 @@ const AllEmployeesAdmin = () => {
 </div>
 </div>
            <EmployeesTable
-            data={employeeList} 
+            data={allEmployees} 
             departments={designation} 
             defaultSorted={defaultSorted}
             selectedOption={selectedOption}
            />
-           <FormModal setformValue={setformValue} template={employeeFormJson} />
+           <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
         </>
     )
 }
