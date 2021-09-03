@@ -27,15 +27,7 @@ export const employeeFormJson = {
             type:'text',
             title:'Middle Name',
             required:{
-                value:false,
-            },
-        },
-        {
-            name:'ogid' ,
-            type:'text',
-            title:'OGID',
-            required:{
-                value:false,
+                value: false,
             },
         },
         {
@@ -63,12 +55,21 @@ export const employeeFormJson = {
             }
         },
         {
+            name:'reports_to' ,
+            type:'text',
+            title:'Reports to',
+            required:{
+                value:true,
+                message:'Reports to is required'
+            },
+        },
+        {
             name:'isAdmin' ,
             type:'check',
             title:'Admin User',
             required:{
                 value:true,
-                message:'Email is required'
+                message:'Admin User is required'
             },
         },
         {
@@ -82,12 +83,13 @@ export const employeeFormJson = {
         },
         {
             name:'designation' ,
-            type:'text',
+            type:'select',
             title:'Designation',
             required:{
                 value:true,
                 message:'designation is required'
-            }
+            },
+            options: []
         },
         {
             name:'department' ,
@@ -100,57 +102,88 @@ export const employeeFormJson = {
         },
         {
             name:'default_shift' ,
-            type:'text',
+            type:'select',
             title:'Shift',
-            
+            required:{
+                value:true,
+                message:'department is required'
+            },
+            options: []
         },
         {
             name:'employment_type' ,
             type:'text',
             title:'Employment type',
+            required:{
+                value:false,
+            }
         },
         {
             name:'gender' ,
-            type:'text',
+            type:'select',
             title:'Gender',
+            options: [
+                {
+                    label: "Male",
+                    value: "male"
+                },
+                {
+                    label: "Female",
+                    value: "female"
+                }
+            ]
+        },
+        {
+            name:'status' ,
+            type:'select',
+            title:'Status',
+            options: [
+                {
+                    label: "Active",
+                    value: "active"
+                },
+                {
+                    label: "Terminated",
+                    value: "terminated"
+                },
+                {
+                    label: "Left",
+                    value: "left"
+                },
+            ]
         },
         {
             name:'image' ,
             type:'file',
-            title:'Image',
+            title:'Employee Image',
         },
-        {
-            name:'status' ,
-            type:'text',
-            title:'Status',
-        },
-        {
-            name:'role' ,
-            type:'role',
-            title:'Role',
-            roleList: [
-                {
-                  name: "HR",
-                  abbrev: "HR",
-                  nestedArray: [{ name: "HR_read"}, {name: "HR_write"},  {name: "HR_update"}, {name: "HR_delete" }]
-                },
-                {
-                  name: "Accounting",
-                  abbrev: "ACC",
-                  nestedArray: [{ name: "ACC_read"}, {name: "ACC_write"},  {name: "ACC_update"}, {name: "ACC_delete" }]
-                },
-                {
-                  name: "Facility",
-                  abbrev: "FAC",
-                  nestedArray: [{ name: "FAC_read"}, {name: "FAC_write"},  {name: "FAC_update"}, {name: "FAC_delete" }]
-                },
-                {
-                  name: "IT",
-                  abbrev: "IT",
-                  nestedArray: [{ name: "IT_read"}, {name: "IT_write"},  {name: "IT_update"}, {name: "IT_delete" }]
-                }
-              ]
-        },
+        // {
+        //     name:'role' ,
+        //     type:'role',
+        //     title:'Role',
+        //     roleList: [
+        //         {
+        //           name: "HR",
+        //           abbrev: "HR",
+        //           nestedArray: [{ name: "HR_read"}, {name: "HR_write"},  {name: "HR_update"}, {name: "HR_delete" }]
+        //         },
+        //         {
+        //           name: "Accounting",
+        //           abbrev: "ACC",
+        //           nestedArray: [{ name: "ACC_read"}, {name: "ACC_write"},  {name: "ACC_update"}, {name: "ACC_delete" }]
+        //         },
+        //         {
+        //           name: "Facility",
+        //           abbrev: "FAC",
+        //           nestedArray: [{ name: "FAC_read"}, {name: "FAC_write"},  {name: "FAC_update"}, {name: "FAC_delete" }]
+        //         },
+        //         {
+        //           name: "IT",
+        //           abbrev: "IT",
+        //           nestedArray: [{ name: "IT_read"}, {name: "IT_write"},  {name: "IT_update"}, {name: "IT_delete" }]
+        //         }
+        //       ]
+        // },
        
     ]
 };

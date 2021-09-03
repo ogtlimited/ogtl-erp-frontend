@@ -1,10 +1,11 @@
 import React from 'react'
+import Login from '../pages/Auth/Login'
 
 const AuthLayout = () => {
     return (
-        <div>
-            
-        </div>
+        <>
+           <Login /> 
+        </>
     )
 }
 

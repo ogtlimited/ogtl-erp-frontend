@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 
 import CustomForm from '../Forms/CustomForm'
 import FieldArray from '../Forms/FieldArray';
-
-const FormModal = ({template, setformValue}) => {    
+import $ from 'jquery'
+const FormModal = ({template, setformValue, setsubmitted}) => {    
      const {  control,
         register,
         handleSubmit,
@@ -15,7 +15,12 @@ const FormModal = ({template, setformValue}) => {
         register:register,
         errors:formState
      };
-     const onSubmit = (data) => setformValue(data); 
+     const onSubmit = (data) => {
+       console.log(data)
+       setformValue(data)
+       setsubmitted(true)
+       $('#FormModal').modal('toggle')
+      }; 
     return (
         <>
            <div class="modal fade" id="FormModal" tabIndex="-1" aria-labelledby="FormModalModalLabel" aria-hidden="true">

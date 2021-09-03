@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 // import "./header.css";
 import logo from "../../assets/img/OG-Logo.png";
 // import { AppContext } from "../context/AppContext";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
+import tokenService from "../../services/token.service";
 
 const toggle_sidebar = (e) => {
   e.preventDefault();
@@ -16,9 +17,12 @@ const toggle_sidebar = (e) => {
 };
 // const Header = withRouter(({ history }) => {
 const Header = () => {
-  const logout = () => {
-    localStorage.clear();
-    // history.push("/auth/login");
+  let history = useHistory()
+  const logout = (e) => {
+    e.preventDefault();
+    tokenService.clearStorage()
+    console.log('pushing')
+    history.push("/auth");
   };
 //   const { user } = useContext(AppContext);
 //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
@@ -119,9 +123,9 @@ const Header = () => {
             <Link className="dropdown-item" to="settings">
               Settings
             </Link>
-            <Link className="dropdown-item" to="login">
+            <a className="dropdown-item" onClick={(e)=>logout(e)}>
               Logout
-            </Link>
+            </a>
           </div>
         </li>
       </ul>
@@ -136,15 +140,15 @@ const Header = () => {
           <i className="fa fa-ellipsis-v"></i>
         </a>
         <div className="dropdown-menu dropdown-menu-right">
-        <Link className="dropdown-item" to="profile">
+        <Link className="dropdown-item" to="/admin/profile-dashboard">
               My Profile
             </Link>
             <Link className="dropdown-item" to="settings">
               Settings
             </Link>
-            <Link className="dropdown-item" to="login">
+            <a className="dropdown-item" onClick={(e)=>logout(e)}>
               Logout
-            </Link>
+            </a>
         </div>
       </div>
     </div>

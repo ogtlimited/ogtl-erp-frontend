@@ -13,6 +13,7 @@ import ToolkitProvider, {
   import male from '../../../assets/img/male_avater.png'
   import male2 from '../../../assets/img/male_avater2.png'
   import male3 from '../../../assets/img/male_avater3.png'
+import { Link } from 'react-router-dom';
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
 const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
@@ -54,13 +55,13 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
     console.log(total)
     const columns = [
         {
-          dataField: "employee",
+          dataField: "",
           text: "Employee Name",
           sort: true,
           headerStyle: {minWidth: "250px"},
           formatter: (value, row) => (
             <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
-          src={ row.image ? imageUrl  + row.image : row.gender === 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><a href="">{value} <span>{row.designation}</span></a></h2>
+          src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.first_name} {row.last_name} <span>{row.designation.designation}</span></Link></h2>
           )    ,
           
         },
@@ -71,11 +72,11 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           headerStyle: {minWidth: "120px"},
           formatter: (value, row) => (
             <>
-            {value == 'Active' ?
+            {value == 'active' ?
             <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
-            : value == 'Pending' ?
+            : value == 'left' ?
              <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
-             : value == 'Terminated' ?
+             : value == 'terminated' ?
              <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
              :
              <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
@@ -99,14 +100,14 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           
         },
         {
-          dataField: "designation",
+          dataField: "designation.designation",
           text: "Designation",
           sort: true,
           headerStyle: {minWidth: "150px"},
           
         },
         {
-          dataField: "email",
+          dataField: "company_email",
           text: "Company Email",
           sort: true,
           headerStyle: {minWidth: "100px"},
