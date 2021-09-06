@@ -115,6 +115,16 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
+                    <Link className="" to="/admin/shift-assignments">
+                      Shift Assignments
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/shift-requests">
+                      Shift Requests
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="" to="/admin/overtime">
                       Overtime
                     </Link>

@@ -5,23 +5,36 @@ import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveT
 import data from '../../../db/shift.json'
 import FormModal from "../../../components/Modal/Modal";
 import {shiftTypeFormJson} from "../../../components/FormJSON/HR/shift/ShiftType";
-import {shiftAssignmentFormJson} from "../../../components/FormJSON/HR/shift/ShiftAssignment";
+import {useAppContext} from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
 const ShiftAdmin = () => {
-    const [formType, setFormType] = useState('')
-    const [template, setTemplate] = useState(shiftTypeFormJson)
-    useEffect(()=>{
-        if(formType === 'ShiftType'){
-            setTemplate(shiftTypeFormJson)
-        }else if(formType === 'ShiftAssignment'){
-            setTemplate(shiftAssignmentFormJson)
-        }
-    },[formType])
+    const [formValue, setFormValue] = useState({})
 
-    const handleChange = (type) =>{
-        console.log(type)
-        setFormType(type)
-    }
+    const [submitted, setSubmitted] = useState(false)
+
+    const {fetchTypesShift}  = useAppContext()
+
+    useEffect(()=>{
+        fetchTypesShift().then(res =>{
+            console.log("Shift types response",res)
+        }).catch(error =>{
+            console.log(error.response.data)
+        })
+    },[])
+
+    useEffect(() => {
+        console.log(submitted)
+        if(submitted === true){
+            axiosInstance.post('/api/shiftType', formValue).then(res =>{
+                fetchTypesShift()
+                setSubmitted(false);
+                console.log(res)
+            })
+        }
+        console.log(formValue)
+    }, [submitted])
+
 
     const columns = [
         {
@@ -58,13 +71,7 @@ const ShiftAdmin = () => {
             dataField: "end_time",
             text: "End time",
             sort: true,
-          //   filter: dateFilter({
-          //     style: { display: 'flex' },
-          //     getFilter: (filter) => {
-          //         attendanceDateFilter = filter;
-          //     }
-          //   }),
-           
+
           },
           {
             dataField: "break_time",
@@ -109,20 +116,9 @@ const ShiftAdmin = () => {
               href="#"
               className="btn add-btn m-r-5"
               data-toggle="modal"
-              onClick={() => handleChange('ShiftType')}
               data-target="#FormModal"
             >
               Add Shifts
-            </a>
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => handleChange('ShiftAssignment')}
-            >
-              {" "}
-              Assign Shifts
             </a>
           </div>
         </div>
@@ -135,7 +131,7 @@ const ShiftAdmin = () => {
               />
           </div>
       </div>
-        <FormModal template={template} />
+        <FormModal setformValue={setFormValue} template={shiftTypeFormJson} setsubmitted={setSubmitted} />
     </>
   );
 };

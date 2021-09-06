@@ -18,20 +18,31 @@ const AppProvider = (props) => {
     }, [])
 
     const fetchEmployee = (employee) =>{
-        axiosInstance.get('/employees').then(e =>{
-            console.log(e)
+        axiosInstance.get('/employees').then(res =>{
+            console.log("Employee response",res)
             // setallEmployees(e.data.employees)
         })
     }
     const fetchTypesShift = () =>{
-        return axiosInstance.get('/shiftType')
+        return axiosInstance.get('/api/shiftType')
     }
+    const fetchShiftAssignment = () =>{
+        return axiosInstance.get('/api/shiftAssignment')
+    }
+    const fetchShiftRequests = () =>{
+        return axiosInstance.get('/api/shiftRequest')
+    }
+
+    const fetchWarningLetter = () => {
+      return axiosInstance.get('/api/warningLetter')
+    }
+
     const combineRequest = ()=>{
         return axiosInstance.get('/combine-employee-form')
     }
 
     return <AppContext.Provider
-        value= {{ fetchTypesShift, combineRequest,setallEmployees, fetchEmployee}}
+        value= {{ fetchTypesShift, combineRequest,setallEmployees, fetchEmployee,fetchShiftAssignment,fetchShiftRequests,fetchWarningLetter}}
 >{props.children}</AppContext.Provider>
 }
 

@@ -2,21 +2,22 @@
 import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from '../../../db/warning-letter.json'
+import data from '../../../db/shift-assignment.json'
 import FormModal from "../../../components/Modal/Modal";
-import {warningLetterFormJson} from "../../../components/FormJSON/HR/Performance/Warning";
+import {shiftAssignmentFormJson} from "../../../components/FormJSON/HR/shift/ShiftAssignment";
 import {useAppContext} from "../../../Context/AppContext";
 
-const WarningLetter = () => {
+const ShiftAssignment = () => {
     const [formValue, setFormValue] = useState({})
-    const [template, setTemplate] = useState(warningLetterFormJson)
     const [submitted, setSubmitted] = useState(false)
+    const [template, setTemplate] = useState(shiftAssignmentFormJson)
 
-    const {fetchWarningLetter,combineRequest} = useAppContext();
+
+    const {fetchShiftAssignment,combineRequest}  = useAppContext()
 
     useEffect(() =>{
-        fetchWarningLetter().then(res =>{
-            console.log("warning letters", res)
+        fetchShiftAssignment().then(res =>{
+            console.log("shift assignments", res)
         }).catch(error =>{
             console.log(error)
         })
@@ -25,23 +26,32 @@ const WarningLetter = () => {
     useEffect(() => {
         combineRequest().then(res =>{
             console.log(res)
-            const {employees} = res.data.createEmployeeFormSelection
+            const {shifts, employees} = res.data.createEmployeeFormSelection
+            const shiftsOpts = shifts?.map(e => {
+                return {
+                    label: e.shift_name,
+                    value: e._id
+                }
+            })
             const employeeOpts = employees?.map(e => {
                 return {
                     label: `${e.first_name} ${e.last_name}`,
                     value: e._id
                 }
             })
-            const finalForm = warningLetterFormJson.Fields.map(field =>{
+            const finalForm = shiftAssignmentFormJson.Fields.map(field =>{
                 if(field.name === 'employee_id'){
                     field.options = employeeOpts
+                    return field
+                }else if(field.name === 'shift_type_id'){
+                    field.options = shiftsOpts
                     return field
                 }
                 return field
             })
             setTemplate(
                 {
-                    title: warningLetterFormJson.title,
+                    title: shiftAssignmentFormJson.title,
                     Fields: finalForm
                 }
             )
@@ -56,41 +66,16 @@ const WarningLetter = () => {
             sort: true,
 
         },
+        {
+            dataField: "shift_type_id",
+            text: "Shift Type",
+            sort: true,
+        },
+        {
+            dataField: "assignment_date",
+            text: "Assignment Date",
+            sort: true,
 
-        {
-            dataField: "hr_user_id",
-            text: "HR User",
-            sort: true,
-        },
-        {
-            dataField: "reason",
-            text: "Reason",
-            sort: true,
-        },
-        {
-            dataField: "details",
-            text: "Details",
-            sort: true,
-        },
-        {
-            dataField: "actions",
-            text: "Actions",
-            sort: true,
-        },
-        {
-            dataField: "date_issued",
-            text: "Date Issued",
-            sort: true,
-        },
-        {
-            dataField: "warningCount",
-            text: "Warning Count",
-            sort: true,
-        },
-        {
-            dataField: "isInPip",
-            text: "PIP Status",
-            sort: true,
         },
         {
             dataField: "",
@@ -114,7 +99,7 @@ const WarningLetter = () => {
             <div className="page-header">
                 <div className="row">
                     <div className="col">
-                        <h3 className="page-title">Warning Letter List</h3>
+                        <h3 className="page-title">Shift List</h3>
                         <ul className="breadcrumb">
                             <li className="breadcrumb-item">
                                 <Link to="/">Dashboard</Link>
@@ -122,7 +107,7 @@ const WarningLetter = () => {
                             <li className="breadcrumb-item">
                                 <Link to="/">Employees</Link>
                             </li>
-                            <li className="breadcrumb-item active">Warning Letter List</li>
+                            <li className="breadcrumb-item active">Shift Assignment List</li>
                         </ul>
                     </div>
                     <div className="col-auto float-right ml-auto">
@@ -130,9 +115,10 @@ const WarningLetter = () => {
                             href="#"
                             className="btn add-btn m-r-5"
                             data-toggle="modal"
+
                             data-target="#FormModal"
                         >
-                            Add Warning Letter
+                            Add Shift Assignment
                         </a>
 
                     </div>
@@ -151,4 +137,4 @@ const WarningLetter = () => {
     );
 };
 
-export default WarningLetter;
+export default ShiftAssignment;

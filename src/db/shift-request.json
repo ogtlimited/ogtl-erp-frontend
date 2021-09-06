@@ -1,0 +1,61 @@
+[{
+  "id": 1,
+  "employee_id": "Averil Belshaw",
+  "shift_type_id": "morning",
+  "from_date": "8/13/2021",
+  "to_date": "8/9/2021"
+}, {
+  "id": 2,
+  "employee_id": "Mabel Popley",
+  "shift_type_id": "evening",
+  "from_date": "11/22/2020",
+  "to_date": "12/25/2020"
+}, {
+  "id": 3,
+  "employee_id": "Britte Lindner",
+  "shift_type_id": "morning",
+  "from_date": "10/15/2020",
+  "to_date": "8/10/2021"
+}, {
+  "id": 4,
+  "employee_id": "Brigid Inns",
+  "shift_type_id": "afternoon",
+  "from_date": "12/7/2020",
+  "to_date": "11/8/2020"
+}, {
+  "id": 5,
+  "employee_id": "Arvin Quantick",
+  "shift_type_id": "afternoon",
+  "from_date": "8/12/2021",
+  "to_date": "7/29/2021"
+}, {
+  "id": 6,
+  "employee_id": "Richmond Gouldstraw",
+  "shift_type_id": "morning",
+  "from_date": "12/11/2020",
+  "to_date": "11/2/2020"
+}, {
+  "id": 7,
+  "employee_id": "Happy Wickey",
+  "shift_type_id": "afternoon",
+  "from_date": "2/26/2021",
+  "to_date": "11/9/2020"
+}, {
+  "id": 8,
+  "employee_id": "Donella Fink",
+  "shift_type_id": "morning",
+  "from_date": "5/30/2021",
+  "to_date": "4/15/2021"
+}, {
+  "id": 9,
+  "employee_id": "Koo Inger",
+  "shift_type_id": "evening",
+  "from_date": "9/28/2020",
+  "to_date": "2/24/2021"
+}, {
+  "id": 10,
+  "employee_id": "Alisha Urvoy",
+  "shift_type_id": "morning",
+  "from_date": "11/5/2020",
+  "to_date": "11/27/2020"
+}]
