@@ -1,21 +1,110 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import LeaveApproverBtn from "../../../components/Tables/EmployeeTables/Leaves/LeaveApproverBtn";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { leaveList } from "../../../db/leaves";
 import male from '../../../assets/img/male_avater.png'
 import FormModal from "../../../components/Modal/Modal";
 import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/application";
+import axiosInstance from "../../../services/api";
+import HelperService from "../../../services/helper";
+import { useAppContext } from "../../../Context/AppContext";
 const LeavesAdmin = () => {
+  const [allLeaves, setallLeaves] = useState([])
+  const {showAlert, allEmployees, combineRequest} = useAppContext()
+  const [template, settemplate] = useState([])
+  const [submitted, setsubmitted] = useState(false)
   const [formValue, setformValue] = useState({})
+  const [present, setpresent] = useState(0);
+  const [planned, setplanned] = useState(0)
+  const [approvedLeaves, setapprovedLeaves] = useState(0)
+  const [status, setStatus] = useState('')
+  const [statusRow, setstatusRow] = useState({})
+  const fetchLeaves = () =>{
+    axiosInstance.get('/leave-application').then(e =>{
+      const leaves = e.data.data
+      setallLeaves(e.data.data)
+      console.log(leaves)
+      const approved = leaves.filter(e => e.status === 'approved').length
+      const open = leaves.filter(l => l.status === 'open').length;
+      console.log(open, approved)
+      setapprovedLeaves(approved)
+      setplanned(open)
+      setpresent(allEmployees.length - approved)
+
+    })
+  }
+  useEffect(() => {
+    if(status.length){
+      console.log(status)
+      console.log(statusRow)
+      const update = {
+        ...statusRow,
+        status: status,
+        employee_id: statusRow.employee_id._id,
+        from_date: new Date(statusRow.from_date),
+        to_date: new Date(statusRow.to_date),
+        posting_date: new Date(statusRow.posting_date)
+      }
+      console.log(update)
+      delete update.createdAt
+      delete update.updatedAt
+      delete update.__v
+      axiosInstance.put('/leave-application/'+statusRow._id, update).then(e =>{
+        console.log(e)
+        fetchLeaves()
+      }).catch(err =>{
+        console.log(err)
+      })
+
+    }
+  }, [status])
+  useEffect(() => {
+    const employeeOpts = allEmployees.map(e => {
+      return {
+        label: e.first_name + ' '+ e.last_name + ' (' + e.ogid + ')',
+        value: e._id
+      }
+    })
+    const finalForm = LeaveApplicationFormJSON.Fields.map(field =>{
+      if(field.name === 'employee_id'){
+       field.options = employeeOpts
+       return field
+      }
+      return field
+    })
+    settemplate({
+      title: LeaveApplicationFormJSON.title,
+      Fields: finalForm
+    })
+  }, [allEmployees])
+  useEffect(() => {
+    if(allLeaves.length < 1){
+      fetchLeaves()
+
+    }
+  }, [allEmployees, allLeaves]);
+  useEffect(() => {
+    if(submitted === true){
+
+      axiosInstance.post('/leave-application', formValue).then(res =>{
+        setsubmitted(false);
+        showAlert(true, 'Leave Application submitted successfully', 'alert-success')
+        fetchLeaves()
+      }).catch(err =>{
+        console.log(err);
+        showAlert(true, 'Unable to submit leave application', 'alert-danger')
+      });
+    }
+  },[submitted, formValue])
   const columns = [
     {
-      dataField: "employee",
+      dataField: "employee_id",
       text: "Employee Name",
       sort: true,
       headerStyle: {minWidth: "250px"},
       formatter: (value, row) => (
         <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
-      src={male} /></a><a href="">{value} <span>{row.designation}</span></a></h2>
+      src={male} /></a><a href="">{value.first_name + ' ' + value.last_name} <span>{value.designation.designation}</span></a></h2>
       )    ,
       
     },
@@ -26,41 +115,46 @@ const LeavesAdmin = () => {
       headerStyle: {minWidth: "120px"},
       formatter: (value, row) => (
           <>
-            <LeaveApproverBtn value={value} row={row} />
+            <LeaveApproverBtn setstatusRow={setstatusRow} setStatus={setStatus} value={value} row={row} />
         </>
         )    ,
       
       
     },
     {
-      dataField: "leave_type",
+      dataField: "leave_type_id",
       text: "Leave Type",
       sort: true,
       headerStyle: {minWidth: "100px"},
       
     },
     {
-        dataField: "from",
+        dataField: "from_date",
         text: "From Date",
         sort: true,
+        headerStyle: {minWidth: "150px"},
+        formatter: (val, row) =>(
+          <p>{new Date(val).toDateString()}</p>
+        )
       //   filter: dateFilter({
       //     style: { display: 'flex' },
       //     getFilter: (filter) => {
       //         attendanceDateFilter = filter;
       //     }
       //   }),
-        headerStyle: {minWidth: "150px"},
         
       },
       {
-        dataField: "to",
+        dataField: "to_date",
         text: "To Date",
         sort: true,
         headerStyle: {minWidth: "150px"},
-        
+        formatter: (val, row) =>(
+          <p>{new Date(val).toDateString()}</p>
+        )
       },
     {
-      dataField: "approved_by",
+      dataField: "leave_approver",
       text: "Approved By",
       sort: true,
 
@@ -72,7 +166,9 @@ const LeavesAdmin = () => {
       text: "Total Leave Days",
       sort: true,
       headerStyle: {minWidth: "80px", textAlign:'center'},
-      
+      formatter: (val, row) =>(
+        <p>{HelperService.diffDays(row.from_date, row.to_date)}</p>
+      )
     },
     
     
@@ -106,38 +202,38 @@ const LeavesAdmin = () => {
         <div class="col-md-3">
           <div class="stats-info">
             <h6>Today Presents</h6>
-            <h4>12 / 60</h4>
+            <h4>{present} / {allEmployees.length}</h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stats-info">
-            <h6>Planned Leaves</h6>
+            <h6>Opened Leaves</h6>
             <h4>
-              8 <span>Today</span>
+              {planned} &nbsp;
             </h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stats-info">
-            <h6>Unplanned Leaves</h6>
+            <h6>Approved Leaves</h6>
             <h4>
-              0 <span>Today</span>
+              {approvedLeaves}
             </h4>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stats-info">
             <h6>Pending Requests</h6>
-            <h4>12</h4>
+            <h4> {planned}</h4>
           </div>
         </div>
       </div>
       <div class="row">
           <div class="col-12">
-          <LeavesTable columns={columns} data={leaveList} />
+          <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>
-      <FormModal setformValue={setformValue} template={LeaveApplicationFormJSON} />
+      <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
     </>
   );
 };

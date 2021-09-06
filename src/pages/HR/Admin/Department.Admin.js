@@ -6,10 +6,14 @@ import departments from "../../../db/departments.json";
 
 import GeneralTable from "../../../components/Tables/Table";
 import { Link } from "react-router-dom";
+import FormModal from "../../../components/Modal/Modal";
 
 let qualityFilter;
 
 const Departments = withRouter(({ history }) => {
+  const [template, settemplate] = useState([])
+  const [submitted, setsubmitted] = useState(false)
+  const [formValue, setformValue] = useState({})
   const defaultSorted = [
     {
       dataField: "designation",
@@ -77,7 +81,7 @@ const Departments = withRouter(({ history }) => {
               href="#"
               class="btn add-btn"
               data-toggle="modal"
-              data-target="#add_department"
+              data-target="#FormModal"
             >
               <i class="fa fa-plus"></i> Add Department
             </a>
@@ -91,6 +95,7 @@ const Departments = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
+      <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
     </>
   );
 });

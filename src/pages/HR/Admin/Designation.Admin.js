@@ -3,15 +3,40 @@ import { withRouter } from "react-router";
 import departments from "../../../db/designationList.json";
 import {designation} from "../../../components/FormJSON/HR/Employee/designation";
 import FormModal from '../../../components/Modal/Modal'
-
+import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable'
 
 
 import GeneralTable from "../../../components/Tables/Table";
 import { Link } from "react-router-dom";
+import axiosInstance from "../../../services/api";
 
 let qualityFilter;
 
 const Designations = withRouter(({ history }) => {
+  const [allDesignation, setallDesignation] = useState([])
+  const [submitted, setsubmitted] = useState(false)
+  const fetchDesignation = () =>{
+    axiosInstance.get('/designation').then(res =>{
+      console.log(res.data.data)
+      setallDesignation(res.data.data)
+    })
+  }
+  useEffect(() => {
+   fetchDesignation()
+  }, [])
+  useEffect(() => {
+    console.log(submitted)
+    if(submitted == true){
+      axiosInstance.post('/designation', formValue).then(res =>{
+       fetchDesignation()
+        setsubmitted(false);
+        console.log(res)
+      })
+    
+
+    }
+   console.log(formValue)
+  }, [submitted])
   const defaultSorted = [
     {
       dataField: "designation",
@@ -50,23 +75,26 @@ const Designations = withRouter(({ history }) => {
   }, [departments]);
   const columns = [
     {
-      dataField: "department_name",
-      text: "Department",
-      sort: true,
-      headerStyle: { minWidth: "450px" },
-    },
-    {
-      dataField: "designations",
+      dataField: "designation",
       text: "Designation",
       sort: true,
       headerStyle: { minWidth: "350px" },
     },
     {
-      dataField: "",
-      text: "Action",
+      dataField: "createdAt",
+      text: "Created",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: "450px" },
+      formatter: (val, row) =>(
+        <p>{new Date(val).toDateString()}</p>
+      )
     },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   sort: true,
+    //   headerStyle: { minWidth: "150px" },
+    // },
   ];
   return (
     <>
@@ -94,13 +122,13 @@ const Designations = withRouter(({ history }) => {
         </div>
       </div>
       <div class="row d-flex justify-content-center">
-        <GeneralTable
-          data={departments}
+        <LeaveTable
+          data={allDesignation}
           // defaultSorted={defaultSorted}
           columns={columns}
         />
       </div>
-      <FormModal setformValue={setformValue} template={designation} />
+      <FormModal setformValue={setformValue} setsubmitted={setsubmitted} template={designation} />
     </>
   );
 });

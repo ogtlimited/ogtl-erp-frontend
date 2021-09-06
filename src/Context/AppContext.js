@@ -8,41 +8,52 @@ const baseURL = "http://localhost:3000"
 const AppContext = createContext();
 const AppProvider = (props) => {
     const [allEmployees, setallEmployees] = useState([])
+    const [showAlertMsg, setshowAlertMsg] = useState({
+        state: false,
+        msg: '',
+        class: ''
+    })
+    useEffect(() => {console.log('alert message')}, [showAlertMsg])
     useEffect(() => {
        const token =  tokenService.getToken()
-       console.log(token);
-       if(token){
+       if(token && allEmployees.length < 1){
            fetchEmployee()
 
        }
-    }, [])
+    }, [allEmployees])
 
     const fetchEmployee = (employee) =>{
-        axiosInstance.get('/employees').then(res =>{
-            console.log("Employee response",res)
-            // setallEmployees(e.data.employees)
+        axiosInstance.get('/employees').then(e =>{
+            setallEmployees(e.data.employees)
         })
     }
+    const showAlert = (state, msg, className) =>{
+       setshowAlertMsg({
+           state: state,
+           msg: msg,
+           class: className
+       })
+       setTimeout(() => {
+        setshowAlertMsg({
+            state: '',
+            msg: '',
+            class: ''
+        })
+       }, 5000);
+    }
     const fetchTypesShift = () =>{
-        return axiosInstance.get('/api/shiftType')
+        return axiosInstance.get('/shiftType')
     }
-    const fetchShiftAssignment = () =>{
-        return axiosInstance.get('/api/shiftAssignment')
-    }
-    const fetchShiftRequests = () =>{
-        return axiosInstance.get('/api/shiftRequest')
-    }
-
-    const fetchWarningLetter = () => {
-      return axiosInstance.get('/api/warningLetter')
-    }
-
     const combineRequest = ()=>{
         return axiosInstance.get('/combine-employee-form')
     }
 
     return <AppContext.Provider
-        value= {{ fetchTypesShift, combineRequest,setallEmployees, fetchEmployee,fetchShiftAssignment,fetchShiftRequests,fetchWarningLetter}}
+        value= {{ fetchTypesShift, 
+        combineRequest,
+        setallEmployees,allEmployees,
+        showAlert, showAlertMsg,
+         fetchEmployee}}
 >{props.children}</AppContext.Provider>
 }
 
