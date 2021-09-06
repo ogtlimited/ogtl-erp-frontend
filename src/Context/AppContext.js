@@ -8,20 +8,38 @@ const baseURL = "http://localhost:3000"
 const AppContext = createContext();
 const AppProvider = (props) => {
     const [allEmployees, setallEmployees] = useState([])
+    const [showAlertMsg, setshowAlertMsg] = useState({
+        state: false,
+        msg: '',
+        class: ''
+    })
+    useEffect(() => {console.log('alert message')}, [showAlertMsg])
     useEffect(() => {
        const token =  tokenService.getToken()
-       console.log(token);
-       if(token){
+       if(token && allEmployees.length < 1){
            fetchEmployee()
 
        }
-    }, [])
+    }, [allEmployees])
 
     const fetchEmployee = (employee) =>{
         axiosInstance.get('/employees').then(e =>{
-            console.log(e)
-            // setallEmployees(e.data.employees)
+            setallEmployees(e.data.employees)
         })
+    }
+    const showAlert = (state, msg, className) =>{
+       setshowAlertMsg({
+           state: state,
+           msg: msg,
+           class: className
+       })
+       setTimeout(() => {
+        setshowAlertMsg({
+            state: '',
+            msg: '',
+            class: ''
+        })
+       }, 5000);
     }
     const fetchTypesShift = () =>{
         return axiosInstance.get('/shiftType')
@@ -31,7 +49,11 @@ const AppProvider = (props) => {
     }
 
     return <AppContext.Provider
-        value= {{ fetchTypesShift, combineRequest,setallEmployees, fetchEmployee}}
+        value= {{ fetchTypesShift, 
+        combineRequest,
+        setallEmployees,allEmployees,
+        showAlert, showAlertMsg,
+         fetchEmployee}}
 >{props.children}</AppContext.Provider>
 }
 

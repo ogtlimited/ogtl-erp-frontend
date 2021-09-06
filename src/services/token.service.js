@@ -27,5 +27,5 @@ class TokenService {
       localStorage.clear()
     }
   }
-  
+
   export default new TokenService();

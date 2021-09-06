@@ -13,7 +13,7 @@ const renderOptions = (options) => {
 const CustomForm = ({ template, data, handleform }) => {
   let { register, errors } = handleform;
   const renderFields = (fields) => {
-    return fields.map((field) => {
+    return fields?.map((field) => {
       let { type, title, name, required, validation } = field;
 
       switch (type) {

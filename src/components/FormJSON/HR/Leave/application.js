@@ -3,16 +3,17 @@ export const LeaveApplicationFormJSON = {
     Fields: [
        
         {
-            name:'employeeId' ,
-            type:'text',
+            name:'employee_id' ,
+            type:'select',
             title:'Employee Id',
+            options: [],
             required:{
                 value:true,
                 message:'Employee Id is required'
             },
         },
         {
-            name:'leaveTypeId' ,
+            name:'leave_type_id' ,
             type:'select',
             title:'Leave Type Id',
             options: [
@@ -44,7 +45,7 @@ export const LeaveApplicationFormJSON = {
             
         },
         {
-            name:'fromDate' ,
+            name:'from_date' ,
             type:'date',
             title:'From Date',
             required:{
@@ -54,7 +55,7 @@ export const LeaveApplicationFormJSON = {
             
         },
         {
-            name:'toDate' ,
+            name:'to_date' ,
             type:'date',
             title:'To Date',
             required:{
@@ -65,7 +66,7 @@ export const LeaveApplicationFormJSON = {
         },
         
         {
-            name:'LeaveApprover' ,
+            name:'leave_approver' ,
             type:'text',
             title:'Leave Approver',
             required:{
@@ -75,7 +76,7 @@ export const LeaveApplicationFormJSON = {
          },
 
          {
-            name:'postingDate' ,
+            name:'posting_date' ,
             type:'date',
             title:'Posting Date',
          },
@@ -90,7 +91,5 @@ export const LeaveApplicationFormJSON = {
             type:'text',
             title:'Status',
          },
-   
-         
     ]
 };
