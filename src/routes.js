@@ -22,6 +22,8 @@ import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
 import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
+import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
+import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -207,6 +209,18 @@ const routes = [
     title: "Shifts",
     path: "/shifts",
     component: ShiftAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Shift Assignment",
+    path: "/shift-assignment",
+    component: ShiftAssignment,
+    layout: "/admin",
+  },
+  {
+    title: "Shift Requests",
+    path: "/shift-request",
+    component: ShiftRequest,
     layout: "/admin",
   },
   {
