@@ -335,7 +335,7 @@ const Sidebar = () => {
                 <span>Administration</span>
               </li>
               <li className="">
-                <Link to="/administrator/assets">
+                <Link to="/admin/assets">
                   <i className="la la-object-ungroup"></i> <span>Assets</span>
                 </Link>
               </li>

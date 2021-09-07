@@ -72,6 +72,7 @@ export const AssetFormJson = {
         {
             name:'condition' ,
             type:'select',
+            full: false,
             title:'Condition',
             options: [
                {
@@ -115,7 +116,7 @@ export const AssetFormJson = {
         },
         {
             name:'description' ,
-            type:'text',
+            type:'textarea',
             title:'Description',
         
         },

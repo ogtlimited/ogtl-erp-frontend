@@ -171,6 +171,12 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Assets",
+    path: "/assets",
+    component: Asset,
+    layout: "/admin",
+  },
+  {
     title: "Leaves Employee",
     path: "/leaves-employee",
     component: LeavesUser,
@@ -210,12 +216,6 @@ const routes = [
     title: "Shifts",
     path: "/shifts",
     component: ShiftAdmin,
-    layout: "/admin",
-  },
-  {
-    title: "Assets",
-    path: "/assets",
-    component: Asset,
     layout: "/admin",
   },
   {
