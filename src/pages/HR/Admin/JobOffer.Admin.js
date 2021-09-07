@@ -82,7 +82,7 @@ const JobOffer = () => {
             })
         }
         console.log(formValue)
-    }, [submitted])
+    }, [submitted,formValue])
 
     //delete job offer
     const deleteJobOffer = (row) =>{

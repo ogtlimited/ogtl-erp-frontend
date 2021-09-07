@@ -82,7 +82,7 @@ const JobOpening = () => {
             })
         }
         console.log(formValue)
-    }, [submitted])
+    }, [submitted,formValue])
 
     //delete job opening
     const deleteJobOpening = (row) =>{

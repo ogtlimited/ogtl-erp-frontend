@@ -92,7 +92,7 @@ const ShiftAssignment = () => {
             })
         }
         console.log(formValue)
-    }, [submitted])
+    }, [submitted,formValue])
 
     //delete shift
     const deleteShiftAssignment = (row) =>{
@@ -125,15 +125,18 @@ const ShiftAssignment = () => {
             dataField: "employee_id",
             text: "Employee",
             sort: true,
+            headerStyle: { minWidth: "350px" },
             formatter: (value, row) => (
                 <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
                                                                         src={ row.employee_id.image ? imageUrl  + row.employee_id.image : row.employee_id.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.employee_id.first_name} {row.employee_id.last_name} <span>{row.employee_id.designation}</span></Link></h2>
-            )    ,
+            ),
+
         },
         {
             dataField: "shift_type_id",
             text: "Shift Type",
             sort: true,
+            headerStyle: { minWidth: "200px" },
             formatter: (value, row) => (
                 <h2>{row.shift_type_id.shift_name}</h2>
             )
@@ -142,6 +145,7 @@ const ShiftAssignment = () => {
             dataField: "assignment_date",
             text: "Assignment Date",
             sort: true,
+            headerStyle: { minWidth: "200px" },
             formatter: (value, row) => (
                 <h2>{moment(row.assignment_date).format('L')}</h2>
             )

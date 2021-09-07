@@ -94,7 +94,7 @@ export const applicationTestFormJson = {
         },
         {
             name:'notes' ,
-            type:'text',
+            type:'textarea',
             title:'Notes',
         },
     ]

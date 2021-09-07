@@ -39,7 +39,7 @@ const ShiftAdmin = () => {
             })
         }
         console.log(formValue)
-    }, [submitted])
+    }, [submitted,formValue])
 
     //delete shift
     const deleteShift = (row) =>{
@@ -74,6 +74,7 @@ const ShiftAdmin = () => {
           dataField: "shift_name",
           text: "Shift Name",
           sort: true,
+          headerStyle: { minWidth: "350px" },
          
         },
 
@@ -81,14 +82,14 @@ const ShiftAdmin = () => {
           dataField: "start_time",
           text: "Start time",
           sort: true,
-          
+          headerStyle: { minWidth: "200px" },
           
         },
         {
             dataField: "end_time",
             text: "End time",
             sort: true,
-
+            headerStyle: { minWidth: "200px" },
           },
 
         {
