@@ -23,6 +23,7 @@ import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
 import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin"
 import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin"
+import Asset from "./pages/HR/Admin/Assets.Admin"
 
 // const routes = [{
 //   title: 'Main',
@@ -209,6 +210,12 @@ const routes = [
     title: "Shifts",
     path: "/shifts",
     component: ShiftAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Assets",
+    path: "/assets",
+    component: Asset,
     layout: "/admin",
   },
   {
