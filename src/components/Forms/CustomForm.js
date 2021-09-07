@@ -32,7 +32,6 @@ const CustomForm = ({ template, data, handleform }) => {
       switch (type) {
         case "text":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
@@ -42,12 +41,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "password":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -55,12 +51,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "email":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -68,12 +61,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "date":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -81,12 +71,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "textarea":
           return (
-           
                 <div class="col-12">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -96,7 +83,7 @@ const CustomForm = ({ template, data, handleform }) => {
                   render={({ value, onChange }) => (
                    <>
                    {console.log(value)}
-                     <ReactQuill  
+                     <ReactQuill
                               onChange={(state) =>onEditorStateChange(state, name)} name={name}
                             />
                     </>
