@@ -13,7 +13,7 @@ export const shiftTypeFormJson = {
         },
         {
             name:'start_time' ,
-            type:'date',
+            type:'time',
             title:'Start Time',
             required:{
                 value:true,
@@ -22,7 +22,7 @@ export const shiftTypeFormJson = {
         },
         {
             name:'end_time' ,
-            type:'date',
+            type:'time',
             title:'End Time',
             required:{
                 value:true,

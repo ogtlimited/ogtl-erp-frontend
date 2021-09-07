@@ -71,6 +71,19 @@ const CustomForm = ({ template, data, handleform }) => {
              
            
           );
+          case "time":
+          return (
+
+                <div class="col-sm-6">
+                <div class="form-group">
+                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <input {...register(name)} class="form-control" type="time" />
+                </div>
+                {errors[name] && <small>{errors[name].message}</small>}
+                </div>
+
+
+          );
         case "check":
           return (
            

@@ -42,8 +42,10 @@ const AppProvider = (props) => {
        }, 5000);
     }
     const fetchTypesShift = () =>{
-        return axiosInstance.get('/shiftType')
+        return axiosInstance.get('/api/shiftType')
     }
+
+
     const combineRequest = ()=>{
         return axiosInstance.get('/combine-employee-form')
     }
@@ -66,3 +68,4 @@ function useAppContext() {
 }
 
 export {AppProvider, useAppContext}
+
