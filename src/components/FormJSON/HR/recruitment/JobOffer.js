@@ -3,12 +3,13 @@ export const jobOfferFormJson = {
     Fields: [
         {
             name:'job_applicant_id' ,
-            type:'text',
+            type:'select',
             title:'Job Applicant',
             required:{
                 value:true,
                 message:'Job applicant is required'
             },
+            options: []
 
         },
         {
@@ -41,12 +42,13 @@ export const jobOfferFormJson = {
         },
         {
             name:'designation_id' ,
-            type:'text',
+            type:'select',
             title:'Designation',
             required:{
                 value:true,
                 message:'Designation is required'
             },
+            options: []
         },
         {
             name:'job_offer_terms' ,

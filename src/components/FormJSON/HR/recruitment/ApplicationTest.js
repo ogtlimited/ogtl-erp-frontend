@@ -36,12 +36,13 @@ export const applicationTestFormJson = {
         },
         {
             name:'job_applicant_id' ,
-            type:'text',
+            type:'select',
             title:'Job Applicant',
             required:{
                 value:true,
                 message:'Job applicant is required'
             },
+            options: []
         },
         {
             name:'status' ,
@@ -60,12 +61,13 @@ export const applicationTestFormJson = {
         },
         {
             name:'hr_user' ,
-            type:'text',
+            type:'select',
             title:'HR User',
             required:{
                 value:true,
                 message:'Hr user is required'
             },
+            options: []
         },
         {
             name:'score' ,

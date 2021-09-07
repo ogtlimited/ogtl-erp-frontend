@@ -1,10 +1,48 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from '../../../db/job-applicants.json'
+import axiosInstance from "../../../services/api";
+import {useAppContext} from "../../../Context/AppContext";
 
 const JobApplicants = () => {
+    const [data,setData] = useState([])
+    const {showAlert} = useAppContext();
+    const fetchJobApplicants = () =>{
+        axiosInstance.get('/api/jobApplicant').then(res =>{
+            console.log(res.data.data)
+            setData(res.data.data)
+        }).catch(error=>{
+            console.log(error)
+        })
+    }
+    useEffect(() =>{
+        fetchJobApplicants()
+    },[])
+
+    //delete job opening
+    const deleteJobApplicant = (row) =>{
+        axiosInstance.delete(`/api/jobApplicant/${row._id}`).then(res =>{
+            console.log(res)
+            setData(prevData => prevData.filter(pdata => pdata._id !== row._id))
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
+    //update jobOpening
+    const updateJobApplicant = (row) =>{
+        axiosInstance.patch(`/api/jobApplicant/${row._id}`,row).then(res =>{
+            console.log(res)
+            setData(prevData => [...data, res.data.data])
+            fetchJobApplicants()
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
 
     const columns = [
         {
@@ -18,15 +56,15 @@ const JobApplicants = () => {
             text: "Status",
             sort: true,
 
-            // formatter: (value, row) => (
-            //     <>
-            //         <div className="action-label">
-            //             <a className="btn btn-white btn-sm btn-rounded" href="">
-            //                 <i className="fa fa-dot-circle-o text-success"></i> Active
-            //             </a>
-            //         </div>
-            //     </>
-            // )    ,
+            formatter: (value, row) => (
+                <>
+                    <div className="action-label">
+                        <a className="btn btn-white btn-sm btn-rounded" href="">
+                            <i className="fa fa-dot-circle-o text-success"></i> {row?.status}
+                        </a>
+                    </div>
+                </>
+            )    ,
         },
         {
             dataField: "email_address",
@@ -37,12 +75,9 @@ const JobApplicants = () => {
             dataField: "job_opening_id",
             text: "Job Opening",
             sort: true,
-            //   filter: dateFilter({
-            //     style: { display: 'flex' },
-            //     getFilter: (filter) => {
-            //         attendanceDateFilter = filter;
-            //     }
-            //   }),
+            formatter: (value, row) => (
+                <h2>{row?.job_opening_id?.job_title}</h2>
+            )
 
         },
         {
@@ -76,6 +111,7 @@ const JobApplicants = () => {
                     <div className="dropdown-menu dropdown-menu-right">
                         <a className="dropdown-item" onClick={() => {}} href="#" data-toggle="modal"
                            data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                        <Link className="dropdown-item" onClick={() => deleteJobApplicant(row)} ><i className="fa fa-trash m-r-5"></i> Delete</Link>
                     </div>
                 </div>
             )    ,

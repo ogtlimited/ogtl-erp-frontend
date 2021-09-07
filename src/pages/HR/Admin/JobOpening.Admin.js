@@ -1,14 +1,113 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from '../../../db/job-opening.json'
 import FormModal from "../../../components/Modal/Modal";
 import {jobOpeningFormJson} from "../../../components/FormJSON/HR/recruitment/JobOpening";
+import {useAppContext} from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
 
 const JobOpening = () => {
     const [formValue, setFormValue] = useState({})
+    const [template, setTemplate] = useState(jobOpeningFormJson)
+    const [submitted, setSubmitted] = useState(false)
+    const {combineRequest,showAlert}  = useAppContext()
+    const [data,setData] = useState([])
+
+    const fetchJobOpenings = () =>{
+        axiosInstance.get('/api/jobOpening').then(res =>{
+            console.log(res.data.data)
+            setData(res.data.data)
+        }).catch(error=>{
+            console.log(error)
+        })
+    }
+    useEffect(() =>{
+        fetchJobOpenings()
+    },[])
+
+
+    useEffect(() => {
+        combineRequest().then(res => {
+            console.log(res)
+            const {projects,designations} = res.data.createEmployeeFormSelection
+            const projectsOpts = projects?.map(e => {
+                return {
+                    label: e.project_name,
+                    value: e._id
+                }
+            })
+            const designationOpts = designations?.map(e => {
+                return {
+                    label: e.designation,
+                    value: e._id
+                }
+            })
+            const finalForm = jobOpeningFormJson.Fields.map(field =>{
+                if(field.name === 'designation_id'){
+                    field.options = designationOpts
+                    return field
+                }else if(field.name === 'project_id'){
+                    field.options = projectsOpts
+                    return field
+                }
+                return field
+            })
+            setTemplate(
+                {
+                    title: jobOpeningFormJson.title,
+                    Fields: finalForm
+                }
+            )
+            console.log(template)
+        }).catch(error =>{
+            console.log(error)
+        })
+    },[])
+
+    //create job opening
+    useEffect(() => {
+        console.log(submitted)
+        if(submitted === true){
+            axiosInstance.post('/api/jobOpening', formValue).then(res =>{
+                setSubmitted(false);
+                fetchJobOpenings()
+                setData(prevData => [...data, res.data.data])
+
+                showAlert(true,res.data.message,'alert alert-success')
+            }).catch(error =>{
+                console.log(error.response.data)
+                showAlert(true,error.response.data.message,'alert alert-danger')
+            })
+        }
+        console.log(formValue)
+    }, [submitted])
+
+    //delete job opening
+    const deleteJobOpening = (row) =>{
+        axiosInstance.delete(`/api/jobOpening/${row._id}`).then(res =>{
+            console.log(res)
+            setData(prevData => prevData.filter(pdata => pdata._id !== row._id))
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
+    //update jobOpening
+    const updateJobOpening = (row) =>{
+        axiosInstance.patch(`/api/jobOpening/${row._id}`,row).then(res =>{
+            console.log(res)
+            setData(prevData => [...data, res.data.data])
+            fetchJobOpenings()
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
+
 
     const columns = [
         {
@@ -21,33 +120,22 @@ const JobOpening = () => {
             dataField: "status",
             text: "Status",
             sort: true,
-
-            // formatter: (value, row) => (
-            //     <>
-            //         <div className="action-label">
-            //             <a className="btn btn-white btn-sm btn-rounded" href="">
-            //                 <i className="fa fa-dot-circle-o text-success"></i> Active
-            //             </a>
-            //         </div>
-            //     </>
-            // )    ,
         },
         {
             dataField: "designation_id",
             text: "Designation",
             sort: true,
+            formatter: (value, row) => (
+                <h2>{row?.designation_id?.designation}</h2>
+            )
         },
         {
-            dataField: "campaign_id",
-            text: "Campaign",
+            dataField: "project_id",
+            text: "Project",
             sort: true,
-            //   filter: dateFilter({
-            //     style: { display: 'flex' },
-            //     getFilter: (filter) => {
-            //         attendanceDateFilter = filter;
-            //     }
-            //   }),
-
+            formatter: (value, row) => (
+                <h2>{row?.project_id?.project_name}</h2>
+            )
         },
         {
             dataField: "description",
@@ -65,6 +153,7 @@ const JobOpening = () => {
                     <div className="dropdown-menu dropdown-menu-right">
                         <a className="dropdown-item" onClick={() => {}} href="#" data-toggle="modal"
                            data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                        <Link className="dropdown-item" onClick={() => deleteJobOpening(row)} ><i className="fa fa-trash m-r-5"></i> Delete</Link>
                     </div>
                 </div>
             )    ,
@@ -108,7 +197,7 @@ const JobOpening = () => {
                     />
                 </div>
             </div>
-            <FormModal setformValue={setFormValue} template={jobOpeningFormJson}  />
+            <FormModal setformValue={setFormValue} template={jobOpeningFormJson} setsubmitted={setSubmitted}  />
         </>
     );
 };

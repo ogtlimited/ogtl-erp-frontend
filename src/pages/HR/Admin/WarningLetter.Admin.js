@@ -6,20 +6,26 @@ import data from '../../../db/warning-letter.json'
 import FormModal from "../../../components/Modal/Modal";
 import {warningLetterFormJson} from "../../../components/FormJSON/HR/Performance/Warning";
 import {useAppContext} from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
 const WarningLetter = () => {
     const [formValue, setFormValue] = useState({})
     const [template, setTemplate] = useState(warningLetterFormJson)
     const [submitted, setSubmitted] = useState(false)
+    const [data,setData] = useState([])
 
-    const {fetchWarningLetter,combineRequest} = useAppContext();
+    const {combineRequest,showAlert} = useAppContext();
 
-    useEffect(() =>{
-        fetchWarningLetter().then(res =>{
-            console.log("warning letters", res)
-        }).catch(error =>{
+    const fetchWarningLetter = () =>{
+        axiosInstance.get('/api/warningLetter').then(res=>{
+            console.log(res.data.data)
+            setData(res.data.data)
+        }).catch(error=>{
             console.log(error)
         })
+    }
+    useEffect(() =>{
+        fetchWarningLetter()
     },[])
 
     useEffect(() => {
@@ -49,18 +55,35 @@ const WarningLetter = () => {
         })
     }, [])
 
+    //delete aptitude test
+    const deleteWarningLetter = (row) =>{
+        axiosInstance.delete(`/api/warningLetter/${row._id}`).then(res =>{
+            console.log(res)
+            setData(prevData => prevData.filter(pdata => pdata._id !== row._id))
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
+
     const columns = [
         {
             dataField: "employee_id",
             text: "Employee",
             sort: true,
-
+            formatter: (value, row) => (
+                <h2>{row?.employee_id?.first_name} {row?.employee_id?.last_name}</h2>
+            )
         },
 
         {
             dataField: "hr_user_id",
             text: "HR User",
             sort: true,
+            formatter: (value, row) => (
+                <h2>{row?.hr_user_id?.first_name} {row?.hr_user_id?.last_name}</h2>
+            )
         },
         {
             dataField: "reason",
@@ -91,6 +114,15 @@ const WarningLetter = () => {
             dataField: "isInPip",
             text: "PIP Status",
             sort: true,
+            // formatter: (value, row) => (
+            //     <>
+            //         <div className="action-label">
+            //             <a className="btn btn-white btn-sm btn-rounded" href="">
+            //                 <i className="fa fa-dot-circle-o text-success"></i> {row.isInPip}
+            //             </a>
+            //         </div>
+            //     </>
+            // )    ,
         },
         {
             dataField: "",
@@ -103,6 +135,7 @@ const WarningLetter = () => {
                     <div className="dropdown-menu dropdown-menu-right">
                         <a className="dropdown-item" onClick={() => {}} href="#" data-toggle="modal"
                            data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                        <Link className="dropdown-item" onClick={() => deleteWarningLetter(row)} ><i className="fa fa-trash m-r-5"></i> Delete</Link>
                     </div>
                 </div>
             )    ,
