@@ -228,7 +228,7 @@ const EmployeeUser = () => {
               <h5 class="dash-title">Upcoming Holiday</h5>
               <div class="card">
                 <div class="card-body text-center">
-                  <h4 class="holiday-title mb-0">Mon 20 May 2019 - Ramzan</h4>
+                  <h4 class="holiday-title mb-0">1 October 2021 - Independence</h4>
                 </div>
               </div>
             </section>

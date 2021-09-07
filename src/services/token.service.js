@@ -8,6 +8,9 @@ class TokenService {
     getUser() {
       return JSON.parse(localStorage.getItem("user"));
     }
+    getOgid() {
+      return this.getUser().ogid;
+    }
   
     setUser(user) {
       console.log(JSON.stringify(user));

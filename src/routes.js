@@ -21,6 +21,8 @@ import JobOpening from "./pages/HR/Admin/JobOpening.Admin";
 import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
 import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
+import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin"
+import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin"
 
 // const routes = [{
 //   title: 'Main',
@@ -147,6 +149,7 @@ const routes = [
     component: EmployeeUser,
     layout: "/admin",
   },
+
   {
     title: "Profile Dashboard",
     path: "/profile-dashboard",
@@ -174,8 +177,8 @@ const routes = [
   },
   {
     title: "Leaves Setting",
-    path: "/leave-setting",
-    name: "Dashboard",
+    path: "/leave-settings",
+    component: LeaveSettingAdmin,
     layout: "/admin",
   },
   {
@@ -206,6 +209,12 @@ const routes = [
     title: "Shifts",
     path: "/shifts",
     component: ShiftAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Coaching",
+    path: "/coaching",
+    component: CoachingAdmin,
     layout: "/admin",
   },
   {

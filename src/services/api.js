@@ -13,6 +13,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (response) =>
     new Promise((resolve,reject) =>{
+        console.log(response)
         resolve(response)
     }),
     (error)=>{

@@ -99,11 +99,11 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   
-                  <li>
+                  {/* <li>
                     <Link className="" to="/admin/departments">
                       Departments
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link className="" to="/admin/designations">
                       Designations
@@ -114,11 +114,11 @@ const Sidebar = () => {
                       Shift &amp; Schedule
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link className="" to="/admin/overtime">
                       Overtime
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </li>
               <li className="submenu">
@@ -207,7 +207,7 @@ const Sidebar = () => {
               </li>
               
               <li className="">
-                <Link href="s/tickets">
+                <Link to="/admin/coaching">
                   <i className="la la-ticket"></i> <span>Coaching Form</span>
                 </Link>
               </li>

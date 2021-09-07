@@ -1,10 +1,20 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
 import BootstrapTable from 'react-bootstrap-table-next';  
+import axiosInstance from "../../services/api";
+import tokenService from "../../services/token.service";
 // import { AppContext } from "../../context/AppContext";
 
 // import attendanceList from './attendance.json'
-const AttendanceTable = () => {
-  const {attendance} = useContext({})
+const AttendanceTable = ({data,}) => {
+  // const {attendance} = useContext({})
+  useEffect(() => {
+    const ogid = tokenService.getOgid()
+    console.log('HELLO')
+    axiosInstance.get('/api/attendance/employee/'+ogid ).then(e =>{
+      console.log(e)
+    });
+    
+  }, [])
     const columns = [
         
         {
@@ -73,7 +83,7 @@ const AttendanceTable = () => {
         striped  
         hover
         keyField='id'
-        data={ attendance }
+        data={ data }
         columns={ columns } ></BootstrapTable>
         )
 }

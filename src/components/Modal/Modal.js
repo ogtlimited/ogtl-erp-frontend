@@ -9,11 +9,15 @@ const FormModal = ({template, setformValue, setsubmitted}) => {
         register,
         handleSubmit,
         getValues,
+        watch,
         errors,
         setValue, formState  } = useForm();
       let handleform= {
         register:register,
-        errors:formState
+        errors:formState,
+        control: control,
+        setValue: setValue,
+        watch: watch,
      };
      const onSubmit = (data) => {
        console.log(data)

@@ -1,6 +1,29 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
+import axiosInstance from "../../services/api";
+import tokenService from "../../services/token.service";
 
 const Timesheet = () => {
+  const [punchedIn, sepunchedIn] = useState()
+  const [monthAttendance, setmonthAttendance] = useState([])
+  const [user, setuser] = useState(tokenService.getUser())
+  const punchInOut = () =>{
+    const currUser = user
+    const obj = {
+      employeeId: currUser._id,
+      shiftTypeId: currUser.default_shift,
+      ogId: currUser.ogid,
+      clockInTime: new Date(),
+      departmentId: currUser.department[0]
+    }
+    axiosInstance.post('/api/attendance', obj).then(e =>{
+      console.log(e)
+    })
+  }
+  useEffect(() => {
+    const user = tokenService.getUser()
+    console.log(user)
+  //  axiosInstance.post()
+  }, [])
   return (
     <div class="col-md-4">
       <div class="card punch-status">
@@ -18,7 +41,7 @@ const Timesheet = () => {
             </div>
           </div>
           <div class="punch-btn-section">
-            <button type="button" class="btn btn-primary punch-btn">
+            <button onClick={() => punchInOut()} type="button" class="btn btn-primary punch-btn">
               Punch Out
             </button>
           </div>
