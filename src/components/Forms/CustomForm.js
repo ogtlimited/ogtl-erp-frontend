@@ -1,5 +1,8 @@
 import React from "react";
-
+import ReactQuill from 'react-quill'; 
+import 'react-quill/dist/quill.snow.css'; 
+import { Controller } from "react-hook-form";
+import Select from "react-select";
 const renderOptions = (options) => {
   return options.map((child) => {
     return (
@@ -11,7 +14,12 @@ const renderOptions = (options) => {
 };
 
 const CustomForm = ({ template, data, handleform }) => {
-  let { register, errors } = handleform;
+  let { register, errors, control, setValue, watch } = handleform;
+  const onEditorStateChange = (editorState, name) => {
+    console.log(editorState)
+    console.log(name)
+    setValue(name, editorState)
+  };
   const renderFields = (fields) => {
     return fields?.map((field) => {
       let { type, title, name, required, validation } = field;
@@ -19,7 +27,6 @@ const CustomForm = ({ template, data, handleform }) => {
       switch (type) {
         case "text":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
@@ -29,12 +36,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "password":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -42,12 +46,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "email":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -55,12 +56,9 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
         case "date":
           return (
-           
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
@@ -68,16 +66,34 @@ const CustomForm = ({ template, data, handleform }) => {
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
-          case "time":
+        case "time":
           return (
-
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
                 <input {...register(name)} class="form-control" type="time" />
+                </div>
+                {errors[name] && <small>{errors[name].message}</small>}
+                </div>
+          );
+          case "textarea":
+          return (
+                <div class="col-12">
+                <div class="form-group">
+                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <Controller
+                  name={name}
+                  control={control}
+                  render={({ value, onChange }) => (
+                   <>
+                   {console.log(value)}
+                     <ReactQuill
+                              onChange={(state) =>onEditorStateChange(state, name)} name={name}
+                            />
+                    </>
+                  )}
+                />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
@@ -103,31 +119,36 @@ const CustomForm = ({ template, data, handleform }) => {
                 <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label ml-2">{title}</label>
-               
                 <input  id="upload" {...register(name)} hidden type="file" />
                 <label htmlFor="upload" class="form-control btn btn-primary"><i class="fa fa-upload"></i> {title}</label>
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
-             
-           
           );
 
-        case "select":
-          let { options, full } = field;
-          return (
-            <div  class="col-sm-12" key={name}>
-                 <div class="form-group">
-                    <label htmlFor={name}>
-                        {title}
-                        <span style={required ? { color: "red" } : {}}>*</span>
-                    </label>
-                    <select className="form-control" type="select" {...register(name)} >
-                        {renderOptions(options)}
-                    </select>
-            </div>
-            </div>
-          );
+          case "select":
+            let { options, full } = field;
+            return (
+              <div  class={full ? "col-sm-12": "col-sm-6"} key={name}>
+                   <div class="form-group">
+                      <label htmlFor={name}>
+                          {title}
+                          <span style={required ? { color: "red" } : {}}>*</span>
+                      </label>
+                      <Controller
+                    name={name}
+                    control={control}
+                    render={({ value, onChange }) => (
+                     <>
+                     {console.log(value)}
+                       <Select  onChange={(state) =>onEditorStateChange(state.value, name)} options={options} />
+                      </>
+                    )}
+                  />
+                     
+              </div>
+              </div>
+            );
         case "role":
             let {roleList} = field;
           return (
