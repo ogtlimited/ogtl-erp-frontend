@@ -7,6 +7,7 @@ export const LeaveApplicationFormJSON = {
             type:'select',
             title:'Employee Id',
             options: [],
+            full: false,
             required:{
                 value:true,
                 message:'Employee Id is required'
@@ -15,6 +16,7 @@ export const LeaveApplicationFormJSON = {
         {
             name:'leave_type_id' ,
             type:'select',
+            full: false,
             title:'Leave Type Id',
             options: [
                 {
