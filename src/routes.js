@@ -137,7 +137,7 @@ import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin"
 const routes = [
   {
     title: "Admin Dashboard",
-    path: "/admin-dashboard",
+    path: "/index",
     name: "Dashboard",
     component: AdminDashboard,
     layout: "/admin",
