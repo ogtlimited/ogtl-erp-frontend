@@ -1,8 +1,5 @@
-import React, {useEffect} from "react";
-import ReactQuill from 'react-quill'; 
-import 'react-quill/dist/quill.snow.css'; 
-import { Controller } from "react-hook-form";
-import Select from "react-select";
+import React from "react";
+
 const renderOptions = (options) => {
   return options.map((child) => {
     return (
@@ -14,20 +11,10 @@ const renderOptions = (options) => {
 };
 
 const CustomForm = ({ template, data, handleform }) => {
-  let { register, errors, control, setValue, watch } = handleform;
-  console.log(control)
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) => console.log(value, name, type));
-    return () => subscription.unsubscribe();
-  }, [watch])
-  const onEditorStateChange = (editorState, name) => {
-    console.log(editorState)
-    console.log(name)
-    setValue(name, editorState)
-  };
+  let { register, errors } = handleform;
   const renderFields = (fields) => {
     return fields?.map((field) => {
-      let { type, title, name, required, validation, disabled } = field;
+      let { type, title, name, required, validation } = field;
 
       switch (type) {
         case "text":
@@ -38,7 +25,7 @@ const CustomForm = ({ template, data, handleform }) => {
                 <label htmlFor={name} class="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
                 <input
                  {...register(name)}
-                 class="form-control" type="text" disabled={disabled} />
+                 class="form-control" type="text" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
@@ -84,27 +71,18 @@ const CustomForm = ({ template, data, handleform }) => {
              
            
           );
-        case "textarea":
+          case "time":
           return (
-           
-                <div class="col-12">
+
+                <div class="col-sm-6">
                 <div class="form-group">
                 <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <Controller
-                  name={name}
-                  control={control}
-                  render={({ value, onChange }) => (
-                   <>
-                   {console.log(value)}
-                     <ReactQuill  
-                              onChange={(state) =>onEditorStateChange(state, name)} name={name}
-                            />
-                    </>
-                  )}
-                />
+                <input {...register(name)} class="form-control" type="time" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
+
+
           );
         case "check":
           return (
@@ -138,23 +116,15 @@ const CustomForm = ({ template, data, handleform }) => {
         case "select":
           let { options, full } = field;
           return (
-            <div  class={full ? "col-sm-12" : "col-sm-6"} key={name}>
+            <div  class="col-sm-12" key={name}>
                  <div class="form-group">
                     <label htmlFor={name}>
                         {title}
                         <span style={required ? { color: "red" } : {}}>*</span>
                     </label>
-                    <Controller
-                  name={name}
-                  control={control}
-                  render={({ value, onChange }) => (
-                   <>
-                   {console.log(value)}
-                     <Select  onChange={(state) =>onEditorStateChange(state.value, name)} options={options} />
-                    </>
-                  )}
-                />
-                   
+                    <select className="form-control" type="select" {...register(name)} >
+                        {renderOptions(options)}
+                    </select>
             </div>
             </div>
           );

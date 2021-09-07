@@ -13,21 +13,23 @@ export const jobOpeningFormJson = {
         },
         {
             name:'designation_id' ,
-            type:'text',
+            type:'select',
             title:'Designation',
             required:{
                 value:true,
                 message:'Designation is required'
             },
+            options:[]
         },
         {
-            name:'campaign_id' ,
-            type:'text',
-            title:'Campaign',
+            name:'project_id' ,
+            type:'select',
+            title:'Project',
             required:{
                 value:true,
-                message:'Campaign is required'
+                message:'Project is required'
             },
+            options:[]
         },
         {
             name:'status' ,

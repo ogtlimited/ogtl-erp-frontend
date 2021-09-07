@@ -2,26 +2,72 @@
 import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from '../../../db/shift.json'
 import FormModal from "../../../components/Modal/Modal";
 import {shiftTypeFormJson} from "../../../components/FormJSON/HR/shift/ShiftType";
-import {shiftAssignmentFormJson} from "../../../components/FormJSON/HR/shift/ShiftAssignment";
+import {useAppContext} from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
 const ShiftAdmin = () => {
-    const [formType, setFormType] = useState('')
-    const [template, setTemplate] = useState(shiftTypeFormJson)
-    useEffect(()=>{
-        if(formType === 'ShiftType'){
-            setTemplate(shiftTypeFormJson)
-        }else if(formType === 'ShiftAssignment'){
-            setTemplate(shiftAssignmentFormJson)
-        }
-    },[formType])
+    const [formValue, setFormValue] = useState({})
 
-    const handleChange = (type) =>{
-        console.log(type)
-        setFormType(type)
+    const [submitted, setSubmitted] = useState(false)
+    const [data,setData] = useState([])
+
+    const {fetchTypesShift,showAlert}  = useAppContext()
+
+    useEffect(()=>{
+        fetchTypesShift().then(res =>{
+            console.log("Shift types response",res)
+            setData(res.data.data)
+        }).catch(error =>{
+            console.log(error)
+        })
+    },[])
+
+    //create shift
+    useEffect(() => {
+        console.log(submitted)
+        if(submitted === true){
+            axiosInstance.post('/api/shiftType', formValue).then(res =>{
+                setSubmitted(false);
+                setData(prevData => [...data, res.data.data])
+                fetchTypesShift()
+                showAlert(true,res.data.message,'alert alert-success')
+            }).catch(error =>{
+                console.log(error)
+                showAlert(true,error.response.data.message,'alert alert-danger')
+            })
+        }
+        console.log(formValue)
+    }, [submitted])
+
+    //delete shift
+    const deleteShift = (row) =>{
+        axiosInstance.delete(`/api/shiftType/${row._id}`).then(res =>{
+            console.log(res)
+            fetchTypesShift()
+            setData(prevData => prevData.filter(pdata => pdata._id !== row._id))
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
     }
+
+    //update shift
+    const updateShift = (row) =>{
+        axiosInstance.patch(`/api/shiftType/${row._id}`,row).then(res =>{
+            console.log(res)
+            setData(prevData => [...data, res.data.data])
+            fetchTypesShift()
+            showAlert(true,res.data.message,'alert alert-success')
+        }).catch(error =>{
+            console.log(error)
+            showAlert(true,error.response.data.message,'alert alert-danger')
+        })
+    }
+
+
 
     const columns = [
         {
@@ -30,23 +76,7 @@ const ShiftAdmin = () => {
           sort: true,
          
         },
-        {
-          dataField: "status",
-          text: "Status",
-          sort: true,
-         
-          formatter: (value, row) => (
-              <>
-                <div className="action-label">
-                    <a className="btn btn-white btn-sm btn-rounded" href="">
-                        <i className="fa fa-dot-circle-o text-success"></i> Active
-                    </a>
-                </div>
-            </>
-            )    ,
-          
-          
-        },
+
         {
           dataField: "start_time",
           text: "Start time",
@@ -58,25 +88,25 @@ const ShiftAdmin = () => {
             dataField: "end_time",
             text: "End time",
             sort: true,
-          //   filter: dateFilter({
-          //     style: { display: 'flex' },
-          //     getFilter: (filter) => {
-          //         attendanceDateFilter = filter;
-          //     }
-          //   }),
-           
-          },
-          {
-            dataField: "break_time",
-            text: "Break time",
-            sort: true,
-          },
-          {
-            dataField: "",
-            text: "Action",
-            sort: false,
 
           },
+
+        {
+            dataField: "",
+            text: "Action",
+            sort: true,
+            headerStyle: {minWidth: "70px", textAlign:"left"},
+            formatter: (value, row) => (
+                <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+                                                                    aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                    <div className="dropdown-menu dropdown-menu-right">
+                        <a className="dropdown-item" onClick={() => updateShift(row)} href="#" data-toggle="modal"
+                                                                      data-target="#FormModal"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+                        <Link className="dropdown-item" onClick={() => deleteShift(row)} ><i className="fa fa-trash m-r-5"></i> Delete</Link>
+                     </div>
+                </div>
+            )    ,
+        },
 
       ];
   return (
@@ -100,20 +130,9 @@ const ShiftAdmin = () => {
               href="#"
               className="btn add-btn m-r-5"
               data-toggle="modal"
-              onClick={() => handleChange('ShiftType')}
               data-target="#FormModal"
             >
               Add Shifts
-            </a>
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => handleChange('ShiftAssignment')}
-            >
-              {" "}
-              Assign Shifts
             </a>
           </div>
         </div>
@@ -126,7 +145,7 @@ const ShiftAdmin = () => {
               />
           </div>
       </div>
-        <FormModal template={template} />
+        <FormModal setformValue={setFormValue} template={shiftTypeFormJson} setsubmitted={setSubmitted} />
     </>
   );
 };

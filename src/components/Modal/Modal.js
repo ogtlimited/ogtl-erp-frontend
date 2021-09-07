@@ -11,7 +11,7 @@ const FormModal = ({template, setformValue, setsubmitted}) => {
         getValues,
         watch,
         errors,
-        setValue, formState  } = useForm();
+        setValue, formState ,reset } = useForm();
       let handleform= {
         register:register,
         errors:formState,
@@ -23,6 +23,7 @@ const FormModal = ({template, setformValue, setsubmitted}) => {
        console.log(data)
        setformValue(data)
        setsubmitted(true)
+         reset()
        $('#FormModal').modal('toggle')
       }; 
     return (

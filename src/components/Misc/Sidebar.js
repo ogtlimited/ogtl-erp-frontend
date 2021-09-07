@@ -99,11 +99,11 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   
-                  {/* <li>
+                  <li>
                     <Link className="" to="/admin/departments">
                       Departments
                     </Link>
-                  </li> */}
+                  </li>
                   <li>
                     <Link className="" to="/admin/designations">
                       Designations
@@ -114,11 +114,21 @@ const Sidebar = () => {
                       Shift &amp; Schedule
                     </Link>
                   </li>
-                  {/* <li>
+                  <li>
+                    <Link className="" to="/admin/shift-assignment">
+                      Shift Assignments
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/shift-request">
+                      Shift Requests
+                    </Link>
+                  </li>
+                  <li>
                     <Link className="" to="/admin/overtime">
                       Overtime
                     </Link>
-                  </li> */}
+                  </li>
                 </ul>
               </li>
               <li className="submenu">
@@ -205,19 +215,11 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
-                  <i className="la la-edit"></i>{" "}
-                  <span> Coaching </span> <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                  <Link  to="/admin/coaching">Coaching Admin</Link>
-                  </li>
-                  <li>
-                  <Link  to="/admin/coaching-employee">Coaching Employee</Link>
-                  </li>
-                </ul>
+              
+              <li className="">
+                <Link to="/admin/coaching">
+                  <i className="la la-ticket"></i> <span>Coaching Form</span>
+                </Link>
               </li>
               <li className="menu-title">
                 <span>Accounting</span>
@@ -260,6 +262,15 @@ const Sidebar = () => {
                   <span> Performance </span> <span className="menu-arrow"></span>
                 </a>
                 <ul style={dNone}>
+                  <li>
+                    <Link
+                      className=""
+                      to="/admin/warning-letter"
+                    >
+                      {" "}
+                     Warning Letter
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       className=""

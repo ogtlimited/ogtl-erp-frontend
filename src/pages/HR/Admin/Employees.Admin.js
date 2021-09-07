@@ -55,16 +55,16 @@ const AllEmployeesAdmin = () => {
         console.log(template)
       })
     }, [])
+
     useEffect(() => {
       console.log(submitted)
-      if(submitted == true){
+      if(submitted === true){
         formValue.image = ""
         axiosInstance.post('/employees', formValue).then(res =>{
           fetchEmployee()
           setsubmitted(false);
           console.log(res)
         })
-      
 
       }
      console.log(formValue)

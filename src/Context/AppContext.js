@@ -42,15 +42,21 @@ const AppProvider = (props) => {
        }, 5000);
     }
     const fetchTypesShift = () =>{
-        return axiosInstance.get('/shiftType')
+        return axiosInstance.get('/api/shiftType')
     }
+
+
     const combineRequest = ()=>{
         return axiosInstance.get('/combine-employee-form')
+    }
+    const adminDashboardData = () =>{
+        return axiosInstance.get('/admin-dashboard')
     }
 
     return <AppContext.Provider
         value= {{ fetchTypesShift, 
         combineRequest,
+            adminDashboardData,
         setallEmployees,allEmployees,
         showAlert, showAlertMsg,
          fetchEmployee}}
@@ -66,3 +72,4 @@ function useAppContext() {
 }
 
 export {AppProvider, useAppContext}
+

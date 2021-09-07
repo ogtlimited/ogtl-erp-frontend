@@ -4,23 +4,24 @@ export const warningLetterFormJson = {
     Fields: [
         {
             name:'employee_id' ,
-            type:'text',
+            type:'select',
             title:'Employee',
             required:{
                 value:true,
                 message:'Employee is required'
             },
+            options: []
 
         },
-        {
-            name:'hr_user_id' ,
-            type:'text',
-            title:'HR User',
-            required:{
-                value:true,
-                message:'Hr user is required'
-            },
-        },
+        // {
+        //     name:'hr_user_id' ,
+        //     type:'text',
+        //     title:'HR User',
+        //     required:{
+        //         value:true,
+        //         message:'Hr user is required'
+        //     },
+        // },
         {
             name:'reason' ,
             type:'text',
