@@ -154,11 +154,12 @@
     position: relative;
     box-sizing: border-box;
     display: inline-block;
-    margin-left: 30px;
-    height: 40px;
-    width: 180px;
+    /* margin-left: 30px; */
+    height: 54px !important;
+    width: 100%;
   }
   .css-yk16xz-control {
+    margin-top: 7px;
     min-height: 44px !important;
   }
   .sortable{

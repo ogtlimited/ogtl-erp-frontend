@@ -115,16 +115,6 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link className="" to="/admin/shift-assignments">
-                      Shift Assignments
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/shift-requests">
-                      Shift Requests
-                    </Link>
-                  </li>
-                  <li>
                     <Link className="" to="/admin/overtime">
                       Overtime
                     </Link>
@@ -263,14 +253,6 @@ const Sidebar = () => {
                 </a>
                 <ul style={dNone}>
                   <li>
-                    <Link
-                      className=""
-                      to="/admin/warning-letter"
-                    >
-                      {" "}
-                      Warning Letter
-                    </Link>
-                  </li><li>
                     <Link
                       className=""
                       to="/performances/performance-indicator"

@@ -82,7 +82,7 @@ const EmployeeAttendance = () => {
         </div>
         <div class="row">
           <div className="col-lg-12" />
-          <GeneralTable
+          <AttendanceTable
             data={attendance}
             columns={columns}
           />
