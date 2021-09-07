@@ -21,9 +21,12 @@ import JobOpening from "./pages/HR/Admin/JobOpening.Admin";
 import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
 import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
-import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
+import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin"
+import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin"
+import Asset from "./pages/HR/Admin/Assets.Admin";
 import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
+import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -138,7 +141,7 @@ import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 const routes = [
   {
     title: "Admin Dashboard",
-    path: "/admin-dashboard",
+    path: "/index",
     name: "Dashboard",
     component: AdminDashboard,
     layout: "/admin",
@@ -167,6 +170,12 @@ const routes = [
     title: "Leaves Admin",
     path: "/leaves-admin",
     component: LeavesAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Assets",
+    path: "/assets",
+    component: Asset,
     layout: "/admin",
   },
   {

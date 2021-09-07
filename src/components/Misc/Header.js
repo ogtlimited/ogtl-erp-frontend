@@ -117,7 +117,7 @@ const Header = () => {
             <span>Admin</span>
           </a>
           <div className="dropdown-menu">
-            <Link className="dropdown-item" to="profile">
+            <Link className="dropdown-item" to="/admin/profile-dashboard">
               My Profile
             </Link>
             <Link className="dropdown-item" to="settings">
