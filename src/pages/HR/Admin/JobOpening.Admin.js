@@ -125,28 +125,33 @@ const JobOpening = () => {
       dataField: "job_title",
       text: "Job Title",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "designation_id",
       text: "Designation",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{row?.designation_id?.designation}</h2>,
     },
     {
       dataField: "project_id",
       text: "Project",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{row?.project_id?.project_name}</h2>,
     },
     {
       dataField: "description",
       text: "Description",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "",

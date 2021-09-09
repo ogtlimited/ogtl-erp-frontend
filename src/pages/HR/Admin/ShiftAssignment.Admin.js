@@ -212,7 +212,7 @@ const ShiftAssignment = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Shift List</h3>
+            <h3 className="page-title">Shift Assignment</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>

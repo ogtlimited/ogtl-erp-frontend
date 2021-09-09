@@ -99,6 +99,7 @@ const WarningLetter = () => {
       dataField: "employee_id",
       text: "Employee",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => (
         <h2>
           {row?.employee_id?.first_name} {row?.employee_id?.last_name}
@@ -109,18 +110,21 @@ const WarningLetter = () => {
       dataField: "reason",
       text: "Reason",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{ReactHtmlParser(row?.reason)}</h2>,
     },
     {
       dataField: "details",
       text: "Details",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{ReactHtmlParser(row?.details)}</h2>,
     },
     {
       dataField: "actions",
       text: "Actions To Take",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{ReactHtmlParser(row?.actions)}</h2>,
     },
     {

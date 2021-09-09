@@ -125,8 +125,9 @@ const JobOffer = () => {
   const columns = [
     {
       dataField: "job_applicant_id",
-      text: "Job Title",
+      text: "Job Applicant",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => (
         <h2>{row?.job_applicant_id?.applicant_name}</h2>
       ),
@@ -150,22 +151,26 @@ const JobOffer = () => {
       dataField: "offer_date",
       text: "Date",
       sort: true,
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "designation_id",
       text: "Designation",
       sort: true,
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{row?.designation_id?.designation}</h2>,
     },
     {
       dataField: "job_offer_terms",
       text: "Job Offer Terms",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "terms_and_conditions",
       text: "Term and Conditions",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "",

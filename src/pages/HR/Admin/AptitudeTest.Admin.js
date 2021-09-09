@@ -128,6 +128,7 @@ const AptitudeTest = () => {
       dataField: "test_type",
       text: "Test Type",
       sort: true,
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "status",
@@ -148,6 +149,7 @@ const AptitudeTest = () => {
       dataField: "job_applicant_id",
       text: "Job Applicant",
       sort: true,
+      headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <h2>{row?.job_applicant_id?.applicant_name}</h2>
       ),
@@ -156,6 +158,7 @@ const AptitudeTest = () => {
       dataField: "hr_user",
       text: "HR User",
       sort: true,
+      headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <h2>
           {row?.hr_user?.first_name} {row?.hr_user?.last_name}
@@ -181,6 +184,7 @@ const AptitudeTest = () => {
       dataField: "notes",
       text: "Notes",
       sort: true,
+      headerStyle: { minWidth: "200px" },
     },
     {
       dataField: "",
