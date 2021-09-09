@@ -57,6 +57,29 @@ const Sidebar = () => {
                 </ul>
               </li>
               <li className="menu-title">
+                <span>Operation</span>
+              </li>
+              <li className="submenu">
+                <a href="" onClick={(e)=> e.preventDefault()}>
+                  <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
+                  <span className="menu-arrow"></span>
+                </a>
+                <ul style={dNone}>
+                  <li>
+                    <Link className="" to="/admin/campaigns">
+                      All Campaigns
+                    </Link>
+                  </li>
+                  <li className="">
+                  <Link to="/admin/leads">
+                   Leads
+                  </Link>
+              </li>
+                  
+                </ul>
+              </li>
+             
+              <li className="menu-title">
                 <span>HR</span>
               </li>
               <li className="submenu">
@@ -131,25 +154,6 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
-                  <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/admin/campaigns">
-                      All Campaigns
-                    </Link>
-                  </li>
-                  <li className="">
-                  <Link to="/admin/leads">
-                   Leads
-                  </Link>
-              </li>
-                  
-                </ul>
-              </li>
              
               <li className="submenu">
                 <a href="" onClick={(e)=> e.preventDefault()}>
@@ -215,144 +219,9 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              
-              <li className="">
-                <Link to="/admin/coaching">
-                  <i className="la la-ticket"></i> <span>Coaching Form</span>
-                </Link>
-              </li>
-              <li className="menu-title">
-                <span>Accounting</span>
-              </li>
               <li className="submenu">
                 <a href="" onClick={(e)=> e.preventDefault()}>
-                  <i className="la la-files-o"></i> <span> Accounting </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/accounts/categories">
-                      Categories
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budgets">
-                      Budgets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budget-expenses">
-                      Budget Expenses
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budget-revenues">
-                      Budget Revenues
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              
-              <li className="menu-title">
-                <span>Performance</span>
-              </li>
-              <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
-                  <i className="la la-graduation-cap"></i>{" "}
-                  <span> Performance </span> <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link
-                      className=""
-                      to="/admin/warning-letter"
-                    >
-                      {" "}
-                     Warning Letter
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-indicator"
-                    >
-                      {" "}
-                      Performance Indicator{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-review"
-                    >
-                      {" "}
-                      Performance Review{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-appraisal"
-                    >
-                      {" "}
-                      Performance Appraisal{" "}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-             <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
-                  <i className="la la-edit"></i> <span> Training </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/training/training-list">
-                      {" "}
-                      Training List{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/training/trainer">
-                      {" "}
-                      Trainers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/training/training-type">
-                      {" "}
-                      Training Type{" "}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="">
-                <Link to="/admin/promotion">
-                  <i className="la la-bullhorn"></i> <span>Promotion</span>
-                </Link>
-              </li>
-              <li className="">
-                <Link to="/performance/resignation">
-                  <i className="la la-external-link-square"></i>{" "}
-                  <span>Resignation</span>
-                </Link>
-              </li>
-              <li className="">
-                <Link to="/performance/termination">
-                  <i className="la la-times-circle"></i> <span>Termination</span>
-                </Link>
-              </li>
-              <li className="menu-title">
-                <span>Administration</span>
-              </li>
-              <li className="">
-                <Link to="/admin/assets">
-                  <i className="la la-object-ungroup"></i> <span>Assets</span>
-                </Link>
-              </li>
-              <li className="submenu">
-                <a href="#">
-                  <i className="la la-briefcase"></i> <span> Jobs </span>{" "}
+                  <i className="la la-briefcase"></i> <span> Recruitment </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={dNone}>
@@ -432,6 +301,141 @@ const Sidebar = () => {
                   </li>
 
                 </ul>
+              </li>              
+              <li className="submenu">
+                <a href="" onClick={(e)=> e.preventDefault()}>
+                  <i className="la la-graduation-cap"></i>{" "}
+                  <span> Performance </span> <span className="menu-arrow"></span>
+                </a>
+                <ul style={dNone}>
+                  <li>
+                    <Link
+                      className=""
+                      to="/admin/warning-letter"
+                    >
+                      {" "}
+                     Warning Letter
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className=""
+                      to="/performances/performance-indicator"
+                    >
+                      {" "}
+                      Performance Indicator{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className=""
+                      to="/performances/performance-review"
+                    >
+                      {" "}
+                      Performance Review{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className=""
+                      to="/performances/performance-appraisal"
+                    >
+                      {" "}
+                      Performance Appraisal{" "}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="">
+                <Link to="/admin/coaching">
+                  <i className="la la-ticket"></i> <span>Coaching Form</span>
+                </Link>
+              </li>
+              <li className="">
+                <Link to="/admin/promotion">
+                  <i className="la la-bullhorn"></i> <span>Promotion</span>
+                </Link>
+              </li>
+              <li className="">
+                <Link to="/performance/resignation">
+                  <i className="la la-external-link-square"></i>{" "}
+                  <span>Resignation</span>
+                </Link>
+              </li>
+              <li className="">
+                <Link to="/performance/termination">
+                  <i className="la la-times-circle"></i> <span>Termination</span>
+                </Link>
+              </li>
+              <li className="menu-title">
+                <span>Accounting</span>
+              </li>
+              <li className="submenu">
+                <a href="" onClick={(e)=> e.preventDefault()}>
+                  <i className="la la-files-o"></i> <span> Accounting </span>{" "}
+                  <span className="menu-arrow"></span>
+                </a>
+                <ul style={dNone}>
+                  <li>
+                    <Link className="" to="/accounts/categories">
+                      Categories
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/accounts/budgets">
+                      Budgets
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/accounts/budget-expenses">
+                      Budget Expenses
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/accounts/budget-revenues">
+                      Budget Revenues
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              
+              {/* <li className="menu-title">
+                <span>Performance</span>
+              </li> */}
+              <li className="submenu">
+                <a href="" onClick={(e)=> e.preventDefault()}>
+                  <i className="la la-edit"></i> <span> Training </span>{" "}
+                  <span className="menu-arrow"></span>
+                </a>
+                <ul style={dNone}>
+                  <li>
+                    <Link className="" to="/training/training-list">
+                      {" "}
+                      Training List{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/training/trainer">
+                      {" "}
+                      Trainers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/training/training-type">
+                      {" "}
+                      Training Type{" "}
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+
+              <li className="menu-title">
+                <span>Administration</span>
+              </li>
+              <li className="">
+                <Link to="/admin/assets">
+                  <i className="la la-object-ungroup"></i> <span>Assets</span>
+                </Link>
               </li>
               <li className="">
                 <Link to="/administrator/activities">
