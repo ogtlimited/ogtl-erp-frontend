@@ -363,7 +363,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link className="" to="/administrator/jobs-dashboard">
+                    <Link className="" to="/admin/jobs-dashboard">
                       {" "}
                       Jobs Dashboard{" "}
                     </Link>

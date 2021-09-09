@@ -27,6 +27,7 @@ import Asset from "./pages/HR/Admin/Assets.Admin";
 import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
+import JobsDashboard from "./pages/Dashboard/JobsDashboard";
 
 // const routes = [{
 //   title: 'Main',
@@ -248,6 +249,12 @@ const routes = [
     title: "Job Applicants",
     path: "/job-applicants",
     component: JobApplicants,
+    layout: "/admin",
+  },
+  {
+    title: "Job Dashboard",
+    path: "/jobs-dashboard",
+    component: JobsDashboard,
     layout: "/admin",
   },
   {
