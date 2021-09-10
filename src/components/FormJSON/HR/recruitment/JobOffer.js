@@ -52,7 +52,7 @@ export const jobOfferFormJson = {
         },
         {
             name:'job_offer_terms' ,
-            type:'text',
+            type:'textarea',
             title:'Job Offer Terms',
             required:{
                 value:true,
@@ -61,7 +61,7 @@ export const jobOfferFormJson = {
         },
         {
             name:'terms_and_conditions' ,
-            type:'text',
+            type:'textarea',
             title:'Terms and Conditions',
             required:{
                 value:true,

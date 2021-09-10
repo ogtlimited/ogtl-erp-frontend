@@ -61,7 +61,7 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           headerStyle: {minWidth: "250px"},
           formatter: (value, row) => (
             <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
-          src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.first_name} {row.last_name} <span>{row.designation.designation}</span></Link></h2>
+          src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.first_name} {row.last_name} <span>{row?.designation?.designation}</span></Link></h2>
           )    ,
           
         },

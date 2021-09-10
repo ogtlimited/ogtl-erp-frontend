@@ -1,33 +1,42 @@
 import React from "react";
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from "react-custom-scrollbars";
 import { Link } from "react-router-dom";
-import routes from '../../routes'
-import './Sidebar.css'
+import routes from "../../routes";
+import "./Sidebar.css";
 const Sidebar = () => {
-    const dNone = {
-        display: 'none'
-    }
+  const dNone = {
+    display: "none",
+  };
   return (
     <div className="sidebar" id="sidebar">
       <div
         className="slimScrollDiv slimScrollDiv-style"
-        style={{position: 'relative', overflow: 'auto', width: '100%', height: '593px'}}
+        style={{
+          position: "relative",
+          overflow: "auto",
+          width: "100%",
+          height: "593px",
+        }}
       >
         <div
           className="sidebar-inner slimscroll slimScroll-style"
-          style={{overflow: 'auto', width: '100%', height:'593px'}}
+          style={{ overflow: "auto", width: "100%", height: "593px" }}
         >
-          <div id="sidebar-menu" className="sidebar-menu">           
+          <div id="sidebar-menu" className="sidebar-menu">
             <ul>
               <li className="menu-title">
                 <span>Main</span>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()} className="active subdrop">
+                <a
+                  href=""
+                  onClick={(e) => e.preventDefault()}
+                  className="active subdrop"
+                >
                   <i className="la la-dashboard"></i> <span> Dashboard</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
-                <ul style={{display: "block"}}>
+                <ul style={{ display: "block" }}>
                   <li>
                     <Link className="active" to="/admin/dashboard">
                       Admin Dashboard
@@ -41,7 +50,7 @@ const Sidebar = () => {
                 </ul>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-cube"></i> <span> Apps</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -60,7 +69,7 @@ const Sidebar = () => {
                 <span>Operation</span>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -71,19 +80,20 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li className="">
-                  <Link to="/admin/leads">
-                   Leads
-                  </Link>
-              </li>
-                  
+                    <Link to="/admin/leads">Leads</Link>
+                  </li>
                 </ul>
               </li>
-             
+
               <li className="menu-title">
                 <span>HR</span>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()} className="noti-dot">
+                <a
+                  href=""
+                  onClick={(e) => e.preventDefault()}
+                  className="noti-dot"
+                >
                   <i className="la la-user"></i> <span> Employees</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -121,7 +131,7 @@ const Sidebar = () => {
                       Attendance (Employee)
                     </Link>
                   </li>
-                  
+
                   <li>
                     <Link className="" to="/admin/departments">
                       Departments
@@ -154,9 +164,9 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-             
+
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-money"></i> <span> Payroll </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -182,7 +192,7 @@ const Sidebar = () => {
                 </ul>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-pie-chart"></i> <span> Reports </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -220,7 +230,7 @@ const Sidebar = () => {
                 </ul>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-briefcase"></i> <span> Recruitment </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -268,19 +278,13 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className=""
-                      to="/administrator/shortlist-candidates"
-                    >
+                    <Link className="" to="/administrator/shortlist-candidates">
                       {" "}
                       Shortlist Candidates{" "}
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className=""
-                      to="/administrator/interview-questions"
-                    >
+                    <Link className="" to="/administrator/interview-questions">
                       {" "}
                       Interview Questions{" "}
                     </Link>
@@ -299,47 +303,35 @@ const Sidebar = () => {
                       Schedule timing{" "}
                     </Link>
                   </li>
-
                 </ul>
-              </li>              
+              </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-graduation-cap"></i>{" "}
-                  <span> Performance </span> <span className="menu-arrow"></span>
+                  <span> Performance </span>{" "}
+                  <span className="menu-arrow"></span>
                 </a>
                 <ul style={dNone}>
                   <li>
-                    <Link
-                      className=""
-                      to="/admin/warning-letter"
-                    >
+                    <Link className="" to="/admin/warning-letter">
                       {" "}
-                     Warning Letter
+                      Warning Letter
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-indicator"
-                    >
+                    <Link className="" to="/performances/performance-indicator">
                       {" "}
                       Performance Indicator{" "}
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-review"
-                    >
+                    <Link className="" to="/performances/performance-review">
                       {" "}
                       Performance Review{" "}
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className=""
-                      to="/performances/performance-appraisal"
-                    >
+                    <Link className="" to="/performances/performance-appraisal">
                       {" "}
                       Performance Appraisal{" "}
                     </Link>
@@ -364,14 +356,15 @@ const Sidebar = () => {
               </li>
               <li className="">
                 <Link to="/performance/termination">
-                  <i className="la la-times-circle"></i> <span>Termination</span>
+                  <i className="la la-times-circle"></i>{" "}
+                  <span>Termination</span>
                 </Link>
               </li>
               <li className="menu-title">
                 <span>Accounting</span>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-files-o"></i> <span> Accounting </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -398,12 +391,12 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              
+
               {/* <li className="menu-title">
                 <span>Performance</span>
               </li> */}
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-edit"></i> <span> Training </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -453,17 +446,17 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li>
-                <a >
+                <a>
                   <span></span>
                 </a>
               </li>
               <li>
-                <a >
+                <a>
                   <span></span>
                 </a>
               </li>
               <li className="submenu">
-                <a href="" onClick={(e)=> e.preventDefault()}>
+                <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
@@ -482,15 +475,11 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-                                      </ul>
+            </ul>
           </div>
         </div>
-        <div
-          className="slimScrollBar slimscollbar-style"
-        ></div>
-        <div
-          className="slimScrollRail slimscollRail-style"
-        ></div>
+        <div className="slimScrollBar slimscollbar-style"></div>
+        <div className="slimScrollRail slimscollRail-style"></div>
       </div>
     </div>
   );
