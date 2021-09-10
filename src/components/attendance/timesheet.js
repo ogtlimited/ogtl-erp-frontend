@@ -9,11 +9,9 @@ const Timesheet = () => {
   const punchInOut = () =>{
     const currUser = user
     const obj = {
-      employeeId: currUser._id,
-      shiftTypeId: currUser.default_shift,
       ogId: currUser.ogid,
       clockInTime: new Date(),
-      departmentId: currUser.department[0]
+      departmentId: currUser.department
     }
     axiosInstance.post('/api/attendance', obj).then(e =>{
       console.log(e)

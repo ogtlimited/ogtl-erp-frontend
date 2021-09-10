@@ -17,7 +17,8 @@ const LeavesAdmin = () => {
   const [present, setpresent] = useState(0);
   const [planned, setplanned] = useState(0)
   const [approvedLeaves, setapprovedLeaves] = useState(0)
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('');
+  const [fetched, setfetched] = useState(false)
   const [statusRow, setstatusRow] = useState({})
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
@@ -30,6 +31,7 @@ const LeavesAdmin = () => {
       setapprovedLeaves(approved)
       setplanned(open)
       setpresent(allEmployees.length - approved)
+      setfetched(true)
 
     })
   }
@@ -78,11 +80,11 @@ const LeavesAdmin = () => {
     })
   }, [allEmployees])
   useEffect(() => {
-    if(allLeaves.length < 1){
+    if(!fetched){
       fetchLeaves()
 
     }
-  }, [allEmployees, allLeaves]);
+  }, [allEmployees, fetched]);
   useEffect(() => {
     if(submitted === true){
 
