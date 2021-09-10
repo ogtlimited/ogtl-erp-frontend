@@ -1,28 +1,28 @@
-import AllCampaigns from "./pages/Campaigns/AllCampaigns"
-import Leads from "./pages/Campaigns/Leads"
-import AdminDashboard from "./pages/Dashboard/AdminDashboard"
-import AttendanceAdmin from "./pages/HR/Admin/Attendance.Admin"
-import Departments from "./pages/HR/Admin/Department.Admin"
-import Designations from "./pages/HR/Admin/Designation.Admin"
-import AllEmployeesAdmin from "./pages/HR/Admin/Employees.Admin"
-import LeavesAdmin from "./pages/HR/Admin/Leaves.Admin"
-import Promotion from "./pages/HR/Admin/Promotion"
-import ShiftAdmin from "./pages/HR/Admin/Shift.Admin"
-import Profile from "./pages/HR/Profile"
-import EmployeeAttendance from "./pages/HR/Users/Attendance.Users"
-import EmployeeUser from "./pages/HR/Users/Employee.User"
-import LeavesUser from "./pages/HR/Users/Leaves.User"
-import EmployeeSalary from "./pages/Payroll/EmployeeSalary"
-import PaySlip from "./pages/Payroll/PaySlip"
-import AttendanceReport from "./pages/Reports/AttendanceReport"
-import EmployeeReport from "./pages/Reports/EmployeeReport"
-import PayslipReport from "./pages/Reports/PayslipReport"
+import AllCampaigns from "./pages/Campaigns/AllCampaigns";
+import Leads from "./pages/Campaigns/Leads";
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import AttendanceAdmin from "./pages/HR/Admin/Attendance.Admin";
+import Departments from "./pages/HR/Admin/Department.Admin";
+import Designations from "./pages/HR/Admin/Designation.Admin";
+import AllEmployeesAdmin from "./pages/HR/Admin/Employees.Admin";
+import LeavesAdmin from "./pages/HR/Admin/Leaves.Admin";
+import Promotion from "./pages/HR/Admin/Promotion";
+import ShiftAdmin from "./pages/HR/Admin/Shift.Admin";
+import Profile from "./pages/HR/Profile";
+import EmployeeAttendance from "./pages/HR/Users/Attendance.Users";
+import EmployeeUser from "./pages/HR/Users/Employee.User";
+import LeavesUser from "./pages/HR/Users/Leaves.User";
+import EmployeeSalary from "./pages/Payroll/EmployeeSalary";
+import PaySlip from "./pages/Payroll/PaySlip";
+import AttendanceReport from "./pages/Reports/AttendanceReport";
+import EmployeeReport from "./pages/Reports/EmployeeReport";
+import PayslipReport from "./pages/Reports/PayslipReport";
 import JobOpening from "./pages/HR/Admin/JobOpening.Admin";
 import JobOffer from "./pages/HR/Admin/JobOffer.Admin";
 import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
-import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin"
-import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin"
+import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin";
+import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin";
 import Asset from "./pages/HR/Admin/Assets.Admin";
 import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
@@ -156,7 +156,7 @@ const routes = [
   },
   {
     title: "Profile Dashboard",
-    path: "/profile-dashboard",
+    path: "/profile-dashboard/:id",
     name: "Dashboard",
     component: Profile,
     layout: "/admin",
@@ -325,8 +325,6 @@ const routes = [
     component: AttendanceReport,
     layout: "/admin",
   },
+];
 
-]
-
-
-export default routes
+export default routes;
