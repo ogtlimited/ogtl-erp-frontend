@@ -13,42 +13,6 @@ export const warningLetterFormJson = {
             options: []
 
         },
-        // {
-        //     name:'hr_user_id' ,
-        //     type:'text',
-        //     title:'HR User',
-        //     required:{
-        //         value:true,
-        //         message:'Hr user is required'
-        //     },
-        // },
-        {
-            name:'reason' ,
-            type:'text',
-            title:'Reason',
-            required:{
-                value:true,
-                message:'Reason is required'
-            },
-        },
-        {
-            name:'details' ,
-            type:'text',
-            title:'Details',
-            required:{
-                value:true,
-                message:'Details is required'
-            },
-        },
-        {
-            name:'actions' ,
-            type:'text',
-            title:'Actions',
-            required:{
-                value:true,
-                message:'Actions are required'
-            },
-        },
         {
             name:'date_issued' ,
             type:'date',
@@ -58,5 +22,33 @@ export const warningLetterFormJson = {
                 message:'Date issued is required'
             },
         },
+        {
+            name:'reason' ,
+            type:'textarea',
+            title:'Reason',
+            required:{
+                value:true,
+                message:'Reason is required'
+            },
+        },
+        {
+            name:'details' ,
+            type:'textarea',
+            title:'Details',
+            required:{
+                value:true,
+                message:'Details is required'
+            },
+        },
+        {
+            name:'actions' ,
+            type:'textarea',
+            title:'Actions',
+            required:{
+                value:true,
+                message:'Actions are required'
+            },
+        },
+
     ]
 };

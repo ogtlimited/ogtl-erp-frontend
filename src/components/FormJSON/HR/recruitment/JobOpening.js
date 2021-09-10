@@ -49,7 +49,7 @@ export const jobOpeningFormJson = {
         },
         {
             name:'description' ,
-            type:'text',
+            type:'textarea',
             title:'Description',
             required:{
                 value:true,
