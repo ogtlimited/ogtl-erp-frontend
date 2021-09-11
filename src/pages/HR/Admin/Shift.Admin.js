@@ -9,7 +9,7 @@ import axiosInstance from "../../../services/api";
 
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState({});
-
+  const [editData, seteditData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
 
@@ -168,6 +168,7 @@ const ShiftAdmin = () => {
         </div>
       </div>
       <FormModal
+      editData={editData}
         setformValue={setFormValue}
         template={shiftTypeFormJson}
         setsubmitted={setSubmitted}

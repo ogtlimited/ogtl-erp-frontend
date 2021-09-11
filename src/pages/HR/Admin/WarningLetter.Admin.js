@@ -14,7 +14,7 @@ const WarningLetter = () => {
   const [template, setTemplate] = useState(warningLetterFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
-
+  const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
 
   const fetchWarningLetter = () => {
@@ -205,6 +205,7 @@ const WarningLetter = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}

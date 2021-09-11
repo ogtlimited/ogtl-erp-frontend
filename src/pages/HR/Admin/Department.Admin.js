@@ -14,6 +14,7 @@ const Departments = withRouter(({ history }) => {
   const [template, settemplate] = useState([])
   const [submitted, setsubmitted] = useState(false)
   const [formValue, setformValue] = useState({})
+  const [editData, seteditData] = useState({});
   const defaultSorted = [
     {
       dataField: "designation",
@@ -95,7 +96,7 @@ const Departments = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
-      <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+      <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
     </>
   );
 });

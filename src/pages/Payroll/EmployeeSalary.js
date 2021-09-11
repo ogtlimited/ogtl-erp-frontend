@@ -57,6 +57,15 @@ const EmployeeSalary = () => {
             sort: true,
             headerStyle: {minWidth: "150px"},
           },
+          {
+            dataField: "payslip",
+            text: "Payslip",
+            sort: true,
+            headerStyle: {minWidth: "150px"},
+            formatter: (value, row) => (
+              <Link class="btn btn-sm btn-primary" to="/admin/payslip">Generate Slip</Link>
+            )    ,
+          },
         {
           dataField: "",
           text: "Action",

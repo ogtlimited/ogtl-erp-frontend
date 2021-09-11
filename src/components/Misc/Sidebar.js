@@ -184,7 +184,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link className="" to="/payroll/payroll-items">
+                    <Link className="" to="/admin/payroll-items">
                       {" "}
                       Payroll Items{" "}
                     </Link>

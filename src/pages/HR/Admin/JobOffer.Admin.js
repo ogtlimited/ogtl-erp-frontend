@@ -14,7 +14,7 @@ const JobOffer = () => {
   const { showAlert, combineRequest } = useAppContext();
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
-
+  const [editData, seteditData] = useState({});
   const fetchJobOffers = () => {
     axiosInstance
       .get("/api/jobOffer")
@@ -239,6 +239,7 @@ const JobOffer = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={jobOfferFormJson}
         setsubmitted={setSubmitted}

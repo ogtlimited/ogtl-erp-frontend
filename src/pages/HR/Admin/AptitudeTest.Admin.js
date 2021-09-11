@@ -14,7 +14,7 @@ const AptitudeTest = () => {
   const { showAlert, combineRequest } = useAppContext();
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
-
+  const [editData, seteditData] = useState({});
   const fetchAllTests = () => {
     axiosInstance
       .get("/api/test")
@@ -253,6 +253,7 @@ const AptitudeTest = () => {
         </div>
       </div>
       <FormModal
+      editData={editData}
         setformValue={setFormValue}
         template={applicationTestFormJson}
         setsubmitted={setSubmitted}

@@ -1,46 +1,84 @@
+import moment from "moment";
 import React,{useState,useEffect} from "react";
+import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import helper from "../../services/helper";
 import tokenService from "../../services/token.service";
-
+const MINUTE_MS = 60000;
 const Timesheet = () => {
   const [punchedIn, sepunchedIn] = useState()
   const [monthAttendance, setmonthAttendance] = useState([])
+  const [workedTime, setworkedTime] = useState('0:00')
   const [user, setuser] = useState(tokenService.getUser())
+  const {fetchEmployeeAttendance} = useAppContext()
+  const [attendance, setattendance] = useState(tokenService.getAttendance())
   const punchInOut = () =>{
+    console.log(attendance)
     const currUser = user
-    const obj = {
-      ogId: currUser.ogid,
-      clockInTime: new Date(),
-      departmentId: currUser.department
+    
+    if(!attendance){
+      const obj = {
+        ogId: currUser.ogid,
+        clockInTime: new Date(),
+        
+        departmentId: currUser.department
+      }
+      axiosInstance.post('/api/attendance', obj).then(e =>{
+        fetchEmployeeAttendance()
+        const att = e.data.data.attendance
+        console.log(att);
+        setattendance(att)
+        tokenService.setAttendance(att)
+      })
+    }else{
+      const obj = {
+        attendanceId: attendance._id,
+        clockOutTime: new Date()
+      }
+      axiosInstance.patch('/api/attendance', obj).then(e =>{
+        console.log(e.data.data.attendance);
+        tokenService.removeAttendance()
+        fetchEmployeeAttendance()
+      })
+      console.log(obj)
     }
-    axiosInstance.post('/api/attendance', obj).then(e =>{
-      console.log(e)
-    })
   }
+  useEffect(() => {
+    const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
+    setworkedTime(wt)
+    const interval = setInterval(() => {
+      const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
+      console.log('Logs every minute');
+      setworkedTime(wt)
+    }, MINUTE_MS);
+  
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [])
   useEffect(() => {
     const user = tokenService.getUser()
     console.log(user)
   //  axiosInstance.post()
-  }, [])
+  }, [attendance])
   return (
     <div class="col-md-4">
       <div class="card punch-status">
         <div class="card-body">
           <h5 class="card-title">
-            Timesheet <small class="text-muted">11 Mar 2019</small>
+            Timesheet <small class="text-muted">{moment().format('ll')}</small>
           </h5>
           <div class="punch-det">
-            <h6>Punch In at</h6>
-            <p>Wed, 11th Mar 2019 10.00 AM</p>
+            <h6>{attendance && 'Punch In at'}</h6>
+            <p>{attendance ? moment(attendance.clockInTime).format('ll h:mm a') : 'You havent clocked in today'}</p>
           </div>
           <div class="punch-info">
             <div class="punch-hours">
-              <span>3.45 hrs</span>
+              <span>{attendance ? workedTime : '0:00'} hrs</span>
+              
             </div>
           </div>
           <div class="punch-btn-section">
             <button onClick={() => punchInOut()} type="button" class="btn btn-primary punch-btn">
-              Punch Out
+              {attendance ? 'Punch Out': 'Punch In'}
             </button>
           </div>
           <div class="statistics">
@@ -48,13 +86,13 @@ const Timesheet = () => {
               <div class="col-md-6 col-6 text-center">
                 <div class="stats-box">
                   <p>Break</p>
-                  <h6>1.21 hrs</h6>
+                  <h6>1 hrs</h6>
                 </div>
               </div>
               <div class="col-md-6 col-6 text-center">
                 <div class="stats-box">
                   <p>Overtime</p>
-                  <h6>3 hrs</h6>
+                  <h6>0 hrs</h6>
                 </div>
               </div>
             </div>

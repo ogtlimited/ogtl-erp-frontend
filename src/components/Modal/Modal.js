@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useForm } from 'react-hook-form';
 
 import CustomForm from '../Forms/CustomForm'
 import FieldArray from '../Forms/FieldArray';
 import $ from 'jquery'
-const FormModal = ({template, setformValue, setsubmitted}) => {    
+const FormModal = ({template, settemplate, setformValue, setsubmitted, editData, formMode}) => {    
      const {  control,
         register,
         handleSubmit,
@@ -19,11 +19,22 @@ const FormModal = ({template, setformValue, setsubmitted}) => {
         setValue: setValue,
         watch: watch,
      };
+     useEffect(() => {
+       if(formMode === 'edit'){
+         const fields =  Object.keys(editData)
+         fields.forEach(field => setValue(field, editData[field]));
+         console.log(formMode)
+       }else{
+        const fields =  Object.keys(editData)
+        fields.forEach(field => setValue(field, ''));
+       }
+       console.log(formMode)
+     }, [editData, formMode])
      const onSubmit = (data) => {
        console.log(data)
        setformValue(data)
        setsubmitted(true)
-         reset()
+       reset()
        $('#FormModal').modal('toggle')
       }; 
     return (

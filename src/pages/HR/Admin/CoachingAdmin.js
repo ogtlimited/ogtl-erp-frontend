@@ -12,6 +12,7 @@ const CoachingAdmin = () => {
     const [submitted, setsubmitted] = useState(false)
     const [coachingList, setcoachingList] = useState([])
     const {allEmployees, showAlert} = useAppContext()
+    const [editData, seteditData] = useState({});
     const fetchCoachingForms = () =>{
         axiosInstance.get('/api/coaching-form').then(e =>{
           const list = e.data.data
@@ -281,7 +282,7 @@ const CoachingAdmin = () => {
                 data={coachingList}
               />
           </div>
-          <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+          <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
           
       </div>
     </>

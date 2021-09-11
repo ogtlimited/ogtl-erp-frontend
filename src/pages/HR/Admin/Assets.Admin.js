@@ -7,6 +7,7 @@ import FormModal from "../../../components/Modal/Modal";
 
 const Asset = () => {
     const [template, setTemplate] = useState(AssetFormJson)
+    const [editData, seteditData] = useState({});
     useEffect(()=>{
         setTemplate(AssetFormJson)
         
@@ -120,7 +121,7 @@ const Asset = () => {
     />
 </div> 
 </div> 
-<FormModal template={template} />
+<FormModal editData={editData} template={template} />
         </>
     )
 

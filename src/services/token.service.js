@@ -29,6 +29,15 @@ class TokenService {
     clearStorage(){
       localStorage.clear()
     }
+    setAttendance(data){
+      localStorage.setItem("attendance", JSON.stringify(data));
+    }
+    getAttendance(){
+     return JSON.parse(localStorage.getItem("attendance"));
+    }
+    removeAttendance(){
+      localStorage.removeItem("attendance");
+    }
   }
 
   export default new TokenService();

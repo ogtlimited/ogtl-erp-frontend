@@ -22,7 +22,7 @@ const ShiftAssignment = () => {
   const imageUrl = "https://erp.outsourceglobal.com";
   const [template, setTemplate] = useState(shiftAssignmentFormJson);
   const [data, setData] = useState([]);
-
+  const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
 
   const fetchShiftAssignments = () => {
@@ -241,6 +241,7 @@ const ShiftAssignment = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}

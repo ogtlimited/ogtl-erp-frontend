@@ -11,22 +11,41 @@ import ProfileCards from "../../components/Profile/ProfileCards";
 
 const Profile = () => {
     const [formType, setformType] = useState('')
-    const [template, settemplate] = useState(PersonalDetailJson)
+    const [formValue, setformValue] = useState({})
+    const [submitted, setsubmitted] = useState(false)
+    const [path, setpath] = useState('/personal-details')
+    const [template, settemplate] = useState({})
+    const [editData, seteditData] = useState({});
     useEffect(() => {
         if(formType === 'PersonalDetails'){
             settemplate(PersonalDetailJson)
+            setformValue({})
+            setpath('/PersonalDetailJson')
         }else if(formType === 'WorkExperience'){
             settemplate(WorkExperienceJson)
+            setformValue({})
+            setpath('/WorkExperienceJson')
         }else if(formType === 'ContactDetails'){
             settemplate(ContactDetailJson)
+            setformValue({})
         }else if(formType === 'EmergencyContact'){
             settemplate(EmergencyDetailJson)
+            setformValue({})
         }
         else if(formType === 'EmployeeEducation'){
             settemplate(EmployeeEducationJson)
+            setformValue({})
         }
         console.log(formType)
     }, [formType])
+    useEffect(() => {
+      if(submitted === true){
+        console.log(formValue)
+        setformValue({})
+        setsubmitted(false)
+
+      }
+    }, [formValue])
   return (
     <>
       <div class="page-header">
@@ -134,7 +153,7 @@ const Profile = () => {
         </div>
       </div>
       <ProfileCards setformType={setformType} />
-      <FormModal  template={template} />
+      <FormModal editData={editData} setformValue={setformValue} settemplate={settemplate} template={template} setsubmitted={setsubmitted} />
     </>
   );
 };

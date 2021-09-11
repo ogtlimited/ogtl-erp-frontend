@@ -16,6 +16,7 @@ const AllEmployeesAdmin = () => {
     const {setallEmployees, fetchEmployee, allEmployees, combineRequest} = useAppContext()
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
+    const [editData, seteditData] = useState({});
     const [template, settemplate] = useState(employeeFormJson)
     const [submitted, setsubmitted] = useState(false)
     console.log(allEmployees)
@@ -101,7 +102,7 @@ const AllEmployeesAdmin = () => {
             defaultSorted={defaultSorted}
             selectedOption={selectedOption}
            />
-           <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+           <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
         </>
     )
 }

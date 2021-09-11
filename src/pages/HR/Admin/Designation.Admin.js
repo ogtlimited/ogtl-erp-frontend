@@ -15,6 +15,7 @@ let qualityFilter;
 const Designations = withRouter(({ history }) => {
   const [allDesignation, setallDesignation] = useState([])
   const [submitted, setsubmitted] = useState(false)
+  const [editData, seteditData] = useState({});
   const fetchDesignation = () =>{
     axiosInstance.get('/designation').then(res =>{
       console.log(res.data.data)
@@ -128,7 +129,7 @@ const Designations = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
-      <FormModal setformValue={setformValue} setsubmitted={setsubmitted} template={designation} />
+      <FormModal editData={editData} setformValue={setformValue} setsubmitted={setsubmitted} template={designation} />
     </>
   );
 });
