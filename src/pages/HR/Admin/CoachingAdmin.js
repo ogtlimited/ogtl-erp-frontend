@@ -5,6 +5,7 @@ import FormModal from "../../../components/Modal/Modal";
 import { coachingFormJSON } from "../../../components/FormJSON/CoachingForm/coachingAdmin";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import CoachingForm from "../../../components/Forms/CoachingForm";
 const CoachingAdmin = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
@@ -15,9 +16,12 @@ const CoachingAdmin = () => {
     const [editData, seteditData] = useState({});
     const fetchCoachingForms = () =>{
         axiosInstance.get('/api/coaching-form').then(e =>{
-          const list = e.data.data
-          setcoachingList(e.data.data)
-          console.log(list)
+          if(e?.data){
+            const list = e.data.data
+            setcoachingList(e.data.data)
+            console.log(list)
+
+          }
         })
       }
     useEffect(() => {
@@ -283,7 +287,7 @@ const CoachingAdmin = () => {
               />
           </div>
           <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
-          
+          <CoachingForm />
       </div>
     </>
   );

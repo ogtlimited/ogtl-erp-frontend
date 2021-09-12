@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
         }
         if(error.response.status === 401){
             tokenService.removeToken()
-            window.location = "/auth"
+            // window.location = "/auth"
         }else{
             return new Promise((resolve,reject) =>{
                 reject(error)
