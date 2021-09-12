@@ -60,37 +60,37 @@ const Timesheet = () => {
   //  axiosInstance.post()
   }, [attendance])
   return (
-    <div class="col-md-4">
-      <div class="card punch-status">
-        <div class="card-body">
-          <h5 class="card-title">
-            Timesheet <small class="text-muted">{moment().format('ll')}</small>
+    <div className="col-md-4">
+      <div className="card punch-status">
+        <div className="card-body">
+          <h5 className="card-title">
+            Timesheet <small className="text-muted">{moment().format('ll')}</small>
           </h5>
-          <div class="punch-det">
+          <div className="punch-det">
             <h6>{attendance && 'Punch In at'}</h6>
             <p>{attendance ? moment(attendance.clockInTime).format('ll h:mm a') : 'You havent clocked in today'}</p>
           </div>
-          <div class="punch-info">
-            <div class="punch-hours">
+          <div className="punch-info">
+            <div className="punch-hours">
               <span>{attendance ? workedTime : '0:00'} hrs</span>
               
             </div>
           </div>
-          <div class="punch-btn-section">
-            <button onClick={() => punchInOut()} type="button" class="btn btn-primary punch-btn">
+          <div className="punch-btn-section">
+            <button onClick={() => punchInOut()} type="button" className="btn btn-primary punch-btn">
               {attendance ? 'Punch Out': 'Punch In'}
             </button>
           </div>
-          <div class="statistics">
-            <div class="row">
-              <div class="col-md-6 col-6 text-center">
-                <div class="stats-box">
+          <div className="statistics">
+            <div className="row">
+              <div className="col-md-6 col-6 text-center">
+                <div className="stats-box">
                   <p>Break</p>
                   <h6>1 hrs</h6>
                 </div>
               </div>
-              <div class="col-md-6 col-6 text-center">
-                <div class="stats-box">
+              <div className="col-md-6 col-6 text-center">
+                <div className="stats-box">
                   <p>Overtime</p>
                   <h6>0 hrs</h6>
                 </div>

@@ -12,8 +12,8 @@ const Leads = () => {
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
-        <h2 class="table-avatar">
-        <a href="#" class="avatar"><img alt="" src={avater} /></a>
+        <h2 className="table-avatar">
+        <a href="#" className="avatar"><img alt="" src={avater} /></a>
         <a href="#">{value}</a>
         </h2>
       ),
@@ -42,7 +42,7 @@ const Leads = () => {
       sort: true,
       headerStyle: { minWidth: "180px" },
       formatter: (value, row) => (
-        <ul class="team-members">
+        <ul className="team-members">
               
           {value.slice(0,3).map((mem, i) => {
               return (
@@ -58,7 +58,7 @@ const Leads = () => {
                       </a>
              
                         : 
-                        <a href="#" class="all-users">+{value.length}</a>
+                        <a href="#" className="all-users">+{value.length}</a>
                         }
                     </li>
                 )
@@ -80,13 +80,13 @@ const Leads = () => {
       formatter: (value, row) => (
         <>
         {value == 'Active' ?
-        <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+        <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
         : value == 'Pending' ?
-         <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
          : value == 'Terminated' ?
-         <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
          :
-         <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
         }
 
         </>
@@ -101,21 +101,21 @@ const Leads = () => {
   ];
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3 class="page-title">Leads</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row">
+          <div className="col-sm-12">
+            <h3 className="page-title">Leads</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Leads</li>
+              <li className="breadcrumb-item active">Leads</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="row">
-      <div class="col-sm-12">
+      <div className="row">
+      <div className="col-sm-12">
          <LeavesTable
             data={data}
             columns={columns}

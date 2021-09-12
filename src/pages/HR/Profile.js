@@ -48,82 +48,82 @@ const Profile = () => {
     }, [formValue])
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3 class="page-title">Profile</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row">
+          <div className="col-sm-12">
+            <h3 className="page-title">Profile</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Profile</li>
+              <li className="breadcrumb-item active">Profile</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="card mb-0">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="profile-view">
-                <div class="profile-img-wrap">
-                  <div class="profile-img">
+      <div className="card mb-0">
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="profile-view">
+                <div className="profile-img-wrap">
+                  <div className="profile-img">
                     <a href="#">
                       <img alt="" src={avater} />
                     </a>
                   </div>
                 </div>
-                <div class="profile-basic">
-                  <div class="row">
-                    <div class="col-md-5">
-                      <div class="profile-info-left">
-                        <h3 class="user-name m-t-0 mb-0">Anthony Potbelly</h3>
-                        <h6 class="text-muted">Software  Developement</h6>
-                        <small class="text-muted">Backend Engineer</small>
-                        <div class="staff-id">Employee ID : OG-0001</div>
-                        <div class="small doj text-muted">
+                <div className="profile-basic">
+                  <div className="row">
+                    <div className="col-md-5">
+                      <div className="profile-info-left">
+                        <h3 className="user-name m-t-0 mb-0">Anthony Potbelly</h3>
+                        <h6 className="text-muted">Software  Developement</h6>
+                        <small className="text-muted">Backend Engineer</small>
+                        <div className="staff-id">Employee ID : OG-0001</div>
+                        <div className="small doj text-muted">
                           Date of Join : 1st Jan 2013
                         </div>
-                        <div class="staff-msg">
-                          <a class="btn btn-custom" href="chat.html">
+                        <div className="staff-msg">
+                          <a className="btn btn-custom" href="chat.html">
                             Send Message
                           </a>
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-7">
-                      <ul class="personal-info">
+                    <div className="col-md-7">
+                      <ul className="personal-info">
                         <li>
-                          <div class="title">Phone:</div>
-                          <div class="text">
+                          <div className="title">Phone:</div>
+                          <div className="text">
                             <a href="">9876543210</a>
                           </div>
                         </li>
                         <li>
-                          <div class="title">Email:</div>
-                          <div class="text">
+                          <div className="title">Email:</div>
+                          <div className="text">
                             <a href="">johndoe@example.com</a>
                           </div>
                         </li>
                         <li>
-                          <div class="title">Birthday:</div>
-                          <div class="text">24th July</div>
+                          <div className="title">Birthday:</div>
+                          <div className="text">24th July</div>
                         </li>
                         <li>
-                          <div class="title">Address:</div>
-                          <div class="text">
+                          <div className="title">Address:</div>
+                          <div className="text">
                             1861 Mabushi, AMAC Abuja, NG, 901101
                           </div>
                         </li>
                         <li>
-                          <div class="title">Gender:</div>
-                          <div class="text">Male</div>
+                          <div className="title">Gender:</div>
+                          <div className="text">Male</div>
                         </li>
                         <li>
-                          <div class="title">Reports to:</div>
-                          <div class="text">
-                            <div class="avatar-box">
-                              <div class="avatar avatar-xs">
+                          <div className="title">Reports to:</div>
+                          <div className="text">
+                            <div className="avatar-box">
+                              <div className="avatar avatar-xs">
                                 <img
                                   src="assets/img/profiles/avatar-16.jpg"
                                   alt=""
@@ -137,14 +137,14 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <div class="pro-edit">
+                <div className="pro-edit">
                   <a
                     data-target="#profile_info"
                     data-toggle="modal"
-                    class="edit-icon"
+                    className="edit-icon"
                     href="#"
                   >
-                    <i class="fa fa-pencil"></i>
+                    <i className="fa fa-pencil"></i>
                   </a>
                 </div>
               </div>

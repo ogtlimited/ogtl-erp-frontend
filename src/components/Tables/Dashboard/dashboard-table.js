@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 const DashboardTable = ({title}) => {
   return (
     <>
-      <div class="col-md-6 d-flex">
-        <div class="card card-table flex-fill">
-          <div class="card-header">
-            <h3 class="card-title mb-0">{title}</h3>
+      <div className="col-md-6 d-flex">
+        <div className="card card-table flex-fill">
+          <div className="card-header">
+            <h3 className="card-title mb-0">{title}</h3>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-nowrap custom-table mb-0">
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table table-nowrap custom-table mb-0">
                 <thead>
                   <tr>
                     <th>Invoice ID</th>
@@ -34,7 +34,7 @@ const DashboardTable = ({title}) => {
                     <td>11 Mar 2019</td>
                     <td>$380</td>
                     <td>
-                      <span class="badge bg-inverse-warning">
+                      <span className="badge bg-inverse-warning">
                         Partially Paid
                       </span>
                     </td>
@@ -51,7 +51,7 @@ const DashboardTable = ({title}) => {
                     <td>8 Feb 2019</td>
                     <td>$500</td>
                     <td>
-                      <span class="badge bg-inverse-success">Paid</span>
+                      <span className="badge bg-inverse-success">Paid</span>
                     </td>
                   </tr>
                   <tr>
@@ -66,14 +66,14 @@ const DashboardTable = ({title}) => {
                     <td>23 Jan 2019</td>
                     <td>$60</td>
                     <td>
-                      <span class="badge bg-inverse-danger">Unpaid</span>
+                      <span className="badge bg-inverse-danger">Unpaid</span>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div class="card-footer">
+          <div className="card-footer">
             <Link to="invoices">View all {title}</Link>
           </div>
         </div>

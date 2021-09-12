@@ -7,180 +7,180 @@ const ProfileCards = ({setformType}) => {
     }
   return (
     <>
-      <div class="card tab-box">
-        <div class="row user-tabs">
-          <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
-            <ul class="nav nav-tabs nav-tabs-bottom">
-              <li class="nav-item">
+      <div className="card tab-box">
+        <div className="row user-tabs">
+          <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
                 <a
                   href="#emp_profile"
                   data-toggle="tab"
-                  class="nav-link active"
+                  className="nav-link active"
                 >
                   Profile
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#emp_projects" data-toggle="tab" class="nav-link">
+              <li className="nav-item">
+                <a href="#emp_projects" data-toggle="tab" className="nav-link">
                   Campaign
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="#bank_statutory" data-toggle="tab" class="nav-link">
+              <li className="nav-item">
+                <a href="#bank_statutory" data-toggle="tab" className="nav-link">
                   Bank &amp; Statutory{" "}
-                  <small class="text-danger">(Admin Only)</small>
+                  <small className="text-danger">(Admin Only)</small>
                 </a>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="tab-content">
-        <div id="emp_profile" class="pro-overview tab-pane fade active show">
-          <div class="row">
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">
+      <div className="tab-content">
+        <div id="emp_profile" className="pro-overview tab-pane fade active show">
+          <div className="row">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">
                     Personal Informations{" "}
                     <a
                       href="#"
                       onClick={() => handleChange('PersonalDetails')}
-                      class="edit-icon"
+                      className="edit-icon"
                       data-toggle="modal"
                       data-target="#FormModal"
                     >
-                      <i class="fa fa-pencil"></i>
+                      <i className="fa fa-pencil"></i>
                     </a>
                   </h3>
-                  <ul class="personal-info">
+                  <ul className="personal-info">
                     <li>
-                      <div class="title">Passport No.</div>
-                      <div class="text">9876543210</div>
+                      <div className="title">Passport No.</div>
+                      <div className="text">9876543210</div>
                     </li>
                     <li>
-                      <div class="title">Passport Exp Date.</div>
-                      <div class="text">9876543210</div>
+                      <div className="title">Passport Exp Date.</div>
+                      <div className="text">9876543210</div>
                     </li>
                     <li>
-                      <div class="title">Tel</div>
-                      <div class="text">
+                      <div className="title">Tel</div>
+                      <div className="text">
                         <a href="">9876543210</a>
                       </div>
                     </li>
                     <li>
-                      <div class="title">Nationality</div>
-                      <div class="text">Nigerian</div>
+                      <div className="title">Nationality</div>
+                      <div className="text">Nigerian</div>
                     </li>
                     <li>
-                      <div class="title">Religion</div>
-                      <div class="text">Christian</div>
+                      <div className="title">Religion</div>
+                      <div className="text">Christian</div>
                     </li>
                     <li>
-                      <div class="title">Marital status</div>
-                      <div class="text">Married</div>
+                      <div className="title">Marital status</div>
+                      <div className="text">Married</div>
                     </li>
                     <li>
-                      <div class="title">Employment of spouse</div>
-                      <div class="text">1 wife 700 concubines</div>
+                      <div className="title">Employment of spouse</div>
+                      <div className="text">1 wife 700 concubines</div>
                     </li>
                     <li>
-                      <div class="title">No. of children</div>
-                      <div class="text">55</div>
+                      <div className="title">No. of children</div>
+                      <div className="text">55</div>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">
                     Emergency Contact{" "}
                     <a
                       href="#"
-                      class="edit-icon"
+                      className="edit-icon"
                       onClick={() => handleChange('EmergencyContact')}
                       data-toggle="modal"
                       data-target="#FormModal"
                     >
-                      <i class="fa fa-pencil"></i>
+                      <i className="fa fa-pencil"></i>
                     </a>
                   </h3>
-                  <h5 class="section-title">Primary</h5>
-                  <ul class="personal-info">
+                  <h5 className="section-title">Primary</h5>
+                  <ul className="personal-info">
                     <li>
-                      <div class="title">Name</div>
-                      <div class="text">Tony Nta</div>
+                      <div className="title">Name</div>
+                      <div className="text">Tony Nta</div>
                     </li>
                     <li>
-                      <div class="title">Relationship</div>
-                      <div class="text">Father</div>
+                      <div className="title">Relationship</div>
+                      <div className="text">Father</div>
                     </li>
                     <li>
-                      <div class="title">Phone </div>
-                      <div class="text">+23470543210</div>
+                      <div className="title">Phone </div>
+                      <div className="text">+23470543210</div>
                     </li>
                   </ul>
                   <hr />
-                  <h5 class="section-title">Secondary</h5>
-                  <ul class="personal-info">
+                  <h5 className="section-title">Secondary</h5>
+                  <ul className="personal-info">
                     <li>
-                      <div class="title">Name</div>
-                      <div class="text">Mrs Tony</div>
+                      <div className="title">Name</div>
+                      <div className="text">Mrs Tony</div>
                     </li>
                     <li>
-                      <div class="title">Relationship</div>
-                      <div class="text">Brother</div>
+                      <div className="title">Relationship</div>
+                      <div className="text">Brother</div>
                     </li>
                     <li>
-                      <div class="title">Phone </div>
-                      <div class="text">+23480437375</div>
+                      <div className="title">Phone </div>
+                      <div className="text">+23480437375</div>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">Bank information</h3>
-                  <ul class="personal-info">
+          <div className="row">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">Bank information</h3>
+                  <ul className="personal-info">
                     <li>
-                      <div class="title">Bank name</div>
-                      <div class="text">GT Bank</div>
+                      <div className="title">Bank name</div>
+                      <div className="text">GT Bank</div>
                     </li>
                     <li>
-                      <div class="title">Bank account No.</div>
-                      <div class="text">159843014641</div>
+                      <div className="title">Bank account No.</div>
+                      <div className="text">159843014641</div>
                     </li>
                     <li>
-                      <div class="title">Bank Code</div>
-                      <div class="text">GT24504</div>
+                      <div className="title">Bank Code</div>
+                      <div className="text">GT24504</div>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">
                     Family Informations{" "}
                     <a
                       href="#"
-                      class="edit-icon"
+                      className="edit-icon"
                       onClick={() => handleChange('ContactDetails')}
                       data-toggle="modal"
                       data-target="#FormModal"
                     >
-                      <i class="fa fa-pencil"></i>
+                      <i className="fa fa-pencil"></i>
                     </a>
                   </h3>
-                  <div class="table-responsive">
-                    <table class="table table-nowrap">
+                  <div className="table-responsive">
+                    <table className="table table-nowrap">
                       <thead>
                         <tr>
                           <th>Name</th>
@@ -196,23 +196,23 @@ const ProfileCards = ({setformType}) => {
                           <td>Brother</td>
                           <td>Feb 16th, 2019</td>
                           <td>9876543210</td>
-                          <td class="text-right">
-                            <div class="dropdown dropdown-action">
+                          <td className="text-right">
+                            <div className="dropdown dropdown-action">
                               <a
                                 aria-expanded="false"
                                 data-toggle="dropdown"
-                                class="action-icon dropdown-toggle"
+                                className="action-icon dropdown-toggle"
                                 href="#"
                               >
-                                <i class="material-icons">more_vert</i>
+                                <i className="material-icons">more_vert</i>
                               </a>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" class="dropdown-item">
-                                  <i class="fa fa-pencil m-r-5"></i>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a href="#" className="dropdown-item">
+                                  <i className="fa fa-pencil m-r-5"></i>
                                   Edit
                                 </a>
-                                <a href="#" class="dropdown-item">
-                                  <i class="fa fa-trash-o m-r-5"></i>
+                                <a href="#" className="dropdown-item">
+                                  <i className="fa fa-trash-o m-r-5"></i>
                                   Delete
                                 </a>
                               </div>
@@ -226,49 +226,49 @@ const ProfileCards = ({setformType}) => {
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">
+          <div className="row">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">
                     Education Informations{" "}
                     <a
                       href="#"
-                      class="edit-icon"
+                      className="edit-icon"
                       data-toggle="modal"
                       onClick={() => handleChange('EmployeeEducation')}
                       data-target="#FormModal"
                     >
-                      <i class="fa fa-pencil"></i>
+                      <i className="fa fa-pencil"></i>
                     </a>
                   </h3>
-                  <div class="experience-box">
-                    <ul class="experience-list">
+                  <div className="experience-box">
+                    <ul className="experience-list">
                       <li>
-                        <div class="experience-user">
-                          <div class="before-circle"></div>
+                        <div className="experience-user">
+                          <div className="before-circle"></div>
                         </div>
-                        <div class="experience-content">
-                          <div class="timeline-content">
-                            <a href="#/" class="name">
+                        <div className="experience-content">
+                          <div className="timeline-content">
+                            <a href="#/" className="name">
                               University of Portharcourt (UP)
                             </a>
                             <div>Bsc Law</div>
-                            <span class="time">2010 - 2014</span>
+                            <span className="time">2010 - 2014</span>
                           </div>
                         </div>
                       </li>
                       <li>
-                        <div class="experience-user">
-                          <div class="before-circle"></div>
+                        <div className="experience-user">
+                          <div className="before-circle"></div>
                         </div>
-                        <div class="experience-content">
-                          <div class="timeline-content">
-                            <a href="#/" class="name">
+                        <div className="experience-content">
+                          <div className="timeline-content">
+                            <a href="#/" className="name">
                               Law School (PH)
                             </a>
                             <div>Bar</div>
-                            <span class="time">2014 - 2017</span>
+                            <span className="time">2014 - 2017</span>
                           </div>
                         </div>
                       </li>
@@ -277,63 +277,63 @@ const ProfileCards = ({setformType}) => {
                 </div>
               </div>
             </div>
-            <div class="col-md-6 d-flex">
-              <div class="card profile-box flex-fill">
-                <div class="card-body">
-                  <h3 class="card-title">
+            <div className="col-md-6 d-flex">
+              <div className="card profile-box flex-fill">
+                <div className="card-body">
+                  <h3 className="card-title">
                     Experience{" "}
                     <a
                       href="#"
-                      class="edit-icon"
+                      className="edit-icon"
                       data-toggle="modal"
                       onClick={() => handleChange('WorkExperience')}
                       data-target="#FormModal"
                     >
-                      <i class="fa fa-pencil"></i>
+                      <i className="fa fa-pencil"></i>
                     </a>
                   </h3>
-                  <div class="experience-box">
-                    <ul class="experience-list">
+                  <div className="experience-box">
+                    <ul className="experience-list">
                       <li>
-                        <div class="experience-user">
-                          <div class="before-circle"></div>
+                        <div className="experience-user">
+                          <div className="before-circle"></div>
                         </div>
-                        <div class="experience-content">
-                          <div class="timeline-content">
-                            <a href="#/" class="name">
+                        <div className="experience-content">
+                          <div className="timeline-content">
+                            <a href="#/" className="name">
                               Lawyer
                             </a>
-                            <span class="time">
+                            <span className="time">
                               Jan 2017 - 2019 ( 2 years)
                             </span>
                           </div>
                         </div>
                       </li>
                       <li>
-                        <div class="experience-user">
-                          <div class="before-circle"></div>
+                        <div className="experience-user">
+                          <div className="before-circle"></div>
                         </div>
-                        <div class="experience-content">
-                          <div class="timeline-content">
-                            <a href="#/" class="name">
+                        <div className="experience-content">
+                          <div className="timeline-content">
+                            <a href="#/" className="name">
                               Backend Engineer
                             </a>
-                            <span class="time">
+                            <span className="time">
                               2019 - Present (2 years 2 months)
                             </span>
                           </div>
                         </div>
                       </li>
                       <li>
-                        <div class="experience-user">
-                          <div class="before-circle"></div>
+                        <div className="experience-user">
+                          <div className="before-circle"></div>
                         </div>
-                        <div class="experience-content">
-                          <div class="timeline-content">
-                            <a href="#/" class="name">
+                        <div className="experience-content">
+                          <div className="timeline-content">
+                            <a href="#/" className="name">
                               Web Designer at Dalt Technology
                             </a>
-                            <span class="time">
+                            <span className="time">
                               Jan 2013 - Present (5 years 2 months)
                             </span>
                           </div>

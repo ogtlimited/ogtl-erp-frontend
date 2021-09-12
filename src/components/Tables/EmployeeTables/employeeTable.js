@@ -60,7 +60,7 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           sort: true,
           headerStyle: {minWidth: "250px"},
           formatter: (value, row) => (
-            <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
+            <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
           src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.first_name} {row.last_name} <span>{row?.designation?.designation}</span></Link></h2>
           )    ,
           
@@ -73,13 +73,13 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           formatter: (value, row) => (
             <>
             {value == 'active' ?
-            <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+            <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
             : value == 'left' ?
-             <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
              : value == 'terminated' ?
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
              :
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
             }
 
             </>
@@ -121,11 +121,11 @@ const EmployeesTable = ({data, defaultSorted, selectedOption, departments}) => {
           sort: true,
           headerStyle: {minWidth: "70px", textAlign:"left"},
           formatter: (value, row) => (
-            <div class="dropdown dropdown-action text-right"><a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-      aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-  <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" onClick={() => seteditEmployee(row)} href="#" data-toggle="modal"
-          data-target="#edit_employee"><i class="fa fa-pencil m-r-5"></i> Edit</a><a class="dropdown-item" href="#"
-          data-toggle="modal" data-target="#delete_employee"><i class="fa fa-download m-r-5"></i> Download Attendance</a></div>
+            <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+      aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+  <div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" onClick={() => seteditEmployee(row)} href="#" data-toggle="modal"
+          data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a><a className="dropdown-item" href="#"
+          data-toggle="modal" data-target="#delete_employee"><i className="fa fa-download m-r-5"></i> Download Attendance</a></div>
 </div>
           )    ,
         },

@@ -82,25 +82,25 @@ const EmployeeAttendance = () => {
   const breadcrumb = "Attendance";
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Employee</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Employee</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Employees</li>
+              <li className="breadcrumb-item active">Employees</li>
             </ul>
           </div>
           </div>
       </div>
-      <div class="row">
+      <div className="row">
         <Timesheet />
         <Stats />
         <Activity />
       </div>
-      <div class="row">
+      <div className="row">
         <div className="col-lg-12" />
         <LeavesTable data={employeeAttendance} columns={columns} />
       </div>

@@ -6,32 +6,32 @@ const PageHeader = ({ title, breadcrumb, RightSide, setcoachingFormEdit }) => {
 
   console.log(breadcrumb);
   return (
-    <div class="page-header">
-      <div class="row align-items-center">
-        <div class="col">
-          <h3 class="page-title">Employee</h3>
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item">
+    <div className="page-header">
+      <div className="row align-items-center">
+        <div className="col">
+          <h3 className="page-title">Employee</h3>
+          <ul className="breadcrumb">
+            <li className="breadcrumb-item">
               <a href="index.html">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Employees</li>
+            <li className="breadcrumb-item active">Employees</li>
           </ul>
         </div>
-        <div class="col-auto float-right ml-auto">
+        <div className="col-auto float-right ml-auto">
           <a
             href="#"
-            class="btn add-btn"
+            className="btn add-btn"
             data-toggle="modal"
             data-target="#add_employee"
           >
-            <i class="fa fa-plus"></i> Add Employee
+            <i className="fa fa-plus"></i> Add Employee
           </a>
-          <div class="view-icons">
-            <a href="" class="grid-view btn btn-link">
-              <i class="fa fa-th"></i>
+          <div className="view-icons">
+            <a href="" className="grid-view btn btn-link">
+              <i className="fa fa-th"></i>
             </a>
-            <a href="" class="list-view btn btn-link active">
-              <i class="fa fa-bars"></i>
+            <a href="" className="list-view btn btn-link active">
+              <i className="fa fa-bars"></i>
             </a>
           </div>
         </div>

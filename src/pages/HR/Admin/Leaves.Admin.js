@@ -119,8 +119,8 @@ const LeavesAdmin = () => {
       sort: true,
       headerStyle: { minWidth: "250px" },
       formatter: (value, row) => (
-        <h2 class="table-avatar">
-          <a href="" class="avatar">
+        <h2 className="table-avatar">
+          <a href="" className="avatar">
             <img alt="" src={male} />
           </a>
           <a href="">
@@ -192,32 +192,32 @@ const LeavesAdmin = () => {
       dataField: "",
       headerStyle: { minWidth: "80px", textAlign: "center" },
       formatter: (val, row) => (
-        <div class="dropdown dropdown-action">
+        <div className="dropdown dropdown-action">
           <a
             href="#"
-            class="action-icon dropdown-toggle"
+            className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
-            <i class="fa fa-ellipsis-v"></i>
+            <i className="fa fa-ellipsis-v"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-right">
+          <div className="dropdown-menu dropdown-menu-right">
             <a
-              class="dropdown-item"
+              className="dropdown-item"
               href="#"
               onClick={() => handleEdit(row)}
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i class="fa fa-pencil m-r-5"></i> Edit
+              <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
             <a
-              class="dropdown-item"
+              className="dropdown-item"
               href="#"
               data-toggle="modal"
               data-target="#delete_salary"
             >
-              <i class="fa fa-trash-o m-r-5"></i> Delete
+              <i className="fa fa-trash-o m-r-5"></i> Delete
             </a>
           </div>
         </div>
@@ -226,60 +226,60 @@ const LeavesAdmin = () => {
   ];
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Leaves</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Leaves</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item active">Leaves</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn"
+              className="btn add-btn"
               data-toggle="modal"
               onClick={() => setformMode('add')}
               data-target="#FormModal"
             >
-              <i class="fa fa-plus"></i> Add Leave
+              <i className="fa fa-plus"></i> Add Leave
             </a>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="stats-info">
+      <div className="row">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Today Presents</h6>
             <h4>
               {present} / {allEmployees.length}
             </h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Opened Leaves</h6>
             <h4>{planned} &nbsp;</h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Approved Leaves</h6>
             <h4>{approvedLeaves}</h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Pending Requests</h6>
             <h4> {planned}</h4>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
+      <div className="row">
+        <div className="col-12">
           <LeavesTable columns={columns} data={allLeaves} />
         </div>
       </div>

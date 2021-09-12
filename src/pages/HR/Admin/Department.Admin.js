@@ -66,30 +66,30 @@ const Departments = withRouter(({ history }) => {
   ];
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Department</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Department</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Department</li>
+              <li className="breadcrumb-item active">Department</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn"
+              className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i class="fa fa-plus"></i> Add Department
+              <i className="fa fa-plus"></i> Add Department
             </a>
           </div>
         </div>
       </div>
-      <div class="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-center">
         <GeneralTable
           data={departments}
           // defaultSorted={defaultSorted}

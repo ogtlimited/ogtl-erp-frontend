@@ -4,83 +4,83 @@ import { Link } from "react-router-dom";
 const LeaveSettingAdmin = () => {
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3 class="page-title">Leave Settings</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row">
+          <div className="col-sm-12">
+            <h3 className="page-title">Leave Settings</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Leave Settings</li>
+              <li className="breadcrumb-item active">Leave Settings</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card leave-box" id="leave_annual">
-            <div class="card-body">
-              <div class="h3 card-title with-switch">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="card leave-box" id="leave_annual">
+            <div className="card-body">
+              <div className="h3 card-title with-switch">
                 Annual
               
               </div>
-              <div class="leave-item">
-                <div class="leave-row">
-                  <div class="leave-left">
-                    <div class="input-box">
-                      <div class="form-group">
+              <div className="leave-item">
+                <div className="leave-row">
+                  <div className="leave-left">
+                    <div className="input-box">
+                      <div className="form-group">
                         <label>Days</label>
-                        <input type="text" class="form-control" disabled="" />
+                        <input type="text" className="form-control" disabled="" />
                       </div>
                     </div>
                   </div>
-                  <div class="leave-right">
-                    <button class="leave-edit-btn">Edit</button>
+                  <div className="leave-right">
+                    <button className="leave-edit-btn">Edit</button>
                   </div>
                 </div>
-                <div class="leave-row">
-                  <div class="leave-left">
-                    <div class="input-box">
-                      <label class="d-block">Carry forward</label>
-                      <div class="leave-inline-form">
-                        <div class="form-check form-check-inline">
+                <div className="leave-row">
+                  <div className="leave-left">
+                    <div className="input-box">
+                      <label className="d-block">Carry forward</label>
+                      <div className="leave-inline-form">
+                        <div className="form-check form-check-inline">
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="radio"
                             name="inlineRadioOptions"
                             id="carry_no"
                             disabled=""
                             value="option1"
                           />
-                          <label class="form-check-label" for="carry_no">
+                          <label className="form-check-label" for="carry_no">
                             No
                           </label>
                         </div>
-                        <div class="form-check form-check-inline">
+                        <div className="form-check form-check-inline">
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="radio"
                             name="inlineRadioOptions"
                             id="carry_yes"
                             disabled=""
                             value="option2"
                           />
-                          <label class="form-check-label" for="carry_yes">
+                          <label className="form-check-label" for="carry_yes">
                             Yes
                           </label>
                         </div>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">Max</span>
+                        <div className="input-group">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text">Max</span>
                           </div>
-                          <input type="text" class="form-control" disabled="" />
+                          <input type="text" className="form-control" disabled="" />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="leave-right">
-                    <button class="leave-edit-btn">Edit</button>
+                  <div className="leave-right">
+                    <button className="leave-edit-btn">Edit</button>
                   </div>
                 </div>
                 

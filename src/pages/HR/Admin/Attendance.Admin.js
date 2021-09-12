@@ -4,30 +4,30 @@ import { Link } from "react-router-dom";
 const AttendanceAdmin = () => {
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3 class="page-title">Attendance</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row">
+          <div className="col-sm-12">
+            <h3 className="page-title">Attendance</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Attendance</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="row filter-row">
-        <div class="col-sm-6 col-md-3">
-          <div class="form-group form-focus">
-            <input type="text" class="form-control floating" />
-            <label class="focus-label">Employee Name</label>
+      <div className="row filter-row">
+        <div className="col-sm-6 col-md-3">
+          <div className="form-group form-focus">
+            <input type="text" className="form-control floating" />
+            <label className="focus-label">Employee Name</label>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-          <div class="form-group form-focus select-focus focused">
+        <div className="col-sm-6 col-md-3">
+          <div className="form-group form-focus select-focus focused">
             <select
-              class="select floating select2-hidden-accessible form-control"
+              className="select floating select2-hidden-accessible form-control"
               data-select2-id="select2-data-1-0b5s"
               tabindex="-1"
               aria-hidden="true"
@@ -47,14 +47,14 @@ const AttendanceAdmin = () => {
               <option>Dec</option>
             </select>
             <span
-              class="select2 select2-container select2-container--default"
+              className="select2 select2-container select2-container--default"
               dir="ltr"
               data-select2-id="select2-data-2-a0vc"
               style={{width: "100%"}}
             >
-              <span class="selection">
+              <span className="selection">
                 <span
-                  class="select2-selection select2-selection--single"
+                  className="select2-selection select2-selection--single"
                   role="combobox"
                   aria-haspopup="true"
                   aria-expanded="false"
@@ -64,7 +64,7 @@ const AttendanceAdmin = () => {
                   aria-controls="select2-rhew-container"
                 >
                   <span
-                    class="select2-selection__rendered"
+                    className="select2-selection__rendered"
                     id="select2-rhew-container"
                     role="textbox"
                     aria-readonly="true"
@@ -72,20 +72,20 @@ const AttendanceAdmin = () => {
                   >
                     -
                   </span>
-                  <span class="select2-selection__arrow" role="presentation">
+                  <span className="select2-selection__arrow" role="presentation">
                     <b role="presentation"></b>
                   </span>
                 </span>
               </span>
-              <span class="dropdown-wrapper" aria-hidden="true"></span>
+              <span className="dropdown-wrapper" aria-hidden="true"></span>
             </span>
-            <label class="focus-label">Select Month</label>
+            <label className="focus-label">Select Month</label>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-          <div class="form-group form-focus select-focus focused">
+        <div className="col-sm-6 col-md-3">
+          <div className="form-group form-focus select-focus focused">
             <select
-              class="select floating select2-hidden-accessible form-control"
+              className="select floating select2-hidden-accessible form-control"
               data-select2-id="select2-data-4-hdsb"
               tabindex="-1"
               aria-hidden="true"
@@ -98,14 +98,14 @@ const AttendanceAdmin = () => {
               <option>2015</option>
             </select>
             <span
-              class="select2 select2-container select2-container--default"
+              className="select2 select2-container select2-container--default"
               dir="ltr"
               data-select2-id="select2-data-5-4i6k"
               style={{width: "100%"}}
             >
-              <span class="selection">
+              <span className="selection">
                 <span
-                  class="select2-selection select2-selection--single"
+                  className="select2-selection select2-selection--single"
                   role="combobox"
                   aria-haspopup="true"
                   aria-expanded="false"
@@ -115,7 +115,7 @@ const AttendanceAdmin = () => {
                   aria-controls="select2-kzmv-container"
                 >
                   <span
-                    class="select2-selection__rendered"
+                    className="select2-selection__rendered"
                     id="select2-kzmv-container"
                     role="textbox"
                     aria-readonly="true"
@@ -123,27 +123,27 @@ const AttendanceAdmin = () => {
                   >
                     -
                   </span>
-                  <span class="select2-selection__arrow" role="presentation">
+                  <span className="select2-selection__arrow" role="presentation">
                     <b role="presentation"></b>
                   </span>
                 </span>
               </span>
-              <span class="dropdown-wrapper" aria-hidden="true"></span>
+              <span className="dropdown-wrapper" aria-hidden="true"></span>
             </span>
-            <label class="focus-label">Select Year</label>
+            <label className="focus-label">Select Year</label>
           </div>
         </div>
-        <div class="col-sm-6 col-md-3">
-          <a href="#" class="btn add-btn btn-block">
+        <div className="col-sm-6 col-md-3">
+          <a href="#" className="btn add-btn btn-block">
             {" "}
             Search{" "}
           </a>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="table-responsive">
-            <table class="table table-striped custom-table table-nowrap mb-0">
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="table-responsive">
+            <table className="table table-striped custom-table table-nowrap mb-0">
               <thead>
                 <tr>
                   <th>Employee</th>
@@ -182,8 +182,8 @@ const AttendanceAdmin = () => {
               <tbody>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-09.jpg" />
                       </a>
                       <a href="profile.html">Anthony Potbelly</a>
@@ -195,7 +195,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -204,7 +204,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -213,7 +213,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -222,7 +222,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -231,7 +231,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -240,22 +240,22 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <div class="half-day">
-                      <span class="first-off">
+                    <div className="half-day">
+                      <span className="first-off">
                         <a
                           href="javascript:void(0);"
                           data-toggle="modal"
                           data-target="#attendance_info"
                         >
-                          <i class="fa fa-check text-success"></i>
+                          <i className="fa fa-check text-success"></i>
                         </a>
                       </span>
-                      <span class="first-off">
-                        <i class="fa fa-close text-danger"></i>
+                      <span className="first-off">
+                        <i className="fa fa-close text-danger"></i>
                       </span>
                     </div>
                   </td>
@@ -265,7 +265,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -274,17 +274,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -292,16 +292,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -310,7 +301,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -319,7 +310,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -328,19 +319,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -349,21 +328,42 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <div class="half-day">
-                      <span class="first-off">
-                        <i class="fa fa-close text-danger"></i>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <div className="half-day">
+                      <span className="first-off">
+                        <i className="fa fa-close text-danger"></i>
                       </span>
-                      <span class="first-off">
+                      <span className="first-off">
                         <a
                           href="javascript:void(0);"
                           data-toggle="modal"
                           data-target="#attendance_info"
                         >
-                          <i class="fa fa-check text-success"></i>
+                          <i className="fa fa-check text-success"></i>
                         </a>
                       </span>
                     </div>
@@ -374,7 +374,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -383,11 +383,11 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -395,16 +395,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -413,19 +404,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -434,14 +413,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-09.jpg" />
                       </a>
                       <a href="profile.html">Ahmed Fatjoe</a>
@@ -453,7 +453,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -462,7 +462,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -471,7 +471,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -480,7 +480,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -489,7 +489,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -498,7 +498,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -507,7 +507,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -516,7 +516,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -525,17 +525,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -543,16 +543,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -561,7 +552,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -570,7 +561,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -579,19 +570,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -600,7 +579,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -609,7 +600,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -618,7 +609,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -627,19 +618,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -648,7 +627,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -657,19 +648,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -678,14 +657,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-10.jpg" />
                       </a>
                       <a href="profile.html">Mazi Ogundu</a>
@@ -697,7 +697,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -706,7 +706,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -715,7 +715,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -724,7 +724,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -733,7 +733,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -742,7 +742,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -751,7 +751,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -760,7 +760,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -769,17 +769,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -787,16 +787,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -805,7 +796,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -814,7 +805,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -823,19 +814,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -844,7 +823,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -853,7 +844,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -862,7 +853,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -871,19 +862,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -892,7 +871,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -901,19 +892,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -922,14 +901,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-05.jpg" />
                       </a>
                       <a href="profile.html">Hassan Kabara</a>
@@ -941,7 +941,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -950,7 +950,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -959,7 +959,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -968,7 +968,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -977,7 +977,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -986,7 +986,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -995,7 +995,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1004,7 +1004,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1013,17 +1013,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -1031,16 +1031,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1049,7 +1040,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1058,7 +1049,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1067,19 +1058,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1088,7 +1067,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1097,7 +1088,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1106,7 +1097,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1115,19 +1106,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1136,7 +1115,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1145,19 +1136,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1166,14 +1145,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-11.jpg" />
                       </a>
                       <a href="profile.html">Ibrahim Nayaya</a>
@@ -1185,7 +1185,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1194,7 +1194,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1203,7 +1203,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1212,7 +1212,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1221,7 +1221,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1230,7 +1230,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1239,7 +1239,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1248,7 +1248,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1257,17 +1257,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -1275,16 +1275,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1293,7 +1284,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1302,7 +1293,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1311,19 +1302,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1332,7 +1311,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1341,7 +1332,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1350,7 +1341,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1359,19 +1350,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1380,7 +1359,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1389,19 +1380,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1410,14 +1389,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-12.jpg" />
                       </a>
                       <a href="profile.html">Mr Nobert</a>
@@ -1429,7 +1429,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1438,7 +1438,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1447,7 +1447,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1456,7 +1456,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1465,7 +1465,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1474,7 +1474,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1483,7 +1483,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1492,7 +1492,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1501,17 +1501,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -1519,16 +1519,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1537,7 +1528,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1546,7 +1537,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1555,19 +1546,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1576,7 +1555,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1585,7 +1576,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1594,7 +1585,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1603,19 +1594,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1624,7 +1603,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1633,19 +1624,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1654,14 +1633,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-13.jpg" />
                       </a>
                       <a href="profile.html">Abubakar Sadiq</a>
@@ -1673,7 +1673,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1682,7 +1682,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1691,7 +1691,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1700,7 +1700,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1709,7 +1709,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1718,7 +1718,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1727,7 +1727,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1736,7 +1736,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1745,17 +1745,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -1763,16 +1763,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1781,7 +1772,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1790,7 +1781,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1799,19 +1790,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1820,7 +1799,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1829,7 +1820,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1838,7 +1829,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1847,19 +1838,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1868,7 +1847,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1877,19 +1868,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1898,14 +1877,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-01.jpg" />
                       </a>
                       <a href="profile.html">Akinade Tumise</a>
@@ -1917,7 +1917,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1926,7 +1926,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1935,7 +1935,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1944,7 +1944,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1953,7 +1953,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1962,7 +1962,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1971,7 +1971,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1980,7 +1980,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -1989,17 +1989,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -2007,16 +2007,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2025,7 +2016,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2034,7 +2025,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2043,19 +2034,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2064,7 +2043,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2073,7 +2064,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2082,7 +2073,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2091,19 +2082,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2112,7 +2091,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2121,19 +2112,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2142,14 +2121,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-16.jpg" />
                       </a>
                       <a href="profile.html">Iman Wada</a>
@@ -2161,7 +2161,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2170,7 +2170,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2179,7 +2179,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2188,7 +2188,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2197,7 +2197,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2206,7 +2206,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2215,7 +2215,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2224,7 +2224,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2233,17 +2233,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -2251,16 +2251,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2269,7 +2260,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2278,7 +2269,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2287,19 +2278,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2308,7 +2287,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2317,7 +2308,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2326,7 +2317,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2335,19 +2326,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2356,7 +2335,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2365,19 +2356,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2386,14 +2365,35 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <h2 class="table-avatar">
-                      <a class="avatar avatar-xs" href="profile.html">
+                    <h2 className="table-avatar">
+                      <a className="avatar avatar-xs" href="profile.html">
                         <img alt="" src="assets/img/profiles/avatar-04.jpg" />
                       </a>
                       <a href="profile.html">Khalil Kabara</a>
@@ -2405,7 +2405,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2414,7 +2414,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2423,7 +2423,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2432,7 +2432,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2441,7 +2441,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2450,7 +2450,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2459,7 +2459,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2468,7 +2468,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2477,17 +2477,17 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
+                    <i className="fa fa-close text-danger"></i>{" "}
                   </td>
                   <td>
                     <a
@@ -2495,16 +2495,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2513,7 +2504,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2522,7 +2513,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2531,19 +2522,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2552,7 +2531,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2561,7 +2552,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2570,7 +2561,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2579,19 +2570,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2600,7 +2579,19 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2609,19 +2600,7 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
-                    </a>
-                  </td>
-                  <td>
-                    <i class="fa fa-close text-danger"></i>{" "}
-                  </td>
-                  <td>
-                    <a
-                      href="javascript:void(0);"
-                      data-toggle="modal"
-                      data-target="#attendance_info"
-                    >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                   <td>
@@ -2630,7 +2609,28 @@ const AttendanceAdmin = () => {
                       data-toggle="modal"
                       data-target="#attendance_info"
                     >
-                      <i class="fa fa-check text-success"></i>
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <i className="fa fa-close text-danger"></i>{" "}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
+                    </a>
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0);"
+                      data-toggle="modal"
+                      data-target="#attendance_info"
+                    >
+                      <i className="fa fa-check text-success"></i>
                     </a>
                   </td>
                 </tr>
