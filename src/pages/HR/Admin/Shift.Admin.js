@@ -6,12 +6,16 @@ import FormModal from "../../../components/Modal/Modal";
 import { shiftTypeFormJson } from "../../../components/FormJSON/HR/shift/ShiftType";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import useToggle from "../../../hooks/useToggle";
 
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState({});
+  const [value, toggleValue] = useToggle(false);
   const [editData, seteditData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const { fetchTypesShift, showAlert } = useAppContext();
 
@@ -34,7 +38,7 @@ const ShiftAdmin = () => {
         .post("/api/shiftType", formValue)
         .then((res) => {
           setSubmitted(false);
-          setData((prevData) => [...data, res.data.data]);
+          setData((prevData) => [...prevData, res.data.data]);
           fetchTypesShift();
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -85,27 +89,27 @@ const ShiftAdmin = () => {
       dataField: "shift_name",
       text: "Shift Name",
       sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { minWidth: "410px" },
     },
 
     {
       dataField: "start_time",
       text: "Start time",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "350px" },
     },
     {
       dataField: "end_time",
       text: "End time",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "350px" },
     },
 
     {
       dataField: "",
       text: "Action",
       sort: true,
-      headerStyle: { minWidth: "70px", textAlign: "left" },
+      headerStyle: { minWidth: "100px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -126,7 +130,13 @@ const ShiftAdmin = () => {
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
-            <Link className="dropdown-item" onClick={() => deleteShift(row)}>
+            <Link
+              className="dropdown-item"
+              onClick={() => {
+                setSelectedRow(row);
+                toggleValue(true);
+              }}
+            >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
           </div>
@@ -168,10 +178,17 @@ const ShiftAdmin = () => {
         </div>
       </div>
       <FormModal
-      editData={editData}
+        editData={editData}
         setformValue={setFormValue}
         template={shiftTypeFormJson}
         setsubmitted={setSubmitted}
+      />
+      <ConfirmModal
+        value={value}
+        title="Shift type"
+        toggleValue={toggleValue}
+        selectedRow={selectedRow}
+        deleteFunction={deleteShift}
       />
     </>
   );

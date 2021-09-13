@@ -17,16 +17,18 @@ const toggle_sidebar = (e) => {
 };
 // const Header = withRouter(({ history }) => {
 const Header = () => {
-  let history = useHistory()
+  let history = useHistory();
   const logout = (e) => {
     e.preventDefault();
-    tokenService.clearStorage()
-    console.log('pushing')
+    tokenService.clearStorage();
+    console.log("pushing");
     history.push("/auth");
   };
-//   const { user } = useContext(AppContext);
-//   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
-//   console.log(imageUrl);
+  const user = tokenService.getUser();
+
+  //   const { user } = useContext(AppContext);
+  //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
+  //   console.log(imageUrl);
   return (
     <div className="header">
       <div className="header-left">
@@ -57,7 +59,7 @@ const Header = () => {
             <a href="javascript:void(0);" className="responsive-search">
               <i className="fa fa-search"></i>
             </a>
-            <form >
+            <form>
               <input
                 className="form-control"
                 type="text"
@@ -70,10 +72,14 @@ const Header = () => {
           </div>
         </li>
 
-       
         <li className="nav-item dropdown">
-          <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
-            <i className="fa fa-bell-o"></i> <span className="badge badge-pill">3</span>
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-toggle="dropdown"
+          >
+            <i className="fa fa-bell-o"></i>{" "}
+            <span className="badge badge-pill">3</span>
           </a>
           <div className="dropdown-menu notifications">
             <div className="topnav-dropdown-header">
@@ -83,12 +89,15 @@ const Header = () => {
                 Clear All{" "}
               </a>
             </div>
-            
           </div>
         </li>
 
         <li className="nav-item dropdown">
-          <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-toggle="dropdown"
+          >
             <i className="fa fa-comment-o"></i>{" "}
             <span className="badge badge-pill">8</span>
           </a>
@@ -100,8 +109,7 @@ const Header = () => {
                 Clear All{" "}
               </a>
             </div>
-            <div className="noti-content">
-            </div>
+            <div className="noti-content"></div>
             <div className="topnav-dropdown-footer">
               <Link to="chat">View all Messages</Link>
             </div>
@@ -109,7 +117,11 @@ const Header = () => {
         </li>
 
         <li className="nav-item dropdown has-arrow main-drop">
-          <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-toggle="dropdown"
+          >
             <span className="user-img">
               <img src="assets/img/profiles/avatar-21.jpg" alt="" />
               <span className="status online"></span>
@@ -117,13 +129,16 @@ const Header = () => {
             <span>Admin</span>
           </a>
           <div className="dropdown-menu">
-            <Link className="dropdown-item" to="/admin/profile-dashboard">
+            <Link
+              className="dropdown-item"
+              to={`/admin/profile-dashboard/${user?._id}`}
+            >
               My Profile
             </Link>
             <Link className="dropdown-item" to="settings">
               Settings
             </Link>
-            <a className="dropdown-item" onClick={(e)=>logout(e)}>
+            <a className="dropdown-item" onClick={(e) => logout(e)}>
               Logout
             </a>
           </div>
@@ -140,20 +155,22 @@ const Header = () => {
           <i className="fa fa-ellipsis-v"></i>
         </a>
         <div className="dropdown-menu dropdown-menu-right">
-        <Link className="dropdown-item" to="/admin/profile-dashboard">
-              My Profile
-            </Link>
-            <Link className="dropdown-item" to="settings">
-              Settings
-            </Link>
-            <a className="dropdown-item" onClick={(e)=>logout(e)}>
-              Logout
-            </a>
+          <Link
+            className="dropdown-item"
+            to={`/admin/profile-dashboard/${user?._id}`}
+          >
+            My Profile
+          </Link>
+          <Link className="dropdown-item" to="settings">
+            Settings
+          </Link>
+          <a className="dropdown-item" onClick={(e) => logout(e)}>
+            Logout
+          </a>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
-
-export default Header
+export default Header;
