@@ -1,49 +1,37 @@
-export const history = {
-    title: 'History Form',
-    Fields: [
-       
-        {
-            name:'employeeId' ,
-            type:'text',
-            title:'Employee Id',
-            required:{
-                value:true,
-                message:'Employee Id is required'
-            },
-        },
-        {
-            name:'designationId' ,
-            type:'text',
-            title:'Designation Id',
-            required:{
-                value:true,
-                message:'Designation Id is required'
-            },
-            
-        },
-        {
-            name:'branchId' ,
-            type:'text',
-            title:'Branch Id',
-            required:{
-                value:true,
-                message:'Branch Id is required'
-            },
-            
-        },
-        
-        {
-            name:'fromDate' ,
-            type:'date',
-            title:'From Date',
-         },
+export const historyJson = {
+  title: "History Form",
+  Fields: [
+    {
+      name: "designation_id",
+      type: "select",
+      title: "Designation Id",
+      required: {
+        value: true,
+        message: "Designation Id is required",
+      },
+      options: [],
+    },
+    {
+      name: "branch_id",
+      type: "select",
+      title: "Branch Id",
+      required: {
+        value: true,
+        message: "Branch Id is required",
+      },
+      options: [],
+    },
 
-         {
-            name:'toDate' ,
-            type:'date',
-            title:'To Date',
-         },
-         
-         
-    ]
+    {
+      name: "from_date",
+      type: "date",
+      title: "From Date",
+    },
+
+    {
+      name: "to_date",
+      type: "date",
+      title: "To Date",
+    },
+  ],
 };

@@ -62,7 +62,7 @@ const ShiftRequest = () => {
       dataField: "employee_id",
       text: "Employee",
       sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { minWidth: "410px" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -88,21 +88,21 @@ const ShiftRequest = () => {
       dataField: "shift_type_id",
       text: "Shift Type",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "350px" },
       formatter: (value, row) => <h2>{row.shift_type_id.shift_name}</h2>,
     },
     {
       dataField: "from_date",
       text: "From Date",
       sort: true,
-
+      headerStyle: { minWidth: "170px" },
       formatter: (value, row) => <h2>{moment(row.from_date).format("L")}</h2>,
     },
     {
       dataField: "to_date",
       text: "To Date",
       sort: true,
-
+      headerStyle: { minWidth: "170px" },
       formatter: (value, row) => <h2>{moment(row.to_date).format("L")}</h2>,
     },
     {

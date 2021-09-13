@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
-import avater from '../../assets/img/anthony.jpg'
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import avater from "../../assets/img/profile.png";
 import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
 import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
 import { EmployeeEducationJson } from "../../components/FormJSON/HR/Employee/EmployeeEducation";
@@ -8,44 +8,85 @@ import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/Person
 import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
 import FormModal from "../../components/Modal/Modal";
 import ProfileCards from "../../components/Profile/ProfileCards";
+import axiosInstance from "../../services/api";
+import moment from "moment";
+import { historyJson } from "../../components/FormJSON/HR/Employee/history";
+import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
-    const [formType, setformType] = useState('')
-    const [formValue, setformValue] = useState({})
-    const [submitted, setsubmitted] = useState(false)
-    const [path, setpath] = useState('/personal-details')
-    const [template, settemplate] = useState({})
-    const [editData, seteditData] = useState({});
-    useEffect(() => {
-        if(formType === 'PersonalDetails'){
-            settemplate(PersonalDetailJson)
-            setformValue({})
-            setpath('/PersonalDetailJson')
-        }else if(formType === 'WorkExperience'){
-            settemplate(WorkExperienceJson)
-            setformValue({})
-            setpath('/WorkExperienceJson')
-        }else if(formType === 'ContactDetails'){
-            settemplate(ContactDetailJson)
-            setformValue({})
-        }else if(formType === 'EmergencyContact'){
-            settemplate(EmergencyDetailJson)
-            setformValue({})
-        }
-        else if(formType === 'EmployeeEducation'){
-            settemplate(EmployeeEducationJson)
-            setformValue({})
-        }
-        console.log(formType)
-    }, [formType])
-    useEffect(() => {
-      if(submitted === true){
-        console.log(formValue)
-        setformValue({})
-        setsubmitted(false)
+  const [formType, setformType] = useState("");
+  const [template, settemplate] = useState(PersonalDetailJson);
+  const { id } = useParams();
+  const [userData, setUserdata] = useState(null);
+  const [formValue, setFormValue] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const { combineRequest } = useAppContext();
 
-      }
-    }, [formValue])
+  useEffect(() => {
+    axiosInstance
+      .get(`/profile-dashboard/${id}`)
+      .then((res) => {
+        console.log("Profile dashboard full data", res.data);
+        setUserdata(res.data.getEmployeeFullData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    if (formType === "PersonalDetails") {
+      settemplate(PersonalDetailJson);
+    } else if (formType === "WorkExperience") {
+      settemplate(WorkExperienceJson);
+    } else if (formType === "ContactDetails") {
+      settemplate(ContactDetailJson);
+    } else if (formType === "EmergencyContact") {
+      settemplate(EmergencyDetailJson);
+    } else if (formType === "EmployeeEducation") {
+      settemplate(EmployeeEducationJson);
+    } else if (formType === "History") {
+      settemplate(historyJson);
+    }
+
+    console.log(formType);
+    console.log("formvalue", formValue);
+  }, [formType, formValue, submitted, template]);
+
+  useEffect(() => {
+    combineRequest().then((res) => {
+      console.log(res);
+      const { designations, branches } = res.data.createEmployeeFormSelection;
+
+      const designationsOpts = designations?.map((e) => {
+        return {
+          label: e.designation,
+          value: e._id,
+        };
+      });
+      const branchesOpts = branches?.map((e) => {
+        return {
+          label: e.branch,
+          value: e._id,
+        };
+      });
+      const finalForm = historyJson.Fields.map((field) => {
+        if (field.name === "branch_id") {
+          field.options = branchesOpts;
+          return field;
+        } else if (field.name === "designation_id") {
+          field.options = designationsOpts;
+          return field;
+        }
+        return field;
+      });
+      settemplate({
+        title: historyJson.title,
+        Fields: finalForm,
+      });
+      console.log(template);
+    });
+  }, []);
   return (
     <>
       <div className="page-header">
@@ -69,7 +110,7 @@ const Profile = () => {
                 <div className="profile-img-wrap">
                   <div className="profile-img">
                     <a href="#">
-                      <img alt="" src={avater} />
+                      <img alt="" src={userData?.employee?.image || avater} />
                     </a>
                   </div>
                 </div>
@@ -77,12 +118,27 @@ const Profile = () => {
                   <div className="row">
                     <div className="col-md-5">
                       <div className="profile-info-left">
-                        <h3 className="user-name m-t-0 mb-0">Anthony Potbelly</h3>
-                        <h6 className="text-muted">Software  Developement</h6>
-                        <small className="text-muted">Backend Engineer</small>
-                        <div className="staff-id">Employee ID : OG-0001</div>
+                        <h3 className="user-name m-t-0 mb-0">
+                          {userData?.employee?.first_name}{" "}
+                          {userData?.employee?.middle_name}{" "}
+                          {userData?.employee?.last_name}
+                        </h3>
+                        <h6 className="text-muted">
+                          {userData?.employee?.isAdmin
+                            ? userData?.employee?.department
+                            : userData?.employee?.projectId?.project_name}
+                        </h6>
+                        <small className="text-muted">
+                          {userData?.employee?.designation?.designation}
+                        </small>
+                        <div className="staff-id">
+                          Employee ID : {userData?.employee?.ogid}
+                        </div>
                         <div className="small doj text-muted">
-                          Date of Join : 1st Jan 2013
+                          Date Joined :{" "}
+                          {moment(userData?.employee?.date_of_joining).format(
+                            "L"
+                          )}
                         </div>
                         <div className="staff-msg">
                           <a className="btn btn-custom" href="chat.html">
@@ -96,28 +152,43 @@ const Profile = () => {
                         <li>
                           <div className="title">Phone:</div>
                           <div className="text">
-                            <a href="">9876543210</a>
+                            {userData?.contactDetails?.mobile || "xxx-xxx-xxx"}
                           </div>
                         </li>
+
                         <li>
                           <div className="title">Email:</div>
                           <div className="text">
-                            <a href="">johndoe@example.com</a>
+                            {userData?.employee?.company_email}
                           </div>
                         </li>
+
                         <li>
                           <div className="title">Birthday:</div>
-                          <div className="text">24th July</div>
+                          <div className="text">
+                            {userData?.personalDetails?.date_of_birth
+                              ? moment(
+                                  userData?.personalDetails?.date_of_birth
+                                ).format("MMMM Do")
+                              : "xxxx-xx-xx"}
+                          </div>
                         </li>
                         <li>
                           <div className="title">Address:</div>
                           <div className="text">
-                            1861 Mabushi, AMAC Abuja, NG, 901101
+                            {userData?.contactDetails?.permanent_address ||
+                              "xxx"}
                           </div>
                         </li>
+
                         <li>
                           <div className="title">Gender:</div>
-                          <div className="text">Male</div>
+                          <div className="text">
+                            {userData?.employee?.gender
+                              .charAt(0)
+                              .toUpperCase() +
+                              userData?.employee?.gender.slice(1)}
+                          </div>
                         </li>
                         <li>
                           <div className="title">Reports to:</div>
@@ -130,30 +201,42 @@ const Profile = () => {
                                 />
                               </div>
                             </div>
-                            <a href="profile.html">Sir Abubakar</a>
+                            <a href="profile.html">
+                              {userData?.employee?.reports_to}
+                            </a>
                           </div>
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
-                <div className="pro-edit">
-                  <a
+                {/* <div className="pro-edit">
+                  <Link
                     data-target="#profile_info"
                     data-toggle="modal"
                     className="edit-icon"
-                    href="#"
+                    role="button"
                   >
                     <i className="fa fa-pencil"></i>
-                  </a>
-                </div>
+                  </Link>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <ProfileCards setformType={setformType} />
-      <FormModal editData={editData} setformValue={setformValue} settemplate={settemplate} template={template} setsubmitted={setsubmitted} />
+      <ProfileCards
+        setformType={setformType}
+        userData={userData}
+        submitted={submitted}
+        formValue={formValue}
+        setFormValue={setFormValue}
+      />
+      <FormModal
+        template={template}
+        setformValue={setFormValue}
+        setsubmitted={setSubmitted}
+      />
     </>
   );
 };

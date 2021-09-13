@@ -13,6 +13,8 @@ import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import moment from "moment";
+import useToggle from "../../../hooks/useToggle";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const ShiftAssignment = () => {
   const [formValue, setFormValue] = useState({});
@@ -22,6 +24,9 @@ const ShiftAssignment = () => {
   const imageUrl = "https://erp.outsourceglobal.com";
   const [template, setTemplate] = useState(shiftAssignmentFormJson);
   const [data, setData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [value, toggleValue] = useToggle(false);
+
   const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
 
@@ -119,7 +124,7 @@ const ShiftAssignment = () => {
       .patch(`/api/shiftAssignment/${row._id}`, row)
       .then((res) => {
         console.log(res);
-        setData((prevData) => [...data, res.data.data]);
+        setData((prevData) => [...prevData, res.data.data]);
         fetchShiftAssignments();
         showAlert(true, res.data.message, "alert alert-success");
       })
@@ -134,7 +139,7 @@ const ShiftAssignment = () => {
       dataField: "employee_id",
       text: "Employee",
       sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { minWidth: "410px" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -143,14 +148,14 @@ const ShiftAssignment = () => {
               src={
                 row.employee_id.image
                   ? imageUrl + row.employee_id.image
-                  : row.employee_id.gender == "Male"
+                  : row.employee_id.gender === "male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
             />
           </a>
           <Link to="/admin/profile-dashboard">
-            {row.employee_id.first_name} {row.employee_id.last_name}{" "}
+            {row?.employee_id?.first_name} {row?.employee_id?.last_name}{" "}
           </Link>
         </h2>
       ),
@@ -159,16 +164,16 @@ const ShiftAssignment = () => {
       dataField: "shift_type_id",
       text: "Shift Type",
       sort: true,
-      headerStyle: { minWidth: "200px" },
-      formatter: (value, row) => <h2>{row.shift_type_id.shift_name}</h2>,
+      headerStyle: { minWidth: "350px" },
+      formatter: (value, row) => <h2>{row?.shift_type_id?.shift_name}</h2>,
     },
     {
       dataField: "assignment_date",
       text: "Assignment Date",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "350px" },
       formatter: (value, row) => (
-        <h2>{moment(row.assignment_date).format("L")}</h2>
+        <h2>{moment(row?.assignment_date).format("L")}</h2>
       ),
     },
     {
@@ -198,7 +203,10 @@ const ShiftAssignment = () => {
             </a>
             <Link
               className="dropdown-item"
-              onClick={() => deleteShiftAssignment(row)}
+              onClick={() => {
+                setSelectedRow(row);
+                toggleValue(true);
+              }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
@@ -245,6 +253,13 @@ const ShiftAssignment = () => {
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}
+      />
+      <ConfirmModal
+        value={value}
+        title="Shift Assignment"
+        toggleValue={toggleValue}
+        selectedRow={selectedRow}
+        deleteFunction={deleteShiftAssignment}
       />
     </>
   );
