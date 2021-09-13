@@ -123,6 +123,7 @@ const AllEmployeesAdmin = () => {
             selectedOption={selectedOption}
            />
            <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+          
         </>
     )
 }
