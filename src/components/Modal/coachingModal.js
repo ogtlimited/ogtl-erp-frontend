@@ -30,9 +30,9 @@ const initForm = {
   user_response: "",
 };
 const CoachingModal = ({ coachingForm }) => {
-  const { allEmployees,  coachingFormEdit, setcoachingFormSubmitted } =
+  const { allEmployees, coachingFormEdit, setcoachingFormSubmitted } =
     useAppContext();
-    const user = tokenService.getUser()
+  const user = tokenService.getUser();
   console.log(coachingFormEdit);
   const [isEdit, setisEdit] = useState(false);
   const [initialValues, setinitialValues] = useState(initForm);
@@ -41,18 +41,18 @@ const CoachingModal = ({ coachingForm }) => {
   const [reality, setreality] = useState("");
   const [opportunities, setopportunities] = useState("");
   const [way_forward, setway_forward] = useState("");
-  const [goalCount, setgoalCount] = useState(0)
-  const [realityCount, setrealityCount] = useState(0)
-  const [way_forwardCount, setway_forwardCount] = useState(0)
+  const [goalCount, setgoalCount] = useState(0);
+  const [realityCount, setrealityCount] = useState(0);
+  const [way_forwardCount, setway_forwardCount] = useState(0);
   const [opportunityCount, setopportunityCount] = useState(0);
-  const [validCount, setvalidCount] = useState(true)
+  const [validCount, setvalidCount] = useState(true);
   const [supervisor, setsupervisor] = useState("");
-  const [coachingPoints, setcoachingPoints] = useState(false)
+  const [coachingPoints, setcoachingPoints] = useState(false);
   useEffect(() => {
-      console.log(allEmployees)
+    console.log(allEmployees);
     let emp = allEmployees?.map((e) => {
       return {
-        label: e.first_name + ' ' + e.last_name +' -'+ e.ogid,
+        label: e.first_name + " " + e.last_name + " -" + e.ogid,
         value: e._id,
         id: e.ogid,
       };
@@ -69,7 +69,7 @@ const CoachingModal = ({ coachingForm }) => {
       setreality(coachingForm.reality);
       setopportunities(coachingForm.opportunities);
       setway_forward(coachingForm.way_forward);
-    //   set(coachingForm.type);
+      //   set(coachingForm.type);
     } else if (coachingFormEdit == "duplicate") {
       setisEdit(false);
       setinitialValues({
@@ -90,17 +90,31 @@ const CoachingModal = ({ coachingForm }) => {
     setsupervisor(user.reports_to);
   }, [supervisor, coachingForm, coachingFormEdit]);
   useEffect(() => {
-      setgoalCount(goals.split(' ').length)
-      setopportunityCount(opportunities.split(' ').length)
-      setrealityCount(reality.split(' ').length)
-      setway_forwardCount(way_forward.split(' ').length)
-      if(goalCount >= 30 && realityCount >= 30 && opportunityCount >= 30 && way_forwardCount >= 30){
-        setvalidCount(false)
-      }else{
-          setvalidCount(true)
-      }
-      
-  }, [validCount,goals, reality, opportunities, way_forward, goalCount, realityCount, opportunityCount, way_forwardCount])
+    setgoalCount(goals.split(" ").length);
+    setopportunityCount(opportunities.split(" ").length);
+    setrealityCount(reality.split(" ").length);
+    setway_forwardCount(way_forward.split(" ").length);
+    if (
+      goalCount >= 30 &&
+      realityCount >= 30 &&
+      opportunityCount >= 30 &&
+      way_forwardCount >= 30
+    ) {
+      setvalidCount(false);
+    } else {
+      setvalidCount(true);
+    }
+  }, [
+    validCount,
+    goals,
+    reality,
+    opportunities,
+    way_forward,
+    goalCount,
+    realityCount,
+    opportunityCount,
+    way_forwardCount,
+  ]);
   const handleClick = (opt) => {
     console.log(opt);
   };
@@ -109,50 +123,49 @@ const CoachingModal = ({ coachingForm }) => {
       enableReinitialize
       initialValues={{ ...initialValues }}
       onSubmit={(values, { setSubmitting }) => {
-          setcoachingPoints(false)
-          const payload = {
-              ...values,
-              supervisor,
-              goals,
-              opportunities,
-              reality,
-              way_forward,
-            };
-            console.log(payload);
-            console.log(goals);
-            setTimeout(() => {
-              if (isEdit) {
-                // alert('edit')
-                const coachingUrl = `/api/coaching-form`;
-                axiosInstance
-                  .put(coachingUrl, payload)
-                  .then((res) => {
-                    console.log(res);
-                    setcoachingFormSubmitted(true);
-                  })
-                  .catch((err) => {
-                    console.log(err.response?.data);
-                  });
-              } else {
-                const coachingUrl = `/api/coaching-form`;
-                delete payload.employee_name
-                delete payload.user_response
-                payload.status = 'draft'
-                axiosInstance
-                  .post(coachingUrl, payload)
-                  .then((res) => {
-                    console.log(res);
-                    setcoachingFormSubmitted(true);
-                  })
-                  .catch((err) => {
-                    console.log(err.response?.data);
-                    //   setShow(true);
-                    //   setMessage(err.response?.data);
-                  });
-              }
-              //   setSubmitting(false);
-            }, 300);
-        
+        setcoachingPoints(false);
+        const payload = {
+          ...values,
+          supervisor,
+          goals,
+          opportunities,
+          reality,
+          way_forward,
+        };
+        console.log(payload);
+        console.log(goals);
+        setTimeout(() => {
+          if (isEdit) {
+            // alert('edit')
+            const coachingUrl = `/api/coaching-form`;
+            axiosInstance
+              .put(coachingUrl, payload)
+              .then((res) => {
+                console.log(res);
+                setcoachingFormSubmitted(true);
+              })
+              .catch((err) => {
+                console.log(err.response?.data);
+              });
+          } else {
+            const coachingUrl = `/api/coaching-form`;
+            delete payload.employee_name;
+            delete payload.user_response;
+            payload.status = "draft";
+            axiosInstance
+              .post(coachingUrl, payload)
+              .then((res) => {
+                console.log(res);
+                setcoachingFormSubmitted(true);
+              })
+              .catch((err) => {
+                console.log(err.response?.data);
+                //   setShow(true);
+                //   setMessage(err.response?.data);
+              });
+          }
+          //   setSubmitting(false);
+        }, 300);
       }}
       validationSchema={Yup.object().shape({
         ogid: Yup.string().required("ogid is required"),
@@ -344,7 +357,8 @@ const CoachingModal = ({ coachingForm }) => {
                                 <input
                                   type="radio"
                                   checked={
-                                    values.coaching_type === "Developmental Coaching"
+                                    values.coaching_type ===
+                                    "Developmental Coaching"
                                   }
                                   onChange={() =>
                                     setFieldValue(
@@ -363,7 +377,8 @@ const CoachingModal = ({ coachingForm }) => {
                                 <input
                                   type="radio"
                                   checked={
-                                    values.coaching_type === "Behavioural Coaching"
+                                    values.coaching_type ===
+                                    "Behavioural Coaching"
                                   }
                                   onChange={() =>
                                     setFieldValue(
@@ -401,9 +416,14 @@ const CoachingModal = ({ coachingForm }) => {
                               <label>
                                 <input
                                   type="radio"
-                                  checked={values.coaching_type === "Coaching Triad"}
+                                  checked={
+                                    values.coaching_type === "Coaching Triad"
+                                  }
                                   onChange={() =>
-                                    setFieldValue("coaching_type", "Coaching Triad")
+                                    setFieldValue(
+                                      "coaching_type",
+                                      "Coaching Triad"
+                                    )
                                   }
                                   value="Coaching Triad"
                                   name="coaching_type"
@@ -415,9 +435,14 @@ const CoachingModal = ({ coachingForm }) => {
                               <label>
                                 <input
                                   type="radio"
-                                  checked={values.coaching_type === "Corrective Action"}
+                                  checked={
+                                    values.coaching_type === "Corrective Action"
+                                  }
                                   onChange={() =>
-                                    setFieldValue("coaching_type", "Corrective Action")
+                                    setFieldValue(
+                                      "coaching_type",
+                                      "Corrective Action"
+                                    )
                                   }
                                   value="Corrective Action"
                                   name="coaching_type"
@@ -496,7 +521,10 @@ const CoachingModal = ({ coachingForm }) => {
                                         value={goals}
                                       />
                                       <small>Minimum of 30 words </small>
-                                    <small className="float-right"> {goalCount} / 30</small>
+                                      <small className="float-right">
+                                        {" "}
+                                        {goalCount} / 30
+                                      </small>
                                     </div>
                                   </div>
                                 </div>
@@ -518,7 +546,10 @@ const CoachingModal = ({ coachingForm }) => {
                                         value={reality}
                                       />
                                       <small>Minimum of 30 words </small>
-                                    <small className="float-right"> {realityCount} / 30</small>
+                                      <small className="float-right">
+                                        {" "}
+                                        {realityCount} / 30
+                                      </small>
                                     </div>
                                   </div>
                                 </div>
@@ -546,7 +577,10 @@ const CoachingModal = ({ coachingForm }) => {
                                         value={opportunities}
                                       />
                                       <small>Minimum of 30 words </small>
-                                    <small className="float-right"> {opportunityCount} / 30</small>
+                                      <small className="float-right">
+                                        {" "}
+                                        {opportunityCount} / 30
+                                      </small>
                                     </div>
                                   </div>
                                 </div>
@@ -569,7 +603,10 @@ const CoachingModal = ({ coachingForm }) => {
                                         value={way_forward}
                                       />
                                       <small>Minimum of 30 words </small>
-                                    <small className="float-right"> {way_forwardCount} / 30</small>
+                                      <small className="float-right">
+                                        {" "}
+                                        {way_forwardCount} / 30
+                                      </small>
                                     </div>
                                   </div>
                                 </div>
