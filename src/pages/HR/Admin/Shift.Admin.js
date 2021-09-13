@@ -7,11 +7,9 @@ import { shiftTypeFormJson } from "../../../components/FormJSON/HR/shift/ShiftTy
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import useToggle from "../../../hooks/useToggle";
 
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState({});
-  const [value, toggleValue] = useToggle(false);
   const [editData, seteditData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
@@ -132,9 +130,10 @@ const ShiftAdmin = () => {
             </a>
             <Link
               className="dropdown-item"
+              data-toggle="modal"
+              data-target="#exampleModal"
               onClick={() => {
                 setSelectedRow(row);
-                toggleValue(true);
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
@@ -184,9 +183,7 @@ const ShiftAdmin = () => {
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
-        value={value}
         title="Shift type"
-        toggleValue={toggleValue}
         selectedRow={selectedRow}
         deleteFunction={deleteShift}
       />
