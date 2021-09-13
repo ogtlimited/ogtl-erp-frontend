@@ -2,7 +2,7 @@ import axios from 'axios'
 import tokenService from './token.service'
 
 let headers = {}
-const token = tokenService.getToken()
+const token = localStorage.getItem('token')
 if(token){
     headers.Authorization = `Bearer ${token}`
 }
@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
         }
         if(error.response.status === 401){
             tokenService.removeToken()
-            // window.location = "/auth"
+            window.location = "/auth"
         }else{
             return new Promise((resolve,reject) =>{
                 reject(error)

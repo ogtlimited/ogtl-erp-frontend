@@ -5,11 +5,14 @@ import FormModal from "../../../components/Modal/Modal";
 import { coachingFormJSON } from "../../../components/FormJSON/CoachingForm/coachingAdmin";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
-import CoachingForm from "../../../components/Forms/CoachingForm";
+import CoachingModal from "../../../components/Modal/coachingModal";
+
+
 const CoachingAdmin = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
-    const [template, settemplate] = useState(coachingFormJSON)
+    const [coachingForm, setcoachingForm] = useState({})
+    const [template, settemplate] = useState({})
     const [submitted, setsubmitted] = useState(false)
     const [coachingList, setcoachingList] = useState([])
     const {allEmployees, showAlert} = useAppContext()
@@ -32,6 +35,7 @@ const CoachingAdmin = () => {
               value: e._id
             }
         })
+        console.log(allEmployees)
         const finalForm = coachingFormJSON.Fields.map(field =>{
             if(field.name === 'employeeId'){
              field.options = employeeOpts
@@ -39,11 +43,22 @@ const CoachingAdmin = () => {
             }
             return field
           })
-          settemplate({
-            title: coachingFormJSON.title,
-            Fields: finalForm
+          // settemplate({
+          //   title: coachingFormJSON.title,
+          //   Fields: finalForm
+          // })
+          const objTemplate = {}
+          finalForm.forEach(e =>{
+            objTemplate[e.name] =  {
+              type: e.type,
+              label: e.title,
+              required: e.required ? true : false,
+              options: e.options
+            }
           })
-       console.log(allEmployees)
+          // objTemplate.employeeId.options = employeeOpts
+       settemplate(objTemplate)
+       console.log(finalForm)
     }, [allEmployees])
     useEffect(() => {
         if(submitted === true){
@@ -72,20 +87,23 @@ const CoachingAdmin = () => {
           text: "Employee Name",
           sort: true,
           headerStyle: {minWidth: "250px"},
-          formatter: (value, row) => (
-            <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
-          src={ row.image }   /></a><a href="">{value.first_name + ' ' + value.last_name} <span>{value.designation.designation}</span></a></h2>
-          )    ,
+          // formatter: (value, row) => (
+          //   <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
+          // src={ row.image }   /></a><a href="">{value.first_name + ' ' + value.last_name} <span>{value.designation.designation}</span></a></h2>
+          // )    ,
           
         },
         {
-            dataField: "employeeId",
+            dataField: "ogid",
             text: "Employee ID",
             sort: true,
             headerStyle: {minWidth: "150px"},
-            formatter: (value, row) => (
-                <a>{value.ogid}</a>
-              )    ,
+        },
+        {
+            dataField: "coaching_type",
+            text: "Coaching Type",
+            sort: true,
+            headerStyle: {minWidth: "200px"},
         },
         // {
         //     dataField: "type",
@@ -182,7 +200,7 @@ const CoachingAdmin = () => {
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#coachingForm"
             >
               <i className="fa fa-plus"></i> Coaching Form
             </a>
@@ -286,8 +304,7 @@ const CoachingAdmin = () => {
                 data={coachingList}
               />
           </div>
-          <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
-          <CoachingForm />
+          <CoachingModal coachingForm={coachingForm} />
       </div>
     </>
   );
