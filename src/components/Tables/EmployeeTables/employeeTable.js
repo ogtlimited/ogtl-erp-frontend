@@ -57,101 +57,29 @@ const EmployeesTable = ({
   };
   //    console.log(data)
 
-        useEffect(() => {
-            setAllEmployee(data)
-            setunfiltered(data)
-        }, [data])
-    console.log(total)
-    const columns = [
-        {
-          dataField: "",
-          text: "Employee Name",
-          sort: true,
-          headerStyle: {minWidth: "250px"},
-          formatter: (value, row) => (
-            <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
-          src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><Link to="/admin/profile-dashboard">{row.first_name} {row.last_name} <span>{row?.designation?.designation}</span></Link></h2>
-          )    ,
-          
-        },
-        {
-          dataField: "status",
-          text: "Status",
-          sort: true,
-          headerStyle: {minWidth: "120px"},
-          formatter: (value, row) => (
-            <>
-            {value == 'active' ?
-            <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
-            : value == 'left' ?
-             <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
-             : value == 'terminated' ?
-             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-             :
-             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-            }
-
-            </>
-          )    ,
-        },
-        {
-          dataField: "ogid",
-          text: "Employee ID",
-          sort: true,
-          headerStyle: {minWidth: "150px"},
-          
-        },
-        {
-          dataField: "department",
-          text: "Department",
-          sort: true,
-          headerStyle: {minWidth: "150px"},
-          
-        },
-        {
-          dataField: "designation.designation",
-          text: "Designation",
-          sort: true,
-          headerStyle: {minWidth: "150px"},
-          
-        },
-        {
-          dataField: "company_email",
-          text: "Company Email",
-          sort: true,
-          headerStyle: {minWidth: "100px"},
-          
-          
-          
-        },
-               {
-          dataField: "",
-          text: "Action",
-          sort: true,
-          headerStyle: {minWidth: "70px", textAlign:"left"},
-          formatter: (value, row) => (
-            <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
-      aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-  <div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" onClick={() => seteditEmployee(row)} href="#" data-toggle="modal"
-          data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a><a className="dropdown-item" href="#"
-          data-toggle="modal" data-target="#delete_employee"><i className="fa fa-download m-r-5"></i> Download Attendance</a></div>
-</div>
-          )    ,
-        },
-
-        
-      ];
-    return (
-        <>
-        {allEmployee &&
-        
-            <ToolkitProvider keyField="id" data={allEmployee} columns={columns} search exportCSV>
-        {(props) => (
-          <div className="col-12">
-            <SearchBar
-              {...props.searchProps}
-              style={{ marginBottom: 15, paddingLeft: "12%" }}
-              className="inputSearch"
+  useEffect(() => {
+    setAllEmployee(data);
+    setunfiltered(data);
+  }, [data]);
+  console.log(total);
+  const columns = [
+    {
+      dataField: "",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { minWidth: "250px" },
+      formatter: (value, row) => (
+        <h2 class="table-avatar">
+          <a href="" class="avatar">
+            <img
+              alt=""
+              src={
+                row.image
+                  ? imageUrl + row.image
+                  : row.gender == "Male"
+                  ? males[Math.floor(Math.random() * males.length)]
+                  : females[Math.floor(Math.random() * females.length)]
+              }
             />
           </a>
           <Link to={`/admin/profile-dashboard/${row._id}`}>

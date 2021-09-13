@@ -29,17 +29,17 @@ const FormModal = ({
     setValue: setValue,
     watch: watch,
   };
-  useEffect(() => {
-    if (formMode === "edit") {
-      const fields = Object.keys(editData);
-      fields.forEach((field) => setValue(field, editData[field]));
-      console.log(formMode);
-    } else {
-      const fields = Object.keys(editData);
-      fields.forEach((field) => setValue(field, ""));
-    }
-    console.log(formMode);
-  }, [editData, formMode]);
+  // useEffect(() => {
+  //   if (formMode === "edit") {
+  //     const fields = Object.keys(editData);
+  //     fields.forEach((field) => setValue(field, editData[field]));
+  //     console.log(formMode);
+  //   } else {
+  //     const fields = Object.keys(editData);
+  //     fields.forEach((field) => setValue(field, ""));
+  //   }
+  //   console.log(formMode);
+  // }, [editData, formMode]);
   const onSubmit = (data) => {
     let newObj = {};
     template.Fields.forEach((temp) => {
