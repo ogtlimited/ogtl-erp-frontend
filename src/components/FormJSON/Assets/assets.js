@@ -22,7 +22,7 @@ export const AssetFormJson = {
 
         {
             name:'purchaseDate' ,
-            type:'text',
+            type:'date',
             title:'Purchase Date',
             required:{
                 value:true,
