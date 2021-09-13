@@ -11,7 +11,6 @@ const Sidebar = () => {
   const [isPriviledged, setisPriviledged] = useState(false);
   const { combineRequest } = useAppContext();
   const canView = (dept) => {
-    console.log(dept, user?.department?.department);
     if (user?.department?.department === dept) {
       return true;
     } else {
@@ -21,13 +20,9 @@ const Sidebar = () => {
   useEffect(() => {
     combineRequest().then((res) => {
       const dept = res.data.createEmployeeFormSelection.departments;
-      console.log(user.department);
-      console.log(dept);
     });
     if (user != null) {
       // const hrLower = HRpeople.map(e => e.toLowerCase())
-      // console.log(user?.designation)
-      // console.log(hrLower)
       // if(HRpeople.includes(user?.designation?.toLowerCase())){
       // 	setisPriviledged(true)
       // }

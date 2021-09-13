@@ -2,7 +2,7 @@ import axios from 'axios'
 import tokenService from './token.service'
 
 let headers = {}
-const token = tokenService.getToken()
+const token = localStorage.getItem('token')
 if(token){
     headers.Authorization = `Bearer ${token}`
 }
