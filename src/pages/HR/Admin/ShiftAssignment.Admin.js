@@ -27,6 +27,7 @@ const ShiftAssignment = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [value, toggleValue] = useToggle(false);
 
+  const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
 
   const fetchShiftAssignments = () => {
@@ -248,6 +249,7 @@ const ShiftAssignment = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}

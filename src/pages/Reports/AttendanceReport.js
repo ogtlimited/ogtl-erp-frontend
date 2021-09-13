@@ -69,17 +69,17 @@ const AttendanceReport = () => {
       ];
     return (
         <>
-         <div class="row">
-<div class="col-sm-12">
-<h3 class="page-title">Attendance Reports</h3>
-<ul class="breadcrumb">
-<li class="breadcrumb-item"><Link to="/">Dashboard</Link></li>
-<li class="breadcrumb-item active">Attendance Reports</li>
+         <div className="row">
+<div className="col-sm-12">
+<h3 className="page-title">Attendance Reports</h3>
+<ul className="breadcrumb">
+<li className="breadcrumb-item"><Link to="/">Dashboard</Link></li>
+<li className="breadcrumb-item active">Attendance Reports</li>
 </ul>
 </div>
 </div>   
-         <div class="row">
-<div class="col-sm-12">
+         <div className="row">
+<div className="col-sm-12">
         <LeavesTable data={data} columns={columns} />
 </div>
 </div>   

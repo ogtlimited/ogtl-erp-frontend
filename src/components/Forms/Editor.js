@@ -12,9 +12,9 @@ const Editor = ({name,title,required,register,errors, setValue}) => {
     };
    
         return (
-            <div class="col-12">
-            <div class="form-group">
-            <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+            <div className="col-12">
+            <div className="form-group">
+            <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
             <ReactQuill  
                 onChange={(onEditorStateChange)} {...register(name)}
                />

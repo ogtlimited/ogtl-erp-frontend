@@ -1,9 +1,60 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Link } from "react-router-dom";
 import routes from "../../routes";
 import "./Sidebar.css";
+import $ from 'jquery'
+import tokenService from "../../services/token.service";
+import { useAppContext } from "../../Context/AppContext";
 const Sidebar = () => {
+  const [user, setuser] = useState(tokenService.getUser())
+  const [isPriviledged, setisPriviledged] = useState(false)
+  const {combineRequest} = useAppContext()
+  const canView = (dept) =>{
+    console.log(dept, user?.department?.department)
+    if(user?.department?.department === dept){
+      return true
+    }else{
+      return false
+    }
+  }
+  useEffect(() => {
+    combineRequest().then(res =>{
+      const dept = res.data.createEmployeeFormSelection.departments
+      console.log(user.department)
+      console.log(dept)
+    })
+    if(user != null){
+			// const hrLower = HRpeople.map(e => e.toLowerCase())
+			// console.log(user?.designation)
+			// console.log(hrLower)
+			// if(HRpeople.includes(user?.designation?.toLowerCase())){
+
+			// 	setisPriviledged(true)
+			// }
+		}
+		var Sidemenu = function() {
+			this.$menuItem = $('#sidebar-menu a');
+		};
+		var $this = Sidemenu;
+		$('#sidebar-menu a').on('click', function(e) {
+			
+			if($(this).parent().hasClass('submenu')) {
+				e.preventDefault();
+			}
+			if(!$(this).hasClass('subdrop')) {
+				$('ul', $(this).parents('ul:first')).slideUp(350);
+				$('a', $(this).parents('ul:first')).removeClass('subdrop');
+				$(this).next('ul').slideDown(350);
+				$(this).addClass('subdrop');
+			} else if($(this).hasClass('subdrop')) {
+				$(this).removeClass('subdrop');
+				$(this).next('ul').slideUp(350);
+			}
+		});
+		$('#sidebar-menu ul li.submenu a.active').parents('li:last').children('a:first').addClass('active').trigger('click');
+	
+	}, [])
   const dNone = {
     display: "none",
   };
@@ -37,11 +88,13 @@ const Sidebar = () => {
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={{ display: "block" }}>
+                {canView('operations') &&  
                   <li>
                     <Link className="active" to="/admin/dashboard">
                       Admin Dashboard
                     </Link>
                   </li>
+                }
                   <li>
                     <Link className="" to="/admin/employee-dashboard">
                       Employee Dashboard
@@ -68,6 +121,7 @@ const Sidebar = () => {
               <li className="menu-title">
                 <span>Operation</span>
               </li>
+              {canView('operations') &&  
               <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
@@ -84,10 +138,13 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-
+                }
+               
               <li className="menu-title">
                 <span>HR</span>
               </li>
+              
+              
               <li className="submenu">
                 <a
                   href=""
@@ -98,11 +155,15 @@ const Sidebar = () => {
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={dNone}>
+                {canView('HR') && 
                   <li>
                     <Link className="" to="/admin/all-employees">
                       All Employees
                     </Link>
                   </li>
+                
+                }
+                 {canView('HR') &&
                   <li>
                     <Link className="" to="/admin/leaves-admin">
                       Leaves (Admin){" "}
@@ -111,86 +172,113 @@ const Sidebar = () => {
                       </span>
                     </Link>
                   </li>
+                 
+                 }
                   <li>
                     <Link className="" to="/admin/leaves-employee">
                       Leaves (Employee)
                     </Link>
                   </li>
+                 
+                
+                  {canView('HR') &&
                   <li>
                     <Link className="" to="/admin/leave-settings">
                       Leave Settings
                     </Link>
                   </li>
+                 
+                }
+                  {canView('HR') &&
+                 
                   <li>
                     <Link className="" to="/admin/attendance-admin">
                       Attendance (Admin)
                     </Link>
                   </li>
+                }
                   <li>
                     <Link className="" to="/admin/attendance-employee">
                       Attendance (Employee)
                     </Link>
                   </li>
-
+                  {canView('HR') &&
+                 
                   <li>
                     <Link className="" to="/admin/departments">
                       Departments
                     </Link>
                   </li>
-                  <li>
-                    <Link className="" to="/admin/designations">
-                      Designations
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/shifts">
-                      Shift &amp; Schedule
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/shift-assignment">
-                      Shift Assignments
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/shift-request">
-                      Shift Requests
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/overtime">
-                      Overtime
-                    </Link>
-                  </li>
+                
+                }
+                  {canView('HR') &&
+                 
+                    <li>
+                      <Link className="" to="/admin/designations">
+                        Designations
+                      </Link>
+                    </li>
+                }
+                  {canView('HR') &&
+
+                    <li>
+                      <Link className="" to="/admin/shifts">
+                        Shift &amp; Schedule
+                      </Link>
+                    </li>
+                 
+                }
+                  {canView('HR') &&
+                    <li>
+                      <Link className="" to="/admin/shift-assignment">
+                        Shift Assignments
+                      </Link>
+                    </li>
+                 
+                  }
+                    <li>
+                      <Link className="" to="/admin/shift-request">
+                        Shift Requests
+                      </Link>
+                    </li>
+
+               
                 </ul>
               </li>
-
+              
               <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-money"></i> <span> Payroll </span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={dNone}>
+                {canView('HR') &&  
                   <li>
                     <Link className="" to="/admin/salary">
                       {" "}
                       Employee Salary{" "}
                     </Link>
                   </li>
+                }
+
                   <li>
                     <Link className="" to="/admin/payslip">
                       {" "}
                       Payslip{" "}
                     </Link>
                   </li>
+
+                   {canView('HR') &&  
                   <li>
-                    <Link className="" to="/payroll/payroll-items">
+                    <Link className="" to="/admin/payroll-items">
                       {" "}
                       Payroll Items{" "}
                     </Link>
                   </li>
+                  }
                 </ul>
               </li>
+              {canView('HR') &&
               <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-pie-chart"></i> <span> Reports </span>{" "}
@@ -229,173 +317,127 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-              <li className="submenu">
-                <a href="" onClick={(e) => e.preventDefault()}>
-                  <i className="la la-briefcase"></i> <span> Recruitment </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/administrator/user-dashboard">
-                      {" "}
-                      User Dasboard{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/administrator/jobs-dashboard">
-                      {" "}
-                      Jobs Dashboard{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/job-opening">
-                      {" "}
-                      Job Opening{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/job-offer">
-                      {" "}
-                      Job Offer{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/job-applicants">
-                      {" "}
-                      Job Applicants
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/admin/aptitude-test">
-                      {" "}
-                      Aptitude Test{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/administrator/manage-resumes">
-                      {" "}
-                      Manage Resumes{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/administrator/shortlist-candidates">
-                      {" "}
-                      Shortlist Candidates{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/administrator/interview-questions">
-                      {" "}
-                      Interview Questions{" "}
-                    </Link>
-                  </li>
+              
+              
+              }
+               {canView('HR') &&
+               
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i className="la la-briefcase"></i> <span> Recruitment </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
+                    <li>
+                      <Link className="" to="/administrator/user-dashboard">
+                        {" "}
+                        User Dasboard{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/administrator/jobs-dashboard">
+                        {" "}
+                        Jobs Dashboard{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/admin/job-opening">
+                        {" "}
+                        Job Opening{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/admin/job-offer">
+                        {" "}
+                        Job Offer{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/admin/job-applicants">
+                        {" "}
+                        Job Applicants
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/admin/aptitude-test">
+                        {" "}
+                        Aptitude Test{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/administrator/manage-resumes">
+                        {" "}
+                        Manage Resumes{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/administrator/shortlist-candidates">
+                        {" "}
+                        Shortlist Candidates{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/administrator/interview-questions">
+                        {" "}
+                        Interview Questions{" "}
+                      </Link>
+                    </li>
 
-                  <li>
-                    <Link className="" to="/administrator/experiance-level">
-                      {" "}
-                      Experience Level{" "}
-                    </Link>
-                  </li>
+                    <li>
+                      <Link className="" to="/administrator/experiance-level">
+                        {" "}
+                        Experience Level{" "}
+                      </Link>
+                    </li>
 
-                  <li>
-                    <Link className="" to="/administrator/schedule-timing">
-                      {" "}
-                      Schedule timing{" "}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="submenu">
-                <a href="" onClick={(e) => e.preventDefault()}>
-                  <i className="la la-graduation-cap"></i>{" "}
-                  <span> Performance </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/admin/warning-letter">
-                      {" "}
-                      Warning Letter
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/performances/performance-indicator">
-                      {" "}
-                      Performance Indicator{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/performances/performance-review">
-                      {" "}
-                      Performance Review{" "}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/performances/performance-appraisal">
-                      {" "}
-                      Performance Appraisal{" "}
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="">
-                <Link to="/admin/coaching">
-                  <i className="la la-ticket"></i> <span>Coaching Form</span>
-                </Link>
-              </li>
-              <li className="">
-                <Link to="/admin/promotion">
-                  <i className="la la-bullhorn"></i> <span>Promotion</span>
-                </Link>
-              </li>
-              <li className="">
-                <Link to="/performance/resignation">
-                  <i className="la la-external-link-square"></i>{" "}
-                  <span>Resignation</span>
-                </Link>
-              </li>
-              <li className="">
-                <Link to="/performance/termination">
-                  <i className="la la-times-circle"></i>{" "}
-                  <span>Termination</span>
-                </Link>
-              </li>
-              <li className="menu-title">
-                <span>Accounting</span>
-              </li>
-              <li className="submenu">
-                <a href="" onClick={(e) => e.preventDefault()}>
-                  <i className="la la-files-o"></i> <span> Accounting </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  <li>
-                    <Link className="" to="/accounts/categories">
-                      Categories
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budgets">
-                      Budgets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budget-expenses">
-                      Budget Expenses
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="" to="/accounts/budget-revenues">
-                      Budget Revenues
-                    </Link>
-                  </li>
-                </ul>
-              </li>
+                    <li>
+                      <Link className="" to="/administrator/schedule-timing">
+                        {" "}
+                        Schedule timing{" "}
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+                
+               }
+                {canView('HR') &&
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i className="la la-graduation-cap"></i>{" "}
+                    <span> Performance </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
+                    <li>
+                      <Link className="" to="/admin/warning-letter">
+                        {" "}
+                        Warning Letter
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/performances/performance-indicator">
+                        {" "}
+                        Performance Indicator{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/performances/performance-review">
+                        {" "}
+                        Performance Review{" "}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="" to="/performances/performance-appraisal">
+                        {" "}
+                        Performance Appraisal{" "}
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
 
-              {/* <li className="menu-title">
-                <span>Performance</span>
-              </li> */}
-              <li className="submenu">
+                }
+                 {canView('HR') &&
+                <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-edit"></i> <span> Training </span>{" "}
                   <span className="menu-arrow"></span>
@@ -422,14 +464,90 @@ const Sidebar = () => {
                 </ul>
               </li>
 
-              <li className="menu-title">
-                <span>Administration</span>
-              </li>
+                 }
+
               <li className="">
-                <Link to="/admin/assets">
-                  <i className="la la-object-ungroup"></i> <span>Assets</span>
+                <Link to="/admin/coaching">
+                  <i className="la la-ticket"></i> <span>Coaching Form</span>
                 </Link>
               </li>
+              {canView('HR') &&
+                <li className="">
+                  <Link to="/admin/promotion">
+                    <i className="la la-bullhorn"></i> <span>Promotion</span>
+                  </Link>
+                </li>
+              
+              }
+               {canView('HR') &&
+                <li className="">
+                  <Link to="/performance/resignation">
+                    <i className="la la-external-link-square"></i>{" "}
+                    <span>Resignation</span>
+                  </Link>
+                </li>
+               
+               
+               }
+                {canView('HR') && 
+                  <li className="">
+                    <Link to="/performance/termination">
+                      <i className="la la-times-circle"></i>{" "}
+                      <span>Termination</span>
+                    </Link>
+                  </li>
+                
+                
+                }
+                 {canView('Accounting') &&
+                 
+                  <li className="menu-title">
+                    <span>Accounting</span>
+                  </li>
+                 }
+                  {canView('Accounting') &&
+                    <li className="submenu">
+                      <a href="" onClick={(e) => e.preventDefault()}>
+                        <i className="la la-files-o"></i> <span> Accounting </span>{" "}
+                        <span className="menu-arrow"></span>
+                      </a>
+                      <ul style={dNone}>
+                        <li>
+                          <Link className="" to="/accounts/categories">
+                            Categories
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="" to="/accounts/budgets">
+                            Budgets
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="" to="/accounts/budget-expenses">
+                            Budget Expenses
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="" to="/accounts/budget-revenues">
+                            Budget Revenues
+                          </Link>
+                        </li>
+                      </ul>
+                    </li>
+                  
+                  }
+                   {canView('Facility') &&
+                    <li className="menu-title">
+                      <span>Administration</span>
+                    </li>
+                   }
+                    {canView('HR') &&
+                      <li className="">
+                        <Link to="/admin/assets">
+                          <i className="la la-object-ungroup"></i> <span>Assets</span>
+                        </Link>
+                      </li>
+                    }
               <li className="">
                 <Link to="/administrator/activities">
                   <i className="la la-bell"></i> <span>Activities</span>
@@ -440,21 +558,15 @@ const Sidebar = () => {
                   <i className="la la-user-plus"></i> <span>Users</span>
                 </Link>
               </li>
-              <li>
-                <Link to="/blue/settings/companysetting">
-                  <i className="la la-cog"></i> <span>Settings</span>
-                </Link>
-              </li>
-              <li>
-                <a>
-                  <span></span>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <span></span>
-                </a>
-              </li>
+              {canView('IT') &&
+                <li>
+                  <Link to="/admin/companysetting">
+                    <i className="la la-cog"></i> <span>Settings</span>
+                  </Link>
+                </li>
+
+              }
+
               <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}
@@ -478,8 +590,6 @@ const Sidebar = () => {
             </ul>
           </div>
         </div>
-        <div className="slimScrollBar slimscollbar-style"></div>
-        <div className="slimScrollRail slimscollRail-style"></div>
       </div>
     </div>
   );

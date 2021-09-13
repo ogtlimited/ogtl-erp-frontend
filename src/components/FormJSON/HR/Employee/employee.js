@@ -93,17 +93,8 @@ export const employeeFormJson = {
         },
         {
             name:'department' ,
-            type:'text',
-            title:'Department',
-            required:{
-                value:true,
-                message:'department is required'
-            }
-        },
-        {
-            name:'default_shift' ,
             type:'select',
-            title:'Shift',
+            title:'Department',
             required:{
                 value:true,
                 message:'department is required'
@@ -111,12 +102,23 @@ export const employeeFormJson = {
             options: []
         },
         {
+            name:'default_shift' ,
+            type:'select',
+            title:'Shift',
+            required:{
+                value:true,
+                message:'shift is required'
+            },
+            options: []
+        },
+        {
             name:'employment_type' ,
-            type:'text',
+            type:'select',
             title:'Employment type',
             required:{
                 value:false,
-            }
+            },
+            options: []
         },
         {
             name:'gender' ,

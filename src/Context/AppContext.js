@@ -13,12 +13,14 @@ const AppProvider = (props) => {
         msg: '',
         class: ''
     })
+    const [employeeAttendance, setemployeeAttendance] = useState([])
+    const [user, setuser] = useState(tokenService.getUser())
     useEffect(() => {console.log('alert message')}, [showAlertMsg])
     useEffect(() => {
        const token =  tokenService.getToken()
        if(token && allEmployees.length < 1){
            fetchEmployee()
-
+           fetchEmployeeAttendance()
        }
     }, [allEmployees])
 
@@ -52,13 +54,25 @@ const AppProvider = (props) => {
     const adminDashboardData = () =>{
         return axiosInstance.get('/admin-dashboard')
     }
+    const fetchEmployeeAttendance = () =>{
+        const date = new Date();
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString();
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleDateString();
+ 
+        const params = `?startOfMonth=${firstDay}&endOfMonth=${lastDay}`
+        return axiosInstance.get('/api/attendance/employee/'+ user.ogid + params).then(e =>{
+            console.log(e.data.data)
+            setemployeeAttendance(e.data.data)
+        })
+    }
 
     return <AppContext.Provider
         value= {{ fetchTypesShift, 
         combineRequest,
+        employeeAttendance,
             adminDashboardData,
         setallEmployees,allEmployees,
-        showAlert, showAlertMsg,
+        showAlert, showAlertMsg,fetchEmployeeAttendance,
          fetchEmployee}}
 >{props.children}</AppContext.Provider>
 }

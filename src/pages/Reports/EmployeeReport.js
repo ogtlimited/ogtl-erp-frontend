@@ -18,7 +18,7 @@ const EmployeeReport = () => {
           sort: true,
           headerStyle: {minWidth: "250px"},
           formatter: (value, row) => (
-            <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
+            <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
           src={ row.image ? imageUrl  + row.image : row.gender == 'Male' ?  males[Math.floor(Math.random() * males.length)] :  females[Math.floor(Math.random() * females.length)]} /></a><a href="">{value} <span>{row.designation}</span></a></h2>
           )    ,
           
@@ -38,13 +38,13 @@ const EmployeeReport = () => {
           formatter: (value, row) => (
             <>
             {value == 'Active' ?
-            <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+            <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
             : value == 'Pending' ?
-             <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
              : value == 'Terminated' ?
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
              :
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
             }
 
             </>
@@ -132,11 +132,11 @@ const EmployeeReport = () => {
           sort: true,
           headerStyle: {minWidth: "70px", textAlign:"left"},
           formatter: (value, row) => (
-            <div class="dropdown dropdown-action text-right"><a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-      aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-  <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" onClick={() => (row)} href="#" data-toggle="modal"
-          data-target="#edit_employee"><i class="fa fa-pencil m-r-5"></i> Edit</a><a class="dropdown-item" href="#"
-          data-toggle="modal" data-target="#delete_employee"><i class="fa fa-download m-r-5"></i> Download Attendance</a></div>
+            <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+      aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+  <div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" onClick={() => (row)} href="#" data-toggle="modal"
+          data-target="#edit_employee"><i className="fa fa-pencil m-r-5"></i> Edit</a><a className="dropdown-item" href="#"
+          data-toggle="modal" data-target="#delete_employee"><i className="fa fa-download m-r-5"></i> Download Attendance</a></div>
 </div>
           )    ,
         },
@@ -145,22 +145,22 @@ const EmployeeReport = () => {
       ];
     return (
         <>
-            <div class="page-header">
-<div class="row">
-<div class="col">
-<h3 class="page-title">Employee Report</h3>
-<ul class="breadcrumb">
-<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-<li class="breadcrumb-item active">Employee Report</li>
+            <div className="page-header">
+<div className="row">
+<div className="col">
+<h3 className="page-title">Employee Report</h3>
+<ul className="breadcrumb">
+<li className="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+<li className="breadcrumb-item active">Employee Report</li>
 </ul>
 </div>
-<div class="col-auto">
-<a href="#" class="btn btn-primary">PDF</a>
+<div className="col-auto">
+<a href="#" className="btn btn-primary">PDF</a>
 </div>
 </div>
 </div>
-<div class="row">
-<div class="col-sm-12">
+<div className="row">
+<div className="col-sm-12">
     <LeavesTable
         columns={columns}
         data={data}

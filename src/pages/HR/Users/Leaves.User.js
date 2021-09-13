@@ -83,17 +83,17 @@ const LeavesUser = () => {
       formatter: (value, row) => (
           <>
            {value === 'approved' ?
-                <span class="btn btn-gray btn-sm btn-rounded"
-                ><i class="fa fa-dot-circle-o text-success"></i> {value}</span>
+                <span className="btn btn-gray btn-sm btn-rounded"
+                ><i className="fa fa-dot-circle-o text-success"></i> {value}</span>
              : value === 'cancelled' ?
-             <span class="btn btn-gray btn-sm btn-rounded"
-             ><i class="fa fa-dot-circle-o text-danger"></i> {value}</span>
+             <span className="btn btn-gray btn-sm btn-rounded"
+             ><i className="fa fa-dot-circle-o text-danger"></i> {value}</span>
 
              : value === 'open' ?
-             <span class="btn btn-gray btn-sm btn-rounded "
-            ><i class="fa fa-dot-circle-o text-primary"></i> {value}</span>
+             <span className="btn btn-gray btn-sm btn-rounded "
+            ><i className="fa fa-dot-circle-o text-primary"></i> {value}</span>
              :
-             <span class="btn btn-gray btn-sm btn-rounded"><i class="fa fa-dot-circle-o text-purple"></i> Approved</span>}
+             <span className="btn btn-gray btn-sm btn-rounded"><i className="fa fa-dot-circle-o text-purple"></i> Approved</span>}
 
         </>
         ),
@@ -109,57 +109,57 @@ const LeavesUser = () => {
   ];
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Leaves</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Leaves</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item active">Leaves</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn"
+              className="btn add-btn"
               data-toggle="modal"
               data-target="#add_leave"
             >
-              <i class="fa fa-plus"></i> Add Leave
+              <i className="fa fa-plus"></i> Add Leave
             </a>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-3">
-          <div class="stats-info">
+      <div className="row">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Total Allocated Leave</h6>
             <h4>20</h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Medical Leave</h6>
             <h4>{medical}</h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Other Leave</h6>
             <h4>{casual}</h4>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="stats-info">
+        <div className="col-md-3">
+          <div className="stats-info">
             <h6>Remaining Leave</h6>
             <h4>{20 - medical - casual}</h4>
           </div>
         </div>
       </div>
-      <div class="row">
-          <div class="col-12">
+      <div className="row">
+          <div className="col-12">
           <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>

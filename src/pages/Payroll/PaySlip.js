@@ -11,18 +11,18 @@ const options = {
 };
 const RightSide = () => {
   return (
-    <div class="col-auto float-right ml-auto">
-      <div class="btn-group btn-group-sm">
-        <button class="btn btn-white">CSV</button>
+    <div className="col-auto float-right ml-auto">
+      <div className="btn-group btn-group-sm">
+        <button className="btn btn-white">CSV</button>
         <Pdf targetRef={ref} filename="payslip.pdf" x={1} y={1} scale={0.8}>
           {({ toPdf }) => (
-            <button class="btn btn-white" onClick={toPdf}>
+            <button className="btn btn-white" onClick={toPdf}>
               Pdf
             </button>
           )}
         </Pdf>
-        <button onClick={() => window.print()} class="btn btn-white">
-          <i class="fa fa-print fa-lg"></i> Print
+        <button onClick={() => window.print()} className="btn btn-white">
+          <i className="fa fa-print fa-lg"></i> Print
         </button>
       </div>
     </div>
@@ -32,48 +32,48 @@ const PaySlip = () => {
   const breadcrumb = "Payslip";
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Payslip</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Payslip</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li class="breadcrumb-item active">Payslip</li>
+              <li className="breadcrumb-item active">Payslip</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-white">CSV</button>
-              <button class="btn btn-white">PDF</button>
-              <button class="btn btn-white">
-                <i class="fa fa-print fa-lg"></i> Print
+          <div className="col-auto float-right ml-auto">
+            <div className="btn-group btn-group-sm">
+              <button className="btn btn-white">CSV</button>
+              <button className="btn btn-white">PDF</button>
+              <button className="btn btn-white">
+                <i className="fa fa-print fa-lg"></i> Print
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div ref={ref} class="row justify-content-center">
-        <div class="col-md-10 mt-5">
-          <div class="card px-5 ">
-            <div class="card-body">
-              <h4 class="payslip-title">Payslip for the month of Feb 2019</h4>
-              <div class="row">
-                <div class="col-sm-6 m-b-20">
-                  <img src={logo} class="inv-logo" alt="" />
-                  <ul class="list-unstyled mb-3">
+      <div ref={ref} className="row justify-content-center">
+        <div className="col-md-10 mt-5">
+          <div className="card px-5 ">
+            <div className="card-body">
+              <h4 className="payslip-title">Payslip for the month of Feb 2019</h4>
+              <div className="row">
+                <div className="col-sm-6 m-b-20">
+                  <img src={logo} className="inv-logo" alt="" />
+                  <ul className="list-unstyled mb-3">
                     <li>Outsource Global Technologies</li>
                     <li> 2nd Floor, ASTA GALLERY Plot 1185, Mabushi </li>
                     <li>Abuja FCT, Nigeria</li>
                   </ul>
                 </div>
 
-                <div class="col-sm-6 mb-20">
-                  <div class="invoice-details">
-                    <h3 class="text-uppercase">Payslip #49029</h3>
-                    <ul class="list-unstyled">
+                <div className="col-sm-6 mb-20">
+                  <div className="invoice-details">
+                    <h3 className="text-uppercase">Payslip #49029</h3>
+                    <ul className="list-unstyled">
                       <li>
                         Salary Month: <span>March, 2019</span>
                       </li>
@@ -81,11 +81,11 @@ const PaySlip = () => {
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-12 m-b-20">
-                  <ul class="list-unstyled">
+              <div className="row">
+                <div className="col-lg-12 m-b-20">
+                  <ul className="list-unstyled">
                     <li>
-                      <h5 class="mb-0">
+                      <h5 className="mb-0">
                         <strong>Sir Abubakar</strong>
                       </h5>
                     </li>
@@ -97,42 +97,42 @@ const PaySlip = () => {
                   </ul>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
+              <div className="row">
+                <div className="col-sm-6">
                   <div>
-                    <h4 class="m-b-10">
+                    <h4 className="m-b-10">
                       <strong>Earnings</strong>
                     </h4>
-                    <table class="table table-bordered">
+                    <table className="table table-bordered">
                       <tbody>
                         <tr>
                           <td>
                             <strong>Basic Salary</strong>{" "}
-                            <span class="float-right">₦6500</span>
+                            <span className="float-right">₦6500</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Hospital Allowance (H.R.A.)</strong>{" "}
-                            <span class="float-right">₦55</span>
+                            <span className="float-right">₦55</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Work from home</strong>{" "}
-                            <span class="float-right">₦55</span>
+                            <span className="float-right">₦55</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Other Allowance</strong>{" "}
-                            <span class="float-right">₦55</span>
+                            <span className="float-right">₦55</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Total Earnings</strong>{" "}
-                            <span class="float-right">
+                            <span className="float-right">
                               <strong>₦55</strong>
                             </span>
                           </td>
@@ -141,41 +141,41 @@ const PaySlip = () => {
                     </table>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div className="col-sm-6">
                   <div>
-                    <h4 class="m-b-10">
+                    <h4 className="m-b-10">
                       <strong>Deductions</strong>
                     </h4>
-                    <table class="table table-bordered">
+                    <table className="table table-bordered">
                       <tbody>
                         <tr>
                           <td>
                             <strong>Tax Deducted at Source (T.D.S.)</strong>{" "}
-                            <span class="float-right">₦0</span>
+                            <span className="float-right">₦0</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Absent</strong>{" "}
-                            <span class="float-right">₦0</span>
+                            <span className="float-right">₦0</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Lateness</strong>{" "}
-                            <span class="float-right">₦0</span>
+                            <span className="float-right">₦0</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Loan</strong>{" "}
-                            <span class="float-right">₦300</span>
+                            <span className="float-right">₦300</span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Total Deductions</strong>{" "}
-                            <span class="float-right">
+                            <span className="float-right">
                               <strong>₦59698</strong>
                             </span>
                           </td>
@@ -184,7 +184,7 @@ const PaySlip = () => {
                     </table>
                   </div>
                 </div>
-                <div class="col-sm-12">
+                <div className="col-sm-12">
                   <p>
                     <strong>Net Salary: ₦59698</strong> (Fifty nine thousand six
                     hundred and ninety eight only.)

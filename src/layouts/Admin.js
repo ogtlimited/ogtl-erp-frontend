@@ -66,7 +66,7 @@ const AdminLayout = (props) => {
         }}
       />
       <div className="page-wrapper" ref={mainContent}>
-        <div class="content container-fluid">
+        <div className="content container-fluid">
           {showAlertMsg.state === true ? 
           <div className={"alert " + showAlertMsg.class} style={{zIndex: 100}} role="alert">
             {showAlertMsg.msg}

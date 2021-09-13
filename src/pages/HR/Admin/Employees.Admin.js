@@ -16,6 +16,7 @@ const AllEmployeesAdmin = () => {
     const {setallEmployees, fetchEmployee, allEmployees, combineRequest} = useAppContext()
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
+    const [editData, seteditData] = useState({});
     const [template, settemplate] = useState(employeeFormJson)
     const [submitted, setsubmitted] = useState(false)
     console.log(allEmployees)
@@ -23,10 +24,22 @@ const AllEmployeesAdmin = () => {
     useEffect(() => {
       combineRequest().then(res =>{
         console.log(res)
-        const {shifts, designations} = res.data.createEmployeeFormSelection
+        const {shifts, designations, employeeTypes, departments} = res.data.createEmployeeFormSelection
         const shiftsopts = shifts?.map(e => {
           return {
             label: e.shift_name,
+            value: e._id
+          }
+        })
+        const empTypeopts = employeeTypes?.map(e => {
+          return {
+            label: e.type,
+            value: e._id
+          }
+        })
+        const deptopts = departments?.map(e => {
+          return {
+            label: e.department,
             value: e._id
           }
         })
@@ -42,6 +55,14 @@ const AllEmployeesAdmin = () => {
            return field
           }else if(field.name === 'default_shift'){
             field.options = shiftsopts
+            return field
+          }
+          else if(field.name === 'department'){
+            field.options = deptopts
+            return field
+          }
+          else if(field.name === 'employment_type'){
+            field.options = empTypeopts
             return field
           }
           return field
@@ -77,20 +98,20 @@ const AllEmployeesAdmin = () => {
       ];
     return (
         <>
-          <div class="page-header">
-<div class="row align-items-center">
-<div class="col">
-<h3 class="page-title">Employee</h3>
-<ul class="breadcrumb">
-<li class="breadcrumb-item"><Link to="/">Dashboard</Link></li>
-<li class="breadcrumb-item active">Employee</li>
+          <div className="page-header">
+<div className="row align-items-center">
+<div className="col">
+<h3 className="page-title">Employee</h3>
+<ul className="breadcrumb">
+<li className="breadcrumb-item"><Link to="/">Dashboard</Link></li>
+<li className="breadcrumb-item active">Employee</li>
 </ul>
 </div>
-<div class="col-auto float-right ml-auto">
-<a href="#" class="btn add-btn" data-toggle="modal" data-target="#FormModal"><i class="fa fa-plus"></i> Add Employee</a>
-<div class="view-icons">
-<a href="employees.html" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
-<a href="employees-list.html" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
+<div className="col-auto float-right ml-auto">
+<a href="#" className="btn add-btn" data-toggle="modal" data-target="#FormModal"><i className="fa fa-plus"></i> Add Employee</a>
+<div className="view-icons">
+<a href="employees.html" className="grid-view btn btn-link active"><i className="fa fa-th"></i></a>
+<a href="employees-list.html" className="list-view btn btn-link"><i className="fa fa-bars"></i></a>
 </div>
 </div>
 </div>
@@ -101,7 +122,7 @@ const AllEmployeesAdmin = () => {
             defaultSorted={defaultSorted}
             selectedOption={selectedOption}
            />
-           <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+           <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
         </>
     )
 }

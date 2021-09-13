@@ -22,7 +22,7 @@ const AllCampaigns = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (value, row) => (
-        <ul class="team-members">
+        <ul className="team-members">
           <li>
             <a
               href="#"
@@ -42,7 +42,7 @@ const AllCampaigns = () => {
       sort: true,
       headerStyle: { minWidth: "180px" },
       formatter: (value, row) => (
-        <ul class="team-members">
+        <ul className="team-members">
               
           {value.slice(0,3).map((mem, i) => {
               return (
@@ -58,7 +58,7 @@ const AllCampaigns = () => {
                       </a>
              
                         : 
-                        <a href="#" class="all-users">+{value.length}</a>
+                        <a href="#" className="all-users">+{value.length}</a>
                         }
                     </li>
                 )
@@ -80,13 +80,13 @@ const AllCampaigns = () => {
       formatter: (value, row) => (
         <>
         {value == 'Active' ?
-        <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+        <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
         : value == 'Pending' ?
-         <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
          : value == 'Terminated' ?
-         <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
          :
-         <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
         }
 
         </>
@@ -101,40 +101,40 @@ const AllCampaigns = () => {
   ];
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Projects</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Projects</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Campaigns</li>
+              <li className="breadcrumb-item active">Campaigns</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn"
+              className="btn add-btn"
               data-toggle="modal"
               data-target="#create_project"
             >
-              <i class="fa fa-plus"></i> Create Project
+              <i className="fa fa-plus"></i> Create Project
             </a>
-            <div class="view-icons">
-              <a href="projects.html" class="grid-view btn btn-link">
-                <i class="fa fa-th"></i>
+            <div className="view-icons">
+              <a href="projects.html" className="grid-view btn btn-link">
+                <i className="fa fa-th"></i>
               </a>
-              <a href="project-list.html" class="list-view btn btn-link active">
-                <i class="fa fa-bars"></i>
+              <a href="project-list.html" className="list-view btn btn-link active">
+                <i className="fa fa-bars"></i>
               </a>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
+      <div className="row">
      
-        <div class="col-12">
+        <div className="col-12">
           <GeneralTable
             data={data}
             columns={columns}

@@ -1,7 +1,7 @@
 class TokenService {
     getToken() {
       const token = localStorage.getItem("token");
-      console.log(token)
+      // console.log(token)
       return token;
     }
 
@@ -13,11 +13,11 @@ class TokenService {
     }
   
     setUser(user) {
-      console.log(JSON.stringify(user));
+      // console.log(JSON.stringify(user));
       localStorage.setItem("user", JSON.stringify(user));
     }
     setToken(token) {
-      console.log(token);
+      // console.log(token);
       localStorage.setItem("token", token);
     }
     removeToken() {
@@ -28,6 +28,15 @@ class TokenService {
     }
     clearStorage(){
       localStorage.clear()
+    }
+    setAttendance(data){
+      localStorage.setItem("attendance", JSON.stringify(data));
+    }
+    getAttendance(){
+     return JSON.parse(localStorage.getItem("attendance"));
+    }
+    removeAttendance(){
+      localStorage.removeItem("attendance");
     }
   }
 

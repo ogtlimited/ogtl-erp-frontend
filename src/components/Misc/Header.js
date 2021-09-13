@@ -33,7 +33,7 @@ const Header = () => {
     <div className="header">
       <div className="header-left">
         <Link to="/" className="logo">
-          <img src={logo} width="40" height="40" alt="" />
+          <img src={logo} style={{width: '100px'}}  alt="" />
         </Link>
       </div>
 

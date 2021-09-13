@@ -10,8 +10,8 @@ const PayslipReport = () => {
           sort: true,
           headerStyle: { width: "350px" },
           formatter: (val, row)=>(
-            <h2 class="table-avatar">
-            <a href="profile.html" class="avatar"><img alt="" src={avater} /></a>
+            <h2 className="table-avatar">
+            <a href="profile.html" className="avatar"><img alt="" src={avater} /></a>
             <a href="profile.html">{val} <span>{row.designation}</span></a>
             </h2>
           )
@@ -48,26 +48,26 @@ const PayslipReport = () => {
           sort: true,
           headerStyle: { minWidth: "150px" },
           formatter: () =>(
-              <a href="#" class="btn btn-sm btn-primary">PDF</a>
+              <a href="#" className="btn btn-sm btn-primary">PDF</a>
           )
         
         },
       ];
     return (
         <>
-          <div class="page-header">
-<div class="row">
-<div class="col-sm-12">
-<h3 class="page-title">Payslip Reports</h3>
-<ul class="breadcrumb">
-<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-<li class="breadcrumb-item active">Payslip Reports</li>
+          <div className="page-header">
+<div className="row">
+<div className="col-sm-12">
+<h3 className="page-title">Payslip Reports</h3>
+<ul className="breadcrumb">
+<li className="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+<li className="breadcrumb-item active">Payslip Reports</li>
 </ul>
 </div>
 </div>
 </div>  
-        <div class="row">
-        <div class="col-md-12">
+        <div className="row">
+        <div className="col-md-12">
             <LeavesTable
                 columns={columns}
                 data={data}

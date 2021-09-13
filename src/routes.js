@@ -28,6 +28,8 @@ import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
 import JobsDashboard from "./pages/Dashboard/JobsDashboard";
+import PayrollItems from "./pages/Payroll/PayrollItems"
+
 
 // const routes = [{
 //   title: 'Main',
@@ -174,6 +176,12 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Coaching Admin",
+    path: "/coaching",
+    component: CoachingAdmin,
+    layout: "/admin",
+  },
+  {
     title: "Assets",
     path: "/assets",
     component: Asset,
@@ -316,6 +324,13 @@ const routes = [
     path: "/payslip",
     name: "Dashboard",
     component: PaySlip,
+    layout: "/admin",
+  },
+  {
+    title: "Payroll",
+    path: "/payroll-items",
+    name: "Dashboard",
+    component: PayrollItems,
     layout: "/admin",
   },
   {

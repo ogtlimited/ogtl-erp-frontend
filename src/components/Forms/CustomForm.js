@@ -27,61 +27,61 @@ const CustomForm = ({ template, data, handleform }) => {
       switch (type) {
         case "text":
           return (
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required?.value ? { color: "red" } : {}}>*</span></label>
                 <input
                  {...register(name)}
-                 class="form-control" type="text" />
+                 className="form-control" type="text" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
           );
         case "password":
           return (
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <input {...register(name)} class="form-control" type="password" />
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <input {...register(name)} className="form-control" type="password" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
           );
         case "email":
           return (
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <input {...register(name)} class="form-control" type="email" />
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <input {...register(name)} className="form-control" type="email" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
           );
         case "date":
           return (
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <input {...register(name)} class="form-control" type="date" />
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <input {...register(name)} className="form-control" type="date" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
           );
         case "time":
           return (
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
-                <input {...register(name)} class="form-control" type="time" />
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <input {...register(name)} className="form-control" type="time" />
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
           );
           case "textarea":
           return (
-                <div class="col-12">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <div className="col-12">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
                 <Controller
                   name={name}
                   control={control}
@@ -103,10 +103,10 @@ const CustomForm = ({ template, data, handleform }) => {
         case "check":
           return (
            
-                <div class="col-sm-12">
-                <div class="form-group">
+                <div className="col-sm-12">
+                <div className="form-group">
                 <input {...register(name)}  type="checkbox" />
-                <label htmlFor={name} class="col-form-label ml-2">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
+                <label htmlFor={name} className="col-form-label ml-2">{title} <span style={required ? { color: "red" } : {}}>*</span></label>
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
@@ -116,11 +116,11 @@ const CustomForm = ({ template, data, handleform }) => {
         case "file":
           return (
            
-                <div class="col-sm-6">
-                <div class="form-group">
-                <label htmlFor={name} class="col-form-label ml-2">{title}</label>
+                <div className="col-sm-6">
+                <div className="form-group">
+                <label htmlFor={name} className="col-form-label ml-2">{title}</label>
                 <input  id="upload" {...register(name)} hidden type="file" />
-                <label htmlFor="upload" class="form-control btn btn-primary"><i class="fa fa-upload"></i> {title}</label>
+                <label htmlFor="upload" className="form-control btn btn-primary"><i className="fa fa-upload"></i> {title}</label>
                 </div>
                 {errors[name] && <small>{errors[name].message}</small>}
                 </div>
@@ -130,7 +130,7 @@ const CustomForm = ({ template, data, handleform }) => {
             let { options, full } = field;
             return (
               <div  class={full ? "col-sm-12": "col-sm-6"} key={name}>
-                   <div class="form-group">
+                   <div className="form-group">
                       <label htmlFor={name}>
                           {title}
                           <span style={required ? { color: "red" } : {}}>*</span>
@@ -152,17 +152,17 @@ const CustomForm = ({ template, data, handleform }) => {
         case "role":
             let {roleList} = field;
           return (
-            <div class="table-responsive m-t-15 x-15">
-            <table class="table table-striped custom-table">
+            <div className="table-responsive m-t-15 x-15">
+            <table className="table table-striped custom-table">
             <thead>
             <tr>
             <th>Module Permission</th>
-            <th class="text-center">Read</th>
-            <th class="text-center">Write</th>
-            <th class="text-center">Update</th>
-            <th class="text-center">Delete</th>
-            <th class="text-center">Import</th>
-            <th class="text-center">Export</th>
+            <th className="text-center">Read</th>
+            <th className="text-center">Write</th>
+            <th className="text-center">Update</th>
+            <th className="text-center">Delete</th>
+            <th className="text-center">Import</th>
+            <th className="text-center">Export</th>
             </tr>
             </thead>
             <tbody>
@@ -174,10 +174,10 @@ const CustomForm = ({ template, data, handleform }) => {
                     {role.nestedArray.map(arr =>{
                         return (
                             <>
-                            <td class="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
-                            {/* <td class="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
-                            <td class="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
-                            <td class="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
+                            <td className="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
+                            {/* <td className="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
+                            <td className="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
+                            <td className="text-center"> <input  {...register(arr.name)} type="checkbox" /></td>
                           */}
                             </>
                         )

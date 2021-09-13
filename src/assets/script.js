@@ -15,31 +15,31 @@ $(document).ready(function() {
 		this.$menuItem = $('#sidebar-menu a');
 	};
 	
-	function init() {
-		var $this = Sidemenu;
-		$('#sidebar-menu a').on('click', function(e) {
-			if($(this).parent().hasClass('submenu')) {
-				e.preventDefault();
-			}
-			if(!$(this).hasClass('subdrop')) {
-				$('ul', $(this).parents('ul:first')).slideUp(350);
-				$('a', $(this).parents('ul:first')).removeClass('subdrop');
-				$(this).next('ul').slideDown(350);
-				$(this).addClass('subdrop');
-			} else if($(this).hasClass('subdrop')) {
-				$(this).removeClass('subdrop');
-				$(this).next('ul').slideUp(350);
-			}
-		});
-		$('#sidebar-menu ul li.submenu a.active').parents('li:last').children('a:first').addClass('active').trigger('click');
-	}
+	// function init() {
+	// 	var $this = Sidemenu;
+	// 	$('#sidebar-menu a').on('click', function(e) {
+	// 		if($(this).parent().hasClass('submenu')) {
+	// 			e.preventDefault();
+	// 		}
+	// 		if(!$(this).hasClass('subdrop')) {
+	// 			$('ul', $(this).parents('ul:first')).slideUp(350);
+	// 			$('a', $(this).parents('ul:first')).removeClass('subdrop');
+	// 			$(this).next('ul').slideDown(350);
+	// 			$(this).addClass('subdrop');
+	// 		} else if($(this).hasClass('subdrop')) {
+	// 			$(this).removeClass('subdrop');
+	// 			$(this).next('ul').slideUp(350);
+	// 		}
+	// 	});
+	// 	$('#sidebar-menu ul li.submenu a.active').parents('li:last').children('a:first').addClass('active').trigger('click');
+	// }
 	
-	// Sidebar Initiate
-	init();
+	// // Sidebar Initiate
+	// init();
 	
 	// Mobile menu sidebar overlay
 	
-	$('body').append('<div class="sidebar-overlay"></div>');
+	$('body').append('<div className="sidebar-overlay"></div>');
 	$(document).on('click', '#mobile_btn', function() {
 		console.log('wrapper')
 		$wrapper.toggleClass('slide-nav');
@@ -221,7 +221,7 @@ $(document).ready(function() {
 	
 	$(document).on('click', '.leave-edit-btn', function() {
 		$(this).removeClass('leave-edit-btn').addClass('btn btn-white leave-cancel-btn').text('Cancel');
-		$(this).closest("div.leave-right").append('<button class="btn btn-primary leave-save-btn" type="submit">Save</button>');
+		$(this).closest("div.leave-right").append('<button className="btn btn-primary leave-save-btn" type="submit">Save</button>');
 		$(this).parent().parent().find("input").prop('disabled', false);
 		return false;
 	});

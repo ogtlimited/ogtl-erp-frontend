@@ -18,6 +18,7 @@ const ShiftRequest = () => {
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
+  const [editData, seteditData] = useState({});
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
@@ -163,7 +164,7 @@ const ShiftRequest = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal setformValue={setFormValue} template={shiftRequestFormJson} />
+      <FormModal editData={editData} setformValue={setFormValue} template={shiftRequestFormJson} />
     </>
   );
 };

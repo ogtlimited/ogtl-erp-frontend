@@ -12,6 +12,7 @@ import useToggle from "../../../hooks/useToggle";
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState({});
   const [value, toggleValue] = useToggle(false);
+  const [editData, seteditData] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -177,6 +178,7 @@ const ShiftAdmin = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={shiftTypeFormJson}
         setsubmitted={setSubmitted}

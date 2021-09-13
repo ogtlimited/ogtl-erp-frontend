@@ -13,7 +13,7 @@ const JobOpening = () => {
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest, showAlert } = useAppContext();
   const [data, setData] = useState([]);
-
+  const [editData, seteditData] = useState({});
   const fetchJobOpenings = () => {
     axiosInstance
       .get("/api/jobOpening")
@@ -223,6 +223,7 @@ const JobOpening = () => {
         </div>
       </div>
       <FormModal
+        editData={editData}
         setformValue={setFormValue}
         template={jobOpeningFormJson}
         setsubmitted={setSubmitted}

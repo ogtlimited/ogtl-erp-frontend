@@ -25,41 +25,41 @@ const Login = () => {
         })
     }
     return (
-        <div class="main-wrapper">
-            <div class="account-content">
-                <div class="container">
-                    <div class="account-logo">
+        <div className="main-wrapper">
+            <div className="account-content">
+                <div className="container">
+                    <div className="account-logo">
                         <Link href="/">
-                            <img class="logo" src="/static/media/outsource.2499b5b3.png" alt="Outsource Global Technologies"/>
+                            <img className="logo" src="/static/media/outsource.2499b5b3.png" alt="Outsource Global Technologies"/>
                         </Link>
                     </div>
-                    <div class="account-box">
-                        <div class="account-wrapper">
-                            <h3 class="account-title">Login</h3>
-                            <p class="account-subtitle">Access to our dashboard</p>
+                    <div className="account-box">
+                        <div className="account-wrapper">
+                            <h3 className="account-title">Login</h3>
+                            <p className="account-subtitle">Access to our dashboard</p>
                             <h6 className="text-center">
-                            <small class="account-subtitle text-center error">{errorMsg}</small>
+                            <small className="account-subtitle text-center error">{errorMsg}</small>
                             </h6>
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <div class="form-group">
+                                <div className="form-group">
                                     <label htmlFor="ogid">OGID </label>
-                                    <input type="text" name="ogid" id="ogid" {...register('ogid', { required: true })} class="form-control" />
+                                    <input type="text" name="ogid" id="ogid" {...register('ogid', { required: true })} className="form-control" />
                                     {errors.ogid && errors.ogid.type === "required" && <span className="error">OGID is required</span>}
                                 </div>
-                                <div class="form-group mt-2">
-                                    <div class="row">
-                                        <div class="col">
+                                <div className="form-group mt-2">
+                                    <div className="row">
+                                        <div className="col">
                                             <label htmlFor="password">Password</label>
                                         </div>
-                                        <div class="col-auto">
-                                            <a class="text-muted" href="/">Forgot password?</a>
+                                        <div className="col-auto">
+                                            <a className="text-muted" href="/">Forgot password?</a>
                                         </div>
                                     </div>
-                                        <input type="password" id="password" name="password" {...register('password', { required: true },)} class="form-control" />
+                                        <input type="password" id="password" name="password" {...register('password', { required: true },)} className="form-control" />
                                         {errors.password && errors.password.type === "required" && <span className="error">Password is required</span>}
                                     </div>
-                                    <div class="form-group text-center">
-                                            <button class="btn btn-primary account-btn" type="submit">Login</button>
+                                    <div className="form-group text-center">
+                                            <button className="btn btn-primary account-btn" type="submit">Login</button>
                                     </div>
                             </form>
                         </div>

@@ -12,6 +12,7 @@ const CoachingAdmin = () => {
     const [submitted, setsubmitted] = useState(false)
     const [coachingList, setcoachingList] = useState([])
     const {allEmployees, showAlert} = useAppContext()
+    const [editData, seteditData] = useState({});
     const fetchCoachingForms = () =>{
         axiosInstance.get('/api/coaching-form').then(e =>{
           const list = e.data.data
@@ -68,7 +69,7 @@ const CoachingAdmin = () => {
           sort: true,
           headerStyle: {minWidth: "250px"},
           formatter: (value, row) => (
-            <h2 class="table-avatar"><a href="" class="avatar"><img alt=""
+            <h2 className="table-avatar"><a href="" className="avatar"><img alt=""
           src={ row.image }   /></a><a href="">{value.first_name + ' ' + value.last_name} <span>{value.designation.designation}</span></a></h2>
           )    ,
           
@@ -97,11 +98,11 @@ const CoachingAdmin = () => {
           formatter: (value, row) => (
             <>
             {value == 'Submitted' ?
-            <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+            <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
             : value == 'Draft' ?
-             <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">Draft</span></a>
+             <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">Draft</span></a>
              :
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">Draft</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">Draft</span></a>
             }
 
             </>
@@ -115,11 +116,11 @@ const CoachingAdmin = () => {
           formatter: (value, row) => (
             <>
                {value == 'Accepted' ?
-            <a href="" class="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
+            <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
             : value == 'Rejected' ?
-             <a href="" class="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
+             <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
              :
-             <a href="" class="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">Pending</span></a>
+             <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">Pending</span></a>
             }
             </>
           )    ,
@@ -144,13 +145,13 @@ const CoachingAdmin = () => {
           sort: true,
           headerStyle: {minWidth: "70px", textAlign:"left"},
           formatter: (value, row) => (
-            <div class="dropdown dropdown-action text-right"><a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"
-      aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-  <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" onClick={() => editAction(row)} href="#" data-toggle="modal"
-          data-target="#coachingForm"><i class="fa fa-pencil m-r-5"></i> Edit</a><a class="dropdown-item" onClick={() => duplicate(row)} href="#"
-          data-toggle="modal" data-target="#coachingForm"><i class="fa fa-copy m-r-5"></i> Duplicate</a>
-          <a class="dropdown-item" onClick={() => duplicate(row)} href="#"
-          data-toggle="modal" data-target="#printCoachForm"><i class="fa fa-print m-r-5"></i> Print</a>
+            <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+      aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+  <div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" onClick={() => editAction(row)} href="#" data-toggle="modal"
+          data-target="#coachingForm"><i className="fa fa-pencil m-r-5"></i> Edit</a><a className="dropdown-item" onClick={() => duplicate(row)} href="#"
+          data-toggle="modal" data-target="#coachingForm"><i className="fa fa-copy m-r-5"></i> Duplicate</a>
+          <a className="dropdown-item" onClick={() => duplicate(row)} href="#"
+          data-toggle="modal" data-target="#printCoachForm"><i className="fa fa-print m-r-5"></i> Print</a>
           </div>
 </div>
           )    ,
@@ -161,43 +162,43 @@ const CoachingAdmin = () => {
     
   return (
     <>
-      <div class="page-header d-print-none">
-        <div class="row">
-          <div class="col">
-            <h3 class="page-title"></h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header d-print-none">
+        <div className="row">
+          <div className="col">
+            <h3 className="page-title"></h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="/">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Coaching Form</li>
+              <li className="breadcrumb-item active">Coaching Form</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             <a
               href="#"
-              class="btn add-btn"
+              className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i class="fa fa-plus"></i> Coaching Form
+              <i className="fa fa-plus"></i> Coaching Form
             </a>
           </div>
         </div>
       </div>
-      <div class="row mb-5 d-print-none">
-        <div class="col-md-12">
-          <div class="card-group m-b-30">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between mb-3">
+      <div className="row mb-5 d-print-none">
+        <div className="col-md-12">
+          <div className="card-group m-b-30">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between mb-3">
                   <div>
-                    <span class="d-block">New Issues</span>
+                    <span className="d-block">New Issues</span>
                   </div>
                 </div>
-                <h3 class="mb-3">6</h3>
-                <div class="progress mb-2" style={{height: '5px'}}>
+                <h3 className="mb-3">6</h3>
+                <div className="progress mb-2" style={{height: '5px'}}>
                   <div
-                    class="progress-bar bg-primary"
+                    className="progress-bar bg-primary"
                     role="progressbar"
                     aria-valuenow="40"
                     aria-valuemin="0"
@@ -208,17 +209,17 @@ const CoachingAdmin = () => {
                 </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between mb-3">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between mb-3">
                   <div>
-                    <span class="d-block">Solved Issues</span>
+                    <span className="d-block">Solved Issues</span>
                   </div>
                 </div>
-                <h3 class="mb-3">11</h3>
-                <div class="progress mb-2" style={{height: '5px'}}>
+                <h3 className="mb-3">11</h3>
+                <div className="progress mb-2" style={{height: '5px'}}>
                   <div
-                    class="progress-bar bg-primary"
+                    className="progress-bar bg-primary"
                     role="progressbar"
                     aria-valuenow="40"
                     aria-valuemin="0"
@@ -229,17 +230,17 @@ const CoachingAdmin = () => {
                 </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between mb-3">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between mb-3">
                   <div>
-                    <span class="d-block">Rejected Issues</span>
+                    <span className="d-block">Rejected Issues</span>
                   </div>
                 </div>
-                <h3 class="mb-3">3</h3>
-                <div class="progress mb-2" style={{height: '5px'}}>
+                <h3 className="mb-3">3</h3>
+                <div className="progress mb-2" style={{height: '5px'}}>
                   <div
-                    class="progress-bar bg-primary"
+                    className="progress-bar bg-primary"
                     role="progressbar"
                     aria-valuenow="40"
                     aria-valuemin="0"
@@ -250,17 +251,17 @@ const CoachingAdmin = () => {
                 </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between mb-3">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between mb-3">
                   <div>
-                    <span class="d-block">Pending Issues</span>
+                    <span className="d-block">Pending Issues</span>
                   </div>
                 </div>
-                <h3 class="mb-3">12</h3>
-                <div class="progress mb-2" style={{height: '5px'}}>
+                <h3 className="mb-3">12</h3>
+                <div className="progress mb-2" style={{height: '5px'}}>
                   <div
-                    class="progress-bar bg-primary"
+                    className="progress-bar bg-primary"
                     role="progressbar"
                     aria-valuenow="40"
                     aria-valuemin="0"
@@ -274,14 +275,14 @@ const CoachingAdmin = () => {
           </div>
         </div>
       </div>
-      <div class="row">
-          <div class="col-md-12">
+      <div className="row">
+          <div className="col-md-12">
               <LeavesTable
                 columns={columns}
                 data={coachingList}
               />
           </div>
-          <FormModal setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+          <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
           
       </div>
     </>
