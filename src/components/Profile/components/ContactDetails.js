@@ -1,9 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
-const ContactDetails = ({ handleChange, contactDetails }) => {
+const ContactDetails = ({
+  handleChange,
+  contactDetails,
+  formValue,
+  submitted,
+  fetchUserInfo,
+}) => {
   const { id } = useParams();
-
+  const { showAlert } = useAppContext();
+  useEffect(() => {
+    if (submitted === true) {
+      let newFormValue = {
+        _id: contactDetails?._id,
+        employee_id: id,
+        ...formValue,
+      };
+      axiosInstance
+        .post("/ContactDetails", newFormValue)
+        .then((res) => {
+          fetchUserInfo();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error?.response?.data?.message, "alert alert-danger");
+        });
+    }
+  }, [submitted, formValue, id]);
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">

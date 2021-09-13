@@ -1,10 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 
-const BankInformation = ({ salaryDetails }) => {
+const BankInformation = ({
+  salaryDetails,
+  handleChange,
+  formValue,
+  submitted,
+  fetchUserInfo,
+}) => {
+  const { id } = useParams();
+  const { showAlert } = useAppContext();
+  useEffect(() => {
+    if (submitted === true) {
+      let newFormValue = {
+        _id: salaryDetails?._id,
+        employee_id: id,
+        ...formValue,
+      };
+      axiosInstance
+        .post("/SalaryDetails", newFormValue)
+        .then((res) => {
+          fetchUserInfo();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error?.response?.data?.message, "alert alert-danger");
+        });
+    }
+  }, [submitted, formValue, id]);
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
-        <h3 className="card-title">Bank information</h3>
+        <h3 className="card-title">
+          Bank information
+          {id === salaryDetails?.employee_id && (
+            <Link
+              className="edit-icon"
+              onClick={() => handleChange("SalaryDetails")}
+              data-toggle="modal"
+              data-target="#FormModal"
+            >
+              <i className="fa fa-pencil"></i>
+            </Link>
+          )}
+        </h3>
         <ul className="personal-info">
           <li>
             <div className="title">Bank name</div>

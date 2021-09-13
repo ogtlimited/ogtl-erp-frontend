@@ -16,12 +16,6 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
               <h5 className="modal-title" id="exampleModalLabel">
                 {title}
               </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
             </div>
             <div className="modal-body">Are you sure you want to delete?</div>
             <div className="modal-footer">

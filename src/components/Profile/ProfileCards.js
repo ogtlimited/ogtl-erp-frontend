@@ -13,6 +13,7 @@ const ProfileCards = ({
   submitted,
   formValue,
   setFormValue,
+  fetchUserInfo,
 }) => {
   const handleChange = (type) => {
     console.log(type);
@@ -63,18 +64,30 @@ const ProfileCards = ({
               <PersonalInfo
                 handleChange={handleChange}
                 personalDetails={userData?.personalDetails}
+                submitted={submitted}
+                formValue={formValue}
+                fetchUserInfo={fetchUserInfo}
               />
             </div>
             <div className="col-md-6 d-flex">
               <ContactDetails
                 handleChange={handleChange}
                 contactDetails={userData?.contactDetails}
+                submitted={submitted}
+                formValue={formValue}
+                fetchUserInfo={fetchUserInfo}
               />
             </div>
           </div>
           <div className="row">
             <div className="col-md-6 d-flex">
-              <BankInformation salaryDetails={userData?.salaryDetails} />
+              <BankInformation
+                handleChange={handleChange}
+                salaryDetails={userData?.salaryDetails}
+                submitted={submitted}
+                formValue={formValue}
+                fetchUserInfo={fetchUserInfo}
+              />
             </div>
             <div className="col-md-6 d-flex">
               <EmergencyContact
