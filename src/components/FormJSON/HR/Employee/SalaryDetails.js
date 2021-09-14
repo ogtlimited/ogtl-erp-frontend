@@ -1,43 +1,39 @@
 export const SalaryDetailJson = {
-    title: 'Salary Details',
-    Fields: [
+  title: "Salary Details",
+  Fields: [
+    {
+      name: "salary_mode",
+      type: "select",
+      title: "Salary Mode",
+      options: [
         {
-            name:'salary_mode' ,
-            type:'select',
-            title:'Salary Mode',
-            options: [
-                {
-                    value: 'bank',
-                    label: 'Bank',
-                },
-                {
-                    value: 'cash, "cheque"',
-                    label: 'Cash',
-                },
-                {
-                    value: 'cheque',
-                    label: 'Cheque',
-                },
-            
-            ]
+          value: "bank",
+          label: "Bank",
         },
         {
-            name:'bank_name' ,
-            type:'text',
-            title:'Bank Name',
-           
+          value: "cash",
+          label: "Cash",
         },
         {
-            name:'bank_code' ,
-            type:'text',
-            title:'Bank Code',
-
+          value: "cheque",
+          label: "Cheque",
         },
-        {
-            name:'bank_account_number' ,
-            type:'text',
-            title:'Account Number',
-
-        }
-    ]
+      ],
+    },
+    {
+      name: "bank_name",
+      type: "text",
+      title: "Bank Name",
+    },
+    {
+      name: "bank_code",
+      type: "text",
+      title: "Bank Code",
+    },
+    {
+      name: "bank_account_number",
+      type: "text",
+      title: "Account Number",
+    },
+  ],
 };

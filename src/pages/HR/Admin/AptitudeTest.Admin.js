@@ -7,11 +7,13 @@ import FormModal from "../../../components/Modal/Modal";
 import { applicationTestFormJson } from "../../../components/FormJSON/HR/recruitment/ApplicationTest";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import ReactHtmlParser from "react-html-parser";
+import moment from "moment";
 
 const AptitudeTest = () => {
   const [formValue, setFormValue] = useState({});
   const [data, setData] = useState([]);
-  const { showAlert, combineRequest } = useAppContext();
+  const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState({});
@@ -32,29 +34,20 @@ const AptitudeTest = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest()
+    axiosInstance
+      .get("/api/jobApplicant-accepted")
       .then((res) => {
-        console.log(res);
-        const { jobApplicants, employees } =
-          res.data.createEmployeeFormSelection;
-        const jobApplicantsOpts = jobApplicants?.map((e) => {
+        console.log("accepted job applicants", res);
+        const jobApplicantsOpts = res?.data?.data?.map((e) => {
           return {
-            label: e.applicant_name,
+            label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
             value: e._id,
           };
         });
-        const employeeOpts = employees?.map((e) => {
-          return {
-            label: `${e.first_name} ${e.last_name}`,
-            value: e._id,
-          };
-        });
+
         const finalForm = applicationTestFormJson.Fields.map((field) => {
           if (field.name === "job_applicant_id") {
             field.options = jobApplicantsOpts;
-            return field;
-          } else if (field.name === "hr_user") {
-            field.options = employeeOpts;
             return field;
           }
           return field;
@@ -79,7 +72,7 @@ const AptitudeTest = () => {
         .then((res) => {
           setSubmitted(false);
           fetchAllTests();
-          setData((prevData) => [...data, res.data.data]);
+          setData((prevData) => [...prevData, res.data.data]);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
@@ -125,6 +118,19 @@ const AptitudeTest = () => {
 
   const columns = [
     {
+      dataField: "job_applicant_id",
+      text: "Job Applicant",
+      sort: true,
+      headerStyle: { minWidth: "250px" },
+      formatter: (value, row) => (
+        <h2>
+          {row?.job_applicant_id?.first_name}{" "}
+          {row?.job_applicant_id?.middle_name}{" "}
+          {row?.job_applicant_id?.last_name}
+        </h2>
+      ),
+    },
+    {
       dataField: "test_type",
       text: "Test Type",
       sort: true,
@@ -145,26 +151,7 @@ const AptitudeTest = () => {
         </>
       ),
     },
-    {
-      dataField: "job_applicant_id",
-      text: "Job Applicant",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <h2>{row?.job_applicant_id?.applicant_name}</h2>
-      ),
-    },
-    {
-      dataField: "hr_user",
-      text: "HR User",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <h2>
-          {row?.hr_user?.first_name} {row?.hr_user?.last_name}
-        </h2>
-      ),
-    },
+
     {
       dataField: "score",
       text: "Score",
@@ -174,6 +161,9 @@ const AptitudeTest = () => {
       dataField: "interview_date",
       text: "Interview Date",
       sort: true,
+      formatter: (value, row) => (
+        <h2>{moment(row?.interview_date).format("L")}</h2>
+      ),
     },
     {
       dataField: "phone_number",
@@ -184,7 +174,8 @@ const AptitudeTest = () => {
       dataField: "notes",
       text: "Notes",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "230px" },
+      formatter: (value, row) => <h2>{ReactHtmlParser(row?.notes)}</h2>,
     },
     {
       dataField: "",
@@ -253,7 +244,7 @@ const AptitudeTest = () => {
         </div>
       </div>
       <FormModal
-      editData={editData}
+        editData={editData}
         setformValue={setFormValue}
         template={applicationTestFormJson}
         setsubmitted={setSubmitted}

@@ -13,7 +13,6 @@ import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import moment from "moment";
-import useToggle from "../../../hooks/useToggle";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const ShiftAssignment = () => {
@@ -25,7 +24,6 @@ const ShiftAssignment = () => {
   const [template, setTemplate] = useState(shiftAssignmentFormJson);
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [value, toggleValue] = useToggle(false);
 
   const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
@@ -203,9 +201,10 @@ const ShiftAssignment = () => {
             </a>
             <Link
               className="dropdown-item"
+              data-toggle="modal"
+              data-target="#exampleModal"
               onClick={() => {
                 setSelectedRow(row);
-                toggleValue(true);
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
@@ -255,9 +254,7 @@ const ShiftAssignment = () => {
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
-        value={value}
         title="Shift Assignment"
-        toggleValue={toggleValue}
         selectedRow={selectedRow}
         deleteFunction={deleteShiftAssignment}
       />

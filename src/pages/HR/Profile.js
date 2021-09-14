@@ -12,6 +12,7 @@ import axiosInstance from "../../services/api";
 import moment from "moment";
 import { historyJson } from "../../components/FormJSON/HR/Employee/history";
 import { useAppContext } from "../../Context/AppContext";
+import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
 
 const Profile = () => {
   const [formType, setformType] = useState("");
@@ -22,7 +23,7 @@ const Profile = () => {
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest } = useAppContext();
 
-  useEffect(() => {
+  const fetchUserInfo = () => {
     axiosInstance
       .get(`/profile-dashboard/${id}`)
       .then((res) => {
@@ -32,6 +33,9 @@ const Profile = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+  useEffect(() => {
+    fetchUserInfo();
   }, [id]);
 
   useEffect(() => {
@@ -47,6 +51,8 @@ const Profile = () => {
       settemplate(EmployeeEducationJson);
     } else if (formType === "History") {
       settemplate(historyJson);
+    } else if (formType === "SalaryDetails") {
+      settemplate(SalaryDetailJson);
     }
 
     console.log(formType);
@@ -125,7 +131,7 @@ const Profile = () => {
                         </h3>
                         <h6 className="text-muted">
                           {userData?.employee?.isAdmin
-                            ? userData?.employee?.department
+                            ? userData?.employee?.department?.title
                             : userData?.employee?.projectId?.project_name}
                         </h6>
                         <small className="text-muted">
@@ -231,6 +237,7 @@ const Profile = () => {
         submitted={submitted}
         formValue={formValue}
         setFormValue={setFormValue}
+        fetchUserInfo={fetchUserInfo}
       />
       <FormModal
         template={template}

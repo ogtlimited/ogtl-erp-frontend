@@ -7,6 +7,10 @@ import { jobOfferFormJson } from "../../../components/FormJSON/HR/recruitment/Jo
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { jobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/JobOpening";
+import ReactHtmlParser from "react-html-parser";
+import { ApproverBtn } from "../../../components/ApproverBtn";
+import moment from "moment";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const JobOffer = () => {
   const [formValue, setFormValue] = useState({});
@@ -15,6 +19,10 @@ const JobOffer = () => {
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState({});
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+
   const fetchJobOffers = () => {
     axiosInstance
       .get("/api/jobOffer")
@@ -34,7 +42,7 @@ const JobOffer = () => {
     combineRequest()
       .then((res) => {
         console.log(res);
-        const { designations, jobApplicants } =
+        const { designations, passedApplicants } =
           res.data.createEmployeeFormSelection;
         const designationOpts = designations?.map((e) => {
           return {
@@ -42,10 +50,10 @@ const JobOffer = () => {
             value: e._id,
           };
         });
-        const jobApplicantsOpts = jobApplicants?.map((e) => {
+        const jobApplicantsOpts = passedApplicants?.map((e) => {
           return {
-            label: e.applicant_name,
-            value: e._id,
+            label: `${e.job_applicant_id.first_name} ${e.job_applicant_id.middle_name} ${e.job_applicant_id.last_name}`,
+            value: e.job_applicant_id._id,
           };
         });
         const finalForm = jobOfferFormJson.Fields.map((field) => {
@@ -107,20 +115,33 @@ const JobOffer = () => {
       });
   };
   //update job offer
-  const updateJobOffer = (row) => {
-    axiosInstance
-      .patch(`/api/jobOffer/${row._id}`, row)
-      .then((res) => {
-        console.log(res);
-        setData((prevData) => [...data, res.data.data]);
-        fetchJobOffers();
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  useEffect(() => {
+    if (status.length) {
+      console.log(status);
+      console.log(statusRow);
+      const update = {
+        ...statusRow,
+        status: status,
+        designation_id: statusRow.designation_id._id,
+        job_applicant_id: statusRow.job_applicant_id._id,
+        job_offer_terms: statusRow.job_offer_terms[0],
+      };
+      console.log("Job offer update", update);
+
+      delete update.__v;
+      axiosInstance
+        .patch("/api/jobOffer/" + statusRow._id, update)
+        .then((res) => {
+          console.log(res);
+          fetchJobOffers();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+  }, [status, statusRow]);
 
   const columns = [
     {
@@ -129,7 +150,11 @@ const JobOffer = () => {
       sort: true,
       headerStyle: { minWidth: "200px" },
       formatter: (value, row) => (
-        <h2>{row?.job_applicant_id?.applicant_name}</h2>
+        <h2>
+          {row?.job_applicant_id?.first_name}{" "}
+          {row?.job_applicant_id?.middle_name}{" "}
+          {row?.job_applicant_id?.last_name}
+        </h2>
       ),
     },
     {
@@ -139,11 +164,13 @@ const JobOffer = () => {
 
       formatter: (value, row) => (
         <>
-          <div className="action-label">
-            <a className="btn btn-white btn-sm btn-rounded" href="">
-              <i className="fa fa-dot-circle-o text-success"></i> {row?.status}
-            </a>
-          </div>
+          <ApproverBtn
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            context="job offer"
+          />
         </>
       ),
     },
@@ -152,6 +179,7 @@ const JobOffer = () => {
       text: "Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.offer_date).format("L")}</h2>,
     },
     {
       dataField: "designation_id",
@@ -165,12 +193,18 @@ const JobOffer = () => {
       text: "Job Offer Terms",
       sort: true,
       headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => (
+        <h2>{ReactHtmlParser(row?.job_offer_terms)}</h2>
+      ),
     },
     {
       dataField: "terms_and_conditions",
       text: "Term and Conditions",
       sort: true,
       headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => (
+        <h2>{ReactHtmlParser(row?.terms_and_conditions)}</h2>
+      ),
     },
     {
       dataField: "",
@@ -197,7 +231,14 @@ const JobOffer = () => {
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
-            <Link className="dropdown-item" onClick={() => deleteJobOffer(row)}>
+            <Link
+              className="dropdown-item"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
+            >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
           </div>
@@ -243,6 +284,11 @@ const JobOffer = () => {
         setformValue={setFormValue}
         template={jobOfferFormJson}
         setsubmitted={setSubmitted}
+      />
+      <ConfirmModal
+        title="Job Offer"
+        selectedRow={selectedRow}
+        deleteFunction={deleteJobOffer}
       />
     </>
   );
