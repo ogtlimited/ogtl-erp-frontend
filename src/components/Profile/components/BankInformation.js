@@ -15,7 +15,7 @@ const BankInformation = ({
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
-        _id: salaryDetails?._id,
+        _id: salaryDetails?.salaryDetails?._id,
         employee_id: id,
         ...formValue,
       };
@@ -36,7 +36,7 @@ const BankInformation = ({
       <div className="card-body">
         <h3 className="card-title">
           Bank information
-          {id === salaryDetails?.employee_id && (
+          {id === salaryDetails?.employee?._id && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("SalaryDetails")}
@@ -51,25 +51,26 @@ const BankInformation = ({
           <li>
             <div className="title">Bank name</div>
             <div className="text">
-              {salaryDetails?.bank_name || "Not Available"}
+              {salaryDetails?.salaryDetails?.bank_name || "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Bank account No.</div>
             <div className="text">
-              {salaryDetails?.bank_account_number || "Not Available"}
+              {salaryDetails?.salaryDetails?.bank_account_number ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Bank Code</div>
             <div className="text">
-              {salaryDetails?.bank_code || "Not Available"}
+              {salaryDetails?.salaryDetails?.bank_code || "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Salary Mode</div>
             <div className="text">
-              {salaryDetails?.salary_mode || "Not Available"}
+              {salaryDetails?.salaryDetails?.salary_mode || "Not Available"}
             </div>
           </li>
         </ul>

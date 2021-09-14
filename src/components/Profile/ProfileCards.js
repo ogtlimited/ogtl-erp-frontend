@@ -63,7 +63,7 @@ const ProfileCards = ({
             <div className="col-md-6 d-flex">
               <PersonalInfo
                 handleChange={handleChange}
-                personalDetails={userData?.personalDetails}
+                personalDetails={userData}
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
@@ -72,7 +72,7 @@ const ProfileCards = ({
             <div className="col-md-6 d-flex">
               <ContactDetails
                 handleChange={handleChange}
-                contactDetails={userData?.contactDetails}
+                contactDetails={userData}
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
@@ -83,7 +83,7 @@ const ProfileCards = ({
             <div className="col-md-6 d-flex">
               <BankInformation
                 handleChange={handleChange}
-                salaryDetails={userData?.salaryDetails}
+                salaryDetails={userData}
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}

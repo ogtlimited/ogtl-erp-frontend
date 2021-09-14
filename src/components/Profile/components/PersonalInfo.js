@@ -16,7 +16,7 @@ const PersonalInfo = ({
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
-        _id: personalDetails?._id,
+        _id: personalDetails?.personalDetails?._id,
         employee_id: id,
         ...formValue,
       };
@@ -37,7 +37,7 @@ const PersonalInfo = ({
       <div className="card-body">
         <h3 className="card-title">
           Personal Informations{" "}
-          {id === personalDetails?.employee_id && (
+          {id === personalDetails?.employee?._id && (
             <Link
               onClick={() => handleChange("PersonalDetails")}
               className="edit-icon"
@@ -52,49 +52,58 @@ const PersonalInfo = ({
           <li>
             <div className="title">Date of birth</div>
             <div className="text">
-              {personalDetails?.date_of_birth
-                ? moment(personalDetails?.date_of_birth).format("L")
+              {personalDetails?.personalDetails?.date_of_birth
+                ? moment(
+                    personalDetails?.personalDetails?.date_of_birth
+                  ).format("L")
                 : "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Passport No.</div>
             <div className="text">
-              {personalDetails?.passport_number || "Not Available"}
+              {personalDetails?.personalDetails?.passport_number ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Passport Exp Date.</div>
             <div className="text">
-              {personalDetails?.valid_upto
-                ? moment(personalDetails?.valid_upto).format("L")
+              {personalDetails?.personalDetails?.valid_upto
+                ? moment(personalDetails?.personalDetails?.valid_upto).format(
+                    "L"
+                  )
                 : "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Passport Issue Date</div>
             <div className="text">
-              {personalDetails?.date_of_issue
-                ? moment(personalDetails?.date_of_issue).format("L")
+              {personalDetails?.personalDetails?.date_of_issue
+                ? moment(
+                    personalDetails?.personalDetails?.date_of_issue
+                  ).format("L")
                 : "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Place of Issue</div>
             <div className="text">
-              {personalDetails?.place_of_issue || "Not Available"}
+              {personalDetails?.personalDetails?.place_of_issue ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Blood Group</div>
             <div className="text">
-              {personalDetails?.blood_group || "Not Available"}
+              {personalDetails?.personalDetails?.blood_group || "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Marital status</div>
             <div className="text">
-              {personalDetails?.marital_status || "Not Available"}
+              {personalDetails?.personalDetails?.marital_status ||
+                "Not Available"}
             </div>
           </li>
         </ul>
