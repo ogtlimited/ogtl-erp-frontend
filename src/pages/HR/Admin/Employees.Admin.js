@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { employeeFormJson } from "../../../components/FormJSON/HR/Employee/employee";
 import PageHeader from "../../../components/Misc/PageHeader";
+import FormModal2 from "../../../components/Modal/FormModal2";
 import FormModal from "../../../components/Modal/Modal";
 import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
 import GeneralTable from "../../../components/Tables/Table";
@@ -10,6 +11,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import designation from "../../../db/designation.json";
 import { employeeList } from "../../../db/employee";
 import axiosInstance from "../../../services/api";
+import helper from "../../../services/helper";
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
   const { setallEmployees, fetchEmployee, allEmployees, combineRequest } =
@@ -17,14 +19,14 @@ const AllEmployeesAdmin = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
-  const [template, settemplate] = useState(employeeFormJson);
+  const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   console.log(allEmployees);
 
   useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
-      const { shifts, designations, departments, branches } =
+      const { shifts, designations, employeeTypes, departments, projects } =
         res.data.createEmployeeFormSelection;
       const shiftsopts = shifts?.map((e) => {
         return {
@@ -32,7 +34,18 @@ const AllEmployeesAdmin = () => {
           value: e._id,
         };
       });
-
+      const campaingOpts = projects?.map((e) => {
+        return {
+          label: e.project_name,
+          value: e._id,
+        };
+      });
+      const empTypeopts = employeeTypes?.map((e) => {
+        return {
+          label: e.type,
+          value: e._id,
+        };
+      });
       const deptopts = departments?.map((e) => {
         return {
           label: e.department,
@@ -42,12 +55,6 @@ const AllEmployeesAdmin = () => {
       const designationOpts = designations?.map((e) => {
         return {
           label: e.designation,
-          value: e._id,
-        };
-      });
-      const branchOpts = branches?.map((e) => {
-        return {
-          label: e.branch,
           value: e._id,
         };
       });
@@ -61,19 +68,26 @@ const AllEmployeesAdmin = () => {
         } else if (field.name === "department") {
           field.options = deptopts;
           return field;
-        } else if (field.name === "branch") {
-          field.options = branchOpts;
+        } else if (field.name === "employment_type") {
+          field.options = empTypeopts;
+          return field;
+        } else if (field.name === "projectId") {
+          field.options = campaingOpts;
           return field;
         }
         return field;
       });
-      settemplate({
-        title: employeeFormJson.title,
-        Fields: finalForm,
-      });
-      console.log(template);
+      // settemplate(
+      //   {
+      //     title: employeeFormJson.title,
+      //     Fields: finalForm
+      //   }
+      // )
+      const obj = helper.formArrayToObject(finalForm);
+      settemplate(obj);
+      console.log(obj);
     });
-  }, []);
+  }, [template]);
 
   useEffect(() => {
     console.log(submitted);
@@ -87,6 +101,7 @@ const AllEmployeesAdmin = () => {
     }
     console.log(formValue);
   }, [submitted]);
+
   const defaultSorted = [
     {
       dataField: "designation",
@@ -135,7 +150,8 @@ const AllEmployeesAdmin = () => {
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
-      <FormModal
+      {template}
+      <FormModal2
         editData={editData}
         setformValue={setformValue}
         template={template}

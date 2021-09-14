@@ -7,6 +7,8 @@ import departments from "../../../db/departments.json";
 import GeneralTable from "../../../components/Tables/Table";
 import { Link } from "react-router-dom";
 import FormModal from "../../../components/Modal/Modal";
+import { departmentFormJson } from "../../../components/FormJSON/HR/Employee/department";
+import FormModal2 from "../../../components/Modal/FormModal2";
 
 let qualityFilter;
 
@@ -42,14 +44,14 @@ const Departments = withRouter(({ history }) => {
   const breadcrumb = "Departments";
 
   useEffect(() => {
-    //   if(loggedUser != null){
-    //     if(!HRpeople.includes(loggedUser?.designation?.toLowerCase())){
-    //       history.push('/forbidden')
-    //     }
-    //   }
+  
 
     setallDepartments(departments);
   }, [departments]);
+  useEffect(() => {
+    console.log(formValue)
+   
+  }, [formValue, submitted]);
   const columns = [
     {
       dataField: "department_name",
@@ -96,7 +98,7 @@ const Departments = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
-      <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+      <FormModal2 title="Create Department" editData={editData} setformValue={setformValue} template={departmentFormJson} setsubmitted={setsubmitted} />
     </>
   );
 });

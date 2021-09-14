@@ -131,10 +131,13 @@ const EmployeesTable = ({
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "department",
+      dataField: "department.department",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      // formatter: (val) =>(
+      //   <span>val.department</span>
+      // )
     },
     {
       dataField: "designation.designation",
@@ -169,7 +172,7 @@ const EmployeesTable = ({
               onClick={() => seteditEmployee(row)}
               href="#"
               data-toggle="modal"
-              data-target="#edit_employee"
+              data-target="#FormModal"
             >
               <i class="fa fa-pencil m-r-5"></i> Edit
             </a>

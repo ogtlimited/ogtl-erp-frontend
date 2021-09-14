@@ -309,18 +309,6 @@ const Sidebar = () => {
                   </a>
                   <ul style={dNone}>
                     <li>
-                      <Link className="" to="/administrator/user-dashboard">
-                        {" "}
-                        User Dasboard{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="" to="/administrator/jobs-dashboard">
-                        {" "}
-                        Jobs Dashboard{" "}
-                      </Link>
-                    </li>
-                    <li>
                       <Link className="" to="/admin/job-opening">
                         {" "}
                         Job Opening{" "}
@@ -344,44 +332,6 @@ const Sidebar = () => {
                         Aptitude Test{" "}
                       </Link>
                     </li>
-                    <li>
-                      <Link className="" to="/administrator/manage-resumes">
-                        {" "}
-                        Manage Resumes{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className=""
-                        to="/administrator/shortlist-candidates"
-                      >
-                        {" "}
-                        Shortlist Candidates{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className=""
-                        to="/administrator/interview-questions"
-                      >
-                        {" "}
-                        Interview Questions{" "}
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="" to="/administrator/experiance-level">
-                        {" "}
-                        Experience Level{" "}
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link className="" to="/administrator/schedule-timing">
-                        {" "}
-                        Schedule timing{" "}
-                      </Link>
-                    </li>
                   </ul>
                 </li>
               )}
@@ -400,27 +350,9 @@ const Sidebar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        className=""
-                        to="/performances/performance-indicator"
-                      >
+                      <Link className="" to="/admin/score-cards">
                         {" "}
-                        Performance Indicator{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="" to="/performances/performance-review">
-                        {" "}
-                        Performance Review{" "}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className=""
-                        to="/performances/performance-appraisal"
-                      >
-                        {" "}
-                        Performance Appraisal{" "}
+                        Score Cards{" "}
                       </Link>
                     </li>
                   </ul>
@@ -530,16 +462,16 @@ const Sidebar = () => {
                   </Link>
                 </li>
               )}
-              <li className="">
+              {/* <li className="">
                 <Link to="/administrator/activities">
                   <i className="la la-bell"></i> <span>Activities</span>
                 </Link>
-              </li>
-              <li className="">
+              </li> */}
+              {/* <li className="">
                 <Link to="/administrator/users">
                   <i className="la la-user-plus"></i> <span>Users</span>
                 </Link>
-              </li>
+              </li> */}
               {canView("IT") && (
                 <li>
                   <Link to="/admin/companysetting">
@@ -548,7 +480,7 @@ const Sidebar = () => {
                 </li>
               )}
 
-              <li className="submenu">
+              {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}
                   <span className="menu-arrow"></span>
@@ -568,6 +500,7 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
+             */}
             </ul>
           </div>
         </div>

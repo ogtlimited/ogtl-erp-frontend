@@ -44,6 +44,53 @@ export function TextField(props) {
         </>
     )
 }
+export function PasswordField(props) {
+    const { name, label, placeholder, ...rest } = props
+    return (
+        <>
+            
+                <div className="form-group">
+                    {label && <label className="col-form-label" for={name}>{label}</label>}
+                    <Field
+                        className="form-control"
+                        type="password"
+                        className="form-control"
+                        name={name}
+                        id={name}
+                        placeholder={placeholder || ""} 
+                        {...rest}
+                    />
+                
+              
+            <ErrorMessage name={name} render={msg => <div style={{ color: 'red' }} >{msg}</div>} />
+            </div>
+            
+        </>
+    )
+}
+export function CheckField(props) {
+    const { name, label, placeholder, ...rest } = props
+    return (
+        <>
+            
+                <div className="form-group">
+                    <Field
+                        type="checkbox"
+                        className="pt-2"
+                        name={name}
+                        id={name}
+                        placeholder={placeholder || ""} 
+                        {...rest}
+                        />
+                        {label && <label className="col-form-label pl-2" for={name}>{label}</label>}
+                
+              
+            <ErrorMessage name={name} render={msg => <div style={{ color: 'red' }} >{msg}</div>} />
+            </div>
+            
+        </>
+    )
+}
 export function DateField(props) {
     const { name, label, placeholder, ...rest } = props
     return (

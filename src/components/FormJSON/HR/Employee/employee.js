@@ -161,8 +161,52 @@ export const employeeFormJson = {
       title: "Gender",
       options: [
         {
-          label: "Male",
-          value: "male",
+          name: "employeeType",
+          type: "select",
+          title: "Employment Type",
+          options: [
+            {
+              label: "Apprentice",
+              value: "Apprentice",
+            },
+            {
+              label: "Intern",
+              value: "Intern",
+            },
+            {
+              label: "Commission",
+              value: "Commission",
+            },
+            {
+              label: "Contract",
+              value: "Contract",
+            },
+            {
+              label: "Probation",
+              value: "Probation",
+            },
+            {
+              label: "PartTime",
+              value: "PartTime",
+            },
+            {
+              label: "FullTime",
+              value: "FullTime",
+            },
+          ],
+          required: {
+            value: true,
+            message: "Admin User is required",
+          },
+        },
+        {
+          name: "date_of_joining",
+          type: "date",
+          title: "Date of joining",
+          required: {
+            value: true,
+            message: "Date of joining is required",
+          },
         },
         {
           label: "Female",
@@ -180,12 +224,24 @@ export const employeeFormJson = {
           value: "active",
         },
         {
-          label: "Terminated",
-          value: "terminated",
+          name: "projectId",
+          type: "select",
+          title: "Campaign",
+          required: {
+            value: true,
+            message: "Campaign is required",
+          },
+          options: [],
         },
         {
-          label: "Left",
-          value: "left",
+          name: "default_shift",
+          type: "select",
+          title: "Shift",
+          required: {
+            value: true,
+            message: "shift is required",
+          },
+          options: [],
         },
       ],
     },

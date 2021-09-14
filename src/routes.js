@@ -29,6 +29,7 @@ import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
 import JobsDashboard from "./pages/Dashboard/JobsDashboard";
 import PayrollItems from "./pages/Payroll/PayrollItems"
+import ScoreCards from "./pages/HR/Admin/score-cards";
 
 
 // const routes = [{
@@ -179,6 +180,12 @@ const routes = [
     title: "Coaching Admin",
     path: "/coaching",
     component: CoachingAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Score Cards",
+    path: "/score-cards",
+    component: ScoreCards,
     layout: "/admin",
   },
   {
