@@ -28,9 +28,10 @@ import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
 import JobsDashboard from "./pages/Dashboard/JobsDashboard";
-import PayrollItems from "./pages/Payroll/PayrollItems"
+import PayrollItems from "./pages/Payroll/PayrollItems";
 import ScoreCards from "./pages/HR/Admin/score-cards";
-
+import Termination from "./pages/HR/Admin/Termination";
+import Resignation from "./pages/HR/Admin/Resignation";
 
 // const routes = [{
 //   title: 'Main',
@@ -303,6 +304,20 @@ const routes = [
     path: "/promotion",
     name: "Dashboard",
     component: Promotion,
+    layout: "/admin",
+  },
+  {
+    title: "Termination",
+    path: "/termination",
+    name: "Dashboard",
+    component: Termination,
+    layout: "/admin",
+  },
+  {
+    title: "Resignation",
+    path: "/resignation",
+    name: "Dashboard",
+    component: Resignation,
     layout: "/admin",
   },
   {

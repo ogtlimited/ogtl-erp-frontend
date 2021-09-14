@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from "../../../db/promotion.json";
-import { AssetFormJson } from "../../../components/FormJSON/Assets/assets";
+import { terminationFormJson } from "../../../components/FormJSON/HR/Employee-lifecycle/Termination";
 import FormModal from "../../../components/Modal/Modal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import ReactHtmlParser from "react-html-parser";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
-const Asset = () => {
-  const [template, setTemplate] = useState(AssetFormJson);
+import moment from "moment";
+const Termination = () => {
+  const [template, setTemplate] = useState(terminationFormJson);
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const { combineRequest, showAlert } = useAppContext();
@@ -18,9 +16,9 @@ const Asset = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const fetchAssets = () => {
+  const fetchTermination = () => {
     axiosInstance
-      .get("/api/assets")
+      .get("/api/termination")
       .then((res) => {
         console.log(res.data);
         setData(res.data.data);
@@ -30,7 +28,7 @@ const Asset = () => {
       });
   };
   useEffect(() => {
-    fetchAssets();
+    fetchTermination();
   }, []);
 
   useEffect(() => {
@@ -43,31 +41,31 @@ const Asset = () => {
           value: e._id,
         };
       });
-      const finalForm = AssetFormJson.Fields.map((field) => {
-        if (field.name === "assigned_to") {
+      const finalForm = terminationFormJson.Fields.map((field) => {
+        if (field.name === "employee") {
           field.options = employeeOpts;
           return field;
         }
         return field;
       });
       setTemplate({
-        title: AssetFormJson.title,
+        title: terminationFormJson.title,
         Fields: finalForm,
       });
       console.log(template);
     });
   }, []);
 
-  //create assets
+  //create termination
   useEffect(() => {
     console.log(submitted);
     if (submitted === true) {
       axiosInstance
-        .post("/api/assets", formValue)
+        .post("/api/termination", formValue)
         .then((res) => {
           setSubmitted(false);
-          fetchAssets();
-          setData((prevData) => [...data, res.data.data]);
+          fetchTermination();
+          //   setData((prevData) => [...prevData, res.data.data]);
 
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -79,10 +77,10 @@ const Asset = () => {
     console.log(formValue);
   }, [submitted, formValue]);
 
-  //delete asset
-  const deleteAssets = (row) => {
+  //delete score card
+  const deleteTermination = (row) => {
     axiosInstance
-      .delete(`/api/assets/${row._id}`)
+      .delete(`/api/termination/${row._id}`)
       .then((res) => {
         console.log(res);
         setData((prevData) =>
@@ -96,14 +94,13 @@ const Asset = () => {
       });
   };
 
-  //update Assets
-  const updateAssets = (row) => {
+  const updateTermination = (row) => {
     axiosInstance
-      .patch(`/api/assets/${row._id}`, row)
+      .patch(`/api/termination/${row._id}`, row)
       .then((res) => {
         console.log(res);
         setData((prevData) => [...data, res.data.data]);
-        fetchAssets();
+        fetchTermination();
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
@@ -114,65 +111,35 @@ const Asset = () => {
 
   const columns = [
     {
-      dataField: "assetId",
-      text: "Asset Id",
+      dataField: "employee",
+      text: "Employee name",
       sort: true,
-    },
-    {
-      dataField: "assetName",
-      text: "Asset name",
-      sort: true,
-    },
-    {
-      dataField: "assigned_to",
-      text: "Assigned to",
-      sort: true,
+      headerStyle: { width: "350px" },
       formatter: (value, row) => (
         <h2>
-          {row?.assigned_to?.first_name} {row?.assigned_to?.last_name}
+          {row?.employee?.first_name} {row?.employee?.last_name}
         </h2>
       ),
     },
     {
-      dataField: "manufacturer",
-      text: "Manufacturer",
+      dataField: "reason",
+      text: "Reason",
       sort: true,
     },
     {
-      dataField: "supplier",
-      text: "Supplier",
+      dataField: "terminationType",
+      text: "Termination Type",
       sort: true,
     },
+
     {
-      dataField: "model",
-      text: "Model",
+      dataField: "terminationDate",
+      text: "Termination Date",
       sort: true,
-    },
-    {
-      dataField: "serialNumber",
-      text: "Serial Number",
-      sort: true,
-    },
-    {
-      dataField: "condition",
-      text: "Condition",
-      sort: true,
-    },
-    {
-      dataField: "warranty",
-      text: "Warranty",
-      sort: true,
-    },
-    {
-      dataField: "value",
-      text: "Value",
-      sort: true,
-    },
-    {
-      dataField: "description",
-      text: "Description",
-      sort: true,
-      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <h2>{moment(row?.terminationDate).format("L")}</h2>
+      ),
     },
     {
       dataField: "",
@@ -214,17 +181,18 @@ const Asset = () => {
       ),
     },
   ];
+
   return (
     <>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Assets</h3>
+            <h3 className="page-title">termination</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Asset</li>
+              <li className="breadcrumb-item active">Termination</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -234,7 +202,7 @@ const Asset = () => {
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i className="fa fa-plus"></i> Add Asset
+              <i className="fa fa-plus"></i> Add Termination
             </a>
           </div>
         </div>
@@ -253,10 +221,9 @@ const Asset = () => {
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}
-        deleteFunction={deleteAssets}
+        deleteFunction={deleteTermination}
       />
     </>
   );
 };
-
-export default Asset;
+export default Termination;

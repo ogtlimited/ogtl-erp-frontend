@@ -12,7 +12,7 @@ export const AssetFormJson = {
         },
         {
             name:'assigned_to' ,
-            type:'text',
+            type:'select',
             title:'Assigned To',
             required:{
                 value:true,
@@ -97,8 +97,23 @@ export const AssetFormJson = {
 
         {
             name:'warranty' ,
-            type:'text',
+            type:'select',
             title:'Warranty',
+            options: [
+                {
+                    value: '6 Months',
+                    label: '6 Months',
+                },
+                {
+                    value: '1 year',
+                    label: '1 year',
+                },
+                {
+                 value: 'More than 1 year',
+                 label: 'More than 1 year',
+             },
+                
+            ],
             required:{
                 value:true,
                 message:'warranty is required'
