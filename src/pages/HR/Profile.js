@@ -198,6 +198,19 @@ const Profile = () => {
                           </div>
                         </li>
                         <li>
+                          <div className="title">Branch:</div>
+                          <div className="text">
+                            {userData?.employee?.branch || "Not Available"}
+                          </div>
+                        </li>
+                        <li>
+                          <div className="title">Shift:</div>
+                          <div className="text">
+                            {userData?.employee?.default_shift?.shift_name ||
+                              "Not Available"}
+                          </div>
+                        </li>
+                        <li>
                           <div className="title">Reports to:</div>
                           <div className="text">
                             <div className="avatar-box">
