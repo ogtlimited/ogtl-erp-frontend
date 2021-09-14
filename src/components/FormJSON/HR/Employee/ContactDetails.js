@@ -28,11 +28,11 @@ export const ContactDetailJson = {
       title: "Permanent Address Type",
       options: [
         {
-          value: "Rented",
+          value: "rented",
           label: "Rented",
         },
         {
-          value: "Owned",
+          value: "owned",
           label: "Owned",
         },
       ],
@@ -49,11 +49,11 @@ export const ContactDetailJson = {
       title: "Current Address Type",
       options: [
         {
-          value: "Rented",
+          value: "rented",
           label: "Rented",
         },
         {
-          value: "Owned",
+          value: "owned",
           label: "Owned",
         },
       ],

@@ -135,16 +135,19 @@ const Profile = () => {
                             : userData?.employee?.projectId?.project_name}
                         </h6>
                         <small className="text-muted">
-                          {userData?.employee?.designation?.designation}
+                          {userData?.employee?.designation?.designation ||
+                            "Not Available"}
                         </small>
                         <div className="staff-id">
                           Employee ID : {userData?.employee?.ogid}
                         </div>
                         <div className="small doj text-muted">
                           Date Joined :{" "}
-                          {moment(userData?.employee?.date_of_joining).format(
-                            "L"
-                          )}
+                          {userData?.employee?.date_of_joining
+                            ? moment(
+                                userData?.employee?.date_of_joining
+                              ).format("L")
+                            : "Not Available"}
                         </div>
                         <div className="staff-msg">
                           <a className="btn btn-custom" href="chat.html">
@@ -165,7 +168,8 @@ const Profile = () => {
                         <li>
                           <div className="title">Email:</div>
                           <div className="text">
-                            {userData?.employee?.company_email}
+                            {userData?.employee?.company_email ||
+                              "Not Available"}
                           </div>
                         </li>
 
@@ -183,17 +187,27 @@ const Profile = () => {
                           <div className="title">Address:</div>
                           <div className="text">
                             {userData?.contactDetails?.permanent_address ||
-                              "xxx"}
+                              "Not Available"}
                           </div>
                         </li>
 
                         <li>
                           <div className="title">Gender:</div>
                           <div className="text">
-                            {userData?.employee?.gender
-                              .charAt(0)
-                              .toUpperCase() +
-                              userData?.employee?.gender.slice(1)}
+                            {userData?.employee?.gender || "Not Available"}
+                          </div>
+                        </li>
+                        <li>
+                          <div className="title">Branch:</div>
+                          <div className="text">
+                            {userData?.employee?.branch || "Not Available"}
+                          </div>
+                        </li>
+                        <li>
+                          <div className="title">Shift:</div>
+                          <div className="text">
+                            {userData?.employee?.default_shift?.shift_name ||
+                              "Not Available"}
                           </div>
                         </li>
                         <li>
@@ -208,7 +222,8 @@ const Profile = () => {
                               </div>
                             </div>
                             <a href="profile.html">
-                              {userData?.employee?.reports_to}
+                              {userData?.employee?.reports_to ||
+                                "Not Available"}
                             </a>
                           </div>
                         </li>
