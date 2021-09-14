@@ -15,7 +15,7 @@ const ContactDetails = ({
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
-        _id: contactDetails?._id,
+        _id: contactDetails?.contactDetails?._id,
         employee_id: id,
         ...formValue,
       };
@@ -36,7 +36,7 @@ const ContactDetails = ({
       <div className="card-body">
         <h3 className="card-title">
           Contact Details
-          {id === contactDetails?.employee_id && (
+          {id === contactDetails?.employee?._id && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("ContactDetails")}
@@ -51,37 +51,42 @@ const ContactDetails = ({
           <li>
             <div className="title">Mobile Number</div>
             <div className="text">
-              {contactDetails?.mobile || "Not Available"}
+              {contactDetails?.contactDetails?.mobile || "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Personal Email</div>
             <div className="text">
-              {contactDetails?.personal_email || "Not Available"}
+              {contactDetails?.contactDetails?.personal_email ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Permanent Address Is</div>
             <div className="text">
-              {contactDetails?.permanent_address_is || "Not Available"}
+              {contactDetails?.contactDetails?.permanent_address_is ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Permanent Address</div>
             <div className="text">
-              {contactDetails?.permanent_address || "Not Available"}
+              {contactDetails?.contactDetails?.permanent_address ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Current Address Is</div>
             <div className="text">
-              {contactDetails?.current_address_is || "Not Available"}
+              {contactDetails?.contactDetails?.current_address_is ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Current Address</div>
             <div className="text">
-              {contactDetails?.current_address || "Not Available"}
+              {contactDetails?.contactDetails?.current_address ||
+                "Not Available"}
             </div>
           </li>
         </ul>
