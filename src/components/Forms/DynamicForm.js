@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 // import './App.css';
-import { Form, TextField, SelectField, SubmitButton, DateField, TextareaField } from './FormElements';
+import { Form, TextField, SelectField, SubmitButton, DateField, TextareaField, PasswordField, CheckField } from './FormElements';
 import * as Yup from 'yup';
 
 
 const DynamicForm = ({formSchema}) => {
     console.log(formSchema)
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState(null);
     const [validationSchema, setValidationSchema] = useState({});
-    useEffect(() => {   
-        initForm(formSchema);
+    useEffect(() => {
+        if(formSchema){
+            initForm(formSchema);
+
+        }
     }, []);
 
     const initForm = (formSchema) => {
+        console.log(formSchema)
         let _formData = {};
         let _validationSchema = {};
 
@@ -28,7 +32,7 @@ const DynamicForm = ({formSchema}) => {
             }else if(formSchema[key].type === "textarea"){
                 _validationSchema[key] = Yup.string()
             }else if(formSchema[key].type === "select"){
-                _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
+                // _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
             }
 
             if(formSchema[key].required){
@@ -50,6 +54,18 @@ const DynamicForm = ({formSchema}) => {
         if (elementSchema.type === "text" || elementSchema.type === "email") {
             
             return <TextField {...props} />
+        }
+        if (elementSchema.type === "password" ) {
+            
+            return <PasswordField {...props} />
+        }
+        if (elementSchema.type === "check" ) {
+            
+            return <CheckField {...props} />
+        }
+        if (elementSchema.type === "radio" ) {
+            
+            return <CheckField {...props} />
         }
         if (elementSchema.type === "date" ) {
             

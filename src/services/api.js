@@ -6,6 +6,7 @@ const token = localStorage.getItem('token')
 if(token){
     headers.Authorization = `Bearer ${token}`
 }
+console.log(token)
 const axiosInstance = axios.create({
     baseURL:"http://localhost:3000",
     headers
@@ -23,8 +24,9 @@ axiosInstance.interceptors.response.use(
             })
         }
         if(error.response.status === 401){
-            tokenService.removeToken()
-            window.location = "/auth"
+            // tokenService.removeToken()
+            console.log('tokrn')
+            // window.location = "/auth"
         }else{
             return new Promise((resolve,reject) =>{
                 reject(error)

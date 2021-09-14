@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import $ from 'jquery'
 import DynamicForm from '../Forms/DynamicForm';
-const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title }) => {    
+const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title, formValue }) => {    
     console.log(template)
      const onSubmit = (data) => {
        console.log(data)
@@ -10,6 +10,9 @@ const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title })
 
        $('#FormModal').modal('toggle')
       }; 
+      useEffect(() => {
+       
+      }, [template])
     return (
         <>
            <div className="modal fade" id="FormModal" tabIndex="-1" aria-labelledby="FormModalModalLabel" aria-hidden="true">
@@ -22,7 +25,7 @@ const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title })
         </button>
       </div>
       <div className="modal-body">
-        <DynamicForm formSchema={template} />
+        {template && <DynamicForm formSchema={template}  />}
     </div>
   </div>
   </div>

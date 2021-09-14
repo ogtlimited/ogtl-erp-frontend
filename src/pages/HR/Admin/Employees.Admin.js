@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee'
 import PageHeader from '../../../components/Misc/PageHeader'
+import FormModal2 from '../../../components/Modal/FormModal2'
 import FormModal from '../../../components/Modal/Modal'
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable'
 import GeneralTable from '../../../components/Tables/Table'
@@ -11,23 +12,30 @@ import { useAppContext } from '../../../Context/AppContext'
 import designation from '../../../db/designation.json'
 import { employeeList } from '../../../db/employee'
 import axiosInstance from '../../../services/api'
+import helper from '../../../services/helper'
 const AllEmployeesAdmin = () => {
     const breadcrumb = "All Employees"
     const {setallEmployees, fetchEmployee, allEmployees, combineRequest} = useAppContext()
     const [selectedOption, setSelectedOption] = useState(null);
     const [formValue, setformValue] = useState({})
     const [editData, seteditData] = useState({});
-    const [template, settemplate] = useState(employeeFormJson)
+    const [template, settemplate] = useState({})
     const [submitted, setsubmitted] = useState(false)
     console.log(allEmployees)
 
     useEffect(() => {
       combineRequest().then(res =>{
         console.log(res)
-        const {shifts, designations, employeeTypes, departments} = res.data.createEmployeeFormSelection
+        const {shifts, designations, employeeTypes, departments, projects} = res.data.createEmployeeFormSelection
         const shiftsopts = shifts?.map(e => {
           return {
             label: e.shift_name,
+            value: e._id
+          }
+        })
+        const campaingOpts = projects?.map(e => {
+          return {
+            label: e.project_name,
             value: e._id
           }
         })
@@ -65,17 +73,23 @@ const AllEmployeesAdmin = () => {
             field.options = empTypeopts
             return field
           }
+          else if(field.name === 'projectId'){
+            field.options = campaingOpts
+            return field
+          }
           return field
         })
-        settemplate(
-          {
-            title: employeeFormJson.title,
-            Fields: finalForm
-          }
-        )
-        console.log(template)
+        // settemplate(
+        //   {
+        //     title: employeeFormJson.title,
+        //     Fields: finalForm
+        //   }
+        // )
+        const obj = helper.formArrayToObject(finalForm)
+        settemplate(obj)
+        console.log(obj)
       })
-    }, [])
+    }, [template])
 
     useEffect(() => {
       console.log(submitted)
@@ -122,7 +136,8 @@ const AllEmployeesAdmin = () => {
             defaultSorted={defaultSorted}
             selectedOption={selectedOption}
            />
-           <FormModal editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
+           {template}
+           <FormModal2 editData={editData} setformValue={setformValue} template={template} setsubmitted={setsubmitted} />
           
         </>
     )
