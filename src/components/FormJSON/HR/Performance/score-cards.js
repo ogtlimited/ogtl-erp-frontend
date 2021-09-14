@@ -1,20 +1,21 @@
-export const scoreCards = {
+export const scoreCardsJSON = {
     title: 'Score Card Form',
     Fields: [
        
         {
-            name:'employeeId' ,
-            type:'text',
+            name:'employee_id' ,
+            type:'select',
             title:'Employee Id',
             required:{
                 value:true,
                 message:'Employee Id is required'
             },
+            options: []
             
         },
         
         {
-            name:'performanceScore' ,
+            name:'performance_score' ,
             type:'text',
             title:'Performance Score',
             required:{
@@ -24,7 +25,7 @@ export const scoreCards = {
          },
 
          {
-            name:'companyValuesScore' ,
+            name:'company_values_score' ,
             type:'text',
             title:'Company Values Score',
             required:{

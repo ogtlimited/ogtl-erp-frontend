@@ -1,6 +1,178 @@
-import React from 'react'
+import React, {useEffect, useState} from "react";
+import { Link } from 'react-router-dom'
+import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable'
+import data from '../../../db/promotion.json'
+import { scoreCardsJSON } from '../../../components/FormJSON/HR/Performance/score-cards'
+import FormModal from "../../../components/Modal/Modal";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import ReactHtmlParser from "react-html-parser";
+import moment from "moment";
 
 const ScoreCards = () => {
+  const [template, setTemplate] = useState(scoreCardsJSON)
+    const [editData, seteditData] = useState({});
+    const [data, setData] = useState([]);
+    const { combineRequest, showAlert } = useAppContext();
+    const [formValue, setFormValue] = useState({});
+    const [submitted, setSubmitted] = useState(false);
+
+    useEffect(()=>{
+      setTemplate(scoreCardsJSON)
+      
+  })
+
+
+  const fetchScoreCard = () => {
+    axiosInstance
+      .get("/scoreCard")
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchScoreCard();
+  }, []);
+
+  useEffect(() => {
+    combineRequest().then((res) => {
+      console.log(res);
+      const { employees } = res.data.createEmployeeFormSelection;
+      const employeeOpts = employees?.map((e) => {
+        return {
+          label: `${e.first_name} ${e.last_name}`,
+          value: e._id,
+        };
+      });
+      const finalForm = scoreCardsJSON.Fields.map((field) => {
+        if (field.name === "employee_id") {
+          field.options = employeeOpts;
+          return field;
+        }
+        return field;
+      });
+      setTemplate({
+        title: scoreCardsJSON.title,
+        Fields: finalForm,
+      });
+      console.log(template);
+    });
+  }, []);
+
+
+  //create score card
+  useEffect(() => {
+    console.log(submitted);
+    if (submitted === true) {
+      axiosInstance
+        .post("/scoreCard", formValue)
+        .then((res) => {
+          setSubmitted(false);
+          fetchScoreCard();
+          setData((prevData) => [...data, res.data.data]);
+
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    console.log(formValue);
+  }, [submitted, formValue]);
+
+
+  //delete score card
+const deleteScoreCard = (row) => {
+  axiosInstance
+    .delete(`/scoreCard/${row._id}`)
+    .then((res) => {
+      console.log(res);
+      setData((prevData) =>
+        prevData.filter((pdata) => pdata._id !== row._id)
+      );
+      showAlert(true, res.data.message, "alert alert-success");
+    })
+    .catch((error) => {
+      console.log(error);
+      showAlert(true, error.response.data.message, "alert alert-danger");
+    });
+};
+
+//update score card
+const updateAssets = (row) => {
+  axiosInstance
+    .patch(`/scoreCard/${row._id}`, row)
+    .then((res) => {
+      console.log(res);
+      setData((prevData) => [...data, res.data.data]);
+      fetchScoreCard();
+      showAlert(true, res.data.message, "alert alert-success");
+    })
+    .catch((error) => {
+      console.log(error);
+      showAlert(true, error.response.data.message, "alert alert-danger");
+    });
+};
+
+
+ 
+  const columns = [
+    {
+      dataField: "employee_id",
+      text: "Employee",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => (
+        <h2>
+          {row?.employee_id?.first_name} {row?.employee_id?.last_name}
+          
+        </h2>
+        
+      ),
+      
+    },
+
+    {
+      dataField :"company_values_score",
+      text: "Company Values Score",
+      sort : true,
+      
+    },
+
+    {
+      dataField :"performance_score",
+      text: "Performance Score",
+      sort : true,
+      
+    },
+
+    {
+      dataField: "",
+      text: "Action",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) =>(
+        <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+            aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+        <div className="dropdown-menu dropdown-menu-right">
+          <a className="dropdown-item" onClick={() => console.log(row)} href="#" data-toggle="modal"
+                data-target="#edit_employee">
+                  <i className="fa fa-pencil m-r-5"></i> Edit</a>
+                <Link className="dropdown-item" onClick={() => deleteScoreCard(row)}
+                ><i className="fa fa-trash m-r-5"></i> Delete</Link></div>
+        </div>
+      )
+    
+    },
+
+
+  ];
+
     return (
         <>
            <div className="page-header">
@@ -27,8 +199,17 @@ const ScoreCards = () => {
           </div>
         </div>
       </div>
-       
+      <div className="row">
+<div className="col-sm-12">
+    <LeavesTable
+        data={data}
+        columns={columns}
+    />
+</div> 
+</div> 
+<FormModal editData={editData} template={template}  setsubmitted={setSubmitted} setformValue={setFormValue}/>
         </>
+        
     )
 }
 
