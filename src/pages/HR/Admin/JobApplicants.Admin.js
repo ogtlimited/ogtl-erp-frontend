@@ -5,12 +5,14 @@ import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveT
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { ApproverBtn } from "../../../components/ApproverBtn";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
   const { showAlert } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const fetchJobApplicants = () => {
     axiosInstance
@@ -153,7 +155,11 @@ const JobApplicants = () => {
             </a>
             <Link
               className="dropdown-item"
-              onClick={() => deleteJobApplicant(row)}
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
@@ -178,17 +184,6 @@ const JobApplicants = () => {
               <li className="breadcrumb-item active">Job Applicants List</li>
             </ul>
           </div>
-          {/*<div className="col-auto float-right ml-auto">*/}
-          {/*    <a*/}
-          {/*        href="#"*/}
-          {/*        className="btn add-btn m-r-5"*/}
-          {/*        data-toggle="modal"*/}
-          {/*        data-target="#FormModal"*/}
-          {/*    >*/}
-          {/*        Add Job Opening*/}
-          {/*    </a>*/}
-
-          {/*</div>*/}
         </div>
       </div>
       <div className="row">
@@ -196,6 +191,11 @@ const JobApplicants = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
+      <ConfirmModal
+        title="Job Applicant"
+        selectedRow={selectedRow}
+        deleteFunction={deleteJobApplicant}
+      />
     </>
   );
 };
