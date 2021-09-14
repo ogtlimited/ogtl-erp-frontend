@@ -117,20 +117,20 @@ const ShiftAssignment = () => {
   };
 
   //update shiftAssignment
-  const updateShiftAssignment = (row) => {
-    axiosInstance
-      .patch(`/api/shiftAssignment/${row._id}`, row)
-      .then((res) => {
-        console.log(res);
-        setData((prevData) => [...prevData, res.data.data]);
-        fetchShiftAssignments();
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  // const updateShiftAssignment = (row) => {
+  //   axiosInstance
+  //     .patch(`/api/shiftAssignment/${row._id}`, row)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData((prevData) => [...prevData, res.data.data]);
+  //       fetchShiftAssignments();
+  //       showAlert(true, res.data.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error.response.data.message, "alert alert-danger");
+  //     });
+  // };
 
   const columns = [
     {

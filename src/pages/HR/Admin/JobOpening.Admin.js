@@ -107,20 +107,20 @@ const JobOpening = () => {
       });
   };
   //update jobOpening
-  const updateJobOpening = (row) => {
-    axiosInstance
-      .patch(`/api/jobOpening/${row._id}`, row)
-      .then((res) => {
-        console.log(res);
-        setData((prevData) => [...data, res.data.data]);
-        fetchJobOpenings();
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  // const updateJobOpening = (row) => {
+  //   axiosInstance
+  //     .patch(`/api/jobOpening/${row._id}`, row)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData((prevData) => [...data, res.data.data]);
+  //       fetchJobOpenings();
+  //       showAlert(true, res.data.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error.response.data.message, "alert alert-danger");
+  //     });
+  // };
 
   const columns = [
     {
