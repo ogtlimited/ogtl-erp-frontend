@@ -315,12 +315,6 @@ const Sidebar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link className="" to="/admin/job-offer">
-                        {" "}
-                        Job Offer{" "}
-                      </Link>
-                    </li>
-                    <li>
                       <Link className="" to="/admin/job-applicants">
                         {" "}
                         Job Applicants
@@ -332,6 +326,14 @@ const Sidebar = () => {
                         Aptitude Test{" "}
                       </Link>
                     </li>
+                    <li>
+                      <Link className="" to="/admin/job-offer">
+                        {" "}
+                        Job Offer{" "}
+                      </Link>
+                    </li>
+                    
+                   
                   </ul>
                 </li>
               )}
