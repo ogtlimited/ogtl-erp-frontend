@@ -21,7 +21,7 @@ const Timesheet = () => {
         ogId: currUser.ogid,
         clockInTime: new Date(),
         
-        departmentId: currUser.department
+        departmentId: currUser.department._id
       }
       axiosInstance.post('/api/attendance', obj).then(e =>{
         fetchEmployeeAttendance()
@@ -46,13 +46,21 @@ const Timesheet = () => {
   useEffect(() => {
     const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
     setworkedTime(wt)
-    const interval = setInterval(() => {
-      const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
-      console.log('Logs every minute');
-      setworkedTime(wt)
-    }, MINUTE_MS);
+    const shiftEnd = user.default_shift.end_time
+    console.log(wt, parseInt(shiftEnd))
+    if(parseInt(shiftEnd) > wt){
+      const interval = setInterval(() => {
+        const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
+        console.log('Logs every minute');
+        setworkedTime(wt)
+      }, MINUTE_MS);
+      return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+
+    }else{
+      setworkedTime('0:00')
+      tokenService.removeAttendance()
+    }
   
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
   useEffect(() => {
     const user = tokenService.getUser()

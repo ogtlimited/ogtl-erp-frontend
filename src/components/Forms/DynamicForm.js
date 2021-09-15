@@ -2,26 +2,40 @@ import React, { useState, useEffect } from 'react';
 // import './App.css';
 import { Form, TextField, SelectField, SubmitButton, DateField, TextareaField, PasswordField, CheckField } from './FormElements';
 import * as Yup from 'yup';
+import $ from 'jquery'
+import { useAppContext } from '../../Context/AppContext';
 
 
-const DynamicForm = ({formSchema}) => {
-    console.log(formSchema)
+const DynamicForm = ({formSchema, value, setvalue}) => {
+
     const [formData, setFormData] = useState(null);
+    const [editRow, seteditRow] = useState(null)
+    const {formUpdate} = useAppContext()
     const [validationSchema, setValidationSchema] = useState({});
     useEffect(() => {
         if(formSchema){
-            initForm(formSchema);
+            initForm(formSchema, value);
 
         }
     }, []);
+    useEffect(() => {
+        console.log(formUpdate)
+        initForm(formSchema, formUpdate)
+       seteditRow(value)
+    }, [formUpdate])
 
-    const initForm = (formSchema) => {
-        console.log(formSchema)
+    const initForm = (formSchema, value) => {
+        console.log(formUpdate, value)
         let _formData = {};
         let _validationSchema = {};
 
         for(var key of Object.keys(formSchema)){
-            _formData[key] = "";
+            if(formUpdate !== null){
+                _formData[key] = formUpdate[key] ;
+            }else{
+                _formData[key] = "";
+
+            }
 
             if(formSchema[key].type === "text"){
                 _validationSchema[key] = Yup.string();
@@ -84,6 +98,8 @@ const DynamicForm = ({formSchema}) => {
 
     const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
         console.log(values);
+        $('#FormModal').modal('toggle')
+        setvalue(values)
         setSubmitting(false);
     }
 
