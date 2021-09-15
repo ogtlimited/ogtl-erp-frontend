@@ -34,6 +34,7 @@ const EmployeesTable = ({
   const [editEmployee, seteditEmployee] = useState({});
   const [showClear, setshowClear] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
+  const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
   const breadcrumb = "Admin Attendance";
   const total = [];
@@ -61,7 +62,17 @@ const EmployeesTable = ({
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
-  console.log(total);
+  useEffect(() => {
+    window.addEventListener('resize', ()=>{
+      if(window.innerWidth >= 768){
+        setmobileView(false)
+      }else{
+        setmobileView(true)
+      }
+     
+    });
+  }, [mobileView])
+  // console.log(total);
   const columns = [
     {
       dataField: "",
@@ -229,7 +240,7 @@ const EmployeesTable = ({
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes="table table-responsive"
+                classes={!mobileView ? "table" : 'table table-responsive' }
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
                 noDataIndication="Fetching Data"
