@@ -401,7 +401,7 @@ const Sidebar = () => {
               )}
               {canView("HR") && (
                 <li className="">
-                  <Link to="/performance/resignation">
+                  <Link to="/admin/resignation">
                     <i className="la la-external-link-square"></i>{" "}
                     <span>Resignation</span>
                   </Link>
@@ -409,7 +409,7 @@ const Sidebar = () => {
               )}
               {canView("HR") && (
                 <li className="">
-                  <Link to="/performance/termination">
+                  <Link to="/admin/termination">
                     <i className="la la-times-circle"></i>{" "}
                     <span>Termination</span>
                   </Link>
