@@ -13,6 +13,7 @@ import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import moment from "moment";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const ShiftRequest = () => {
   const [formValue, setFormValue] = useState({});
@@ -22,6 +23,7 @@ const ShiftRequest = () => {
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const { showAlert } = useAppContext();
 
@@ -132,7 +134,11 @@ const ShiftRequest = () => {
             </a>
             <Link
               className="dropdown-item"
-              onClick={() => deleteShiftRequest(row)}
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
@@ -164,7 +170,16 @@ const ShiftRequest = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal editData={editData} setformValue={setFormValue} template={shiftRequestFormJson} />
+      <FormModal
+        editData={editData}
+        setformValue={setFormValue}
+        template={shiftRequestFormJson}
+      />
+      <ConfirmModal
+        title="Shift Request"
+        selectedRow={selectedRow}
+        deleteFunction={deleteShiftRequest}
+      />
     </>
   );
 };

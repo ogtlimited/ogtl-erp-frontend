@@ -1,18 +1,25 @@
-import React, {useEffect} from 'react'
-import $ from 'jquery'
+import React, {useEffect, useState} from 'react'
 import DynamicForm from '../Forms/DynamicForm';
-const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title, formValue }) => {    
-    console.log(template)
+const FormModal2 = ({template, editData, setformValue, setsubmitted, title, formValue }) => {
+    const [value, setvalue] = useState(null)
+   useEffect(() => {
+     setvalue(value)
+   }, [value])
+
      const onSubmit = (data) => {
        console.log(data)
        setformValue(data)
        setsubmitted(true)
 
-       $('#FormModal').modal('toggle')
-      }; 
+      
+      };
       useEffect(() => {
-       
-      }, [template])
+        setformValue(value)
+
+      }, [value])
+      useEffect(() => {
+
+      }, [template, formValue])
     return (
         <>
            <div className="modal fade" id="FormModal" tabIndex="-1" aria-labelledby="FormModalModalLabel" aria-hidden="true">
@@ -25,7 +32,7 @@ const FormModal2 = ({template, settemplate, setformValue, setsubmitted, title, f
         </button>
       </div>
       <div className="modal-body">
-        {template && <DynamicForm formSchema={template}  />}
+        {template && <DynamicForm value={editData} setvalue={setvalue} formSchema={template}  />}
     </div>
   </div>
   </div>

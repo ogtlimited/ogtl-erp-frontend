@@ -21,9 +21,14 @@ const AllEmployeesAdmin = () => {
   const [editData, seteditData] = useState({});
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
-  console.log(allEmployees);
-
+  // console.log(allEmployees);
   useEffect(() => {
+    fetchEmployee()
+    const obj = helper.formArrayToObject(employeeFormJson.Fields);
+        settemplate(obj);
+  }, [])
+  useEffect(() => {
+    
     combineRequest().then((res) => {
       console.log(res);
       const { shifts, designations, employeeTypes, departments, projects } =
@@ -87,7 +92,7 @@ const AllEmployeesAdmin = () => {
       settemplate(obj);
       console.log(obj);
     });
-  }, [template]);
+  }, []);
 
   useEffect(() => {
     console.log(submitted);
@@ -150,7 +155,7 @@ const AllEmployeesAdmin = () => {
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
-      {template}
+    
       <FormModal2
         editData={editData}
         setformValue={setformValue}

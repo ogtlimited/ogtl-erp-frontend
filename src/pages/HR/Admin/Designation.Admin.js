@@ -2,20 +2,26 @@ import React, { useMemo, useState, useEffect, useContext } from "react";
 import { withRouter } from "react-router";
 import departments from "../../../db/designationList.json";
 import {designation} from "../../../components/FormJSON/HR/Employee/designation";
-import FormModal from '../../../components/Modal/Modal'
+
 import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable'
 
 
-import GeneralTable from "../../../components/Tables/Table";
+
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import FormModal2 from "../../../components/Modal/FormModal2";
 
 let qualityFilter;
 
 const Designations = withRouter(({ history }) => {
   const [allDesignation, setallDesignation] = useState([])
+  const {formUpdate, setformUpdate} = useAppContext()
   const [submitted, setsubmitted] = useState(false)
-  const [editData, seteditData] = useState({});
+  const [formValue, setformValue] = useState(null)
+  const [editData, seteditData] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null)
+  const [deleteData, setdeleteData] = useState(null)
   const fetchDesignation = () =>{
     axiosInstance.get('/designation').then(res =>{
       console.log(res.data.data)
@@ -26,76 +32,81 @@ const Designations = withRouter(({ history }) => {
    fetchDesignation()
   }, [])
   useEffect(() => {
-    console.log(submitted)
-    if(submitted == true){
-      axiosInstance.post('/designation', formValue).then(res =>{
-       fetchDesignation()
-        setsubmitted(false);
-        console.log(res)
-      })
-    
+    console.log(formValue)
+    fetchDesignation()
+    if(formValue){
+      if(!formUpdate){
+        axiosInstance.post('/designation', formValue).then(e =>{
+          console.log(e)
+          setformValue(null)
+        }).catch(err =>{
+          setformValue(null)
+          console.log(err)
+        })
+      }else{
+        console.log(editData)
+        formValue._id = formUpdate._id
+        axiosInstance.put('/designation/'+formUpdate._id , formValue).then(e =>{
+          console.log(e)
+          setformValue(null)
+          fetchDesignation()
+        }).catch(err =>{
+          setformValue(null)
+          console.log(err)
+        })
+      }
 
     }
-   console.log(formValue)
-  }, [submitted])
+    // setallDepartments(departments);
+  }, [formValue]);
+
   const defaultSorted = [
     {
       dataField: "designation",
       order: "desc",
     },
   ];
-//   const { departments, user } = useContext(AppContext);
-//   const loggedUser = user || JSON.parse(localStorage.getItem("user"));
-  const HRpeople = [
-    "ceo",
-    "coo",
-    "hr manager",
-    "hr senior associate",
-    "hr user",
-    "team leader",
-    "operations and training director",
-    "supervisor",
-    "operations manager/training manager/supervisor",
-    "team lead",
-    "team leader",
-    "trainer",
-  ];
-  const [allDepartments, setallDepartments] = useState([]);
-  const [formValue, setformValue] = useState({});
+;
 
   const breadcrumb = "Departments";
-
-  useEffect(() => {
-    //   if(loggedUser != null){
-    //     if(!HRpeople.includes(loggedUser?.designation?.toLowerCase())){
-    //       history.push('/forbidden')
-    //     }
-    //   }
-
-    setallDepartments(departments);
-  }, [departments]);
   const columns = [
+    {
+      dataField: "",
+      text: "#",
+      headerStyle: { width: "5%" },
+      formatter: (cell, row, rowIndex, )=>(
+        <span>{rowIndex + 1}</span>
+      )
+    },
     {
       dataField: "designation",
       text: "Designation",
       sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { width: "70%" },
     },
     {
       dataField: "createdAt",
       text: "Created",
       sort: true,
-      headerStyle: { minWidth: "450px" },
+      headerStyle: { width: "20%"},
       formatter: (val, row) =>(
         <p>{new Date(val).toDateString()}</p>
       )
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   sort: true,
-    //   headerStyle: { minWidth: "150px" },
-    // },
+    {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
+  aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+<div className="dropdown-menu dropdown-menu-right"><a className="dropdown-item" onClick={() => setformUpdate(row)} href="#" data-toggle="modal"
+      data-target="#FormModal"><i className="fa fa-pencil m-r-5"></i> Edit</a><a className="dropdown-item" onClick={() => console.log(row)} href="#"
+      data-toggle="modal" data-target="#FormModal"><i className="fa fa-trash m-r-5"></i> Delete</a>
+      
+      </div>
+</div>)
+    },
   ];
   return (
     <>
@@ -129,7 +140,7 @@ const Designations = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
-      <FormModal editData={editData} setformValue={setformValue} setsubmitted={setsubmitted} template={designation} />
+      <FormModal2 title="Create Department" editData={editData} setformValue={setformValue} template={designation} setsubmitted={setsubmitted} />
     </>
   );
 });

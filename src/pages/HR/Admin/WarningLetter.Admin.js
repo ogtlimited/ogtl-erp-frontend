@@ -8,6 +8,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ReactHtmlParser from "react-html-parser";
 import moment from "moment";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const WarningLetter = () => {
   const [formValue, setFormValue] = useState({});
@@ -16,6 +17,7 @@ const WarningLetter = () => {
   const [data, setData] = useState([]);
   const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const fetchWarningLetter = () => {
     axiosInstance
@@ -162,7 +164,11 @@ const WarningLetter = () => {
             </a>
             <Link
               className="dropdown-item"
-              onClick={() => deleteWarningLetter(row)}
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
@@ -209,6 +215,11 @@ const WarningLetter = () => {
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}
+      />
+      <ConfirmModal
+        title="Warning Letter"
+        selectedRow={selectedRow}
+        deleteFunction={deleteWarningLetter}
       />
     </>
   );

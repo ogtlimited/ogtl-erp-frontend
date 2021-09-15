@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Activity from "../../../components/attendance/activity";
 import AttendanceTable from "../../../components/attendance/attendance-table";
 import Stats from "../../../components/attendance/stats";
@@ -10,7 +10,10 @@ import { useAppContext } from "../../../Context/AppContext";
 import attendance from "../../../db/attendance.json";
 
 const EmployeeAttendance = () => {
-  const { employeeAttendance } = useAppContext();
+  const { employeeAttendance,fetchEmployeeAttendance } = useAppContext();
+  useEffect(() => {
+    fetchEmployeeAttendance()
+  }, [])
   console.log(employeeAttendance);
   const columns = [
     {

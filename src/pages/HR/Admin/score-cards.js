@@ -65,13 +65,14 @@ const ScoreCards = () => {
         .then((res) => {
           setSubmitted(false);
           fetchScoreCard();
-          setData((prevData) => [...data, res.data.data]);
+
+          console.log(res);
 
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
+          console.log(error?.response?.data);
+          showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
     console.log(formValue);

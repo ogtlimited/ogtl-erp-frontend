@@ -67,20 +67,20 @@ const ShiftAdmin = () => {
   };
 
   //update shift
-  const updateShift = (row) => {
-    axiosInstance
-      .patch(`/api/shiftType/${row._id}`, row)
-      .then((res) => {
-        console.log(res);
-        setData((prevData) => [...data, res.data.data]);
-        fetchTypesShift();
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  // const updateShift = (row) => {
+  //   axiosInstance
+  //     .patch(`/api/shiftType/${row._id}`, row)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData((prevData) => [...data, res.data.data]);
+  //       fetchTypesShift();
+  //       showAlert(true, res.data.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error.response.data.message, "alert alert-danger");
+  //     });
+  // };
 
   const columns = [
     {
@@ -121,7 +121,6 @@ const ShiftAdmin = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              onClick={() => updateShift(row)}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"

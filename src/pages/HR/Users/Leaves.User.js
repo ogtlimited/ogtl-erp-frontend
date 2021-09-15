@@ -2,14 +2,23 @@ import React,{useState, useEffect} from "react";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import tokenService from "../../../services/token.service";
 import axiosInstance from "../../../services/api";
+import FormModal from "../../../components/Modal/Modal";
+import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/application";
+import { useAppContext } from "../../../Context/AppContext";
 const LeavesUser = () => {
+  const {allEmployees, fetchEmployee} = useAppContext();
+  // fetchEmployee()
   const [userId, setuserId] = useState('')
+  const [template, settemplate] = useState([]);
+  const [submitted, setsubmitted] = useState(false);
+  const [formValue, setformValue] = useState({});
+  const [editData, seteditData] = useState({});
   const [allLeaves, setallLeaves] = useState([])
   const [annual, setannual] = useState(0);
   const [casual, setcasual] = useState(0);
   const [medical, setmedical] = useState(0)
   const [remaining, setremaining] = useState(0);
-
+  const [formMode, setformMode] = useState('add')
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
       const leaves = e.data.data.filter(f => f.employee_id._id == userId);
@@ -35,6 +44,26 @@ const LeavesUser = () => {
     console.log(user)
     
   }, [userId, allLeaves])
+  useEffect(() => {
+    console.log(allEmployees)
+    const employeeOpts = allEmployees.map((e) => {
+      return {
+        label: e.first_name + " " + e.last_name + " (" + e.ogid + ")",
+        value: e._id,
+      };
+    });
+    const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
+      if (field.name === "employee_id") {
+        field.options = employeeOpts;
+        return field;
+      }
+      return field;
+    });
+    settemplate({
+      title: LeaveApplicationFormJSON.title,
+      Fields: finalForm,
+    });
+  }, []);
   const columns = [
     {
       dataField: "leave_type_id",
@@ -121,11 +150,12 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
+          <a
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#add_leave"
+              onClick={() => setformMode('add')}
+              data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add Leave
             </a>
@@ -163,6 +193,13 @@ const LeavesUser = () => {
           <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>
+      <FormModal
+        setformValue={setformValue}
+        template={template}
+        setsubmitted={setsubmitted}
+        editData={editData}
+        formMode={formMode}
+      />
     </>
   );
 };

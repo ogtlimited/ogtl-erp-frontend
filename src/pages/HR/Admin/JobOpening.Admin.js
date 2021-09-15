@@ -6,6 +6,7 @@ import FormModal from "../../../components/Modal/Modal";
 import { jobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/JobOpening";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const JobOpening = () => {
   const [formValue, setFormValue] = useState({});
@@ -13,6 +14,7 @@ const JobOpening = () => {
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest, showAlert } = useAppContext();
   const [data, setData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
   const [editData, seteditData] = useState({});
   const fetchJobOpenings = () => {
     axiosInstance
@@ -105,20 +107,20 @@ const JobOpening = () => {
       });
   };
   //update jobOpening
-  const updateJobOpening = (row) => {
-    axiosInstance
-      .patch(`/api/jobOpening/${row._id}`, row)
-      .then((res) => {
-        console.log(res);
-        setData((prevData) => [...data, res.data.data]);
-        fetchJobOpenings();
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  // const updateJobOpening = (row) => {
+  //   axiosInstance
+  //     .patch(`/api/jobOpening/${row._id}`, row)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setData((prevData) => [...data, res.data.data]);
+  //       fetchJobOpenings();
+  //       showAlert(true, res.data.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error.response.data.message, "alert alert-danger");
+  //     });
+  // };
 
   const columns = [
     {
@@ -180,7 +182,11 @@ const JobOpening = () => {
             </a>
             <Link
               className="dropdown-item"
-              onClick={() => deleteJobOpening(row)}
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>
@@ -227,6 +233,11 @@ const JobOpening = () => {
         setformValue={setFormValue}
         template={jobOpeningFormJson}
         setsubmitted={setSubmitted}
+      />
+      <ConfirmModal
+        title="Job Opening"
+        selectedRow={selectedRow}
+        deleteFunction={deleteJobOpening}
       />
     </>
   );
