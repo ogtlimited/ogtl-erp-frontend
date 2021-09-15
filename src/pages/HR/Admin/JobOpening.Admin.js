@@ -7,6 +7,8 @@ import { jobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import { ApproverBtn } from "../../../components/ApproverBtn";
+import ReactHtmlParser from "react-html-parser";
 
 const JobOpening = () => {
   const [formValue, setFormValue] = useState({});
@@ -16,11 +18,13 @@ const JobOpening = () => {
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [editData, seteditData] = useState({});
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
+
   const fetchJobOpenings = () => {
     axiosInstance
       .get("/api/jobOpening")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -34,7 +38,6 @@ const JobOpening = () => {
   useEffect(() => {
     combineRequest()
       .then((res) => {
-        console.log(res);
         const { projects, designations } = res.data.createEmployeeFormSelection;
         const projectsOpts = projects?.map((e) => {
           return {
@@ -62,7 +65,6 @@ const JobOpening = () => {
           title: jobOpeningFormJson.title,
           Fields: finalForm,
         });
-        console.log(template);
       })
       .catch((error) => {
         console.log(error);
@@ -71,7 +73,6 @@ const JobOpening = () => {
 
   //create job opening
   useEffect(() => {
-    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/api/jobOpening", formValue)
@@ -83,11 +84,9 @@ const JobOpening = () => {
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error.response.data);
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
-    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete job opening
@@ -95,32 +94,37 @@ const JobOpening = () => {
     axiosInstance
       .delete(`/api/jobOpening/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
+
   //update jobOpening
-  // const updateJobOpening = (row) => {
-  //   axiosInstance
-  //     .patch(`/api/jobOpening/${row._id}`, row)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setData((prevData) => [...data, res.data.data]);
-  //       fetchJobOpenings();
-  //       showAlert(true, res.data.message, "alert alert-success");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       showAlert(true, error.response.data.message, "alert alert-danger");
-  //     });
-  // };
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        ...statusRow,
+        status: status,
+        designation_id: statusRow.designation_id?._id,
+        project_id: statusRow.project_id?._id,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/jobOpening/" + statusRow._id, update)
+        .then((res) => {
+          fetchJobOpenings();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+  }, [status, statusRow]);
 
   const columns = [
     {
@@ -134,6 +138,17 @@ const JobOpening = () => {
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => (
+        <>
+          <ApproverBtn
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            context="job_opening"
+          />
+        </>
+      ),
     },
     {
       dataField: "designation_id",
@@ -147,13 +162,16 @@ const JobOpening = () => {
       text: "Project",
       sort: true,
       headerStyle: { minWidth: "200px" },
-      formatter: (value, row) => <h2>{row?.project_id?.project_name}</h2>,
+      formatter: (value, row) => (
+        <h2>{row?.project_id?.project_name || "Not Available"}</h2>
+      ),
     },
     {
       dataField: "description",
       text: "Description",
       sort: true,
       headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
     },
     {
       dataField: "",
