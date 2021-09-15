@@ -73,13 +73,15 @@ const ScoreCards = () => {
         .then((res) => {
           setSubmitted(false);
           fetchScoreCard();
-          setData((prevData) => [...data, res.data.data]);
+         
+            console.log(res)
+          // setData((prevData) => [...data, res.data.data]);
 
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
+          console.log(error?.response?.data);
+          showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
     console.log(formValue);
@@ -130,11 +132,11 @@ const updateAssets = (row) => {
       formatter: (value, row) => (
         <h2>
           {row?.employee_id?.first_name} {row?.employee_id?.last_name}
-          
+
         </h2>
-        
+
       ),
-      
+
     },
 
     {
