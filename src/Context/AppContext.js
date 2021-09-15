@@ -9,8 +9,8 @@ const AppContext = createContext();
 
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
-  const [loggedIn, setloggedIn] = useState(false)
-  const [formUpdate, setformUpdate] = useState(null)
+  const [loggedIn, setloggedIn] = useState(false);
+  const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
     state: false,
     msg: "",
@@ -23,17 +23,17 @@ const AppProvider = (props) => {
   }, [showAlertMsg]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (loggedIn ) {
+    const token = localStorage.getItem("token");
+    if (loggedIn) {
       // fetchEmployee();
-      fetchEmployeeAttendance()
+      fetchEmployeeAttendance();
     }
   }, []);
 
   const fetchEmployee = (employee) => {
     axiosInstance.get("/employees").then((e) => {
       setallEmployees(e?.data?.employees);
-      setloggedIn(false)
+      setloggedIn(false);
     });
   };
   const showAlert = (state, msg, className) => {
@@ -96,8 +96,8 @@ const AppProvider = (props) => {
         fetchEmployeeAttendance,
         fetchEmployee,
         setloggedIn,
-        formUpdate, 
-        setformUpdate
+        formUpdate,
+        setformUpdate,
       }}
     >
       {props.children}

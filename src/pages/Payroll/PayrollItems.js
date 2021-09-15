@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { salaryAssignmentFormJson } from "../../components/FormJSON/payroll/salary-assignments";
 import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/salary-component";
 import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
@@ -6,32 +6,73 @@ import FormModal from "../../components/Modal/Modal";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalaryStructure from "../../components/payroll-tabs/salary-structure";
+import { useAppContext } from "../../Context/AppContext";
 
 const PayrollItems = () => {
-  const [formType, setformType] = useState('')
-  const [template, settemplate] = useState(salaryComponentsFormJson)
-  const [formValue, setformValue] = useState({})
-  const [submitted, setsubmitted] = useState(false)
-  const [path, setpath] = useState('/personal-details')
+  const [formType, setformType] = useState("");
+  const [template, settemplate] = useState(salaryComponentsFormJson);
+  const [formValue, setformValue] = useState({});
+  const [submitted, setsubmitted] = useState(false);
+  const [path, setpath] = useState("/personal-details");
   const [editData, seteditData] = useState({});
-  useEffect(() => {
-    console.log(formType)
-    if(formType === 'components'){
-      settemplate(salaryComponentsFormJson)
-    }else if(formType === 'structure'){
-      settemplate(salaryStructureFormJson)
-    }else if(formType === 'assignment'){
-      settemplate(salaryAssignmentFormJson)
-    }
-  }, [formType, template])
-  useEffect(() => {
-    if(submitted === true){
-      console.log(formValue)
-      setformValue({})
-      setsubmitted(false)
 
+  const { combineRequest } = useAppContext();
+
+  useEffect(() => {
+    console.log(formType);
+    if (formType === "components") {
+      settemplate(salaryComponentsFormJson);
+    } else if (formType === "structure") {
+      settemplate(salaryStructureFormJson);
+    } else if (formType === "assignment") {
+      settemplate(salaryAssignmentFormJson);
     }
-  }, [formValue])
+  }, [formType, template]);
+  // useEffect(() => {
+  //   if (submitted === true) {
+  //     console.log(formValue);
+  //     setformValue({});
+  //     setsubmitted(false);
+  //   }
+  // }, [formValue]);
+
+  const fetchedCombineRequest = useCallback(() => {
+    combineRequest().then((res) => {
+      console.log(res);
+      const { departments, projects } = res.data.createEmployeeFormSelection;
+      const departmentsOpts = departments?.map((e) => {
+        return {
+          label: e.department,
+          value: e._id,
+        };
+      });
+      const projectsOpts = projects?.map((e) => {
+        return {
+          label: e.project_name,
+          value: e._id,
+        };
+      });
+      const finalForm = template.Fields.map((field) => {
+        if (field.name === "departmentId") {
+          field.options = departmentsOpts;
+          return field;
+        } else if (field.name === "projectId") {
+          field.options = projectsOpts;
+          return field;
+        }
+        return field;
+      });
+      settemplate({
+        title: template.title,
+        Fields: finalForm,
+      });
+      console.log("my template", template);
+    });
+  }, [template, combineRequest]);
+
+  useEffect(() => {
+    fetchedCombineRequest();
+  }, []);
   return (
     <>
       <div className="page-header">
@@ -52,7 +93,11 @@ const PayrollItems = () => {
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
               <li className="nav-item">
-                <a   className="nav-link active"data-toggle="tab" href="#tab_components">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_components"
+                >
                   Salary Components
                 </a>
               </li>
@@ -62,7 +107,11 @@ const PayrollItems = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_assignment">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_assignment"
+                >
                   Salary Assigment
                 </a>
               </li>
@@ -71,11 +120,25 @@ const PayrollItems = () => {
         </div>
       </div>
       <div className="tab-content">
-       <SalaryComponents setformType={setformType} />
-        <SalaryStructure setformType={setformType} />
+        <SalaryComponents
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+        />
+        <SalaryStructure
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+        />
         <SalaryAssignment setformType={setformType} />
       </div>
-      <FormModal editData={editData} setformValue={setformValue} settemplate={settemplate} template={template} setsubmitted={setsubmitted} />
+      <FormModal
+        editData={editData}
+        setformValue={setformValue}
+        settemplate={settemplate}
+        template={template}
+        setsubmitted={setsubmitted}
+      />
     </>
   );
 };
