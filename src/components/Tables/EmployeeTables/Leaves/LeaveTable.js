@@ -12,6 +12,17 @@ const LeavesTable = ({data, columns}) => {
   
     const { SearchBar, ClearSearchButton } = Search;
     const { ExportCSVButton } = CSVExport;
+    const [mobileView, setmobileView] = useState(false);
+    useEffect(() => {
+      window.addEventListener('resize', ()=>{
+        if(window.innerWidth >= 768){
+          setmobileView(false)
+        }else{
+          setmobileView(true)
+        }
+       
+      });
+    }, [mobileView])
     // const [formatted, setformatted] = useState([])
     // const [showClear, setshowClear] = useState(false)
     // const [unfiltered, setunfiltered] = useState([])
@@ -99,7 +110,7 @@ const LeavesTable = ({data, columns}) => {
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes="table  w-100"
+                classes={!mobileView ? "table" : 'table table-responsive' }
                 noDataIndication="Fetching Data..."
                 // defaultSorted={defaultSorted}
               />

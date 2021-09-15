@@ -161,56 +161,12 @@ export const employeeFormJson = {
       title: "Gender",
       options: [
         {
-          name: "employeeType",
-          type: "select",
-          title: "Employment Type",
-          options: [
-            {
-              label: "Apprentice",
-              value: "Apprentice",
-            },
-            {
-              label: "Intern",
-              value: "Intern",
-            },
-            {
-              label: "Commission",
-              value: "Commission",
-            },
-            {
-              label: "Contract",
-              value: "Contract",
-            },
-            {
-              label: "Probation",
-              value: "Probation",
-            },
-            {
-              label: "PartTime",
-              value: "PartTime",
-            },
-            {
-              label: "FullTime",
-              value: "FullTime",
-            },
-          ],
-          required: {
-            value: true,
-            message: "Admin User is required",
-          },
-        },
-        {
-          name: "date_of_joining",
-          type: "date",
-          title: "Date of joining",
-          required: {
-            value: true,
-            message: "Date of joining is required",
-          },
-        },
-        {
           label: "Female",
           value: "female",
+        },
+        {
+          label: "Male",
+          value: "male",
         },
       ],
     },
