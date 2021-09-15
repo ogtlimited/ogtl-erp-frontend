@@ -1,17 +1,13 @@
 export const designation = {
-    title: 'designation Form',
-    Fields: [
-        {
+
+    designation:  {
             name:'designation' ,
             type:'text',
-            title:'Designation Name',
+            label:'Designation Name',
             required:{
                 value:true,
                 message:'Designation Name is required'
             }
-        },
-       
-        
-        
-    ]
+        }
+
 };

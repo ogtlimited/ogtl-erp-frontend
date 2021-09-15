@@ -238,15 +238,7 @@ const LeavesAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              onClick={() => setformMode('add')}
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Leave
-            </a>
+            
           </div>
         </div>
       </div>

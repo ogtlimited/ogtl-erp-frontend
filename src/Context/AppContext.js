@@ -6,8 +6,11 @@ import tokenService from "../services/token.service";
 export default createBrowserHistory();
 const baseURL = "http://localhost:3000";
 const AppContext = createContext();
+
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
+  const [loggedIn, setloggedIn] = useState(false)
+  const [formUpdate, setformUpdate] = useState(null)
   const [showAlertMsg, setshowAlertMsg] = useState({
     state: false,
     msg: "",
@@ -18,17 +21,19 @@ const AppProvider = (props) => {
   useEffect(() => {
     console.log("alert message");
   }, [showAlertMsg]);
+
   useEffect(() => {
-    const token = tokenService.getToken();
-    if (token && allEmployees?.length < 1) {
-      fetchEmployee();
-      fetchEmployeeAttendance();
+    const token = localStorage.getItem('token');
+    if (loggedIn ) {
+      // fetchEmployee();
+      fetchEmployeeAttendance()
     }
-  }, [allEmployees]);
+  }, []);
 
   const fetchEmployee = (employee) => {
     axiosInstance.get("/employees").then((e) => {
       setallEmployees(e?.data?.employees);
+      setloggedIn(false)
     });
   };
   const showAlert = (state, msg, className) => {
@@ -90,6 +95,9 @@ const AppProvider = (props) => {
         showAlertMsg,
         fetchEmployeeAttendance,
         fetchEmployee,
+        setloggedIn,
+        formUpdate, 
+        setformUpdate
       }}
     >
       {props.children}

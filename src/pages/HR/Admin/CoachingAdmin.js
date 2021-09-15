@@ -27,6 +27,9 @@ const CoachingAdmin = () => {
           }
         })
       }
+      useEffect(() => {
+        setformValue(editData)
+      }, [editData])
     useEffect(() => {
         fetchCoachingForms()
         const employeeOpts = allEmployees.map(e => {

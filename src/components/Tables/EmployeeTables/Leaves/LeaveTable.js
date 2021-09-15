@@ -99,7 +99,7 @@ const LeavesTable = ({data, columns}) => {
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes="table table-responsive w-100"
+                classes="table  w-100"
                 noDataIndication="Fetching Data..."
                 // defaultSorted={defaultSorted}
               />
