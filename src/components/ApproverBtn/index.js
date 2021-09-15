@@ -12,6 +12,69 @@ export const ApproverBtn = ({
     setStatus(status);
     setstatusRow(row);
   };
+  if (context === "job_opening") {
+    return (
+      <div className="dropdown action-label text-center">
+        {value === "OPEN" ? (
+          <Link
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+            href="#"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-dot-circle-o text-success"></i> {value}
+          </Link>
+        ) : value === "CLOSED" ? (
+          <Link
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+            href="#"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-dot-circle-o text-danger"></i> {value}
+          </Link>
+        ) : (
+          <Link
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+            href="#"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-dot-circle-o text-primary"></i> OPEN
+          </Link>
+        )}
+
+        <div
+          className="dropdown-menu dropdown-menu-right"
+          x-placement="bottom-end"
+          style={{
+            position: "absolute",
+            willChange: "transform",
+            top: "0px",
+            left: "0px",
+            transform: "translate3d(106px, 31px, 0px)",
+          }}
+        >
+          {context !== "job offer" && (
+            <Link
+              onClick={() => handleStatus("OPEN")}
+              className="dropdown-item"
+              href="#"
+            >
+              <i className="fa fa-dot-circle-o text-primary"></i> OPEN
+            </Link>
+          )}
+          <Link
+            onClick={() => handleStatus("CLOSED")}
+            className="dropdown-item"
+            href="#"
+          >
+            <i className="fa fa-dot-circle-o text-danger"></i> CLOSED
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div className="dropdown action-label text-center">

@@ -73,7 +73,7 @@ const ShiftRequest = () => {
               src={
                 row.employee_id.image
                   ? imageUrl + row.employee_id.image
-                  : row.employee_id.gender == "Male"
+                  : row.employee_id.gender === "Male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
