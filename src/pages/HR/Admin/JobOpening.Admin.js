@@ -24,7 +24,6 @@ const JobOpening = () => {
     axiosInstance
       .get("/api/jobOpening")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -38,7 +37,6 @@ const JobOpening = () => {
   useEffect(() => {
     combineRequest()
       .then((res) => {
-        console.log("form selection", res);
         const { projects, designations } = res.data.createEmployeeFormSelection;
         const projectsOpts = projects?.map((e) => {
           return {
@@ -66,7 +64,6 @@ const JobOpening = () => {
           title: jobOpeningFormJson.title,
           Fields: finalForm,
         });
-        console.log(template);
       })
       .catch((error) => {
         console.log(error);
@@ -75,7 +72,6 @@ const JobOpening = () => {
 
   //create job opening
   useEffect(() => {
-    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/api/jobOpening", formValue)
@@ -87,11 +83,9 @@ const JobOpening = () => {
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error.response.data);
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
-    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete job opening
@@ -99,14 +93,12 @@ const JobOpening = () => {
     axiosInstance
       .delete(`/api/jobOpening/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
@@ -114,8 +106,6 @@ const JobOpening = () => {
   //update jobOpening
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         ...statusRow,
         status: status,
@@ -126,12 +116,10 @@ const JobOpening = () => {
       axiosInstance
         .patch("/api/jobOpening/" + statusRow._id, update)
         .then((res) => {
-          console.log(res);
           fetchJobOpenings();
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error);
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
