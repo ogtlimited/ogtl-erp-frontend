@@ -8,6 +8,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { ApproverBtn } from "../../../components/ApproverBtn";
+import ReactHtmlParser from "react-html-parser";
 
 const JobOpening = () => {
   const [formValue, setFormValue] = useState({});
@@ -170,6 +171,7 @@ const JobOpening = () => {
       text: "Description",
       sort: true,
       headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
     },
     {
       dataField: "",
