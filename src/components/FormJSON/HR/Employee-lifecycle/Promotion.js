@@ -4,7 +4,7 @@ export const promotionFormJson = {
     Fields: [
         {
             name:'employee' ,
-            type:'text',
+            type:'select',
             title:'Employee',
             required:{
                 value:true,
@@ -13,28 +13,12 @@ export const promotionFormJson = {
 
         },
         {
-            name:'status' ,
-            type:'text',
-            title:'Status',
+            name:'newDesignation' ,
+            type:'select',
+            title:'Designation',
 
         },
-        {
-            name:'department' ,
-            type:'text',
-            title:'Department',
-
-        },
-        {
-            name:'branch' ,
-            type:'text',
-            title:'Branch',
-
-        },
-        {
-            name:'promotionDetails' ,
-            type:'text',
-            title:'Promotion Details',
-        },
+       
         {
             name:'promotionDate' ,
             type:'date',

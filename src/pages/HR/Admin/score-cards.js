@@ -1,27 +1,20 @@
-import React, {useEffect, useState} from "react";
-import { Link } from 'react-router-dom'
-import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable'
-import data from '../../../db/promotion.json'
-import { scoreCardsJSON } from '../../../components/FormJSON/HR/Performance/score-cards'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import { scoreCardsJSON } from "../../../components/FormJSON/HR/Performance/score-cards";
 import FormModal from "../../../components/Modal/Modal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import ReactHtmlParser from "react-html-parser";
-import moment from "moment";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const ScoreCards = () => {
-  const [template, setTemplate] = useState(scoreCardsJSON)
-    const [editData, seteditData] = useState({});
-    const [data, setData] = useState([]);
-    const { combineRequest, showAlert } = useAppContext();
-    const [formValue, setFormValue] = useState({});
-    const [submitted, setSubmitted] = useState(false);
-
-    useEffect(()=>{
-      setTemplate(scoreCardsJSON)
-      
-  })
-
+  const [template, setTemplate] = useState(scoreCardsJSON);
+  const [editData, seteditData] = useState({});
+  const [data, setData] = useState([]);
+  const { combineRequest, showAlert } = useAppContext();
+  const [formValue, setFormValue] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const fetchScoreCard = () => {
     axiosInstance
@@ -63,7 +56,6 @@ const ScoreCards = () => {
     });
   }, []);
 
-
   //create score card
   useEffect(() => {
     console.log(submitted);
@@ -73,9 +65,8 @@ const ScoreCards = () => {
         .then((res) => {
           setSubmitted(false);
           fetchScoreCard();
-         
-            console.log(res)
-          // setData((prevData) => [...data, res.data.data]);
+
+          console.log(res);
 
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -87,42 +78,39 @@ const ScoreCards = () => {
     console.log(formValue);
   }, [submitted, formValue]);
 
-
   //delete score card
-const deleteScoreCard = (row) => {
-  axiosInstance
-    .delete(`/scoreCard/${row._id}`)
-    .then((res) => {
-      console.log(res);
-      setData((prevData) =>
-        prevData.filter((pdata) => pdata._id !== row._id)
-      );
-      showAlert(true, res.data.message, "alert alert-success");
-    })
-    .catch((error) => {
-      console.log(error);
-      showAlert(true, error.response.data.message, "alert alert-danger");
-    });
-};
+  const deleteScoreCard = (row) => {
+    axiosInstance
+      .delete(`/scoreCard/${row._id}`)
+      .then((res) => {
+        console.log(res);
+        setData((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
 
-//update score card
-const updateAssets = (row) => {
-  axiosInstance
-    .patch(`/scoreCard/${row._id}`, row)
-    .then((res) => {
-      console.log(res);
-      setData((prevData) => [...data, res.data.data]);
-      fetchScoreCard();
-      showAlert(true, res.data.message, "alert alert-success");
-    })
-    .catch((error) => {
-      console.log(error);
-      showAlert(true, error.response.data.message, "alert alert-danger");
-    });
-};
+  //update score card
+  const updateScoreCard = (row) => {
+    axiosInstance
+      .patch(`/scoreCard/${row._id}`, row)
+      .then((res) => {
+        console.log(res);
+        setData((prevData) => [...data, res.data.data]);
+        fetchScoreCard();
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
 
-
- 
   const columns = [
     {
       dataField: "employee_id",
@@ -132,25 +120,20 @@ const updateAssets = (row) => {
       formatter: (value, row) => (
         <h2>
           {row?.employee_id?.first_name} {row?.employee_id?.last_name}
-
         </h2>
-
       ),
-
     },
 
     {
-      dataField :"company_values_score",
+      dataField: "company_values_score",
       text: "Company Values Score",
-      sort : true,
-      
+      sort: true,
     },
 
     {
-      dataField :"performance_score",
+      dataField: "performance_score",
       text: "Performance Score",
-      sort : true,
-      
+      sort: true,
     },
 
     {
@@ -158,26 +141,45 @@ const updateAssets = (row) => {
       text: "Action",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) =>(
-        <div className="dropdown dropdown-action text-right"><a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown"
-            aria-expanded="false"><i className="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-        <div className="dropdown-menu dropdown-menu-right">
-          <a className="dropdown-item" onClick={() => console.log(row)} href="#" data-toggle="modal"
-                data-target="#edit_employee">
-                  <i className="fa fa-pencil m-r-5"></i> Edit</a>
-                <Link className="dropdown-item" onClick={() => deleteScoreCard(row)}
-                ><i className="fa fa-trash m-r-5"></i> Delete</Link></div>
+      formatter: (val, row) => (
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              onClick={() => console.log(row)}
+              href="#"
+              data-toggle="modal"
+              data-target="#edit_employee"
+            >
+              <i className="fa fa-pencil m-r-5"></i> Edit
+            </a>
+            <Link
+              className="dropdown-item"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
+            >
+              <i className="fa fa-trash m-r-5"></i> Delete
+            </Link>
+          </div>
         </div>
-      )
-    
+      ),
     },
-
-
   ];
 
-    return (
-        <>
-           <div className="page-header">
+  return (
+    <>
+      <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
             <h3 className="page-title">Perfomance</h3>
@@ -193,7 +195,6 @@ const updateAssets = (row) => {
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-             
               data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add Score Card
@@ -202,17 +203,23 @@ const updateAssets = (row) => {
         </div>
       </div>
       <div className="row">
-<div className="col-sm-12">
-    <LeavesTable
-        data={data}
-        columns={columns}
-    />
-</div> 
-</div> 
-<FormModal editData={editData} template={template}  setsubmitted={setSubmitted} setformValue={setFormValue}/>
-        </>
-        
-    )
-}
+        <div className="col-sm-12">
+          <LeavesTable data={data} columns={columns} />
+        </div>
+      </div>
+      <FormModal
+        editData={editData}
+        template={template}
+        setsubmitted={setSubmitted}
+        setformValue={setFormValue}
+      />
+      <ConfirmModal
+        title="Assets"
+        selectedRow={selectedRow}
+        deleteFunction={deleteScoreCard}
+      />
+    </>
+  );
+};
 
-export default ScoreCards
+export default ScoreCards;
