@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { salaryComponentsFormJson } from '../FormJSON/payroll/salary-component'
 import { salaryStructureFormJson } from '../FormJSON/payroll/salary-structure'
 import FormModal from '../Modal/Modal'
+import SalaryStructureModal from '../Modal/SalaryStructureModal'
 import LeavesTable from '../Tables/EmployeeTables/Leaves/LeaveTable'
 
 
@@ -10,6 +11,7 @@ const SalaryStructure = ({setformType}) => {
         console.log(type)
         setformType(type)
       }
+      const [type, settype] = useState(null)
     const [editData, seteditData] = useState({})
     const columns = [
         {
@@ -82,17 +84,23 @@ const SalaryStructure = ({setformType}) => {
        <>
          <div className="tab-pane" id="tab_structure">
         <div className="text-right mb-4 clearfix">
-          <button
-            className="btn btn-primary add-btn"
-            type="button"
-            onClick={() => handleChange('structure')}
-            data-toggle="modal"
-            data-target="#FormModal"
-          >
-            <i className="fa fa-plus"></i> Add Structure
-          </button>
+        <div class="dropdown">
+  <button class="btn btn-secondary btn-primary add-btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  Add Structure
+  <i className="fa fa-plus px-1"></i> 
+  </button>
+  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a className="dropdown-item" onClick={() => settype('Project')}  data-toggle="modal"
+            data-target="#SalaryStructureModal" href="">Project</a>
+    <a className="dropdown-item" onClick={() => settype('Department')}  data-toggle="modal"
+            data-target="#SalaryStructureModal" href="">Department</a>
+   
+  </div>
+</div>
+         
         </div>
         <LeavesTable data={[]} columns={columns} />
+        <SalaryStructureModal type={type} />
         
         </div>
 

@@ -1,0 +1,88 @@
+import axios from 'axios';
+import React, {useState, useEffect} from 'react'
+import ReactQuill from 'react-quill';
+import Select from 'react-select';
+import axiosInstance from '../../services/api';
+const statusOptions = [
+    { value: 'draft', label: 'Draft' },
+    { value: 'submit', label: 'Submit' },
+
+  ];
+const baseURL = "http://15.236.1.91" 
+const AcceptDeclineModal = ({setsubmitAction, reason, setreason, file, setfile}) => {
+    const [showReason, setshowReason] = useState(false)
+    const [upload, setupload] = useState(file)
+    const [wordCount, setwordCount] = useState(0)
+    const [disabled, setdisabled] = useState(true)
+    const handleClick = (e,str) =>{
+        if(str == 'Accepted'){
+            setsubmitAction(str)
+        }else{
+            setshowReason(true)
+        }
+        e.preventDefault();
+
+    }
+    const handleSubmit = (e) =>{
+        setsubmitAction('Rejected')
+        e.preventDefault();
+    }
+    useEffect(() => {
+       setwordCount(reason.split(' ').length)
+       if(reason.split(' ').length >= 30){
+           setdisabled(false)
+       }else{
+           setdisabled(true)
+       }
+    }, [reason])
+    const onFileChange = event => {    
+        // Update the state
+        const formData = new FormData();
+		formData.append('file', event.target.files[0]);
+        console.log(formData.get('file'))
+        axiosInstance.post('/api/employee/upload', formData).then(res =>{
+            console.log(res.data.file_url)
+            setfile('https://erp.outsourceglobal.com'+res.data.file_url)
+        }).catch(err =>{
+            console.log(err)
+        })
+      };
+    return (
+        <div class="modal custom-modal fade show" id="acceptDecline" role="dialog"
+         aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-header">
+                        <h3>Accept / Reject Coaching Form Review</h3>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <div class="row">
+                            <div class="col-6"><a onClick={(e) => handleClick(e,'Accepted')} data-dismiss="modal" class="btn btn-primary continue-btn text-light">Accept</a></div>
+                            <div class="col-6"><a onClick={(e) => setshowReason(true)} class="btn btn-primary cancel-btn text-light">Decline</a>
+                            </div>
+                            {showReason && 
+                                <>
+                                    <div class="col-12 mt-3">
+                                        <ReactQuill value={reason} onChange={(html) => setreason(html)} />
+                                        <small>Minimum of 30 words </small>
+                                        <small className="float-right"> {wordCount} / 30</small>
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                        <input type="file" value={upload} onChange={onFileChange} />
+                                    </div>
+                                    <div class="col-12 mt-3">
+                                    <button disabled={disabled} onClick={(e) => handleSubmit(e)} data-dismiss="modal" class="btn btn-primary btn-block cancel-btn text-light">Submit</button>
+                                    </div>
+                            </>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    )
+}
+
+export default AcceptDeclineModal

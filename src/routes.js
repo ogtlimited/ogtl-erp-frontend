@@ -32,6 +32,7 @@ import PayrollItems from "./pages/Payroll/PayrollItems";
 import ScoreCards from "./pages/HR/Admin/score-cards";
 import Termination from "./pages/HR/Admin/Termination";
 import Resignation from "./pages/HR/Admin/Resignation";
+import CoachingEmployee from "./pages/HR/Users/CoachingEmployee";
 
 // const routes = [{
 //   title: 'Main',
@@ -181,6 +182,12 @@ const routes = [
     title: "Coaching Admin",
     path: "/coaching",
     component: CoachingAdmin,
+    layout: "/admin",
+  },
+  {
+    title: "Coaching Employee",
+    path: "/employee-coaching",
+    component: CoachingEmployee,
     layout: "/admin",
   },
   {

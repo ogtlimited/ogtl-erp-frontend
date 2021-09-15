@@ -1,8 +1,8 @@
+import axios from 'axios'
 import React, {useState} from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useHistory } from 'react-router-dom'
 import { useAppContext } from '../../Context/AppContext'
-import axiosInstance from '../../services/api'
 import tokenService from '../../services/token.service'
 
 const Login = () => {
@@ -11,7 +11,7 @@ const Login = () => {
     const [errorMsg, seterrorMsg] = useState('')
     const {register, handleSubmit, formState: { errors }  } = useForm()
     const onSubmit = (data) =>{
-        axiosInstance.post('/api/login', data).then(res =>{
+        axios.post('http://localhost:3000/api/login', data).then(res =>{
             console.log(res)
             tokenService.setUser(res.data.employee)
             setloggedIn(true)
