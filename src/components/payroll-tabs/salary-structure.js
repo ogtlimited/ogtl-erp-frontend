@@ -162,6 +162,7 @@ const SalaryStructure = ({ setformType, formValue, submitted }) => {
           </button>
         </div>
         <LeavesTable data={data} columns={columns} />
+        {/* <SalaryStructureModa type={type} /> */}
       </div>
     </>
   );

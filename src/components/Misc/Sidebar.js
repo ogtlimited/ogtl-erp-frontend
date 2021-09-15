@@ -394,6 +394,11 @@ const Sidebar = () => {
                   <i className="la la-ticket"></i> <span>Coaching Form</span>
                 </Link>
               </li>
+              <li className="">
+                <Link to="/admin/employee-coaching">
+                  <i className="la la-ticket"></i> <span>Coaching Form</span>
+                </Link>
+              </li>
               {canView("HR") && (
                 <li className="">
                   <Link to="/admin/promotion">
