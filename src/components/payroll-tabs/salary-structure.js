@@ -7,8 +7,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 const SalaryStructure = () => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const [statusRow, setstatusRow] = useState(null);
-  const [status, setStatus] = useState("");
+
   const [type, settype] = useState(null);
 
   const fetchSalaryStructures = () => {
