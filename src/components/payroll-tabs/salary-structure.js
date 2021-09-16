@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "../../Context/AppContext";
+import { Link } from "react-router-dom";
 import axiosInstance from "../../services/api";
-import { salaryStructureFormJson } from "../FormJSON/payroll/salary-structure";
+import SalaryStructureModal from "../Modal/SalaryStructureModal";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
-const SalaryStructure = ({ setformType, formValue, submitted }) => {
-  const handleChange = (type) => {
-    console.log(type);
-    setformType(type);
-  };
+const SalaryStructure = () => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { showAlert } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
+  const [type, settype] = useState(null);
 
   const fetchSalaryStructures = () => {
     axiosInstance
@@ -29,55 +25,6 @@ const SalaryStructure = ({ setformType, formValue, submitted }) => {
   useEffect(() => {
     fetchSalaryStructures();
   }, []);
-
-  // localhost:3000/api/salary-component?projectId=6141f0eb636f25b9428409c3
-
-  // useEffect(() => {
-  //   axiosInstance
-  //     .get("/api/salary-component")
-  //     .then((res) => {
-  //       console.log("salary component", res);
-  //       // const salaryComponentsOpt = res?.data?.data?.map((e) => {
-  //       //   return {
-  //       //     label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
-  //       //     value: e._id,
-  //       //   };
-  //       // });
-
-  //       // const finalForm = salaryStructureFormJson.Fields.map((field) => {
-  //       //   if (field.name === "job_applicant_id") {
-  //       //     field.options = salaryComponentsOpt;
-  //       //     return field;
-  //       //   }
-  //       //   return field;
-  //       // });
-  //       // setTemplate({
-  //       //   title: salaryStructureFormJson.title,
-  //       //   Fields: finalForm,
-  //       // });
-  //       // console.log(template);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
-  useEffect(() => {
-    if (submitted === true) {
-      console.log(formValue);
-      // axiosInstance
-      //   .post("/api/salary-component", formValue)
-      //   .then((res) => {
-      //     console.log(res);
-      //     fetchSalaryStructures();
-      //     showAlert(true, "Salary structure created.", "alert alert-success");
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     showAlert(true, error?.response?.data?.message, "alert alert-danger");
-      //   });
-    }
-  }, [submitted, formValue]);
 
   const columns = [
     {
@@ -110,22 +57,35 @@ const SalaryStructure = ({ setformType, formValue, submitted }) => {
       dataField: "earnings",
       text: "Earnings",
       sort: true,
+      formatter: (val, row) => (
+        <>
+          {row?.earnings.map((earn) => (
+            <p>
+              {earn?.title} - ₦{earn?.amount}
+            </p>
+          ))}
+        </>
+      ),
     },
     {
       dataField: "deductions",
       text: "Deductions",
       sort: true,
-    },
-
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
+      formatter: (val, row) => (
+        <>
+          {row?.deductions.map((deduction) => (
+            <p>
+              {deduction?.title} - ₦{deduction?.amount}
+            </p>
+          ))}
+        </>
+      ),
     },
     {
       dataField: "netPay",
       text: "Net Pay",
       sort: true,
+      formatter: (val, row) => <p>{row?.netPay || "Not Available"}</p>,
     },
     {
       dataField: "",
@@ -136,33 +96,50 @@ const SalaryStructure = ({ setformType, formValue, submitted }) => {
         lineHeight: "16px",
       },
     },
-    // {
-    //   dataField: "over_time",
-    //   text: "Overtime",
-    //   headerStyle: { minWidth: "100px" },
-    //   sort: true,
-    //   style: {
-    //     fontSize: "12px",
-    //     lineHeight: "16px",
-    //   },
-    //},
   ];
   return (
     <>
       <div className="tab-pane" id="tab_structure">
         <div className="text-right mb-4 clearfix">
-          <button
-            className="btn btn-primary add-btn"
-            type="button"
-            onClick={() => handleChange("structure")}
-            data-toggle="modal"
-            data-target="#FormModal"
-          >
-            <i className="fa fa-plus"></i> Add Structure
-          </button>
+          <div className="dropdown">
+            <button
+              className="btn btn-secondary btn-primary add-btn "
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Add Structure
+              <i className="fa fa-plus px-1"></i>
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <Link
+                className="dropdown-item"
+                onClick={() => settype("projectId")}
+                data-toggle="modal"
+                data-target="#SalaryStructureModal"
+                href=""
+              >
+                Project
+              </Link>
+              <Link
+                className="dropdown-item"
+                onClick={() => settype("departmentId")}
+                data-toggle="modal"
+                data-target="#SalaryStructureModal"
+                href=""
+              >
+                Department
+              </Link>
+            </div>
+          </div>
         </div>
         <LeavesTable data={data} columns={columns} />
-        {/* <SalaryStructureModa type={type} /> */}
+        <SalaryStructureModal
+          type={type}
+          fetchSalaryStructures={fetchSalaryStructures}
+        />
       </div>
     </>
   );
