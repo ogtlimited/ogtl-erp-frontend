@@ -85,7 +85,7 @@ const SalaryStructure = () => {
       dataField: "netPay",
       text: "Net Pay",
       sort: true,
-      formatter: (val, row) => <p>{row?.netPay || "Not Available"}</p>,
+      formatter: (val, row) => <p>₦{row?.netPay}</p>,
     },
     {
       dataField: "",
