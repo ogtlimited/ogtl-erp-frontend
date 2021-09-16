@@ -125,12 +125,8 @@ const PayrollItems = () => {
           submitted={submitted}
           formValue={formValue}
         />
-        <SalaryStructure
-          setformType={setformType}
-          submitted={submitted}
-          formValue={formValue}
-        />
-        <SalaryAssignment setformType={setformType} />
+        <SalaryStructure />
+        <SalaryAssignment />
       </div>
       <FormModal
         editData={editData}

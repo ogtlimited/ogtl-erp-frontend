@@ -1,98 +1,113 @@
-import React, {useState} from 'react'
-import { salaryAssignmentFormJson } from '../FormJSON/payroll/salary-assignments'
-import FormModal from '../Modal/Modal'
-import LeavesTable from '../Tables/EmployeeTables/Leaves/LeaveTable'
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
 
-const SalaryAssignment = ({setformType}) => {
-    const [editData, seteditData] = useState({})
-    const handleChange = (type) =>{
-        console.log(type)
-        setformType(type)
-      }
-    const columns = [
-        {
-          dataField: "title",
-          text: "Title",
-          sort: true,
-          headerStyle: { minWidth: "300px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-          formatter: (val, row) => <p>{new Date(val).toLocaleDateString()}</p>,
-        },
-        {
-          dataField: "amount",
-          text: "Amount",
-          sort: true,
-          headerStyle: { minWidth: "200px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-          formatter: (val, row) => <p>{new Date(val).toLocaleTimeString()}</p>,
-        },
-        {
-          dataField: "type",
-          text: "Type",
-          sort: true,
-          headerStyle: { width: "200px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-          formatter: (val, row) => (
-            <p>{val && new Date(val).toLocaleTimeString()}</p>
-          ),
-        },
-        {
-          dataField: "description",
-          text: "Description",
-          sort: true,
-          headerStyle: { width: "300px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-        },
-        {
-          dataField: "",
-          text: "",
-          headerStyle: { minWidth: "200px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "16px",
-          },
-        },
-        // {
-        //   dataField: "over_time",
-        //   text: "Overtime",
-        //   headerStyle: { minWidth: "100px" },
-        //   sort: true,
-        //   style: {
-        //     fontSize: "12px",
-        //     lineHeight: "16px",
-        //   },
-        //},
-      ];
-    return (
-        <div className="tab-pane" id="tab_assignment">
+import SalaryAssignmentModal from "../Modal/SalaryAssignmentModal";
+import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
+
+const SalaryAssignment = () => {
+  const [editData, seteditData] = useState({});
+  const [data, setData] = useState([]);
+  const { combineRequest } = useAppContext();
+  const [employeeOpts, setEmployeeOpts] = useState([]);
+
+  const fetchSalaryAssignments = (ogid) => {
+    axiosInstance
+      .get(`/api/salary-structure-assignment?ogId=${ogid}`)
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  };
+
+  useEffect(() => {
+    combineRequest().then((res) => {
+      console.log(res);
+      const { employees } = res.data.createEmployeeFormSelection;
+      const employeeOpts = employees?.map((e) => {
+        return {
+          label: `${e.first_name} ${e.last_name}`,
+          value: e.ogid,
+        };
+      });
+      setEmployeeOpts(employeeOpts);
+    });
+  }, []);
+
+  const columns = [
+    {
+      dataField: "employeeId",
+      text: "Employee",
+      sort: true,
+      headerStyle: { minWidth: "300px" },
+      formatter: (val, row) => (
+        <p>
+          {row?.employeeId?.first_name} {row?.employeeId?.last_name}
+        </p>
+      ),
+    },
+    {
+      dataField: "salaryStructureId",
+      text: "Salary Structure",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+
+      formatter: (val, row) => <p>{row?.salaryStructureId?.title}</p>,
+    },
+    {
+      dataField: "fromDate",
+      text: "Assignment Date",
+      sort: true,
+      headerStyle: { width: "200px" },
+
+      formatter: (val, row) => <p>{moment(row?.fromData).format("L")}</p>,
+    },
+
+    {
+      dataField: "",
+      text: "",
+      headerStyle: { minWidth: "200px" },
+      style: {
+        fontSize: "12px",
+        lineHeight: "16px",
+      },
+    },
+  ];
+  return (
+    <>
+      <div className="tab-pane" id="tab_assignment">
         <div className="text-right mb-4 clearfix">
           <button
             className="btn btn-primary add-btn"
             type="button"
-            onClick={() => handleChange('assignment')}
             data-toggle="modal"
-            data-target="#FormModal"
+            data-target="#SalaryAssignmentModal"
           >
             <i className="fa fa-plus"></i> Add Assignment
           </button>
         </div>
-
-        <LeavesTable data={[]} columns={columns} />
+        <div className="col-12 mb-2">
+          <Select
+            defaultValue={[]}
+            onChange={(val) => fetchSalaryAssignments(val?.value)}
+            options={employeeOpts}
+            placeholder="Filter Employees"
+            isClearable={true}
+            style={{ display: "inline-block" }}
+            // formatGroupLabel={formatGroupLabel}
+          />
         </div>
-    
-    )
-}
 
-export default SalaryAssignment
+        <LeavesTable data={data} columns={columns} />
+      </div>
+      <SalaryAssignmentModal />
+    </>
+  );
+};
+
+export default SalaryAssignment;
