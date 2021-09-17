@@ -1,29 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosInstance from "../../services/api";
 import SalaryStructureModal from "../Modal/SalaryStructureModal";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
-const SalaryStructure = () => {
+const SalaryStructure = ({ data, fetchSalaryStructures }) => {
   const [editData, seteditData] = useState({});
-  const [data, setData] = useState([]);
 
   const [type, settype] = useState(null);
-
-  const fetchSalaryStructures = () => {
-    axiosInstance
-      .get("/api/salary-structure")
-      .then((res) => {
-        console.log(res);
-        setData(res.data.data);
-      })
-      .catch((error) => {
-        console.log(error?.response);
-      });
-  };
-  useEffect(() => {
-    fetchSalaryStructures();
-  }, []);
 
   const columns = [
     {
