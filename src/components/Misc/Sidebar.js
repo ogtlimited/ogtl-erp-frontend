@@ -105,7 +105,7 @@ const Sidebar = () => {
                 </a>
                 <ul style={dNone}>
                   <li>
-                    <Link to="/blue/email/inbox">Email</Link>
+                    <Link to="/admin/email">Email</Link>
                   </li>
                   <li>
                     <Link className="" to="/apps/file-manager">

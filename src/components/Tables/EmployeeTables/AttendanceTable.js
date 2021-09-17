@@ -28,9 +28,6 @@ const AdminAttendanceTable = ({
   columns,
   designation
 }) => {
-    console.log(data)
-    console.log(departments)
-    console.log(designation)
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
   const females = [female, female2, female3];
@@ -64,6 +61,7 @@ const AdminAttendanceTable = ({
   //    console.log(data)
 
   useEffect(() => {
+      console.log(data)
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
@@ -81,7 +79,7 @@ const AdminAttendanceTable = ({
   
   return (
     <>
-    {true && (
+    {data && (
         <ToolkitProvider
           keyField="id"
           data={data}

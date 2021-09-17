@@ -7,8 +7,10 @@ import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalaryStructure from "../../components/payroll-tabs/salary-structure";
 import { useAppContext } from "../../Context/AppContext";
-
+import $ from 'jquery'
 const PayrollItems = () => {
+  
+  $(document).trigger("enhance");
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(salaryComponentsFormJson);
   const [formValue, setformValue] = useState({});

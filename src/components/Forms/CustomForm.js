@@ -1,5 +1,6 @@
 import React from "react";
 import ReactQuill from "react-quill";
+import InputMask from 'react-input-mask';
 import "react-quill/dist/quill.snow.css";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
@@ -50,16 +51,19 @@ const CustomForm = ({ template, data, handleform }) => {
                   {title}{" "}
                   <span style={required?.value ? { color: "red" } : {}}>*</span>
                 </label>
+                {/* <InputMask className="form-control" {...register(name)} mask="999" maskChar=" " />; */}
                 <input
                   {...register(name)}
                   className="form-control"
                   type="number"
+                  pattern="[0-9]*" data-politespace data-grouplength="3" data-delimiter="," data-reverse
                 />
               </div>
               {errors[name] && <small>{errors[name].message}</small>}
             </div>
           );
-        case "password":
+        
+          case "password":
           return (
             <div className="col-sm-6">
               <div className="form-group">

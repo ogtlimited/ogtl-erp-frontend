@@ -208,6 +208,9 @@ const Profile = () => {
                           <div className="text">
                             {userData?.employee?.default_shift?.shift_name ||
                               "Not Available"}
+                            <a href="#" class="btn btn-custom  float-right mb-2" role="button">Request Shift</a>
+                          </div>
+                          <div className="text">
                           </div>
                         </li>
                         <li>
