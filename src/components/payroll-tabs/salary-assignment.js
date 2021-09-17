@@ -7,7 +7,7 @@ import axiosInstance from "../../services/api";
 import SalaryAssignmentModal from "../Modal/SalaryAssignmentModal";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
-const SalaryAssignment = () => {
+const SalaryAssignment = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const { combineRequest } = useAppContext();
@@ -65,7 +65,7 @@ const SalaryAssignment = () => {
       sort: true,
       headerStyle: { width: "200px" },
 
-      formatter: (val, row) => <p>{moment(row?.fromData).format("L")}</p>,
+      formatter: (val, row) => <p>{moment(row?.fromDate).format("L")}</p>,
     },
 
     {
@@ -105,7 +105,7 @@ const SalaryAssignment = () => {
 
         <LeavesTable data={data} columns={columns} />
       </div>
-      <SalaryAssignmentModal />
+      <SalaryAssignmentModal salaryStructure={salaryStructure} />
     </>
   );
 };

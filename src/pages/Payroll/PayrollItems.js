@@ -7,16 +7,17 @@ import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalaryStructure from "../../components/payroll-tabs/salary-structure";
 import { useAppContext } from "../../Context/AppContext";
-import $ from 'jquery'
+import axiosInstance from "../../services/api";
+
 const PayrollItems = () => {
   
-  $(document).trigger("enhance");
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(salaryComponentsFormJson);
   const [formValue, setformValue] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [path, setpath] = useState("/personal-details");
   const [editData, seteditData] = useState({});
+  const [data, setData] = useState([]);
 
   const { combineRequest } = useAppContext();
 
@@ -67,6 +68,21 @@ const PayrollItems = () => {
 
   useEffect(() => {
     fetchedCombineRequest();
+  }, []);
+
+  const fetchSalaryStructures = () => {
+    axiosInstance
+      .get("/api/salary-structure")
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  };
+  useEffect(() => {
+    fetchSalaryStructures();
   }, []);
   return (
     <>
@@ -120,8 +136,11 @@ const PayrollItems = () => {
           submitted={submitted}
           formValue={formValue}
         />
-        <SalaryStructure />
-        <SalaryAssignment />
+        <SalaryStructure
+          data={data}
+          fetchSalaryStructures={fetchSalaryStructures}
+        />
+        <SalaryAssignment salaryStructure={data} />
       </div>
       <FormModal
         editData={editData}
