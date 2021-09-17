@@ -5,7 +5,7 @@ import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
-const SalaryAssignmentModal = () => {
+const SalaryAssignmentModal = ({ salaryStructure }) => {
   const { combineRequest, showAlert } = useAppContext();
   const [formOptions, setFormOptions] = useState([]);
   const [employeeOpts, setEmployeeOpts] = useState([]);
@@ -17,22 +17,14 @@ const SalaryAssignmentModal = () => {
   };
 
   useEffect(() => {
-    axiosInstance
-      .get("/api/salary-structure")
-      .then((res) => {
-        console.log(res);
-        const salaryStructures = res.data.data.map((e) => {
-          return {
-            label: e.title,
-            value: e._id,
-          };
-        });
-        setFormOptions(salaryStructures);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    const salaruStruc = salaryStructure.map((e) => {
+      return {
+        label: e.title,
+        value: e._id,
+      };
+    });
+    setFormOptions(salaruStruc);
+  }, [salaryStructure]);
 
   useEffect(() => {
     combineRequest().then((res) => {
