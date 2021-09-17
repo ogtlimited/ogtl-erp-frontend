@@ -32,6 +32,7 @@ const AppProvider = (props) => {
 
   const fetchEmployee = (employee) => {
     axiosInstance.get("/employees").then((e) => {
+      console.log(e)
       setallEmployees(e?.data?.employees);
       setloggedIn(false)
     });
