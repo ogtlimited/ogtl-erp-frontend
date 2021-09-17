@@ -1,111 +1,147 @@
-import React, {useState} from 'react'
-import { salaryComponentsFormJson } from '../FormJSON/payroll/salary-component'
-import { salaryStructureFormJson } from '../FormJSON/payroll/salary-structure'
-import FormModal from '../Modal/Modal'
-import SalaryStructureModal from '../Modal/SalaryStructureModal'
-import LeavesTable from '../Tables/EmployeeTables/Leaves/LeaveTable'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axiosInstance from "../../services/api";
+import SalaryStructureModal from "../Modal/SalaryStructureModal";
+import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
+const SalaryStructure = () => {
+  const [editData, seteditData] = useState({});
+  const [data, setData] = useState([]);
 
-const SalaryStructure = ({setformType}) => {
-    const handleChange = (type) =>{
-        console.log(type)
-        setformType(type)
-      }
-      const [type, settype] = useState(null)
-    const [editData, seteditData] = useState({})
-    const columns = [
-        {
-            dataField: "earnings",
-            text: "Earnings",
-            sort: true,
-            headerStyle: { width: "200px" },
-            style: {
-              fontSize: "12px",
-              lineHeight: "18px",
-            },
-            formatter: (val, row) => (
-              <p>{val && new Date(val).toLocaleTimeString()}</p>
-            ),
-          },
-        {
-          dataField: "deductions",
-          text: "Deductions",
-          sort: true,
-          headerStyle: { minWidth: "200px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-          formatter: (val, row) => <p>{new Date(val).toLocaleTimeString()}</p>,
-        },
-      
-        {
-            dataField: "status",
-            text: "Status",
-            sort: true,
-            headerStyle: { minWidth: "300px" },
-            style: {
-              fontSize: "12px",
-              lineHeight: "18px",
-            },
-            formatter: (val, row) => <p>{new Date(val).toLocaleDateString()}</p>,
-          },
-        {
-          dataField: "netPay",
-          text: "Net Pay",
-          sort: true,
-          headerStyle: { width: "300px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "18px",
-          },
-        },
-        {
-          dataField: "",
-          text: "",
-          headerStyle: { minWidth: "200px" },
-          style: {
-            fontSize: "12px",
-            lineHeight: "16px",
-          },
-        },
-        // {
-        //   dataField: "over_time",
-        //   text: "Overtime",
-        //   headerStyle: { minWidth: "100px" },
-        //   sort: true,
-        //   style: {
-        //     fontSize: "12px",
-        //     lineHeight: "16px",
-        //   },
-        //},
-      ];
-    return (
-       <>
-         <div className="tab-pane" id="tab_structure">
+  const [type, settype] = useState(null);
+
+  const fetchSalaryStructures = () => {
+    axiosInstance
+      .get("/api/salary-structure")
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  };
+  useEffect(() => {
+    fetchSalaryStructures();
+  }, []);
+
+  const columns = [
+    {
+      dataField: "title",
+      text: "Title",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+    },
+    {
+      dataField: "projectId",
+      text: "Project",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+
+      formatter: (val, row) => (
+        <p>{row?.projectId?.project_name || "Not Available"}</p>
+      ),
+    },
+    {
+      dataField: "departmentId",
+      text: "Department",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+
+      formatter: (val, row) => (
+        <p>{row?.departmentId?.department || "Not Available"}</p>
+      ),
+    },
+    {
+      dataField: "earnings",
+      text: "Earnings",
+      sort: true,
+      formatter: (val, row) => (
+        <>
+          {row?.earnings.map((earn) => (
+            <p>
+              {earn?.title} - ₦{earn?.amount}
+            </p>
+          ))}
+        </>
+      ),
+    },
+    {
+      dataField: "deductions",
+      text: "Deductions",
+      sort: true,
+      formatter: (val, row) => (
+        <>
+          {row?.deductions.map((deduction) => (
+            <p>
+              {deduction?.title} - ₦{deduction?.amount}
+            </p>
+          ))}
+        </>
+      ),
+    },
+    {
+      dataField: "netPay",
+      text: "Net Pay",
+      sort: true,
+      formatter: (val, row) => <p>₦{row?.netPay}</p>,
+    },
+    {
+      dataField: "",
+      text: "",
+
+      style: {
+        fontSize: "12px",
+        lineHeight: "16px",
+      },
+    },
+  ];
+  return (
+    <>
+      <div className="tab-pane" id="tab_structure">
         <div className="text-right mb-4 clearfix">
-        <div class="dropdown">
-  <button class="btn btn-secondary btn-primary add-btn " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  Add Structure
-  <i className="fa fa-plus px-1"></i> 
-  </button>
-  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a className="dropdown-item" onClick={() => settype('Project')}  data-toggle="modal"
-            data-target="#SalaryStructureModal" href="">Project</a>
-    <a className="dropdown-item" onClick={() => settype('Department')}  data-toggle="modal"
-            data-target="#SalaryStructureModal" href="">Department</a>
-   
-  </div>
-</div>
-         
+          <div className="dropdown">
+            <button
+              className="btn btn-secondary btn-primary add-btn "
+              type="button"
+              id="dropdownMenuButton"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Add Structure
+              <i className="fa fa-plus px-1"></i>
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <Link
+                className="dropdown-item"
+                onClick={() => settype("projectId")}
+                data-toggle="modal"
+                data-target="#SalaryStructureModal"
+                href=""
+              >
+                Project
+              </Link>
+              <Link
+                className="dropdown-item"
+                onClick={() => settype("departmentId")}
+                data-toggle="modal"
+                data-target="#SalaryStructureModal"
+                href=""
+              >
+                Department
+              </Link>
+            </div>
+          </div>
         </div>
-        <LeavesTable data={[]} columns={columns} />
-        <SalaryStructureModal type={type} />
-        
-        </div>
+        <LeavesTable data={data} columns={columns} />
+        <SalaryStructureModal
+          type={type}
+          fetchSalaryStructures={fetchSalaryStructures}
+        />
+      </div>
+    </>
+  );
+};
 
-       </>
-    )
-}
-
-export default SalaryStructure
+export default SalaryStructure;

@@ -105,7 +105,9 @@ export const ApproverBtn = ({
           >
             <i className="fa fa-dot-circle-o text-primary"></i> {value}
           </Link>
-        ) : value === "Replied" && context !== "job offer" ? (
+        ) : value === "Replied" &&
+          context !== "job offer" &&
+          context !== "salary_component" ? (
           <Link
             className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
             href="#"
@@ -113,6 +115,15 @@ export const ApproverBtn = ({
             aria-expanded="false"
           >
             <i className="fa fa-dot-circle-o text-purple"></i> Replied
+          </Link>
+        ) : value === "Pending" && context === "salary_component" ? (
+          <Link
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+            href="#"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-dot-circle-o text-purple"></i> Pending
           </Link>
         ) : (
           <Link
@@ -163,7 +174,7 @@ export const ApproverBtn = ({
             <i className="fa fa-dot-circle-o text-success"></i>
             Accepted
           </Link>
-          {context !== "job offer" && (
+          {context !== "job offer" && context !== "salary_component" && (
             <Link
               onClick={() => handleStatus("Replied")}
               className="dropdown-item"
@@ -179,6 +190,15 @@ export const ApproverBtn = ({
               href="#"
             >
               <i className="fa fa-dot-circle-o text-info"></i> Awaiting Response
+            </Link>
+          )}
+          {context === "salary_component" && (
+            <Link
+              onClick={() => handleStatus("Pending")}
+              className="dropdown-item"
+              href="#"
+            >
+              <i className="fa fa-dot-circle-o text-info"></i> Pending
             </Link>
           )}
         </div>
