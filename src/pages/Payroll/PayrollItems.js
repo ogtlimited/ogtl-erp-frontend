@@ -28,13 +28,6 @@ const PayrollItems = () => {
       settemplate(salaryAssignmentFormJson);
     }
   }, [formType, template]);
-  // useEffect(() => {
-  //   if (submitted === true) {
-  //     console.log(formValue);
-  //     setformValue({});
-  //     setsubmitted(false);
-  //   }
-  // }, [formValue]);
 
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
