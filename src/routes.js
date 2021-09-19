@@ -350,7 +350,7 @@ const routes = [
   },
   {
     title: "Payslip",
-    path: "/payslip",
+    path: "/payslip/:id",
     name: "Dashboard",
     component: PaySlip,
     layout: "/admin",

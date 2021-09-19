@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import tokenService from "../../../services/token.service";
 
 const PersonalInfo = ({
   handleChange,
@@ -13,6 +14,8 @@ const PersonalInfo = ({
 }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
+  const user = tokenService.getUser();
+
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
@@ -37,7 +40,7 @@ const PersonalInfo = ({
       <div className="card-body">
         <h3 className="card-title">
           Personal Informations{" "}
-          {id === personalDetails?.employee?._id && (
+          {id === user?._id && (
             <Link
               onClick={() => handleChange("PersonalDetails")}
               className="edit-icon"

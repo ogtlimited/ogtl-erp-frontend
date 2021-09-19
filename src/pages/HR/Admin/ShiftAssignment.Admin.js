@@ -144,9 +144,9 @@ const ShiftAssignment = () => {
             <img
               alt=""
               src={
-                row.employee_id.image
-                  ? imageUrl + row.employee_id.image
-                  : row.employee_id.gender === "male"
+                row?.employee_id?.image
+                  ? imageUrl + row?.employee_id?.image
+                  : row?.employee_id?.gender === "male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }

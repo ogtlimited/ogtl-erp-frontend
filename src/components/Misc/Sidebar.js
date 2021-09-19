@@ -243,12 +243,12 @@ const Sidebar = () => {
                     </li>
                   )}
 
-                  <li>
+                  {/* <li>
                     <Link className="" to="/admin/payslip">
                       {" "}
                       Payslip{" "}
                     </Link>
-                  </li>
+                  </li> */}
 
                   {canView("HR") && (
                     <li>
@@ -332,8 +332,6 @@ const Sidebar = () => {
                         Job Offer{" "}
                       </Link>
                     </li>
-                    
-                   
                   </ul>
                 </li>
               )}

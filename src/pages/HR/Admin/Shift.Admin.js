@@ -20,7 +20,7 @@ const ShiftAdmin = () => {
   useEffect(() => {
     fetchTypesShift()
       .then((res) => {
-        console.log("Shift types response", res);
+        console.log("Shift types response", typeof res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {

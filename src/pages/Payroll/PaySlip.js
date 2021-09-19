@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/img/outsource.png";
 // import PageHeader from "../../components/page-header";
 import Pdf from "react-to-pdf";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
+import axiosInstance from "../../services/api";
+import moment from "moment";
+import { formatter } from "../../services/numberFormatter";
 const ref = React.createRef();
 const options = {
   // orientation: 'port',
@@ -30,6 +33,22 @@ const RightSide = () => {
 };
 const PaySlip = () => {
   const breadcrumb = "Payslip";
+  const { id } = useParams();
+  const location = useLocation();
+  const [paySlip, setPaySlip] = useState(null);
+  useEffect(() => {
+    const fetchPaySlip = async () => {
+      try {
+        const res = await axiosInstance.get(`/api/salary-slip/${id}`);
+        console.log(res);
+        setPaySlip(res.data.data.employeeSlip);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchPaySlip();
+  }, [id]);
+
   return (
     <>
       <div className="page-header">
@@ -59,7 +78,10 @@ const PaySlip = () => {
         <div className="col-md-10 mt-5">
           <div className="card px-5 ">
             <div className="card-body">
-              <h4 className="payslip-title">Payslip for the month of Feb 2019</h4>
+              <h4 className="payslip-title">
+                Payslip for the month of{" "}
+                {moment(paySlip?.createdAt).format("MMMM YYYY")}
+              </h4>
               <div className="row">
                 <div className="col-sm-6 m-b-20">
                   <img src={logo} className="inv-logo" alt="" />
@@ -72,10 +94,14 @@ const PaySlip = () => {
 
                 <div className="col-sm-6 mb-20">
                   <div className="invoice-details">
-                    <h3 className="text-uppercase">Payslip #49029</h3>
+                    <h3 className="text-uppercase">Payslip</h3>
                     <ul className="list-unstyled">
                       <li>
-                        Salary Month: <span>March, 2019</span>
+                        Salary Month:{" "}
+                        <span>
+                          {" "}
+                          {moment(paySlip?.createdAt).format("MMMM, YYYY")}
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -86,14 +112,21 @@ const PaySlip = () => {
                   <ul className="list-unstyled">
                     <li>
                       <h5 className="mb-0">
-                        <strong>Sir Abubakar</strong>
+                        <strong>
+                          {location?.state?.employee?.first_name}{" "}
+                          {location?.state?.employee?.middle_name}{" "}
+                          {location?.state?.employee?.last_name}
+                        </strong>
                       </h5>
                     </li>
+                    <li>{/* <span>Web Designer</span> */}</li>
+                    <li>Employee ID: {location?.state?.employee?.ogid}</li>
                     <li>
-                      <span>Web Designer</span>
+                      Joining Date:{" "}
+                      {moment(
+                        location?.state?.employee?.date_of_joining
+                      ).format("L")}
                     </li>
-                    <li>Employee ID: OG-1950</li>
-                    <li>Joining Date: 1 Jan 2013</li>
                   </ul>
                 </div>
               </div>
@@ -105,38 +138,18 @@ const PaySlip = () => {
                     </h4>
                     <table className="table table-bordered">
                       <tbody>
-                        <tr>
-                          <td>
-                            <strong>Basic Salary</strong>{" "}
-                            <span className="float-right">₦6500</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <strong>Hospital Allowance (H.R.A.)</strong>{" "}
-                            <span className="float-right">₦55</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <strong>Work from home</strong>{" "}
-                            <span className="float-right">₦55</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <strong>Other Allowance</strong>{" "}
-                            <span className="float-right">₦55</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <strong>Total Earnings</strong>{" "}
-                            <span className="float-right">
-                              <strong>₦55</strong>
-                            </span>
-                          </td>
-                        </tr>
+                        {paySlip?.salaryStructure?.earnings.map(
+                          (earning, index) => (
+                            <tr key={index}>
+                              <td>
+                                <strong>{earning?.title}</strong>{" "}
+                                <span className="float-right">
+                                  {formatter.format(earning?.amount)}
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -148,35 +161,55 @@ const PaySlip = () => {
                     </h4>
                     <table className="table table-bordered">
                       <tbody>
+                        {paySlip?.salaryStructure?.deductions.map(
+                          (deduction, index) => (
+                            <tr key={index}>
+                              <td>
+                                <strong>{deduction?.title}</strong>{" "}
+                                <span className="float-right">
+                                  {formatter.format(deduction?.amount)}
+                                </span>
+                              </td>
+                            </tr>
+                          )
+                        )}
                         <tr>
                           <td>
-                            <strong>Tax Deducted at Source (T.D.S.)</strong>{" "}
-                            <span className="float-right">₦0</span>
+                            <strong>NCNS</strong>{" "}
+                            <span className="float-right">
+                              {formatter.format(
+                                paySlip?.additionalDeductions?.NCNS
+                              )}
+                            </span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Absent</strong>{" "}
-                            <span className="float-right">₦0</span>
+                            <span className="float-right">
+                              {formatter.format(
+                                paySlip?.additionalDeductions?.absent
+                              )}
+                            </span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Lateness</strong>{" "}
-                            <span className="float-right">₦0</span>
+                            <span className="float-right">
+                              {formatter.format(
+                                paySlip?.additionalDeductions?.lateness
+                              )}
+                            </span>
                           </td>
                         </tr>
                         <tr>
                           <td>
                             <strong>Loan</strong>{" "}
-                            <span className="float-right">₦300</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <strong>Total Deductions</strong>{" "}
                             <span className="float-right">
-                              <strong>₦59698</strong>
+                              {formatter.format(
+                                paySlip?.additionalDeductions?.loan || 0
+                              )}
                             </span>
                           </td>
                         </tr>
@@ -186,8 +219,9 @@ const PaySlip = () => {
                 </div>
                 <div className="col-sm-12">
                   <p>
-                    <strong>Net Salary: ₦59698</strong> (Fifty nine thousand six
-                    hundred and ninety eight only.)
+                    <strong>
+                      Net Salary: {formatter.format(paySlip?.netPay)}
+                    </strong>
                   </p>
                 </div>
               </div>
