@@ -93,13 +93,17 @@ const EmployeeReport = () => {
       dataField: "department",
       text: "Department",
       sort: true,
-      formatter: (value, row) => <h2>{row?.department?.department}</h2>,
+      formatter: (value, row) => (
+        <h2>{row?.department?.department || "Not Available"}</h2>
+      ),
     },
     {
       dataField: "designation",
       text: "Designation",
       sort: true,
-      formatter: (value, row) => <h2>{row?.designation?.designation}</h2>,
+      formatter: (value, row) => (
+        <h2>{row?.designation?.designation || "Not Available"}</h2>
+      ),
     },
     {
       dataField: "gender",

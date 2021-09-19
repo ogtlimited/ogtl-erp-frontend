@@ -34,42 +34,36 @@ const AttendanceAdmin = () => {
   ];
   const columns = [
     {
-      dataField: "createdAt",
-      text: "Date",
+      dataField: "",
+      text: "Employee",
       sort: true,
       headerStyle: { minWidth: "200px" },
       style: {
         fontSize: "12px",
         lineHeight: "18px",
       },
-      formatter: (val, row) => <p>{new Date(val).toLocaleDateString()}</p>,
+      formatter: (value, row) => (
+        <h2 class="table-avatar">
+          <Link to={`/admin/profile-dashboard/${row._id}`}>
+            {row.first_name} {row.last_name}{" "}
+            <span>{row?.designation?.designation}</span>
+          </Link>
+        </h2>
+      )
     },
+
     {
-      dataField: "clockInTime",
-      text: "Punch In",
-      sort: true,
-      headerStyle: { minWidth: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "18px",
-      },
-      formatter: (val, row) => <p>{new Date(val).toLocaleTimeString()}</p>,
-    },
-    {
-      dataField: "clockOutTime",
-      text: "Punch Out",
+      dataField: "attendance.daysWorked",
+      text: "Total Days",
       sort: true,
       headerStyle: { width: "200px" },
       style: {
         fontSize: "12px",
         lineHeight: "18px",
       },
-      formatter: (val, row) => (
-        <p>{val && new Date(val).toLocaleTimeString()}</p>
-      ),
     },
     {
-      dataField: "hoursWorked",
+      dataField: "attendance.total_hours",
       text: "Total Hours",
       sort: true,
       headerStyle: { width: "200px" },
@@ -79,10 +73,20 @@ const AttendanceAdmin = () => {
       },
     },
     {
-      dataField: "break",
-      text: "Break",
+      dataField: "attendance.total_minutes",
+      text: "Total Minutes",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { width: "200px" },
+      style: {
+        fontSize: "12px",
+        lineHeight: "18px",
+      },
+    },
+    {
+      dataField: "",
+      text: "Action",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
       style: {
         fontSize: "12px",
         lineHeight: "16px",
@@ -102,6 +106,8 @@ const AttendanceAdmin = () => {
   useEffect(() => {
    axiosInstance.get('/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50').then(e =>{
      console.log(e)
+     const att = e.data.data
+     setallAttendance(att)
    })
   }, [])
 
@@ -122,7 +128,7 @@ const AttendanceAdmin = () => {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          <AdminAttendanceTable data={departments} defaultSorted={defaultSorted}
+          <AdminAttendanceTable data={allAttendance} defaultSorted={defaultSorted}
         selectedOption={selectedOption} columns={columns} designation={designation} departments={departments} />
           </div>
       </div>

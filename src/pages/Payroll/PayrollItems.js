@@ -10,6 +10,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
 const PayrollItems = () => {
+  
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(salaryComponentsFormJson);
   const [formValue, setformValue] = useState({});
