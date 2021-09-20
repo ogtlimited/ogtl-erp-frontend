@@ -88,7 +88,7 @@ const CoachingModal = ({ coachingForm }) => {
     }
     setemployeeOptions(emp);
     setsupervisor(user.reports_to);
-  }, [supervisor, coachingForm, coachingFormEdit]);
+  }, [supervisor, coachingForm, coachingFormEdit, allEmployees]);
   useEffect(() => {
     setgoalCount(goals.split(" ").length);
     setopportunityCount(opportunities.split(" ").length);

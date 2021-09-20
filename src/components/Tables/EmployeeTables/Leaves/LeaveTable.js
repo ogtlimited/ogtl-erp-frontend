@@ -18,13 +18,20 @@ const LeavesTable = ({ data, columns }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
+  const resizeTable = () => {
+    if (window.innerWidth >= 768) {
+      setmobileView(false);
+    }
+    if (columns.length > 8) {
+      setmobileView(true);
+    } else if (window.innerWidth <= 768) {
+      setmobileView(true);
+    }
+  };
   useEffect(() => {
+    resizeTable();
     window.addEventListener("resize", () => {
-      if (window.innerWidth >= 768) {
-        setmobileView(false);
-      } else {
-        setmobileView(true);
-      }
+      resizeTable();
     });
   }, [mobileView]);
 

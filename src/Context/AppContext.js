@@ -25,10 +25,11 @@ const AppProvider = (props) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (loggedIn) {
-      // fetchEmployee();
+      console.log('LOGGED IN')
+      fetchEmployee();
       fetchEmployeeAttendance();
     }
-  }, []);
+  }, [user]);
 
   const fetchEmployee = (employee) => {
     axiosInstance.get("/employees").then((e) => {
