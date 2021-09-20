@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import tokenService from "../../../services/token.service";
 
 const BankInformation = ({
   salaryDetails,
@@ -12,6 +13,8 @@ const BankInformation = ({
 }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
+  const user = tokenService.getUser();
+
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
@@ -36,7 +39,7 @@ const BankInformation = ({
       <div className="card-body">
         <h3 className="card-title">
           Bank information
-          {id === salaryDetails?.employee?._id && (
+          {id === user?._id && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("SalaryDetails")}

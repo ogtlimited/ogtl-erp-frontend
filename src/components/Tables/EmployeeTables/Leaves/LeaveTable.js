@@ -13,30 +13,29 @@ import filterFactory, {
 import LeaveApproverBtn from "./LeaveApproverBtn";
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-const LeavesTable = ({data, columns}) => {
-  console.log(data)
-    const { SearchBar, ClearSearchButton } = Search;
-    const { ExportCSVButton } = CSVExport;
-    const [mobileView, setmobileView] = useState(false);
-    const resizeTable = ()=>{
-      if(window.innerWidth >= 768){
-        setmobileView(false)
-      }if(columns.length > 8){
-        setmobileView(true)
-      }else if(window.innerWidth <= 768)
-      {
-        setmobileView(true)
-      }
+const LeavesTable = ({ data, columns }) => {
+  console.log(data);
+  const { SearchBar, ClearSearchButton } = Search;
+  const { ExportCSVButton } = CSVExport;
+  const [mobileView, setmobileView] = useState(false);
+  const resizeTable = () => {
+    if (window.innerWidth >= 768) {
+      setmobileView(false);
     }
-    useEffect(() => {
-      resizeTable()
-      window.addEventListener('resize', ()=>{
-        resizeTable()
-      });
-    }, [mobileView])
+    if (columns.length > 8) {
+      setmobileView(true);
+    } else if (window.innerWidth <= 768) {
+      setmobileView(true);
+    }
+  };
+  useEffect(() => {
+    resizeTable();
+    window.addEventListener("resize", () => {
+      resizeTable();
+    });
+  }, [mobileView]);
 
-    const imageUrl = 'https://erp.outsourceglobal.com'
-   
+  const imageUrl = "https://erp.outsourceglobal.com";
 
   //          }
   //          total.push(user)
@@ -88,9 +87,10 @@ const LeavesTable = ({data, columns}) => {
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : "table table-responsive"}
+                classes={!mobileView ? "table " : "table table-responsive"}
                 noDataIndication="Fetching Data..."
                 pagination={paginationFactory()}
+
                 // defaultSorted={defaultSorted}
               />
             </div>
