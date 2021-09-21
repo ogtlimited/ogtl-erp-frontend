@@ -11,6 +11,8 @@ import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
 import { maintenanceAndRepairFormJson } from "../../components/FormJSON/Maintenance/MaintenanceAndReparis";
 import { formatter } from "../../services/numberFormatter";
+import { ApproverBtn } from "../../components/ApproverBtn";
+import tokenService from "../../services/token.service";
 
 const MaintenanceAndRepairs = () => {
   const [formValue, setFormValue] = useState(null);
@@ -20,7 +22,9 @@ const MaintenanceAndRepairs = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [template, setTemplate] = useState(maintenanceAndRepairFormJson);
-
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
+  const user = tokenService.getUser();
   const { showAlert, setformUpdate } = useAppContext();
 
   const editRow = (row) => {
@@ -88,9 +92,12 @@ const MaintenanceAndRepairs = () => {
           });
       } else {
         formValue._id = editData._id;
-
+        let newFormValue = {
+          ...formValue,
+          asset_id: formValue.asset_id.assetId,
+        };
         axiosInstance
-          .patch("/api/maintenanceAndRepairs/" + editData._id, formValue)
+          .patch("/api/maintenanceAndRepairs/" + editData._id, newFormValue)
           .then((res) => {
             setFormValue(null);
             fetchMaintenanceAndRepairs();
@@ -107,6 +114,31 @@ const MaintenanceAndRepairs = () => {
   useEffect(() => {
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
+
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        status,
+      };
+
+      axiosInstance
+        .patch("/api/maintenanceAndRepairs/status/" + statusRow._id, update)
+        .then((res) => {
+          console.log(res);
+          fetchMaintenanceAndRepairs();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
 
   //delete shift
   const deleteMaintenanceReport = (row) => {
@@ -133,6 +165,23 @@ const MaintenanceAndRepairs = () => {
       sort: true,
 
       formatter: (value, row) => <h2>{row?.asset_id?.assetName} </h2>,
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+
+      formatter: (value, row) => (
+        <>
+          <ApproverBtn
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            context="maintenance"
+          />
+        </>
+      ),
     },
 
     {
