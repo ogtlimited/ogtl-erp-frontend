@@ -55,7 +55,7 @@ const MaintenanceAndRepairs = () => {
 
       const assetOpts = res.data.data?.map((e) => {
         return {
-          label: e.assetName,
+          label: `${e.assetName} ${e.model}`,
           value: e._id,
         };
       });
