@@ -34,6 +34,7 @@ import Termination from "./pages/HR/Admin/Termination";
 import Resignation from "./pages/HR/Admin/Resignation";
 import CoachingEmployee from "./pages/HR/Users/CoachingEmployee";
 import Email from "./pages/In-Apps/Email";
+import CampaignInfo from "./pages/Campaigns/CampaignInfo";
 
 // const routes = [{
 //   title: 'Main',
@@ -189,6 +190,12 @@ const routes = [
     title: "Coaching Employee",
     path: "/employee-coaching",
     component: CoachingEmployee,
+    layout: "/admin",
+  },
+  {
+    title: "Campaign ",
+    path: "/campaign-info",
+    component: CampaignInfo,
     layout: "/admin",
   },
   {

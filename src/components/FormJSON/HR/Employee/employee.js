@@ -2,33 +2,14 @@ export const employeeFormJson = {
   title: "Employee Form",
   Fields: [
     {
-      name: "first_name",
-      type: "text",
-      title: "First Name",
+      name: "applicant",
+      type: "select",
+      title: "Applicant",
       required: {
         value: true,
-        message: "Employee First Name is required",
+        message: "designation is required",
       },
-      validation: function (val) {
-        return val.length >= 5 || "Min Length is 5";
-      },
-    },
-    {
-      name: "last_name",
-      type: "text",
-      title: "Last Name",
-      required: {
-        value: true,
-        message: "Employee Last Name is required",
-      },
-    },
-    {
-      name: "middle_name",
-      type: "text",
-      title: "Middle Name",
-      required: {
-        value: false,
-      },
+      options: [],
     },
     {
       name: "password",
@@ -85,6 +66,16 @@ export const employeeFormJson = {
       name: "designation",
       type: "select",
       title: "Designation",
+      required: {
+        value: true,
+        message: "designation is required",
+      },
+      options: [],
+    },
+    {
+      name: "projectId",
+      type: "select",
+      title: "Campaign",
       required: {
         value: true,
         message: "designation is required",

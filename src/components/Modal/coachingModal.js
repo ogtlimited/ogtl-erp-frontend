@@ -17,8 +17,8 @@ const statusOptions = [
 ];
 const baseURL = "http://15.236.1.91";
 const initForm = {
-  ogid: "",
   employee_name: null,
+  employee_id: null,
   incident_date: "",
   supervisor: "",
   coaching_type: "",
@@ -76,7 +76,7 @@ const CoachingModal = ({ coachingForm }) => {
         ...coachingForm,
         incident_date: "",
         employee_name: "",
-        ogid: "",
+        employee_id: "",
         coaching_type: "",
       });
     } else {
@@ -168,7 +168,7 @@ const CoachingModal = ({ coachingForm }) => {
         }, 300);
       }}
       validationSchema={Yup.object().shape({
-        ogid: Yup.string().required("ogid is required"),
+        employee: Yup.string().required("ogid is required"),
         employee_name: Yup.string().required("Employee Name is required"),
         supervisor: Yup.string().required("Supervisor is required."),
         incident_date: Yup.string().required("Incident date is required."),
@@ -249,6 +249,7 @@ const CoachingModal = ({ coachingForm }) => {
                                 name="employee_name"
                                 onChange={(opt) => {
                                   console.log(employeeOptions);
+                                  setFieldValue("employee_id", opt.id);
                                   setFieldValue("ogid", opt.id);
                                   setFieldValue("employee_name", opt.value);
                                 }}
