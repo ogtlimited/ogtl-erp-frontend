@@ -242,14 +242,6 @@ const Sidebar = () => {
                       </Link>
                     </li>
                   )}
-
-                  {/* <li>
-                    <Link className="" to="/admin/payslip">
-                      {" "}
-                      Payslip{" "}
-                    </Link>
-                  </li> */}
-
                   {canView("HR") && (
                     <li>
                       <Link className="" to="/admin/payroll-items">
@@ -484,7 +476,24 @@ const Sidebar = () => {
                   </Link>
                 </li>
               )}
-
+              <li className="submenu">
+                <a href="" onClick={(e) => e.preventDefault()}>
+                  <i className="la la-tools"></i> <span> Maintenance </span>{" "}
+                  <span className="menu-arrow"></span>
+                </a>
+                <ul style={dNone}>
+                  <li>
+                    <Link className="" to="/admin/maintenance-report">
+                      Maintenance Report
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="" to="/admin/maintenance-repairs">
+                      Maintenance and Repairs
+                    </Link>
+                  </li>
+                </ul>
+              </li>
               {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}
