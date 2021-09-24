@@ -35,6 +35,8 @@ import Resignation from "./pages/HR/Admin/Resignation";
 import CoachingEmployee from "./pages/HR/Users/CoachingEmployee";
 import Email from "./pages/In-Apps/Email";
 import CampaignInfo from "./pages/Campaigns/CampaignInfo";
+import MaintenanceReport from "./pages/Maintenance/MaintenanceReport";
+import MaintenanceAndRepairs from "./pages/Maintenance/MaintenanceAndRepairs";
 
 // const routes = [{
 //   title: 'Main',
@@ -381,6 +383,18 @@ const routes = [
     path: "/attendance-reports",
     name: "Dashboard",
     component: AttendanceReport,
+    layout: "/admin",
+  },
+  {
+    title: "Maintenance Reports",
+    path: "/maintenance-report",
+    component: MaintenanceReport,
+    layout: "/admin",
+  },
+  {
+    title: "Maintenance And Repairs",
+    path: "/maintenance-repairs",
+    component: MaintenanceAndRepairs,
     layout: "/admin",
   },
 ];
