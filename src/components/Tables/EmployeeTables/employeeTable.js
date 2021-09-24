@@ -87,7 +87,7 @@ const EmployeesTable = ({
               src={
                 row.image
                   ? imageUrl + row.image
-                  : row.gender == "Male"
+                  : row.gender === "male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }

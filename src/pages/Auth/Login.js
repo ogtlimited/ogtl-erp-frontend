@@ -26,7 +26,7 @@ const Login = () => {
         // fetchEmployee()
         // fetchEmployeeAttendance()
         tokenService.setToken(res.data.token.token);
-        history.push("admin/employee-dashboard");
+        window.location.href = "/admin/employee-dashboard";
       })
       .catch((err) => {
         console.log(err);

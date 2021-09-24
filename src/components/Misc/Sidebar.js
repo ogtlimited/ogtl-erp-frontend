@@ -84,7 +84,7 @@ const Sidebar = () => {
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={{ display: "block" }}>
-                  {canView("operations") && (
+                  {canView("Operations") && (
                     <li>
                       <Link className="active" to="/admin/dashboard">
                         Admin Dashboard
@@ -117,7 +117,7 @@ const Sidebar = () => {
               <li className="menu-title">
                 <span>Operation</span>
               </li>
-              {canView("operations") && (
+              {canView("Operations") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
                     <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
