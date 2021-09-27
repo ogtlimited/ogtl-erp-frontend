@@ -21,18 +21,27 @@ const AllEmployeesAdmin = () => {
   const [editData, seteditData] = useState({});
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
+
   // console.log(allEmployees);
   useEffect(() => {
     fetchEmployee()
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
         settemplate(obj);
+        
   }, [])
+  useEffect(() => {console.log(editData)}, [editData])
   useEffect(() => {
     
     combineRequest().then((res) => {
       console.log(res);
-      const { shifts, designations, employeeTypes, departments, projects } =
+      const { shifts, designations, employeeTypes, departments, projects, acceptedJobOffers } =
         res.data.createEmployeeFormSelection;
+      const appOpts = acceptedJobOffers?.map((e) => {
+        return {
+          label: e.job_applicant_id.first_name + ' ' + e.job_applicant_id.last_name + ' ' + e.job_applicant_id.middle_name,
+          value: e.job_applicant_id.first_name + '-' + e.job_applicant_id.last_name + '-' + e?.job_applicant_id.middle_name,
+        };
+      });
       const shiftsopts = shifts?.map((e) => {
         return {
           label: e.shift_name,
@@ -70,7 +79,13 @@ const AllEmployeesAdmin = () => {
         } else if (field.name === "default_shift") {
           field.options = shiftsopts;
           return field;
-        } else if (field.name === "department") {
+        } 
+        else if (field.name === "applicant") {
+          console.log('APPLICANT')
+          field.options = appOpts;
+          return field;
+        } 
+        else if (field.name === "department") {
           field.options = deptopts;
           return field;
         } else if (field.name === "employment_type") {
@@ -89,6 +104,13 @@ const AllEmployeesAdmin = () => {
       //   }
       // )
       const obj = helper.formArrayToObject(finalForm);
+      let initialValues = {}
+      for(let i in obj){
+        initialValues[i] = ''
+        console.log(i)
+      }
+      seteditData(initialValues)
+      console.log(initialValues)
       settemplate(obj);
       console.log(obj);
     });
@@ -96,8 +118,13 @@ const AllEmployeesAdmin = () => {
 
   useEffect(() => {
     console.log(submitted);
-    if (submitted === true) {
+    if (formValue && Object.keys(formValue).length > 0) {
       formValue.image = "";
+      const fullName = formValue.applicant?.split('-')
+      formValue.first_name = fullName[0]
+      formValue.last_name = fullName[1]
+      formValue.middle_name = fullName[2]
+      delete formValue.applicant
       axiosInstance.post("/employees", formValue).then((res) => {
         fetchEmployee();
         setsubmitted(false);
@@ -105,7 +132,7 @@ const AllEmployeesAdmin = () => {
       });
     }
     console.log(formValue);
-  }, [submitted]);
+  }, [submitted, formValue]);
 
   const defaultSorted = [
     {
@@ -151,6 +178,7 @@ const AllEmployeesAdmin = () => {
       </div>
       <EmployeesTable
         data={allEmployees}
+        seteditData={seteditData}
         departments={designation}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}

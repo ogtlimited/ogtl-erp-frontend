@@ -64,6 +64,7 @@ const LeavesTable = ({ data, columns }) => {
                 style={{ marginBottom: 15, paddingLeft: "12%" }}
                 className="inputSearch"
               />
+              
               {/* <ClearSearchButton className="clear" { ...props.searchProps } /> */}
               {/* <Select
               defaultValue={selectedOption}

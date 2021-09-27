@@ -17,8 +17,7 @@ const statusOptions = [
 ];
 const baseURL = "http://15.236.1.91";
 const initForm = {
-  ogid: "",
-  employee_name: null,
+  employee_id: '',
   incident_date: "",
   supervisor: "",
   coaching_type: "",
@@ -29,7 +28,7 @@ const initForm = {
   status: "",
   user_response: "",
 };
-const CoachingModal = ({ coachingForm }) => {
+const CoachingModal = ({ coachingForm, setformSubmitted }) => {
   const { allEmployees, coachingFormEdit, setcoachingFormSubmitted } =
     useAppContext();
   const user = tokenService.getUser();
@@ -75,8 +74,7 @@ const CoachingModal = ({ coachingForm }) => {
       setinitialValues({
         ...coachingForm,
         incident_date: "",
-        employee_name: "",
-        ogid: "",
+        employee_id: "",
         coaching_type: "",
       });
     } else {
@@ -149,7 +147,7 @@ const CoachingModal = ({ coachingForm }) => {
               });
           } else {
             const coachingUrl = `/api/coaching-form`;
-            delete payload.employee_name;
+            delete payload.ogid;
             delete payload.user_response;
             payload.status = "draft";
             axiosInstance
@@ -157,6 +155,7 @@ const CoachingModal = ({ coachingForm }) => {
               .then((res) => {
                 console.log(res);
                 setcoachingFormSubmitted(true);
+                setformSubmitted(true)
               })
               .catch((err) => {
                 console.log(err.response?.data);
@@ -168,8 +167,7 @@ const CoachingModal = ({ coachingForm }) => {
         }, 300);
       }}
       validationSchema={Yup.object().shape({
-        ogid: Yup.string().required("ogid is required"),
-        employee_name: Yup.string().required("Employee Name is required"),
+        employee_id: Yup.string().required("Employee is required"),
         supervisor: Yup.string().required("Supervisor is required."),
         incident_date: Yup.string().required("Incident date is required."),
         coaching_type: Yup.string().required("coaching type is required."),
@@ -196,7 +194,7 @@ const CoachingModal = ({ coachingForm }) => {
         } = props;
         // console.log(isValid);
         // console.log(values);
-        // console.log(errors);
+        console.log(errors);
         return (
           <div
             className="modal custom-modal fade"
@@ -249,8 +247,8 @@ const CoachingModal = ({ coachingForm }) => {
                                 name="employee_name"
                                 onChange={(opt) => {
                                   console.log(employeeOptions);
+                                  setFieldValue("employee_id", opt.value);
                                   setFieldValue("ogid", opt.id);
-                                  setFieldValue("employee_name", opt.value);
                                 }}
                                 onBlur={setFieldTouched}
                                 className=" ml-0 w-100"

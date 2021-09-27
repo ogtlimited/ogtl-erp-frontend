@@ -58,7 +58,7 @@ const MaintenanceReport = () => {
           .then((res) => {
             setFormValue(null);
             fetchMaintenanceReport();
-            showAlert(true, res?.data?.message, "alert alert-success");
+            showAlert(true, res.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);

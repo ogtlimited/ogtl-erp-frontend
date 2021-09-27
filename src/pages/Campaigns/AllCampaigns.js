@@ -2,6 +2,7 @@ import React from "react";
 import GeneralTable from "../../components/Tables/Table";
 import data from '../../db/campaigns.json'
 import avater from '../../assets/img/male_avater.png'
+import { Link } from "react-router-dom";
 const AllCampaigns = () => {
   const columns = [
     {
@@ -9,6 +10,11 @@ const AllCampaigns = () => {
       text: "Campaign name",
       sort: true,
       headerStyle: { width: "450px" },
+      formatter: (value, row) => (
+        <Link  to={`/admin/campaign-info/${row.campaign_id}`}>
+          {value}
+        </Link>
+      ),
     },
     {
       dataField: "campaign_id",
