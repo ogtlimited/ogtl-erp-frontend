@@ -2,24 +2,32 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import FormModal from "../../../components/Modal/Modal";
 import { jobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/JobOpening";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { ApproverBtn } from "../../../components/ApproverBtn";
 import ReactHtmlParser from "react-html-parser";
+import FormModal2 from "../../../components/Modal/FormModal2";
+import HelperService from "../../../services/helper";
 
 const JobOpening = () => {
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState(null);
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
-  const { combineRequest, showAlert } = useAppContext();
+  const { combineRequest, showAlert, setformUpdate } = useAppContext();
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [editData, seteditData] = useState({});
+  const [editData, seteditData] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
+  const [clickedRow, setclickedRow] = useState(null);
+
+  const editRow = (row) => {
+    // setformUpdate(null)
+    setformUpdate(row);
+    setclickedRow(row);
+  };
 
   const fetchJobOpenings = () => {
     axiosInstance
@@ -73,21 +81,54 @@ const JobOpening = () => {
 
   //create job opening
   useEffect(() => {
-    if (submitted === true) {
-      axiosInstance
-        .post("/api/jobOpening", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchJobOpenings();
-          setData((prevData) => [...data, res.data.data]);
+    if (formValue) {
+      if (!editData) {
+        axiosInstance
+          .post("/api/jobOpening", formValue)
+          .then((res) => {
+            setFormValue(null);
+            setData((prevData) => [...prevData, res.data.data]);
+            fetchJobOpenings();
 
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+            showAlert(true, res.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      } else {
+        formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
+        axiosInstance
+          .patch("/api/jobOpening/" + editData._id, formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchJobOpenings();
+            showAlert(true, res?.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      }
     }
-  }, [submitted, formValue]);
+  }, [formValue, editData, data]);
+
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow, submitted]);
 
   //delete job opening
   const deleteJobOpening = (row) => {
@@ -189,15 +230,14 @@ const JobOpening = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            <Link
               className="dropdown-item"
-              onClick={() => {}}
-              href="#"
               data-toggle="modal"
-              data-target="#edit_employee"
+              data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </Link>
             <Link
               className="dropdown-item"
               data-toggle="modal"
@@ -246,10 +286,12 @@ const JobOpening = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
+
+      <FormModal2
+        title="Create Job Opening"
         editData={editData}
         setformValue={setFormValue}
-        template={jobOpeningFormJson}
+        template={HelperService.formArrayToObject(jobOpeningFormJson.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal

@@ -71,6 +71,9 @@ const MaintenanceReport = () => {
           });
       } else {
         formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
         axiosInstance
           .patch("/api/maintenanceReport/" + editData._id, formValue)
           .then((res) => {

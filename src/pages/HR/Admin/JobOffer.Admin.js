@@ -11,17 +11,26 @@ import ReactHtmlParser from "react-html-parser";
 import { ApproverBtn } from "../../../components/ApproverBtn";
 import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import FormModal2 from "../../../components/Modal/FormModal2";
+import HelperService from "../../../services/helper";
 
 const JobOffer = () => {
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState(null);
   const [data, setData] = useState([]);
-  const { showAlert, combineRequest } = useAppContext();
+  const { showAlert, combineRequest, setformUpdate } = useAppContext();
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
-  const [editData, seteditData] = useState({});
+  const [editData, seteditData] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null);
+
+  const editRow = (row) => {
+    // setformUpdate(null)
+    setformUpdate(row);
+    setclickedRow(row);
+  };
 
   const fetchJobOffers = () => {
     axiosInstance
@@ -79,24 +88,53 @@ const JobOffer = () => {
 
   //create job offer
   useEffect(() => {
-    console.log(submitted);
-    if (submitted === true) {
-      axiosInstance
-        .post("/api/jobOffer", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchJobOffers();
-          setData((prevData) => [...data, res.data.data]);
-
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+    if (formValue) {
+      if (!editData) {
+        axiosInstance
+          .post("/api/jobOffer", formValue)
+          .then((res) => {
+            setFormValue(null);
+            setData((prevData) => [...prevData, res.data.data]);
+            fetchJobOffers();
+            showAlert(true, res.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      } else {
+        formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
+        axiosInstance
+          .patch("/api/jobOffer/" + editData._id, formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchJobOffers();
+            showAlert(true, res?.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      }
     }
-    console.log(formValue);
-  }, [submitted, formValue]);
+  }, [formValue, editData, data]);
+
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow, submitted]);
 
   //delete job offer
   const deleteJobOffer = (row) => {
@@ -222,15 +260,14 @@ const JobOffer = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            <Link
               className="dropdown-item"
-              onClick={() => {}}
-              href="#"
               data-toggle="modal"
-              data-target="#edit_employee"
+              data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </Link>
             <Link
               className="dropdown-item"
               data-toggle="modal"
@@ -279,10 +316,12 @@ const JobOffer = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
+
+      <FormModal2
+        title="Create Job Offer"
         editData={editData}
         setformValue={setFormValue}
-        template={jobOfferFormJson}
+        template={HelperService.formArrayToObject(jobOfferFormJson.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal

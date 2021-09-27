@@ -96,6 +96,9 @@ const MaintenanceAndRepairs = () => {
           ...formValue,
           asset_id: formValue.asset_id.assetId,
         };
+        delete newFormValue.__v;
+        delete newFormValue.createdAt;
+        delete newFormValue.updatedAt;
         axiosInstance
           .patch("/api/maintenanceAndRepairs/" + editData._id, newFormValue)
           .then((res) => {
