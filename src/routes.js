@@ -23,7 +23,7 @@ import JobApplicants from "./pages/HR/Admin/JobApplicants.Admin";
 import AptitudeTest from "./pages/HR/Admin/AptitudeTest.Admin";
 import LeaveSettingAdmin from "./pages/HR/Admin/LeaveSetting.Admin";
 import CoachingAdmin from "./pages/HR/Admin/CoachingAdmin";
-import Asset from "./pages/HR/Admin/Assets.Admin";
+import AssetAssignmentForm from "./pages/HR/Admin/AssetAssignment.Admin";
 import ShiftAssignment from "./pages/HR/Admin/ShiftAssignment.Admin";
 import ShiftRequest from "./pages/HR/Admin/ShiftRequest.Admin";
 import WarningLetter from "./pages/HR/Admin/WarningLetter.Admin";
@@ -37,6 +37,8 @@ import Email from "./pages/In-Apps/Email";
 import CampaignInfo from "./pages/Campaigns/CampaignInfo";
 import MaintenanceReport from "./pages/Maintenance/MaintenanceReport";
 import MaintenanceAndRepairs from "./pages/Maintenance/MaintenanceAndRepairs";
+import Asset from "./pages/HR/Admin/Asset.Admin";
+import PurchaseOrder from "./pages/HR/Admin/PurchaseOrder.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -213,7 +215,19 @@ const routes = [
     layout: "/admin",
   },
   {
-    title: "Assets",
+    title: "Asset Assignment",
+    path: "/asset-assignment",
+    component: AssetAssignmentForm,
+    layout: "/admin",
+  },
+  {
+    title: "Purchase Order",
+    path: "/purchase-order",
+    component: PurchaseOrder,
+    layout: "/admin",
+  },
+  {
+    title: "Asset",
     path: "/assets",
     component: Asset,
     layout: "/admin",
