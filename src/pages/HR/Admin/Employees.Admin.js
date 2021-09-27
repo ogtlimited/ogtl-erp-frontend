@@ -29,6 +29,7 @@ const AllEmployeesAdmin = () => {
         settemplate(obj);
         
   }, [])
+  useEffect(() => {console.log(editData)}, [editData])
   useEffect(() => {
     
     combineRequest().then((res) => {
@@ -38,7 +39,7 @@ const AllEmployeesAdmin = () => {
       const appOpts = acceptedJobOffers?.map((e) => {
         return {
           label: e.job_applicant_id.first_name + ' ' + e.job_applicant_id.last_name + ' ' + e.job_applicant_id.middle_name,
-          value: e.job_applicant_id.first_name + '-' + e.job_applicant_id.last_name + '-' + e.job_applicant_id.middle_name,
+          value: e.job_applicant_id.first_name + '-' + e.job_applicant_id.last_name + '-' + e?.job_applicant_id.middle_name,
         };
       });
       const shiftsopts = shifts?.map((e) => {
@@ -103,6 +104,13 @@ const AllEmployeesAdmin = () => {
       //   }
       // )
       const obj = helper.formArrayToObject(finalForm);
+      let initialValues = {}
+      for(let i in obj){
+        initialValues[i] = ''
+        console.log(i)
+      }
+      seteditData(initialValues)
+      console.log(initialValues)
       settemplate(obj);
       console.log(obj);
     });
@@ -112,7 +120,7 @@ const AllEmployeesAdmin = () => {
     console.log(submitted);
     if (formValue && Object.keys(formValue).length > 0) {
       formValue.image = "";
-      const fullName = formValue.applicant.split('-')
+      const fullName = formValue.applicant?.split('-')
       formValue.first_name = fullName[0]
       formValue.last_name = fullName[1]
       formValue.middle_name = fullName[2]
@@ -170,6 +178,7 @@ const AllEmployeesAdmin = () => {
       </div>
       <EmployeesTable
         data={allEmployees}
+        seteditData={seteditData}
         departments={designation}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}

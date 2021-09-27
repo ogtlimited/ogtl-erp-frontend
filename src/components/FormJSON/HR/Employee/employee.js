@@ -7,7 +7,7 @@ export const employeeFormJson = {
       title: "Applicant",
       required: {
         value: true,
-        message: "designation is required",
+        message: "applicant is required",
       },
       options: [],
     },

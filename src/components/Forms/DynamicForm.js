@@ -26,6 +26,9 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
     }
   }, []);
   useEffect(() => {
+   setFormData(value)
+  }, [value])
+  useEffect(() => {
     console.log(formUpdate);
     initForm(formSchema, formUpdate);
     seteditRow(value);
@@ -58,6 +61,7 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
       }
 
       if (formSchema[key].required) {
+        console.log(formSchema[key])
         _validationSchema[key] = _validationSchema[key].required("Required");
       }
     }
@@ -104,7 +108,9 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
     console.log(values);
     $("#FormModal").modal("toggle");
     setvalue(values);
+    
     setSubmitting(false);
+    resetForm()
   };
 
   return (

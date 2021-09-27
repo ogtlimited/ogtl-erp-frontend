@@ -25,6 +25,7 @@ const EmployeesTable = ({
   defaultSorted,
   selectedOption,
   departments,
+  seteditData
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -180,7 +181,7 @@ const EmployeesTable = ({
           <div class="dropdown-menu dropdown-menu-right">
             <a
               class="dropdown-item"
-              onClick={() => seteditEmployee(row)}
+              onClick={() => seteditData(row)}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"

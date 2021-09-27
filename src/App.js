@@ -6,6 +6,7 @@ import Sidebar from "./components/Misc/Sidebar";
 import AdminLayout from "./layouts/Admin";
 import AuthLayout from "./layouts/Auth";
 import './assets/script'
+import { AppProvider } from "./Context/AppContext";
 
 function App() {
 
@@ -13,9 +14,10 @@ function App() {
     <div className="main-wrapper">
       <BrowserRouter>
       <Switch>
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-        <Route path="/employees" render={(props) => <AdminLayout {...props} />} />
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+        <AppProvider>
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        </AppProvider>
         <Redirect from="/" to="/admin/index" />
       </Switch>
     </BrowserRouter>

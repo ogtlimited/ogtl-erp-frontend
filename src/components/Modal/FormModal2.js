@@ -4,7 +4,11 @@ const FormModal2 = ({template, editData, setformValue, setsubmitted, title, form
     const [value, setvalue] = useState(null)
    useEffect(() => {
      setvalue(value)
+     console.log(editData)
    }, [value])
+   useEffect(() => {
+     console.log(editData)
+   }, [editData])
 
      const onSubmit = (data) => {
        console.log(data)
