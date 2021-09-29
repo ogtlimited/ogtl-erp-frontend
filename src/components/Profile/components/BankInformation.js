@@ -15,8 +15,6 @@ const BankInformation = ({
   const { id } = useParams();
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
-
-  console.log("Salaryyyyyyyyyyyyy", salaryDetails);
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
@@ -27,7 +25,6 @@ const BankInformation = ({
       axiosInstance
         .post("/SalaryDetails", newFormValue)
         .then((res) => {
-          console.log(res);
           fetchUserInfo();
           showAlert(true, res.data.message, "alert alert-success");
         })

@@ -16,10 +16,9 @@ const ProfileCards = ({
   fetchUserInfo,
 }) => {
   const handleChange = (type) => {
-    console.log(type);
     setformType(type);
   };
-  console.log(userData);
+
   return (
     <>
       <div className="card tab-box">
