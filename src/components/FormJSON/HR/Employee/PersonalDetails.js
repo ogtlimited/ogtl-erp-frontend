@@ -2,11 +2,29 @@ export const PersonalDetailJson = {
   title: "Personal Details",
   Fields: [
     {
-      name: "passport_number",
-      type: "text",
-      title: "Passport Number",
+      name: "means_of_identification",
+      type: "select",
+      title: "Means of Identification",
+      options: [
+        {
+          value: "NIN",
+          label: "NIN",
+        },
+        {
+          value: "International Passport",
+          label: "International Passport",
+        },
+        {
+          value: "Drivers License",
+          label: "Drivers License",
+        },
+      ],
     },
-
+    {
+      name: "id_number",
+      type: "text",
+      title: "ID Number",
+    },
     {
       name: "date_of_issue",
       type: "date",

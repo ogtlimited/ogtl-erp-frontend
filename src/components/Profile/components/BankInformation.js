@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import { canView } from "../../../services/canView";
 import tokenService from "../../../services/token.service";
 
 const BankInformation = ({
@@ -15,6 +16,7 @@ const BankInformation = ({
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
 
+  console.log("Salaryyyyyyyyyyyyy", salaryDetails);
   useEffect(() => {
     if (submitted === true) {
       let newFormValue = {
@@ -25,6 +27,7 @@ const BankInformation = ({
       axiosInstance
         .post("/SalaryDetails", newFormValue)
         .then((res) => {
+          console.log(res);
           fetchUserInfo();
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -33,13 +36,13 @@ const BankInformation = ({
           showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
-  }, [submitted, formValue, id]);
+  }, [submitted, formValue, id, salaryDetails?.salaryDetails?._id]);
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
         <h3 className="card-title">
           Bank information
-          {id === user?._id && (
+          {canView(user, "HR") && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("SalaryDetails")}
