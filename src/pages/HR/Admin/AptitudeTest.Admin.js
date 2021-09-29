@@ -193,7 +193,7 @@ const AptitudeTest = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            {/* <a
               className="dropdown-item"
               onClick={() => {}}
               href="#"
@@ -201,7 +201,7 @@ const AptitudeTest = () => {
               data-target="#edit_employee"
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </a> */}
             <Link className="dropdown-item" onClick={() => deleteTest(row)}>
               <i className="fa fa-trash m-r-5"></i> Delete
             </Link>

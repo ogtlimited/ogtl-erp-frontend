@@ -55,7 +55,7 @@ const MaintenanceAndRepairs = () => {
 
       const assetOpts = res.data.data?.map((e) => {
         return {
-          label: e.assetName,
+          label: `${e.assetName} ${e.model}`,
           value: e._id,
         };
       });
@@ -96,6 +96,9 @@ const MaintenanceAndRepairs = () => {
           ...formValue,
           asset_id: formValue.asset_id.assetId,
         };
+        delete newFormValue.__v;
+        delete newFormValue.createdAt;
+        delete newFormValue.updatedAt;
         axiosInstance
           .patch("/api/maintenanceAndRepairs/" + editData._id, newFormValue)
           .then((res) => {

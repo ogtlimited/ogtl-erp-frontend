@@ -34,7 +34,7 @@ const MaintenanceReport = () => {
       .get("/api/maintenanceReport")
       .then((res) => {
         console.log(res);
-        setData(res.data.data);
+        setData(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -63,10 +63,17 @@ const MaintenanceReport = () => {
           .catch((error) => {
             console.log(error);
             setFormValue(null);
-            showAlert(true, error?.response?.data?.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       } else {
         formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
         axiosInstance
           .patch("/api/maintenanceReport/" + editData._id, formValue)
           .then((res) => {
@@ -77,7 +84,11 @@ const MaintenanceReport = () => {
           .catch((error) => {
             console.log(error);
             setFormValue(null);
-            showAlert(true, error?.response?.data?.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       }
     }
@@ -96,11 +107,11 @@ const MaintenanceReport = () => {
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
-        showAlert(true, res.data.message, "alert alert-success");
+        showAlert(true, res?.data?.message, "alert alert-success");
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error?.response?.data?.message, "alert alert-danger");
       });
   };
 

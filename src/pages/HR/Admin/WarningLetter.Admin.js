@@ -15,7 +15,6 @@ const WarningLetter = () => {
   const [template, setTemplate] = useState(warningLetterFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
-  const [editData, seteditData] = useState({});
   const { combineRequest, showAlert } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -153,15 +152,6 @@ const WarningLetter = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              onClick={() => {}}
-              href="#"
-              data-toggle="modal"
-              data-target="#edit_employee"
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
             <Link
               className="dropdown-item"
               data-toggle="modal"
@@ -211,7 +201,6 @@ const WarningLetter = () => {
         </div>
       </div>
       <FormModal
-        editData={editData}
         setformValue={setFormValue}
         template={template}
         setsubmitted={setSubmitted}

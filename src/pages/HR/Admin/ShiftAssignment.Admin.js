@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import FormModal from "../../../components/Modal/Modal";
 import { shiftAssignmentFormJson } from "../../../components/FormJSON/HR/shift/ShiftAssignment";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
@@ -14,19 +13,28 @@ import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import FormModal2 from "../../../components/Modal/FormModal2";
+import HelperService from "../../../services/helper";
 
 const ShiftAssignment = () => {
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [editData, seteditData] = useState(null);
+
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
   const [template, setTemplate] = useState(shiftAssignmentFormJson);
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null);
+  const { combineRequest, showAlert, setformUpdate } = useAppContext();
 
-  const [editData, seteditData] = useState({});
-  const { combineRequest, showAlert } = useAppContext();
+  const editRow = (row) => {
+    // setformUpdate(null)
+    setformUpdate(row);
+    setclickedRow(row);
+  };
 
   const fetchShiftAssignments = () => {
     axiosInstance
@@ -74,30 +82,57 @@ const ShiftAssignment = () => {
         title: shiftAssignmentFormJson.title,
         Fields: finalForm,
       });
-      console.log(template);
     });
   }, []);
 
-  //create shift
   useEffect(() => {
-    console.log(submitted);
-    if (submitted === true) {
-      axiosInstance
-        .post("/api/shiftAssignment", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchShiftAssignments();
-          setData((prevData) => [...data, res.data.data]);
-
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+    if (formValue) {
+      if (!editData) {
+        axiosInstance
+          .post("/api/shiftAssignment", formValue)
+          .then((res) => {
+            setFormValue(null);
+            setData((prevData) => [...prevData, res.data.data]);
+            fetchShiftAssignments();
+            showAlert(true, res.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      } else {
+        formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
+        axiosInstance
+          .patch("/api/shiftAssignment/" + editData._id, formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchShiftAssignments();
+            showAlert(true, res?.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      }
     }
-    console.log(formValue);
-  }, [submitted, formValue]);
+  }, [formValue, editData]);
+
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow, submitted]);
 
   //delete shift
   const deleteShiftAssignment = (row) => {
@@ -115,22 +150,6 @@ const ShiftAssignment = () => {
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
-
-  //update shiftAssignment
-  // const updateShiftAssignment = (row) => {
-  //   axiosInstance
-  //     .patch(`/api/shiftAssignment/${row._id}`, row)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setData((prevData) => [...prevData, res.data.data]);
-  //       fetchShiftAssignments();
-  //       showAlert(true, res.data.message, "alert alert-success");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       showAlert(true, error.response.data.message, "alert alert-danger");
-  //     });
-  // };
 
   const columns = [
     {
@@ -190,15 +209,14 @@ const ShiftAssignment = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            <Link
               className="dropdown-item"
-              onClick={() => {}}
-              href="#"
               data-toggle="modal"
-              data-target="#edit_employee"
+              data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </Link>
             <Link
               className="dropdown-item"
               data-toggle="modal"
@@ -247,10 +265,17 @@ const ShiftAssignment = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
+      {/* <FormModal
         editData={editData}
         setformValue={setFormValue}
         template={template}
+        setsubmitted={setSubmitted}
+      /> */}
+      <FormModal2
+        title="Create Shift Assignment"
+        editData={editData}
+        setformValue={setFormValue}
+        template={HelperService.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
