@@ -459,6 +459,22 @@ const Sidebar = () => {
                   </Link>
                 </li>
               )}
+              {canView("HR") && (
+                <li className="">
+                  <Link to="/admin/asset-assignment">
+                    <i className="la la-object-ungroup"></i>{" "}
+                    <span>Asset Assignments</span>
+                  </Link>
+                </li>
+              )}
+              {canView("HR") && (
+                <li className="">
+                  <Link to="/admin/purchase-order">
+                    <i className="la la-object-ungroup"></i>{" "}
+                    <span>Purchase Order</span>
+                  </Link>
+                </li>
+              )}
               {/* <li className="">
                 <Link to="/administrator/activities">
                   <i className="la la-bell"></i> <span>Activities</span>
