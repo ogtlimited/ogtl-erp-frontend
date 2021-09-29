@@ -2,13 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
-import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
 
 const Login = () => {
   let history = useHistory();
-  let { fetchEmployeeAttendance, fetchEmployee, setloggedIn } = useAppContext();
   const [errorMsg, seterrorMsg] = useState("");
   const {
     register,
@@ -22,7 +20,6 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         tokenService.setUser(res.data.employee);
-        setloggedIn(true);
         // fetchEmployee()
         // fetchEmployeeAttendance()
         tokenService.setToken(res.data.token.token);

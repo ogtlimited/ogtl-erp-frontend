@@ -156,6 +156,33 @@ export function DateField(props) {
     </>
   );
 }
+export function TimeField(props) {
+  const { name, label, placeholder, ...rest } = props;
+  return (
+    <>
+      <div className="form-group">
+        {label && (
+          <label className="col-form-label" for={name}>
+            {label}
+          </label>
+        )}
+        <Field
+          className="form-control"
+          type="time"
+          name={name}
+          id={name}
+          placeholder={placeholder || ""}
+          {...rest}
+        />
+
+        <ErrorMessage
+          name={name}
+          render={(msg) => <div style={{ color: "red" }}>{msg}</div>}
+        />
+      </div>
+    </>
+  );
+}
 export function TextareaField(props) {
   const { name, label, placeholder, ...rest } = props;
   return (

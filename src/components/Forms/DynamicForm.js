@@ -10,6 +10,7 @@ import {
   PasswordField,
   CheckField,
   NumberField,
+  TimeField,
 } from "./FormElements";
 import * as Yup from "yup";
 import $ from "jquery";
@@ -25,6 +26,9 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
       initForm(formSchema, value);
     }
   }, []);
+  useEffect(() => {
+    setFormData(value);
+  }, [value]);
   useEffect(() => {
     console.log(formUpdate);
     initForm(formSchema, formUpdate);
@@ -55,9 +59,12 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
         // _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
+      } else if (formSchema[key].type === "time") {
+        _validationSchema[key] = Yup.string();
       }
 
       if (formSchema[key].required) {
+        console.log(formSchema[key]);
         _validationSchema[key] = _validationSchema[key].required("Required");
       }
     }
@@ -91,6 +98,9 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
     if (elementSchema.type === "date") {
       return <DateField {...props} />;
     }
+    if (elementSchema.type === "time") {
+      return <TimeField {...props} />;
+    }
     if (elementSchema.type === "textarea") {
       return <TextareaField {...props} />;
     }
@@ -104,7 +114,9 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
     console.log(values);
     $("#FormModal").modal("toggle");
     setvalue(values);
+
     setSubmitting(false);
+    resetForm();
   };
 
   return (

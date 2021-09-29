@@ -43,23 +43,28 @@ const CoachingEmployee = () => {
     const user = tokenService.getUser();
     console.log(file);
     axiosInstance.get("/api/coaching-form/employee/" + user._id).then((res) => {
-      console.log(res.data);
+      console.log(res.data?.data[0]);
       if (res.data.data.length === 0) {
         setnoForm(false);
       }
-      setcoachingForm(res.data[0]);
+      setcoachingForm(res.data?.data[0]);
     });
     if (submitAction.length) {
       const payload = {
-        ...coachingForm,
         user_response: submitAction,
         reason,
-        files: file,
       };
       console.log(payload);
-      updateEmployeeCoachingList(payload).then((res) => {
-        console.log(res.data);
+      axiosInstance.put("/api/coaching-form/user-response/" + coachingForm._id, payload).then((res) => {
+        console.log(res.data?.data[0]);
+        if (res.data.data.length === 0) {
+          setnoForm(false);
+        }
+        setcoachingForm(res.data?.data[0]);
       });
+      // updateEmployeeCoachingList(payload).then((res) => {
+      //   console.log(res.data);
+      // });
     }
   }, [submitAction, file]);
   const breadcrumb = "Coaching Review";
@@ -99,7 +104,7 @@ const CoachingEmployee = () => {
                           <td>
                             <strong>Team Member Name</strong>{" "}
                             <span class="float-right">
-                              {coachingForm?.employee_name}
+                              {coachingForm?.employee_id?.first_name}  {coachingForm?.employee_id?.last_name}
                             </span>
                           </td>
                           <td>
@@ -117,7 +122,7 @@ const CoachingEmployee = () => {
                           <td>
                             <strong>Supervisor</strong>{" "}
                             <span class="float-right">
-                              {coachingForm?.supervisor}
+                              {coachingForm?.supervisor?.first_name} {coachingForm?.employee_id?.last_name}
                             </span>
                           </td>
                         </tr>
