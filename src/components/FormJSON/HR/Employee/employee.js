@@ -13,7 +13,8 @@ export const employeeFormJson = {
     },
     {
       name: "password",
-      type: "password",
+      type: "text",
+      disabled: true,
       title: "Password",
       required: {
         value: true,

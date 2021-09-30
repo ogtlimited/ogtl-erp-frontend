@@ -20,8 +20,8 @@ export function Form(props) {
 }
 
 export function TextField(props) {
-  const { name, label, placeholder, ...rest } = props;
-
+  const { name, label,disabled, placeholder, ...rest } = props;
+  console.log(props)
   return (
     <>
       <div className="form-group">
@@ -35,6 +35,7 @@ export function TextField(props) {
           type="text"
           name={name}
           id={name}
+          disabled={disabled}
           placeholder={placeholder || ""}
           {...rest}
         />
@@ -48,6 +49,7 @@ export function TextField(props) {
   );
 }
 export function NumberField(props) {
+  console.log(props)
   const { name, label, placeholder, ...rest } = props;
 
   return (
