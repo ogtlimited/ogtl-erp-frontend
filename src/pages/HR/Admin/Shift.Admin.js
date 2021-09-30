@@ -2,20 +2,28 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import FormModal from "../../../components/Modal/Modal";
 import { shiftTypeFormJson } from "../../../components/FormJSON/HR/shift/ShiftType";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import FormModal2 from "../../../components/Modal/FormModal2";
+import HelperService from "../../../services/helper";
 
 const ShiftAdmin = () => {
-  const [formValue, setFormValue] = useState({});
-  const [editData, seteditData] = useState({});
+  const [formValue, setFormValue] = useState(null);
+  const [editData, seteditData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null);
 
-  const { fetchTypesShift, showAlert } = useAppContext();
+  const { fetchTypesShift, showAlert, setformUpdate } = useAppContext();
+
+  const editRow = (row) => {
+    // setformUpdate(null)
+    setformUpdate(row);
+    setclickedRow(row);
+  };
 
   useEffect(() => {
     fetchTypesShift()
@@ -26,27 +34,56 @@ const ShiftAdmin = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [fetchTypesShift]);
 
-  //create shift
   useEffect(() => {
-    console.log(submitted);
-    if (submitted === true) {
-      axiosInstance
-        .post("/api/shiftType", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          setData((prevData) => [...prevData, res.data.data]);
-          fetchTypesShift();
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+    if (formValue) {
+      if (!editData) {
+        axiosInstance
+          .post("/api/shiftType", formValue)
+          .then((res) => {
+            setFormValue(null);
+            setData((prevData) => [...prevData, res.data.data]);
+            fetchTypesShift();
+            showAlert(true, res.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      } else {
+        formValue._id = editData._id;
+        delete formValue.__v;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
+        axiosInstance
+          .patch("/api/shiftType/" + editData._id, formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchTypesShift();
+            showAlert(true, res?.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      }
     }
-    console.log(formValue);
-  }, [submitted, formValue]);
+  }, [formValue, editData, fetchTypesShift]);
+
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow, submitted]);
 
   //delete shift
   const deleteShift = (row) => {
@@ -65,22 +102,6 @@ const ShiftAdmin = () => {
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
-
-  //update shift
-  // const updateShift = (row) => {
-  //   axiosInstance
-  //     .patch(`/api/shiftType/${row._id}`, row)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setData((prevData) => [...data, res.data.data]);
-  //       fetchTypesShift();
-  //       showAlert(true, res.data.message, "alert alert-success");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       showAlert(true, error.response.data.message, "alert alert-danger");
-  //     });
-  // };
 
   const columns = [
     {
@@ -124,6 +145,7 @@ const ShiftAdmin = () => {
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
@@ -175,10 +197,12 @@ const ShiftAdmin = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
+
+      <FormModal2
+        title="Create Shift"
         editData={editData}
         setformValue={setFormValue}
-        template={shiftTypeFormJson}
+        template={HelperService.formArrayToObject(shiftTypeFormJson.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
