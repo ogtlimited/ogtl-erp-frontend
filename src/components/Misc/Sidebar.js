@@ -494,9 +494,29 @@ const Sidebar = () => {
                   <li className="menu-title">
                     <span>Facility</span>
                   </li>
-                  <li className="">
-                  <Link to="/admin/assets">
-                    <i className="la la-object-ungroup"></i> <span>Assets</span>
+                  <li className="submenu">
+                    <a href="" onClick={(e) => e.preventDefault()}>
+                    <i className="la la-object-ungroup"></i> <span> Assets </span>{" "}
+                      <span className="menu-arrow"></span>
+                    </a>
+                    <ul style={dNone}>
+                      <li>
+                      <Link to="/admin/assets">
+                          <span>Assets</span>
+                        </Link>
+                      </li>
+                      <li>
+                          <Link to="/admin/asset-assignment">
+                         <span>Assignment</span>
+                      </Link>
+                      </li>
+                    </ul>
+                 
+                  
+                </li>
+                <li>
+                  <Link to="/admin/purchase-order">
+                    <i className="la la-cog"></i> <span>Asset Purchase Order</span>
                   </Link>
                 </li>
                   <li className="submenu">
