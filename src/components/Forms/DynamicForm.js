@@ -71,10 +71,12 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
   };
 
   const getFormElement = (elementName, elementSchema) => {
+    console.log(elementSchema)
     const props = {
       name: elementName,
       label: elementSchema.label,
       options: elementSchema.options,
+      disabled: elementSchema.disabled
     };
 
     if (elementSchema.type === "text" || elementSchema.type === "email") {

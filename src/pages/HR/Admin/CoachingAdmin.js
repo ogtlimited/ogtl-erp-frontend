@@ -13,6 +13,8 @@ const CoachingAdmin = () => {
   const [formSubmitted, setformSubmitted] = useState(false);
   const [coachingForm, setcoachingForm] = useState({});
   const [template, settemplate] = useState({});
+  const [status, setStatus] = useState("");
+  const [statusRow, setstatusRow] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [coachingList, setcoachingList] = useState([]);
   const { allEmployees, showAlert } = useAppContext();
@@ -91,6 +93,28 @@ const CoachingAdmin = () => {
         });
     }
   }, [submitted, formValue]);
+  useEffect(() => {
+    if (status.length) {
+      console.log(status);
+      console.log(statusRow);
+      const update = {
+        ...statusRow,
+        status: status,
+        employee_id: statusRow.employee_id._id,
+      };
+      console.log(update);
+      delete update.__v;
+      axiosInstance
+        .put("/leave-application/" + statusRow._id, update)
+        .then((e) => {
+          console.log(e);
+          // fetchLeaves();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [status]);
   const editAction = (row) => {
     // setcoachingForm(row)
     // setcoachingFormEdit('edit')
