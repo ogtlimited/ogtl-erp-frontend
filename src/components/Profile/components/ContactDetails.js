@@ -33,7 +33,7 @@ const ContactDetails = ({
           showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
-  }, [submitted, formValue, id]);
+  }, [submitted, formValue, id, contactDetails?.contactDetails?._id]);
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">

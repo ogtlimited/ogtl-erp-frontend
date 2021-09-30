@@ -34,7 +34,7 @@ const PersonalInfo = ({
           showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
-  }, [submitted, formValue, id]);
+  }, [submitted, formValue, id, personalDetails?.personalDetails?._id]);
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
@@ -63,10 +63,16 @@ const PersonalInfo = ({
             </div>
           </li>
           <li>
-            <div className="title">Passport No.</div>
+            <div className="title">Means of Identification</div>
             <div className="text">
-              {personalDetails?.personalDetails?.passport_number ||
+              {personalDetails?.personalDetails?.means_of_identification ||
                 "Not Available"}
+            </div>
+          </li>
+          <li>
+            <div className="title">ID Number</div>
+            <div className="text">
+              {personalDetails?.personalDetails?.id_number || "Not Available"}
             </div>
           </li>
           <li>

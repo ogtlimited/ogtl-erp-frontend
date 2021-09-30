@@ -26,9 +26,10 @@ const AdminAttendanceTable = ({
   selectedOption,
   departments,
   columns,
-  designation
+  designation,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
+
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -37,10 +38,30 @@ const AdminAttendanceTable = ({
   const [showClear, setshowClear] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
+  const [departmentsOpt, setDepartmentsOpts] = useState([]);
+  const [designarionsOpt, setDesignationsOpts] = useState([]);
   const imageUrl = "https://erp.outsourceglobal.com";
   const breadcrumb = "Admin Attendance";
   const total = [];
   let attendanceDateFilter;
+
+  useEffect(() => {
+    const departmentOpts = departments.map((e) => {
+      return {
+        label: e.department,
+        value: e._id,
+      };
+    });
+    const designationOpts = designation.map((e) => {
+      return {
+        label: e.designation,
+        value: e._id,
+      };
+    });
+    setDepartmentsOpts(departmentOpts);
+    setDesignationsOpts(designationOpts);
+  }, [departments, designation]);
+
   const handleClick = (i) => {
     console.log(i);
     if (i?.value == "All" || i == null) {
@@ -61,25 +82,24 @@ const AdminAttendanceTable = ({
   //    console.log(data)
 
   useEffect(() => {
-      console.log(data)
+    console.log(data);
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
   useEffect(() => {
-    window.addEventListener('resize', ()=>{
-      if(window.innerWidth >= 768){
-        setmobileView(false)
-      }else{
-        setmobileView(true)
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        setmobileView(false);
+      } else {
+        setmobileView(true);
       }
-     
     });
-  }, [mobileView])
+  }, [mobileView]);
   // console.log(total);
-  
+
   return (
     <>
-    {data && (
+      {data && (
         <ToolkitProvider
           keyField="id"
           data={data}
@@ -96,63 +116,45 @@ const AdminAttendanceTable = ({
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
               <div className="row mb-3">
-              <div className="col-5">
-              <Select
-                defaultValue={selectedOption}
-                onChange={handleClick}
-                options={departments}
-                placeholder="Filter Department"
-                isClearable={true}
-                style={{ display: "inline-block" }}
-                // formatGroupLabel={formatGroupLabel}
-              />
+                <div className="col-5">
+                  <Select
+                    defaultValue={selectedOption}
+                    onChange={handleClick}
+                    options={departmentsOpt}
+                    placeholder="Filter Department"
+                    isClearable={true}
+                    style={{ display: "inline-block" }}
+                    // formatGroupLabel={formatGroupLabel}
+                  />
+                </div>
+                <div className="col-5">
+                  <Select
+                    defaultValue={selectedOption}
+                    onChange={handleClick}
+                    options={designarionsOpt}
+                    placeholder="Filter Designation"
+                    isClearable={true}
+                    style={{ display: "inline-block" }}
+                    // formatGroupLabel={formatGroupLabel}
+                  />
+                </div>
 
-
+                <div className="col-2 mt-3 mr-auto float-right">
+                  <ExportCSVButton
+                    className="float-right btn export-csv"
+                    {...props.csvProps}
+                  >
+                    Export CSV
+                  </ExportCSVButton>
+                </div>
               </div>
-              <div className="col-5">
-              <Select
-                defaultValue={selectedOption}
-                onChange={handleClick}
-                options={departments}
-                placeholder="Filter Designation"
-                isClearable={true}
-                style={{ display: "inline-block" }}
-                // formatGroupLabel={formatGroupLabel}
-              />
-
-              </div>
-              <div className="col-5">
-              <Select
-                defaultValue={selectedOption}
-                onChange={handleClick}
-                options={departments}
-                placeholder="Filter Designation"
-                isClearable={true}
-                style={{ display: "inline-block" }}
-                // formatGroupLabel={formatGroupLabel}
-              />
-
-              </div>
-              <div className="col-2 mt-3 mr-auto float-right">
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
-
-              </div>
-              
-              </div>
-              
-              
 
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : 'table table-responsive' }
+                classes={!mobileView ? "table" : "table table-responsive"}
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
                 noDataIndication="Fetching Data"

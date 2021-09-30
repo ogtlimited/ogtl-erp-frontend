@@ -38,12 +38,13 @@ export const employeeFormJson = {
     },
     {
       name: "reports_to",
-      type: "text",
+      type: "select",
       title: "Reports to",
       required: {
         value: true,
         message: "Reports to is required",
       },
+      options: [],
     },
     {
       name: "isAdmin",
