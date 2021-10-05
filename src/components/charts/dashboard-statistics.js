@@ -1,6 +1,26 @@
 import React from "react";
+import { Doughnut } from "react-chartjs-2";
 
 const DashboardStatistics = () => {
+  const data = {
+    labels: ['Profit', 'Expenses'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [120000, 190000, ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
   return (
     <>
       
@@ -204,9 +224,10 @@ const DashboardStatistics = () => {
           <div className="card flex-fill">
             <div className="card-body">
               <h4 className="card-title">
-                Today Absent <span className="badge bg-inverse-danger ml-2">5</span>
+                Profit vs Expenses
               </h4>
-              <div className="leave-info-box">
+              <Doughnut data={data} />
+              {/* <div className="leave-info-box">
                 <div className="media align-items-center">
                   <a href="profile.html" className="avatar">
                     <img alt="" src="assets/img/user.jpg" />
@@ -249,6 +270,7 @@ const DashboardStatistics = () => {
                   Load More
                 </a>
               </div>
+            */}
             </div>
           </div>
       </div>

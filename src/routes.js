@@ -39,6 +39,11 @@ import MaintenanceReport from "./pages/Maintenance/MaintenanceReport";
 import MaintenanceAndRepairs from "./pages/Maintenance/MaintenanceAndRepairs";
 import Asset from "./pages/HR/Admin/Asset.Admin";
 import PurchaseOrder from "./pages/HR/Admin/PurchaseOrder.Admin";
+import { AccountingDashboard } from "./pages/Accounting/AccountingDashboard";
+import Clients from "./pages/Clients/Client";
+import Vendors from "./pages/Vendors/Vendors";
+import Invoices from "./pages/Accounting/Invoices";
+import AccountList from "./pages/Accounting/AccountList";
 
 // const routes = [{
 //   title: 'Main',
@@ -156,6 +161,41 @@ const routes = [
     path: "/index",
     name: "Dashboard",
     component: AdminDashboard,
+    layout: "/admin",
+  },
+  {
+    title: "Accounting Dashboard",
+    path: "/accounting-dashboard",
+    name: "Accounting Dashboard",
+    component: AccountingDashboard,
+    layout: "/admin",
+  },
+  {
+    title: "Clients",
+    path: "/clients",
+    name: "Clients",
+    component: Clients,
+    layout: "/admin",
+  },
+  {
+    title: "Vendors",
+    path: "/vendors",
+    name: "Vendors",
+    component: Vendors,
+    layout: "/admin",
+  },
+  {
+    title: "Invoices",
+    path: "/invoices",
+    name: "Invoices",
+    component: Invoices,
+    layout: "/admin",
+  },
+  {
+    title: "Account List",
+    path: "/account-list",
+    name: "Account list",
+    component: AccountList,
     layout: "/admin",
   },
   {

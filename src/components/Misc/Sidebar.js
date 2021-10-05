@@ -91,6 +91,13 @@ const Sidebar = () => {
                       </Link>
                     </li>
                   )}
+                  {canView("Accounting") && (
+                    <li>
+                      <Link className="active" to="/admin/accounting-dashboard">
+                        Accounting Dashboard
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link className="" to="/admin/employee-dashboard">
                       Employee Dashboard
@@ -424,6 +431,7 @@ const Sidebar = () => {
                   <span>Accounting</span>
                 </li>
               )}
+             
               {canView("Accounting") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
@@ -431,6 +439,11 @@ const Sidebar = () => {
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={dNone}>
+                  <li>
+                      <Link className="" to="/admin/account-list">
+                        Accounts
+                      </Link>
+                    </li>
                   <li>
                       <Link className="" to="/admin/receivables">
                         Account Receivables
@@ -469,11 +482,27 @@ const Sidebar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link className="" to="/accounts/invoices">
+                      <Link className="" to="/admin/invoices">
                         Invoices
                       </Link>
                     </li>
                   </ul>
+                </li>
+              )}
+               {canView("Accounting") && (
+                <li>
+                   <Link to="/admin/clients">
+                   <i class="las la-user-friends"></i> <span> Clients </span>{" "}
+                    
+                  </Link>
+                </li>
+              )}
+               {canView("Accounting") && (
+                <li>
+                   <Link to="/admin/vendors">
+                   <i class="las la-users"></i> <span> Suppliers </span>{" "}
+                    
+                  </Link>
                 </li>
               )}
               {canView("Facility") && (
