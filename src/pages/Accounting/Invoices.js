@@ -21,24 +21,17 @@ const Invoices = () => {
   const [template, setTemplate] = useState(vendorsClientsFormJson);
   const [submitted, setSubmitted] = useState(false);
     const columns = [
+      {
+        dataField: "no",
+        text: "Number",
+        sort: true,
+        headerStyle: { minWidth: "100px" }
+      },
         {
           dataField: "customer",
           text: "Customer",
           sort: true,
-          headerStyle: { width: "350px" },
-          formatter: (val, row) => (
-            <h2 className="table-avatar">
-              <span>
-                {row?.employeeId?.fullName} {" "}
-              </span>
-            </h2>
-          ),
-        },
-        {
-          dataField: "amount",
-          text: "Amount",
-          sort: true,
-          headerStyle: { minWidth: "150px" }
+          headerStyle: { width: "300px" },
         },
         {
           dataField: "date",
@@ -53,8 +46,20 @@ const Invoices = () => {
           headerStyle: { minWidth: "100px" }
         },
         {
+          dataField: "total",
+          text: "Total",
+          sort: true,
+          headerStyle: { minWidth: "150px" }
+        },
+        {
           dataField: "status",
           text: "Status",
+          sort: true,
+          headerStyle: { minWidth: "100px" }
+        },
+        {
+          dataField: "paymentStatus",
+          text: "Payment Status",
           sort: true,
           headerStyle: { minWidth: "100px" }
         },

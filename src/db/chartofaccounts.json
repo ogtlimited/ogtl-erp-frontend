@@ -1,0 +1,116 @@
+[{
+    "id": "58607-700",
+    "number": "ACC/58607",
+    "account": "Accounts Payable",
+    "type": "Accounts Payable",
+    "description": "Accounts Payable",
+    "balance": "$0.00"
+  }, {
+    "id": "55648-661",
+    "number": "ACC/55648",
+    "account": "Accounts Receivable",
+    "type": "Accounts Receivable",
+    "description": "Accounts Receivable",
+    "balance": "$0.00"
+  }, {
+    "id": "13537-110",
+    "number": "ACC/13537",
+    "account": "Customer Deposits/Retainers",
+    "type": "Other Current Liability",
+    "description": "Customer Deposits/Retainers",
+    "balance": "$0.00"
+  },
+  {
+    "id": "63323-241",
+    "number": "ACC/63323",
+    "account": "Service Tax Payable",
+    "type": "Other Current Liability",
+    "description": "Service Tax Payable",
+    "balance": "$0.00"
+  },
+  {
+    "id": "63323-241",
+    "number": "ACC/63323",
+    "account": "Expense Tax Payable",
+    "type": "Other Current Liability",
+    "description": "Expense Tax Payable",
+    "balance": "$0.00"
+  },
+  {
+    "id": "49035-214",
+    "number": "ACC/49035",
+    "account": "Legacy Payments",
+    "type": "Other Current Asset",
+    "description": "Legacy Payments",
+    "balance": "$0.00"
+  }, {
+    "id": "54868-4812",
+    "number": "ACC/548682",
+    "account": "Equity",
+    "type": "Opening Balance Equity",
+    "description": "Opening Balance Equity",
+    "balance": "$0.00"
+  }, {
+    "id": "58118-2214",
+    "number": "ACC/581184",
+    "account": "Payroll Liabilities",
+    "type": "Other Current Liability",
+    "description": "Payroll Liabilities",
+    "balance": "$0.00"
+  }, {
+    "id": "54473-246",
+    "number": "ACC/54473",
+    "account": "Office Supplies",
+    "type": "Expense",
+    "description": "Office Supplies",
+    "balance": ""
+  }, {
+    "id": "54868-0026",
+    "number": "ACC/548686",
+    "account": "Opening Balance Equity",
+    "type": "Equity",
+    "description": "Opening Balance Equity",
+    "balance": "$0.00"
+  }, {
+    "id": "59045-1004",
+    "number": "ACC/590454",
+    "account": "Rent",
+    "type": "Expense",
+    "description": "Rent",
+    "balance": ""
+  }, {
+    "id": "41520-359",
+    "number": "ACC/41520",
+    "account": "Vendor Refunds",
+    "type": "Income",
+    "description": "Vendor Refunds",
+    "balance": ""
+  }, {
+    "id": "67046-092",
+    "number": "ACC/67046",
+    "account": "Insurance",
+    "type": "Expense",
+    "description": "Insurance",
+    "balance": ""
+  }, {
+    "id": "27293-017",
+    "number": "ACC/27293",
+    "account": "Cleaning/Janitorial",
+    "type": "Expense",
+    "description": "Cleaning/Janitorial",
+    "balance": ""
+  }, {
+    "id": "25000-132",
+    "number": "ACC/25000",
+    "account": "Printing and Reproduction",
+    "type": "Expense",
+    "description": "Printing and Reproduction",
+    "balance": ""
+  }, {
+    "id": "43353-796",
+    "number": "ACC/43353",
+    "account": "Advertising Expense",
+    "type": "Expense",
+    "description": "Advertising Expense",
+    "balance": ""
+  }]
