@@ -116,9 +116,9 @@ const Sidebar = () => {
               </li>
               {canView("Operations") && (
                 <>
-              <li className="menu-title">
-                <span>Operation</span>
-              </li>
+                  <li className="menu-title">
+                    <span>Operation</span>
+                  </li>
                   <li className="submenu">
                     <a href="" onClick={(e) => e.preventDefault()}>
                       <i className="la la-rocket"></i> <span> Campaigns</span>{" "}
@@ -135,8 +135,6 @@ const Sidebar = () => {
                       </li>
                     </ul>
                   </li>
-                
-                
                 </>
               )}
 
@@ -232,32 +230,31 @@ const Sidebar = () => {
                 </ul>
               </li>
               {canView("HR") && (
-              <li className="submenu">
-                <a href="" onClick={(e) => e.preventDefault()}>
-                  <i className="la la-money"></i> <span> Payroll </span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={dNone}>
-                  
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i className="la la-money"></i> <span> Payroll </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
                     <li>
                       <Link className="" to="/admin/salary">
                         {" "}
                         Employee Salary{" "}
                       </Link>
                     </li>
-                  
-                  {canView("HR") && (
-                    <li>
-                      <Link className="" to="/admin/payroll-items">
-                        {" "}
-                        Payroll Items{" "}
-                      </Link>
-                    </li>
-                  )}
-                </ul>
-              </li>
+
+                    {canView("HR") && (
+                      <li>
+                        <Link className="" to="/admin/payroll-items">
+                          {" "}
+                          Payroll Items{" "}
+                        </Link>
+                      </li>
+                    )}
+                  </ul>
+                </li>
               )}
-              
+
               {canView("HR") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
@@ -385,11 +382,12 @@ const Sidebar = () => {
                 </li>
               )}
               {canView("HR") && (
-              <li className="">
-                <Link to="/admin/coaching">
-                  <i className="la la-ticket"></i> <span>Coaching Form List</span>
-                </Link>
-              </li>
+                <li className="">
+                  <Link to="/admin/coaching">
+                    <i className="la la-ticket"></i>{" "}
+                    <span>Coaching Form List</span>
+                  </Link>
+                </li>
               )}
               <li className="">
                 <Link to="/admin/employee-coaching">
@@ -431,7 +429,7 @@ const Sidebar = () => {
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={dNone}>
-                  <li>
+                    <li>
                       <Link className="" to="/admin/receivables">
                         Account Receivables
                       </Link>
@@ -461,8 +459,7 @@ const Sidebar = () => {
                         General Ledger
                       </Link>
                     </li>
-                  
-                  
+
                     <li>
                       <Link className="" to="/admin/subscriptions">
                         Subscriptions
@@ -481,43 +478,6 @@ const Sidebar = () => {
                   <span>Administration</span>
                 </li>
               )}
-<<<<<<< HEAD
-              {canView("HR") && (
-                <li className="">
-                  <Link to="/admin/assets">
-                    <i className="la la-object-ungroup"></i> <span>Assets</span>
-                  </Link>
-                </li>
-              )}
-              {canView("HR") && (
-                <li className="">
-                  <Link to="/admin/asset-assignment">
-                    <i className="la la-object-ungroup"></i>{" "}
-                    <span>Asset Assignments</span>
-                  </Link>
-                </li>
-              )}
-              {canView("HR") && (
-                <li className="">
-                  <Link to="/admin/purchase-order">
-                    <i className="la la-object-ungroup"></i>{" "}
-                    <span>Purchase Order</span>
-                  </Link>
-                </li>
-              )}
-              {/* <li className="">
-                <Link to="/administrator/activities">
-                  <i className="la la-bell"></i> <span>Activities</span>
-                </Link>
-              </li> */}
-              {/* <li className="">
-                <Link to="/administrator/users">
-                  <i className="la la-user-plus"></i> <span>Users</span>
-                </Link>
-              </li> */}
-=======
-
->>>>>>> 368c82b244b312622cc501f519a08622f32b4afc
               {canView("IT") && (
                 <li>
                   <Link to="/admin/companysetting">
@@ -525,16 +485,17 @@ const Sidebar = () => {
                   </Link>
                 </li>
               )}
-               {canView("Accounting") && (
-                 <>
+              {canView("Accounting") && (
+                <>
                   <li className="menu-title">
                     <span>Facility</span>
                   </li>
                   <li className="">
-                  <Link to="/admin/assets">
-                    <i className="la la-object-ungroup"></i> <span>Assets</span>
-                  </Link>
-                </li>
+                    <Link to="/admin/assets">
+                      <i className="la la-object-ungroup"></i>{" "}
+                      <span>Assets</span>
+                    </Link>
+                  </li>
                   <li className="submenu">
                     <a href="" onClick={(e) => e.preventDefault()}>
                       <i className="la la-tools"></i> <span> Maintenance </span>{" "}
@@ -553,8 +514,7 @@ const Sidebar = () => {
                       </li>
                     </ul>
                   </li>
-                  
-                 </>
+                </>
               )}
               {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
