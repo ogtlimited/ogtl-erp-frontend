@@ -318,3 +318,16 @@ tbody > tr:nth-of-type(2n+1) {
 .filter-label{
   display: block;
 }
+.invoice-card{
+  background: linear-gradient(87deg,#2dce89 0,#2dcecc 100%);
+  border-radius: .375rem; 
+  min-height: 1px;
+  padding: 1.5rem;
+  flex: 1 1 auto
+
+}
+.invoice-card2{
+  background: linear-gradient(87deg,#2dce89 0,#2dcecc 100%);
+  
+
+}

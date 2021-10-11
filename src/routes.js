@@ -39,6 +39,15 @@ import MaintenanceReport from "./pages/Maintenance/MaintenanceReport";
 import MaintenanceAndRepairs from "./pages/Maintenance/MaintenanceAndRepairs";
 import Asset from "./pages/HR/Admin/Asset.Admin";
 import PurchaseOrder from "./pages/HR/Admin/PurchaseOrder.Admin";
+import { AccountingDashboard } from "./pages/Accounting/AccountingDashboard";
+import Clients from "./pages/Clients/Client";
+import Vendors from "./pages/Vendors/Vendors";
+import Invoices from "./pages/Accounting/Invoices";
+import VendorBills from "./pages/Vendors/VendorBills";
+import VendorPayments from "./pages/Vendors/VendorPayment";
+import ChartOfAccounts from "./pages/Accounting/chartOfAccounts";
+import GeneralLedger from "./pages/Accounting/GeneralLedger";
+import Budget from "./pages/Accounting/Budget";
 
 // const routes = [{
 //   title: 'Main',
@@ -156,6 +165,69 @@ const routes = [
     path: "/index",
     name: "Dashboard",
     component: AdminDashboard,
+    layout: "/admin",
+  },
+  {
+    title: "Accounting Dashboard",
+    path: "/accounting-dashboard",
+    name: "Accounting Dashboard",
+    component: AccountingDashboard,
+    layout: "/admin",
+  },
+  {
+    title: "Clients",
+    path: "/clients",
+    name: "Clients",
+    component: Clients,
+    layout: "/admin",
+  },
+  {
+    title: "Vendors",
+    path: "/vendors",
+    name: "Vendors",
+    component: Vendors,
+    layout: "/admin",
+  },
+  {
+    title: "Vendors Bills",
+    path: "/vendor-bills",
+    name: "Vendors",
+    component: VendorBills,
+    layout: "/admin",
+  },
+  {
+    title: "Vendors Payments",
+    path: "/vendor-payments",
+    name: "Vendors",
+    component: VendorPayments,
+    layout: "/admin",
+  },
+  {
+    title: "Invoices",
+    path: "/client-invoice",
+    name: "Invoices",
+    component: Invoices,
+    layout: "/admin",
+  },
+  {
+    title: "Account List",
+    path: "/chart-of-account",
+    name: "Account list",
+    component: ChartOfAccounts,
+    layout: "/admin",
+  },
+  {
+    title: "General Ledger",
+    path: "/ledger",
+    name: "General Ledger",
+    component: GeneralLedger,
+    layout: "/admin",
+  },
+  {
+    title: "Budget",
+    path: "/budgets",
+    name: "Budget",
+    component: Budget,
     layout: "/admin",
   },
   {

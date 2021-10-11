@@ -13,7 +13,8 @@ export const employeeFormJson = {
     },
     {
       name: "password",
-      type: "password",
+      type: "text",
+      disabled: true,
       title: "Password",
       required: {
         value: true,
@@ -37,12 +38,13 @@ export const employeeFormJson = {
     },
     {
       name: "reports_to",
-      type: "text",
+      type: "select",
       title: "Reports to",
       required: {
         value: true,
         message: "Reports to is required",
       },
+      options: [],
     },
     {
       name: "isAdmin",

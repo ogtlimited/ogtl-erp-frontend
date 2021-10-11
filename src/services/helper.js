@@ -40,6 +40,7 @@ class HelperService{
               type: e.type,
               label: e.title,
               required: e.required ? true : false,
+              disabled: e.disabled ? true : false,
             }
           }
           

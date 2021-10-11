@@ -24,22 +24,45 @@ const AllEmployeesAdmin = () => {
 
   // console.log(allEmployees);
   useEffect(() => {
-    fetchEmployee()
+    fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
-        settemplate(obj);
-        
-  }, [])
-  useEffect(() => {console.log(editData)}, [editData])
+    settemplate(obj);
+  }, []);
   useEffect(() => {
-    
+    console.log(editData);
+  }, [editData]);
+  useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
-      const { shifts, designations, employeeTypes, departments, projects, acceptedJobOffers } =
-        res.data.createEmployeeFormSelection;
+      const {
+        shifts,
+        designations,
+        employeeTypes,
+        departments,
+        projects,
+        acceptedJobOffers,
+        employees,
+      } = res.data.createEmployeeFormSelection;
       const appOpts = acceptedJobOffers?.map((e) => {
         return {
-          label: e.job_applicant_id.first_name + ' ' + e.job_applicant_id.last_name + ' ' + e.job_applicant_id.middle_name,
-          value: e.job_applicant_id.first_name + '-' + e.job_applicant_id.last_name + '-' + e?.job_applicant_id.middle_name,
+          label:
+            e.job_applicant_id.first_name +
+            " " +
+            e.job_applicant_id.last_name +
+            " " +
+            e.job_applicant_id.middle_name,
+          value:
+            e.job_applicant_id.first_name +
+            "-" +
+            e.job_applicant_id.last_name +
+            "-" +
+            e?.job_applicant_id.middle_name,
+        };
+      });
+      const reportstoOpts = employees?.map((e) => {
+        return {
+          label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
+          value: e._id,
         };
       });
       const shiftsopts = shifts?.map((e) => {
@@ -79,13 +102,11 @@ const AllEmployeesAdmin = () => {
         } else if (field.name === "default_shift") {
           field.options = shiftsopts;
           return field;
-        } 
-        else if (field.name === "applicant") {
-          console.log('APPLICANT')
+        } else if (field.name === "applicant") {
+          console.log("APPLICANT");
           field.options = appOpts;
           return field;
-        } 
-        else if (field.name === "department") {
+        } else if (field.name === "department") {
           field.options = deptopts;
           return field;
         } else if (field.name === "employment_type") {
@@ -93,6 +114,9 @@ const AllEmployeesAdmin = () => {
           return field;
         } else if (field.name === "projectId") {
           field.options = campaingOpts;
+          return field;
+        } else if (field.name === "reports_to") {
+          field.options = reportstoOpts;
           return field;
         }
         return field;
@@ -104,13 +128,13 @@ const AllEmployeesAdmin = () => {
       //   }
       // )
       const obj = helper.formArrayToObject(finalForm);
-      let initialValues = {}
-      for(let i in obj){
-        initialValues[i] = ''
-        console.log(i)
+      let initialValues = {};
+      for (let i in obj) {
+        initialValues[i] = "";
+        console.log(i);
       }
-      seteditData(initialValues)
-      console.log(initialValues)
+      seteditData(initialValues);
+      console.log(initialValues);
       settemplate(obj);
       console.log(obj);
     });
@@ -120,11 +144,11 @@ const AllEmployeesAdmin = () => {
     console.log(submitted);
     if (formValue && Object.keys(formValue).length > 0) {
       formValue.image = "";
-      const fullName = formValue.applicant?.split('-')
-      formValue.first_name = fullName[0]
-      formValue.last_name = fullName[1]
-      formValue.middle_name = fullName[2]
-      delete formValue.applicant
+      const fullName = formValue.applicant?.split("-");
+      formValue.first_name = fullName[0];
+      formValue.last_name = fullName[1];
+      formValue.middle_name = fullName[2];
+      delete formValue.applicant;
       axiosInstance.post("/employees", formValue).then((res) => {
         fetchEmployee();
         setsubmitted(false);
@@ -183,7 +207,7 @@ const AllEmployeesAdmin = () => {
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
-    
+
       <FormModal2
         editData={editData}
         setformValue={setformValue}

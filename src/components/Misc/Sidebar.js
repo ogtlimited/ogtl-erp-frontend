@@ -91,6 +91,13 @@ const Sidebar = () => {
                       </Link>
                     </li>
                   )}
+                  {canView("Accounting") && (
+                    <li>
+                      <Link className="active" to="/admin/accounting-dashboard">
+                        Accounting Dashboard
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link className="" to="/admin/employee-dashboard">
                       Employee Dashboard
@@ -422,6 +429,7 @@ const Sidebar = () => {
                   <span>Accounting</span>
                 </li>
               )}
+
               {canView("Accounting") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
@@ -430,13 +438,8 @@ const Sidebar = () => {
                   </a>
                   <ul style={dNone}>
                     <li>
-                      <Link className="" to="/admin/receivables">
-                        Account Receivables
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="" to="/admin/payables">
-                        Account Payables
+                      <Link className="" to="/admin/chart-of-account">
+                        Accounts
                       </Link>
                     </li>
                     <li>
@@ -444,7 +447,7 @@ const Sidebar = () => {
                         Budgets
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link className="" to="/admin/budget-expenses">
                         Budget Expenses
                       </Link>
@@ -453,7 +456,7 @@ const Sidebar = () => {
                       <Link className="" to="/admin/budget-revenues">
                         Budget Revenues
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link className="" to="/admin/ledger">
                         General Ledger
@@ -465,9 +468,46 @@ const Sidebar = () => {
                         Subscriptions
                       </Link>
                     </li>
+                  </ul>
+                </li>
+              )}
+              {canView("Accounting") && (
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i class="las la-user-friends"></i> <span> Clients </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
                     <li>
-                      <Link className="" to="/accounts/invoices">
+                      <Link className="" to="/admin/clients">
+                        Clients
+                      </Link>
+                      <Link className="" to="/admin/client-invoice">
                         Invoices
+                      </Link>
+                      <Link className="" to="/admin/client-payments">
+                        Payments
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {canView("Accounting") && (
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i class="las la-user-friends"></i> <span> Vendors </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
+                    <li>
+                      <Link className="" to="/admin/vendors">
+                        Vendors
+                      </Link>
+                      <Link className="" to="/admin/vendor-bills">
+                        Bills
+                      </Link>
+                      <Link className="" to="/admin/vendor-payments">
+                        Payments
                       </Link>
                     </li>
                   </ul>
@@ -490,10 +530,28 @@ const Sidebar = () => {
                   <li className="menu-title">
                     <span>Facility</span>
                   </li>
-                  <li className="">
-                    <Link to="/admin/assets">
+                  <li className="submenu">
+                    <a href="" onClick={(e) => e.preventDefault()}>
                       <i className="la la-object-ungroup"></i>{" "}
-                      <span>Assets</span>
+                      <span> Assets </span> <span className="menu-arrow"></span>
+                    </a>
+                    <ul style={dNone}>
+                      <li>
+                        <Link to="/admin/assets">
+                          <span>Assets</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="/admin/asset-assignment">
+                          <span>Assignment</span>
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link to="/admin/purchase-order">
+                      <i className="la la-cog"></i>{" "}
+                      <span>Asset Purchase Order</span>
                     </Link>
                   </li>
                   <li className="submenu">
