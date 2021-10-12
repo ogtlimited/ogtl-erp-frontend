@@ -138,7 +138,7 @@ const Clients = () => {
         </div>
       </div>
       <FormModal2
-        title="Create Asset Assignment"
+        title="New Client"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}

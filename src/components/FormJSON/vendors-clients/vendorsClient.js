@@ -51,7 +51,7 @@ export const vendorsClientsFormJson = {
             type:'text',
             title:'Address',
             required:{
-                value:true,
+                value: false,
                 message:'Address is required'
             }
         },
@@ -60,7 +60,7 @@ export const vendorsClientsFormJson = {
             type:'text',
             title:'City',
             required:{
-                value:true,
+                value:false,
                 message:'City is required'
             }
         },
@@ -87,7 +87,7 @@ export const vendorsClientsFormJson = {
             type:'text',
             title:'Country',
             required:{
-                value:true,
+                value:false,
                 message:'Country is required'
             }
         },

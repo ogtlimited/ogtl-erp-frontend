@@ -16,7 +16,8 @@ import * as Yup from "yup";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
-const DynamicForm = ({ formSchema, value, setvalue }) => {
+const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
+  console.log(editData)
   const [formData, setFormData] = useState(null);
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -74,7 +75,7 @@ const DynamicForm = ({ formSchema, value, setvalue }) => {
   };
 
   const getFormElement = (elementName, elementSchema) => {
-    console.log(elementSchema)
+    // console.log(elementSchema)
     const props = {
       name: elementName,
       label: elementSchema.label,
