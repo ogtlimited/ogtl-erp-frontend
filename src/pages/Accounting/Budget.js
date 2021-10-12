@@ -2,18 +2,17 @@ import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
-import { vendorsClientsFormJson } from "../../components/FormJSON/vendors-clients/vendorsClient";
+import { budgetFormJson } from "../../components/FormJSON/Accounting/budget";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 
-
 const Budget = () => {
-    const [data, setData] = useState([]);
-    const [formValue, setFormValue] = useState({});
-    const [editData, seteditData] = useState({});
-    const { showAlert } = useAppContext();
-    const [template, setTemplate] = useState(vendorsClientsFormJson);
-    const [submitted, setSubmitted] = useState(false);
+  const [data, setData] = useState([]);
+  const [formValue, setFormValue] = useState({});
+  const [editData, seteditData] = useState({});
+  const { showAlert } = useAppContext();
+  const [template, setTemplate] = useState(budgetFormJson);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchClient = () => {
@@ -35,30 +34,30 @@ const Budget = () => {
       dataField: "budget",
       text: "Budget",
       sort: true,
-      headerStyle: { minWidth: "150px" }
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "description",
       text: "Description",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "startDate",
       text: "Start Date",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "endDate",
       text: "End Date",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
   ];
   return (
     <>
-       <div className="page-header">
+      <div className="page-header">
         <div className="row">
           <div className="col">
             <h3 className="page-title">Bills</h3>
@@ -86,10 +85,15 @@ const Budget = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-     
+      <FormModal2
+        title="Create New Budget"
+        editData={editData}
+        setformValue={setFormValue}
+        template={helper.formArrayToObject(template.Fields)}
+        setsubmitted={setSubmitted}
+      />
     </>
   );
-}
+};
 
-
-export default Budget
+export default Budget;
