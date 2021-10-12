@@ -41,9 +41,7 @@ const Clients = () => {
       headerStyle: { width: "350px" },
       formatter: (val, row) => (
         <h2 className="table-avatar">
-          <span>
-            {row?.employeeId?.fullName} {" "}
-          </span>
+          <span>{row?.employeeId?.fullName} </span>
         </h2>
       ),
     },
@@ -51,49 +49,49 @@ const Clients = () => {
       dataField: "code",
       text: "Code",
       sort: true,
-      headerStyle: { minWidth: "150px" }
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "company",
       text: "Company",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "phone",
       text: "Phone",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "address",
       text: "Address",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "city",
       text: "City",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "state-region",
       text: "State/Region",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "country",
       text: "Country",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "",
@@ -149,6 +147,3 @@ const Clients = () => {
 };
 
 export default Clients;
-
-
-
