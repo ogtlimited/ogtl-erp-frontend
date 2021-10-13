@@ -3,18 +3,17 @@ import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTabl
 import avater from "../../assets/img/male_avater.png";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
-import { vendorsClientsFormJson } from "../../components/FormJSON/vendors-clients/vendorsClient";
+import { vendorPaymentFormJson } from "../../components/FormJSON/vendors-clients/payment";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 
-
 const VendorPayments = () => {
-    const [data, setData] = useState([]);
-    const [formValue, setFormValue] = useState({});
-    const [editData, seteditData] = useState({});
-    const { showAlert } = useAppContext();
-    const [template, setTemplate] = useState(vendorsClientsFormJson);
-    const [submitted, setSubmitted] = useState(false);
+  const [data, setData] = useState([]);
+  const [formValue, setFormValue] = useState({});
+  const [editData, seteditData] = useState({});
+  const { showAlert } = useAppContext();
+  const [template, setTemplate] = useState(vendorPaymentFormJson);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchClient = () => {
@@ -32,48 +31,47 @@ const VendorPayments = () => {
   }, []);
 
   const columns = [
-
     {
       dataField: "no",
       text: "Number",
       sort: true,
-      headerStyle: { minWidth: "150px" }
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "date",
       text: "Date",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "journal",
       text: "Journal",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "paymentMethod",
       text: "Payment Method",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "vendor",
       text: "Vendor",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "amount",
       text: "Amount",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "",
@@ -89,7 +87,7 @@ const VendorPayments = () => {
   ];
   return (
     <>
-       <div className="page-header">
+      <div className="page-header">
         <div className="row">
           <div className="col">
             <h3 className="page-title">Payments</h3>
@@ -118,7 +116,7 @@ const VendorPayments = () => {
         </div>
       </div>
       <FormModal2
-        title="Create Vendor"
+        title="Create Vendor Payment"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
@@ -126,6 +124,6 @@ const VendorPayments = () => {
       />
     </>
   );
-}
+};
 
-export default VendorPayments
+export default VendorPayments;

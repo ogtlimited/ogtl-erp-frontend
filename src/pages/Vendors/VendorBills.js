@@ -3,18 +3,17 @@ import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTabl
 import avater from "../../assets/img/male_avater.png";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
-import { vendorsClientsFormJson } from "../../components/FormJSON/vendors-clients/vendorsClient";
+import { vendorBillFormJson } from "../../components/FormJSON/vendors-clients/bill";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 
-
 const VendorBills = () => {
-    const [data, setData] = useState([]);
-    const [formValue, setFormValue] = useState({});
-    const [editData, seteditData] = useState({});
-    const { showAlert } = useAppContext();
-    const [template, setTemplate] = useState(vendorsClientsFormJson);
-    const [submitted, setSubmitted] = useState(false);
+  const [data, setData] = useState([]);
+  const [formValue, setFormValue] = useState({});
+  const [editData, seteditData] = useState({});
+  const { showAlert } = useAppContext();
+  const [template, setTemplate] = useState(vendorBillFormJson);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchClient = () => {
@@ -36,43 +35,43 @@ const VendorBills = () => {
       dataField: "number",
       text: "Number",
       sort: true,
-      headerStyle: { minWidth: "150px" }
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "vendor",
       text: "Vendor",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "bill_date",
       text: "Bill Date",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "due_date",
       text: "Due Date",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "reference",
       text: "Reference",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "total",
       text: "Total",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "100px" }
+      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "",
@@ -88,7 +87,7 @@ const VendorBills = () => {
   ];
   return (
     <>
-       <div className="page-header">
+      <div className="page-header">
         <div className="row">
           <div className="col">
             <h3 className="page-title">Bills</h3>
@@ -125,6 +124,6 @@ const VendorBills = () => {
       />
     </>
   );
-}
+};
 
-export default VendorBills
+export default VendorBills;

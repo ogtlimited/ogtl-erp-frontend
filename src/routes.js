@@ -48,6 +48,8 @@ import VendorPayments from "./pages/Vendors/VendorPayment";
 import ChartOfAccounts from "./pages/Accounting/chartOfAccounts";
 import GeneralLedger from "./pages/Accounting/GeneralLedger";
 import Budget from "./pages/Accounting/Budget";
+import Journals from "./pages/Accounting/Journal";
+import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
 
 // const routes = [{
 //   title: 'Main',
@@ -210,6 +212,13 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Invoice",
+    path: "/invoice/:id",
+    name: "Invoice",
+    component: InvoiceTemplate,
+    layout: "/admin",
+  },
+  {
     title: "Account List",
     path: "/chart-of-account",
     name: "Account list",
@@ -228,6 +237,13 @@ const routes = [
     path: "/budgets",
     name: "Budget",
     component: Budget,
+    layout: "/admin",
+  },
+  {
+    title: "Journals",
+    path: "/journals",
+    name: "Journals",
+    component: Journals,
     layout: "/admin",
   },
   {
