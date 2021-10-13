@@ -16,9 +16,9 @@ const VendorBills = () => {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const fetchClient = () => {
+    const fetchVendor = () => {
       axiosInstance
-        .get("/api/clients")
+        .get("/api/vendor")
         .then((res) => {
           console.log(res);
           setData(res.data.data);
@@ -27,7 +27,7 @@ const VendorBills = () => {
           console.log(error);
         });
     };
-    fetchClient();
+    fetchVendor();
   }, []);
 
   const columns = [
