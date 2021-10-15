@@ -50,6 +50,7 @@ import GeneralLedger from "./pages/Accounting/GeneralLedger";
 import Budget from "./pages/Accounting/Budget";
 import Journals from "./pages/Accounting/Journal";
 import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
+import ClientPayments from "./pages/Clients/ClientPayment";
 
 // const routes = [{
 //   title: 'Main',
@@ -202,6 +203,13 @@ const routes = [
     path: "/vendor-payments",
     name: "Vendors",
     component: VendorPayments,
+    layout: "/admin",
+  },
+  {
+    title: "Client Payments",
+    path: "/client-payments",
+    name: "Clients",
+    component: ClientPayments,
     layout: "/admin",
   },
   {

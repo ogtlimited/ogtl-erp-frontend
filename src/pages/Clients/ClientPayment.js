@@ -107,7 +107,7 @@ const ClientPayments = () => {
         </div>
       </div>
       <FormModal2
-        title="Create Vendor"
+        title="Make Payments"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}

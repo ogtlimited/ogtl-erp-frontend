@@ -4,29 +4,29 @@ export const budgetFormJson = {
     {
       name: "budget",
       type: "text",
-      title: "Budget",
+      title: "Budget Amount",
       required: {
         value: true,
         message: "Budget is required",
       },
     },
-
     {
-      name: "description",
-      type: "text",
-      title: "Description",
+      name: "departmentId",
+      type: "select",
+      title: "Department",
+      options: [],
       required: {
-        value: true,
+        
         message: "Description is required",
       },
     },
     {
-      name: "start-date",
+      name: "startDate",
       type: "date",
       title: "Start Date",
     },
     {
-      name: "end-date",
+      name: "endDate",
       type: "date",
       title: "End Date",
     },
