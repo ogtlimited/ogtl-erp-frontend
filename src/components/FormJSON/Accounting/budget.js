@@ -16,7 +16,7 @@ export const budgetFormJson = {
       title: "Department",
       options: [],
       required: {
-        
+
         message: "Description is required",
       },
     },
@@ -32,3 +32,5 @@ export const budgetFormJson = {
     },
   ],
 };
+
+
