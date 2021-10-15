@@ -7,9 +7,11 @@ import {
   useFormikContext,
   useField,
   useFormik,
+  
 } from "formik";
-
+import Select from "react-select";
 export function Form(props) {
+  console.log(props)
   return (
     <Formik {...props}>
       <FormikForm className="needs-validation" novalidate="">
@@ -20,8 +22,8 @@ export function Form(props) {
 }
 
 export function TextField(props) {
-  const { name, label,disabled, placeholder, ...rest } = props;
   console.log(props)
+  const { name, label,disabled, placeholder, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -215,7 +217,7 @@ export function TextareaField(props) {
 }
 
 export function SelectField(props) {
-  const { name, label, options } = props;
+  const { name, label, options, value } = props;
   return (
     <>
       <div className="form-group">
@@ -224,12 +226,23 @@ export function SelectField(props) {
             {label}
           </label>
         )}
-        <Field as="select" id={name} className="form-control" name={name}>
+          <Select
+                                options={options}
+                                defaultValue={value}
+                                name="employee_name"
+                                onChange={(opt) => {
+                                  // setFieldValue(name, opt.value);
+                                  // setFieldValue("employee_name", opt.value);
+                                }}
+                                
+                                className=" ml-0 w-100"
+                              />
+        {/* <Field as="select" id={name} className="form-control" name={name}>
           <option value="">Choose...</option>
           {options.map((optn, index) => (
             <option value={optn.value} label={optn.label || optn.value} />
           ))}
-        </Field>
+        </Field> */}
         <ErrorMessage
           name={name}
           render={(msg) => <div style={{ color: "red" }}>{msg}</div>}

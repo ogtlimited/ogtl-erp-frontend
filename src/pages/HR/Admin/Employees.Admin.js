@@ -131,10 +131,10 @@ const AllEmployeesAdmin = () => {
       let initialValues = {};
       for (let i in obj) {
         initialValues[i] = "";
-        console.log(i);
+        // console.log(i);
       }
       seteditData(initialValues);
-      console.log(initialValues);
+      // console.log(initialValues);
       settemplate(obj);
       console.log(obj);
     });

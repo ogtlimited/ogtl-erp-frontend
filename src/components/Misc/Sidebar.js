@@ -447,6 +447,11 @@ const Sidebar = () => {
                         Budgets
                       </Link>
                     </li>
+                    <li>
+                      <Link className="" to="/admin/journals">
+                        Journals
+                      </Link>
+                    </li>
                     {/* <li>
                       <Link className="" to="/admin/budget-expenses">
                         Budget Expenses

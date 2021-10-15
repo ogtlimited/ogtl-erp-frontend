@@ -31,11 +31,12 @@ const Budget = () => {
 
   const columns = [
     {
-      dataField: "budget",
-      text: "Budget",
+      dataField: "Title",
+      text: "Title",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
+    
     {
       dataField: "description",
       text: "Description",
@@ -54,6 +55,12 @@ const Budget = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
+    {
+        dataField: "budget",
+        text: "Budget",
+        sort: true,
+        headerStyle: { minWidth: "150px" }
+      },
   ];
   return (
     <>
