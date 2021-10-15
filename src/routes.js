@@ -45,6 +45,7 @@ import Vendors from "./pages/Vendors/Vendors";
 import Invoices from "./pages/Accounting/Invoices";
 import VendorBills from "./pages/Vendors/VendorBills";
 import VendorPayments from "./pages/Vendors/VendorPayment";
+import ClientPayments from "./pages/Clients/ClientPayment";
 import ChartOfAccounts from "./pages/Accounting/chartOfAccounts";
 import GeneralLedger from "./pages/Accounting/GeneralLedger";
 import Budget from "./pages/Accounting/Budget";
@@ -211,6 +212,13 @@ const routes = [
     component: Invoices,
     layout: "/admin",
   },
+  {
+    title: "Client Payments",
+    path: "/client-payments",
+    name: "Client",
+    component: ClientPayments,
+
+  }
   {
     title: "Invoice",
     path: "/invoice/:id",
