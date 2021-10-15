@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import avater from "../../assets/img/male_avater.png";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
 import { vendorBillFormJson } from "../../components/FormJSON/vendors-clients/bill";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
+import { BillForm } from "./components/form";
+import { Link } from "react-router-dom";
 
 const VendorBills = () => {
   const [data, setData] = useState([]);
-  const [formValue, setFormValue] = useState({});
-  const [editData, seteditData] = useState({});
+  const [formValue, setFormValue] = useState(null);
+  const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(vendorBillFormJson);
   const [submitted, setSubmitted] = useState(false);
 
+  const fetchBills = () => {
+    axiosInstance
+      .get("/api/bills")
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchVendor = () => {
-      axiosInstance
-        .get("/api/vendor")
-        .then((res) => {
-          console.log(res);
-          setData(res.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchVendor();
+    fetchBills();
   }, []);
 
   const columns = [
@@ -99,14 +100,13 @@ const VendorBills = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
+            <Link
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i className="fa fa-plus"></i> Add Vendor
-            </a>
+              <i className="fa fa-plus"></i> Add Bill
+            </Link>
           </div>
         </div>
       </div>
@@ -115,13 +115,14 @@ const VendorBills = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <FormModal2
+      <BillForm />
+      {/* <FormModal2
         title="Create Vendor"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
-      />
+      /> */}
     </>
   );
 };

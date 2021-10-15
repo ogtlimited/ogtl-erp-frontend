@@ -518,6 +518,13 @@ const Sidebar = () => {
                   </ul>
                 </li>
               )}
+              {canView("Accounting") && (
+                <li>
+                  <Link to="/admin/product-items">
+                    <i className="la la-box"></i> <span>Product Items</span>
+                  </Link>
+                </li>
+              )}
               {canView("Facility") && (
                 <li className="menu-title">
                   <span>Administration</span>

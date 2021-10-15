@@ -50,6 +50,7 @@ import GeneralLedger from "./pages/Accounting/GeneralLedger";
 import Budget from "./pages/Accounting/Budget";
 import Journals from "./pages/Accounting/Journal";
 import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
+import ProductItems from "./pages/ProductItems/ProductItems";
 
 // const routes = [{
 //   title: 'Main',
@@ -230,6 +231,13 @@ const routes = [
     path: "/ledger",
     name: "General Ledger",
     component: GeneralLedger,
+    layout: "/admin",
+  },
+  {
+    title: "Product Items",
+    path: "/product-items",
+    name: "Product Items",
+    component: ProductItems,
     layout: "/admin",
   },
   {
