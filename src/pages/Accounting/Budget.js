@@ -12,27 +12,46 @@ const Budget = () => {
   const [editData, seteditData] = useState({});
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(budgetFormJson);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted,setSubmitted ] = useState(false);
 
+  const fetchBudget = () => {
+    axiosInstance
+      .get("/api/budget")
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchClient = () => {
-      axiosInstance
-        .get("/api/clients")
-        .then((res) => {
-          console.log(res);
-          setData(res.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchClient();
+    fetchBudget();
   }, []);
+  useEffect(() => {
+    console.log(formValue);
+    if (formValue && Object.keys(formValue).length > 0) {
+     
+      
+      axiosInstance.post("/api/budget", formValue).then((res) => {
+        fetchBudget();
+        setSubmitted(false);
+        console.log(res);
+      });
+    }
+    console.log(formValue);
+  }, [submitted, formValue]);
 
   const columns = [
     {
       dataField: "Title",
       text: "Title",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "departmentId",
+      text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },

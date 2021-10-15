@@ -83,7 +83,7 @@ const Invoices = () => {
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#invoiceForm"
             >
               <i className="fa fa-plus"></i> Add Invoice
             </a>
@@ -98,7 +98,7 @@ const Invoices = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <FormModal2
+      <InvoiceModal
         title="Create Invoice"
         editData={editData}
         setformValue={setFormValue}

@@ -112,8 +112,88 @@ const InvoiceModal = () => {
                     </button>
                   </div>
                   <div className="modal-body">
-                    {/* {errors} */}
-                    
+                  <form  >
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="invoice_no">Number</label><input
+                    name="invoice_no" class="form-control" type="text" id="invoice_no" placeholder="" value="" /></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="customer">Customer</label>
+                <select className="form-control" name="" id="">
+                    <option value="">Select employee</option>
+                </select>
+                </div>
+            </div>
+        
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="invoice_date">Invoice Date</label><input
+                    name="invoice_date" class="form-control" type="date" id="invoice_date" placeholder="" value="" />
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="due-date">Due Date</label><input name="due-date"
+                    class="form-control" type="date" id="due-date" placeholder="" value="" /></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="total">Total</label><input name="total"
+                    class="form-control" type="text" id="total" placeholder="" value=""/></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="status">Status</label><input name="status"
+                    class="form-control" type="text" id="status" placeholder="" value=""/></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group"><label class="col-form-label" for="payment-status">Payment Status</label><input
+                    name="payment-status" class="form-control" type="text" id="payment-status" placeholder="" value=""/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    <table class="table table-striped">
+  <thead>
+    <tr>
+      <th className="col-4">Product/Service</th>
+      <th className="col-1">Rate</th>
+      <th className="col-2">Price</th>
+      <th className="col-1">Tax %</th>
+      <th className="col-2">Sub Total</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row"> <select className="form-control" name="" id="">
+                    <option value="">Select Product</option>
+                </select></th>
+      <td><input name="product"
+                    class="form-control" type="text"  /></td>
+      <td><input name="rate"
+                    class="form-control" type="text" /></td>
+      <td><input name="price"
+                    class="form-control" type="text" /></td>
+      <td><input name="subtotal"
+                    class="form-control" type="text" /></td>
+
+    </tr>
+
+  </tbody>
+</table>
+    <div className="flex text-center mb-4">
+
+    <a
+
+      className="edit-icon ml-2  text-center pos-relative" style={{paddingLeft: '2px'}}>
+     <i class="las la-plus" style={{fontSize: '21px'}}></i>
+    </a>
+
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12"><button class="btn btn-primary btn-add" type="submit">Submit</button></div>
+    </div>
+</form>
+
                   </div>
                 </div>
               </div>
