@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import Select from "react-select";
+import { useAppContext } from "../../../../Context/AppContext";
 import axiosInstance from "../../../../services/api";
-import { FieldArray } from "./field-array";
 
 const defaultValues = {
   vendor: "",
@@ -11,15 +12,59 @@ const defaultValues = {
   due_date: "",
   total_amount: "",
   paid: "",
-  productItems: [],
 };
 
-export const BillForm = () => {
+export const BillForm = ({ fetchBills }) => {
   const [formOptions, setFormOptions] = useState([]);
-  const { register, handleSubmit, reset, control, setValue } = useForm({
+  const [loading, setLoading] = useState(false);
+  const [productOptions, setProductOptions] = useState([]);
+  const { showAlert } = useAppContext();
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues,
   });
 
+  const [productItems, setProductItems] = useState([
+    {
+      productId: "",
+      rate: "",
+      price: "",
+      tax: "",
+      units: "",
+    },
+  ]);
+
+  const handleChange = (editorState, index) => {
+    const values = [...productItems];
+    values[index].productId = editorState._id;
+    values[index].rate = editorState.rate;
+
+    values[index].price = editorState.price;
+
+    values[index].tax = editorState.tax;
+
+    values[index].units = editorState.units;
+    console.log(values);
+    setProductItems(values);
+  };
+  const handleRemoveFields = (index) => {
+    const values = [...productItems];
+
+    if (values.length > 1) {
+      values.splice(index, 1);
+      setProductItems(values);
+    }
+  };
+  const handleAddFields = () => {
+    const values = [...productItems];
+    values.push({
+      productId: "",
+      rate: "",
+      price: "",
+      tax: "",
+      units: "",
+    });
+    setProductItems(values);
+  };
   useEffect(() => {
     axiosInstance
       .get("/api/vendor")
@@ -37,11 +82,58 @@ export const BillForm = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axiosInstance
+      .get("/api/product-service")
+      .then((res) => {
+        console.log(res.data.data);
+        const prodOpt = res.data.data.map((e) => {
+          return {
+            label: e.product,
+            value: e,
+          };
+        });
+
+        setProductOptions(prodOpt);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
   };
   const onSubmit = (data) => {
-    console.log(data);
+    let productIds = productItems.map((prod) => prod.productId);
+    let balance = 0;
+    if (data.paid < data.total_amount) {
+      balance = data.total_amount - data.paid;
+    } else {
+      balance = 0;
+    }
+
+    let newData = {
+      ...data,
+      balance,
+      productItems: productIds,
+    };
+    setLoading(true);
+    axiosInstance
+      .post("/api/bills", newData)
+      .then((res) => {
+        console.log(res);
+        fetchBills();
+        showAlert(true, res.data.message, "alert alert-success");
+        reset();
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -112,13 +204,13 @@ export const BillForm = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="total_amount">Total Amount</label>
+                      <label htmlFor="due_date">Due Date</label>
                       <input
-                        name="total_amount"
-                        defaultValue={defaultValues.total_amount}
+                        name="due_date"
+                        defaultValue={defaultValues.due_date}
                         className="form-control "
-                        type="number"
-                        {...register("total_amount")}
+                        type="date"
+                        {...register("due_date")}
                       />
                     </div>
                   </div>
@@ -132,41 +224,123 @@ export const BillForm = () => {
                         defaultValue={defaultValues.paid}
                         className="form-control "
                         type="number"
-                        {...register("paid")}
+                        {...register("paid", { valueAsNumber: true })}
                       />
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="due_date">Due Date</label>
+                      <label htmlFor="total_amount">Total Amount</label>
                       <input
-                        name="due_date"
-                        defaultValue={defaultValues.due_date}
+                        name="total_amount"
+                        defaultValue={defaultValues.total_amount}
                         className="form-control "
-                        type="date"
-                        {...register("due_date")}
+                        type="number"
+                        {...register("total_amount", { valueAsNumber: true })}
                       />
                     </div>
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-12">
-                    <table className="table ">
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th>Product Name</th>
-                          <th>Description</th>
-                          <th>Rate</th>
-                          <th>Price</th>
-                          <th>Units</th>
-                          <th>Tax</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <FieldArray {...{ control, register, defaultValues }} />
-                    </table>
-                  </div>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th className="col-4">Product/Service</th>
+
+                        <th className="col-1">Rate</th>
+                        <th className="col-2">Price</th>
+                        <th className="col-1">Tax %</th>
+                        <th className="col-2">Units</th>
+                        <th className="col-1">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {productItems &&
+                        productItems.map((product, index) => (
+                          <tr>
+                            <th scope="row">
+                              <Select
+                                options={productOptions}
+                                // defaultValue={defaultValues.productItems}
+                                // name="productId"
+                                onChange={(state) =>
+                                  handleChange(state.value, index)
+                                }
+                              />
+                            </th>
+                            <input
+                              name="productId"
+                              className="form-control"
+                              type="text"
+                              defaultValue={product?._id}
+                              disabled
+                              hidden
+                            />
+                            <td>
+                              <input
+                                name="rate"
+                                className="form-control"
+                                type="text"
+                                defaultValue={product?.rate}
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                name="price"
+                                className="form-control"
+                                type="text"
+                                defaultValue={product?.price}
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                name="tax"
+                                className="form-control"
+                                type="text"
+                                defaultValue={product?.tax}
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                name="units"
+                                className="form-control"
+                                type="text"
+                                defaultValue={product?.units}
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <Link
+                                className="edit-icon ml-2  text-center pos-relative"
+                                style={{
+                                  paddingLeft: "2px",
+                                  left: "-16px",
+                                  top: "10px",
+                                }}
+                                onClick={() => handleRemoveFields(index)}
+                              >
+                                <i
+                                  class="las la-minus"
+                                  style={{ fontSize: "21px" }}
+                                ></i>
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                    <tfoot className="d-flex">
+                      <Link
+                        className="edit-icon ml-2 mt-3  text-center pos-relative"
+                        style={{ paddingLeft: "2px" }}
+                        onClick={handleAddFields}
+                      >
+                        <i class="las la-plus" style={{ fontSize: "21px" }}></i>
+                      </Link>
+                    </tfoot>
+                  </table>
                 </div>
 
                 <div className="col-md-12">
@@ -179,7 +353,15 @@ export const BillForm = () => {
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      Save
+                      {loading ? (
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        "Save"
+                      )}
                     </button>
                   </div>
                 </div>
