@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { formatter } from "../../services/numberFormatter";
 import moment from "moment";
 import { clientInvoiceFormJson } from "../../components/FormJSON/clients/client-invoice";
+import { InvoiceForm } from "./components";
 import { useAppContext } from "../../Context/AppContext";
 import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
@@ -105,19 +106,13 @@ const Invoices = () => {
 
   const columns = [
     {
-      dataField: "no",
-      text: "Number",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-    {
       dataField: "customer",
       text: "Customer",
       sort: true,
       headerStyle: { width: "300px" },
     },
     {
-      dataField: "date",
+      dataField: "invoice_date",
       text: "Invoice Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
@@ -129,8 +124,14 @@ const Invoices = () => {
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "total",
+      dataField: "total_amount",
       text: "Total",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "type",
+      text: "Type",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
@@ -141,7 +142,7 @@ const Invoices = () => {
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "paymentStatus",
+      dataField: "productItems",
       text: "Payment Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
@@ -166,7 +167,7 @@ const Invoices = () => {
               className="dropdown-item"
               href="#"
               data-toggle="modal"
-              data-target="#InvoiceModal"
+              data-target="#FormModal"
               onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
@@ -193,7 +194,10 @@ const Invoices = () => {
           <div className="col">
             <h3 className="page-title">Invoices</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item active">Dashboard</li>
+              <li className="breadcrumb-item">
+                <a href="index.html">Dashboard</a>
+              </li>
+              <li className="breadcrumb-item active">Invoices</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -201,7 +205,7 @@ const Invoices = () => {
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#invoiceForm"
+              data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add Invoice
             </a>
@@ -216,15 +220,16 @@ const Invoices = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <InvoiceModal
+      <InvoiceForm fetchInvoice={fetchInvoice} />
+      {/* <InvoiceModal
         title="Create Invoice"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
-      />
+      /> */}
       <ConfirmModal
-        title="Assets"
+        title="Invoice"
         selectedRow={selectedRow}
         deleteFunction={deleteInvoice}
       />
