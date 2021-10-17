@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { formatter } from "../../services/numberFormatter";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { EditBillForm } from "./components/form/editForm";
 
 const VendorBills = () => {
   const [data, setData] = useState([]);
@@ -17,7 +18,7 @@ const VendorBills = () => {
   const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(vendorBillFormJson);
-  const [submitted, setSubmitted] = useState(false);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
 
@@ -41,6 +42,10 @@ const VendorBills = () => {
   useEffect(() => {
     fetchBills();
   }, []);
+
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow]);
 
   const deleteBill = (row) => {
     axiosInstance
@@ -138,7 +143,7 @@ const VendorBills = () => {
             <Link
               className="dropdown-item"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#EditFormModal"
               onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
@@ -187,7 +192,11 @@ const VendorBills = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
+
+      <EditBillForm fetchBills={fetchBills} editData={editData} />
+
       <BillForm fetchBills={fetchBills} />
+
       <ConfirmModal
         title="Bill"
         selectedRow={selectedRow}
