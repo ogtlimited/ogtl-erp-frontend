@@ -1,54 +1,54 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
+import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import axiosInstance from "../../services/api";
+import FormModal2 from "../../components/Modal/FormModal2";
+import { useAppContext } from "../../Context/AppContext";
+import helper from "../../services/helper";
 import { Link } from "react-router-dom";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { shiftTypeFormJson } from "../../../components/FormJSON/HR/shift/ShiftType";
-import { useAppContext } from "../../../Context/AppContext";
-import axiosInstance from "../../../services/api";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import FormModal2 from "../../../components/Modal/FormModal2";
-import HelperService from "../../../services/helper";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { productItemsFormJson } from "../../components/FormJSON/vendors-clients/product-items";
 
-const ShiftAdmin = () => {
+const ProductItems = () => {
+  const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
+  const { showAlert, setformUpdate } = useAppContext();
   const [submitted, setSubmitted] = useState(false);
-  const [data, setData] = useState([]);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
 
-  const { fetchTypesShift, showAlert, setformUpdate } = useAppContext();
-
   const editRow = (row) => {
-    // setformUpdate(null)
     setformUpdate(row);
     setclickedRow(row);
   };
 
-  useEffect(() => {
-    fetchTypesShift()
+  const fetchVendor = () => {
+    axiosInstance
+      .get("/api/product-service")
       .then((res) => {
-        console.log("Shift types response", typeof res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [fetchTypesShift]);
+  };
+  useEffect(() => {
+    fetchVendor();
+  }, []);
 
   useEffect(() => {
     if (formValue) {
       if (!editData) {
         axiosInstance
-          .post("/api/shiftType", formValue)
+          .post("/api/product-service", formValue)
           .then((res) => {
             setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
-            fetchTypesShift();
+            fetchVendor();
             showAlert(true, res.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(
               true,
@@ -62,14 +62,13 @@ const ShiftAdmin = () => {
         delete formValue.createdAt;
         delete formValue.updatedAt;
         axiosInstance
-          .patch("/api/shiftType/" + editData._id, formValue)
+          .put("/api/product-service/" + editData._id, formValue)
           .then((res) => {
             setFormValue(null);
-            fetchTypesShift();
+            fetchVendor();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(
               true,
@@ -79,20 +78,18 @@ const ShiftAdmin = () => {
           });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formValue, editData, fetchTypesShift]);
+  }, [formValue, editData]);
 
   useEffect(() => {
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
 
-  //delete shift
-  const deleteShift = (row) => {
+  const deleteVendor = (row) => {
     axiosInstance
-      .delete(`/api/shiftType/${row._id}`)
+      .delete(`/api/product-service/${row._id}`)
       .then((res) => {
         console.log(res);
-        fetchTypesShift();
+        fetchVendor();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -106,50 +103,65 @@ const ShiftAdmin = () => {
 
   const columns = [
     {
-      dataField: "shift_name",
-      text: "Shift Name",
+      dataField: "product",
+      text: "Product name",
       sort: true,
-      headerStyle: { minWidth: "410px" },
-    },
-
-    {
-      dataField: "start_time",
-      text: "Start time",
-      sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { width: "350px" },
     },
     {
-      dataField: "end_time",
-      text: "End time",
+      dataField: "description",
+      text: "Description",
       sort: true,
-      headerStyle: { minWidth: "350px" },
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "rate",
+      text: "Rate",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "price",
+      text: "Price",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "units",
+      text: "Units",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "tax",
+      text: "Tax",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
     },
 
     {
       dataField: "",
       text: "Action",
       sort: true,
-      headerStyle: { minWidth: "100px", textAlign: "left" },
+      headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
+          <Link
             className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
+          </Link>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            <Link
               className="dropdown-item"
-              href="#"
               data-toggle="modal"
               data-target="#FormModal"
               onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </Link>
             <Link
               className="dropdown-item"
               data-toggle="modal"
@@ -170,49 +182,44 @@ const ShiftAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Shift List</h3>
+            <h3 className="page-title">Product Items</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item">
-                <Link to="/">Employees</Link>
-              </li>
-              <li className="breadcrumb-item active">Shift List</li>
+              <li className="breadcrumb-item active">Product Items</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
+            <Link
+              className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              Add Shifts
-            </a>
+              <i className="fa fa-plus"></i> Add Product Item
+            </Link>
           </div>
         </div>
       </div>
       <div className="row">
-        <div className="col-12">
-          <LeavesTable data={data} columns={columns} />
+        <div className="col-md-12">
+          <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-
       <FormModal2
-        title="Create Shift"
+        title="Create Product Item"
         editData={editData}
         setformValue={setFormValue}
-        template={HelperService.formArrayToObject(shiftTypeFormJson.Fields)}
+        template={helper.formArrayToObject(productItemsFormJson.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
-        title="Shift type"
+        title="Product Item"
         selectedRow={selectedRow}
-        deleteFunction={deleteShift}
+        deleteFunction={deleteVendor}
       />
     </>
   );
 };
 
-export default ShiftAdmin;
+export default ProductItems;
