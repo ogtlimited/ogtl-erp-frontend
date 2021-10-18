@@ -25,7 +25,6 @@ const Invoices = () => {
   const [clickedRow, setclickedRow] = useState(null);
 
   const editRow = (row) => {
-    setformUpdate(row);
     setclickedRow(row);
   };
 
@@ -130,12 +129,6 @@ const Invoices = () => {
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "type",
-      text: "Type",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
       dataField: "status",
       text: "Status",
       sort: true,
@@ -154,24 +147,22 @@ const Invoices = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
+          <Link
             className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
+          </Link>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            <Link
               className="dropdown-item"
-              href="#"
               data-toggle="modal"
               data-target="#FormModal"
               onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </Link>
             <Link
               className="dropdown-item"
               data-toggle="modal"
