@@ -5,19 +5,20 @@ import Select from "react-select";
 import { useAppContext } from "../../../../Context/AppContext";
 import axiosInstance from "../../../../services/api";
 
-const defaultValues = {
-  vendor: "",
-
-  bill_date: "",
-  due_date: "",
-  total_amount: "",
-};
-
-export const BillForm = ({ fetchBills }) => {
+export const EditBillForm = ({ fetchBills, editData }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const { showAlert } = useAppContext();
+
+  const defaultValues = {
+    vendor: editData?.vendor,
+    ref: editData?.ref,
+    bill_date: editData?.bill_date,
+    due_date: editData?.due_date,
+    total_amount: editData?.total_amount,
+    paid: editData?.paid,
+  };
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues,
   });
@@ -106,11 +107,11 @@ export const BillForm = ({ fetchBills }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    // if (data.paid < data.total_amount) {
-    //   balance = data.total_amount - data.paid;
-    // } else {
-    //   balance = 0;
-    // }
+    if (data.paid < data.total_amount) {
+      balance = data.total_amount - data.paid;
+    } else {
+      balance = 0;
+    }
 
     let newData = {
       ...data,
@@ -119,7 +120,7 @@ export const BillForm = ({ fetchBills }) => {
     };
     setLoading(true);
     axiosInstance
-      .post("/api/bills", newData)
+      .patch("/api/bills", newData)
       .then((res) => {
         console.log(res);
         fetchBills();
@@ -135,11 +136,13 @@ export const BillForm = ({ fetchBills }) => {
       });
   };
 
+  console.log("def", defaultValues);
+
   return (
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id="EditFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -167,7 +170,10 @@ export const BillForm = ({ fetchBills }) => {
                       <label htmlFor="vendor">Vendor</label>
                       <Select
                         options={formOptions}
-                        defaultValue={defaultValues.vendor}
+                        value={{
+                          label: defaultValues?.vendor?.company,
+                          value: defaultValues?.vendor?._id,
+                        }}
                         name="vendor"
                         onChange={(state) =>
                           onEditorStateChange(state.value, "vendor")
@@ -177,13 +183,13 @@ export const BillForm = ({ fetchBills }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="total_amount">Total Amount</label>
+                      <label htmlFor="ref">Ref</label>
                       <input
-                        name="total_amount"
-                        defaultValue={defaultValues.total_amount}
+                        name="ref"
+                        defaultValue={defaultValues.ref}
                         className="form-control "
-                        type="number"
-                        {...register("total_amount", { valueAsNumber: true })}
+                        type="text"
+                        {...register("ref")}
                       />
                     </div>
                   </div>
@@ -214,7 +220,32 @@ export const BillForm = ({ fetchBills }) => {
                     </div>
                   </div>
                 </div>
-
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="paid">Paid</label>
+                      <input
+                        name="paid"
+                        defaultValue={defaultValues.paid}
+                        className="form-control "
+                        type="number"
+                        {...register("paid", { valueAsNumber: true })}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="total_amount">Total Amount</label>
+                      <input
+                        name="total_amount"
+                        defaultValue={defaultValues.total_amount}
+                        className="form-control "
+                        type="number"
+                        {...register("total_amount", { valueAsNumber: true })}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div className="row">
                   <table class="table table-striped">
                     <thead>
