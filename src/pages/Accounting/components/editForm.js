@@ -5,18 +5,20 @@ import Select from "react-select";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 
-const defaultValues = {
-  customer: "",
-  invoice_date: "",
-  due_date: "",
-  total_amount: "",
-};
-
-export const InvoiceForm = ({ fetchInvoice }) => {
+export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const { showAlert } = useAppContext();
+
+  const defaultValues = {
+    customer: editData?.customer,
+    ref: editData?.ref,
+    invoice_date: editData?.invoice_date,
+    due_date: editData?.due_date,
+    total_amount: editData?.total_amount,
+    paid: editData?.paid,
+  };
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues,
   });
@@ -105,11 +107,11 @@ export const InvoiceForm = ({ fetchInvoice }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    // if (data.paid < data.total_amount) {
-    //   balance = data.total_amount - data.paid;
-    // } else {
-    //   balance = 0;
-    // }
+    if (data.paid < data.total_amount) {
+      balance = data.total_amount - data.paid;
+    } else {
+      balance = 0;
+    }
 
     let newData = {
       ...data,
@@ -118,10 +120,10 @@ export const InvoiceForm = ({ fetchInvoice }) => {
     };
     setLoading(true);
     axiosInstance
-      .post("/api/invoice", newData)
+      .patch("/api/invoice", newData)
       .then((res) => {
         console.log(res);
-        fetchInvoice();
+        fetchInvoices();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
       })
@@ -134,11 +136,13 @@ export const InvoiceForm = ({ fetchInvoice }) => {
       });
   };
 
+  console.log("def", defaultValues);
+
   return (
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id="EditFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -166,7 +170,10 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                       <label htmlFor="customer">Customer</label>
                       <Select
                         options={formOptions}
-                        defaultValue={defaultValues.customer}
+                        value={{
+                          label: defaultValues?.customer?.company,
+                          value: defaultValues?.customer?._id,
+                        }}
                         name="customer"
                         onChange={(state) =>
                           onEditorStateChange(state.value, "customer")
@@ -174,6 +181,20 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                       />
                     </div>
                   </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="ref">Ref</label>
+                      <input
+                        name="ref"
+                        defaultValue={defaultValues.ref}
+                        className="form-control "
+                        type="text"
+                        {...register("ref")}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="invoice_date">Invoice Date</label>
@@ -186,8 +207,6 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="due_date">Due Date</label>
@@ -200,7 +219,20 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                       />
                     </div>
                   </div>
-
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="paid">Paid</label>
+                      <input
+                        name="paid"
+                        defaultValue={defaultValues.paid}
+                        className="form-control "
+                        type="number"
+                        {...register("paid", { valueAsNumber: true })}
+                      />
+                    </div>
+                  </div>
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="total_amount">Total Amount</label>
@@ -214,7 +246,6 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                     </div>
                   </div>
                 </div>
-
                 <div className="row">
                   <table class="table table-striped">
                     <thead>

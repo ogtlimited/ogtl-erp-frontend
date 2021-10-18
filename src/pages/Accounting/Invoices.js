@@ -13,6 +13,8 @@ import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
 import InvoiceModal from "../../components/Modal/invoiceModal";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { EditInvoiceForm } from "./components/editForm";
+import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const Invoices = () => {
   const [data, setData] = useState(null);
@@ -21,8 +23,10 @@ const Invoices = () => {
   const { showAlert, combineRequest, setformUpdate } = useAppContext();
   const [template, setTemplate] = useState(clientInvoiceFormJson);
   const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [statusRow, setstatusRow] = useState(null);
 
   const editRow = (row) => {
     setclickedRow(row);
@@ -44,54 +48,15 @@ const Invoices = () => {
   }, []);
 
   useEffect(() => {
-    if (formValue) {
-      if (!editData) {
-        console.log(formValue);
-        axiosInstance
-          .post("/api/invoice", formValue)
-          .then((res) => {
-            setFormValue(null);
-            fetchInvoice();
-            showAlert(true, res.data.message, "alert alert-success");
-          })
-          .catch((error) => {
-            console.log(error);
-            setFormValue(null);
-            showAlert(true, error.response.data.message, "alert alert-danger");
-          });
-      } else {
-        formValue._id = editData._id;
-        delete formValue.__v;
-        delete formValue._id;
-        delete formValue.createdAt;
-        delete formValue.updatedAt;
-        axiosInstance
-          .patch("/api/invoice" + editData._id, formValue)
-          .then((res) => {
-            setFormValue(null);
-            fetchInvoice();
-            showAlert(true, res.data.message, "alert alert-success");
-          })
-          .catch((error) => {
-            console.log(error);
-            setFormValue(null);
-            showAlert(true, error.response.data.message, "alert alert-danger");
-          });
-      }
-    }
-  }, [formValue, editData]);
-  useEffect(() => {
     seteditData(clickedRow);
-    return () => {
-      seteditData(null);
-    };
-  }, [clickedRow, submitted]);
+  }, [clickedRow]);
 
   const deleteInvoice = (row) => {
     axiosInstance
-      .delete(`/api/client/${row._id}`)
+      .delete(`/api/invoice/${row._id}`)
       .then((res) => {
         console.log(res);
+        fetchInvoice();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -103,22 +68,56 @@ const Invoices = () => {
       });
   };
 
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        status,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/invoice/status/" + statusRow._id, update)
+        .then((res) => {
+          fetchInvoice();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
+
   const columns = [
     {
       dataField: "customer",
       text: "Customer",
       sort: true,
       headerStyle: { width: "300px" },
+      formatter: (value, row) => <h2>{row?.customer?.company}</h2>,
     },
     {
       dataField: "invoice_date",
       text: "Invoice Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <h2>{moment(row?.invoice_date).format("L")}</h2>
+      ),
     },
     {
       dataField: "due_date",
       text: "Due Date",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.due_date).format("L")}</h2>,
+    },
+    {
+      dataField: "ref",
+      text: "Reference",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
@@ -127,18 +126,37 @@ const Invoices = () => {
       text: "Total",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(row?.total_amount)}</p>,
+    },
+    {
+      dataField: "paid",
+      text: "Amount Paid",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(row?.paid) || 0}</p>,
+    },
+    {
+      dataField: "balance",
+      text: "Balance",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(row?.balance)}</p>,
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
-    },
-    {
-      dataField: "productItems",
-      text: "Payment Status",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          <InvoiceBillApprover
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+          />
+        </>
+      ),
     },
     {
       dataField: "",
@@ -146,35 +164,39 @@ const Invoices = () => {
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <Link
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </Link>
-          <div className="dropdown-menu dropdown-menu-right">
+        <>
+          <div className="dropdown dropdown-action text-right">
             <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
             >
-              <i className="fa fa-pencil m-r-5"></i> Edit
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </Link>
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            <div className="dropdown-menu dropdown-menu-right">
+              {row?.status === "Draft" && (
+                <Link
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#EditFormModal"
+                  onClick={() => editRow(row)}
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </Link>
+              )}
+              <Link
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </Link>
+            </div>
           </div>
-        </div>
+        </>
       ),
     },
   ];
@@ -211,14 +233,10 @@ const Invoices = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
+
+      <EditInvoiceForm fetchInvoice={fetchInvoice} editData={editData} />
       <InvoiceForm fetchInvoice={fetchInvoice} />
-      {/* <InvoiceModal
-        title="Create Invoice"
-        editData={editData}
-        setformValue={setFormValue}
-        template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      /> */}
+
       <ConfirmModal
         title="Invoice"
         selectedRow={selectedRow}
