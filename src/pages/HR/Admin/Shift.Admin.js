@@ -79,6 +79,7 @@ const ShiftAdmin = () => {
           });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValue, editData, fetchTypesShift]);
 
   useEffect(() => {

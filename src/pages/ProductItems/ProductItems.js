@@ -2,83 +2,53 @@ import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
-import { vendorPaymentFormJson } from "../../components/FormJSON/vendors-clients/payment";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 import { Link } from "react-router-dom";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { productItemsFormJson } from "../../components/FormJSON/vendors-clients/product-items";
 
-const VendorPayments = () => {
+const ProductItems = () => {
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const { showAlert, setformUpdate } = useAppContext();
-  const [template, setTemplate] = useState(vendorPaymentFormJson);
   const [submitted, setSubmitted] = useState(false);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
 
   const editRow = (row) => {
-    // setformUpdate(null)
     setformUpdate(row);
     setclickedRow(row);
   };
-  const fetchVendorPayment = () => {
+
+  const fetchVendor = () => {
     axiosInstance
-      .get("/api/vendor-payment")
+      .get("/api/product-service")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
   useEffect(() => {
-    fetchVendorPayment();
-  }, []);
-
-  useEffect(() => {
-    axiosInstance
-      .get("/api/vendor")
-      .then((res) => {
-        const formOp = res.data.data.map((e) => {
-          return {
-            label: e.company,
-            value: e._id,
-          };
-        });
-        const finalForm = vendorPaymentFormJson.Fields.map((field) => {
-          if (field.name === "vendor") {
-            field.options = formOp;
-            return field;
-          }
-          return field;
-        });
-        setTemplate({
-          title: vendorPaymentFormJson.title,
-          Fields: finalForm,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchVendor();
   }, []);
 
   useEffect(() => {
     if (formValue) {
       if (!editData) {
         axiosInstance
-          .post("/api/vendor-payment", formValue)
+          .post("/api/product-service", formValue)
           .then((res) => {
             setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
-            fetchVendorPayment();
+            fetchVendor();
             showAlert(true, res.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(
               true,
@@ -92,14 +62,13 @@ const VendorPayments = () => {
         delete formValue.createdAt;
         delete formValue.updatedAt;
         axiosInstance
-          .patch("/api/vendor-payment/" + editData._id, formValue)
+          .put("/api/product-service/" + editData._id, formValue)
           .then((res) => {
             setFormValue(null);
-            fetchVendorPayment();
+            fetchVendor();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(
               true,
@@ -115,11 +84,12 @@ const VendorPayments = () => {
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
 
-  const deleteVendorPayment = (row) => {
+  const deleteVendor = (row) => {
     axiosInstance
-      .delete(`/api/vendor-payment/${row._id}`)
+      .delete(`/api/product-service/${row._id}`)
       .then((res) => {
         console.log(res);
+        fetchVendor();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -133,48 +103,42 @@ const VendorPayments = () => {
 
   const columns = [
     {
-      dataField: "number",
-      text: "Number",
+      dataField: "product",
+      text: "Product name",
+      sort: true,
+      headerStyle: { width: "350px" },
+    },
+    {
+      dataField: "description",
+      text: "Description",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "date",
-      text: "Date",
+      dataField: "rate",
+      text: "Rate",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "journal",
-      text: "Journal",
+      dataField: "price",
+      text: "Price",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "paymentMethod",
-      text: "Payment Method",
+      dataField: "units",
+      text: "Units",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "vendor",
-      text: "Vendor",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => <h2>{row?.vendor?.company}</h2>,
-    },
-    {
-      dataField: "amount",
-      text: "Amount",
+      dataField: "tax",
+      text: "Tax",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
+
     {
       dataField: "",
       text: "Action",
@@ -182,14 +146,13 @@ const VendorPayments = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
+          <Link
             className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
+          </Link>
           <div className="dropdown-menu dropdown-menu-right">
             <Link
               className="dropdown-item"
@@ -219,12 +182,12 @@ const VendorPayments = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Payments</h3>
+            <h3 className="page-title">Product Items</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Payments</li>
+              <li className="breadcrumb-item active">Product Items</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -233,7 +196,7 @@ const VendorPayments = () => {
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i className="fa fa-plus"></i> Add Payment
+              <i className="fa fa-plus"></i> Add Product Item
             </Link>
           </div>
         </div>
@@ -244,19 +207,19 @@ const VendorPayments = () => {
         </div>
       </div>
       <FormModal2
-        title="Create Vendor Payment"
+        title="Create Product Item"
         editData={editData}
         setformValue={setFormValue}
-        template={helper.formArrayToObject(template.Fields)}
+        template={helper.formArrayToObject(productItemsFormJson.Fields)}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal
-        title="Vendor Payment"
+        title="Product Item"
         selectedRow={selectedRow}
-        deleteFunction={deleteVendorPayment}
+        deleteFunction={deleteVendor}
       />
     </>
   );
 };
 
-export default VendorPayments;
+export default ProductItems;
