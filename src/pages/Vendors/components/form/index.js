@@ -7,11 +7,10 @@ import axiosInstance from "../../../../services/api";
 
 const defaultValues = {
   vendor: "",
-  ref: "",
+
   bill_date: "",
   due_date: "",
   total_amount: "",
-  paid: "",
 };
 
 export const BillForm = ({ fetchBills }) => {
@@ -107,11 +106,11 @@ export const BillForm = ({ fetchBills }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    if (data.paid < data.total_amount) {
-      balance = data.total_amount - data.paid;
-    } else {
-      balance = 0;
-    }
+    // if (data.paid < data.total_amount) {
+    //   balance = data.total_amount - data.paid;
+    // } else {
+    //   balance = 0;
+    // }
 
     let newData = {
       ...data,
@@ -178,13 +177,13 @@ export const BillForm = ({ fetchBills }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="ref">Ref</label>
+                      <label htmlFor="total_amount">Total Amount</label>
                       <input
-                        name="ref"
-                        defaultValue={defaultValues.ref}
+                        name="total_amount"
+                        defaultValue={defaultValues.total_amount}
                         className="form-control "
-                        type="text"
-                        {...register("ref")}
+                        type="number"
+                        {...register("total_amount", { valueAsNumber: true })}
                       />
                     </div>
                   </div>
@@ -215,32 +214,7 @@ export const BillForm = ({ fetchBills }) => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="paid">Paid</label>
-                      <input
-                        name="paid"
-                        defaultValue={defaultValues.paid}
-                        className="form-control "
-                        type="number"
-                        {...register("paid", { valueAsNumber: true })}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="total_amount">Total Amount</label>
-                      <input
-                        name="total_amount"
-                        defaultValue={defaultValues.total_amount}
-                        className="form-control "
-                        type="number"
-                        {...register("total_amount", { valueAsNumber: true })}
-                      />
-                    </div>
-                  </div>
-                </div>
+
                 <div className="row">
                   <table class="table table-striped">
                     <thead>

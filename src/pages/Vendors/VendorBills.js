@@ -11,6 +11,7 @@ import moment from "moment";
 import { formatter } from "../../services/numberFormatter";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { EditBillForm } from "./components/form/editForm";
+import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const VendorBills = () => {
   const [data, setData] = useState([]);
@@ -18,6 +19,8 @@ const VendorBills = () => {
   const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(vendorBillFormJson);
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
@@ -64,13 +67,30 @@ const VendorBills = () => {
       });
   };
 
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        status,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/bills/status/" + statusRow._id, update)
+        .then((res) => {
+          fetchBills();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
+
   const columns = [
-    // {
-    //   dataField: "number",
-    //   text: "Number",
-    //   sort: true,
-    //   headerStyle: { minWidth: "150px" },
-    // },
     {
       dataField: "vendor",
       text: "Vendor",
@@ -100,7 +120,7 @@ const VendorBills = () => {
     },
     {
       dataField: "total_amount",
-      text: "Total Amount",
+      text: "Billed Amount",
       sort: true,
       headerStyle: { minWidth: "200px" },
       formatter: (val, row) => <p>{formatter.format(row?.total_amount)}</p>,
@@ -110,7 +130,7 @@ const VendorBills = () => {
       text: "Amount Paid",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{formatter.format(row?.paid)}</p>,
+      formatter: (val, row) => <p>{formatter.format(row?.paid) || 0}</p>,
     },
     {
       dataField: "balance",
@@ -124,6 +144,17 @@ const VendorBills = () => {
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
+
+      formatter: (value, row) => (
+        <>
+          <InvoiceBillApprover
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+          />
+        </>
+      ),
     },
     {
       dataField: "",
@@ -131,35 +162,39 @@ const VendorBills = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <Link
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </Link>
-          <div className="dropdown-menu dropdown-menu-right">
+        <>
+          <div className="dropdown dropdown-action text-right">
             <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#EditFormModal"
-              onClick={() => editRow(row)}
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
             >
-              <i className="fa fa-pencil m-r-5"></i> Edit
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </Link>
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            <div className="dropdown-menu dropdown-menu-right">
+              {row?.status === "Draft" && (
+                <Link
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#EditFormModal"
+                  onClick={() => editRow(row)}
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </Link>
+              )}
+              <Link
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </Link>
+            </div>
           </div>
-        </div>
+        </>
       ),
     },
   ];
