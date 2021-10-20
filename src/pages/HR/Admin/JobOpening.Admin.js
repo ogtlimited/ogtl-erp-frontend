@@ -10,6 +10,18 @@ import { ApproverBtn } from "../../../components/ApproverBtn";
 import ReactHtmlParser from "react-html-parser";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
+import Select from "react-select";
+
+const jobOpts = [
+  {
+    label: "CLOSED",
+    value: "CLOSED",
+  },
+  {
+    label: "OPEN",
+    value: "OPEN",
+  },
+];
 
 const JobOpening = () => {
   const [formValue, setFormValue] = useState(null);
@@ -23,6 +35,8 @@ const JobOpening = () => {
   const [status, setStatus] = useState("");
   const [clickedRow, setclickedRow] = useState(null);
 
+  const [unfiltered, setunfiltered] = useState([]);
+
   const editRow = (row) => {
     // setformUpdate(null)
     setformUpdate(row);
@@ -33,7 +47,9 @@ const JobOpening = () => {
     axiosInstance
       .get("/api/jobOpening")
       .then((res) => {
+        console.log(res);
         setData(res.data.data);
+        setunfiltered(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -42,7 +58,15 @@ const JobOpening = () => {
   useEffect(() => {
     fetchJobOpenings();
   }, []);
+  const handleClick = (i) => {
+    if (i?.value === "All" || i === null) {
+      setData(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) => i.label.includes(e.status));
 
+      setData(filt);
+    }
+  };
   useEffect(() => {
     combineRequest()
       .then((res) => {
@@ -283,6 +307,17 @@ const JobOpening = () => {
       </div>
       <div className="row">
         <div className="col-12">
+          <div className="col-3 mb-2">
+            <Select
+              defaultValue={[]}
+              onChange={handleClick}
+              options={jobOpts}
+              placeholder="Filter Job Openings"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>

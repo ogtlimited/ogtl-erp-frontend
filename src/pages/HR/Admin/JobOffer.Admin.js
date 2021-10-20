@@ -13,6 +13,22 @@ import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
+import Select from "react-select";
+
+const jobOpts = [
+  {
+    label: "Rejected",
+    value: "Rejected",
+  },
+  {
+    label: "Accepted",
+    value: "Accepted",
+  },
+  {
+    label: "Open",
+    value: "Open",
+  },
+];
 
 const JobOffer = () => {
   const [formValue, setFormValue] = useState(null);
@@ -25,6 +41,7 @@ const JobOffer = () => {
   const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [unfiltered, setunfiltered] = useState([]);
 
   const editRow = (row) => {
     // setformUpdate(null)
@@ -38,6 +55,7 @@ const JobOffer = () => {
       .then((res) => {
         console.log(res.data.data);
         setData(res.data.data);
+        setunfiltered(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -46,7 +64,15 @@ const JobOffer = () => {
   useEffect(() => {
     fetchJobOffers();
   }, []);
+  const handleClick = (i) => {
+    if (i?.value === "All" || i === null) {
+      setData(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) => i.label.includes(e.status));
 
+      setData(filt);
+    }
+  };
   useEffect(() => {
     combineRequest()
       .then((res) => {
@@ -313,6 +339,17 @@ const JobOffer = () => {
       </div>
       <div className="row">
         <div className="col-12">
+          <div className="col-3 mb-2">
+            <Select
+              defaultValue={[]}
+              onChange={handleClick}
+              options={jobOpts}
+              placeholder="Filter Job Offers"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>

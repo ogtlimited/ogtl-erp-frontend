@@ -6,6 +6,22 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { ApproverBtn } from "../../../components/ApproverBtn";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import Select from "react-select";
+
+const jobOpts = [
+  {
+    label: "Rejected",
+    value: "Rejected",
+  },
+  {
+    label: "Accepted",
+    value: "Accepted",
+  },
+  {
+    label: "Open",
+    value: "Open",
+  },
+];
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
@@ -13,6 +29,7 @@ const JobApplicants = () => {
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
+  const [unfiltered, setunfiltered] = useState([]);
 
   const fetchJobApplicants = () => {
     axiosInstance
@@ -20,6 +37,7 @@ const JobApplicants = () => {
       .then((res) => {
         console.log(res.data.data);
         setData(res.data.data);
+        setunfiltered(res?.data?.data);
       })
       .catch((error) => {
         console.log(error);
@@ -28,7 +46,15 @@ const JobApplicants = () => {
   useEffect(() => {
     fetchJobApplicants();
   }, []);
+  const handleClick = (i) => {
+    if (i?.value === "All" || i === null) {
+      setData(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) => i.label.includes(e.status));
 
+      setData(filt);
+    }
+  };
   //delete job opening
   const deleteJobApplicant = (row) => {
     axiosInstance
@@ -193,6 +219,17 @@ const JobApplicants = () => {
       </div>
       <div className="row">
         <div className="col-12">
+          <div className="col-3 mb-2">
+            <Select
+              defaultValue={[]}
+              onChange={handleClick}
+              options={jobOpts}
+              placeholder="Filter Job Applicants"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>

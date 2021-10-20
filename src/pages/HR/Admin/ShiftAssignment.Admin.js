@@ -15,6 +15,7 @@ import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
+import Select from "react-select";
 
 const ShiftAssignment = () => {
   const [formValue, setFormValue] = useState(null);
@@ -28,6 +29,8 @@ const ShiftAssignment = () => {
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [shiftsOpt, setShiftOpts] = useState(null);
+  const [unfiltered, setunfiltered] = useState([]);
   const { combineRequest, showAlert, setformUpdate } = useAppContext();
 
   const editRow = (row) => {
@@ -42,6 +45,14 @@ const ShiftAssignment = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data.data);
+        setunfiltered(res?.data?.data);
+        const shiftOpts = res.data.data.map((e) => {
+          return {
+            label: e.shift_type_id.shift_name,
+            value: e._id,
+          };
+        });
+        setShiftOpts(shiftOpts);
       })
       .catch((error) => {
         console.log(error);
@@ -51,6 +62,17 @@ const ShiftAssignment = () => {
     fetchShiftAssignments();
   }, []);
 
+  const handleClick = (i) => {
+    if (i?.value === "All" || i === null) {
+      setData(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) =>
+        i.label.includes(e.shift_type_id.shift_name)
+      );
+
+      setData(filt);
+    }
+  };
   useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
@@ -262,6 +284,17 @@ const ShiftAssignment = () => {
       </div>
       <div className="row">
         <div className="col-12">
+          <div className="col-3 mb-2">
+            <Select
+              defaultValue={[]}
+              onChange={handleClick}
+              options={shiftsOpt}
+              placeholder="Filter Shift Assignments"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>

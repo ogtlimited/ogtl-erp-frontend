@@ -25,7 +25,7 @@ const EmployeesTable = ({
   defaultSorted,
   selectedOption,
   departments,
-  seteditData
+  seteditData,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -41,14 +41,13 @@ const EmployeesTable = ({
   const total = [];
   let attendanceDateFilter;
   const handleClick = (i) => {
-    console.log(i);
-    if (i?.value == "All" || i == null) {
+    if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
     } else {
-      console.log(i);
-      console.log(unfiltered);
-      const filt = unfiltered.filter((e) => i.value.includes(e.department));
-      console.log(filt);
+      const filt = unfiltered.filter((e) =>
+        i.label.includes(e.department.department)
+      );
+
       setAllEmployee(filt);
     }
   };
@@ -64,15 +63,14 @@ const EmployeesTable = ({
     setunfiltered(data);
   }, [data]);
   useEffect(() => {
-    window.addEventListener('resize', ()=>{
-      if(window.innerWidth >= 768){
-        setmobileView(false)
-      }else{
-        setmobileView(true)
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) {
+        setmobileView(false);
+      } else {
+        setmobileView(true);
       }
-     
     });
-  }, [mobileView])
+  }, [mobileView]);
   // console.log(total);
   const columns = [
     {
@@ -81,8 +79,8 @@ const EmployeesTable = ({
       sort: true,
       headerStyle: { minWidth: "250px" },
       formatter: (value, row) => (
-        <h2 class="table-avatar">
-          <a href="" class="avatar">
+        <h2 className="table-avatar">
+          <a href="" className="avatar">
             <img
               alt=""
               src={
@@ -108,26 +106,26 @@ const EmployeesTable = ({
       headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-          {value == "active" ? (
-            <a href="" class="pos-relative">
+          {value === "active" ? (
+            <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          ) : value == "left" ? (
-            <a href="" class="pos-relative">
+          ) : value === "left" ? (
+            <a href="" className="pos-relative">
               {" "}
               <span className="status-pending"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          ) : value == "terminated" ? (
-            <a href="" class="pos-relative">
+          ) : value === "terminated" ? (
+            <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
           ) : (
-            <a href="" class="pos-relative">
+            <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
@@ -169,32 +167,32 @@ const EmployeesTable = ({
       sort: true,
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
-        <div class="dropdown dropdown-action text-right">
+        <div className="dropdown dropdown-action text-right">
           <a
             href="#"
-            class="action-icon dropdown-toggle"
+            className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
-            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-right">
+          <div className="dropdown-menu dropdown-menu-right">
             <a
-              class="dropdown-item"
+              className="dropdown-item"
               onClick={() => seteditData(row)}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i class="fa fa-pencil m-r-5"></i> Edit
+              <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
             <a
-              class="dropdown-item"
+              className="dropdown-item"
               href="#"
               data-toggle="modal"
               data-target="#delete_employee"
             >
-              <i class="fa fa-download m-r-5"></i> Download Attendance
+              <i className="fa fa-download m-r-5"></i> Download Attendance
             </a>
           </div>
         </div>
@@ -241,7 +239,7 @@ const EmployeesTable = ({
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : 'table table-responsive' }
+                classes={!mobileView ? "table" : "table table-responsive"}
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
                 noDataIndication="Fetching Data"
