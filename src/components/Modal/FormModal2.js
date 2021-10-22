@@ -14,8 +14,6 @@ const FormModal2 = ({template, editData, setformValue, setsubmitted, title, form
        console.log(data)
        setformValue(data)
        setsubmitted(true)
-
-      
       };
       useEffect(() => {
         setformValue(value)

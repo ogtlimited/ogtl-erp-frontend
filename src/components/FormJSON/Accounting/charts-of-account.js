@@ -2,32 +2,19 @@ export const chartOfAccountsFormJson = {
   title: "Chart of Accounts Form",
   Fields: [
     {
-      name: "type",
-      type: "text",
+      name: "parent",
+      type: "select",
       title: "Type",
-      required: {
-        value: true,
-        message: "Type is required",
-      },
+      options: []
     },
     {
-      name: "account",
+      name: "account_name",
       type: "text",
-      title: "Account",
+      title: "Account Name",
       required: {
         value: true,
         message: "Account is required",
       },
-    },
-    {
-      name: "description",
-      type: "text",
-      title: "Description",
-    },
-    {
-      name: "balance",
-      type: "text",
-      title: "Balance",
-    },
+    }
   ],
 };

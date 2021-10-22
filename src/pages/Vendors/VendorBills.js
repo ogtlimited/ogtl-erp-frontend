@@ -1,87 +1,200 @@
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import avater from "../../assets/img/male_avater.png";
 import axiosInstance from "../../services/api";
 import FormModal2 from "../../components/Modal/FormModal2";
 import { vendorBillFormJson } from "../../components/FormJSON/vendors-clients/bill";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
+import { BillForm } from "./components/form";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import { formatter } from "../../services/numberFormatter";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import { EditBillForm } from "./components/form/editForm";
+import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const VendorBills = () => {
   const [data, setData] = useState([]);
-  const [formValue, setFormValue] = useState({});
-  const [editData, seteditData] = useState({});
+  const [formValue, setFormValue] = useState(null);
+  const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(vendorBillFormJson);
-  const [submitted, setSubmitted] = useState(false);
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
 
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null);
+
+  const editRow = (row) => {
+    // setformUpdate(null)
+
+    setclickedRow(row);
+  };
+
+  const fetchBills = () => {
+    axiosInstance
+      .get("/api/bills")
+      .then((res) => {
+        console.log(res);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchClient = () => {
-      axiosInstance
-        .get("/api/clients")
-        .then((res) => {
-          console.log(res);
-          setData(res.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    fetchClient();
+    fetchBills();
   }, []);
 
+  useEffect(() => {
+    seteditData(clickedRow);
+  }, [clickedRow]);
+
+  const deleteBill = (row) => {
+    axiosInstance
+      .delete(`/api/bills/${row._id}`)
+      .then((res) => {
+        console.log(res);
+        fetchBills();
+        setData((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
+
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        status,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/bills/status/" + statusRow._id, update)
+        .then((res) => {
+          fetchBills();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
+
   const columns = [
-    {
-      dataField: "number",
-      text: "Number",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
     {
       dataField: "vendor",
       text: "Vendor",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => <h2>{row?.vendor?.company}</h2>,
     },
     {
       dataField: "bill_date",
       text: "Bill Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.bill_date).format("L")}</h2>,
     },
     {
       dataField: "due_date",
       text: "Due Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.due_date).format("L")}</h2>,
     },
     {
-      dataField: "reference",
+      dataField: "ref",
       text: "Reference",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "total",
-      text: "Total",
+      dataField: "total_amount",
+      text: "Billed Amount",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { minWidth: "200px" },
+      formatter: (val, row) => <p>{formatter.format(row?.total_amount)}</p>,
+    },
+    {
+      dataField: "paid",
+      text: "Amount Paid",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(row?.paid) || 0}</p>,
+    },
+    {
+      dataField: "balance",
+      text: "Balance",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(row?.balance)}</p>,
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
+
+      formatter: (value, row) => (
+        <>
+          <InvoiceBillApprover
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+          />
+        </>
+      ),
     },
     {
       dataField: "",
       text: "Action",
       sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: () => (
-        <a href="#" className="btn btn-sm btn-primary">
-          PDF
-        </a>
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          <div className="dropdown dropdown-action text-right">
+            <Link
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </Link>
+            <div className="dropdown-menu dropdown-menu-right">
+              {row?.status === "Draft" && (
+                <Link
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#EditFormModal"
+                  onClick={() => editRow(row)}
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </Link>
+              )}
+              <Link
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </Link>
+            </div>
+          </div>
+        </>
       ),
     },
   ];
@@ -99,14 +212,13 @@ const VendorBills = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
+            <Link
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i className="fa fa-plus"></i> Add Vendor
-            </a>
+              <i className="fa fa-plus"></i> Add Bill
+            </Link>
           </div>
         </div>
       </div>
@@ -115,12 +227,15 @@ const VendorBills = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <FormModal2
-        title="Create Vendor"
-        editData={editData}
-        setformValue={setFormValue}
-        template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
+
+      <EditBillForm fetchBills={fetchBills} editData={editData} />
+
+      <BillForm fetchBills={fetchBills} />
+
+      <ConfirmModal
+        title="Bill"
+        selectedRow={selectedRow}
+        deleteFunction={deleteBill}
       />
     </>
   );
