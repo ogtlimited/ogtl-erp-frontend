@@ -15,6 +15,7 @@ const PersonalInfo = ({
   const { id } = useParams();
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
+  console.log(personalDetails);
 
   useEffect(() => {
     if (submitted === true) {

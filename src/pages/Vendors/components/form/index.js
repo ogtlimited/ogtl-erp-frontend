@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../../../Context/AppContext";
 import axiosInstance from "../../../../services/api";
+import $ from "jquery";
 
 const defaultValues = {
   vendor: "",
@@ -125,6 +126,7 @@ export const BillForm = ({ fetchBills }) => {
         fetchBills();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
+        $("#FormModal").modal("toggle");
       })
       .catch((error) => {
         console.log(error);

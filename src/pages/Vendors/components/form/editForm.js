@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../../../Context/AppContext";
 import axiosInstance from "../../../../services/api";
+import $ from "jquery";
 
 export const EditBillForm = ({ fetchBills, editData }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const { showAlert } = useAppContext();
-
   const defaultValues = {
     vendor: editData?.vendor,
     ref: editData?.ref,
@@ -43,7 +43,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
     values[index].tax = editorState.tax;
 
     values[index].units = editorState.units;
-    console.log(values);
+
     setProductItems(values);
   };
   const handleRemoveFields = (index) => {
@@ -107,8 +107,8 @@ export const EditBillForm = ({ fetchBills, editData }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    if (data.paid < data.total_amount) {
-      balance = data.total_amount - data.paid;
+    if (data.paid < editData.total_amount) {
+      balance = editData.total_amount - data.paid;
     } else {
       balance = 0;
     }
@@ -117,15 +117,28 @@ export const EditBillForm = ({ fetchBills, editData }) => {
       ...data,
       balance,
       productItems: productIds,
+      ref: editData?.ref,
+      vendor: editData.vendor._id,
+      total_amount: editData.total_amount,
     };
     setLoading(true);
     axiosInstance
-      .patch("/api/bills", newData)
+      .patch(`/api/bills/${editData._id}`, newData)
       .then((res) => {
         console.log(res);
         fetchBills();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
+        setProductItems([
+          {
+            productId: "",
+            rate: "",
+            price: "",
+            tax: "",
+            units: "",
+          },
+        ]);
+        $("#EditFormModal").modal("toggle");
       })
       .catch((error) => {
         console.log(error);
@@ -135,8 +148,6 @@ export const EditBillForm = ({ fetchBills, editData }) => {
         setLoading(false);
       });
   };
-
-  console.log("def", defaultValues);
 
   return (
     <>
@@ -174,6 +185,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                           label: defaultValues?.vendor?.company,
                           value: defaultValues?.vendor?._id,
                         }}
+                        isDisabled={true}
                         name="vendor"
                         onChange={(state) =>
                           onEditorStateChange(state.value, "vendor")
@@ -189,6 +201,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                         defaultValue={defaultValues.ref}
                         className="form-control "
                         type="text"
+                        disabled
                         {...register("ref")}
                       />
                     </div>
@@ -238,6 +251,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                       <label htmlFor="total_amount">Total Amount</label>
                       <input
                         name="total_amount"
+                        disabled
                         defaultValue={defaultValues.total_amount}
                         className="form-control "
                         type="number"
@@ -266,7 +280,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                             <th scope="row">
                               <Select
                                 options={productOptions}
-                                // defaultValue={defaultValues.productItems}
+                                // defaultValue={editData.productItems}
                                 // name="productId"
                                 onChange={(state) =>
                                   handleChange(state.value, index)

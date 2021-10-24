@@ -1,4 +1,5 @@
 import React from "react";
+import $ from "jquery";
 
 const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
   return (
@@ -31,6 +32,7 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
                 className="btn btn-danger"
                 onClick={() => {
                   deleteFunction(selectedRow);
+                  $("#exampleModal").modal("toggle");
                 }}
               >
                 Save changes
