@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../../authConfig";
 
 const Login = () => {
+  const { instance } = useMsal();
   let history = useHistory();
   const [errorMsg, seterrorMsg] = useState("");
   const {
@@ -15,8 +18,15 @@ const Login = () => {
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
-    axios
-      .post("http://localhost:3000/api/login", data)
+    instance.loginPopup(loginRequest).then(e => {
+      console.log(e);
+      const obj = {
+        company_email: e.account.username
+      }
+      localStorage.setItem('microsoftAccount', JSON.stringify(e.account))
+      localStorage.setItem('microsoftAccessToken', JSON.stringify(e.accessToken))
+      axios
+      .post("http://localhost:3000/api/login", obj)
       .then((res) => {
         console.log(res);
         tokenService.setUser(res.data.employee);
@@ -33,6 +43,10 @@ const Login = () => {
         //     seterrorMsg('')
         // }, 5000);
       });
+    }).catch(e => {
+      console.log(e);
+     
+  });
   };
   return (
     <div className="main-wrapper">
@@ -58,7 +72,7 @@ const Login = () => {
               </h6>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group">
-                  <label htmlFor="ogid">OGID </label>
+                  <label htmlFor="ogid">Email </label>
                   <input
                     type="text"
                     name="ogid"
@@ -67,10 +81,10 @@ const Login = () => {
                     className="form-control"
                   />
                   {errors.ogid && errors.ogid.type === "required" && (
-                    <span className="error">OGID is required</span>
+                    <span className="error">Email is required</span>
                   )}
                 </div>
-                <div className="form-group mt-2">
+                {/* <div className="form-group mt-2">
                   <div className="row">
                     <div className="col">
                       <label htmlFor="password">Password</label>
@@ -91,7 +105,7 @@ const Login = () => {
                   {errors.password && errors.password.type === "required" && (
                     <span className="error">Password is required</span>
                   )}
-                </div>
+                </div> */}
                 <div className="form-group text-center">
                   <button className="btn btn-primary account-btn" type="submit">
                     Login

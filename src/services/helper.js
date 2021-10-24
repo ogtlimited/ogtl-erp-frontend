@@ -31,6 +31,7 @@ class HelperService{
             objTemplate[e.name] =  {
               type: e.type,
               label: e.title,
+              value: e.value,
               required: e.required ? true : false,
               options: e.options
             }
@@ -39,6 +40,7 @@ class HelperService{
             objTemplate[e.name] =  {
               type: e.type,
               label: e.title,
+              value: e.value,
               required: e.required ? true : false,
               disabled: e.disabled ? true : false,
             }

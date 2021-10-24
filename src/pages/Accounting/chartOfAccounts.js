@@ -12,43 +12,45 @@ import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
 import chartofaccounts from "../../db/chartofaccounts.json";
 import InvoiceModal from "../../components/Modal/invoiceModal";
+import { NOT_LOCAL_BINDING } from "@babel/types";
+
 const ChartOfAccounts = () => {
   const [data, setData] = useState([]);
-  const [formValue, setFormValue] = useState({});
-  const [editData, seteditData] = useState({});
-  const { showAlert } = useAppContext();
+  const [accountReceivable, setAccountReceivable] = useState(0);
+  const [accountPayable, setAccountPayable] = useState(0);
+  const [bank, setBank] = useState(0);
+  const [formValue, setFormValue] = useState(null);
+  const [accounts, setAccounts] = useState();
+  const [editData, seteditData] = useState(null);
+  const { showAlert, isChecked, setIsChecked } = useAppContext();
   const [template, setTemplate] = useState(chartOfAccountsFormJson);
   const [submitted, setSubmitted] = useState(false);
+  const keys_to_keep = ['_id', 'account_name'];
+
   const columns = [
     {
-      dataField: "number",
-      text: "Number",
+      dataField: "type",
+      text: "Account Type",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "type",
-      text: "Type",
+      dataField: "account_name",
+      text: "Account Name",
       sort: true,
       headerStyle: { width: "300px" },
-    },
-    {
-      dataField: "account",
-      text: "Account",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-    {
-      dataField: "description",
-      text: "Description",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "balance",
       text: "Balance",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "account_number",
+      text: "Account Number",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
     },
 
     {
@@ -69,20 +71,20 @@ const ChartOfAccounts = () => {
       ),
     },
   ];
-  const cards = [
+  let cards = [
     {
       title: "Account Payables",
-      amount: "260,900",
+      amount: accountPayable,
       icon: "las la-hand-holding-usd",
     },
     {
       title: "Account Receivables",
-      amount: "672,300",
+      amount: accountReceivable,
       icon: "las la-money-bill-wave-alt",
     },
     {
       title: "Bank",
-      amount: "523,000",
+      amount: bank,
       icon: "las la-coins",
     },
     {
@@ -91,6 +93,167 @@ const ChartOfAccounts = () => {
       icon: "las la-file-invoice-dollar",
     },
   ];
+  const checkbox = [
+    {
+      name: "is_group",
+      type: "check",
+      title: "Is Group",
+      value: isChecked
+    }
+  ]
+  const otherFields = [
+    {
+      name: "currency",
+      type: "select",
+      title: "Currency",
+      options: [
+        {
+          value: "NGN",
+          label: "NGN"
+        },
+        {
+          value: "USD",
+          label: "USD"
+        },
+        {
+          value: "GPB",
+          label: "GPB"
+        },
+      ]
+    },
+    {
+      name: "account_number",
+      type: "text",
+      title: "Account Number",
+      required: {
+        value: true,
+        message: "Account Number is required",
+      },
+    }
+  ]
+
+  const dynamicOptions = (formJson, accounts) => {
+    let arr = formJson
+    let fields = formJson.Fields
+    let options = []
+    for(let i=0; i<fields.length; i++){
+      if(fields[i].type === "select"){
+        fields[i].options = accounts
+      }
+    }
+
+    setTemplate({...arr, "Fields": fields})
+  }
+
+  
+
+  const redux = array => array.map(o => keys_to_keep.reduce((acc, curr) => {
+    acc[curr] = o[curr];
+    return acc;
+  }, {}));
+
+  const getDescendant = () => {
+    axiosInstance
+    .get("/api/account/descendants/616364e9e53c425c741b3fae")
+    .then((res) => {
+      let result = res.data.data.filter(ele => ele.is_group === false).reduce((a, b) => a + b.balance, 0)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const fetchAccounts = () => {
+    axiosInstance
+    .get("/api/account")
+    .then((res) => {
+      let arr = res.data.data.filter((ele) => {
+        if(ele.slug === "account-receivable"){
+          setAccountReceivable(ele.balance)
+        } else if(ele.slug === "account-payable"){
+          setAccountPayable(ele.balance)
+        } else if(ele.slug === "cash"){
+          setBank(ele.balance)
+        }
+        return ele.is_group === true
+      })
+
+      let accounts = res.data.data.filter((ele) => {
+        return ele.is_group === false
+      })
+
+      accounts.map(ele => {
+        ele["type"] = ele.ancestors[0].slug
+      })
+      
+      let reducedArr = redux(arr)
+
+      reducedArr.map(obj => {
+        Object.keys(obj).map( key => {
+          if (key.match('_id')){
+              obj['value'] = obj[key];
+              delete obj[key];
+          } else if(key.match('account_name')){
+              obj['label'] = obj[key];
+              delete obj[key];
+          }
+        })
+      })
+      
+      setData(reducedArr);
+      setAccounts(accounts)
+      dynamicOptions(template, reducedArr)
+      getDescendant()
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  useEffect(() => {
+    fetchAccounts()
+  }, [])
+
+  //create new client
+  useEffect(() => {
+    if (formValue) {
+      if (!editData) {
+        
+        formValue["is_default"] = false
+        formValue["balance"] = 0
+        axiosInstance
+          .post("/api/account", formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchAccounts();
+            showAlert(true, res.data.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(true, error.response.data.message, "alert alert-danger");
+          });
+      } else {
+        // formValue._id = editData._id;
+        // delete formValue.__v
+        // delete formValue._id
+        // delete formValue.createdAt
+        // delete formValue.updatedAt
+        // axiosInstance
+        //   .patch("/api/client/" + editData._id, formValue)
+        //   .then((res) => {
+        //     setFormValue(null);
+        //     fetchClient();
+        //     showAlert(true, res.data.message, "alert alert-success");
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //     setFormValue(null);
+        //     showAlert(true, error.response.data.message, "alert alert-danger");
+        //   });
+      }
+    }
+  }, [formValue, editData]);
+
   return (
     <>
       <div className="page-header">
@@ -132,16 +295,27 @@ const ChartOfAccounts = () => {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <LeavesTable columns={columns} data={chartofaccounts} />
+          <LeavesTable columns={columns} data={accounts} />
         </div>
       </div>
-      <FormModal2
+      { isChecked ? (
+        <FormModal2
         title="Create New Account"
         editData={editData}
         setformValue={setFormValue}
-        template={helper.formArrayToObject(template.Fields)}
+        template={helper.formArrayToObject(template.Fields.concat(checkbox))}
         setsubmitted={setSubmitted}
       />
+      ) : (
+        <FormModal2
+        title="Create New Account"
+        editData={editData}
+        setformValue={setFormValue}
+        template={helper.formArrayToObject(otherFields.concat(template.Fields.concat(checkbox)))}
+        setsubmitted={setSubmitted}
+      />
+      ) }
+      
     </>
   );
 };

@@ -18,6 +18,9 @@ const AppProvider = (props) => {
   });
   const [employeeAttendance, setemployeeAttendance] = useState([]);
   const [user, setuser] = useState(tokenService.getUser());
+  const [isChecked, setIsChecked] = useState(true)
+  
+
   useEffect(() => {
     console.log("alert message");
   }, [showAlertMsg]);
@@ -100,6 +103,8 @@ const AppProvider = (props) => {
         setloggedIn,
         formUpdate,
         setformUpdate,
+        isChecked,
+        setIsChecked
       }}
     >
       {props.children}

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   Form,
   TextField,
+  CheckboxField,
   SelectField,
   SubmitButton,
   DateField,
@@ -17,7 +18,6 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
 const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
-  console.log(editData)
   const [formData, setFormData] = useState(null);
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -37,7 +37,6 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
   }, [formUpdate]);
 
   const initForm = (formSchema, value) => {
-    console.log(formUpdate, value);
     let _formData = {};
     let _validationSchema = {};
 
@@ -47,7 +46,6 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
       } else {
         _formData[key] = "";
       }
-
       if (formSchema[key].type === "text") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "email") {
@@ -75,14 +73,13 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
   };
 
   const getFormElement = (elementName, elementSchema) => {
-    // console.log(elementSchema)
     const props = {
       name: elementName,
       label: elementSchema.label,
+      value: elementSchema.value,
       options: elementSchema.options,
       disabled: elementSchema.disabled
     };
-
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
     }
@@ -114,7 +111,6 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
   };
 
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
-    console.log(values);
     $("#FormModal").modal("toggle");
     setvalue(values);
 
