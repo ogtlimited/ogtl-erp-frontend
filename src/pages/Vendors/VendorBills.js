@@ -35,7 +35,7 @@ const VendorBills = () => {
     axiosInstance
       .get("/api/bills")
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {

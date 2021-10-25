@@ -2,12 +2,18 @@ export const vendorPaymentFormJson = {
   title: "Create Vendor Payment Form",
   Fields: [
     {
-      name: "number",
-      type: "text",
-      title: "Number",
+      name: "bill",
+      type: "select",
+      title: "Bill",
+      options: [],
+    },
+    {
+      name: "amount",
+      type: "number",
+      title: "Amount",
       required: {
         value: true,
-        message: "Payment number is required",
+        message: "Amount is required",
       },
     },
     {
@@ -17,15 +23,6 @@ export const vendorPaymentFormJson = {
       required: {
         value: true,
         message: "payment date  is required",
-      },
-    },
-    {
-      name: "journal",
-      type: "text",
-      title: "Journal",
-      required: {
-        value: true,
-        message: "Journal is required",
       },
     },
 
@@ -51,26 +48,6 @@ export const vendorPaymentFormJson = {
       //     value: true,
       //     message: "Payment method required",
       //   },
-    },
-    {
-      name: "vendor",
-      type: "select",
-      title: "Vendor",
-      options: [],
-      //   required: {
-      //     value: true,
-      //     message: "Customer is required",
-      //   },
-    },
-
-    {
-      name: "amount",
-      type: "number",
-      title: "Amount",
-      required: {
-        value: true,
-        message: "Amount is required",
-      },
     },
 
     {

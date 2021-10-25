@@ -8,6 +8,7 @@ import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
+import Select from "react-select";
 
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState(null);
@@ -16,7 +17,8 @@ const ShiftAdmin = () => {
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
-
+  const [shiftsOpt, setShiftOpts] = useState(null);
+  const [unfiltered, setunfiltered] = useState([]);
   const { fetchTypesShift, showAlert, setformUpdate } = useAppContext();
 
   const editRow = (row) => {
@@ -28,14 +30,30 @@ const ShiftAdmin = () => {
   useEffect(() => {
     fetchTypesShift()
       .then((res) => {
-        console.log("Shift types response", typeof res.data.data);
         setData(res.data.data);
+        setunfiltered(res?.data?.data);
+        const shiftOpts = res.data.data.map((e) => {
+          return {
+            label: e.shift_name,
+            value: e._id,
+          };
+        });
+        setShiftOpts(shiftOpts);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [fetchTypesShift]);
 
+  const handleClick = (i) => {
+    if (i?.value === "All" || i === null) {
+      setData(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) => i.label.includes(e.shift_name));
+
+      setData(filt);
+    }
+  };
   useEffect(() => {
     if (formValue) {
       if (!editData) {
@@ -195,6 +213,17 @@ const ShiftAdmin = () => {
       </div>
       <div className="row">
         <div className="col-12">
+          <div className="col-3 mb-2">
+            <Select
+              defaultValue={[]}
+              onChange={handleClick}
+              options={shiftsOpt}
+              placeholder="Filter Shifts"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>

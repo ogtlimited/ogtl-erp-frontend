@@ -29,7 +29,7 @@ const AdminAttendanceTable = ({
   designation,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
-
+  console.log("dataaaaaa", designation);
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -63,14 +63,24 @@ const AdminAttendanceTable = ({
   }, [departments, designation]);
 
   const handleClick = (i) => {
-    console.log(i);
-    if (i?.value == "All" || i == null) {
+    if (i?.value === "All" || i === null) {
       setAllEmployee(unfiltered);
     } else {
-      console.log(i);
-      console.log(unfiltered);
-      const filt = unfiltered.filter((e) => i.value.includes(e.department));
-      console.log(filt);
+      const filt = unfiltered.filter((e) =>
+        i.value.includes(e.department.department)
+      );
+
+      setAllEmployee(filt);
+    }
+  };
+  const handleDesignation = (i) => {
+    if (i?.value === "All" || i === null) {
+      setAllEmployee(unfiltered);
+    } else {
+      const filt = unfiltered.filter((e) =>
+        i.value.includes(e.designation.designation)
+      );
+
       setAllEmployee(filt);
     }
   };
@@ -130,7 +140,7 @@ const AdminAttendanceTable = ({
                 <div className="col-5">
                   <Select
                     defaultValue={selectedOption}
-                    onChange={handleClick}
+                    onChange={handleDesignation}
                     options={designarionsOpt}
                     placeholder="Filter Designation"
                     isClearable={true}

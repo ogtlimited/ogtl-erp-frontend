@@ -21,6 +21,7 @@ const AllEmployeesAdmin = () => {
   const [editData, seteditData] = useState({});
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
+  const [departments, setDepartments] = useState([]);
 
   // console.log(allEmployees);
   useEffect(() => {
@@ -95,6 +96,7 @@ const AllEmployeesAdmin = () => {
           value: e._id,
         };
       });
+      setDepartments(deptopts);
       const finalForm = employeeFormJson.Fields.map((field) => {
         if (field.name === "designation") {
           field.options = designationOpts;
@@ -203,7 +205,7 @@ const AllEmployeesAdmin = () => {
       <EmployeesTable
         data={allEmployees}
         seteditData={seteditData}
-        departments={designation}
+        departments={departments}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
