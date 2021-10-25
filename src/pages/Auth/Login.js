@@ -18,35 +18,40 @@ const Login = () => {
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
-    instance.loginPopup(loginRequest).then(e => {
-      console.log(e);
-      const obj = {
-        company_email: e.account.username
-      }
-      localStorage.setItem('microsoftAccount', JSON.stringify(e.account))
-      localStorage.setItem('microsoftAccessToken', JSON.stringify(e.accessToken))
-      axios
-      .post("http://localhost:3000/api/login", obj)
-      .then((res) => {
-        console.log(res);
-        tokenService.setUser(res.data.employee);
-        // fetchEmployee()
-        // fetchEmployeeAttendance()
-        tokenService.setToken(res.data.token.token);
-        window.location.href = "/admin/employee-dashboard";
+    instance
+      .loginPopup(loginRequest)
+      .then((e) => {
+        console.log(e);
+        const obj = {
+          company_email: e.account.username,
+        };
+        localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
+        localStorage.setItem(
+          "microsoftAccessToken",
+          JSON.stringify(e.accessToken)
+        );
+        axios
+          .post("http://localhost:3000/api/login", obj)
+          .then((res) => {
+            console.log(res);
+            tokenService.setUser(res.data.employee);
+            // fetchEmployee()
+            // fetchEmployeeAttendance()
+            tokenService.setToken(res.data.token.token);
+            window.location.href = "/admin/employee-dashboard";
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log(err.message?.message);
+            seterrorMsg("Unable to login either ogid or password is incorrect");
+            // setInterval(() => {
+            //     seterrorMsg('')
+            // }, 5000);
+          });
       })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.message?.message);
-        seterrorMsg("Unable to login either ogid or password is incorrect");
-        // setInterval(() => {
-        //     seterrorMsg('')
-        // }, 5000);
+      .catch((e) => {
+        console.log(e);
       });
-    }).catch(e => {
-      console.log(e);
-     
-  });
   };
   return (
     <div className="main-wrapper">

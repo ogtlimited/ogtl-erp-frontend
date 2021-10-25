@@ -25,7 +25,7 @@ const VendorPayments = () => {
   };
   const fetchVendorPayment = () => {
     axiosInstance
-      .get("/api/vendor-payment")
+      .get("/api/payment")
       .then((res) => {
         console.log(res);
         setData(res.data.data);
@@ -41,16 +41,16 @@ const VendorPayments = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/api/vendor")
+      .get("/api/bills")
       .then((res) => {
         const formOp = res.data.data.map((e) => {
           return {
-            label: e.company,
+            label: e.vendor.company,
             value: e._id,
           };
         });
         const finalForm = vendorPaymentFormJson.Fields.map((field) => {
-          if (field.name === "vendor") {
+          if (field.name === "bill") {
             field.options = formOp;
             return field;
           }
@@ -70,7 +70,7 @@ const VendorPayments = () => {
     if (formValue) {
       if (!editData) {
         axiosInstance
-          .post("/api/vendor-payment", formValue)
+          .post("/api/payment", formValue)
           .then((res) => {
             setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
@@ -92,7 +92,7 @@ const VendorPayments = () => {
         delete formValue.createdAt;
         delete formValue.updatedAt;
         axiosInstance
-          .patch("/api/vendor-payment/" + editData._id, formValue)
+          .patch("/api/payment/" + editData._id, formValue)
           .then((res) => {
             setFormValue(null);
             fetchVendorPayment();
@@ -117,7 +117,7 @@ const VendorPayments = () => {
 
   const deleteVendorPayment = (row) => {
     axiosInstance
-      .delete(`/api/vendor-payment/${row._id}`)
+      .delete(`/api/payment/${row._id}`)
       .then((res) => {
         console.log(res);
         setData((prevData) =>
@@ -157,11 +157,11 @@ const VendorPayments = () => {
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: "vendor",
-      text: "Vendor",
+      dataField: "bill",
+      text: "Bill",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => <h2>{row?.vendor?.company}</h2>,
+      formatter: (value, row) => <h2>{row?.bill?.ref}</h2>,
     },
     {
       dataField: "amount",
@@ -182,14 +182,13 @@ const VendorPayments = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
+          <Link
             className="action-icon dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
+          </Link>
           <div className="dropdown-menu dropdown-menu-right">
             <Link
               className="dropdown-item"

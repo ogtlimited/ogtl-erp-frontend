@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../../../Context/AppContext";
 import axiosInstance from "../../../../services/api";
+import moment from "moment";
 import $ from "jquery";
 
 export const EditBillForm = ({ fetchBills, editData }) => {
+  console.log("edit dataaaa", editData);
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
@@ -213,7 +215,9 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                       <label htmlFor="bill_date">Bill Date</label>
                       <input
                         name="bill_date"
-                        defaultValue={defaultValues.bill_date}
+                        defaultValue={moment(defaultValues.bill_date).format(
+                          "YYYY-MM-DD"
+                        )}
                         className="form-control "
                         type="date"
                         {...register("bill_date")}
@@ -225,7 +229,9 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                       <label htmlFor="due_date">Due Date</label>
                       <input
                         name="due_date"
-                        defaultValue={defaultValues.due_date}
+                        defaultValue={moment(defaultValues.due_date).format(
+                          "YYYY-MM-DD"
+                        )}
                         className="form-control "
                         type="date"
                         {...register("due_date")}
@@ -280,7 +286,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                             <th scope="row">
                               <Select
                                 options={productOptions}
-                                // defaultValue={editData.productItems}
+                                // defaultValue={editData?.productItems}
                                 // name="productId"
                                 onChange={(state) =>
                                   handleChange(state.value, index)
