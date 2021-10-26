@@ -8,6 +8,7 @@ import helper from "../../services/helper";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const ClientPayments = () => {
   const [data, setData] = useState([]);
@@ -18,6 +19,8 @@ const ClientPayments = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
 
   const editRow = (row) => {
     // setformUpdate(null)
@@ -72,7 +75,7 @@ const ClientPayments = () => {
     if (formValue) {
       if (!editData) {
         axiosInstance
-          .post("/api/payment", formValue)
+          .post("/api/payment/draft", formValue)
           .then((res) => {
             setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
@@ -133,6 +136,40 @@ const ClientPayments = () => {
       });
   };
 
+  //update payment status
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        _id: statusRow._id,
+        status: status,
+        number: statusRow.number,
+        invoice: statusRow.invoice._id,
+        date: statusRow.date,
+        paymentMethod: statusRow.paymentMethod,
+        total_amount: statusRow.total_amount,
+        paymentStatus: statusRow.paymentStatus,
+      };
+
+      delete update.__v;
+      // console.log("update", update);
+      // return;
+      axiosInstance
+        .post("/api/payment/published", update)
+        .then((res) => {
+          fetchClientPayment();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
+
   const columns = [
     {
       dataField: "number",
@@ -167,8 +204,14 @@ const ClientPayments = () => {
       formatter: (value, row) => <h2>{row?.invoice?.ref}</h2>,
     },
     {
-      dataField: "amount",
+      dataField: "total_amount",
       text: "Amount",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "paymentStatus",
+      text: "Payment Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
@@ -177,6 +220,16 @@ const ClientPayments = () => {
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          <InvoiceBillApprover
+            setstatusRow={setstatusRow}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+          />
+        </>
+      ),
     },
     {
       dataField: "",
@@ -185,33 +238,38 @@ const ClientPayments = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <Link
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </Link>
-          <div className="dropdown-menu dropdown-menu-right">
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </Link>
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
-          </div>
+          {row?.status === "Draft" && (
+            <>
+              <Link
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </Link>
+              <div className="dropdown-menu dropdown-menu-right">
+                <Link
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#FormModal"
+                  onClick={() => editRow(row)}
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </Link>
+
+                <Link
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  onClick={() => {
+                    setSelectedRow(row);
+                  }}
+                >
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       ),
     },
