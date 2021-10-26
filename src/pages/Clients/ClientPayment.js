@@ -146,11 +146,13 @@ const ClientPayments = () => {
         invoice: statusRow.invoice._id,
         date: statusRow.date,
         paymentMethod: statusRow.paymentMethod,
-        amount: statusRow.amount,
+        total_amount: statusRow.total_amount,
         paymentStatus: statusRow.paymentStatus,
       };
 
       delete update.__v;
+      // console.log("update", update);
+      // return;
       axiosInstance
         .post("/api/payment/published", update)
         .then((res) => {
@@ -202,7 +204,7 @@ const ClientPayments = () => {
       formatter: (value, row) => <h2>{row?.invoice?.ref}</h2>,
     },
     {
-      dataField: "amount",
+      dataField: "total_amount",
       text: "Amount",
       sort: true,
       headerStyle: { minWidth: "100px" },

@@ -42,7 +42,7 @@ export const clientPaymentFormJson = {
     },
 
     {
-      name: "amount",
+      name: "total_amount",
       type: "number",
       title: "Amount",
       required: {
