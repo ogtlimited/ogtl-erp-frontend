@@ -7,6 +7,7 @@ import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 import { Link } from "react-router-dom";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import moment from "moment";
 
 const VendorPayments = () => {
   const [data, setData] = useState([]);
@@ -45,7 +46,7 @@ const VendorPayments = () => {
       .then((res) => {
         const formOp = res.data.data.map((e) => {
           return {
-            label: e.vendor.company,
+            label: e.vendor.company + " - " + e.ref,
             value: e._id,
           };
         });
@@ -143,6 +144,7 @@ const VendorPayments = () => {
       text: "Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row.date).format("L")}</h2>,
     },
     {
       dataField: "journal",
