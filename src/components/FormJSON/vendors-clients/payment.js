@@ -8,7 +8,7 @@ export const vendorPaymentFormJson = {
       options: [],
     },
     {
-      name: "amount",
+      name: "total_amount",
       type: "number",
       title: "Amount",
       required: {
@@ -51,9 +51,9 @@ export const vendorPaymentFormJson = {
     },
 
     {
-      name: "status",
+      name: "paymentStatus",
       type: "select",
-      title: "Status",
+      title: "Payment Status",
       options: [
         {
           value: "Partial Payment",
