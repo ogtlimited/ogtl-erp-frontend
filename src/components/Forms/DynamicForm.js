@@ -78,7 +78,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
       label: elementSchema.label,
       value: elementSchema.value,
       options: elementSchema.options,
-      disabled: elementSchema.disabled
+      disabled: elementSchema.disabled,
     };
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
@@ -116,6 +116,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
 
     setSubmitting(false);
     resetForm();
+    console.log("valuess", values);
   };
 
   return (

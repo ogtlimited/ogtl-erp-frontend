@@ -2,13 +2,10 @@ export const clientPaymentFormJson = {
   title: "Create Vendor Payment Form",
   Fields: [
     {
-      name: "payment_no",
-      type: "text",
-      title: "Number",
-      required: {
-        value: true,
-        message: "Payment number is required",
-      },
+      name: "invoice",
+      type: "select",
+      title: "Invoice",
+      options: [],
     },
     {
       name: "date",
@@ -19,18 +16,9 @@ export const clientPaymentFormJson = {
         message: "payment date  is required",
       },
     },
-    {
-      name: "journal",
-      type: "text",
-      title: "Journal",
-      required: {
-        value: true,
-        message: "Journal is required",
-      },
-    },
 
     {
-      name: "payment method",
+      name: "paymentMethod",
       type: "select",
       title: "Payment method",
       options: [
@@ -52,20 +40,10 @@ export const clientPaymentFormJson = {
       //     message: "Payment method required",
       //   },
     },
-    {
-      name: "client",
-      type: "select",
-      title: "Client",
-      options: [],
-      //   required: {
-      //     value: true,
-      //     message: "Customer is required",
-      //   },
-    },
 
     {
-      name: "amount",
-      type: "text",
+      name: "total_amount",
+      type: "number",
       title: "Amount",
       required: {
         value: true,
@@ -74,13 +52,19 @@ export const clientPaymentFormJson = {
     },
 
     {
-      name: "status",
-      type: "text",
-      title: "Status",
-      required: {
-        value: true,
-        message: "status is required",
-      },
+      name: "paymentStatus",
+      type: "select",
+      title: "Payment Status",
+      options: [
+        {
+          value: "Partial Payment",
+          label: "Partial Payment",
+        },
+        {
+          value: "Full Payment",
+          label: "Full Payment",
+        },
+      ],
     },
   ],
 };
