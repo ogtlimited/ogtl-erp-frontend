@@ -35,7 +35,7 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
                   $("#exampleModal").modal("toggle");
                 }}
               >
-                Save changes
+                Delete
               </button>
             </div>
           </div>

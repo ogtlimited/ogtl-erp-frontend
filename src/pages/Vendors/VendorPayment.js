@@ -175,43 +175,43 @@ const VendorPayments = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
-    {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <Link
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </Link>
-          <div className="dropdown-menu dropdown-menu-right">
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </Link>
-            <Link
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   sort: true,
+    //   headerStyle: { minWidth: "150px" },
+    //   formatter: (value, row) => (
+    //     <div className="dropdown dropdown-action text-right">
+    //       <Link
+    //         className="action-icon dropdown-toggle"
+    //         data-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //       </Link>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         <Link
+    //           className="dropdown-item"
+    //           data-toggle="modal"
+    //           data-target="#FormModal"
+    //           onClick={() => editRow(row)}
+    //         >
+    //           <i className="fa fa-pencil m-r-5"></i> Edit
+    //         </Link>
+    //         <Link
+    //           className="dropdown-item"
+    //           data-toggle="modal"
+    //           data-target="#exampleModal"
+    //           onClick={() => {
+    //             setSelectedRow(row);
+    //           }}
+    //         >
+    //           <i className="fa fa-trash m-r-5"></i> Delete
+    //         </Link>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
   return (
     <>

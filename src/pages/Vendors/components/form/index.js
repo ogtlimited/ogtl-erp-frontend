@@ -107,11 +107,6 @@ export const BillForm = ({ fetchBills }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    // if (data.paid < data.total_amount) {
-    //   balance = data.total_amount - data.paid;
-    // } else {
-    //   balance = 0;
-    // }
 
     let newData = {
       ...data,
@@ -122,14 +117,12 @@ export const BillForm = ({ fetchBills }) => {
     axiosInstance
       .post("/api/bills", newData)
       .then((res) => {
-        console.log(res);
         fetchBills();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
         $("#FormModal").modal("toggle");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       })
       .finally(() => {

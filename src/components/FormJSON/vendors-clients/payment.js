@@ -56,16 +56,12 @@ export const vendorPaymentFormJson = {
       title: "Status",
       options: [
         {
-          value: "Paid",
-          label: "Paid",
+          value: "Partial Payment",
+          label: "Partial Payment",
         },
         {
-          value: "Half Paid",
-          label: "Half Paid",
-        },
-        {
-          value: "Not Paid",
-          label: "Not Paid",
+          value: "Full Payment",
+          label: "Full Payment",
         },
       ],
     },
