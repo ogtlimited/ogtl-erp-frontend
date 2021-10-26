@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import moment from "moment";
+import $ from "jquery";
 
-export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
+export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
@@ -107,8 +109,8 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-    if (data.paid < data.total_amount) {
-      balance = data.total_amount - data.paid;
+    if (data.paid < editData.total_amount) {
+      balance = editData.total_amount - data.paid;
     } else {
       balance = 0;
     }
@@ -117,19 +119,32 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
       ...data,
       balance,
       productItems: productIds,
+      ref: editData?.ref,
+      customer: editData.customer._id,
+      total_amount: editData.total_amount,
     };
     setLoading(true);
     axiosInstance
-      .patch("/api/invoice", newData)
+      .patch(`/api/invoice/${editData._id}`, newData)
       .then((res) => {
         console.log(res);
-        fetchInvoices();
+        fetchInvoice();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
+        setProductItems([
+          {
+            productId: "",
+            rate: "",
+            price: "",
+            tax: "",
+            units: "",
+          },
+        ]);
+        $("#EditFormModal").modal("toggle");
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error?.response?.data?.message, "alert alert-danger");
       })
       .finally(() => {
         setLoading(false);
@@ -174,6 +189,7 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
                           label: defaultValues?.customer?.company,
                           value: defaultValues?.customer?._id,
                         }}
+                        isDisabled={true}
                         name="customer"
                         onChange={(state) =>
                           onEditorStateChange(state.value, "customer")
@@ -190,6 +206,7 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
                         className="form-control "
                         type="text"
                         {...register("ref")}
+                        disabled
                       />
                     </div>
                   </div>
@@ -200,7 +217,9 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
                       <label htmlFor="invoice_date">Invoice Date</label>
                       <input
                         name="invoice_date"
-                        defaultValue={defaultValues.invoice_date}
+                        defaultValue={moment(defaultValues.invoice_date).format(
+                          "YYYY-MM-DD"
+                        )}
                         className="form-control "
                         type="date"
                         {...register("invoice_date")}
@@ -212,7 +231,9 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
                       <label htmlFor="due_date">Due Date</label>
                       <input
                         name="due_date"
-                        defaultValue={defaultValues.due_date}
+                        defaultValue={moment(defaultValues.due_date).format(
+                          "YYYY-MM-DD"
+                        )}
                         className="form-control "
                         type="date"
                         {...register("due_date")}
@@ -242,6 +263,7 @@ export const EditInvoiceForm = ({ fetchInvoices, editData }) => {
                         className="form-control "
                         type="number"
                         {...register("total_amount", { valueAsNumber: true })}
+                        disabled
                       />
                     </div>
                   </div>
