@@ -301,8 +301,8 @@ const ChartOfAccounts = () => {
       { isChecked ? (
         <FormModal2
         title="Create New Account"
-        editData={editData}
-        setformValue={setFormValue}
+        editData={editData }
+        setformValue={setFormValue }
         template={helper.formArrayToObject(template.Fields.concat(checkbox))}
         setsubmitted={setSubmitted}
       />
