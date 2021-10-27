@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";
-import FormModal2 from "../../components/Modal/FormModal2";
-import { vendorBillFormJson } from "../../components/FormJSON/vendors-clients/bill";
 import { useAppContext } from "../../Context/AppContext";
-import helper from "../../services/helper";
 import { BillForm } from "./components/form";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -15,10 +12,8 @@ import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const VendorBills = () => {
   const [data, setData] = useState([]);
-  const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
-  const [template, setTemplate] = useState(vendorBillFormJson);
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
 
@@ -26,8 +21,6 @@ const VendorBills = () => {
   const [clickedRow, setclickedRow] = useState(null);
 
   const editRow = (row) => {
-    // setformUpdate(null)
-
     setclickedRow(row);
   };
 
@@ -35,7 +28,6 @@ const VendorBills = () => {
     axiosInstance
       .get("/api/bills")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -54,7 +46,6 @@ const VendorBills = () => {
     axiosInstance
       .delete(`/api/bills/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchBills();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
@@ -62,7 +53,6 @@ const VendorBills = () => {
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };

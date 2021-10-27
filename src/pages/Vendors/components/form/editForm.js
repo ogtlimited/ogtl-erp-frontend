@@ -8,7 +8,6 @@ import moment from "moment";
 import $ from "jquery";
 
 export const EditBillForm = ({ fetchBills, editData }) => {
-  console.log("edit dataaaa", editData);
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
@@ -108,26 +107,24 @@ export const EditBillForm = ({ fetchBills, editData }) => {
   };
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
-    let balance = 0;
-    if (data.paid < editData.total_amount) {
-      balance = editData.total_amount - data.paid;
-    } else {
-      balance = 0;
-    }
+    // let balance = 0;
+    // if (data.paid < editData.total_amount) {
+    //   balance = editData.total_amount - data.paid;
+    // } else {
+    //   balance = 0;
+    // }
 
     let newData = {
       ...data,
-      balance,
+
       productItems: productIds,
       ref: editData?.ref,
       vendor: editData.vendor._id,
-      total_amount: editData.total_amount,
     };
     setLoading(true);
     axiosInstance
       .patch(`/api/bills/${editData._id}`, newData)
       .then((res) => {
-        console.log(res);
         fetchBills();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
@@ -143,7 +140,6 @@ export const EditBillForm = ({ fetchBills, editData }) => {
         $("#EditFormModal").modal("toggle");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       })
       .finally(() => {
@@ -240,7 +236,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="paid">Paid</label>
                       <input
@@ -251,13 +247,12 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                         {...register("paid", { valueAsNumber: true })}
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="total_amount">Total Amount</label>
                       <input
                         name="total_amount"
-                        disabled
                         defaultValue={defaultValues.total_amount}
                         className="form-control "
                         type="number"

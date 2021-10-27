@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./acc.css";
 
 const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
   const handleStatus = (status) => {
@@ -11,7 +12,7 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
       <div className="dropdown action-label text-center">
         {value === "Published" ? (
           <Link
-            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle disabled-link"
             data-toggle="dropdown"
             aria-expanded="false"
           >
@@ -31,7 +32,7 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
             data-toggle="dropdown"
             aria-expanded="false"
           >
-            <i className="fa fa-dot-circle-o text-purple"></i> Published
+            <i className="fa fa-dot-circle-o text-purple"></i> Draft
           </Link>
         )}
 
@@ -52,7 +53,7 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
 
           <Link
             onClick={() => handleStatus("Published")}
-            className="dropdown-item"
+            className="dropdown-item "
             data-toggle="modal"
             data-target="#approve_leave"
           >
