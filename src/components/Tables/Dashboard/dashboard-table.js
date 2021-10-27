@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
+import { formatter } from "../../../services/numberFormatter";
 
-const DashboardTable = ({title}) => {
+const DashboardTable = ({ title, data }) => {
   return (
     <>
       <div className="col-md-6 d-flex">
@@ -14,61 +16,61 @@ const DashboardTable = ({title}) => {
               <table className="table table-nowrap custom-table mb-0">
                 <thead>
                   <tr>
-                    <th>Invoice ID</th>
-                    <th>Client</th>
-                    <th>Due Date</th>
+                    <th>{title === "Invoices" ? "Invoice ID" : "Number"}</th>
+                    <th>{title === "Invoices" ? "Client" : "Status"}</th>
+                    <th>{title === "Invoices" ? "Due Date" : "Date"}</th>
                     <th>Total</th>
-                    <th>Status</th>
+                    <th>
+                      {title === "Invoices" ? "Status" : "Payment Status"}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <Link to="invoice-view">#INV-0001</Link>
-                    </td>
-                    <td>
-                      <h2>
-                        <Link>Outsource Global Technologies</Link>
-                      </h2>
-                    </td>
-                    <td>11 Mar 2019</td>
-                    <td>$380</td>
-                    <td>
-                      <span className="badge bg-inverse-warning">
-                        Partially Paid
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Link to="invoice-view">#INV-0002</Link>
-                    </td>
-                    <td>
-                      <h2>
-                        <Link to="#">Parkway</Link>
-                      </h2>
-                    </td>
-                    <td>8 Feb 2019</td>
-                    <td>$500</td>
-                    <td>
-                      <span className="badge bg-inverse-success">Paid</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Link to="invoice-view">#INV-0003</Link>
-                    </td>
-                    <td>
-                      <h2>
-                        <Link to="#">Blue Tag</Link>
-                      </h2>
-                    </td>
-                    <td>23 Jan 2019</td>
-                    <td>$60</td>
-                    <td>
-                      <span className="badge bg-inverse-danger">Unpaid</span>
-                    </td>
-                  </tr>
+                  {data?.map((dt, index) => (
+                    <tr key={index}>
+                      <td>{title === "Invoices" ? dt?.ref : dt?.number}</td>
+                      <td>
+                        {title === "Invoices" ? (
+                          dt?.customer?.company
+                        ) : (
+                          <span
+                            className={`badge bg-inverse-${
+                              dt.status === "Published" ? "success" : "warning"
+                            }`}
+                          >
+                            {dt.status}
+                          </span>
+                        )}
+                      </td>
+                      <td>
+                        {title === "Invoices"
+                          ? moment(dt?.due_date).format("L")
+                          : moment(dt?.date).format("L")}
+                      </td>
+                      <td>{formatter.format(dt?.total_amount)}</td>
+                      <td>
+                        {title === "Invoices" ? (
+                          <span
+                            className={`badge bg-inverse-${
+                              dt.status === "Published" ? "success" : "warning"
+                            }`}
+                          >
+                            {dt.status}
+                          </span>
+                        ) : (
+                          <span
+                            className={`badge bg-inverse-${
+                              dt.paymentStatus === "Full Payment"
+                                ? "success"
+                                : "warning"
+                            }`}
+                          >
+                            {dt.paymentStatus}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
