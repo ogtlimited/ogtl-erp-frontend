@@ -85,12 +85,12 @@ const GeneralLedger = () => {
        <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Bills</h3>
+            <h3 className="page-title">General Ledger</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Bills</li>
+              <li className="breadcrumb-item active">General Ledger</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

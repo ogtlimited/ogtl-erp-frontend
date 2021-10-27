@@ -86,12 +86,12 @@ const Budget = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Bills</h3>
+            <h3 className="page-title">Budget</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Bills</li>
+              <li className="breadcrumb-item active">Budget</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -111,13 +111,13 @@ const Budget = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <FormModal2
+      {/* <FormModal2
         title="Create New Budget"
         editData={editData}
         setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
-      />
+      /> */}
     </>
   );
 };

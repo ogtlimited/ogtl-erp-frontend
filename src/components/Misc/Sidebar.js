@@ -468,11 +468,11 @@ const Sidebar = () => {
                       </Link>
                     </li>
 
-                    <li>
+                    {/* <li>
                       <Link className="" to="/admin/subscriptions">
                         Subscriptions
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </li>
               )}
