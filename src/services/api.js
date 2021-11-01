@@ -8,7 +8,7 @@ if (token) {
 }
 console.log(token);
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://34.240.246.145",
 });
 axiosInstance.interceptors.request.use((config) => {
   // console.log(config)

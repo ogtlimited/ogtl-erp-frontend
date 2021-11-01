@@ -4,7 +4,7 @@ import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
 
 export default createBrowserHistory();
-const baseURL = "http://localhost:3000";
+const baseURL = "http://34.240.246.145";
 const AppContext = createContext();
 
 const AppProvider = (props) => {

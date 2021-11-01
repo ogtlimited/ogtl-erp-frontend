@@ -31,7 +31,7 @@ const Login = () => {
           JSON.stringify(e.accessToken)
         );
         axios
-          .post("http://localhost:3000/api/login", obj)
+          .post("http://34.240.246.145/api/login", obj)
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.employee);
