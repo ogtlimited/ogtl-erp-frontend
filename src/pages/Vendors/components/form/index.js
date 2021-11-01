@@ -40,6 +40,8 @@ export const BillForm = ({ fetchBills }) => {
   // console.log("unittttttssssssssssssss", getUnits);
 
   const handleChange = (editorState, index) => {
+    console.log(editorState, index)
+    // return
     const values = [...productItems];
     values[index].productId = editorState._id;
     values[index].rate = editorState.rate;
@@ -48,11 +50,11 @@ export const BillForm = ({ fetchBills }) => {
 
     values[index].tax = editorState.tax;
 
-    let cost = editorState.rate * editorState.price * unit;
+    let cost = editorState.rate * editorState.price * editorState.units;
     let tax = (editorState.tax / 100) * cost;
     let total = cost + tax;
     values[index].total = total;
-    console.log("edit", editorState);
+    console.log("edit", editorState, cost);
     setProductItems(values);
   };
 
@@ -331,7 +333,13 @@ export const BillForm = ({ fetchBills }) => {
                                 name="units"
                                 className="form-control"
                                 type="text"
-                                onChange={(e) => setunit(e.target.value)}
+                                onChange={(e) => {
+                                  let newValue = {
+                                    ...product,
+                                    units: parseInt(e.target.value)
+                                  }
+                                  handleChange(newValue, index)
+                                }}
                                 // {...register("units")}
                                 // defaultValue={product.units}
                               />
