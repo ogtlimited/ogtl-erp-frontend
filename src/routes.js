@@ -52,6 +52,7 @@ import Budget from "./pages/Accounting/Budget";
 import Journals from "./pages/Accounting/Journal";
 import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
 import ProductItems from "./pages/ProductItems/ProductItems";
+import PayrollReports from "./pages/Accounting/Payroll-Reports";
 
 
 // const routes = [{
@@ -240,6 +241,13 @@ const routes = [
     path: "/chart-of-account",
     name: "Account list",
     component: ChartOfAccounts,
+    layout: "/admin",
+  },
+  {
+    title: "Payroll Reports",
+    path: "/payroll-reports",
+    name: "Payroll Reports",
+    component: PayrollReports,
     layout: "/admin",
   },
   {

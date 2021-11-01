@@ -33,9 +33,7 @@ const Activity = () => {
              </p>
            </li>
              </>
-           ))} 
-            
-           
+           ))}
           </ul>
         </div>
       </div>

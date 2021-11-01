@@ -111,13 +111,13 @@ const Budget = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <FormModal2
+      {/* <FormModal2
         title="Create New Budget"
         // editData={editData}
         // setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
+        setsubmitted={setSubmitted} */}
+      {/* /> */}
     </>
   );
 };

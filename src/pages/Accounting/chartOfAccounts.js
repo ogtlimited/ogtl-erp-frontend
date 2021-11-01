@@ -285,7 +285,7 @@ const ChartOfAccounts = () => {
                   <i class={card.icon}></i>
                 </span>
                 <div class="dash-widget-info">
-                  <h3>${card.amount}</h3>
+                  <h3>₦ {" "}{card.amount}</h3>
                   <span>{card.title}</span>
                 </div>
               </div>
