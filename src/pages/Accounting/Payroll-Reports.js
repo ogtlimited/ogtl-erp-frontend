@@ -1,13 +1,23 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom';
 import LeavesTable from '../../components/Tables/EmployeeTables/Leaves/LeaveTable';
 import axiosInstance from '../../services/api';
 import { formatter } from '../../services/numberFormatter';
 
 const PayrollReports = () => {
+    const ref = useRef(null)
+    const [val, setval] = useState("")
+    const [counter, setcounter] = useState(0)
     const [data, setData] = useState([]);
-
+    const click = () =>{
+        setval(ref.current.value)
+        ref.current.value = val + ref.current.value
+        console.log('state:', val, 'input val:', ref.current.value)
+    }
+    useEffect(() => {
+       setcounter(counter + 1)
+    }, )
     const fetchEmployeeSalary = () => {
       axiosInstance
         .get("/api/salary-slip")
@@ -151,6 +161,12 @@ const PayrollReports = () => {
         ))}
       </div> 
       <div className="row">
+          <div class="form-group">
+            <label for="">{counter}</label>
+            <input type="text"
+              class="form-control" onChange={(e) => setval(e.target.value)} value={val} aria-describedby="helpId" placeholder="" />
+            <button onClick={click} class="form-text text-muted">Help text</button>
+          </div>
         <div className="col-md-12">
           <LeavesTable data={data} columns={columns} />
         </div>
