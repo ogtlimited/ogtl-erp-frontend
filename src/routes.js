@@ -52,7 +52,7 @@ import Budget from "./pages/Accounting/Budget";
 import Journals from "./pages/Accounting/Journal";
 import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
 import ProductItems from "./pages/ProductItems/ProductItems";
-
+import Bill from "./pages/Vendors/bill";
 
 // const routes = [{
 //   title: 'Main',
@@ -201,6 +201,13 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Bill",
+    path: "/bills/:id",
+    name: "Vendors",
+    component: Bill,
+    layout: "/admin",
+  },
+  {
     title: "Vendors Payments",
     path: "/vendor-payments",
     name: "Vendors",
@@ -226,7 +233,6 @@ const routes = [
     path: "/client-payments",
     name: "Client",
     component: ClientPayments,
-
   },
   {
     title: "Invoice",

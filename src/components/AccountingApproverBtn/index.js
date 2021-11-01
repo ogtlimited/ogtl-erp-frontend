@@ -12,7 +12,7 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
       <div className="dropdown action-label text-center">
         {value === "Published" ? (
           <Link
-            className="btn btn-gray btn-sm btn-rounded dropdown-toggle disabled-link"
+            className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
