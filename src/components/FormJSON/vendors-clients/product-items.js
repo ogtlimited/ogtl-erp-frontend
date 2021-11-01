@@ -33,15 +33,7 @@ export const productItemsFormJson = {
         message: "Price is required",
       },
     },
-    {
-      name: "units",
-      type: "number",
-      title: "Units",
-      required: {
-        value: true,
-        message: "Units is required",
-      },
-    },
+
     {
       name: "tax",
       type: "number",

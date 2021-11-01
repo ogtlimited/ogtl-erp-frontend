@@ -126,12 +126,7 @@ const ProductItems = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
-    {
-      dataField: "units",
-      text: "Units",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
+
     {
       dataField: "tax",
       text: "Tax",

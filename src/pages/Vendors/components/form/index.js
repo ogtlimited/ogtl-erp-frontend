@@ -8,7 +8,7 @@ import $ from "jquery";
 
 const defaultValues = {
   vendor: "",
-
+  units: "",
   bill_date: "",
   due_date: "",
   total_amount: "",
@@ -18,8 +18,9 @@ export const BillForm = ({ fetchBills }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
+  const [unit, setunit] = useState(1);
   const { showAlert } = useAppContext();
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const { register, handleSubmit, reset, setValue, watch } = useForm({
     defaultValues,
   });
 
@@ -29,9 +30,12 @@ export const BillForm = ({ fetchBills }) => {
       rate: "",
       price: "",
       tax: "",
+      total: "",
       units: "",
     },
   ]);
+  // const getUnits = watch("units");
+  // console.log("unittttttssssssssssssss", getUnits);
 
   const handleChange = (editorState, index) => {
     const values = [...productItems];
@@ -42,10 +46,14 @@ export const BillForm = ({ fetchBills }) => {
 
     values[index].tax = editorState.tax;
 
-    values[index].units = editorState.units;
-    console.log(values);
+    let cost = editorState.rate * editorState.price * unit;
+    let tax = (editorState.tax / 100) * cost;
+    let total = cost + tax;
+    values[index].total = total;
+    console.log("edit", editorState);
     setProductItems(values);
   };
+
   const handleRemoveFields = (index) => {
     const values = [...productItems];
 
@@ -61,6 +69,7 @@ export const BillForm = ({ fetchBills }) => {
       rate: "",
       price: "",
       tax: "",
+      total: "",
       units: "",
     });
     setProductItems(values);
@@ -104,10 +113,16 @@ export const BillForm = ({ fetchBills }) => {
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
   };
+
+  //calculate the total amount
+  useEffect(() => {
+    const result = productItems.reduce((sum, { total }) => sum + total, 0);
+    setValue("total_amount", result);
+  }, [productItems, setValue]);
+
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
     let balance = 0;
-
     let newData = {
       ...data,
       balance,
@@ -173,11 +188,13 @@ export const BillForm = ({ fetchBills }) => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="total_amount">Total Amount</label>
+
                       <input
                         name="total_amount"
                         defaultValue={defaultValues.total_amount}
                         className="form-control "
                         type="number"
+                        disabled
                         {...register("total_amount", { valueAsNumber: true })}
                       />
                     </div>
@@ -217,9 +234,10 @@ export const BillForm = ({ fetchBills }) => {
                         <th className="col-4">Product/Service</th>
 
                         <th className="col-1">Rate</th>
-                        <th className="col-2">Price</th>
+                        <th className="col-1">Price</th>
                         <th className="col-1">Tax %</th>
-                        <th className="col-2">Units</th>
+                        <th className="col-1">Units</th>
+                        <th className="col-2">Total</th>
                         <th className="col-1">Action</th>
                       </tr>
                     </thead>
@@ -231,7 +249,9 @@ export const BillForm = ({ fetchBills }) => {
                               <Select
                                 options={productOptions}
                                 // defaultValue={defaultValues.productItems}
-                                // name="productId"
+                                // name="product"
+                                // {...register("product")}
+
                                 onChange={(state) =>
                                   handleChange(state.value, index)
                                 }
@@ -277,8 +297,18 @@ export const BillForm = ({ fetchBills }) => {
                                 name="units"
                                 className="form-control"
                                 type="text"
-                                defaultValue={product?.units}
+                                onChange={(e) => setunit(e.target.value)}
+                                // {...register("units")}
+                                // defaultValue={product.units}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                name="total"
+                                className="form-control"
+                                type="text"
                                 disabled
+                                defaultValue={product.total}
                               />
                             </td>
                             <td>

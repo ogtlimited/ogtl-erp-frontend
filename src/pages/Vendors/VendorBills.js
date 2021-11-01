@@ -172,6 +172,9 @@ const VendorBills = () => {
                   <i className="fa fa-pencil m-r-5"></i> Edit
                 </Link>
               )}
+              <Link className="dropdown-item" to={`/admin/bills/${row._id}`}>
+                <i className="fa fa-eye m-r-5"></i> View
+              </Link>
               <Link
                 className="dropdown-item"
                 data-toggle="modal"
