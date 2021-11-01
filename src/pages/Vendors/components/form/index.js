@@ -12,12 +12,14 @@ const defaultValues = {
   bill_date: "",
   due_date: "",
   total_amount: "",
+  account: "",
 };
 
 export const BillForm = ({ fetchBills }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
+  const [accountOptions, setAccountOptions] = useState([]);
   const [unit, setunit] = useState(1);
   const { showAlert } = useAppContext();
   const { register, handleSubmit, reset, setValue, watch } = useForm({
@@ -110,6 +112,23 @@ export const BillForm = ({ fetchBills }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axiosInstance
+      .get("/api/account")
+      .then((res) => {
+        const data = res.data.data.filter((e) => e.is_group === false);
+        const accountOpt = data.map((e) => {
+          return {
+            label: `${e.account_name} - ${e.account_number}`,
+            value: e._id,
+          };
+        });
+        setAccountOptions(accountOpt);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
   };
@@ -187,6 +206,21 @@ export const BillForm = ({ fetchBills }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
+                      <label htmlFor="accounta">Account</label>
+                      <Select
+                        options={accountOptions}
+                        defaultValue={defaultValues.account}
+                        name="account"
+                        onChange={(state) =>
+                          onEditorStateChange(state.value, "account")
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
                       <label htmlFor="total_amount">Total Amount</label>
 
                       <input
@@ -199,8 +233,6 @@ export const BillForm = ({ fetchBills }) => {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="bill_date">Bill Date</label>
@@ -213,6 +245,8 @@ export const BillForm = ({ fetchBills }) => {
                       />
                     </div>
                   </div>
+                </div>
+                <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="due_date">Due Date</label>
