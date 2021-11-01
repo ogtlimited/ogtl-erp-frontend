@@ -11,7 +11,7 @@ import io from "socket.io-client";
 function App() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io("http://34.240.246.145");
     setSocket(newSocket);
     console.log(newSocket);
     newSocket.io.on("error", (error) => {
