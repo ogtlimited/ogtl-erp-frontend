@@ -20,9 +20,8 @@ export const BillForm = ({ fetchBills }) => {
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const [accountOptions, setAccountOptions] = useState([]);
-  const [unit, setunit] = useState(1);
   const { showAlert } = useAppContext();
-  const { register, handleSubmit, reset, setValue, watch } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues,
   });
 
@@ -36,12 +35,8 @@ export const BillForm = ({ fetchBills }) => {
       units: "",
     },
   ]);
-  // const getUnits = watch("units");
-  // console.log("unittttttssssssssssssss", getUnits);
 
   const handleChange = (editorState, index) => {
-    console.log(editorState, index)
-    // return
     const values = [...productItems];
     values[index].productId = editorState._id;
     values[index].rate = editorState.rate;
@@ -49,12 +44,12 @@ export const BillForm = ({ fetchBills }) => {
     values[index].price = editorState.price;
 
     values[index].tax = editorState.tax;
+    values[index].units = editorState.units;
 
     let cost = editorState.rate * editorState.price * editorState.units;
     let tax = (editorState.tax / 100) * cost;
     let total = cost + tax;
     values[index].total = total;
-    console.log("edit", editorState, cost);
     setProductItems(values);
   };
 
@@ -143,11 +138,11 @@ export const BillForm = ({ fetchBills }) => {
 
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
-    let balance = 0;
+    let units = productItems.map((prod) => prod.units);
     let newData = {
       ...data,
-      balance,
       productItems: productIds,
+      units,
     };
     setLoading(true);
     axiosInstance
@@ -297,7 +292,7 @@ export const BillForm = ({ fetchBills }) => {
                               name="productId"
                               className="form-control"
                               type="text"
-                              defaultValue={product?._id}
+                              defaultValue={product?.productId}
                               disabled
                               hidden
                             />
@@ -336,9 +331,11 @@ export const BillForm = ({ fetchBills }) => {
                                 onChange={(e) => {
                                   let newValue = {
                                     ...product,
-                                    units: parseInt(e.target.value)
-                                  }
-                                  handleChange(newValue, index)
+                                    _id: product.productId,
+                                    units: parseInt(e.target.value),
+                                  };
+                                  console.log(product);
+                                  handleChange(newValue, index);
                                 }}
                                 // {...register("units")}
                                 // defaultValue={product.units}
