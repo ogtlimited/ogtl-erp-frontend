@@ -479,6 +479,27 @@ const Sidebar = () => {
               {canView("Accounting") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
+                  <i class="las la-chart-pie"></i> <span> Accounting Reports </span>{" "}
+                    <span className="menu-arrow"></span>
+                  </a>
+                  <ul style={dNone}>
+                    <li>
+                      <Link className="" to="/admin/payroll-reports">
+                        Payroll Reports
+                      </Link>
+                      {/* <Link className="" to="/admin/client-invoice">
+                        Invoices
+                      </Link> */}
+                      {/* <Link className="" to="/admin/client-payments">
+                        Payments
+                      </Link> */}
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {canView("Accounting") && (
+                <li className="submenu">
+                  <a href="" onClick={(e) => e.preventDefault()}>
                     <i class="las la-user-friends"></i> <span> Clients </span>{" "}
                     <span className="menu-arrow"></span>
                   </a>

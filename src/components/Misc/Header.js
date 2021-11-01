@@ -33,7 +33,7 @@ const Header = () => {
     <div className="header">
       <div className="header-left">
         <Link to="/" className="logo">
-          <img src={logo} style={{width: '100px'}}  alt="" />
+          <img src={logo} style={{ width: "100px" }} alt="" />
         </Link>
       </div>
 
@@ -81,13 +81,128 @@ const Header = () => {
             <i className="fa fa-bell-o"></i>{" "}
             <span className="badge badge-pill">3</span>
           </a>
-          <div className="dropdown-menu notifications">
-            <div className="topnav-dropdown-header">
-              <span className="notification-title">Notifications</span>
-              <a href="javascript:void(0)" className="clear-noti">
+          <div
+            class="dropdown-menu notifications"
+            style={{position: 'absolute', transform: 'translate3d(-133px, 60px, 0px)', top: '0px', left: '0px'}}
+          >
+            <div class="topnav-dropdown-header">
+              <span class="notification-title">Notifications</span>
+              <a href="javascript:void(0)" class="clear-noti">
                 {" "}
                 Clear All{" "}
               </a>
+            </div>
+            <div class="noti-content">
+              <ul class="notification-list">
+                <li class="notification-message">
+                  <a href="">
+                    <div class="media">
+                      <span class="avatar">
+                        <img alt="" src="" />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <span class="noti-title">Ahmad</span> added new
+                          task{" "}
+                          <span class="noti-title">
+                            Notifications module
+                          </span>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">4 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="notification-message">
+                  <a href="">
+                    <div class="media">
+                      <span class="avatar">
+                        <img alt="" src="" />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <span class="noti-title">Potbelly</span>{" "}
+                          changed the task name{" "}
+                          <span class="noti-title">
+                            always says nonsense
+                          </span>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">6 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="notification-message">
+                  <a href="">
+                    <div class="media">
+                      <span class="avatar">
+                        <img alt="" src="" />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <span class="noti-title">Sir Abubakar</span> added{" "}
+                          <span class="noti-title">Ahmad</span> and{" "}
+                          <span class="noti-title">Missy</span> to
+                          project{" "}
+                          <span class="noti-title">
+                            General Ledger
+                          </span>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">8 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="notification-message">
+                  <a href="">
+                    <div class="media">
+                      <span class="avatar">
+                        <img alt="" src="" />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <span class="noti-title">Missy</span>{" "}
+                          completed task{" "}
+                          <span class="noti-title">
+                            Tony is saying nonsense
+                          </span>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">12 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li class="notification-message">
+                  <a href="">
+                    <div class="media">
+                      <span class="avatar">
+                        <img alt="" src="" />
+                      </span>
+                      <div class="media-body">
+                        <p class="noti-details">
+                          <span class="noti-title">Mazi </span> added
+                          new task{" "}
+                          <span class="noti-title">Notification module</span>
+                        </p>
+                        <p class="noti-time">
+                          <span class="notification-time">2 days ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="topnav-dropdown-footer">
+              <a href="">View all Notifications</a>
             </div>
           </div>
         </li>

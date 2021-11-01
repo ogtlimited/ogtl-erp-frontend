@@ -113,11 +113,11 @@ const Budget = () => {
       </div>
       {/* <FormModal2
         title="Create New Budget"
-        editData={editData}
-        setformValue={setFormValue}
+        // editData={editData}
+        // setformValue={setFormValue}
         template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      /> */}
+        setsubmitted={setSubmitted} */}
+      {/* /> */}
     </>
   );
 };

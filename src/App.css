@@ -334,3 +334,12 @@ tbody > tr:nth-of-type(2n+1) {
 .pos-relative{
   position: relative !important;
 }
+
+@media print {
+  .sidebar{
+    margin-left: -225px !important;
+  }
+  .header {
+    display: none !important;
+  }
+}

@@ -48,9 +48,10 @@ const ClientPayments = () => {
     axiosInstance
       .get("/api/invoice")
       .then((res) => {
+        console.log('invoice', res)
         const formOp = res.data.data.map((e) => {
           return {
-            label: e.customer.company + " - " + e.ref,
+            label: e?.customer?.company + " - " + e.ref,
             value: e._id,
           };
         });
