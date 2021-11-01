@@ -304,8 +304,6 @@ export const BillForm = ({ fetchBills }) => {
                                     ...product,
                                     units: parseInt(e.target.value)
                                   }
-                                  console.log(newValue)
-                                  console.log(product)
                                   handleChange(newValue, index)
                                 }}
                                 // {...register("units")}
