@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build
+      - echo build completed
+  post_build:
+    commands:
+      - aws cloudfront create-invalidation --distribution-id E301WD6BY9YF54 --paths "/*"
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
