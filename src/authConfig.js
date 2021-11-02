@@ -4,7 +4,7 @@
  */
 
 import { LogLevel } from "@azure/msal-browser";
-
+import config from './config.json'
 /**
  * Configuration object to be passed to MSAL instance on creation. 
  * For a full list of MSAL.js configuration parameters, visit:
@@ -14,7 +14,7 @@ export const msalConfig = {
     auth: {
         clientId: "1657a1b8-dc54-4586-814b-3f5235ba2dad",
         authority: "https://login.microsoftonline.com/515060b6-5478-49e6-a65b-8de5f555e50c",
-        redirectUri: "http://localhost:3001/"
+        redirectUri: config.BaseUrl
     },
     cache: {
         cacheLocation: "localStorage", // This configures where your cache will be stored
@@ -52,7 +52,7 @@ export const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: ["User.Read"]
+    scopes: ["User.Read", "profile"]
 };
 
 /**
