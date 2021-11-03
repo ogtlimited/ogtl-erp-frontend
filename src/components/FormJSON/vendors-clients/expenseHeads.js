@@ -15,10 +15,10 @@ export const expenseHeadsFormJson = {
         type: "select",
         options: [],
         title: "Department",
-        required: {
-          value: true,
-          message: "department is required",
-        },
+        // required: {
+        //   value: true,
+        //   message: "department is required",
+        // },
       },
       {
         name: "flagAlert",

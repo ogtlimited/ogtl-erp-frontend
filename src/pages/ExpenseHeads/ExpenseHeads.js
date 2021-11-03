@@ -129,13 +129,13 @@ const ExpenseHeads = () => {
 
   const columns = [
     {
-      dataField: "Title",
+      dataField: "title",
       text: "title",
       sort: true,
       headerStyle: { width: "350px" },
     },
     {
-      dataField: "department",
+      dataField: "department.title",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "100px" },
