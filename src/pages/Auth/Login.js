@@ -6,7 +6,7 @@ import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
-
+import config from '../../config.json'
 const Login = () => {
   const { instance } = useMsal();
   let history = useHistory();
@@ -31,7 +31,7 @@ const Login = () => {
           JSON.stringify(e.accessToken)
         );
         axios
-          .post("http://localhost:3000/api/login", obj)
+          .post(config.ApiUrl +"/api/login", obj)
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.employee);

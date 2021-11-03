@@ -2,9 +2,9 @@ import React, { createContext, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
-
+import config from '../config.json'
 export default createBrowserHistory();
-const baseURL = "https://erp-api.outsourceglobal.com";
+const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
 const AppProvider = (props) => {

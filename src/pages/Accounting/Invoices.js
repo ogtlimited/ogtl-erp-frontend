@@ -18,7 +18,7 @@ import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const Invoices = () => {
   const card = [];
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const { showAlert, combineRequest, setformUpdate } = useAppContext();
@@ -261,6 +261,7 @@ const Invoices = () => {
       </div> */}
       <div className="row">
         <div className="col-md-12">
+
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
