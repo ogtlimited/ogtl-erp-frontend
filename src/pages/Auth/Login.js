@@ -31,7 +31,7 @@ const Login = () => {
           JSON.stringify(e.accessToken)
         );
         axios
-          .post("https://erp-api.outsourceglobal.com/api/login", obj)
+          .post("http://localhost:3000/api/login", obj)
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.employee);

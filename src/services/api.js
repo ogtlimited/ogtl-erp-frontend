@@ -8,7 +8,7 @@ if (token) {
 }
 console.log(token);
 const axiosInstance = axios.create({
-  baseURL: "https://erp-api.outsourceglobal.com",
+  baseURL: "http://localhost:3000",
 });
 axiosInstance.interceptors.request.use((config) => {
   // console.log(config)
