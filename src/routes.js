@@ -54,6 +54,7 @@ import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
 import ProductItems from "./pages/ProductItems/ProductItems";
 import Bill from "./pages/Vendors/bill";
 import PayrollReports from "./pages/Accounting/Payroll-Reports";
+import Notifications from "./pages/In-Apps/Notifications";
 
 // const routes = [{
 //   title: 'Main',
@@ -332,6 +333,12 @@ const routes = [
     title: "Email",
     path: "/email",
     component: Email,
+    layout: "/admin",
+  },
+  {
+    title: "Notifications",
+    path: "/notifications",
+    component: Notifications,
     layout: "/admin",
   },
   {

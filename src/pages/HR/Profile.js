@@ -19,7 +19,7 @@ const Profile = () => {
   const [template, settemplate] = useState(PersonalDetailJson);
   const { id } = useParams();
   const [userData, setUserdata] = useState(null);
-  const [formValue, setFormValue] = useState({});
+  const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest } = useAppContext();
 
@@ -38,30 +38,51 @@ const Profile = () => {
     fetchUserInfo();
   }, [id]);
 
-  useEffect(() => {
-    if (formType === "PersonalDetails") {
-      settemplate(PersonalDetailJson);
-    } else if (formType === "WorkExperience") {
-      settemplate(WorkExperienceJson);
-    } else if (formType === "ContactDetails") {
-      settemplate(ContactDetailJson);
-    } else if (formType === "EmergencyContact") {
-      settemplate(EmergencyDetailJson);
-    } else if (formType === "EmployeeEducation") {
-      settemplate(EmployeeEducationJson);
-    } else if (formType === "History") {
-      settemplate(historyJson);
-    } else if (formType === "SalaryDetails") {
-      settemplate(SalaryDetailJson);
-    }
+  // useEffect(() => {
+  //   if (formType === "PersonalDetails") {
+  //     settemplate(PersonalDetailJson);
+  //   } else if (formType === "WorkExperience") {
+  //     settemplate(WorkExperienceJson);
+  //   } else if (formType === "ContactDetails") {
+  //     settemplate(ContactDetailJson);
+  //   } else if (formType === "EmergencyContact") {
+  //     settemplate(EmergencyDetailJson);
+  //   } else if (formType === "EmployeeEducation") {
+  //     settemplate(EmployeeEducationJson);
+  //   } else if (formType === "History") {
+  //     settemplate(historyJson);
+  //   } else if (formType === "SalaryDetails") {
+  //     settemplate(SalaryDetailJson);
+  //   }
 
-    console.log(formType);
-    console.log("formvalue", formValue);
-  }, [formType, formValue, submitted, template]);
+  //   console.log(formType);
+  //   console.log("formvalue", formValue);
+  //   return () => {
+  //     setformType("");
+  //   };
+  // }, [formType, formValue, submitted, template]);
+
+  useEffect(() => {
+    switch (formType) {
+      case "WorkExperience":
+        return settemplate(WorkExperienceJson);
+      case "ContactDetails":
+        return settemplate(ContactDetailJson);
+      case "EmergencyContact":
+        return settemplate(EmergencyDetailJson);
+      case "EmployeeEducation":
+        return settemplate(EmployeeEducationJson);
+      case "History":
+        return settemplate(historyJson);
+      case "SalaryDetails":
+        return settemplate(SalaryDetailJson);
+      default:
+        return settemplate(PersonalDetailJson);
+    }
+  }, [formType]);
 
   useEffect(() => {
     combineRequest().then((res) => {
-      console.log(res);
       const { designations, branches } = res.data.createEmployeeFormSelection;
 
       const designationsOpts = designations?.map((e) => {
@@ -90,9 +111,9 @@ const Profile = () => {
         title: historyJson.title,
         Fields: finalForm,
       });
-      console.log(template);
     });
   }, []);
+
   return (
     <>
       <div className="page-header">

@@ -119,6 +119,11 @@ const Sidebar = () => {
                       File Manager
                     </Link>
                   </li>
+                  <li>
+                    <Link className="" to="/admin/notifications">
+                      Notifications
+                    </Link>
+                  </li>
                 </ul>
               </li>
               {canView("Operations") && (
@@ -479,7 +484,8 @@ const Sidebar = () => {
               {canView("Accounting") && (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>
-                  <i class="las la-chart-pie"></i> <span> Accounting Reports </span>{" "}
+                    <i class="las la-chart-pie"></i>{" "}
+                    <span> Accounting Reports </span>{" "}
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={dNone}>

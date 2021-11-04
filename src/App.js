@@ -20,6 +20,7 @@ function App() {
     });
     newSocket.io.on("notification", (data) => {
       // ...
+      newSocket.emit();
       console.log(data);
     });
     return () => newSocket.close();

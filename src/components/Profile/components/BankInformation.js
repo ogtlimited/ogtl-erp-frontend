@@ -11,6 +11,7 @@ const BankInformation = ({
   formValue,
   submitted,
   fetchUserInfo,
+  setFormValue,
 }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
@@ -26,6 +27,7 @@ const BankInformation = ({
         .post("/SalaryDetails", newFormValue)
         .then((res) => {
           fetchUserInfo();
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {

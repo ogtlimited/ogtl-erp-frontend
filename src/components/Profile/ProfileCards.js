@@ -22,7 +22,6 @@ const ProfileCards = ({
   const handleChange = (type) => {
     setformType(type);
   };
-
   return (
     <>
       <div className="card tab-box">
@@ -30,16 +29,16 @@ const ProfileCards = ({
           <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
             <ul className="nav nav-tabs nav-tabs-bottom">
               <li className="nav-item">
-                <a
-                  href="#emp_profile"
-                  data-toggle="tab"
-                  className="nav-link "
-                >
+                <a href="#emp_profile" data-toggle="tab" className="nav-link ">
                   Profile
                 </a>
               </li>
               <li className="nav-item">
-                <a href="#emp_campaign" data-toggle="tab" className="nav-link active">
+                <a
+                  href="#emp_campaign"
+                  data-toggle="tab"
+                  className="nav-link active"
+                >
                   Campaign
                 </a>
               </li>
@@ -67,6 +66,7 @@ const ProfileCards = ({
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
+                setFormValue={setFormValue}
               />
             </div>
             <div className="col-md-6 d-flex">
@@ -76,6 +76,7 @@ const ProfileCards = ({
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
+                setFormValue={setFormValue}
               />
             </div>
           </div>
@@ -87,6 +88,7 @@ const ProfileCards = ({
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
+                setFormValue={setFormValue}
               />
             </div>
             <div className="col-md-6 d-flex">
@@ -106,6 +108,7 @@ const ProfileCards = ({
                 education={userData?.education}
                 submitted={submitted}
                 formValue={formValue}
+                setFormValue={setFormValue}
               />
             </div>
             <div className="col-md-6 d-flex">
@@ -242,18 +245,14 @@ const ProfileCards = ({
                       <label class="col-form-label">
                         Salary basis <span class="text-danger">*</span>
                       </label>
-                      <select class="form-control"
-                        
-                      >
-                        <option >
-                          Select salary basis type
-                        </option>
+                      <select class="form-control">
+                        <option>Select salary basis type</option>
                         <option>Hourly</option>
                         <option>Daily</option>
                         <option>Weekly</option>
                         <option>Monthly</option>
                       </select>
-                       </div>
+                    </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
@@ -277,18 +276,13 @@ const ProfileCards = ({
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">Payment type</label>
-                      <select
-                        class="form-control"
-                        
-                      >
-                        <option >
-                          Select payment type
-                        </option>
+                      <select class="form-control">
+                        <option>Select payment type</option>
                         <option>Bank transfer</option>
                         <option>Check</option>
                         <option>Cash</option>
                       </select>
-                        </div>
+                    </div>
                   </div>
                 </div>
                 <hr />
@@ -297,28 +291,21 @@ const ProfileCards = ({
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">Bank</label>
-                      <input
-                        class="form-control" />
-                     
+                      <input class="form-control" />
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">Account Number</label>
-                      <input
-                        class="form-control" />
-                     
+                      <input class="form-control" />
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">BVN</label>
-                      <input
-                        class="form-control" />
-                     
+                      <input class="form-control" />
                     </div>
                   </div>
-                 
                 </div>
                 <hr />
                 <h3 class="card-title"> Tax & Pension Information</h3>
@@ -326,23 +313,17 @@ const ProfileCards = ({
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">Tax %</label>
-                      <input
-                        class="form-control" />
-                     
+                      <input class="form-control" />
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="col-form-label">Pension %</label>
-                      <input
-                        class="form-control" />
-                     
+                      <input class="form-control" />
                     </div>
                   </div>
-                 
                 </div>
-
-                 </form>
+              </form>
             </div>
           </div>
         </div>

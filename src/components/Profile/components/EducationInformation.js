@@ -45,6 +45,7 @@ const EducationInformation = ({
   handleChange,
   submitted,
   formValue,
+  setFormValue,
 }) => {
   const { id } = useParams();
   const user = tokenService.getUser();
@@ -69,6 +70,7 @@ const EducationInformation = ({
             type: "ADD",
             educationalBackground: res?.data?.data,
           });
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
