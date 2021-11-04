@@ -17,7 +17,8 @@ import { EditInvoiceForm } from "./components/editForm";
 import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 
 const Invoices = () => {
-  const [data, setData] = useState(null);
+  const card = [];
+  const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const { showAlert, combineRequest, setformUpdate } = useAppContext();
@@ -27,7 +28,7 @@ const Invoices = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
-
+  const [earnings, setearnings] = useState(0);
   const editRow = (row) => {
     setclickedRow(row);
   };
@@ -38,6 +39,9 @@ const Invoices = () => {
       .then((res) => {
         console.log(res.data);
         setData(res.data.data);
+        const invoices = res.data.data;
+        let earn = invoices.reduce((a, b) => a.paid + b.paid, 0);
+        setearnings(earn);
       })
       .catch((error) => {
         console.log(error);
@@ -225,11 +229,39 @@ const Invoices = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <DashboardStats />
-      </div>
+      {/* <div className="row">
+        <div className="col-md-12">
+          <div className="card-group m-b-30">
+            <div className="card">
+              <div className="card-body">
+                <div className="d-flex justify-content-between mb-3">
+                  <div>
+                    <span className="d-block">New Invoices</span>
+                  </div>
+                  <div>
+                    <span className="text-success">+10%</span>
+                  </div>
+                </div>
+                <h3 className="mb-3">10</h3>
+                <div className="progress mb-2" style={{ height: "5px" }}>
+                  <div
+                    className="progress-bar bg-primary"
+                    role="progressbar"
+                    style={{ width: "70%" }}
+                    aria-valuenow="40"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+                <p className="mb-0">Overall Invoices 218</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> */}
       <div className="row">
         <div className="col-md-12">
+
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>

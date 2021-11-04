@@ -8,10 +8,11 @@ import AuthLayout from "./layouts/Auth";
 import "./assets/script";
 import { AppProvider } from "./Context/AppContext";
 import io from "socket.io-client";
+import config from './config.json'
 function App() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
-    const newSocket = io("http://localhost:3000");
+    const newSocket = io(config.ApiUrl);
     setSocket(newSocket);
     console.log(newSocket);
     newSocket.io.on("error", (error) => {

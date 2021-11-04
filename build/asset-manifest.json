@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e82877f2.chunk.css",
+    "main.js": "/static/js/main.6b0f8269.chunk.js",
+    "main.js.map": "/static/js/main.6b0f8269.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.12baa187.js",
+    "runtime-main.js.map": "/static/js/runtime-main.12baa187.js.map",
+    "static/css/2.8889ce68.chunk.css": "/static/css/2.8889ce68.chunk.css",
+    "static/js/2.c852dd25.chunk.js": "/static/js/2.c852dd25.chunk.js",
+    "static/js/2.c852dd25.chunk.js.map": "/static/js/2.c852dd25.chunk.js.map",
+    "static/js/3.3d600a8b.chunk.js": "/static/js/3.3d600a8b.chunk.js",
+    "static/js/3.3d600a8b.chunk.js.map": "/static/js/3.3d600a8b.chunk.js.map",
+    "static/js/4.5e7980af.chunk.js": "/static/js/4.5e7980af.chunk.js",
+    "static/js/4.5e7980af.chunk.js.map": "/static/js/4.5e7980af.chunk.js.map",
+    "static/js/5.a298a6e0.chunk.js": "/static/js/5.a298a6e0.chunk.js",
+    "static/js/5.a298a6e0.chunk.js.map": "/static/js/5.a298a6e0.chunk.js.map",
+    "static/js/6.d3d902c6.chunk.js": "/static/js/6.d3d902c6.chunk.js",
+    "static/js/6.d3d902c6.chunk.js.map": "/static/js/6.d3d902c6.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.8889ce68.chunk.css.map": "/static/css/2.8889ce68.chunk.css.map",
+    "static/css/main.e82877f2.chunk.css.map": "/static/css/main.e82877f2.chunk.css.map",
+    "static/js/2.c852dd25.chunk.js.LICENSE.txt": "/static/js/2.c852dd25.chunk.js.LICENSE.txt",
+    "static/js/3.3d600a8b.chunk.js.LICENSE.txt": "/static/js/3.3d600a8b.chunk.js.LICENSE.txt",
+    "static/js/4.5e7980af.chunk.js.LICENSE.txt": "/static/js/4.5e7980af.chunk.js.LICENSE.txt",
+    "static/js/5.a298a6e0.chunk.js.LICENSE.txt": "/static/js/5.a298a6e0.chunk.js.LICENSE.txt",
+    "static/media/OG-Logo.png": "/static/media/OG-Logo.df1e133d.png",
+    "static/media/female_avatar.5a47975a.png": "/static/media/female_avatar.5a47975a.png",
+    "static/media/female_avatar2.679c2c6b.png": "/static/media/female_avatar2.679c2c6b.png",
+    "static/media/female_avatar3.bab33148.png": "/static/media/female_avatar3.bab33148.png",
+    "static/media/male_avater.59a948f8.png": "/static/media/male_avater.59a948f8.png",
+    "static/media/male_avater3.c5bd840e.png": "/static/media/male_avater3.c5bd840e.png",
+    "static/media/outsource.2499b5b3.png": "/static/media/outsource.2499b5b3.png",
+    "static/media/profile.a9136072.png": "/static/media/profile.a9136072.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.12baa187.js",
+    "static/css/2.8889ce68.chunk.css",
+    "static/js/2.c852dd25.chunk.js",
+    "static/css/main.e82877f2.chunk.css",
+    "static/js/main.6b0f8269.chunk.js"
+  ]
+}

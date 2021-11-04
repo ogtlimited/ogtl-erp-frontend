@@ -1,6 +1,6 @@
 import axios from "axios";
 import tokenService from "./token.service";
-
+import config from '../config.json'
 let headers = {};
 const token = localStorage.getItem("token");
 if (token) {
@@ -8,7 +8,7 @@ if (token) {
 }
 console.log(token);
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: config.ApiUrl,
 });
 axiosInstance.interceptors.request.use((config) => {
   // console.log(config)

@@ -161,12 +161,7 @@ const PayrollReports = () => {
         ))}
       </div> 
       <div className="row">
-          <div class="form-group">
-            <label for="">{counter}</label>
-            <input type="text"
-              class="form-control" onChange={(e) => setval(e.target.value)} value={val} aria-describedby="helpId" placeholder="" />
-            <button onClick={click} class="form-text text-muted">Help text</button>
-          </div>
+         
         <div className="col-md-12">
           <LeavesTable data={data} columns={columns} />
         </div>

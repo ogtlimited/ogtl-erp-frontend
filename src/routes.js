@@ -55,6 +55,7 @@ import ProductItems from "./pages/ProductItems/ProductItems";
 import Bill from "./pages/Vendors/bill";
 import PayrollReports from "./pages/Accounting/Payroll-Reports";
 import Notifications from "./pages/In-Apps/Notifications";
+import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
 
 // const routes = [{
 //   title: 'Main',
@@ -241,6 +242,13 @@ const routes = [
     path: "/invoice/:id",
     name: "Invoice",
     component: InvoiceTemplate,
+    layout: "/admin",
+  },
+  {
+    title: "Expense Heads",
+    path: "/expense-heads",
+    name: "Expense Heads",
+    component: ExpenseHeads,
     layout: "/admin",
   },
   {

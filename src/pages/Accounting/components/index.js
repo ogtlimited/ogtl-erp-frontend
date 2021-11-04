@@ -11,12 +11,15 @@ const defaultValues = {
   invoice_date: "",
   due_date: "",
   total_amount: "",
+  units: 1,
+  account: "",
 };
 
 export const InvoiceForm = ({ fetchInvoice }) => {
   const [formOptions, setFormOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
+  const [accOptions, setAccOptions] = useState([]);
   const { showAlert } = useAppContext();
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues,
@@ -40,8 +43,13 @@ export const InvoiceForm = ({ fetchInvoice }) => {
     values[index].price = editorState.price;
 
     values[index].tax = editorState.tax;
-
     values[index].units = editorState.units;
+
+    let cost = editorState.rate * editorState.price * editorState.units;
+    let tax = (editorState.tax / 100) * cost;
+    let total = cost + tax;
+    values[index].total = total;
+
     console.log(values);
     setProductItems(values);
   };
@@ -100,22 +108,42 @@ export const InvoiceForm = ({ fetchInvoice }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axiosInstance
+      .get("/api/account")
+      .then((res) => {
+        const accountss = res.data.data.filter((e) => e.is_group === false);
+        const accOpt = accountss.map((e) => {
+          return {
+            label: e.account_name + " - " + e.account_number,
+            value: e._id,
+          };
+        });
+
+        setAccOptions(accOpt);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
   };
+  useEffect(() => {
+    const result = productItems.reduce((sum, { total }) => sum + total, 0);
+    setValue("total_amount", result);
+  }, [productItems, setValue]);
+
   const onSubmit = (data) => {
     let productIds = productItems.map((prod) => prod.productId);
+    const units = productItems.map((prod) => prod.units);
     let balance = 0;
-    // if (data.paid < data.total_amount) {
-    //   balance = data.total_amount - data.paid;
-    // } else {
-    //   balance = 0;
-    // }
-
     let newData = {
       ...data,
       balance,
       productItems: productIds,
+      units,
     };
     setLoading(true);
     axiosInstance
@@ -216,17 +244,32 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                     </div>
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="customer">Account</label>
+                      <Select
+                        options={accOptions}
+                        defaultValue={defaultValues.account}
+                        name="account"
+                        onChange={(state) =>
+                          onEditorStateChange(state.value, "account")
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <div className="row">
                   <table class="table table-striped">
                     <thead>
                       <tr>
                         <th className="col-4">Product/Service</th>
-
                         <th className="col-1">Rate</th>
-                        <th className="col-2">Price</th>
+                        <th className="col-1">Price</th>
                         <th className="col-1">Tax %</th>
-                        <th className="col-2">Units</th>
+                        <th className="col-1">Units</th>
+                        <th className="col-2">Total</th>
                         <th className="col-1">Action</th>
                       </tr>
                     </thead>
@@ -284,8 +327,23 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                                 name="units"
                                 className="form-control"
                                 type="text"
-                                defaultValue={product?.units}
+                                onChange={(e) => {
+                                  let newValue = {
+                                    ...product,
+                                    _id: product.productId,
+                                    units: parseInt(e.target.value),
+                                  };
+                                  handleChange(newValue, index);
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                name="total"
+                                className="form-control"
+                                type="text"
                                 disabled
+                                defaultValue={product.total}
                               />
                             </td>
                             <td>

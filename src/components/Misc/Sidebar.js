@@ -472,6 +472,11 @@ const Sidebar = () => {
                         General Ledger
                       </Link>
                     </li>
+                    <li>
+                      <Link className="" to="/admin/expense-heads">
+                        Expense
+                      </Link>
+                    </li>
 
                     {/* <li>
                       <Link className="" to="/admin/subscriptions">

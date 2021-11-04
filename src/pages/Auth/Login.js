@@ -6,7 +6,7 @@ import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
-
+import config from '../../config.json'
 const Login = () => {
   const { instance } = useMsal();
   let history = useHistory();
@@ -31,7 +31,7 @@ const Login = () => {
           JSON.stringify(e.accessToken)
         );
         axios
-          .post("http://localhost:3000/api/login", obj)
+          .post(config.ApiUrl +"/api/login", obj)
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.employee);
@@ -43,7 +43,7 @@ const Login = () => {
           .catch((err) => {
             console.log(err);
             console.log(err.message?.message);
-            seterrorMsg("Unable to login either ogid or password is incorrect");
+            seterrorMsg("Unable to login either username or password is incorrect");
             // setInterval(() => {
             //     seterrorMsg('')
             // }, 5000);

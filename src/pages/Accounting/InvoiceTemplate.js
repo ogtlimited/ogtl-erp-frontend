@@ -1,5 +1,5 @@
 import React from "react";
-import logo from '../../assets/img/outsource.png'
+import logo from "../../assets/img/outsource.png";
 const InvoiceTemplate = () => {
   return (
     <>
