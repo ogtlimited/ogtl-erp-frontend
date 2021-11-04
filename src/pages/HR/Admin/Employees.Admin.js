@@ -151,7 +151,7 @@ const AllEmployeesAdmin = () => {
       formValue.last_name = fullName[1];
       formValue.middle_name = fullName[2];
       delete formValue.applicant;
-      console.log(formValue)
+      console.log(formValue);
       axiosInstance.post("/employees", formValue).then((res) => {
         fetchEmployee();
         setsubmitted(false);
@@ -161,24 +161,27 @@ const AllEmployeesAdmin = () => {
     console.log(formValue);
   }, [submitted, formValue]);
 
-  const onFileUpload = (e) =>{
+  const onFileUpload = (e) => {
     const files = e.target.files;
     console.log(files);
     if (files) {
       console.log(files[0]);
       Papa.parse(files[0], {
-        complete: function(results) {
-          const jsonData = helper.arrayToJSONObject(results.data)
-          console.log(jsonData)
-          axiosInstance.post("/employees/bulk", jsonData).then(res =>{
-            console.log(res)
-          }).catch(err => console.log(err))
+        complete: function (results) {
+          const jsonData = helper.arrayToJSONObject(results.data);
+          console.log(jsonData);
+          axiosInstance
+            .post("/employees/bulk", jsonData)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => console.log(err));
           console.log("Finished:", results.data);
-        }}
-      )
+        },
+      });
     }
-  }
-  
+  };
+
   const defaultSorted = [
     {
       dataField: "designation",
@@ -187,9 +190,16 @@ const AllEmployeesAdmin = () => {
   ];
   return (
     <>
-    <div class="progress mb-3">
-    <div class="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
+      <div class="progress mb-3">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          style={{ width: "25%" }}
+          aria-valuenow="25"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -211,15 +221,15 @@ const AllEmployeesAdmin = () => {
               <i className="fa fa-plus"></i> Add Employee
             </a>
             <label className="btn add-btn mx-2">
-      <input
-        type="file"
-        style={{display: 'none'}}
-        accept=".csv,.xlsx,.xls"
-        onChange={(e) => onFileUpload(e)}
-      />
-      <i className="fa fa-cloud-upload"></i>
-      Bulk Upload
-    </label>
+              <input
+                type="file"
+                style={{ display: "none" }}
+                accept=".csv,.xlsx,.xls"
+                onChange={(e) => onFileUpload(e)}
+              />
+              <i className="fa fa-cloud-upload"></i>
+              Bulk Upload
+            </label>
             <div className="view-icons">
               <a
                 href="employees.html"

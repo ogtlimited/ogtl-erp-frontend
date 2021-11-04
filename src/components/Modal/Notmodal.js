@@ -6,7 +6,6 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
 export const NotForm = ({ fetchNotifications, editData }) => {
-  console.log("helloooooooooooooo");
   const [loading, setLoading] = useState(false);
   const [modelOpts, setModelOpts] = useState([]);
   const [employeeOpts, setEmployeeOpts] = useState([]);

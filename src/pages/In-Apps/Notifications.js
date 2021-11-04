@@ -92,7 +92,7 @@ const Notifications = () => {
       dataField: "message",
       text: "Message",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "",
