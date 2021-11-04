@@ -43,7 +43,7 @@ const Login = () => {
           .catch((err) => {
             console.log(err);
             console.log(err.message?.message);
-            seterrorMsg("Unable to login either ogid or password is incorrect");
+            seterrorMsg("Unable to login either username or password is incorrect");
             // setInterval(() => {
             //     seterrorMsg('')
             // }, 5000);
