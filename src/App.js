@@ -12,6 +12,7 @@ import config from './config.json'
 function App() {
   const [socket, setSocket] = useState(null);
   useEffect(() => {
+    
     const newSocket = io(config.ApiUrl);
     setSocket(newSocket);
     console.log(newSocket);
