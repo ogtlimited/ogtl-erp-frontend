@@ -39,6 +39,7 @@ const Profile = () => {
   }, [id]);
 
   useEffect(() => {
+    console.log('FORM TYPE',formType)
     if (formType === "PersonalDetails") {
       settemplate(PersonalDetailJson);
     } else if (formType === "WorkExperience") {
