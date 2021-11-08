@@ -135,7 +135,7 @@ const ExpenseHeads = () => {
       headerStyle: { width: "350px" },
     },
     {
-      dataField: "department.title",
+      dataField: "departmentId.department",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "100px" },

@@ -287,18 +287,18 @@ const Sidebar = () => {
                         Attendance Report{" "}
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link className="" to="/reports/leave-reports">
                         {" "}
                         Leave Report{" "}
                       </Link>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                       <Link className="" to="/reports/daily-reports">
                         {" "}
                         Daily Report{" "}
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </li>
               )}
@@ -367,12 +367,12 @@ const Sidebar = () => {
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={dNone}>
-                    <li>
+                    {/* <li>
                       <Link className="" to="/training/training-list">
                         {" "}
                         Training List{" "}
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link className="" to="/training/trainer">
                         {" "}
