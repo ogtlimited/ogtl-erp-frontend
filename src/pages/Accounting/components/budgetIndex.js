@@ -24,10 +24,8 @@ export const BudgetForm = ({ fetchInvoice }) => {
 
   const [expenseHeads, setExpenseHeads] = useState([
     {
-      title: "",
       amount: "",
-      departmentId: "",
-      flagAlert: "",
+      expensHeadDraftId: "",
     },
   ]);
 
@@ -38,11 +36,12 @@ export const BudgetForm = ({ fetchInvoice }) => {
   ];
 
   const handleChange = (editorState, index) => {
+    console.log(editorState, index)
     const values = [...expenseHeads];
-    values[index].title = editorState.title;
+    // values[index].title = editorState.title;
     values[index].amount = editorState.amount;
-    values[index].departmentId = editorState.departmentId;
-    values[index].flagAlert = editorState.flagAlert;
+    values[index].expensHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expensHeadDraftId;
+    // values[index].flagAlert = editorState.flagAlert;
 
     console.log(values);
     setExpenseHeads(values);
@@ -58,9 +57,9 @@ export const BudgetForm = ({ fetchInvoice }) => {
   const handleAddFields = () => {
     const values = [...expenseHeads];
     values.push({
-      title: "",
-      flagAlert: "",
-      departmentId: "",
+      // title: "",
+      // flagAlert: "",
+      expensHeadDraftId: "",
       amount: "",
     });
     setExpenseHeads(values);
@@ -74,10 +73,10 @@ export const BudgetForm = ({ fetchInvoice }) => {
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.title,
-            value: e,
+            value: e._id,
           };
         });
-
+        // console.log(object)
         setExpenseOptions(prodOpt);
       })
       .catch((error) => {
@@ -96,6 +95,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
     // const flagAlert = expenseHeads.map((prod) => prod.flagAlert);
     // const departmentId = expenseHeads.map((prod) => prod.departmentId);
     console.log("expenseeee", expenseHeads);
+
     let newData = {
       ...data,
       expenseHeads,
@@ -114,7 +114,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error?.response?.data?.message, "alert alert-danger");
       })
       .finally(() => {
         setLoading(false);
