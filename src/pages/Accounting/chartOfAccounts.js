@@ -253,7 +253,6 @@ const ChartOfAccounts = () => {
       accounts.map(ele => {
         ele["type"] = ele.ancestors[0].slug
       })
-      
       let reducedArr = redux(arr)
 
       reducedArr.map(obj => {
