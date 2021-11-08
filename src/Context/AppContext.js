@@ -18,7 +18,7 @@ const AppProvider = (props) => {
   });
   const [employeeAttendance, setemployeeAttendance] = useState([]);
   const [user, setuser] = useState(tokenService.getUser());
-  const [isChecked, setIsChecked] = useState(true)
+  const [isChecked, setIsChecked] = useState(false)
   
 
   useEffect(() => {
