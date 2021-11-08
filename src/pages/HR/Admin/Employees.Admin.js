@@ -191,9 +191,10 @@ const AllEmployeesAdmin = () => {
   ];
   return (
     <>
-    { uploading && <div class="progress mb-3">
+
+    {/* { uploading && <div class="progress mb-3">
     <div class="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-  </div> }
+  </div> } */}
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">

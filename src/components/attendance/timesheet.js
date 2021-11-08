@@ -36,7 +36,7 @@ const Timesheet = () => {
         clockOutTime: new Date()
       }
       axiosInstance.patch('/api/attendance', obj).then(e =>{
-        console.log(e.data.data.attendance);
+        // console.log(e.data.data.attendance);
         tokenService.removeAttendance()
         fetchEmployeeAttendance()
       })
@@ -46,7 +46,7 @@ const Timesheet = () => {
   useEffect(() => {
     const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
     setworkedTime(wt)
-    const shiftEnd = user.default_shift.end_time
+    const shiftEnd = user?.default_shift?.end_time
     console.log(wt, parseInt(shiftEnd))
     if(parseInt(shiftEnd) > wt){
       const interval = setInterval(() => {
