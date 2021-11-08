@@ -3,8 +3,10 @@ import axiosInstance from "../../services/api";
 import Papa from "papaparse";
 import helper from "../../services/helper";
 import { object } from 'yup/lib/locale';
+import { useAppContext } from '../../Context/AppContext';
 const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSuccess }) => {
-    let buttonRef = React.createRef()
+    const { combineRequest, showAlert } = useAppContext();
+    const [buttonRef, setbuttonRef] = useState(React.createRef())
     const [uploadState, setuploadState] = useState('Upload New Employees')
     const [fileName, setfileName] = useState('')
     const [invalid, setinvalid] = useState(false)
@@ -48,12 +50,22 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
         setuploading(true)
         axiosInstance.post(path, data).then(res =>{
           console.log(res)
+          showAlert(
+            true,
+            "Data successfully uploaded",
+            "alert alert-success"
+          );
           settoggleModal(false)
           setuploading(false)
           buttonRef.click()
           fetchEmployee()
         }).catch(err => {
             console.log(err)
+            showAlert(
+                false,
+                "Error uploading data",
+                "alert alert-success"
+              );
             buttonRef.click()
             settoggleModal(false)
         })
@@ -68,7 +80,7 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{uploadState}</h5>
-                <button ref={input => buttonRef = input} type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button ref={(input) => setbuttonRef(input)} type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
