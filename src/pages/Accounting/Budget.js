@@ -5,20 +5,26 @@ import FormModal2 from "../../components/Modal/FormModal2";
 import { budgetFormJson } from "../../components/FormJSON/Accounting/budget";
 import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
+import { BudgetForm } from "./components/budgetIndex";
+import moment from "moment";
 
 const Budget = () => {
   const [data, setData] = useState([]);
-  const [formValue, setFormValue] = useState({});
-  const [editData, seteditData] = useState({});
+  const [formValue, setFormValue] = useState(null);
+  const [editData, seteditData] = useState(null);
   const { showAlert } = useAppContext();
   const [template, setTemplate] = useState(budgetFormJson);
-  const [submitted,setSubmitted ] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [clickedRow, setclickedRow] = useState(null);
+  const [statusRow, setstatusRow] = useState(null);
 
   const fetchBudget = () => {
     axiosInstance
       .get("/api/budget")
       .then((res) => {
-        console.log(res);
+        console.log("budgetttt", res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -28,58 +34,76 @@ const Budget = () => {
   useEffect(() => {
     fetchBudget();
   }, []);
+
   useEffect(() => {
-    console.log(formValue);
-    if (formValue && Object.keys(formValue).length > 0) {
-     
-      
-      axiosInstance.post("/api/budget", formValue).then((res) => {
-        fetchBudget();
-        setSubmitted(false);
+    seteditData(clickedRow);
+  }, [clickedRow]);
+
+  const deleteBudget = (row) => {
+    axiosInstance
+      .delete(`/api/budget/${row._id}`)
+      .then((res) => {
         console.log(res);
+        fetchBudget();
+        setData((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
       });
-    }
-    console.log(formValue);
-  }, [submitted, formValue]);
+  };
 
   const columns = [
     {
-      dataField: "Title",
+      dataField: "title",
       text: "Title",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => <h2>{row?._id.title}</h2>,
     },
     {
       dataField: "departmentId",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => <h2>{row?._id.departmentId?.title}</h2>,
     },
-    
-    {
-      dataField: "description",
-      text: "Description",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
+
     {
       dataField: "startDate",
       text: "Start Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.startDate).format("L")}</h2>,
     },
     {
       dataField: "endDate",
       text: "End Date",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.endDate).format("L")}</h2>,
     },
     {
-        dataField: "budget",
-        text: "Budget",
-        sort: true,
-        headerStyle: { minWidth: "150px" }
-      },
+      dataField: "budget",
+      text: "Budget",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "type",
+      text: "Type",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "flagAlert",
+      text: "Flag Alert",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
   ];
   return (
     <>
@@ -111,13 +135,15 @@ const Budget = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      {/* <FormModal2
-        title="Create New Budget"
-        // editData={editData}
-        // setformValue={setFormValue}
-        template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted} */}
-      {/* /> */}
+
+      {/* <EditInvoiceForm fetchInvoice={fetchInvoice} editData={editData} /> */}
+      <BudgetForm fetchBudget={fetchBudget} />
+
+      {/* <ConfirmModal
+        title="Budget"
+        selectedRow={selectedRow}
+        deleteFunction={deleteBudget}
+      /> */}
     </>
   );
 };
