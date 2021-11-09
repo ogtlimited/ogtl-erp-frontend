@@ -14,7 +14,7 @@ const defaultValues = {
   flagAlert: 0,
 };
 
-export const BudgetForm = ({ fetchInvoice }) => {
+export const BudgetForm = ({ fetchBudget }) => {
   const [loading, setLoading] = useState(false);
   const [expenseOptions, setExpenseOptions] = useState([]);
   const { showAlert } = useAppContext();
@@ -107,7 +107,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
       .post("/api/budget", newData)
       .then((res) => {
         console.log(res);
-        fetchInvoice();
+        fetchBudget();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
         $("#FormModal").modal("toggle");
@@ -134,7 +134,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="FormModalLabel">
-                Invoices
+                Create Budget
               </h5>
               <button
                 type="button"
