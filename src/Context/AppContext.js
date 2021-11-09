@@ -33,8 +33,7 @@ const AppProvider = (props) => {
       // ...
     });
 
-    socket.current.emit("notification", "ahmed.dambatta@outsourceglobal.com");
-    // socket.current.emit("notification", user?.company_email);
+    socket.current.emit("notification", user?.company_email);
     socket.current.on("messages", (data) => {
       const newArr = data.map((e) => JSON.parse(e));
       setNotifications((prev) => [...newArr, ...prev]);
