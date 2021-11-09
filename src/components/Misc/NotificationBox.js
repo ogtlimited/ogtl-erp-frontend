@@ -23,10 +23,7 @@ export const NotificationBox = () => {
       >
         <div className="topnav-dropdown-header">
           <span className="notification-title">Notifications</span>
-          {/* <a href="javascript:void(0)" className="clear-noti">
-            {" "}
-            Clear All{" "}
-          </a> */}
+
           <Link onClick={() => clearNotifications()}>Clear All</Link>
         </div>
         <div className="noti-content">
@@ -42,12 +39,12 @@ export const NotificationBox = () => {
                       <p className="noti-details">
                         A new {not?.module} was added
                       </p>
-                      <p>
+                      <p style={{ marginBottom: "0px" }}>
                         <span className="noti-title">{not?.message}</span>
                       </p>
                       <p className="noti-time">
                         <span className="notification-time">
-                          {moment(not?.date).startOf("hour").fromNow()}
+                          {moment(not?.date).calendar()}
                         </span>
                       </p>
                     </div>
@@ -55,33 +52,11 @@ export const NotificationBox = () => {
                 </Link>
               </li>
             ))}
-
-            {/* <li className="notification-message">
-              <a href="">
-                <div className="media">
-                  <span className="avatar">
-                    <img alt="" src="" />
-                  </span>
-                  <div className="media-body">
-                    <p className="noti-details">
-                      <span className="noti-title">Potbelly</span> changed the
-                      task name{" "}
-                      <span className="noti-title">always says nonsense</span>
-                    </p>
-                    <p className="noti-time">
-                      <span className="notification-time">6 mins ago</span>
-                    </p>
-                  </div>
-                </div>
-              </a>
-            </li>
-     
-            */}
           </ul>
         </div>
-        <div className="topnav-dropdown-footer">
+        {/* <div className="topnav-dropdown-footer">
           <a href="">View all Notifications</a>
-        </div>
+        </div> */}
       </div>
     </>
   );

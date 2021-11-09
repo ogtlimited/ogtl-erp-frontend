@@ -9,19 +9,9 @@ export const NotForm = ({ fetchNotifications, editData }) => {
   const [loading, setLoading] = useState(false);
   const [modelOpts, setModelOpts] = useState([]);
   const [employeeOpts, setEmployeeOpts] = useState([]);
-  //   const [formValue, setFormValue] = useState(null);
   const isAddMode = !editData?._id;
-
   const { showAlert, combineRequest } = useAppContext();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues,
-    errors,
-    formState,
-  } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
 
   useEffect(() => {
     axiosInstance
@@ -135,7 +125,7 @@ export const NotForm = ({ fetchNotifications, editData }) => {
       fields.forEach((field) => setValue(field, ""));
       //   setFormValue(null);
     }
-  }, [editData, isAddMode]);
+  }, [isAddMode]);
 
   return (
     <>
@@ -162,7 +152,7 @@ export const NotForm = ({ fetchNotifications, editData }) => {
               </button>
             </div>
             <div className="modal-body">
-              <form onSubmit={handleSubmit(onSubmit)} onReset={reset}>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">

@@ -4,7 +4,6 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { Link } from "react-router-dom";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import { NotificationForm } from "../../components/Modal/NotificationModeal";
 import { NotForm } from "../../components/Modal/Notmodal";
 
 const Notifications = () => {
@@ -26,6 +25,7 @@ const Notifications = () => {
     axiosInstance
       .get("/api/notification")
       .then((res) => {
+        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -56,7 +56,7 @@ const Notifications = () => {
       dataField: "document_name",
       text: "Document Name",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      // headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "subject",
@@ -68,7 +68,7 @@ const Notifications = () => {
       dataField: "send_alert_on",
       text: "Send On",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      // headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "sender",
@@ -87,6 +87,13 @@ const Notifications = () => {
       text: "Recipient ",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => (
+        <p>
+          {value.map((val) => (
+            <p>{val}</p>
+          ))}
+        </p>
+      ),
     },
     {
       dataField: "message",
@@ -164,11 +171,8 @@ const Notifications = () => {
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>
-      <NotificationForm
-        fetchNotifications={fetchNotifications}
-        editData={editData}
-      />
-      {/* <NotForm fetchNotifications={fetchNotifications} editData={editData} /> */}
+
+      <NotForm fetchNotifications={fetchNotifications} editData={editData} />
       <ConfirmModal
         title="Notification"
         selectedRow={selectedRow}
