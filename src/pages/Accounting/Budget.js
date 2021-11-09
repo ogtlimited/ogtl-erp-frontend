@@ -7,6 +7,9 @@ import { useAppContext } from "../../Context/AppContext";
 import helper from "../../services/helper";
 import { BudgetForm } from "./components/budgetIndex";
 import moment from "moment";
+import { Link } from "react-router-dom";
+
+import ApproveModal from "../../components/Modal/approveModal";
 
 const Budget = () => {
   const [data, setData] = useState([]);
@@ -42,6 +45,23 @@ const Budget = () => {
   const deleteBudget = (row) => {
     axiosInstance
       .delete(`/api/budget/${row._id}`)
+      .then((res) => {
+        console.log(res);
+        fetchBudget();
+        setData((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
+
+  const approveBudget = (row) => {
+    axiosInstance
+      .patch(`/api/budget/approve/${row._id}`)
       .then((res) => {
         console.log(res);
         fetchBudget();
@@ -102,6 +122,37 @@ const Budget = () => {
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
+    {
+      dataField: "",
+      text: "Approve",
+      sort: true,
+      headerStyle: { maxWidth: "90px" },
+      formatter: (value, row) => (
+        <>
+          <div className="dropdown dropdown-action text-right">
+            <Link
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </Link>
+            <div className="dropdown-menu dropdown-menu-right">
+              <Link
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-thumbs-up m-r-5"></i> Approve
+              </Link>
+            </div>
+          </div>
+        </>
+      ),
+    },
   ];
   return (
     <>
@@ -134,14 +185,14 @@ const Budget = () => {
         </div>
       </div>
 
-      {/* <EditInvoiceForm fetchInvoice={fetchInvoice} editData={editData} /> */}
+      {/* <EditBudgetForm fetchBudget={fetchBudget} editData={editData} /> */}
       <BudgetForm fetchBudget={fetchBudget} />
 
-      {/* <ConfirmModal
+      <ApproveModal
         title="Budget"
         selectedRow={selectedRow}
-        deleteFunction={deleteBudget}
-      /> */}
+        approveFunction={approveBudget}
+      />
     </>
   );
 };
