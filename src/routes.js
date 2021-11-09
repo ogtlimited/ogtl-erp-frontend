@@ -56,6 +56,7 @@ import Bill from "./pages/Vendors/bill";
 import PayrollReports from "./pages/Accounting/Payroll-Reports";
 import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
 import BalanceSheet from "./pages/Reports/BalanceSheet";
+import SingleEmail from "./pages/In-Apps/SingleEmail";
 
 // const routes = [{
 //   title: 'Main',
@@ -348,6 +349,12 @@ const routes = [
     title: "Email",
     path: "/email",
     component: Email,
+    layout: "/admin",
+  },
+  {
+    title: "View Email",
+    path: "/mail/:id",
+    component: SingleEmail,
     layout: "/admin",
   },
   {
