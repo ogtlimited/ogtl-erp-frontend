@@ -14,7 +14,7 @@ const defaultValues = {
   flagAlert: 0,
 };
 
-export const BudgetForm = ({ fetchInvoice }) => {
+export const BudgetForm = ({ fetchBudget }) => {
   const [loading, setLoading] = useState(false);
   const [expenseOptions, setExpenseOptions] = useState([]);
   const { showAlert } = useAppContext();
@@ -25,7 +25,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
   const [expenseHeads, setExpenseHeads] = useState([
     {
       amount: "",
-      expensHeadDraftId: "",
+      expenseHeadDraftId: "",
     },
   ]);
 
@@ -40,7 +40,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
     const values = [...expenseHeads];
     // values[index].title = editorState.title;
     values[index].amount = editorState.amount;
-    values[index].expensHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expensHeadDraftId;
+    values[index].expenseHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expenseHeadDraftId;
     // values[index].flagAlert = editorState.flagAlert;
 
     console.log(values);
@@ -59,7 +59,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
     values.push({
       // title: "",
       // flagAlert: "",
-      expensHeadDraftId: "",
+      expenseHeadDraftId: "",
       amount: "",
     });
     setExpenseHeads(values);
@@ -107,7 +107,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
       .post("/api/budget", newData)
       .then((res) => {
         console.log(res);
-        fetchInvoice();
+        fetchBudget();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
         $("#FormModal").modal("toggle");
@@ -134,7 +134,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="FormModalLabel">
-                Invoices
+                Create Budget
               </h5>
               <button
                 type="button"

@@ -61,17 +61,9 @@ const Budget = () => {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => <h2>{row?._id.title}</h2>,
+      headerStyle: { minWidth: "250px" },
+      // formatter: (value, row) => <h2>{row?._id.title}</h2>,
     },
-    {
-      dataField: "departmentId",
-      text: "Department",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => <h2>{row?._id.departmentId?.title}</h2>,
-    },
-
     {
       dataField: "startDate",
       text: "Start Date",
@@ -101,6 +93,12 @@ const Budget = () => {
     {
       dataField: "flagAlert",
       text: "Flag Alert",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "approved",
+      text: "Status",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
