@@ -140,7 +140,7 @@ const ChartOfAccounts = () => {
       icon: "las la-coins",
     },
     {
-      title: "Invoices",
+      title: "Income",
       amount: "23,000",
       icon: "las la-file-invoice-dollar",
     },

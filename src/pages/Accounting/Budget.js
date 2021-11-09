@@ -61,8 +61,8 @@ const Budget = () => {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => <h2>{row?._id.title}</h2>,
+      headerStyle: { minWidth: "250px" },
+      // formatter: (value, row) => <h2>{row?._id.title}</h2>,
     },
     {
       dataField: "departmentId",

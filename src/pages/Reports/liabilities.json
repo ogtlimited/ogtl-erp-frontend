@@ -1,0 +1,17 @@
+[{
+    "id": 1,
+    "title": "Account Payable",
+    "curr_balance": 23929,
+    "prev_balance": 46084
+  }, {
+    "id": 2,
+    "title": "Debt",
+    "curr_balance": 25077,
+    "prev_balance": 30845
+  }, {
+    "id": 3,
+    "title": "Current Liabilities",
+    "curr_balance": 30537,
+    "prev_balance": 19147
+  }
+]

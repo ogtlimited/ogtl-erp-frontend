@@ -55,6 +55,7 @@ import ProductItems from "./pages/ProductItems/ProductItems";
 import Bill from "./pages/Vendors/bill";
 import PayrollReports from "./pages/Accounting/Payroll-Reports";
 import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
+import BalanceSheet from "./pages/Reports/BalanceSheet";
 
 // const routes = [{
 //   title: 'Main',
@@ -262,6 +263,13 @@ const routes = [
     path: "/payroll-reports",
     name: "Payroll Reports",
     component: PayrollReports,
+    layout: "/admin",
+  },
+  {
+    title: "Balance Sheet Reports",
+    path: "/balance-sheet",
+    name: "Balance Sheet Reports",
+    component: BalanceSheet,
     layout: "/admin",
   },
   {

@@ -492,9 +492,9 @@ const Sidebar = () => {
                       <Link className="" to="/admin/payroll-reports">
                         Payroll Reports
                       </Link>
-                      {/* <Link className="" to="/admin/client-invoice">
-                        Invoices
-                      </Link> */}
+                      <Link className="" to="/admin/balance-sheet">
+                        Balance Sheet 
+                      </Link>
                       {/* <Link className="" to="/admin/client-payments">
                         Payments
                       </Link> */}
