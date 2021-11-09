@@ -7,11 +7,12 @@ import FormModal from "../../../components/Modal/Modal";
 import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
 import GeneralTable from "../../../components/Tables/Table";
 import { useAppContext } from "../../../Context/AppContext";
-import Papa from "papaparse";
 import designation from "../../../db/designation.json";
 import { employeeList } from "../../../db/employee";
 import axiosInstance from "../../../services/api";
+import Papa from "papaparse";
 import helper from "../../../services/helper";
+import UploadModal from "../../../components/Modal/uploadModal";
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
   const { setallEmployees, fetchEmployee, allEmployees, combineRequest } =
@@ -22,7 +23,9 @@ const AllEmployeesAdmin = () => {
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [departments, setDepartments] = useState([]);
-
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploading, setuploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   // console.log(allEmployees);
   useEffect(() => {
     fetchEmployee();
@@ -174,6 +177,7 @@ const AllEmployeesAdmin = () => {
             .post("/employees/bulk", jsonData)
             .then((res) => {
               console.log(res);
+              fetchEmployee();
             })
             .catch((err) => console.log(err));
           console.log("Finished:", results.data);
@@ -190,16 +194,9 @@ const AllEmployeesAdmin = () => {
   ];
   return (
     <>
-      <div class="progress mb-3">
-        <div
-          class="progress-bar"
-          role="progressbar"
-          style={{ width: "25%" }}
-          aria-valuenow="25"
-          aria-valuemin="0"
-          aria-valuemax="100"
-        ></div>
-      </div>
+      {/* { uploading && <div class="progress mb-3">
+    <div class="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+  </div> } */}
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -220,16 +217,27 @@ const AllEmployeesAdmin = () => {
             >
               <i className="fa fa-plus"></i> Add Employee
             </a>
-            <label className="btn add-btn mx-2">
-              <input
-                type="file"
-                style={{ display: "none" }}
-                accept=".csv,.xlsx,.xls"
-                onChange={(e) => onFileUpload(e)}
-              />
+            <button
+              onClick={() => settoggleModal(true)}
+              type="button"
+              class="btn add-btn mx-3"
+              data-toggle="modal"
+              data-target="#uploadModal"
+            >
               <i className="fa fa-cloud-upload"></i>
               Bulk Upload
-            </label>
+            </button>
+
+            {/* <label className="btn add-btn mx-2">
+      <input
+        type="file"
+        style={{display: 'none'}}
+        accept=".csv,.xlsx,.xls"
+        onChange={(e) => onFileUpload(e)}
+      />
+      <i className="fa fa-cloud-upload"></i>
+      Bulk Upload
+    </label> */}
             <div className="view-icons">
               <a
                 href="employees.html"
@@ -251,6 +259,14 @@ const AllEmployeesAdmin = () => {
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
+      {toggleModal && (
+        <UploadModal
+          setUploadSuccess={setUploadSuccess}
+          setuploading={setuploading}
+          settoggleModal={settoggleModal}
+          fetchEmployee={fetchEmployee}
+        />
+      )}
 
       <FormModal2
         editData={editData}

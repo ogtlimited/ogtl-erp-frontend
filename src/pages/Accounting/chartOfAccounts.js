@@ -13,6 +13,7 @@ import helper from "../../services/helper";
 import chartofaccounts from "../../db/chartofaccounts.json";
 import InvoiceModal from "../../components/Modal/invoiceModal";
 import { NOT_LOCAL_BINDING } from "@babel/types";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 const ChartOfAccounts = () => {
   const [data, setData] = useState([]);
@@ -22,11 +23,58 @@ const ChartOfAccounts = () => {
   const [formValue, setFormValue] = useState(null);
   const [accounts, setAccounts] = useState();
   const [editData, seteditData] = useState(null);
-  const { showAlert, isChecked, setIsChecked } = useAppContext();
+  const { showAlert, isChecked, setIsChecked, setformUpdate, formUpdate } = useAppContext();
   const [template, setTemplate] = useState(chartOfAccountsFormJson);
+  const [selectedRow, setSelectedRow] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [clickedRow, setclickedRow] = useState(null);
+
   const keys_to_keep = ['_id', 'account_name'];
 
+  const editRow = (row) => {
+    setformUpdate(row);
+    setclickedRow(row);
+  };
+
+  useEffect(() => {
+    seteditData(clickedRow);
+    return () => {
+      seteditData(null);
+    };
+  }, [clickedRow, submitted]);
+
+  const conditionalDropdown = (row) => {
+    return row.is_default ? (
+      <div className="dropdown-menu dropdown-menu-right">
+          <a className="dropdown-item">
+              <i className="fa fa-ban m-r-5"></i> Disabled
+          </a>
+      </div>
+   ) : (
+      <div className="dropdown-menu dropdown-menu-right">
+          <a
+            className="dropdown-item"
+            href="#"
+            data-toggle="modal"
+            data-target="#FormModal"
+            onClick={() => editRow(row)}
+          >
+              <i className="fa fa-pencil m-r-5"></i> Edit
+          </a>
+          <Link
+            className="dropdown-item"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            onClick={() => {
+              setSelectedRow(row);
+            }}
+          >
+              <i className="fa fa-trash m-r-5"></i> Delete
+          </Link>
+    </div>
+  ) ;
+     
+  }
   const columns = [
     {
       dataField: "type",
@@ -58,16 +106,20 @@ const ChartOfAccounts = () => {
       text: "Action",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => (
-        <>
-          {row.balance.length > 0 ? (
-            <a href="#" className="">
-              View Register
-            </a>
-          ) : (
-            ""
-          )}
-        </>
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right">
+          
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          {conditionalDropdown(row)}
+          
+        </div>
       ),
     },
   ];
@@ -88,7 +140,7 @@ const ChartOfAccounts = () => {
       icon: "las la-coins",
     },
     {
-      title: "Invoices",
+      title: "Income",
       amount: "23,000",
       icon: "las la-file-invoice-dollar",
     },
@@ -163,6 +215,22 @@ const ChartOfAccounts = () => {
     });
   }
 
+  const deleteAccount = (row) => {
+    axiosInstance
+      .delete(`/api/account/${row._id}`)
+      .then((res) => {
+        fetchAccounts();
+        setData((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
+
   const fetchAccounts = () => {
     axiosInstance
     .get("/api/account")
@@ -185,7 +253,6 @@ const ChartOfAccounts = () => {
       accounts.map(ele => {
         ele["type"] = ele.ancestors[0].slug
       })
-      
       let reducedArr = redux(arr)
 
       reducedArr.map(obj => {
@@ -217,7 +284,9 @@ const ChartOfAccounts = () => {
   useEffect(() => {
     if (formValue) {
       if (!editData) {
-        
+        if(formValue.is_group.length === 0){
+          formValue["is_group"] = false
+        }
         formValue["is_default"] = false
         formValue["balance"] = 0
         axiosInstance
@@ -233,27 +302,32 @@ const ChartOfAccounts = () => {
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
       } else {
-        // formValue._id = editData._id;
-        // delete formValue.__v
-        // delete formValue._id
-        // delete formValue.createdAt
-        // delete formValue.updatedAt
-        // axiosInstance
-        //   .patch("/api/client/" + editData._id, formValue)
-        //   .then((res) => {
-        //     setFormValue(null);
-        //     fetchClient();
-        //     showAlert(true, res.data.message, "alert alert-success");
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //     setFormValue(null);
-        //     showAlert(true, error.response.data.message, "alert alert-danger");
-        //   });
+        formValue._id = editData._id;
+        delete formValue.__v
+        delete formValue._id
+        delete formValue.createdAt
+        delete formValue.updatedAt
+        delete formValue.is_group
+        delete formValue.is_default
+        delete formValue.parent
+        delete formValue.ancestors
+        delete formValue.slug
+        delete formValue.type
+        axiosInstance
+          .patch("/api/account/" + editData._id, formValue)
+          .then((res) => {
+            setFormValue(null);
+            fetchAccounts();
+            showAlert(true, res.data.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setFormValue(null);
+            showAlert(true, error.response.data.message, "alert alert-danger");
+          });
       }
     }
   }, [formValue, editData]);
-
   return (
     <>
       <div className="page-header">
@@ -315,6 +389,12 @@ const ChartOfAccounts = () => {
         setsubmitted={setSubmitted}
       />
       ) }
+
+      <ConfirmModal
+        title="Vendor"
+        selectedRow={selectedRow}
+        deleteFunction={deleteAccount}
+      />
       
     </>
   );

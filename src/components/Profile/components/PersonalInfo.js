@@ -41,7 +41,7 @@ const PersonalInfo = ({
     <div className="card profile-box flex-fill">
       <div className="card-body">
         <h3 className="card-title">
-          Personal Informations{" "}
+          Personal Information{" "}
           {id === user?._id && (
             <Link
               onClick={() => handleChange("PersonalDetails")}

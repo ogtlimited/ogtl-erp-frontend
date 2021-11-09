@@ -1,0 +1,16 @@
+[{
+    "id": 1,
+    "title": "Cash",
+    "curr_balance": 39018,
+    "prev_balance": 78990
+  }, {
+    "id": 2,
+    "title": "Accounts Receivable",
+    "curr_balance": 52248,
+    "prev_balance": 95777
+  }, {
+    "id": 3,
+    "title": "Current Assets",
+    "curr_balance": 43197,
+    "prev_balance": 42640
+  }]

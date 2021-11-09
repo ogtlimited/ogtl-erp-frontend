@@ -57,6 +57,8 @@ import PayrollReports from "./pages/Accounting/Payroll-Reports";
 import Notifications from "./pages/In-Apps/Notifications";
 import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
 import ViewEmail from "./pages/In-Apps/ViewEmail";
+import BalanceSheet from "./pages/Reports/BalanceSheet";
+import SingleEmail from "./pages/In-Apps/SingleEmail";
 
 // const routes = [{
 //   title: 'Main',
@@ -267,6 +269,13 @@ const routes = [
     layout: "/admin",
   },
   {
+    title: "Balance Sheet Reports",
+    path: "/balance-sheet",
+    name: "Balance Sheet Reports",
+    component: BalanceSheet,
+    layout: "/admin",
+  },
+  {
     title: "General Ledger",
     path: "/ledger",
     name: "General Ledger",
@@ -346,14 +355,16 @@ const routes = [
   },
   {
     title: "View Email",
-    path: "/email/:id",
-    component: ViewEmail,
+    // path: "/email/:id",
+    path: "/mail/:id",
+    component: SingleEmail,
     layout: "/admin",
   },
   {
     title: "Notifications",
     path: "/notifications",
     component: Notifications,
+
     layout: "/admin",
   },
   {
