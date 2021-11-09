@@ -25,7 +25,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
   const [expenseHeads, setExpenseHeads] = useState([
     {
       amount: "",
-      expensHeadDraftId: "",
+      expenseHeadDraftId: "",
     },
   ]);
 
@@ -40,7 +40,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
     const values = [...expenseHeads];
     // values[index].title = editorState.title;
     values[index].amount = editorState.amount;
-    values[index].expensHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expensHeadDraftId;
+    values[index].expenseHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expenseHeadDraftId;
     // values[index].flagAlert = editorState.flagAlert;
 
     console.log(values);
@@ -59,7 +59,7 @@ export const BudgetForm = ({ fetchInvoice }) => {
     values.push({
       // title: "",
       // flagAlert: "",
-      expensHeadDraftId: "",
+      expenseHeadDraftId: "",
       amount: "",
     });
     setExpenseHeads(values);
