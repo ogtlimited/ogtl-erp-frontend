@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Header from "./components/Misc/Header";
 import Sidebar from "./components/Misc/Sidebar";
 import AdminLayout from "./layouts/Admin";
 import AuthLayout from "./layouts/Auth";
-import "./assets/script";
 import { AppProvider } from "./Context/AppContext";
-// import io from "socket.io-client";
 import config from "./config.json";
+import "./assets/script";
+
 function App() {
-  // const [socket, setSocket] = useState(null);
-  // useEffect(() => {
-  //   const newSocket = io(config.ApiUrl);
-  //   setSocket(newSocket);
-  //   console.log(newSocket);
-  //   newSocket.io.on("error", (error) => {
-  //     console.log(error);
-  //     // ...
-  //   });
-  //   newSocket.io.on("notification", (data) => {
-  //     // ...
-  //     newSocket.emit();
-  //     console.log(data);
-  //   });
-  //   return () => newSocket.close();
-  // }, [setSocket]);
   return (
     <div className="main-wrapper">
       <BrowserRouter>

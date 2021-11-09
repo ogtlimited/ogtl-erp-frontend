@@ -275,15 +275,16 @@ const Email = () => {
                           </td>
                           <td className="subject">{inbox?.subject}</td>
                           <td className="subject">{inbox?.model_name}</td>
-                          {/* <td><i className="fa fa-paperclip"></i></td> */}
                           <td className="mail-date">
                             {moment(inbox?.createdAt).format("L")}
                           </td>
                           <td>
                             <Link
-                              className="subject"
+                              style={{
+                                color: !inbox?.is_read ? "#000" : "#7b939c",
+                              }}
                               to={{
-                                pathname: `/admin/email/${inbox?._id}`,
+                                pathname: `/admin/mail/${inbox?._id}`,
                                 state: { inbox },
                               }}
                             >

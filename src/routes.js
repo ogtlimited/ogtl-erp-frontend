@@ -355,7 +355,6 @@ const routes = [
   },
   {
     title: "View Email",
-    // path: "/email/:id",
     path: "/mail/:id",
     component: SingleEmail,
     layout: "/admin",
