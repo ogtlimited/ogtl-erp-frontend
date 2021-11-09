@@ -7,12 +7,11 @@ import {
   useFormikContext,
   useField,
   useFormik,
-  
 } from "formik";
 import Select from "react-select";
-import {useAppContext} from "../../Context/AppContext";
+import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
-  console.log(props)
+  // console.log(props)
   return (
     <Formik {...props}>
       <FormikForm className="needs-validation" novalidate="">
@@ -23,8 +22,8 @@ export function Form(props) {
 }
 
 export function TextField(props) {
-  console.log(props)
-  const { name, label,disabled, placeholder, ...rest } = props;
+  // console.log(props)
+  const { name, label, disabled, placeholder, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -53,7 +52,7 @@ export function TextField(props) {
 }
 
 export function NumberField(props) {
-  console.log(props)
+  // console.log(props)
   const { name, label, placeholder, ...rest } = props;
 
   return (
@@ -110,7 +109,7 @@ export function PasswordField(props) {
 }
 export function CheckField(props) {
   const { name, label, placeholder, value, ...rest } = props;
-  const { isChecked, setIsChecked } = useAppContext()
+  const { isChecked, setIsChecked } = useAppContext();
   return (
     <>
       <div className="form-group">
@@ -120,9 +119,11 @@ export function CheckField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          checked = {isChecked}
+          checked={isChecked}
           {...rest}
-          onClick={() => isChecked === true ?  setIsChecked(false) :  setIsChecked(true) }
+          onClick={() =>
+            isChecked === true ? setIsChecked(false) : setIsChecked(true)
+          }
         />
         {label && (
           <label className="col-form-label pl-2" for={name}>
@@ -231,7 +232,7 @@ export function SelectField(props) {
             {label}
           </label>
         )}
-          {/*<Select
+        {/*<Select
                                 options={options}
                                 defaultValue={value}
                                 name={name}
@@ -242,7 +243,7 @@ export function SelectField(props) {
                                 
                                 className=" ml-0 w-100"
                               />*/}
-         <Field as="select" id={name} className="form-control" name={name}>
+        <Field as="select" id={name} className="form-control" name={name}>
           <option value="">Choose...</option>
           {options.map((optn, index) => (
             <option value={optn.value} label={optn.label || optn.value} />

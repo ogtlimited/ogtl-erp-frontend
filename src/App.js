@@ -7,25 +7,25 @@ import AdminLayout from "./layouts/Admin";
 import AuthLayout from "./layouts/Auth";
 import "./assets/script";
 import { AppProvider } from "./Context/AppContext";
-import io from "socket.io-client";
-import config from './config.json'
+// import io from "socket.io-client";
+import config from "./config.json";
 function App() {
-  const [socket, setSocket] = useState(null);
-  useEffect(() => {
-    const newSocket = io(config.ApiUrl);
-    setSocket(newSocket);
-    console.log(newSocket);
-    newSocket.io.on("error", (error) => {
-      console.log(error);
-      // ...
-    });
-    newSocket.io.on("notification", (data) => {
-      // ...
-      newSocket.emit();
-      console.log(data);
-    });
-    return () => newSocket.close();
-  }, [setSocket]);
+  // const [socket, setSocket] = useState(null);
+  // useEffect(() => {
+  //   const newSocket = io(config.ApiUrl);
+  //   setSocket(newSocket);
+  //   console.log(newSocket);
+  //   newSocket.io.on("error", (error) => {
+  //     console.log(error);
+  //     // ...
+  //   });
+  //   newSocket.io.on("notification", (data) => {
+  //     // ...
+  //     newSocket.emit();
+  //     console.log(data);
+  //   });
+  //   return () => newSocket.close();
+  // }, [setSocket]);
   return (
     <div className="main-wrapper">
       <BrowserRouter>

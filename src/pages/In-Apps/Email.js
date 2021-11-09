@@ -1,227 +1,297 @@
-import React from "react";
-import data from '../../db/inbox.json'
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axiosInstance from "../../services/api";
+import "./email.css";
+
 const Email = () => {
+  const [data, setData] = useState([]);
+  const [postsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchField, setSearchField] = useState("");
+
+  const indexOfLastPost1 = currentPage * postsPerPage;
+  const indexOfFirstPost1 = indexOfLastPost1 - postsPerPage;
+
+  //search function
+  const searchChange = (e) => {
+    setSearchField(e.target.value);
+  };
+
+  //fetch emails
+  const fetchEmails = () => {
+    axiosInstance
+      .get("api/email/ahmed.dambatta@outsourceglobal.com")
+      .then((res) => {
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchEmails();
+  }, []);
+
+  const currentPosts1 = data?.slice(indexOfFirstPost1, indexOfLastPost1);
+
+  function goToNextPage() {
+    setCurrentPage((page) => page + 1);
+  }
+
+  function goToPreviousPage() {
+    setCurrentPage((page) => page - 1);
+  }
+
+  const filteredData = currentPosts1?.filter((post) => {
+    return (
+      post?.model_name?.toLowerCase().includes(searchField.toLowerCase()) ||
+      post?.sender?.toLowerCase().includes(searchField.toLowerCase())
+    );
+  });
+
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Inbox</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Inbox</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Inbox</li>
+              <li className="breadcrumb-item active">Inbox</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
-            <a href="#composeForm" class="btn add-btn">
-              <i class="fa fa-plus"></i> Compose
+          <div className="col-auto float-right ml-auto">
+            <a href="#composeForm" className="btn add-btn">
+              <i className="fa fa-plus"></i> Compose
             </a>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card mb-0">
-            <div class="card-body">
-              <div class="email-header">
-                <div class="row">
-                  <div class="col top-action-left">
-                    <div class="float-left">
-                      <div class="btn-group dropdown-action">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="card mb-0">
+            <div className="card-body">
+              <div className="email-header">
+                <div className="row">
+                  <div className="col top-action-left">
+                    <div className="float-left">
+                      <div className="btn-group dropdown-action">
                         <button
                           type="button"
-                          class="btn btn-white dropdown-toggle"
+                          className="btn btn-white dropdown-toggle mr-1"
                           data-toggle="dropdown"
                         >
-                          Select <i class="fa fa-angle-down "></i>
+                          Select <i className="fa fa-angle-down "></i>
                         </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">
+                        <div className="dropdown-menu">
+                          <a className="dropdown-item" href="#">
                             All
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             None
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             Read
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Unread
                           </a>
                         </div>
                       </div>
-                      <div class="btn-group dropdown-action">
+                      <div className="btn-group dropdown-action">
                         <button
                           type="button"
-                          class="btn btn-white dropdown-toggle"
+                          className="btn btn-white dropdown-toggle mr-1"
                           data-toggle="dropdown"
                         >
-                          Actions <i class="fa fa-angle-down "></i>
+                          Actions <i className="fa fa-angle-down "></i>
                         </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">
+                        <div className="dropdown-menu">
+                          <a className="dropdown-item" href="#">
                             Reply
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Forward
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Archive
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             Mark As Read
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Mark As Unread
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             Delete
                           </a>
                         </div>
                       </div>
-                      <div class="btn-group dropdown-action">
+                      <div className="btn-group dropdown-action">
                         <button
                           type="button"
-                          class="btn btn-white dropdown-toggle"
+                          className="btn btn-white dropdown-toggle mr-1"
                           data-toggle="dropdown"
                         >
-                          <i class="fa fa-folder"></i>{" "}
-                          <i class="fa fa-angle-down"></i>
+                          <i className="fa fa-folder"></i>{" "}
+                          <i className="fa fa-angle-down"></i>
                         </button>
-                        <div role="menu" class="dropdown-menu">
-                          <a class="dropdown-item" href="#">
+                        <div role="menu" className="dropdown-menu">
+                          <a className="dropdown-item" href="#">
                             Social
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Forums
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Updates
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             Spam
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Trash
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             New
                           </a>
                         </div>
                       </div>
-                      <div class="btn-group dropdown-action">
+                      <div className="btn-group dropdown-action">
                         <button
                           type="button"
                           data-toggle="dropdown"
-                          class="btn btn-white dropdown-toggle"
+                          className="btn btn-white dropdown-toggle"
                         >
-                          <i class="fa fa-tags"></i>{" "}
-                          <i class="fa fa-angle-down"></i>
+                          <i className="fa fa-tags"></i>{" "}
+                          <i className="fa fa-angle-down"></i>
                         </button>
-                        <div role="menu" class="dropdown-menu">
-                          <a class="dropdown-item" href="#">
+                        <div role="menu" className="dropdown-menu">
+                          <a className="dropdown-item" href="#">
                             Work
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Family
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Social
                           </a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">
+                          <div className="dropdown-divider"></div>
+                          <a className="dropdown-item" href="#">
                             Primary
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Promotions
                           </a>
-                          <a class="dropdown-item" href="#">
+                          <a className="dropdown-item" href="#">
                             Forums
                           </a>
                         </div>
                       </div>
                     </div>
-                    <div class="float-left d-none d-sm-block">
+                    <div className="float-left d-none d-sm-block">
                       <input
-                        type="text"
+                        type="search"
                         placeholder="Search Messages"
-                        class="form-control search-message"
+                        className="form-control search-message"
+                        onChange={searchChange}
                       />
                     </div>
                   </div>
-                  <div class="col-auto top-action-right">
-                    <div class="text-right">
+                  <div className="col-auto top-action-right">
+                    <div className="text-right">
                       <button
                         type="button"
                         title=""
                         data-toggle="tooltip"
-                        class="btn btn-white d-none d-md-inline-block"
+                        className="btn btn-white d-none d-md-inline-block mr-1"
                         data-original-title="Refresh"
+                        onClick={() => fetchEmails()}
                       >
-                        <i class="fa fa-refresh"></i>
+                        <i className="fa fa-refresh"></i>
                       </button>
-                      <div class="btn-group">
-                        <a class="btn btn-white">
-                          <i class="fa fa-angle-left"></i>
-                        </a>
-                        <a class="btn btn-white">
-                          <i class="fa fa-angle-right"></i>
-                        </a>
+                      <div className="btn-group">
+                        <Link
+                          className={`btn btn-white ${
+                            currentPage === 1 ? "disabled" : ""
+                          } `}
+                          onClick={() => goToPreviousPage()}
+                        >
+                          <i className="fa fa-angle-left"></i>
+                        </Link>
+                        <Link
+                          className={`btn btn-white ${
+                            currentPage === data.length ? "disabled" : ""
+                          } `}
+                          onClick={() => goToNextPage()}
+                        >
+                          <i className="fa fa-angle-right"></i>
+                        </Link>
                       </div>
                     </div>
-                    <div class="text-right">
-                      <span class="text-muted d-none d-md-inline-block">
-                        Showing 10 of 112{" "}
+                    <div className="text-right">
+                      <span className="text-muted d-none d-md-inline-block">
+                        Showing {currentPosts1.length} of {data.length}
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="email-content">
-                <div class="table-responsive">
-                  <table class="table table-inbox table-hover">
+              <div className="email-content">
+                <div className="table-responsive">
+                  <table className="table table-inbox table-hover">
                     <thead>
                       <tr>
                         <th colspan="6">
-                          <input type="checkbox" class="checkbox-all" />
+                          <input type="checkbox" className="checkbox-all" />
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                        {data.map((inbox, i) =>(
-                            <tr
-                              class={i < 7 ? "clickable-row" :"clickable-row unread" }
-                              data-href="mail-view.html"
-                            >
-                              <td>
-                                <input type="checkbox" class="checkmail" />
-                              </td>
-                              <td>
-                                <span class="mail-important">
-                                  <i class={i % 3 != 0 ? "fa fa-star starred" :"fa fa-star-o" }></i>
-                                </span>
-                              </td>
-                              <td class="name">{inbox.from}</td>
-                              <td class="subject">
-                                {inbox.subject}
-                                
-                              </td>
-                              <td>
-                                <i class="fa fa-paperclip"></i>
-                              </td>
-                              <td class="mail-date">{inbox.date}</td>
-                            </tr>
-                            
+                      {filteredData.map((inbox, i) => (
+                        <tr
+                          className={`${
+                            inbox?.is_read
+                              ? "clickable-row"
+                              : "clickable-row unread"
+                          }`}
+                          data-href="mail-view.html"
+                          key={i}
+                        >
+                          <td>
+                            <input type="checkbox" className="checkmail" />
+                          </td>
 
-                        ))}
-                    
+                          <td className="name">
+                            {inbox?.sender || "Not Available"}
+                          </td>
+                          <td className="subject">{inbox?.subject}</td>
+                          <td className="subject">{inbox?.model_name}</td>
+                          {/* <td><i className="fa fa-paperclip"></i></td> */}
+                          <td className="mail-date">
+                            {moment(inbox?.createdAt).format("L")}
+                          </td>
+                          <td>
+                            <Link
+                              className="subject"
+                              to={{
+                                pathname: `/admin/email/${inbox?._id}`,
+                                state: { inbox },
+                              }}
+                            >
+                              <i className="fa fa-eye"></i>
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
