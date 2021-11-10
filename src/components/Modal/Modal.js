@@ -67,7 +67,7 @@ const FormModal = ({
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="FormModalLabel">
-                {template.title}
+                {template?.title}
               </h5>
               <button
                 type="button"

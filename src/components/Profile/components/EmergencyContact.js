@@ -45,6 +45,7 @@ const EmergencyContact = ({
   submitted,
   handleChange,
   formValue,
+  setFormValue,
 }) => {
   const { id } = useParams();
   const user = tokenService.getUser();
@@ -72,6 +73,7 @@ const EmergencyContact = ({
             type: "ADD",
             emergencyContact: res?.data?.data,
           });
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {

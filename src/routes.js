@@ -54,7 +54,9 @@ import InvoiceTemplate from "./pages/Accounting/InvoiceTemplate";
 import ProductItems from "./pages/ProductItems/ProductItems";
 import Bill from "./pages/Vendors/bill";
 import PayrollReports from "./pages/Accounting/Payroll-Reports";
+import Notifications from "./pages/In-Apps/Notifications";
 import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
+import ViewEmail from "./pages/In-Apps/ViewEmail";
 import BalanceSheet from "./pages/Reports/BalanceSheet";
 import SingleEmail from "./pages/In-Apps/SingleEmail";
 
@@ -355,6 +357,13 @@ const routes = [
     title: "View Email",
     path: "/mail/:id",
     component: SingleEmail,
+    layout: "/admin",
+  },
+  {
+    title: "Notifications",
+    path: "/notifications",
+    component: Notifications,
+
     layout: "/admin",
   },
   {

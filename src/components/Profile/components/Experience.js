@@ -37,7 +37,13 @@ const experiencesReducer = (state, action) => {
   }
 };
 
-const Experience = ({ handleChange, workExperience, submitted, formValue }) => {
+const Experience = ({
+  handleChange,
+  workExperience,
+  submitted,
+  formValue,
+  setFormValue,
+}) => {
   const { id } = useParams();
   const user = tokenService.getUser();
   const [experiencesState, experiencesDispatch] = useReducer(
@@ -65,6 +71,7 @@ const Experience = ({ handleChange, workExperience, submitted, formValue }) => {
             type: "ADD",
             experience: res?.data?.data,
           });
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
