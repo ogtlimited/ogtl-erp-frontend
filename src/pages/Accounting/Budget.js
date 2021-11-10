@@ -10,8 +10,23 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 import ApproveModal from "../../components/Modal/approveModal";
+import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
 
 const Budget = () => {
+  const [approval, setApproval] = useState([
+    {
+      title: "Draft",
+      color: "text-primary",
+    },
+    {
+      title: "Approved",
+      color: "text-success",
+    },
+    {
+      title: "Rejected",
+      color: "text-danger",
+    }
+  ])
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -37,6 +52,10 @@ const Budget = () => {
   useEffect(() => {
     fetchBudget();
   }, []);
+
+  useEffect(() => {
+    console.log(status)
+  }, [status])
 
   useEffect(() => {
     seteditData(clickedRow);
@@ -120,8 +139,19 @@ const Budget = () => {
       dataField: "approved",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          <GeneralApproverBtn
+            options={approval}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+          />
+        </>
+      ),
     },
+
     {
       dataField: "",
       text: "Approve",
