@@ -1,7 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
+  const { notifications, user } = useAppContext();
+
   return (
     <>
       <div className="row">
@@ -11,7 +15,10 @@ const EmployeeUser = () => {
               <img alt="" src="assets/img/profiles/avatar-02.jpg" />
             </div>
             <div className="welcome-det">
-              <h3>Welcome, Sir Abubakar</h3>
+              <h3>
+                Welcome,{" "}
+                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}
+              </h3>
               <p>{date}</p>
             </div>
           </div>
@@ -22,25 +29,28 @@ const EmployeeUser = () => {
           <section className="dash-section">
             <h1 className="dash-sec-title">Today</h1>
             <div className="dash-sec-content">
-              <div className="dash-info-list">
-                <a href="#" className="dash-card text-danger">
-                  <div className="dash-card-container">
-                    <div className="dash-card-icon">
-                      <i className="fa fa-hourglass-o"></i>
-                    </div>
-                    <div className="dash-card-content">
-                      <p>Tony is off sick today</p>
-                    </div>
-                    <div className="dash-card-avatars">
-                      <div className="e-avatar">
-                        <img src="assets/img/profiles/avatar-09.jpg" alt="" />
+              {notifications.map((notification, index) => (
+                <div className="dash-info-list" key={index}>
+                  <Link className="dash-card  ">
+                    <div className="dash-card-container">
+                      <div className="dash-card-icon">
+                        <i className="fa fa-hourglass-o"></i>
+                      </div>
+                      <div className="dash-card-content">
+                        <p>A new {notification.module} was added</p>
+                      </div>
+                      <div className="dash-card-avatars">
+                        <div className="e-avatar">
+                          <img src="assets/img/profiles/avatar-09.jpg" alt="" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </div>
-              <div className="dash-info-list">
-                <a href="#" className="dash-card">
+                  </Link>
+                </div>
+              ))}
+
+              {/* <div className="dash-info-list">
+                <Link className="dash-card">
                   <div className="dash-card-container">
                     <div className="dash-card-icon">
                       <i className="fa fa-suitcase"></i>
@@ -54,10 +64,10 @@ const EmployeeUser = () => {
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
               <div className="dash-info-list">
-                <a href="#" className="dash-card">
+                <Link className="dash-card">
                   <div className="dash-card-container">
                     <div className="dash-card-icon">
                       <i className="fa fa-building-o"></i>
@@ -71,11 +81,11 @@ const EmployeeUser = () => {
                       </div>
                     </div>
                   </div>
-                </a>
-              </div>
+                </Link>
+              </div> */}
             </div>
           </section>
-          <section className="dash-section">
+          {/* <section className="dash-section">
             <h1 className="dash-sec-title">Tomorrow</h1>
             <div className="dash-sec-content">
               <div className="dash-info-list">
@@ -88,19 +98,19 @@ const EmployeeUser = () => {
                       <p>2 people will be away tomorrow</p>
                     </div>
                     <div className="dash-card-avatars">
-                      <a href="#" className="e-avatar">
+                      <Link className="e-avatar">
                         <img src="assets/img/profiles/avatar-04.jpg" alt="" />
-                      </a>
-                      <a href="#" className="e-avatar">
+                      </Link>
+                      <Link className="e-avatar">
                         <img src="assets/img/profiles/avatar-08.jpg" alt="" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
-          <section className="dash-section">
+          </section> */}
+          {/* <section className="dash-section">
             <h1 className="dash-sec-title">Next seven days</h1>
             <div className="dash-sec-content">
               <div className="dash-info-list">
@@ -113,12 +123,12 @@ const EmployeeUser = () => {
                       <p>2 people are going to be away</p>
                     </div>
                     <div className="dash-card-avatars">
-                      <a href="#" className="e-avatar">
+                      <Link className="e-avatar">
                         <img src="assets/img/profiles/avatar-05.jpg" alt="" />
-                      </a>
-                      <a href="#" className="e-avatar">
+                      </Link>
+                      <Link className="e-avatar">
                         <img src="assets/img/profiles/avatar-07.jpg" alt="" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -141,7 +151,7 @@ const EmployeeUser = () => {
                 </div>
               </div>
               <div className="dash-info-list">
-                <a href="" className="dash-card">
+                <Link href="" className="dash-card">
                   <div className="dash-card-container">
                     <div className="dash-card-icon">
                       <i className="fa fa-calendar"></i>
@@ -150,10 +160,10 @@ const EmployeeUser = () => {
                       <p>It's Spring Bank Holiday on Monday</p>
                     </div>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
-          </section>
+          </section> */}
         </div>
         <div className="col-lg-4 col-md-4">
           <div className="dash-sidebar">
@@ -195,9 +205,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <a className="btn btn-primary" href="#">
-                      Apply Leave
-                    </a>
+                    <Link className="btn btn-primary">Apply Leave</Link>
                   </div>
                 </div>
               </div>
@@ -217,9 +225,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <a className="btn btn-primary" href="#">
-                      Apply Time Off
-                    </a>
+                    <Link className="btn btn-primary">Apply Time Off</Link>
                   </div>
                 </div>
               </div>
@@ -228,7 +234,9 @@ const EmployeeUser = () => {
               <h5 className="dash-title">Upcoming Holiday</h5>
               <div className="card">
                 <div className="card-body text-center">
-                  <h4 className="holiday-title mb-0">1 October 2021 - Independence</h4>
+                  <h4 className="holiday-title mb-0">
+                    1 October 2021 - Independence
+                  </h4>
                 </div>
               </div>
             </section>

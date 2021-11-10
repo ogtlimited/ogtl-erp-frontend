@@ -10,12 +10,12 @@ const PersonalInfo = ({
   personalDetails,
   formValue,
   submitted,
+  setFormValue,
   fetchUserInfo,
 }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
-  console.log(personalDetails);
 
   useEffect(() => {
     if (submitted === true) {
@@ -28,6 +28,7 @@ const PersonalInfo = ({
         .post("/PersonalDetails", newFormValue)
         .then((res) => {
           fetchUserInfo();
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {

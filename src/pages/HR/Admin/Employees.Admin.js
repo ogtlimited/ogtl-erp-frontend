@@ -23,9 +23,9 @@ const AllEmployeesAdmin = () => {
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [departments, setDepartments] = useState([]);
-  const [toggleModal, settoggleModal] = useState(false)
-  const [uploading, setuploading] = useState(false)
-  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploading, setuploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   // console.log(allEmployees);
   useEffect(() => {
     fetchEmployee();
@@ -154,7 +154,7 @@ const AllEmployeesAdmin = () => {
       formValue.last_name = fullName[1];
       formValue.middle_name = fullName[2];
       delete formValue.applicant;
-      console.log(formValue)
+      console.log(formValue);
       axiosInstance.post("/employees", formValue).then((res) => {
         fetchEmployee();
         setsubmitted(false);
@@ -164,25 +164,28 @@ const AllEmployeesAdmin = () => {
     console.log(formValue);
   }, [submitted, formValue]);
 
-  const onFileUpload = (e) =>{
+  const onFileUpload = (e) => {
     const files = e.target.files;
     console.log(files);
     if (files) {
       console.log(files[0]);
       Papa.parse(files[0], {
-        complete: function(results) {
-          const jsonData = helper.arrayToJSONObject(results.data)
-          console.log(jsonData)
-          axiosInstance.post("/employees/bulk", jsonData).then(res =>{
-            console.log(res)
-            fetchEmployee()
-          }).catch(err => console.log(err))
+        complete: function (results) {
+          const jsonData = helper.arrayToJSONObject(results.data);
+          console.log(jsonData);
+          axiosInstance
+            .post("/employees/bulk", jsonData)
+            .then((res) => {
+              console.log(res);
+              fetchEmployee();
+            })
+            .catch((err) => console.log(err));
           console.log("Finished:", results.data);
-        }}
-      )
+        },
+      });
     }
-  }
-  
+  };
+
   const defaultSorted = [
     {
       dataField: "designation",
@@ -191,8 +194,7 @@ const AllEmployeesAdmin = () => {
   ];
   return (
     <>
-
-    {/* { uploading && <div class="progress mb-3">
+      {/* { uploading && <div class="progress mb-3">
     <div class="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
   </div> } */}
       <div className="page-header">
@@ -215,14 +217,17 @@ const AllEmployeesAdmin = () => {
             >
               <i className="fa fa-plus"></i> Add Employee
             </a>
-            <button onClick={()=> settoggleModal(true)} type="button" class="btn add-btn mx-3" data-toggle="modal" data-target="#uploadModal">
-            <i className="fa fa-cloud-upload"></i>
+            <button
+              onClick={() => settoggleModal(true)}
+              type="button"
+              class="btn add-btn mx-3"
+              data-toggle="modal"
+              data-target="#uploadModal"
+            >
+              <i className="fa fa-cloud-upload"></i>
               Bulk Upload
             </button>
 
-
-
-            
             {/* <label className="btn add-btn mx-2">
       <input
         type="file"
@@ -254,10 +259,14 @@ const AllEmployeesAdmin = () => {
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />
-      {toggleModal && 
-      <UploadModal setUploadSuccess={setUploadSuccess} setuploading={setuploading} settoggleModal={settoggleModal} fetchEmployee={fetchEmployee} />
-      
-      }
+      {toggleModal && (
+        <UploadModal
+          setUploadSuccess={setUploadSuccess}
+          setuploading={setuploading}
+          settoggleModal={settoggleModal}
+          fetchEmployee={fetchEmployee}
+        />
+      )}
 
       <FormModal2
         editData={editData}

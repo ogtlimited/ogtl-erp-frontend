@@ -1,8 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
-import config from '../config.json'
+import config from "../config.json";
+import socketIOClient from "socket.io-client";
+
 export default createBrowserHistory();
 const baseURL = config.ApiUrl;
 const AppContext = createContext();
@@ -18,17 +20,44 @@ const AppProvider = (props) => {
   });
   const [employeeAttendance, setemployeeAttendance] = useState([]);
   const [user, setuser] = useState(tokenService.getUser());
-  const [isChecked, setIsChecked] = useState(false)
-  
+  const [isChecked, setIsChecked] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  let socket = useRef();
+
+  // let socketRef;
+  //Fetching notifications
+  useEffect(() => {
+    socket.current = socketIOClient("http://localhost:3000");
+    socket.current.on("error", (error) => {
+      console.log(error);
+      // ...
+    });
+
+    socket.current.emit("notification", user?.company_email);
+    socket.current.on("messages", (data) => {
+      const newArr = data.map((e) => JSON.parse(e));
+      setNotifications((prev) => [...newArr, ...prev]);
+    });
+    return () => socket.current.close();
+  }, [user?.company_email]);
 
   useEffect(() => {
     console.log("alert message");
   }, [showAlertMsg]);
 
+  const clearNotifications = () => {
+    if (socket) {
+      socket.current.emit(
+        "clear_notification",
+        "ahmed.dambatta@outsourceglobal.com"
+      );
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      console.log('LOGGED IN')
+      console.log("LOGGED IN");
       fetchEmployee();
       fetchEmployeeAttendance();
     }
@@ -36,7 +65,6 @@ const AppProvider = (props) => {
 
   const fetchEmployee = (employee) => {
     axiosInstance.get("/employees").then((e) => {
-      console.log(e)
       setallEmployees(e?.data?.employees);
       setloggedIn(false);
     });
@@ -80,10 +108,9 @@ const AppProvider = (props) => {
 
     const params = `?startOfMonth=${firstDay}&endOfMonth=${lastDay}`;
     return axiosInstance
-      .get("/api/attendance/employee/" + user.ogid + params)
+      .get("/api/attendance/employee/" + user?.ogid + params)
       .then((e) => {
-        console.log(e.data.data);
-        setemployeeAttendance(e.data.data);
+        setemployeeAttendance(e?.data?.data);
       });
   };
 
@@ -104,7 +131,10 @@ const AppProvider = (props) => {
         formUpdate,
         setformUpdate,
         isChecked,
-        setIsChecked
+        setIsChecked,
+        notifications,
+        user,
+        clearNotifications,
       }}
     >
       {props.children}

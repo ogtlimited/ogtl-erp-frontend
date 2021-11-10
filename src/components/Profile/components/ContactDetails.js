@@ -10,6 +10,7 @@ const ContactDetails = ({
   formValue,
   submitted,
   fetchUserInfo,
+  setFormValue,
 }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
@@ -26,6 +27,7 @@ const ContactDetails = ({
         .post("/ContactDetails", newFormValue)
         .then((res) => {
           fetchUserInfo();
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {

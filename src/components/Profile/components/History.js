@@ -36,7 +36,13 @@ const historiesReducer = (state, action) => {
   }
 };
 
-const History = ({ handleChange, history, submitted, formValue }) => {
+const History = ({
+  handleChange,
+  history,
+  submitted,
+  formValue,
+  setFormValue,
+}) => {
   const { id } = useParams();
   const user = tokenService.getUser();
   const [historyState, historyDispatch] = useReducer(
@@ -63,6 +69,7 @@ const History = ({ handleChange, history, submitted, formValue }) => {
             type: "ADD",
             history: res?.data?.data,
           });
+          setFormValue(null);
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
