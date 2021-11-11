@@ -16,6 +16,7 @@ import {
 import * as Yup from "yup";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
+import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
   const [formData, setFormData] = useState(null);
@@ -55,7 +56,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
       } else if (formSchema[key].type === "textarea") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "select") {
-        // _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
+        _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
       } else if (formSchema[key].type === "time") {
@@ -63,8 +64,8 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
       }
 
       if (formSchema[key].required) {
-        console.log(formSchema[key]);
-        _validationSchema[key] = _validationSchema[key].required("Required");
+        // console.log(formSchema[key], key);
+        _validationSchema[key] = _validationSchema[key]?.required("Required");
       }
     }
 
@@ -72,13 +73,14 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
     setValidationSchema(Yup.object().shape({ ..._validationSchema }));
   };
 
-  const getFormElement = (elementName, elementSchema) => {
+  const getFormElement = (elementName, elementSchema, setFieldValue) => {
     const props = {
       name: elementName,
       label: elementSchema.label,
       value: elementSchema.value,
       options: elementSchema.options,
       disabled: elementSchema.disabled,
+      setFieldValue: setFieldValue
     };
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
@@ -111,35 +113,68 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
   };
 
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
-    $("#FormModal").modal("toggle");
+    console.log(values)
+    // $("#FormModal").modal("toggle");
     setvalue(values);
 
-    setSubmitting(false);
-    resetForm();
-    console.log("valuess", values);
+    // setSubmitting(false);
+    resetForm({});
+    console.log('form reset')
+    
   };
 
   return (
     <div className="App">
-      <Form
+      <Formik
         enableReinitialize
         initialValues={formData}
         validationSchema={validationSchema}
+        
         onSubmit={onSubmit}
       >
-        <div class="row">
+         {(props) => {
+        const {
+          values,
+          touched,
+          errors,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+
+          setFieldValue,
+          setFieldTouched,
+          isValid,
+        } = props;
+        // console.log(isValid);
+        // console.log(values);
+        // console.log(errors);
+        return (
+          <form onSubmit={handleSubmit}>
+          <div class="row">
           {Object.keys(formSchema).map((key, ind) => (
             <div className="col-sm-6" key={key}>
-              {getFormElement(key, formSchema[key])}
+              {getFormElement(key, formSchema[key], setFieldValue)}
             </div>
           ))}
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <SubmitButton title="Submit" />
+          <button
+                        type="submit"
+                        
+                        // data-dismiss="modal"
+                        className="btn btn-primary submit-btn"
+                      >
+                        Submit
+                      </button>
           </div>
         </div>
-      </Form>
+        </form>
+        );
+      }}
+
+      </Formik>
     </div>
   );
 };

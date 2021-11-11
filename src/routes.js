@@ -343,7 +343,7 @@ const routes = [
   },
   {
     title: "Campaign ",
-    path: "/campaign-info",
+    path: "/campaign-info/:id",
     component: CampaignInfo,
     layout: "/admin",
   },
