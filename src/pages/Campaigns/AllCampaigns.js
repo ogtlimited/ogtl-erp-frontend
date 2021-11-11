@@ -33,20 +33,33 @@ const AllCampaigns = () => {
     combineRequest().then((res) => {
       console.log(res);
       const { employees } = res.data.createEmployeeFormSelection;
-      const departmentsOpts = employees?.map((e) => {
+      const emp = employees?.map((e) => {
         return {
           label: e.first_name + ' ' + e.last_name,
           value: e._id,
         };
       });
+      
       console.log(campaignFormJson)
+      const formatted = campaignFormJson.Fields.map(c =>{
+        if(c.name === 'client_id' || c.name === 'manager' || c.name === 'quality_analyst'){
+          return {
+            ...c,
+            options: emp
+          }
+        }
+        return c
+      })
+      campaignFormJson.Fields = formatted
+      console.log(campaignFormJson)
+      setTemplate(campaignFormJson)
       // if (type === "projectId") {
       //   setFormOptions(projectsOpts);
       // } else {
       //   setFormOptions(departmentsOpts);
       // }
     });
-  }, []);
+  }, [template]);
   useEffect(() => {
     fetchCampaign();
   }, []);
