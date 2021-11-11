@@ -12,6 +12,7 @@ import {
   CheckField,
   NumberField,
   TimeField,
+  FileField
 } from "./FormElements";
 import * as Yup from "yup";
 import $ from "jquery";
@@ -110,6 +111,9 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
     if (elementSchema.type === "select") {
       return <SelectField {...props} />;
     }
+    if (elementSchema.type === "file") {
+      return <FileField {...props} />;
+    }
   };
 
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
@@ -153,7 +157,8 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
           <form onSubmit={handleSubmit}>
           <div class="row">
           {Object.keys(formSchema).map((key, ind) => (
-            <div className="col-sm-6" key={key}>
+            <div className={formSchema[key].type === 'textarea' ?  "col-sm-12" : formSchema[key].type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key}>
+            
               {getFormElement(key, formSchema[key], setFieldValue)}
             </div>
           ))}
