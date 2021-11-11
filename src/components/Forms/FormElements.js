@@ -5,18 +5,20 @@ import {
   Field,
   ErrorMessage,
   useFormikContext,
-  useField,
-  useFormik,
+
 } from "formik";
 import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
-  // console.log(props)
+  console.log(props)
   return (
     <Formik {...props}>
-      <FormikForm className="needs-validation" novalidate="">
+      render={({ values, errors, touched, handleSubmit, handleChange, setFieldValue }) => (
+        <> {props.children}</>
+      )}
+      {/* <FormikForm className="needs-validation" novalidate="">
         {props.children}
-      </FormikForm>
+      </FormikForm> */}
     </Formik>
   );
 }
@@ -223,7 +225,8 @@ export function TextareaField(props) {
 }
 
 export function SelectField(props) {
-  const { name, label, options, value } = props;
+  const { name, label, options, value, setFieldValue } = props;
+  // console.log(setFieldValue)
   return (
     <>
       <div className="form-group">
@@ -232,23 +235,25 @@ export function SelectField(props) {
             {label}
           </label>
         )}
-        {/*<Select
+        <Field
                                 options={options}
+                                component={Select}
                                 defaultValue={value}
                                 name={name}
                                 onChange={(opt) => {
-                                  // setFieldValue(name, opt.value);
+                                  console.log(opt)
+                                  setFieldValue(name, opt.value);
                                   // setFieldValue("employee_name", opt.value);
-                                }}
+                               }}
                                 
                                 className=" ml-0 w-100"
-                              />*/}
-        <Field as="select" id={name} className="form-control" name={name}>
+                              />
+        {/* <Field as="select" id={name} className="form-control" name={name}>
           <option value="">Choose...</option>
           {options.map((optn, index) => (
             <option value={optn.value} label={optn.label || optn.value} />
           ))}
-        </Field>
+        </Field> */}
         <ErrorMessage
           name={name}
           render={(msg) => <div style={{ color: "red" }}>{msg}</div>}
