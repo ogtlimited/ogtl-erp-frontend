@@ -9,32 +9,31 @@ export const campaignFormJson = {
     },
     {
       name: "client_id",
-      type: "text",
+      type: "select",
+      options: [],
       title: "Client",
       required: { value: true, message: "Field is required" },
     },
     {
       name: "type",
-      type: "text",
+      type: "select",
       title: "Type",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "objectives",
-      type: "text",
-      title: "Objectives",
+      options: [
+        {
+            label: "Domestic",
+            value: "domestic",
+        },
+        {
+            label: "Foreign",
+            value: "foreign",
+        },
+      ],
       required: { value: true, message: "Field is required" },
     },
     {
       name: "hours_of_operation",
       type: "text",
       title: "Hours of operation",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "type_of_employees",
-      type: "text",
-      title: "Type of employees",
       required: { value: true, message: "Field is required" },
     },
     {
@@ -100,18 +99,6 @@ export const campaignFormJson = {
       required: { value: true, message: "Field is required" },
     },
     {
-      name: "documents",
-      type: "text",
-      title: "Documents",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "creator",
-      type: "text",
-      title: "Creator",
-      required: { value: true, message: "Field is required" },
-    },
-    {
       name: "status",
       type: "select",
       title: "Status",
@@ -138,13 +125,29 @@ export const campaignFormJson = {
     {
       name: "manager",
       type: "text",
+      type: "select",
+      options: [],
       title: "Manager",
       required: { value: true, message: "Field is required" },
     },
     {
       name: "quality_analyst",
       type: "text",
+      type: "select",
+      options: [],
       title: "Quality analyst",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "documents",
+      type: "file",
+      title: "Documents",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "objectives",
+      type: "textarea",
+      title: "Objectives",
       required: { value: true, message: "Field is required" },
     },
   ],

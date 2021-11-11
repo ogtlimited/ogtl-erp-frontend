@@ -30,6 +30,24 @@ const AllCampaigns = () => {
       });
   };
   useEffect(() => {
+    combineRequest().then((res) => {
+      console.log(res);
+      const { employees } = res.data.createEmployeeFormSelection;
+      const departmentsOpts = employees?.map((e) => {
+        return {
+          label: e.first_name + ' ' + e.last_name,
+          value: e._id,
+        };
+      });
+      console.log(campaignFormJson)
+      // if (type === "projectId") {
+      //   setFormOptions(projectsOpts);
+      // } else {
+      //   setFormOptions(departmentsOpts);
+      // }
+    });
+  }, []);
+  useEffect(() => {
     fetchCampaign();
   }, []);
   useEffect(() => {
