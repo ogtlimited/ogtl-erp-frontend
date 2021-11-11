@@ -25,8 +25,8 @@ const Budget = () => {
     {
       title: "Rejected",
       color: "text-danger",
-    }
-  ])
+    },
+  ]);
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -42,7 +42,6 @@ const Budget = () => {
     axiosInstance
       .get("/api/budget")
       .then((res) => {
-        console.log("budgetttt", res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -54,8 +53,8 @@ const Budget = () => {
   }, []);
 
   useEffect(() => {
-    console.log(status)
-  }, [status])
+    console.log(status);
+  }, [status]);
 
   useEffect(() => {
     seteditData(clickedRow);
@@ -78,22 +77,30 @@ const Budget = () => {
       });
   };
 
-  const approveBudget = (row) => {
-    axiosInstance
-      .patch(`/api/budget/approve/${row._id}`)
-      .then((res) => {
-        console.log(res);
-        fetchBudget();
-        setData((prevData) =>
-          prevData.filter((pdata) => pdata._id !== row._id)
-        );
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  useEffect(() => {
+    if (status.length) {
+      console.log("sttayus", { status, statusRow });
+      axiosInstance
+        .patch(`/api/budget/approve/${statusRow._id}?status=${status}`)
+        .then((res) => {
+          console.log(res);
+          fetchBudget();
+          setData((prevData) =>
+            prevData.filter((pdata) => pdata._id !== statusRow._id)
+          );
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
 
   const columns = [
     {
@@ -147,42 +154,43 @@ const Budget = () => {
             setStatus={setStatus}
             value={value}
             row={row}
+            setstatusRow={setstatusRow}
           />
         </>
       ),
     },
 
-    {
-      dataField: "",
-      text: "Approve",
-      sort: true,
-      headerStyle: { maxWidth: "90px" },
-      formatter: (value, row) => (
-        <>
-          <div className="dropdown dropdown-action text-right">
-            <Link
-              className="action-icon dropdown-toggle"
-              data-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </Link>
-            <div className="dropdown-menu dropdown-menu-right">
-              <Link
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => {
-                  setSelectedRow(row);
-                }}
-              >
-                <i className="fa fa-thumbs-up m-r-5"></i> Approve
-              </Link>
-            </div>
-          </div>
-        </>
-      ),
-    },
+    // {
+    //   dataField: "",
+    //   text: "Approve",
+    //   sort: true,
+    //   headerStyle: { maxWidth: "90px" },
+    //   formatter: (value, row) => (
+    //     <>
+    //       <div className="dropdown dropdown-action text-right">
+    //         <Link
+    //           className="action-icon dropdown-toggle"
+    //           data-toggle="dropdown"
+    //           aria-expanded="false"
+    //         >
+    //           <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //         </Link>
+    //         <div className="dropdown-menu dropdown-menu-right">
+    //           <Link
+    //             className="dropdown-item"
+    //             data-toggle="modal"
+    //             data-target="#exampleModal"
+    //             onClick={() => {
+    //               setSelectedRow(row);
+    //             }}
+    //           >
+    //             <i className="fa fa-thumbs-up m-r-5"></i> Approve
+    //           </Link>
+    //         </div>
+    //       </div>
+    //     </>
+    //   ),
+    // },
   ];
   return (
     <>
@@ -217,12 +225,6 @@ const Budget = () => {
 
       {/* <EditBudgetForm fetchBudget={fetchBudget} editData={editData} /> */}
       <BudgetForm fetchBudget={fetchBudget} />
-
-      <ApproveModal
-        title="Budget"
-        selectedRow={selectedRow}
-        approveFunction={approveBudget}
-      />
     </>
   );
 };
