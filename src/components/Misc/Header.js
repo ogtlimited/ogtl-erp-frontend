@@ -77,7 +77,7 @@ const Header = () => {
           <NotificationBox />
         </li>
 
-        <li className="nav-item dropdown">
+        {/* <li className="nav-item dropdown">
           <a
             href="#"
             className="dropdown-toggle nav-link"
@@ -99,7 +99,7 @@ const Header = () => {
               <Link to="chat">View all Messages</Link>
             </div>
           </div>
-        </li>
+        </li> */}
 
         <li className="nav-item dropdown has-arrow main-drop">
           <a

@@ -47,10 +47,7 @@ const AppProvider = (props) => {
 
   const clearNotifications = () => {
     if (socket) {
-      socket.current.emit(
-        "clear_notification",
-        "ahmed.dambatta@outsourceglobal.com"
-      );
+      socket.current.emit("clear_notification", user?.company_email);
     }
   };
 
