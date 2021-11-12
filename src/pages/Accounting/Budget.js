@@ -88,11 +88,11 @@ const Budget = () => {
           setData((prevData) =>
             prevData.filter((pdata) => pdata._id !== statusRow._id)
           );
-          showAlert(true, res.data.message, "alert alert-success");
+          showAlert(true, res.data.data, "alert alert-success");
         })
         .catch((error) => {
           console.log(error);
-          showAlert(true, error.response.data.message, "alert alert-danger");
+          showAlert(true, error.response.data.data, "alert alert-danger");
         });
     }
     return () => {
@@ -143,7 +143,7 @@ const Budget = () => {
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "approved",
+      dataField: "status",
       text: "Status",
       sort: true,
       headerStyle: { minWidth: "100px" },
