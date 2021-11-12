@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import data from '../../db/campaigns.json'
-import avater from '../../assets/img/male_avater.png'
+// import data from '../../db/campaigns.json';
+import avater from "../../assets/img/male_avater.png";
+import axiosInstance from "../../services/api";
+import { useAppContext } from "../../Context/AppContext";
 
 const Leads = () => {
+  const [data, setData] = useState([]);
+
+  const fetchLeads = () => {
+    axiosInstance
+      .get("/employees/all/team-leads")
+      .then((res) => {
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchLeads();
+  }, []);
   const columns = [
     {
       dataField: "lead",
@@ -13,64 +30,61 @@ const Leads = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-        <a href="#" className="avatar"><img alt="" src={avater} /></a>
-        <a href="#">{value}</a>
+          <a href="#" className="avatar">
+            <img alt="" src={avater} />
+          </a>
+          <a href="#">{row.first_name + row.last_name}</a>
         </h2>
       ),
     },
     {
-      dataField: "email",
+      dataField: "company_email",
       text: "Email",
       sort: true,
       headerStyle: { width: "150px" },
     },
     {
-      dataField: "phone",
-      text: "Phone",
+      dataField: "ogid",
+      text: "OG ID",
       sort: true,
       headerStyle: { width: "150px" },
     },
     {
-      dataField: "campaign_name",
+      dataField: "projectId",
       text: "Campaign name",
       sort: true,
       headerStyle: { width: "450px" },
+      formatter: (value, row) => <h2>{row?.projectId?.project_name}</h2>,
     },
     {
-      dataField: "team_member",
+      dataField: "teamMembers",
       text: "Team members",
       sort: true,
       headerStyle: { minWidth: "180px" },
       formatter: (value, row) => (
         <ul className="team-members">
-              
-          {value.slice(0,3).map((mem, i) => {
-              return (
-                    <li>
-                        {(i+1) <= 3  ? 
-                        <a
-                        href="#"
-                        data-toggle="tooltip"
-                        title=""
-                        data-original-title={mem.employee_name}
-                      >
-                        <img alt="" src={avater} />
-                      </a>
-             
-                        : 
-                        <a href="#" className="all-users">+{value.length}</a>
-                        }
-                    </li>
-                )
-            })}
+          {value.slice(0, 3).map((mem, i) => {
+            return (
+              <li>
+                {i + 1 <= 3 ? (
+                  <a
+                    href="#"
+                    data-toggle="tooltip"
+                    title=""
+                    data-original-title={mem.first_name + mem.last_name}
+                  >
+                    <img alt="" src={avater} />
+                  </a>
+                ) : (
+                  <a href="#" className="all-users">
+                    +{value.length}
+                  </a>
+                )}
+              </li>
+            );
+          })}
         </ul>
       ),
-    },
-    {
-      dataField: "created",
-      text: "Created",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "status",
@@ -79,18 +93,33 @@ const Leads = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <>
-        {value == 'Active' ?
-        <a href="" className="pos-relative"> <span className="status-online"></span> <span className="ml-4 d-block">{value}</span></a>
-        : value == 'Pending' ?
-         <a href="" className="pos-relative"> <span className="status-pending"></span> <span className="ml-4 d-block">{value}</span></a>
-         : value == 'Terminated' ?
-         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-         :
-         <a href="" className="pos-relative"> <span className="status-terminated"></span> <span className="ml-4 d-block">{value}</span></a>
-        }
-
+          {value == "active" ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-online"></span>{" "}
+              <span className="ml-4 d-block">{value}</span>
+            </a>
+          ) : value == "left" ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-pending"></span>{" "}
+              <span className="ml-4 d-block">{value}</span>
+            </a>
+          ) : value == "terminated" ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-terminated"></span>{" "}
+              <span className="ml-4 d-block">{value}</span>
+            </a>
+          ) : (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-terminated"></span>{" "}
+              <span className="ml-4 d-block">{value}</span>
+            </a>
+          )}
         </>
-      )   
+      ),
     },
     {
       dataField: "",
@@ -115,13 +144,9 @@ const Leads = () => {
         </div>
       </div>
       <div className="row">
-      <div className="col-sm-12">
-         <LeavesTable
-            data={data}
-            columns={columns}
-         /> 
-      </div>
-          
+        <div className="col-sm-12">
+          <LeavesTable data={data} columns={columns} />
+        </div>
       </div>
     </>
   );
