@@ -5,11 +5,12 @@ import axiosInstance from "../../../services/api";
 import FormModal from "../../../components/Modal/Modal";
 import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/application";
 import { useAppContext } from "../../../Context/AppContext";
+import FormModal2 from "../../../components/Modal/FormModal2";
+import helper from "../../../services/helper";
 const LeavesUser = () => {
-  const {allEmployees, fetchEmployee} = useAppContext();
-  // fetchEmployee()
+  const {allEmployees, combineRequest, showAlert} = useAppContext();
   const [userId, setuserId] = useState('')
-  const [template, settemplate] = useState([]);
+  const [template, settemplate] = useState(null);
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
@@ -19,8 +20,12 @@ const LeavesUser = () => {
   const [medical, setmedical] = useState(0)
   const [remaining, setremaining] = useState(0);
   const [formMode, setformMode] = useState('add')
+  const [fetched, setfetched] = useState(false)
+  const [loadedSelect, setloadedSelect] = useState(false)
+  const [loadLeaves, setloadLeaves] = useState(false)
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
+      console.log(userId, 'USERID')
       const leaves = e.data.data.filter(f => f.employee_id._id == userId);
       const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
       const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
@@ -29,27 +34,48 @@ const LeavesUser = () => {
       setcasual(casual);
       setmedical(medic)
 
+      console.log('LEAVES', leaves)
       setallLeaves(leaves)
+      if(allLeaves.length){
+        setloadLeaves(true)
+      }
       console.log(leaves)
       console.log(userId)
 
     })
   }
-  useEffect(() => {
-    const user = tokenService.getUser()
+ useEffect(() => {
+  let user = tokenService.getUser()
     setuserId(user._id)
-    if(allLeaves.length == 0){
+    if(userId){
       fetchLeaves()
     }
-    console.log(user)
-    
-  }, [userId, allLeaves])
+    console.log(userId)
+ }, [userId])
   useEffect(() => {
-    console.log(allEmployees)
+    if (!fetched) {
+      console.log('FETCHED')
+      fetchLeaves();
+    }
+  }, [allEmployees, fetched]);
+
+  useEffect(() => {
+   console.log(formValue, submitted)
+   if(submitted){
+    axiosInstance.post('/leave-application', formValue).then( e =>{
+      console.log(e)
+      showAlert(true, e?.data.message, "alert alert-success");
+    }).catch(err =>{
+      showAlert(true, err?.data.message, "alert alert-danger");
+    })
+   }
+  }, [formValue, submitted])
+  useEffect(() => {
+    // console.log(allEmployees)
     const employeeOpts = allEmployees.map((e) => {
       return {
-        label: e.first_name + " " + e.last_name + " (" + e.ogid + ")",
         value: e._id,
+        label: e.first_name + " " + e.last_name,
       };
     });
     const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
@@ -59,11 +85,19 @@ const LeavesUser = () => {
       }
       return field;
     });
+    // console.log(finalForm)
     settemplate({
       title: LeaveApplicationFormJSON.title,
       Fields: finalForm,
     });
-  }, []);
+    console.log(template)
+    if(template !== null){
+      setloadedSelect(true)
+      console.log('loaded')
+
+    }
+    // console.log(template)
+  }, [allEmployees, loadedSelect]);
   const columns = [
     {
       dataField: "leave_type_id",
@@ -150,6 +184,7 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+            
           <a
               href="#"
               className="btn add-btn"
@@ -193,13 +228,17 @@ const LeavesUser = () => {
           <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>
-      <FormModal
-        setformValue={setformValue}
-        template={template}
-        setsubmitted={setsubmitted}
+      {loadedSelect ? 
+      <>
+       <FormModal2
+        title="Leave Application"
         editData={editData}
-        formMode={formMode}
+        setformValue={setformValue}
+        template={helper.formArrayToObject(template.Fields)}
+        setsubmitted={setsubmitted}
       />
+      </> : null
+      }
     </>
   );
 };

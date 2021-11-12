@@ -37,7 +37,7 @@ const Budget = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
-
+  const [loadedSelect, setloadedSelect] = useState(false)
   const fetchBudget = () => {
     axiosInstance
       .get("/api/budget")

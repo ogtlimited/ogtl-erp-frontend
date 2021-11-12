@@ -19,7 +19,7 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
-const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
+const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }) => {
   const [formData, setFormData] = useState(null);
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -33,7 +33,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
     setFormData(value);
   }, [value]);
   useEffect(() => {
-    console.log(formUpdate);
+    // console.log(formUpdate);
     initForm(formSchema, formUpdate);
     seteditRow(value);
   }, [formUpdate]);
@@ -57,7 +57,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
       } else if (formSchema[key].type === "textarea") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "select") {
-        _validationSchema[key] = Yup.string().oneOf(formSchema[key].options.map(o => o.value));
+         _validationSchema[key] = Yup.string().nullable(true).oneOf([null, ...formSchema[key].options.map(o => o.value)]);
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
       } else if (formSchema[key].type === "time") {
@@ -66,7 +66,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
 
       if (formSchema[key].required) {
         // console.log(formSchema[key], key);
-        _validationSchema[key] = _validationSchema[key]?.required("Required");
+        _validationSchema[key] = _validationSchema[key]?.required("Field Required");
       }
     }
 
@@ -118,9 +118,9 @@ const DynamicForm = ({ formSchema, value, setvalue, editData }) => {
 
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
     console.log(values)
-    // $("#FormModal").modal("toggle");
+    $("#FormModal").modal("toggle");
     setvalue(values);
-
+    setformSubmitted(true)
     // setSubmitting(false);
     resetForm({});
     console.log('form reset')

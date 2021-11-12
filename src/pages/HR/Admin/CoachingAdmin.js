@@ -20,6 +20,7 @@ const CoachingAdmin = () => {
   const { allEmployees, showAlert } = useAppContext();
   const [editData, seteditData] = useState({});
   useEffect(() => {
+    console.log(formSubmitted)
     if (formSubmitted == true) {
       fetchCoachingForms();
     }

@@ -29,10 +29,10 @@ const initForm = {
   user_response: "",
 };
 const CoachingModal = ({ coachingForm, setformSubmitted }) => {
-  const { allEmployees, coachingFormEdit, setcoachingFormSubmitted } =
+  const { allEmployees, coachingFormEdit, setcoachingFormSubmitted, showAlert } =
     useAppContext();
   const user = tokenService.getUser();
-  console.log(coachingFormEdit);
+  // console.log(coachingFormEdit);
   const [isEdit, setisEdit] = useState(false);
   const [initialValues, setinitialValues] = useState(initForm);
   const [employeeOptions, setemployeeOptions] = useState([]);
@@ -48,18 +48,19 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
   const [supervisor, setsupervisor] = useState("");
   const [coachingPoints, setcoachingPoints] = useState(false);
   useEffect(() => {
-    console.log(allEmployees);
+    // console.log(allEmployees);
     let emp = allEmployees?.map((e) => {
       return {
         label: e.first_name + " " + e.last_name + " -" + e.ogid,
         value: e._id,
         id: e.ogid,
+        reports_to: e.reports_to
+
       };
     });
 
     setinitialValues({
       ...initialValues,
-      supervisor: supervisor,
     });
     if (coachingFormEdit == "edit") {
       setisEdit(true);
@@ -81,11 +82,10 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
       setisEdit(false);
       setinitialValues({
         ...initForm,
-        supervisor: supervisor,
       });
     }
     setemployeeOptions(emp);
-    setsupervisor(user.reports_to);
+    // setsupervisor(user.reports_to);
   }, [supervisor, coachingForm, coachingFormEdit, allEmployees]);
   useEffect(() => {
     setgoalCount(goals.split(" ").length);
@@ -114,7 +114,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
     way_forwardCount,
   ]);
   const handleClick = (opt) => {
-    console.log(opt);
+    // console.log(opt);
   };
   return (
     <Formik
@@ -124,14 +124,13 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
         setcoachingPoints(false);
         const payload = {
           ...values,
-          supervisor,
           goals,
           opportunities,
           reality,
           way_forward,
         };
-        console.log(payload);
-        console.log(goals);
+        // console.log(payload);
+        // console.log(goals);
         setTimeout(() => {
           if (isEdit) {
             // alert('edit')
@@ -139,10 +138,12 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
             axiosInstance
               .put(coachingUrl, payload)
               .then((res) => {
-                console.log(res);
+                // console.log(res);
+                showAlert(true, 'coaching form created', 'alert alert-success')
                 setcoachingFormSubmitted(true);
               })
               .catch((err) => {
+                showAlert(true, 'Unable to update coaching form', 'alert alert-danger')
                 console.log(err.response?.data);
               });
           } else {
@@ -154,11 +155,13 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
               .post(coachingUrl, payload)
               .then((res) => {
                 console.log(res);
+                showAlert(true, 'coaching form created', 'alert alert-success')
                 setcoachingFormSubmitted(true);
                 setformSubmitted(true)
               })
               .catch((err) => {
                 console.log(err.response?.data);
+                showAlert(true, 'Unable to create coaching form', 'alert alert-danger')
                 //   setShow(true);
                 //   setMessage(err.response?.data);
               });
@@ -194,7 +197,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
         } = props;
         // console.log(isValid);
         // console.log(values);
-        console.log(errors);
+        // console.log(errors);
         return (
           <div
             className="modal custom-modal fade"
@@ -246,8 +249,9 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 defaultValue={values.employee_name}
                                 name="employee_name"
                                 onChange={(opt) => {
-                                  console.log(employeeOptions);
+                                  // console.log(employeeOptions);
                                   setFieldValue("employee_id", opt.value);
+                                  setFieldValue("supervisor",opt.reports_to._id )
                                   setFieldValue("ogid", opt.id);
                                 }}
                                 onBlur={setFieldTouched}
