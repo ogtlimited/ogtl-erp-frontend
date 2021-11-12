@@ -20,10 +20,12 @@ const LeavesUser = () => {
   const [medical, setmedical] = useState(0)
   const [remaining, setremaining] = useState(0);
   const [formMode, setformMode] = useState('add')
+  const [fetched, setfetched] = useState(false)
   const [loadedSelect, setloadedSelect] = useState(false)
   const [loadLeaves, setloadLeaves] = useState(false)
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
+      console.log(userId, 'USERID')
       const leaves = e.data.data.filter(f => f.employee_id._id == userId);
       const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
       const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
@@ -32,6 +34,7 @@ const LeavesUser = () => {
       setcasual(casual);
       setmedical(medic)
 
+      console.log('LEAVES', leaves)
       setallLeaves(leaves)
       if(allLeaves.length){
         setloadLeaves(true)
@@ -41,19 +44,20 @@ const LeavesUser = () => {
 
     })
   }
-  useEffect(() => {
-    const user = tokenService.getUser()
+ useEffect(() => {
+  let user = tokenService.getUser()
     setuserId(user._id)
-    console.log(allLeaves)
-    if(!loadLeaves){
+    if(userId){
       fetchLeaves()
-      // combineRequest()
     }
-    // if(allLeaves.length == 0){
-    // }
-    // console.log(user)
-    
-  }, [loadLeaves])
+    console.log(userId)
+ }, [userId])
+  useEffect(() => {
+    if (!fetched) {
+      console.log('FETCHED')
+      fetchLeaves();
+    }
+  }, [allEmployees, fetched]);
 
   useEffect(() => {
    console.log(formValue, submitted)
