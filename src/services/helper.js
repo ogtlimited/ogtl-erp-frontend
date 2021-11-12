@@ -26,6 +26,7 @@ class HelperService{
 
     formArrayToObject(arr){
         const objTemplate = {}
+        // console.log(arr)
         arr.forEach(e =>{
           if(e.type === 'select'){
             objTemplate[e.name] =  {
@@ -51,6 +52,7 @@ class HelperService{
     }
     arrayToJSONObject (arr){
       //header
+      // console.log(arr)
       var keys = arr[0];
    
       //vacate keys from main array

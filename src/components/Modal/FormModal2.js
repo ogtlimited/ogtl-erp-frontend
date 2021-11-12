@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import DynamicForm from '../Forms/DynamicForm';
 const FormModal2 = ({template, editData, setformValue, setsubmitted, title, formValue }) => {
     const [value, setvalue] = useState(null)
+    const [formSubmitted, setformSubmitted] = useState(false)
    useEffect(() => {
      setvalue(value)
      console.log(editData)
@@ -16,9 +17,12 @@ const FormModal2 = ({template, editData, setformValue, setsubmitted, title, form
        setsubmitted(true)
       };
       useEffect(() => {
-        setformValue(value)
+        if(formSubmitted){
+          setformValue(value)
+          setsubmitted(formSubmitted)
 
-      }, [value])
+        }
+      }, [value, formSubmitted])
       useEffect(() => {
 
       }, [template, formValue])
@@ -34,7 +38,7 @@ const FormModal2 = ({template, editData, setformValue, setsubmitted, title, form
         </button>
       </div>
       <div className="modal-body">
-        {template && <DynamicForm value={editData} setvalue={setvalue} formSchema={template}  />}
+        {template && <DynamicForm value={editData} setformSubmitted={setformSubmitted} setvalue={setvalue} formSchema={template}  />}
     </div>
   </div>
   </div>
