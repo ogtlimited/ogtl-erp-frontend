@@ -15,15 +15,15 @@ import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
 const Budget = () => {
   const [approval, setApproval] = useState([
     {
-      title: "Draft",
+      title: "draft",
       color: "text-primary",
     },
     {
-      title: "Approved",
+      title: "approved",
       color: "text-success",
     },
     {
-      title: "Rejected",
+      title: "rejected",
       color: "text-danger",
     },
   ]);
