@@ -176,7 +176,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="endDate">Due Date</label>
+                      <label htmlFor="endDate">End Date</label>
                       <input
                         name="endDate"
                         defaultValue={defaultValues.endDate}
