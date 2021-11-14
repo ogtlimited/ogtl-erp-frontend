@@ -4,15 +4,10 @@ export const LeaveApplicationFormJSON = {
        
         {
             name:'employee_id' ,
-            type:'select',
+            type:'text',
+            disabled: true,
             full: false,
             title:'Employee Id',
-            options: [
-                {
-                    value: 'f',
-                    label: '',
-                },
-            ],
             required:{
                 value:true,
                 message:'Employee Id is required'
