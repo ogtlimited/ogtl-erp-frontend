@@ -16,7 +16,7 @@ const Promotion = () => {
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchPromotion = () => {
     axiosInstance
       .get("/api/promotion")
@@ -63,9 +63,10 @@ const Promotion = () => {
         title: promotionFormJson.title,
         Fields: finalForm,
       });
+      if(!loadSelect) setloadSelect(true)
       console.log(template);
     });
-  }, []);
+  }, [loadSelect]);
 //create promotion
   useEffect(() => {
     console.log(submitted);
@@ -229,14 +230,17 @@ const Promotion = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Promotion
-            </a>
+            {loadSelect &&
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Promotion
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -245,12 +249,15 @@ const Promotion = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
-        editData={editData}
-        template={template}
-        setsubmitted={setSubmitted}
-        setformValue={setFormValue}
-      />
+      {loadSelect &&
+        <FormModal
+          editData={editData}
+          template={template}
+          setsubmitted={setSubmitted}
+          setformValue={setFormValue}
+        />
+      
+      }
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

@@ -15,7 +15,7 @@ const Resignation = () => {
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchResignation = () => {
     axiosInstance
       .get("/Exit")
@@ -53,6 +53,7 @@ const Resignation = () => {
         Fields: finalForm,
       });
       console.log(template);
+      if(!loadSelect) setloadSelect(true)
     });
   }, []);
 
@@ -198,14 +199,17 @@ const Resignation = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Resignation
-            </a>
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Resignation
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -214,12 +218,16 @@ const Resignation = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
-        editData={editData}
-        template={template}
-        setsubmitted={setSubmitted}
-        setformValue={setFormValue}
-      />
+      {
+        loadSelect &&
+        <FormModal
+          editData={editData}
+          template={template}
+          setsubmitted={setSubmitted}
+          setformValue={setFormValue}
+        />
+
+      }
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}
