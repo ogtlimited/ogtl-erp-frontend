@@ -25,14 +25,14 @@ const ShiftAssignment = () => {
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
-  const [template, setTemplate] = useState(shiftAssignmentFormJson);
+  const [template, setTemplate] = useState(null);
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [shiftsOpt, setShiftOpts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const { combineRequest, showAlert, setformUpdate } = useAppContext();
-
+  const [loadSelect, setloadSelect] = useState(false)
   const editRow = (row) => {
     // setformUpdate(null)
     setformUpdate(row);
@@ -104,8 +104,11 @@ const ShiftAssignment = () => {
         title: shiftAssignmentFormJson.title,
         Fields: finalForm,
       });
+      if(template == null){
+        setloadSelect(true)
+      }
     });
-  }, []);
+  }, [loadSelect]);
 
   useEffect(() => {
     if (formValue) {
@@ -271,6 +274,8 @@ const ShiftAssignment = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+            {
+              loadSelect && 
             <a
               href="#"
               className="btn add-btn m-r-5"
@@ -279,6 +284,7 @@ const ShiftAssignment = () => {
             >
               Add Shift Assignment
             </a>
+            }
           </div>
         </div>
       </div>
@@ -304,13 +310,16 @@ const ShiftAssignment = () => {
         template={template}
         setsubmitted={setSubmitted}
       /> */}
+      {loadSelect && 
       <FormModal2
         title="Create Shift Assignment"
         editData={editData}
         setformValue={setFormValue}
         template={HelperService.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
-      />
+        />
+      
+      }
       <ConfirmModal
         title="Shift Assignment"
         selectedRow={selectedRow}
