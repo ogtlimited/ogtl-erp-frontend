@@ -22,7 +22,7 @@ const AllEmployeesAdmin = () => {
   const [editData, seteditData] = useState({});
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
-  const [departments, setDepartments] = useState([]);
+  const [filters, setfilters] = useState([])
   const [toggleModal, settoggleModal] = useState(false);
   const [uploading, setuploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -99,7 +99,23 @@ const AllEmployeesAdmin = () => {
           value: e._id,
         };
       });
-      setDepartments(deptopts);
+      setfilters([
+        {
+          name: 'projectId',
+          placeholder: 'Filter by campaign',
+          options: campaingOpts
+        },
+        {
+          name: 'department',
+          placeholder: 'Filter by department',
+          options: deptopts
+        },
+        {
+          name: 'designation',
+          placeholder: 'Filter by designation',
+          options: designationOpts
+        },
+      ])
       const finalForm = employeeFormJson.Fields.map((field) => {
         if (field.name === "designation") {
           field.options = designationOpts;
@@ -255,7 +271,7 @@ const AllEmployeesAdmin = () => {
       <EmployeesTable
         data={allEmployees}
         seteditData={seteditData}
-        departments={departments}
+        filters={filters}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />

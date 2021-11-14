@@ -24,7 +24,7 @@ const EmployeesTable = ({
   data,
   defaultSorted,
   selectedOption,
-  departments,
+  filters,
   seteditData,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
@@ -39,15 +39,18 @@ const EmployeesTable = ({
   const imageUrl = "https://erp.outsourceglobal.com";
   const breadcrumb = "Admin Attendance";
   const total = [];
-  let attendanceDateFilter;
-  const handleClick = (i) => {
+  useEffect(() => {
+  
+  }, [filters])
+  const handleClick = (i, type) => {
+    console.log(i, unfiltered)
     if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
     } else {
       const filt = unfiltered.filter((e) =>
-        i.label.includes(e.department.department)
+        i.value == e[type]?._id
       );
-
+      console.log(filt)
       setAllEmployee(filt);
     }
   };
@@ -59,6 +62,7 @@ const EmployeesTable = ({
   //    console.log(data)
 
   useEffect(() => {
+    console.log(filters)
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
@@ -217,15 +221,26 @@ const EmployeesTable = ({
                 className="inputSearch"
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
-              <Select
-                defaultValue={selectedOption}
-                onChange={handleClick}
-                options={departments}
-                placeholder="Filter Department"
-                isClearable={true}
-                style={{ display: "inline-block" }}
-                // formatGroupLabel={formatGroupLabel}
-              />
+              <div className="d-flex row">
+               
+                {filters && filters.map(f =>(
+                   <div className="col-md-4">
+                   <Select
+                     defaultValue={selectedOption}
+                     onChange={(i) => handleClick(i, f.name)}
+                     options={f.options}
+                     placeholder={f.placeholder}
+                     isClearable={true}
+                     style={{ display: "inline-block" }}
+                     // formatGroupLabel={formatGroupLabel}
+                   />
+   
+                   </div>
+                ))}
+               
+                
+
+              </div>
 
               <ExportCSVButton
                 className="float-right btn export-csv"

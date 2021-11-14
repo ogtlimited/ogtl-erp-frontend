@@ -15,7 +15,7 @@ const Termination = () => {
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchTermination = () => {
     axiosInstance
       .get("/api/termination")
@@ -52,6 +52,7 @@ const Termination = () => {
         title: terminationFormJson.title,
         Fields: finalForm,
       });
+      if(!loadSelect) setloadSelect(true)
       console.log(template);
     });
   }, []);
@@ -196,14 +197,17 @@ const Termination = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Termination
-            </a>
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Termination
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -212,12 +216,15 @@ const Termination = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
+      {loadSelect &&
+      
       <FormModal
         editData={editData}
         template={template}
         setsubmitted={setSubmitted}
         setformValue={setFormValue}
       />
+      }
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}
