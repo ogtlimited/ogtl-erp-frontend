@@ -115,7 +115,7 @@ const Sidebar = () => {
                     <Link to="/admin/email">Email</Link>
                   </li>
                   <li>
-                    <Link className="" to="/apps/file-manager">
+                    <Link className="" to="/admin/file-manager">
                       File Manager
                     </Link>
                   </li>
@@ -187,13 +187,13 @@ const Sidebar = () => {
                     </Link>
                   </li>
 
-                  {canView("HR") && (
+                  {/* {canView("HR") && (
                     <li>
                       <Link className="" to="/admin/leave-settings">
                         Leave Settings
                       </Link>
                     </li>
-                  )}
+                  )} */}
                   {canView("HR") && (
                     <li>
                       <Link className="" to="/admin/attendance-admin">

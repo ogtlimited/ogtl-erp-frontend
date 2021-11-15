@@ -64,9 +64,10 @@ const LeavesUser = () => {
    if(submitted){
     axiosInstance.post('/leave-application', formValue).then( e =>{
       console.log(e)
-      showAlert(true, e?.data.message, "alert alert-success");
+      showAlert(true, e?.data?.message, "alert alert-success");
     }).catch(err =>{
-      showAlert(true, err?.data.message, "alert alert-danger");
+      console.log(err)
+      showAlert(true, err?.data?.message, "alert alert-danger");
     })
    }
   }, [formValue, submitted])
@@ -184,16 +185,18 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+            {loadedSelect &&
+              <a
+                  href="#"
+                  className="btn add-btn"
+                  data-toggle="modal"
+                  onClick={() => setformMode('add')}
+                  data-target="#FormModal"
+                >
+                  <i className="fa fa-plus"></i> Add Leave
+                </a>
             
-          <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              onClick={() => setformMode('add')}
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Leave
-            </a>
+            }
           </div>
         </div>
       </div>

@@ -59,6 +59,7 @@ import ExpenseHeads from "./pages/ExpenseHeads/ExpenseHeads";
 import ViewEmail from "./pages/In-Apps/ViewEmail";
 import BalanceSheet from "./pages/Reports/BalanceSheet";
 import SingleEmail from "./pages/In-Apps/SingleEmail";
+import FileManager from "./pages/In-Apps/FileManager";
 
 // const routes = [{
 //   title: 'Main',
@@ -351,6 +352,12 @@ const routes = [
     title: "Email",
     path: "/email",
     component: Email,
+    layout: "/admin",
+  },
+  {
+    title: "File Manager",
+    path: "/file-manager",
+    component: FileManager,
     layout: "/admin",
   },
   {

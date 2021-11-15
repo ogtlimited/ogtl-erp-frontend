@@ -41,10 +41,11 @@ const Designations = withRouter(({ history }) => {
   }, []);
 
   const handleClick = (i) => {
+    console.log(i, unfiltered)
     if (i?.value === "All" || i === null) {
       setallDesignation(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) => i.label.includes(e.designation));
+      const filt = unfiltered.filter((e) => { console.log(e); return i.label.includes(e.designation)} );
 
       setallDesignation(filt);
     }

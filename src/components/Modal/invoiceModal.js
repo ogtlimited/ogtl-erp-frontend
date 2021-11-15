@@ -27,6 +27,16 @@ const InvoiceModal = () => {
     <Formik
       enableReinitialize
       initialValues={{ ...initialValues }}
+      validationSchema={Yup.object().shape({
+        customerId: Yup.string().required("Customer Id is required"),
+        invoice_date: Yup.string().required("Invoice Date is required."),
+        title: Yup.string().required("Title  is required."),
+        // goals: Yup.string().required("goals is required."),
+        // reality: Yup.string().required("reality is required."),
+        // opportunities: Yup.string().required("opportunities is required."),
+        // way_forward: Yup.string().required("way_forward is required."),
+        //   .min(6, "Password is too short - should be 6 chars minimum"),
+      })}
       onSubmit={(values, { setSubmitting }) => {
         const payload = {
           ...values,

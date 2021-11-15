@@ -15,7 +15,7 @@ const ScoreCards = () => {
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchScoreCard = () => {
     axiosInstance
       .get("/scoreCard")
@@ -52,6 +52,7 @@ const ScoreCards = () => {
         title: scoreCardsJSON.title,
         Fields: finalForm,
       });
+      if(!loadSelect) setloadSelect(true)
       console.log(template);
     });
   }, []);
@@ -191,14 +192,17 @@ const ScoreCards = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Score Card
-            </a>
+            {loadSelect &&
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Score Card
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -207,12 +211,15 @@ const ScoreCards = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
-        editData={editData}
-        template={template}
-        setsubmitted={setSubmitted}
-        setformValue={setFormValue}
-      />
+      {loadSelect && 
+        <FormModal
+          editData={editData}
+          template={template}
+          setsubmitted={setSubmitted}
+          setformValue={setFormValue}
+        />
+      
+      }
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

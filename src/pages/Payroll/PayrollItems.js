@@ -18,7 +18,7 @@ const PayrollItems = () => {
   const [path, setpath] = useState("/personal-details");
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const { combineRequest } = useAppContext();
 
   useEffect(() => {
@@ -62,9 +62,12 @@ const PayrollItems = () => {
         title: template.title,
         Fields: finalForm,
       });
+      if(template !== null){
+        setloadSelect(true)
+      }
       console.log("my template", template);
     });
-  }, [template, combineRequest]);
+  }, [template, combineRequest, loadSelect]);
 
   useEffect(() => {
     fetchedCombineRequest();
@@ -135,20 +138,25 @@ const PayrollItems = () => {
           setformType={setformType}
           submitted={submitted}
           formValue={formValue}
+          loadSelect={loadSelect}
         />
         <SalaryStructure
           data={data}
+          loadSelect={loadSelect}
           fetchSalaryStructures={fetchSalaryStructures}
         />
-        <SalaryAssignment salaryStructure={data} />
+        <SalaryAssignment loadSelect={loadSelect}  salaryStructure={data} />
       </div>
-      <FormModal
-        editData={editData}
-        setformValue={setformValue}
-        settemplate={settemplate}
-        template={template}
-        setsubmitted={setsubmitted}
-      />
+      {loadSelect && 
+        <FormModal
+          editData={editData}
+          setformValue={setformValue}
+          settemplate={settemplate}
+          template={template}
+          setsubmitted={setsubmitted}
+        />
+      
+      }
     </>
   );
 };

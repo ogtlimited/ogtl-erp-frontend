@@ -17,6 +17,7 @@ const AptitudeTest = () => {
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState({});
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchAllTests = () => {
     axiosInstance
       .get("/api/test")
@@ -56,12 +57,17 @@ const AptitudeTest = () => {
           title: applicationTestFormJson.title,
           Fields: finalForm,
         });
+        console.log('load', loadSelect)
+        if(!loadSelect){
+          setloadSelect(true)
+          console.log(loadSelect)
+        }
         console.log(template);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [loadSelect]);
 
   //create aptitude test
   useEffect(() => {
@@ -227,14 +233,17 @@ const AptitudeTest = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Add Aptitude Test
-            </a>
+            {loadSelect &&
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                Add Aptitude Test
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -243,12 +252,15 @@ const AptitudeTest = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
-        editData={editData}
-        setformValue={setFormValue}
-        template={applicationTestFormJson}
-        setsubmitted={setSubmitted}
-      />
+      {loadSelect &&
+        <FormModal
+          editData={editData}
+          setformValue={setFormValue}
+          template={applicationTestFormJson}
+          setsubmitted={setSubmitted}
+        />
+      
+      }
     </>
   );
 };

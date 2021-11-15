@@ -34,7 +34,7 @@ const JobOpening = () => {
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const [clickedRow, setclickedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const [unfiltered, setunfiltered] = useState([]);
 
   const editRow = (row) => {
@@ -70,6 +70,7 @@ const JobOpening = () => {
   useEffect(() => {
     combineRequest()
       .then((res) => {
+        console.log(res)
         const { projects, designations } = res.data.createEmployeeFormSelection;
         const projectsOpts = projects?.map((e) => {
           return {
@@ -97,11 +98,15 @@ const JobOpening = () => {
           title: jobOpeningFormJson.title,
           Fields: finalForm,
         });
+        console.log(template)
+        if(!loadSelect){
+          setloadSelect(true)
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [loadSelect]);
 
   //create job opening
   useEffect(() => {
@@ -294,14 +299,17 @@ const JobOpening = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Add Job Opening
-            </a>
+            {loadSelect &&
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                Add Job Opening
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -321,14 +329,15 @@ const JobOpening = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-
+      {loadSelect &&
       <FormModal2
         title="Create Job Opening"
         editData={editData}
         setformValue={setFormValue}
-        template={HelperService.formArrayToObject(jobOpeningFormJson.Fields)}
+        template={HelperService.formArrayToObject(template.Fields)}
         setsubmitted={setSubmitted}
       />
+}
       <ConfirmModal
         title="Job Opening"
         selectedRow={selectedRow}
