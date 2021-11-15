@@ -20,7 +20,7 @@ const Asset = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false);
   const editRow = (row) => {
     setformUpdate(row);
     setclickedRow(row);
@@ -63,9 +63,12 @@ const Asset = () => {
         title: AssetFormJson.title,
         Fields: finalForm,
       });
+      if(!loadSelect){
+        setloadSelect(true)
+      }
       console.log(template);
     });
-  }, []);
+  }, [loadSelect]);
 
   //create assets
   useEffect(() => {
@@ -134,7 +137,7 @@ const Asset = () => {
       sort: true,
     },
     {
-      dataField: "assetName",
+      dataField: "assetName.productName",
       text: "Asset name",
       sort: true,
     },
@@ -202,14 +205,18 @@ const Asset = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Assets
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Assets
+            
             </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -218,13 +225,17 @@ const Asset = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal2
-        title="Create Assets"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
+      {loadSelect && 
+        <FormModal2
+          title="Create Assets"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(template.Fields)}
+          setsubmitted={setSubmitted}
+        />
+      
+      
+      }
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}
