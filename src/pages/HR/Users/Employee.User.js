@@ -29,43 +29,87 @@ const EmployeeUser = () => {
           <section className="dash-section">
             <h1 className="dash-sec-title">Today</h1>
             <div className="dash-sec-content">
-              {notifications.length ? (
-                notifications.map((notification, index) => (
-                  <div className="dash-info-list" key={index}>
-                    <Link className="dash-card  ">
-                      <div className="dash-card-container">
-                        <div className="dash-card-icon">
-                          <i className="fa fa-hourglass-o"></i>
-                        </div>
-                        <div className="dash-card-content">
-                          <p>A new {notification.module} was added</p>
-                        </div>
-                        <div className="dash-card-avatars">
-                          <div className="e-avatar">
-                            <img
-                              src="assets/img/profiles/avatar-09.jpg"
-                              alt=""
-                            />
-                          </div>
+              {notifications.map((notification, index) => (
+                <div className="dash-info-list" key={index}>
+                  <Link className="dash-card  ">
+                    <div className="dash-card-container">
+                      <div className="dash-card-icon">
+                        <i className="fa fa-hourglass-o"></i>
+                      </div>
+                      <div className="dash-card-content">
+                        <p>A new {notification.module} was added</p>
+                      </div>
+                      <div className="dash-card-avatars">
+                        <div className="e-avatar">
+                          <img src="assets/img/profiles/avatar-09.jpg" alt="" />
                         </div>
                       </div>
-                    </Link>
-                  </div>
-                ))
-              ) : (
-                <div className="card">
-                  <div className="card-body">
-                    <div className="time-list">
-                      <div className="dash-stats-list">
-                        <h3>No New Notifications</h3>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+
+              {/* <div className="dash-info-list">
+                <Link className="dash-card">
+                  <div className="dash-card-container">
+                    <div className="dash-card-icon">
+                      <i className="fa fa-suitcase"></i>
+                    </div>
+                    <div className="dash-card-content">
+                      <p>You are away today</p>
+                    </div>
+                    <div className="dash-card-avatars">
+                      <div className="e-avatar">
+                        <img src="assets/img/profiles/avatar-02.jpg" alt="" />
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </Link>
+              </div>
+              <div className="dash-info-list">
+                <Link className="dash-card">
+                  <div className="dash-card-container">
+                    <div className="dash-card-icon">
+                      <i className="fa fa-building-o"></i>
+                    </div>
+                    <div className="dash-card-content">
+                      <p>You are working from home today</p>
+                    </div>
+                    <div className="dash-card-avatars">
+                      <div className="e-avatar">
+                        <img src="assets/img/profiles/avatar-02.jpg" alt="" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div> */}
             </div>
           </section>
-
+          {/* <section className="dash-section">
+            <h1 className="dash-sec-title">Tomorrow</h1>
+            <div className="dash-sec-content">
+              <div className="dash-info-list">
+                <div className="dash-card">
+                  <div className="dash-card-container">
+                    <div className="dash-card-icon">
+                      <i className="fa fa-suitcase"></i>
+                    </div>
+                    <div className="dash-card-content">
+                      <p>2 people will be away tomorrow</p>
+                    </div>
+                    <div className="dash-card-avatars">
+                      <Link className="e-avatar">
+                        <img src="assets/img/profiles/avatar-04.jpg" alt="" />
+                      </Link>
+                      <Link className="e-avatar">
+                        <img src="assets/img/profiles/avatar-08.jpg" alt="" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section> */}
           {/* <section className="dash-section">
             <h1 className="dash-sec-title">Next seven days</h1>
             <div className="dash-sec-content">

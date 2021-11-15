@@ -77,6 +77,30 @@ const Header = () => {
           <NotificationBox />
         </li>
 
+        <li className="nav-item dropdown">
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-toggle="dropdown"
+          >
+            <i className="fa fa-comment-o"></i>{" "}
+            <span className="badge badge-pill">8</span>
+          </a>
+          <div className="dropdown-menu notifications">
+            <div className="topnav-dropdown-header">
+              <span className="notification-title">Messages</span>
+              <a href="javascript:void(0)" className="clear-noti">
+                {" "}
+                Clear All{" "}
+              </a>
+            </div>
+            <div className="noti-content"></div>
+            <div className="topnav-dropdown-footer">
+              <Link to="chat">View all Messages</Link>
+            </div>
+          </div>
+        </li>
+
         <li className="nav-item dropdown has-arrow main-drop">
           <a
             href="#"

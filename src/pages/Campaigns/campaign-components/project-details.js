@@ -1,209 +1,194 @@
-import React, { useState } from "react";
-import male from "../../../assets/img/male_avater.png";
-import female from "../../../assets/img/female_avatar.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import moment from "moment";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
-
-const CampaignRightCard = ({ campaign_info }) => {
-  const [approval, setApproval] = useState([
-    {
-      title: "open",
-      color: "text-primary",
-    },
-    {
-      title: "approved",
-      color: "text-success",
-    },
-    {
-      title: "suspended",
-      color: "text-warning",
-    },
-    {
-      title: "rejected",
-      color: "text-danger",
-    },
-  ]);
-  const [status, setStatus] = useState("");
-  const lead = [
-    {
-      employee_name: "Oga Ahmed",
-      designation: "Software Engineer",
-      img: male,
-    },
-    {
-      employee_name: "Margaret Iman",
-      designation: "Software Engineer",
-      img: female,
-    },
-  ];
-  const users = [
-    {
-      employee_name: "Anthony Potbelly",
-      designation: "Software Engineer",
-      img: male,
-    },
-    {
-      employee_name: "Mazi Ogundu",
-      designation: "Software Engineer",
-      img: male,
-    },
-  ];
-
+import React from "react";
+import male from '../../../assets/img/male_avater.png'
+import female from '../../../assets/img/female_avatar.png'
+import male2 from '../../../assets/img/male_avater2.png'
+const CampaignRightCard = () => {
+    const lead = [
+        {
+        employee_name: 'Oga Ahmed',
+        designation: 'Software Engineer',
+        img: male
+        },
+        {
+        employee_name: 'Margaret Iman',
+        designation: 'Software Engineer',
+        img: female
+        },
+    ]
+    const users = [{
+        employee_name: 'Anthony Potbelly',
+        designation: 'Software Engineer',
+        img: male
+        },
+        {
+        employee_name: 'Mazi Ogundu',
+        designation: 'Software Engineer',
+        img: male
+        },]
   return (
     <>
-      <div className="card">
-        <div className="card-body">
-          <h6 className="card-title m-b-15">Campaign details</h6>
-          <table className="table table-striped table-border">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title m-b-15">Campaign details</h6>
+          <table class="table table-striped table-border">
             <tbody>
               <tr>
+                <td>Cost:</td>
+                <td class="text-right">$1200</td>
+              </tr>
+              <tr>
                 <td>Total Hours:</td>
-                <td className="text-right">
-                  {campaign_info?.hours_of_operation} Hours
-                </td>
+                <td class="text-right">100 Hours</td>
               </tr>
               <tr>
                 <td>Created:</td>
-                <td className="text-right">
-                  {moment(campaign_info?.createdAt).format("Do MMM, YYYY")}
-                </td>
-              </tr>
-              <tr>
-                <td>Start Date:</td>
-                <td className="text-right">
-                  {moment(campaign_info?.start_date).format("Do MMM, YYYY")}
-                </td>
+                <td class="text-right">22 Sept, 2021</td>
               </tr>
               <tr>
                 <td>End Date:</td>
-                <td className="text-right">
-                  {moment(campaign_info?.end_date).format("Do MMM, YYYY")}
-                </td>
+                <td class="text-right">22 Sept, 2023</td>
               </tr>
               <tr>
                 <td>Status:</td>
-                <td className="text-right">
-                  <GeneralApproverBtn
-                    options={approval}
-                    setStatus={setStatus}
-                    value={campaign_info?.status}
-                  />
+                <td class="text-right">
+                  <div class="btn-group">
+                    <a
+                      href="#"
+                      class="badge badge-success dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      Approved{" "}
+                    </a>
+                    <div
+                      class="dropdown-menu dropdown-menu-right"
+                      x-placement="bottom-end"
+                    >
+                      <a class="dropdown-item" href="#">
+                        <i class="fa fa-dot-circle-o text-danger"></i> Rejected
+                        
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="fa fa-dot-circle-o text-info"></i> Suspended 
+                        
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="fa fa-dot-circle-o text-primary"></i> Open
+                        
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        <i class="fa fa-dot-circle-o text-success"></i> Approved
+                        
+                      </a>
+                    </div>
+                  </div>
                 </td>
               </tr>
               <tr>
                 <td>Created by:</td>
-                <td className="text-right">
-                  <a href="/">
-                    {campaign_info?.creator?.first_name}{" "}
-                    {campaign_info?.creator?.last_name}
-                  </a>
+                <td class="text-right">
+                  <a href="/">Amal Hassan</a>
                 </td>
               </tr>
               <tr>
-                <td>Bill Structure:</td>
-                <td className="text-right">
-                  {campaign_info?.billing_structure}
-                </td>
-              </tr>
-              <tr>
-                <td>Diallers:</td>
-                <td className="text-right">{campaign_info?.diallers}</td>
-              </tr>
-              <tr>
-                <td>Number of Employees:</td>
-                <td className="text-right">
-                  {campaign_info?.number_of_employees}
-                </td>
+                <td>Status:</td>
+                <td class="text-right">Active</td>
               </tr>
             </tbody>
           </table>
-          {/* <p className="m-b-5">
-            Progress <span className="text-success float-right">40%</span>
+          <p class="m-b-5">
+            Progress <span class="text-success float-right">40%</span>
           </p>
-          <div className="progress progress-xs mb-0">
+          <div class="progress progress-xs mb-0">
             <div
-              className="progress-bar bg-success"
+              class="progress-bar bg-success"
               role="progressbar"
               data-toggle="tooltip"
               title=""
               style={{ width: "40%" }}
               data-original-title="40%"
             ></div>
-          </div> */}
+          </div>
         </div>
       </div>
-      <div className="card project-user">
-        <div className="card-body">
-          <h6 className="card-title m-b-20">
+      <div class="card project-user">
+        <div class="card-body">
+          <h6 class="card-title m-b-20">
             Assigned Leader{" "}
             <button
               type="button"
-              className="float-right btn btn-primary btn-sm"
+              class="float-right btn btn-primary btn-sm"
               data-toggle="modal"
               data-target="#assign_leader"
             >
-              <i className="fa fa-plus"></i> Add
+              <i class="fa fa-plus"></i> Add
             </button>
           </h6>
-          <ul className="list-box">
-            {lead.map((e) => (
-              <li>
-                <a href="profile.html">
-                  <div className="list-item">
-                    <div className="list-left">
-                      <span className="avatar">
-                        <img alt="" src={e.img} />
-                      </span>
-                    </div>
-                    <div className="list-body">
-                      <span className="message-author">{e.employee_name}</span>
-                      <div className="clearfix"></div>
-                      <span className="message-content">Team Leader</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            ))}
+          <ul class="list-box">
+              {lead.map(e =>(
+                  <li>
+                    <a href="profile.html">
+                      <div class="list-item">
+                        <div class="list-left">
+                          <span class="avatar">
+                            <img alt="" src={e.img} />
+                          </span>
+                        </div>
+                        <div class="list-body">
+                          <span class="message-author">{e.employee_name}</span>
+                          <div class="clearfix"></div>
+                          <span class="message-content">Team Leader</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+
+              ))}
+           
           </ul>
         </div>
       </div>
-
-      <div className="card project-user">
-        <div className="card-body">
-          <h6 className="card-title m-b-20">
+    
+      <div class="card project-user">
+        <div class="card-body">
+          <h6 class="card-title m-b-20">
             Assigned Members{" "}
             <button
               type="button"
-              className="float-right btn btn-primary btn-sm"
+              class="float-right btn btn-primary btn-sm"
               data-toggle="modal"
               data-target="#assign_leader"
             >
-              <i className="fa fa-plus"></i> Add
+              <i class="fa fa-plus"></i> Add
             </button>
           </h6>
-          <ul className="list-box">
-            {users.map((e) => (
-              <li>
-                <a href="profile.html">
-                  <div className="list-item">
-                    <div className="list-left">
-                      <span className="avatar">
-                        <img alt="" src={e.img} />
-                      </span>
-                    </div>
-                    <div className="list-body">
-                      <span className="message-author">{e.employee_name}</span>
-                      <div className="clearfix"></div>
-                      <span className="message-content">{e.designation}</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            ))}
+          <ul class="list-box">
+              {users.map(e =>(
+                  <li>
+                    <a href="profile.html">
+                      <div class="list-item">
+                        <div class="list-left">
+                          <span class="avatar">
+                            <img alt="" src={e.img} />
+                          </span>
+                        </div>
+                        <div class="list-body">
+                          <span class="message-author">{e.employee_name}</span>
+                          <div class="clearfix"></div>
+                          <span class="message-content">{e.designation}</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  
+
+              ))}
+           
           </ul>
         </div>
       </div>
+    
     </>
   );
 };
