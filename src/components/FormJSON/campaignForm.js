@@ -37,6 +37,12 @@ export const campaignFormJson = {
       required: { value: true, message: "Field is required" },
     },
     {
+      name: "type_of_employees",
+      type: "text",
+      title: "Type of employees",
+      required: { value: true, message: "Field is required" },
+    },
+    {
       name: "start_date",
       type: "date",
       title: "Start date",
@@ -98,30 +104,30 @@ export const campaignFormJson = {
       ],
       required: { value: true, message: "Field is required" },
     },
-    {
-      name: "status",
-      type: "select",
-      title: "Status",
-      options: [
-        {
-          label: "Open",
-          value: "open",
-        },
-        {
-          label: "Approved",
-          value: "approved",
-        },
-        {
-          label: "Rejected",
-          value: "rejected",
-        },
-        {
-          label: "Suspended",
-          value: "suspended",
-        },
-      ],
-      required: { value: true, message: "Field is required" },
-    },
+    // {
+    //   name: "status",
+    //   type: "select",
+    //   title: "Status",
+    //   options: [
+    //     {
+    //       label: "Open",
+    //       value: "open",
+    //     },
+    //     {
+    //       label: "Approved",
+    //       value: "approved",
+    //     },
+    //     {
+    //       label: "Rejected",
+    //       value: "rejected",
+    //     },
+    //     {
+    //       label: "Suspended",
+    //       value: "suspended",
+    //     },
+    //   ],
+    //   required: { value: true, message: "Field is required" },
+    // },
     {
       name: "manager",
 
