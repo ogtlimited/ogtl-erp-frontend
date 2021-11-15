@@ -1,6 +1,6 @@
-export const branch = {
+export const branchFormJSON = {
     title: 'Branch Form',
-    Fields: [
+    branch: [
         {
             name:'branch' ,
             type:'text',

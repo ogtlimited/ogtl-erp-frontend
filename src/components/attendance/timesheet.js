@@ -10,18 +10,17 @@ const Timesheet = () => {
   const [monthAttendance, setmonthAttendance] = useState([])
   const [workedTime, setworkedTime] = useState('0:00')
   const [user, setuser] = useState(tokenService.getUser())
-  const {fetchEmployeeAttendance} = useAppContext()
+  const {fetchEmployeeAttendance, employeeAttendance} = useAppContext()
   const [attendance, setattendance] = useState(tokenService.getAttendance())
   const punchInOut = () =>{
-    console.log(attendance)
     const currUser = user
+    console.log(user)
     
     if(!attendance){
       const obj = {
-        ogId: currUser.ogid,
         clockInTime: new Date(),
-        
-        departmentId: currUser.department._id
+
+        departmentId: currUser.department._id ? currUser.department._id : currUser.projectId._id
       }
       axiosInstance.post('/api/attendance', obj).then(e =>{
         fetchEmployeeAttendance()
@@ -44,6 +43,11 @@ const Timesheet = () => {
     }
   }
   useEffect(() => {
+    setattendance(employeeAttendance[0])
+   console.log(employeeAttendance)
+  }, [employeeAttendance])
+  useEffect(() => {
+    console.log(employeeAttendance)
     const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
     setworkedTime(wt)
     const shiftEnd = user?.default_shift?.end_time
@@ -61,7 +65,7 @@ const Timesheet = () => {
       tokenService.removeAttendance()
     }
   
-  }, [])
+  }, [attendance])
   useEffect(() => {
     const user = tokenService.getUser()
     console.log(user)

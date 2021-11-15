@@ -145,6 +145,9 @@ const Sidebar = () => {
                       <li className="">
                         <Link to="/admin/leads">Leads</Link>
                       </li>
+                      <li className="">
+                        <Link to="/admin/branch">Branch</Link>
+                      </li>
                     </ul>
                   </li>
                 </>
@@ -618,6 +621,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
+             
               {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}

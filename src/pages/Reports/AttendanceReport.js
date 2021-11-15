@@ -1,12 +1,67 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
 import { textFilter, selectFilter  } from 'react-bootstrap-table2-filter';
 import LeavesTable from '../../components/Tables/EmployeeTables/Leaves/LeaveTable';
 import data from '../../db/attendace-report.json'
+import { useAppContext } from '../../Context/AppContext';
+import axiosInstance from '../../services/api';
+import moment from 'moment';
 const AttendanceReport = () => {
+  const { combineRequest, showAlert, setformUpdate } = useAppContext();
+  const [depts, setdepts] = useState([])
+  const [attendance, setattendance] = useState([])
+ const [campaign, setcampaign] = useState([])
+ const [query, setquery] = useState(null)
+ const [queryType, setqueryType] = useState('departmentId')
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
         ];
+
+    useEffect(() => {
+      combineRequest()
+      .then((res) => {
+        console.log(res)
+        const { projects, dept } = res.data.createEmployeeFormSelection;
+        const projectsOpts = projects?.map((e) => {
+          return {
+            label: e.project_name,
+            value: e._id,
+          };
+        });
+        const deptOpts = dept?.map((e) => {
+          return {
+            label: e.designation,
+            value: e._id,
+          };
+        });
+       setcampaign(projectsOpts)
+       setdepts(deptOpts)
+       setquery(projectsOpts[0].value)
+       if(query){
+         axiosInstance.get(`/api/attendance?startOfMonth=2021-11-01&endOfMonth=2021-11-31&departmentId=613a7d5b8f7b0734ccfa1f50`).then( res =>{
+           console.log(res.data)
+           let data = res.data.data
+           setattendance(data)
+           for (const i of data) {
+             console.log(i)
+             
+           }
+         })
+        // const startOfMonth= new Date(moment().startOf('M')).toLocaleDateString()
+        //  const endOfMonth= new Date(moment().endOf('M')).toLocaleDateString()
+        //  axiosInstance.get(`/api/attendance?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}&${queryType}=${query}`).then( res =>{
+        //    console.log(res.data)
+        //  })
+       }
+       console.log(query)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }, [query])
+    useEffect(() => {
+     console.log(attendance)
+    }, [attendance])
     const empOpts = Object.assign({}, data.map(e => e.employee_name))
     const monthOptions = Object.assign({}, monthNames)
     const getHour = (e) =>{
@@ -16,54 +71,46 @@ const AttendanceReport = () => {
     const d = new Date();
     const columns = [
         {
-          dataField: "employee_name",
+          dataField: "first_name",
           text: "Employee name",
           headerStyle: { width: "450px" },
-          filter:  selectFilter({
-            options: empOpts
-          })
-        },
-        {
-          dataField: "clock_in",
-          text: "Clock In",
-          sort: true,
-          headerStyle: { minWidth: "150px" },
-        },
-        {
-          dataField: "clock_out",
-          text: "Clock Out",
-          sort: true,
-          headerStyle: { minWidth: "100px" }
-        },
-        {
-          dataField: "",
-          text: "Total Hours",
-          sort: true,
-          headerStyle: { minWidth: "100px" },
-          formatter: (value, row) =>(
-            <span>{getHour(row.clock_out) - getHour(row.clock_in) }</span>
+          // filter:  selectFilter({
+          //   options: empOpts
+          // }),
+          formatter: (value,row) =>(
+            <span>{row.first_name } {row.last_name}</span>
         )
         },
         {
-          dataField: "",
+          dataField: "ogid",
+          text: "OGID",
+          sort: true,
+          headerStyle: { minWidth: "100px" },
+        },
+        {
+          dataField: "attendance.total_hours",
+          text: "Total Hours",
+          sort: true,
+          headerStyle: { minWidth: "100px" },
+        //   formatter: (value, row) =>(
+        //     <span>{getHour(row.clock_out) - getHour(row.clock_in) }</span>
+        // )
+        },
+        {
+          dataField: "attendance.month",
           text: "Month",
           sort: true,
           headerStyle: { minWidth: "200px" },
           filter: selectFilter({
             options: monthOptions
           }),
-          formatter: (value,row) =>(
-            <span>{monthNames[new Date(row.date).getMonth()]}</span>
-        )
+
         },
         {
-          dataField: "",
+          dataField: "attendance.year",
           text: "Year",
           sort: true,
           headerStyle: { minWidth: "100px" },
-          formatter: (value,row) =>(
-            <span>{new Date(row.date).getFullYear() }</span>
-        )
         },
 
       ];
@@ -80,7 +127,7 @@ const AttendanceReport = () => {
 </div>   
          <div className="row">
 <div className="col-sm-12">
-        <LeavesTable data={data} columns={columns} />
+        <LeavesTable data={attendance} columns={columns} />
 </div>
 </div>   
         </>

@@ -60,6 +60,7 @@ import ViewEmail from "./pages/In-Apps/ViewEmail";
 import BalanceSheet from "./pages/Reports/BalanceSheet";
 import SingleEmail from "./pages/In-Apps/SingleEmail";
 import FileManager from "./pages/In-Apps/FileManager";
+import Branch from "./pages/HR/Admin/Branch";
 
 // const routes = [{
 //   title: 'Main',
@@ -346,6 +347,12 @@ const routes = [
     title: "Campaign ",
     path: "/campaign-info/:id",
     component: CampaignInfo,
+    layout: "/admin",
+  },
+  {
+    title: "Branch ",
+    path: "/branch",
+    component: Branch,
     layout: "/admin",
   },
   {
