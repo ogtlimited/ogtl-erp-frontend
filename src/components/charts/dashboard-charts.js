@@ -2,7 +2,7 @@ import React from "react";
 import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 
-const DashboardChart = () => {
+const DashboardChart = ({title,dougnutTitle, data, dougnutData}) => {
   return (
    
       <div className="col-md-12">
@@ -10,17 +10,17 @@ const DashboardChart = () => {
           <div className="col-md-6 text-center">
             <div className="card">
               <div className="card-body">
-                <h3 className="card-title">INCOME</h3>
+                <h3 className="card-title">{title}</h3>
 
-                <VerticalBar />
+                <VerticalBar data={data} />
               </div>
             </div>
           </div>
           <div className="col-md-6 text-center">
             <div  className="card">
               <div className="card-body">
-                <h3 className="card-title">AGED RECEIVABLES</h3>
-                <DoughnutChart />
+                <h3 className="card-title">{dougnutTitle}</h3>
+                <DoughnutChart data={dougnutData} />
               </div>
             </div>
           </div>

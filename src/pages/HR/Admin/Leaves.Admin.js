@@ -44,7 +44,8 @@ const LeavesAdmin = () => {
       const update = {
         ...statusRow,
         status: status,
-        employee_id: statusRow.employee_id._id,
+        leave_approver: statusRow.employee_id._id,
+        employee_id: statusRow.leave_approver._id,
         from_date: new Date(statusRow.from_date),
         to_date: new Date(statusRow.to_date),
         posting_date: new Date(statusRow.posting_date),
@@ -176,8 +177,18 @@ const LeavesAdmin = () => {
       dataField: "leave_approver",
       text: "Approved By",
       sort: true,
-
       headerStyle: { minWidth: "100px", textAlign: "center" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <a href="" className="avatar">
+            <img alt="" src={male} />
+          </a>
+          <a href="">
+            {value.first_name + " " + value.last_name}{" "}
+            <span>{value.designation.designation}</span>
+          </a>
+        </h2>
+      ),
     },
     {
       dataField: "total_leave_days",
