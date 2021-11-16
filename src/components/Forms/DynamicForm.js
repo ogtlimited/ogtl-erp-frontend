@@ -12,7 +12,8 @@ import {
   CheckField,
   NumberField,
   TimeField,
-  FileField
+  FileField,
+  RichTextField
 } from "./FormElements";
 import * as Yup from "yup";
 import $ from "jquery";
@@ -107,6 +108,9 @@ const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }
     if (elementSchema.type === "textarea") {
       return <TextareaField {...props} />;
     }
+    if (elementSchema.type === "richText") {
+      return <RichTextField {...props} />;
+    }
 
     if (elementSchema.type === "select") {
       return <SelectField {...props} />;
@@ -157,7 +161,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }
           <form onSubmit={handleSubmit}>
           <div class="row">
           {Object.keys(formSchema).map((key, ind) => (
-            <div className={formSchema[key].type === 'textarea' ?  "col-sm-12" : formSchema[key].type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key}>
+            <div className={(formSchema[key].type === 'textarea' ||formSchema[key].type ===  'richText') ?  "col-sm-12" : formSchema[key].type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key}>
             
               {getFormElement(key, formSchema[key], setFieldValue)}
             </div>

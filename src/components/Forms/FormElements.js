@@ -5,17 +5,25 @@ import {
   Field,
   ErrorMessage,
   useFormikContext,
-
 } from "formik";
 import Select from "react-select";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
-  console.log(props)
+  console.log(props);
   return (
     <Formik {...props}>
-      render={({ values, errors, touched, handleSubmit, handleChange, setFieldValue }) => (
-        <> {props.children}</>
-      )}
+      render=
+      {({
+        values,
+        errors,
+        touched,
+        handleSubmit,
+        handleChange,
+        setFieldValue,
+      }) => <> {props.children}</>}
       {/* <FormikForm className="needs-validation" novalidate="">
         {props.children}
       </FormikForm> */}
@@ -109,6 +117,40 @@ export function PasswordField(props) {
     </>
   );
 }
+export function RichTextField(props) {
+  const { name, label, placeholder,setFieldValue, ...rest } = props;
+  return (
+    <>
+      <div className="form-group">
+        {label && (
+          <label className="col-form-label" for={name}>
+            {label}
+          </label>
+        )}
+        {/* <ReactQuill
+          onChange={(html) => setgoals(html)}
+          name={name}
+          
+        /> */}
+         <Field
+          component={ReactQuill}
+          name={name}
+          onChange={(html) => {
+            console.log(html);
+            setFieldValue(name, html);
+            // setFieldValue("employee_name", opt.value);
+          }}
+          className=" ml-0 w-100"
+        />
+
+        <ErrorMessage
+          name={name}
+          render={(msg) => <div style={{ color: "red" }}>{msg}</div>}
+        />
+      </div>
+    </>
+  );
+}
 export function CheckField(props) {
   const { name, label, placeholder, value, ...rest } = props;
   const { isChecked, setIsChecked } = useAppContext();
@@ -178,16 +220,19 @@ export function FileField(props) {
             {label}
           </label>
         )}
-         <label class="upload-csv" style={{padding: "5% 8px"}} id="v-pills-home">
-      <input
-        type="file"
-        style={{display: 'none'}}
-      />
-      <i style={{fontSize: '20px'}} className="fa fa-cloud-upload pr-4"></i>
+        <label
+          class="upload-csv"
+          style={{ padding: "5% 8px" }}
+          id="v-pills-home"
+        >
+          <input type="file" style={{ display: "none" }} />
+          <i
+            style={{ fontSize: "20px" }}
+            className="fa fa-cloud-upload pr-4"
+          ></i>
           Upload File
           {/* <p className="pt-3">{fileName}</p>  */}
-         
-      </label>
+        </label>
         {/* <Field
           className="form-control"
           type="file"
@@ -273,18 +318,17 @@ export function SelectField(props) {
           </label>
         )}
         <Field
-                                options={options}
-                                component={Select}
-                                defaultValue={value}
-                                name={name}
-                                onChange={(opt) => {
-                                  console.log(opt)
-                                  setFieldValue(name, opt.value);
-                                  // setFieldValue("employee_name", opt.value);
-                               }}
-                                
-                                className=" ml-0 w-100"
-                              />
+          options={options}
+          component={Select}
+          defaultValue={value}
+          name={name}
+          onChange={(opt) => {
+            console.log(opt);
+            setFieldValue(name, opt.value);
+            // setFieldValue("employee_name", opt.value);
+          }}
+          className=" ml-0 w-100"
+        />
         {/* <Field as="select" id={name} className="form-control" name={name}>
           <option value="">Choose...</option>
           {options.map((optn, index) => (
