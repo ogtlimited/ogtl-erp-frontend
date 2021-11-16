@@ -98,6 +98,13 @@ const Sidebar = () => {
                       </Link>
                     </li>
                   )}
+                  {canView("HR") && (
+                    <li>
+                      <Link className="active" to="/admin/hr-dashboard">
+                        HR Dashboard
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link className="" to="/admin/employee-dashboard">
                       Employee Dashboard

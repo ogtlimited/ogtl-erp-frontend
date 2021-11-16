@@ -60,11 +60,17 @@ const LeavesUser = () => {
   }, [allEmployees, fetched]);
 
   useEffect(() => {
+    let user = tokenService.getUser()
    console.log(formValue, submitted)
+   const values = {
+     ...formValue,
+     employee_id: user._id
+   }
    if(submitted){
-    axiosInstance.post('/leave-application', formValue).then( e =>{
+    axiosInstance.post('/leave-application', values).then( e =>{
       console.log(e)
       showAlert(true, e?.data?.message, "alert alert-success");
+      fetchLeaves()
     }).catch(err =>{
       console.log(err)
       showAlert(true, err?.data?.message, "alert alert-danger");
@@ -72,33 +78,43 @@ const LeavesUser = () => {
    }
   }, [formValue, submitted])
   useEffect(() => {
-    // console.log(allEmployees)
-    const employeeOpts = allEmployees.map((e) => {
-      return {
-        value: e._id,
-        label: e.first_name + " " + e.last_name,
-      };
-    });
-    const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
-      if (field.name === "employee_id") {
-        field.options = employeeOpts;
-        return field;
-      }
-      return field;
-    });
-    // console.log(finalForm)
-    settemplate({
-      title: LeaveApplicationFormJSON.title,
-      Fields: finalForm,
-    });
+    console.log(allEmployees)
+    combineRequest()
+      .then((res) => {
+        console.log(res)
+        const { employees } = res.data.createEmployeeFormSelection;
+        const employeeOpts = employees.map((e) => {
+          return {
+            value: e._id,
+            label: e.first_name + " " + e.last_name,
+          };
+        });
+        const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
+          if (field.name === "leave_approver") {
+            field.options = employeeOpts;
+            return field;
+          }
+          return field;
+        });
+        // console.log(finalForm)
+        settemplate({
+          title: LeaveApplicationFormJSON.title,
+          Fields: finalForm,
+        });
+        if(!loadedSelect){
+          setloadedSelect(true)
+          console.log('loaded')
+    
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+   
     console.log(template)
-    if(template !== null){
-      setloadedSelect(true)
-      console.log('loaded')
-
-    }
+    
     // console.log(template)
-  }, [allEmployees, loadedSelect]);
+  }, [loadedSelect]);
   const columns = [
     {
       dataField: "leave_type_id",
@@ -167,6 +183,11 @@ const LeavesUser = () => {
       dataField: "leave_approver",
       text: "Approved by",
       sort: true,
+      formatter: (value, row) => (
+        <>
+          {row.leave_approver.first_name} {row.leave_approver.last_name}
+        </>
+        )
       // headerStyle: {minWidth: "80px", textAlign:'center'},
 
     },
@@ -231,8 +252,7 @@ const LeavesUser = () => {
           <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>
-      {loadedSelect ? 
-      <>
+      {loadedSelect &&
        <FormModal2
         title="Leave Application"
         editData={editData}
@@ -240,7 +260,7 @@ const LeavesUser = () => {
         template={helper.formArrayToObject(template.Fields)}
         setsubmitted={setsubmitted}
       />
-      </> : null
+     
       }
     </>
   );

@@ -61,6 +61,7 @@ import BalanceSheet from "./pages/Reports/BalanceSheet";
 import SingleEmail from "./pages/In-Apps/SingleEmail";
 import FileManager from "./pages/In-Apps/FileManager";
 import Branch from "./pages/HR/Admin/Branch";
+import HRDashboard from "./pages/Dashboard/HRDashboard";
 
 // const routes = [{
 //   title: 'Main',
@@ -178,6 +179,13 @@ const routes = [
     path: "/index",
     name: "Dashboard",
     component: AdminDashboard,
+    layout: "/admin",
+  },
+  {
+    title: "HR Dashboard",
+    path: "/hr-dashboard",
+    name: "Dashboard",
+    component: HRDashboard,
     layout: "/admin",
   },
   {
