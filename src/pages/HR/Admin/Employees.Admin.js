@@ -15,7 +15,7 @@ import helper from "../../../services/helper";
 import UploadModal from "../../../components/Modal/uploadModal";
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
-  const { setallEmployees, fetchEmployee, allEmployees, combineRequest } =
+  const { setallEmployees, fetchEmployee, allEmployees, combineRequest, showAlert } =
     useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
@@ -193,9 +193,13 @@ const AllEmployeesAdmin = () => {
             .post("/employees/bulk", jsonData)
             .then((res) => {
               console.log(res);
+              showAlert(true, "Data uploaded successfully", "alert alert-success")
               fetchEmployee();
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err)
+              showAlert(true, err?.message, "alert alert-danger")
+            });
           console.log("Finished:", results.data);
         },
       });

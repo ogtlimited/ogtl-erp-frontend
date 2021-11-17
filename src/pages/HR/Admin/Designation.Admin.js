@@ -2,10 +2,10 @@ import React, { useMemo, useState, useEffect, useContext } from "react";
 import { withRouter } from "react-router";
 import departments from "../../../db/designationList.json";
 import { designation } from "../../../components/FormJSON/HR/Employee/designation";
-
+import list from '../../../designation.json'
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import Select from "react-select";
-
+import dates from './dates.json'
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -14,6 +14,9 @@ import FormModal2 from "../../../components/Modal/FormModal2";
 let qualityFilter;
 
 const Designations = withRouter(({ history }) => {
+
+
+  // console.log(uniqueArray)
   const [allDesignation, setallDesignation] = useState([]);
   const { formUpdate, setformUpdate } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
@@ -38,6 +41,19 @@ const Designations = withRouter(({ history }) => {
   };
   useEffect(() => {
     fetchDesignation();
+    // for (let index = 0; index < list.length; index++) {
+    //   axiosInstance
+    //   .post("/designation", list[index])
+    //   .then((e) => {
+    //     console.log(e);
+    //     setformValue(null);
+    //   })
+    //   .catch((err) => {
+    //     setformValue(null);
+    //     console.log(err);
+    //   });
+      
+    // }
   }, []);
 
   const handleClick = (i) => {
