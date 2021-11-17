@@ -64,7 +64,6 @@ const LeavesUser = () => {
    console.log(formValue, submitted)
    const values = {
      ...formValue,
-     employee_id: user._id
    }
    if(submitted){
     axiosInstance.post('/leave-application', values).then( e =>{

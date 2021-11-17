@@ -54,23 +54,6 @@ export const LeaveApplicationFormJSON = {
             },
             
         },
-        
-        {
-            name:'leave_approver' ,
-            type:'select',
-            title:'Leave Approver',
-            options: [],
-            required:{
-                value:true,
-                message:'To Date is required'
-            },
-         },
-
-         {
-            name:'posting_date' ,
-            type:'date',
-            title:'Posting Date',
-         },
          {
             name:'reason' ,
             type:'textarea',

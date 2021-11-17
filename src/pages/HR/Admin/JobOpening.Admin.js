@@ -236,13 +236,13 @@ const JobOpening = () => {
         <h2>{row?.project_id?.project_name || "Not Available"}</h2>
       ),
     },
-    {
-      dataField: "description",
-      text: "Description",
-      sort: true,
-      headerStyle: { minWidth: "200px" },
-      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
-    },
+    // {
+    //   dataField: "description",
+    //   text: "Description",
+    //   sort: true,
+    //   headerStyle: { minWidth: "250px" },
+    //   formatter: (value, row) => <span>{ReactHtmlParser(row?.description.slice(0,50))}</span>,
+    // },
     {
       dataField: "",
       text: "Action",

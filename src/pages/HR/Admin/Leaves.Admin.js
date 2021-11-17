@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import LeaveApproverBtn from "../../../components/Tables/EmployeeTables/Leaves/LeaveApproverBtn";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { leaveList } from "../../../db/leaves";
 import male from "../../../assets/img/male_avater.png";
@@ -8,7 +7,30 @@ import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/
 import axiosInstance from "../../../services/api";
 import HelperService from "../../../services/helper";
 import { useAppContext } from "../../../Context/AppContext";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 const LeavesAdmin = () => {
+    const [approval, setApproval] = useState([
+      {
+        title: "open",
+        color: "text-secondary",
+      },
+      {
+        title: "approved by supervisor",
+        color: "text-info",
+      },
+      {
+        title: "approved",
+        color: "text-success",
+      },
+      {
+        title: "cancelled",
+        color: "text-warning",
+      },
+      {
+        title: "rejected",
+        color: "text-danger",
+      },
+    ]);
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -138,11 +160,12 @@ const LeavesAdmin = () => {
       headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-          <LeaveApproverBtn
-            setstatusRow={setstatusRow}
+        <GeneralApproverBtn
+            options={approval}
             setStatus={setStatus}
             value={value}
             row={row}
+            setstatusRow={setstatusRow}
           />
         </>
       ),
