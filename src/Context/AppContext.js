@@ -60,7 +60,7 @@ const AppProvider = (props) => {
     }
   }, []);
 
-  const fetchEmployee = (employee) => {
+  const fetchEmployee = () => {
     axiosInstance.get("/employees").then((e) => {
       setallEmployees(e?.data?.employees);
       setloggedIn(false);
