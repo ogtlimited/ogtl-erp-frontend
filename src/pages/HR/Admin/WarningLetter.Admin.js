@@ -17,7 +17,7 @@ const WarningLetter = () => {
   const [data, setData] = useState([]);
   const { combineRequest, showAlert } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const fetchWarningLetter = () => {
     axiosInstance
       .get("/api/warningLetter")
@@ -54,6 +54,7 @@ const WarningLetter = () => {
         title: warningLetterFormJson.title,
         Fields: finalForm,
       });
+      if(!loadSelect) setloadSelect(true)
       console.log(template);
     });
   }, []);
@@ -184,14 +185,17 @@ const WarningLetter = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Add Warning Letter
-            </a>
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                Add Warning Letter
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -200,11 +204,15 @@ const WarningLetter = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal
-        setformValue={setFormValue}
-        template={template}
-        setsubmitted={setSubmitted}
-      />
+      {
+        loadSelect &&
+        <FormModal
+          setformValue={setFormValue}
+          template={template}
+          setsubmitted={setSubmitted}
+        />
+
+      }
       <ConfirmModal
         title="Warning Letter"
         selectedRow={selectedRow}

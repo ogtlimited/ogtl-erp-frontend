@@ -41,7 +41,7 @@ export const jobOpeningFormJson = {
     },
     {
       name: "description",
-      type: "textarea",
+      type: "richText",
       title: "Description",
     },
   ],

@@ -1,7 +1,7 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
-const DashboardStatistics = () => {
+const DashboardStatistics = ({stats, chartData, chartTitle}) => {
   const data = {
     labels: ["Profit", "Expenses"],
     datasets: [
@@ -16,6 +16,15 @@ const DashboardStatistics = () => {
   };
   return (
     <>
+     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div className="card flex-fill">
+          <div className="card-body">
+            <h4 className="card-title">{chartTitle}</h4>
+            <Doughnut data={chartData} />
+            
+          </div>
+        </div>
+      </div>
       <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
         <div className="card flex-fill dash-statistics">
           <div className="card-body">
@@ -212,58 +221,7 @@ const DashboardStatistics = () => {
           </div>
         </div>
       </div>
-      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
-        <div className="card flex-fill">
-          <div className="card-body">
-            <h4 className="card-title">Profit vs Expenses</h4>
-            <Doughnut data={data} />
-            {/* <div className="leave-info-box">
-                <div className="media align-items-center">
-                  <a href="profile.html" className="avatar">
-                    <img alt="" src="assets/img/user.jpg" />
-                  </a>
-                  <div className="media-body">
-                    <div className="text-sm my-0">Iman Wada (Miss Leave)</div>
-                  </div>
-                </div>
-                <div className="row align-items-center mt-3">
-                  <div className="col-6">
-                    <h6 className="mb-0">4 Sep 2021</h6>
-                    <span className="text-sm text-muted">Leave Date</span>
-                  </div>
-                  <div className="col-6 text-right">
-                    <span className="badge bg-inverse-danger">Pending</span>
-                  </div>
-                </div>
-              </div>
-              <div className="leave-info-box">
-                <div className="media align-items-center">
-                  <a href="profile.html" className="avatar">
-                    <img alt="" src="assets/img/user.jpg" />
-                  </a>
-                  <div className="media-body">
-                    <div className="text-sm my-0">Mazi Ogundu</div>
-                  </div>
-                </div>
-                <div className="row align-items-center mt-3">
-                  <div className="col-6">
-                    <h6 className="mb-0">4 Sep 2021</h6>
-                    <span className="text-sm text-muted">Leave Date</span>
-                  </div>
-                  <div className="col-6 text-right">
-                    <span className="badge bg-inverse-success">Approved</span>
-                  </div>
-                </div>
-              </div>
-              <div className="load-more text-center">
-                <a className="text-dark" href="javascript:void(0);">
-                  Load More
-                </a>
-              </div>
-            */}
-          </div>
-        </div>
-      </div>
+     
     </>
   );
 };

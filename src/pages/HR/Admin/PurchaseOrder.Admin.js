@@ -24,7 +24,7 @@ const PurchaseOrder = () => {
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const user = tokenService.getUser();
-
+  const [loadSelect, setloadSelect] = useState(false)
   const editRow = (row) => {
     setformUpdate(row);
     setclickedRow(row);
@@ -86,6 +86,7 @@ const PurchaseOrder = () => {
         title: PurchaseOrderFormJson.title,
         Fields: finalForm,
       });
+      if(!loadSelect) setloadSelect(true)
       console.log(template);
     });
   }, []);
@@ -94,7 +95,14 @@ const PurchaseOrder = () => {
   useEffect(() => {
     if (formValue) {
       if (!editData) {
-        let newFormValue = { ...formValue };
+        let newFormValue = { 
+          ...formValue,
+         };
+         if(newFormValue.projectId == ""){
+           delete newFormValue.projectId
+         }else if(newFormValue.departmentId == ""){
+           delete newFormValue.departmentId
+         }
         console.log(newFormValue);
         axiosInstance
           .post("/api/purchase-order", newFormValue)
@@ -190,7 +198,7 @@ const PurchaseOrder = () => {
       dataField: "projectId",
       text: "Project",
       sort: true,
-      formatter: (value, row) => <h2>{row?.projectId?.project || "N/A"} </h2>,
+      formatter: (value, row) => <h2>{row?.projectId?.project_name || "N/A"} </h2>,
     },
 
     {
@@ -268,14 +276,17 @@ const PurchaseOrder = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Purchase Order
-            </a>
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Purchase Order
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -284,13 +295,16 @@ const PurchaseOrder = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal2
-        title="Create Purchase Order"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
+      {loadSelect && 
+        <FormModal2
+          title="Create Purchase Order"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(template.Fields)}
+          setsubmitted={setSubmitted}
+        />
+      
+      }
       <ConfirmModal
         title="Purchase Order"
         selectedRow={selectedRow}

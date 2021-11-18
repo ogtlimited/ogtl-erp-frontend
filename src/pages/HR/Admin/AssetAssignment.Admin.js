@@ -20,6 +20,7 @@ const AssetAssignment = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [loadSelect, setloadSelect] = useState(false);
   const user = tokenService.getUser();
 
   const editRow = (row) => {
@@ -54,8 +55,8 @@ const AssetAssignment = () => {
       });
       const AssetOpts = allAssets?.map((e) => {
         return {
-          label: `${e.assetName}`,
-          value: e.assetName,
+          label: e.assetName.productName,
+          value: e._id,
         };
       });
       const finalForm = AssetAssignmentForm.Fields.map((field) => {
@@ -72,9 +73,12 @@ const AssetAssignment = () => {
         title: AssetAssignmentForm.title,
         Fields: finalForm,
       });
+      if(!loadSelect){
+        setloadSelect(true);
+      }
       console.log(template);
     });
-  }, []);
+  }, [loadSelect]);
 
   //create assets
   useEffect(() => {
@@ -160,7 +164,7 @@ const AssetAssignment = () => {
 
   const columns = [
     {
-      dataField: "assetName",
+      dataField: "assetName.productName",
       text: "Asset name",
       sort: true,
       formatter: (value, row) => <h2>{row?.assetId?.assetName}</h2>,
@@ -257,14 +261,17 @@ const AssetAssignment = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Asset Assignment
-            </a>
+            {loadSelect &&
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Asset Assignment
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -273,13 +280,17 @@ const AssetAssignment = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      <FormModal2
-        title="Create Asset Assignment"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
+      {
+        loadSelect &&
+        <FormModal2
+          title="Create Asset Assignment"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(template.Fields)}
+          setsubmitted={setSubmitted}
+        />
+
+      }
       <ConfirmModal
         title="Asset Assignment"
         selectedRow={selectedRow}

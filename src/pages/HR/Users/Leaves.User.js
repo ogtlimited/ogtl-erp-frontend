@@ -26,7 +26,9 @@ const LeavesUser = () => {
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
       console.log(userId, 'USERID')
-      const leaves = e.data.data.filter(f => f.employee_id._id == userId);
+      console.log(e, 'USERID')
+      
+      const leaves = e?.data?.data?.filter(f => f?.employee_id?._id == userId);
       const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
       const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
       const open = leaves.filter(l => l.status === 'open').length;
@@ -60,44 +62,60 @@ const LeavesUser = () => {
   }, [allEmployees, fetched]);
 
   useEffect(() => {
+    let user = tokenService.getUser()
    console.log(formValue, submitted)
+   const values = {
+     ...formValue,
+   }
    if(submitted){
-    axiosInstance.post('/leave-application', formValue).then( e =>{
+    axiosInstance.post('/leave-application', values).then( e =>{
       console.log(e)
-      showAlert(true, e?.data.message, "alert alert-success");
+      showAlert(true, e?.data?.message, "alert alert-success");
+      fetchLeaves()
     }).catch(err =>{
-      showAlert(true, err?.data.message, "alert alert-danger");
+      console.log(err)
+      showAlert(true, err?.data?.message, "alert alert-danger");
     })
    }
   }, [formValue, submitted])
   useEffect(() => {
-    // console.log(allEmployees)
-    const employeeOpts = allEmployees.map((e) => {
-      return {
-        value: e._id,
-        label: e.first_name + " " + e.last_name,
-      };
-    });
-    const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
-      if (field.name === "employee_id") {
-        field.options = employeeOpts;
-        return field;
-      }
-      return field;
-    });
-    // console.log(finalForm)
-    settemplate({
-      title: LeaveApplicationFormJSON.title,
-      Fields: finalForm,
-    });
+    console.log(allEmployees)
+    combineRequest()
+      .then((res) => {
+        console.log(res)
+        const { employees } = res.data.createEmployeeFormSelection;
+        const employeeOpts = employees.map((e) => {
+          return {
+            value: e._id,
+            label: e.first_name + " " + e.last_name,
+          };
+        });
+        const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
+          if (field.name === "leave_approver") {
+            field.options = employeeOpts;
+            return field;
+          }
+          return field;
+        });
+        // console.log(finalForm)
+        settemplate({
+          title: LeaveApplicationFormJSON.title,
+          Fields: finalForm,
+        });
+        if(!loadedSelect){
+          setloadedSelect(true)
+          console.log('loaded')
+    
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+   
     console.log(template)
-    if(template !== null){
-      setloadedSelect(true)
-      console.log('loaded')
-
-    }
+    
     // console.log(template)
-  }, [allEmployees, loadedSelect]);
+  }, [loadedSelect]);
   const columns = [
     {
       dataField: "leave_type_id",
@@ -166,6 +184,11 @@ const LeavesUser = () => {
       dataField: "leave_approver",
       text: "Approved by",
       sort: true,
+      formatter: (value, row) => (
+        <>
+          {row.leave_approver.first_name} {row.leave_approver.last_name}
+        </>
+        )
       // headerStyle: {minWidth: "80px", textAlign:'center'},
 
     },
@@ -184,16 +207,18 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+            {loadedSelect &&
+              <a
+                  href="#"
+                  className="btn add-btn"
+                  data-toggle="modal"
+                  onClick={() => setformMode('add')}
+                  data-target="#FormModal"
+                >
+                  <i className="fa fa-plus"></i> Add Leave
+                </a>
             
-          <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              onClick={() => setformMode('add')}
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Leave
-            </a>
+            }
           </div>
         </div>
       </div>
@@ -228,8 +253,7 @@ const LeavesUser = () => {
           <LeavesTable columns={columns} data={allLeaves} />
           </div>
       </div>
-      {loadedSelect ? 
-      <>
+      {loadedSelect &&
        <FormModal2
         title="Leave Application"
         editData={editData}
@@ -237,7 +261,7 @@ const LeavesUser = () => {
         template={helper.formArrayToObject(template.Fields)}
         setsubmitted={setsubmitted}
       />
-      </> : null
+     
       }
     </>
   );

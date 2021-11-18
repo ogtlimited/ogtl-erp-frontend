@@ -42,7 +42,7 @@ const JobOffer = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-
+  const [loadSelect, setloadSelect] = useState(false)
   const editRow = (row) => {
     // setformUpdate(null)
     setformUpdate(row);
@@ -105,6 +105,9 @@ const JobOffer = () => {
           title: jobOfferFormJson.title,
           Fields: finalForm,
         });
+        if(!loadSelect){
+          setloadSelect(true)
+        }
         console.log(template);
       })
       .catch((error) => {
@@ -326,14 +329,17 @@ const JobOffer = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Add Job Offer
-            </a>
+            {loadSelect && 
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                Add Job Offer
+              </a>
+            
+            }
           </div>
         </div>
       </div>
@@ -353,14 +359,17 @@ const JobOffer = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-
-      <FormModal2
-        title="Create Job Offer"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(jobOfferFormJson.Fields)}
-        setsubmitted={setSubmitted}
-      />
+            {loadSelect && 
+            
+              <FormModal2
+                title="Create Job Offer"
+                editData={editData}
+                setformValue={setFormValue}
+                template={HelperService.formArrayToObject(jobOfferFormJson.Fields)}
+                setsubmitted={setSubmitted}
+              />
+            
+            }
       <ConfirmModal
         title="Job Offer"
         selectedRow={selectedRow}

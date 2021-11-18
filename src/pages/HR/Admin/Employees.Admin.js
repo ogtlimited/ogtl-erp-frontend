@@ -15,14 +15,14 @@ import helper from "../../../services/helper";
 import UploadModal from "../../../components/Modal/uploadModal";
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
-  const { setallEmployees, fetchEmployee, allEmployees, combineRequest } =
+  const { setallEmployees, fetchEmployee, allEmployees, combineRequest, showAlert } =
     useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
-  const [departments, setDepartments] = useState([]);
+  const [filters, setfilters] = useState([])
   const [toggleModal, settoggleModal] = useState(false);
   const [uploading, setuploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -99,7 +99,23 @@ const AllEmployeesAdmin = () => {
           value: e._id,
         };
       });
-      setDepartments(deptopts);
+      setfilters([
+        {
+          name: 'projectId',
+          placeholder: 'Filter by campaign',
+          options: campaingOpts
+        },
+        {
+          name: 'department',
+          placeholder: 'Filter by department',
+          options: deptopts
+        },
+        {
+          name: 'designation',
+          placeholder: 'Filter by designation',
+          options: designationOpts
+        },
+      ])
       const finalForm = employeeFormJson.Fields.map((field) => {
         if (field.name === "designation") {
           field.options = designationOpts;
@@ -177,9 +193,13 @@ const AllEmployeesAdmin = () => {
             .post("/employees/bulk", jsonData)
             .then((res) => {
               console.log(res);
+              showAlert(true, "Data uploaded successfully", "alert alert-success")
               fetchEmployee();
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+              console.log(err)
+              showAlert(true, err?.message, "alert alert-danger")
+            });
           console.log("Finished:", results.data);
         },
       });
@@ -255,7 +275,7 @@ const AllEmployeesAdmin = () => {
       <EmployeesTable
         data={allEmployees}
         seteditData={seteditData}
-        departments={departments}
+        filters={filters}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />

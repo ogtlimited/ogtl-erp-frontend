@@ -98,6 +98,13 @@ const Sidebar = () => {
                       </Link>
                     </li>
                   )}
+                  {canView("HR") && (
+                    <li>
+                      <Link className="active" to="/admin/hr-dashboard">
+                        HR Dashboard
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link className="" to="/admin/employee-dashboard">
                       Employee Dashboard
@@ -115,7 +122,7 @@ const Sidebar = () => {
                     <Link to="/admin/email">Email</Link>
                   </li>
                   <li>
-                    <Link className="" to="/apps/file-manager">
+                    <Link className="" to="/admin/file-manager">
                       File Manager
                     </Link>
                   </li>
@@ -144,6 +151,9 @@ const Sidebar = () => {
                       </li>
                       <li className="">
                         <Link to="/admin/leads">Leads</Link>
+                      </li>
+                      <li className="">
+                        <Link to="/admin/branch">Branch</Link>
                       </li>
                     </ul>
                   </li>
@@ -187,13 +197,13 @@ const Sidebar = () => {
                     </Link>
                   </li>
 
-                  {canView("HR") && (
+                  {/* {canView("HR") && (
                     <li>
                       <Link className="" to="/admin/leave-settings">
                         Leave Settings
                       </Link>
                     </li>
-                  )}
+                  )} */}
                   {canView("HR") && (
                     <li>
                       <Link className="" to="/admin/attendance-admin">
@@ -618,6 +628,7 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
+             
               {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>
                   <i className="la la-crosshairs"></i> <span> Goals </span>{" "}

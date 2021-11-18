@@ -10,7 +10,7 @@ import filterFactory, {
   selectFilter,
   dateFilter,
 } from "react-bootstrap-table2-filter";
-import LeaveApproverBtn from "./LeaveApproverBtn";
+
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 const LeavesTable = ({ data, columns }) => {

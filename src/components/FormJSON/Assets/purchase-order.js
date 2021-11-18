@@ -22,7 +22,16 @@ export const PurchaseOrderFormJson = {
       name: "location",
       type: "select",
       title: "Branch",
-      options: [],
+      options: [
+        {
+          label: 'Abuja',
+          value: 'Abuja'
+        },
+        {
+          label: 'Kaduna',
+          value: 'Kaduna'
+        },
+      ],
     },
     {
       name: "model",

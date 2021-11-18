@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import LeaveApproverBtn from "../../../components/Tables/EmployeeTables/Leaves/LeaveApproverBtn";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { leaveList } from "../../../db/leaves";
 import male from "../../../assets/img/male_avater.png";
@@ -8,7 +7,30 @@ import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/
 import axiosInstance from "../../../services/api";
 import HelperService from "../../../services/helper";
 import { useAppContext } from "../../../Context/AppContext";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 const LeavesAdmin = () => {
+    const [approval, setApproval] = useState([
+      {
+        title: "open",
+        color: "text-secondary",
+      },
+      {
+        title: "approved by supervisor",
+        color: "text-info",
+      },
+      {
+        title: "approved",
+        color: "text-success",
+      },
+      {
+        title: "cancelled",
+        color: "text-warning",
+      },
+      {
+        title: "rejected",
+        color: "text-danger",
+      },
+    ]);
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -44,7 +66,8 @@ const LeavesAdmin = () => {
       const update = {
         ...statusRow,
         status: status,
-        employee_id: statusRow.employee_id._id,
+        leave_approver: statusRow.employee_id._id,
+        employee_id: statusRow.leave_approver._id,
         from_date: new Date(statusRow.from_date),
         to_date: new Date(statusRow.to_date),
         posting_date: new Date(statusRow.posting_date),
@@ -137,11 +160,12 @@ const LeavesAdmin = () => {
       headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-          <LeaveApproverBtn
-            setstatusRow={setstatusRow}
+        <GeneralApproverBtn
+            options={approval}
             setStatus={setStatus}
             value={value}
             row={row}
+            setstatusRow={setstatusRow}
           />
         </>
       ),
@@ -176,8 +200,18 @@ const LeavesAdmin = () => {
       dataField: "leave_approver",
       text: "Approved By",
       sort: true,
-
       headerStyle: { minWidth: "100px", textAlign: "center" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <a href="" className="avatar">
+            <img alt="" src={male} />
+          </a>
+          <a href="">
+            {value.first_name + " " + value.last_name}{" "}
+            <span>{value.designation.designation}</span>
+          </a>
+        </h2>
+      ),
     },
     {
       dataField: "total_leave_days",

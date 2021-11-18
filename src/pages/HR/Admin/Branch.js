@@ -1,79 +1,64 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
 import { withRouter } from "react-router";
-import departments from "../../../db/designationList.json";
-import { designation } from "../../../components/FormJSON/HR/Employee/designation";
-import list from '../../../designation.json'
+
+
+
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import Select from "react-select";
-import dates from './dates.json'
+
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
-
-let qualityFilter;
-
-const Designations = withRouter(({ history }) => {
+import { branchFormJSON } from "../../../components/FormJSON/HR/Employee/branch";
+import helper from "../../../services/helper";
 
 
-  // console.log(uniqueArray)
-  const [allDesignation, setallDesignation] = useState([]);
+const Branch = withRouter(({ history }) => {
+  const [allBranch, setallBranch] = useState([]);
   const { formUpdate, setformUpdate } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
-  const [designationOpts, setDesignationOts] = useState(null);
+  const [branchOpts, setbranchOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const fetchDesignation = () => {
-    axiosInstance.get("/designation").then((res) => {
-      setallDesignation(res.data.data);
+  const fetchBranch = () => {
+    axiosInstance.get("/branch").then((res) => {
+      setallBranch(res.data.data);
       setunfiltered(res?.data?.data);
-      const depsigOpts = res.data.data.map((e) => {
+      const branchOpts = res.data.data.map((e) => {
         return {
-          label: e.designation,
+          label: e.branch,
           value: e._id,
         };
       });
-      setDesignationOts(depsigOpts);
+      setbranchOts(branchOpts);
     });
   };
   useEffect(() => {
-    fetchDesignation();
-    // for (let index = 0; index < list.length; index++) {
-    //   axiosInstance
-    //   .post("/designation", list[index])
-    //   .then((e) => {
-    //     console.log(e);
-    //     setformValue(null);
-    //   })
-    //   .catch((err) => {
-    //     setformValue(null);
-    //     console.log(err);
-    //   });
-      
-    // }
+    fetchBranch();
   }, []);
 
   const handleClick = (i) => {
     console.log(i, unfiltered)
     if (i?.value === "All" || i === null) {
-      setallDesignation(unfiltered);
+      setallBranch(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) => { console.log(e); return i.label.includes(e.designation)} );
+      const filt = unfiltered.filter((e) => { console.log(e); return i.label.includes(e.branch)} );
 
-      setallDesignation(filt);
+      setallBranch(filt);
     }
   };
 
   useEffect(() => {
     console.log(formValue);
-    fetchDesignation();
+    fetchBranch();
     if (formValue) {
       if (!formUpdate) {
         axiosInstance
-          .post("/designation", formValue)
+          .post("/branch", formValue)
           .then((e) => {
             console.log(e);
             setformValue(null);
@@ -86,11 +71,11 @@ const Designations = withRouter(({ history }) => {
         console.log(editData);
         formValue._id = formUpdate._id;
         axiosInstance
-          .put("/designation/" + formUpdate._id, formValue)
+          .put("/branch/" + formUpdate._id, formValue)
           .then((e) => {
             console.log(e);
             setformValue(null);
-            fetchDesignation();
+            fetchBranch();
           })
           .catch((err) => {
             setformValue(null);
@@ -103,11 +88,11 @@ const Designations = withRouter(({ history }) => {
 
   const defaultSorted = [
     {
-      dataField: "designation",
+      dataField: "branch",
       order: "desc",
     },
   ];
-  const breadcrumb = "Departments";
+  const breadcrumb = "Branch";
   const columns = [
     {
       dataField: "",
@@ -116,8 +101,8 @@ const Designations = withRouter(({ history }) => {
       formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
     },
     {
-      dataField: "designation",
-      text: "Designation",
+      dataField: "branch",
+      text: "Branch",
       sort: true,
       headerStyle: { width: "70%" },
     },
@@ -171,12 +156,12 @@ const Designations = withRouter(({ history }) => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Designations</h3>
+            <h3 className="page-title">Branch</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Designations</li>
+              <li className="breadcrumb-item active">Branch</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -186,7 +171,7 @@ const Designations = withRouter(({ history }) => {
               data-toggle="modal"
               data-target="#FormModal"
             >
-              <i className="fa fa-plus"></i> Add Designation
+              <i className="fa fa-plus"></i> Add Branch
             </a>
           </div>
         </div>
@@ -196,28 +181,28 @@ const Designations = withRouter(({ history }) => {
           <Select
             defaultValue={[]}
             onChange={handleClick}
-            options={designationOpts}
-            placeholder="Filter Designations"
+            options={branchOpts}
+            placeholder="Filter Branch"
             isClearable={true}
             style={{ display: "inline-block" }}
             // formatGroupLabel={formatGroupLabel}
           />
         </div>
         <LeaveTable
-          data={allDesignation}
+          data={allBranch}
           // defaultSorted={defaultSorted}
           columns={columns}
         />
       </div>
       <FormModal2
-        title="Create Department"
+        title="Create Branch"
         editData={editData}
         setformValue={setformValue}
-        template={designation}
+        template={helper.formArrayToObject(branchFormJSON.branch)}
         setsubmitted={setsubmitted}
       />
     </>
   );
 });
 
-export default Designations;
+export default Branch;
