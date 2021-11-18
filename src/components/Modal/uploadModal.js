@@ -7,6 +7,7 @@ import { useAppContext } from '../../Context/AppContext';
 const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSuccess }) => {
     const { combineRequest, showAlert } = useAppContext();
     const [buttonRef, setbuttonRef] = useState(React.createRef())
+    const [loading, setloading] = useState(false)
     const [uploadState, setuploadState] = useState('Upload New Employees')
     const [fileName, setfileName] = useState('')
     const [invalid, setinvalid] = useState(false)
@@ -48,6 +49,7 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
     const uploadData = () =>{
         console.log(data)
         setuploading(true)
+        setloading(true)
         axiosInstance.post(path, data).then(res =>{
           console.log(res)
           showAlert(
@@ -57,6 +59,7 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
           );
           settoggleModal(false)
           setuploading(false)
+          setloading(false)
           buttonRef.click()
           fetchEmployee()
         }).catch(err => {
@@ -66,6 +69,7 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
                 "Error uploading data",
                 "alert alert-success"
               );
+              setloading(false)
             buttonRef.click()
             settoggleModal(false)
         })
@@ -128,7 +132,19 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onClick={() => uploadData()} type="button" class="btn btn-primary">Upload</button>
+                
+                <button onClick={() => uploadData()} type="button" class="btn btn-primary">
+                  
+                  {loading ? (
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        "Upload"
+                      )}
+                  </button>
               </div>
             </div>
           </div>
