@@ -10,14 +10,18 @@ export const jobOpeningFormJson = {
       name: "designation_id",
       type: "select",
       title: "Designation",
-
       options: [],
     },
     {
       name: "project_id",
       type: "select",
       title: "Project",
-
+      options: [],
+    },
+    {
+      name: "location",
+      type: "select",
+      title: "Location",
       options: [],
     },
     {

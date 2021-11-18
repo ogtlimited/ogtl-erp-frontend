@@ -12,9 +12,11 @@ import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTabl
 import { useAppContext } from "../../Context/AppContext";
 import data from "../../db/employeeReport.json";
 import axiosInstance from "../../services/api";
+
 const EmployeeReport = () => {
   const { fetchEmployee, allEmployees } = useAppContext();
-  const [employees, setemployees] = useState();
+  const [employees, setemployees] = useState([]);
+
   useEffect(() => {
     // fetchEmployee()
     axiosInstance.get("/employees").then((e) => {
