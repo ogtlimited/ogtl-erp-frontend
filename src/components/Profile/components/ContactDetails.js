@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import { canView } from "../../../services/canView";
 import tokenService from "../../../services/token.service";
 
 const ContactDetails = ({
@@ -41,7 +42,7 @@ const ContactDetails = ({
       <div className="card-body">
         <h3 className="card-title">
           Contact Details
-          {id === user?._id && (
+          {canView(user, "HR") && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("ContactDetails")}

@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import { canView } from "../../../services/canView";
 import tokenService from "../../../services/token.service";
 
 const initialState = {
@@ -86,7 +87,7 @@ const Experience = ({
       <div className="card-body">
         <h3 className="card-title">
           Experience{" "}
-          {id === user._id && (
+          {canView(user, "HR") && (
             <Link
               className="edit-icon"
               data-toggle="modal"

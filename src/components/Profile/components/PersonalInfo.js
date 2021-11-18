@@ -4,6 +4,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import tokenService from "../../../services/token.service";
+import { canView } from "../../../services/canView";
 
 const PersonalInfo = ({
   handleChange,
@@ -42,7 +43,7 @@ const PersonalInfo = ({
       <div className="card-body">
         <h3 className="card-title">
           Personal Information{" "}
-          {id === user?._id && (
+          {canView(user, "HR") && (
             <Link
               onClick={() => handleChange("PersonalDetails")}
               className="edit-icon"

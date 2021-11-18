@@ -122,7 +122,7 @@ const Profile = () => {
             <h3 className="page-title">Profile</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/admin/all-employees">Employees</Link>
               </li>
               <li className="breadcrumb-item active">Profile</li>
             </ul>
@@ -152,7 +152,7 @@ const Profile = () => {
                         </h3>
                         <h6 className="text-muted">
                           {userData?.employee?.isAdmin
-                            ? userData?.employee?.department?.title
+                            ? userData?.employee?.department?.department
                             : userData?.employee?.projectId?.project_name}
                         </h6>
                         <small className="text-muted">
@@ -221,7 +221,8 @@ const Profile = () => {
                         <li>
                           <div className="title">Branch:</div>
                           <div className="text">
-                            {userData?.employee?.branch || "Not Available"}
+                            {userData?.employee?.branch?.branch ||
+                              "Not Available"}
                           </div>
                         </li>
                         <li>
@@ -251,7 +252,7 @@ const Profile = () => {
                               </div>
                             </div>
                             <a href="profile.html">
-                              {userData?.employee?.reports_to ||
+                              {userData?.employee?.reports_to?.last_name ||
                                 "Not Available"}
                             </a>
                           </div>
