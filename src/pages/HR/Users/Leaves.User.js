@@ -26,7 +26,9 @@ const LeavesUser = () => {
   const fetchLeaves = () =>{
     axiosInstance.get('/leave-application').then(e =>{
       console.log(userId, 'USERID')
-      const leaves = e.data.data.filter(f => f.employee_id._id == userId);
+      console.log(e, 'USERID')
+      
+      const leaves = e?.data?.data?.filter(f => f?.employee_id?._id == userId);
       const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
       const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
       const open = leaves.filter(l => l.status === 'open').length;
