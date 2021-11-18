@@ -70,8 +70,9 @@ const JobOpening = () => {
   useEffect(() => {
     combineRequest()
       .then((res) => {
-        console.log(res)
-        const { projects, designations } = res.data.createEmployeeFormSelection;
+        console.log(res.data);
+        const { projects, designations, branches } =
+          res.data.createEmployeeFormSelection;
         const projectsOpts = projects?.map((e) => {
           return {
             label: e.project_name,
@@ -84,12 +85,21 @@ const JobOpening = () => {
             value: e._id,
           };
         });
+        const branchOpts = branches?.map((e) => {
+          return {
+            label: e.branch,
+            value: e._id,
+          };
+        });
         const finalForm = jobOpeningFormJson.Fields.map((field) => {
           if (field.name === "designation_id") {
             field.options = designationOpts;
             return field;
           } else if (field.name === "project_id") {
             field.options = projectsOpts;
+            return field;
+          } else if (field.name === "location") {
+            field.options = branchOpts;
             return field;
           }
           return field;
@@ -201,13 +211,13 @@ const JobOpening = () => {
       dataField: "job_title",
       text: "Job Title",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "150px" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "100px" },
       formatter: (value, row) => (
         <>
           <ApproverBtn
@@ -224,25 +234,34 @@ const JobOpening = () => {
       dataField: "designation_id",
       text: "Designation",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "100px" },
       formatter: (value, row) => <h2>{row?.designation_id?.designation}</h2>,
     },
     {
       dataField: "project_id",
       text: "Project",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: "100px" },
       formatter: (value, row) => (
         <h2>{row?.project_id?.project_name || "Not Available"}</h2>
       ),
     },
-    // {
-    //   dataField: "description",
-    //   text: "Description",
-    //   sort: true,
-    //   headerStyle: { minWidth: "250px" },
-    //   formatter: (value, row) => <span>{ReactHtmlParser(row?.description.slice(0,50))}</span>,
-    // },
+    {
+      dataField: "location",
+      text: "Location",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <h2>{row?.location?.branch || "Not Available"}</h2>
+      ),
+    },
+    {
+      dataField: "description",
+      text: "Description",
+      sort: true,
+      headerStyle: { minWidth: "250px" },
+      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
+    },
     {
       dataField: "",
       text: "Action",
