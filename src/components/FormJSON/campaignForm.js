@@ -20,12 +20,12 @@ export const campaignFormJson = {
       title: "Type",
       options: [
         {
-            label: "Domestic",
-            value: "domestic",
+          label: "Domestic",
+          value: "domestic",
         },
         {
-            label: "Foreign",
-            value: "foreign",
+          label: "Foreign",
+          value: "foreign",
         },
       ],
       required: { value: true, message: "Field is required" },
@@ -34,6 +34,12 @@ export const campaignFormJson = {
       name: "hours_of_operation",
       type: "text",
       title: "Hours of operation",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "type_of_employees",
+      type: "text",
+      title: "Type of employees",
       required: { value: true, message: "Field is required" },
     },
     {
@@ -60,21 +66,21 @@ export const campaignFormJson = {
       title: "Billing structure",
       options: [
         {
-            label: "Standard",
-            value: "standard",
+          label: "Standard",
+          value: "standard",
         },
         {
-            label: "Hourly",
-            value: "per_hour",
+          label: "Hourly",
+          value: "per_hour",
         },
         {
-            label: "Seat",
-            value: "seat",
+          label: "Seat",
+          value: "seat",
         },
         {
-            label: "Per Hour /Seat",
-            value: "per_hour/seat",
-        }
+          label: "Per Hour /Seat",
+          value: "per_hour/seat",
+        },
       ],
       required: { value: true, message: "Field is required" },
     },
@@ -84,47 +90,47 @@ export const campaignFormJson = {
       title: "Diallers",
       options: [
         {
-            label: "In House",
-            value: "inhouse",
+          label: "In House",
+          value: "inhouse",
         },
         {
-            label: "External",
-            value: "external",
+          label: "External",
+          value: "external",
         },
         {
-            label: "Others",
-            value: "others",
-        }
-      ],
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "status",
-      type: "select",
-      title: "Status",
-      options: [
-        {
-            label: "Open",
-            value: "open",
-        },
-        {
-            label: "Approved",
-            value: "approved",
-        },
-        {
-            label: "Rejected",
-            value: "rejected",
-        },
-        {
-            label: "Suspended",
-            value: "suspended",
+          label: "Others",
+          value: "others",
         },
       ],
       required: { value: true, message: "Field is required" },
     },
+    // {
+    //   name: "status",
+    //   type: "select",
+    //   title: "Status",
+    //   options: [
+    //     {
+    //       label: "Open",
+    //       value: "open",
+    //     },
+    //     {
+    //       label: "Approved",
+    //       value: "approved",
+    //     },
+    //     {
+    //       label: "Rejected",
+    //       value: "rejected",
+    //     },
+    //     {
+    //       label: "Suspended",
+    //       value: "suspended",
+    //     },
+    //   ],
+    //   required: { value: true, message: "Field is required" },
+    // },
     {
       name: "manager",
-      type: "text",
+
       type: "select",
       options: [],
       title: "Manager",
@@ -132,7 +138,7 @@ export const campaignFormJson = {
     },
     {
       name: "quality_analyst",
-      type: "text",
+
       type: "select",
       options: [],
       title: "Quality analyst",
