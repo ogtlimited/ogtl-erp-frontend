@@ -26,19 +26,17 @@ const EmployeesTable = ({
   selectedOption,
   filters,
   seteditData,
+  setmode
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [allEmployee, setAllEmployee] = useState([]);
-  const [editEmployee, seteditEmployee] = useState({});
-  const [showClear, setshowClear] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
-  const breadcrumb = "Admin Attendance";
-  const total = [];
+
   useEffect(() => {
   
   }, [filters])
@@ -52,8 +50,22 @@ const EmployeesTable = ({
       );
       console.log(filt)
       setAllEmployee(filt);
+
     }
   };
+  const handleEdit =(row) =>{
+    let hash = {}
+    for(let d in row){
+      if(typeof row[d] == 'object' && row[d] !== null){
+        hash[d] = row[d]._id
+      }else{
+        hash[d] = row[d]
+      }
+     
+    }
+    setmode("edit")
+    seteditData(hash)
+  }
   const clearFilter = (e) => {
     e.preventDefault();
     // attendaceDateFilter('')
@@ -183,7 +195,7 @@ const EmployeesTable = ({
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              onClick={() => seteditData(row)}
+              onClick={() => handleEdit(row)}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"

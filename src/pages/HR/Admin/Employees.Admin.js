@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { employeeFormJson } from "../../../components/FormJSON/HR/Employee/employee";
-import PageHeader from "../../../components/Misc/PageHeader";
+
 import FormModal2 from "../../../components/Modal/FormModal2";
-import FormModal from "../../../components/Modal/Modal";
 import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
-import GeneralTable from "../../../components/Tables/Table";
+
 import { useAppContext } from "../../../Context/AppContext";
-import designation from "../../../db/designation.json";
-import { employeeList } from "../../../db/employee";
+
 import axiosInstance from "../../../services/api";
 import Papa from "papaparse";
 import helper from "../../../services/helper";
@@ -26,15 +24,35 @@ const AllEmployeesAdmin = () => {
   const [toggleModal, settoggleModal] = useState(false);
   const [uploading, setuploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [loadForm, setloadForm] = useState(false)
+  const [mode, setmode] = useState('add')
   // console.log(allEmployees);
   useEffect(() => {
     fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
     settemplate(obj);
   }, []);
+
   useEffect(() => {
-    console.log(editData);
-  }, [editData]);
+    console.log(editData, mode);
+    console.log(template);
+    let applicant =  {
+      name: "applicant",
+      type: "text",
+      title: "Applicant",
+      required: {
+        value: true,
+        message: "applicant is required",
+      }
+    }
+   
+    let editT = {
+      ...template,
+      applicant
+
+    }
+    // settemplate(editT)
+  }, [editData, mode]);
   useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
@@ -124,8 +142,12 @@ const AllEmployeesAdmin = () => {
           field.options = shiftsopts;
           return field;
         } else if (field.name === "applicant") {
-          console.log("APPLICANT");
-          field.options = appOpts;
+          console.log('MODE', mode)
+          if(mode == 'add'){
+            field.options = appOpts;
+          }else{
+            field.options = reportstoOpts
+          }
           return field;
         } else if (field.name === "department") {
           field.options = deptopts;
@@ -154,32 +176,63 @@ const AllEmployeesAdmin = () => {
         initialValues[i] = "";
         // console.log(i);
       }
-      seteditData(initialValues);
-      // console.log(initialValues);
-      settemplate(obj);
+      console.log(mode)
+      if(mode == "add"){
+        seteditData(initialValues);
+        settemplate(obj);
+
+      }else{
+
+        // settemplate(obj);
+      }
+      console.log(template);
+      if(!loadForm) setloadForm(true)
       console.log(obj);
     });
-  }, []);
+  }, [mode]);
+  const changeMode = () =>{
 
+  }
+  // Submit
   useEffect(() => {
     console.log(submitted);
     if (formValue && Object.keys(formValue).length > 0) {
       formValue.image = "";
       const fullName = formValue.applicant?.split("-");
-      formValue.first_name = fullName[0];
-      formValue.last_name = fullName[1];
-      formValue.middle_name = fullName[2];
+      formValue['first_name'] = fullName[0];
+      formValue['last_name'] = fullName[1];
+      formValue['middle_name'] = fullName[2];
       delete formValue.applicant;
-      console.log(formValue);
-      axiosInstance.post("/employees", formValue).then((res) => {
-        fetchEmployee();
-        setsubmitted(false);
-        console.log(res);
-      });
+      console.log(formValue, mode, 'MODE EDIT');
+      if(!formValue['_id']){
+        axiosInstance.post("/employees", formValue).then((res) => {
+          fetchEmployee();
+          setsubmitted(false);
+          console.log(res);
+        });
+      }else{
+        let id = formValue._id
+        delete formValue._id;
+        delete formValue.__v;
+        delete formValue.salaryStructure_id;
+        delete formValue.warningCount;
+        delete formValue.isInPIP;
+        delete formValue.ogid;
+        delete formValue.permissionLevel;
+        delete formValue.isSupervisor;
+        delete formValue.isTeamLead;
+        axiosInstance.put("/employees/"+ formValue._id, formValue).then((res) => {
+          fetchEmployee();
+          setsubmitted(false);
+          console.log(res);
+        });
+
+      }
     }
     console.log(formValue);
   }, [submitted, formValue]);
 
+  // File upload
   const onFileUpload = (e) => {
     const files = e.target.files;
     console.log(files);
@@ -247,17 +300,6 @@ const AllEmployeesAdmin = () => {
               <i className="fa fa-cloud-upload"></i>
               Bulk Upload
             </button>
-
-            {/* <label className="btn add-btn mx-2">
-      <input
-        type="file"
-        style={{display: 'none'}}
-        accept=".csv,.xlsx,.xls"
-        onChange={(e) => onFileUpload(e)}
-      />
-      <i className="fa fa-cloud-upload"></i>
-      Bulk Upload
-    </label> */}
             <div className="view-icons">
               <a
                 href="employees.html"
@@ -275,6 +317,7 @@ const AllEmployeesAdmin = () => {
       <EmployeesTable
         data={allEmployees}
         seteditData={seteditData}
+        setmode={setmode}
         filters={filters}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
@@ -287,14 +330,16 @@ const AllEmployeesAdmin = () => {
           fetchEmployee={fetchEmployee}
         />
       )}
+     
+        <FormModal2
+          editData={editData}
+          setformValue={setformValue}
+          template={template}
+          setsubmitted={setsubmitted}
+        />
+      
+      </>
 
-      <FormModal2
-        editData={editData}
-        setformValue={setformValue}
-        template={template}
-        setsubmitted={setsubmitted}
-      />
-    </>
   );
 };
 

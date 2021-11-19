@@ -184,7 +184,7 @@ export function CheckField(props) {
   );
 }
 export function DateField(props) {
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder,value, ...rest  } = props;
   return (
     <>
       <div className="form-group">
@@ -196,6 +196,7 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
+          value={new Date()}
           name={name}
           id={name}
           placeholder={placeholder || ""}
@@ -308,7 +309,7 @@ export function TextareaField(props) {
 
 export function SelectField(props) {
   const { name, label, options, value, setFieldValue } = props;
-  // console.log(setFieldValue)
+  let defaultValue = options.filter(e => e.value === value)[0]
   return (
     <>
       <div className="form-group">
@@ -320,7 +321,7 @@ export function SelectField(props) {
         <Field
           options={options}
           component={Select}
-          defaultValue={value}
+          value={defaultValue}
           name={name}
           onChange={(opt) => {
             console.log(opt);

@@ -11,7 +11,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import Select from "react-select";
 
 const Departments = withRouter(({ history }) => {
-  const [template, settemplate] = useState([]);
+  const [template, settemplate] = useState({});
   const { formUpdate, setformUpdate } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
@@ -31,8 +31,9 @@ const Departments = withRouter(({ history }) => {
 
   const breadcrumb = "Departments";
   const fetchDept = () => {
+    settemplate(departmentFormJson)
     axiosInstance.get("/department").then((e) => {
-      console.log(e.data.data);
+      // console.log(e.data.data);
       setallDepartments(e?.data?.data);
       setunfiltered(e?.data?.data);
       const departOpts = e.data.data.map((e) => {
@@ -61,7 +62,7 @@ const Departments = withRouter(({ history }) => {
   };
 
   useEffect(() => {
-    console.log(formValue);
+    // console.log(formValue);
     fetchDept();
     if (formValue) {
       if (!editData) {
@@ -190,11 +191,12 @@ const Departments = withRouter(({ history }) => {
           columns={columns}
         />
       </div>
+      {/* departmentFormJson */}
       <FormModal2
         title="Create Department"
         editData={editData}
         setformValue={setformValue}
-        template={departmentFormJson}
+        template={template}
         setsubmitted={setsubmitted}
       />
     </>

@@ -1,0 +1,692 @@
+[
+    {
+        "start_time": "07:00",
+        "end_time": "01:30",
+        "_id": "6197762a31904a26a8b871d1",
+        "shift_name": "Morning 7-AM to 1:30-AM",
+        "slug": "morning-7am-to-1am",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.817Z",
+        "updatedAt": "2021-11-19T10:02:18.817Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "15:00",
+        "_id": "6197762a31904a26a8b871d2",
+        "shift_name": "Morning 7-AM to 15-PM",
+        "slug": "morning-7am-to-15pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.818Z",
+        "updatedAt": "2021-11-19T10:02:18.818Z"
+    },
+    {
+        "start_time": "19:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d3",
+        "shift_name": "Afternoon 19:30-PM to 22-PM",
+        "slug": "afternoon-19pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.818Z",
+        "updatedAt": "2021-11-19T10:02:18.818Z"
+    },
+    {
+        "start_time": "18:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d4",
+        "shift_name": "Afternoon 18:30-PM to 22-PM",
+        "slug": "afternoon-18pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.818Z",
+        "updatedAt": "2021-11-19T10:02:18.818Z"
+    },
+    {
+        "start_time": "17:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d5",
+        "shift_name": "Afternoon 17:30-PM to 22-PM",
+        "slug": "afternoon-17pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.818Z",
+        "updatedAt": "2021-11-19T10:02:18.818Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d6",
+        "shift_name": "Afternoon 16:30-PM to 22-PM",
+        "slug": "afternoon-16pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "15:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d7",
+        "shift_name": "Afternoon 15:30-PM to 22-PM",
+        "slug": "afternoon-15pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871d8",
+        "shift_name": "Afternoon 14:30-PM to 22-PM",
+        "slug": "afternoon-14pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:30",
+        "_id": "6197762a31904a26a8b871d9",
+        "shift_name": "Afternoon 14:30-PM to 22:30-PM",
+        "slug": "afternoon-14pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "08:30",
+        "end_time": "17:00",
+        "_id": "6197762a31904a26a8b871da",
+        "shift_name": "Morning 8:30-AM to 17-PM",
+        "slug": "morning-8am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "12:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871db",
+        "shift_name": "Afternoon 12:30-PM to 22-PM",
+        "slug": "afternoon-12pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "12:00",
+        "end_time": "20:30",
+        "_id": "6197762a31904a26a8b871dc",
+        "shift_name": "Afternoon 12-PM to 20:30-PM",
+        "slug": "afternoon-12pm-to-20pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.819Z",
+        "updatedAt": "2021-11-19T10:02:18.819Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "24:00",
+        "_id": "6197762a31904a26a8b871dd",
+        "shift_name": "Afternoon 14:30-PM to 24-PM",
+        "slug": "afternoon-14pm-to-24pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:00",
+        "_id": "6197762a31904a26a8b871de",
+        "shift_name": "Afternoon 13:30-PM to 22-PM",
+        "slug": "afternoon-13pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:30",
+        "_id": "6197762a31904a26a8b871df",
+        "shift_name": "Afternoon 13:30-PM to 22:30-PM",
+        "slug": "afternoon-13pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "23:00",
+        "_id": "6197762a31904a26a8b871e0",
+        "shift_name": "Afternoon 16:30-PM to 23-PM",
+        "slug": "afternoon-16pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "07:30",
+        "end_time": "18:00",
+        "_id": "6197762a31904a26a8b871e1",
+        "shift_name": "Morning 7:30-AM to 18-PM",
+        "slug": "morning-7am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "23:30",
+        "_id": "6197762a31904a26a8b871e2",
+        "shift_name": "Morning 8-AM to 23:30-PM",
+        "slug": "morning-8am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.820Z",
+        "updatedAt": "2021-11-19T10:02:18.820Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "23:00",
+        "_id": "6197762a31904a26a8b871e3",
+        "shift_name": "Morning 7-AM to 23-PM",
+        "slug": "morning-7am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.821Z",
+        "updatedAt": "2021-11-19T10:02:18.821Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "21:00",
+        "_id": "6197762a31904a26a8b871e4",
+        "shift_name": "Morning 7-AM to 21-PM",
+        "slug": "morning-7am-to-21pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.821Z",
+        "updatedAt": "2021-11-19T10:02:18.821Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "23:30",
+        "_id": "6197762a31904a26a8b871e5",
+        "shift_name": "Afternoon 14:30-PM to 23:30-PM",
+        "slug": "afternoon-14pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.821Z",
+        "updatedAt": "2021-11-19T10:02:18.821Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "_id": "6197762a31904a26a8b871e6",
+        "shift_name": "Morning 9-AM to 17-PM",
+        "slug": "morning-9am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.821Z",
+        "updatedAt": "2021-11-19T10:02:18.821Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "_id": "6197762a31904a26a8b871e7",
+        "shift_name": "Morning 9-AM to 18-PM",
+        "slug": "morning-9am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:18.821Z",
+        "updatedAt": "2021-11-19T10:02:18.821Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "01:30",
+        "_id": "6197763331904a26a8b87207",
+        "shift_name": "Morning 7-AM to 1:30-AM",
+        "slug": "morning-7am-to-1am",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.884Z",
+        "updatedAt": "2021-11-19T10:02:27.884Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "15:00",
+        "_id": "6197763331904a26a8b87208",
+        "shift_name": "Morning 7-AM to 15-PM",
+        "slug": "morning-7am-to-15pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.884Z",
+        "updatedAt": "2021-11-19T10:02:27.884Z"
+    },
+    {
+        "start_time": "19:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b87209",
+        "shift_name": "Afternoon 19:30-PM to 22-PM",
+        "slug": "afternoon-19pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.884Z",
+        "updatedAt": "2021-11-19T10:02:27.884Z"
+    },
+    {
+        "start_time": "18:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b8720a",
+        "shift_name": "Afternoon 18:30-PM to 22-PM",
+        "slug": "afternoon-18pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.884Z",
+        "updatedAt": "2021-11-19T10:02:27.884Z"
+    },
+    {
+        "start_time": "17:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b8720b",
+        "shift_name": "Afternoon 17:30-PM to 22-PM",
+        "slug": "afternoon-17pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.884Z",
+        "updatedAt": "2021-11-19T10:02:27.884Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b8720c",
+        "shift_name": "Afternoon 16:30-PM to 22-PM",
+        "slug": "afternoon-16pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "15:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b8720d",
+        "shift_name": "Afternoon 15:30-PM to 22-PM",
+        "slug": "afternoon-15pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b8720e",
+        "shift_name": "Afternoon 14:30-PM to 22-PM",
+        "slug": "afternoon-14pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:30",
+        "_id": "6197763331904a26a8b8720f",
+        "shift_name": "Afternoon 14:30-PM to 22:30-PM",
+        "slug": "afternoon-14pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "08:30",
+        "end_time": "17:00",
+        "_id": "6197763331904a26a8b87210",
+        "shift_name": "Morning 8:30-AM to 17-PM",
+        "slug": "morning-8am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "12:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b87211",
+        "shift_name": "Afternoon 12:30-PM to 22-PM",
+        "slug": "afternoon-12pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "12:00",
+        "end_time": "20:30",
+        "_id": "6197763331904a26a8b87212",
+        "shift_name": "Afternoon 12-PM to 20:30-PM",
+        "slug": "afternoon-12pm-to-20pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "24:00",
+        "_id": "6197763331904a26a8b87213",
+        "shift_name": "Afternoon 14:30-PM to 24-PM",
+        "slug": "afternoon-14pm-to-24pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.885Z",
+        "updatedAt": "2021-11-19T10:02:27.885Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:00",
+        "_id": "6197763331904a26a8b87214",
+        "shift_name": "Afternoon 13:30-PM to 22-PM",
+        "slug": "afternoon-13pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.886Z",
+        "updatedAt": "2021-11-19T10:02:27.886Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:30",
+        "_id": "6197763331904a26a8b87215",
+        "shift_name": "Afternoon 13:30-PM to 22:30-PM",
+        "slug": "afternoon-13pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.886Z",
+        "updatedAt": "2021-11-19T10:02:27.886Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "23:00",
+        "_id": "6197763331904a26a8b87216",
+        "shift_name": "Afternoon 16:30-PM to 23-PM",
+        "slug": "afternoon-16pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.886Z",
+        "updatedAt": "2021-11-19T10:02:27.886Z"
+    },
+    {
+        "start_time": "07:30",
+        "end_time": "18:00",
+        "_id": "6197763331904a26a8b87217",
+        "shift_name": "Morning 7:30-AM to 18-PM",
+        "slug": "morning-7am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.886Z",
+        "updatedAt": "2021-11-19T10:02:27.886Z"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "23:30",
+        "_id": "6197763331904a26a8b87218",
+        "shift_name": "Morning 8-AM to 23:30-PM",
+        "slug": "morning-8am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.886Z",
+        "updatedAt": "2021-11-19T10:02:27.886Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "23:00",
+        "_id": "6197763331904a26a8b87219",
+        "shift_name": "Morning 7-AM to 23-PM",
+        "slug": "morning-7am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.887Z",
+        "updatedAt": "2021-11-19T10:02:27.887Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "21:00",
+        "_id": "6197763331904a26a8b8721a",
+        "shift_name": "Morning 7-AM to 21-PM",
+        "slug": "morning-7am-to-21pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.887Z",
+        "updatedAt": "2021-11-19T10:02:27.887Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "23:30",
+        "_id": "6197763331904a26a8b8721b",
+        "shift_name": "Afternoon 14:30-PM to 23:30-PM",
+        "slug": "afternoon-14pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.887Z",
+        "updatedAt": "2021-11-19T10:02:27.887Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "_id": "6197763331904a26a8b8721c",
+        "shift_name": "Morning 9-AM to 17-PM",
+        "slug": "morning-9am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.887Z",
+        "updatedAt": "2021-11-19T10:02:27.887Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "_id": "6197763331904a26a8b8721d",
+        "shift_name": "Morning 9-AM to 18-PM",
+        "slug": "morning-9am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:02:27.887Z",
+        "updatedAt": "2021-11-19T10:02:27.887Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "01:30",
+        "_id": "6197765431904a26a8b87246",
+        "shift_name": "Morning 7-AM to 1:30-AM",
+        "slug": "morning-7am-to-1am",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.086Z",
+        "updatedAt": "2021-11-19T10:03:00.086Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "15:00",
+        "_id": "6197765431904a26a8b87247",
+        "shift_name": "Morning 7-AM to 15-PM",
+        "slug": "morning-7am-to-15pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.086Z",
+        "updatedAt": "2021-11-19T10:03:00.086Z"
+    },
+    {
+        "start_time": "19:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b87248",
+        "shift_name": "Afternoon 19:30-PM to 22-PM",
+        "slug": "afternoon-19pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.086Z",
+        "updatedAt": "2021-11-19T10:03:00.086Z"
+    },
+    {
+        "start_time": "18:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b87249",
+        "shift_name": "Afternoon 18:30-PM to 22-PM",
+        "slug": "afternoon-18pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "17:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b8724a",
+        "shift_name": "Afternoon 17:30-PM to 22-PM",
+        "slug": "afternoon-17pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b8724b",
+        "shift_name": "Afternoon 16:30-PM to 22-PM",
+        "slug": "afternoon-16pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "15:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b8724c",
+        "shift_name": "Afternoon 15:30-PM to 22-PM",
+        "slug": "afternoon-15pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b8724d",
+        "shift_name": "Afternoon 14:30-PM to 22-PM",
+        "slug": "afternoon-14pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:30",
+        "_id": "6197765431904a26a8b8724e",
+        "shift_name": "Afternoon 14:30-PM to 22:30-PM",
+        "slug": "afternoon-14pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "08:30",
+        "end_time": "17:00",
+        "_id": "6197765431904a26a8b8724f",
+        "shift_name": "Morning 8:30-AM to 17-PM",
+        "slug": "morning-8am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "12:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b87250",
+        "shift_name": "Afternoon 12:30-PM to 22-PM",
+        "slug": "afternoon-12pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "12:00",
+        "end_time": "20:30",
+        "_id": "6197765431904a26a8b87251",
+        "shift_name": "Afternoon 12-PM to 20:30-PM",
+        "slug": "afternoon-12pm-to-20pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "24:00",
+        "_id": "6197765431904a26a8b87252",
+        "shift_name": "Afternoon 14:30-PM to 24-PM",
+        "slug": "afternoon-14pm-to-24pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:00",
+        "_id": "6197765431904a26a8b87253",
+        "shift_name": "Afternoon 13:30-PM to 22-PM",
+        "slug": "afternoon-13pm-to-22pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:30",
+        "_id": "6197765431904a26a8b87254",
+        "shift_name": "Afternoon 13:30-PM to 22:30-PM",
+        "slug": "afternoon-13pm-to-22-30pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "23:00",
+        "_id": "6197765431904a26a8b87255",
+        "shift_name": "Afternoon 16:30-PM to 23-PM",
+        "slug": "afternoon-16pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "07:30",
+        "end_time": "18:00",
+        "_id": "6197765431904a26a8b87256",
+        "shift_name": "Morning 7:30-AM to 18-PM",
+        "slug": "morning-7am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "23:30",
+        "_id": "6197765431904a26a8b87257",
+        "shift_name": "Morning 8-AM to 23:30-PM",
+        "slug": "morning-8am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.087Z",
+        "updatedAt": "2021-11-19T10:03:00.087Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "23:00",
+        "_id": "6197765431904a26a8b87258",
+        "shift_name": "Morning 7-AM to 23-PM",
+        "slug": "morning-7am-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.088Z",
+        "updatedAt": "2021-11-19T10:03:00.088Z"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "21:00",
+        "_id": "6197765431904a26a8b87259",
+        "shift_name": "Morning 7-AM to 21-PM",
+        "slug": "morning-7am-to-21pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.088Z",
+        "updatedAt": "2021-11-19T10:03:00.088Z"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "23:30",
+        "_id": "6197765431904a26a8b8725a",
+        "shift_name": "Afternoon 14:30-PM to 23:30-PM",
+        "slug": "afternoon-14pm-to-23pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.088Z",
+        "updatedAt": "2021-11-19T10:03:00.088Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "_id": "6197765431904a26a8b8725b",
+        "shift_name": "Morning 9-AM to 17-PM",
+        "slug": "morning-9am-to-17pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.088Z",
+        "updatedAt": "2021-11-19T10:03:00.088Z"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "_id": "6197765431904a26a8b8725c",
+        "shift_name": "Morning 9-AM to 18-PM",
+        "slug": "morning-9am-to-18pm",
+        "__v": 0,
+        "createdAt": "2021-11-19T10:03:00.088Z",
+        "updatedAt": "2021-11-19T10:03:00.088Z"
+    }
+]

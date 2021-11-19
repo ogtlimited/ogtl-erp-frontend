@@ -24,9 +24,11 @@ const Designations = withRouter(({ history }) => {
   const [editData, seteditData] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
+  const [template, settemplate] = useState({})
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const fetchDesignation = () => {
+    settemplate(designation)
     axiosInstance.get("/designation").then((res) => {
       setallDesignation(res.data.data);
       setunfiltered(res?.data?.data);
@@ -213,7 +215,7 @@ const Designations = withRouter(({ history }) => {
         title="Create Department"
         editData={editData}
         setformValue={setformValue}
-        template={designation}
+        template={template}
         setsubmitted={setsubmitted}
       />
     </>

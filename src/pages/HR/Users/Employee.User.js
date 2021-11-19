@@ -1,13 +1,52 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
+// import axiosInstance from "../../../services/api";
+// import shifts from './shift.json'
+// import raw from './raw.json'
+// import allShift from './allShift.json'
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const { notifications, user } = useAppContext();
-
+  // let arr = []
+  // let unique = []
+  // let allShifts = []
+  // console.log(shifts)
+  // raw.forEach(r =>{
+  //  let index = allShift.findIndex(e => (e.start_time == r.actual_shift_start) && (e.end_time == r.actual_shift_end))
+  //  unique.push({
+  //    ...r,
+  //    default_shift: allShift[index]?.shift_name
+  //  })
+  // })
+  // console.log(unique)
+  // console.log(arr)
+  // shifts.forEach(e =>{
+  //   axiosInstance.post("/api/shiftType", e)
+  // })
+  // let sort = shifts.sort((a,b) => parseInt(a.start_time) - parseInt(b.end_time))
+  // shifts.forEach(e =>{
+  //   if(parseInt(e.start_time) < 12){
+  //     let s = {
+  //       ...e,
+  //       shift_name: 'Morning ' + parseInt(e.start_time) + ' AM to ' + parseInt(e.end_time),
+  //       slug: slugify(e.shift_name)
+  //     }
+  //     allShifts.push(s)
+  //   }else{
+  //     let end = parseInt(e.end_time) < 12 ? parseInt(e.end_time) + ' AM' : parseInt(e.end_time) + ' PM' 
+  //     let s = {
+  //       ...e,
+  //       shift_name: 'Afternoon ' + parseInt(e.start_time) + ' PM to ' + end,
+  //       slug: slugify(e.shift_name)
+  //     }
+  //     allShifts.push(s)
+  //   }
+  // })
   return (
     <>
+    
       <div className="row">
         <div className="col-md-12">
           <div className="welcome-box">
