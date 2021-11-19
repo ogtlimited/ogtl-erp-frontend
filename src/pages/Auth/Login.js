@@ -23,7 +23,7 @@ const Login = () => {
       .then((e) => {
         console.log(e);
         const obj = {
-          company_email: data.ogid,
+          company_email: data.company_email,
         };
         localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
         localStorage.setItem(
@@ -77,15 +77,15 @@ const Login = () => {
               </h6>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group">
-                  <label htmlFor="ogid">Email </label>
+                  <label htmlFor="company_email">Email </label>
                   <input
                     type="text"
-                    name="ogid"
-                    id="ogid"
-                    {...register("ogid", { required: true })}
+                    name="company_email"
+                    id="company_email"
+                    {...register("company_email", { required: true })}
                     className="form-control"
                   />
-                  {errors.ogid && errors.ogid.type === "required" && (
+                  {errors.company_email && errors.company_email.type === "required" && (
                     <span className="error">Email is required</span>
                   )}
                 </div>
