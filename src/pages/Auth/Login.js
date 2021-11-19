@@ -23,7 +23,7 @@ const Login = () => {
       .then((e) => {
         console.log(e);
         const obj = {
-          company_email: e.account.username,
+          company_email: data.ogid,
         };
         localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
         localStorage.setItem(
