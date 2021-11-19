@@ -1,0 +1,140 @@
+[
+    {
+        "start_time": "07:00",
+        "end_time": "01:30",
+        "shift_name": "Morning 7-AM to 1:30-AM",
+        "slug": "morning-7am-to-1am"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "15:00",
+        "shift_name": "Morning 7-AM to 15-PM",
+        "slug": "morning-7am-to-15pm"
+    },
+    {
+        "start_time": "19:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 19:30-PM to 22-PM",
+        "slug": "afternoon-19pm-to-22pm"
+    },
+    {
+        "start_time": "18:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 18:30-PM to 22-PM",
+        "slug": "afternoon-18pm-to-22pm"
+    },
+    {
+        "start_time": "17:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 17:30-PM to 22-PM",
+        "slug": "afternoon-17pm-to-22pm"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 16:30-PM to 22-PM",
+        "slug": "afternoon-16pm-to-22pm"
+    },
+    {
+        "start_time": "15:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 15:30-PM to 22-PM",
+        "slug": "afternoon-15pm-to-22pm"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 14:30-PM to 22-PM",
+        "slug": "afternoon-14pm-to-22pm"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "22:30",
+        "shift_name": "Afternoon 14:30-PM to 22:30-PM",
+        "slug": "afternoon-14pm-to-22-30pm"
+    },
+    {
+        "start_time": "08:30",
+        "end_time": "17:00",
+        "shift_name": "Morning 8:30-AM to 17-PM",
+        "slug": "morning-8am-to-17pm"
+    },
+    {
+        "start_time": "12:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 12:30-PM to 22-PM",
+        "slug": "afternoon-12pm-to-22pm"
+    },
+    {
+        "start_time": "12:00",
+        "end_time": "20:30",
+        "shift_name": "Afternoon 12-PM to 20:30-PM",
+        "slug": "afternoon-12pm-to-20pm"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "24:00",
+        "shift_name": "Afternoon 14:30-PM to 24-PM",
+        "slug": "afternoon-14pm-to-24pm"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:00",
+        "shift_name": "Afternoon 13:30-PM to 22-PM",
+        "slug": "afternoon-13pm-to-22pm"
+    },
+    {
+        "start_time": "13:30",
+        "end_time": "22:30",
+        "shift_name": "Afternoon 13:30-PM to 22:30-PM",
+        "slug": "afternoon-13pm-to-22-30pm"
+    },
+    {
+        "start_time": "16:30",
+        "end_time": "23:00",
+        "shift_name": "Afternoon 16:30-PM to 23-PM",
+        "slug": "afternoon-16pm-to-23pm"
+    },
+    {
+        "start_time": "07:30",
+        "end_time": "18:00",
+        "shift_name": "Morning 7:30-AM to 18-PM",
+        "slug": "morning-7am-to-18pm"
+    },
+    {
+        "start_time": "08:00",
+        "end_time": "23:30",
+        "shift_name": "Morning 8-AM to 23:30-PM",
+        "slug": "morning-8am-to-23pm"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "23:00",
+        "shift_name": "Morning 7-AM to 23-PM",
+        "slug": "morning-7am-to-23pm"
+    },
+    {
+        "start_time": "07:00",
+        "end_time": "21:00",
+        "shift_name": "Morning 7-AM to 21-PM",
+        "slug": "morning-7am-to-21pm"
+    },
+    {
+        "start_time": "14:30",
+        "end_time": "23:30",
+        "shift_name": "Afternoon 14:30-PM to 23:30-PM",
+        "slug": "afternoon-14pm-to-23pm"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "17:00",
+        "shift_name": "Morning 9-AM to 17-PM",
+        "slug": "morning-9am-to-17pm"
+    },
+    {
+        "start_time": "09:00",
+        "end_time": "18:00",
+        "shift_name": "Morning 9-AM to 18-PM",
+        "slug": "morning-9am-to-18pm"
+    }
+]

@@ -1,0 +1,2827 @@
+[
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:30",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:30",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "16:30",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "01:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:00",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:30",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:00",
+      "actual_shift_end": "20:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:00",
+      "actual_shift_end": "20:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:00",
+      "actual_shift_end": "20:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:00",
+      "actual_shift_end": "20:30"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "12:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "24:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "23:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:30"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30PM",
+      "actual_shift_end": "22:30PM"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30PM",
+      "actual_shift_end": "22:30PM"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30PM",
+      "actual_shift_end": "22:30PM"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30PM",
+      "actual_shift_end": "22:30PM"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30PM",
+      "actual_shift_end": "22:30PM"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "13:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "14:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "15:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "16:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "17:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "18:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "AFTERNOON",
+      "actual_shift_start": "19:30",
+      "actual_shift_end": "22:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "18:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "09:00",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "15:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "15:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "15:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "08:30",
+      "actual_shift_end": "17:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "23:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    },
+    {
+      "default_shift_type": "MORNING",
+      "actual_shift_start": "07:00",
+      "actual_shift_end": "21:00"
+    }
+   ]

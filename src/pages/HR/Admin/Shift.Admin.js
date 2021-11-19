@@ -15,6 +15,7 @@ const ShiftAdmin = () => {
   const [editData, seteditData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
+  const [template, settemplate] = useState({})
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [shiftsOpt, setShiftOpts] = useState(null);
@@ -28,6 +29,7 @@ const ShiftAdmin = () => {
   };
 
   useEffect(() => {
+    settemplate(HelperService.formArrayToObject(shiftTypeFormJson.Fields))
     fetchTypesShift()
       .then((res) => {
         setData(res.data.data);
@@ -224,6 +226,7 @@ const ShiftAdmin = () => {
               // formatGroupLabel={formatGroupLabel}
             />
           </div>
+        
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
@@ -232,7 +235,7 @@ const ShiftAdmin = () => {
         title="Create Shift"
         editData={editData}
         setformValue={setFormValue}
-        template={HelperService.formArrayToObject(shiftTypeFormJson.Fields)}
+        template={template}
         setsubmitted={setSubmitted}
       />
       <ConfirmModal

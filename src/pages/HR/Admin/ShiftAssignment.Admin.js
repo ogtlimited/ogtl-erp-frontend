@@ -25,7 +25,7 @@ const ShiftAssignment = () => {
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
-  const [template, setTemplate] = useState(null);
+  const [template, setTemplate] = useState({});
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
@@ -315,7 +315,7 @@ const ShiftAssignment = () => {
         title="Create Shift Assignment"
         editData={editData}
         setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
+        template={template}
         setsubmitted={setSubmitted}
         />
       
