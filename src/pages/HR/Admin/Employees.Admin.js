@@ -11,6 +11,7 @@ import axiosInstance from "../../../services/api";
 import Papa from "papaparse";
 import helper from "../../../services/helper";
 import UploadModal from "../../../components/Modal/uploadModal";
+import EmployeeHelperService from "./employee.helper";
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
   const { setallEmployees, fetchEmployee, allEmployees, combineRequest, showAlert } =
@@ -23,12 +24,13 @@ const AllEmployeesAdmin = () => {
   const [filters, setfilters] = useState([])
   const [toggleModal, settoggleModal] = useState(false);
   const [uploading, setuploading] = useState(false);
+  const [combinedData, setcombinedData] = useState(null)
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false)
   const [mode, setmode] = useState('add')
   // console.log(allEmployees);
   useEffect(() => {
-    fetchEmployee();
+    // fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
     settemplate(obj);
   }, []);
@@ -56,6 +58,7 @@ const AllEmployeesAdmin = () => {
   useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
+      setcombinedData(res)
       const {
         shifts,
         designations,
@@ -65,105 +68,28 @@ const AllEmployeesAdmin = () => {
         acceptedJobOffers,
         employees,
       } = res.data.createEmployeeFormSelection;
-      const appOpts = acceptedJobOffers?.map((e) => {
-        return {
-          label:
-            e.job_applicant_id.first_name +
-            " " +
-            e.job_applicant_id.last_name +
-            " " +
-            e.job_applicant_id.middle_name,
-          value:
-            e.job_applicant_id.first_name +
-            "-" +
-            e.job_applicant_id.last_name +
-            "-" +
-            e?.job_applicant_id.middle_name,
-        };
-      });
-      const reportstoOpts = employees?.map((e) => {
-        return {
-          label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
-          value: e._id,
-        };
-      });
-      const shiftsopts = shifts?.map((e) => {
-        return {
-          label: e.shift_name,
-          value: e._id,
-        };
-      });
-      const campaingOpts = projects?.map((e) => {
-        return {
-          label: e.project_name,
-          value: e._id,
-        };
-      });
-      const empTypeopts = employeeTypes?.map((e) => {
-        return {
-          label: e.type,
-          value: e._id,
-        };
-      });
-      const deptopts = departments?.map((e) => {
-        return {
-          label: e.department,
-          value: e._id,
-        };
-      });
-      const designationOpts = designations?.map((e) => {
-        return {
-          label: e.designation,
-          value: e._id,
-        };
-      });
+      const empHelper = new EmployeeHelperService(shifts,designations,employeeTypes,departments,projects,acceptedJobOffers,
+        employees)
+      const service = empHelper.mapRecords()
+        console.log(service)
       setfilters([
         {
           name: 'projectId',
           placeholder: 'Filter by campaign',
-          options: campaingOpts
+          options: service.campaingOpts
         },
         {
           name: 'department',
           placeholder: 'Filter by department',
-          options: deptopts
+          options: service.deptopts
         },
         {
           name: 'designation',
           placeholder: 'Filter by designation',
-          options: designationOpts
+          options: service.designationOpts
         },
       ])
-      const finalForm = employeeFormJson.Fields.map((field) => {
-        if (field.name === "designation") {
-          field.options = designationOpts;
-          return field;
-        } else if (field.name === "default_shift") {
-          field.options = shiftsopts;
-          return field;
-        } else if (field.name === "applicant") {
-          console.log('MODE', mode)
-          if(mode == 'add'){
-            field.options = appOpts;
-          }else{
-            field.options = reportstoOpts
-          }
-          return field;
-        } else if (field.name === "department") {
-          field.options = deptopts;
-          return field;
-        } else if (field.name === "employment_type") {
-          field.options = empTypeopts;
-          return field;
-        } else if (field.name === "projectId") {
-          field.options = campaingOpts;
-          return field;
-        } else if (field.name === "reports_to") {
-          field.options = reportstoOpts;
-          return field;
-        }
-        return field;
-      });
+      const finalForm = empHelper.finalForm(employeeFormJson, service, mode)
       // settemplate(
       //   {
       //     title: employeeFormJson.title,
@@ -178,7 +104,7 @@ const AllEmployeesAdmin = () => {
       }
       console.log(mode)
       if(mode == "add"){
-        seteditData(initialValues);
+        // seteditData(initialValues);
         settemplate(obj);
 
       }else{
@@ -195,23 +121,27 @@ const AllEmployeesAdmin = () => {
   }
   // Submit
   useEffect(() => {
-    console.log(submitted);
+    console.log(formValue, mode, editData);
     if (formValue && Object.keys(formValue).length > 0) {
       formValue.image = "";
       const fullName = formValue.applicant?.split("-");
-      formValue['first_name'] = fullName[0];
-      formValue['last_name'] = fullName[1];
-      formValue['middle_name'] = fullName[2];
-      delete formValue.applicant;
+      if(mode === 'add'){
+        formValue['first_name'] = fullName[0];
+        formValue['last_name'] = fullName[1];
+        formValue['middle_name'] = fullName[2];
+        delete formValue.applicant;
+
+      }
       console.log(formValue, mode, 'MODE EDIT');
-      if(!formValue['_id']){
+      if(mode === 'add'){
         axiosInstance.post("/employees", formValue).then((res) => {
           fetchEmployee();
           setsubmitted(false);
           console.log(res);
         });
       }else{
-        let id = formValue._id
+        let id = editData._id
+        console.log(id)
         delete formValue._id;
         delete formValue.__v;
         delete formValue.salaryStructure_id;
@@ -221,7 +151,7 @@ const AllEmployeesAdmin = () => {
         delete formValue.permissionLevel;
         delete formValue.isSupervisor;
         delete formValue.isTeamLead;
-        axiosInstance.put("/employees/"+ formValue._id, formValue).then((res) => {
+        axiosInstance.put("/employees/"+ id, formValue).then((res) => {
           fetchEmployee();
           setsubmitted(false);
           console.log(res);
@@ -319,6 +249,7 @@ const AllEmployeesAdmin = () => {
         seteditData={seteditData}
         setmode={setmode}
         filters={filters}
+        loadForm={loadForm}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
       />

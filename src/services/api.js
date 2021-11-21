@@ -3,6 +3,7 @@ import tokenService from "./token.service";
 import config from '../config.json'
 let headers = {};
 const token = localStorage.getItem("token");
+
 if (token) {
   headers.Authorization = `Bearer ${token}`;
 }
@@ -12,6 +13,7 @@ const axiosInstance = axios.create({
 });
 axiosInstance.interceptors.request.use((config) => {
   // console.log(config)
+  const token = localStorage.getItem("token");
   if (!token) {
     throw new axios.Cancel("Token is not available. Do login, please.");
   } else {

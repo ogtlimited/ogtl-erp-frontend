@@ -9,8 +9,10 @@ export default createBrowserHistory();
 const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
+
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
+  const [userToken, setuserToken] = useState(null)
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
@@ -56,12 +58,13 @@ const AppProvider = (props) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log(token)
     if (token) {
       console.log("LOGGED IN");
       fetchEmployee();
       fetchEmployeeAttendance();
     }
-  }, []);
+  }, [userToken]);
 
   const fetchEmployee = () => {
     axiosInstance.get("/employees").then((e) => {
@@ -135,6 +138,7 @@ const AppProvider = (props) => {
         notifications,
         user,
         clearNotifications,
+        setuserToken
       }}
     >
       {props.children}
