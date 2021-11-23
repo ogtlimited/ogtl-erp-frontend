@@ -26,7 +26,8 @@ const EmployeesTable = ({
   selectedOption,
   filters,
   seteditData,
-  setmode
+  setmode,
+  loadForm
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -39,7 +40,7 @@ const EmployeesTable = ({
 
   useEffect(() => {
   
-  }, [filters])
+  }, [filters, loadForm])
   const handleClick = (i, type) => {
     console.log(i, unfiltered)
     if (i?.value === "All" || i == null) {
@@ -64,6 +65,7 @@ const EmployeesTable = ({
      
     }
     setmode("edit")
+    console.log(hash)
     seteditData(hash)
   }
   const clearFilter = (e) => {
@@ -126,25 +128,25 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           ) : value === "left" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           ) : value === "terminated" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           ) : (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           )}
         </>
@@ -157,13 +159,13 @@ const EmployeesTable = ({
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "department.department",
+      dataField: "department",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      // formatter: (val) =>(
-      //   <span>val.department</span>
-      // )
+      formatter: (val,row) =>(
+        <span>{val?.department.toUpperCase()}</span>
+      )
     },
     {
       dataField: "designation.designation",
@@ -183,6 +185,10 @@ const EmployeesTable = ({
       sort: true,
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
+        <>
+        {filters &&
+
+
         <div className="dropdown dropdown-action text-right">
           <a
             href="#"
@@ -202,16 +208,11 @@ const EmployeesTable = ({
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
-            <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#delete_employee"
-            >
-              <i className="fa fa-download m-r-5"></i> Download Attendance
-            </a>
+           
           </div>
         </div>
+         }
+        </>
       ),
     },
   ];
@@ -233,10 +234,10 @@ const EmployeesTable = ({
                 className="inputSearch"
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
-              <div className="d-flex row">
+              <div className="d-flex row mb-3">
                
                 {filters && filters.map(f =>(
-                   <div className="col-md-4">
+                   <div className="col-md-3">
                    <Select
                      defaultValue={selectedOption}
                      onChange={(i) => handleClick(i, f.name)}
@@ -249,17 +250,22 @@ const EmployeesTable = ({
    
                    </div>
                 ))}
+               <div className="col-md-3 pt-3 float-right">
+               {filters &&
+                  <ExportCSVButton
+                    className="float-right btn export-csv"
+                    {...props.csvProps}
+                  >
+                    Export CSV
+                  </ExportCSVButton>
                
+               }
+
+               </div>
                 
 
               </div>
 
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
 
               <BootstrapTable
                 {...props.baseProps}

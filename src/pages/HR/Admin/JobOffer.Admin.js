@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import FormModal from "../../../components/Modal/Modal";
 import { jobOfferFormJson } from "../../../components/FormJSON/HR/recruitment/JobOffer";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -14,6 +13,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const jobOpts = [
   {
@@ -45,6 +45,7 @@ const JobOffer = () => {
   const [loadSelect, setloadSelect] = useState(false)
   const editRow = (row) => {
     // setformUpdate(null)
+    console.log(row)
     setformUpdate(row);
     setclickedRow(row);
   };
@@ -293,7 +294,7 @@ const JobOffer = () => {
               className="dropdown-item"
               data-toggle="modal"
               data-target="#FormModal"
-              onClick={() => editRow(row)}
+              onClick={() => editRow(helper.handleEdit(row))}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </Link>

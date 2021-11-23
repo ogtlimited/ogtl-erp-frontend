@@ -7,6 +7,7 @@ import tokenService from "../../services/token.service";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import config from '../../config.json'
+import { useAppContext } from "../../Context/AppContext";
 const Login = () => {
   const { instance } = useMsal();
   let history = useHistory();
@@ -38,7 +39,9 @@ const Login = () => {
             // fetchEmployee()
             // fetchEmployeeAttendance()
             tokenService.setToken(res.data.token.token);
-            window.location.href = "/admin/employee-dashboard";
+            // setuserToken(res.data.token.token)
+            history.push("/admin/employee-dashboard")
+            // window.location.href = "/admin/employee-dashboard";
           })
           .catch((err) => {
             console.log(err);

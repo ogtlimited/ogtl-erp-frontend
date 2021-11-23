@@ -9,6 +9,7 @@ import FormModal2 from "../../../components/Modal/FormModal2";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const Departments = withRouter(({ history }) => {
   const [template, settemplate] = useState({});
@@ -47,8 +48,9 @@ const Departments = withRouter(({ history }) => {
   };
   const editRow = (row) => {
     // setformUpdate(null)
-    setformUpdate(row);
-    setclickedRow(row);
+    let formatted = helper.handleEdit(row)
+    setformUpdate(formatted);
+    setclickedRow(formatted);
   };
 
   const handleClick = (i) => {

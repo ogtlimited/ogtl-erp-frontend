@@ -20,8 +20,8 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
-const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }) => {
-  const [formData, setFormData] = useState(editData);
+const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
+  const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
   const [validationSchema, setValidationSchema] = useState({});
@@ -31,6 +31,7 @@ const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }
     }
   }, []);
   useEffect(() => {
+    console.log(value)
     setFormData(value);
   }, [value]);
   useEffect(() => {
@@ -70,17 +71,16 @@ const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }
         _validationSchema[key] = _validationSchema[key]?.required("Field Required");
       }
     }
-    console.log(formSchema)
     setFormData(_formData);
     setValidationSchema(Yup.object().shape({ ..._validationSchema }));
   };
 
   const getFormElement = (elementName, elementSchema, setFieldValue, value) => {
-    // console.log(elementName, formData[elementName]);
+    // console.log(value);
     const props = {
       name: elementName,
       label: elementSchema.label,
-      value: formData[elementName],
+      defaultValue: formData[elementName],
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,
@@ -144,27 +144,15 @@ const DynamicForm = ({ formSchema, value, setvalue, editData, setformSubmitted }
       >
          {(props) => {
         const {
-          values,
-          touched,
-          errors,
-          isSubmitting,
-          handleChange,
-          handleBlur,
           handleSubmit,
-
-          setFieldValue,
-          setFieldTouched,
-          isValid,
+          setFieldValue
         } = props;
-        // console.log(isValid);
-        // console.log(values);
-        // console.log(errors);
+        // console.log(formData);
         return (
           <form onSubmit={handleSubmit}>
           <div class="row">
-            
-          {Object.keys(formSchema).map((key, ind) => (
-            <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key}>
+          { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
+            <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
               {getFormElement(key, formSchema[key], setFieldValue, formData[key])}
             </div>
           ))}

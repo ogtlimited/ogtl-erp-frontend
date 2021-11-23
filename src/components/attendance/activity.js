@@ -9,7 +9,7 @@ const Activity = () => {
      setactivities(employeeAttendance.reverse().slice(0,3))
    }
   }, [])
-  console.log(employeeAttendance.reverse())
+  // console.log(employeeAttendance.reverse())
   return (
     <div className="col-md-4">
       <div className="card recent-activity">

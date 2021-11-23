@@ -18,9 +18,9 @@ const Sidebar = () => {
     }
   };
   useEffect(() => {
-    combineRequest().then((res) => {
-      const dept = res.data.createEmployeeFormSelection.departments;
-    });
+    // combineRequest().then((res) => {
+    //   const dept = res.data.createEmployeeFormSelection.departments;
+    // });
     if (user != null) {
       // const hrLower = HRpeople.map(e => e.toLowerCase())
       // if(HRpeople.includes(user?.designation?.toLowerCase())){

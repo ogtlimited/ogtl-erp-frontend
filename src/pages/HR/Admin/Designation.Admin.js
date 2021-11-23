@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
+import helper from "../../../services/helper";
 
 let qualityFilter;
 
@@ -43,19 +44,6 @@ const Designations = withRouter(({ history }) => {
   };
   useEffect(() => {
     fetchDesignation();
-    // for (let index = 0; index < list.length; index++) {
-    //   axiosInstance
-    //   .post("/designation", list[index])
-    //   .then((e) => {
-    //     console.log(e);
-    //     setformValue(null);
-    //   })
-    //   .catch((err) => {
-    //     setformValue(null);
-    //     console.log(err);
-    //   });
-      
-    // }
   }, []);
 
   const handleClick = (i) => {
@@ -147,7 +135,7 @@ const Designations = withRouter(({ history }) => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              onClick={() => setformUpdate(row)}
+              onClick={() => setformUpdate(helper.handleEdit(row))}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
