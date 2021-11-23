@@ -33,7 +33,7 @@ export function Form(props) {
 
 export function TextField(props) {
   // console.log(props)
-  const { name, label, disabled, placeholder, ...rest } = props;
+  const { name, label, disabled, placeholder, defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -46,10 +46,9 @@ export function TextField(props) {
           className="form-control"
           type="text"
           name={name}
-          id={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-          {...rest}
+          defaultValue={defaultValue ? defaultValue : ''}
         />
 
         <ErrorMessage
@@ -63,7 +62,7 @@ export function TextField(props) {
 
 export function NumberField(props) {
   // console.log(props)
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder, defaultValue, ...rest } = props;
 
   return (
     <>
@@ -79,6 +78,7 @@ export function NumberField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          defaultValue={defaultValue ? defaultValue : ''}
           {...rest}
         />
 
@@ -91,7 +91,7 @@ export function NumberField(props) {
   );
 }
 export function PasswordField(props) {
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder,defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -106,6 +106,7 @@ export function PasswordField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          value={defaultValue ? defaultValue : ''}
           {...rest}
         />
 
@@ -118,7 +119,7 @@ export function PasswordField(props) {
   );
 }
 export function RichTextField(props) {
-  const { name, label, placeholder,setFieldValue, ...rest } = props;
+  const { name, label, placeholder,setFieldValue, defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -127,18 +128,14 @@ export function RichTextField(props) {
             {label}
           </label>
         )}
-        {/* <ReactQuill
-          onChange={(html) => setgoals(html)}
-          name={name}
-          
-        /> */}
          <Field
           component={ReactQuill}
           name={name}
+          value={defaultValue ? defaultValue : ''}
+
           onChange={(html) => {
             console.log(html);
             setFieldValue(name, html);
-            // setFieldValue("employee_name", opt.value);
           }}
           className=" ml-0 w-100"
         />
@@ -152,7 +149,7 @@ export function RichTextField(props) {
   );
 }
 export function CheckField(props) {
-  const { name, label, placeholder, value, ...rest } = props;
+  const { name, label, placeholder, defaultValue, ...rest } = props;
   const { isChecked, setIsChecked } = useAppContext();
   return (
     <>
@@ -184,7 +181,7 @@ export function CheckField(props) {
   );
 }
 export function DateField(props) {
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder,defaultValue, ...rest  } = props;
   return (
     <>
       <div className="form-group">
@@ -196,6 +193,7 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
+          value={defaultValue ? defaultValue : ''}
           name={name}
           id={name}
           placeholder={placeholder || ""}
@@ -251,7 +249,7 @@ export function FileField(props) {
   );
 }
 export function TimeField(props) {
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder, defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -266,6 +264,7 @@ export function TimeField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          value={defaultValue ? defaultValue : ''}
           {...rest}
         />
 
@@ -278,7 +277,7 @@ export function TimeField(props) {
   );
 }
 export function TextareaField(props) {
-  const { name, label, placeholder, ...rest } = props;
+  const { name, label, placeholder, defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -294,6 +293,7 @@ export function TextareaField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          value={defaultValue || ''}
           {...rest}
         />
 
@@ -307,8 +307,11 @@ export function TextareaField(props) {
 }
 
 export function SelectField(props) {
-  const { name, label, options, value, setFieldValue } = props;
-  // console.log(setFieldValue)
+  const { name, label, options, defaultValue, setFieldValue } = props;
+  let val = options.filter(e => e.value === defaultValue)[0]
+  console.log(name === 'designation_id' ?  options : '' )
+  console.log(name === 'designation_id' ?  defaultValue : '' )
+  console.log(name === 'designation_id' ?  val : null )
   return (
     <>
       <div className="form-group">
@@ -320,7 +323,7 @@ export function SelectField(props) {
         <Field
           options={options}
           component={Select}
-          defaultValue={value}
+          value={val}
           name={name}
           onChange={(opt) => {
             console.log(opt);

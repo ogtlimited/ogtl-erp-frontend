@@ -135,7 +135,7 @@ const CoachingAdmin = () => {
           <a href="" className="avatar">
             <img alt="" src={row.image} />
           </a>
-          <a href="">{value.first_name + " " + value.last_name} </a>
+          <a href="">{value?.first_name + " " + value?.last_name} </a>
         </h2>
       ),
     },
@@ -144,7 +144,7 @@ const CoachingAdmin = () => {
       text: "Employee ID",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => <span>{value.ogid}</span>,
+      formatter: (value, row) => <span>{value?.ogid}</span>,
     },
     {
       dataField: "coaching_type",

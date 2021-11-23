@@ -16,11 +16,12 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const ShiftAssignment = () => {
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [editData, seteditData] = useState(null);
+  const [editData, seteditData] = useState({});
 
   const males = [male, male2, male3];
   const females = [female, female2, female3];
@@ -100,11 +101,10 @@ const ShiftAssignment = () => {
         }
         return field;
       });
-      setTemplate({
-        title: shiftAssignmentFormJson.title,
-        Fields: finalForm,
-      });
-      if(template == null){
+      console.log(finalForm)
+      console.log(helper.formArrayToObject(finalForm))
+      if(finalForm.length){
+        setTemplate(helper.formArrayToObject(finalForm));
         setloadSelect(true)
       }
     });
@@ -238,7 +238,7 @@ const ShiftAssignment = () => {
               className="dropdown-item"
               data-toggle="modal"
               data-target="#FormModal"
-              onClick={() => editRow(row)}
+              onClick={() => editRow(helper.handleEdit(row))}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </Link>
@@ -315,7 +315,7 @@ const ShiftAssignment = () => {
         title="Create Shift Assignment"
         editData={editData}
         setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
+        template={template}
         setsubmitted={setSubmitted}
         />
       

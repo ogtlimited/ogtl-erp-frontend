@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
+import helper from "../../../services/helper";
 
 let qualityFilter;
 
@@ -24,9 +25,11 @@ const Designations = withRouter(({ history }) => {
   const [editData, seteditData] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
+  const [template, settemplate] = useState({})
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const fetchDesignation = () => {
+    settemplate(designation)
     axiosInstance.get("/designation").then((res) => {
       setallDesignation(res.data.data);
       setunfiltered(res?.data?.data);
@@ -41,19 +44,6 @@ const Designations = withRouter(({ history }) => {
   };
   useEffect(() => {
     fetchDesignation();
-    // for (let index = 0; index < list.length; index++) {
-    //   axiosInstance
-    //   .post("/designation", list[index])
-    //   .then((e) => {
-    //     console.log(e);
-    //     setformValue(null);
-    //   })
-    //   .catch((err) => {
-    //     setformValue(null);
-    //     console.log(err);
-    //   });
-      
-    // }
   }, []);
 
   const handleClick = (i) => {
@@ -145,7 +135,7 @@ const Designations = withRouter(({ history }) => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              onClick={() => setformUpdate(row)}
+              onClick={() => setformUpdate(helper.handleEdit(row))}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
@@ -213,7 +203,7 @@ const Designations = withRouter(({ history }) => {
         title="Create Department"
         editData={editData}
         setformValue={setformValue}
-        template={designation}
+        template={template}
         setsubmitted={setsubmitted}
       />
     </>

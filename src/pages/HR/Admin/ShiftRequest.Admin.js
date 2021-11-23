@@ -14,9 +14,11 @@ import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import helper from "../../../services/helper";
 
 const ShiftRequest = () => {
   const [formValue, setFormValue] = useState({});
+  const [template, settemplate] = useState({})
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
   const [editData, seteditData] = useState({});
@@ -39,6 +41,7 @@ const ShiftRequest = () => {
       });
   };
   useEffect(() => {
+    settemplate(helper.formArrayToObject(shiftRequestFormJson.Fields))
     fetchShiftRequests();
   }, []);
 
@@ -173,7 +176,7 @@ const ShiftRequest = () => {
       <FormModal
         editData={editData}
         setformValue={setFormValue}
-        template={shiftRequestFormJson}
+        template={template}
       />
       <ConfirmModal
         title="Shift Request"

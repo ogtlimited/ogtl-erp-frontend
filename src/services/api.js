@@ -3,15 +3,17 @@ import tokenService from "./token.service";
 import config from '../config.json'
 let headers = {};
 const token = localStorage.getItem("token");
+
 if (token) {
   headers.Authorization = `Bearer ${token}`;
 }
-console.log(token);
+// console.log(token);
 const axiosInstance = axios.create({
   baseURL: config.ApiUrl,
 });
 axiosInstance.interceptors.request.use((config) => {
   // console.log(config)
+  const token = localStorage.getItem("token");
   if (!token) {
     throw new axios.Cancel("Token is not available. Do login, please.");
   } else {
@@ -33,7 +35,7 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response.status === 401) {
       // tokenService.removeToken()
-      console.log("tokrn");
+      // console.log("tokrn");
       window.location = "/auth";
     } else {
       return new Promise((resolve, reject) => {

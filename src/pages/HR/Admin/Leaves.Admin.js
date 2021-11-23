@@ -147,8 +147,8 @@ const LeavesAdmin = () => {
             <img alt="" src={male} />
           </a>
           <a href="">
-            {value.first_name + " " + value.last_name}{" "}
-            <span>{value.designation.designation}</span>
+            {value?.first_name + " " + value?.last_name}{" "}
+            <span>{value?.designation?.designation}</span>
           </a>
         </h2>
       ),
@@ -207,8 +207,8 @@ const LeavesAdmin = () => {
             <img alt="" src={male} />
           </a>
           <a href="">
-            {value.first_name + " " + value.last_name}{" "}
-            <span>{value.designation.designation}</span>
+            {value?.first_name + " " + value?.last_name}{" "}
+            <span>{value?.designation.designation}</span>
           </a>
         </h2>
       ),

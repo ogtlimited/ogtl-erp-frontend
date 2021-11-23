@@ -11,7 +11,6 @@ import tokenService from "./services/token.service";
 
 function App() {
   const [token, settoken] = useState(tokenService.getToken())
-  console.log(token)
   return (
     <div className="main-wrapper">
       <BrowserRouter>
