@@ -9,6 +9,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const ShiftAdmin = () => {
   const [formValue, setFormValue] = useState(null);
@@ -166,7 +167,7 @@ const ShiftAdmin = () => {
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
-              onClick={() => editRow(row)}
+              onClick={() => editRow(helper.handleEdit(row))}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>

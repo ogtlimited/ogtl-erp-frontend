@@ -7,7 +7,7 @@ const token = localStorage.getItem("token");
 if (token) {
   headers.Authorization = `Bearer ${token}`;
 }
-console.log(token);
+// console.log(token);
 const axiosInstance = axios.create({
   baseURL: config.ApiUrl,
 });
@@ -35,7 +35,7 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response.status === 401) {
       // tokenService.removeToken()
-      console.log("tokrn");
+      // console.log("tokrn");
       window.location = "/auth";
     } else {
       return new Promise((resolve, reject) => {

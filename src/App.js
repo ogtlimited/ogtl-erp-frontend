@@ -11,14 +11,6 @@ import tokenService from "./services/token.service";
 
 function App() {
   const [token, settoken] = useState(tokenService.getToken())
-  if(typeof window!='undefined'){
-    console.log(localStorage.getItem("token"));
-    window.addEventListener("storage",function(e){
-      console.log(e)
-       this.setState({ auth: true});
-    })
-}
-  console.log(token)
   return (
     <div className="main-wrapper">
       <BrowserRouter>

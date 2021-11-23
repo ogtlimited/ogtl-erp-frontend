@@ -11,6 +11,7 @@ import ReactHtmlParser from "react-html-parser";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const jobOpts = [
   {
@@ -39,8 +40,10 @@ const JobOpening = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
-    setformUpdate(row);
-    setclickedRow(row);
+    console.log('template', helper.handleEdit(row))
+    let formatted =  helper.handleEdit(row)
+    setformUpdate(formatted);
+    setclickedRow(formatted);
   };
 
   const fetchJobOpenings = () => {
@@ -70,7 +73,7 @@ const JobOpening = () => {
   useEffect(() => {
     combineRequest()
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         const { projects, designations, branches } =
           res.data.createEmployeeFormSelection;
         const projectsOpts = projects?.map((e) => {
@@ -166,6 +169,7 @@ const JobOpening = () => {
   }, [formValue, editData, data]);
 
   useEffect(() => {
+    console.log(template)
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
 
@@ -254,13 +258,6 @@ const JobOpening = () => {
       formatter: (value, row) => (
         <h2>{row?.location?.branch || "Not Available"}</h2>
       ),
-    },
-    {
-      dataField: "description",
-      text: "Description",
-      sort: true,
-      headerStyle: { minWidth: "250px" },
-      formatter: (value, row) => <h2>{ReactHtmlParser(row?.description)}</h2>,
     },
     {
       dataField: "",

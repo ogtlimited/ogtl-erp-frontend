@@ -7,6 +7,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import { ApproverBtn } from "../../../components/ApproverBtn";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Select from "react-select";
+import helper from "../../../services/helper";
 
 const jobOpts = [
   {
@@ -189,7 +190,7 @@ const JobApplicants = () => {
               data-toggle="modal"
               data-target="#exampleModal"
               onClick={() => {
-                setSelectedRow(row);
+                setSelectedRow(helper.handleEdit(row));
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete

@@ -15,6 +15,7 @@ const Timesheet = () => {
   const punchInOut = () =>{
     const currUser = user
     console.log(user)
+    console.log(attendance)
     
     if(!attendance){
       const obj = {
@@ -43,16 +44,40 @@ const Timesheet = () => {
     }
   }
   useEffect(() => {
-    setattendance(employeeAttendance[0])
+    // setattendance(employeeAttendance[0])
+    const date = moment(new Date("2021 01"))
+    if(employeeAttendance.length){
+     let todayAttendance =  employeeAttendance.filter(e => moment(new Date().toLocaleDateString()).isSame(new Date(e.clockInTime).toLocaleDateString()))
+     console.log(todayAttendance)
+     if(todayAttendance.length){
+       setattendance(todayAttendance[0])
+     }
+    }
    console.log(employeeAttendance)
   }, [employeeAttendance])
   useEffect(() => {
-    console.log(employeeAttendance)
-    const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
+  
+    
+    let shiftBg = user?.default_shift?.start_time.split(":")
+    console.log(user?.default_shift?.start_time)
+    let shiftBegin = new Date().setHours(parseInt(shiftBg[0]), parseInt(shiftBg[1]))
+    let now = moment(new Date(attendance?.clockInTime)); //todays date
+    let end = moment(new Date()); // another date
+    let duration = moment.duration(end.diff(now));
+    let diffHours = duration.asHours();
+    console.log(now, end, diffHours)
+    console.log(end.diff(now))
+    var dif = moment.duration(end.diff(now));
+console.log([dif.hours(), dif.minutes(), dif.seconds()].join(':'));
+    // console.log(parseInt(shiftBg[0]), parseInt(shiftBg[1]), shiftBegin)
+    const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date(shiftBegin).toLocaleTimeString())
     setworkedTime(wt)
-    const shiftEnd = user?.default_shift?.end_time
-    console.log(wt, parseInt(shiftEnd))
-    if(parseInt(shiftEnd) > wt){
+    const shiftEnd = user?.default_shift?.end_time;
+    let endToSec = shiftEnd.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
+    let wtToSec = wt.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
+    console.log(wt, shiftEnd)
+    console.log(endToSec, wtToSec)
+    if(endToSec > wtToSec){
       const interval = setInterval(() => {
         const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
         console.log('Logs every minute');
@@ -68,7 +93,7 @@ const Timesheet = () => {
   }, [attendance])
   useEffect(() => {
     const user = tokenService.getUser()
-    console.log(user)
+    // console.log(user)
   //  axiosInstance.post()
   }, [attendance])
   return (
@@ -84,6 +109,7 @@ const Timesheet = () => {
           </div>
           <div className="punch-info">
             <div className="punch-hours">
+             
               <span>{attendance ? workedTime : '0:00'} hrs</span>
               
             </div>

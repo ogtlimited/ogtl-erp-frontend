@@ -58,9 +58,7 @@ const AppProvider = (props) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(token)
     if (token) {
-      console.log("LOGGED IN");
       fetchEmployee();
       fetchEmployeeAttendance();
     }

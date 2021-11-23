@@ -1,6 +1,32 @@
-import React from "react";
+import moment from "moment";
+import React, {useState, useEffect} from "react";
+import { useAppContext } from "../../Context/AppContext";
+import helper from "../../services/helper";
+import tokenService from "../../services/token.service";
 
 const Stats = () => {
+
+  const {fetchEmployeeAttendance, employeeAttendance} = useAppContext()
+  const [today, settoday] = useState(0)
+  const [user, setuser] = useState(tokenService.getUser())
+  useEffect(() => {
+    if(employeeAttendance.length){
+      let todayAttendance =  employeeAttendance.filter(e => moment(new Date().toLocaleDateString()).isSame(new Date(e.clockInTime).toLocaleDateString()))
+      console.log(todayAttendance)
+      if(todayAttendance.length){
+        settoday(todayAttendance[0])
+        const wt = helper.diffHours(new Date(todayAttendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
+        console.log(wt)
+      const shiftEnd = user?.default_shift?.end_time;
+      let endToSec = shiftEnd.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
+      let wtToSec = wt.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
+      console.log(wt, shiftEnd)
+      console.log(endToSec, wtToSec)
+      }
+     }
+   
+  }, [])
+
 	const pWidth = {
         width: '60%'
       }
