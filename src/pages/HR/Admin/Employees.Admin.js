@@ -28,7 +28,7 @@ const AllEmployeesAdmin = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false)
   const [mode, setmode] = useState('add')
-  // console.log(allEmployees);
+  console.log(allEmployees);
   useEffect(() => {
     // fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
