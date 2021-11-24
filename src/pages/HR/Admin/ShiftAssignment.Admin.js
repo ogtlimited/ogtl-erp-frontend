@@ -34,8 +34,20 @@ const ShiftAssignment = () => {
   const [unfiltered, setunfiltered] = useState([]);
   const { createShifts, showAlert, setformUpdate } = useAppContext();
   const [loadSelect, setloadSelect] = useState(false);
+  const [mode, setmode] = useState("add");
+  const create = () => {
+    let initialValues = {};
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
   const editRow = (row) => {
     // setformUpdate(null)
+    setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
   };
@@ -111,8 +123,8 @@ const ShiftAssignment = () => {
   }, [loadSelect]);
 
   useEffect(() => {
-    if (formValue) {
-      if (!editData) {
+    if (submitted) {
+      if (mode == "add") {
         axiosInstance
           .post("/api/shiftAssignment", formValue)
           .then((res) => {
@@ -280,6 +292,7 @@ const ShiftAssignment = () => {
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
+                onClick={() => create()}
               >
                 Add Shift Assignment
               </a>

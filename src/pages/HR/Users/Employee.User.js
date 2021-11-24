@@ -5,10 +5,30 @@ import { useAppContext } from "../../../Context/AppContext";
 // import shifts from './shift.json'
 // import raw from './raw.json'
 // import allShift from './allShift.json'
+import ogids from './allEmployeeOgid.json'
+import emergency from './emergency.json'
+import personal from './personal.json'
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const { notifications, user } = useAppContext();
+  let formatted = []
+  ogids.forEach(e =>{
+    let idx = personal.filter(f => e.first_name === f.first_name && e.last_name === f.last_name )[0]
+    if(idx){
+      formatted.push({
+      ogid: e.ogid,
+      means_of_identification: idx.means_of_identification,
+      emergency_phone: idx.emergency_phone,
+      id_number: idx.id_number,
+      date_of_issue: idx.date_of_issue,
+      valid_upto: idx.valid_upto,
+      place_of_issue: idx.place_of_issue,
+      marital_status: idx.marital_status,
+      blood_group: idx.blood_group,
+      })
+    }
+  })
   // let arr = []
   // let unique = []
   // let allShifts = []
@@ -46,7 +66,7 @@ const EmployeeUser = () => {
   // })
   return (
     <>
-    
+      
       <div className="row">
         <div className="col-md-12">
           <div className="welcome-box">

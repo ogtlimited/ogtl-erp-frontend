@@ -16,6 +16,18 @@ const Termination = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false);
+
+  const [mode, setmode] = useState("add");
+  const create = () => {
+    let initialValues = {};
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
   const fetchTermination = () => {
     axiosInstance
       .get("/api/termination")

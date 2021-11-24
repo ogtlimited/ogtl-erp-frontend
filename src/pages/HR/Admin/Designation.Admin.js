@@ -15,11 +15,9 @@ import helper from "../../../services/helper";
 let qualityFilter;
 
 const Designations = withRouter(({ history }) => {
-
-
   // console.log(uniqueArray)
   const [allDesignation, setallDesignation] = useState([]);
-  const { formUpdate, setformUpdate } = useAppContext();
+  const { formUpdate, setformUpdate, showAlert } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -28,6 +26,25 @@ const Designations = withRouter(({ history }) => {
   const [template, settemplate] = useState({})
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
+  const [mode, setmode] = useState('add')
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setmode('add')
+      setformValue(initialValues)
+      seteditData(initialValues)
+  }
+  const editRow = (row) => {
+    // setformUpdate(null)
+    let formatted = helper.handleEdit(row)
+    setmode('edit')
+    setformUpdate(formatted);
+    setclickedRow(formatted);
+  };
+
   const fetchDesignation = () => {
     settemplate(designation)
     axiosInstance.get("/designation").then((res) => {
@@ -60,25 +77,30 @@ const Designations = withRouter(({ history }) => {
   useEffect(() => {
     console.log(formValue);
     fetchDesignation();
-    if (formValue) {
-      if (!formUpdate) {
+    console.log(submitted, mode)
+    if (submitted) {
+      if (mode == 'add') {
         axiosInstance
           .post("/designation", formValue)
           .then((e) => {
             console.log(e);
-            setformValue(null);
+            showAlert(true, "Designation successfully created", "alert alert-success")
+            // setformValue(null);
+            fetchDesignation()
           })
           .catch((err) => {
-            setformValue(null);
+            // setformValue(null);
             console.log(err);
           });
       } else {
         console.log(editData);
-        formValue._id = formUpdate._id;
+        console.log(formValue);
+        // formValue._id = formUpdate._id;
         axiosInstance
           .put("/designation/" + formUpdate._id, formValue)
           .then((e) => {
             console.log(e);
+            showAlert(true, "Designation successfully updated", "alert alert-success")
             setformValue(null);
             fetchDesignation();
           })
@@ -135,7 +157,10 @@ const Designations = withRouter(({ history }) => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              onClick={() => setformUpdate(helper.handleEdit(row))}
+              onClick={() => {
+                setmode("edit")
+                setformUpdate(helper.handleEdit(row))
+              }}
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
@@ -175,6 +200,7 @@ const Designations = withRouter(({ history }) => {
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Add Designation
             </a>

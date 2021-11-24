@@ -48,7 +48,7 @@ export function TextField(props) {
           name={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-          defaultValue={defaultValue ? defaultValue : ''}
+          // defaultValue={defaultValue ? defaultValue : ''}
         />
 
         <ErrorMessage
@@ -193,11 +193,11 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
-          value={defaultValue ? defaultValue : ''}
+          // value={defaultValue ? defaultValue : ''}
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          {...rest}
+
         />
 
         <ErrorMessage
@@ -264,8 +264,8 @@ export function TimeField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue ? defaultValue : ''}
-          {...rest}
+
+
         />
 
         <ErrorMessage
@@ -293,8 +293,7 @@ export function TextareaField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue || ''}
-          {...rest}
+
         />
 
         <ErrorMessage
@@ -309,9 +308,6 @@ export function TextareaField(props) {
 export function SelectField(props) {
   const { name, label, options, defaultValue, setFieldValue } = props;
   let val = options.filter(e => e.value === defaultValue)[0]
-  console.log(name === 'designation_id' ?  options : '' )
-  console.log(name === 'designation_id' ?  defaultValue : '' )
-  console.log(name === 'designation_id' ?  val : null )
   return (
     <>
       <div className="form-group">
@@ -323,7 +319,8 @@ export function SelectField(props) {
         <Field
           options={options}
           component={Select}
-          value={val}
+          defaultValue={val}
+          key={val}
           name={name}
           onChange={(opt) => {
             console.log(opt);

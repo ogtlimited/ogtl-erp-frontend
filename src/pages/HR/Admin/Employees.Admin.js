@@ -33,7 +33,7 @@ const AllEmployeesAdmin = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
   const [mode, setmode] = useState("add");
-  // console.log(allEmployees);
+  console.log(allEmployees);
   useEffect(() => {
     // fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
@@ -125,7 +125,15 @@ const AllEmployeesAdmin = () => {
       console.log(obj);
     });
   }, [mode]);
-  const changeMode = () => {};
+  const create = () => {
+    let initialValues = {};
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setformValue(initialValues);
+    seteditData(initialValues);
+  };
   // Submit
   useEffect(() => {
     console.log(formValue, mode, editData);
@@ -160,7 +168,13 @@ const AllEmployeesAdmin = () => {
         axiosInstance.put("/employees/" + id, formValue).then((res) => {
           fetchEmployee();
           setsubmitted(false);
+          seteditData({});
           console.log(res);
+          showAlert(
+            true,
+            "Employee Details successfully updated",
+            "alert alert-success"
+          );
         });
       }
     }
@@ -226,6 +240,7 @@ const AllEmployeesAdmin = () => {
               className="btn add-btn "
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Add Employee
             </a>
