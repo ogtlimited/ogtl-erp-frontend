@@ -264,8 +264,8 @@ export function TimeField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue ? defaultValue : ''}
-          {...rest}
+
+
         />
 
         <ErrorMessage

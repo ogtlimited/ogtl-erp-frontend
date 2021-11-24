@@ -22,12 +22,23 @@ const ShiftAdmin = () => {
   const [shiftsOpt, setShiftOpts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const { fetchTypesShift, showAlert, setformUpdate } = useAppContext();
-
+  const [mode, setmode] = useState("add")
   const editRow = (row) => {
     // setformUpdate(null)
+    setmode("edit")
     setformUpdate(row);
     setclickedRow(row);
   };
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setmode('add')
+      setFormValue(initialValues)
+      seteditData(initialValues)
+  }
 
   useEffect(() => {
     settemplate(HelperService.formArrayToObject(shiftTypeFormJson.Fields))
@@ -58,8 +69,9 @@ const ShiftAdmin = () => {
     }
   };
   useEffect(() => {
-    if (formValue) {
-      if (!editData) {
+    console.log(formValue)
+    if (submitted) {
+      if (mode == "add") {
         axiosInstance
           .post("/api/shiftType", formValue)
           .then((res) => {
@@ -78,10 +90,8 @@ const ShiftAdmin = () => {
             );
           });
       } else {
-        formValue._id = editData._id;
-        delete formValue.__v;
-        delete formValue.createdAt;
-        delete formValue.updatedAt;
+        // formValue._id = editData._id;
+        console.log(formValue)
         axiosInstance
           .patch("/api/shiftType/" + editData._id, formValue)
           .then((res) => {
@@ -101,7 +111,7 @@ const ShiftAdmin = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formValue, editData, fetchTypesShift]);
+  }, [formValue]);
 
   useEffect(() => {
     seteditData(clickedRow);
@@ -167,7 +177,7 @@ const ShiftAdmin = () => {
               href="#"
               data-toggle="modal"
               data-target="#FormModal"
-              onClick={() => editRow(helper.handleEdit(row))}
+              onClick={() => {editRow(helper.handleEdit(row))}}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
@@ -208,6 +218,7 @@ const ShiftAdmin = () => {
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => create()}
             >
               Add Shifts
             </a>
