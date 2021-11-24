@@ -338,7 +338,7 @@ const JobOffer = () => {
               <li className="breadcrumb-item">
                 <Link to="/">Employees</Link>
               </li>
-              <li className="breadcrumb-item active">Job Offer List</li>
+              <li className="breadcrumb-item active">Job Offers</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
