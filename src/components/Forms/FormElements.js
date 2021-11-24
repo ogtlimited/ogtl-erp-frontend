@@ -197,7 +197,7 @@ export function DateField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          {...rest}
+
         />
 
         <ErrorMessage
@@ -320,7 +320,7 @@ export function SelectField(props) {
         <Field
           options={options}
           component={Select}
-          value={val}
+          defaultValue={val}
           key={val}
           name={name}
           onChange={(opt) => {

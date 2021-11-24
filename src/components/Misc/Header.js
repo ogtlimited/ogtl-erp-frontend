@@ -5,6 +5,7 @@ import logo from "../../assets/img/OG-Logo.png";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { NotificationBox } from "./NotificationBox";
+import { useMsal } from "@azure/msal-react";
 
 const toggle_sidebar = (e) => {
   e.preventDefault();
@@ -19,11 +20,18 @@ const toggle_sidebar = (e) => {
 // const Header = withRouter(({ history }) => {
 const Header = () => {
   let history = useHistory();
+  const { instance } = useMsal();
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
+    instance.logoutPopup().then(e =>{
+      history.push("/auth");
+
+    })
+    .catch(e => {
+      console.error(e);
+    });
     console.log("pushing");
-    history.push("/auth");
   };
   const user = tokenService.getUser();
 

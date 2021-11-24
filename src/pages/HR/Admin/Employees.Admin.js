@@ -154,7 +154,9 @@ const AllEmployeesAdmin = () => {
         axiosInstance.put("/employees/"+ id, formValue).then((res) => {
           fetchEmployee();
           setsubmitted(false);
+          seteditData({})
           console.log(res);
+          showAlert(true, "Employee Details successfully updated", "alert alert-success")
         });
 
       }
@@ -217,6 +219,10 @@ const AllEmployeesAdmin = () => {
               className="btn add-btn "
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => {
+                seteditData({})
+                setformValue({})
+              }}
             >
               <i className="fa fa-plus"></i> Add Employee
             </a>

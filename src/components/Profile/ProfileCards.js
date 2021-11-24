@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import BankInformation from "./components/BankInformation";
 import ContactDetails from "./components/ContactDetails";
 import EducationInformation from "./components/EducationInformation";
@@ -19,9 +19,17 @@ const ProfileCards = ({
   setFormValue,
   fetchUserInfo,
 }) => {
+  const [employeeDetails, setemployeeDetails] = useState({})
+  const [campaign, setcampaign] = useState({})
+  const [avaterList, setavaterList] = useState([avater, avater2, avater3, avater4, avater5])
   const handleChange = (type) => {
     setformType(type);
   };
+  useEffect(() => {
+    console.log(userData.employee)
+    setemployeeDetails(userData?.employee)
+    setcampaign(userData?.employee?.projectId)
+  }, [userData])
   return (
     <>
       <div className="card tab-box">
@@ -139,17 +147,15 @@ const ProfileCards = ({
               <div class="card">
                 <div class="card-body">
                   <h4 class="project-title mb-2">
-                    <a href="">CS Campaign</a>
+                    <a href="">{campaign?.project_name}</a>
                   </h4>
 
                   <p class="text-muted">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. When an unknown printer took a galley
-                    of type and scrambled it...
+                   {campaign?.objectives}
                   </p>
                   <div class="pro-deadline m-b-15">
-                    <div class="sub-title">Deadline:</div>
-                    <div class="text-muted">17 Apr 2019</div>
+                    <div class="sub-title">Start date:</div>
+                    <div class="text-muted">{new Date(campaign?.start_date).toDateString()}</div>
                   </div>
                   <div class="project-members m-b-15">
                     <div>Team Leader :</div>
@@ -169,49 +175,23 @@ const ProfileCards = ({
                   <div class="project-members m-b-15">
                     <div>Team :</div>
                     <ul class="team-members">
-                      <li>
-                        <a
-                          href="#"
-                          data-toggle="tooltip"
-                          title=""
-                          data-original-title=""
-                        >
-                          <img alt="" src={avater2} />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          data-toggle="tooltip"
-                          title=""
-                          data-original-title=""
-                        >
-                          <img alt="" src={avater3} />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          data-toggle="tooltip"
-                          title=""
-                          data-original-title="John Smith"
-                        >
-                          <img alt="" src={avater4} />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          data-toggle="tooltip"
-                          title=""
-                          data-original-title="Mike Litorus"
-                        >
-                          <img alt="" src={avater5} />
-                        </a>
-                      </li>
+                      {campaign?.number_of_employees && 
+                      Array(campaign.number_of_employees).fill(1).slice(0,4).map((e, i) => (
+                          <li>
+                            <a
+                              href="#"
+                              data-toggle="tooltip"
+                              title=""
+                              data-original-title=""
+                            >
+                              <img alt="" src={avaterList[Math.floor(Math.random() * avaterList.length)]} />
+                            </a>
+                          </li>
+
+                      ))}
                       <li>
                         <a href="#" class="all-users">
-                          +15
+                          {campaign?.number_of_employees <= 4 ? campaign?.number_of_employees : '+' + (campaign?.number_of_employees - 4)}
                         </a>
                       </li>
                     </ul>
