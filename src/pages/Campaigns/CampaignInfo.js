@@ -14,7 +14,6 @@ const CampaignInfo = () => {
       axiosInstance
         .get(`/api/project/${id}`)
         .then((res) => {
-          console.log(res.data);
           setData(res.data.data);
         })
         .catch((error) => {

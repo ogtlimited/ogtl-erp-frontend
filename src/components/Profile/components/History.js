@@ -4,6 +4,7 @@ import moment from "moment";
 import tokenService from "../../../services/token.service";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import { canView } from "../../../services/canView";
 
 const initialState = {
   histories: [],
@@ -84,7 +85,7 @@ const History = ({
       <div className="card-body">
         <h3 className="card-title">
           History
-          {id === user._id && (
+          {canView(user, "HR") && (
             <Link
               className="edit-icon"
               onClick={() => handleChange("History")}

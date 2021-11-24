@@ -174,36 +174,7 @@ const AllCampaigns = () => {
       headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{value?.company}</h2>,
     },
-    // {
-    //   dataField: "team_member",
-    //   text: "Team members",
-    //   sort: true,
-    //   headerStyle: { minWidth: "180px" },
-    //   formatter: (value, row) => (
-    //     <ul className="team-members">
-    //       {value?.slice(0, 3).map((mem, i) => {
-    //         return (
-    //           <li>
-    //             {i + 1 <= 3 ? (
-    //               <Link
-    //                 href="#"
-    //                 data-toggle="tooltip"
-    //                 title=""
-    //                 data-original-title={mem.employee_name}
-    //               >
-    //                 <img alt="" src={avater} />
-    //               </Link>
-    //             ) : (
-    //               <Link href="#" className="all-users">
-    //                 +{value.length}
-    //               </Link>
-    //             )}
-    //           </li>
-    //         );
-    //       })}
-    //     </ul>
-    //   ),
-    // },
+
     {
       dataField: "status",
       text: "Status",
@@ -221,12 +192,6 @@ const AllCampaigns = () => {
         </>
       ),
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   sort: true,
-    //   headerStyle: { minWidth: "150px" },
-    // },
   ];
   return (
     <>
@@ -242,14 +207,13 @@ const AllCampaigns = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
+            <Link
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Create Project
-            </a>
+            </Link>
             <div className="view-icons">
               <a href="projects" className="grid-view btn btn-link">
                 <i className="fa fa-th"></i>
