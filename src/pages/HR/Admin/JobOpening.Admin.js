@@ -37,10 +37,11 @@ const JobOpening = () => {
   const [clickedRow, setclickedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false)
   const [unfiltered, setunfiltered] = useState([]);
-
+  const [mode, setmode] = useState("add")
   const editRow = (row) => {
     // setformUpdate(null)
     console.log('template', helper.handleEdit(row))
+    setmode("edit")
     let formatted =  helper.handleEdit(row)
     setformUpdate(formatted);
     setclickedRow(formatted);
@@ -51,6 +52,7 @@ const JobOpening = () => {
         initialValues[i] = "";
         // console.log(i);
       }
+      setmode("add")
       setFormValue(initialValues)
       seteditData(initialValues)
   }
@@ -132,12 +134,12 @@ const JobOpening = () => {
 
   //create job opening
   useEffect(() => {
-    if (formValue) {
-      if (!editData) {
+    if (submitted) {
+      if (mode == 'add') {
         axiosInstance
           .post("/api/jobOpening", formValue)
           .then((res) => {
-            setFormValue(null);
+            // setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
             fetchJobOpenings();
 
@@ -145,7 +147,7 @@ const JobOpening = () => {
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            // setFormValue(null);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -153,20 +155,20 @@ const JobOpening = () => {
             );
           });
       } else {
-        formValue._id = editData._id;
-        delete formValue.__v;
-        delete formValue.createdAt;
-        delete formValue.updatedAt;
+        // formValue._id = editData._id;
+        // delete formValue.__v;
+        // delete formValue.createdAt;
+        // delete formValue.updatedAt;
         axiosInstance
           .patch("/api/jobOpening/" + editData._id, formValue)
           .then((res) => {
-            setFormValue(null);
+            // setFormValue(null);
             fetchJobOpenings();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            // setFormValue(null);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -175,7 +177,7 @@ const JobOpening = () => {
           });
       }
     }
-  }, [formValue, editData, data]);
+  }, [formValue, editData]);
 
   useEffect(() => {
     console.log(template)
