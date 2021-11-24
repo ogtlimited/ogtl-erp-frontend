@@ -45,6 +45,15 @@ const JobOpening = () => {
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setFormValue(initialValues)
+      seteditData(initialValues)
+  }
 
   const fetchJobOpenings = () => {
     axiosInstance
@@ -321,6 +330,7 @@ const JobOpening = () => {
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
+                onClick={()=> create()}
               >
                 Add Job Opening
               </a>

@@ -26,7 +26,7 @@ const ProfileCards = ({
     setformType(type);
   };
   useEffect(() => {
-    console.log(userData.employee)
+    // console.log(userData.employee)
     setemployeeDetails(userData?.employee)
     setcampaign(userData?.employee?.projectId)
   }, [userData])

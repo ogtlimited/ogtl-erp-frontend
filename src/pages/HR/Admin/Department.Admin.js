@@ -10,10 +10,11 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import Select from "react-select";
 import helper from "../../../services/helper";
+import { create } from "yup/lib/Reference";
 
 const Departments = withRouter(({ history }) => {
   const [template, settemplate] = useState({});
-  const { formUpdate, setformUpdate } = useAppContext();
+  const { formUpdate, setformUpdate, showAlert } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -21,6 +22,7 @@ const Departments = withRouter(({ history }) => {
   const [deleteData, setdeleteData] = useState(null);
   const [departMentOpts, setDepartmentOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
+  const [mode, setmode] = useState('add')
   const defaultSorted = [
     {
       dataField: "designation",
@@ -49,9 +51,20 @@ const Departments = withRouter(({ history }) => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row)
+    setmode('edit')
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setmode('add')
+      setformValue(initialValues)
+      seteditData(initialValues)
+  }
 
   const handleClick = (i) => {
     if (i?.value === "All" || i === null) {
@@ -62,17 +75,23 @@ const Departments = withRouter(({ history }) => {
       setallDepartments(filt);
     }
   };
+  useEffect(() => {
+    fetchDept();
+    setallDepartments(departments);
+  }, [])
 
   useEffect(() => {
-    // console.log(formValue);
-    fetchDept();
-    if (formValue) {
-      if (!editData) {
+    console.log(formValue);
+    console.log(editData);
+    if (submitted) {
+      if (mode == 'add') {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {
             console.log(e);
-            setformValue(null);
+            // setformValue({});
+            fetchDept()
+            showAlert(true, "New department created", "alert alert-success")
           })
           .catch((err) => {
             setformValue(null);
@@ -80,12 +99,13 @@ const Departments = withRouter(({ history }) => {
           });
       } else {
         console.log(editData);
-        formValue._id = editData._id;
+        console.log(formValue);
         axiosInstance
           .put("/department/" + editData._id, formValue)
           .then((e) => {
             console.log(e);
             setformValue(null);
+            showAlert(true, "Department successfully updated", "alert alert-success")
             fetchDept();
           })
           .catch((err) => {
@@ -94,7 +114,6 @@ const Departments = withRouter(({ history }) => {
           });
       }
     }
-    setallDepartments(departments);
   }, [formValue]);
   useEffect(() => {
     seteditData(clickedRow);
@@ -169,6 +188,7 @@ const Departments = withRouter(({ history }) => {
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={()=> create()}
             >
               <i className="fa fa-plus"></i> Add Department
             </a>

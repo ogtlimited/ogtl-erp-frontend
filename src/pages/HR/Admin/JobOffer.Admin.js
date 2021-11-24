@@ -49,6 +49,15 @@ const JobOffer = () => {
     setformUpdate(row);
     setclickedRow(row);
   };
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setFormValue(initialValues)
+      seteditData(initialValues)
+  }
 
   const fetchJobOffers = () => {
     axiosInstance
@@ -336,6 +345,7 @@ const JobOffer = () => {
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
+                onClick={()=> create()}
               >
                 Add Job Offer
               </a>

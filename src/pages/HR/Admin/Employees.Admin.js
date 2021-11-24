@@ -116,8 +116,14 @@ const AllEmployeesAdmin = () => {
       console.log(obj);
     });
   }, [mode]);
-  const changeMode = () =>{
-
+  const create = () =>{
+    let initialValues = {};
+      for (let i in template) {
+        initialValues[i] = "";
+        // console.log(i);
+      }
+      setformValue(initialValues)
+      seteditData(initialValues)
   }
   // Submit
   useEffect(() => {
@@ -219,10 +225,7 @@ const AllEmployeesAdmin = () => {
               className="btn add-btn "
               data-toggle="modal"
               data-target="#FormModal"
-              onClick={() => {
-                seteditData({})
-                setformValue({})
-              }}
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Add Employee
             </a>
