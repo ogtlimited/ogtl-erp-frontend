@@ -10,7 +10,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 const SalaryAssignment = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { combineRequest } = useAppContext();
+  const { createPayroll } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
 
   const fetchSalaryAssignments = (ogid) => {
@@ -26,9 +26,9 @@ const SalaryAssignment = ({ salaryStructure }) => {
   };
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPayroll().then((res) => {
       console.log(res);
-      const { employees } = res.data.createEmployeeFormSelection;
+      const { employees } = res.data.createPayrollForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,

@@ -28,20 +28,20 @@ const JobOpening = () => {
   const [formValue, setFormValue] = useState(null);
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
-  const { combineRequest, showAlert, setformUpdate } = useAppContext();
+  const { createRecruitmens, showAlert, setformUpdate } = useAppContext();
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [editData, seteditData] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const [clickedRow, setclickedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
 
   const editRow = (row) => {
     // setformUpdate(null)
-    console.log('template', helper.handleEdit(row))
-    let formatted =  helper.handleEdit(row)
+    console.log("template", helper.handleEdit(row));
+    let formatted = helper.handleEdit(row);
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -71,11 +71,11 @@ const JobOpening = () => {
     }
   };
   useEffect(() => {
-    combineRequest()
+    createRecruitmens()
       .then((res) => {
         // console.log(res.data);
         const { projects, designations, branches } =
-          res.data.createEmployeeFormSelection;
+          res.data.createRecruitmentForm;
         const projectsOpts = projects?.map((e) => {
           return {
             label: e.project_name,
@@ -111,9 +111,9 @@ const JobOpening = () => {
           title: jobOpeningFormJson.title,
           Fields: finalForm,
         });
-        console.log(template)
-        if(!loadSelect){
-          setloadSelect(true)
+        console.log(template);
+        if (!loadSelect) {
+          setloadSelect(true);
         }
       })
       .catch((error) => {
@@ -169,7 +169,7 @@ const JobOpening = () => {
   }, [formValue, editData, data]);
 
   useEffect(() => {
-    console.log(template)
+    console.log(template);
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
 
@@ -315,7 +315,7 @@ const JobOpening = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect &&
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
@@ -324,8 +324,7 @@ const JobOpening = () => {
               >
                 Add Job Opening
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -345,15 +344,15 @@ const JobOpening = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect &&
-      <FormModal2
-        title="Create Job Opening"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
-}
+      {loadSelect && (
+        <FormModal2
+          title="Create Job Opening"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(template.Fields)}
+          setsubmitted={setSubmitted}
+        />
+      )}
       <ConfirmModal
         title="Job Opening"
         selectedRow={selectedRow}

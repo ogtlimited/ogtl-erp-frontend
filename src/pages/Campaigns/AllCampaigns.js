@@ -124,6 +124,33 @@ const AllCampaigns = () => {
     }
   }, [formValue, user?._id]);
 
+  useEffect(() => {
+    if (status.length) {
+      console.log(status);
+      console.log(statusRow);
+      const update = {
+        status,
+      };
+
+      axiosInstance
+        .put("/api/project/approve/" + statusRow._id, update)
+        .then((res) => {
+          console.log("statusssssssssssss", res.data);
+          fetchCampaign();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
+
   const columns = [
     {
       dataField: "project_name",

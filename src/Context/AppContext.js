@@ -9,10 +9,9 @@ export default createBrowserHistory();
 const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
-
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
-  const [userToken, setuserToken] = useState(null)
+  const [userToken, setuserToken] = useState(null);
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
@@ -91,6 +90,32 @@ const AppProvider = (props) => {
   const combineRequest = () => {
     return axiosInstance.get("/combine-employee-form");
   };
+
+  //for creating employees
+  const createEmployee = () => {
+    return axiosInstance.get("/create-employee-form");
+  };
+
+  //for creating shifts
+  const createShifts = () => {
+    return axiosInstance.get("/create-shift-form");
+  };
+
+  //create payroll
+  const createPayroll = () => {
+    return axiosInstance.get("/create-payroll-form");
+  };
+
+  //creating recruitments
+  const createRecruitmens = () => {
+    return axiosInstance.get("/create-recruitment-form");
+  };
+
+  //for anything relating to performace
+  const createPerfomance = () => {
+    return axiosInstance.get("/create-performance-form");
+  };
+
   const adminDashboardData = () => {
     return axiosInstance.get("/admin-dashboard");
   };
@@ -136,7 +161,12 @@ const AppProvider = (props) => {
         notifications,
         user,
         clearNotifications,
-        setuserToken
+        setuserToken,
+        createEmployee,
+        createShifts,
+        createPayroll,
+        createRecruitmens,
+        createPerfomance,
       }}
     >
       {props.children}
