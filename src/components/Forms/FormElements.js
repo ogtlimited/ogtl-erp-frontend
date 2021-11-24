@@ -193,7 +193,7 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
-          defaultValue={defaultValue ? defaultValue : ''}
+          // value={defaultValue ? defaultValue : ''}
           name={name}
           id={name}
           placeholder={placeholder || ""}
@@ -293,8 +293,7 @@ export function TextareaField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue || ''}
-          {...rest}
+
         />
 
         <ErrorMessage
