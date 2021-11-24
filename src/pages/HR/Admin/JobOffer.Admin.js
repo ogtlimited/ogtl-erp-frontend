@@ -43,9 +43,11 @@ const JobOffer = () => {
   const [clickedRow, setclickedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [loadSelect, setloadSelect] = useState(false)
+  const [mode, setmode] = useState("add")
   const editRow = (row) => {
     // setformUpdate(null)
     console.log(row)
+    setmode("edit")
     setformUpdate(row);
     setclickedRow(row);
   };
@@ -55,6 +57,7 @@ const JobOffer = () => {
         initialValues[i] = "";
         // console.log(i);
       }
+      setmode("add")
       setFormValue(initialValues)
       seteditData(initialValues)
   }
@@ -127,19 +130,20 @@ const JobOffer = () => {
 
   //create job offer
   useEffect(() => {
-    if (formValue) {
-      if (!editData) {
+    if (submitted) {
+      if (mode === "add") {
         axiosInstance
           .post("/api/jobOffer", formValue)
           .then((res) => {
-            setFormValue(null);
+            // setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
+            setSubmitted(false)
             fetchJobOffers();
             showAlert(true, res.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            // setFormValue(null);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -147,20 +151,19 @@ const JobOffer = () => {
             );
           });
       } else {
-        formValue._id = editData._id;
-        delete formValue.__v;
-        delete formValue.createdAt;
-        delete formValue.updatedAt;
+
         axiosInstance
           .patch("/api/jobOffer/" + editData._id, formValue)
           .then((res) => {
-            setFormValue(null);
+            // setFormValue(null);
             fetchJobOffers();
+            setSubmitted(false)
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            // setFormValue(null);
+            setSubmitted(false)
             showAlert(
               true,
               error?.response?.data?.message,
@@ -335,7 +338,7 @@ const JobOffer = () => {
               <li className="breadcrumb-item">
                 <Link to="/">Employees</Link>
               </li>
-              <li className="breadcrumb-item active">Job Offer List</li>
+              <li className="breadcrumb-item active">Job Offers</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
