@@ -4,6 +4,8 @@ import female from "../../../assets/img/female_avatar.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import moment from "moment";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import AddTeam from "./form-components/AddTeam";
+import AddMembers from "./form-components/AddMembers";
 
 const CampaignRightCard = ({ campaign_info }) => {
   const [approval, setApproval] = useState([
@@ -25,30 +27,7 @@ const CampaignRightCard = ({ campaign_info }) => {
     },
   ]);
   const [status, setStatus] = useState("");
-  const lead = [
-    {
-      employee_name: "Oga Ahmed",
-      designation: "Software Engineer",
-      img: male,
-    },
-    {
-      employee_name: "Margaret Iman",
-      designation: "Software Engineer",
-      img: female,
-    },
-  ];
-  const users = [
-    {
-      employee_name: "Anthony Potbelly",
-      designation: "Software Engineer",
-      img: male,
-    },
-    {
-      employee_name: "Mazi Ogundu",
-      designation: "Software Engineer",
-      img: male,
-    },
-  ];
+  console.log("campaign ", campaign_info);
 
   return (
     <>
@@ -95,7 +74,7 @@ const CampaignRightCard = ({ campaign_info }) => {
                 <td>Created by:</td>
                 <td className="text-right">
                   <a href="/">
-                    {campaign_info?.creator?.first_name}{" "}
+                    {campaign_info?.creator?.first_name}
                     {campaign_info?.creator?.last_name}
                   </a>
                 </td>
@@ -136,28 +115,33 @@ const CampaignRightCard = ({ campaign_info }) => {
       <div className="card project-user">
         <div className="card-body">
           <h6 className="card-title m-b-20">
-            Assigned Leader{" "}
+            Assigned Leader
             <button
               type="button"
               className="float-right btn btn-primary btn-sm"
               data-toggle="modal"
-              data-target="#assign_leader"
+              data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add
             </button>
           </h6>
           <ul className="list-box">
-            {lead.map((e) => (
+            {campaign_info?.team_leads.map((e) => (
               <li>
                 <a href="profile.html">
                   <div className="list-item">
                     <div className="list-left">
                       <span className="avatar">
-                        <img alt="" src={e.img} />
+                        <img
+                          alt=""
+                          src={e.gender === "male" ? male2 : female}
+                        />
                       </span>
                     </div>
                     <div className="list-body">
-                      <span className="message-author">{e.employee_name}</span>
+                      <span className="message-author">
+                        {e.first_name} {e.middle_name} {e.last_name}
+                      </span>
                       <div className="clearfix"></div>
                       <span className="message-content">Team Leader</span>
                     </div>
@@ -172,30 +156,37 @@ const CampaignRightCard = ({ campaign_info }) => {
       <div className="card project-user">
         <div className="card-body">
           <h6 className="card-title m-b-20">
-            Assigned Members{" "}
+            Assigned Members
             <button
               type="button"
               className="float-right btn btn-primary btn-sm"
               data-toggle="modal"
-              data-target="#assign_leader"
+              data-target="#FormModalMembers"
             >
               <i className="fa fa-plus"></i> Add
             </button>
           </h6>
           <ul className="list-box">
-            {users.map((e) => (
+            {campaign_info?.team_members?.map((e) => (
               <li>
                 <a href="profile.html">
                   <div className="list-item">
                     <div className="list-left">
                       <span className="avatar">
-                        <img alt="" src={e.img} />
+                        <img
+                          alt=""
+                          src={e.gender === "male" ? male2 : female}
+                        />
                       </span>
                     </div>
                     <div className="list-body">
-                      <span className="message-author">{e.employee_name}</span>
+                      <span className="message-author">
+                        {e.first_name} {e.middle_name} {e.last_name}
+                      </span>
                       <div className="clearfix"></div>
-                      <span className="message-content">{e.designation}</span>
+                      <span className="message-content">
+                        {e.designation.designation}
+                      </span>
                     </div>
                   </div>
                 </a>
@@ -204,6 +195,8 @@ const CampaignRightCard = ({ campaign_info }) => {
           </ul>
         </div>
       </div>
+      <AddTeam campaign_info={campaign_info} />
+      <AddMembers campaign_info={campaign_info} />
     </>
   );
 };

@@ -10,7 +10,6 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
 const PayrollItems = () => {
-  
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(salaryComponentsFormJson);
   const [formValue, setformValue] = useState({});
@@ -18,8 +17,8 @@ const PayrollItems = () => {
   const [path, setpath] = useState("/personal-details");
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const [loadSelect, setloadSelect] = useState(false)
-  const { combineRequest } = useAppContext();
+  const [loadSelect, setloadSelect] = useState(false);
+  const { createPayroll } = useAppContext();
 
   useEffect(() => {
     console.log(formType);
@@ -33,9 +32,9 @@ const PayrollItems = () => {
   }, [formType, template]);
 
   const fetchedCombineRequest = useCallback(() => {
-    combineRequest().then((res) => {
+    createPayroll().then((res) => {
       console.log(res);
-      const { departments, projects } = res.data.createEmployeeFormSelection;
+      const { departments, projects } = res.data.createPayrollForm;
       const departmentsOpts = departments?.map((e) => {
         return {
           label: e.department,
@@ -62,12 +61,12 @@ const PayrollItems = () => {
         title: template.title,
         Fields: finalForm,
       });
-      if(template !== null){
-        setloadSelect(true)
+      if (template !== null) {
+        setloadSelect(true);
       }
       console.log("my template", template);
     });
-  }, [template, combineRequest, loadSelect]);
+  }, [template, createPayroll, loadSelect]);
 
   useEffect(() => {
     fetchedCombineRequest();
@@ -145,9 +144,9 @@ const PayrollItems = () => {
           loadSelect={loadSelect}
           fetchSalaryStructures={fetchSalaryStructures}
         />
-        <SalaryAssignment loadSelect={loadSelect}  salaryStructure={data} />
+        <SalaryAssignment loadSelect={loadSelect} salaryStructure={data} />
       </div>
-      {loadSelect && 
+      {loadSelect && (
         <FormModal
           editData={editData}
           setformValue={setformValue}
@@ -155,8 +154,7 @@ const PayrollItems = () => {
           template={template}
           setsubmitted={setsubmitted}
         />
-      
-      }
+      )}
     </>
   );
 };
