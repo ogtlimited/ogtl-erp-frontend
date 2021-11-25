@@ -375,34 +375,34 @@ const Sidebar = () => {
                   </ul>
                 </li>
               )}
-              {canView("HR") && (
-                <li className="submenu">
-                  <a href="" onClick={(e) => e.preventDefault()}>
+              {/* {canView("HR") && ( */}
+                {/*  <li className="submenu"> */}
+                  {/* <a href="" onClick={(e) => e.preventDefault()}>
                     <i className="la la-edit"></i> <span> Training </span>{" "}
                     <span className="menu-arrow"></span>
-                  </a>
-                  <ul style={dNone}>
+                  </a> */}
+                  {/* <ul style={dNone}> */}
                     {/* <li>
                       <Link className="" to="/training/training-list">
                         {" "}
                         Training List{" "}
                       </Link>
                     </li> */}
-                    <li>
+                    {/* <li>
                       <Link className="" to="/training/trainer">
                         {" "}
                         Trainers
                       </Link>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                       <Link className="" to="/training/training-type">
                         {" "}
                         Training Type{" "}
                       </Link>
-                    </li>
-                  </ul>
-                </li>
-              )}
+                    </li> */}
+                  {/* </ul>
+                </li> */}
+              {/* )} */}
               {canView("HR") && (
                 <li className="">
                   <Link to="/admin/coaching">
