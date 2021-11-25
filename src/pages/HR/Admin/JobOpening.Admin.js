@@ -140,6 +140,7 @@ const JobOpening = () => {
           .post("/api/jobOpening", formValue)
           .then((res) => {
             // setFormValue(null);
+            setSubmitted(false)
             setData((prevData) => [...prevData, res.data.data]);
             fetchJobOpenings();
 
@@ -147,6 +148,7 @@ const JobOpening = () => {
           })
           .catch((error) => {
             console.log(error);
+            setSubmitted(false)
             // setFormValue(null);
             showAlert(
               true,
@@ -163,12 +165,14 @@ const JobOpening = () => {
           .patch("/api/jobOpening/" + editData._id, formValue)
           .then((res) => {
             // setFormValue(null);
+            setSubmitted(false)
             fetchJobOpenings();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
             // setFormValue(null);
+            setSubmitted(false)
             showAlert(
               true,
               error?.response?.data?.message,

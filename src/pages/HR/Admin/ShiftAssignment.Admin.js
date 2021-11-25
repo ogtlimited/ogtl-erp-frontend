@@ -128,14 +128,14 @@ const ShiftAssignment = () => {
         axiosInstance
           .post("/api/shiftAssignment", formValue)
           .then((res) => {
-            setFormValue(null);
+            setSubmitted(false);
             setData((prevData) => [...prevData, res.data.data]);
             fetchShiftAssignments();
             showAlert(true, res.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            setSubmitted(false);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -143,20 +143,16 @@ const ShiftAssignment = () => {
             );
           });
       } else {
-        formValue._id = editData._id;
-        delete formValue.__v;
-        delete formValue.createdAt;
-        delete formValue.updatedAt;
         axiosInstance
           .patch("/api/shiftAssignment/" + editData._id, formValue)
           .then((res) => {
-            setFormValue(null);
+            setSubmitted(false);
             fetchShiftAssignments();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
-            setFormValue(null);
+            setSubmitted(false);
             showAlert(
               true,
               error?.response?.data?.message,
