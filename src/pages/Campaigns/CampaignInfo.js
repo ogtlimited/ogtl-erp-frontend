@@ -8,24 +8,23 @@ import CampaignHeader from "./CampaignHeader";
 const CampaignInfo = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
-
+  const fetchProjects = () => {
+    axiosInstance
+      .get(`/api/project/${id}`)
+      .then((res) => {
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    const fetchProjects = () => {
-      axiosInstance
-        .get(`/api/project/${id}`)
-        .then((res) => {
-          setData(res.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
     fetchProjects();
   }, [id]);
 
   return (
     <>
-      <CampaignHeader campaign_name={data?.project_name} />
+      <CampaignHeader campaign_info={data} fetchProjects={fetchProjects} />
       <div class="row">
         <div class="col-lg-8 col-xl-9">
           <CampaignLeftCard campaign_info={data} />

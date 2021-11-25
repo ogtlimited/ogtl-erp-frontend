@@ -35,7 +35,7 @@ const AllCampaigns = () => {
   const [template, setTemplate] = useState(campaignFormJson);
   const [editData, seteditData] = useState(null);
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert, setformUpdate, user } = useAppContext();
+  const { createCampaign, showAlert, setformUpdate, user } = useAppContext();
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [loadedSelect, setloadedSelect] = useState(false);
@@ -54,9 +54,9 @@ const AllCampaigns = () => {
   };
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createCampaign().then((res) => {
       console.log(res);
-      const { employees, clientS } = res.data.createEmployeeFormSelection;
+      const { employees, clientS } = res.data.createCampaignForm;
       const emp = employees?.map((e) => {
         return {
           label: e.first_name + " " + e.last_name,
@@ -95,7 +95,7 @@ const AllCampaigns = () => {
         setloadedSelect(true);
       }
     });
-  }, [template, combineRequest]);
+  }, [template, createCampaign]);
 
   useEffect(() => {
     fetchCampaign();
@@ -133,14 +133,13 @@ const AllCampaigns = () => {
       };
 
       axiosInstance
-        .put("/api/project/approve/" + statusRow._id, update)
+        .patch("/api/project/approve/" + statusRow._id, update)
         .then((res) => {
-          console.log("statusssssssssssss", res.data);
           fetchCampaign();
-          showAlert(true, res.data.message, "alert alert-success");
+          showAlert(true, "Status updated", "alert alert-success");
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.response);
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }

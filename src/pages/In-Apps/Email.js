@@ -1,6 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import "./email.css";
 
@@ -9,6 +10,8 @@ const Email = () => {
   const [postsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchField, setSearchField] = useState("");
+
+  const { user } = useAppContext();
 
   const indexOfLastPost1 = currentPage * postsPerPage;
   const indexOfFirstPost1 = indexOfLastPost1 - postsPerPage;
@@ -21,7 +24,7 @@ const Email = () => {
   //fetch emails
   const fetchEmails = () => {
     axiosInstance
-      .get("api/email/ahmed.dambatta@outsourceglobal.com")
+      .get(`api/email/${user?.company_email}`)
       .then((res) => {
         setData(res.data.data);
       })
@@ -237,7 +240,7 @@ const Email = () => {
                         </Link>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right mt-2">
                       <span className="text-muted d-none d-md-inline-block">
                         Showing {currentPosts1.length} of {data.length}
                       </span>
@@ -251,7 +254,7 @@ const Email = () => {
                     <thead>
                       <tr>
                         <th colspan="6">
-                          <input type="checkbox" className="checkbox-all" />
+                          {/* <input type="checkbox" className="checkbox-all" /> */}
                         </th>
                       </tr>
                     </thead>

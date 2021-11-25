@@ -116,6 +116,11 @@ const AppProvider = (props) => {
     return axiosInstance.get("/create-performance-form");
   };
 
+  //for anything relating to campaign
+  const createCampaign = () => {
+    return axiosInstance.get("/create-campaign-form");
+  };
+
   const adminDashboardData = () => {
     return axiosInstance.get("/admin-dashboard");
   };
@@ -167,6 +172,7 @@ const AppProvider = (props) => {
         createPayroll,
         createRecruitmens,
         createPerfomance,
+        createCampaign,
       }}
     >
       {props.children}

@@ -27,6 +27,7 @@ const CampaignRightCard = ({ campaign_info }) => {
     },
   ]);
   const [status, setStatus] = useState("");
+  console.log("campaign ", campaign_info);
 
   return (
     <>
@@ -73,7 +74,7 @@ const CampaignRightCard = ({ campaign_info }) => {
                 <td>Created by:</td>
                 <td className="text-right">
                   <a href="/">
-                    {campaign_info?.creator?.first_name}{" "}
+                    {campaign_info?.creator?.first_name}
                     {campaign_info?.creator?.last_name}
                   </a>
                 </td>
@@ -114,7 +115,7 @@ const CampaignRightCard = ({ campaign_info }) => {
       <div className="card project-user">
         <div className="card-body">
           <h6 className="card-title m-b-20">
-            Assigned Leader{" "}
+            Assigned Leader
             <button
               type="button"
               className="float-right btn btn-primary btn-sm"
@@ -155,7 +156,7 @@ const CampaignRightCard = ({ campaign_info }) => {
       <div className="card project-user">
         <div className="card-body">
           <h6 className="card-title m-b-20">
-            Assigned Members{" "}
+            Assigned Members
             <button
               type="button"
               className="float-right btn btn-primary btn-sm"
@@ -180,11 +181,12 @@ const CampaignRightCard = ({ campaign_info }) => {
                     </div>
                     <div className="list-body">
                       <span className="message-author">
-                        {" "}
                         {e.first_name} {e.middle_name} {e.last_name}
                       </span>
                       <div className="clearfix"></div>
-                      <span className="message-content">{e.designation}</span>
+                      <span className="message-content">
+                        {e.designation.designation}
+                      </span>
                     </div>
                   </div>
                 </a>
