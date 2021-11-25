@@ -11,11 +11,11 @@ const ScoreCards = () => {
   const [template, setTemplate] = useState(scoreCardsJSON);
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert } = useAppContext();
+  const { createPerfomance, showAlert } = useAppContext();
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
   const fetchScoreCard = () => {
     axiosInstance
       .get("/scoreCard")
@@ -32,9 +32,9 @@ const ScoreCards = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPerfomance().then((res) => {
       console.log(res);
-      const { employees } = res.data.createEmployeeFormSelection;
+      const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -52,7 +52,7 @@ const ScoreCards = () => {
         title: scoreCardsJSON.title,
         Fields: finalForm,
       });
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) setloadSelect(true);
       console.log(template);
     });
   }, []);
@@ -192,7 +192,7 @@ const ScoreCards = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect &&
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -201,8 +201,7 @@ const ScoreCards = () => {
               >
                 <i className="fa fa-plus"></i> Add Score Card
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -211,15 +210,14 @@ const ScoreCards = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && 
+      {loadSelect && (
         <FormModal
           editData={editData}
           template={template}
           setsubmitted={setSubmitted}
           setformValue={setFormValue}
         />
-      
-      }
+      )}
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

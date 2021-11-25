@@ -12,11 +12,11 @@ const Promotion = () => {
   const [template, setTemplate] = useState(promotionFormJson);
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert } = useAppContext();
+  const { createPerfomance, showAlert } = useAppContext();
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
   const fetchPromotion = () => {
     axiosInstance
       .get("/api/promotion")
@@ -33,9 +33,9 @@ const Promotion = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPerfomance().then((res) => {
       console.log(res);
-      const { employees,designations } = res.data.createEmployeeFormSelection;
+      const { employees, designations } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -52,10 +52,9 @@ const Promotion = () => {
         if (field.name === "employee") {
           field.options = employeeOpts;
           return field;
-        }
-        else if(field.name === "newDesignation"){
+        } else if (field.name === "newDesignation") {
           field.options = designationOpts;
-          return field
+          return field;
         }
         return field;
       });
@@ -63,11 +62,11 @@ const Promotion = () => {
         title: promotionFormJson.title,
         Fields: finalForm,
       });
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) setloadSelect(true);
       console.log(template);
     });
   }, [loadSelect]);
-//create promotion
+  //create promotion
   useEffect(() => {
     console.log(submitted);
     if (submitted === true) {
@@ -105,7 +104,6 @@ const Promotion = () => {
       });
   };
 
-
   const updatePromotion = (row) => {
     axiosInstance
       .patch(`/api/promotion/${row._id}`, row)
@@ -138,11 +136,7 @@ const Promotion = () => {
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <h2>
-          {row?.employee?.department?.title} 
-        </h2>
-      ),
+      formatter: (value, row) => <h2>{row?.employee?.department?.title}</h2>,
     },
     {
       dataField: "promotion_from",
@@ -150,9 +144,7 @@ const Promotion = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (value, row) => (
-        <h2>
-          {row?.employee?.designation?.designation} 
-        </h2>
+        <h2>{row?.employee?.designation?.designation}</h2>
       ),
     },
     {
@@ -160,12 +152,7 @@ const Promotion = () => {
       text: "New Designation",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => (
-        <h2>
-          {row?.newDesignation?.designation} 
-        </h2>
-      ),
-      
+      formatter: (value, row) => <h2>{row?.newDesignation?.designation}</h2>,
     },
     {
       dataField: "promotionDate",
@@ -230,7 +217,7 @@ const Promotion = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect &&
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -239,8 +226,7 @@ const Promotion = () => {
               >
                 <i className="fa fa-plus"></i> Add Promotion
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -249,21 +235,19 @@ const Promotion = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect &&
+      {loadSelect && (
         <FormModal
           editData={editData}
           template={template}
           setsubmitted={setSubmitted}
           setformValue={setFormValue}
         />
-      
-      }
+      )}
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}
         deleteFunction={deletePromotion}
       />
-    
     </>
   );
 };

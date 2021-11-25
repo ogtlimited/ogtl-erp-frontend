@@ -36,12 +36,12 @@ export const campaignFormJson = {
       title: "Hours of operation",
       required: { value: true, message: "Field is required" },
     },
-    {
-      name: "type_of_employees",
-      type: "text",
-      title: "Type of employees",
-      required: { value: true, message: "Field is required" },
-    },
+    // {
+    //   name: "type_of_employees",
+    //   type: "text",
+    //   title: "Type of employees",
+    //   required: { value: true, message: "Field is required" },
+    // },
     {
       name: "start_date",
       type: "date",
@@ -56,7 +56,7 @@ export const campaignFormJson = {
     },
     {
       name: "number_of_employees",
-      type: "number",
+      type: "text",
       title: "Number of employees",
       required: { value: true, message: "Field is required" },
     },
@@ -144,12 +144,7 @@ export const campaignFormJson = {
       title: "Quality analyst",
       required: { value: true, message: "Field is required" },
     },
-    {
-      name: "documents",
-      type: "file",
-      title: "Documents",
-      required: { value: true, message: "Field is required" },
-    },
+
     {
       name: "objectives",
       type: "textarea",

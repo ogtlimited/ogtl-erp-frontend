@@ -33,7 +33,7 @@ const jobOpts = [
 const JobOffer = () => {
   const [formValue, setFormValue] = useState(null);
   const [data, setData] = useState([]);
-  const { showAlert, combineRequest, setformUpdate } = useAppContext();
+  const { showAlert, createRecruitmens, setformUpdate } = useAppContext();
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState(null);
@@ -42,25 +42,25 @@ const JobOffer = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [loadSelect, setloadSelect] = useState(false)
-  const [mode, setmode] = useState("add")
+  const [loadSelect, setloadSelect] = useState(false);
+  const [mode, setmode] = useState("add");
   const editRow = (row) => {
     // setformUpdate(null)
-    console.log(row)
-    setmode("edit")
+    console.log(row);
+    setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
   };
-  const create = () =>{
+  const create = () => {
     let initialValues = {};
-      for (let i in template) {
-        initialValues[i] = "";
-        // console.log(i);
-      }
-      setmode("add")
-      setFormValue(initialValues)
-      seteditData(initialValues)
-  }
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
 
   const fetchJobOffers = () => {
     axiosInstance
@@ -87,11 +87,11 @@ const JobOffer = () => {
     }
   };
   useEffect(() => {
-    combineRequest()
+    createRecruitmens()
       .then((res) => {
         console.log(res);
         const { designations, passedApplicants } =
-          res.data.createEmployeeFormSelection;
+          res.data.createRecruitmentForm;
         const designationOpts = designations?.map((e) => {
           return {
             label: e.designation,
@@ -118,8 +118,8 @@ const JobOffer = () => {
           title: jobOfferFormJson.title,
           Fields: finalForm,
         });
-        if(!loadSelect){
-          setloadSelect(true)
+        if (!loadSelect) {
+          setloadSelect(true);
         }
         console.log(template);
       })
@@ -137,7 +137,7 @@ const JobOffer = () => {
           .then((res) => {
             // setFormValue(null);
             setData((prevData) => [...prevData, res.data.data]);
-            setSubmitted(false)
+            setSubmitted(false);
             fetchJobOffers();
             showAlert(true, res.data?.message, "alert alert-success");
           })
@@ -151,19 +151,18 @@ const JobOffer = () => {
             );
           });
       } else {
-
         axiosInstance
           .patch("/api/jobOffer/" + editData._id, formValue)
           .then((res) => {
             // setFormValue(null);
             fetchJobOffers();
-            setSubmitted(false)
+            setSubmitted(false);
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
             // setFormValue(null);
-            setSubmitted(false)
+            setSubmitted(false);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -342,18 +341,17 @@ const JobOffer = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={()=> create()}
+                onClick={() => create()}
               >
                 Add Job Offer
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -373,17 +371,15 @@ const JobOffer = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-            {loadSelect && 
-            
-              <FormModal2
-                title="Create Job Offer"
-                editData={editData}
-                setformValue={setFormValue}
-                template={HelperService.formArrayToObject(jobOfferFormJson.Fields)}
-                setsubmitted={setSubmitted}
-              />
-            
-            }
+      {loadSelect && (
+        <FormModal2
+          title="Create Job Offer"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(jobOfferFormJson.Fields)}
+          setsubmitted={setSubmitted}
+        />
+      )}
       <ConfirmModal
         title="Job Offer"
         selectedRow={selectedRow}

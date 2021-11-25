@@ -32,22 +32,22 @@ const ShiftAssignment = () => {
   const [clickedRow, setclickedRow] = useState(null);
   const [shiftsOpt, setShiftOpts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const { combineRequest, showAlert, setformUpdate } = useAppContext();
-  const [loadSelect, setloadSelect] = useState(false)
-  const [mode, setmode] = useState("add")
-  const create = () =>{
+  const { createShifts, showAlert, setformUpdate } = useAppContext();
+  const [loadSelect, setloadSelect] = useState(false);
+  const [mode, setmode] = useState("add");
+  const create = () => {
     let initialValues = {};
-      for (let i in template) {
-        initialValues[i] = "";
-        // console.log(i);
-      }
-      setmode('add')
-      setFormValue(initialValues)
-      seteditData(initialValues)
-  }
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
   const editRow = (row) => {
     // setformUpdate(null)
-    setmode("edit")
+    setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
   };
@@ -87,9 +87,9 @@ const ShiftAssignment = () => {
     }
   };
   useEffect(() => {
-    combineRequest().then((res) => {
+    createShifts().then((res) => {
       console.log(res);
-      const { shifts, employees } = res.data.createEmployeeFormSelection;
+      const { shifts, employees } = res.data.createShiftForm;
 
       const shiftsOpts = shifts?.map((e) => {
         return {
@@ -113,11 +113,11 @@ const ShiftAssignment = () => {
         }
         return field;
       });
-      console.log(finalForm)
-      console.log(helper.formArrayToObject(finalForm))
-      if(finalForm.length){
+      console.log(finalForm);
+      console.log(helper.formArrayToObject(finalForm));
+      if (finalForm.length) {
         setTemplate(helper.formArrayToObject(finalForm));
-        setloadSelect(true)
+        setloadSelect(true);
       }
     });
   }, [loadSelect]);
@@ -282,18 +282,17 @@ const ShiftAssignment = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {
-              loadSelect && 
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => create()}
-            >
-              Add Shift Assignment
-            </a>
-            }
+            {loadSelect && (
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => create()}
+              >
+                Add Shift Assignment
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -319,16 +318,15 @@ const ShiftAssignment = () => {
         template={template}
         setsubmitted={setSubmitted}
       /> */}
-      {loadSelect && 
-      <FormModal2
-        title="Create Shift Assignment"
-        editData={editData}
-        setformValue={setFormValue}
-        template={template}
-        setsubmitted={setSubmitted}
+      {loadSelect && (
+        <FormModal2
+          title="Create Shift Assignment"
+          editData={editData}
+          setformValue={setFormValue}
+          template={template}
+          setsubmitted={setSubmitted}
         />
-      
-      }
+      )}
       <ConfirmModal
         title="Shift Assignment"
         selectedRow={selectedRow}
