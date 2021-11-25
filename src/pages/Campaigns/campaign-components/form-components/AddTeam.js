@@ -5,6 +5,7 @@ import axiosInstance from "../../../../services/api";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import $ from "jquery";
+import "../../campaign.css";
 
 const AddTeam = ({ campaign_info }) => {
   const [loading, setLoading] = useState(false);
@@ -70,7 +71,7 @@ const AddTeam = ({ campaign_info }) => {
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id="FormModalLead"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -93,35 +94,37 @@ const AddTeam = ({ campaign_info }) => {
             <div className="modal-body">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th className="col-4">Employees</th>
-                        <th className="col-4">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {teamLeads &&
-                        teamLeads.map((emp, index) => (
-                          <tr key={index}>
-                            <td>
-                              <h2>{emp.label}</h2>
-                            </td>
-                            <td>
-                              <Link
-                                className=" ml-2  text-center pos-relative"
-                                onClick={() => removeFromList(emp.value)}
-                              >
-                                <i
-                                  className="las la-minus"
-                                  style={{ fontSize: "21px" }}
-                                ></i>
-                              </Link>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                  <div className="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th className="col-4">Employees</th>
+                          <th className="col-4">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="">
+                        {teamLeads &&
+                          teamLeads.map((emp, index) => (
+                            <tr key={index}>
+                              <td>
+                                <h2>{emp.label}</h2>
+                              </td>
+                              <td>
+                                <Link
+                                  className=" ml-2  text-center pos-relative"
+                                  onClick={() => removeFromList(emp.value)}
+                                >
+                                  <i
+                                    className="las la-minus"
+                                    style={{ fontSize: "21px" }}
+                                  ></i>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className="row">
                   <div className="col-md-6">
