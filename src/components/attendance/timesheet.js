@@ -12,12 +12,24 @@ const Timesheet = () => {
   const [user, setuser] = useState(tokenService.getUser())
   const {fetchEmployeeAttendance, employeeAttendance} = useAppContext()
   const [attendance, setattendance] = useState(tokenService.getAttendance())
+
+  const calcWorkTime = () =>{
+    const startTime = moment(new Date(attendance?.clockInTime));
+    const endTime  = moment(new Date());
+    let duration = moment.duration(endTime.diff(startTime))
+    let hours = parseInt(duration.asHours());
+    let minutes = parseInt(duration.asMinutes())%60;
+    let minStr = minutes < 10 ? '0'+minutes : minutes
+    return hours + ":" + minStr
+  }
+  
   const punchInOut = () =>{
     const currUser = user
     console.log(user)
     console.log(attendance)
-    
+    // const startTime = moment(user?.default_shift?.start_time,"HH:mm");
     if(!attendance){
+      
       const obj = {
         clockInTime: new Date(),
 
@@ -45,43 +57,32 @@ const Timesheet = () => {
   }
   useEffect(() => {
     // setattendance(employeeAttendance[0])
-    const date = moment(new Date("2021 01"))
     if(employeeAttendance.length){
      let todayAttendance =  employeeAttendance.filter(e => moment(new Date().toLocaleDateString()).isSame(new Date(e.clockInTime).toLocaleDateString()))
-     console.log(todayAttendance)
+    //  console.log(todayAttendance)
      if(todayAttendance.length){
        setattendance(todayAttendance[0])
      }
     }
-   console.log(employeeAttendance)
+  //  console.log(employeeAttendance)
   }, [employeeAttendance])
   useEffect(() => {
-  
-    
-    let shiftBg = user?.default_shift?.start_time.split(":")
-    console.log(user?.default_shift?.start_time)
-    let shiftBegin = new Date().setHours(parseInt(shiftBg[0]), parseInt(shiftBg[1]))
-    let now = moment(new Date(attendance?.clockInTime)); //todays date
-    let end = moment(new Date()); // another date
-    let duration = moment.duration(end.diff(now));
-    let diffHours = duration.asHours();
-    console.log(now, end, diffHours)
-    console.log(end.diff(now))
-    var dif = moment.duration(end.diff(now));
-console.log([dif.hours(), dif.minutes(), dif.seconds()].join(':'));
-    // console.log(parseInt(shiftBg[0]), parseInt(shiftBg[1]), shiftBegin)
-    const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date(shiftBegin).toLocaleTimeString())
-    setworkedTime(wt)
+
+    const wt = calcWorkTime()
+    setworkedTime(calcWorkTime())
     const shiftEnd = user?.default_shift?.end_time;
+
+    // console.log('shift start and end', shiftStart, shiftEnd)
     let endToSec = shiftEnd.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
+
     let wtToSec = wt.split(':').reduce((acc,time) => (60 * acc) + +time) * 60
-    console.log(wt, shiftEnd)
+ 
     console.log(endToSec, wtToSec)
     if(endToSec > wtToSec){
       const interval = setInterval(() => {
         const wt = helper.diffHours(new Date(attendance?.clockInTime).toLocaleTimeString(), new Date().toLocaleTimeString())
         console.log('Logs every minute');
-        setworkedTime(wt)
+        setworkedTime(calcWorkTime())
       }, MINUTE_MS);
       return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
 

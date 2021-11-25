@@ -11,11 +11,11 @@ const Resignation = () => {
   const [template, setTemplate] = useState(resignationFormJson);
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert } = useAppContext();
+  const { createPerfomance, showAlert } = useAppContext();
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
   const fetchResignation = () => {
     axiosInstance
       .get("/Exit")
@@ -32,9 +32,9 @@ const Resignation = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPerfomance().then((res) => {
       console.log(res);
-      const { employees } = res.data.createEmployeeFormSelection;
+      const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -53,7 +53,7 @@ const Resignation = () => {
         Fields: finalForm,
       });
       console.log(template);
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) setloadSelect(true);
     });
   }, []);
 
@@ -199,7 +199,7 @@ const Resignation = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -208,8 +208,7 @@ const Resignation = () => {
               >
                 <i className="fa fa-plus"></i> Add Resignation
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -218,16 +217,14 @@ const Resignation = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {
-        loadSelect &&
+      {loadSelect && (
         <FormModal
           editData={editData}
           template={template}
           setsubmitted={setSubmitted}
           setformValue={setFormValue}
         />
-
-      }
+      )}
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

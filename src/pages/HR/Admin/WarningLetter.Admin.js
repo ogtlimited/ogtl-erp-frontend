@@ -15,9 +15,9 @@ const WarningLetter = () => {
   const [template, setTemplate] = useState(warningLetterFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert } = useAppContext();
+  const { createPerfomance, showAlert } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
   const fetchWarningLetter = () => {
     axiosInstance
       .get("/api/warningLetter")
@@ -34,9 +34,9 @@ const WarningLetter = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPerfomance().then((res) => {
       console.log(res);
-      const { employees } = res.data.createEmployeeFormSelection;
+      const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -54,7 +54,7 @@ const WarningLetter = () => {
         title: warningLetterFormJson.title,
         Fields: finalForm,
       });
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) setloadSelect(true);
       console.log(template);
     });
   }, []);
@@ -185,7 +185,7 @@ const WarningLetter = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
@@ -194,8 +194,7 @@ const WarningLetter = () => {
               >
                 Add Warning Letter
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -204,15 +203,13 @@ const WarningLetter = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {
-        loadSelect &&
+      {loadSelect && (
         <FormModal
           setformValue={setFormValue}
           template={template}
           setsubmitted={setSubmitted}
         />
-
-      }
+      )}
       <ConfirmModal
         title="Warning Letter"
         selectedRow={selectedRow}

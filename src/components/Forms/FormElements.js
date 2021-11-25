@@ -120,6 +120,7 @@ export function PasswordField(props) {
 }
 export function RichTextField(props) {
   const { name, label, placeholder,setFieldValue, defaultValue, ...rest } = props;
+  let key = `${Math.floor((Math.random() * 1000))}-min`
   return (
     <>
       <div className="form-group">
@@ -131,7 +132,8 @@ export function RichTextField(props) {
          <Field
           component={ReactQuill}
           name={name}
-          value={defaultValue ? defaultValue : ''}
+          key={defaultValue}
+          defaultValue={defaultValue ? defaultValue : ''}
 
           onChange={(html) => {
             console.log(html);
@@ -182,6 +184,13 @@ export function CheckField(props) {
 }
 export function DateField(props) {
   const { name, label, placeholder,defaultValue, ...rest  } = props;
+  console.log(defaultValue)
+  let date = null
+  if(defaultValue){
+    let curr = new Date(defaultValue);
+    curr.setDate(curr.getDate() + 3);
+    date = curr.toISOString().substr(0,10);
+  }
   return (
     <>
       <div className="form-group">
@@ -193,7 +202,7 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
-          defaultValue={defaultValue ? defaultValue : ''}
+          defaultValue={date ? date : ''}
           name={name}
           id={name}
           placeholder={placeholder || ""}
@@ -293,8 +302,7 @@ export function TextareaField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue || ''}
-          {...rest}
+
         />
 
         <ErrorMessage

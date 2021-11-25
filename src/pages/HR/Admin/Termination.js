@@ -11,23 +11,23 @@ const Termination = () => {
   const [template, setTemplate] = useState(terminationFormJson);
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert } = useAppContext();
+  const { createPerfomance, showAlert } = useAppContext();
   const [formValue, setFormValue] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false)
+  const [loadSelect, setloadSelect] = useState(false);
 
-  const [mode, setmode] = useState("add")
-  const create = () =>{
+  const [mode, setmode] = useState("add");
+  const create = () => {
     let initialValues = {};
-      for (let i in template) {
-        initialValues[i] = "";
-        // console.log(i);
-      }
-      setmode('add')
-      setFormValue(initialValues)
-      seteditData(initialValues)
-  }
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
   const fetchTermination = () => {
     axiosInstance
       .get("/api/termination")
@@ -44,9 +44,9 @@ const Termination = () => {
   }, []);
 
   useEffect(() => {
-    combineRequest().then((res) => {
+    createPerfomance().then((res) => {
       console.log(res);
-      const { employees } = res.data.createEmployeeFormSelection;
+      const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -64,7 +64,7 @@ const Termination = () => {
         title: terminationFormJson.title,
         Fields: finalForm,
       });
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) setloadSelect(true);
       console.log(template);
     });
   }, []);
@@ -209,7 +209,7 @@ const Termination = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -218,8 +218,7 @@ const Termination = () => {
               >
                 <i className="fa fa-plus"></i> Add Termination
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -228,15 +227,14 @@ const Termination = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect &&
-      
-      <FormModal
-        editData={editData}
-        template={template}
-        setsubmitted={setSubmitted}
-        setformValue={setFormValue}
-      />
-      }
+      {loadSelect && (
+        <FormModal
+          editData={editData}
+          template={template}
+          setsubmitted={setSubmitted}
+          setformValue={setFormValue}
+        />
+      )}
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

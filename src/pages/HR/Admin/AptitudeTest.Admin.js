@@ -18,6 +18,7 @@ const AptitudeTest = () => {
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState({});
   const [loadSelect, setloadSelect] = useState(false)
+  
   const fetchAllTests = () => {
     axiosInstance
       .get("/api/test")
