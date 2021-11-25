@@ -6,6 +6,7 @@ import moment from "moment";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import AddTeam from "./form-components/AddTeam";
 import AddMembers from "./form-components/AddMembers";
+import "../campaign.css";
 
 const CampaignRightCard = ({ campaign_info }) => {
   const [approval, setApproval] = useState([
@@ -120,12 +121,12 @@ const CampaignRightCard = ({ campaign_info }) => {
               type="button"
               className="float-right btn btn-primary btn-sm"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#FormModalLead"
             >
               <i className="fa fa-plus"></i> Add
             </button>
           </h6>
-          <ul className="list-box">
+          <ul className="list-box teams">
             {campaign_info?.team_leads.map((e) => (
               <li>
                 <a href="profile.html">
@@ -166,7 +167,7 @@ const CampaignRightCard = ({ campaign_info }) => {
               <i className="fa fa-plus"></i> Add
             </button>
           </h6>
-          <ul className="list-box">
+          <ul className="list-box teams">
             {campaign_info?.team_members?.map((e) => (
               <li>
                 <a href="profile.html">
