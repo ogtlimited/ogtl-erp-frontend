@@ -66,7 +66,7 @@ const AllEmployeesAdmin = () => {
       const {
         shifts,
         designations,
-        employeeTypes,
+        branches,
         departments,
         projects,
         acceptedJobOffers,
@@ -75,7 +75,7 @@ const AllEmployeesAdmin = () => {
       const empHelper = new EmployeeHelperService(
         shifts,
         designations,
-        employeeTypes,
+        branches,
         departments,
         projects,
         acceptedJobOffers,

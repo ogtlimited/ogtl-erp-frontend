@@ -41,9 +41,9 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-left">
-        <Link to="/" className="logo">
+        <div  className="logo">
           <img src={logo} style={{ width: "100px" }} alt="" />
-        </Link>
+        </div>
       </div>
 
       <a id="toggle_btn" href="javascript:void(0);">

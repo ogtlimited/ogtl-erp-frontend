@@ -7726,6 +7726,8 @@ ul.comment-list li ul.children {
 		font-size: 26px;
 		line-height: 60px;
 		padding: 0 10px;
+		z-index: 1000;
+		position: absolute;
 	}
 	.mini-sidebar .header-left .logo img {
 		height: auto;
