@@ -61,12 +61,11 @@ const AllEmployeesAdmin = () => {
   }, [editData, mode]);
   useEffect(() => {
     createEmployee().then((res) => {
-      console.log(res);
       setcombinedData(res);
       const {
         shifts,
         designations,
-        employeeTypes,
+        branches,
         departments,
         projects,
         acceptedJobOffers,
@@ -75,7 +74,7 @@ const AllEmployeesAdmin = () => {
       const empHelper = new EmployeeHelperService(
         shifts,
         designations,
-        employeeTypes,
+        branches,
         departments,
         projects,
         acceptedJobOffers,
