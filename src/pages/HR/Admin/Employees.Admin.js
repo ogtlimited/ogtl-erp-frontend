@@ -164,15 +164,6 @@ const AllEmployeesAdmin = () => {
           values[i] = formValue[i];
           // console.log(i);
         }
-        // delete formValue._id;
-        // delete formValue.__v;
-        // delete formValue.salaryStructure_id;
-        // delete formValue.warningCount;
-        // delete formValue.isInPIP;
-        // delete formValue.ogid;
-        // delete formValue.permissionLevel;
-        // delete formValue.isSupervisor;
-        // delete formValue.isTeamLead;
         axiosInstance.put("/employees/" + id, values).then((res) => {
           fetchEmployee();
           setsubmitted(false);
