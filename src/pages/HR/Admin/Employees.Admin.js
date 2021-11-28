@@ -92,7 +92,9 @@ const AllEmployeesAdmin = () => {
       //   }
       // )
       const obj = helper.formArrayToObject(finalForm);
-      let initialValues = {};
+      let initialValues = {
+        leaveCount: 0
+      };
       for (let i in obj) {
         initialValues[i] = "";
         // console.log(i);
@@ -115,7 +117,11 @@ const AllEmployeesAdmin = () => {
       console.log(i)
       if(i == 'isAdmin'){
         initialValues[i] = false;
-      }else{
+      }
+      else if(i == 'date_of_joining'){
+        initialValues[i] = new Date().toISOString().slice(0,10);
+      }
+      else{
         initialValues[i] = "";
 
       }
@@ -141,21 +147,33 @@ const AllEmployeesAdmin = () => {
         axiosInstance.post("/employees", formValue).then((res) => {
           fetchEmployee();
           setsubmitted(false);
+          showAlert(
+            true,
+            "New Employee created successfully",
+            "alert alert-success"
+          );
           console.log(res);
         });
       } else {
         let id = editData._id;
         console.log(id);
-        delete formValue._id;
-        delete formValue.__v;
-        delete formValue.salaryStructure_id;
-        delete formValue.warningCount;
-        delete formValue.isInPIP;
-        delete formValue.ogid;
-        delete formValue.permissionLevel;
-        delete formValue.isSupervisor;
-        delete formValue.isTeamLead;
-        axiosInstance.put("/employees/" + id, formValue).then((res) => {
+        let values = {
+          
+        };
+        for (let i in template) {
+          values[i] = formValue[i];
+          // console.log(i);
+        }
+        // delete formValue._id;
+        // delete formValue.__v;
+        // delete formValue.salaryStructure_id;
+        // delete formValue.warningCount;
+        // delete formValue.isInPIP;
+        // delete formValue.ogid;
+        // delete formValue.permissionLevel;
+        // delete formValue.isSupervisor;
+        // delete formValue.isTeamLead;
+        axiosInstance.put("/employees/" + id, values).then((res) => {
           fetchEmployee();
           setsubmitted(false);
           seteditData({});
