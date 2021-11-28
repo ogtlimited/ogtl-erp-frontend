@@ -137,7 +137,7 @@ const AllEmployeesAdmin = () => {
   // Submit
   useEffect(() => {
     console.log(formValue, mode, editData);
-    if (formValue && Object.keys(formValue).length > 0) {
+    if (submitted) {
       formValue.image = "";
       const fullName = formValue.applicant?.split("-");
       if (mode === "add") {
