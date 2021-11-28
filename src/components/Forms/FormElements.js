@@ -12,6 +12,7 @@ import "react-quill/dist/quill.snow.css";
 
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
+
   console.log(props);
   return (
     <Formik {...props}>
@@ -153,6 +154,7 @@ export function RichTextField(props) {
 export function CheckField(props) {
   const { name, label, placeholder, defaultValue, ...rest } = props;
   const { isChecked, setIsChecked } = useAppContext();
+  // console.log(defaultValue)
   return (
     <>
       <div className="form-group">
@@ -162,8 +164,7 @@ export function CheckField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          checked={isChecked}
-          {...rest}
+          key={name}
           onClick={() =>
             isChecked === true ? setIsChecked(false) : setIsChecked(true)
           }
@@ -183,13 +184,13 @@ export function CheckField(props) {
   );
 }
 export function DateField(props) {
-  const { name, label, placeholder,defaultValue, ...rest  } = props;
+
+  const { name, label, placeholder,defaultValue,setFieldValue, ...rest  } = props;
   console.log(defaultValue)
-  let date = null
+  let date = new Date().toISOString().slice(0,10);
   if(defaultValue){
-    let curr = new Date(defaultValue);
-    curr.setDate(curr.getDate() + 3);
-    date = curr.toISOString().substr(0,10);
+    date = new Date(defaultValue).toISOString().slice(0,10);
+
   }
   return (
     <>
@@ -202,10 +203,17 @@ export function DateField(props) {
         <Field
           className="form-control"
           type="date"
-          defaultValue={date ? date : ''}
+          value={date ? date : ''}
+          key={name}
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          onChange={(e) =>{
+
+            // setFieldValue(name, e.target.value)
+            // setdateState(e.target.value)
+            console.log(e.target.value)
+          }}
 
         />
 

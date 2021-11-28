@@ -1,14 +1,14 @@
 export default class EmployeeHelperService{
     constructor(shifts,
         designations,
-        employeeTypes,
+        branches,
         departments,
         projects,
         acceptedJobOffers,
         employees){
         this.shifts = shifts
         this.designations = designations
-        this.employeeTypes = employeeTypes
+        this.branches = branches
         this.departments = departments
         this.projects = projects
         this.acceptedJobOffers = acceptedJobOffers
@@ -16,7 +16,7 @@ export default class EmployeeHelperService{
 
     }
     mapRecords(){
-        console.log(this.employeeTypes)
+        // console.log(this.employeeTypes)
           const appOpts = this.acceptedJobOffers?.map((e) => {
               return {
                 label:
@@ -39,7 +39,7 @@ export default class EmployeeHelperService{
               value: e._id,
             };
           });
-          console.log(reportstoOpts)
+          // console.log(reportstoOpts)
           const shiftsopts = this.shifts?.map((e) => {
             return {
               label: e.shift_name,
@@ -52,9 +52,9 @@ export default class EmployeeHelperService{
               value: e._id,
             };
           });
-          const empTypeopts = this.employeeTypes?.map((e) => {
+          const branchOpts = this.branches?.map((e) => {
             return {
-              label: e.type,
+              label: e.branch,
               value: e._id,
             };
           });
@@ -71,7 +71,7 @@ export default class EmployeeHelperService{
             };
           });
           return{
-            reportstoOpts,shiftsopts, campaingOpts, empTypeopts, deptopts, designationOpts, appOpts
+            reportstoOpts,shiftsopts, campaingOpts, branchOpts, deptopts, designationOpts, appOpts
 
           }
     }
@@ -95,8 +95,8 @@ export default class EmployeeHelperService{
             } else if (field.name === "department") {
               field.options = service.deptopts;
               return field;
-            } else if (field.name === "employment_type") {
-              field.options = service.empTypeopts;
+            } else if (field.name === "branch") {
+              field.options = service.branchOpts;
               return field;
             } else if (field.name === "projectId") {
               field.options = service.campaingOpts;

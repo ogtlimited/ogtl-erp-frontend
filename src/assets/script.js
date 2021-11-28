@@ -8,7 +8,7 @@ $(document).ready(function() {
 	var $wrapper = $('.main-wrapper');
 	var $pageWrapper = $('.page-wrapper');
 	var $slimScrolls = $('.slimscroll');
-	console.log( $slimScrolls)
+
 	// Sidebar
 	
 	var Sidemenu = function() {
@@ -41,7 +41,7 @@ $(document).ready(function() {
 	
 	$('body').append('<div className="sidebar-overlay"></div>');
 	$(document).on('click', '#mobile_btn', function() {
-		console.log('wrapper')
+		// console.log('wrapper')
 		$wrapper.toggleClass('slide-nav');
 		$('.sidebar-overlay').toggleClass('opened');
 		$('html').addClass('menu-opened');

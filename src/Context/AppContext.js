@@ -43,7 +43,7 @@ const AppProvider = (props) => {
   }, [user?.company_email]);
 
   useEffect(() => {
-    console.log("alert message");
+    // console.log("alert message");
   }, [showAlertMsg]);
 
   const clearNotifications = () => {
