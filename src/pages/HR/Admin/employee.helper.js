@@ -16,7 +16,7 @@ export default class EmployeeHelperService{
 
     }
     mapRecords(){
-        console.log(this.employeeTypes)
+        // console.log(this.employeeTypes)
           const appOpts = this.acceptedJobOffers?.map((e) => {
               return {
                 label:
@@ -39,7 +39,7 @@ export default class EmployeeHelperService{
               value: e._id,
             };
           });
-          console.log(reportstoOpts)
+          // console.log(reportstoOpts)
           const shiftsopts = this.shifts?.map((e) => {
             return {
               label: e.shift_name,
@@ -54,7 +54,7 @@ export default class EmployeeHelperService{
           });
           const branchOpts = this.branches?.map((e) => {
             return {
-              label: e.type,
+              label: e.branch,
               value: e._id,
             };
           });

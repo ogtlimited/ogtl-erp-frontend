@@ -76,7 +76,7 @@ const EmployeesTable = ({
   //    console.log(data)
 
   useEffect(() => {
-    console.log(filters)
+    // console.log(filters)
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);

@@ -33,7 +33,7 @@ const AllEmployeesAdmin = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
   const [mode, setmode] = useState("add");
-  console.log(allEmployees);
+  // console.log(allEmployees);
   useEffect(() => {
     // fetchEmployee();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
@@ -41,27 +41,11 @@ const AllEmployeesAdmin = () => {
   }, []);
 
   useEffect(() => {
-    console.log(editData, mode);
-    console.log(template);
-    let applicant = {
-      name: "applicant",
-      type: "text",
-      title: "Applicant",
-      required: {
-        value: true,
-        message: "applicant is required",
-      },
-    };
 
-    let editT = {
-      ...template,
-      applicant,
-    };
-    // settemplate(editT)
   }, [editData, mode]);
   useEffect(() => {
     createEmployee().then((res) => {
-      console.log(res);
+      // console.log(res);
       setcombinedData(res);
       const {
         shifts,
@@ -82,7 +66,7 @@ const AllEmployeesAdmin = () => {
         employees
       );
       const service = empHelper.mapRecords();
-      console.log(service);
+      // console.log(service);
       setfilters([
         {
           name: "projectId",
@@ -120,23 +104,29 @@ const AllEmployeesAdmin = () => {
       } else {
         // settemplate(obj);
       }
-      console.log(template);
+      // console.log(template);
       if (!loadForm) setloadForm(true);
-      console.log(obj);
+      // console.log(obj);
     });
   }, [mode]);
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      initialValues[i] = "";
-      // console.log(i);
+      console.log(i)
+      if(i == 'isAdmin'){
+        initialValues[i] = false;
+      }else{
+        initialValues[i] = "";
+
+      }
+      console.log(initialValues);
     }
     setformValue(initialValues);
     seteditData(initialValues);
   };
   // Submit
   useEffect(() => {
-    console.log(formValue, mode, editData);
+    // console.log(formValue, mode, editData);
     if (submitted) {
       formValue.image = "";
       const fullName = formValue.applicant?.split("-");
@@ -178,7 +168,7 @@ const AllEmployeesAdmin = () => {
         });
       }
     }
-    console.log(formValue);
+    // console.log(formValue);
   }, [submitted, formValue]);
 
   // File upload
