@@ -32,7 +32,7 @@ const AssetAssignment = () => {
     axiosInstance
       .get("/api/asset-assignment")
       .then((res) => {
-        console.log(res.data);
+        console.log("asset thingy", res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -73,7 +73,7 @@ const AssetAssignment = () => {
         title: AssetAssignmentForm.title,
         Fields: finalForm,
       });
-      if(!loadSelect){
+      if (!loadSelect) {
         setloadSelect(true);
       }
       console.log(template);
@@ -167,7 +167,9 @@ const AssetAssignment = () => {
       dataField: "assetName.productName",
       text: "Asset name",
       sort: true,
-      formatter: (value, row) => <h2>{row?.assetId?.assetName}</h2>,
+      formatter: (value, row) => (
+        <h2>{row?.assetId?.assetName?.productName}</h2>
+      ),
     },
     {
       dataField: "assigned_to",
@@ -261,7 +263,7 @@ const AssetAssignment = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect &&
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -270,8 +272,7 @@ const AssetAssignment = () => {
               >
                 <i className="fa fa-plus"></i> Add Asset Assignment
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -280,8 +281,7 @@ const AssetAssignment = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {
-        loadSelect &&
+      {loadSelect && (
         <FormModal2
           title="Create Asset Assignment"
           editData={editData}
@@ -289,8 +289,7 @@ const AssetAssignment = () => {
           template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
-
-      }
+      )}
       <ConfirmModal
         title="Asset Assignment"
         selectedRow={selectedRow}
