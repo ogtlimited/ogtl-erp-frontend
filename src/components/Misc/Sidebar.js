@@ -582,7 +582,7 @@ const Sidebar = () => {
               {canView("Accounting") && (
                 <>
                   <li className="menu-title">
-                    <span>Facility</span>
+                    <span>Procurement</span>
                   </li>
                   <li className="submenu">
                     <a href="" onClick={(e) => e.preventDefault()}>
@@ -602,11 +602,18 @@ const Sidebar = () => {
                       </li>
                     </ul>
                   </li>
-                  <li>
+              <li>
                     <Link to="/admin/purchase-order">
-                      <i className="la la-cog"></i>{" "}
+                    <i class="las la-shopping-cart"></i>{" "}
                       <span>Asset Purchase Order</span>
                     </Link>
+                  </li>
+                  </>
+              )}
+              {canView("Accounting") && (
+                <>
+                  <li className="menu-title">
+                    <span>Facility</span>
                   </li>
                   <li className="submenu">
                     <a href="" onClick={(e) => e.preventDefault()}>

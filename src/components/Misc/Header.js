@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 // import "./header.css";
-import logo from "../../assets/img/OG-Logo.png";
+import logo from "../../assets/img/og-white-logo.png";
+import cropped from "../../assets/img/cropped-white.png";
 // import { AppContext } from "../context/AppContext";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import tokenService from "../../services/token.service";
@@ -43,6 +44,9 @@ const Header = () => {
       <div className="header-left">
         <div  className="logo">
           <img src={logo} style={{ width: "100px" }} alt="" />
+        </div>
+        <div  className="cropped-logo">
+          <img src={cropped}  alt="" />
         </div>
       </div>
 

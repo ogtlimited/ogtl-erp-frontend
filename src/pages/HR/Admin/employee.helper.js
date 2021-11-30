@@ -20,15 +20,15 @@ export default class EmployeeHelperService{
           const appOpts = this.acceptedJobOffers?.map((e) => {
               return {
                 label:
-                  e.job_applicant_id.first_name +
+                  e?.job_applicant_id.first_name +
                   " " +
-                  e.job_applicant_id.last_name +
+                  e?.job_applicant_id.last_name +
                   " " +
-                  e.job_applicant_id.middle_name,
+                  e?.job_applicant_id.middle_name,
                 value:
-                  e.job_applicant_id.first_name +
+                  e?.job_applicant_id.first_name +
                   "-" +
-                  e.job_applicant_id.last_name +
+                  e?.job_applicant_id.last_name +
                   "-" +
                   e?.job_applicant_id.middle_name,
               };

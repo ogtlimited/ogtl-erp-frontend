@@ -145,7 +145,7 @@ const JobApplicants = () => {
       text: "Resume Attachment",
       sort: true,
       formatter: (value, row) => (
-        <a href="#" class="btn btn-sm btn-primary">
+        <a href={value} class="btn btn-sm btn-primary" download>
           <i class="fa fa-download"></i> Download
         </a>
       ),
@@ -154,7 +154,7 @@ const JobApplicants = () => {
       dataField: "cover_letter",
       text: "Cover Letter",
       sort: true,
-      formatter: (value, row) => <span> {value.slice(0, 30)}...</span>,
+      formatter: (value, row) => {value && <span> {value.slice(0, 30)}...</span>},
     },
     {
       dataField: "video_attachment",
@@ -162,7 +162,7 @@ const JobApplicants = () => {
       sort: true,
       formatter: (value, row) =>
         value ? (
-          <a href="#" class="btn btn-sm btn-primary">
+          <a href="#" class="btn btn-sm btn-primary" download>
             <i class="fa fa-download"></i> Download
           </a>
         ) : (

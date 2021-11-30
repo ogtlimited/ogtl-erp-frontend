@@ -1290,6 +1290,10 @@ table.dataTable thead > tr > td.sorting {
 	display: inline-block;
 	line-height: 60px;
 }
+.header .header-left .cropped-logo {
+	display: none;
+	line-height: 60px;
+}
 .bar-icon {
     display: inline-block;
     width: 21px;
@@ -1350,7 +1354,7 @@ table.dataTable thead > tr > td.sorting {
 	float: left;
 	height: 60px;
 	margin-bottom: 0;
-	padding: 17px 20px;
+	padding: 17px 55px;
 }
 .page-title-box h3 {
 	color: #fff;
@@ -7733,6 +7737,18 @@ ul.comment-list li ul.children {
 		height: auto;
 		max-height: 30px;
 		width: auto;
+		display: none;
+	}
+	.mini-sidebar .header-left .cropped-logo  {
+	
+		max-height: 30px;
+		width: auto;
+		display: inline-block;
+	}
+	.mini-sidebar .header-left .cropped-logo img {
+		height: auto;
+		width: 30px;
+		display: inline-block;
 	}
 	.mini-sidebar .header .header-left {
 		padding: 0 5px;
