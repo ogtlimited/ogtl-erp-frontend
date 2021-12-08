@@ -323,14 +323,7 @@ $(document).ready(function() {
 	$(document).on('click', '.file-side-close', function() {
 		$('.file-wrap').removeClass('file-sidebar-toggle');
 	});
-	
-	if($('.kanban-wrap').length > 0) {
-		$(".kanban-wrap").sortable({
-			connectWith: ".kanban-wrap",
-			handle: ".kanban-box",
-			placeholder: "drag-placeholder"
-		});
-	}
+
 
 });
 

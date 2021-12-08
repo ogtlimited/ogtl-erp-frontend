@@ -122,6 +122,9 @@ const Sidebar = () => {
                     <Link to="/admin/email">Email</Link>
                   </li>
                   <li>
+                    <Link to="/admin/email-signature">Email Signature</Link>
+                  </li>
+                  <li>
                     <Link className="" to="/admin/file-manager">
                       File Manager
                     </Link>
