@@ -62,6 +62,7 @@ import SingleEmail from "./pages/In-Apps/SingleEmail";
 import FileManager from "./pages/In-Apps/FileManager";
 import Branch from "./pages/HR/Admin/Branch";
 import HRDashboard from "./pages/Dashboard/HRDashboard";
+import SignatureGenerator from "./pages/In-Apps/signature-generator";
 
 // const routes = [{
 //   title: 'Main',
@@ -367,6 +368,12 @@ const routes = [
     title: "Email",
     path: "/email",
     component: Email,
+    layout: "/admin",
+  },
+  {
+    title: "Email",
+    path: "/email-signature",
+    component: SignatureGenerator,
     layout: "/admin",
   },
   {
