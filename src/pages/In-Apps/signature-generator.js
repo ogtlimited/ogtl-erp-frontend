@@ -1,21 +1,18 @@
 import React, {useState} from 'react'
-
+import logo from '../../assets/img/OG-Logo.png'
 import Signature from './signature';
-
+import './signature.css'
 const getIcon =  (name) => (<i class={"las "+ name}></i> );
 
 const SignatureGenerator = () => {
     const initialState = {
         fullName: "",
         position: "",
-        skype: "",
+        email: "",
         phone: "",
-        photo: "",
-        withPhoto: false,
         copied: false,
     };
     const [state, setState] = useState(initialState)
-    const photoUrlMaxLength = 1000;
     const handleChange = (event) => {
         if (event.target.name === "withPhoto") {
             setState((prevState) => ({
@@ -36,21 +33,19 @@ const SignatureGenerator = () => {
                 state.fullName &&
                 state.phone &&
                 state.position &&
-                state.skype &&
-                state.photo
+                state.email
             ) {
                 return (
                     <React.Fragment>
                         <Signature
                             fullName={state.fullName}
                             position={state.position}
-                            skype={state.skype}
+                            email={state.email}
                             phone={state.phone}
-                            photo={state.photo}
                         />
                         <br/>
                         <button
-                            disabled={state.photo.length > photoUrlMaxLength}
+                            className="btn btn-primary"
                             onClick={copyToClipboard}
                             endIcon={state.copied ? getIcon('la-check') : getIcon('la-copy') }
                         >
@@ -61,7 +56,7 @@ const SignatureGenerator = () => {
             } else {
                 Object.entries(state).forEach(([key, value]) => {
                     if (
-                        ["fullName", "phone", "position", "skype", "photo"].includes(key)
+                        ["fullName", "phone", "position", "email"].includes(key)
                     ) {
                         if (value.length === 0) {
                             progress = progress - 20;
@@ -70,28 +65,28 @@ const SignatureGenerator = () => {
                 });
             }
         } else {
-            if (state.fullName && state.phone && state.position && state.skype) {
+            if (state.fullName && state.phone && state.position && state.email) {
                 return (
                     <React.Fragment>
                         <Signature
                             fullName={state.fullName}
                             position={state.position}
-                            skype={state.skype}
+                            email={state.email}
                             phone={state.phone}
-                            photo={"no-photo"}
                         />
                         <br/>
                         <button
+                            className="btn btn-primary"
                             onClick={copyToClipboard}
-                            endIcon={state.copied ? getIcon('la-check') : getIcon('la-copy')}
                         >
-                            {state.copied ? "Copied" : "Copy to clipboard"}
+                            {state.copied ? "Copied" : "Copy to clipboard"} {" "}
+                            {state.copied ? getIcon('la-check') : getIcon('la-copy')}
                         </button>
                     </React.Fragment>
                 );
             } else {
                 Object.entries(state).forEach(([key, value]) => {
-                    if (["fullName", "phone", "position", "skype"].includes(key)) {
+                    if (["fullName", "phone", "position", "email"].includes(key)) {
                         if (value.length === 0) {
                             progress = progress - 25;
                         }
@@ -103,7 +98,7 @@ const SignatureGenerator = () => {
             return (
                 <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status">
-                  <span class="visually-hidden">Loading...</span>
+                  {/* <span class="visually-hidden">Loading...</span> */}
                 </div>
               </div>
             );
@@ -133,25 +128,112 @@ const SignatureGenerator = () => {
             console.log("Fail");
         }
     };
+    const isStateChanged = () => {
+        return JSON.stringify(state) === JSON.stringify(initialState);
+    };
+
+    const clearState = () => {
+        setState(initialState);
+    };
 
 
     return (
-        <div class="row">
-      <div class="col-sm-12">
-        <div class="file-wrap">
-          <div class="file-sidebar">
-            <div class="file-header justify-content-center">
-              <span>Projects</span>
-              <a href="" class="file-side-close">
-                <i class="fa fa-times"></i>
-              </a>
-            </div>
+        <>
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Email Signature</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href="index.html">Dashboard</a>
+              </li>
+              <li className="breadcrumb-item active">Email Signatue</li>
+            </ul>
+          </div>
          
-           
-        </div>
         </div>
       </div>
+
+      <div class="row">
+    <div  class="col-xl-5 d-flex gfuSqG">
+        <div class="flex-fill">
+            
+            <div class="card-body">
+                <form action="#">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Full Name</label>
+                        <div class="col-lg-9">
+                            <input type="text"
+                                value={state.fullName}
+                                name={"fullName"}
+                                onChange={handleChange}
+                                autoFocus={true}
+                             class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Designation</label>
+                        <div class="col-lg-9">
+                            <input type="text"
+                            label="Position"
+                            value={state.position}
+                            name={"position"}
+                            onChange={handleChange}
+                            
+                            class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Email Address</label>
+                        <div class="col-lg-9">
+                            <input 
+                            type="email"
+                            value={state.email}
+                            name={"email"}
+                            onChange={handleChange}
+                            
+                            class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Phone</label>
+                        <div class="col-lg-9">
+                            <input type="text"
+                                value={state.phone}
+                                name={"phone"}
+                                onChange={handleChange}
+                             class="form-control" />
+                        </div>
+                    </div>
+                   
+                   
+                    <div class="text-right">
+                        {/* <button type="submit" class="btn btn-primary">Submit</button> */}
+                        <button
+                                disabled={isStateChanged()}
+                                onClick={clearState}
+                                class="btn btn-primary"
+                            >
+                                Clear
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+    <div class="col-xl-7 d-flex ">
+        <div class="gfuSqG flex-fill">
+           
+            <div class="card-body">
+                {enoughData()}
+            </div>
+        </div>
+    </div>
+</div>
+      {/* custom generator */}
+            {/* <img style={{width: '50px'}} src={logo} alt={"logo"}/> */}
+     
+    </>
     )
 }
 
