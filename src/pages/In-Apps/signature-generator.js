@@ -2,17 +2,22 @@ import React, {useState} from 'react'
 import logo from '../../assets/img/OG-Logo.png'
 import Signature from './signature';
 import './signature.css'
+import tokenService from '../../services/token.service'
 const getIcon =  (name) => (<i class={"las "+ name}></i> );
 
 const SignatureGenerator = () => {
+    
+    const [user, setuser] = useState(tokenService.getUser())
+    console.log(user)
     const initialState = {
-        fullName: "",
-        position: "",
-        email: "",
+        fullName: user.first_name + " " + user.last_name || "",
+        position: user.designation.designation || "",
+        email: user.company_email || "",
         phone: "",
         copied: false,
     };
     const [state, setState] = useState(initialState)
+
     const handleChange = (event) => {
         if (event.target.name === "withPhoto") {
             setState((prevState) => ({
@@ -31,7 +36,7 @@ const SignatureGenerator = () => {
         if (state.withPhoto) {
             if (
                 state.fullName &&
-                state.phone &&
+                
                 state.position &&
                 state.email
             ) {
@@ -56,7 +61,7 @@ const SignatureGenerator = () => {
             } else {
                 Object.entries(state).forEach(([key, value]) => {
                     if (
-                        ["fullName", "phone", "position", "email"].includes(key)
+                        ["fullName", "position", "email"].includes(key)
                     ) {
                         if (value.length === 0) {
                             progress = progress - 20;
@@ -65,7 +70,7 @@ const SignatureGenerator = () => {
                 });
             }
         } else {
-            if (state.fullName && state.phone && state.position && state.email) {
+            if (state.fullName  && state.position && state.email) {
                 return (
                     <React.Fragment>
                         <Signature

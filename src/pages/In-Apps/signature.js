@@ -3,54 +3,85 @@ import logo from '../../assets/img/outsource.png'
 import TwitterLogo from '../../assets/img/twitter.svg'
 import LinkedInLogo from '../../assets/img/linkedin.svg'
 import FacebookLogo from '../../assets/img/facebook.svg'
-const getIcon =  (name) => (<i class={"lab "+ name}></i> );
+import LocationSvg from '../../assets/img/location.svg'
+import PhoneSvg from '../../assets/img/phone.svg'
+import AnchorSvg from '../../assets/img/anchor.svg'
+import Mail from '../../assets/img/mail.svg'
+import Iso from '../../assets/img/Skype_Picture_2021_06_03T10_49_47_206Z.jpeg'
 
+const getIcon =  (name) => (<i class={"lab "+ name}></i> );
+const tr = {bacground: 'aliceblue'}
 const Signature = (props) => {
     return (
         <>
         <div className="row signature">
-        <table cellPadding={0} cellSpacing={0} className={"signature"}>
+        <div className="col-md-12 title">
+            <h1 className="s-title">{props.fullName}</h1>
+            <p className="">{props.position}</p>
+        </div>
+        <table cellPadding={0} cellSpacing={0} >
             <tbody>
-            <tr>
-                <td rowSpan={5}>
+            <tr style={{background: 'aliceblue'}} className="pt-1">
+                <td  style={{height: '30%', width: '35%'}} className="pl-5" rowSpan={8}>
                     <img
-                        className={"main-image"}
-                        src={props.photo === "no-photo" ? logo : props.photo}
+                        style={{width: '80%'}}
+                        src="https://www.outsourceglobal.com/logo.png"
                         alt={""}
                     />
-                </td>
-                <td rowSpan={5}>
-                    <div
-                        className={"vertical-line"}
-                    />
-                </td>
-                <td>{props.fullName}</td>
-            </tr>
-            <tr>
-                <td colSpan={3}>{props.position}</td>
-            </tr>
-            <tr>
-                <td colSpan={3}>Telephone: {props.phone}</td>
-            </tr>
-            <tr>
-                <td colSpan={3}>Skype: {props.skype}</td>
-            </tr>
-            <tr>
-                <td colSpan={3}>
-                    <div className={"social-logos-frame"}>
-                        <a href={"https://twitter.com/"}>
+                    <div className="social-logos-frame mt-3">
+                        <a className="mr-3" href={"https://twitter.com/OutSourceGbl"}>
                             <img src={TwitterLogo} alt={""}/>
                         </a>
-                        <a href={"https://www.linkedin.com/"}>
+                        <a  href={"https://www.linkedin.com/company/outsourceglobal/mycompany/"}>
                             <img src={LinkedInLogo} alt={""}/>
                         </a>
-                        <a href={"https://www.facebook.com/"}>
+                        <a  href={"https://www.facebook.com/OutsourceGbl/"}>
                             <img src={FacebookLogo} alt={""}/>
                         </a>
                         
                     </div>
+                   
+                </td>
+                <td>
+                <h3><span class="blue">Outsource Global</span> Technologies Limited</h3>
                 </td>
             </tr>
+            
+            <tr style={{background: 'aliceblue'}}>
+           
+                <td colSpan={3}>
+                    <span><img style={{width: '15px'}}  src={Mail}  alt="" /></span>&nbsp;
+                   <span> {props.email} </span>
+                    </td>
+            </tr>
+            
+            <tr style={{background: 'aliceblue'}}>
+                <td colSpan={3}>
+                <div class="detail-link">
+                            <span><img  src={LocationSvg}  alt="" /></span>&nbsp;
+                            <span>2nd Floor, ASTA GALLERY Plot 1185, Parkway Road, Cadastral Zone,Mabushi District, Abuja FCT</span>
+                        </div>
+                </td>
+            </tr>
+            <tr style={{background: 'aliceblue'}}>
+                <td colSpan={3}>
+                <div class="detail-link">
+                <span><img  src={PhoneSvg}  alt="" /></span>&nbsp;
+                            <span>{props.phone}</span>
+                        </div>
+                </td>
+            </tr>
+            <tr style={{background: 'aliceblue'}}>
+                <td colSpan={3}>
+                <div class="detail-link">
+                            <span><img  src={AnchorSvg}  alt="" /> </span> &nbsp;
+                            <span>
+                                <a href="www.outsourceglobal.com">www.outsourceglobal.com</a>
+                            </span>
+                        </div>
+                </td>
+            </tr>
+            
             </tbody>
         </table>
         {/* <div className="col-md-12 title">
