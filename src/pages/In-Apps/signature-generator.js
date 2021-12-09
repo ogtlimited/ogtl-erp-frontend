@@ -152,7 +152,7 @@ const SignatureGenerator = () => {
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Email Signatue</li>
+              <li className="breadcrumb-item active">Email Signature</li>
             </ul>
           </div>
          
