@@ -79,6 +79,27 @@ class HelperService {
     }
     return formatted;
   }
+  arrayToJSONObjectAttendance(arr) {
+    //header
+
+    var keys = arr[1];
+    console.log("hii", keys);
+
+    //vacate keys from main array
+    var newArr = arr.slice(2, arr.length);
+    console.log("imaannnnnnn", newArr);
+    var formatted = [],
+      data = newArr,
+      cols = keys,
+      l = cols.length;
+    for (var i = 0; i < data.length; i++) {
+      var d = data[i],
+        o = {};
+      for (var j = 0; j < l; j++) o[cols[j]] = d[j];
+      formatted.push(o);
+    }
+    return formatted;
+  }
   shuffle(array) {
     let currentIndex = array.length,
       randomIndex;
@@ -163,10 +184,10 @@ class HelperService {
         hash[d] = row[d];
       }
     }
-    delete hash.__v
-    delete hash.createdAt
-    delete hash.updatedAt
-    delete hash.slug
+    delete hash.__v;
+    delete hash.createdAt;
+    delete hash.updatedAt;
+    delete hash.slug;
     return hash;
   }
 }

@@ -1,24 +1,28 @@
-import React, {useEffect, useState, useCallback} from "react";
-import { Link } from "react-router-dom";import AttendanceTable from "../../../components/attendance/attendance-table";
+import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import AttendanceTable from "../../../components/attendance/attendance-table";
 import AdminAttendanceTable from "../../../components/Tables/EmployeeTables/AttendanceTable";
-
+import AttendanceModal from "../../../components/Modal/attendanceModal";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 
 const AttendanceAdmin = () => {
-  const [allAttendance, setallAttendance] = useState([])
-  const {combineRequest} = useAppContext()
+  const [allAttendance, setallAttendance] = useState([]);
+  const { combineRequest } = useAppContext();
   const [selectedOption, setSelectedOption] = useState([]);
-  const [departments, setdepartments] = useState([])
-  const [designation, setdesignation] = useState([])
-  const [projects, setprojects] = useState([])
-  
+  const [departments, setdepartments] = useState([]);
+  const [designation, setdesignation] = useState([]);
+  const [projects, setprojects] = useState([]);
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploading, setuploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
       console.log(res);
-    setdepartments(res.data.createEmployeeFormSelection.departments)
-    setdesignation(res.data.createEmployeeFormSelection.designations)
-    setprojects(res.data.createEmployeeFormSelection.projects)
+      setdepartments(res.data.createEmployeeFormSelection.departments);
+      setdesignation(res.data.createEmployeeFormSelection.designations);
+      setprojects(res.data.createEmployeeFormSelection.projects);
     });
   }, [departments, designation, , combineRequest]);
 
@@ -49,7 +53,7 @@ const AttendanceAdmin = () => {
             <span>{row?.designation?.designation}</span>
           </Link>
         </h2>
-      )
+      ),
     },
 
     {
@@ -104,12 +108,16 @@ const AttendanceAdmin = () => {
     //},
   ];
   useEffect(() => {
-   axiosInstance.get('/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50').then(e =>{
-     console.log(e)
-     const att = e.data.data
-     setallAttendance(att)
-   })
-  }, [])
+    axiosInstance
+      .get(
+        "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
+      )
+      .then((e) => {
+        console.log(e);
+        const att = e.data.data;
+        setallAttendance(att);
+      });
+  }, []);
 
   return (
     <>
@@ -124,13 +132,39 @@ const AttendanceAdmin = () => {
               <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
+          <div className="col-auto float-right ml-auto">
+            <button
+              onClick={() => settoggleModal(true)}
+              type="button"
+              class="btn add-btn mx-3"
+              data-toggle="modal"
+              data-target="#attendanceModal"
+            >
+              <i className="fa fa-cloud-upload"></i>
+              Upload Attendance
+            </button>
+          </div>
         </div>
       </div>
       <div className="row">
         <div className="col-lg-12">
-          <AdminAttendanceTable data={allAttendance} defaultSorted={defaultSorted}
-        selectedOption={selectedOption} columns={columns} designation={designation} departments={departments} />
-          </div>
+          <AdminAttendanceTable
+            data={allAttendance}
+            defaultSorted={defaultSorted}
+            selectedOption={selectedOption}
+            columns={columns}
+            designation={designation}
+            departments={departments}
+          />
+          {toggleModal && (
+            <AttendanceModal
+              setUploadSuccess={setUploadSuccess}
+              setuploading={setuploading}
+              settoggleModal={settoggleModal}
+              fetchedCombineRequest={fetchedCombineRequest}
+            />
+          )}
+        </div>
       </div>
     </>
   );
