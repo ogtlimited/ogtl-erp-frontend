@@ -638,6 +638,22 @@ const Sidebar = () => {
                   </li>
                 </>
               )}
+              {canView("HR") && (
+                <>
+                  <li className="menu-title">
+                    <span>Settings</span>
+                  </li>
+                  <li className="">
+                    <Link to="/admin/roles-permissions" >
+                      <i className="la la-key"></i> <span> Roles & Permissions </span>{" "}
+                     
+                    </Link>
+                  </li>
+                  <div className="row">
+
+                  </div>
+                </>
+              )}
              
               {/* <li className="submenu">
                 <a href="" onClick={(e) => e.preventDefault()}>

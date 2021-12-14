@@ -3714,7 +3714,9 @@ table.dataTable thead > tr > td.sorting {
 -----------------------*/
 
 .roles-menu {
-	margin-top: 20px;
+    margin-top: 20px;
+    height: 400px;
+    overflow: auto;
 }
 .roles-menu > ul {
     background-color: #fff;
