@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 // import "./header.css";
-import logo from "../../assets/img/OG-Logo.png";
+import logo from "../../assets/img/og-white-logo.png";
+import cropped from "../../assets/img/cropped-white.png";
 // import { AppContext } from "../context/AppContext";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import tokenService from "../../services/token.service";
@@ -41,9 +42,12 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-left">
-        <Link to="/" className="logo">
+        <div  className="logo">
           <img src={logo} style={{ width: "100px" }} alt="" />
-        </Link>
+        </div>
+        <div  className="cropped-logo">
+          <img src={cropped}  alt="" />
+        </div>
       </div>
 
       <a id="toggle_btn" href="javascript:void(0);">

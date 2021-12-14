@@ -219,6 +219,13 @@ const Profile = () => {
                           </div>
                         </li>
                         <li>
+                          <div className="title">Leave Count:</div>
+                          <div className="text">
+                            {userData?.employee?.leaveCount ||
+                              "Not Available"}
+                          </div>
+                        </li>
+                        <li>
                           <div className="title">Branch:</div>
                           <div className="text">
                             {userData?.employee?.branch?.branch ||

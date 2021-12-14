@@ -31,7 +31,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
     }
   }, []);
   useEffect(() => {
-    console.log(value)
+    // console.log(value)
     setFormData(value);
   }, [value]);
   useEffect(() => {

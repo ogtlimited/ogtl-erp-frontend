@@ -7,9 +7,12 @@ import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
+import moment from "moment";
 const LeavesUser = () => {
   const {allEmployees, combineRequest, showAlert} = useAppContext();
   const [userId, setuserId] = useState('')
+  const [user, setuser] = useState(null)
+  const [usedLeaves, setusedLeaves] = useState(0)
   const [template, settemplate] = useState(null);
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState({});
@@ -24,6 +27,7 @@ const LeavesUser = () => {
   const [loadedSelect, setloadedSelect] = useState(false)
   const [loadLeaves, setloadLeaves] = useState(false)
   const fetchLeaves = () =>{
+    
     axiosInstance.get('/leave-application').then(e =>{
       console.log(userId, 'USERID')
       console.log(e, 'USERID')
@@ -32,6 +36,14 @@ const LeavesUser = () => {
       const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
       const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
       const open = leaves.filter(l => l.status === 'open').length;
+      let count = 0
+      leaves.forEach(e =>{
+          let a = moment(new Date(e.from_date));
+          let b = moment(new Date(e.to_date));
+          count += b.diff(a, 'days') + 1
+      })
+      console.log(count)
+      setusedLeaves(count)
       setannual(annual);
       setcasual(casual);
       setmedical(medic)
@@ -48,6 +60,7 @@ const LeavesUser = () => {
   }
  useEffect(() => {
   let user = tokenService.getUser()
+    setuser(user)
     setuserId(user._id)
     if(userId){
       fetchLeaves()
@@ -225,8 +238,8 @@ const LeavesUser = () => {
       <div className="row">
         <div className="col-md-3">
           <div className="stats-info">
-            <h6>Total Allocated Leave</h6>
-            <h4>20</h4>
+            <h6>Used Leave</h6>
+            <h4>{usedLeaves}</h4>
           </div>
         </div>
         <div className="col-md-3">
@@ -244,7 +257,7 @@ const LeavesUser = () => {
         <div className="col-md-3">
           <div className="stats-info">
             <h6>Remaining Leave</h6>
-            <h4>{20 - medical - casual}</h4>
+            <h4>{user?.leaveCount}</h4>
           </div>
         </div>
       </div>

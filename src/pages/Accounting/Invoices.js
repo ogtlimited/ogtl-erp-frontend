@@ -188,6 +188,11 @@ const Invoices = () => {
                   <i className="fa fa-pencil m-r-5"></i> Edit
                 </Link>
               )}
+
+              <Link className="dropdown-item" to={`/admin/invoice/${row._id}`}>
+                <i className="fa fa-eye m-r-5"></i> View
+              </Link>
+
               <Link
                 className="dropdown-item"
                 data-toggle="modal"
@@ -261,7 +266,6 @@ const Invoices = () => {
       </div> */}
       <div className="row">
         <div className="col-md-12">
-
           <LeavesTable columns={columns} data={data} />
         </div>
       </div>

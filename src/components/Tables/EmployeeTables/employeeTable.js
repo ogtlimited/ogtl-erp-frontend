@@ -56,6 +56,7 @@ const EmployeesTable = ({
   };
   const handleEdit =(row) =>{
     let hash = {}
+    seteditData(null)
     for(let d in row){
       if(typeof row[d] == 'object' && row[d] !== null){
         hash[d] = row[d]._id
@@ -76,7 +77,7 @@ const EmployeesTable = ({
   //    console.log(data)
 
   useEffect(() => {
-    console.log(filters)
+    // console.log(filters)
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);

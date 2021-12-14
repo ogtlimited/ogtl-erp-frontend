@@ -8,7 +8,7 @@ $(document).ready(function() {
 	var $wrapper = $('.main-wrapper');
 	var $pageWrapper = $('.page-wrapper');
 	var $slimScrolls = $('.slimscroll');
-	console.log( $slimScrolls)
+
 	// Sidebar
 	
 	var Sidemenu = function() {
@@ -41,7 +41,7 @@ $(document).ready(function() {
 	
 	$('body').append('<div className="sidebar-overlay"></div>');
 	$(document).on('click', '#mobile_btn', function() {
-		console.log('wrapper')
+		// console.log('wrapper')
 		$wrapper.toggleClass('slide-nav');
 		$('.sidebar-overlay').toggleClass('opened');
 		$('html').addClass('menu-opened');
@@ -323,14 +323,7 @@ $(document).ready(function() {
 	$(document).on('click', '.file-side-close', function() {
 		$('.file-wrap').removeClass('file-sidebar-toggle');
 	});
-	
-	if($('.kanban-wrap').length > 0) {
-		$(".kanban-wrap").sortable({
-			connectWith: ".kanban-wrap",
-			handle: ".kanban-box",
-			placeholder: "drag-placeholder"
-		});
-	}
+
 
 });
 

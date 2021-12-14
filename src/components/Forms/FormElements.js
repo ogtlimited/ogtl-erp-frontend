@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Formik,
   Form as FormikForm,
@@ -12,6 +12,7 @@ import "react-quill/dist/quill.snow.css";
 
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
+
   console.log(props);
   return (
     <Formik {...props}>
@@ -153,6 +154,7 @@ export function RichTextField(props) {
 export function CheckField(props) {
   const { name, label, placeholder, defaultValue, ...rest } = props;
   const { isChecked, setIsChecked } = useAppContext();
+  // console.log(defaultValue)
   return (
     <>
       <div className="form-group">
@@ -162,8 +164,7 @@ export function CheckField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          checked={isChecked}
-          {...rest}
+          key={name}
           onClick={() =>
             isChecked === true ? setIsChecked(false) : setIsChecked(true)
           }
@@ -183,14 +184,16 @@ export function CheckField(props) {
   );
 }
 export function DateField(props) {
-  const { name, label, placeholder,defaultValue, ...rest  } = props;
+
+  const { name, label, placeholder,defaultValue,setFieldValue, ...rest  } = props;
   console.log(defaultValue)
-  let date = null
-  if(defaultValue){
-    let curr = new Date(defaultValue);
-    curr.setDate(curr.getDate() + 3);
-    date = curr.toISOString().substr(0,10);
-  }
+  const [date, setdate] = useState(new Date().toISOString().slice(0,10))
+  // let date = n;
+  useEffect(() => {
+    if(defaultValue){
+      setdate(new Date(defaultValue).toISOString().slice(0,10));
+    }
+  }, [])
   return (
     <>
       <div className="form-group">
@@ -199,13 +202,21 @@ export function DateField(props) {
             {label}
           </label>
         )}
-        <Field
+        <input
           className="form-control"
           type="date"
-          defaultValue={date ? date : ''}
+          key={name}
+          // value={date}
+          // defaultValue={date ? date : null}
           name={name}
           id={name}
           placeholder={placeholder || ""}
+          onChange={(e) =>{
+
+            setFieldValue(name, e.target.value)
+            // setdateState(e.target.value)
+            console.log(e.target.value)
+          }}
 
         />
 

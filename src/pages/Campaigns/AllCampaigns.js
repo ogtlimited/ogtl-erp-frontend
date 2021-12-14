@@ -187,7 +187,7 @@ const AllCampaigns = () => {
               <img alt="" src={avater} />
             </Link>
             <span className="pt-1">
-              {row.manager.first_name} {row.manager.last_name}
+              {row?.manager?.first_name} {row?.manager?.last_name}
             </span>
           </li>
         </ul>

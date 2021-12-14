@@ -11,6 +11,7 @@ const AppContext = createContext();
 
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
+  const [showProgress, setshowProgress] = useState(false);
   const [userToken, setuserToken] = useState(null);
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
@@ -43,7 +44,7 @@ const AppProvider = (props) => {
   }, [user?.company_email]);
 
   useEffect(() => {
-    console.log("alert message");
+    // console.log("alert message");
   }, [showAlertMsg]);
 
   const clearNotifications = () => {
@@ -149,6 +150,7 @@ const AppProvider = (props) => {
     <AppContext.Provider
       value={{
         fetchTypesShift,
+        showProgress,
         combineRequest,
         employeeAttendance,
         adminDashboardData,
