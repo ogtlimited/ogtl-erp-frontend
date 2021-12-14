@@ -17,7 +17,8 @@ export default class EmployeeHelperService{
     }
     mapRecords(){
         // console.log(this.employeeTypes)
-          const appOpts = this.acceptedJobOffers?.map((e) => {
+          const appOpts = this.acceptedJobOffers.length > 0 ? this.acceptedJobOffers?.map((e) => {
+            console.log(e, 'offers')
               return {
                 label:
                   e?.job_applicant_id.first_name +
@@ -32,7 +33,7 @@ export default class EmployeeHelperService{
                   "-" +
                   e?.job_applicant_id.middle_name,
               };
-            })
+            }) : []
         const reportstoOpts = this.employees?.map((e) => {
             return {
               label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
