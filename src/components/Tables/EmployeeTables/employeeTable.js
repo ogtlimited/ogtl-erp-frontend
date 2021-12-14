@@ -56,6 +56,7 @@ const EmployeesTable = ({
   };
   const handleEdit =(row) =>{
     let hash = {}
+    seteditData(null)
     for(let d in row){
       if(typeof row[d] == 'object' && row[d] !== null){
         hash[d] = row[d]._id

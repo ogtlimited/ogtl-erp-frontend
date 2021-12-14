@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Formik,
   Form as FormikForm,
@@ -187,11 +187,13 @@ export function DateField(props) {
 
   const { name, label, placeholder,defaultValue,setFieldValue, ...rest  } = props;
   console.log(defaultValue)
-  let date = new Date().toISOString().slice(0,10);
-  if(defaultValue){
-    date = new Date(defaultValue).toISOString().slice(0,10);
-
-  }
+  const [date, setdate] = useState(new Date().toISOString().slice(0,10))
+  // let date = n;
+  useEffect(() => {
+    if(defaultValue){
+      setdate(new Date(defaultValue).toISOString().slice(0,10));
+    }
+  }, [])
   return (
     <>
       <div className="form-group">
@@ -200,17 +202,18 @@ export function DateField(props) {
             {label}
           </label>
         )}
-        <Field
+        <input
           className="form-control"
           type="date"
-          value={date ? date : ''}
           key={name}
+          // value={date}
+          // defaultValue={date ? date : null}
           name={name}
           id={name}
           placeholder={placeholder || ""}
           onChange={(e) =>{
 
-            // setFieldValue(name, e.target.value)
+            setFieldValue(name, e.target.value)
             // setdateState(e.target.value)
             console.log(e.target.value)
           }}
