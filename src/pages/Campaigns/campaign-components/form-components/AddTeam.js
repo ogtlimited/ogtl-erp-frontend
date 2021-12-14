@@ -80,7 +80,7 @@ const AddTeam = ({ campaign_info }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="FormModalLabel">
-                Add Team
+                Add Team Leads
               </h5>
               <button
                 type="button"

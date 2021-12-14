@@ -25,13 +25,14 @@ const Header = () => {
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
-    instance.logoutPopup().then(e =>{
-      history.push("/auth");
-
-    })
-    .catch(e => {
-      console.error(e);
-    });
+    instance
+      .logoutPopup()
+      .then((e) => {
+        history.push("/auth");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     console.log("pushing");
   };
   const user = tokenService.getUser();
@@ -42,11 +43,11 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-left">
-        <div  className="logo">
+        <div className="logo">
           <img src={logo} style={{ width: "100px" }} alt="" />
         </div>
-        <div  className="cropped-logo">
-          <img src={cropped}  alt="" />
+        <div className="cropped-logo">
+          <img src={cropped} alt="" />
         </div>
       </div>
 
@@ -97,9 +98,12 @@ const Header = () => {
           >
             <span className="user-img">
               <img src="assets/img/profiles/avatar-21.jpg" alt="" />
-              <span className="status online"></span>
+              <span
+                className="status online"
+                style={{ bottom: 24, right: 3 }}
+              ></span>
             </span>
-            <span>Admin</span>
+            <span>{user?.first_name}</span>
           </a>
           <div className="dropdown-menu">
             <Link
