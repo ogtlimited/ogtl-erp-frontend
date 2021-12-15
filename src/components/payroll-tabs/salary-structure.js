@@ -96,7 +96,7 @@ const SalaryStructure = ({ data, fetchSalaryStructures }) => {
               <i className="fa fa-plus px-1"></i>
             </button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <Link
+              <a
                 className="dropdown-item"
                 onClick={() => settype("projectId")}
                 data-toggle="modal"
@@ -104,8 +104,8 @@ const SalaryStructure = ({ data, fetchSalaryStructures }) => {
                 href=""
               >
                 Project
-              </Link>
-              <Link
+              </a>
+              <a
                 className="dropdown-item"
                 onClick={() => settype("departmentId")}
                 data-toggle="modal"
@@ -113,7 +113,7 @@ const SalaryStructure = ({ data, fetchSalaryStructures }) => {
                 href=""
               >
                 Department
-              </Link>
+              </a>
             </div>
           </div>
         </div>

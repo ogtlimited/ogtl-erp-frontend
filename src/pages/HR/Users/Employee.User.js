@@ -1,34 +1,59 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+
 import { useAppContext } from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 // import axiosInstance from "../../../services/api";
 // import shifts from './shift.json'
 // import raw from './raw.json'
 // import allShift from './allShift.json'
-import ogids from './allEmployeeOgid.json'
-import emergency from './emergency.json'
-import personal from './personal.json'
+import ogids from "./allEmployeeOgid.json";
+import emergency from "./emergency.json";
+import personal from "./personal.json";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const { notifications, user } = useAppContext();
-  let formatted = []
-  ogids.forEach(e =>{
-    let idx = personal.filter(f => e.first_name === f.first_name && e.last_name === f.last_name )[0]
-    if(idx){
+  const [leaveTaken, setLeaveTaken] = useState(0);
+  const [leaveRemaining, setLeaveRemaining] = useState(0);
+
+  useEffect(() => {
+    axiosInstance.get("/leave-application").then((e) => {
+      console.log(e, "USERID");
+      const leaves = e?.data?.data?.filter(
+        (f) => f?.employee_id?._id === user._id
+      );
+      const open = leaves.filter((l) => l.status === "open").length;
+      let count = 0;
+      leaves.forEach((e) => {
+        let a = moment(new Date(e.from_date));
+        let b = moment(new Date(e.to_date));
+        count += b.diff(a, "days") + 1;
+      });
+      setLeaveTaken(count);
+      setLeaveRemaining(open);
+    });
+  }, [user._id]);
+
+  let formatted = [];
+  ogids.forEach((e) => {
+    let idx = personal.filter(
+      (f) => e.first_name === f.first_name && e.last_name === f.last_name
+    )[0];
+    if (idx) {
       formatted.push({
-      ogid: e.ogid,
-      means_of_identification: idx.means_of_identification,
-      emergency_phone: idx.emergency_phone,
-      id_number: idx.id_number,
-      date_of_issue: idx.date_of_issue,
-      valid_upto: idx.valid_upto,
-      place_of_issue: idx.place_of_issue,
-      marital_status: idx.marital_status,
-      blood_group: idx.blood_group,
-      })
+        ogid: e.ogid,
+        means_of_identification: idx.means_of_identification,
+        emergency_phone: idx.emergency_phone,
+        id_number: idx.id_number,
+        date_of_issue: idx.date_of_issue,
+        valid_upto: idx.valid_upto,
+        place_of_issue: idx.place_of_issue,
+        marital_status: idx.marital_status,
+        blood_group: idx.blood_group,
+      });
     }
-  })
+  });
   // let arr = []
   // let unique = []
   // let allShifts = []
@@ -55,7 +80,7 @@ const EmployeeUser = () => {
   //     }
   //     allShifts.push(s)
   //   }else{
-  //     let end = parseInt(e.end_time) < 12 ? parseInt(e.end_time) + ' AM' : parseInt(e.end_time) + ' PM' 
+  //     let end = parseInt(e.end_time) < 12 ? parseInt(e.end_time) + ' AM' : parseInt(e.end_time) + ' PM'
   //     let s = {
   //       ...e,
   //       shift_name: 'Afternoon ' + parseInt(e.start_time) + ' PM to ' + end,
@@ -66,7 +91,6 @@ const EmployeeUser = () => {
   // })
   return (
     <>
-      
       <div className="row">
         <div className="col-md-12">
           <div className="welcome-box">
@@ -91,7 +115,7 @@ const EmployeeUser = () => {
               {notifications.length ? (
                 notifications.map((notification, index) => (
                   <div className="dash-info-list" key={index}>
-                    <Link className="dash-card  ">
+                    <a className="dash-card  ">
                       <div className="dash-card-container">
                         <div className="dash-card-icon">
                           <i className="fa fa-hourglass-o"></i>
@@ -108,7 +132,7 @@ const EmployeeUser = () => {
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </a>
                   </div>
                 ))
               ) : (
@@ -211,16 +235,16 @@ const EmployeeUser = () => {
                 <div className="card-body">
                   <div className="time-list">
                     <div className="dash-stats-list">
-                      <h4>4.5</h4>
+                      <h4>{leaveTaken}</h4>
                       <p>Leave Taken</p>
                     </div>
                     <div className="dash-stats-list">
-                      <h4>12</h4>
+                      <h4>{leaveRemaining}</h4>
                       <p>Remaining</p>
                     </div>
                   </div>
                   <div className="request-btn">
-                    <Link className="btn btn-primary">Apply Leave</Link>
+                    <button className="btn btn-primary">Apply Leave</button>
                   </div>
                 </div>
               </div>
@@ -240,7 +264,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <Link className="btn btn-primary">Apply Time Off</Link>
+                    <button className="btn btn-primary">Apply Time Off</button>
                   </div>
                 </div>
               </div>

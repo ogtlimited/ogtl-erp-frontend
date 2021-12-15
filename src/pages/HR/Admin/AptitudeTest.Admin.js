@@ -209,9 +209,9 @@ const AptitudeTest = () => {
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a> */}
-            <Link className="dropdown-item" onClick={() => deleteTest(row)}>
+            <a className="dropdown-item" onClick={() => deleteTest(row)}>
               <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            </a>
           </div>
         </div>
       ),

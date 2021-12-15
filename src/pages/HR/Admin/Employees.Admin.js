@@ -40,9 +40,7 @@ const AllEmployeesAdmin = () => {
     settemplate(obj);
   }, []);
 
-  useEffect(() => {
-
-  }, [editData, mode]);
+  useEffect(() => {}, [editData, mode]);
   useEffect(() => {
     createEmployee().then((res) => {
       // console.log(res);
@@ -93,7 +91,7 @@ const AllEmployeesAdmin = () => {
       // )
       const obj = helper.formArrayToObject(finalForm);
       let initialValues = {
-        leaveCount: 0
+        leaveCount: 0,
       };
       for (let i in obj) {
         initialValues[i] = "";
@@ -114,16 +112,13 @@ const AllEmployeesAdmin = () => {
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      console.log(i)
-      if(i == 'isAdmin'){
+      console.log(i);
+      if (i == "isAdmin") {
         initialValues[i] = false;
-      }
-      else if(i == 'date_of_joining'){
-        initialValues[i] = new Date().toISOString().slice(0,10);
-      }
-      else{
+      } else if (i == "date_of_joining") {
+        initialValues[i] = new Date().toISOString().slice(0, 10);
+      } else {
         initialValues[i] = "";
-
       }
       console.log(initialValues);
     }
@@ -157,9 +152,7 @@ const AllEmployeesAdmin = () => {
       } else {
         let id = editData._id;
         console.log(id);
-        let values = {
-          
-        };
+        let values = {};
         for (let i in template) {
           values[i] = formValue[i];
           // console.log(i);

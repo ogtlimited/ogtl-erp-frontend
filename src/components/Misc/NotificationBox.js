@@ -24,13 +24,13 @@ export const NotificationBox = () => {
         <div className="topnav-dropdown-header">
           <span className="notification-title">Notifications</span>
 
-          <Link onClick={() => clearNotifications()}>Clear All</Link>
+          <a onClick={() => clearNotifications()}>Clear All</a>
         </div>
         <div className="noti-content">
           <ul className="notification-list">
             {notifications?.map((not, index) => (
               <li className="notification-message" key={index}>
-                <Link>
+                <a>
                   <div className="media">
                     <span className="avatar">
                       <img alt="" src="" />
@@ -49,7 +49,7 @@ export const NotificationBox = () => {
                       </p>
                     </div>
                   </div>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

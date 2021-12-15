@@ -154,28 +154,28 @@ const VendorBills = () => {
       formatter: (value, row) => (
         <>
           <div className="dropdown dropdown-action text-right">
-            <Link
+            <a
               className="action-icon dropdown-toggle"
               data-toggle="dropdown"
               aria-expanded="false"
             >
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </Link>
+            </a>
             <div className="dropdown-menu dropdown-menu-right">
               {row?.status === "Draft" && (
-                <Link
+                <a
                   className="dropdown-item"
                   data-toggle="modal"
                   data-target="#EditFormModal"
                   onClick={() => editRow(row)}
                 >
                   <i className="fa fa-pencil m-r-5"></i> Edit
-                </Link>
+                </a>
               )}
               <Link className="dropdown-item" to={`/admin/bills/${row._id}`}>
                 <i className="fa fa-eye m-r-5"></i> View
               </Link>
-              <Link
+              <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#exampleModal"
@@ -184,7 +184,7 @@ const VendorBills = () => {
                 }}
               >
                 <i className="fa fa-trash m-r-5"></i> Delete
-              </Link>
+              </a>
             </div>
           </div>
         </>
@@ -205,13 +205,13 @@ const VendorBills = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <Link
+            <a
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add Bill
-            </Link>
+            </a>
           </div>
         </div>
       </div>
