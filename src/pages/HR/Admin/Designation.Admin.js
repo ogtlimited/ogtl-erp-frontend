@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router";
+
 import departments from "../../../db/designationList.json";
 import { designation } from "../../../components/FormJSON/HR/Employee/designation";
 import list from '../../../designation.json'
@@ -14,7 +14,7 @@ import helper from "../../../services/helper";
 
 let qualityFilter;
 
-const Designations = withRouter(({ history }) => {
+const Designations = () => {
   // console.log(uniqueArray)
   const [allDesignation, setallDesignation] = useState([]);
   const { formUpdate, setformUpdate, showAlert } = useAppContext();
@@ -234,6 +234,6 @@ const Designations = withRouter(({ history }) => {
       />
     </>
   );
-});
+}
 
 export default Designations;

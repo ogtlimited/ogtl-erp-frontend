@@ -239,23 +239,23 @@ const VendorPayments = () => {
         <div className="dropdown dropdown-action text-right">
           {row?.status === "Draft" && (
             <>
-              <Link
+              <a
                 className="action-icon dropdown-toggle"
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
                 <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-              </Link>
+              </a>
               <div className="dropdown-menu dropdown-menu-right">
-                <Link
+                <a
                   className="dropdown-item"
                   data-toggle="modal"
                   data-target="#FormModal"
                   onClick={() => editRow(row)}
                 >
                   <i className="fa fa-pencil m-r-5"></i> Edit
-                </Link>
-                <Link
+                </a>
+                <a
                   className="dropdown-item"
                   data-toggle="modal"
                   data-target="#exampleModal"
@@ -264,7 +264,7 @@ const VendorPayments = () => {
                   }}
                 >
                   <i className="fa fa-trash m-r-5"></i> Delete
-                </Link>
+                </a>
               </div>
             </>
           )}
@@ -286,13 +286,13 @@ const VendorPayments = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <Link
+            <a
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Add Payment
-            </Link>
+            </a>
           </div>
         </div>
       </div>

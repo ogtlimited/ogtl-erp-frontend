@@ -8,12 +8,15 @@ import { AppProvider } from "./Context/AppContext";
 import config from "./config.json";
 import "./assets/script";
 import tokenService from "./services/token.service";
+import Router from './routes/index'
 
 function App() {
   const [token, settoken] = useState(tokenService.getToken())
   return (
     <div className="main-wrapper">
-      <BrowserRouter>
+      
+      <Router />
+      {/* <BrowserRouter>
         <Switch>
         <Route
                 exact
@@ -35,7 +38,7 @@ function App() {
           </AppProvider>
           <Redirect from="/" to="/admin/index" />
         </Switch>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 }

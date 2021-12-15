@@ -1,0 +1,119 @@
+function path(root, sublink) {
+    return `${root}${sublink}`;
+}
+
+const ROOTS_AUTH = '/auth';
+const ROOTS_DASHBOARD = '/dashboard';
+
+export const PATH_AUTH = {
+    root: ROOTS_AUTH,
+    login: path(ROOTS_AUTH, '/login'),
+};
+
+export const PATH_DASHBOARD = {
+    root: ROOTS_DASHBOARD,
+    main: {
+        root: path(ROOTS_DASHBOARD, '/dashboard'),
+        main: path(ROOTS_DASHBOARD, '/dashboard/main'),
+        hrDashboard: path(ROOTS_DASHBOARD, '/hr-dashboard'),
+        accountDashboard: path(ROOTS_DASHBOARD, '/account-dashboard'),
+        employeeDashboard: path(ROOTS_DASHBOARD, '/employee-dashboard'),
+    },
+    apps: {
+        root: path(ROOTS_DASHBOARD, '/apps'),
+        email: path(ROOTS_DASHBOARD, '/apps/email'),
+        signature: path(ROOTS_DASHBOARD, '/apps/email-signature'),
+        fileManager: path(ROOTS_DASHBOARD, '/apps/file-manager'),
+        notification: path(ROOTS_DASHBOARD, '/apps/notifications'),
+    },
+    hr: {
+      root: path(ROOTS_DASHBOARD, '/hr'),
+      allEmployees: path(ROOTS_DASHBOARD, '/hr/all-employees'),
+      leavesAdmin: path(ROOTS_DASHBOARD, '/hr/leaves-admin'),
+      attendanceAdmin: path(ROOTS_DASHBOARD, '/hr/attendance-admin'),
+      leavesEmployee: path(ROOTS_DASHBOARD, '/hr/leaves'),
+      attendanceEmployee: path(ROOTS_DASHBOARD, '/hr/attendance'),
+      department: path(ROOTS_DASHBOARD, '/hr/departments'),
+      designations: path(ROOTS_DASHBOARD, '/hr/designations'),
+      shifts: path(ROOTS_DASHBOARD, '/hr/shifts'),
+      shiftAssignment: path(ROOTS_DASHBOARD, '/hr/shift-assignment'),
+      shiftRequest: path(ROOTS_DASHBOARD, '/hr/shift-request'),
+    },
+    payroll: {
+      root: path(ROOTS_DASHBOARD, '/payroll'),
+      salary: path(ROOTS_DASHBOARD, '/payroll/salaries'),
+      payrollItem: path(ROOTS_DASHBOARD, '/payroll/payroll-items')
+    },
+    reports: {
+      root: path(ROOTS_DASHBOARD, '/reports'),
+      employeeReport: path(ROOTS_DASHBOARD, '/reports/employee-reports'),
+      payslipReport: path(ROOTS_DASHBOARD, '/reports/payslip-reports'),
+      attendanceReports: path(ROOTS_DASHBOARD, '/reports/attendance-reports')
+    },
+    recruitment: {
+        root: path(ROOTS_DASHBOARD, '/recruitment'),
+        jobOpening: path(ROOTS_DASHBOARD, '/recruitment/job-opening'),
+        jobOffer: path(ROOTS_DASHBOARD, '/recruitment/job-offer'),
+        jobApplicants: path(ROOTS_DASHBOARD, '/recruitment/job-applicants'),
+        aptitudeTests: path(ROOTS_DASHBOARD, '/recruitment/aptitude-test'),
+    },
+    performance: {
+      root: path(ROOTS_DASHBOARD, '/performance'),
+      warningLetter: path(ROOTS_DASHBOARD, '/performance/warning-letter'),
+      scoreCards: path(ROOTS_DASHBOARD, '/performance/score-cards'),
+    },
+    coaching: path(ROOTS_DASHBOARD, '/coaching'),
+    employeeCoaching: path(ROOTS_DASHBOARD, '/employee-coaching'),
+    promotion: path(ROOTS_DASHBOARD, '/promotion'),
+    resignation: path(ROOTS_DASHBOARD, '/resignation'),
+    termination: path(ROOTS_DASHBOARD, '/termination'),
+    productItems: path(ROOTS_DASHBOARD, '/product-items'),
+    settings: {
+      root: path(ROOTS_DASHBOARD, '/settings'),
+      rolesPermission: path(ROOTS_DASHBOARD, '/settings/roles-permissions'),
+    },
+    campaign: {
+      root: path(ROOTS_DASHBOARD, '/campaign'),
+      allCampaign: path(ROOTS_DASHBOARD, '/campaign/all'),
+      lead: path(ROOTS_DASHBOARD, '/campaign/leads'),
+      branch: path(ROOTS_DASHBOARD, '/campaign/branch'),
+    },
+    accounts: {
+      root: path(ROOTS_DASHBOARD, '/accounts'),
+      chartOfAccount: path(ROOTS_DASHBOARD, '/accounts/chart-of-account'),
+      budgets: path(ROOTS_DASHBOARD, '/accounts/budgets'),
+      journals: path(ROOTS_DASHBOARD, '/accounts/journals'),
+      ledger: path(ROOTS_DASHBOARD, '/accounts/ledger'),
+      expenseHeads: path(ROOTS_DASHBOARD, '/accounts/expense-heads')
+    },
+    accountingReports: {
+      root: path(ROOTS_DASHBOARD, '/accounting-reports/'),
+      payrollReport: path(ROOTS_DASHBOARD, '/accounting-reports/payroll-reports'),
+      balanceSheet: path(ROOTS_DASHBOARD, '/accounting-reports/balance-sheet'),
+    },
+    clients: {
+      root: path(ROOTS_DASHBOARD, '/clients/'),
+      clients: path(ROOTS_DASHBOARD, '/clients/all'),
+      invoices: path(ROOTS_DASHBOARD, '/clients/invoices'),
+      payments: path(ROOTS_DASHBOARD, '/clients/payments'),
+    },
+    vendors: {
+      root: path(ROOTS_DASHBOARD, '/vendors/'),
+      vendors: path(ROOTS_DASHBOARD, '/vendors/all'),
+      bills: path(ROOTS_DASHBOARD, '/vendors/bills'),
+      payments: path(ROOTS_DASHBOARD, '/vendors/payments'),
+    },
+    assets: {
+      root: path(ROOTS_DASHBOARD, '/assets/'),
+      all: path(ROOTS_DASHBOARD, '/assets/all'),
+      assignment: path(ROOTS_DASHBOARD, '/assets/assignment')
+    },
+    facility: {
+      root: path(ROOTS_DASHBOARD, '/maintenance/'),
+      all: path(ROOTS_DASHBOARD, '/maintenance/reports'),
+      maintenanceRepair: path(ROOTS_DASHBOARD, '/maintenance/maintenance-and-repair')
+    },
+ 
+    purchaseOrder: path(ROOTS_DASHBOARD, '/purchase-order'),
+  };
+  

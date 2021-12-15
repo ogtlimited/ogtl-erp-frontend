@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
       });
     }
     if (error.response.status === 401) {
-      // tokenService.removeToken()
+      tokenService.removeToken()
       // console.log("tokrn");
       window.location = "/auth";
     } else {

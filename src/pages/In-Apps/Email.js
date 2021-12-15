@@ -225,22 +225,22 @@ const Email = () => {
                         <i className="fa fa-refresh"></i>
                       </button>
                       <div className="btn-group">
-                        <Link
+                        <a
                           className={`btn btn-white ${
                             currentPage === 1 ? "disabled" : ""
                           } `}
                           onClick={() => goToPreviousPage()}
                         >
                           <i className="fa fa-angle-left"></i>
-                        </Link>
-                        <Link
+                        </a>
+                        <a
                           className={`btn btn-white ${
                             currentPage === data.length ? "disabled" : ""
                           } `}
                           onClick={() => goToNextPage()}
                         >
                           <i className="fa fa-angle-right"></i>
-                        </Link>
+                        </a>
                       </div>
                     </div>
                     <div className="text-right mt-2">

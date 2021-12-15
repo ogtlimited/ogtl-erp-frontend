@@ -98,7 +98,7 @@ const Bill = () => {
                     <li>{data?.vendor?.country}</li>
                     <li>{data?.vendor?.phone}</li>
                     <li>
-                      <Link>{data?.vendor?.email}</Link>
+                      <a>{data?.vendor?.email}</a>
                     </li>
                   </ul>
                 </div>
