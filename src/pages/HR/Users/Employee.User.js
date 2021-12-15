@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 // import axiosInstance from "../../../services/api";
@@ -115,7 +115,7 @@ const EmployeeUser = () => {
               {notifications.length ? (
                 notifications.map((notification, index) => (
                   <div className="dash-info-list" key={index}>
-                    <Link className="dash-card  ">
+                    <a className="dash-card  ">
                       <div className="dash-card-container">
                         <div className="dash-card-icon">
                           <i className="fa fa-hourglass-o"></i>
@@ -132,7 +132,7 @@ const EmployeeUser = () => {
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </a>
                   </div>
                 ))
               ) : (
@@ -244,7 +244,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <Link className="btn btn-primary">Apply Leave</Link>
+                    <button className="btn btn-primary">Apply Leave</button>
                   </div>
                 </div>
               </div>
@@ -264,7 +264,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <Link className="btn btn-primary">Apply Time Off</Link>
+                    <button className="btn btn-primary">Apply Time Off</button>
                   </div>
                 </div>
               </div>

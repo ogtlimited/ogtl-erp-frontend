@@ -10,25 +10,22 @@ import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user, setuser] = useState(tokenService.getUser());
+  console.log(user)
   const [isPriviledged, setisPriviledged] = useState(false);
   const { combineRequest } = useAppContext();
   const canView = (dept) => {
     if (user?.department?.department === dept) {
       return true;
-    } else {
+    }
+    else if(dept === 'All'){
+      return true
+    }
+     else {
       return false;
     }
   };
   useEffect(() => {
-    // combineRequest().then((res) => {
-    //   const dept = res.data.createEmployeeFormSelection.departments;
-    // });
-    if (user != null) {
-      // const hrLower = HRpeople.map(e => e.toLowerCase())
-      // if(HRpeople.includes(user?.designation?.toLowerCase())){
-      // 	setisPriviledged(true)
-      // }
-    }
+
     var Sidemenu = function () {
       this.$menuItem = $("#sidebar-menu a");
     };
@@ -75,45 +72,47 @@ const Sidebar = () => {
             <ul>
               {sidebarConfig.map((nav) => (
                 <>
-                  <li className="menu-title">
-                    <span>{nav.subheader}</span>
-                  </li>
+                  {canView(nav.canView) && 
+                    <li className="menu-title">
+                      <span>{nav.subheader}</span>
+                    </li>
+                  }
                   {nav.items.map((item) => (
                     <>
                       {item.children ? (
-                        <li className="submenu">
+                        <>
+                        {canView(item.canView) &&
+                          <li className="submenu">
                           <a
                             href=""
                             onClick={(e) => e.preventDefault()}
-                            className=" subdrop"
+                            className={nav.subheader == 'Main' ? "active subdrop" : "subdrop"}
                           >
                             {item.icon} <span> {item.title}</span>{" "}
                             <span className="menu-arrow"></span>
                           </a>
-                          <ul style={{ display: "none" }}>
+                          <ul style={{ display: nav.subheader == 'Main' ? "block" : "none" }}>
                             {item.children.map((child) => (
-                              <li class="">
-                                <Link to={`${child.path}`} class="">
-                                  {child.title}
-                                </Link>
-                              </li>
+                              <>
+                              {canView(child.canView) && 
+                                <li class="">
+                                  <Link to={`${child.path}`} class="">
+                                    {child.title}
+                                  </Link>
+                                </li>
+                              }
+                              </>
                             ))}
-
-                            {/* {canView("HR") && (
-                    <li>
-                      <Link className="active" to="/admin/hr-dashboard">
-                        HR Dashboard
-                      </Link>
-                    </li>
-                  )} */}
                           </ul>
                         </li>
-                      ) : (
-                        <li>
+                        }
+                        </>
+                      ) : (<>
+                        {canView(item.canView) && <li>
                           <Link to={item.path}>
                             {item.icon} <span>{item.title}</span>
                           </Link>
-                        </li>
+                        </li>}</>
                       )}
                     </>
                   ))}

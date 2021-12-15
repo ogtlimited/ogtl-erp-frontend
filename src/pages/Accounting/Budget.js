@@ -160,37 +160,6 @@ const Budget = () => {
       ),
     },
 
-    // {
-    //   dataField: "",
-    //   text: "Approve",
-    //   sort: true,
-    //   headerStyle: { maxWidth: "90px" },
-    //   formatter: (value, row) => (
-    //     <>
-    //       <div className="dropdown dropdown-action text-right">
-    //         <Link
-    //           className="action-icon dropdown-toggle"
-    //           data-toggle="dropdown"
-    //           aria-expanded="false"
-    //         >
-    //           <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //         </Link>
-    //         <div className="dropdown-menu dropdown-menu-right">
-    //           <Link
-    //             className="dropdown-item"
-    //             data-toggle="modal"
-    //             data-target="#exampleModal"
-    //             onClick={() => {
-    //               setSelectedRow(row);
-    //             }}
-    //           >
-    //             <i className="fa fa-thumbs-up m-r-5"></i> Approve
-    //           </Link>
-    //         </div>
-    //       </div>
-    //     </>
-    //   ),
-    // },
   ];
   return (
     <>

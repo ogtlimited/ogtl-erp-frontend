@@ -81,7 +81,7 @@ export const PATH_DASHBOARD = {
     accounts: {
       root: path(ROOTS_DASHBOARD, '/accounts'),
       chartOfAccount: path(ROOTS_DASHBOARD, '/accounts/chart-of-account'),
-      budgets: path(ROOTS_DASHBOARD, '/accounts/post/budgets'),
+      budgets: path(ROOTS_DASHBOARD, '/accounts/budgets'),
       journals: path(ROOTS_DASHBOARD, '/accounts/journals'),
       ledger: path(ROOTS_DASHBOARD, '/accounts/ledger'),
       expenseHeads: path(ROOTS_DASHBOARD, '/accounts/expense-heads')

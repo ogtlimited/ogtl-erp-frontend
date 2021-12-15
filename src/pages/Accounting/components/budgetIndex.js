@@ -264,7 +264,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                             </td>
 
                             <td>
-                              <Link
+                              <a
                                 className="edit-icon ml-2  text-center pos-relative"
                                 style={{
                                   paddingLeft: "2px",
@@ -277,19 +277,19 @@ export const BudgetForm = ({ fetchBudget }) => {
                                   class="las la-minus"
                                   style={{ fontSize: "21px" }}
                                 ></i>
-                              </Link>
+                              </a>
                             </td>
                           </tr>
                         ))}
                     </tbody>
                     <tfoot className="d-flex">
-                      <Link
+                      <a
                         className="edit-icon ml-2 mt-3  text-center pos-relative"
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
                         <i class="las la-plus" style={{ fontSize: "21px" }}></i>
-                      </Link>
+                      </a>
                     </tfoot>
                   </table>
                 </div>
