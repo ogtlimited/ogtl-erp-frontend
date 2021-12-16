@@ -14,7 +14,7 @@ const Sidebar = () => {
   const [isPriviledged, setisPriviledged] = useState(false);
   const { combineRequest } = useAppContext();
   const canView = (dept) => {
-    if (user?.department?.department === dept) {
+    if (user?.department?.department === dept || user?.role?.title === 'Super') {
       return true;
     }
     else if(dept === 'All'){
