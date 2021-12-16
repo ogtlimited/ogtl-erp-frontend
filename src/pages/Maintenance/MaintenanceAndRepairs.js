@@ -239,7 +239,7 @@ const MaintenanceAndRepairs = () => {
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
-            <Link
+            <a
               className="dropdown-item"
               data-toggle="modal"
               data-target="#exampleModal"
@@ -248,7 +248,7 @@ const MaintenanceAndRepairs = () => {
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            </a>
           </div>
         </div>
       ),

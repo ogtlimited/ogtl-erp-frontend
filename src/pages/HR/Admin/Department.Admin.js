@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router";
+import React, { useState, useEffect } from "react"
 import departments from "../../../db/departments.json";
 
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
@@ -12,7 +11,12 @@ import Select from "react-select";
 import helper from "../../../services/helper";
 import { create } from "yup/lib/Reference";
 
-const Departments = withRouter(({ history }) => {
+
+
+
+
+
+const Departments = () => {
   const [template, settemplate] = useState({});
   const { formUpdate, setformUpdate, showAlert } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
@@ -223,6 +227,6 @@ const Departments = withRouter(({ history }) => {
       />
     </>
   );
-});
+};
 
 export default Departments;

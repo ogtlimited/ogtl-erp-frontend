@@ -1,16 +1,17 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import config from "../../config.json";
 import { useAppContext } from "../../Context/AppContext";
+
 const Login = () => {
   const { instance } = useMsal();
-  let history = useHistory();
+  let navigate = useNavigate();
   const [errorMsg, seterrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const {
@@ -43,7 +44,7 @@ const Login = () => {
             // fetchEmployeeAttendance()
             tokenService.setToken(res.data.token.token);
             // setuserToken(res.data.token.token)
-            history.push("/admin/employee-dashboard");
+            navigate("/dashboard/employee-dashboard");
             // window.location.href = "/admin/employee-dashboard";
           })
           .catch((err) => {
@@ -72,7 +73,7 @@ const Login = () => {
       <div className="account-content">
         <div className="container">
           <div className="account-logo">
-            <Link href="/">
+            <Link to="/">
               <img
                 className="logo"
                 src="/static/media/outsource.2499b5b3.png"

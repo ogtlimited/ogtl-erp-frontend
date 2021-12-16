@@ -1,8 +1,10 @@
 import axios from "axios";
 import tokenService from "./token.service";
 import config from '../config.json'
+// import { useAppContext } from "../Context/AppContext";
 let headers = {};
 const token = localStorage.getItem("token");
+
 
 if (token) {
   headers.Authorization = `Bearer ${token}`;
@@ -12,6 +14,7 @@ const axiosInstance = axios.create({
   baseURL: config.ApiUrl,
 });
 axiosInstance.interceptors.request.use((config) => {
+
   // console.log(config)
   const token = localStorage.getItem("token");
   if (!token) {
@@ -34,7 +37,7 @@ axiosInstance.interceptors.response.use(
       });
     }
     if (error.response.status === 401) {
-      // tokenService.removeToken()
+      tokenService.removeToken()
       // console.log("tokrn");
       window.location = "/auth";
     } else {

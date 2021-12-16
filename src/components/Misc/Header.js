@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import logo from "../../assets/img/og-white-logo.png";
 import cropped from "../../assets/img/cropped-white.png";
 // import { AppContext } from "../context/AppContext";
-import { Link, useHistory, withRouter } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { NotificationBox } from "./NotificationBox";
 import { useMsal } from "@azure/msal-react";
@@ -18,9 +18,9 @@ const toggle_sidebar = (e) => {
     body.classList.add("mini-sidebar");
   }
 };
-// const Header = withRouter(({ history }) => {
+
 const Header = () => {
-  let history = useHistory();
+  let navigate = useNavigate();
   const { instance } = useMsal();
   const logout = (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const Header = () => {
     instance
       .logoutPopup()
       .then((e) => {
-        history.push("/auth");
+        navigate("/auth");
       })
       .catch((e) => {
         console.error(e);

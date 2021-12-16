@@ -11,29 +11,29 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
     <>
       <div className="dropdown action-label text-center">
         {value === "Published" ? (
-          <Link
+          <a
             className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-dot-circle-o text-success"></i> {value}
-          </Link>
+          </a>
         ) : value === "Draft" ? (
-          <Link
+          <a
             className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-dot-circle-o text-primary"></i> {value}
-          </Link>
+          </a>
         ) : (
-          <Link
+          <a
             className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
           >
             <i className="fa fa-dot-circle-o text-purple"></i> Draft
-          </Link>
+          </a>
         )}
 
         <div
@@ -47,11 +47,11 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
             transform: "translate3d(106px, 31px, 0px)",
           }}
         >
-          <Link onClick={() => handleStatus("Draft")} className="dropdown-item">
+          <a onClick={() => handleStatus("Draft")} className="dropdown-item">
             <i className="fa fa-dot-circle-o text-primary"></i> Draft
-          </Link>
+          </a>
 
-          <Link
+          <a
             onClick={() => handleStatus("Published")}
             className="dropdown-item "
             data-toggle="modal"
@@ -59,7 +59,7 @@ const InvoiceBillApprover = ({ row, value, setStatus, setstatusRow }) => {
           >
             <i className="fa fa-dot-circle-o text-success"></i>
             Published
-          </Link>
+          </a>
         </div>
       </div>
     </>
