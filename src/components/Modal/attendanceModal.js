@@ -74,7 +74,7 @@ const AttendanceModal = ({
     setuploading(true);
     setloading(true);
     axiosInstance
-      .post("/api/attendance", data)
+      .post("/api/attendance/bulk", data)
       .then((res) => {
         console.log(res);
         showAlert(true, "Data successfully uploaded", "alert alert-success");

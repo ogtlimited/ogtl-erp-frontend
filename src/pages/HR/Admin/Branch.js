@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
-import { withRouter } from "react-router";
+
 
 
 
@@ -14,7 +14,7 @@ import { branchFormJSON } from "../../../components/FormJSON/HR/Employee/branch"
 import helper from "../../../services/helper";
 
 
-const Branch = withRouter(({ history }) => {
+const Branch = () => {
   const [allBranch, setallBranch] = useState([]);
   const { formUpdate, setformUpdate } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
@@ -203,6 +203,6 @@ const Branch = withRouter(({ history }) => {
       />
     </>
   );
-});
+};
 
 export default Branch;

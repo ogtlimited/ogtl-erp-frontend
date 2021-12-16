@@ -290,15 +290,15 @@ const JobOpening = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <Link
+            <a
               className="dropdown-item"
               data-toggle="modal"
               data-target="#FormModal"
               onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </Link>
-            <Link
+            </a>
+            <a
               className="dropdown-item"
               data-toggle="modal"
               data-target="#exampleModal"
@@ -307,7 +307,7 @@ const JobOpening = () => {
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            </a>
           </div>
         </div>
       ),

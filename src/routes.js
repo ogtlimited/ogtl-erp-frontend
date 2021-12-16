@@ -63,6 +63,8 @@ import FileManager from "./pages/In-Apps/FileManager";
 import Branch from "./pages/HR/Admin/Branch";
 import HRDashboard from "./pages/Dashboard/HRDashboard";
 import SignatureGenerator from "./pages/In-Apps/signature-generator";
+import RolePermission from "./pages/settings/roles-permission";
+import RoleAssignment from "./pages/HR/Admin/RoleAssignment.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -596,6 +598,18 @@ const routes = [
     title: "Maintenance And Repairs",
     path: "/maintenance-repairs",
     component: MaintenanceAndRepairs,
+    layout: "/admin",
+  },
+  {
+    title: "Roles & Permissions",
+    path: "/roles-permissions",
+    component: RolePermission,
+    layout: "/admin",
+  },
+  {
+    title: "Role Assignment",
+    path: "/role-assignment",
+    component: RoleAssignment,
     layout: "/admin",
   },
 ];

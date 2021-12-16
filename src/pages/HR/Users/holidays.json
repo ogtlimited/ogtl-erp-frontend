@@ -1,0 +1,135 @@
+[
+    {
+      "date": "1 Jan",
+      "holiday_name": "New Year's Day"
+    },
+    {
+      "date": "14 Feb",
+      "holiday_name": "Valentine's Day"
+    },
+    {
+      "date": "17 Feb",
+      "holiday_name": "Ash Wednesday"
+    },
+    {
+      "date": "8 Mar",
+      "holiday_name": "Women's Day"
+    },
+    {
+      "date": "14 Mar",
+      "holiday_name": "Mothering Sunday"
+    },
+    {
+      "date": "20 Mar",
+      "holiday_name": "March Equinox"
+    },
+    {
+      "date": "2 Apr",
+      "holiday_name": "Good Friday"
+    },
+    {
+      "date": "3 Apr",
+      "holiday_name": "Holy Saturday"
+    },
+    {
+      "date": "4 Apr",
+      "holiday_name": "Easter Sunday"
+    },
+    {
+      "date": "5 Apr",
+      "holiday_name": "Easter Monday"
+    },
+
+    {
+      "date": "1 May",
+      "holiday_name": "Workers' Day"
+    },
+    {
+      "date": "3 May",
+      "holiday_name": "Day off for Workers' Day"
+    },
+    {
+      "date": "12 May",
+      "holiday_name": "Id el Fitr holiday"
+    },
+    {
+      "date": "13 May",
+      "holiday_name": "Id el Fitr"
+    },
+    {
+      "date": "27 May",
+      "holiday_name": "Children's Day"
+    },
+    {
+      "date": "12 Jun",
+      "holiday_name": "Democracy Day"
+    },
+    {
+      "date": "14 Jun",
+      "holiday_name": "Day off for Democracy Day"
+    },
+    {
+      "date": "20 Jun",
+      "holiday_name": "Father's Day"
+    },
+    {
+      "date": "21 Jun",
+      "holiday_name": "June Solstice"
+    },
+    {
+      "date": "20 Jul",
+      "holiday_name": "Id el Kabir"
+    },
+    {
+      "date": "21 Jul",
+      "holiday_name": "Id el Kabir additional holiday"
+    },
+    {
+      "date": "9 Aug",
+      "holiday_name": "Al-Hijra observed"
+    },
+    {
+      "date": "10 Aug",
+      "holiday_name": "Al-Hijra observed"
+    },
+    {
+      "date": "20 Aug",
+      "holiday_name": "Isese Day"
+    },
+    {
+      "date": "27 Aug",
+      "holiday_name": "State Creation Anniversary Day"
+    },
+    {
+      "date": "22 Sep",
+      "holiday_name": "September Equinox"
+    },
+    {
+      "date": "1 Oct",
+      "holiday_name": "National Day"
+    },
+    {
+      "date": "19 Oct",
+      "holiday_name": "Id el Maulud"
+    },
+    {
+      "date": "22 Dec",
+      "holiday_name": "Sambisa Memorial Day"
+    },
+    {
+      "date": "24 Dec",
+      "holiday_name": "Christmas Eve"
+    },
+    {
+      "date": "25 Dec",
+      "holiday_name": "Christmas Day"
+    },
+    {
+      "date": "26 Dec",
+      "holiday_name": "Boxing Day"
+    },
+    {
+      "date": "31 Dec",
+      "holiday_name": "New Year's Eve"
+    }
+   ]

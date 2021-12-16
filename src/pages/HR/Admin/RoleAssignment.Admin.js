@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import data from "../../../db/promotion.json";
-import { PurchaseOrderFormJson } from "../../../components/FormJSON/Assets/purchase-order";
+import { RoleAssignmentForm } from "../../../components/FormJSON/HR/Employee/RoleAssignment";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ReactHtmlParser from "react-html-parser";
@@ -10,10 +10,9 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import tokenService from "../../../services/token.service";
-import { ApproverBtn } from "../../../components/ApproverBtn";
 
-const PurchaseOrder = () => {
-  const [template, setTemplate] = useState(PurchaseOrderFormJson);
+const RoleAssignment = () => {
+  const [template, setTemplate] = useState(RoleAssignmentForm);
   const [editData, seteditData] = useState(null);
   const [data, setData] = useState([]);
   const { combineRequest, showAlert, setformUpdate } = useAppContext();
@@ -21,20 +20,19 @@ const PurchaseOrder = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
-  const [statusRow, setstatusRow] = useState(null);
-  const [status, setStatus] = useState("");
+  const [loadSelect, setloadSelect] = useState(false);
   const user = tokenService.getUser();
-  const [loadSelect, setloadSelect] = useState(false)
+
   const editRow = (row) => {
     setformUpdate(row);
     setclickedRow(row);
   };
 
-  const fetchPurchaseOrder = () => {
+  const fetchRoleAssignment = () => {
     axiosInstance
-      .get("/api/purchase-order")
+      .get("/api/role-assignment")
       .then((res) => {
-        console.log(res.data);
+        console.log("role thingy", res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -42,73 +40,57 @@ const PurchaseOrder = () => {
       });
   };
   useEffect(() => {
-    fetchPurchaseOrder();
+    fetchRoleAssignment();
   }, []);
 
   useEffect(() => {
     combineRequest().then((res) => {
       console.log(res);
-      const { departments, branches, projects } =
-        res.data.createEmployeeFormSelection;
-      const departmentOpts = departments?.map((e) => {
+      const { employees, allRoles } = res.data.createEmployeeFormSelection;
+      const employeeOpts = employees?.map((e) => {
         return {
-          label: `${e.department}`,
+          label: `${e.first_name} ${e.last_name}`,
           value: e._id,
         };
       });
-      const branchOpts = branches?.map((e) => {
+      const roleOpts = allRoles?.map((e) => {
         return {
-          label: `${e.branch}`,
+          label: e.title,
           value: e._id,
         };
       });
-      const projectOpts = projects?.map((e) => {
-        return {
-          label: `${e.project_name}`,
-          value: e._id,
-        };
-      });
-
-      const finalForm = PurchaseOrderFormJson.Fields.map((field) => {
-        if (field.name === "departmentId") {
-          field.options = departmentOpts;
+      const finalForm = RoleAssignmentForm.Fields.map((field) => {
+        if (field.name === "assigned_to") {
+          field.options = employeeOpts;
           return field;
-        } else if (field.name === "projectId") {
-          field.options = projectOpts;
-          return field;
-        } else if (field.name === "location") {
-          field.options = branchOpts;
+        } else if (field.name === "roleId") {
+          field.options = roleOpts;
           return field;
         }
         return field;
       });
       setTemplate({
-        title: PurchaseOrderFormJson.title,
+        title: RoleAssignmentForm.title,
         Fields: finalForm,
       });
-      if(!loadSelect) setloadSelect(true)
+      if (!loadSelect) {
+        setloadSelect(true);
+      }
       console.log(template);
     });
-  }, []);
+  }, [loadSelect]);
 
-  //create purchase orders
+  //create assets
   useEffect(() => {
     if (formValue) {
       if (!editData) {
-        let newFormValue = { 
-          ...formValue,
-         };
-         if(newFormValue.projectId == ""){
-           delete newFormValue.projectId
-         }else if(newFormValue.departmentId == ""){
-           delete newFormValue.departmentId
-         }
+        let newFormValue = { ...formValue, assigned_by: user._id };
         console.log(newFormValue);
         axiosInstance
-          .post("/api/purchase-order", newFormValue)
+          .post("/api/role-assignment", newFormValue)
           .then((res) => {
             setFormValue(null);
-            fetchPurchaseOrder();
+            fetchRoleAssignment();
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
@@ -118,12 +100,18 @@ const PurchaseOrder = () => {
           });
       } else {
         formValue._id = editData._id;
+        let newFormValue = {
+          ...formValue,
+          roleId: formValue?.roleId?._id,
+          assigned_to: formValue?.assigned_to?._id,
+          assigned_by: user._id,
+        };
 
         axiosInstance
-          .patch("/api/purchase-order/" + editData._id, formValue)
+          .patch("/api/role-assignment/" + editData._id, newFormValue)
           .then((res) => {
             setFormValue(null);
-            fetchPurchaseOrder();
+            fetchRoleAssignment();
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
@@ -133,7 +121,7 @@ const PurchaseOrder = () => {
           });
       }
     }
-  }, [formValue, editData]);
+  }, [formValue, editData, user._id]);
   useEffect(() => {
     seteditData(clickedRow);
     return () => {
@@ -141,11 +129,10 @@ const PurchaseOrder = () => {
     };
   }, [clickedRow, submitted]);
 
-  //delete purchase order
-  const deletePurchaseOrder = (row) => {
+  //delete asset
+  const deleteAssets = (row) => {
     axiosInstance
-      .delete(`/api/purchase-order/${row._id}`)
-
+      .delete(`/api/role-assignment/${row._id}`)
       .then((res) => {
         console.log(res);
         setData((prevData) =>
@@ -158,70 +145,35 @@ const PurchaseOrder = () => {
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
+
   const columns = [
     {
-      dataField: "purchaseOrderId",
-      text: "Purchase Order",
+      dataField: "RoleId",
+      text: "Role",
       sort: true,
+      formatter: (value, row) => <h2>{row?.roleId?.title}</h2>,
     },
     {
-      dataField: "productName",
-      text: "Asset name",
-      sort: true,
-    },
-    {
-      dataField: "status",
-      text: "Status",
+      dataField: "assigned_to",
+      text: "Assigned to",
       sort: true,
       formatter: (value, row) => (
-        <>
-          <ApproverBtn
-            setstatusRow={setstatusRow}
-            setStatus={setStatus}
-            value={value}
-            row={row}
-            context="maintenance"
-          />
-        </>
-      ),
-    },
-
-    {
-      dataField: "departmentId",
-      text: "Department",
-      sort: true,
-      formatter: (value, row) => (
-        <h2>{row?.departmentId?.department || "N/A"}</h2>
+        <h2>
+          {row?.assigned_to?.first_name} {row?.assigned_to?.last_name}
+        </h2>
       ),
     },
     {
-      dataField: "projectId",
-      text: "Project",
+      dataField: "assigned_by",
+      text: "Assigned By",
       sort: true,
-      formatter: (value, row) => <h2>{row?.projectId?.project_name || "N/A"} </h2>,
+      formatter: (value, row) => (
+        <h2>
+          {row?.assigned_by?.first_name} {row?.assigned_by?.last_name}
+        </h2>
+      ),
     },
 
-    {
-      dataField: "location",
-      text: "Branch",
-      sort: true,
-      formatter: (value, row) => <h2>{row?.location?.branch || "N/A"}</h2>,
-    },
-    {
-      dataField: "model",
-      text: "model",
-      sort: true,
-    },
-    {
-      dataField: "manufacturer",
-      text: "manufacturer",
-      sort: true,
-    },
-    {
-      dataField: "amount",
-      text: "amount",
-      sort: true,
-    },
     {
       dataField: "",
       text: "Action",
@@ -267,26 +219,25 @@ const PurchaseOrder = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Purchase Order</h3>
+            <h3 className="page-title">Role Assignment</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Purchase Order</li>
+              <li className="breadcrumb-item active">Role Assignment</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
               >
-                <i className="fa fa-plus"></i> Add Purchase Order
+                <i className="fa fa-plus"></i> Add Role Assignment
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -295,23 +246,22 @@ const PurchaseOrder = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && 
+      {loadSelect && (
         <FormModal2
-          title="Create Purchase Order"
+          title="Create Role Assignment"
           editData={editData}
           setformValue={setFormValue}
           template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
-      
-      }
+      )}
       <ConfirmModal
-        title="Purchase Order"
+        title="Role Assignment"
         selectedRow={selectedRow}
-        deleteFunction={deletePurchaseOrder}
+        deleteFunction={deleteAssets}
       />
     </>
   );
 };
 
-export default PurchaseOrder;
+export default RoleAssignment;

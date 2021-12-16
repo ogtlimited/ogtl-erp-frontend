@@ -185,7 +185,7 @@ const JobApplicants = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <Link
+            <a
               className="dropdown-item"
               data-toggle="modal"
               data-target="#exampleModal"
@@ -194,7 +194,7 @@ const JobApplicants = () => {
               }}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
-            </Link>
+            </a>
           </div>
         </div>
       ),

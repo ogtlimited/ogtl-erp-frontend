@@ -1,17 +1,19 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import tokenService from "../../services/token.service";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
-import config from '../../config.json'
+import config from "../../config.json";
 import { useAppContext } from "../../Context/AppContext";
+
 const Login = () => {
   const { instance } = useMsal();
-  let history = useHistory();
+  let navigate = useNavigate();
   const [errorMsg, seterrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -19,20 +21,22 @@ const Login = () => {
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
+    setLoading(true);
     instance
       .loginPopup(loginRequest)
       .then((e) => {
         console.log(e);
         const obj = {
-          company_email: data.company_email,
+          company_email: data.company_email.trim(),
         };
+
         localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
         localStorage.setItem(
           "microsoftAccessToken",
           JSON.stringify(e.accessToken)
         );
         axios
-          .post(config.ApiUrl +"/api/login", obj)
+          .post(config.ApiUrl + "/api/login", obj)
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.employee);
@@ -40,20 +44,28 @@ const Login = () => {
             // fetchEmployeeAttendance()
             tokenService.setToken(res.data.token.token);
             // setuserToken(res.data.token.token)
-            history.push("/admin/employee-dashboard")
+            navigate("/dashboard/employee-dashboard");
             // window.location.href = "/admin/employee-dashboard";
           })
           .catch((err) => {
             console.log(err);
             console.log(err.message?.message);
-            seterrorMsg("Unable to login either username or password is incorrect");
+            seterrorMsg(
+              "Unable to login either username or password is incorrect"
+            );
             // setInterval(() => {
             //     seterrorMsg('')
             // }, 5000);
+          })
+          .finally(() => {
+            setLoading(false);
           });
       })
       .catch((e) => {
         console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   return (
@@ -61,7 +73,7 @@ const Login = () => {
       <div className="account-content">
         <div className="container">
           <div className="account-logo">
-            <Link href="/">
+            <Link to="/">
               <img
                 className="logo"
                 src="/static/media/outsource.2499b5b3.png"
@@ -88,9 +100,10 @@ const Login = () => {
                     {...register("company_email", { required: true })}
                     className="form-control"
                   />
-                  {errors.company_email && errors.company_email.type === "required" && (
-                    <span className="error">Email is required</span>
-                  )}
+                  {errors.company_email &&
+                    errors.company_email.type === "required" && (
+                      <span className="error">Email is required</span>
+                    )}
                 </div>
                 {/* <div className="form-group mt-2">
                   <div className="row">
@@ -115,8 +128,20 @@ const Login = () => {
                   )}
                 </div> */}
                 <div className="form-group text-center">
-                  <button className="btn btn-primary account-btn" type="submit">
-                    Login
+                  <button
+                    className="btn btn-primary account-btn"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <span
+                        className="spinner-border"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    ) : (
+                      "Login"
+                    )}
                   </button>
                 </div>
               </form>
