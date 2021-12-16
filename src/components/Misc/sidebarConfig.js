@@ -87,7 +87,7 @@ const getIcon = (name) => (
         {
           canView: 'HR', title: "Reports",
           path: PATH_DASHBOARD.payroll.root,
-          icon: ICONS.payroll,
+          icon: ICONS.reports,
           children: [
             { canView: 'HR', title: "Employee Reports", path: PATH_DASHBOARD.reports.employeeReport },
             { canView: 'HR', title: "Payslip Reports", path: PATH_DASHBOARD.reports.payslipReport },
@@ -230,10 +230,10 @@ const getIcon = (name) => (
       },
       {
         subheader: "Settings",
-        canView: 'HR',
+        canView: 'Super',
         items: [
           {
-            canView: 'HR', title: "Roles & Permission",
+            canView: 'Super', title: "Roles & Permission",
             path: PATH_DASHBOARD.settings.rolesPermission,
             icon: ICONS.rolesPermission,
           },

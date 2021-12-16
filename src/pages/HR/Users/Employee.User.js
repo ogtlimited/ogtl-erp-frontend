@@ -1,14 +1,12 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
+import welcome from '../../../assets/img/welcome.png'
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
-// import axiosInstance from "../../../services/api";
-// import shifts from './shift.json'
-// import raw from './raw.json'
-// import allShift from './allShift.json'
+import holidays from './holidays.json'
 import ogids from "./allEmployeeOgid.json";
-import emergency from "./emergency.json";
+
 import personal from "./personal.json";
 
 const EmployeeUser = () => {
@@ -17,7 +15,26 @@ const EmployeeUser = () => {
   const [leaveTaken, setLeaveTaken] = useState(0);
   const [leaveRemaining, setLeaveRemaining] = useState(0);
 
+  const getNextHoliday = () =>{
+    const year = new Date().getFullYear()
+    const current = new Date().getTime()
+    const mapHolidays = holidays.map(hol => new Date(hol.date + " " + year).getTime() )
+    const greater = mapHolidays.filter(time => time >= current);
+    const index = mapHolidays.findIndex(idx => idx === Math.min(...greater))
+    console.log(Math.min(...greater), index)
+    return holidays[index]
+  }
+  console.log(getNextHoliday())
+  const calcShift = (time) =>{
+    let split = time.split(":")
+    if(parseInt(split[0]) < 12){
+      return parseInt(split[0]) + ':' + split[1] + ' AM'
+    }else{
+      return parseInt(split[0]) + ':' + split[1] + ' PM'
+    }
+  }
   useEffect(() => {
+    console.log(user)
     axiosInstance.get("/leave-application").then((e) => {
       console.log(e, "USERID");
       const leaves = e?.data?.data?.filter(
@@ -35,25 +52,6 @@ const EmployeeUser = () => {
     });
   }, [user._id]);
 
-  let formatted = [];
-  ogids.forEach((e) => {
-    let idx = personal.filter(
-      (f) => e.first_name === f.first_name && e.last_name === f.last_name
-    )[0];
-    if (idx) {
-      formatted.push({
-        ogid: e.ogid,
-        means_of_identification: idx.means_of_identification,
-        emergency_phone: idx.emergency_phone,
-        id_number: idx.id_number,
-        date_of_issue: idx.date_of_issue,
-        valid_upto: idx.valid_upto,
-        place_of_issue: idx.place_of_issue,
-        marital_status: idx.marital_status,
-        blood_group: idx.blood_group,
-      });
-    }
-  });
   // let arr = []
   // let unique = []
   // let allShifts = []
@@ -91,66 +89,47 @@ const EmployeeUser = () => {
   // })
   return (
     <>
+
       <div className="row">
-        <div className="col-md-12">
-          <div className="welcome-box">
-            <div className="welcome-img">
-              <img alt="" src="assets/img/profiles/avatar-02.jpg" />
-            </div>
-            <div className="welcome-det">
-              <h3>
-                Welcome,{" "}
-                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}
-              </h3>
-              <p>{date}</p>
-            </div>
-          </div>
+      <div className="col-lg-8 col-md-8">
+        <div className="row welcome-card p-5">
+        <div className="col-md-9 left-card">
+        <h4 class="welcome-text">Welcome back,<br />  {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}!</h4>
+        <p class="welcome-p">If you havent punched in today, you need to do it right away</p>
+        <Link class="go" to="/dashboard/hr/attendance">Go Now</Link>
         </div>
-      </div>
-      <div className="row">
-        <div className="col-lg-8 col-md-8">
+        <div className="col-md-3">
+          <img style={{width: '100%'}} className="mt-4" src={welcome} />
+        </div>
+            
+        </div>
+        <div className="row mt-4">
+        <div className="col-lg-12 col-md-12">
           <section className="dash-section">
             <h1 className="dash-sec-title">Today</h1>
             <div className="dash-sec-content">
-              {notifications.length ? (
-                notifications.map((notification, index) => (
-                  <div className="dash-info-list" key={index}>
-                    <a className="dash-card  ">
-                      <div className="dash-card-container">
-                        <div className="dash-card-icon">
-                          <i className="fa fa-hourglass-o"></i>
-                        </div>
-                        <div className="dash-card-content">
-                          <p>A new {notification.module} was added</p>
-                        </div>
-                        <div className="dash-card-avatars">
-                          <div className="e-avatar">
-                            <img
-                              src="assets/img/profiles/avatar-09.jpg"
-                              alt=""
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                ))
-              ) : (
-                <div className="card">
-                  <div className="card-body">
-                    <div className="time-list">
-                      <div className="dash-stats-list">
-                        <h3>No New Notifications</h3>
-                      </div>
+            <div className="dash-sec-content">
+              <div className="dash-info-list">
+                <div className="dash-card">
+                  <div className="dash-card-container">
+                    <div className="dash-card-icon">
+                      <i className="fa fa-clock"></i>
                     </div>
+                    <div className="dash-card-content">
+                      <p>Your shift starts at {calcShift(user?.default_shift.start_time)} and ends at {calcShift(user?.default_shift.end_time)} </p>
+                    </div>
+
                   </div>
                 </div>
-              )}
+              </div>
+
+
+            </div>
             </div>
           </section>
 
-          {/* <section className="dash-section">
-            <h1 className="dash-sec-title">Next seven days</h1>
+           <section className="dash-section">
+            <h1 className="dash-sec-title">This Month</h1>
             <div className="dash-sec-content">
               <div className="dash-info-list">
                 <div className="dash-card">
@@ -159,16 +138,9 @@ const EmployeeUser = () => {
                       <i className="fa fa-suitcase"></i>
                     </div>
                     <div className="dash-card-content">
-                      <p>2 people are going to be away</p>
+                      <p>You have 0 late attendance</p>
                     </div>
-                    <div className="dash-card-avatars">
-                      <Link className="e-avatar">
-                        <img src="assets/img/profiles/avatar-05.jpg" alt="" />
-                      </Link>
-                      <Link className="e-avatar">
-                        <img src="assets/img/profiles/avatar-07.jpg" alt="" />
-                      </Link>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -181,16 +153,12 @@ const EmployeeUser = () => {
                     <div className="dash-card-content">
                       <p>Your first day is going to be on Thursday</p>
                     </div>
-                    <div className="dash-card-avatars">
-                      <div className="e-avatar">
-                        <img src="assets/img/profiles/avatar-02.jpg" alt="" />
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
               <div className="dash-info-list">
-                <Link href="" className="dash-card">
+                <a href="" className="dash-card">
                   <div className="dash-card-container">
                     <div className="dash-card-icon">
                       <i className="fa fa-calendar"></i>
@@ -199,11 +167,14 @@ const EmployeeUser = () => {
                       <p>It's Spring Bank Holiday on Monday</p>
                     </div>
                   </div>
-                </Link>
+                </a>
               </div>
             </div>
-          </section> */}
+          </section> 
         </div>
+        </div>
+      </div>
+       
         <div className="col-lg-4 col-md-4">
           <div className="dash-sidebar">
             <section>
@@ -212,17 +183,17 @@ const EmployeeUser = () => {
                 <div className="card-body">
                   <div className="time-list">
                     <div className="dash-stats-list">
-                      <h4>71</h4>
+                      <h4>0</h4>
                       <p>Total Tasks</p>
                     </div>
                     <div className="dash-stats-list">
-                      <h4>14</h4>
+                      <h4>0</h4>
                       <p>Pending Tasks</p>
                     </div>
                   </div>
                   <div className="request-btn">
                     <div className="dash-stats-list">
-                      <h4>2</h4>
+                      <h4>{user.projectId ? 1 : 0}</h4>
                       <p>Total Projects</p>
                     </div>
                   </div>
@@ -244,7 +215,7 @@ const EmployeeUser = () => {
                     </div>
                   </div>
                   <div className="request-btn">
-                    <button className="btn btn-primary">Apply Leave</button>
+                    <Link to="/dashboard/hr/leaves" className="btn btn-primary">Apply Leave</Link>
                   </div>
                 </div>
               </div>
@@ -255,11 +226,11 @@ const EmployeeUser = () => {
                 <div className="card-body">
                   <div className="time-list">
                     <div className="dash-stats-list">
-                      <h4>5.0 Hours</h4>
+                      <h4>0 Hours</h4>
                       <p>Approved</p>
                     </div>
                     <div className="dash-stats-list">
-                      <h4>15 Hours</h4>
+                      <h4>0 Hours</h4>
                       <p>Remaining</p>
                     </div>
                   </div>
@@ -274,14 +245,16 @@ const EmployeeUser = () => {
               <div className="card">
                 <div className="card-body text-center">
                   <h4 className="holiday-title mb-0">
-                    1 October 2021 - Independence
+                    {getNextHoliday().date} - {getNextHoliday().holiday_name}
                   </h4>
                 </div>
               </div>
             </section>
           </div>
         </div>
+        
       </div>
+    
     </>
   );
 };
