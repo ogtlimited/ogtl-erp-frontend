@@ -78,6 +78,7 @@ const sidebarConfig = [
       },
     ],
   },
+
   {
     subheader: "HR",
     canView: "All",
@@ -425,10 +426,10 @@ const sidebarConfig = [
   },
   {
     subheader: "Settings",
-    canView: "Super",
+    canView: "HR",
     items: [
       {
-        canView: "Super",
+        canView: "HR",
         title: "Roles & Permission",
         path: PATH_DASHBOARD.settings.rolesPermission,
         icon: ICONS.rolesPermission,

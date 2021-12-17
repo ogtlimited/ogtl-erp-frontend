@@ -2,7 +2,7 @@ export const RoleAssignmentForm = {
   title: " Role Assignment Form",
   Fields: [
     {
-      name: "roleId",
+      name: "RoleId",
       type: "select",
       title: "Role Name",
       options: [],

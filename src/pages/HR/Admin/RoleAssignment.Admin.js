@@ -63,7 +63,7 @@ const RoleAssignment = () => {
         if (field.name === "assigned_to") {
           field.options = employeeOpts;
           return field;
-        } else if (field.name === "roleId") {
+        } else if (field.name === "RoleId") {
           field.options = roleOpts;
           return field;
         }
@@ -91,18 +91,22 @@ const RoleAssignment = () => {
           .then((res) => {
             setFormValue(null);
             fetchRoleAssignment();
-            showAlert(true, res.data.message, "alert alert-success");
+            showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
             setFormValue(null);
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       } else {
         formValue._id = editData._id;
         let newFormValue = {
           ...formValue,
-          roleId: formValue?.roleId?._id,
+          RoleId: formValue?.RoleId,
           assigned_to: formValue?.assigned_to?._id,
           assigned_by: user._id,
         };
@@ -151,7 +155,7 @@ const RoleAssignment = () => {
       dataField: "RoleId",
       text: "Role",
       sort: true,
-      formatter: (value, row) => <h2>{row?.roleId?.title}</h2>,
+      formatter: (value, row) => <h2>{row?.RoleId?.title}</h2>,
     },
     {
       dataField: "assigned_to",
