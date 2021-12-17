@@ -438,7 +438,7 @@ a.nav-link {
     padding: 6px 16px;
     border-radius: 8px;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: rgb(33, 43, 54);
+    color: #fff;
     background-color: rgb(28, 202, 255);
     box-shadow: rgb(28 202 255 / 24%) 0px 8px 16px 0px;
 
