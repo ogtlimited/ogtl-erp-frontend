@@ -35,6 +35,7 @@ const DesignationList = ({
         .then((res) => {
           setSubmitted(false);
           setallRoles((prevData) => [...prevData, res.data.data]);
+          setrole(res.data.data[0])
           fetchDesignation();
 
           showAlert(true, res.data?.message, "alert alert-success");
