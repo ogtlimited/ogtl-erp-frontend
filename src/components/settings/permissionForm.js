@@ -96,8 +96,8 @@ const PermissionForm = ({ role, setupdated }) => {
                       <tr>
                         <th>Module Permission</th>
                         <th class="text-center">Read</th>
-                        <th class="text-center">Write</th>
                         <th class="text-center">Create</th>
+                        <th class="text-center">Update</th>
                         <th class="text-center">Delete</th>
                       </tr>
                     </thead>
