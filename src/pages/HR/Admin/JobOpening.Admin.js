@@ -48,11 +48,13 @@ const JobOpening = () => {
   };
   const create = () => {
     let initialValues = {};
-    for (let i in template) {
+    let temp = HelperService.formArrayToObject(template.Fields)
+    for (let i in temp) {
       initialValues[i] = "";
       // console.log(i);
     }
     setmode("add");
+    console.log(initialValues)
     setFormValue(initialValues);
     seteditData(initialValues);
   };
@@ -118,10 +120,10 @@ const JobOpening = () => {
           }
           return field;
         });
-        setTemplate({
-          title: jobOpeningFormJson.title,
-          Fields: finalForm,
-        });
+        // setTemplate({
+        //   title: jobOpeningFormJson.title,
+        //   Fields: finalForm,
+        // });
         console.log(template);
         if (!loadSelect) {
           setloadSelect(true);
@@ -183,10 +185,10 @@ const JobOpening = () => {
     }
   }, [formValue, editData]);
 
-  useEffect(() => {
-    console.log(template);
-    seteditData(clickedRow);
-  }, [clickedRow, submitted]);
+  // useEffect(() => {
+  //   console.log(template);
+  //   seteditData(clickedRow);
+  // }, [clickedRow, submitted]);
 
   //delete job opening
   const deleteJobOpening = (row) => {

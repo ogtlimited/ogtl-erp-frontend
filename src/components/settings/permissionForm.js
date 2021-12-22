@@ -39,10 +39,9 @@ const PermissionForm = ({ role, fetchRole }) => {
   const { showAlert } = useAppContext();
   const [defaultValues, setDefaultValues] = useState(initialValues);
   useEffect(() => {
-    if (role) {
-      if (Object.keys(role).length > 0) {
-        setDefaultValues(role);
-      }
+    console.log("ROLE", role);
+    if (role !== undefined && role && Object.keys(role).length > 0) {
+      setDefaultValues(role);
     }
   }, [defaultValues, role]);
 
@@ -98,8 +97,8 @@ const PermissionForm = ({ role, fetchRole }) => {
                       <tr>
                         <th>Module Permission</th>
                         <th class="text-center">Read</th>
-                        <th class="text-center">Write</th>
                         <th class="text-center">Create</th>
+                        <th class="text-center">Update</th>
                         <th class="text-center">Delete</th>
                       </tr>
                     </thead>

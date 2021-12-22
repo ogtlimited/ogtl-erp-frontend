@@ -1819,7 +1819,7 @@ table.dataTable thead > tr > td.sorting {
 	background-color: #fff;
     border: 1px solid #ededed;
     border-radius: 4px;
-    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2); */
     margin: 0 auto;
     overflow: hidden;
     width: 480px;
@@ -5556,7 +5556,7 @@ table.table-inbox tbody tr.checked {
 	background-color: #fff;
 	border: 1px solid #ededed;
 	border-radius: 4px;
-	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+	/* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2); */
 	display: block;
 	margin-bottom: 35px;
 	position: relative;

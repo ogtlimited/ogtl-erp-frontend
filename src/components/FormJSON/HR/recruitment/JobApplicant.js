@@ -1,51 +1,74 @@
-// export const template = {
-//     title: 'Job Applicant Form',
-//     Fields: [
-//         {
-//             name:'job_title' ,
-//             type:'text',
-//             title:'Job Title',
-//             required:{
-//                 value:true,
-//                 message:'Job title is required'
-//             },
-//
-//         },
-//         {
-//             name:'designation_id' ,
-//             type:'text',
-//             title:'Designation',
-//             required:{
-//                 value:true,
-//                 message:'Designation is required'
-//             },
-//         },
-//         {
-//             name:'campaign_id' ,
-//             type:'text',
-//             title:'Campaign',
-//             required:{
-//                 value:true,
-//                 message:'Campaign is required'
-//             },
-//         },
-//         {
-//             name:'status' ,
-//             type:'text',
-//             title:'Status',
-//             // required:{
-//             //     value:false,
-//             //     message:'Status is required'
-//             // },
-//         },
-//         {
-//             name:'description' ,
-//             type:'text',
-//             title:'Description',
-//             required:{
-//                 value:true,
-//                 message:'Description is required'
-//             },
-//         },
-//     ]
-// };
+export const jobAApplicationFormJSON = {
+    title: 'Job Applicant Form',
+    Fields: [
+        {
+            name:'first_name' ,
+            type:'text',
+            title:'First Name',
+            required:{
+                value:true,
+                message:'First Name is required'
+            },
+
+        },
+        {
+            name:'last_name' ,
+            type:'text',
+            title:'Last Name',
+            required:{
+                value:true,
+                message:'Last Name is required'
+            },
+
+        },
+        {
+            name:'middle_name' ,
+            type:'text',
+            title:'Middle Name',
+            required:{
+                value:false,
+                message:'Middle Name is required'
+            },
+
+        },
+        {
+            name:'email' ,
+            type:'text',
+            title:'Email',
+            required:{
+                value:true,
+                message:'Email is required'
+            },
+
+        },
+        {
+            name:'resume_attachment' ,
+            type:'file',
+            title:'Resume',
+            required:{
+                value:true,
+                message:'Resume is required'
+            },
+
+        },
+        {
+            name:'video_attachment' ,
+            type:'text',
+            title:'Video Attachment',
+            required:{
+                value:true,
+                message:'video Aattachment is required'
+            },
+        },
+        {
+            name:'cover_letter' ,
+            type:'file',
+            title:'Cover Letter',
+            required:{
+                value:false,
+                message:'Cover Letter is required'
+            },
+        },
+       
+    ]
+};
