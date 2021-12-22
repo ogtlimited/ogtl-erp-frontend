@@ -4,6 +4,7 @@ import { AppProvider } from "../Context/AppContext";
 import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
 import AdminLayout from "../layouts/Admin";
+import RecruitmentLayout from "../layouts/RecruitmentLayout";
 import Login from "../pages/Auth/Login";
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,6 +34,32 @@ export default function Router() {
             <GuestGuard>
               <Login />
             </GuestGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: "recruitment",
+      element: (
+            <RecruitmentLayout />
+
+      ),
+      children: [
+        { path: "", element: <Navigate to="/recruitment/joblist" replace /> },
+        {
+          path: "joblist",
+          element: (
+           
+              <JobOpenings />
+           
+          ),
+        },
+        {
+          path: "joblist/:id",
+          element: (
+           
+              <JobView />
+           
           ),
         },
       ],
@@ -198,6 +225,12 @@ export default function Router() {
 }
 const AllCampaigns = Loadable(
   lazy(() => import("../pages/Campaigns/AllCampaigns"))
+);
+const JobOpenings = Loadable(
+  lazy(() => import("../pages/recruitments/joblist"))
+);
+const JobView = Loadable(
+  lazy(() => import("../pages/recruitments/jobview"))
 );
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AdminDashboard = Loadable(

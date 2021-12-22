@@ -98,7 +98,7 @@ const Departments = () => {
             showAlert(true, "New department created", "alert alert-success")
           })
           .catch((err) => {
-            setformValue(null);
+            // setformValue(null);
             console.log(err);
           });
       } else {
@@ -119,9 +119,9 @@ const Departments = () => {
       }
     }
   }, [formValue]);
-  useEffect(() => {
-    seteditData(clickedRow);
-  }, [clickedRow, submitted]);
+  // useEffect(() => {
+  //   seteditData(clickedRow);
+  // }, [clickedRow, submitted]);
   const columns = [
     {
       dataField: "",

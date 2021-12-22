@@ -1,24 +1,31 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import DesignationList from "../../components/settings/designationList";
 import PermissionForm from "../../components/settings/permissionForm";
 import axiosInstance from "../../services/api";
 
 const RolePermission = () => {
-    const [role, setrole] = useState(null)
-    const [allDesignation, setallDesignation] = useState([]);
-    const fetchDesignation = () => {
-        axiosInstance.get("/designation").then((res) => {
-            console.log(res.data.data)
-          setallDesignation(res.data.data);
-          setrole(res.data.data[0])
-        });
-      };
-      useEffect(() => {
-        fetchDesignation();
-      }, []);
-    useEffect(() => {
-        console.log(role)
-    }, [role])
+  const [role, setrole] = useState({});
+  const [allRoles, setallRoles] = useState([]);
+  const [updated, setupdated] = useState(false)
+  const fetchRole = () => {
+    axiosInstance.get("/api/role").then((res) => {
+      // console.log(res);
+      setallRoles(res.data.data);
+      setrole(res.data.data[0])
+      setupdated(false)
+      // setrole(res.data.data[0])
+    });
+  };
+  
+  useEffect(() => {
+    fetchRole();
+  }, []);
+  useEffect(() => {
+    fetchRole();
+  }, [updated]);
+  useEffect(() => {
+    console.log(role);
+  }, [role]);
   return (
     <>
       <div class="page-header">
@@ -29,7 +36,13 @@ const RolePermission = () => {
         </div>
       </div>
       <div className="row">
-        <DesignationList setrole={setrole} allDesignation={allDesignation} />
+        <DesignationList
+          setrole={setrole}
+          fetchDesignation={fetchRole}
+          allDesignation={allRoles}
+          setallRoles={setallRoles}
+          setupdated={setupdated}
+        />
         <PermissionForm role={role} />
       </div>
     </>

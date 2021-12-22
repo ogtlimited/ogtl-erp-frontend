@@ -54,6 +54,7 @@ const FormModal = ({
     reset();
     $("#FormModal").modal("toggle");
   };
+  
   return (
     <>
       <div

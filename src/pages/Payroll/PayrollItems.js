@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { salaryAssignmentFormJson } from "../../components/FormJSON/payroll/salary-assignments";
 import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/salary-component";
+import { salarySettingsFormJson } from "../../components/FormJSON/payroll/salary-settings";
 import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
 import FormModal from "../../components/Modal/Modal";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
+import SalarySettings from "../../components/payroll-tabs/salary-settings";
 import SalaryStructure from "../../components/payroll-tabs/salary-structure";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -28,6 +30,8 @@ const PayrollItems = () => {
       settemplate(salaryStructureFormJson);
     } else if (formType === "assignment") {
       settemplate(salaryAssignmentFormJson);
+    } else if (formType === "settings") {
+      settemplate(salarySettingsFormJson);
     }
   }, [formType, template]);
 
@@ -128,6 +132,11 @@ const PayrollItems = () => {
                   Salary Assigment
                 </a>
               </li>
+              <li className="nav-item">
+                <a className="nav-link" data-toggle="tab" href="#tab_settings">
+                  Salary Settings
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -145,6 +154,12 @@ const PayrollItems = () => {
           fetchSalaryStructures={fetchSalaryStructures}
         />
         <SalaryAssignment loadSelect={loadSelect} salaryStructure={data} />
+        <SalarySettings
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+        />
       </div>
       {loadSelect && (
         <FormModal

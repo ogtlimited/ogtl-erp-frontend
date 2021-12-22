@@ -71,16 +71,22 @@ const AppProvider = (props) => {
     });
   };
   const showAlert = (state, msg, className) => {
+    let icon = className.includes('alert-success') ? '#check-circle-fill' : '#exclamation-triangle-fill'
+    let label = className.includes('alert-success') ? 'Success:' : 'Warning:'
     setshowAlertMsg({
       state: state,
       msg: msg,
       class: className,
+      icon,
+      label
     });
     setTimeout(() => {
       setshowAlertMsg({
         state: "",
         msg: "",
         class: "",
+        icon: "",
+        label: ""
       });
     }, 5000);
   };
