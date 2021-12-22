@@ -5,6 +5,7 @@ import HelperService from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import ConfirmModal from "../Modal/ConfirmModal";
+import helper from "../../services/helper";
 
 const DesignationList = ({
   setrole,
@@ -18,10 +19,25 @@ const DesignationList = ({
   const [selectedRow, setSelectedRow] = useState(null);
 
   const [editData, seteditData] = useState({});
-  const { showAlert } = useAppContext();
-
+  const { showAlert, setformUpdate } = useAppContext();
+  const [mode, setmode] = useState("add");
   const [activeId, setActiveId] = useState();
-
+  const create = () => {
+    let initialValues = {};
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
+  const editRow = (row) => {
+    // setformUpdate(null)
+    setmode("edit");
+    setformUpdate(row);
+    seteditData(row);
+  };
   useEffect(() => {
     if (allDesignation.length) {
       setActiveId(allDesignation[0]._id);
@@ -30,22 +46,48 @@ const DesignationList = ({
 
   useEffect(() => {
     if (submitted) {
-      axiosInstance
-        .post("/api/role", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          setallRoles((prevData) => [...prevData, res.data.data]);
-          setrole(res.data.data[0])
-          fetchDesignation();
+      if (mode === "add") {
+        axiosInstance
+          .post("/api/role", formValue)
+          .then((res) => {
+            setSubmitted(false);
+            setallRoles((prevData) => [...prevData, res.data.data]);
+            setrole(res.data.data[0]);
+            fetchDesignation();
 
-          showAlert(true, res.data?.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error);
-          setSubmitted(false);
+            showAlert(true, res.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error);
+            setSubmitted(false);
 
-          showAlert(true, error?.response?.data?.message, "alert alert-danger");
-        });
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      } else {
+        let newValue = {
+          title: formValue.title,
+        };
+
+        axiosInstance
+          .put("/api/role/" + editData._id, newValue)
+          .then((res) => {
+            setSubmitted(false);
+            fetchDesignation();
+            showAlert(true, res?.data?.message, "alert alert-success");
+          })
+          .catch((error) => {
+            setSubmitted(false);
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
+          });
+      }
     }
   }, [formValue]);
 
@@ -69,6 +111,7 @@ const DesignationList = ({
           class="btn btn-primary btn-block"
           data-toggle="modal"
           data-target="#FormModal"
+          onClick={() => create()}
         >
           <i class="fa fa-plus"></i> Add Roles
         </a>
@@ -89,7 +132,8 @@ const DesignationList = ({
                       <span
                         class="action-circle large"
                         data-toggle="modal"
-                        data-target="#edit_role"
+                        data-target="#FormModal"
+                        onClick={() => editRow(helper.handleEdit(d))}
                       >
                         <i class="las la-pencil-alt"></i>
                       </span>
