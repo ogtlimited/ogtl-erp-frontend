@@ -75,7 +75,7 @@ const DesignationList = ({
         <div class="roles-menu">
           <ul>
             {allDesignation &&
-              allDesignation.map((d) => (
+              allDesignation.sort((a,b) => a.title > b.title && 1 || -1 ).map((d) => (
                 <li
                   onClick={() => {
                     setActiveId(d._id);
@@ -85,23 +85,26 @@ const DesignationList = ({
                 >
                   <a href="javascript:void(0);">
                     {d.title}
-                    <span class="role-action">
-                      <span
-                        class="action-circle large"
-                        data-toggle="modal"
-                        data-target="#edit_role"
-                      >
-                        <i class="las la-pencil-alt"></i>
+                    {d.title !== 'Super' &&
+                      <span class="role-action">
+                        <span
+                          class="action-circle large"
+                          data-toggle="modal"
+                          data-target="#edit_role"
+                        >
+                          <i class="las la-pencil-alt"></i>
+                        </span>
+                        <span
+                          class="action-circle large delete-btn"
+                          data-toggle="modal"
+                          data-target="#exampleModal"
+                          onClick={() => setSelectedRow(d._id)}
+                        >
+                          <i class="las la-trash-alt"></i>
+                        </span>
                       </span>
-                      <span
-                        class="action-circle large delete-btn"
-                        data-toggle="modal"
-                        data-target="#exampleModal"
-                        onClick={() => setSelectedRow(d._id)}
-                      >
-                        <i class="las la-trash-alt"></i>
-                      </span>
-                    </span>
+                    
+                    }
                   </a>
                 </li>
               ))}

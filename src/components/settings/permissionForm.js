@@ -39,7 +39,8 @@ const PermissionForm = ({ role, setupdated }) => {
   const { showAlert } = useAppContext();
   const [defaultValues, setDefaultValues] = useState(initialValues);
   useEffect(() => {
-    if (Object.keys(role).length > 0) {
+    console.log('ROLE', role)
+    if (role != undefined && role && Object.keys(role).length > 0) {
       setDefaultValues(role)
     }
   }, [defaultValues, role]);
