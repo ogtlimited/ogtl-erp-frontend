@@ -13,7 +13,7 @@ import InvoiceBillApprover from "../../components/AccountingApproverBtn";
 const VendorBills = () => {
   const [data, setData] = useState([]);
   const [editData, seteditData] = useState(null);
-  const { showAlert } = useAppContext();
+  const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
 
@@ -162,7 +162,7 @@ const VendorBills = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {row?.status === "Draft" && (
+              {row?.status === "Draft" && user?.role?.account?.update && (
                 <a
                   className="dropdown-item"
                   data-toggle="modal"
@@ -172,19 +172,23 @@ const VendorBills = () => {
                   <i className="fa fa-pencil m-r-5"></i> Edit
                 </a>
               )}
-              <Link className="dropdown-item" to={`/admin/bills/${row._id}`}>
-                <i className="fa fa-eye m-r-5"></i> View
-              </Link>
-              <a
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => {
-                  setSelectedRow(row);
-                }}
-              >
-                <i className="fa fa-trash m-r-5"></i> Delete
-              </a>
+              {user?.role?.account?.read && (
+                <Link className="dropdown-item" to={`/admin/bills/${row._id}`}>
+                  <i className="fa fa-eye m-r-5"></i> View
+                </Link>
+              )}
+              {user?.role?.account?.delete && (
+                <a
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  onClick={() => {
+                    setSelectedRow(row);
+                  }}
+                >
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </a>
+              )}
             </div>
           </div>
         </>
@@ -205,13 +209,15 @@ const VendorBills = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Bill
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Bill
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ const Asset = () => {
   const [template, setTemplate] = useState(AssetFormJson);
   const [editData, seteditData] = useState(null);
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert, setformUpdate } = useAppContext();
+  const { combineRequest, showAlert, setformUpdate, user } = useAppContext();
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -63,8 +63,8 @@ const Asset = () => {
         title: AssetFormJson.title,
         Fields: finalForm,
       });
-      if(!loadSelect){
-        setloadSelect(true)
+      if (!loadSelect) {
+        setloadSelect(true);
       }
       console.log(template);
     });
@@ -167,25 +167,29 @@ const Asset = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.account?.update && (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => editRow(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.account?.delete && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -205,7 +209,7 @@ const Asset = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && 
+            {loadSelect && user?.role?.account?.create && (
               <a
                 href="#"
                 className="btn add-btn"
@@ -213,10 +217,8 @@ const Asset = () => {
                 data-target="#FormModal"
               >
                 <i className="fa fa-plus"></i> Add Assets
-            
-            </a>
-            
-            }
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -225,7 +227,7 @@ const Asset = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && 
+      {loadSelect && (
         <FormModal2
           title="Create Assets"
           editData={editData}
@@ -233,9 +235,7 @@ const Asset = () => {
           template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
-      
-      
-      }
+      )}
       <ConfirmModal
         title="Assets"
         selectedRow={selectedRow}

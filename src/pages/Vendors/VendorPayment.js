@@ -16,7 +16,7 @@ const VendorPayments = () => {
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
-  const { showAlert, setformUpdate } = useAppContext();
+  const { showAlert, setformUpdate, user } = useAppContext();
   const [template, setTemplate] = useState(vendorPaymentFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -247,24 +247,28 @@ const VendorPayments = () => {
                 <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
               </a>
               <div className="dropdown-menu dropdown-menu-right">
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#FormModal"
-                  onClick={() => editRow(row)}
-                >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </a>
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => {
-                    setSelectedRow(row);
-                  }}
-                >
-                  <i className="fa fa-trash m-r-5"></i> Delete
-                </a>
+                {user?.role?.account?.update && (
+                  <a
+                    className="dropdown-item"
+                    data-toggle="modal"
+                    data-target="#FormModal"
+                    onClick={() => editRow(row)}
+                  >
+                    <i className="fa fa-pencil m-r-5"></i> Edit
+                  </a>
+                )}
+                {user?.role?.account?.delete && (
+                  <a
+                    className="dropdown-item"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    onClick={() => {
+                      setSelectedRow(row);
+                    }}
+                  >
+                    <i className="fa fa-trash m-r-5"></i> Delete
+                  </a>
+                )}
               </div>
             </>
           )}
@@ -286,13 +290,15 @@ const VendorPayments = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Payment
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Payment
+              </a>
+            )}
           </div>
         </div>
       </div>

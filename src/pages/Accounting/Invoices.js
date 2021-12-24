@@ -21,7 +21,7 @@ const Invoices = () => {
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
-  const { showAlert, combineRequest, setformUpdate } = useAppContext();
+  const { showAlert, combineRequest, setformUpdate, user } = useAppContext();
   const [template, setTemplate] = useState(clientInvoiceFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState("");
@@ -178,7 +178,7 @@ const Invoices = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {row?.status === "Draft" && (
+              {row?.status === "Draft" && user?.role?.account?.update && (
                 <a
                   className="dropdown-item"
                   data-toggle="modal"
@@ -189,20 +189,27 @@ const Invoices = () => {
                 </a>
               )}
 
-              <Link className="dropdown-item" to={`/admin/invoice/${row._id}`}>
-                <i className="fa fa-eye m-r-5"></i> View
-              </Link>
+              {user?.role?.account?.read && (
+                <Link
+                  className="dropdown-item"
+                  to={`/admin/invoice/${row._id}`}
+                >
+                  <i className="fa fa-eye m-r-5"></i> View
+                </Link>
+              )}
 
-              <a
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => {
-                  setSelectedRow(row);
-                }}
-              >
-                <i className="fa fa-trash m-r-5"></i> Delete
-              </a>
+              {user?.role?.account?.delete && (
+                <a
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  onClick={() => {
+                    setSelectedRow(row);
+                  }}
+                >
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </a>
+              )}
             </div>
           </div>
         </>
@@ -223,14 +230,16 @@ const Invoices = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Invoice
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Invoice
+              </a>
+            )}
           </div>
         </div>
       </div>

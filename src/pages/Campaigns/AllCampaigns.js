@@ -233,13 +233,15 @@ const AllCampaigns = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <Link
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Create Project
-            </Link>
+            {user?.role?.projects?.create && (
+              <Link
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Create Project
+              </Link>
+            )}
             <div className="view-icons">
               <a href="projects" className="grid-view btn btn-link">
                 <i className="fa fa-th"></i>
