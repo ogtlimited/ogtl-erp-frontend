@@ -26,7 +26,7 @@ const jobOpts = [
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
-  const { showAlert } = useAppContext();
+  const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
@@ -154,7 +154,9 @@ const JobApplicants = () => {
       dataField: "cover_letter",
       text: "Cover Letter",
       sort: true,
-      formatter: (value, row) => {value && <span> {value.slice(0, 30)}...</span>},
+      formatter: (value, row) => {
+        value && <span> {value.slice(0, 30)}...</span>;
+      },
     },
     {
       dataField: "video_attachment",
@@ -176,26 +178,30 @@ const JobApplicants = () => {
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(helper.handleEdit(row));
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
-          </div>
+          {user?.role?.hr?.delete && (
+            <>
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  onClick={() => {
+                    setSelectedRow(helper.handleEdit(row));
+                  }}
+                >
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </a>
+              </div>
+            </>
+          )}
         </div>
       ),
     },

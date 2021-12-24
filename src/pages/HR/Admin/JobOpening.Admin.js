@@ -28,7 +28,7 @@ const JobOpening = () => {
   const [formValue, setFormValue] = useState(null);
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
-  const { createRecruitmens, showAlert, setformUpdate } = useAppContext();
+  const { createRecruitmens, showAlert, setformUpdate, user } = useAppContext();
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -48,13 +48,13 @@ const JobOpening = () => {
   };
   const create = () => {
     let initialValues = {};
-    let temp = HelperService.formArrayToObject(template.Fields)
+    let temp = HelperService.formArrayToObject(template.Fields);
     for (let i in temp) {
       initialValues[i] = "";
       // console.log(i);
     }
     setmode("add");
-    console.log(initialValues)
+    console.log(initialValues);
     setFormValue(initialValues);
     seteditData(initialValues);
   };
@@ -142,7 +142,7 @@ const JobOpening = () => {
           .post("/api/jobOpening", formValue)
           .then((res) => {
             // setFormValue(null);
-            setSubmitted(false)
+            setSubmitted(false);
             setData((prevData) => [...prevData, res.data.data]);
             fetchJobOpenings();
 
@@ -150,7 +150,7 @@ const JobOpening = () => {
           })
           .catch((error) => {
             console.log(error);
-            setSubmitted(false)
+            setSubmitted(false);
             // setFormValue(null);
             showAlert(
               true,
@@ -167,14 +167,14 @@ const JobOpening = () => {
           .patch("/api/jobOpening/" + editData._id, formValue)
           .then((res) => {
             // setFormValue(null);
-            setSubmitted(false)
+            setSubmitted(false);
             fetchJobOpenings();
             showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
             console.log(error);
             // setFormValue(null);
-            setSubmitted(false)
+            setSubmitted(false);
             showAlert(
               true,
               error?.response?.data?.message,
@@ -292,24 +292,28 @@ const JobOpening = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.hr?.update && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => editRow(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.hr?.delete && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -332,7 +336,7 @@ const JobOpening = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && (
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"

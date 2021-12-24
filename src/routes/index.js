@@ -40,27 +40,16 @@ export default function Router() {
     },
     {
       path: "recruitment",
-      element: (
-            <RecruitmentLayout />
-
-      ),
+      element: <RecruitmentLayout />,
       children: [
         { path: "", element: <Navigate to="/recruitment/joblist" replace /> },
         {
           path: "joblist",
-          element: (
-           
-              <JobOpenings />
-           
-          ),
+          element: <JobOpenings />,
         },
         {
           path: "joblist/:id",
-          element: (
-           
-              <JobView />
-           
-          ),
+          element: <JobView />,
         },
       ],
     },
@@ -85,9 +74,12 @@ export default function Router() {
           ],
         },
         {
-          path: 'apps',
+          path: "apps",
           children: [
-            { path: "", element: <Navigate to="/dashboard/apps/email" replace /> },
+            {
+              path: "",
+              element: <Navigate to="/dashboard/apps/email" replace />,
+            },
             { path: "email", element: <Email /> },
             { path: "email-signature", element: <SignatureGenerator /> },
             { path: "file-manager", element: <FileManager /> },
@@ -95,9 +87,12 @@ export default function Router() {
           ],
         },
         {
-          path: 'hr',
+          path: "hr",
           children: [
-            { path: "", element: <Navigate to="/dashboard/hr/all-employees" replace /> },
+            {
+              path: "",
+              element: <Navigate to="/dashboard/hr/all-employees" replace />,
+            },
             { path: "all-employees", element: <AllEmployeesAdmin /> },
             { path: "leaves-admin", element: <LeavesAdmin /> },
             { path: "leaves", element: <LeavesUser /> },
@@ -111,26 +106,39 @@ export default function Router() {
           ],
         },
         {
-          path: 'payroll',
+          path: "payroll",
           children: [
-            { path: "", element: <Navigate to="/dashboard/payroll/salaries" replace /> },
+            {
+              path: "",
+              element: <Navigate to="/dashboard/payroll/salaries" replace />,
+            },
             { path: "salaries", element: <EmployeeSalary /> },
             { path: "payroll-items", element: <PayrollItems /> },
           ],
         },
         {
-          path: 'reports',
+          path: "reports",
           children: [
-            { path: "", element: <Navigate to="/dashboard/reports/employee-reports" replace /> },
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/reports/employee-reports" replace />
+              ),
+            },
             { path: "employee-reports", element: <EmployeeReport /> },
             { path: "attendance-reports", element: <AttendanceReport /> },
             { path: "payslip-reports", element: <PayrollReports /> },
           ],
         },
         {
-          path: 'recruitment',
+          path: "recruitment",
           children: [
-            { path: "", element: <Navigate to="/dashboard/recruitment/job-opening" replace /> },
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/recruitment/job-opening" replace />
+              ),
+            },
             { path: "job-opening", element: <JobOpening /> },
             { path: "job-applicants", element: <JobApplicants /> },
             { path: "aptitude-test", element: <AptitudeTest /> },
@@ -138,84 +146,119 @@ export default function Router() {
           ],
         },
         {
-          path: 'performance',
+          path: "performance",
           children: [
-            { path: "", element: <Navigate to="/dashboard/performance/warning-letter" replace /> },
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/performance/warning-letter" replace />
+              ),
+            },
             { path: "warning-letter", element: <WarningLetter /> },
             { path: "score-cards", element: <ScoreCards /> },
-          ]
+          ],
         },
-          {
-            path: 'accounts',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/accounts/chart-of-account" replace /> },
-              { path: 'chart-of-account', element: <ChartOfAccounts /> },
-              { path: 'budgets', element: <Budget /> },
-              { path: 'journals', element: <Journals /> },
-              { path: 'expense-heads', element: <ExpenseHeads /> },
-              { path: 'ledger', element: <GeneralLedger /> }
-            ]
-          },
-          {
-            path: 'accounting-reports',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/accounting-reports/payroll-reports" replace /> },
-              { path: 'payroll-reports', element: <PayrollReports /> },
-              { path: 'balance-sheet', element: <BalanceSheet /> },
-            ]
-          },
-          {
-            path: 'clients',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/clients/all" replace /> },
-              { path: 'all', element: <Clients /> },
-              { path: 'invoices', element: <Invoices /> },
-              { path: 'payments', element: <ClientPayments /> },
-            ]
-          },
-          {
-            path: 'vendors',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/vendors/all" replace /> },
-              { path: 'all', element: <Vendors /> },
-              { path: 'bills', element: <VendorBills /> },
-              { path: 'payments', element: <VendorPayments /> },
-            ]
-          },
-          {
-            path: 'assets',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/assets/all" replace /> },
-              { path: 'all', element: <Asset /> },
-              { path: 'assignment', element: <AssetAssignmentForm /> },
-
-            ]
-          },
-          {
-            path: 'maintenance',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/maintenance/reports" replace /> },
-              { path: 'reports', element: <MaintenanceReport /> },
-              { path: 'maintenance-and-repair', element: <MaintenanceAndRepairs /> },
-
-            ]
-          },
-          {
-            path: 'settings',
-            children: [
-              { path: '', element: <Navigate to="/dashboard/settings/roles-permissionss" replace /> },
-              { path: 'roles-permissions', element: <RolePermission /> },
-
-
-            ]
-          },
-         { path: 'employee-coaching', element: <CoachingEmployee /> },
-         { path: 'product-items', element: <ProductItems /> },
-         { path: 'coaching', element: <CoachingAdmin /> },
-         { path: 'purchase-order', element: <PurchaseOrder /> },
-         { path: 'promotion', element: <Promotion /> },
-         { path: 'resignation', element: <Resignation /> },
-         { path: 'termination', element: <Termination /> },
+        {
+          path: "accounts",
+          children: [
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/accounts/chart-of-account" replace />
+              ),
+            },
+            { path: "chart-of-account", element: <ChartOfAccounts /> },
+            { path: "budgets", element: <Budget /> },
+            { path: "journals", element: <Journals /> },
+            { path: "expense-heads", element: <ExpenseHeads /> },
+            { path: "ledger", element: <GeneralLedger /> },
+          ],
+        },
+        {
+          path: "accounting-reports",
+          children: [
+            {
+              path: "",
+              element: (
+                <Navigate
+                  to="/dashboard/accounting-reports/payroll-reports"
+                  replace
+                />
+              ),
+            },
+            { path: "payroll-reports", element: <PayrollReports /> },
+            { path: "balance-sheet", element: <BalanceSheet /> },
+          ],
+        },
+        {
+          path: "clients",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/clients/all" replace />,
+            },
+            { path: "all", element: <Clients /> },
+            { path: "invoices", element: <Invoices /> },
+            { path: "payments", element: <ClientPayments /> },
+          ],
+        },
+        {
+          path: "vendors",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/vendors/all" replace />,
+            },
+            { path: "all", element: <Vendors /> },
+            { path: "bills", element: <VendorBills /> },
+            { path: "payments", element: <VendorPayments /> },
+          ],
+        },
+        {
+          path: "assets",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/assets/all" replace />,
+            },
+            { path: "all", element: <Asset /> },
+            { path: "assignment", element: <AssetAssignmentForm /> },
+          ],
+        },
+        {
+          path: "maintenance",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/maintenance/reports" replace />,
+            },
+            { path: "reports", element: <MaintenanceReport /> },
+            {
+              path: "maintenance-and-repair",
+              element: <MaintenanceAndRepairs />,
+            },
+          ],
+        },
+        {
+          path: "settings",
+          children: [
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/settings/roles-permissionss" replace />
+              ),
+            },
+            { path: "roles-permissions", element: <RolePermission /> },
+            { path: "roles-assignment", element: <RoleAssignment /> },
+          ],
+        },
+        { path: "employee-coaching", element: <CoachingEmployee /> },
+        { path: "product-items", element: <ProductItems /> },
+        { path: "coaching", element: <CoachingAdmin /> },
+        { path: "purchase-order", element: <PurchaseOrder /> },
+        { path: "promotion", element: <Promotion /> },
+        { path: "resignation", element: <Resignation /> },
+        { path: "termination", element: <Termination /> },
         //   { path: 'finance', element: <Finance /> },
       ],
     },
@@ -229,9 +272,7 @@ const AllCampaigns = Loadable(
 const JobOpenings = Loadable(
   lazy(() => import("../pages/recruitments/joblist"))
 );
-const JobView = Loadable(
-  lazy(() => import("../pages/recruitments/jobview"))
-);
+const JobView = Loadable(lazy(() => import("../pages/recruitments/jobview")));
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AdminDashboard = Loadable(
   lazy(() => import("../pages/Dashboard/AdminDashboard"))
@@ -398,4 +439,8 @@ const SignatureGenerator = Loadable(
 );
 const RolePermission = Loadable(
   lazy(() => import("../pages/settings/roles-permission"))
+);
+
+const RoleAssignment = Loadable(
+  lazy(() => import("../pages/settings/rolesAssignment"))
 );

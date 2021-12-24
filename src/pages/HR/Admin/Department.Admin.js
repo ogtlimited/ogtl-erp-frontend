@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import departments from "../../../db/departments.json";
 
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
@@ -11,14 +11,9 @@ import Select from "react-select";
 import helper from "../../../services/helper";
 import { create } from "yup/lib/Reference";
 
-
-
-
-
-
 const Departments = () => {
   const [template, settemplate] = useState({});
-  const { formUpdate, setformUpdate, showAlert } = useAppContext();
+  const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
@@ -26,7 +21,7 @@ const Departments = () => {
   const [deleteData, setdeleteData] = useState(null);
   const [departMentOpts, setDepartmentOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [mode, setmode] = useState('add')
+  const [mode, setmode] = useState("add");
   const defaultSorted = [
     {
       dataField: "designation",
@@ -38,7 +33,7 @@ const Departments = () => {
 
   const breadcrumb = "Departments";
   const fetchDept = () => {
-    settemplate(departmentFormJson)
+    settemplate(departmentFormJson);
     axiosInstance.get("/department").then((e) => {
       // console.log(e.data.data);
       setallDepartments(e?.data?.data);
@@ -54,21 +49,21 @@ const Departments = () => {
   };
   const editRow = (row) => {
     // setformUpdate(null)
-    let formatted = helper.handleEdit(row)
-    setmode('edit')
+    let formatted = helper.handleEdit(row);
+    setmode("edit");
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
-  const create = () =>{
+  const create = () => {
     let initialValues = {};
-      for (let i in template) {
-        initialValues[i] = "";
-        // console.log(i);
-      }
-      setmode('add')
-      setformValue(initialValues)
-      seteditData(initialValues)
-  }
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setformValue(initialValues);
+    seteditData(initialValues);
+  };
 
   const handleClick = (i) => {
     if (i?.value === "All" || i === null) {
@@ -82,20 +77,20 @@ const Departments = () => {
   useEffect(() => {
     fetchDept();
     setallDepartments(departments);
-  }, [])
+  }, []);
 
   useEffect(() => {
     console.log(formValue);
     console.log(editData);
     if (submitted) {
-      if (mode == 'add') {
+      if (mode == "add") {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {
             console.log(e);
             // setformValue({});
-            fetchDept()
-            showAlert(true, "New department created", "alert alert-success")
+            fetchDept();
+            showAlert(true, "New department created", "alert alert-success");
           })
           .catch((err) => {
             // setformValue(null);
@@ -109,7 +104,11 @@ const Departments = () => {
           .then((e) => {
             console.log(e);
             setformValue(null);
-            showAlert(true, "Department successfully updated", "alert alert-success")
+            showAlert(
+              true,
+              "Department successfully updated",
+              "alert alert-success"
+            );
             fetchDept();
           })
           .catch((err) => {
@@ -150,24 +149,28 @@ const Departments = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              onClick={() => editRow(row)}
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() => setdeleteData(row)}
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.hr?.update && (
+              <a
+                className="dropdown-item"
+                onClick={() => editRow(row)}
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.hr?.delete && (
+              <a
+                className="dropdown-item"
+                onClick={() => setdeleteData(row)}
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -187,15 +190,17 @@ const Departments = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={()=> create()}
-            >
-              <i className="fa fa-plus"></i> Add Department
-            </a>
+            {user?.role?.hr?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => create()}
+              >
+                <i className="fa fa-plus"></i> Add Department
+              </a>
+            )}
           </div>
         </div>
       </div>

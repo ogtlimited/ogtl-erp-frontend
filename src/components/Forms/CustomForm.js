@@ -23,7 +23,7 @@ const CustomForm = ({ template, data, handleform }) => {
   };
   const handleFile = (e, name) => {
     console.log(e.target.files, name);
-    setValue(name,  e.target.files)
+    setValue(name, e.target.files);
   };
   const renderFields = (fields) => {
     return fields?.map((field) => {
@@ -36,10 +36,11 @@ const CustomForm = ({ template, data, handleform }) => {
               <div className="form-group">
                 <label htmlFor={name} className="col-form-label">
                   {title}{" "}
-                  {required.value && 
-                  <span style={required?.value ? { color: "red" } : {}}>*</span>
-                  
-                  }
+                  {required?.value && (
+                    <span style={required?.value ? { color: "red" } : {}}>
+                      *
+                    </span>
+                  )}
                 </label>
                 <input
                   {...register(name)}
@@ -187,7 +188,12 @@ const CustomForm = ({ template, data, handleform }) => {
                 <label htmlFor={name} className="col-form-label ml-2">
                   {title}
                 </label>
-                <input id="upload" {...register(name)} onChange={(e) => handleFile(e, name)} type="file" />
+                <input
+                  id="upload"
+                  {...register(name)}
+                  onChange={(e) => handleFile(e, name)}
+                  type="file"
+                />
                 <label
                   htmlFor="upload"
                   className="form-control btn btn-primary"

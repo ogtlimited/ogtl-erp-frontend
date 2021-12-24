@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../Context/AppContext";
 import SalaryStructureModal from "../Modal/SalaryStructureModal";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
 const SalaryStructure = ({ data, fetchSalaryStructures }) => {
   const [editData, seteditData] = useState({});
+  const { user } = useAppContext();
 
   const [type, settype] = useState(null);
 
@@ -84,17 +86,19 @@ const SalaryStructure = ({ data, fetchSalaryStructures }) => {
       <div className="tab-pane" id="tab_structure">
         <div className="text-right mb-4 clearfix">
           <div className="dropdown">
-            <button
-              className="btn btn-secondary btn-primary add-btn "
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Add Structure
-              <i className="fa fa-plus px-1"></i>
-            </button>
+            {user?.role?.hr?.create && (
+              <button
+                className="btn btn-secondary btn-primary add-btn "
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Add Structure
+                <i className="fa fa-plus px-1"></i>
+              </button>
+            )}
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a
                 className="dropdown-item"
