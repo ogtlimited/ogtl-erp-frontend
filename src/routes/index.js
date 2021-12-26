@@ -81,6 +81,7 @@ export default function Router() {
               element: <Navigate to="/dashboard/apps/email" replace />,
             },
             { path: "email", element: <Email /> },
+            { path: "email/:id", element: <ViewEmail /> },
             { path: "email-signature", element: <SignatureGenerator /> },
             { path: "file-manager", element: <FileManager /> },
             { path: "notifications", element: <Notifications /> },
@@ -226,6 +227,13 @@ export default function Router() {
           ],
         },
         {
+          path: "user",
+          children: [
+            { path: '', element: <Navigate to="/dashboard/user/profile/:id" replace /> },
+            { path: "profile/:id", element: <Profile /> },
+          ],
+        },
+        {
           path: "maintenance",
           children: [
             {
@@ -249,7 +257,6 @@ export default function Router() {
               ),
             },
             { path: "roles-permissions", element: <RolePermission /> },
-            { path: "roles-assignment", element: <RoleAssignment /> },
           ],
         },
         { path: "employee-coaching", element: <CoachingEmployee /> },
@@ -368,6 +375,7 @@ const CoachingEmployee = Loadable(
   lazy(() => import("../pages/HR/Users/CoachingEmployee"))
 );
 const Email = Loadable(lazy(() => import("../pages/In-Apps/Email")));
+
 const CampaignInfo = Loadable(
   lazy(() => import("../pages/Campaigns/CampaignInfo"))
 );
@@ -420,7 +428,7 @@ const Notifications = Loadable(
 const ExpenseHeads = Loadable(
   lazy(() => import("../pages/ExpenseHeads/ExpenseHeads"))
 );
-const ViewEmail = Loadable(lazy(() => import("../pages/In-Apps/ViewEmail")));
+const ViewEmail = Loadable(lazy(() => import("../pages/In-Apps/SingleEmail")));
 const BalanceSheet = Loadable(
   lazy(() => import("../pages/Reports/BalanceSheet"))
 );

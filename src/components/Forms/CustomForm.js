@@ -26,9 +26,10 @@ const CustomForm = ({ template, data, handleform }) => {
     setValue(name, e.target.files);
   };
   const renderFields = (fields) => {
-    return fields?.map((field) => {
+    console.log(fields)
+    return fields && fields?.map((field) => {
       let { type, title, name, required, validation } = field;
-
+      console.log(type, title, name, required)
       switch (type) {
         case "text":
           return (
@@ -36,11 +37,10 @@ const CustomForm = ({ template, data, handleform }) => {
               <div className="form-group">
                 <label htmlFor={name} className="col-form-label">
                   {title}{" "}
-                  {required?.value && (
-                    <span style={required?.value ? { color: "red" } : {}}>
-                      *
-                    </span>
-                  )}
+                  {required?.value && 
+                  <span style={required?.value ? { color: "red" } : {}}>*</span>
+                  
+                  }
                 </label>
                 <input
                   {...register(name)}
