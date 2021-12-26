@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import { canView } from "../../../services/canView";
@@ -88,14 +88,14 @@ const EducationInformation = ({
           <h3 className="card-title">
             Education Information
             {canView(user, "HR") && (
-              <Link
+              <a
                 className="edit-icon"
                 data-toggle="modal"
                 data-target="#FormModal"
                 onClick={() => handleChange("EmployeeEducation")}
               >
                 <i className="fa fa-pencil"></i>
-              </Link>
+              </a>
             )}
           </h3>
           <div className="experience-box">
