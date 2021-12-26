@@ -21,7 +21,7 @@ const RightWidget = ({state}) => {
             <div  class="info-list"><span ><i 
                         class="fa fa-suitcase"></i></span>
                 <h5 >Experience</h5>
-                <p >{state?.experience} Years</p>
+                <p >{state?.experience ? state.experience : 0} Years</p>
             </div>
             <div  class="info-list"><span ><i 
                         class="fa fa-ticket"></i></span>
@@ -44,8 +44,9 @@ const RightWidget = ({state}) => {
             <div  class="info-list">
                 <p > NG: +234 7006 8876 8723 <br /> info@outsourceglobal.com <br/> https://www.outsourceglobal.com </p>
             </div>
-            <div  class="info-list text-center"><a 
-                    class="app-ends">Application ends in 2d 7h 6m</a></div>
+            <div  class="info-list text-center">
+                {state.deadline ?<a 
+                    class="app-ends">Application ends on {new Date(state?.deadline).toDateString()}</a> : ''}</div>
         </div>   
         </>
     )

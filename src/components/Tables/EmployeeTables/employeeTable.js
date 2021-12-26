@@ -111,7 +111,7 @@ const EmployeesTable = ({
               }
             />
           </a>
-          <Link to={`/admin/profile-dashboard/${row._id}`}>
+          <Link to={`/dashboard/user/profile/${row._id}`}>
             {row.first_name} {row.last_name}{" "}
             <span>{row?.designation?.designation}</span>
           </Link>

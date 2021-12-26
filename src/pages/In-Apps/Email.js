@@ -1,11 +1,12 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import "./email.css";
 
 const Email = () => {
+  let navigate = useNavigate();
   const [data, setData] = useState([]);
   const [postsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +21,9 @@ const Email = () => {
   const searchChange = (e) => {
     setSearchField(e.target.value);
   };
+  const handleRowClick = (row) => {
+    navigate(row._id, {state: row});;
+  }  
 
   //fetch emails
   const fetchEmails = () => {
@@ -263,6 +267,7 @@ const Email = () => {
                     </thead>
                     <tbody>
                       {filteredData.map((inbox, i) => (
+                        
                         <tr
                           className={`${
                             inbox?.is_read
@@ -271,6 +276,7 @@ const Email = () => {
                           }`}
                           data-href="mail-view.html"
                           key={i}
+                          onClick={() => handleRowClick(inbox)}
                         >
                           <td>
                             <input type="checkbox" className="checkmail" />
@@ -290,7 +296,7 @@ const Email = () => {
                                 color: !inbox?.is_read ? "#000" : "#7b939c",
                               }}
                               to={{
-                                pathname: `/admin/mail/${inbox?._id}`,
+                                pathname: `/dashboard/apps/email/${inbox?._id}`,
                                 state: { inbox },
                               }}
                             >

@@ -1,26 +1,45 @@
 import moment from "moment";
-import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import avater from "../../assets/img/male_avater.png";
 import axiosInstance from "../../services/api";
 
 const SingleEmail = () => {
-  const location = useLocation();
-  const { inbox } = location?.state;
+  const location = useParams();
+
+  const [inbox, setinbox] = useState({})
+  console.log(location)
+  const fetchEmail = () => {
+    axiosInstance
+      .get(`api/email/single/${location.id}`)
+      .then((res) => {
+        console.log(res)
+        setinbox(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchEmail()
+  }, [])
 
   useEffect(() => {
     let data = {
       is_read: true,
     };
-    if (!inbox?.is_read) {
-      axiosInstance
-        .put(`api/email/${inbox?._id}`, data)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    if(Object.keys(inbox).length > 0){
+      if (!inbox?.is_read) {
+        axiosInstance
+          .put(`api/email/${inbox?._id}`, data)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+
     }
   }, [inbox?.is_read, inbox?._id]);
 
@@ -105,7 +124,7 @@ const SingleEmail = () => {
                   </div>
                 </div>
                 <div className="mailview-inner">
-                  <p>Action occured on {inbox?.model_name} component</p>
+                  <h4>{inbox?.subject} </h4>
                   <p>{inbox?.message}</p>
                 </div>
               </div>
@@ -140,15 +159,15 @@ const SingleEmail = () => {
               <div className="mailview-footer">
                 <div className="row">
                   <div className="col-sm-6 left-action">
-                    <button type="button" className="btn btn-white">
+                    {/* <button type="button" className="btn btn-white">
                       <i className="fa fa-reply"></i> Reply
                     </button>
                     <button type="button" className="btn btn-white">
                       <i className="fa fa-share"></i> Forward
-                    </button>
+                    </button> */}
                   </div>
                   <div className="col-sm-6 right-action">
-                    <button type="button" className="btn btn-white">
+                    <button type="button" className="btn btn-white mx-1">
                       <i className="fa fa-print"></i> Print
                     </button>
                     <button type="button" className="btn btn-white">
