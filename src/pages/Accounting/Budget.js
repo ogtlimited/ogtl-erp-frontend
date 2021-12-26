@@ -37,7 +37,8 @@ const Budget = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
-  const [loadedSelect, setloadedSelect] = useState(false)
+  const [loadedSelect, setloadedSelect] = useState(false);
+  const { user } = useAppContext();
   const fetchBudget = () => {
     axiosInstance
       .get("/api/budget")
@@ -159,7 +160,6 @@ const Budget = () => {
         </>
       ),
     },
-
   ];
   return (
     <>
@@ -175,14 +175,16 @@ const Budget = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Create Budget
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Create Budget
+              </a>
+            )}
           </div>
         </div>
       </div>

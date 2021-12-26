@@ -15,7 +15,7 @@ const WarningLetter = () => {
   const [template, setTemplate] = useState(warningLetterFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
-  const { createPerfomance, showAlert } = useAppContext();
+  const { createPerfomance, showAlert, user } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false);
   const fetchWarningLetter = () => {
@@ -144,26 +144,31 @@ const WarningLetter = () => {
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
-          </div>
+          {user?.role?.hr?.delete && (
+            <>
+              {" "}
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#exampleModal"
+                  onClick={() => {
+                    setSelectedRow(row);
+                  }}
+                >
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </a>
+              </div>
+            </>
+          )}
         </div>
       ),
     },
@@ -185,7 +190,7 @@ const WarningLetter = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && (
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"

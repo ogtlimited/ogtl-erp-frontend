@@ -33,7 +33,7 @@ const jobOpts = [
 const JobOffer = () => {
   const [formValue, setFormValue] = useState(null);
   const [data, setData] = useState([]);
-  const { showAlert, createRecruitmens, setformUpdate } = useAppContext();
+  const { showAlert, createRecruitmens, setformUpdate, user } = useAppContext();
   const [template, setTemplate] = useState(jobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState(null);
@@ -301,24 +301,28 @@ const JobOffer = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(helper.handleEdit(row))}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.hr?.update && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => editRow(helper.handleEdit(row))}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.hr?.delete && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -341,7 +345,7 @@ const JobOffer = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && (
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"

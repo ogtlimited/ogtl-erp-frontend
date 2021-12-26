@@ -15,7 +15,7 @@ const Clients = () => {
   const [editData, seteditData] = useState(null);
   const [template, setTemplate] = useState(ClientsFormJson);
   const [data, setData] = useState([]);
-  const { combineRequest, showAlert, setformUpdate } = useAppContext();
+  const { combineRequest, showAlert, setformUpdate, user } = useAppContext();
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -60,10 +60,10 @@ const Clients = () => {
           });
       } else {
         formValue._id = editData._id;
-        delete formValue.__v
-        delete formValue._id
-        delete formValue.createdAt
-        delete formValue.updatedAt
+        delete formValue.__v;
+        delete formValue._id;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
         axiosInstance
           .patch("/api/client/" + editData._id, formValue)
           .then((res) => {
@@ -173,25 +173,29 @@ const Clients = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.account?.update && (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => editRow(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.account?.delete && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -211,14 +215,16 @@ const Clients = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> Add Client
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Client
+              </a>
+            )}
           </div>
         </div>
       </div>

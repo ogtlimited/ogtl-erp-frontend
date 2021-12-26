@@ -23,7 +23,7 @@ const CustomForm = ({ template, data, handleform }) => {
   };
   const handleFile = (e, name) => {
     console.log(e.target.files, name);
-    setValue(name,  e.target.files)
+    setValue(name, e.target.files);
   };
   const renderFields = (fields) => {
     console.log(fields)
@@ -188,7 +188,12 @@ const CustomForm = ({ template, data, handleform }) => {
                 <label htmlFor={name} className="col-form-label ml-2">
                   {title}
                 </label>
-                <input id="upload" {...register(name)} onChange={(e) => handleFile(e, name)} type="file" />
+                <input
+                  id="upload"
+                  {...register(name)}
+                  onChange={(e) => handleFile(e, name)}
+                  type="file"
+                />
                 <label
                   htmlFor="upload"
                   className="form-control btn btn-primary"

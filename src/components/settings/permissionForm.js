@@ -33,15 +33,15 @@ const initialValues = {
     update: false,
     delete: false,
   },
-  title: ""
+  title: "",
 };
-const PermissionForm = ({ role, setupdated }) => {
+const PermissionForm = ({ role, fetchRole }) => {
   const { showAlert } = useAppContext();
   const [defaultValues, setDefaultValues] = useState(initialValues);
   useEffect(() => {
-    console.log('ROLE', role)
-    if (role != undefined && role && Object.keys(role).length > 0) {
-      setDefaultValues(role)
+    console.log("ROLE", role);
+    if (role !== undefined && role && Object.keys(role).length > 0) {
+      setDefaultValues(role);
     }
   }, [defaultValues, role]);
 
@@ -50,7 +50,6 @@ const PermissionForm = ({ role, setupdated }) => {
       <div class="col-sm-8 col-md-8 col-lg-8 col-xl-9">
         <h6 class="card-title m-b-20">
           Module Access {role && "For " + role.title}
-          
         </h6>
         <div class="table-responsive">
           <Formik
@@ -64,10 +63,11 @@ const PermissionForm = ({ role, setupdated }) => {
                   .then((res) => {
                     // console.log(res);
                     // setupdated(true)
+                    fetchRole();
                     showAlert(true, res.data?.message, "alert alert-success");
                   })
                   .catch((error) => {
-                    console.log(error)
+                    console.log(error);
                     showAlert(
                       true,
                       error?.response?.data?.message,
@@ -181,7 +181,14 @@ const PermissionForm = ({ role, setupdated }) => {
                     </tbody>
                   </table>
                   <button type="submit" className="btn btn-primary mb-3">
-                    Submit
+                    {isSubmitting ? (
+                      <div
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                      ></div>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 </form>
               );

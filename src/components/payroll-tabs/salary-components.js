@@ -12,7 +12,7 @@ const SalaryComponents = ({ setformType, formValue, submitted }) => {
   };
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { showAlert } = useAppContext();
+  const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
 
@@ -141,15 +141,17 @@ const SalaryComponents = ({ setformType, formValue, submitted }) => {
     <>
       <div className="tab-pane show active" id="tab_components">
         <div className="text-right mb-4 clearfix">
-          <button
-            className="btn btn-primary add-btn"
-            type="button"
-            onClick={() => handleChange("components")}
-            data-toggle="modal"
-            data-target="#FormModal"
-          >
-            <i className="fa fa-plus"></i> Add Components
-          </button>
+          {user?.role?.hr?.create && (
+            <button
+              className="btn btn-primary add-btn"
+              type="button"
+              onClick={() => handleChange("components")}
+              data-toggle="modal"
+              data-target="#FormModal"
+            >
+              <i className="fa fa-plus"></i> Add Components
+            </button>
+          )}
         </div>
 
         <LeavesTable data={data} columns={columns} />

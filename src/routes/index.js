@@ -448,3 +448,7 @@ const SignatureGenerator = Loadable(
 const RolePermission = Loadable(
   lazy(() => import("../pages/settings/roles-permission"))
 );
+
+const RoleAssignment = Loadable(
+  lazy(() => import("../pages/settings/rolesAssignment"))
+);
