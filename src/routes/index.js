@@ -87,7 +87,6 @@ export default function Router() {
             { path: "shifts", element: <ShiftAdmin /> },
             { path: "shift-assignment", element: <ShiftAssignment /> },
             { path: "shift-request", element: <ShiftRequest /> },
-            { path: "role-assignment", element: <RoleAssignment /> },
           ],
         },
         {
@@ -419,8 +418,4 @@ const SignatureGenerator = Loadable(
 );
 const RolePermission = Loadable(
   lazy(() => import("../pages/settings/roles-permission"))
-);
-
-const RoleAssignment = Loadable(
-  lazy(() => import("../pages/HR/Admin/RoleAssignment.Admin"))
 );

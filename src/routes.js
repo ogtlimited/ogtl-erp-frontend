@@ -64,7 +64,6 @@ import Branch from "./pages/HR/Admin/Branch";
 import HRDashboard from "./pages/Dashboard/HRDashboard";
 import SignatureGenerator from "./pages/In-Apps/signature-generator";
 import RolePermission from "./pages/settings/roles-permission";
-import RoleAssignment from "./pages/HR/Admin/RoleAssignment.Admin";
 
 // const routes = [{
 //   title: 'Main',
@@ -604,12 +603,6 @@ const routes = [
     title: "Roles & Permissions",
     path: "/roles-permissions",
     component: RolePermission,
-    layout: "/admin",
-  },
-  {
-    title: "Role Assignment",
-    path: "/role-assignment",
-    component: RoleAssignment,
     layout: "/admin",
   },
 ];

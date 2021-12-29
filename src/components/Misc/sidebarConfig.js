@@ -135,11 +135,6 @@ const sidebarConfig = [
             title: "Shift Request",
             path: PATH_DASHBOARD.hr.shiftRequest,
           },
-          {
-            canView: "HR",
-            title: "Role Assignment",
-            path: PATH_DASHBOARD.hr.roleAssignment,
-          },
         ],
       },
       {
