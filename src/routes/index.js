@@ -257,6 +257,7 @@ export default function Router() {
               ),
             },
             { path: "roles-permissions", element: <RolePermission /> },
+            { path: "roles-assignment", element: <RoleAssignment /> },
           ],
         },
         { path: "employee-coaching", element: <CoachingEmployee /> },
