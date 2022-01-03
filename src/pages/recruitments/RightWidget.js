@@ -11,7 +11,7 @@ const RightWidget = ({state}) => {
                  data-target="#apply_job" class="btn job-btn">Apply For This Job</a> */}
               <Link
                 class="btn job-btn"
-                 to={"/recruitment/consent/" + id.id}>Apply For This Job</Link>
+                 to={"/recruitment/apply/" + id.id}>Apply For This Job</Link>
             <div  class="info-list"><span ><i 
                         class="fa fa-bar-chart"></i></span>
                 <h5 >Mode of Engagement</h5>
