@@ -51,7 +51,7 @@ export default function Router() {
           element: <JobOpenings />,
         },
         {
-          path: "consent/:id",
+          path: "apply/:id",
           element: <ConsentPage />,
         },
         {
