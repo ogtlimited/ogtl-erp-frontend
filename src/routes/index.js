@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes, useLocation } from "react-router-dom";
 import { AppProvider } from "../Context/AppContext";
+import { NoAuthContextProvider } from "../Context/NoAuthContext";
 import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
 import AdminLayout from "../layouts/Admin";
@@ -40,12 +41,18 @@ export default function Router() {
     },
     {
       path: "recruitment",
-      element: <RecruitmentLayout />,
+      element: <NoAuthContextProvider>
+          <RecruitmentLayout />
+      </NoAuthContextProvider>,
       children: [
         { path: "", element: <Navigate to="/recruitment/joblist" replace /> },
         {
           path: "joblist",
           element: <JobOpenings />,
+        },
+        {
+          path: "consent/:id",
+          element: <ConsentPage />,
         },
         {
           path: "joblist/:id",
@@ -85,6 +92,19 @@ export default function Router() {
             { path: "email-signature", element: <SignatureGenerator /> },
             { path: "file-manager", element: <FileManager /> },
             { path: "notifications", element: <Notifications /> },
+          ],
+        },
+        {
+          path: "operations",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/operations/campaigns" replace />,
+            },
+            { path: "campaigns", element: <AllCampaigns /> },
+            { path: "campaign-info/:id", element: <CampaignInfo /> },
+            { path: "leads", element: <Leads /> },
+            { path: "branch", element: <Branch /> }
           ],
         },
         {
@@ -279,6 +299,9 @@ const AllCampaigns = Loadable(
 );
 const JobOpenings = Loadable(
   lazy(() => import("../pages/recruitments/joblist"))
+);
+const ConsentPage = Loadable(
+  lazy(() => import("../pages/recruitments/Consent"))
 );
 const JobView = Loadable(lazy(() => import("../pages/recruitments/jobview")));
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));

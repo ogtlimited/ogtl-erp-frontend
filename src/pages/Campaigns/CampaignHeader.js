@@ -110,13 +110,13 @@ const CampaignHeader = ({ campaign_info, fetchProjects }) => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <Link
+            <a
               className="btn add-btn"
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-plus"></i> Edit Campaign
-            </Link>
+            </a>
             <a
               href="task-board.html"
               className="btn btn-white float-right m-r-10"
