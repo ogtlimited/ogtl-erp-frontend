@@ -157,7 +157,7 @@ const AllCampaigns = () => {
       sort: true,
       headerStyle: { width: "250px" },
       formatter: (value, row) => (
-        <Link to={`/admin/campaign-info/${row._id}`}>{value}</Link>
+        <Link to={`/dashboard/operations/campaign-info/${row._id}`}>{value}</Link>
       ),
     },
     {
@@ -183,9 +183,9 @@ const AllCampaigns = () => {
       formatter: (value, row) => (
         <ul className="team-members">
           <li className="row">
-            <Link data-toggle="tooltip" title="" data-original-title="">
+            <a data-toggle="tooltip" title="" data-original-title="">
               <img alt="" src={avater} />
-            </Link>
+            </a>
             <span className="pt-1">
               {row?.manager?.first_name} {row?.manager?.last_name}
             </span>
@@ -234,13 +234,13 @@ const AllCampaigns = () => {
           </div>
           <div className="col-auto float-right ml-auto">
             {user?.role?.projects?.create && (
-              <Link
+              <a
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
               >
                 <i className="fa fa-plus"></i> Create Project
-              </Link>
+              </a>
             )}
             <div className="view-icons">
               <a href="projects" className="grid-view btn btn-link">

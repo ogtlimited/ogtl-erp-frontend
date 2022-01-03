@@ -257,6 +257,152 @@ const sidebarConfig = [
     ],
   },
   {
+    subheader: "Operations",
+    canView: "All",
+    items: [
+      {
+        canView: "All",
+        title: "Campaign",
+        path: PATH_DASHBOARD.campaign.root,
+        icon: ICONS.user,
+        children: [
+          {
+            canView: "All",
+            title: "All Campaigns",
+            path: PATH_DASHBOARD.campaign.allCampaign,
+          },
+          {
+            canView: "All",
+            title: "Leads",
+            path: PATH_DASHBOARD.campaign.lead,
+          },
+          {
+            canView: "All",
+            title: "Branch",
+            path: PATH_DASHBOARD.campaign.branch,
+          }
+        ],
+      },
+      {
+        canView: "HR",
+        title: "Payroll",
+        path: PATH_DASHBOARD.payroll.root,
+        icon: ICONS.payroll,
+        children: [
+          {
+            canView: "HR",
+            title: "Employee Salary",
+            path: PATH_DASHBOARD.payroll.salary,
+          },
+          {
+            canView: "HR",
+            title: "Payroll Items",
+            path: PATH_DASHBOARD.payroll.payrollItem,
+          },
+        ],
+      },
+      {
+        canView: "HR",
+        title: "Reports",
+        path: PATH_DASHBOARD.payroll.root,
+        icon: ICONS.reports,
+        children: [
+          {
+            canView: "HR",
+            title: "Employee Reports",
+            path: PATH_DASHBOARD.reports.employeeReport,
+          },
+          {
+            canView: "HR",
+            title: "Payslip Reports",
+            path: PATH_DASHBOARD.reports.payslipReport,
+          },
+          {
+            canView: "HR",
+            title: "Attendance Reports",
+            path: PATH_DASHBOARD.reports.attendanceReports,
+          },
+        ],
+      },
+      {
+        canView: "HR",
+        title: "Recruitment",
+        path: PATH_DASHBOARD.recruitment.root,
+        icon: ICONS.recruitment,
+        children: [
+          {
+            canView: "HR",
+            title: "Job Opening",
+            path: PATH_DASHBOARD.recruitment.jobOpening,
+          },
+          {
+            canView: "HR",
+            title: "Job Applicants",
+            path: PATH_DASHBOARD.recruitment.jobApplicants,
+          },
+          {
+            canView: "HR",
+            title: "Apptitude Test",
+            path: PATH_DASHBOARD.recruitment.aptitudeTests,
+          },
+          {
+            canView: "HR",
+            title: "Job Offer",
+            path: PATH_DASHBOARD.recruitment.jobOffer,
+          },
+        ],
+      },
+      {
+        canView: "HR",
+        title: "Performance",
+        path: PATH_DASHBOARD.performance.root,
+        icon: ICONS.performance,
+        children: [
+          {
+            canView: "HR",
+            title: "Warning Letter",
+            path: PATH_DASHBOARD.performance.warningLetter,
+          },
+          {
+            canView: "HR",
+            title: "Score Cards",
+            path: PATH_DASHBOARD.performance.scoreCards,
+          },
+        ],
+      },
+      {
+        canView: "",
+        title: "Coaching Form List",
+        path: PATH_DASHBOARD.coaching,
+        icon: ICONS.coaching,
+      },
+      {
+        canView: "All",
+        title: "Coaching Form",
+        path: PATH_DASHBOARD.employeeCoaching,
+        icon: ICONS.coaching,
+      },
+      {
+        canView: "HR",
+        title: "Promomotion",
+        path: PATH_DASHBOARD.promotion,
+        icon: ICONS.promotion,
+      },
+      {
+        canView: "HR",
+        title: "Resignation",
+        path: PATH_DASHBOARD.resignation,
+        icon: ICONS.resignation,
+      },
+      {
+        canView: "HR",
+        title: "Termination",
+        path: PATH_DASHBOARD.termination,
+        icon: ICONS.termination,
+      },
+    ],
+  },
+  {
     subheader: "Accounting",
     canView: "Accounting",
     items: [
