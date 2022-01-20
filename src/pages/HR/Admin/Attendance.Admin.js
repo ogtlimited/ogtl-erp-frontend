@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useCallback} from "react";
 import { Link } from "react-router-dom";import AttendanceTable from "../../../components/attendance/attendance-table";
+import GeneralUpload from "../../../components/Modal/GeneralUpload";
 import AdminAttendanceTable from "../../../components/Tables/EmployeeTables/AttendanceTable";
 
 import { useAppContext } from "../../../Context/AppContext";
@@ -12,7 +13,7 @@ const AttendanceAdmin = () => {
   const [departments, setdepartments] = useState([])
   const [designation, setdesignation] = useState([])
   const [projects, setprojects] = useState([])
-  
+  const [toggleModal, settoggleModal] = useState(false);
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
       console.log(res);
@@ -115,7 +116,7 @@ const AttendanceAdmin = () => {
     <>
       <div className="page-header">
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col">
             <h3 className="page-title">Attendance</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
@@ -123,6 +124,17 @@ const AttendanceAdmin = () => {
               </li>
               <li className="breadcrumb-item active">Attendance</li>
             </ul>
+          </div>
+          <div className="col-auto float-right ml-auto">
+            <a
+              
+              className="btn add-btn m-r-5"
+              data-toggle="modal"
+              data-target="#uploadAttendance"
+              onClick={() => settoggleModal(true)}
+            >
+              Upload Attendance
+            </a>
           </div>
         </div>
       </div>
@@ -132,6 +144,13 @@ const AttendanceAdmin = () => {
         selectedOption={selectedOption} columns={columns} designation={designation} departments={departments} />
           </div>
       </div>
+      
+      {toggleModal && (
+        <GeneralUpload settoggleModal={settoggleModal}
+        title="Upload Attendance"
+        url="'/api/attendance/bulk'"
+        />
+      )}
     </>
   );
 };

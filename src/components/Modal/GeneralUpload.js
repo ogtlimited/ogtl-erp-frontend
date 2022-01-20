@@ -4,16 +4,15 @@ import Papa from "papaparse";
 import helper from "../../services/helper";
 import { object } from 'yup/lib/locale';
 import { useAppContext } from '../../Context/AppContext';
-import config from '../../config.json'
-const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSuccess }) => {
+const GeneralUpload = ({settoggleModal, title, url }) => {
     const { combineRequest, showAlert } = useAppContext();
     const [buttonRef, setbuttonRef] = useState(React.createRef())
     const [loading, setloading] = useState(false)
-    const [uploadState, setuploadState] = useState('Upload New Employees')
+    const [uploadState, setuploadState] = useState(title)
     const [fileName, setfileName] = useState('')
     const [invalid, setinvalid] = useState(false)
     const [data, setData] = useState([])
-    const [path, setpath] = useState('/employees/bulk-upload')
+    const [path, setpath] = useState(url)
     const updateState = (path, msg) =>{
         setpath(path)
         setuploadState(msg)
@@ -49,14 +48,8 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
 
     const uploadData = () =>{
         console.log(data)
-        setuploading(true)
         setloading(true)
-        console.log(path);
-        axiosInstance({
-          method: path === '/leave-application/update-leavecount' ? 'PUT' : 'POST',
-          baseURL: config.ApiUrl + path,
-          data: data
-        }).then(res =>{
+        axiosInstance.post(path, data).then(res =>{
           console.log(res)
           showAlert(
             true,
@@ -64,10 +57,9 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
             "alert alert-success"
           );
           settoggleModal(false)
-          setuploading(false)
           setloading(false)
           buttonRef.click()
-          fetchEmployee()
+        //   fetchEmployee()
         }).catch(err => {
             console.log(err)
             showAlert(
@@ -81,12 +73,12 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
         })
     }
     return (
-        <div class="modal fade show" id="uploadModal"
+        <div class="modal fade" id="uploadAttendance"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         style={{display: 'block'}}
         aria-hidden="true" >
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog ">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">{uploadState}</h5>
@@ -96,17 +88,8 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
               </div>
               <div class="modal-body">
               <div class="row">
-  <div class="col-4">
-    <div class="nav flex-column nav-pills mt-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-      <a onClick={()=> updateState("/employees/bulk-upload", "Upload New employees")} class="nav-link active mb-3" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">New User</a>
-      <a onClick={()=> updateState("/EmergencyContact/bulk-upload", "Upload Emergency Contact")} class="nav-link mb-3" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-profile" aria-selected="false">Emergency Contacts</a>
-      <a onClick={()=> updateState("/ContactDetails/bulk-upload", "Upload Contact Details")} class="nav-link mb-3" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-messages" aria-selected="false">Contact Details</a>
-      <a onClick={()=> updateState("/PersonalDetails/bulk-upload", "Upload Personal Details")} class="nav-link mb-3" id="v-pills-personal-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-personal" aria-selected="false">Personal Details</a>
-      <a onClick={()=> updateState("/SalaryDetails/bulk-upload", "Upload Salary Details")} class="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Salary Details</a>
-      <a onClick={()=> updateState("/leave-application/update-leavecount", "Upload Leave")} class="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Employee Leave</a>
-    </div>
-  </div>
-  <div class="col-8">
+  
+  <div class="col-12">
     <div class="tab-content" id="v-pills-tabContent">
       <label class="tab-pane fade upload-csv show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
       <input
@@ -117,22 +100,11 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
       />
       <i style={{fontSize: '20px'}} className="fa fa-cloud-upload pr-4"></i>
           Click to  {uploadState}
-          <p className="pt-3">{fileName}</p> 
+          <p className="pt-3">{fileName}</p>
           {invalid ? <small className="pt-3 text-danger">This file contains invalid fields</small>  : null}
         
       </label>
-      {/* <label class="tab-pane fade upload-csv" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-          Emergency Contact
-      </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-          Contact Details
-      </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-personal" role="tabpanel" aria-labelledby="v-pills-personal-tab">
-          Personal Details
-      </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-          Salary Details
-      </label> */}
+     
     </div>
   </div>
 </div>
@@ -159,4 +131,4 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
     )
 }
 
-export default UploadModal
+export default GeneralUpload
