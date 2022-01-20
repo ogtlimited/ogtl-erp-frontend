@@ -8,6 +8,7 @@ import axiosInstance from "../../../services/api";
 import HelperService from "../../../services/helper";
 import { useAppContext } from "../../../Context/AppContext";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import GeneralUpload from "../../../components/Modal/GeneralUpload";
 const LeavesAdmin = () => {
     const [approval, setApproval] = useState([
       {
@@ -39,6 +40,7 @@ const LeavesAdmin = () => {
   const [present, setpresent] = useState(0);
   const [planned, setplanned] = useState(0);
   const [approvedLeaves, setapprovedLeaves] = useState(0);
+  const [toggleModal, settoggleModal] = useState(false);
   const [status, setStatus] = useState("");
   const [editData, seteditData] = useState({});
   const [formMode, setformMode] = useState('add')
@@ -316,6 +318,12 @@ const LeavesAdmin = () => {
         editData={editData}
         formMode={formMode}
       />
+       {toggleModal && (
+        <GeneralUpload settoggleModal={settoggleModal}
+        title="Upload Attendance"
+        url="'/api/attendance/bulk'"
+        />
+      )}
     </>
   );
 };
