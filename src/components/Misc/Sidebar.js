@@ -10,7 +10,7 @@ import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user, setuser] = useState(tokenService.getUser());
-  // console.log(user)
+  console.log(user)
   const [isPriviledged, setisPriviledged] = useState(false);
   const { combineRequest } = useAppContext();
   const canView = (dept) => {
