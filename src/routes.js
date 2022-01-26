@@ -39,7 +39,7 @@ import MaintenanceReport from "./pages/Maintenance/MaintenanceReport";
 import MaintenanceAndRepairs from "./pages/Maintenance/MaintenanceAndRepairs";
 import Asset from "./pages/HR/Admin/Asset.Admin";
 import PurchaseOrder from "./pages/HR/Admin/PurchaseOrder.Admin";
-import { AccountingDashboard } from "./pages/Accounting/AccountingDashboard";
+import  AccountingDashboard  from "./pages/Accounting/AccountingDashboard";
 import Clients from "./pages/Clients/Client";
 import Vendors from "./pages/Vendors/Vendors";
 import Invoices from "./pages/Accounting/Invoices";

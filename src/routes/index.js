@@ -413,9 +413,10 @@ const Asset = Loadable(lazy(() => import("../pages/HR/Admin/Asset.Admin")));
 const PurchaseOrder = Loadable(
   lazy(() => import("../pages/HR/Admin/PurchaseOrder.Admin"))
 );
-const AccountingDashboard = Loadable(
-  lazy(() => import("../pages/Accounting/AccountingDashboard"))
-);
+// const AccountingDashboard = Loadable(
+//   lazy(() => import("../pages/Accounting/AccountingDashboard"))
+// );
+const AccountingDashboard = Loadable(lazy(() => import("../pages/Accounting/AccountingDashboard.js")));
 const Clients = Loadable(lazy(() => import("../pages/Clients/Client")));
 const Vendors = Loadable(lazy(() => import("../pages/Vendors/Vendors")));
 const Invoices = Loadable(lazy(() => import("../pages/Accounting/Invoices")));
