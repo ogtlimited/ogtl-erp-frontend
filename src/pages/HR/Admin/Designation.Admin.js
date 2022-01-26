@@ -2,10 +2,10 @@ import React, { useMemo, useState, useEffect, useContext } from "react";
 
 import departments from "../../../db/designationList.json";
 import { designation } from "../../../components/FormJSON/HR/Employee/designation";
-import list from '../../../designation.json'
+import list from "../../../designation.json";
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import Select from "react-select";
-import dates from './dates.json'
+import dates from "./dates.json";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -17,36 +17,36 @@ let qualityFilter;
 const Designations = () => {
   // console.log(uniqueArray)
   const [allDesignation, setallDesignation] = useState([]);
-  const { formUpdate, setformUpdate, showAlert } = useAppContext();
+  const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
-  const [template, settemplate] = useState({})
+  const [template, settemplate] = useState({});
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [mode, setmode] = useState('add')
-  const create = () =>{
+  const [mode, setmode] = useState("add");
+  const create = () => {
     let initialValues = {};
-      for (let i in template) {
-        initialValues[i] = "";
-        // console.log(i);
-      }
-      setmode('add')
-      setformValue(initialValues)
-      seteditData(initialValues)
-  }
+    for (let i in template) {
+      initialValues[i] = "";
+      // console.log(i);
+    }
+    setmode("add");
+    setformValue(initialValues);
+    seteditData(initialValues);
+  };
   const editRow = (row) => {
     // setformUpdate(null)
-    let formatted = helper.handleEdit(row)
-    setmode('edit')
+    let formatted = helper.handleEdit(row);
+    setmode("edit");
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
 
   const fetchDesignation = () => {
-    settemplate(designation)
+    settemplate(designation);
     axiosInstance.get("/designation").then((res) => {
       setallDesignation(res.data.data);
       setunfiltered(res?.data?.data);
@@ -64,11 +64,14 @@ const Designations = () => {
   }, []);
 
   const handleClick = (i) => {
-    console.log(i, unfiltered)
+    console.log(i, unfiltered);
     if (i?.value === "All" || i === null) {
       setallDesignation(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) => { console.log(e); return i.label.includes(e.designation)} );
+      const filt = unfiltered.filter((e) => {
+        console.log(e);
+        return i.label.includes(e.designation);
+      });
 
       setallDesignation(filt);
     }
@@ -77,16 +80,20 @@ const Designations = () => {
   useEffect(() => {
     console.log(formValue);
     fetchDesignation();
-    console.log(submitted, mode)
+    console.log(submitted, mode);
     if (submitted) {
-      if (mode == 'add') {
+      if (mode == "add") {
         axiosInstance
           .post("/designation", formValue)
           .then((e) => {
             console.log(e);
-            showAlert(true, "Designation successfully created", "alert alert-success")
+            showAlert(
+              true,
+              "Designation successfully created",
+              "alert alert-success"
+            );
             // setformValue(null);
-            fetchDesignation()
+            fetchDesignation();
           })
           .catch((err) => {
             // setformValue(null);
@@ -100,7 +107,11 @@ const Designations = () => {
           .put("/designation/" + formUpdate._id, formValue)
           .then((e) => {
             console.log(e);
-            showAlert(true, "Designation successfully updated", "alert alert-success")
+            showAlert(
+              true,
+              "Designation successfully updated",
+              "alert alert-success"
+            );
             setformValue(null);
             fetchDesignation();
           })
@@ -155,27 +166,31 @@ const Designations = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              onClick={() => {
-                setmode("edit")
-                setformUpdate(helper.handleEdit(row))
-              }}
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() => console.log(row)}
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.hr?.update && (
+              <a
+                className="dropdown-item"
+                onClick={() => {
+                  setmode("edit");
+                  setformUpdate(helper.handleEdit(row));
+                }}
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.hr?.delete && (
+              <a
+                className="dropdown-item"
+                onClick={() => console.log(row)}
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -195,15 +210,17 @@ const Designations = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => create()}
-            >
-              <i className="fa fa-plus"></i> Add Designation
-            </a>
+            {user?.role?.hr?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => create()}
+              >
+                <i className="fa fa-plus"></i> Add Designation
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -234,6 +251,6 @@ const Designations = () => {
       />
     </>
   );
-}
+};
 
 export default Designations;

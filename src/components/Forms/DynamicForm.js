@@ -21,6 +21,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
+  console.log('formSchema DHSHDHSH', formSchema)
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -128,7 +129,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
     setvalue(values);
     setformSubmitted(true)
     // setSubmitting(false);
-    resetForm({});
+    // resetForm({});
     console.log('form reset')
     
   };
@@ -151,6 +152,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
         return (
           <form onSubmit={handleSubmit}>
           <div class="row">
+
           { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
             <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
               {getFormElement(key, formSchema[key], setFieldValue, formData[key])}

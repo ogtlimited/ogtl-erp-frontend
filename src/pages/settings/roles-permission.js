@@ -4,18 +4,25 @@ import PermissionForm from "../../components/settings/permissionForm";
 import axiosInstance from "../../services/api";
 
 const RolePermission = () => {
-  const [role, setrole] = useState(null);
+  const [role, setrole] = useState({});
   const [allRoles, setallRoles] = useState([]);
-  const fetchDesignation = () => {
+  const [updated, setupdated] = useState(false);
+  const fetchRole = () => {
     axiosInstance.get("/api/role").then((res) => {
-      console.log(res);
+      // console.log(res);
       setallRoles(res.data.data);
+      setrole(res.data.data[0]);
+      setupdated(false);
       // setrole(res.data.data[0])
     });
   };
+
   useEffect(() => {
-    fetchDesignation();
+    fetchRole();
   }, []);
+  useEffect(() => {
+    fetchRole();
+  }, [updated]);
   useEffect(() => {
     console.log(role);
   }, [role]);
@@ -31,11 +38,12 @@ const RolePermission = () => {
       <div className="row">
         <DesignationList
           setrole={setrole}
-          fetchDesignation={fetchDesignation}
+          fetchDesignation={fetchRole}
           allDesignation={allRoles}
           setallRoles={setallRoles}
+          setupdated={setupdated}
         />
-        <PermissionForm role={role} />
+        <PermissionForm role={role} fetchRole={fetchRole} />
       </div>
     </>
   );

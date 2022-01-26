@@ -38,7 +38,6 @@ export const PATH_DASHBOARD = {
     shifts: path(ROOTS_DASHBOARD, "/hr/shifts"),
     shiftAssignment: path(ROOTS_DASHBOARD, "/hr/shift-assignment"),
     shiftRequest: path(ROOTS_DASHBOARD, "/hr/shift-request"),
-    roleAssignment: path(ROOTS_DASHBOARD, "/hr/role-assignment"),
   },
   payroll: {
     root: path(ROOTS_DASHBOARD, "/payroll"),
@@ -72,6 +71,7 @@ export const PATH_DASHBOARD = {
   settings: {
     root: path(ROOTS_DASHBOARD, "/settings"),
     rolesPermission: path(ROOTS_DASHBOARD, "/settings/roles-permissions"),
+    rolesAssignment: path(ROOTS_DASHBOARD, "/settings/roles-assignment"),
   },
   campaign: {
     root: path(ROOTS_DASHBOARD, "/campaign"),

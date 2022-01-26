@@ -43,14 +43,14 @@ const ContactDetails = ({
         <h3 className="card-title">
           Contact Details
           {canView(user, "HR") && (
-            <Link
+            <a
               className="edit-icon"
               onClick={() => handleChange("ContactDetails")}
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-pencil"></i>
-            </Link>
+            </a>
           )}
         </h3>
         <ul className="personal-info">

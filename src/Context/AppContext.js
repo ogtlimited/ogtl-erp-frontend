@@ -49,10 +49,7 @@ const AppProvider = (props) => {
 
   const clearNotifications = () => {
     if (socket) {
-      socket.current.emit(
-        "clear_notification",
-        "ahmed.dambatta@outsourceglobal.com"
-      );
+      socket.current.emit("clear_notification", user?.company_email);
     }
   };
 
@@ -71,16 +68,24 @@ const AppProvider = (props) => {
     });
   };
   const showAlert = (state, msg, className) => {
+    let icon = className?.includes("alert-success")
+      ? "#check-circle-fill"
+      : "#exclamation-triangle-fill";
+    let label = className?.includes("alert-success") ? "Success:" : "Warning:";
     setshowAlertMsg({
       state: state,
       msg: msg,
       class: className,
+      icon,
+      label,
     });
     setTimeout(() => {
       setshowAlertMsg({
         state: "",
         msg: "",
         class: "",
+        icon: "",
+        label: "",
       });
     }, 5000);
   };
@@ -120,6 +125,10 @@ const AppProvider = (props) => {
   //for anything relating to campaign
   const createCampaign = () => {
     return axiosInstance.get("/create-campaign-form");
+  };
+  //for anything relating to role assignment
+  const createRoleAssignment = () => {
+    return axiosInstance.get("/create-role-form");
   };
 
   const adminDashboardData = () => {
@@ -175,6 +184,7 @@ const AppProvider = (props) => {
         createRecruitmens,
         createPerfomance,
         createCampaign,
+        createRoleAssignment,
       }}
     >
       {props.children}

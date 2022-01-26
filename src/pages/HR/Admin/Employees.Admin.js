@@ -33,6 +33,7 @@ const AllEmployeesAdmin = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
   const [mode, setmode] = useState("add");
+  const { user } = useAppContext();
   // console.log(allEmployees);
   useEffect(() => {
     // fetchEmployee();
@@ -227,25 +228,29 @@ const AllEmployeesAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn "
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => create()}
-            >
-              <i className="fa fa-plus"></i> Add Employee
-            </a>
-            <button
-              onClick={() => settoggleModal(true)}
-              type="button"
-              class="btn add-btn mx-3"
-              data-toggle="modal"
-              data-target="#uploadModal"
-            >
-              <i className="fa fa-cloud-upload"></i>
-              Bulk Upload
-            </button>
+            {user?.role?.hr?.create && (
+              <>
+                <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
+                  data-target="#FormModal"
+                  onClick={() => create()}
+                >
+                  <i className="fa fa-plus"></i> Add Employee
+                </a>
+                <button
+                  onClick={() => settoggleModal(true)}
+                  type="button"
+                  class="btn add-btn mx-3"
+                  data-toggle="modal"
+                  data-target="#uploadModal"
+                >
+                  <i className="fa fa-cloud-upload"></i>
+                  Bulk Upload
+                </button>
+              </>
+            )}
             <div className="view-icons">
               <a
                 href="employees.html"

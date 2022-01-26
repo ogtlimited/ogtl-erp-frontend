@@ -4,60 +4,46 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 const initialValues = {
   account: {
-    read: true,
-    write: true,
-    update: true,
-    delete: true,
+    read: false,
+    create: false,
+    update: false,
+    delete: false,
   },
   projects: {
-    read: true,
-    write: true,
+    read: false,
+    create: false,
     update: false,
     delete: false,
   },
   facility: {
     read: false,
-    write: false,
+    create: false,
     update: false,
     delete: false,
   },
   hr: {
     read: false,
-    write: false,
+    create: false,
     update: false,
     delete: false,
   },
   it: {
     read: false,
-    write: false,
+    create: false,
     update: false,
     delete: false,
   },
+  title: "",
 };
-const PermissionForm = ({ role }) => {
+const PermissionForm = ({ role, fetchRole }) => {
   const { showAlert } = useAppContext();
-  const [defaultValues, setDefaultValues] = useState(null);
+  const [defaultValues, setDefaultValues] = useState(initialValues);
   useEffect(() => {
-    if (role) {
-      axiosInstance
-        .get(`/api/role/${role?._id}`)
-        .then((res) => {
-          const { account, hr, it, facility, projects } = res.data.data;
-          const newObj = {
-            account,
-            projects,
-            facility,
-            hr,
-            it,
-          };
-
-          setDefaultValues(newObj);
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
+    console.log("ROLE", role);
+    if (role !== undefined && role && Object.keys(role).length > 0) {
+      setDefaultValues(role);
     }
-  }, [role, role?._id]);
+  }, [defaultValues, role]);
 
   return (
     <>
@@ -65,20 +51,23 @@ const PermissionForm = ({ role }) => {
         <h6 class="card-title m-b-20">
           Module Access {role && "For " + role.title}
         </h6>
-
         <div class="table-responsive">
           <Formik
             initialValues={defaultValues}
+            enableReinitialize
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
                 console.log(values);
                 axiosInstance
                   .put(`/api/role/${role._id}`, values)
                   .then((res) => {
-                    console.log(res);
+                    // console.log(res);
+                    // setupdated(true)
+                    fetchRole();
                     showAlert(true, res.data?.message, "alert alert-success");
                   })
                   .catch((error) => {
+                    console.log(error);
                     showAlert(
                       true,
                       error?.response?.data?.message,
@@ -108,8 +97,8 @@ const PermissionForm = ({ role }) => {
                       <tr>
                         <th>Module Permission</th>
                         <th class="text-center">Read</th>
-                        <th class="text-center">Write</th>
                         <th class="text-center">Create</th>
+                        <th class="text-center">Update</th>
                         <th class="text-center">Delete</th>
                       </tr>
                     </thead>
@@ -120,7 +109,7 @@ const PermissionForm = ({ role }) => {
                           <Field name="account.read" type="checkbox" />
                         </td>
                         <td class="text-center">
-                          <Field name="account.write" type="checkbox" />
+                          <Field name="account.create" type="checkbox" />
                         </td>
                         <td class="text-center">
                           <Field name="account.update" type="checkbox" />
@@ -135,7 +124,7 @@ const PermissionForm = ({ role }) => {
                           <Field name="projects.read" type="checkbox" />
                         </td>
                         <td class="text-center">
-                          <Field name="projects.write" type="checkbox" />
+                          <Field name="projects.create" type="checkbox" />
                         </td>
                         <td class="text-center">
                           <Field name="projects.update" type="checkbox" />
@@ -150,7 +139,7 @@ const PermissionForm = ({ role }) => {
                           <Field name="facility.read" type="checkbox" />
                         </td>
                         <td class="text-center">
-                          <Field name="facility.write" type="checkbox" />
+                          <Field name="facility.create" type="checkbox" />
                         </td>
                         <td class="text-center">
                           <Field name="facility.update" type="checkbox" />
@@ -165,7 +154,7 @@ const PermissionForm = ({ role }) => {
                           <Field name="hr.read" type="checkbox" />
                         </td>
                         <td class="text-center">
-                          <Field name="hr.write" type="checkbox" />
+                          <Field name="hr.create" type="checkbox" />
                         </td>
                         <td class="text-center">
                           <Field name="hr.update" type="checkbox" />
@@ -180,7 +169,7 @@ const PermissionForm = ({ role }) => {
                           <Field name="it.read" type="checkbox" />
                         </td>
                         <td class="text-center">
-                          <Field name="it.write" type="checkbox" />
+                          <Field name="it.create" type="checkbox" />
                         </td>
                         <td class="text-center">
                           <Field name="it.update" type="checkbox" />
@@ -192,7 +181,14 @@ const PermissionForm = ({ role }) => {
                     </tbody>
                   </table>
                   <button type="submit" className="btn btn-primary mb-3">
-                    Submit
+                    {isSubmitting ? (
+                      <div
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                      ></div>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 </form>
               );

@@ -4,6 +4,7 @@ import { AppProvider } from "../Context/AppContext";
 import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
 import AdminLayout from "../layouts/Admin";
+import RecruitmentLayout from "../layouts/RecruitmentLayout";
 import Login from "../pages/Auth/Login";
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -38,6 +39,21 @@ export default function Router() {
       ],
     },
     {
+      path: "recruitment",
+      element: <RecruitmentLayout />,
+      children: [
+        { path: "", element: <Navigate to="/recruitment/joblist" replace /> },
+        {
+          path: "joblist",
+          element: <JobOpenings />,
+        },
+        {
+          path: "joblist/:id",
+          element: <JobView />,
+        },
+      ],
+    },
+    {
       path: "dashboard",
       element: (
         <AppProvider>
@@ -65,6 +81,7 @@ export default function Router() {
               element: <Navigate to="/dashboard/apps/email" replace />,
             },
             { path: "email", element: <Email /> },
+            { path: "email/:id", element: <ViewEmail /> },
             { path: "email-signature", element: <SignatureGenerator /> },
             { path: "file-manager", element: <FileManager /> },
             { path: "notifications", element: <Notifications /> },
@@ -210,6 +227,16 @@ export default function Router() {
           ],
         },
         {
+          path: "user",
+          children: [
+            {
+              path: "",
+              element: <Navigate to="/dashboard/user/profile/:id" replace />,
+            },
+            { path: "profile/:id", element: <Profile /> },
+          ],
+        },
+        {
           path: "maintenance",
           children: [
             {
@@ -252,6 +279,10 @@ export default function Router() {
 const AllCampaigns = Loadable(
   lazy(() => import("../pages/Campaigns/AllCampaigns"))
 );
+const JobOpenings = Loadable(
+  lazy(() => import("../pages/recruitments/joblist"))
+);
+const JobView = Loadable(lazy(() => import("../pages/recruitments/jobview")));
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AdminDashboard = Loadable(
   lazy(() => import("../pages/Dashboard/AdminDashboard"))
@@ -347,6 +378,7 @@ const CoachingEmployee = Loadable(
   lazy(() => import("../pages/HR/Users/CoachingEmployee"))
 );
 const Email = Loadable(lazy(() => import("../pages/In-Apps/Email")));
+
 const CampaignInfo = Loadable(
   lazy(() => import("../pages/Campaigns/CampaignInfo"))
 );
@@ -399,7 +431,7 @@ const Notifications = Loadable(
 const ExpenseHeads = Loadable(
   lazy(() => import("../pages/ExpenseHeads/ExpenseHeads"))
 );
-const ViewEmail = Loadable(lazy(() => import("../pages/In-Apps/ViewEmail")));
+const ViewEmail = Loadable(lazy(() => import("../pages/In-Apps/SingleEmail")));
 const BalanceSheet = Loadable(
   lazy(() => import("../pages/Reports/BalanceSheet"))
 );
@@ -418,4 +450,8 @@ const SignatureGenerator = Loadable(
 );
 const RolePermission = Loadable(
   lazy(() => import("../pages/settings/roles-permission"))
+);
+
+const RoleAssignment = Loadable(
+  lazy(() => import("../pages/settings/rolesAssignment"))
 );

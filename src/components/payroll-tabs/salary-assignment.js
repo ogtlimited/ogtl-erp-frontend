@@ -10,7 +10,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 const SalaryAssignment = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
-  const { createPayroll } = useAppContext();
+  const { createPayroll, user } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
 
   const fetchSalaryAssignments = (ogid) => {
@@ -82,14 +82,16 @@ const SalaryAssignment = ({ salaryStructure }) => {
     <>
       <div className="tab-pane" id="tab_assignment">
         <div className="text-right mb-4 clearfix">
-          <button
-            className="btn btn-primary add-btn"
-            type="button"
-            data-toggle="modal"
-            data-target="#SalaryAssignmentModal"
-          >
-            <i className="fa fa-plus"></i> Add Assignment
-          </button>
+          {user?.role?.hr?.create && (
+            <button
+              className="btn btn-primary add-btn"
+              type="button"
+              data-toggle="modal"
+              data-target="#SalaryAssignmentModal"
+            >
+              <i className="fa fa-plus"></i> Add Assignment
+            </button>
+          )}
         </div>
         <div className="col-12 mb-2">
           <Select

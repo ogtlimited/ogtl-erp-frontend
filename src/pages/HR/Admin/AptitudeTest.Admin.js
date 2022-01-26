@@ -13,12 +13,12 @@ import moment from "moment";
 const AptitudeTest = () => {
   const [formValue, setFormValue] = useState({});
   const [data, setData] = useState([]);
-  const { showAlert } = useAppContext();
+  const { showAlert, user } = useAppContext();
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState({});
-  const [loadSelect, setloadSelect] = useState(false)
-  
+  const [loadSelect, setloadSelect] = useState(false);
+
   const fetchAllTests = () => {
     axiosInstance
       .get("/api/test")
@@ -58,10 +58,10 @@ const AptitudeTest = () => {
           title: applicationTestFormJson.title,
           Fields: finalForm,
         });
-        console.log('load', loadSelect)
-        if(!loadSelect){
-          setloadSelect(true)
-          console.log(loadSelect)
+        console.log("load", loadSelect);
+        if (!loadSelect) {
+          setloadSelect(true);
+          console.log(loadSelect);
         }
         console.log(template);
       })
@@ -191,16 +191,19 @@ const AptitudeTest = () => {
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            {/* <a
+          {user?.role?.hr?.delete && (
+            <>
+              {" "}
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                {/* <a
               className="dropdown-item"
               onClick={() => {}}
               href="#"
@@ -209,10 +212,12 @@ const AptitudeTest = () => {
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a> */}
-            <a className="dropdown-item" onClick={() => deleteTest(row)}>
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
-          </div>
+                <a className="dropdown-item" onClick={() => deleteTest(row)}>
+                  <i className="fa fa-trash m-r-5"></i> Delete
+                </a>
+              </div>
+            </>
+          )}
         </div>
       ),
     },
@@ -234,7 +239,7 @@ const AptitudeTest = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect &&
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
@@ -243,8 +248,7 @@ const AptitudeTest = () => {
               >
                 Add Aptitude Test
               </a>
-            
-            }
+            )}
           </div>
         </div>
       </div>
@@ -253,15 +257,14 @@ const AptitudeTest = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect &&
+      {loadSelect && (
         <FormModal
           editData={editData}
           setformValue={setFormValue}
           template={applicationTestFormJson}
           setsubmitted={setSubmitted}
         />
-      
-      }
+      )}
     </>
   );
 };

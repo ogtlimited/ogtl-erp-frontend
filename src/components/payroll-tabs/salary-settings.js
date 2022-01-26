@@ -6,7 +6,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
 const SalarySettings = ({ setformType, formValue, submitted }) => {
   const [data, setData] = useState([]);
-  const { showAlert } = useAppContext();
+  const { showAlert, user } = useAppContext();
 
   const handleChange = (type) => {
     console.log(type);
@@ -97,15 +97,17 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
     <>
       <div className="tab-pane" id="tab_settings">
         <div className="text-right mb-4 clearfix">
-          <button
-            className="btn btn-primary add-btn"
-            type="button"
-            onClick={() => handleChange("settings")}
-            data-toggle="modal"
-            data-target="#FormModal"
-          >
-            <i className="fa fa-plus"></i> Add Salary Settings
-          </button>
+          {user?.role?.hr?.create && (
+            <button
+              className="btn btn-primary add-btn"
+              type="button"
+              onClick={() => handleChange("settings")}
+              data-toggle="modal"
+              data-target="#FormModal"
+            >
+              <i className="fa fa-plus"></i> Add Salary Settings
+            </button>
+          )}
         </div>
 
         <LeavesTable data={data} columns={columns} />

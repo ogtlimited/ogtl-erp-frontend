@@ -23,13 +23,20 @@ const ChartOfAccounts = () => {
   const [formValue, setFormValue] = useState(null);
   const [accounts, setAccounts] = useState();
   const [editData, seteditData] = useState(null);
-  const { showAlert, isChecked, setIsChecked, setformUpdate, formUpdate } = useAppContext();
+  const {
+    showAlert,
+    isChecked,
+    setIsChecked,
+    setformUpdate,
+    formUpdate,
+    user,
+  } = useAppContext();
   const [template, setTemplate] = useState(chartOfAccountsFormJson);
   const [selectedRow, setSelectedRow] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [clickedRow, setclickedRow] = useState(null);
 
-  const keys_to_keep = ['_id', 'account_name'];
+  const keys_to_keep = ["_id", "account_name"];
 
   const editRow = (row) => {
     setformUpdate(row);
@@ -46,35 +53,34 @@ const ChartOfAccounts = () => {
   const conditionalDropdown = (row) => {
     return row.is_default ? (
       <div className="dropdown-menu dropdown-menu-right">
-          <a className="dropdown-item">
-              <i className="fa fa-ban m-r-5"></i> Disabled
-          </a>
+        <a className="dropdown-item">
+          <i className="fa fa-ban m-r-5"></i> Disabled
+        </a>
       </div>
-   ) : (
+    ) : (
       <div className="dropdown-menu dropdown-menu-right">
-          <a
-            className="dropdown-item"
-            href="#"
-            data-toggle="modal"
-            data-target="#FormModal"
-            onClick={() => editRow(row)}
-          >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-          </a>
-          <Link
-            className="dropdown-item"
-            data-toggle="modal"
-            data-target="#exampleModal"
-            onClick={() => {
-              setSelectedRow(row);
-            }}
-          >
-              <i className="fa fa-trash m-r-5"></i> Delete
-          </Link>
-    </div>
-  ) ;
-     
-  }
+        <a
+          className="dropdown-item"
+          href="#"
+          data-toggle="modal"
+          data-target="#FormModal"
+          onClick={() => editRow(row)}
+        >
+          <i className="fa fa-pencil m-r-5"></i> Edit
+        </a>
+        <Link
+          className="dropdown-item"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          onClick={() => {
+            setSelectedRow(row);
+          }}
+        >
+          <i className="fa fa-trash m-r-5"></i> Delete
+        </Link>
+      </div>
+    );
+  };
   const columns = [
     {
       dataField: "type",
@@ -108,7 +114,6 @@ const ChartOfAccounts = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          
           <a
             href="#"
             className="action-icon dropdown-toggle"
@@ -118,7 +123,6 @@ const ChartOfAccounts = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           {conditionalDropdown(row)}
-          
         </div>
       ),
     },
@@ -150,9 +154,9 @@ const ChartOfAccounts = () => {
       name: "is_group",
       type: "check",
       title: "Is Group",
-      value: isChecked
-    }
-  ]
+      value: isChecked,
+    },
+  ];
   const otherFields = [
     {
       name: "currency",
@@ -161,17 +165,17 @@ const ChartOfAccounts = () => {
       options: [
         {
           value: "NGN",
-          label: "NGN"
+          label: "NGN",
         },
         {
           value: "USD",
-          label: "USD"
+          label: "USD",
         },
         {
           value: "GPB",
-          label: "GPB"
+          label: "GPB",
         },
-      ]
+      ],
     },
     {
       name: "account_number",
@@ -181,39 +185,42 @@ const ChartOfAccounts = () => {
         value: true,
         message: "Account Number is required",
       },
-    }
-  ]
+    },
+  ];
 
   const dynamicOptions = (formJson, accounts) => {
-    let arr = formJson
-    let fields = formJson.Fields
-    let options = []
-    for(let i=0; i<fields.length; i++){
-      if(fields[i].type === "select"){
-        fields[i].options = accounts
+    let arr = formJson;
+    let fields = formJson.Fields;
+    let options = [];
+    for (let i = 0; i < fields.length; i++) {
+      if (fields[i].type === "select") {
+        fields[i].options = accounts;
       }
     }
 
-    setTemplate({...arr, "Fields": fields})
-  }
+    setTemplate({ ...arr, Fields: fields });
+  };
 
-  
-
-  const redux = array => array.map(o => keys_to_keep.reduce((acc, curr) => {
-    acc[curr] = o[curr];
-    return acc;
-  }, {}));
+  const redux = (array) =>
+    array.map((o) =>
+      keys_to_keep.reduce((acc, curr) => {
+        acc[curr] = o[curr];
+        return acc;
+      }, {})
+    );
 
   const getDescendant = () => {
     axiosInstance
-    .get("/api/account/descendants/616364e9e53c425c741b3fae")
-    .then((res) => {
-      let result = res.data.data.filter(ele => ele.is_group === false).reduce((a, b) => a + b.balance, 0)
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+      .get("/api/account/descendants/616364e9e53c425c741b3fae")
+      .then((res) => {
+        let result = res.data.data
+          .filter((ele) => ele.is_group === false)
+          .reduce((a, b) => a + b.balance, 0);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const deleteAccount = (row) => {
     axiosInstance
@@ -233,62 +240,62 @@ const ChartOfAccounts = () => {
 
   const fetchAccounts = () => {
     axiosInstance
-    .get("/api/account")
-    .then((res) => {
-      let arr = res.data.data.filter((ele) => {
-        if(ele.slug === "account-receivable"){
-          setAccountReceivable(ele.balance)
-        } else if(ele.slug === "account-payable"){
-          setAccountPayable(ele.balance)
-        } else if(ele.slug === "cash"){
-          setBank(ele.balance)
-        }
-        return ele.is_group === true
-      })
-
-      let accounts = res.data.data.filter((ele) => {
-        return ele.is_group === false
-      })
-
-      accounts.map(ele => {
-        ele["type"] = ele.ancestors[0].slug
-      })
-      let reducedArr = redux(arr)
-
-      reducedArr.map(obj => {
-        Object.keys(obj).map( key => {
-          if (key.match('_id')){
-              obj['value'] = obj[key];
-              delete obj[key];
-          } else if(key.match('account_name')){
-              obj['label'] = obj[key];
-              delete obj[key];
+      .get("/api/account")
+      .then((res) => {
+        let arr = res.data.data.filter((ele) => {
+          if (ele.slug === "account-receivable") {
+            setAccountReceivable(ele.balance);
+          } else if (ele.slug === "account-payable") {
+            setAccountPayable(ele.balance);
+          } else if (ele.slug === "cash") {
+            setBank(ele.balance);
           }
-        })
+          return ele.is_group === true;
+        });
+
+        let accounts = res.data.data.filter((ele) => {
+          return ele.is_group === false;
+        });
+
+        accounts.map((ele) => {
+          ele["type"] = ele.ancestors[0].slug;
+        });
+        let reducedArr = redux(arr);
+
+        reducedArr.map((obj) => {
+          Object.keys(obj).map((key) => {
+            if (key.match("_id")) {
+              obj["value"] = obj[key];
+              delete obj[key];
+            } else if (key.match("account_name")) {
+              obj["label"] = obj[key];
+              delete obj[key];
+            }
+          });
+        });
+
+        setData(reducedArr);
+        setAccounts(accounts);
+        dynamicOptions(template, reducedArr);
+        getDescendant();
       })
-      
-      setData(reducedArr);
-      setAccounts(accounts)
-      dynamicOptions(template, reducedArr)
-      getDescendant()
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    fetchAccounts()
-  }, [])
+    fetchAccounts();
+  }, []);
 
   //create new client
   useEffect(() => {
     if (formValue) {
       if (!editData) {
-        if(formValue.is_group.length === 0){
-          formValue["is_group"] = false
+        if (formValue.is_group.length === 0) {
+          formValue["is_group"] = false;
         }
-        formValue["is_default"] = false
-        formValue["balance"] = 0
+        formValue["is_default"] = false;
+        formValue["balance"] = 0;
         axiosInstance
           .post("/api/account", formValue)
           .then((res) => {
@@ -303,16 +310,16 @@ const ChartOfAccounts = () => {
           });
       } else {
         formValue._id = editData._id;
-        delete formValue.__v
-        delete formValue._id
-        delete formValue.createdAt
-        delete formValue.updatedAt
-        delete formValue.is_group
-        delete formValue.is_default
-        delete formValue.parent
-        delete formValue.ancestors
-        delete formValue.slug
-        delete formValue.type
+        delete formValue.__v;
+        delete formValue._id;
+        delete formValue.createdAt;
+        delete formValue.updatedAt;
+        delete formValue.is_group;
+        delete formValue.is_default;
+        delete formValue.parent;
+        delete formValue.ancestors;
+        delete formValue.slug;
+        delete formValue.type;
         axiosInstance
           .patch("/api/account/" + editData._id, formValue)
           .then((res) => {
@@ -339,14 +346,16 @@ const ChartOfAccounts = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-plus"></i> New Account
-            </a>
+            {user?.role?.account?.create && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> New Account
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -359,7 +368,7 @@ const ChartOfAccounts = () => {
                   <i class={card.icon}></i>
                 </span>
                 <div class="dash-widget-info">
-                  <h3>₦ {" "}{card.amount}</h3>
+                  <h3>₦ {card.amount}</h3>
                   <span>{card.title}</span>
                 </div>
               </div>
@@ -372,30 +381,31 @@ const ChartOfAccounts = () => {
           <LeavesTable columns={columns} data={accounts} />
         </div>
       </div>
-      { isChecked ? (
+      {isChecked ? (
         <FormModal2
-        title="Create New Account"
-        editData={editData }
-        setformValue={setFormValue }
-        template={helper.formArrayToObject(template.Fields.concat(checkbox))}
-        setsubmitted={setSubmitted}
-      />
+          title="Create New Account"
+          editData={editData}
+          setformValue={setFormValue}
+          template={helper.formArrayToObject(template.Fields.concat(checkbox))}
+          setsubmitted={setSubmitted}
+        />
       ) : (
         <FormModal2
-        title="Create New Account"
-        editData={editData}
-        setformValue={setFormValue}
-        template={helper.formArrayToObject(otherFields.concat(template.Fields.concat(checkbox)))}
-        setsubmitted={setSubmitted}
-      />
-      ) }
+          title="Create New Account"
+          editData={editData}
+          setformValue={setFormValue}
+          template={helper.formArrayToObject(
+            otherFields.concat(template.Fields.concat(checkbox))
+          )}
+          setsubmitted={setSubmitted}
+        />
+      )}
 
       <ConfirmModal
         title="Vendor"
         selectedRow={selectedRow}
         deleteFunction={deleteAccount}
       />
-      
     </>
   );
 };

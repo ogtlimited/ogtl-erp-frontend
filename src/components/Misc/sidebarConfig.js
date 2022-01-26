@@ -19,6 +19,7 @@ const ICONS = {
   purchaseOrder: getIcon("la-shopping-cart"),
   productItems: getIcon("la-box"),
   settings: getIcon("la-shopping-cart"),
+  rolesAssignment: getIcon("la-lock"),
 };
 
 const sidebarConfig = [
@@ -428,6 +429,12 @@ const sidebarConfig = [
         title: "Roles & Permission",
         path: PATH_DASHBOARD.settings.rolesPermission,
         icon: ICONS.rolesPermission,
+      },
+      {
+        canView: "HR",
+        title: "Roles Assignment",
+        path: PATH_DASHBOARD.settings.rolesAssignment,
+        icon: ICONS.rolesAssignment,
       },
     ],
   },

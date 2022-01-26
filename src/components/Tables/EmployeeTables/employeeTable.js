@@ -18,6 +18,7 @@ import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
 const EmployeesTable = ({
@@ -27,7 +28,7 @@ const EmployeesTable = ({
   filters,
   seteditData,
   setmode,
-  loadForm
+  loadForm,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -37,38 +38,33 @@ const EmployeesTable = ({
   const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
+  const { user } = useAppContext();
 
-  useEffect(() => {
-  
-  }, [filters, loadForm])
+  useEffect(() => {}, [filters, loadForm]);
   const handleClick = (i, type) => {
-    console.log(i, unfiltered)
+    console.log(i, unfiltered);
     if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) =>
-        i.value == e[type]?._id
-      );
-      console.log(filt)
+      const filt = unfiltered.filter((e) => i.value == e[type]?._id);
+      console.log(filt);
       setAllEmployee(filt);
-
     }
   };
-  const handleEdit =(row) =>{
-    let hash = {}
-    seteditData(null)
-    for(let d in row){
-      if(typeof row[d] == 'object' && row[d] !== null){
-        hash[d] = row[d]._id
-      }else{
-        hash[d] = row[d]
+  const handleEdit = (row) => {
+    let hash = {};
+    seteditData(null);
+    for (let d in row) {
+      if (typeof row[d] == "object" && row[d] !== null) {
+        hash[d] = row[d]._id;
+      } else {
+        hash[d] = row[d];
       }
-     
     }
-    setmode("edit")
-    console.log(hash)
-    seteditData(hash)
-  }
+    setmode("edit");
+    console.log(hash);
+    seteditData(hash);
+  };
   const clearFilter = (e) => {
     e.preventDefault();
     // attendaceDateFilter('')
@@ -111,7 +107,7 @@ const EmployeesTable = ({
               }
             />
           </a>
-          <Link to={`/admin/profile-dashboard/${row._id}`}>
+          <Link to={`/dashboard/user/profile/${row._id}`}>
             {row.first_name} {row.last_name}{" "}
             <span>{row?.designation?.designation}</span>
           </Link>
@@ -164,9 +160,7 @@ const EmployeesTable = ({
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val,row) =>(
-        <span>{val?.department.toUpperCase()}</span>
-      )
+      formatter: (val, row) => <span>{val?.department.toUpperCase()}</span>,
     },
     {
       dataField: "designation.designation",
@@ -187,32 +181,29 @@ const EmployeesTable = ({
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <>
-        {filters &&
-
-
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              onClick={() => handleEdit(row)}
-              href="#"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-           
-          </div>
-        </div>
-         }
+          {filters && user?.role?.hr?.update && (
+            <div className="dropdown dropdown-action text-right">
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleEdit(row)}
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#FormModal"
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </a>
+              </div>
+            </div>
+          )}
         </>
       ),
     },
@@ -236,37 +227,31 @@ const EmployeesTable = ({
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
               <div className="d-flex row mb-3">
-               
-                {filters && filters.map(f =>(
-                   <div className="col-md-3">
-                   <Select
-                     defaultValue={selectedOption}
-                     onChange={(i) => handleClick(i, f.name)}
-                     options={f.options}
-                     placeholder={f.placeholder}
-                     isClearable={true}
-                     style={{ display: "inline-block" }}
-                     // formatGroupLabel={formatGroupLabel}
-                   />
-   
-                   </div>
-                ))}
-               <div className="col-md-3 pt-3 float-right">
-               {filters &&
-                  <ExportCSVButton
-                    className="float-right btn export-csv"
-                    {...props.csvProps}
-                  >
-                    Export CSV
-                  </ExportCSVButton>
-               
-               }
-
-               </div>
-                
-
+                {filters &&
+                  filters.map((f) => (
+                    <div className="col-md-3">
+                      <Select
+                        defaultValue={selectedOption}
+                        onChange={(i) => handleClick(i, f.name)}
+                        options={f.options}
+                        placeholder={f.placeholder}
+                        isClearable={true}
+                        style={{ display: "inline-block" }}
+                        // formatGroupLabel={formatGroupLabel}
+                      />
+                    </div>
+                  ))}
+                <div className="col-md-3 pt-3 float-right">
+                  {filters && (
+                    <ExportCSVButton
+                      className="float-right btn export-csv"
+                      {...props.csvProps}
+                    >
+                      Export CSV
+                    </ExportCSVButton>
+                  )}
+                </div>
               </div>
-
 
               <BootstrapTable
                 {...props.baseProps}

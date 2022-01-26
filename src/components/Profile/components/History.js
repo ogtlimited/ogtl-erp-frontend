@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import moment from "moment";
 import tokenService from "../../../services/token.service";
 import { useAppContext } from "../../../Context/AppContext";
@@ -86,14 +86,14 @@ const History = ({
         <h3 className="card-title">
           History
           {canView(user, "HR") && (
-            <Link
+            <a
               className="edit-icon"
               onClick={() => handleChange("History")}
               data-toggle="modal"
               data-target="#FormModal"
             >
               <i className="fa fa-pencil"></i>
-            </Link>
+            </a>
           )}
         </h3>
         <div className="table-responsive">
@@ -123,7 +123,7 @@ const History = ({
                   <td className="text-right">
                     {hist && (
                       <div className="dropdown dropdown-action">
-                        <Link
+                        <a
                           aria-expanded="false"
                           data-toggle="dropdown"
                           className="action-icon dropdown-toggle"
@@ -132,16 +132,16 @@ const History = ({
                             className="fa fa-ellipsis-v"
                             aria-hidden="true"
                           ></i>
-                        </Link>
+                        </a>
                         <div className="dropdown-menu dropdown-menu-right">
-                          <Link className="dropdown-item">
+                          <a className="dropdown-item">
                             <i className="fa fa-pencil m-r-5"></i>
                             Edit
-                          </Link>
-                          <Link className="dropdown-item">
+                          </a>
+                          <a className="dropdown-item">
                             <i className="fa fa-trash-o m-r-5"></i>
                             Delete
-                          </Link>
+                          </a>
                         </div>
                       </div>
                     )}

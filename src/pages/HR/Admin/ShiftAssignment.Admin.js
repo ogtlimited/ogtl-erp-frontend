@@ -32,7 +32,7 @@ const ShiftAssignment = () => {
   const [clickedRow, setclickedRow] = useState(null);
   const [shiftsOpt, setShiftOpts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const { createShifts, showAlert, setformUpdate } = useAppContext();
+  const { createShifts, showAlert, setformUpdate, user } = useAppContext();
   const [loadSelect, setloadSelect] = useState(false);
   const [mode, setmode] = useState("add");
   const create = () => {
@@ -242,24 +242,28 @@ const ShiftAssignment = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#FormModal"
-              onClick={() => editRow(helper.handleEdit(row))}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            {user?.role?.hr?.update && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => editRow(helper.handleEdit(row))}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+            {user?.role?.hr?.delete && (
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -282,7 +286,7 @@ const ShiftAssignment = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && (
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"

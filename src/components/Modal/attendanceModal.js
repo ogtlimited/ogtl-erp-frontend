@@ -63,7 +63,7 @@ const AttendanceModal = ({
           console.log("resultssss", result);
 
           setinvalid(false);
-          setData(result);
+          setData("attendances:", result);
         },
       });
     }
