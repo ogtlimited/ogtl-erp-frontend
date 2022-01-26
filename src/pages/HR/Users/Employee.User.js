@@ -255,7 +255,7 @@ const EmployeeUser = () => {
               <div className="card">
                 <div className="card-body text-center">
                   <h4 className="holiday-title mb-0">
-                    {getNextHoliday().date} - {getNextHoliday().holiday_name}
+                    {getNextHoliday()?.date} - {getNextHoliday()?.holiday_name}
                   </h4>
                 </div>
               </div>

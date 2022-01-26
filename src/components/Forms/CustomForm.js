@@ -64,11 +64,6 @@ const CustomForm = ({ template, data, handleform }) => {
                   {...register(name)}
                   className="form-control"
                   type="number"
-                  pattern="[0-9]*"
-                  data-politespace
-                  data-grouplength="3"
-                  data-delimiter=","
-                  data-reverse
                 />
               </div>
               {errors[name] && <small>{errors[name].message}</small>}

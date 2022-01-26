@@ -5,7 +5,7 @@ import DashboardStatistics from "../../components/charts/dashboard-statistics";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import DashboardTable from "../../components/Tables/Dashboard/dashboard-table";
 import axiosInstance from "../../services/api";
-export const AccountingDashboard = () => {
+const AccountingDashboard = () => {
   const [invoices, setInvoices] = useState([]);
   const [payments, setPayments] = useState([]);
   const sampleStats = [
@@ -147,3 +147,4 @@ export const AccountingDashboard = () => {
     </div>
   );
 };
+export default  AccountingDashboard

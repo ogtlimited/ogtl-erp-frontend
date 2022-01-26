@@ -74,10 +74,10 @@ export const PATH_DASHBOARD = {
     rolesAssignment: path(ROOTS_DASHBOARD, "/settings/roles-assignment"),
   },
   campaign: {
-    root: path(ROOTS_DASHBOARD, "/campaign"),
-    allCampaign: path(ROOTS_DASHBOARD, "/campaign/all"),
-    lead: path(ROOTS_DASHBOARD, "/campaign/leads"),
-    branch: path(ROOTS_DASHBOARD, "/campaign/branch"),
+    root: path(ROOTS_DASHBOARD, "/operations"),
+    allCampaign: path(ROOTS_DASHBOARD, "/operations/campaigns"),
+    lead: path(ROOTS_DASHBOARD, "/operations/leads"),
+    branch: path(ROOTS_DASHBOARD, "/operations/branch"),
   },
   accounts: {
     root: path(ROOTS_DASHBOARD, "/accounts"),

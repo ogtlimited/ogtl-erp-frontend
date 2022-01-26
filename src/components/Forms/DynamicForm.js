@@ -21,7 +21,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
-  console.log('formSchema DHSHDHSH', formSchema)
+
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -32,11 +32,9 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
     }
   }, []);
   useEffect(() => {
-    // console.log(value)
     setFormData(value);
   }, [value]);
   useEffect(() => {
-    // console.log(formUpdate);
     initForm(formSchema, formUpdate);
     seteditRow(value);
   }, [formUpdate]);
@@ -68,7 +66,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       }
 
       if (formSchema[key].required) {
-        // console.log(formSchema[key], key);
         _validationSchema[key] = _validationSchema[key]?.required("Field Required");
       }
     }
@@ -77,7 +74,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   };
 
   const getFormElement = (elementName, elementSchema, setFieldValue, value) => {
-    // console.log(value);
     const props = {
       name: elementName,
       label: elementSchema.label,
@@ -124,16 +120,11 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   };
 
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
-    console.log(values)
     $("#FormModal").modal("toggle");
     setvalue(values);
     setformSubmitted(true)
-    // setSubmitting(false);
-    // resetForm({});
-    console.log('form reset')
-    
   };
-  // console.log(formData)
+
   return (
     <div className="App">
       <Formik
@@ -148,7 +139,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
           handleSubmit,
           setFieldValue
         } = props;
-        // console.log(formData);
         return (
           <form onSubmit={handleSubmit}>
           <div class="row">

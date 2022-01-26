@@ -54,7 +54,7 @@ export const jobOpeningFormJson = {
     {
       name: "type",
       type: "select",
-      title: "Job Type",
+      title: "Mode of engagement",
       options: [
         {
           value: "Full Time",

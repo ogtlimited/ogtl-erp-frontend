@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import AttendanceTable from "../../../components/attendance/attendance-table";
+import GeneralUpload from "../../../components/Modal/GeneralUpload";
 import AdminAttendanceTable from "../../../components/Tables/EmployeeTables/AttendanceTable";
 import AttendanceModal from "../../../components/Modal/attendanceModal";
 import { useAppContext } from "../../../Context/AppContext";
@@ -14,9 +15,6 @@ const AttendanceAdmin = () => {
   const [designation, setdesignation] = useState([]);
   const [projects, setprojects] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
-  const [uploading, setuploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
       console.log(res);
@@ -123,7 +121,7 @@ const AttendanceAdmin = () => {
     <>
       <div className="page-header">
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col">
             <h3 className="page-title">Attendance</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
@@ -133,16 +131,14 @@ const AttendanceAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <button
-              onClick={() => settoggleModal(true)}
-              type="button"
-              class="btn add-btn mx-3"
+            <a
+              className="btn add-btn m-r-5"
               data-toggle="modal"
-              data-target="#attendanceModal"
+              data-target="#uploadAttendance"
+              onClick={() => settoggleModal(true)}
             >
-              <i className="fa fa-cloud-upload"></i>
               Upload Attendance
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -156,16 +152,24 @@ const AttendanceAdmin = () => {
             designation={designation}
             departments={departments}
           />
-          {toggleModal && (
+          {/* {toggleModal && (
             <AttendanceModal
               setUploadSuccess={setUploadSuccess}
               setuploading={setuploading}
               settoggleModal={settoggleModal}
               fetchedCombineRequest={fetchedCombineRequest}
             />
-          )}
+          )} */}
         </div>
       </div>
+
+      {toggleModal && (
+        <GeneralUpload
+          settoggleModal={settoggleModal}
+          title="Upload Attendance"
+          url="'/api/attendance/bulk'"
+        />
+      )}
     </>
   );
 };

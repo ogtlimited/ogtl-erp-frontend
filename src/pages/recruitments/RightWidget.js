@@ -1,16 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 
 const RightWidget = ({state}) => {
-    
+    const [id, setid] = useState(useParams())
     return (
         <>
           <div  class="job-det-info job-widget">
-              <a
+              {/* <a
                  data-toggle="modal"
-                 data-target="#apply_job" class="btn job-btn">Apply For This Job</a>
+                 data-target="#apply_job" class="btn job-btn">Apply For This Job</a> */}
+              <Link
+                class="btn job-btn"
+                 to={"/recruitment/apply/" + id.id}>Apply For This Job</Link>
             <div  class="info-list"><span ><i 
                         class="fa fa-bar-chart"></i></span>
-                <h5 >Job Type</h5>
+                <h5 >Mode of Engagement</h5>
                 <p> {state?.type}</p>
             </div>
             <div  class="info-list"><span ><i 
