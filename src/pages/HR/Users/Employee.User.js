@@ -210,7 +210,7 @@ const EmployeeUser = () => {
                       <p>Leave Taken</p>
                     </div>
                     <div className="dash-stats-list">
-                      <h4>{leaveRemaining}</h4>
+                      <h4>{user.leaveCount}</h4>
                       <p>Remaining</p>
                     </div>
                   </div>
