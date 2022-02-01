@@ -238,7 +238,7 @@ const sidebarConfig = [
       },
       {
         canView: "HR",
-        title: "Promomotion",
+        title: "Promotion",
         path: PATH_DASHBOARD.promotion,
         icon: ICONS.promotion,
       },
@@ -324,82 +324,7 @@ const sidebarConfig = [
           },
         ],
       },
-      {
-        canView: "HR",
-        title: "Recruitment",
-        path: PATH_DASHBOARD.recruitment.root,
-        icon: ICONS.recruitment,
-        children: [
-          {
-            canView: "HR",
-            title: "Job Opening",
-            path: PATH_DASHBOARD.recruitment.jobOpening,
-          },
-          {
-            canView: "HR",
-            title: "Job Applicants",
-            path: PATH_DASHBOARD.recruitment.jobApplicants,
-          },
-          {
-            canView: "HR",
-            title: "Apptitude Test",
-            path: PATH_DASHBOARD.recruitment.aptitudeTests,
-          },
-          {
-            canView: "HR",
-            title: "Job Offer",
-            path: PATH_DASHBOARD.recruitment.jobOffer,
-          },
-        ],
-      },
-      {
-        canView: "HR",
-        title: "Performance",
-        path: PATH_DASHBOARD.performance.root,
-        icon: ICONS.performance,
-        children: [
-          {
-            canView: "HR",
-            title: "Warning Letter",
-            path: PATH_DASHBOARD.performance.warningLetter,
-          },
-          {
-            canView: "HR",
-            title: "Score Cards",
-            path: PATH_DASHBOARD.performance.scoreCards,
-          },
-        ],
-      },
-      {
-        canView: "",
-        title: "Coaching Form List",
-        path: PATH_DASHBOARD.coaching,
-        icon: ICONS.coaching,
-      },
-      {
-        canView: "All",
-        title: "Coaching Form",
-        path: PATH_DASHBOARD.employeeCoaching,
-        icon: ICONS.coaching,
-      },
-      {
-        canView: "HR",
-        title: "Promomotion",
-        path: PATH_DASHBOARD.promotion,
-        icon: ICONS.promotion,
-      },
-      {
-        canView: "HR",
-        title: "Resignation",
-        path: PATH_DASHBOARD.resignation,
-        icon: ICONS.resignation,
-      },
-      {
-        canView: "HR",
-        title: "Termination",
-        path: PATH_DASHBOARD.termination,
-        icon: ICONS.termination,
-      },
+
     ],
   },
   {
