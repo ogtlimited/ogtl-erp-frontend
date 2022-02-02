@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import config from "../../config.json";
-import joblistings from "./job.json";
+
 import RecruitmentPageHeader from "./PageHeader";
 import axios from "axios";
 import moment from "moment";
@@ -14,9 +14,6 @@ const Joblist = () => {
       if (res.data.data.length) {
         console.log("some data");
         setjobListings(res.data.data);
-      } else {
-        setjobListings(joblistings);
-        console.log("No data");
       }
     });
   };
@@ -82,26 +79,26 @@ const Joblist = () => {
               <Link to={"/recruitment/joblist/" + job._id} class="job-list">
                 <div class="job-list-det">
                   <div class="job-list-desc">
-                    <h3 class="job-list-title">{job.title}</h3>
+                    <h3 class="job-list-title">{job?.title}</h3>
                     <h4 class="job-department">
-                      {job.designation_id.designation}
+                      {job?.designation_id?.designation}
                     </h4>
                   </div>
                   <div class="job-type-info">
-                    <span class="job-types">{job.type}</span>
+                    <span class="job-types">{job?.type}</span>
                   </div>
                 </div>
                 <div class="job-list-footer">
                   <ul>
                     <li>
-                      <i class="fa fa-map-signs"></i> {job.location.branch}
+                      <i class="fa fa-map-signs"></i> {job?.location.branch}
                     </li>
                     <li>
-                      <i class="fa fa-money"></i> ₦{job.salary}
+                      <i class="fa fa-money"></i> ₦{job?.salary}
                     </li>
                     <li>
                       <i class="fa fa-clock-o"></i>
-                      {job.date ? moment(new Date(job.date)).fromNow(true) : ""}
+                      {job.date ? moment(new Date(job?.date)).fromNow(true) : ""}
                     </li>
                   </ul>
                 </div>
