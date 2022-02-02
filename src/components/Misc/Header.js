@@ -108,7 +108,7 @@ const Header = () => {
           <div className="dropdown-menu">
             <Link
               className="dropdown-item"
-              to={`/admin/profile-dashboard/${user?._id}`}
+              to={`/dashboard/user/profile/${user?._id}`}
             >
               My Profile
             </Link>
@@ -134,7 +134,7 @@ const Header = () => {
         <div className="dropdown-menu dropdown-menu-right">
           <Link
             className="dropdown-item"
-            to={`/admin/profile-dashboard/${user?._id}`}
+            to={`/dashboard/user/profile/${user?._id}`}
           >
             My Profile
           </Link>
