@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import BankInformation from "./components/BankInformation";
 import ContactDetails from "./components/ContactDetails";
 import EducationInformation from "./components/EducationInformation";
@@ -11,6 +11,8 @@ import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
 import avater4 from "../../assets/img/female_avatar.png";
 import avater5 from "../../assets/img/female_avatar2.png";
+import EmployeePromotions from "./promotions";
+import EmployeeWarningLetters from "./warningLetters";
 const ProfileCards = ({
   setformType,
   userData,
@@ -19,17 +21,23 @@ const ProfileCards = ({
   setFormValue,
   fetchUserInfo,
 }) => {
-  const [employeeDetails, setemployeeDetails] = useState({})
-  const [campaign, setcampaign] = useState({})
-  const [avaterList, setavaterList] = useState([avater, avater2, avater3, avater4, avater5])
+  const [employeeDetails, setemployeeDetails] = useState({});
+  const [campaign, setcampaign] = useState({});
+  const [avaterList, setavaterList] = useState([
+    avater,
+    avater2,
+    avater3,
+    avater4,
+    avater5,
+  ]);
   const handleChange = (type) => {
     setformType(type);
   };
   useEffect(() => {
     // console.log(userData.employee)
-    setemployeeDetails(userData?.employee)
-    setcampaign(userData?.employee?.projectId)
-  }, [userData])
+    setemployeeDetails(userData?.employee);
+    setcampaign(userData?.employee?.projectId);
+  }, [userData]);
   return (
     <>
       <div className="card tab-box">
@@ -58,6 +66,20 @@ const ProfileCards = ({
                 >
                   Bank &amp; Statutory{" "}
                   <small className="text-danger">(Admin Only)</small>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#promotions" data-toggle="tab" className="nav-link">
+                  Promotions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#warning_letters"
+                  data-toggle="tab"
+                  className="nav-link"
+                >
+                  Warning Letters
                 </a>
               </li>
             </ul>
@@ -150,12 +172,12 @@ const ProfileCards = ({
                     <a href="">{campaign?.project_name}</a>
                   </h4>
 
-                  <p class="text-muted">
-                   {campaign?.objectives}
-                  </p>
+                  <p class="text-muted">{campaign?.objectives}</p>
                   <div class="pro-deadline m-b-15">
                     <div class="sub-title">Start date:</div>
-                    <div class="text-muted">{new Date(campaign?.start_date).toDateString()}</div>
+                    <div class="text-muted">
+                      {new Date(campaign?.start_date).toDateString()}
+                    </div>
                   </div>
                   <div class="project-members m-b-15">
                     <div>Team Leader :</div>
@@ -175,23 +197,36 @@ const ProfileCards = ({
                   <div class="project-members m-b-15">
                     <div>Team :</div>
                     <ul class="team-members">
-                      {campaign?.number_of_employees && 
-                      Array(campaign.number_of_employees).fill(1).slice(0,4).map((e, i) => (
-                          <li>
-                            <a
-                              href="#"
-                              data-toggle="tooltip"
-                              title=""
-                              data-original-title=""
-                            >
-                              <img alt="" src={avaterList[Math.floor(Math.random() * avaterList.length)]} />
-                            </a>
-                          </li>
-
-                      ))}
+                      {campaign?.number_of_employees &&
+                        Array(campaign.number_of_employees)
+                          .fill(1)
+                          .slice(0, 4)
+                          .map((e, i) => (
+                            <li>
+                              <a
+                                href="#"
+                                data-toggle="tooltip"
+                                title=""
+                                data-original-title=""
+                              >
+                                <img
+                                  alt=""
+                                  src={
+                                    avaterList[
+                                      Math.floor(
+                                        Math.random() * avaterList.length
+                                      )
+                                    ]
+                                  }
+                                />
+                              </a>
+                            </li>
+                          ))}
                       <li>
                         <a href="#" class="all-users">
-                          {campaign?.number_of_employees <= 4 ? campaign?.number_of_employees : '+' + (campaign?.number_of_employees - 4)}
+                          {campaign?.number_of_employees <= 4
+                            ? campaign?.number_of_employees
+                            : "+" + (campaign?.number_of_employees - 4)}
                         </a>
                       </li>
                     </ul>
@@ -306,6 +341,12 @@ const ProfileCards = ({
               </form>
             </div>
           </div>
+        </div>
+        <div id="promotions" className="pro-overview tab-pane fade">
+          <EmployeePromotions />
+        </div>
+        <div id="warning_letters" className="pro-overview tab-pane fade">
+          <EmployeeWarningLetters />
         </div>
       </div>
     </>
