@@ -196,7 +196,7 @@ const sidebarConfig = [
           },
           {
             canView: "HR",
-            title: "Apptitude Test",
+            title: "Interview",
             path: PATH_DASHBOARD.recruitment.aptitudeTests,
           },
           {
@@ -280,7 +280,7 @@ const sidebarConfig = [
             canView: "All",
             title: "Branch",
             path: PATH_DASHBOARD.campaign.branch,
-          }
+          },
         ],
       },
       {
@@ -324,7 +324,6 @@ const sidebarConfig = [
           },
         ],
       },
-
     ],
   },
   {
