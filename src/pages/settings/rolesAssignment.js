@@ -14,6 +14,7 @@ const RoleAssignment = () => {
   const [formValue, setFormValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [allRoles, setallRoles] = useState([]);
   const [data, setData] = useState([]);
   const [template, settemplate] = useState({});
   const [roleOpts, setRoleOpts] = useState(null);
@@ -36,6 +37,7 @@ const RoleAssignment = () => {
     createRoleAssignment()
       .then((res) => {
         const { employees, roles } = res.data.createRoleAssignment;
+        setallRoles(roles)
         const employeeOpts = employees?.map((e) => {
           return {
             label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
@@ -85,8 +87,15 @@ const RoleAssignment = () => {
   };
   useEffect(() => {
     if (formValue) {
+      console.log(formValue);
+      let role = allRoles.filter(e => e._id === formValue.role)[0]
+      console.log(role);
+      let obj = {
+        ...formValue,
+        isRepSiever: role.title === 'HR In-House Agent' ? true : false
+      }
       axiosInstance
-        .put("/employees/update-role/" + formValue._id, formValue)
+        .put("/employees/update-role/" + formValue._id, obj)
         .then((res) => {
           setFormValue(null);
           console.log(res.data);
