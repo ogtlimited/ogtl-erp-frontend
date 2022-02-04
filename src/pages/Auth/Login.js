@@ -44,8 +44,8 @@ const Login = () => {
             // fetchEmployeeAttendance()
             tokenService.setToken(res.data.token.token);
             // setuserToken(res.data.token.token)
-            navigate("/dashboard/employee-dashboard");
-            // window.location.href = "/admin/employee-dashboard";
+            // navigate("/dashboard/employee-dashboard");
+            window.location.href = "/dashboard/employee-dashboard";
           })
           .catch((err) => {
             console.log(err);

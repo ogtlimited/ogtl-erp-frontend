@@ -158,12 +158,6 @@ const AptitudeTest = () => {
         </>
       ),
     },
-
-    {
-      dataField: "score",
-      text: "Score",
-      sort: true,
-    },
     {
       dataField: "interview_date",
       text: "Interview Date",
@@ -175,6 +169,132 @@ const AptitudeTest = () => {
     {
       dataField: "phone_number",
       text: "Phone Number",
+      sort: true,
+    },
+    {
+      dataField: "interviewer",
+      text: "Interviewer",
+      sort: true,
+    },
+    {
+      dataField: "email_address",
+      text: "Email Address",
+      sort: true,
+    },
+    {
+      dataField: "typing_speed_score",
+      text: "Typing Speed Score",
+      sort: true,
+    },
+    {
+      dataField: "typing_accuracy_score",
+      text: "Typing Accuracy Score/100",
+      sort: true,
+    },
+    {
+      dataField: "accent_test_score",
+      text: "Accent Test Score/100",
+      sort: true,
+    },
+    {
+      dataField: "attention_to_details_test",
+      text: "Attention to Details Test/6",
+      sort: true,
+    },
+    {
+      dataField: "multitasking_skills_test",
+      text: "Multitasking Skills Test/6",
+      sort: true,
+    },
+    {
+      dataField: "dictation_test",
+      text: "Dictation Test/10",
+      sort: true,
+    },
+    {
+      dataField: "professional_writing_email_test",
+      text: "Professional Writing Email Test/10",
+      sort: true,
+    },
+    {
+      dataField: "send_for_testGorilla_skype_interview",
+      text: "Send for Testgorilla/Skype/Interview?",
+      sort: true,
+    },
+    {
+      dataField: "testGorilla_invitation_date",
+      text: "Testgorilla Invitation Date",
+      sort: true,
+      formatter: (value, row) => (
+        <h2>{moment(row?.testGorilla_invitation_date).format("L")}</h2>
+      ),
+    },
+    {
+      dataField: "assessment_completion_date",
+      text: "Assessment Completion Date",
+      sort: true,
+      formatter: (value, row) => (
+        <h2>{moment(row?.assessment_completion_date).format("L")}</h2>
+      ),
+    },
+    {
+      dataField: "stage",
+      text: "Stage",
+      sort: true,
+    },
+    {
+      dataField: "average_score",
+      text: "Average Score",
+      sort: true,
+    },
+    {
+      dataField: "personality_score",
+      text: "16 Types Personality Score",
+      sort: true,
+    },
+    {
+      dataField: "attention_to_detail_score",
+      text: "Attention to Detail (textual) Score",
+      sort: true,
+    },
+    {
+      dataField: "communication_score",
+      text: "Communication Score",
+      sort: true,
+    },
+    {
+      dataField: "disc_profile_score",
+      text: "DISC Profile Score",
+      sort: true,
+    },
+    {
+      dataField: "english_score",
+      text: "English (intermediate/B1) Score",
+      sort: true,
+    },
+    {
+      dataField: "filed_out_only_once_from_ip_address",
+      text: "Filled Out Only Once From IP Address?",
+      sort: true,
+    },
+    {
+      dataField: "webcam_enabled",
+      text: "Webcam Enabled?",
+      sort: true,
+    },
+    {
+      dataField: "full_screen_mode_always_active",
+      text: "Full-Screen Mode Always Active?",
+      sort: true,
+    },
+    {
+      dataField: "mouse_always_in_assessment_window",
+      text: "Mouse Always In Assessment Window?",
+      sort: true,
+    },
+    {
+      dataField: "interviewer_rating",
+      text: "Interviewer's Rating",
       sort: true,
     },
     {
@@ -227,7 +347,7 @@ const AptitudeTest = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Aptitude Test List</h3>
+            <h3 className="page-title">Interview List</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
@@ -235,18 +355,19 @@ const AptitudeTest = () => {
               <li className="breadcrumb-item">
                 <Link to="/">Employees</Link>
               </li>
-              <li className="breadcrumb-item active">Aptitude Test List</li>
+              <li className="breadcrumb-item active">Interview List</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && user?.role?.hr?.create && (
+            {/* && user?.role?.hr?.create */}
+            {loadSelect && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
               >
-                Add Aptitude Test
+                Add New Interview
               </a>
             )}
           </div>
@@ -254,7 +375,7 @@ const AptitudeTest = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <LeavesTable data={data} columns={columns} />
+          <LeavesTable data={data} columns={columns} context="interview" />
         </div>
       </div>
       {loadSelect && (

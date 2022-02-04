@@ -8,6 +8,8 @@ import { ApproverBtn } from "../../../components/ApproverBtn";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Select from "react-select";
 import helper from "../../../services/helper";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import { InterviewStatusOptions } from "../../../constants";
 
 const jobOpts = [
   {
@@ -148,6 +150,23 @@ const JobApplicants = () => {
         <a href={value} class="btn btn-sm btn-primary" download>
           <i class="fa fa-download"></i> Download
         </a>
+      ),
+    },
+    {
+      dataField: "interview_status",
+      text: "Interview Status",
+      sort: true,
+
+      formatter: (value, row) => (
+        <>
+          <GeneralApproverBtn
+            options={InterviewStatusOptions}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
+        </>
       ),
     },
     {

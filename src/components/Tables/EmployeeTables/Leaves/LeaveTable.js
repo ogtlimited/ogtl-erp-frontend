@@ -13,7 +13,7 @@ import filterFactory, {
 
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-const LeavesTable = ({ data, columns }) => {
+const LeavesTable = ({ data, columns, context }) => {
   // console.log(data);
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -88,7 +88,13 @@ const LeavesTable = ({ data, columns }) => {
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table " : "table table-responsive"}
+                classes={
+                  !mobileView
+                    ? "table "
+                    : context
+                    ? "table table-responsive"
+                    : "table table-responsive"
+                }
                 noDataIndication="Fetching Data..."
                 pagination={paginationFactory()}
 
