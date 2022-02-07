@@ -10,6 +10,9 @@ import Select from "react-select";
 import helper from "../../../services/helper";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import { InterviewStatusOptions } from "../../../constants";
+import ViewModal from "../../../components/Modal/ViewModal";
+import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
+import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 
 const jobOpts = [
   {
@@ -33,7 +36,7 @@ const JobApplicants = () => {
   const [status, setStatus] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-
+  const [modalType, setmodalType] = useState("schedule-interview");
   const fetchJobApplicants = () => {
     axiosInstance
       .get("/api/jobApplicant")
@@ -75,6 +78,19 @@ const JobApplicants = () => {
       });
   };
   //update jobOpening
+  const handleUpdate = (id ,update) =>{
+    axiosInstance
+    .patch("/api/jobApplicant/" + id, update)
+    .then((res) => {
+      console.log(res);
+      fetchJobApplicants();
+      showAlert(true, res.data.message, "alert alert-success");
+    })
+    .catch((error) => {
+      console.log(error);
+      showAlert(true, error.response.data.message, "alert alert-danger");
+    });
+  }
   useEffect(() => {
     if (status.length) {
       console.log(status);
@@ -82,20 +98,10 @@ const JobApplicants = () => {
       const update = {
         ...statusRow,
         status: status,
-        job_opening_id: statusRow.job_opening_id._id,
+        job_opening_id: statusRow?.job_opening_id?._id,
       };
       delete update.__v;
-      axiosInstance
-        .patch("/api/jobApplicant/" + statusRow._id, update)
-        .then((res) => {
-          console.log(res);
-          fetchJobApplicants();
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+     handleUpdate(statusRow._id, update)
     }
   }, [status, statusRow]);
 
@@ -111,22 +117,6 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-
-      formatter: (value, row) => (
-        <>
-          <ApproverBtn
-            setstatusRow={setstatusRow}
-            setStatus={setStatus}
-            value={value}
-            row={row}
-          />
-        </>
-      ),
-    },
-    {
       dataField: "email_address",
       text: "Email Address",
       sort: true,
@@ -138,19 +128,10 @@ const JobApplicants = () => {
       formatter: (value, row) => <h2>{row?.job_opening_id?.job_title}</h2>,
     },
     {
-      dataField: "application_source",
-      text: "Application Source",
+      dataField: "interview_date",
+      text: "Interview Date",
       sort: true,
-    },
-    {
-      dataField: "resume_attachment",
-      text: "Resume Attachment",
-      sort: true,
-      formatter: (value, row) => (
-        <a href={value} class="btn btn-sm btn-primary" download>
-          <i class="fa fa-download"></i> Download
-        </a>
-      ),
+      formatter: (value, row) => <h2>{row.interview_date ? row.interview_date : 'Not Set'}</h2>,
     },
     {
       dataField: "interview_status",
@@ -170,25 +151,14 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "cover_letter",
-      text: "Cover Letter",
+      dataField: "resume_attachment",
+      text: "Resume Attachment",
       sort: true,
-      formatter: (value, row) => {
-        value && <span> {value.slice(0, 30)}...</span>;
-      },
-    },
-    {
-      dataField: "video_attachment",
-      text: "Video Attachment",
-      sort: true,
-      formatter: (value, row) =>
-        value ? (
-          <a href="#" class="btn btn-sm btn-primary" download>
-            <i class="fa fa-download"></i> Download
-          </a>
-        ) : (
-          ""
-        ),
+      formatter: (value, row) => (
+        <a href={value} class="btn btn-sm btn-primary" download>
+          <i class="fa fa-download"></i> Download
+        </a>
+      ),
     },
     {
       dataField: "",
@@ -197,30 +167,53 @@ const JobApplicants = () => {
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
-          {user?.role?.hr?.delete && (
-            <>
-              <a
-                href="#"
-                className="action-icon dropdown-toggle"
-                data-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
+          <>
+            <a
+              href="#"
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </a>
+            <div className="dropdown-menu dropdown-menu-right">
+              {user?.role?.hr?.delete && (
                 <a
                   className="dropdown-item"
                   data-toggle="modal"
                   data-target="#exampleModal"
                   onClick={() => {
+                    setmodalType();
                     setSelectedRow(helper.handleEdit(row));
                   }}
                 >
                   <i className="fa fa-trash m-r-5"></i> Delete
                 </a>
-              </div>
-            </>
-          )}
+              )}
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#generalModal"
+                onClick={() => {
+                  setmodalType("view-details");
+                  setSelectedRow(helper.handleEdit(row));
+                }}
+              >
+                <i className="fa fa-eye m-r-5"></i> View
+              </a>
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#generalModal"
+                onClick={() => {
+                  setmodalType("schedule-interview");
+                  setSelectedRow(helper.handleEdit(row));
+                }}
+              >
+                <i className="fa fa-clock m-r-5"></i> Schedule Interview
+              </a>
+            </div>
+          </>
         </div>
       ),
     },
@@ -264,6 +257,17 @@ const JobApplicants = () => {
         selectedRow={selectedRow}
         deleteFunction={deleteJobApplicant}
       />
+      {modalType === "view-details" ? (
+        <ViewModal
+          title="Applicant Details"
+          content={<JobApplicationContent jobApplication={selectedRow} />}
+        />
+      ) : (
+        <ViewModal
+          title="Schedule Interview"
+          content={<ScheduleInterview handleUpdate={handleUpdate} jobApplication={selectedRow} />}
+        />
+      )}
     </>
   );
 };

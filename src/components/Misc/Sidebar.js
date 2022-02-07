@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Link } from "react-router-dom";
-import routes from "../../routes";
+
 import "./Sidebar.css";
 import $ from "jquery";
 import tokenService from "../../services/token.service";

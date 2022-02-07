@@ -78,6 +78,7 @@ export default function Router() {
             { path: "hr-dashboard", element: <HRDashboard /> },
             { path: "account-dashboard", element: <AccountingDashboard /> },
             { path: "employee-dashboard", element: <EmployeeUser /> },
+            { path: "job-dashboard", element: <JobDashboard /> },
           ],
         },
         {
@@ -417,6 +418,7 @@ const PurchaseOrder = Loadable(
 //   lazy(() => import("../pages/Accounting/AccountingDashboard"))
 // );
 const AccountingDashboard = Loadable(lazy(() => import("../pages/Accounting/AccountingDashboard.js")));
+const JobDashboard = Loadable(lazy(() => import("../pages/Dashboard/JobsDashboard")));
 const Clients = Loadable(lazy(() => import("../pages/Clients/Client")));
 const Vendors = Loadable(lazy(() => import("../pages/Vendors/Vendors")));
 const Invoices = Loadable(lazy(() => import("../pages/Accounting/Invoices")));
