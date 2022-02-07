@@ -4,6 +4,9 @@ html {
 .page-wrapper {
   min-height: 643px;
 }
+.float-end {
+  float: right!important;
+}
 .account-logo {
   margin-bottom: 30px;
   margin-top: 20px;

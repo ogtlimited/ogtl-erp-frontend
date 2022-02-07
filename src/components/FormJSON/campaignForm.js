@@ -31,17 +31,17 @@ export const campaignFormJson = {
       required: { value: true, message: "Field is required" },
     },
     {
-      name: "hours_of_operation",
-      type: "text",
-      title: "Hours of operation",
+      name: "shift_start",
+      type: "time",
+      title: "Shift Start",
       required: { value: true, message: "Field is required" },
     },
-    // {
-    //   name: "type_of_employees",
-    //   type: "text",
-    //   title: "Type of employees",
-    //   required: { value: true, message: "Field is required" },
-    // },
+    {
+      name: "shift_end",
+      type: "time",
+      title: "Shift End",
+      required: { value: true, message: "Field is required" },
+    },
     {
       name: "start_date",
       type: "date",
@@ -129,11 +129,11 @@ export const campaignFormJson = {
     //   required: { value: true, message: "Field is required" },
     // },
     {
-      name: "manager",
+      name: "supervisor",
 
       type: "select",
       options: [],
-      title: "Manager",
+      title: "Supervisor",
       required: { value: true, message: "Field is required" },
     },
     {

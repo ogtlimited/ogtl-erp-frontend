@@ -1,0 +1,71 @@
+[{
+    "id": 1,
+    "full_name": "Barth Dawley",
+    "cv_sieving": 40,
+    "phone_screening": 14,
+    "interview_schedule": 16,
+    "designation": "Tax Accountant"
+  }, {
+    "id": 2,
+    "full_name": "Andie Smallsman",
+    "cv_sieving": 50,
+    "phone_screening": 30,
+    "interview_schedule": 19,
+    "designation": "Assistant Professor"
+  }, {
+    "id": 3,
+    "full_name": "Marina Laxe",
+    "cv_sieving": 55,
+    "phone_screening": 30,
+    "interview_schedule": 23,
+    "designation": "Developer II"
+  }, {
+    "id": 4,
+    "full_name": "Margette Piner",
+    "cv_sieving": 32,
+    "phone_screening": 39,
+    "interview_schedule": 29,
+    "designation": "Administrative Assistant I"
+  }, {
+    "id": 5,
+    "full_name": "Jesse Burleton",
+    "cv_sieving": 45,
+    "phone_screening": 39,
+    "interview_schedule": 23,
+    "designation": "Help Desk Operator"
+  }, {
+    "id": 6,
+    "full_name": "Creighton Murdie",
+    "cv_sieving": 44,
+    "phone_screening": 7,
+    "interview_schedule": 11,
+    "designation": "Senior Editor"
+  }, {
+    "id": 7,
+    "full_name": "Auberta Babidge",
+    "cv_sieving": 56,
+    "phone_screening": 27,
+    "interview_schedule": 20,
+    "designation": "Web Developer III"
+  }, {
+    "id": 8,
+    "full_name": "Hedwiga Beardow",
+    "cv_sieving": 31,
+    "phone_screening": 22,
+    "interview_schedule": 31,
+    "designation": "Senior Developer"
+  }, {
+    "id": 9,
+    "full_name": "Rodie Gentry",
+    "cv_sieving": 59,
+    "phone_screening": 35,
+    "interview_schedule": 3,
+    "designation": "Registered Nurse"
+  }, {
+    "id": 10,
+    "full_name": "Kissiah Kilgrew",
+    "cv_sieving": 59,
+    "phone_screening": 35,
+    "interview_schedule": 10,
+    "designation": "Nurse Practicioner"
+  }]
