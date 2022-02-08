@@ -44,11 +44,11 @@ const JobDashboardOverviewLatest = ({ data }) => {
               <div className="card-body">
                 <h3 className="card-title text-center">Latest Jobs</h3>
                 <ul className="list-group">
-                  {latestJob.map((job) => (
+                  {latestJob?.map((job) => (
                     <li className="list-group-item list-group-item-action">
-                      {job.title}{" "}
+                      {job?.title}{" "}
                       <span className="float-end text-sm text-muted">
-                        {moment(job.posted).fromNow() ?? "Not Available"}
+                        {moment(job?.posted).fromNow() ?? "Not Available"}
                       </span>
                     </li>
                   ))}
