@@ -1,72 +1,57 @@
 import React from "react";
 import JobChart from "./JobChart";
+import moment from "moment";
 
-const JobDashboardOverviewLatest = () => {
-    const latestJob = [
-    {
-        title: ' UI Developer',
-        posted: '1 Hour ago'
-    },
-    {
-        title: ' Customer Service Agent',
-        posted: 'a Day ago'
-    },
-    {
-        title: 'Accountant',
-        posted: '2 Days ago'
-    },
-    {
-        title: 'Lawyer',
-        posted: '3 Days ago'
-    },
-    {
-        title: 'Software Developer',
-        posted: 'a week ago'
-    },
-]
+const JobDashboardOverviewLatest = ({ data }) => {
+  const latestJob = data?.jobOpenings
+    ?.map((e) => {
+      return {
+        title: e.job_title,
+        posted: e.createdAt,
+      };
+    })
+    .reverse()
+    .splice(0, 7);
   return (
-    <div class="row">
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-6 text-center d-flex">
-            <div class="card flex-fill">
-              <div class="card-body">
-                <div class="chartjs-size-monitor">
-                  <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
+    <div className="row">
+      <div className="col-md-12">
+        <div className="row">
+          <div className="col-md-6 text-center d-flex">
+            <div className="card flex-fill">
+              <div className="card-body">
+                <div className="chartjs-size-monitor">
+                  <div className="chartjs-size-monitor-expand">
+                    <div className=""></div>
                   </div>
-                  <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
+                  <div className="chartjs-size-monitor-shrink">
+                    <div className=""></div>
                   </div>
                 </div>
-                <h3 class="card-title">Overview</h3>
-                <JobChart />
+                <h3 className="card-title">Overview</h3>
+                <JobChart data={data} />
                 {/* <canvas
                   id="lineChart"
                   width="830"
                   height="414"
                   style="display: block; height: 207px; width: 415px;"
-                  class="chartjs-render-monitor"
+                  className="chartjs-render-monitor"
                 ></canvas> */}
               </div>
             </div>
           </div>
-          <div class="col-md-6 d-flex">
-            <div class="card flex-fill">
-              <div class="card-body">
-                <h3 class="card-title text-center">Latest Jobs</h3>
-                <ul class="list-group">
-                    {latestJob.map( job => (
-                    <li class="list-group-item list-group-item-action">
-                        {job.title}{" "}
-                        <span class="float-end text-sm text-muted">
-                        {job.posted}
-                        </span>
+          <div className="col-md-6 d-flex">
+            <div className="card flex-fill">
+              <div className="card-body">
+                <h3 className="card-title text-center">Latest Jobs</h3>
+                <ul className="list-group">
+                  {latestJob.map((job) => (
+                    <li className="list-group-item list-group-item-action">
+                      {job.title}{" "}
+                      <span className="float-end text-sm text-muted">
+                        {moment(job.posted).fromNow() ?? "Not Available"}
+                      </span>
                     </li>
-
-                    ))}
-                 
-                 
+                  ))}
                 </ul>
               </div>
             </div>

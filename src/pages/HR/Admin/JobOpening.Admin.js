@@ -42,7 +42,7 @@ const JobOpening = () => {
     // setformUpdate(null)
     console.log("template", helper.handleEdit(row));
     setmode("edit");
-    seteditData(row)
+    seteditData(row);
     let formatted = helper.handleEdit(row);
     setformUpdate(formatted);
     setclickedRow(formatted);
@@ -164,7 +164,7 @@ const JobOpening = () => {
         // delete formValue.__v;
         // delete formValue.createdAt;
         // delete formValue.updatedAt;
-        console.log(formValue)
+        console.log(formValue);
         axiosInstance
           .patch("/api/jobOpening/" + editData._id, formValue)
           .then((res) => {
