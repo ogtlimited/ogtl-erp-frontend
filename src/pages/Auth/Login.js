@@ -49,7 +49,7 @@ const Login = () => {
           })
           .catch((err) => {
             console.log(err);
-            console.log(err.message?.message);
+            console.log(JSON.stringify(err));
             seterrorMsg(
               "Unable to login either username or password is incorrect"
             );

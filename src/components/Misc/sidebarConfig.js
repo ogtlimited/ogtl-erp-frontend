@@ -47,6 +47,11 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.main.accountDashboard,
           },
           {
+            canView: "HR",
+            title: "Job Dashboard",
+            path: PATH_DASHBOARD.main.jobDashboard,
+          },
+          {
             canView: "All",
             title: "Employee Dashboard",
             path: PATH_DASHBOARD.main.employeeDashboard,
