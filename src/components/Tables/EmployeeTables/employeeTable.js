@@ -131,7 +131,7 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+              <span className="ml-4 d-block">{"Resigned"}</span>
             </a>
           ) : value === "terminated" ? (
             <a href="" className="pos-relative">
