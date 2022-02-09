@@ -172,7 +172,7 @@ const Resignation = () => {
               </a>
             )}
             {user?.role?.hr?.delete && (
-              <Link
+              <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#exampleModal"
@@ -181,7 +181,7 @@ const Resignation = () => {
                 }}
               >
                 <i className="fa fa-trash m-r-5"></i> Delete
-              </Link>
+              </a>
             )}
           </div>
         </div>
