@@ -182,22 +182,18 @@ const JobOffer = () => {
     axiosInstance
       .delete(`/api/jobOffer/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
   //update job offer
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         ...statusRow,
         status: status,
@@ -205,18 +201,15 @@ const JobOffer = () => {
         job_applicant_id: statusRow.job_applicant_id._id,
         job_offer_terms: statusRow.job_offer_terms[0],
       };
-      console.log("Job offer update", update);
 
       delete update.__v;
       axiosInstance
         .patch("/api/jobOffer/" + statusRow._id, update)
         .then((res) => {
-          console.log(res);
           fetchJobOffers();
           showAlert(true, res.data.message, "alert alert-success");
         })
         .catch((error) => {
-          console.log(error);
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }

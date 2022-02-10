@@ -1,37 +1,6 @@
 export const applicationTestFormJson = {
-  title: "Interview Form",
+  title: "Interview Form Process",
   Fields: [
-    {
-      name: "test_type",
-      type: "select",
-      title: "Test Type",
-      required: {
-        value: true,
-        message: "Test type is required",
-      },
-      options: [
-        {
-          value: "Phone Screening",
-          label: "Phone Screening",
-        },
-        {
-          value: "Typing Test",
-          label: "Typing Test",
-        },
-        {
-          value: "Excel Test",
-          label: "Excel Test",
-        },
-        {
-          value: "Formal Writing",
-          label: "Formal Writing",
-        },
-        {
-          value: "Soft Skills",
-          label: "Soft Skills",
-        },
-      ],
-    },
     {
       name: "job_applicant_id",
       type: "select",
@@ -80,28 +49,16 @@ export const applicationTestFormJson = {
       name: "email_address",
       type: "email",
       title: "Email Address",
-      required: {
-        value: true,
-        message: "Email Address is required",
-      },
     },
     {
       name: "typing_speed_score",
       type: "text",
       title: "Typing Speed Score",
-      required: {
-        value: true,
-        message: "Typing Speed Score is required",
-      },
     },
     {
       name: "typing_accuracy_score",
       type: "text",
       title: "Typing Accuracy Score/100 ",
-      required: {
-        value: true,
-        message: "Typing Accuracy Score/100  is required",
-      },
     },
     {
       name: "accent_test_score",
@@ -337,19 +294,11 @@ export const applicationTestFormJson = {
       name: "testGorilla_invitation_date",
       type: "date",
       title: "Testgorilla Invitation Date",
-      required: {
-        value: true,
-        message: "Testgorilla Invitation Date is required",
-      },
     },
     {
       name: "assessment_completion_date",
       type: "date",
       title: "Assessment Completion Date",
-      required: {
-        value: true,
-        message: "Assessment Completion Date is required",
-      },
     },
     {
       name: "status",
@@ -437,55 +386,31 @@ export const applicationTestFormJson = {
       name: "average_score",
       type: "text",
       title: "Average Score",
-      required: {
-        value: true,
-        message: "Average Score is required",
-      },
     },
     {
       name: "personality_score",
       type: "text",
       title: "16 Types Personality Score",
-      required: {
-        value: true,
-        message: "16 Types Personality Score is required",
-      },
     },
     {
       name: "attention_to_detail_score",
       type: "text",
       title: "Attention to Detail (textual) Score",
-      required: {
-        value: true,
-        message: "Attention to Detail (textual) Score is required",
-      },
     },
     {
       name: "communication_score",
       type: "text",
       title: "Communication Score",
-      required: {
-        value: true,
-        message: "Communication Score is required",
-      },
     },
     {
       name: "disc_profile_score",
       type: "text",
       title: "DISC Profile Score",
-      required: {
-        value: true,
-        message: "DISC Profile Score is required",
-      },
     },
     {
       name: "english_score",
       type: "text",
       title: "English (intermediate/B1) Score",
-      required: {
-        value: true,
-        message: "English (intermediate/B1) Score is required",
-      },
     },
     {
       name: "filed_out_only_once_from_ip_address",
@@ -551,10 +476,6 @@ export const applicationTestFormJson = {
       name: "interviewer_rating",
       type: "text",
       title: "Interviewer's Rating",
-      required: {
-        value: true,
-        message: "Interviewer's Rating is required",
-      },
     },
     {
       name: "notes",

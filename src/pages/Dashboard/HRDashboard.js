@@ -27,7 +27,7 @@ const HRDashboard = () => {
           })
           setheadACount(employees.length)
            employees?.forEach((e) => {
-               console.log(e.projectId)
+              //  console.log(e.projectId)
                if(e.department){
                    if(!deptHash[e.department.department]){
                        deptHash[e.department.department] = 1
@@ -86,9 +86,9 @@ const HRDashboard = () => {
               }] 
           })
           
-          console.log(deptHash)
-          console.log(genderHash)
-          console.log(gender)
+          // console.log(deptHash)
+          // console.log(genderHash)
+          // console.log(gender)
         });
       }, []);
     return (
