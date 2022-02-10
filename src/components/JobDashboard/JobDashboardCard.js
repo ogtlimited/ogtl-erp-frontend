@@ -1,55 +1,55 @@
 import React from "react";
 
-const JobDashboardCard = () => {
+const JobDashboardCard = ({ data }) => {
   return (
-    <div class="row">
-      <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-        <div class="card dash-widget">
-          <div class="card-body">
-            <span class="dash-widget-icon">
-              <i class="fa fa-briefcase"></i>
+    <div className="row">
+      <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div className="card dash-widget">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i className="fa fa-briefcase"></i>
             </span>
-            <div class="dash-widget-info">
-              <h3>110</h3>
+            <div className="dash-widget-info">
+              <h3>{data?.totalJobOpenings}</h3>
               <span>Jobs</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-        <div class="card dash-widget">
-          <div class="card-body">
-            <span class="dash-widget-icon">
-              <i class="fa fa-users"></i>
+      <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div className="card dash-widget">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i className="fa fa-users"></i>
             </span>
-            <div class="dash-widget-info">
-              <h3>40</h3>
-              <span>Job Seekers</span>
+            <div className="dash-widget-info">
+              <h3>{data?.totalJobOffers}</h3>
+              <span>Accepted Job Offers</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-        <div class="card dash-widget">
-          <div class="card-body">
-            <span class="dash-widget-icon">
-              <i class="fa fa-user"></i>
+      <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div className="card dash-widget">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i className="fa fa-user"></i>
             </span>
-            <div class="dash-widget-info">
-              <h3>374</h3>
+            <div className="dash-widget-info">
+              <h3>{data?.totalEmployees}</h3>
               <span>Employees</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-        <div class="card dash-widget">
-          <div class="card-body">
-            <span class="dash-widget-icon">
-              <i class="fa fa-clipboard"></i>
+      <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div className="card dash-widget">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i className="fa fa-clipboard"></i>
             </span>
-            <div class="dash-widget-info">
-              <h3>220</h3>
+            <div className="dash-widget-info">
+              <h3>{data?.totalJobApplicants}</h3>
               <span>Applications</span>
             </div>
           </div>
