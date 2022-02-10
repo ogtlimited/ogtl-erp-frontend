@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from "axios";
@@ -9,8 +9,11 @@ import { languages, qualifications, referredOpts } from "./options";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
 
 const PersonalInfoForm = () => {
+
     const [id, setid] = useState(useParams())
+    console.log(id)
     const {setjobApplication, jobApplication} = useNoAuthContext()
+    const [defaultJob, setdefaultJob] = useState([]);
     const FILE_SIZE = 160 * 10240;
     const [showProgress, setshowProgress] = useState(false)
     const [submitted, setsubmitted] = useState(false)
@@ -18,6 +21,19 @@ const PersonalInfoForm = () => {
     const [fileName, setfileName] = useState('')
     const [afterSuccess, setafterSuccess] = useState(false)
     const [header, setheader] = useState('Add Your Details')
+
+    const fetchDefaultJob = () =>{
+        axios.get(config.ApiUrl +'/api/jobOpening/defaultJobs' ).then(res =>{
+            console.log(res)
+            const data = res.data.data.map(e => {
+                return {
+                    label: e.job_title,
+                    value: e._id
+                }
+            })
+            setdefaultJob(data)
+        })
+    }
     const handleUpload = (e, setFieldValue) =>{
         console.log(id)
         setprogress(65)
@@ -60,7 +76,10 @@ const PersonalInfoForm = () => {
 
         // })
     }
-
+    useEffect(() => {
+        fetchDefaultJob()
+    }, []);
+    
     const SUPPORTED_FORMATS = [
       "application/pdf",
       "application/msword",
@@ -116,7 +135,7 @@ const PersonalInfoForm = () => {
                 handleSubmit(null, fields)
                 console.log('SUCCESS!! :-)\n\n' + JSON.stringify(fields, null, 4))
             }}
-            render={({ errors, dirty, isValid, touched, setFieldValue, values }) => (
+            render={({ errors, dirty, isValid, touched, setFieldValue, values, handleChange }) => (
                 <div class="card">
                 <div className="card-header application-form-header">
                     Application Form
@@ -124,6 +143,7 @@ const PersonalInfoForm = () => {
                 <div class="card-body">
                     { !afterSuccess ?
                   <Form>
+                   
                     <div class="form-group row">
                     <div class="col-md-6">
                     <label htmlFor="first_name">First Name</label>
@@ -163,10 +183,31 @@ const PersonalInfoForm = () => {
                         <label htmlFor="alternate_mobile">Alternate Phone Number</label>
                         <Field name="alternate_mobile" type="text" className='form-control'  />
                     </div>
+    
                     
 
                     </div>
                     <div class="form-group row">
+                    {id.id === "general" && 
+                    
+                    <div class="col-md-6">
+                    <label htmlFor="job_opening_id">Which Job application are you applying for *</label>
+                        <Field as="select" name="job_opening_id" onChange={(e) => {
+                            setFieldValue('job_opening_id', e.currentTarget.value)
+                            setid({id: values?.job_opening_id})
+                            console.log(values);
+                        }} className={'form-control' + (errors.job_opening_id && touched.job_opening_id ? ' is-invalid' : '')}>
+                            {defaultJob.map(e =>(
+                                <option value={e.value}>{e.label}</option>
+
+                            )) }
+                           
+                        </Field>
+                        <ErrorMessage name="job_opening_id" component="div" className="invalid-feedback" />
+                   
+                    </div>
+                    
+                    }
                     <div class="col-md-6">
                         <label htmlFor="highest_qualification">Highest Qualification Attained</label>                        
                         <Field as="select" name="highest_qualification" className={'form-control' + (errors.highest_qualification && touched.highest_qualification ? ' is-invalid' : '')}>
@@ -179,7 +220,8 @@ const PersonalInfoForm = () => {
                         <ErrorMessage name="highest_qualification" component="div" className="invalid-feedback" />
                    
                     </div>
-                    <div class="col-md-6">
+                   
+                    <div class={id.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
                     <label htmlFor="certifications">Certifications (if any) *</label>
                         <Field name="certifications" component="textarea" className={'form-control' + (errors.certifications && touched.certifications ? ' is-invalid' : '')} />
                         <ErrorMessage name="certifications" component="div" className="invalid-feedback" />

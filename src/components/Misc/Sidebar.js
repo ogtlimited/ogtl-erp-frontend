@@ -5,14 +5,13 @@ import { Link } from "react-router-dom";
 import "./Sidebar.css";
 import $ from "jquery";
 import tokenService from "../../services/token.service";
-import { useAppContext } from "../../Context/AppContext";
+
 import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
-  const [user, setuser] = useState(tokenService.getUser());
-  console.log(user)
-  const [isPriviledged, setisPriviledged] = useState(false);
-  const { combineRequest } = useAppContext();
+  const [user] = useState(tokenService.getUser());
+  // console.log(user)
+
   const AllAccess = ['Super', 'CEO', 'HR Manager']
   const canView = (dept) => {
     if (user?.department?.department === dept || AllAccess.includes(user?.role?.title)) {
