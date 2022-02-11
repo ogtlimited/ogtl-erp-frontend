@@ -53,7 +53,7 @@ const AptitudeTest = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
-    console.log(row);
+
     setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
@@ -73,7 +73,6 @@ const AptitudeTest = () => {
     axiosInstance
       .get("/api/test")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -89,7 +88,6 @@ const AptitudeTest = () => {
     axiosInstance
       .get("/api/jobApplicant-accepted")
       .then((res) => {
-        console.log("accepted job applicants", res);
         const jobApplicantsOpts = res?.data?.data?.map((e) => {
           return {
             label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
@@ -98,7 +96,7 @@ const AptitudeTest = () => {
         });
 
         const finalForm = applicationTestFormJson.Fields.map((field) => {
-          if (field.name === "job_applicant_id") {
+          if (field.name === "_id") {
             field.options = jobApplicantsOpts;
             return field;
           }
@@ -243,6 +241,11 @@ const AptitudeTest = () => {
       sort: true,
     },
 
+    {
+      dataField: "interview_status",
+      text: "Interview Status",
+      sort: true,
+    },
     {
       dataField: "notes",
       text: "Notes",

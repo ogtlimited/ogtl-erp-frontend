@@ -13,7 +13,7 @@ import {
   NumberField,
   TimeField,
   FileField,
-  RichTextField
+  RichTextField,
 } from "./FormElements";
 import * as Yup from "yup";
 import $ from "jquery";
@@ -21,7 +21,6 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
-
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -58,7 +57,9 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       } else if (formSchema[key].type === "textarea") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "select") {
-         _validationSchema[key] = Yup.string().nullable(true).oneOf([null, ...formSchema[key].options.map(o => o.value)]);
+        _validationSchema[key] = Yup.string()
+          .nullable(true)
+          .oneOf([null, ...formSchema[key].options.map((o) => o.value)]);
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
       } else if (formSchema[key].type === "time") {
@@ -66,7 +67,8 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       }
 
       if (formSchema[key].required) {
-        _validationSchema[key] = _validationSchema[key]?.required("Field Required");
+        _validationSchema[key] =
+          _validationSchema[key]?.required("Field Required");
       }
     }
     setFormData(_formData);
@@ -81,7 +83,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,
-
     };
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
@@ -122,49 +123,57 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
     $("#FormModal").modal("toggle");
     setvalue(values);
-    setformSubmitted(true)
+    setformSubmitted(true);
   };
-
   return (
     <div className="App">
       <Formik
         enableReinitialize
         initialValues={formData}
         validationSchema={validationSchema}
-        
         onSubmit={onSubmit}
       >
-         {(props) => {
-        const {
-          handleSubmit,
-          setFieldValue
-        } = props;
-        return (
-          <form onSubmit={handleSubmit}>
-          <div class="row">
-
-          { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
-            <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
-              {getFormElement(key, formSchema[key], setFieldValue, formData[key])}
-            </div>
-          ))}
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-          <button
-                        type="submit"
-
-                        // data-dismiss="modal"
-                        className="btn btn-primary submit-btn"
-                      >
-                        Submit
-                      </button>
-          </div>
-        </div>
-        </form>
-        );
-      }}
-
+        {(props) => {
+          const { handleSubmit, setFieldValue } = props;
+          return (
+            <form onSubmit={handleSubmit}>
+              <div class="row">
+                {Object.keys(formSchema).length &&
+                  Object.keys(formSchema).map((key, ind) => (
+                    <div
+                      className={
+                        formSchema[key]?.type === "textarea" ||
+                        formSchema[key]?.type === "richText"
+                          ? "col-sm-12"
+                          : formSchema[key]?.type === "file"
+                          ? "col-sm-12"
+                          : "col-sm-6"
+                      }
+                      key={key}
+                    >
+                      {getFormElement(
+                        key,
+                        formSchema[key],
+                        setFieldValue,
+                        formData[key]
+                      )}
+                    </div>
+                  ))}
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <button
+                    type="submit"
+                    // data-dismiss="modal"
+                    className="btn btn-primary submit-btn"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
+          );
+        }}
       </Formik>
     </div>
   );

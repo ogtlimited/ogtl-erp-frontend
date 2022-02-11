@@ -2,7 +2,7 @@ export const applicationTestFormJson = {
   title: "Interview Form Process",
   Fields: [
     {
-      name: "job_applicant_id",
+      name: "_id",
       type: "select",
       title: "Job Applicant",
       required: {
@@ -482,6 +482,25 @@ export const applicationTestFormJson = {
       name: "notes",
       type: "textarea",
       title: "Notes",
+    },
+    {
+      name: "interview_status",
+      type: "select",
+      title: "Interview Status",
+      options: [
+        {
+          value: "Qualify for Coaching/Shadowing",
+          label: "Qualify for Coaching/Shadowing",
+        },
+        {
+          value: "Qualify for Domestic",
+          label: "Qualify for Domestic",
+        },
+        {
+          value: "Qualify for Bootcamp",
+          label: "Qualify for Bootcamp",
+        },
+      ],
     },
   ],
 };
