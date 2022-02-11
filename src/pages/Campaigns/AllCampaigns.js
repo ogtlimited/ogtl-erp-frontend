@@ -126,8 +126,6 @@ const AllCampaigns = () => {
 
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         status,
       };
@@ -157,7 +155,9 @@ const AllCampaigns = () => {
       sort: true,
       headerStyle: { width: "250px" },
       formatter: (value, row) => (
-        <Link to={`/dashboard/operations/campaign-info/${row._id}`}>{value}</Link>
+        <Link to={`/dashboard/operations/campaign-info/${row._id}`}>
+          {value}
+        </Link>
       ),
     },
     {

@@ -15,6 +15,26 @@ import HelperService from "../../../services/helper";
 import helper from "../../../services/helper";
 import InterviewContent from "../../../components/ModalContents/interviewContents";
 import FormModal2 from "../../../components/Modal/FormModal2";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+
+const statusOptions = [
+  {
+    title: "Invitation Sent",
+    color: "text-primary",
+  },
+  {
+    title: "Invitation Opened",
+    color: "text-secondary",
+  },
+  {
+    title: "Assessment Started",
+    color: "text-info",
+  },
+  {
+    title: "Assessment Completed",
+    color: "text-success",
+  },
+];
 
 const AptitudeTest = () => {
   const [formValue, setFormValue] = useState(null);
@@ -26,6 +46,8 @@ const AptitudeTest = () => {
   const [loadSelect, setloadSelect] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [status, setStatus] = useState("");
+  const [statusRow, setstatusRow] = useState(null);
 
   const [mode, setmode] = useState("add");
 
@@ -135,7 +157,6 @@ const AptitudeTest = () => {
     axiosInstance
       .delete(`/api/test/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -146,6 +167,30 @@ const AptitudeTest = () => {
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
+
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        ...statusRow,
+        status,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/test/" + statusRow._id, update)
+        .then((res) => {
+          fetchAllTests();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
 
   const columns = [
     {
@@ -169,11 +214,13 @@ const AptitudeTest = () => {
 
       formatter: (value, row) => (
         <>
-          <div className="action-label">
-            <a className="btn btn-white btn-sm btn-rounded" href="">
-              <i className="fa fa-dot-circle-o text-success"></i> {row.status}
-            </a>
-          </div>
+          <GeneralApproverBtn
+            options={statusOptions}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
         </>
       ),
     },

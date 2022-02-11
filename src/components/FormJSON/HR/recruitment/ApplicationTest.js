@@ -51,6 +51,29 @@ export const applicationTestFormJson = {
       title: "Email Address",
     },
     {
+      name: "status",
+      type: "select",
+      title: "Status",
+      options: [
+        {
+          value: "Invitation Sent",
+          label: "Invitation Sent",
+        },
+        {
+          value: "Invitation Opened",
+          label: "Invitation Opened",
+        },
+        {
+          value: "Assessment Started",
+          label: "Assessment Started",
+        },
+        {
+          value: "Assessment Completed",
+          label: "Assessment Completed",
+        },
+      ],
+    },
+    {
       name: "typing_speed_score",
       type: "text",
       title: "Typing Speed Score",
@@ -300,29 +323,7 @@ export const applicationTestFormJson = {
       type: "date",
       title: "Assessment Completion Date",
     },
-    {
-      name: "status",
-      type: "select",
-      title: "Status",
-      options: [
-        {
-          value: "Invitation Sent",
-          label: "Invitation Sent",
-        },
-        {
-          value: "Invitation Opened",
-          label: "Invitation Opened",
-        },
-        {
-          value: "Assessment Started",
-          label: "Assessment Started",
-        },
-        {
-          value: "Assessment Completed",
-          label: "Assessment Completed",
-        },
-      ],
-    },
+
     {
       name: "stage",
       type: "select",
