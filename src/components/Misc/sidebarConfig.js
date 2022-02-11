@@ -392,11 +392,7 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.clients.root,
         icon: ICONS.user,
         children: [
-          {
-            canView: "Accounting",
-            title: "Clients",
-            path: PATH_DASHBOARD.clients.clients,
-          },
+          
           {
             canView: "Accounting",
             title: "Invoices",
