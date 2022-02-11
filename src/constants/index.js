@@ -8,3 +8,8 @@ export const InterviewStatusOptions = [
   { title: "Missed call", color: "text-info" },
   { title: "call back", color: "text-info" },
 ];
+export const InterviewProcessStageOptions = [
+  { title: "Sieving", color: "text-primary" },
+  { title: "Phone screening", color: "text-info" },
+  { title: "Interviews scheduled", color: "text-success" }
+];

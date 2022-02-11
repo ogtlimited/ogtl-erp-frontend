@@ -9,7 +9,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Select from "react-select";
 import helper from "../../../services/helper";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
-import { InterviewStatusOptions } from "../../../constants";
+import { InterviewProcessStageOptions, InterviewStatusOptions } from "../../../constants";
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
@@ -33,7 +33,9 @@ const JobApplicants = () => {
   const [data, setData] = useState([]);
   const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
+  const [processingStageRow, setprocessingStageRow] = useState(null);
   const [status, setStatus] = useState("");
+  const [processingStage, setprocessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState("schedule-interview");
@@ -142,6 +144,23 @@ const JobApplicants = () => {
         <>
           <GeneralApproverBtn
             options={InterviewStatusOptions}
+            setStatus={setprocessingStage}
+            value={value}
+            row={row}
+            setstatusRow={setprocessingStageRow}
+          />
+        </>
+      ),
+    },
+    {
+      dataField: "interview_status",
+      text: "Processing Stage",
+      sort: true,
+
+      formatter: (value, row) => (
+        <>
+          <GeneralApproverBtn
+            options={InterviewProcessStageOptions}
             setStatus={setStatus}
             value={value}
             row={row}

@@ -263,26 +263,26 @@ const sidebarConfig = [
   },
   {
     subheader: "Operations",
-    canView: "All",
+    canView: "Super",
     items: [
       {
-        canView: "All",
+        canView: "Super",
         title: "Campaign",
         path: PATH_DASHBOARD.campaign.root,
         icon: ICONS.user,
         children: [
           {
-            canView: "All",
+            canView: "Super",
             title: "All Campaigns",
             path: PATH_DASHBOARD.campaign.allCampaign,
           },
           {
-            canView: "All",
+            canView: "Super",
             title: "Leads",
             path: PATH_DASHBOARD.campaign.lead,
           },
           {
-            canView: "All",
+            canView: "Super",
             title: "Branch",
             path: PATH_DASHBOARD.campaign.branch,
           },
