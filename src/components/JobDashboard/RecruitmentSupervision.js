@@ -1,13 +1,77 @@
-import React from "react";
-import sample from './recruitment-supervision.json'
+import React, { useEffect, useState } from "react";
+import sample from "./recruitment-supervision.json";
+import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import axiosInstance from "../../services/api";
+import { useAppContext } from "../../Context/AppContext";
+import moment from "moment";
+
 const RecruitmentSupervision = () => {
+  const [data, setData] = useState([]);
+  const fetchJobTasks = () => {
+    axiosInstance
+      .get("/api/jobApplicant/tasks")
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchJobTasks();
+  }, []);
+
+  const columns = [
+    {
+      dataField: "company_email",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+      formatter: (value, row) => (
+        <h2>
+          {" "}
+          {row?.company_email?.first_name} {row?.company_email?.last_name}
+        </h2>
+      ),
+    },
+    {
+      dataField: "sieving",
+      text: "CV Sieving",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+    },
+    {
+      dataField: "phone_screening",
+      text: "Phone Screening",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+    },
+    {
+      dataField: "scheduled_for_interview",
+      text: "Interview Schedule",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+    },
+
+    {
+      dataField: "date",
+      text: "Date",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <h2>{moment(row?.date).format("L")}</h2>,
+    },
+  ];
+
   return (
     <div class="row">
       <div class="col-md-12">
-        <div class="card card-table">
+        <h3 class="card-title mb-1s">Recruitment Supervision Sheet</h3>
+        <LeavesTable columns={columns} data={data} />
+        {/* <div class="card card-table">
           <div class="card-header d-flex justify-content-between">
-            <h3 class="card-title mb-1s">Recruitment Supervision Sheet</h3>
-            <span class=" mb-0">Target: CV Sieving 50 | Phone Screening: 30 | Interview Schedule : 20</span>
+            <h3 class="card-title mb-1s">Recruitment Supervision Sheet</h3> */}
+        {/* <span class=" mb-0">Target: CV Sieving 50 | Phone Screening: 30 | Interview Schedule : 20</span>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -59,8 +123,8 @@ const RecruitmentSupervision = () => {
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
       </div>
     </div>
   );
