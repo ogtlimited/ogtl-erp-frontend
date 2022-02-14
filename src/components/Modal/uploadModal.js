@@ -81,34 +81,34 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
         })
     }
     return (
-        <div class="modal fade show" id="uploadModal"
+        <div className="modal fade show" id="uploadModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         style={{display: 'block'}}
         aria-hidden="true" >
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">{uploadState}</h5>
-                <button ref={(input) => setbuttonRef(input)} type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="staticBackdropLabel">{uploadState}</h5>
+                <button ref={(input) => setbuttonRef(input)} type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-              <div class="row">
-  <div class="col-4">
-    <div class="nav flex-column nav-pills mt-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-      <a onClick={()=> updateState("/employees/bulk-upload", "Upload New employees")} class="nav-link active mb-3" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">New User</a>
-      <a onClick={()=> updateState("/EmergencyContact/bulk-upload", "Upload Emergency Contact")} class="nav-link mb-3" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-profile" aria-selected="false">Emergency Contacts</a>
-      <a onClick={()=> updateState("/ContactDetails/bulk-upload", "Upload Contact Details")} class="nav-link mb-3" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-messages" aria-selected="false">Contact Details</a>
-      <a onClick={()=> updateState("/PersonalDetails/bulk-upload", "Upload Personal Details")} class="nav-link mb-3" id="v-pills-personal-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-personal" aria-selected="false">Personal Details</a>
-      <a onClick={()=> updateState("/SalaryDetails/bulk-upload", "Upload Salary Details")} class="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Salary Details</a>
-      <a onClick={()=> updateState("/leave-application/update-leavecount", "Upload Leave")} class="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Employee Leave</a>
+              <div className="modal-body">
+              <div className="row">
+  <div className="col-4">
+    <div className="nav flex-column nav-pills mt-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a onClick={()=> updateState("/employees/bulk-upload", "Upload New employees")} className="nav-link active mb-3" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">New User</a>
+      <a onClick={()=> updateState("/EmergencyContact/bulk-upload", "Upload Emergency Contact")} className="nav-link mb-3" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-profile" aria-selected="false">Emergency Contacts</a>
+      <a onClick={()=> updateState("/ContactDetails/bulk-upload", "Upload Contact Details")} className="nav-link mb-3" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-messages" aria-selected="false">Contact Details</a>
+      <a onClick={()=> updateState("/PersonalDetails/bulk-upload", "Upload Personal Details")} className="nav-link mb-3" id="v-pills-personal-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-personal" aria-selected="false">Personal Details</a>
+      <a onClick={()=> updateState("/SalaryDetails/bulk-upload", "Upload Salary Details")} className="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Salary Details</a>
+      <a onClick={()=> updateState("/leave-application/update-leavecount", "Upload Leave")} className="nav-link mb-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-settings" aria-selected="false">Employee Leave</a>
     </div>
   </div>
-  <div class="col-8">
-    <div class="tab-content" id="v-pills-tabContent">
-      <label class="tab-pane fade upload-csv show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+  <div className="col-8">
+    <div className="tab-content" id="v-pills-tabContent">
+      <label className="tab-pane fade upload-csv show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
       <input
         type="file"
         style={{display: 'none'}}
@@ -121,30 +121,30 @@ const UploadModal = ({fetchEmployee, settoggleModal, setuploading, setUploadSucc
           {invalid ? <small className="pt-3 text-danger">This file contains invalid fields</small>  : null}
         
       </label>
-      {/* <label class="tab-pane fade upload-csv" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+      {/* <label className="tab-pane fade upload-csv" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
           Emergency Contact
       </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+      <label className="tab-pane fade upload-csv" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
           Contact Details
       </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-personal" role="tabpanel" aria-labelledby="v-pills-personal-tab">
+      <label className="tab-pane fade upload-csv" id="v-pills-personal" role="tabpanel" aria-labelledby="v-pills-personal-tab">
           Personal Details
       </label>
-      <label class="tab-pane fade upload-csv" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+      <label className="tab-pane fade upload-csv" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
           Salary Details
       </label> */}
     </div>
   </div>
 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 
-                <button onClick={() => uploadData()} type="button" class="btn btn-primary">
+                <button onClick={() => uploadData()} type="button" className="btn btn-primary">
                   
                   {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

@@ -261,7 +261,7 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                 </div>
 
                 <div className="row">
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
                         <th className="col-4">Product/Service</th>
@@ -357,7 +357,7 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                                 onClick={() => handleRemoveFields(index)}
                               >
                                 <i
-                                  class="las la-minus"
+                                  className="las la-minus"
                                   style={{ fontSize: "21px" }}
                                 ></i>
                               </a>
@@ -371,7 +371,7 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i class="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
                       </a>
                     </tfoot>
                   </table>
@@ -389,7 +389,7 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                     <button type="submit" className="btn btn-primary">
                       {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

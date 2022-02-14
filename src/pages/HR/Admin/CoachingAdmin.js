@@ -173,25 +173,25 @@ const CoachingAdmin = () => {
               <span className="ml-4 d-block">{value}</span>
             </a>
           )  : (
-            <div class="dropdown action-label text-center ">
+            <div className="dropdown action-label text-center ">
               <a
-                class="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+                className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
                 href=""
                 data-toggle="dropdown"
                 aria-expanded="true"
               >
-                <i class="fa fa-dot-circle-o text-success"></i> Draft
+                <i className="fa fa-dot-circle-o text-success"></i> Draft
               </a>
               <div
-                class="dropdown-menu dropdown-menu-right"
+                className="dropdown-menu dropdown-menu-right"
                 style={{position: 'absolute', willChange: 'transform', top: '0px', left: '0px', transform: 'translate3d(106px, 31px, 0px)'}}
                 x-placement="bottom-end"
               >
-                <a class="dropdown-item" href="">
-                  <i class="fa fa-dot-circle-o text-primary"></i> Submitted
+                <a className="dropdown-item" href="">
+                  <i className="fa fa-dot-circle-o text-primary"></i> Submitted
                 </a>
-                <a class="dropdown-item" href="">
-                  <i class="fa fa-dot-circle-o text-danger"></i> CLOSED
+                <a className="dropdown-item" href="">
+                  <i className="fa fa-dot-circle-o text-danger"></i> CLOSED
                 </a>
               </div>
             </div>

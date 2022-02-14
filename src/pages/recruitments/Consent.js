@@ -58,8 +58,8 @@ const Consent = () => {
     return (
         <>
              <RecruitmentPageHeader />
-             <div class="row justify-content-center">
-<div class="accordion col-md-11" id="accordionExample">
+             <div className="row justify-content-center">
+<div className="accordion col-md-11" id="accordionExample">
 <Stepper controls={items} />
 <Steps items={items} />
 

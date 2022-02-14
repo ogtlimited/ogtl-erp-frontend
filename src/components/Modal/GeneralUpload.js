@@ -73,25 +73,25 @@ const GeneralUpload = ({settoggleModal, title, url }) => {
         })
     }
     return (
-        <div class="modal fade" id="uploadAttendance"
+        <div className="modal fade" id="uploadAttendance"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         style={{display: 'block'}}
         aria-hidden="true" >
-          <div class="modal-dialog ">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">{uploadState}</h5>
-                <button ref={(input) => setbuttonRef(input)} type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <div className="modal-dialog ">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="staticBackdropLabel">{uploadState}</h5>
+                <button ref={(input) => setbuttonRef(input)} type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
-              <div class="row">
+              <div className="modal-body">
+              <div className="row">
   
-  <div class="col-12">
-    <div class="tab-content" id="v-pills-tabContent">
-      <label class="tab-pane fade upload-csv show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+  <div className="col-12">
+    <div className="tab-content" id="v-pills-tabContent">
+      <label className="tab-pane fade upload-csv show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
       <input
         type="file"
         style={{display: 'none'}}
@@ -109,14 +109,14 @@ const GeneralUpload = ({settoggleModal, title, url }) => {
   </div>
 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 
-                <button onClick={() => uploadData()} type="button" class="btn btn-primary">
+                <button onClick={() => uploadData()} type="button" className="btn btn-primary">
                   
                   {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

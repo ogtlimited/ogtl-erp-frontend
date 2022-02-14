@@ -203,7 +203,7 @@ const CustomForm = ({ template, data, handleform }) => {
         case "select":
           let { options, full } = field;
           return (
-            <div class={full ? "col-sm-12" : "col-sm-6"} key={name}>
+            <div className={full ? "col-sm-12" : "col-sm-6"} key={name}>
               <div className="form-group">
                 <label htmlFor={name}>
                   {title}

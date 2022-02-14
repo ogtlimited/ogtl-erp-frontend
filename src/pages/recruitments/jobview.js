@@ -54,13 +54,13 @@ const Jobview = () => {
         <>
             <RecruitmentPageHeader />
 
-            <div  class="row">
+            <div  className="row">
             <AlertSvg />
                 
-                <div  class="col-md-8">
+                <div  className="col-md-8">
                     <JobWidget state={state} />
                 </div>
-                <div  class="col-md-4">
+                <div  className="col-md-4">
                     <RightWidget state={state} />
                 </div>
             </div>

@@ -106,8 +106,8 @@ const Sidebar = () => {
                                 {item.children.map((child) => (
                                   <>
                                     {canView(child.canView) && (
-                                      <li class="">
-                                        <Link to={`${child.path}`} class="">
+                                      <li className="">
+                                        <Link to={`${child.path}`} className="">
                                           {child.title}
                                         </Link>
                                       </li>
@@ -140,12 +140,12 @@ const Sidebar = () => {
                   onClick={(e) => e.preventDefault()}
                   className="subdrop"
                 >
-                  <i class="la la-cube"></i>
+                  <i className="la la-cube"></i>
                   <span>Recruitment</span>
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={{display: "none"}}>
-                  <Link to="/dashboard/recruitment/job-applicants" class="">
+                  <Link to="/dashboard/recruitment/job-applicants" className="">
                     Job Applicants
                   </Link>
                 </ul>

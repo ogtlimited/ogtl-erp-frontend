@@ -25,11 +25,11 @@ const CampaignInfo = () => {
   return (
     <>
       <CampaignHeader campaign_info={data} fetchProjects={fetchProjects} />
-      <div class="row">
-        <div class="col-lg-8 col-xl-9">
+      <div className="row">
+        <div className="col-lg-8 col-xl-9">
           <CampaignLeftCard campaign_info={data} />
         </div>
-        <div class="col-lg-4 col-xl-3">
+        <div className="col-lg-4 col-xl-3">
           <CampaignRightCard campaign_info={data} />
         </div>
       </div>

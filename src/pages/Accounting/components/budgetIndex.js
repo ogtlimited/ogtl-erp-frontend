@@ -214,7 +214,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                 </div>
 
                 <div className="row">
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
                         <th className="col-4">Expense Heads</th>
@@ -274,7 +274,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                                 onClick={() => handleRemoveFields(index)}
                               >
                                 <i
-                                  class="las la-minus"
+                                  className="las la-minus"
                                   style={{ fontSize: "21px" }}
                                 ></i>
                               </a>
@@ -288,7 +288,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i class="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
                       </a>
                     </tfoot>
                   </table>
@@ -306,7 +306,7 @@ export const BudgetForm = ({ fetchBudget }) => {
                     <button type="submit" className="btn btn-primary">
                       {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

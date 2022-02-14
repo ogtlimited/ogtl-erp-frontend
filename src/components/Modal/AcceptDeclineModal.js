@@ -48,31 +48,31 @@ const AcceptDeclineModal = ({setsubmitAction, reason, setreason, file, setfile})
         })
       };
     return (
-        <div class="modal custom-modal fade show" id="acceptDecline" role="dialog"
+        <div className="modal custom-modal fade show" id="acceptDecline" role="dialog"
          aria-modal="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="form-header">
+        <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+                <div className="modal-body">
+                    <div className="form-header">
                         <h3>Accept / Reject Coaching Form Review</h3>
                     </div>
-                    <div class="modal-btn delete-action">
-                        <div class="row">
-                            <div class="col-6"><a onClick={(e) => handleClick(e,'Accepted')} data-dismiss="modal" class="btn btn-primary continue-btn text-light">Accept</a></div>
-                            <div class="col-6"><a onClick={(e) => setshowReason(true)} class="btn btn-primary cancel-btn text-light">Decline</a>
+                    <div className="modal-btn delete-action">
+                        <div className="row">
+                            <div className="col-6"><a onClick={(e) => handleClick(e,'Accepted')} data-dismiss="modal" className="btn btn-primary continue-btn text-light">Accept</a></div>
+                            <div className="col-6"><a onClick={(e) => setshowReason(true)} className="btn btn-primary cancel-btn text-light">Decline</a>
                             </div>
                             {showReason && 
                                 <>
-                                    <div class="col-12 mt-3">
+                                    <div className="col-12 mt-3">
                                         <ReactQuill value={reason} onChange={(html) => setreason(html)} />
                                         <small>Minimum of 30 words </small>
                                         <small className="float-right"> {wordCount} / 30</small>
                                     </div>
-                                    <div class="col-12 mt-3">
+                                    <div className="col-12 mt-3">
                                         <input type="file" value={upload} onChange={onFileChange} />
                                     </div>
-                                    <div class="col-12 mt-3">
-                                    <button disabled={disabled} onClick={(e) => handleSubmit(e)} data-dismiss="modal" class="btn btn-primary btn-block cancel-btn text-light">Submit</button>
+                                    <div className="col-12 mt-3">
+                                    <button disabled={disabled} onClick={(e) => handleSubmit(e)} data-dismiss="modal" className="btn btn-primary btn-block cancel-btn text-light">Submit</button>
                                     </div>
                             </>
                             }

@@ -145,13 +145,13 @@ const PayrollReports = () => {
       </div>
       <div className="row">
         {cards.map((card) => (
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-            <div class="card dash-widget">
-              <div class="card-body">
-                <span class="dash-widget-icon">
-                  <i class={card.icon}></i>
+          <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <div className="card dash-widget">
+              <div className="card-body">
+                <span className="dash-widget-icon">
+                  <i className={card.icon}></i>
                 </span>
-                <div class="dash-widget-info">
+                <div className="dash-widget-info">
                   <h3>{card.amount}</h3>
                   <span>{card.title}</span>
                 </div>

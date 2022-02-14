@@ -141,7 +141,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
         } = props;
         return (
           <form onSubmit={handleSubmit}>
-          <div class="row">
+          <div className="row">
 
           { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
             <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
@@ -149,8 +149,8 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
             </div>
           ))}
         </div>
-        <div class="row">
-          <div class="col-sm-12">
+        <div className="row">
+          <div className="col-sm-12">
           <button
                         type="submit"
 

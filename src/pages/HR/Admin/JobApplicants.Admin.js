@@ -174,8 +174,8 @@ const JobApplicants = () => {
       text: "Resume Attachment",
       sort: true,
       formatter: (value, row) => (
-        <a href={value} class="btn btn-sm btn-primary" download>
-          <i class="fa fa-download"></i> Download
+        <a href={value} className="btn btn-sm btn-primary" download>
+          <i className="fa fa-download"></i> Download
         </a>
       ),
     },

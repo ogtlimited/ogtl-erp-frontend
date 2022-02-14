@@ -11,20 +11,20 @@ const RecruitmentPageHeader = () => {
   console.log(pathname);
     return (
         <>
-        <div class="page-header">
-        <div class="row">
-          <div class="col-sm-10">
-            <h3 class="page-title">Jobs</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+        <div className="page-header">
+        <div className="row">
+          <div className="col-sm-10">
+            <h3 className="page-title">Jobs</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a>Recruitment</a>
               </li>
-              <li class="breadcrumb-item active">Jobs</li>
+              <li className="breadcrumb-item active">Jobs</li>
             </ul>
           </div>
           {showIf === pathname  &&
-            <div class="col-sm-2">
-            <Link to="/recruitment/apply/general" class="btn job-type-info"><span class="job-types">Apply</span></Link>
+            <div className="col-sm-2">
+            <Link to="/recruitment/apply/general" className="btn job-type-info"><span className="job-types">Apply</span></Link>
               
             </div>
           
