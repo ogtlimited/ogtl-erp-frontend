@@ -21,7 +21,7 @@ export default function GuardedRoute({title, dept, children }) {
 
   const AllAccess = ['Super', 'CEO', 'HR Manager']
   const canView = (title, dept) => {
-      // console.log(title, user.role.title);
+      console.log(title,dept, user.role.title);
     if (user?.department?.department === dept || AllAccess.includes(user?.role?.title)) {
       return true;
     }
@@ -35,7 +35,7 @@ export default function GuardedRoute({title, dept, children }) {
     }
   };
   console.log(canView());
-  if (!canView(dept)) {
+  if (!canView(title, dept)) {
     return <Navigate to="/403" />;
   }
 
