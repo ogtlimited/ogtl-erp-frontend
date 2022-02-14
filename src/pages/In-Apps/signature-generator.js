@@ -3,7 +3,7 @@ import logo from '../../assets/img/OG-Logo.png'
 import Signature from './signature';
 import './signature.css'
 import tokenService from '../../services/token.service'
-const getIcon =  (name) => (<i class={"las "+ name}></i> );
+const getIcon =  (name) => (<i className={"las "+ name}></i> );
 
 const SignatureGenerator = () => {
     
@@ -101,9 +101,9 @@ const SignatureGenerator = () => {
         }
         if (progress > 0) {
             return (
-                <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                  {/* <span class="visually-hidden">Loading...</span> */}
+                <div className="d-flex justify-content-center">
+                <div className="spinner-border" role="status">
+                  {/* <span className="visually-hidden">Loading...</span> */}
                 </div>
               </div>
             );
@@ -159,65 +159,65 @@ const SignatureGenerator = () => {
         </div>
       </div>
 
-      <div class="row">
-    <div  class="col-xl-5 d-flex gfuSqG">
-        <div class="flex-fill">
+      <div className="row">
+    <div  className="col-xl-5 d-flex gfuSqG">
+        <div className="flex-fill">
             
-            <div class="card-body">
+            <div className="card-body">
                 <form action="#">
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label">Full Name</label>
-                        <div class="col-lg-9">
+                    <div className="form-group row">
+                        <label className="col-lg-3 col-form-label">Full Name</label>
+                        <div className="col-lg-9">
                             <input type="text"
                                 value={state.fullName}
                                 name={"fullName"}
                                 onChange={handleChange}
                                 autoFocus={true}
-                             class="form-control" />
+                             className="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label">Designation</label>
-                        <div class="col-lg-9">
+                    <div className="form-group row">
+                        <label className="col-lg-3 col-form-label">Designation</label>
+                        <div className="col-lg-9">
                             <input type="text"
                             label="Position"
                             value={state.position}
                             name={"position"}
                             onChange={handleChange}
                             
-                            class="form-control" />
+                            className="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label">Email Address</label>
-                        <div class="col-lg-9">
+                    <div className="form-group row">
+                        <label className="col-lg-3 col-form-label">Email Address</label>
+                        <div className="col-lg-9">
                             <input 
                             type="email"
                             value={state.email}
                             name={"email"}
                             onChange={handleChange}
                             
-                            class="form-control" />
+                            className="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-lg-3 col-form-label">Phone</label>
-                        <div class="col-lg-9">
+                    <div className="form-group row">
+                        <label className="col-lg-3 col-form-label">Phone</label>
+                        <div className="col-lg-9">
                             <input type="text"
                                 value={state.phone}
                                 name={"phone"}
                                 onChange={handleChange}
-                             class="form-control" />
+                             className="form-control" />
                         </div>
                     </div>
                    
                    
-                    <div class="text-right">
-                        {/* <button type="submit" class="btn btn-primary">Submit</button> */}
+                    <div className="text-right">
+                        {/* <button type="submit" className="btn btn-primary">Submit</button> */}
                         <button
                                 disabled={isStateChanged()}
                                 onClick={clearState}
-                                class="btn btn-primary"
+                                className="btn btn-primary"
                             >
                                 Clear
                             </button>
@@ -226,10 +226,10 @@ const SignatureGenerator = () => {
             </div>
         </div>
     </div>
-    <div class="col-xl-7 d-flex ">
-        <div class="gfuSqG flex-fill">
+    <div className="col-xl-7 d-flex ">
+        <div className="gfuSqG flex-fill">
            
-            <div class="card-body">
+            <div className="card-body">
                 {enoughData()}
             </div>
         </div>

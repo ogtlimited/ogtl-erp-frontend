@@ -13,18 +13,18 @@ const GeneralApproverBtn = ({
   };
   return (
     <div>
-      <div class="dropdown action-label text-center">
+      <div className="dropdown action-label text-center">
         <a
-          class="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+          className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
           data-toggle="dropdown"
           aria-expanded="false"
         >
-          <i class="fa fa-dot-circle-o text-success"></i> {value}
+          <i className="fa fa-dot-circle-o text-success"></i> {value}
         </a>
-        <div class="dropdown-menu dropdown-menu-right">
+        <div className="dropdown-menu dropdown-menu-right">
           {options.map((opt) => (
-            <a class="dropdown-item" onClick={() => handleStatus(opt.title)}>
-              <i class={"fa fa-dot-circle-o " + opt.color}></i>
+            <a className="dropdown-item" onClick={() => handleStatus(opt.title)}>
+              <i className={"fa fa-dot-circle-o " + opt.color}></i>
               {opt.title}
             </a>
           ))}

@@ -15,6 +15,26 @@ import HelperService from "../../../services/helper";
 import helper from "../../../services/helper";
 import InterviewContent from "../../../components/ModalContents/interviewContents";
 import FormModal2 from "../../../components/Modal/FormModal2";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+
+const statusOptions = [
+  {
+    title: "Invitation Sent",
+    color: "text-primary",
+  },
+  {
+    title: "Invitation Opened",
+    color: "text-secondary",
+  },
+  {
+    title: "Assessment Started",
+    color: "text-info",
+  },
+  {
+    title: "Assessment Completed",
+    color: "text-success",
+  },
+];
 
 const AptitudeTest = () => {
   const [formValue, setFormValue] = useState(null);
@@ -26,12 +46,14 @@ const AptitudeTest = () => {
   const [loadSelect, setloadSelect] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
+  const [status, setStatus] = useState("");
+  const [statusRow, setstatusRow] = useState(null);
 
   const [mode, setmode] = useState("add");
 
   const editRow = (row) => {
     // setformUpdate(null)
-    console.log(row);
+
     setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
@@ -51,7 +73,6 @@ const AptitudeTest = () => {
     axiosInstance
       .get("/api/test")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -67,7 +88,6 @@ const AptitudeTest = () => {
     axiosInstance
       .get("/api/jobApplicant-accepted")
       .then((res) => {
-        console.log("accepted job applicants", res);
         const jobApplicantsOpts = res?.data?.data?.map((e) => {
           return {
             label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
@@ -76,7 +96,7 @@ const AptitudeTest = () => {
         });
 
         const finalForm = applicationTestFormJson.Fields.map((field) => {
-          if (field.name === "job_applicant_id") {
+          if (field.name === "_id") {
             field.options = jobApplicantsOpts;
             return field;
           }
@@ -135,7 +155,6 @@ const AptitudeTest = () => {
     axiosInstance
       .delete(`/api/test/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -146,6 +165,30 @@ const AptitudeTest = () => {
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
+
+  useEffect(() => {
+    if (status.length) {
+      const update = {
+        ...statusRow,
+        status,
+      };
+      delete update.__v;
+      axiosInstance
+        .patch("/api/test/" + statusRow._id, update)
+        .then((res) => {
+          fetchAllTests();
+          showAlert(true, res.data.message, "alert alert-success");
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
+        });
+    }
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
 
   const columns = [
     {
@@ -169,11 +212,13 @@ const AptitudeTest = () => {
 
       formatter: (value, row) => (
         <>
-          <div className="action-label">
-            <a className="btn btn-white btn-sm btn-rounded" href="">
-              <i className="fa fa-dot-circle-o text-success"></i> {row.status}
-            </a>
-          </div>
+          <GeneralApproverBtn
+            options={statusOptions}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
         </>
       ),
     },
@@ -196,6 +241,11 @@ const AptitudeTest = () => {
       sort: true,
     },
 
+    {
+      dataField: "interview_status",
+      text: "Interview Status",
+      sort: true,
+    },
     {
       dataField: "notes",
       text: "Notes",

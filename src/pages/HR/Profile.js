@@ -239,7 +239,7 @@ const Profile = () => {
                               "Not Available"}
                             <a
                               href="#"
-                              class="btn btn-custom  float-right mb-2"
+                              className="btn btn-custom  float-right mb-2"
                               role="button"
                             >
                               Request Shift

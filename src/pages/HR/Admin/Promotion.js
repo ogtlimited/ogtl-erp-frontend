@@ -111,11 +111,11 @@ const Promotion = () => {
         console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchPromotion();
-        showAlert(true, res.data.message, "alert alert-success");
+        showAlert(true, res?.data?.message, "alert alert-success");
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error?.response?.data?.message, "alert alert-danger");
       });
   };
 
@@ -191,7 +191,7 @@ const Promotion = () => {
               </a>
             )}
             {user?.role?.hr?.delete && (
-              <Link
+              <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#exampleModal"
@@ -200,7 +200,7 @@ const Promotion = () => {
                 }}
               >
                 <i className="fa fa-trash m-r-5"></i> Delete
-              </Link>
+              </a>
             )}
           </div>
         </div>

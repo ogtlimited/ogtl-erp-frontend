@@ -62,46 +62,46 @@ const CoachingEmployee = () => {
   const breadcrumb = "Coaching Review";
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Coaching Form</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Coaching Form</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <a href="/">Dashboard</a>
               </li>
-              <li class="breadcrumb-item active">Coaching Form</li>
+              <li className="breadcrumb-item active">Coaching Form</li>
             </ul>
           </div>
          </div>
       </div>
 
       {noForm ? (
-       <div ref={ref} class="row justify-content-center">
-       <div class="col-md-11 mt-5">
-         <div class="card px-2 ">
-           <div class="card-body">
-             <h4 class="payslip-title">Coaching Form Review</h4>
-             <div class="row">
-               {/* <div class="col-sm-6 m-b-20">
-                          <img src={logo} class="inv-logo" alt="" />
+       <div ref={ref} className="row justify-content-center">
+       <div className="col-md-11 mt-5">
+         <div className="card px-2 ">
+           <div className="card-body">
+             <h4 className="payslip-title">Coaching Form Review</h4>
+             <div className="row">
+               {/* <div className="col-sm-6 m-b-20">
+                          <img src={logo} className="inv-logo" alt="" />
                           
                       </div> */}
              </div>
-             <div class="row mt-5">
-               <div class="col-lg-12  m-b-20">
-                 <table class="table table-bordered">
+             <div className="row mt-5">
+               <div className="col-lg-12  m-b-20">
+                 <table className="table table-bordered">
                    <tbody>
                      <tr>
                        <td>
                          <strong>Team Member Name</strong>{" "}
-                         <span class="float-right">
+                         <span className="float-right">
                            {coachingForm?.employee_id?.first_name}  {coachingForm?.employee_id?.last_name}
                          </span>
                        </td>
                        <td>
                          <strong>Date</strong>{" "}
-                         <span class="float-right">
+                         <span className="float-right">
                            {coachingForm?.incident_date}
                          </span>
                        </td>
@@ -109,11 +109,11 @@ const CoachingEmployee = () => {
                      <tr>
                        <td>
                          <strong>Title / Position</strong>{" "}
-                         <span class="float-right">{user?.designation}</span>
+                         <span className="float-right">{user?.designation}</span>
                        </td>
                        <td>
                          <strong>Supervisor</strong>{" "}
-                         <span class="float-right">
+                         <span className="float-right">
                            {coachingForm?.supervisor?.first_name} {coachingForm?.employee_id?.last_name}
                          </span>
                        </td>
@@ -124,11 +124,11 @@ const CoachingEmployee = () => {
              </div>
 
              <div className="row px-3 mt-5" id="accordion">
-               <div class="card col-sm-12 px-0">
-                 <div class="card-header" id="headingOne">
-                   <h5 class="mb-0">
+               <div className="card col-sm-12 px-0">
+                 <div className="card-header" id="headingOne">
+                   <h5 className="mb-0">
                      <button
-                       class="btn btn-link text-dark"
+                       className="btn btn-link text-dark"
                        data-toggle="collapse"
                        data-target="#collapseOne"
                        aria-expanded="true"
@@ -141,12 +141,12 @@ const CoachingEmployee = () => {
 
                  <div
                    id="collapseOne"
-                   class="collapse show"
+                   className="collapse show"
                    aria-labelledby="headingOne"
                    data-parent="#accordion"
                  >
                    <div
-                     class="card-body"
+                     className="card-body"
                      dangerouslySetInnerHTML={{
                        __html: coachingForm?.goals,
                      }}
@@ -155,11 +155,11 @@ const CoachingEmployee = () => {
                    </div>
                  </div>
                </div>
-               <div class="card col-sm-12 px-0">
-                 <div class="card-header" id="headingTwo">
-                   <h5 class="mb-0">
+               <div className="card col-sm-12 px-0">
+                 <div className="card-header" id="headingTwo">
+                   <h5 className="mb-0">
                      <button
-                       class="btn btn-link text-dark collapsed"
+                       className="btn btn-link text-dark collapsed"
                        data-toggle="collapse"
                        data-target="#collapseTwo"
                        aria-expanded="false"
@@ -171,12 +171,12 @@ const CoachingEmployee = () => {
                  </div>
                  <div
                    id="collapseTwo"
-                   class="collapse"
+                   className="collapse"
                    aria-labelledby="headingTwo"
                    data-parent="#accordion"
                  >
                    <div
-                     class="card-body"
+                     className="card-body"
                      dangerouslySetInnerHTML={{
                        __html: coachingForm?.reality,
                      }}
@@ -186,11 +186,11 @@ const CoachingEmployee = () => {
                  </div>
                </div>
 
-               <div class="card col-sm-12 px-0">
-                 <div class="card-header" id="headingFour">
-                   <h5 class="mb-0">
+               <div className="card col-sm-12 px-0">
+                 <div className="card-header" id="headingFour">
+                   <h5 className="mb-0">
                      <button
-                       class="btn btn-link text-dark collapsed"
+                       className="btn btn-link text-dark collapsed"
                        data-toggle="collapse"
                        data-target="#collapseFour"
                        aria-expanded="false"
@@ -202,23 +202,23 @@ const CoachingEmployee = () => {
                  </div>
                  <div
                    id="collapseFour"
-                   class="collapse"
+                   className="collapse"
                    aria-labelledby="headingFour"
                    data-parent="#accordion"
                  >
                    <div
-                     class="card-body"
+                     className="card-body"
                      dangerouslySetInnerHTML={{
                        __html: coachingForm?.opportunities,
                      }}
                    ></div>
                  </div>
                </div>
-               <div class="card col-sm-12 px-0">
-                 <div class="card-header" id="headingFive">
-                   <h5 class="mb-0">
+               <div className="card col-sm-12 px-0">
+                 <div className="card-header" id="headingFive">
+                   <h5 className="mb-0">
                      <button
-                       class="btn btn-link text-dark collapsed"
+                       className="btn btn-link text-dark collapsed"
                        data-toggle="collapse"
                        data-target="#collapseFive"
                        aria-expanded="false"
@@ -230,12 +230,12 @@ const CoachingEmployee = () => {
                  </div>
                  <div
                    id="collapseFive"
-                   class="collapse"
+                   className="collapse"
                    aria-labelledby="headingFive"
                    data-parent="#accordion"
                  >
                    <div
-                     class="card-body"
+                     className="card-body"
                      dangerouslySetInnerHTML={{
                        __html: coachingForm?.way_forward,
                      }}
@@ -250,7 +250,7 @@ const CoachingEmployee = () => {
                  <button
                    data-toggle="modal"
                    data-target="#acceptDecline"
-                   class="btn btn-primary submit-btn"
+                   className="btn btn-primary submit-btn"
                  >
                    Submit
                  </button>
@@ -262,11 +262,11 @@ const CoachingEmployee = () => {
      </div>
       ) : (
         <>
-          <div ref={ref} class="row justify-content-center">
-            <div class="col-md-11 mt-5">
-              <div class="card px-5 ">
-                <div class="card-body">
-                  <h4 class="payslip-title">No pending coaching form</h4>
+          <div ref={ref} className="row justify-content-center">
+            <div className="col-md-11 mt-5">
+              <div className="card px-5 ">
+                <div className="card-body">
+                  <h4 className="payslip-title">No pending coaching form</h4>
                 </div>
               </div>
             </div>

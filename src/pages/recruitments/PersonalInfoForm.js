@@ -136,22 +136,22 @@ const PersonalInfoForm = () => {
                 console.log('SUCCESS!! :-)\n\n' + JSON.stringify(fields, null, 4))
             }}
             render={({ errors, dirty, isValid, touched, setFieldValue, values, handleChange }) => (
-                <div class="card">
+                <div className="card">
                 <div className="card-header application-form-header">
                     Application Form
                 </div>  
-                <div class="card-body">
+                <div className="card-body">
                     { !afterSuccess ?
                   <Form>
                    
-                    <div class="form-group row">
-                    <div class="col-md-6">
+                    <div className="form-group row">
+                    <div className="col-md-6">
                     <label htmlFor="first_name">First Name</label>
                     <Field name="first_name" type="text" className={'form-control' + (errors.first_name && touched.first_name ? ' is-invalid' : '')} />
                     <ErrorMessage name="first_name" component="div" className="invalid-feedback" />
                    
                     </div>
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                     <label htmlFor="last_name">Last Name</label>
                     <Field name="last_name" type="text" className={'form-control' + (errors.last_name && touched.last_name ? ' is-invalid' : '')} />
                     <ErrorMessage name="last_name" component="div" className="invalid-feedback" />
@@ -159,12 +159,12 @@ const PersonalInfoForm = () => {
                     </div>
 
                     </div>
-                    <div class="form-group row">
-                    <div class="col-md-6">
+                    <div className="form-group row">
+                    <div className="col-md-6">
                         <label>Middle Name</label>
                         <Field name="middle_name" type="text" className='form-control'  />
                     </div>
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                     <label htmlFor="email_address">Email</label>
                         <Field name="email_address" type="text" className={'form-control' + (errors.email_address && touched.email_address ? ' is-invalid' : '')} />
                         <ErrorMessage name="email_address" component="div" className="invalid-feedback" />
@@ -172,14 +172,14 @@ const PersonalInfoForm = () => {
                     </div>
 
                     </div>
-                    <div class="form-group row">
-                    <div class="col-md-6">
+                    <div className="form-group row">
+                    <div className="col-md-6">
                     <label htmlFor="mobile">Mobile</label>
                         <Field name="mobile" type="text" className={'form-control' + (errors.mobile && touched.mobile ? ' is-invalid' : '')} />
                         <ErrorMessage name="mobile" component="div" className="invalid-feedback" />
                    
                     </div>
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                         <label htmlFor="alternate_mobile">Alternate Phone Number</label>
                         <Field name="alternate_mobile" type="text" className='form-control'  />
                     </div>
@@ -187,10 +187,10 @@ const PersonalInfoForm = () => {
                     
 
                     </div>
-                    <div class="form-group row">
+                    <div className="form-group row">
                     {id.id === "general" && 
                     
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                     <label htmlFor="job_opening_id">Which Job application are you applying for *</label>
                         <Field as="select" name="job_opening_id" onChange={(e) => {
                             setFieldValue('job_opening_id', e.currentTarget.value)
@@ -208,7 +208,7 @@ const PersonalInfoForm = () => {
                     </div>
                     
                     }
-                    <div class="col-md-6">
+                    <div className="col-md-6">
                         <label htmlFor="highest_qualification">Highest Qualification Attained</label>                        
                         <Field as="select" name="highest_qualification" className={'form-control' + (errors.highest_qualification && touched.highest_qualification ? ' is-invalid' : '')}>
                             {qualifications.map(e =>(
@@ -221,7 +221,7 @@ const PersonalInfoForm = () => {
                    
                     </div>
                    
-                    <div class={id.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
+                    <div className={id.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
                     <label htmlFor="certifications">Certifications (if any) *</label>
                         <Field name="certifications" component="textarea" className={'form-control' + (errors.certifications && touched.certifications ? ' is-invalid' : '')} />
                         <ErrorMessage name="certifications" component="div" className="invalid-feedback" />
@@ -229,8 +229,8 @@ const PersonalInfoForm = () => {
                     </div>
 
                     </div>
-                    <div class="form-group row">
-                    <div class="col-md-8">
+                    <div className="form-group row">
+                    <div className="col-md-8">
                     <div id="checkbox-group" className="mb-2">Language(s) spoken (Fluently)</div>
                     <div role="group" aria-labelledby="checkbox-group">
                         {languages.map(l => (
@@ -243,7 +243,7 @@ const PersonalInfoForm = () => {
 
                     </div>
                     </div>
-                    <div class="col-md-6 mt-3">
+                    <div className="col-md-6 mt-3">
                     <label htmlFor="referred">Were you referred by an OGTL employee? *</label>
                                     
                         <Field as="select" name="referred" className={'form-control' + (errors.referred && touched.referred ? ' is-invalid' : '')}>
@@ -256,7 +256,7 @@ const PersonalInfoForm = () => {
                    
                     </div>
                    
-                    <div class="col-md-6 mt-3">
+                    <div className="col-md-6 mt-3">
                     {values.referred == 'true' ? 
                     <>
                         <label htmlFor="referal_name"> Referrers full name.  *</label>
@@ -269,17 +269,17 @@ const PersonalInfoForm = () => {
 
                     </div>
 
-                    <div class="form-group">
+                    <div className="form-group">
                       <label>Upload your CV</label>
-                      <div class="custom-file">
-                        <Field type="file" name="resume_attachment" value={undefined} onChange={(e) => handleUpload(e, setFieldValue) } class={"custom-file-input" +  (errors.resume_attachment && touched.resume_attachment ? ' is-invalid' : '')} id="resume_attachment" />
-                        <label class="custom-file-label" for="resume_attachment">
+                      <div className="custom-file">
+                        <Field type="file" name="resume_attachment" value={undefined} onChange={(e) => handleUpload(e, setFieldValue) } className={"custom-file-input" +  (errors.resume_attachment && touched.resume_attachment ? ' is-invalid' : '')} id="resume_attachment" />
+                        <label className="custom-file-label" for="resume_attachment">
                           {fileName.length ? fileName : 'Choose file'}
                         
                         </label>
                         {showProgress && 
-                                    <div class="progress mt-1" style={{height: "3px"}}>
-        <div class="progress-bar" role="progressbar" style={{width: progress + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div className="progress mt-1" style={{height: "3px"}}>
+        <div className="progress-bar" role="progressbar" style={{width: progress + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
                         
                         }
@@ -287,16 +287,16 @@ const PersonalInfoForm = () => {
                    
                       </div>
                     </div>
-                    <div class="row flex justify-content-between px-3">
+                    <div className="row flex justify-content-between px-3">
                    
-                      <button  type="button" class="nav-button btn btn-primary submit-btn" data-toggle="collapse"
+                      <button  type="button" className="nav-button btn btn-primary submit-btn" data-toggle="collapse"
                 data-target={"#collapse1"} aria-expanded="false" aria-controls={"collapse1"}>
                           
                            Prev
                           
                     </button>
                     
-                      <button type="submit"  disabled={!(dirty && isValid)}class="nav-button btn btn-primary submit-btn" data-toggle="collapse"
+                      <button type="submit"  disabled={!(dirty && isValid)}className="nav-button btn btn-primary submit-btn" data-toggle="collapse"
                 data-target={"#collapse3"} aria-expanded="false" aria-controls={"collapse3"}>
                           Next
                          

@@ -51,7 +51,7 @@ const Header = () => {
         </div>
       </div>
 
-      <a id="toggle_btn" href="javascript:void(0);">
+      <a id="toggle_btn">
         <span className="bar-icon">
           <span></span>
           <span></span>
@@ -70,7 +70,7 @@ const Header = () => {
       <ul className="nav user-menu">
         <li className="nav-item">
           <div className="top-nav-search">
-            <a href="javascript:void(0);" className="responsive-search">
+            <a className="responsive-search">
               <i className="fa fa-search"></i>
             </a>
             <form>

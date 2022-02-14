@@ -25,8 +25,8 @@ const Joblist = () => {
       <RecruitmentPageHeader />
       
       <div className="row">
-      <div class="col-md-8">
-        <h1 class="ju-h1">Join Us</h1>
+      <div className="col-md-8">
+        <h1 className="ju-h1">Join Us</h1>
         <p className="rec-p">
           If you are passionate about delivering great customer experience,
           Outsource Global is the place for you. At Outsource Global, everything
@@ -47,21 +47,21 @@ const Joblist = () => {
           outsourcing industry?
         </p>
       </div>
-      <div class="col-md-4">
-        <div class="ju-percent-group">
-          <div class="d-flex ju-percent">
+      <div className="col-md-4">
+        <div className="ju-percent-group">
+          <div className="d-flex ju-percent">
             <h1>50%</h1>
             <p>Female Employees</p>
           </div>
-          <div class="d-flex ju-percent">
+          <div className="d-flex ju-percent">
             <h1>90%</h1>
             <p>University Graduates</p>
           </div>
-          <div class="d-flex ju-percent-down">
+          <div className="d-flex ju-percent-down">
             <h1>100%</h1>
             <p>Technical Professionals</p>
           </div>
-          <div class="d-flex ju-percent-down">
+          <div className="d-flex ju-percent-down">
             <h1>1000+</h1>
             <p>Employees</p>
           </div>
@@ -75,29 +75,29 @@ const Joblist = () => {
       <div className="row">
         {jobListings &&
           jobListings.map((job) => (
-            <div class="col-md-6">
-              <Link to={"/recruitment/joblist/" + job._id} class="job-list">
-                <div class="job-list-det">
-                  <div class="job-list-desc">
-                    <h3 class="job-list-title">{job?.title}</h3>
-                    <h4 class="job-department">
+            <div className="col-md-6">
+              <Link to={"/recruitment/joblist/" + job._id} className="job-list">
+                <div className="job-list-det">
+                  <div className="job-list-desc">
+                    <h3 className="job-list-title">{job?.title}</h3>
+                    <h4 className="job-department">
                       {job?.designation_id?.designation}
                     </h4>
                   </div>
-                  <div class="job-type-info">
-                    <span class="job-types">{job?.type}</span>
+                  <div className="job-type-info">
+                    <span className="job-types">{job?.type}</span>
                   </div>
                 </div>
-                <div class="job-list-footer">
+                <div className="job-list-footer">
                   <ul>
                     <li>
-                      <i class="fa fa-map-signs"></i> {job?.location.branch}
+                      <i className="fa fa-map-signs"></i> {job?.location.branch}
                     </li>
                     <li>
-                      <i class="fa fa-money"></i> ₦{job?.salary}
+                      <i className="fa fa-money"></i> ₦{job?.salary}
                     </li>
                     <li>
-                      <i class="fa fa-clock-o"></i>
+                      <i className="fa fa-clock-o"></i>
                       {job.date ? moment(new Date(job?.date)).fromNow(true) : ""}
                     </li>
                   </ul>

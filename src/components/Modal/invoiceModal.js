@@ -123,10 +123,10 @@ const InvoiceModal = () => {
                 </div>
                 <div className="modal-body">
                   <form>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="customer">
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="customer">
                             Customer
                           </label>
                           <select className="form-control" name="" id="">
@@ -135,14 +135,14 @@ const InvoiceModal = () => {
                         </div>
                       </div>
 
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="invoice_date">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="invoice_date">
                             Invoice Date
                           </label>
                           <input
                             name="invoice_date"
-                            class="form-control"
+                            className="form-control"
                             type="date"
                             id="invoice_date"
                             placeholder=""
@@ -150,14 +150,14 @@ const InvoiceModal = () => {
                           />
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="due-date">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="due-date">
                             Due Date
                           </label>
                           <input
                             name="due-date"
-                            class="form-control"
+                            className="form-control"
                             type="date"
                             id="due-date"
                             placeholder=""
@@ -165,14 +165,14 @@ const InvoiceModal = () => {
                           />
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="total_amount">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="total_amount">
                             Total
                           </label>
                           <input
                             name="total"
-                            class="form-control"
+                            className="form-control"
                             type="text"
                             id="total"
                             placeholder=""
@@ -180,14 +180,14 @@ const InvoiceModal = () => {
                           />
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="status">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="status">
                             Status
                           </label>
                           <input
                             name="status"
-                            class="form-control"
+                            className="form-control"
                             type="text"
                             id="status"
                             placeholder=""
@@ -195,14 +195,14 @@ const InvoiceModal = () => {
                           />
                         </div>
                       </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-form-label" for="payment-status">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label" for="payment-status">
                             Payment Status
                           </label>
                           <input
                             name="payment-status"
-                            class="form-control"
+                            className="form-control"
                             type="text"
                             id="payment-status"
                             placeholder=""
@@ -211,8 +211,8 @@ const InvoiceModal = () => {
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <table class="table table-striped">
+                    <div className="row">
+                      <table className="table table-striped">
                         <thead>
                           <tr>
                             <th className="col-4">Product/Service</th>
@@ -233,28 +233,28 @@ const InvoiceModal = () => {
                             <td>
                               <input
                                 name="product"
-                                class="form-control"
+                                className="form-control"
                                 type="text"
                               />
                             </td>
                             <td>
                               <input
                                 name="rate"
-                                class="form-control"
+                                className="form-control"
                                 type="text"
                               />
                             </td>
                             <td>
                               <input
                                 name="price"
-                                class="form-control"
+                                className="form-control"
                                 type="text"
                               />
                             </td>
                             <td>
                               <input
                                 name="subtotal"
-                                class="form-control"
+                                className="form-control"
                                 type="text"
                               />
                             </td>
@@ -267,15 +267,15 @@ const InvoiceModal = () => {
                           style={{ paddingLeft: "2px" }}
                         >
                           <i
-                            class="las la-plus"
+                            className="las la-plus"
                             style={{ fontSize: "21px" }}
                           ></i>
                         </a>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <button class="btn btn-primary btn-add" type="submit">
+                    <div className="row">
+                      <div className="col-sm-12">
+                        <button className="btn btn-primary btn-add" type="submit">
                           Submit
                         </button>
                       </div>

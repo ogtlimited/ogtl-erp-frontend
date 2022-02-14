@@ -8,9 +8,11 @@ import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import config from "../../config.json";
 import { useAppContext } from "../../Context/AppContext";
+import { callMsGraph } from "../../graph";
 
 const Login = () => {
-  const { instance } = useMsal();
+  const { instance, accounts } = useMsal();
+  const [graphData, setGraphData] = useState(null);
   let navigate = useNavigate();
   const [errorMsg, seterrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,15 @@ const Login = () => {
     instance
       .loginPopup(loginRequest)
       .then((e) => {
+        instance.acquireTokenSilent({
+          ...loginRequest,
+          account: accounts[0]
+      }).then((response) => {
+          callMsGraph(response.accessToken).then(response =>{
+            console.log(response)
+            setGraphData(response)
+          });
+      });
         console.log(e);
         const obj = {
           company_email: data.company_email.trim(),
@@ -35,6 +46,7 @@ const Login = () => {
           "microsoftAccessToken",
           JSON.stringify(e.accessToken)
         );
+        
         axios
           .post(config.ApiUrl + "/api/login", obj)
           .then((res) => {

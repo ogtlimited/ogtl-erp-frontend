@@ -262,7 +262,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                   </div>
                 </div>
                 <div className="row">
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                     <thead>
                       <tr>
                         <th className="col-4">Product/Service</th>
@@ -343,7 +343,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                                 onClick={() => handleRemoveFields(index)}
                               >
                                 <i
-                                  class="las la-minus"
+                                  className="las la-minus"
                                   style={{ fontSize: "21px" }}
                                 ></i>
                               </a>
@@ -357,7 +357,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i class="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
                       </a>
                     </tfoot>
                   </table>
@@ -375,7 +375,7 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                     <button type="submit" className="btn btn-primary">
                       {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

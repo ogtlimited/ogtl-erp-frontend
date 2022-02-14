@@ -2,16 +2,16 @@ import React from "react";
 import sample from './recruitment-supervision.json'
 const RecruitmentSupervision = () => {
   return (
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card card-table">
-          <div class="card-header d-flex justify-content-between">
-            <h3 class="card-title mb-1s">Recruitment Supervision Sheet</h3>
-            <span class=" mb-0">Target: CV Sieving 50 | Phone Screening: 30 | Interview Schedule : 20</span>
+    <div className="row">
+      <div className="col-md-12">
+        <div className="card card-table">
+          <div className="card-header d-flex justify-content-between">
+            <h3 className="card-title mb-1s">Recruitment Supervision Sheet</h3>
+            <span className=" mb-0">Target: CV Sieving 50 | Phone Screening: 30 | Interview Schedule : 20</span>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-nowrap custom-table mb-0">
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table table-nowrap custom-table mb-0">
                 <thead>
                   <tr>
                     <th>#</th>
@@ -19,7 +19,7 @@ const RecruitmentSupervision = () => {
                     <th>CV Sieving</th>
                     <th>Phone Screening</th>
                     <th>Interview Schedule</th>
-                    <th class="text-center">Date</th>
+                    <th className="text-center">Date</th>
 
                   </tr>
                   
@@ -30,14 +30,14 @@ const RecruitmentSupervision = () => {
                         <tr>
                             <td>{i + 1}</td>
                             <td>
-                            <h2 class="table-avatar">
-                                <a href="" class="avatar">
+                            <h2 className="table-avatar">
+                                <a href="" className="avatar">
                                 <img
                                     alt=""
                                     src="avater.jpg"
                                 />
                                 </a>
-                                <a href="" class="">
+                                <a href="" className="">
                                 {s.full_name} <span>HR In House Agent</span>
                                 </a>
                             </h2>

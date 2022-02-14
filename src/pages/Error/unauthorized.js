@@ -5,16 +5,16 @@ const Unauthorized = () => {
   return(
     <div id="app">
         <div>
-        <div class="error404 error-page" style={{ height: "100vh" }}>
+        <div className="error404 error-page" style={{ height: "100vh" }}>
 
-            <div class="main-wrapper">
-            <div class="error-box">
+            <div className="main-wrapper">
+            <div className="error-box">
                 <h1>404</h1>
                 <h3>
-                <i class="fa fa-warning"></i> Oops! Unauthorized Access!
+                <i className="fa fa-warning"></i> Oops! Unauthorized Access!
                 </h3>
                 <p>You dont have access to visit this page</p>
-                <Link to="/dashboard/employee-dashboard" class="btn btn-custom">
+                <Link to="/dashboard/employee-dashboard" className="btn btn-custom">
                     Back to Home
                 </Link>
             </div>

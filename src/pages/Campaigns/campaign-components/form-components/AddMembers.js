@@ -95,7 +95,7 @@ const AddMembers = ({ campaign_info }) => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
                   <div className="table-wrapper-scroll-y my-custom-scrollbar">
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                       <thead>
                         <tr>
                           <th className="col-4">Employees</th>
@@ -153,7 +153,7 @@ const AddMembers = ({ campaign_info }) => {
                     <button type="submit" className="btn btn-primary">
                       {loading ? (
                         <span
-                          class="spinner-border spinner-border-sm"
+                          className="spinner-border spinner-border-sm"
                           role="status"
                           aria-hidden="true"
                         ></span>

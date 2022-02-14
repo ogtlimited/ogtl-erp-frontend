@@ -99,37 +99,37 @@ const JobModal = () => {
             }}
             render={({ errors, status, touched, setFieldValue }) => (
                 <div
-                class="modal custom-modal fade show"
+                className="modal custom-modal fade show"
                 id="apply_job"
                 role="dialog"
                 aria-modal="true"
               
               >
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">{header}</h5>
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title">{header}</h5>
                       <button
                         id="closeBtn"
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >
                         <span aria-hidden="true">×</span>
                       </button>
                     </div>
-                    <div class="modal-body">
+                    <div className="modal-body">
                         { !afterSuccess ?
                       <Form>
-                        <div class="form-group row">
-                        <div class="col-md-6">
+                        <div className="form-group row">
+                        <div className="col-md-6">
                         <label htmlFor="first_name">First Name</label>
                         <Field name="first_name" type="text" className={'form-control' + (errors.first_name && touched.first_name ? ' is-invalid' : '')} />
                         <ErrorMessage name="first_name" component="div" className="invalid-feedback" />
                        
                         </div>
-                        <div class="col-md-6">
+                        <div className="col-md-6">
                         <label htmlFor="last_name">Last Name</label>
                         <Field name="last_name" type="text" className={'form-control' + (errors.last_name && touched.last_name ? ' is-invalid' : '')} />
                         <ErrorMessage name="last_name" component="div" className="invalid-feedback" />
@@ -137,12 +137,12 @@ const JobModal = () => {
                         </div>
 
                         </div>
-                        <div class="form-group row">
-                        <div class="col-md-6">
+                        <div className="form-group row">
+                        <div className="col-md-6">
                             <label>Middle Name</label>
                             <Field name="middle_name" type="text" className='form-control'  />
                         </div>
-                        <div class="col-md-6">
+                        <div className="col-md-6">
                         <label htmlFor="email_address">Email</label>
                             <Field name="email_address" type="text" className={'form-control' + (errors.email_address && touched.email_address ? ' is-invalid' : '')} />
                             <ErrorMessage name="email_address" component="div" className="invalid-feedback" />
@@ -151,21 +151,21 @@ const JobModal = () => {
 
                         </div>
  
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Cover Letter</label>
-                          <Field component="textarea" rows="4" name="cover_letter" class="form-control"></Field>
+                          <Field component="textarea" rows="4" name="cover_letter" className="form-control"></Field>
                         </div>
-                        <div class="form-group">
+                        <div className="form-group">
                           <label>Upload your CV</label>
-                          <div class="custom-file">
-                            <Field type="file" name="resume_attachment" value={undefined} onChange={(e) => handleUpload(e, setFieldValue) } class={"custom-file-input" +  (errors.resume_attachment && touched.resume_attachment ? ' is-invalid' : '')} id="resume_attachment" />
-                            <label class="custom-file-label" for="resume_attachment">
+                          <div className="custom-file">
+                            <Field type="file" name="resume_attachment" value={undefined} onChange={(e) => handleUpload(e, setFieldValue) } className={"custom-file-input" +  (errors.resume_attachment && touched.resume_attachment ? ' is-invalid' : '')} id="resume_attachment" />
+                            <label className="custom-file-label" for="resume_attachment">
                               {fileName.length ? fileName : 'Choose file'}
                             
                             </label>
                             {showProgress && 
-                                        <div class="progress mt-1" style={{height: "3px"}}>
-            <div class="progress-bar" role="progressbar" style={{width: progress + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div className="progress mt-1" style={{height: "3px"}}>
+            <div className="progress-bar" role="progressbar" style={{width: progress + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
                             
                             }
@@ -173,10 +173,10 @@ const JobModal = () => {
                        
                           </div>
                         </div>
-                        <div class="submit-section">
-                          <button type="submit" class="btn btn-primary submit-btn">
+                        <div className="submit-section">
+                          <button type="submit" className="btn btn-primary submit-btn">
                               {/* Submit */}
-                              {submitted ? <div class="spinner-grow" role="status"></div> : 'Submit' }
+                              {submitted ? <div className="spinner-grow" role="status"></div> : 'Submit' }
                               
                         </button>
                         </div>

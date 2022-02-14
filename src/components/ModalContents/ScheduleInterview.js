@@ -24,13 +24,13 @@ const ScheduleInterview = ({jobApplication, handleUpdate}) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="form-group">
             <label>Interview Date </label>
             <input
               type="datetime-local"
-              class="form-control"
+              className="form-control"
               onChange={handleChange}
               name="interview_date"
               defaultValue={form.interview_date}
@@ -39,8 +39,8 @@ const ScheduleInterview = ({jobApplication, handleUpdate}) => {
         </div>
 
       </div>
-      <div class="submit-section">
-        <button class="btn btn-primary submit-btn">Save</button>
+      <div className="submit-section">
+        <button className="btn btn-primary submit-btn">Save</button>
       </div>
     </form>
   );
