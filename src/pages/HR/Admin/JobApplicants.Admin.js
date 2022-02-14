@@ -1,15 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import { ApproverBtn } from "../../../components/ApproverBtn";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Select from "react-select";
 import helper from "../../../services/helper";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
-import { InterviewProcessStageOptions, InterviewStatusOptions } from "../../../constants";
+import {
+  InterviewProcessStageOptions,
+  InterviewStatusOptions,
+} from "../../../constants";
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
@@ -34,8 +36,8 @@ const JobApplicants = () => {
   const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [processingStageRow, setprocessingStageRow] = useState(null);
-  const [status, setStatus] = useState("");
-  const [processingStage, setprocessingStage] = useState("");
+  const [interview_status, setInterviewStatus] = useState("");
+  const [process_stage, setprocessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState("schedule-interview");
@@ -43,7 +45,6 @@ const JobApplicants = () => {
     axiosInstance
       .get("/api/jobApplicant")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
         setunfiltered(res?.data?.data);
       })
@@ -68,7 +69,6 @@ const JobApplicants = () => {
     axiosInstance
       .delete(`/api/jobApplicant/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -80,32 +80,38 @@ const JobApplicants = () => {
       });
   };
   //update jobOpening
-  const handleUpdate = (id ,update) =>{
+  const handleUpdate = useCallback((id, update) => {
     axiosInstance
-    .patch("/api/jobApplicant/" + id, update)
-    .then((res) => {
-      console.log(res);
-      fetchJobApplicants();
-      showAlert(true, res.data.message, "alert alert-success");
-    })
-    .catch((error) => {
-      console.log(error);
-      showAlert(true, error.response.data.message, "alert alert-danger");
-    });
-  }
+      .patch("/api/jobApplicant/" + id, update)
+      .then((res) => {
+        console.log(res.data);
+        fetchJobApplicants();
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  }, []);
   useEffect(() => {
-    if (status.length) {
-      console.log(status);
-      console.log(statusRow);
+    if (interview_status.length) {
       const update = {
-        ...statusRow,
-        status: status,
-        job_opening_id: statusRow?.job_opening_id?._id,
+        interview_status,
+        _id: statusRow?._id,
       };
-      delete update.__v;
-     handleUpdate(statusRow._id, update)
+      handleUpdate(statusRow._id, update);
     }
-  }, [status, statusRow]);
+  }, [interview_status, statusRow, handleUpdate]);
+
+  useEffect(() => {
+    if (process_stage.length) {
+      const update = {
+        process_stage,
+        _id: processingStageRow?._id,
+      };
+      handleUpdate(processingStageRow._id, update);
+    }
+  }, [process_stage, processingStageRow, handleUpdate]);
 
   const columns = [
     {
@@ -133,27 +139,28 @@ const JobApplicants = () => {
       dataField: "interview_date",
       text: "Interview Date",
       sort: true,
-      formatter: (value, row) => <h2>{row.interview_date ? row.interview_date : 'Not Set'}</h2>,
+      formatter: (value, row) => (
+        <h2>{row.interview_date ? row.interview_date : "Not Set"}</h2>
+      ),
     },
     {
       dataField: "interview_status",
       text: "Interview Status",
       sort: true,
-
       formatter: (value, row) => (
         <>
           <GeneralApproverBtn
             options={InterviewStatusOptions}
-            setStatus={setprocessingStage}
+            setStatus={setInterviewStatus}
             value={value}
             row={row}
-            setstatusRow={setprocessingStageRow}
+            setstatusRow={setstatusRow}
           />
         </>
       ),
     },
     {
-      dataField: "interview_status",
+      dataField: "process_stage",
       text: "Processing Stage",
       sort: true,
 
@@ -161,10 +168,10 @@ const JobApplicants = () => {
         <>
           <GeneralApproverBtn
             options={InterviewProcessStageOptions}
-            setStatus={setStatus}
+            setStatus={setprocessingStage}
             value={value}
             row={row}
-            setstatusRow={setstatusRow}
+            setstatusRow={setprocessingStageRow}
           />
         </>
       ),
@@ -284,7 +291,12 @@ const JobApplicants = () => {
       ) : (
         <ViewModal
           title="Schedule Interview"
-          content={<ScheduleInterview handleUpdate={handleUpdate} jobApplication={selectedRow} />}
+          content={
+            <ScheduleInterview
+              handleUpdate={handleUpdate}
+              jobApplication={selectedRow}
+            />
+          }
         />
       )}
     </>
