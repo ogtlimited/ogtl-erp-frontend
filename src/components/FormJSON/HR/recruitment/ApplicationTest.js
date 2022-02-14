@@ -2,7 +2,7 @@ export const applicationTestFormJson = {
   title: "Interview Form Process",
   Fields: [
     {
-      name: "job_applicant_id",
+      name: "_id",
       type: "select",
       title: "Job Applicant",
       required: {
@@ -49,6 +49,29 @@ export const applicationTestFormJson = {
       name: "email_address",
       type: "email",
       title: "Email Address",
+    },
+    {
+      name: "status",
+      type: "select",
+      title: "Status",
+      options: [
+        {
+          value: "Invitation Sent",
+          label: "Invitation Sent",
+        },
+        {
+          value: "Invitation Opened",
+          label: "Invitation Opened",
+        },
+        {
+          value: "Assessment Started",
+          label: "Assessment Started",
+        },
+        {
+          value: "Assessment Completed",
+          label: "Assessment Completed",
+        },
+      ],
     },
     {
       name: "typing_speed_score",
@@ -300,29 +323,7 @@ export const applicationTestFormJson = {
       type: "date",
       title: "Assessment Completion Date",
     },
-    {
-      name: "status",
-      type: "select",
-      title: "Status",
-      options: [
-        {
-          value: "Invitation Sent",
-          label: "Invitation Sent",
-        },
-        {
-          value: "Invitation Opened",
-          label: "Invitation Opened",
-        },
-        {
-          value: "Assessment Started",
-          label: "Assessment Started",
-        },
-        {
-          value: "Assessment Completed",
-          label: "Assessment Completed",
-        },
-      ],
-    },
+
     {
       name: "stage",
       type: "select",
@@ -481,6 +482,25 @@ export const applicationTestFormJson = {
       name: "notes",
       type: "textarea",
       title: "Notes",
+    },
+    {
+      name: "interview_status",
+      type: "select",
+      title: "Interview Status",
+      options: [
+        {
+          value: "Qualify for Coaching/Shadowing",
+          label: "Qualify for Coaching/Shadowing",
+        },
+        {
+          value: "Qualify for Domestic",
+          label: "Qualify for Domestic",
+        },
+        {
+          value: "Qualify for Bootcamp",
+          label: "Qualify for Bootcamp",
+        },
+      ],
     },
   ],
 };

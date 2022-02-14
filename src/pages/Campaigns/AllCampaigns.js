@@ -12,26 +12,26 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
 
-const AllCampaigns = () => {
-  const [approval, setApproval] = useState([
-    {
-      title: "open",
-      color: "text-primary",
-    },
-    {
-      title: "approved",
-      color: "text-success",
-    },
-    {
-      title: "suspended",
-      color: "text-warning",
-    },
-    {
-      title: "rejected",
-      color: "text-danger",
-    },
-  ]);
+const approval = [
+  {
+    title: "open",
+    color: "text-primary",
+  },
+  {
+    title: "approved",
+    color: "text-success",
+  },
+  {
+    title: "suspended",
+    color: "text-warning",
+  },
+  {
+    title: "rejected",
+    color: "text-danger",
+  },
+];
 
+const AllCampaigns = () => {
   const [template, setTemplate] = useState(campaignFormJson);
   const [editData, seteditData] = useState(null);
   const [data, setData] = useState([]);
@@ -126,8 +126,6 @@ const AllCampaigns = () => {
 
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         status,
       };
@@ -157,7 +155,9 @@ const AllCampaigns = () => {
       sort: true,
       headerStyle: { width: "250px" },
       formatter: (value, row) => (
-        <Link to={`/dashboard/operations/campaign-info/${row._id}`}>{value}</Link>
+        <Link to={`/dashboard/operations/campaign-info/${row._id}`}>
+          {value}
+        </Link>
       ),
     },
     {
