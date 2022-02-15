@@ -18,7 +18,6 @@ export default function AuthGuard({ children }) {
   const [isAuthenticated, setisAuthenticated] = useState(tokenService.getToken())
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
-  console.log(pathname, requestedLocation, "PATHNAME");
   if (!isAuthenticated) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);

@@ -7,7 +7,6 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import { ApproverBtn } from "../../../components/ApproverBtn";
-import ReactHtmlParser from "react-html-parser";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import HelperService from "../../../services/helper";
 import Select from "react-select";
@@ -64,7 +63,6 @@ const JobOpening = () => {
     axiosInstance
       .get("/api/jobOpening")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
         setunfiltered(res?.data?.data);
       })
@@ -125,6 +123,7 @@ const JobOpening = () => {
         //   title: jobOpeningFormJson.title,
         //   Fields: finalForm,
         // });
+        console.log(jobOpeningFormJson);
         console.log(template);
         if (!loadSelect) {
           setloadSelect(true);
