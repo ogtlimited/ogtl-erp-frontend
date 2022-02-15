@@ -26,11 +26,16 @@ const EmployeeUser = () => {
   }
   console.log(getNextHoliday())
   const calcShift = (time) =>{
-    let split = time.split(":")
-    if(parseInt(split[0]) < 12){
-      return parseInt(split[0]) + ':' + split[1] + ' AM'
+    if(time){
+
+      let split = time.split(":")
+      if(parseInt(split[0]) < 12){
+        return parseInt(split[0]) + ':' + split[1] + ' AM'
+      }else{
+        return parseInt(split[0]) + ':' + split[1] + ' PM'
+      } 
     }else{
-      return parseInt(split[0]) + ':' + split[1] + ' PM'
+      return ""
     }
   }
   useEffect(() => {
@@ -116,7 +121,7 @@ const EmployeeUser = () => {
                       <i className="fa fa-clock"></i>
                     </div>
                     <div className="dash-card-content">
-                      <p>Your shift starts at {calcShift(user?.default_shift.start_time)} and ends at {calcShift(user?.default_shift.end_time)} </p>
+                      <p>Your shift starts at {calcShift(user?.default_shift?.start_time)} and ends at {calcShift(user?.default_shift?.end_time)} </p>
                     </div>
 
                   </div>

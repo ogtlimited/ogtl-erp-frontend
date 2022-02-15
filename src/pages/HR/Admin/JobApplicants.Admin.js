@@ -133,7 +133,14 @@ const JobApplicants = () => {
       dataField: "job_opening_id",
       text: "Job Opening",
       sort: true,
-      formatter: (value, row) => <h2>{row?.job_opening_id?.job_title}</h2>,
+      formatter: (value, row) => (
+        <>
+        {row?.job_opening_id?.job_title ? <h2>{row?.job_opening_id?.job_title}</h2>
+        :
+        <h2>{row?.default_job_opening_id?.job_title}</h2>
+      }
+        </>
+      ),
     },
     {
       dataField: "interview_date",

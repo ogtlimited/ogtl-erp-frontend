@@ -10,8 +10,8 @@ import { useNoAuthContext } from "../../Context/NoAuthContext";
 
 const PersonalInfoForm = () => {
 
-    const [id, setid] = useState(useParams())
-    console.log(id)
+    const [jobId, setjobId] = useState(useParams())
+    const [initialId, setinitialId] = useState(useParams())
     const {setjobApplication, jobApplication} = useNoAuthContext()
     const [defaultJob, setdefaultJob] = useState([]);
     const FILE_SIZE = 160 * 10240;
@@ -34,16 +34,19 @@ const PersonalInfoForm = () => {
             setdefaultJob(data)
         })
     }
+    useEffect(() => {
+     console.log(jobId)
+    }, [jobId])
+    
     const handleUpload = (e, setFieldValue) =>{
-        console.log(id)
+        console.log(jobId)
         setprogress(65)
         setshowProgress(true)
         let formdata = new FormData();
         let file = e.target.files[0]
         console.log(file)
         setfileName(file.name)
-       
-        formdata.append("job_id", id.id);
+        formdata.append("job_id", jobId.id);
         formdata.append("document", file);
         axios.post(config.ApiUrl +'/api/job-document',formdata ).then(res =>{
             console.log(res)
@@ -59,9 +62,10 @@ const PersonalInfoForm = () => {
         setsubmitted(true)
         let obj = {
             ...field,
-            job_opening_id: id.id
+            job_opening_id:  jobId.id,
+            default_job_opening_id: jobId.id
         }
-        console.log(jobApplication)
+        console.log(obj)
         console.log(setjobApplication)
         setjobApplication(obj)
         // axios.post(config.ApiUrl +'/api/jobApplicant',obj ).then(res =>{
@@ -86,7 +90,7 @@ const PersonalInfoForm = () => {
     ];
     return (
         <Formik
-            enableReinitialize={true}
+            enableReinitialize={false}
             initialValues={{
                 first_name: '',
                 last_name: '',
@@ -100,7 +104,7 @@ const PersonalInfoForm = () => {
                 languages_spoken: [],
                 referred: false,
                 referal_name: '',
-                job_opening_id: id.id
+                job_opening_id: jobId.id
             }}
             validationSchema={Yup.object().shape({
                 first_name: Yup.string()
@@ -188,14 +192,14 @@ const PersonalInfoForm = () => {
 
                     </div>
                     <div className="form-group row">
-                    {id.id === "general" && 
+                    {initialId.id === "general" && 
                     
                     <div className="col-md-6">
                     <label htmlFor="job_opening_id">Which Job application are you applying for *</label>
                         <Field as="select" name="job_opening_id" onChange={(e) => {
                             setFieldValue('job_opening_id', e.currentTarget.value)
-                            setid({id: values?.job_opening_id})
-                            console.log(values);
+                            setjobId({id: e.currentTarget.value})
+                            console.log( jobId);
                         }} className={'form-control' + (errors.job_opening_id && touched.job_opening_id ? ' is-invalid' : '')}>
                             {defaultJob.map(e =>(
                                 <option value={e.value}>{e.label}</option>
@@ -221,7 +225,7 @@ const PersonalInfoForm = () => {
                    
                     </div>
                    
-                    <div className={id.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
+                    <div className={jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
                     <label htmlFor="certifications">Certifications (if any) *</label>
                         <Field name="certifications" component="textarea" className={'form-control' + (errors.certifications && touched.certifications ? ' is-invalid' : '')} />
                         <ErrorMessage name="certifications" component="div" className="invalid-feedback" />
