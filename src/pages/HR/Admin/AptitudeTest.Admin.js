@@ -8,7 +8,6 @@ import { applicationTestFormJson } from "../../../components/FormJSON/HR/recruit
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ReactHtmlParser from "react-html-parser";
-import moment from "moment";
 import ViewModal from "../../../components/Modal/ViewModal";
 import HelperService from "../../../services/helper";
 
@@ -175,9 +174,10 @@ const AptitudeTest = () => {
   useEffect(() => {
     if (status.length) {
       const update = {
-        ...statusRow,
+        _id: statusRow._id,
         status,
       };
+
       delete update.__v;
       axiosInstance
         .patch("/api/test/" + statusRow._id, update)
@@ -228,14 +228,7 @@ const AptitudeTest = () => {
         </>
       ),
     },
-    {
-      dataField: "interview_date",
-      text: "Interview Date",
-      sort: true,
-      formatter: (value, row) => (
-        <h2>{moment(row?.interview_date).format("L")}</h2>
-      ),
-    },
+
     {
       dataField: "phone_number",
       text: "Phone Number",
