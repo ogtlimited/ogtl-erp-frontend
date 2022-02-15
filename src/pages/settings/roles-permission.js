@@ -28,10 +28,10 @@ const RolePermission = () => {
   }, [role]);
   return (
     <>
-      <div class="page-header">
-        <div class="row">
-          <div class="col-sm-12">
-            <h3 class="page-title">Roles &amp; Permissions</h3>
+      <div className="page-header">
+        <div className="row">
+          <div className="col-sm-12">
+            <h3 className="page-title">Roles &amp; Permissions</h3>
           </div>
         </div>
       </div>

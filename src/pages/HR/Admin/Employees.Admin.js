@@ -213,8 +213,8 @@ const AllEmployeesAdmin = () => {
   ];
   return (
     <>
-      {/* { uploading && <div class="progress mb-3">
-    <div class="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      {/* { uploading && <div className="progress mb-3">
+    <div className="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
   </div> } */}
       <div className="page-header">
         <div className="row align-items-center">
@@ -242,7 +242,7 @@ const AllEmployeesAdmin = () => {
                 <button
                   onClick={() => settoggleModal(true)}
                   type="button"
-                  class="btn add-btn mx-3"
+                  className="btn add-btn mx-3"
                   data-toggle="modal"
                   data-target="#uploadModal"
                 >

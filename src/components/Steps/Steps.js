@@ -6,7 +6,7 @@ const Steps = ({items}) => {
         <>
         {items && items.map(e =>(
            
-            <div id={"collapse" + e.id} class={e.default ? "collapse show" : "collapse"}
+            <div id={"collapse" + e.id} className={e.default ? "collapse show" : "collapse"}
                 data-parent="#accordionExample">
                 
                    {e.component}

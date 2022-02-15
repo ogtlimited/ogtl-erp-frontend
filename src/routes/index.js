@@ -167,6 +167,7 @@ export default function Router() {
             },
             { path: "job-opening", element: <GuardedRoute title="" dept="HR"><JobOpening /></GuardedRoute> },
             { path: "job-applicants", element: <GuardedRoute title="Job Applicants" dept="HR"><JobApplicants /></GuardedRoute> },
+            { path: "interviewees", element: <GuardedRoute title="Interviewees" dept="Facility"><Interviewees /></GuardedRoute> },
             { path: "aptitude-test", element: <GuardedRoute title="" dept="HR"><AptitudeTest /></GuardedRoute> },
             { path: "job-offer", element: <GuardedRoute title="" dept="HR"><JobOffer /></GuardedRoute> },
           ],
@@ -366,12 +367,13 @@ const JobOffer = Loadable(
 const JobApplicants = Loadable(
   lazy(() => import("../pages/HR/Admin/JobApplicants.Admin"))
 );
+const Interviewees = Loadable(
+  lazy(() => import("../pages/HR/Admin/Interviewees"))
+);
 const AptitudeTest = Loadable(
   lazy(() => import("../pages/HR/Admin/AptitudeTest.Admin"))
 );
-const LeaveSettingAdmin = Loadable(
-  lazy(() => import("../pages/HR/Admin/LeaveSetting.Admin"))
-);
+
 const CoachingAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/CoachingAdmin"))
 );

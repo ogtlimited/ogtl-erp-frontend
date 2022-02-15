@@ -133,47 +133,37 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {(props) => {
-          const { handleSubmit, setFieldValue } = props;
-          return (
-            <form onSubmit={handleSubmit}>
-              <div class="row">
-                {Object.keys(formSchema).length &&
-                  Object.keys(formSchema).map((key, ind) => (
-                    <div
-                      className={
-                        formSchema[key]?.type === "textarea" ||
-                        formSchema[key]?.type === "richText"
-                          ? "col-sm-12"
-                          : formSchema[key]?.type === "file"
-                          ? "col-sm-12"
-                          : "col-sm-6"
-                      }
-                      key={key}
-                    >
-                      {getFormElement(
-                        key,
-                        formSchema[key],
-                        setFieldValue,
-                        formData[key]
-                      )}
-                    </div>
-                  ))}
-              </div>
-              <div class="row">
-                <div class="col-sm-12">
-                  <button
-                    type="submit"
-                    // data-dismiss="modal"
-                    className="btn btn-primary submit-btn"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </form>
-          );
-        }}
+         {(props) => {
+        const {
+          handleSubmit,
+          setFieldValue
+        } = props;
+        return (
+          <form onSubmit={handleSubmit}>
+          <div className="row">
+
+          { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
+            <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
+              {getFormElement(key, formSchema[key], setFieldValue, formData[key])}
+            </div>
+          ))}
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+          <button
+                        type="submit"
+
+                        // data-dismiss="modal"
+                        className="btn btn-primary submit-btn"
+                      >
+                        Submit
+                      </button>
+          </div>
+        </div>
+        </form>
+        );
+      }}
+
       </Formik>
     </div>
   );

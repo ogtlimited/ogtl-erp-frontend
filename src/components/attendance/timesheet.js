@@ -70,7 +70,7 @@ const Timesheet = () => {
 
     const wt = calcWorkTime()
     setworkedTime(calcWorkTime())
-    const shiftEnd = user?.default_shift?.end_time;
+    const shiftEnd = user?.default_shift?.end_time ? user?.default_shift?.end_time : "0:0";
 
     // console.log('shift start and end', shiftStart, shiftEnd)
     let endToSec = shiftEnd.split(':').reduce((acc,time) => (60 * acc) + +time) * 60

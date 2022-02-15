@@ -105,17 +105,17 @@ const DesignationList = ({
 
   return (
     <>
-      <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
+      <div className="col-sm-4 col-md-4 col-lg-4 col-xl-3">
         <a
           href="#"
-          class="btn btn-primary btn-block"
+          className="btn btn-primary btn-block"
           data-toggle="modal"
           data-target="#FormModal"
           onClick={() => create()}
         >
-          <i class="fa fa-plus"></i> Add Roles
+          <i className="fa fa-plus"></i> Add Roles
         </a>
-        <div class="roles-menu">
+        <div className="roles-menu">
           <ul>
             {allDesignation &&
               allDesignation
@@ -126,26 +126,26 @@ const DesignationList = ({
                       setActiveId(d._id);
                       setrole(d);
                     }}
-                    class={activeId === d._id ? "active" : ""}
+                    className={activeId === d._id ? "active" : ""}
                   >
-                    <a href="javascript:void(0);">
+                    <a >
                       {d.title}
                       {d.title !== "Super" && (
-                        <span class="role-action">
+                        <span className="role-action">
                           <span
-                            class="action-circle large"
+                            className="action-circle large"
                             data-toggle="modal"
                             data-target="#edit_role"
                           >
-                            <i class="las la-pencil-alt"></i>
+                            <i className="las la-pencil-alt"></i>
                           </span>
                           <span
-                            class="action-circle large delete-btn"
+                            className="action-circle large delete-btn"
                             data-toggle="modal"
                             data-target="#exampleModal"
                             onClick={() => setSelectedRow(d._id)}
                           >
-                            <i class="las la-trash-alt"></i>
+                            <i className="las la-trash-alt"></i>
                           </span>
                         </span>
                       )}

@@ -10,16 +10,12 @@ import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
-  // console.log(user)
-
   const AllAccess = ["Super", "CEO", "HR Manager"];
   const canView = (dept) => {
     if (
       user?.department?.department === dept ||
       AllAccess.includes(user?.role?.title)
     ) {
-      return true;
-    } else if (dept === "All") {
       return true;
     } else if (dept === "All") {
       return true;
@@ -74,16 +70,16 @@ const Sidebar = () => {
             <ul>
               {sidebarConfig.map((nav) => (
                 <>
-                  {canView(nav.canView) && (
+                  {canView(nav?.canView) && (
                     <li className="menu-title">
-                      <span>{nav.subheader}</span>
+                      <span>{nav?.subheader}</span>
                     </li>
                   )}
                   {nav.items.map((item) => (
                     <>
                       {item.children ? (
                         <>
-                          {canView(item.canView) && (
+                          {canView(item?.canView) && (
                             <li className="submenu">
                               <a
                                 href=""
@@ -105,9 +101,9 @@ const Sidebar = () => {
                               >
                                 {item.children.map((child) => (
                                   <>
-                                    {canView(child.canView) && (
-                                      <li class="">
-                                        <Link to={`${child.path}`} class="">
+                                    {canView(child?.canView) && (
+                                      <li className="">
+                                        <Link to={`${child.path}`} className="">
                                           {child.title}
                                         </Link>
                                       </li>
@@ -120,7 +116,7 @@ const Sidebar = () => {
                         </>
                       ) : (
                         <>
-                          {canView(item.canView) && (
+                          {canView(item?.canView) && (
                             <li>
                               <Link to={item.path}>
                                 {item.icon} <span>{item.title}</span>
@@ -133,19 +129,19 @@ const Sidebar = () => {
                   ))}
                 </>
               ))}
-              {user.role.title === "HR In-House Agent" &&
+              {user?.role?.title === "HR In-House Agent" &&
                 <li className="submenu">
                 <a
                   href=""
                   onClick={(e) => e.preventDefault()}
                   className="subdrop"
                 >
-                  <i class="la la-cube"></i>
+                  <i className="la la-cube"></i>
                   <span>Recruitment</span>
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={{display: "none"}}>
-                  <Link to="/dashboard/recruitment/job-applicants" class="">
+                  <Link to="/dashboard/recruitment/job-applicants" className="">
                     Job Applicants
                   </Link>
                 </ul>

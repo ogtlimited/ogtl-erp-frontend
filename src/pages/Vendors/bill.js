@@ -25,46 +25,46 @@ const Bill = () => {
 
   return (
     <>
-      <div class="page-header">
-        <div class="row align-items-center">
-          <div class="col">
-            <h3 class="page-title">Bill</h3>
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Bill</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
                 <Link to="/admin/vendor-bills">Bills</Link>
               </li>
-              <li class="breadcrumb-item active">Bill</li>
+              <li className="breadcrumb-item active">Bill</li>
             </ul>
           </div>
-          <div class="col-auto float-right ml-auto">
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-white">CSV</button>
-              <button class="btn btn-white">PDF</button>
-              <button class="btn btn-white">
-                <i class="fa fa-print fa-lg"></i> Print
+          <div className="col-auto float-right ml-auto">
+            <div className="btn-group btn-group-sm">
+              <button className="btn btn-white">CSV</button>
+              <button className="btn btn-white">PDF</button>
+              <button className="btn btn-white">
+                <i className="fa fa-print fa-lg"></i> Print
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-6 m-b-20">
-                  <img src={logo} class="inv-logo" alt="" />
-                  <ul class="list-unstyled">
+      <div className="row">
+        <div className="col-md-12">
+          <div className="card">
+            <div className="card-body">
+              <div className="row">
+                <div className="col-sm-6 m-b-20">
+                  <img src={logo} className="inv-logo" alt="" />
+                  <ul className="list-unstyled">
                     <li>Outsource Global Technologies</li>
                     <li>2nd Floor, ASTA GALLERY Plot 1185,Parkway Road</li>
                     <li>Cadastral Zone Mabushi District, Abuja</li>
                     <li>GST No:</li>
                   </ul>
                 </div>
-                <div class="col-sm-6 m-b-20">
-                  <div class="invoice-details">
-                    <h3 class="text-uppercase">Bill #{data?.ref}</h3>
-                    <ul class="list-unstyled">
+                <div className="col-sm-6 m-b-20">
+                  <div className="invoice-details">
+                    <h3 className="text-uppercase">Bill #{data?.ref}</h3>
+                    <ul className="list-unstyled">
                       <li>
                         Date:{" "}
                         <span>
@@ -81,10 +81,10 @@ const Bill = () => {
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6 col-lg-7 col-xl-8 m-b-20">
+              <div className="row">
+                <div className="col-sm-6 col-lg-7 col-xl-8 m-b-20">
                   <h5>Bill to:</h5>
-                  <ul class="list-unstyled">
+                  <ul className="list-unstyled">
                     <li>
                       <h5>
                         <strong>{data?.vendor?.fullName}</strong>
@@ -102,13 +102,13 @@ const Bill = () => {
                     </li>
                   </ul>
                 </div>
-                <div class="col-sm-6 col-lg-5 col-xl-4 m-b-20">
-                  <span class="text-muted">Payment Details:</span>
-                  <ul class="list-unstyled invoice-payment-details">
+                <div className="col-sm-6 col-lg-5 col-xl-4 m-b-20">
+                  <span className="text-muted">Payment Details:</span>
+                  <ul className="list-unstyled invoice-payment-details">
                     <li>
                       <h5>
                         Total Amount:{" "}
-                        <span class="text-right">
+                        <span className="text-right">
                           {formatter.format(data?.total_amount)}
                         </span>
                       </h5>
@@ -140,57 +140,57 @@ const Bill = () => {
                   </ul>
                 </div>
               </div>
-              <div class="table-responsive">
-                <table class="table table-striped table-hover">
+              <div className="table-responsive">
+                <table className="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>ITEM</th>
-                      <th class="d-none d-sm-table-cell">DESCRIPTION</th>
+                      <th className="d-none d-sm-table-cell">DESCRIPTION</th>
                       <th>RATE</th>
                       <th>PRICE</th>
                       <th>UNITS</th>
                       <th>TAX</th>
-                      <th class="text-right">TOTAL</th>
+                      <th className="text-right">TOTAL</th>
                     </tr>
                   </thead>
                   <tbody>
                     {data?.productItems.map((product) => (
                       <tr key={product._id}>
                         <td>{product?.product}</td>
-                        <td class="d-none d-sm-table-cell">
+                        <td className="d-none d-sm-table-cell">
                           {product?.description}
                         </td>
                         <td>{product?.rate}</td>
                         <td>{product?.price}</td>
                         <td>{product?.units}</td>
                         <td>{product?.tax}</td>
-                        <td class="text-right">$2000</td>
+                        <td className="text-right">$2000</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
               <div>
-                <div class="row invoice-payment">
-                  <div class="col-sm-7"></div>
-                  <div class="col-sm-5">
-                    <div class="m-b-20">
-                      <div class="table-responsive no-border">
-                        <table class="table mb-0">
+                <div className="row invoice-payment">
+                  <div className="col-sm-7"></div>
+                  <div className="col-sm-5">
+                    <div className="m-b-20">
+                      <div className="table-responsive no-border">
+                        <table className="table mb-0">
                           <tbody>
                             {/* <tr>
                               <th>Subtotal:</th>
-                              <td class="text-right">$7,000</td>
+                              <td className="text-right">$7,000</td>
                             </tr>
                             <tr>
                               <th>
-                                Tax: <span class="text-regular">(25%)</span>
+                                Tax: <span className="text-regular">(25%)</span>
                               </th>
-                              <td class="text-right">$1,750</td>
+                              <td className="text-right">$1,750</td>
                             </tr> */}
                             <tr>
                               <th>Total:</th>
-                              <td class="text-right text-primary">
+                              <td className="text-right text-primary">
                                 <h5>{formatter.format(data?.total_amount)}</h5>
                               </td>
                             </tr>
@@ -200,9 +200,9 @@ const Bill = () => {
                     </div>
                   </div>
                 </div>
-                <div class="invoice-info">
+                <div className="invoice-info">
                   <h5>Other information</h5>
-                  <p class="text-muted"></p>
+                  <p className="text-muted"></p>
                 </div>
               </div>
             </div>

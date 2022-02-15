@@ -68,13 +68,13 @@ const BalanceSheet = () => {
       </div>
       <div className="row">
         {cards.slice(0, 4).map((card) => (
-          <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-            <div class="card dash-widget">
-              <div class="card-body">
-                <span class="dash-widget-icon">
-                  <i class={card.icon}></i>
+          <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+            <div className="card dash-widget">
+              <div className="card-body">
+                <span className="dash-widget-icon">
+                  <i className={card.icon}></i>
                 </span>
-                <div class="dash-widget-info">
+                <div className="dash-widget-info">
                   <h3> {card.amount}</h3>
                   <span>{card.title}</span>
                 </div>
@@ -85,9 +85,9 @@ const BalanceSheet = () => {
       </div>
       <div className="row">
         <div className="col-md-9">
-          <div class="card dash-widget">
-            <div class="card-body">
-              <table class="table balance-sheet">
+          <div className="card dash-widget">
+            <div className="card-body">
+              <table className="table balance-sheet">
                 <thead>
                   <tr>
                     <th># </th>
@@ -185,14 +185,14 @@ const BalanceSheet = () => {
           </div>
           {/* <LeavesTable columns={columns} data={accounts} /> */}
         </div>
-        <div class="col-md-3">
+        <div className="col-md-3">
           {cards.slice(4).map((card) => (
-            <div class="card dash-widget">
-              <div class="card-body">
-                <span class="dash-widget-icon">
-                  <i class={card.icon}></i>
+            <div className="card dash-widget">
+              <div className="card-body">
+                <span className="dash-widget-icon">
+                  <i className={card.icon}></i>
                 </span>
-                <div class="dash-widget-info">
+                <div className="dash-widget-info">
                   <h3> {card.amount}</h3>
                   <span>{card.title}</span>
                 </div>

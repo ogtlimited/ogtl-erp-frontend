@@ -18,15 +18,15 @@ const CampaignLeftCard = ({ campaign_info }) => {
   ];
   return (
     <>
-      <div class="card">
-        <div class="card-body">
-          <div class="project-title">
-            <h5 class="card-title">{campaign_info?.project_name} Campaign</h5>
-            {/* <small class="block text-ellipsis m-b-15">
-              <span class="text-xs">2</span>{" "}
-              <span class="text-muted">open tasks, </span>
-              <span class="text-xs">5</span>{" "}
-              <span class="text-muted">tasks completed</span>
+      <div className="card">
+        <div className="card-body">
+          <div className="project-title">
+            <h5 className="card-title">{campaign_info?.project_name} Campaign</h5>
+            {/* <small className="block text-ellipsis m-b-15">
+              <span className="text-xs">2</span>{" "}
+              <span className="text-muted">open tasks, </span>
+              <span className="text-xs">5</span>{" "}
+              <span className="text-muted">tasks completed</span>
             </small> */}
           </div>
 
@@ -34,17 +34,17 @@ const CampaignLeftCard = ({ campaign_info }) => {
         </div>
       </div>
       {/* images */}
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title m-b-20">Uploaded image files</h5>
-          <div class="row">
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title m-b-20">Uploaded image files</h5>
+          <div className="row">
             {dummyImage.map((img) => (
-              <div class="col-md-3 col-sm-4 col-lg-4 col-xl-3">
-                <div class="uploaded-box">
-                  <div class="uploaded-img">
-                    <img src={img} class="img-fluid" alt="" />
+              <div className="col-md-3 col-sm-4 col-lg-4 col-xl-3">
+                <div className="uploaded-box">
+                  <div className="uploaded-img">
+                    <img src={img} className="img-fluid" alt="" />
                   </div>
-                  <div class="uploaded-img-name">demo.png</div>
+                  <div className="uploaded-img-name">demo.png</div>
                 </div>
               </div>
             ))}
@@ -52,43 +52,43 @@ const CampaignLeftCard = ({ campaign_info }) => {
         </div>
       </div>
       {/* files */}
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title m-b-20">Uploaded files</h5>
-          <ul class="files-list">
+      <div className="card">
+        <div className="card-body">
+          <h5 className="card-title m-b-20">Uploaded files</h5>
+          <ul className="files-list">
             {dummyFilee.map((e) => (
               <li>
-                <div class="files-cont">
-                  <div class="file-type">
-                    <span class="files-icon">
-                      <i class="fa fa-file-pdf-o"></i>
+                <div className="files-cont">
+                  <div className="file-type">
+                    <span className="files-icon">
+                      <i className="fa fa-file-pdf-o"></i>
                     </span>
                   </div>
-                  <div class="files-info">
-                    <span class="file-name text-ellipsis">
+                  <div className="files-info">
+                    <span className="file-name text-ellipsis">
                       <a href="#">{e.title}</a>
                     </span>
-                    <span class="file-author">
+                    <span className="file-author">
                       <a href="#">{e.author}</a>
                     </span>{" "}
-                    <span class="file-date">{e.uploaded_on}</span>
-                    <div class="file-size">Size: {e.size}</div>
+                    <span className="file-date">{e.uploaded_on}</span>
+                    <div className="file-size">Size: {e.size}</div>
                   </div>
-                  <ul class="files-action">
-                    <li class="dropdown dropdown-action">
+                  <ul className="files-action">
+                    <li className="dropdown dropdown-action">
                       <a
                         href=""
-                        class="dropdown-toggle btn btn-link"
+                        className="dropdown-toggle btn btn-link"
                         data-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
                       </a>
-                      <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" onClick={"javascript:void(0)"}>
+                      <div className="dropdown-menu dropdown-menu-right">
+                        <a className="dropdown-item" >
                           Download
                         </a>
-                        <a class="dropdown-item" onClick={"javascript:void(0)"}>
+                        <a className="dropdown-item">
                           Delete
                         </a>
                       </div>

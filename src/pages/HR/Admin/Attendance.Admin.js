@@ -44,7 +44,7 @@ const AttendanceAdmin = () => {
         lineHeight: "18px",
       },
       formatter: (value, row) => (
-        <h2 class="table-avatar">
+        <h2 className="table-avatar">
           <Link to={`/admin/profile-dashboard/${row._id}`}>
             {row.first_name} {row.last_name}{" "}
             <span>{row?.designation?.designation}</span>
@@ -148,7 +148,7 @@ const AttendanceAdmin = () => {
       {toggleModal && (
         <GeneralUpload settoggleModal={settoggleModal}
         title="Upload Attendance"
-        url="'/api/attendance/bulk'"
+        url="/api/attendance/bulk"
         />
       )}
     </>

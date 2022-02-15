@@ -26,11 +26,16 @@ const EmployeeUser = () => {
   }
   console.log(getNextHoliday())
   const calcShift = (time) =>{
-    let split = time.split(":")
-    if(parseInt(split[0]) < 12){
-      return parseInt(split[0]) + ':' + split[1] + ' AM'
+    if(time){
+
+      let split = time.split(":")
+      if(parseInt(split[0]) < 12){
+        return parseInt(split[0]) + ':' + split[1] + ' AM'
+      }else{
+        return parseInt(split[0]) + ':' + split[1] + ' PM'
+      } 
     }else{
-      return parseInt(split[0]) + ':' + split[1] + ' PM'
+      return ""
     }
   }
   useEffect(() => {
@@ -94,9 +99,9 @@ const EmployeeUser = () => {
       <div className="col-lg-8 col-md-8">
         <div className="row welcome-card p-5">
         <div className="col-md-9 left-card">
-        <h4 class="welcome-text">Welcome back,<br />  {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}!</h4>
-        <p class="welcome-p">If you havent punched in today, you need to do it right away</p>
-        <Link class="go" to="/dashboard/hr/attendance">Go Now</Link>
+        <h4 className="welcome-text">Welcome back,<br />  {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}!</h4>
+        <p className="welcome-p">If you havent punched in today, you need to do it right away</p>
+        <Link className="go" to="/dashboard/hr/attendance">Go Now</Link>
         </div>
         <div className="col-md-3">
           <img style={{width: '100%'}} className="mt-4" src={welcome} />
@@ -116,7 +121,7 @@ const EmployeeUser = () => {
                       <i className="fa fa-clock"></i>
                     </div>
                     <div className="dash-card-content">
-                      <p>Your shift starts at {calcShift(user?.default_shift.start_time)} and ends at {calcShift(user?.default_shift.end_time)} </p>
+                      <p>Your shift starts at {calcShift(user?.default_shift?.start_time)} and ends at {calcShift(user?.default_shift?.end_time)} </p>
                     </div>
 
                   </div>

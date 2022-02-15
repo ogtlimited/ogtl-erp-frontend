@@ -331,10 +331,10 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                         </div>
                       </div>
                       <div className="col-sm-12">
-                        <div class="form-group ">
-                          <label class="col-form-label">Coaching Type</label>
-                          <div class="col-md-10">
-                            <div class="radio">
+                        <div className="form-group ">
+                          <label className="col-form-label">Coaching Type</label>
+                          <div className="col-md-10">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"
@@ -354,7 +354,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 MPR (Monthly Performance Review)
                               </label>
                             </div>
-                            <div class="radio">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"
@@ -374,7 +374,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 Developmental Coaching{" "}
                               </label>
                             </div>
-                            <div class="radio">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"
@@ -394,7 +394,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 Behavioural Coaching{" "}
                               </label>
                             </div>
-                            <div class="radio">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"
@@ -414,7 +414,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 Quality Monitoring Coaching{" "}
                               </label>
                             </div>
-                            <div class="radio">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"
@@ -433,7 +433,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 Coaching Triad{" "}
                               </label>
                             </div>
-                            <div class="radio">
+                            <div className="radio">
                               <label>
                                 <input
                                   type="radio"

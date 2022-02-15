@@ -239,7 +239,7 @@ export function FileField(props) {
           </label>
         )}
         <label
-          class="upload-csv"
+          className="upload-csv"
           style={{ padding: "5% 8px" }}
           id="v-pills-home"
         >

@@ -164,24 +164,24 @@ const ProfileCards = ({
           </div>
         </div>
         <div id="emp_campaign" className="pro-overview tab-pane fade">
-          <div class="row">
-            <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="project-title mb-2">
+          <div className="row">
+            <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+              <div className="card">
+                <div className="card-body">
+                  <h4 className="project-title mb-2">
                     <a href="">{campaign?.project_name}</a>
                   </h4>
 
-                  <p class="text-muted">{campaign?.objectives}</p>
-                  <div class="pro-deadline m-b-15">
-                    <div class="sub-title">Start date:</div>
-                    <div class="text-muted">
+                  <p className="text-muted">{campaign?.objectives}</p>
+                  <div className="pro-deadline m-b-15">
+                    <div className="sub-title">Start date:</div>
+                    <div className="text-muted">
                       {new Date(campaign?.start_date).toDateString()}
                     </div>
                   </div>
-                  <div class="project-members m-b-15">
+                  <div className="project-members m-b-15">
                     <div>Team Leader :</div>
-                    <ul class="team-members">
+                    <ul className="team-members">
                       <li>
                         <a
                           href="#"
@@ -194,9 +194,9 @@ const ProfileCards = ({
                       </li>
                     </ul>
                   </div>
-                  <div class="project-members m-b-15">
+                  <div className="project-members m-b-15">
                     <div>Team :</div>
-                    <ul class="team-members">
+                    <ul className="team-members">
                       {campaign?.number_of_employees &&
                         Array(campaign.number_of_employees)
                           .fill(1)
@@ -223,7 +223,7 @@ const ProfileCards = ({
                             </li>
                           ))}
                       <li>
-                        <a href="#" class="all-users">
+                        <a href="#" className="all-users">
                           {campaign?.number_of_employees <= 4
                             ? campaign?.number_of_employees
                             : "+" + (campaign?.number_of_employees - 4)}
@@ -231,16 +231,16 @@ const ProfileCards = ({
                       </li>
                     </ul>
                   </div>
-                  <p class="m-b-5">
-                    Progress <span class="text-success float-right">40%</span>
+                  <p className="m-b-5">
+                    Progress <span className="text-success float-right">40%</span>
                   </p>
-                  <div class="progress progress-xs mb-0">
+                  <div className="progress progress-xs mb-0">
                     <div
                       style={{ width: "40%" }}
                       title=""
                       data-toggle="tooltip"
                       role="progressbar"
-                      class="progress-bar bg-success"
+                      className="progress-bar bg-success"
                       data-original-title="40%"
                     ></div>
                   </div>
@@ -250,17 +250,17 @@ const ProfileCards = ({
           </div>
         </div>
         <div id="bank_statutory" className="pro-overview tab-pane fade">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title"> Basic Salary Information</h3>
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title"> Basic Salary Information</h3>
               <form>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">
-                        Salary basis <span class="text-danger">*</span>
+                <div className="row">
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">
+                        Salary basis <span className="text-danger">*</span>
                       </label>
-                      <select class="form-control">
+                      <select className="form-control">
                         <option>Select salary basis type</option>
                         <option>Hourly</option>
                         <option>Daily</option>
@@ -269,29 +269,29 @@ const ProfileCards = ({
                       </select>
                     </div>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">
                         Salary amount{" "}
-                        <small class="text-muted">per month</small>
+                        <small className="text-muted">per month</small>
                       </label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">₦</span>
+                      <div className="input-group">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">₦</span>
                         </div>
                         <input
                           type="text"
-                          class="form-control"
+                          className="form-control"
                           placeholder="Type your salary amount"
                           value="0.00"
                         />
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">Payment type</label>
-                      <select class="form-control">
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">Payment type</label>
+                      <select className="form-control">
                         <option>Select payment type</option>
                         <option>Bank transfer</option>
                         <option>Check</option>
@@ -301,40 +301,40 @@ const ProfileCards = ({
                   </div>
                 </div>
                 <hr />
-                <h3 class="card-title"> Bank Information</h3>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">Bank</label>
-                      <input class="form-control" />
+                <h3 className="card-title"> Bank Information</h3>
+                <div className="row">
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">Bank</label>
+                      <input className="form-control" />
                     </div>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">Account Number</label>
-                      <input class="form-control" />
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">Account Number</label>
+                      <input className="form-control" />
                     </div>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">BVN</label>
-                      <input class="form-control" />
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">BVN</label>
+                      <input className="form-control" />
                     </div>
                   </div>
                 </div>
                 <hr />
-                <h3 class="card-title"> Tax & Pension Information</h3>
-                <div class="row">
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">Tax %</label>
-                      <input class="form-control" />
+                <h3 className="card-title"> Tax & Pension Information</h3>
+                <div className="row">
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">Tax %</label>
+                      <input className="form-control" />
                     </div>
                   </div>
-                  <div class="col-sm-4">
-                    <div class="form-group">
-                      <label class="col-form-label">Pension %</label>
-                      <input class="form-control" />
+                  <div className="col-sm-4">
+                    <div className="form-group">
+                      <label className="col-form-label">Pension %</label>
+                      <input className="form-control" />
                     </div>
                   </div>
                 </div>

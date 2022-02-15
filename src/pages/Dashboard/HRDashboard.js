@@ -108,7 +108,7 @@ const HRDashboard = () => {
           <div className="card dash-widget">
             <div className="card-body">
               <span className="dash-widget-icon">
-              <i class="las la-users"></i>
+              <i className="las la-users"></i>
               </span>
               <div className="dash-widget-info">
                 <h3>{headACount}</h3>
@@ -121,7 +121,7 @@ const HRDashboard = () => {
           <div className="card dash-widget">
             <div className="card-body">
               <span className="dash-widget-icon">
-              <i class="las la-door-open"></i>
+              <i className="las la-door-open"></i>
               </span>
               <div className="dash-widget-info">
                 <h3>44 %</h3>
@@ -147,7 +147,7 @@ const HRDashboard = () => {
           <div className="card dash-widget">
             <div className="card-body">
               <span className="dash-widget-icon">
-              <i class="las la-percent"></i>
+              <i className="las la-percent"></i>
               </span>
               <div className="dash-widget-info">
                 <h3>218</h3>
