@@ -11,15 +11,7 @@ export const applicationTestFormJson = {
       },
       options: [],
     },
-    {
-      name: "interview_date",
-      type: "date",
-      title: "Interview Date",
-      required: {
-        value: true,
-        message: "Interview date is required",
-      },
-    },
+
     {
       name: "phone_number",
       type: "text",
