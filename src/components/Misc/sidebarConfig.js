@@ -209,6 +209,11 @@ const sidebarConfig = [
             title: "Job Offer",
             path: PATH_DASHBOARD.recruitment.jobOffer,
           },
+          {
+            canView: "Facility",
+            title: "Interviewees",
+            path: PATH_DASHBOARD.recruitment.interviewees,
+          },
         ],
       },
       {

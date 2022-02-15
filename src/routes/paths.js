@@ -57,6 +57,7 @@ export const PATH_DASHBOARD = {
     jobOffer: path(ROOTS_DASHBOARD, "/recruitment/job-offer"),
     jobApplicants: path(ROOTS_DASHBOARD, "/recruitment/job-applicants"),
     aptitudeTests: path(ROOTS_DASHBOARD, "/recruitment/aptitude-test"),
+    interviewees: path(ROOTS_DASHBOARD, "/recruitment/interviewees"),
   },
   performance: {
     root: path(ROOTS_DASHBOARD, "/performance"),
