@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import DynamicForm from '../Forms/DynamicForm';
 const FormModal2 = ({template, editData, setformValue, setsubmitted, title, formValue }) => {
+  console.log(editData, 'UPDATED')
+  console.log( template, 'TEMPLATE')
+  console.log(formValue, 'FORMVALUE')
     const [value, setvalue] = useState(null)
     const [formSubmitted, setformSubmitted] = useState(false)
    useEffect(() => {
@@ -9,14 +12,13 @@ const FormModal2 = ({template, editData, setformValue, setsubmitted, title, form
    useEffect(() => {
    }, [editData])
 
-     const onSubmit = (data) => {
-       setformValue(data)
-       setsubmitted(true)
-      };
       useEffect(() => {
         if(formSubmitted){
+          console.log(value)
           setformValue(value)
+          console.log(formSubmitted, 'FORM SUBMITTED')
           setsubmitted(formSubmitted)
+          setformSubmitted(false)
 
         }
       }, [value, formSubmitted])

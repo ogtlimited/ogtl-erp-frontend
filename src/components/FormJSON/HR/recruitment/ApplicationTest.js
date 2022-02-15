@@ -2,7 +2,7 @@ export const applicationTestFormJson = {
   title: "Interview Form Process",
   Fields: [
     {
-      name: "_id",
+      name: "job_applicant_id",
       type: "select",
       title: "Job Applicant",
       required: {
@@ -11,25 +11,6 @@ export const applicationTestFormJson = {
       },
       options: [],
     },
-    {
-      name: "interview_date",
-      type: "date",
-      title: "Interview Date",
-      required: {
-        value: true,
-        message: "Interview date is required",
-      },
-    },
-    {
-      name: "phone_number",
-      type: "text",
-      title: "Phone Number",
-      required: {
-        value: true,
-        message: "Phone number is required",
-      },
-    },
-
     {
       name: "interviewer",
       type: "select",
@@ -44,11 +25,6 @@ export const applicationTestFormJson = {
           label: "Cyril",
         },
       ],
-    },
-    {
-      name: "email_address",
-      type: "email",
-      title: "Email Address",
     },
     {
       name: "status",

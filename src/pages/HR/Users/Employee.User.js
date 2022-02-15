@@ -21,10 +21,10 @@ const EmployeeUser = () => {
     const mapHolidays = holidays.map(hol => new Date(hol.date + " " + year).getTime() )
     const greater = mapHolidays.filter(time => time >= current);
     const index = mapHolidays.findIndex(idx => idx === Math.min(...greater))
-    console.log(Math.min(...greater), index)
+
     return holidays[index]
   }
-  console.log(getNextHoliday())
+
   const calcShift = (time) =>{
     if(time){
 
@@ -39,9 +39,8 @@ const EmployeeUser = () => {
     }
   }
   useEffect(() => {
-    console.log(user)
+
     axiosInstance.get("/leave-application").then((e) => {
-      console.log(e, "USERID");
       const leaves = e?.data?.data?.filter(
         (f) => f?.employee_id?._id === user._id
       );
@@ -60,7 +59,7 @@ const EmployeeUser = () => {
   // let arr = []
   // let unique = []
   // let allShifts = []
-  // console.log(shifts)
+
   // raw.forEach(r =>{
   //  let index = allShift.findIndex(e => (e.start_time == r.actual_shift_start) && (e.end_time == r.actual_shift_end))
   //  unique.push({
@@ -68,8 +67,7 @@ const EmployeeUser = () => {
   //    default_shift: allShift[index]?.shift_name
   //  })
   // })
-  // console.log(unique)
-  // console.log(arr)
+
   // shifts.forEach(e =>{
   //   axiosInstance.post("/api/shiftType", e)
   // })

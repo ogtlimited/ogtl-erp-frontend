@@ -15,8 +15,10 @@ const ScheduleInterview = ({jobApplication, handleUpdate}) => {
     const update ={
         interview_date: moment(form).format('llll'),
         _id: jobApplication._id,
+        rep_sieving_call: jobApplication.rep_sieving_call,
         interview_status: 'Scheduled for interview'
     }
+    console.log(update)
     handleUpdate(jobApplication._id,update );
 
   }
