@@ -1,5 +1,8 @@
 export const qualifications = [
     {
+        label: 'Select Qualification',
+    },
+    {
         label: 'Secondary School Certificate',
     },
     {
@@ -22,6 +25,10 @@ export const qualifications = [
     },
 ];
 export const referredOpts = [
+    {
+        label: 'Select',
+        value: 'Select'
+    },
     {
         label: 'Yes',
         value: true
