@@ -52,9 +52,10 @@ const AptitudeTest = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
-    seteditData(row);
+
     setmode("edit");
     let formatted = helper.handleEdit(row);
+    seteditData(formatted);
     setformUpdate(formatted);
     setclickedRow(formatted);
   };

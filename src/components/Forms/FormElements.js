@@ -15,7 +15,7 @@ export function Form(props) {
 
   console.log(props);
   return (
-    <Formik {...props}>
+    <Formik  {...props}>
       render=
       {({
         values,
@@ -33,7 +33,6 @@ export function Form(props) {
 }
 
 export function TextField(props) {
-  // console.log(props)
   const { name, label, disabled, placeholder, defaultValue, ...rest } = props;
   return (
     <>
@@ -43,13 +42,13 @@ export function TextField(props) {
             {label}
           </label>
         )}
-        <Field
+        <input
           className="form-control"
           type="text"
           name={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-          // defaultValue={defaultValue ? defaultValue : ''}
+          defaultValue={defaultValue || ""} 
         />
 
         <ErrorMessage
