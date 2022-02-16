@@ -13,7 +13,7 @@ import "react-quill/dist/quill.snow.css";
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
   return (
-    <Formik {...props}>
+    <Formik  {...props}>
       render=
       {({
         values,
@@ -40,13 +40,13 @@ export function TextField(props) {
             {label}
           </label>
         )}
-        <Field
+        <input
           className="form-control"
           type="text"
           name={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-          // defaultValue={defaultValue ? defaultValue : ''}
+          defaultValue={defaultValue || ""} 
         />
 
         <ErrorMessage

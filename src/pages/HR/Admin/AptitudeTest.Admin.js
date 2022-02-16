@@ -8,7 +8,6 @@ import { applicationTestFormJson } from "../../../components/FormJSON/HR/recruit
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ReactHtmlParser from "react-html-parser";
-import moment from "moment";
 import ViewModal from "../../../components/Modal/ViewModal";
 import HelperService from "../../../services/helper";
 
@@ -53,9 +52,10 @@ const AptitudeTest = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
-    seteditData(row)
+
     setmode("edit");
     let formatted = helper.handleEdit(row);
+    seteditData(formatted);
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -103,7 +103,6 @@ const AptitudeTest = () => {
           }
           return field;
         });
-        console.log(applicationTestFormJson)
         // setTemplate({
         //   title: applicationTestFormJson.title,
         //   Fields: finalForm,
@@ -130,23 +129,34 @@ const AptitudeTest = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       } else {
+        let newFormValue = {
+          ...formValue,
+          _id: editData._id,
+        };
         axiosInstance
-          .patch("/api/test/" + editData?._id, formValue)
+          .patch("/api/test/" + editData?._id, newFormValue)
           .then((res) => {
             setSubmitted(false);
             fetchAllTests();
-            showAlert(true, res.data.message, "alert alert-success");
+            showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error.response);
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       }
     }
-  }, [formValue, editData]);
+  }, [formValue, editData, mode]);
 
   // useEffect(() => {
   //   seteditData(clickedRow);
@@ -171,9 +181,10 @@ const AptitudeTest = () => {
   useEffect(() => {
     if (status.length) {
       const update = {
-        ...statusRow,
+        _id: statusRow._id,
         status,
       };
+
       delete update.__v;
       axiosInstance
         .patch("/api/test/" + statusRow._id, update)
@@ -224,19 +235,7 @@ const AptitudeTest = () => {
         </>
       ),
     },
-    {
-      dataField: "interview_date",
-      text: "Interview Date",
-      sort: true,
-      formatter: (value, row) => (
-        <h2>{moment(row?.interview_date).format("L")}</h2>
-      ),
-    },
-    {
-      dataField: "phone_number",
-      text: "Phone Number",
-      sort: true,
-    },
+
     {
       dataField: "interviewer",
       text: "Interviewer",

@@ -23,43 +23,57 @@ const PersonalInfoForm = () => {
 
   const fetchDefaultJob = () => {
     axios.get(config.ApiUrl + "/api/jobOpening/defaultJobs").then((res) => {
+      console.log(res);
       const data = res.data.data.map((e) => {
         return {
           label: e.job_title,
           value: e._id,
         };
       });
-      setdefaultJob(data);
+      setdefaultJob([
+        {
+          label: "Select Job",
+          value: "",
+        },
+        ...data,
+      ]);
     });
   };
-  useEffect(() => {}, [jobId]);
+  useEffect(() => {
+    console.log(jobId);
+  }, [jobId]);
 
   const handleUpload = (e, setFieldValue) => {
+    console.log(jobId);
     setprogress(65);
     setshowProgress(true);
     let formdata = new FormData();
     let file = e.target.files[0];
-
+    console.log(file);
     setfileName(file.name);
     formdata.append("job_id", jobId.id);
     formdata.append("document", file);
     axios.post(config.ApiUrl + "/api/job-document", formdata).then((res) => {
+      console.log(res);
       let path = res.data.data.file_path;
       setFieldValue("resume_attachment", path);
       setprogress(100);
     });
   };
   const handleSubmit = (e, field) => {
+    console.log(field);
+    // setprogress(65)
     setsubmitted(true);
     let obj = {
       ...field,
       job_opening_id: jobId.id,
       default_job_opening_id: jobId.id,
     };
-
+    console.log(obj);
+    console.log(setjobApplication);
     setjobApplication(obj);
     // axios.post(config.ApiUrl +'/api/jobApplicant',obj ).then(res =>{
-
+    //     console.log(res)
     //     setsubmitted(false)
     //     setafterSuccess(true)
     //     setheader('Your Application has been submitted sucessfully')
@@ -120,7 +134,7 @@ const PersonalInfoForm = () => {
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
-        // console.log('SUCCESS!! :-)\n\n' + JSON.stringify(fields, null, 4))
+        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
         errors,
@@ -139,8 +153,18 @@ const PersonalInfoForm = () => {
             {!afterSuccess ? (
               <Form>
                 <div className="form-group row">
+                  <div className="col-md-6 ml-1">
+                    <label>
+                      All field with <span className="text-danger">*</span> are
+                      required
+                    </label>
+                  </div>
+                </div>
+                <div className="form-group row">
                   <div className="col-md-6">
-                    <label htmlFor="first_name">First Name</label>
+                    <label htmlFor="first_name">
+                      First Name <span className="text-danger">*</span>
+                    </label>
                     <Field
                       name="first_name"
                       type="text"
@@ -158,7 +182,9 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="last_name">Last Name</label>
+                    <label htmlFor="last_name">
+                      Last Name <span className="text-danger">*</span>
+                    </label>
                     <Field
                       name="last_name"
                       type="text"
@@ -186,7 +212,9 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="email_address">Email</label>
+                    <label htmlFor="email_address">
+                      Email <span className="text-danger">*</span>
+                    </label>
                     <Field
                       name="email_address"
                       type="text"
@@ -206,7 +234,9 @@ const PersonalInfoForm = () => {
                 </div>
                 <div className="form-group row">
                   <div className="col-md-6">
-                    <label htmlFor="mobile">Mobile</label>
+                    <label htmlFor="mobile">
+                      Mobile <span className="text-danger">*</span>
+                    </label>
                     <Field
                       name="mobile"
                       type="text"
@@ -236,7 +266,8 @@ const PersonalInfoForm = () => {
                   {initialId.id === "general" && (
                     <div className="col-md-6">
                       <label htmlFor="job_opening_id">
-                        Which Job application are you applying for *
+                        Which Job application are you applying for{" "}
+                        <span className="text-danger">*</span>
                       </label>
                       <Field
                         as="select"
@@ -247,6 +278,7 @@ const PersonalInfoForm = () => {
                             e.currentTarget.value
                           );
                           setjobId({ id: e.currentTarget.value });
+                          console.log(jobId);
                         }}
                         className={
                           "form-control" +
@@ -255,7 +287,7 @@ const PersonalInfoForm = () => {
                             : "")
                         }
                       >
-                        {defaultJob.map((e) => (
+                        {defaultJob.map((e, i) => (
                           <option value={e.value}>{e.label}</option>
                         ))}
                       </Field>
@@ -268,7 +300,8 @@ const PersonalInfoForm = () => {
                   )}
                   <div className="col-md-6">
                     <label htmlFor="highest_qualification">
-                      Highest Qualification Attained
+                      Highest Qualification Attained{" "}
+                      <span className="text-danger">*</span>
                     </label>
                     <Field
                       as="select"
@@ -281,6 +314,7 @@ const PersonalInfoForm = () => {
                           : "")
                       }
                     >
+                      <option disabled>Select field</option>
                       {qualifications.map((e) => (
                         <option value={e.label}>{e.label}</option>
                       ))}
@@ -298,7 +332,8 @@ const PersonalInfoForm = () => {
                     }
                   >
                     <label htmlFor="certifications">
-                      Certifications (if any) *
+                      Certifications (if any){" "}
+                      <span className="text-danger">*</span>
                     </label>
                     <Field
                       name="certifications"
@@ -320,7 +355,8 @@ const PersonalInfoForm = () => {
                 <div className="form-group row">
                   <div className="col-md-8">
                     <div id="checkbox-group" className="mb-2">
-                      Language(s) spoken (Fluently)
+                      Language(s) spoken (Fluently){" "}
+                      <span className="text-danger">*</span>
                     </div>
                     <div role="group" aria-labelledby="checkbox-group">
                       {languages.map((l) => (
@@ -337,7 +373,8 @@ const PersonalInfoForm = () => {
                   </div>
                   <div className="col-md-6 mt-3">
                     <label htmlFor="referred">
-                      Were you referred by an OGTL employee? *
+                      Were you referred by an OGTL employee?{" "}
+                      <span className="text-danger">*</span>
                     </label>
 
                     <Field
@@ -361,7 +398,8 @@ const PersonalInfoForm = () => {
                       <>
                         <label htmlFor="referal_name">
                           {" "}
-                          Referrers full name. *
+                          Referrers full name.{" "}
+                          <span className="text-danger">*</span>
                         </label>
                         <Field
                           name="referal_name"
@@ -378,7 +416,9 @@ const PersonalInfoForm = () => {
                 </div>
 
                 <div className="form-group">
-                  <label>Upload your CV</label>
+                  <label>
+                    Upload your CV <span className="text-danger">*</span>
+                  </label>
                   <div className="custom-file">
                     <Field
                       type="file"

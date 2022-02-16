@@ -72,7 +72,6 @@ const Asset = () => {
     if (formValue) {
       if (!editData) {
         let newFormValue = { ...formValue };
-
         axiosInstance
           .post("/api/assets", newFormValue)
           .then((res) => {
@@ -81,7 +80,6 @@ const Asset = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
@@ -96,7 +94,6 @@ const Asset = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
@@ -121,7 +118,6 @@ const Asset = () => {
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
