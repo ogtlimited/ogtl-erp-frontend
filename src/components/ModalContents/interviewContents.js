@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 
 const InterviewContent = ({ interviewContent = {} }) => {
@@ -20,10 +21,16 @@ const InterviewContent = ({ interviewContent = {} }) => {
         newData?.map((e) => (
           <>
             <div className="col-md-6 mt-3">
-              <p className="job-field">{e.split("_").join(" ")}</p>
+              <p className="job-field">{e?.split("_").join(" ")}</p>
             </div>
             <div className="col-md-6 mt-3">
-              <p className="">{newData[e] ? newData[e] : "Not Provided"}</p>
+              {e.includes("date") ? (
+                <p>{moment(interviewContent[e]).format("L")}</p>
+              ) : (
+                <p className="">
+                  {interviewContent[e] ? interviewContent[e] : "Not Provided"}
+                </p>
+              )}
             </div>
           </>
         ))}
