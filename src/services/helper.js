@@ -37,7 +37,6 @@ class HelperService {
 
   formArrayToObject(arr) {
     const objTemplate = {};
-
     arr.forEach((e) => {
       if (e.type === "select") {
         objTemplate[e.name] = {

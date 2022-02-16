@@ -81,6 +81,7 @@ const JobApplicants = () => {
   };
   //update jobOpening
   const handleUpdate = useCallback((id, update) => {
+    console.log(update)
     axiosInstance
       .patch("/api/jobApplicant/" + id, update)
       .then((res) => {

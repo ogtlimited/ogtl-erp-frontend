@@ -37,12 +37,12 @@ const statusOptions = [
 ];
 
 const AptitudeTest = () => {
-  const [formValue, setFormValue] = useState(null);
+  const [formValue, setFormValue] = useState({});
   const [data, setData] = useState([]);
   const { showAlert, user, setformUpdate } = useAppContext();
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
-  const [editData, seteditData] = useState(null);
+  const [editData, seteditData] = useState({});
   const [loadSelect, setloadSelect] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
@@ -53,14 +53,16 @@ const AptitudeTest = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
-
+    seteditData(row)
     setmode("edit");
-    setformUpdate(row);
-    setclickedRow(row);
+    let formatted = helper.handleEdit(row);
+    setformUpdate(formatted);
+    setclickedRow(formatted);
   };
   const create = () => {
     let initialValues = {};
-    for (let i in template) {
+    let temp = HelperService.formArrayToObject(template.Fields);
+    for (let i in temp) {
       initialValues[i] = "";
     }
     setmode("add");
@@ -95,16 +97,17 @@ const AptitudeTest = () => {
         });
 
         const finalForm = applicationTestFormJson.Fields.map((field) => {
-          if (field.name === "_id") {
+          if (field.name === "job_applicant_id") {
             field.options = jobApplicantsOpts;
             return field;
           }
           return field;
         });
-        setTemplate({
-          title: applicationTestFormJson.title,
-          Fields: finalForm,
-        });
+        console.log(applicationTestFormJson)
+        // setTemplate({
+        //   title: applicationTestFormJson.title,
+        //   Fields: finalForm,
+        // });
         if (!loadSelect) {
           setloadSelect(true);
         }
@@ -143,11 +146,11 @@ const AptitudeTest = () => {
           });
       }
     }
-  }, [submitted, formValue, editData?._id]);
+  }, [formValue, editData]);
 
-  useEffect(() => {
-    seteditData(clickedRow);
-  }, [clickedRow, submitted]);
+  // useEffect(() => {
+  //   seteditData(clickedRow);
+  // }, [clickedRow, submitted]);
 
   //delete aptitude test
   const deleteTest = (row) => {
@@ -320,7 +323,7 @@ const AptitudeTest = () => {
             {/* && user?.role?.hr?.create */}
             {loadSelect && (
               <a
-                href="#"
+                href=""
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"

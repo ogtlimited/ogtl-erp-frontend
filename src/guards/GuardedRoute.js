@@ -34,7 +34,6 @@ export default function GuardedRoute({ title, dept, children }) {
       return false;
     }
   };
-
   if (!canView(title, dept)) {
     return <Navigate to="/403" />;
   }

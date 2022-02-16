@@ -11,14 +11,24 @@ const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    console.log(jobApplication);
     const update = {
       interview_date: moment(form).format("llll"),
       _id: jobApplication._id,
+      rep_sieving_call: jobApplication.rep_sieving_call,
       interview_status: "Scheduled for interview",
     };
+    console.log(update);
     handleUpdate(jobApplication._id, update);
   };
+
+  const update = {
+    interview_date: moment(form).format("llll"),
+    _id: jobApplication._id,
+    interview_status: "Scheduled for interview",
+  };
+  handleUpdate(jobApplication._id, update);
+  // };
 
   return (
     <form onSubmit={handleSubmit}>
