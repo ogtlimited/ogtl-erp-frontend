@@ -21,7 +21,6 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
-  console.log(formSchema)
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -40,7 +39,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   }, [formUpdate]);
 
   const initForm = (formSchema, value) => {
-    // console.log((formSchema))
     let _formData = {};
     let _validationSchema = {};
 
@@ -78,11 +76,10 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   };
 
   const getFormElement = (elementName, elementSchema, setFieldValue, value) => {
-    // console.log(elementName, elementSchema, value)
     const props = {
       name: elementName,
       label: elementSchema.label,
-      defaultValue: formData[elementName],
+      defaultValue: formData[elementName] ? formData[elementName] : "",
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,
@@ -132,7 +129,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   return (
     <div className="App">
       <Formik
-        // enableReinitialize
+        enableReinitialize
         initialValues={formData}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
