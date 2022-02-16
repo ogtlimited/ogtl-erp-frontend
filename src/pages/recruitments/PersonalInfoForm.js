@@ -28,10 +28,13 @@ const PersonalInfoForm = () => {
             const data = res.data.data.map(e => {
                 return {
                     label: e.job_title,
-                    value: e._id
+                    value: e._id,
                 }
             })
-            setdefaultJob(data)
+            setdefaultJob([{
+                label: 'Select Job',
+                value: '',
+            },...data])
         })
     }
     useEffect(() => {
@@ -149,14 +152,20 @@ const PersonalInfoForm = () => {
                   <Form>
                    
                     <div className="form-group row">
+                    <div className="col-md-6 ml-1">
+                        <label>All field with <span className="text-danger">*</span> are required</label>
+
+                    </div>
+                    </div>
+                    <div className="form-group row">
                     <div className="col-md-6">
-                    <label htmlFor="first_name">First Name</label>
+                    <label htmlFor="first_name">First Name <span className="text-danger">*</span></label>
                     <Field name="first_name" type="text" className={'form-control' + (errors.first_name && touched.first_name ? ' is-invalid' : '')} />
                     <ErrorMessage name="first_name" component="div" className="invalid-feedback" />
                    
                     </div>
                     <div className="col-md-6">
-                    <label htmlFor="last_name">Last Name</label>
+                    <label htmlFor="last_name">Last Name <span className="text-danger">*</span></label>
                     <Field name="last_name" type="text" className={'form-control' + (errors.last_name && touched.last_name ? ' is-invalid' : '')} />
                     <ErrorMessage name="last_name" component="div" className="invalid-feedback" />
                    
@@ -169,7 +178,7 @@ const PersonalInfoForm = () => {
                         <Field name="middle_name" type="text" className='form-control'  />
                     </div>
                     <div className="col-md-6">
-                    <label htmlFor="email_address">Email</label>
+                    <label htmlFor="email_address">Email <span className="text-danger">*</span></label>
                         <Field name="email_address" type="text" className={'form-control' + (errors.email_address && touched.email_address ? ' is-invalid' : '')} />
                         <ErrorMessage name="email_address" component="div" className="invalid-feedback" />
                    
@@ -178,7 +187,7 @@ const PersonalInfoForm = () => {
                     </div>
                     <div className="form-group row">
                     <div className="col-md-6">
-                    <label htmlFor="mobile">Mobile</label>
+                    <label htmlFor="mobile">Mobile <span className="text-danger">*</span></label>
                         <Field name="mobile" type="text" className={'form-control' + (errors.mobile && touched.mobile ? ' is-invalid' : '')} />
                         <ErrorMessage name="mobile" component="div" className="invalid-feedback" />
                    
@@ -195,13 +204,13 @@ const PersonalInfoForm = () => {
                     {initialId.id === "general" && 
                     
                     <div className="col-md-6">
-                    <label htmlFor="job_opening_id">Which Job application are you applying for *</label>
+                    <label htmlFor="job_opening_id">Which Job application are you applying for <span className="text-danger">*</span></label>
                         <Field as="select" name="job_opening_id" onChange={(e) => {
                             setFieldValue('job_opening_id', e.currentTarget.value)
                             setjobId({id: e.currentTarget.value})
                             console.log( jobId);
                         }} className={'form-control' + (errors.job_opening_id && touched.job_opening_id ? ' is-invalid' : '')}>
-                            {defaultJob.map(e =>(
+                            {defaultJob.map((e, i) =>(
                                 <option value={e.value}>{e.label}</option>
 
                             )) }
@@ -213,8 +222,9 @@ const PersonalInfoForm = () => {
                     
                     }
                     <div className="col-md-6">
-                        <label htmlFor="highest_qualification">Highest Qualification Attained</label>                        
+                        <label htmlFor="highest_qualification">Highest Qualification Attained <span className="text-danger">*</span></label>                        
                         <Field as="select" name="highest_qualification" className={'form-control' + (errors.highest_qualification && touched.highest_qualification ? ' is-invalid' : '')}>
+                            <option disabled>Select field</option>
                             {qualifications.map(e =>(
                                 <option value={e.label}>{e.label}</option>
 
@@ -226,7 +236,7 @@ const PersonalInfoForm = () => {
                     </div>
                    
                     <div className={jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6"}>
-                    <label htmlFor="certifications">Certifications (if any) *</label>
+                    <label htmlFor="certifications">Certifications (if any) <span className="text-danger">*</span></label>
                         <Field name="certifications" component="textarea" className={'form-control' + (errors.certifications && touched.certifications ? ' is-invalid' : '')} />
                         <ErrorMessage name="certifications" component="div" className="invalid-feedback" />
                    
@@ -235,7 +245,7 @@ const PersonalInfoForm = () => {
                     </div>
                     <div className="form-group row">
                     <div className="col-md-8">
-                    <div id="checkbox-group" className="mb-2">Language(s) spoken (Fluently)</div>
+                    <div id="checkbox-group" className="mb-2">Language(s) spoken (Fluently) <span className="text-danger">*</span></div>
                     <div role="group" aria-labelledby="checkbox-group">
                         {languages.map(l => (
                             <label className="block">
@@ -248,7 +258,7 @@ const PersonalInfoForm = () => {
                     </div>
                     </div>
                     <div className="col-md-6 mt-3">
-                    <label htmlFor="referred">Were you referred by an OGTL employee? *</label>
+                    <label htmlFor="referred">Were you referred by an OGTL employee? <span className="text-danger">*</span></label>
                                     
                         <Field as="select" name="referred" className={'form-control' + (errors.referred && touched.referred ? ' is-invalid' : '')}>
                             {referredOpts.map(e =>(
@@ -263,7 +273,7 @@ const PersonalInfoForm = () => {
                     <div className="col-md-6 mt-3">
                     {values.referred == 'true' ? 
                     <>
-                        <label htmlFor="referal_name"> Referrers full name.  *</label>
+                        <label htmlFor="referal_name"> Referrers full name.  <span className="text-danger">*</span></label>
                         <Field  name="referal_name" className={'form-control' + (errors.referal_name && touched.referal_name ? ' is-invalid' : '')} />
 
                     </>
@@ -274,7 +284,7 @@ const PersonalInfoForm = () => {
                     </div>
 
                     <div className="form-group">
-                      <label>Upload your CV</label>
+                      <label>Upload your CV <span className="text-danger">*</span></label>
                       <div className="custom-file">
                         <Field type="file" name="resume_attachment" value={undefined} onChange={(e) => handleUpload(e, setFieldValue) } className={"custom-file-input" +  (errors.resume_attachment && touched.resume_attachment ? ' is-invalid' : '')} id="resume_attachment" />
                         <label className="custom-file-label" for="resume_attachment">
