@@ -95,7 +95,7 @@ const AptitudeTest = () => {
         });
 
         const finalForm = applicationTestFormJson.Fields.map((field) => {
-          if (field.name === "_id") {
+          if (field.name === "job_applicant_id") {
             field.options = jobApplicantsOpts;
             return field;
           }
@@ -127,7 +127,11 @@ const AptitudeTest = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       } else {
         axiosInstance
@@ -135,11 +139,14 @@ const AptitudeTest = () => {
           .then((res) => {
             setSubmitted(false);
             fetchAllTests();
-            showAlert(true, res.data.message, "alert alert-success");
+            showAlert(true, res?.data?.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error.response);
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       }
     }

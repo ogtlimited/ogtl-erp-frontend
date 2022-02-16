@@ -30,7 +30,6 @@ const Asset = () => {
     axiosInstance
       .get("/api/assets")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -43,7 +42,6 @@ const Asset = () => {
 
   useEffect(() => {
     combineRequest().then((res) => {
-      console.log(res);
       const { allPurchaseOrders } = res.data.createEmployeeFormSelection;
 
       const AssetOpts = allPurchaseOrders?.map((e) => {
@@ -66,7 +64,6 @@ const Asset = () => {
       if (!loadSelect) {
         setloadSelect(true);
       }
-      console.log(template);
     });
   }, [loadSelect]);
 
@@ -75,7 +72,6 @@ const Asset = () => {
     if (formValue) {
       if (!editData) {
         let newFormValue = { ...formValue };
-        console.log(newFormValue);
         axiosInstance
           .post("/api/assets", newFormValue)
           .then((res) => {
@@ -84,7 +80,6 @@ const Asset = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
@@ -99,7 +94,6 @@ const Asset = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            console.log(error);
             setFormValue(null);
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
@@ -118,14 +112,12 @@ const Asset = () => {
     axiosInstance
       .delete(`/api/assets/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
         showAlert(true, res.data.message, "alert alert-success");
       })
       .catch((error) => {
-        console.log(error);
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
