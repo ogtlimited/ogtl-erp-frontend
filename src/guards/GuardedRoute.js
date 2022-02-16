@@ -1,16 +1,16 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 // hooks
 
 // routes
-import { PATH_DASHBOARD } from '../routes/paths';
-import tokenService from '../services/token.service';
+import { PATH_DASHBOARD } from "../routes/paths";
+import tokenService from "../services/token.service";
 
 // ----------------------------------------------------------------------
 
 GuardedRoute.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default function GuardedRoute({title, dept, children }) {
@@ -18,17 +18,18 @@ export default function GuardedRoute({title, dept, children }) {
   const [user, setuser] = useState(tokenService.getUser());
 
 
-  const AllAccess = ['Super', 'CEO', 'HR Manager']
+  const AllAccess = ["Super", "CEO", "HR Manager"];
   const canView = (title, dept) => {
     if (user?.department?.department === dept || AllAccess.includes(user?.role?.title)) {
       return true;
-    }
-    else if(dept === 'All'){
-      return true
-    }else if(title === 'Job Applicants' && user?.role?.title === 'HR In-House Agent'){
-        return true
-    }
-     else {
+    } else if (dept === "All") {
+      return true;
+    } else if (
+      title === "Job Applicants" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else {
       return false;
     }
   };

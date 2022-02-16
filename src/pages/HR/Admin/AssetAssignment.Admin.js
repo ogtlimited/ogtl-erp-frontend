@@ -32,7 +32,6 @@ const AssetAssignment = () => {
     axiosInstance
       .get("/api/asset-assignment")
       .then((res) => {
-        console.log("asset thingy", res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -45,7 +44,6 @@ const AssetAssignment = () => {
 
   useEffect(() => {
     combineRequest().then((res) => {
-      console.log(res);
       const { employees, allAssets } = res.data.createEmployeeFormSelection;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -76,7 +74,6 @@ const AssetAssignment = () => {
       if (!loadSelect) {
         setloadSelect(true);
       }
-      console.log(template);
     });
   }, [loadSelect]);
 
@@ -85,7 +82,7 @@ const AssetAssignment = () => {
     if (formValue) {
       if (!editData) {
         let newFormValue = { ...formValue, assigned_by: user._id };
-        console.log(newFormValue);
+
         axiosInstance
           .post("/api/asset-assignment", newFormValue)
           .then((res) => {
@@ -134,7 +131,6 @@ const AssetAssignment = () => {
     axiosInstance
       .delete(`/api/asset-assignment/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -151,7 +147,6 @@ const AssetAssignment = () => {
     axiosInstance
       .patch(`/api/assets/${row._id}`, row)
       .then((res) => {
-        console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchAssetAssignments();
         showAlert(true, res.data.message, "alert alert-success");

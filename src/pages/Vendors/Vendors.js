@@ -89,7 +89,6 @@ const Vendors = () => {
     axiosInstance
       .delete(`/api/vendor/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchVendor();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)

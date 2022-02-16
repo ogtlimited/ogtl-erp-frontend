@@ -20,7 +20,6 @@ const CoachingAdmin = () => {
   const { allEmployees, showAlert } = useAppContext();
   const [editData, seteditData] = useState({});
   useEffect(() => {
-    console.log(formSubmitted)
     if (formSubmitted == true) {
       fetchCoachingForms();
     }
@@ -30,7 +29,7 @@ const CoachingAdmin = () => {
       if (e?.data) {
         const list = e.data.data;
         setcoachingList(e.data.data);
-        console.log(list);
+
         setformSubmitted(false);
       }
     });
@@ -46,7 +45,7 @@ const CoachingAdmin = () => {
         value: e._id,
       };
     });
-    console.log(allEmployees);
+
     const finalForm = coachingFormJSON.Fields.map((field) => {
       if (field.name === "employeeId") {
         field.options = employeeOpts;
@@ -69,7 +68,6 @@ const CoachingAdmin = () => {
     });
     // objTemplate.employeeId.options = employeeOpts
     settemplate(objTemplate);
-    console.log(finalForm);
   }, [allEmployees]);
   useEffect(() => {
     if (submitted === true) {
@@ -96,19 +94,16 @@ const CoachingAdmin = () => {
   }, [submitted, formValue]);
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         ...statusRow,
         status: status,
         employee_id: statusRow.employee_id._id,
       };
-      console.log(update);
+
       delete update.__v;
       axiosInstance
         .put("/leave-application/" + statusRow._id, update)
         .then((e) => {
-          console.log(e);
           // fetchLeaves();
         })
         .catch((err) => {
@@ -172,7 +167,7 @@ const CoachingAdmin = () => {
               <span className="status-online"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          )  : (
+          ) : (
             <div className="dropdown action-label text-center ">
               <a
                 className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
@@ -184,7 +179,13 @@ const CoachingAdmin = () => {
               </a>
               <div
                 className="dropdown-menu dropdown-menu-right"
-                style={{position: 'absolute', willChange: 'transform', top: '0px', left: '0px', transform: 'translate3d(106px, 31px, 0px)'}}
+                style={{
+                  position: "absolute",
+                  willChange: "transform",
+                  top: "0px",
+                  left: "0px",
+                  transform: "translate3d(106px, 31px, 0px)",
+                }}
                 x-placement="bottom-end"
               >
                 <a className="dropdown-item" href="">

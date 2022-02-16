@@ -28,7 +28,6 @@ const CampaignRightCard = ({ campaign_info }) => {
     },
   ]);
   const [status, setStatus] = useState("");
-  console.log("campaign ", campaign_info);
 
   return (
     <>

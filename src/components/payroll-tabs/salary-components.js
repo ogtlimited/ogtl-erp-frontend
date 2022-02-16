@@ -7,7 +7,6 @@ import { ApproverBtn } from "../ApproverBtn";
 
 const SalaryComponents = ({ setformType, formValue, submitted }) => {
   const handleChange = (type) => {
-    console.log(type);
     setformType(type);
   };
   const [editData, seteditData] = useState({});
@@ -20,7 +19,6 @@ const SalaryComponents = ({ setformType, formValue, submitted }) => {
     axiosInstance
       .get("/api/salary-component")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -40,7 +38,6 @@ const SalaryComponents = ({ setformType, formValue, submitted }) => {
       axiosInstance
         .post("/api/salary-component", newFormValue)
         .then((res) => {
-          console.log(res);
           fetchSalaryComponents();
           showAlert(true, "Salary component created.", "alert alert-success");
         })

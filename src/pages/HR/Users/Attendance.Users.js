@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Activity from "../../../components/attendance/activity";
 import AttendanceTable from "../../../components/attendance/attendance-table";
 import Stats from "../../../components/attendance/stats";
@@ -10,11 +10,11 @@ import { useAppContext } from "../../../Context/AppContext";
 import attendance from "../../../db/attendance.json";
 
 const EmployeeAttendance = () => {
-  const { employeeAttendance,fetchEmployeeAttendance } = useAppContext();
+  const { employeeAttendance, fetchEmployeeAttendance } = useAppContext();
   useEffect(() => {
-    fetchEmployeeAttendance()
-  }, [])
-  console.log(employeeAttendance);
+    fetchEmployeeAttendance();
+  }, []);
+
   const columns = [
     {
       dataField: "createdAt",
@@ -96,7 +96,7 @@ const EmployeeAttendance = () => {
               <li className="breadcrumb-item active">Employees</li>
             </ul>
           </div>
-          </div>
+        </div>
       </div>
       <div className="row">
         <Timesheet />

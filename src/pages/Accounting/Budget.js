@@ -53,9 +53,7 @@ const Budget = () => {
     fetchBudget();
   }, []);
 
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
+  useEffect(() => {}, [status]);
 
   useEffect(() => {
     seteditData(clickedRow);
@@ -65,7 +63,6 @@ const Budget = () => {
     axiosInstance
       .delete(`/api/budget/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchBudget();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
@@ -80,11 +77,9 @@ const Budget = () => {
 
   useEffect(() => {
     if (status.length) {
-      console.log("sttayus", { status, statusRow });
       axiosInstance
         .patch(`/api/budget/approve/${statusRow._id}?status=${status}`)
         .then((res) => {
-          console.log(res);
           fetchBudget();
           setData((prevData) =>
             prevData.filter((pdata) => pdata._id !== statusRow._id)

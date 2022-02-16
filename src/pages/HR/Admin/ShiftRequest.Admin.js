@@ -18,7 +18,7 @@ import helper from "../../../services/helper";
 
 const ShiftRequest = () => {
   const [formValue, setFormValue] = useState({});
-  const [template, settemplate] = useState({})
+  const [template, settemplate] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
   const [editData, seteditData] = useState({});
@@ -33,7 +33,6 @@ const ShiftRequest = () => {
     axiosInstance
       .get("/api/shiftRequest")
       .then((res) => {
-        console.log("Shifts requests", res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -41,7 +40,7 @@ const ShiftRequest = () => {
       });
   };
   useEffect(() => {
-    settemplate(helper.formArrayToObject(shiftRequestFormJson.Fields))
+    settemplate(helper.formArrayToObject(shiftRequestFormJson.Fields));
     fetchShiftRequests();
   }, []);
 
@@ -50,7 +49,6 @@ const ShiftRequest = () => {
     axiosInstance
       .delete(`/api/shiftRequest/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

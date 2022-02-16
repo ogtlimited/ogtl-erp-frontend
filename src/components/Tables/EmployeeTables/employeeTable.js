@@ -42,12 +42,11 @@ const EmployeesTable = ({
 
   useEffect(() => {}, [filters, loadForm]);
   const handleClick = (i, type) => {
-    console.log(i, unfiltered);
     if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => i.value == e[type]?._id);
-      console.log(filt);
+
       setAllEmployee(filt);
     }
   };
@@ -62,7 +61,7 @@ const EmployeesTable = ({
       }
     }
     setmode("edit");
-    console.log(hash);
+
     seteditData(hash);
   };
   const clearFilter = (e) => {
@@ -70,10 +69,8 @@ const EmployeesTable = ({
     // attendaceDateFilter('')
     setAllEmployee(unfiltered);
   };
-  //    console.log(data)
 
   useEffect(() => {
-    // console.log(filters)
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
@@ -86,7 +83,7 @@ const EmployeesTable = ({
       }
     });
   }, [mobileView]);
-  // console.log(total);
+
   const columns = [
     {
       dataField: "",

@@ -38,8 +38,6 @@ const JobOpening = () => {
   const [unfiltered, setunfiltered] = useState([]);
   const [mode, setmode] = useState("add");
   const editRow = (row) => {
-    // setformUpdate(null)
-    console.log("template", helper.handleEdit(row));
     setmode("edit");
     seteditData(row);
     let formatted = helper.handleEdit(row);
@@ -51,10 +49,9 @@ const JobOpening = () => {
     let temp = HelperService.formArrayToObject(template.Fields);
     for (let i in temp) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
-    console.log(initialValues);
+
     setFormValue(initialValues);
     seteditData(initialValues);
   };
@@ -85,7 +82,6 @@ const JobOpening = () => {
   useEffect(() => {
     createRecruitmens()
       .then((res) => {
-        // console.log(res.data);
         const { projects, designations, branches } =
           res.data.createRecruitmentForm;
         const projectsOpts = projects?.map((e) => {
@@ -123,8 +119,6 @@ const JobOpening = () => {
         //   title: jobOpeningFormJson.title,
         //   Fields: finalForm,
         // });
-        console.log(jobOpeningFormJson);
-        console.log(template);
         if (!loadSelect) {
           setloadSelect(true);
         }
@@ -163,7 +157,7 @@ const JobOpening = () => {
         // delete formValue.__v;
         // delete formValue.createdAt;
         // delete formValue.updatedAt;
-        console.log(formValue);
+
         axiosInstance
           .patch("/api/jobOpening/" + editData._id, formValue)
           .then((res) => {
@@ -187,7 +181,7 @@ const JobOpening = () => {
   }, [formValue, editData]);
 
   // useEffect(() => {
-  //   console.log(template);
+
   //   seteditData(clickedRow);
   // }, [clickedRow, submitted]);
 

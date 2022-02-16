@@ -25,7 +25,6 @@ const Notifications = () => {
     axiosInstance
       .get("/api/notification")
       .then((res) => {
-        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {

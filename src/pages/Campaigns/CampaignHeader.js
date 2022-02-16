@@ -28,7 +28,6 @@ const CampaignHeader = ({ campaign_info, fetchProjects }) => {
 
   useEffect(() => {
     createCampaign().then((res) => {
-      console.log(res);
       const { employees, clientS } = res.data.createCampaignForm;
       const emp = employees?.map((e) => {
         return {
@@ -57,7 +56,7 @@ const CampaignHeader = ({ campaign_info, fetchProjects }) => {
         return c;
       });
       campaignFormJson.Fields = formatted;
-      console.log(campaignFormJson);
+
       setTemplate(campaignFormJson);
       // if (type === "projectId") {
       //   setFormOptions(projectsOpts);
@@ -81,7 +80,6 @@ const CampaignHeader = ({ campaign_info, fetchProjects }) => {
       axiosInstance
         .put(`/api/project/${campaign_info?._id}`, newValue)
         .then((res) => {
-          console.log(res);
           setFormValue(null);
           fetchProjects();
           showAlert(true, res.data?.message, "alert alert-success");
