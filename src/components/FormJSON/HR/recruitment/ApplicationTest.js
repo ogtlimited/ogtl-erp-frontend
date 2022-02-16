@@ -11,7 +11,6 @@ export const applicationTestFormJson = {
       },
       options: [],
     },
-
     {
       name: "interviewer",
       type: "select",
@@ -27,7 +26,6 @@ export const applicationTestFormJson = {
         },
       ],
     },
-
     {
       name: "status",
       type: "select",

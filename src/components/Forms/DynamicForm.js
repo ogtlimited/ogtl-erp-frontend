@@ -21,6 +21,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
+  console.log(formSchema)
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
@@ -39,6 +40,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   }, [formUpdate]);
 
   const initForm = (formSchema, value) => {
+    // console.log((formSchema))
     let _formData = {};
     let _validationSchema = {};
 
@@ -76,6 +78,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   };
 
   const getFormElement = (elementName, elementSchema, setFieldValue, value) => {
+    // console.log(elementName, elementSchema, value)
     const props = {
       name: elementName,
       label: elementSchema.label,
@@ -123,12 +126,13 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
     $("#FormModal").modal("toggle");
     setvalue(values);
+    console.log(values)
     setformSubmitted(true);
   };
   return (
     <div className="App">
       <Formik
-        enableReinitialize
+        // enableReinitialize
         initialValues={formData}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
@@ -141,7 +145,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
         return (
           <form onSubmit={handleSubmit}>
           <div className="row">
-
           { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
             <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
               {getFormElement(key, formSchema[key], setFieldValue, formData[key])}

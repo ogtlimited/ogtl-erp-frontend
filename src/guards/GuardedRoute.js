@@ -14,14 +14,12 @@ GuardedRoute.propTypes = {
 };
 
 export default function GuardedRoute({title, dept, children }) {
-    console.log(dept);
-    console.log(children);
+
   const [user, setuser] = useState(tokenService.getUser());
-  console.log(user)
+
 
   const AllAccess = ['Super', 'CEO', 'HR Manager']
   const canView = (title, dept) => {
-      console.log(title,dept, user.role.title);
     if (user?.department?.department === dept || AllAccess.includes(user?.role?.title)) {
       return true;
     }
@@ -34,7 +32,6 @@ export default function GuardedRoute({title, dept, children }) {
       return false;
     }
   };
-  console.log(canView());
   if (!canView(title, dept)) {
     return <Navigate to="/403" />;
   }
