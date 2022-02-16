@@ -138,8 +138,12 @@ const AptitudeTest = () => {
             );
           });
       } else {
+        let newFormValue = {
+          ...formValue,
+          _id: editData._id,
+        };
         axiosInstance
-          .patch("/api/test/" + editData?._id, formValue)
+          .patch("/api/test/" + editData?._id, newFormValue)
           .then((res) => {
             setSubmitted(false);
             fetchAllTests();
@@ -154,7 +158,7 @@ const AptitudeTest = () => {
           });
       }
     }
-  }, [formValue, editData]);
+  }, [formValue, editData, mode]);
 
   // useEffect(() => {
   //   seteditData(clickedRow);
