@@ -7,6 +7,7 @@ import axiosInstance from "../../services/api";
 
 const JobDashboard = () => {
   const [data, setData] = useState(null);
+  const [empStats, setEmpStats] = useState([]);
 
   useEffect(() => {
     const fetchJobDashboard = () => {
@@ -20,6 +21,20 @@ const JobDashboard = () => {
         });
     };
     fetchJobDashboard();
+  }, []);
+
+  useEffect(() => {
+    const fetchEmStats = () => {
+      axiosInstance
+        .get("/employees/employees/stats")
+        .then((res) => {
+          setEmpStats(res.data.employees);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchEmStats();
   }, []);
   return (
     <>
@@ -40,7 +55,7 @@ const JobDashboard = () => {
         </div>
       </div>
       <JobDashboardCard data={data} />
-      <JobDashboardOverviewLatest data={data} />
+      <JobDashboardOverviewLatest data={data} empStats={empStats} />
       <RecruitmentSupervision />
     </>
   );
