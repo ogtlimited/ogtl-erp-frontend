@@ -20,7 +20,6 @@ const GeneralLedger = () => {
     axiosInstance
       .get("/Journal")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -40,7 +39,6 @@ const GeneralLedger = () => {
       axiosInstance
         .get("/api/clients")
         .then((res) => {
-          console.log("account name", res.data);
           setData(res.data.data);
         })
         .catch((error) => {

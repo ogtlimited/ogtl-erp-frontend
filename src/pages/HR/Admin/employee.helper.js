@@ -17,11 +17,9 @@ export default class EmployeeHelperService {
     this.employees = employees;
   }
   mapRecords() {
-    // console.log(this.employeeTypes)
     const appOpts =
       this.acceptedJobOffers.length > 0
         ? this.acceptedJobOffers?.map((e) => {
-            console.log(e, "offers");
             return {
               label:
                 e?.job_applicant_id.first_name +
@@ -44,7 +42,7 @@ export default class EmployeeHelperService {
         value: e._id,
       };
     });
-    // console.log(reportstoOpts)
+
     const shiftsopts = this.shifts?.map((e) => {
       return {
         label: e.shift_name,
@@ -99,7 +97,6 @@ export default class EmployeeHelperService {
           field.options = service.appOpts;
         } else {
           field.options = service.reportstoOpts;
-          console.log("REPORT", field);
         }
         return field;
       } else if (field.name === "department") {
@@ -132,7 +129,6 @@ export default class EmployeeHelperService {
           field.options = service.appOpts;
         } else {
           field.options = service.reportstoOpts;
-          console.log("REPORT", field);
         }
         return field;
       } else if (field.name === "department") {

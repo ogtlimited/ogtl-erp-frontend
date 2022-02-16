@@ -20,7 +20,6 @@ const Resignation = () => {
     axiosInstance
       .get("/Exit")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -33,7 +32,6 @@ const Resignation = () => {
 
   useEffect(() => {
     createPerfomance().then((res) => {
-      console.log(res);
       const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -52,14 +50,13 @@ const Resignation = () => {
         title: resignationFormJson.title,
         Fields: finalForm,
       });
-      console.log(template);
+
       if (!loadSelect) setloadSelect(true);
     });
   }, []);
 
   //create Resignation
   useEffect(() => {
-    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/Exit", formValue)
@@ -74,7 +71,6 @@ const Resignation = () => {
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
-    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete score card
@@ -82,7 +78,6 @@ const Resignation = () => {
     axiosInstance
       .delete(`/Exit/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -97,7 +92,6 @@ const Resignation = () => {
     axiosInstance
       .patch(`/Exit/${row._id}`, row)
       .then((res) => {
-        console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchResignation();
         showAlert(true, res.data.message, "alert alert-success");

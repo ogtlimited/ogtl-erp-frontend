@@ -28,7 +28,6 @@ const SalaryAssignmentModal = ({ salaryStructure }) => {
 
   useEffect(() => {
     combineRequest().then((res) => {
-      console.log(res);
       const { employees } = res.data.createEmployeeFormSelection;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -69,7 +68,6 @@ const SalaryAssignmentModal = ({ salaryStructure }) => {
                 enableReinitialize
                 initialValues={initialValues}
                 onSubmit={(values, { setSubmitting }) => {
-                  //   console.log(values);
                   let employeeIds = values.employeeIds.map(
                     (employeeId) => employeeId.value
                   );
@@ -83,8 +81,6 @@ const SalaryAssignmentModal = ({ salaryStructure }) => {
                   axiosInstance
                     .post("/api/salary-structure-assignment", newFormValue)
                     .then((res) => {
-                      console.log(res);
-
                       showAlert(
                         true,
                         "Salary assignment added.",

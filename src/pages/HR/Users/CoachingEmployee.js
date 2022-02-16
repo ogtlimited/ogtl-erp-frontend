@@ -27,35 +27,35 @@ const CoachingEmployee = () => {
   const [coachingForm, setcoachingForm] = useState({});
   useEffect(() => {
     const user = tokenService.getUser();
-    console.log(file);
-    axiosInstance.get("/api/coaching-form/employee/" + user?._id).then((res) => {
-      console.log(res.data?.data);
-      if (res.data.data.length === 0) {
-        setnoForm(false);
-      }else{
-        setnoForm(true)
-        setcoachingForm(res.data?.data[0]);
-      }
-    });
-   
-  }, [noForm])
+
+    axiosInstance
+      .get("/api/coaching-form/employee/" + user?._id)
+      .then((res) => {
+        if (res.data.data.length === 0) {
+          setnoForm(false);
+        } else {
+          setnoForm(true);
+          setcoachingForm(res.data?.data[0]);
+        }
+      });
+  }, [noForm]);
   useEffect(() => {
-  
     if (submitAction.length) {
       const payload = {
         user_response: submitAction,
         reason,
       };
-      console.log(payload);
-      axiosInstance.put("/api/coaching-form/user-response/" + coachingForm._id, payload).then((res) => {
-        console.log(res.data?.data[0]);
-        if (res.data.data.length === 0) {
-          setnoForm(false);
-        }
-        setcoachingForm(res.data?.data[0]);
-      });
+
+      axiosInstance
+        .put("/api/coaching-form/user-response/" + coachingForm._id, payload)
+        .then((res) => {
+          if (res.data.data.length === 0) {
+            setnoForm(false);
+          }
+          setcoachingForm(res.data?.data[0]);
+        });
       // updateEmployeeCoachingList(payload).then((res) => {
-      //   console.log(res.data);
+
       // });
     }
   }, [submitAction, file]);
@@ -73,193 +73,197 @@ const CoachingEmployee = () => {
               <li className="breadcrumb-item active">Coaching Form</li>
             </ul>
           </div>
-         </div>
+        </div>
       </div>
 
       {noForm ? (
-       <div ref={ref} className="row justify-content-center">
-       <div className="col-md-11 mt-5">
-         <div className="card px-2 ">
-           <div className="card-body">
-             <h4 className="payslip-title">Coaching Form Review</h4>
-             <div className="row">
-               {/* <div className="col-sm-6 m-b-20">
+        <div ref={ref} className="row justify-content-center">
+          <div className="col-md-11 mt-5">
+            <div className="card px-2 ">
+              <div className="card-body">
+                <h4 className="payslip-title">Coaching Form Review</h4>
+                <div className="row">
+                  {/* <div className="col-sm-6 m-b-20">
                           <img src={logo} className="inv-logo" alt="" />
                           
                       </div> */}
-             </div>
-             <div className="row mt-5">
-               <div className="col-lg-12  m-b-20">
-                 <table className="table table-bordered">
-                   <tbody>
-                     <tr>
-                       <td>
-                         <strong>Team Member Name</strong>{" "}
-                         <span className="float-right">
-                           {coachingForm?.employee_id?.first_name}  {coachingForm?.employee_id?.last_name}
-                         </span>
-                       </td>
-                       <td>
-                         <strong>Date</strong>{" "}
-                         <span className="float-right">
-                           {coachingForm?.incident_date}
-                         </span>
-                       </td>
-                     </tr>
-                     <tr>
-                       <td>
-                         <strong>Title / Position</strong>{" "}
-                         <span className="float-right">{user?.designation}</span>
-                       </td>
-                       <td>
-                         <strong>Supervisor</strong>{" "}
-                         <span className="float-right">
-                           {coachingForm?.supervisor?.first_name} {coachingForm?.employee_id?.last_name}
-                         </span>
-                       </td>
-                     </tr>
-                   </tbody>
-                 </table>
-               </div>
-             </div>
+                </div>
+                <div className="row mt-5">
+                  <div className="col-lg-12  m-b-20">
+                    <table className="table table-bordered">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <strong>Team Member Name</strong>{" "}
+                            <span className="float-right">
+                              {coachingForm?.employee_id?.first_name}{" "}
+                              {coachingForm?.employee_id?.last_name}
+                            </span>
+                          </td>
+                          <td>
+                            <strong>Date</strong>{" "}
+                            <span className="float-right">
+                              {coachingForm?.incident_date}
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <strong>Title / Position</strong>{" "}
+                            <span className="float-right">
+                              {user?.designation}
+                            </span>
+                          </td>
+                          <td>
+                            <strong>Supervisor</strong>{" "}
+                            <span className="float-right">
+                              {coachingForm?.supervisor?.first_name}{" "}
+                              {coachingForm?.employee_id?.last_name}
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
-             <div className="row px-3 mt-5" id="accordion">
-               <div className="card col-sm-12 px-0">
-                 <div className="card-header" id="headingOne">
-                   <h5 className="mb-0">
-                     <button
-                       className="btn btn-link text-dark"
-                       data-toggle="collapse"
-                       data-target="#collapseOne"
-                       aria-expanded="true"
-                       aria-controls="collapseOne"
-                     >
-                       Goal
-                     </button>
-                   </h5>
-                 </div>
+                <div className="row px-3 mt-5" id="accordion">
+                  <div className="card col-sm-12 px-0">
+                    <div className="card-header" id="headingOne">
+                      <h5 className="mb-0">
+                        <button
+                          className="btn btn-link text-dark"
+                          data-toggle="collapse"
+                          data-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        >
+                          Goal
+                        </button>
+                      </h5>
+                    </div>
 
-                 <div
-                   id="collapseOne"
-                   className="collapse show"
-                   aria-labelledby="headingOne"
-                   data-parent="#accordion"
-                 >
-                   <div
-                     className="card-body"
-                     dangerouslySetInnerHTML={{
-                       __html: coachingForm?.goals,
-                     }}
-                   >
-                     {/* {coachingForm?.goals} */}
-                   </div>
-                 </div>
-               </div>
-               <div className="card col-sm-12 px-0">
-                 <div className="card-header" id="headingTwo">
-                   <h5 className="mb-0">
-                     <button
-                       className="btn btn-link text-dark collapsed"
-                       data-toggle="collapse"
-                       data-target="#collapseTwo"
-                       aria-expanded="false"
-                       aria-controls="collapseTwo"
-                     >
-                       Reality
-                     </button>
-                   </h5>
-                 </div>
-                 <div
-                   id="collapseTwo"
-                   className="collapse"
-                   aria-labelledby="headingTwo"
-                   data-parent="#accordion"
-                 >
-                   <div
-                     className="card-body"
-                     dangerouslySetInnerHTML={{
-                       __html: coachingForm?.reality,
-                     }}
-                   >
-                     {/* {coachingForm?.reality} */}
-                   </div>
-                 </div>
-               </div>
+                    <div
+                      id="collapseOne"
+                      className="collapse show"
+                      aria-labelledby="headingOne"
+                      data-parent="#accordion"
+                    >
+                      <div
+                        className="card-body"
+                        dangerouslySetInnerHTML={{
+                          __html: coachingForm?.goals,
+                        }}
+                      >
+                        {/* {coachingForm?.goals} */}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card col-sm-12 px-0">
+                    <div className="card-header" id="headingTwo">
+                      <h5 className="mb-0">
+                        <button
+                          className="btn btn-link text-dark collapsed"
+                          data-toggle="collapse"
+                          data-target="#collapseTwo"
+                          aria-expanded="false"
+                          aria-controls="collapseTwo"
+                        >
+                          Reality
+                        </button>
+                      </h5>
+                    </div>
+                    <div
+                      id="collapseTwo"
+                      className="collapse"
+                      aria-labelledby="headingTwo"
+                      data-parent="#accordion"
+                    >
+                      <div
+                        className="card-body"
+                        dangerouslySetInnerHTML={{
+                          __html: coachingForm?.reality,
+                        }}
+                      >
+                        {/* {coachingForm?.reality} */}
+                      </div>
+                    </div>
+                  </div>
 
-               <div className="card col-sm-12 px-0">
-                 <div className="card-header" id="headingFour">
-                   <h5 className="mb-0">
-                     <button
-                       className="btn btn-link text-dark collapsed"
-                       data-toggle="collapse"
-                       data-target="#collapseFour"
-                       aria-expanded="false"
-                       aria-controls="collapseFour"
-                     >
-                       Opportunities / Options
-                     </button>
-                   </h5>
-                 </div>
-                 <div
-                   id="collapseFour"
-                   className="collapse"
-                   aria-labelledby="headingFour"
-                   data-parent="#accordion"
-                 >
-                   <div
-                     className="card-body"
-                     dangerouslySetInnerHTML={{
-                       __html: coachingForm?.opportunities,
-                     }}
-                   ></div>
-                 </div>
-               </div>
-               <div className="card col-sm-12 px-0">
-                 <div className="card-header" id="headingFive">
-                   <h5 className="mb-0">
-                     <button
-                       className="btn btn-link text-dark collapsed"
-                       data-toggle="collapse"
-                       data-target="#collapseFive"
-                       aria-expanded="false"
-                       aria-controls="collapseFive"
-                     >
-                       Way Forward
-                     </button>
-                   </h5>
-                 </div>
-                 <div
-                   id="collapseFive"
-                   className="collapse"
-                   aria-labelledby="headingFive"
-                   data-parent="#accordion"
-                 >
-                   <div
-                     className="card-body"
-                     dangerouslySetInnerHTML={{
-                       __html: coachingForm?.way_forward,
-                     }}
-                   >
-                     {/* {coachingForm?.way_forward} */}
-                   </div>
-                 </div>
-               </div>
-             </div>
-             <div className="row">
-               <div className="col-sm-12">
-                 <button
-                   data-toggle="modal"
-                   data-target="#acceptDecline"
-                   className="btn btn-primary submit-btn"
-                 >
-                   Submit
-                 </button>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
+                  <div className="card col-sm-12 px-0">
+                    <div className="card-header" id="headingFour">
+                      <h5 className="mb-0">
+                        <button
+                          className="btn btn-link text-dark collapsed"
+                          data-toggle="collapse"
+                          data-target="#collapseFour"
+                          aria-expanded="false"
+                          aria-controls="collapseFour"
+                        >
+                          Opportunities / Options
+                        </button>
+                      </h5>
+                    </div>
+                    <div
+                      id="collapseFour"
+                      className="collapse"
+                      aria-labelledby="headingFour"
+                      data-parent="#accordion"
+                    >
+                      <div
+                        className="card-body"
+                        dangerouslySetInnerHTML={{
+                          __html: coachingForm?.opportunities,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                  <div className="card col-sm-12 px-0">
+                    <div className="card-header" id="headingFive">
+                      <h5 className="mb-0">
+                        <button
+                          className="btn btn-link text-dark collapsed"
+                          data-toggle="collapse"
+                          data-target="#collapseFive"
+                          aria-expanded="false"
+                          aria-controls="collapseFive"
+                        >
+                          Way Forward
+                        </button>
+                      </h5>
+                    </div>
+                    <div
+                      id="collapseFive"
+                      className="collapse"
+                      aria-labelledby="headingFive"
+                      data-parent="#accordion"
+                    >
+                      <div
+                        className="card-body"
+                        dangerouslySetInnerHTML={{
+                          __html: coachingForm?.way_forward,
+                        }}
+                      >
+                        {/* {coachingForm?.way_forward} */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <button
+                      data-toggle="modal"
+                      data-target="#acceptDecline"
+                      className="btn btn-primary submit-btn"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <>
           <div ref={ref} className="row justify-content-center">

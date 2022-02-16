@@ -84,7 +84,6 @@ const JobApplicants = () => {
     axiosInstance
       .patch("/api/jobApplicant/" + id, update)
       .then((res) => {
-        console.log(res.data);
         fetchJobApplicants();
         showAlert(true, res.data.message, "alert alert-success");
       })
@@ -135,10 +134,11 @@ const JobApplicants = () => {
       sort: true,
       formatter: (value, row) => (
         <>
-        {row?.job_opening_id?.job_title ? <h2>{row?.job_opening_id?.job_title}</h2>
-        :
-        <h2>{row?.default_job_opening_id?.job_title}</h2>
-      }
+          {row?.job_opening_id?.job_title ? (
+            <h2>{row?.job_opening_id?.job_title}</h2>
+          ) : (
+            <h2>{row?.default_job_opening_id?.job_title}</h2>
+          )}
         </>
       ),
     },

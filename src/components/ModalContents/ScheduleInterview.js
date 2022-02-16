@@ -1,26 +1,24 @@
 import moment from "moment";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-const ScheduleInterview = ({jobApplication, handleUpdate}) => {
-    const [form, setform] = useState("");
-    
-  const handleChange =(event)=> {
+const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
+  const [form, setform] = useState("");
+
+  const handleChange = (event) => {
     const target = event.target;
-    const value =  target.value;
+    const value = target.value;
     setform(value);
-  }
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(jobApplication);
-    const update ={
-        interview_date: moment(form).format('llll'),
-        _id: jobApplication._id,
-        interview_status: 'Scheduled for interview'
-    }
-    handleUpdate(jobApplication._id,update );
 
-  }
-
+    const update = {
+      interview_date: moment(form).format("llll"),
+      _id: jobApplication._id,
+      interview_status: "Scheduled for interview",
+    };
+    handleUpdate(jobApplication._id, update);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -37,7 +35,6 @@ const ScheduleInterview = ({jobApplication, handleUpdate}) => {
             />
           </div>
         </div>
-
       </div>
       <div className="submit-section">
         <button className="btn btn-primary submit-btn">Save</button>

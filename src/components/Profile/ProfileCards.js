@@ -34,7 +34,6 @@ const ProfileCards = ({
     setformType(type);
   };
   useEffect(() => {
-    // console.log(userData.employee)
     setemployeeDetails(userData?.employee);
     setcampaign(userData?.employee?.projectId);
   }, [userData]);
@@ -232,7 +231,8 @@ const ProfileCards = ({
                     </ul>
                   </div>
                   <p className="m-b-5">
-                    Progress <span className="text-success float-right">40%</span>
+                    Progress{" "}
+                    <span className="text-success float-right">40%</span>
                   </p>
                   <div className="progress progress-xs mb-0">
                     <div

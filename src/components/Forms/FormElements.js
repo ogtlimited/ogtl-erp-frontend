@@ -12,8 +12,6 @@ import "react-quill/dist/quill.snow.css";
 
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
-
-  console.log(props);
   return (
     <Formik {...props}>
       render=
@@ -33,7 +31,6 @@ export function Form(props) {
 }
 
 export function TextField(props) {
-  // console.log(props)
   const { name, label, disabled, placeholder, defaultValue, ...rest } = props;
   return (
     <>
@@ -62,7 +59,6 @@ export function TextField(props) {
 }
 
 export function NumberField(props) {
-  // console.log(props)
   const { name, label, placeholder, defaultValue, ...rest } = props;
 
   return (
@@ -79,7 +75,7 @@ export function NumberField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          defaultValue={defaultValue ? defaultValue : ''}
+          defaultValue={defaultValue ? defaultValue : ""}
           {...rest}
         />
 
@@ -92,7 +88,7 @@ export function NumberField(props) {
   );
 }
 export function PasswordField(props) {
-  const { name, label, placeholder,defaultValue, ...rest } = props;
+  const { name, label, placeholder, defaultValue, ...rest } = props;
   return (
     <>
       <div className="form-group">
@@ -107,7 +103,7 @@ export function PasswordField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          value={defaultValue ? defaultValue : ''}
+          value={defaultValue ? defaultValue : ""}
           {...rest}
         />
 
@@ -120,8 +116,9 @@ export function PasswordField(props) {
   );
 }
 export function RichTextField(props) {
-  const { name, label, placeholder,setFieldValue, defaultValue, ...rest } = props;
-  let key = `${Math.floor((Math.random() * 1000))}-min`
+  const { name, label, placeholder, setFieldValue, defaultValue, ...rest } =
+    props;
+  let key = `${Math.floor(Math.random() * 1000)}-min`;
   return (
     <>
       <div className="form-group">
@@ -130,14 +127,12 @@ export function RichTextField(props) {
             {label}
           </label>
         )}
-         <Field
+        <Field
           component={ReactQuill}
           name={name}
           key={defaultValue}
-          defaultValue={defaultValue ? defaultValue : ''}
-
+          defaultValue={defaultValue ? defaultValue : ""}
           onChange={(html) => {
-            console.log(html);
             setFieldValue(name, html);
           }}
           className=" ml-0 w-100"
@@ -154,7 +149,7 @@ export function RichTextField(props) {
 export function CheckField(props) {
   const { name, label, placeholder, defaultValue, ...rest } = props;
   const { isChecked, setIsChecked } = useAppContext();
-  // console.log(defaultValue)
+
   return (
     <>
       <div className="form-group">
@@ -184,16 +179,16 @@ export function CheckField(props) {
   );
 }
 export function DateField(props) {
+  const { name, label, placeholder, defaultValue, setFieldValue, ...rest } =
+    props;
 
-  const { name, label, placeholder,defaultValue,setFieldValue, ...rest  } = props;
-  console.log(defaultValue)
-  const [date, setdate] = useState(new Date().toISOString().slice(0,10))
+  const [date, setdate] = useState(new Date().toISOString().slice(0, 10));
   // let date = n;
   useEffect(() => {
-    if(defaultValue){
-      setdate(new Date(defaultValue).toISOString().slice(0,10));
+    if (defaultValue) {
+      setdate(new Date(defaultValue).toISOString().slice(0, 10));
     }
-  }, [])
+  }, []);
   return (
     <>
       <div className="form-group">
@@ -211,13 +206,10 @@ export function DateField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-          onChange={(e) =>{
-
-            setFieldValue(name, e.target.value)
+          onChange={(e) => {
+            setFieldValue(name, e.target.value);
             // setdateState(e.target.value)
-            console.log(e.target.value)
           }}
-
         />
 
         <ErrorMessage
@@ -284,8 +276,6 @@ export function TimeField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-
-
         />
 
         <ErrorMessage
@@ -313,7 +303,6 @@ export function TextareaField(props) {
           name={name}
           id={name}
           placeholder={placeholder || ""}
-
         />
 
         <ErrorMessage
@@ -327,7 +316,7 @@ export function TextareaField(props) {
 
 export function SelectField(props) {
   const { name, label, options, defaultValue, setFieldValue } = props;
-  let val = options.filter(e => e.value === defaultValue)[0]
+  let val = options.filter((e) => e.value === defaultValue)[0];
   return (
     <>
       <div className="form-group">
@@ -343,7 +332,6 @@ export function SelectField(props) {
           key={val}
           name={name}
           onChange={(opt) => {
-            console.log(opt);
             setFieldValue(name, opt.value);
             // setFieldValue("employee_name", opt.value);
           }}

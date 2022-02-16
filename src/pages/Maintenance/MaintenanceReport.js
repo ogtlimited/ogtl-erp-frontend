@@ -33,7 +33,6 @@ const MaintenanceReport = () => {
     axiosInstance
       .get("/api/maintenanceReport")
       .then((res) => {
-        console.log(res);
         setData(res?.data?.data);
       })
       .catch((error) => {
@@ -102,7 +101,6 @@ const MaintenanceReport = () => {
     axiosInstance
       .delete(`/api/maintenanceReport/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchMaintenanceReport();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)

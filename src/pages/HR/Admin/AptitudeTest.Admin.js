@@ -62,7 +62,6 @@ const AptitudeTest = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
