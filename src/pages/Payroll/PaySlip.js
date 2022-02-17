@@ -40,7 +40,7 @@ const PaySlip = () => {
     const fetchPaySlip = async () => {
       try {
         const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        console.log(res);
+
         setPaySlip(res.data.data.employeeSlip);
       } catch (error) {
         console.log(error);

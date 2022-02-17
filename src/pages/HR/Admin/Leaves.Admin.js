@@ -10,28 +10,28 @@ import { useAppContext } from "../../../Context/AppContext";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import GeneralUpload from "../../../components/Modal/GeneralUpload";
 const LeavesAdmin = () => {
-    const [approval, setApproval] = useState([
-      {
-        title: "open",
-        color: "text-secondary",
-      },
-      {
-        title: "approved by supervisor",
-        color: "text-info",
-      },
-      {
-        title: "approved",
-        color: "text-success",
-      },
-      {
-        title: "cancelled",
-        color: "text-warning",
-      },
-      {
-        title: "rejected",
-        color: "text-danger",
-      },
-    ]);
+  const [approval, setApproval] = useState([
+    {
+      title: "open",
+      color: "text-secondary",
+    },
+    {
+      title: "approved by supervisor",
+      color: "text-info",
+    },
+    {
+      title: "approved",
+      color: "text-success",
+    },
+    {
+      title: "cancelled",
+      color: "text-warning",
+    },
+    {
+      title: "rejected",
+      color: "text-danger",
+    },
+  ]);
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -43,18 +43,17 @@ const LeavesAdmin = () => {
   const [toggleModal, settoggleModal] = useState(false);
   const [status, setStatus] = useState("");
   const [editData, seteditData] = useState({});
-  const [formMode, setformMode] = useState('add')
+  const [formMode, setformMode] = useState("add");
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
   const fetchLeaves = () => {
-    console.log('CALL ERROR')
     axiosInstance.get("/leave-application").then((e) => {
       const leaves = e.data.data;
       setallLeaves(e.data.data);
-      console.log(leaves);
+
       const approved = leaves.filter((e) => e.status === "approved").length;
       const open = leaves.filter((l) => l.status === "open").length;
-      console.log(open, approved);
+
       setapprovedLeaves(approved);
       setplanned(open);
       setpresent(allEmployees.length - approved);
@@ -63,8 +62,6 @@ const LeavesAdmin = () => {
   };
   useEffect(() => {
     if (status.length) {
-      console.log(status);
-      console.log(statusRow);
       const update = {
         ...statusRow,
         status: status,
@@ -74,14 +71,13 @@ const LeavesAdmin = () => {
         to_date: new Date(statusRow.to_date),
         posting_date: new Date(statusRow.posting_date),
       };
-      console.log(update);
+
       delete update.createdAt;
       delete update.updatedAt;
       delete update.__v;
       axiosInstance
         .put("/leave-application/" + statusRow._id, update)
         .then((e) => {
-          console.log(e);
           fetchLeaves();
         })
         .catch((err) => {
@@ -110,7 +106,6 @@ const LeavesAdmin = () => {
   }, [allEmployees]);
   useEffect(() => {
     if (!fetched) {
-      console.log('FETCHED')
       fetchLeaves();
     }
   }, [allEmployees, fetched]);
@@ -133,10 +128,10 @@ const LeavesAdmin = () => {
         });
     }
   }, [submitted, formValue]);
-  const handleEdit = (row) =>{
-    setformMode('edit')
-    seteditData(row)
-  }
+  const handleEdit = (row) => {
+    setformMode("edit");
+    seteditData(row);
+  };
   const columns = [
     {
       dataField: "employee_id",
@@ -162,7 +157,7 @@ const LeavesAdmin = () => {
       headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-        <GeneralApproverBtn
+          <GeneralApproverBtn
             options={approval}
             setStatus={setStatus}
             value={value}
@@ -273,9 +268,7 @@ const LeavesAdmin = () => {
               <li className="breadcrumb-item active">Leaves</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            
-          </div>
+          <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
       <div className="row">
@@ -318,10 +311,11 @@ const LeavesAdmin = () => {
         editData={editData}
         formMode={formMode}
       />
-       {toggleModal && (
-        <GeneralUpload settoggleModal={settoggleModal}
-        title="Upload Attendance"
-        url="'/api/attendance/bulk'"
+      {toggleModal && (
+        <GeneralUpload
+          settoggleModal={settoggleModal}
+          title="Upload Attendance"
+          url="'/api/attendance/bulk'"
         />
       )}
     </>

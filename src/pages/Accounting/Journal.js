@@ -24,7 +24,6 @@ const Journals = () => {
     axiosInstance
       .get("/Journal")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {

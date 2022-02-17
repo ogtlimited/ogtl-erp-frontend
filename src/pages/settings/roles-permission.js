@@ -9,7 +9,6 @@ const RolePermission = () => {
   const [updated, setupdated] = useState(false);
   const fetchRole = () => {
     axiosInstance.get("/api/role").then((res) => {
-      // console.log(res);
       setallRoles(res.data.data);
       setrole(res.data.data[0]);
       setupdated(false);
@@ -23,9 +22,7 @@ const RolePermission = () => {
   useEffect(() => {
     fetchRole();
   }, [updated]);
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
+  useEffect(() => {}, [role]);
   return (
     <>
       <div className="page-header">

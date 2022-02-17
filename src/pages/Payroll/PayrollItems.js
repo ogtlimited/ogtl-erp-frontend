@@ -23,7 +23,6 @@ const PayrollItems = () => {
   const { createPayroll } = useAppContext();
 
   useEffect(() => {
-    console.log(formType);
     if (formType === "components") {
       settemplate(salaryComponentsFormJson);
     } else if (formType === "structure") {
@@ -37,7 +36,6 @@ const PayrollItems = () => {
 
   const fetchedCombineRequest = useCallback(() => {
     createPayroll().then((res) => {
-      console.log(res);
       const { departments, projects } = res.data.createPayrollForm;
       const departmentsOpts = departments?.map((e) => {
         return {
@@ -68,7 +66,6 @@ const PayrollItems = () => {
       if (template !== null) {
         setloadSelect(true);
       }
-      console.log("my template", template);
     });
   }, [template, createPayroll, loadSelect]);
 
@@ -80,7 +77,6 @@ const PayrollItems = () => {
     axiosInstance
       .get("/api/salary-structure")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {

@@ -32,7 +32,6 @@ const ClientPayments = () => {
     axiosInstance
       .get("/api/payment")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -48,7 +47,6 @@ const ClientPayments = () => {
     axiosInstance
       .get("/api/invoice")
       .then((res) => {
-        console.log("invoice", res);
         const formOp = res.data.data.map((e) => {
           return {
             label: e?.customer?.company + " - " + e.ref,
@@ -125,7 +123,6 @@ const ClientPayments = () => {
     axiosInstance
       .delete(`/api/payment/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -152,8 +149,7 @@ const ClientPayments = () => {
       };
 
       delete update.__v;
-      // console.log("update", update);
-      // return;
+
       axiosInstance
         .post("/api/payment/published", update)
         .then((res) => {

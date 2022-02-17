@@ -26,7 +26,6 @@ const DesignationList = ({
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -128,7 +127,7 @@ const DesignationList = ({
                     }}
                     className={activeId === d._id ? "active" : ""}
                   >
-                    <a >
+                    <a>
                       {d.title}
                       {d.title !== "Super" && (
                         <span className="role-action">

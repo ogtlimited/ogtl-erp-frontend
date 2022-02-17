@@ -1,5 +1,6 @@
-import React, {useEffect, useState, useCallback} from "react";
-import { Link } from "react-router-dom";import AttendanceTable from "../../../components/attendance/attendance-table";
+import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import AttendanceTable from "../../../components/attendance/attendance-table";
 import GeneralUpload from "../../../components/Modal/GeneralUpload";
 import AdminAttendanceTable from "../../../components/Tables/EmployeeTables/AttendanceTable";
 
@@ -7,19 +8,18 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 
 const AttendanceAdmin = () => {
-  const [allAttendance, setallAttendance] = useState([])
-  const {combineRequest} = useAppContext()
+  const [allAttendance, setallAttendance] = useState([]);
+  const { combineRequest } = useAppContext();
   const [selectedOption, setSelectedOption] = useState([]);
-  const [departments, setdepartments] = useState([])
-  const [designation, setdesignation] = useState([])
-  const [projects, setprojects] = useState([])
+  const [departments, setdepartments] = useState([]);
+  const [designation, setdesignation] = useState([]);
+  const [projects, setprojects] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
-      console.log(res);
-    setdepartments(res.data.createEmployeeFormSelection.departments)
-    setdesignation(res.data.createEmployeeFormSelection.designations)
-    setprojects(res.data.createEmployeeFormSelection.projects)
+      setdepartments(res.data.createEmployeeFormSelection.departments);
+      setdesignation(res.data.createEmployeeFormSelection.designations);
+      setprojects(res.data.createEmployeeFormSelection.projects);
     });
   }, [departments, designation, , combineRequest]);
 
@@ -50,7 +50,7 @@ const AttendanceAdmin = () => {
             <span>{row?.designation?.designation}</span>
           </Link>
         </h2>
-      )
+      ),
     },
 
     {
@@ -105,12 +105,15 @@ const AttendanceAdmin = () => {
     //},
   ];
   useEffect(() => {
-   axiosInstance.get('/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50').then(e =>{
-     console.log(e)
-     const att = e.data.data
-     setallAttendance(att)
-   })
-  }, [])
+    axiosInstance
+      .get(
+        "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
+      )
+      .then((e) => {
+        const att = e.data.data;
+        setallAttendance(att);
+      });
+  }, []);
 
   return (
     <>
@@ -127,7 +130,6 @@ const AttendanceAdmin = () => {
           </div>
           <div className="col-auto float-right ml-auto">
             <a
-              
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#uploadAttendance"
@@ -140,15 +142,22 @@ const AttendanceAdmin = () => {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          <AdminAttendanceTable data={allAttendance} defaultSorted={defaultSorted}
-        selectedOption={selectedOption} columns={columns} designation={designation} departments={departments} />
-          </div>
+          <AdminAttendanceTable
+            data={allAttendance}
+            defaultSorted={defaultSorted}
+            selectedOption={selectedOption}
+            columns={columns}
+            designation={designation}
+            departments={departments}
+          />
+        </div>
       </div>
-      
+
       {toggleModal && (
-        <GeneralUpload settoggleModal={settoggleModal}
-        title="Upload Attendance"
-        url="/api/attendance/bulk"
+        <GeneralUpload
+          settoggleModal={settoggleModal}
+          title="Upload Attendance"
+          url="/api/attendance/bulk"
         />
       )}
     </>

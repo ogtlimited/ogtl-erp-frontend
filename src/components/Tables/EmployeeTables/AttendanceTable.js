@@ -29,7 +29,7 @@ const AdminAttendanceTable = ({
   designation,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
-  console.log("dataaaaaa", designation);
+
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -89,10 +89,8 @@ const AdminAttendanceTable = ({
     // attendaceDateFilter('')
     setAllEmployee(unfiltered);
   };
-  //    console.log(data)
 
   useEffect(() => {
-    console.log(data);
     setAllEmployee(data);
     setunfiltered(data);
   }, [data]);
@@ -105,7 +103,6 @@ const AdminAttendanceTable = ({
       }
     });
   }, [mobileView]);
-  // console.log(total);
 
   return (
     <>

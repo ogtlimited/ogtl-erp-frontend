@@ -37,7 +37,6 @@ const Invoices = () => {
     axiosInstance
       .get("/api/invoice")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
         const invoices = res.data.data;
         let earn = invoices.reduce((a, b) => a.paid + b.paid, 0);
@@ -59,7 +58,6 @@ const Invoices = () => {
     axiosInstance
       .delete(`/api/invoice/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchInvoice();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)

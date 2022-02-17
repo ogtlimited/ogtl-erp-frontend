@@ -33,13 +33,12 @@ const Header = () => {
       .catch((e) => {
         console.error(e);
       });
-    console.log("pushing");
   };
   const user = tokenService.getUser();
 
   //   const { user } = useContext(AppContext);
   //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
-  //   console.log(imageUrl);
+
   return (
     <div className="header">
       <div className="header-left">
