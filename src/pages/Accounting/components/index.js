@@ -50,7 +50,6 @@ export const InvoiceForm = ({ fetchInvoice }) => {
     let total = cost + tax;
     values[index].total = total;
 
-    console.log(values);
     setProductItems(values);
   };
   const handleRemoveFields = (index) => {
@@ -93,7 +92,6 @@ export const InvoiceForm = ({ fetchInvoice }) => {
     axiosInstance
       .get("/api/product-service")
       .then((res) => {
-        console.log(res.data.data);
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.product,
@@ -149,7 +147,6 @@ export const InvoiceForm = ({ fetchInvoice }) => {
     axiosInstance
       .post("/api/invoice", newData)
       .then((res) => {
-        console.log(res);
         fetchInvoice();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
@@ -371,7 +368,10 @@ export const InvoiceForm = ({ fetchInvoice }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i
+                          className="las la-plus"
+                          style={{ fontSize: "21px" }}
+                        ></i>
                       </a>
                     </tfoot>
                   </table>

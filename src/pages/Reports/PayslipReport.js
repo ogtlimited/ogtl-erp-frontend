@@ -14,7 +14,6 @@ const PayslipReport = () => {
       axiosInstance
         .get("/api/salary-slip")
         .then((res) => {
-          console.log(res);
           setData(res.data.data);
         })
         .catch((error) => {

@@ -2,9 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const PageHeader = ({ title, breadcrumb, RightSide, setcoachingFormEdit }) => {
-  // console.log(props.children)
-
-  console.log(breadcrumb);
   return (
     <div className="page-header">
       <div className="row align-items-center">

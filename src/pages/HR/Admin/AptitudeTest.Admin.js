@@ -64,7 +64,6 @@ const AptitudeTest = () => {
     let temp = HelperService.formArrayToObject(template.Fields);
     for (let i in temp) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);

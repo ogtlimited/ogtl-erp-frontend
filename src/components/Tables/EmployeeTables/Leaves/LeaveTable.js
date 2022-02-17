@@ -14,7 +14,6 @@ import filterFactory, {
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 const LeavesTable = ({ data, columns, context }) => {
-  // console.log(data);
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
