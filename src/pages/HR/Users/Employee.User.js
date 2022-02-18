@@ -14,8 +14,9 @@ const EmployeeUser = () => {
   const { notifications, user } = useAppContext();
   const [leaveTaken, setLeaveTaken] = useState(0);
   const [leaveRemaining, setLeaveRemaining] = useState(0);
+  const [jobOpeningsLength, setJobOpeningsLength] = useState("");
+  const [quotes, setQuotes] = useState(null);
 
-<<<<<<< HEAD
   const getNextHoliday = () => {
     const year = new Date().getFullYear();
     const current = new Date().getTime();
@@ -24,23 +25,15 @@ const EmployeeUser = () => {
     );
     const greater = mapHolidays.filter((time) => time >= current);
     const index = mapHolidays.findIndex((idx) => idx === Math.min(...greater));
-=======
-  const getNextHoliday = () =>{
-    const year = new Date().getFullYear()
-    const current = new Date().getTime()
-    const mapHolidays = holidays.map(hol => new Date(hol.date + " " + year).getTime() )
-    const greater = mapHolidays.filter(time => time >= current);
-    const index = mapHolidays.findIndex(idx => idx === Math.min(...greater))
-
-    return holidays[index]
-  }
-
-  const calcShift = (time) =>{
-    if(time){
->>>>>>> e83020bc77ae05e354f34467209169136e450320
 
     return holidays[index];
   };
+
+  // const calcShift = (time) =>{
+  //   if(time){
+
+  //   return holidays[index];
+  // };
 
   const calcShift = (time) => {
     if (time) {
@@ -70,6 +63,31 @@ const EmployeeUser = () => {
       setLeaveRemaining(open);
     });
   }, [user._id]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/jobOpening")
+      .then((res) => {
+        let newData = res.data.data.filter(
+          (dt) =>
+            moment(dt.createdAt).format("MMMM") === moment().format("MMMM")
+        );
+        setJobOpeningsLength(newData.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const fetchQuotes = async () => {
+      const result = await fetch("https://type.fit/api/quotes");
+      const data = await result.json();
+      const shuffledArray = data.sort((a, b) => 0.5 - Math.random());
+      setQuotes(shuffledArray[0]);
+    };
+    fetchQuotes();
+  }, []);
 
   // let arr = []
   // let unique = []
@@ -125,7 +143,12 @@ const EmployeeUser = () => {
               </Link>
             </div>
             <div className="col-md-3">
-              <img style={{ width: "100%" }} className="mt-4" src={welcome} />
+              <img
+                style={{ width: "100%" }}
+                alt="welcome"
+                className="mt-4"
+                src={welcome}
+              />
             </div>
           </div>
           <div className="row mt-4">
@@ -247,32 +270,38 @@ const EmployeeUser = () => {
               </div>
             </section>
             <section>
-              <h5 className="dash-title">Your time off allowance</h5>
+              <h5 className="dash-title">Job Openings</h5>
               <div className="card">
                 <div className="card-body">
                   <div className="time-list">
                     <div className="dash-stats-list">
-                      <h4>0 Hours</h4>
-                      <p>Approved</p>
-                    </div>
-                    <div className="dash-stats-list">
-                      <h4>0 Hours</h4>
-                      <p>Remaining</p>
+                      <h4>{jobOpeningsLength} </h4>
+                      <p>new job openings</p>
                     </div>
                   </div>
                   <div className="request-btn">
-                    <button className="btn btn-primary">Apply Time Off</button>
+                    <a
+                      href="https://erp.outsourceglobal.com/recruitment/joblist"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-primary"
+                    >
+                      View New Openings
+                    </a>
                   </div>
                 </div>
               </div>
             </section>
             <section>
-              <h5 className="dash-title">Upcoming Holiday</h5>
+              <h5 className="dash-title">Quote of the day</h5>
               <div className="card">
                 <div className="card-body text-center">
-                  <h4 className="holiday-title mb-0">
-                    {getNextHoliday()?.date} - {getNextHoliday()?.holiday_name}
-                  </h4>
+                  <figure>
+                    <blockquote>
+                      <h4 className="holiday-title">{quotes?.text}</h4>
+                    </blockquote>
+                    <figcaption>—{quotes?.author}</figcaption>
+                  </figure>
                 </div>
               </div>
             </section>
