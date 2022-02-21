@@ -81,10 +81,9 @@ const EmployeeUser = () => {
 
   useEffect(() => {
     const fetchQuotes = async () => {
-      const result = await fetch("https://type.fit/api/quotes");
+      const result = await fetch("https://quotes.rest/qod?language=en");
       const data = await result.json();
-      const shuffledArray = data.sort((a, b) => 0.5 - Math.random());
-      setQuotes(shuffledArray[0]);
+      setQuotes(data?.contents.quotes[0]);
     };
     fetchQuotes();
   }, []);
@@ -298,7 +297,7 @@ const EmployeeUser = () => {
                 <div className="card-body text-center">
                   <figure>
                     <blockquote>
-                      <h4 className="holiday-title">{quotes?.text}</h4>
+                      <h4 className="holiday-title">{quotes?.quote}</h4>
                     </blockquote>
                     <figcaption>—{quotes?.author}</figcaption>
                   </figure>
