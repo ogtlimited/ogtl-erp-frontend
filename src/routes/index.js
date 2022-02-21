@@ -79,7 +79,7 @@ export default function Router() {
             { path: "", element: <Navigate to="/dashboard/main" replace /> },
             { path: "main", element: <GuardedRoute title="" dept="Super"><AdminDashboard /> </GuardedRoute>},
             { path: "hr-dashboard", element: <GuardedRoute title="" dept="Super"><HRDashboard /> </GuardedRoute>  },
-            { path: "account-dashboard", element: <GuardedRoute title="" dept="Super">
+            { path: "account-dashboard", element: <GuardedRoute title="" dept="Accounting">
                  <AccountingDashboard /> </GuardedRoute> },
             { path: "employee-dashboard", element: <EmployeeUser /> },
             { path: "job-dashboard", element: <GuardedRoute title="" dept="HR"><JobDashboard /></GuardedRoute> },

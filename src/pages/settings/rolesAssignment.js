@@ -152,7 +152,7 @@ const RoleAssignment = () => {
               data-target="#FormModal"
               // onClick={() => create()}
             >
-              Add Role
+              Assign Role
             </a>
           </div>
         </div>
