@@ -15,16 +15,6 @@ const EmployeeUser = () => {
   const [leaveTaken, setLeaveTaken] = useState(0);
   const [leaveRemaining, setLeaveRemaining] = useState(0);
 
-<<<<<<< HEAD
-  const getNextHoliday = () => {
-    const year = new Date().getFullYear();
-    const current = new Date().getTime();
-    const mapHolidays = holidays.map((hol) =>
-      new Date(hol.date + " " + year).getTime()
-    );
-    const greater = mapHolidays.filter((time) => time >= current);
-    const index = mapHolidays.findIndex((idx) => idx === Math.min(...greater));
-=======
   const getNextHoliday = () =>{
     const year = new Date().getFullYear()
     const current = new Date().getTime()
@@ -35,12 +25,6 @@ const EmployeeUser = () => {
     return holidays[index]
   }
 
-  const calcShift = (time) =>{
-    if(time){
->>>>>>> e83020bc77ae05e354f34467209169136e450320
-
-    return holidays[index];
-  };
 
   const calcShift = (time) => {
     if (time) {
