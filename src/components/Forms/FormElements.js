@@ -23,9 +23,9 @@ export function Form(props) {
         handleChange,
         setFieldValue,
       }) => <> {props.children}</>}
-      {/* <FormikForm className="needs-validation" novalidate="">
+      <FormikForm className="needs-validation" novalidate="">
         {props.children}
-      </FormikForm> */}
+      </FormikForm>
     </Formik>
   );
 }
@@ -46,7 +46,8 @@ export function TextField(props) {
           name={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-          defaultValue={defaultValue || ""} 
+        
+          {...rest}
         />
 
         <ErrorMessage
