@@ -111,6 +111,7 @@ const Departments = () => {
       }
     }
   }, [formValue]);
+  // CAUSE object.keys() bug
   // useEffect(() => {
   //   seteditData(clickedRow);
   // }, [clickedRow, submitted]);
