@@ -27,7 +27,6 @@ const Profile = () => {
     axiosInstance
       .get(`/profile-dashboard/${id}`)
       .then((res) => {
-        console.log("Profile dashboard full data", res.data);
         setUserdata(res.data.getEmployeeFullData);
       })
       .catch((error) => {
@@ -55,8 +54,6 @@ const Profile = () => {
   //     settemplate(SalaryDetailJson);
   //   }
 
-  //   console.log(formType);
-  //   console.log("formvalue", formValue);
   //   return () => {
   //     setformType("");
   //   };
@@ -221,8 +218,7 @@ const Profile = () => {
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {userData?.employee?.leaveCount ||
-                              "Not Available"}
+                            {userData?.employee?.leaveCount || "Not Available"}
                           </div>
                         </li>
                         <li>

@@ -17,7 +17,7 @@ const statusOptions = [
 ];
 const baseURL = "http://15.236.1.91";
 const initForm = {
-  employee_id: '',
+  employee_id: "",
   incident_date: "",
   supervisor: "",
   coaching_type: "",
@@ -29,10 +29,14 @@ const initForm = {
   user_response: "",
 };
 const CoachingModal = ({ coachingForm, setformSubmitted }) => {
-  const { allEmployees, coachingFormEdit, setcoachingFormSubmitted, showAlert } =
-    useAppContext();
+  const {
+    allEmployees,
+    coachingFormEdit,
+    setcoachingFormSubmitted,
+    showAlert,
+  } = useAppContext();
   const user = tokenService.getUser();
-  // console.log(coachingFormEdit);
+
   const [isEdit, setisEdit] = useState(false);
   const [initialValues, setinitialValues] = useState(initForm);
   const [employeeOptions, setemployeeOptions] = useState([]);
@@ -48,14 +52,12 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
   const [supervisor, setsupervisor] = useState("");
   const [coachingPoints, setcoachingPoints] = useState(false);
   useEffect(() => {
-    // console.log(allEmployees);
     let emp = allEmployees?.map((e) => {
       return {
         label: e.first_name + " " + e.last_name + " -" + e.ogid,
         value: e._id,
         id: e.ogid,
-        reports_to: e.reports_to
-
+        reports_to: e.reports_to,
       };
     });
 
@@ -113,9 +115,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
     opportunityCount,
     way_forwardCount,
   ]);
-  const handleClick = (opt) => {
-    // console.log(opt);
-  };
+  const handleClick = (opt) => {};
   return (
     <Formik
       enableReinitialize
@@ -129,8 +129,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
           reality,
           way_forward,
         };
-        // console.log(payload);
-        // console.log(goals);
+
         setTimeout(() => {
           if (isEdit) {
             // alert('edit')
@@ -138,12 +137,15 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
             axiosInstance
               .put(coachingUrl, payload)
               .then((res) => {
-                // console.log(res);
-                showAlert(true, 'coaching form created', 'alert alert-success')
+                showAlert(true, "coaching form created", "alert alert-success");
                 setcoachingFormSubmitted(true);
               })
               .catch((err) => {
-                showAlert(true, 'Unable to update coaching form', 'alert alert-danger')
+                showAlert(
+                  true,
+                  "Unable to update coaching form",
+                  "alert alert-danger"
+                );
                 console.log(err.response?.data);
               });
           } else {
@@ -154,14 +156,17 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
             axiosInstance
               .post(coachingUrl, payload)
               .then((res) => {
-                console.log(res);
-                showAlert(true, 'coaching form created', 'alert alert-success')
+                showAlert(true, "coaching form created", "alert alert-success");
                 setcoachingFormSubmitted(true);
-                setformSubmitted(true)
+                setformSubmitted(true);
               })
               .catch((err) => {
                 console.log(err.response?.data);
-                showAlert(true, 'Unable to create coaching form', 'alert alert-danger')
+                showAlert(
+                  true,
+                  "Unable to create coaching form",
+                  "alert alert-danger"
+                );
                 //   setShow(true);
                 //   setMessage(err.response?.data);
               });
@@ -195,9 +200,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
           setFieldTouched,
           isValid,
         } = props;
-        // console.log(isValid);
-        // console.log(values);
-        // console.log(errors);
+
         return (
           <div
             className="modal custom-modal fade"
@@ -249,9 +252,11 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 defaultValue={values.employee_name}
                                 name="employee_name"
                                 onChange={(opt) => {
-                                  // console.log(employeeOptions);
                                   setFieldValue("employee_id", opt.value);
-                                  setFieldValue("supervisor",opt.reports_to._id )
+                                  setFieldValue(
+                                    "supervisor",
+                                    opt.reports_to._id
+                                  );
                                   setFieldValue("ogid", opt.id);
                                 }}
                                 onBlur={setFieldTouched}
@@ -332,7 +337,9 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                       </div>
                       <div className="col-sm-12">
                         <div className="form-group ">
-                          <label className="col-form-label">Coaching Type</label>
+                          <label className="col-form-label">
+                            Coaching Type
+                          </label>
                           <div className="col-md-10">
                             <div className="radio">
                               <label>

@@ -36,14 +36,15 @@ export const BudgetForm = ({ fetchBudget }) => {
   ];
 
   const handleChange = (editorState, index) => {
-    console.log(editorState, index)
     const values = [...expenseHeads];
     // values[index].title = editorState.title;
     values[index].amount = editorState.amount;
-    values[index].expenseHeadDraftId = typeof editorState == 'string' ? editorState : editorState.expenseHeadDraftId;
+    values[index].expenseHeadDraftId =
+      typeof editorState == "string"
+        ? editorState
+        : editorState.expenseHeadDraftId;
     // values[index].flagAlert = editorState.flagAlert;
 
-    console.log(values);
     setExpenseHeads(values);
   };
   const handleRemoveFields = (index) => {
@@ -69,14 +70,13 @@ export const BudgetForm = ({ fetchBudget }) => {
     axiosInstance
       .get("/api/expense-head-draft")
       .then((res) => {
-        console.log(res.data.data);
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.title,
             value: e._id,
           };
         });
-        // console.log(object)
+
         setExpenseOptions(prodOpt);
       })
       .catch((error) => {
@@ -94,19 +94,17 @@ export const BudgetForm = ({ fetchBudget }) => {
     // const amount = expenseHeads.map((prod) => prod.amount);
     // const flagAlert = expenseHeads.map((prod) => prod.flagAlert);
     // const departmentId = expenseHeads.map((prod) => prod.departmentId);
-    console.log("expenseeee", expenseHeads);
 
     let newData = {
       ...data,
       expenseHeads,
       //   expenseHeads: [title, amount, flagAlert, departmentId],
     };
-    console.log("letsseee", expenseHeads);
+
     setLoading(true);
     axiosInstance
       .post("/api/budget", newData)
       .then((res) => {
-        console.log(res);
         fetchBudget();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
@@ -288,7 +286,10 @@ export const BudgetForm = ({ fetchBudget }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i
+                          className="las la-plus"
+                          style={{ fontSize: "21px" }}
+                        ></i>
                       </a>
                     </tfoot>
                   </table>

@@ -39,7 +39,6 @@ const ShiftAssignment = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -56,7 +55,6 @@ const ShiftAssignment = () => {
     axiosInstance
       .get("/api/shiftAssignment")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
         setunfiltered(res?.data?.data);
         const shiftOpts = res.data.data.map((e) => {
@@ -88,7 +86,6 @@ const ShiftAssignment = () => {
   };
   useEffect(() => {
     createShifts().then((res) => {
-      console.log(res);
       const { shifts, employees } = res.data.createShiftForm;
 
       const shiftsOpts = shifts?.map((e) => {
@@ -113,8 +110,7 @@ const ShiftAssignment = () => {
         }
         return field;
       });
-      console.log(finalForm);
-      console.log(helper.formArrayToObject(finalForm));
+
       if (finalForm.length) {
         setTemplate(helper.formArrayToObject(finalForm));
         setloadSelect(true);
@@ -172,7 +168,6 @@ const ShiftAssignment = () => {
     axiosInstance
       .delete(`/api/shiftAssignment/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

@@ -22,20 +22,20 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     setLoading(true);
     instance
       .loginPopup(loginRequest)
       .then((e) => {
-        instance.acquireTokenSilent({
-          ...loginRequest,
-          account: accounts[0]
-      }).then((response) => {
-          callMsGraph(response.accessToken).then(response =>{
-            console.log(response)
-            setGraphData(response)
+        instance
+          .acquireTokenSilent({
+            ...loginRequest,
+            account: accounts[0],
+          })
+          .then((response) => {
+            callMsGraph(response.accessToken).then((response) => {
+              setGraphData(response);
+            });
           });
-      });
         console.log(e);
         const obj = {
           company_email: data.company_email.trim(),
@@ -46,11 +46,10 @@ const Login = () => {
           "microsoftAccessToken",
           JSON.stringify(e.accessToken)
         );
-        
+
         axios
           .post(config.ApiUrl + "/api/login", obj)
           .then((res) => {
-            console.log(res);
             tokenService.setUser(res.data.employee);
             // fetchEmployee()
             // fetchEmployeeAttendance()

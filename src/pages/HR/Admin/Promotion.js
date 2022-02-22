@@ -21,7 +21,6 @@ const Promotion = () => {
     axiosInstance
       .get("/api/promotion")
       .then((res) => {
-        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -34,7 +33,6 @@ const Promotion = () => {
 
   useEffect(() => {
     createPerfomance().then((res) => {
-      console.log(res);
       const { employees, designations } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -63,12 +61,10 @@ const Promotion = () => {
         Fields: finalForm,
       });
       if (!loadSelect) setloadSelect(true);
-      console.log(template);
     });
   }, [loadSelect]);
   //create promotion
   useEffect(() => {
-    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/api/promotion", formValue)
@@ -84,7 +80,6 @@ const Promotion = () => {
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
-    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete score card
@@ -92,7 +87,6 @@ const Promotion = () => {
     axiosInstance
       .delete(`/api/promotion/${row._id}`)
       .then((res) => {
-        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -108,7 +102,6 @@ const Promotion = () => {
     axiosInstance
       .patch(`/api/promotion/${row._id}`, row)
       .then((res) => {
-        console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchPromotion();
         showAlert(true, res?.data?.message, "alert alert-success");

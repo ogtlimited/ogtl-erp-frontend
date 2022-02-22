@@ -8,7 +8,6 @@ import { applicationTestFormJson } from "../../../components/FormJSON/HR/recruit
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ReactHtmlParser from "react-html-parser";
-import moment from "moment";
 import ViewModal from "../../../components/Modal/ViewModal";
 import HelperService from "../../../services/helper";
 
@@ -53,9 +52,11 @@ const AptitudeTest = () => {
 
   const editRow = (row) => {
     // setformUpdate(null)
+    seteditData(row);
     setmode("edit");
     let formatted = helper.handleEdit(row);
-    seteditData(formatted);
+    console.log(formatted, "formatted")
+    seteditData(formatted)
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -64,7 +65,6 @@ const AptitudeTest = () => {
     let temp = HelperService.formArrayToObject(template.Fields);
     for (let i in temp) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -104,7 +104,6 @@ const AptitudeTest = () => {
           }
           return field;
         });
-        console.log(applicationTestFormJson);
         // setTemplate({
         //   title: applicationTestFormJson.title,
         //   Fields: finalForm,
@@ -131,7 +130,11 @@ const AptitudeTest = () => {
             showAlert(true, res.data.message, "alert alert-success");
           })
           .catch((error) => {
-            showAlert(true, error.response.data.message, "alert alert-danger");
+            showAlert(
+              true,
+              error?.response?.data?.message,
+              "alert alert-danger"
+            );
           });
       } else {
         let newFormValue = {
@@ -182,6 +185,7 @@ const AptitudeTest = () => {
         _id: statusRow._id,
         status,
       };
+
       delete update.__v;
       axiosInstance
         .patch("/api/test/" + statusRow._id, update)

@@ -87,7 +87,6 @@ export const EditBillForm = ({ fetchBills, editData }) => {
     axiosInstance
       .get("/api/product-service")
       .then((res) => {
-        console.log(res.data.data);
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.product,
@@ -357,7 +356,10 @@ export const EditBillForm = ({ fetchBills, editData }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
+                        <i
+                          className="las la-plus"
+                          style={{ fontSize: "21px" }}
+                        ></i>
                       </a>
                     </tfoot>
                   </table>

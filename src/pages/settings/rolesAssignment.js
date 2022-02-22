@@ -27,7 +27,6 @@ const RoleAssignment = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
-      // console.log(i);
     }
     setFormValue(initialValues);
     seteditData(initialValues);
@@ -37,7 +36,7 @@ const RoleAssignment = () => {
     createRoleAssignment()
       .then((res) => {
         const { employees, roles } = res.data.createRoleAssignment;
-        setallRoles(roles)
+        setallRoles(roles);
         const employeeOpts = employees?.map((e) => {
           return {
             label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
@@ -87,18 +86,17 @@ const RoleAssignment = () => {
   };
   useEffect(() => {
     if (formValue) {
-      console.log(formValue);
-      let role = allRoles.filter(e => e._id === formValue.role)[0]
-      console.log(role);
+      let role = allRoles.filter((e) => e._id === formValue.role)[0];
+
       let obj = {
         ...formValue,
-        isRepSiever: role.title === 'HR In-House Agent' ? true : false
-      }
+        isRepSiever: role.title === "HR In-House Agent" ? true : false,
+      };
       axiosInstance
         .put("/employees/update-role/" + formValue._id, obj)
         .then((res) => {
           setFormValue(null);
-          console.log(res.data);
+
           showAlert(true, res?.data?.message, "alert alert-success");
         })
         .catch((error) => {
@@ -118,7 +116,6 @@ const RoleAssignment = () => {
       headerStyle: { minWidth: "410px" },
       formatter: (value, row) => (
         <h2>
-          {console.log("row", row)}
           {row?.first_name} {row?.middle_name} {row?.last_name}
         </h2>
       ),
@@ -150,13 +147,12 @@ const RoleAssignment = () => {
           </div>
           <div className="col-auto float-right ml-auto">
             <a
-              
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#FormModal"
               // onClick={() => create()}
             >
-              Add Role
+              Assign Role
             </a>
           </div>
         </div>

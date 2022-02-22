@@ -2,7 +2,7 @@ import React from "react";
 import JobChart from "./JobChart";
 import moment from "moment";
 
-const JobDashboardOverviewLatest = ({ data }) => {
+const JobDashboardOverviewLatest = ({ data, empStats }) => {
   const latestJob = data?.jobOpenings
     ?.map((e) => {
       return {
@@ -28,7 +28,7 @@ const JobDashboardOverviewLatest = ({ data }) => {
                   </div>
                 </div>
                 <h3 className="card-title">Overview</h3>
-                <JobChart data={data} />
+                <JobChart data={empStats} />
                 {/* <canvas
                   id="lineChart"
                   width="830"

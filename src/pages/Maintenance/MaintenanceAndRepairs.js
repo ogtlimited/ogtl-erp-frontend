@@ -37,7 +37,6 @@ const MaintenanceAndRepairs = () => {
     axiosInstance
       .get("/api/maintenanceAndRepairs")
       .then((res) => {
-        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -51,8 +50,6 @@ const MaintenanceAndRepairs = () => {
 
   useEffect(() => {
     axiosInstance.get("api/assets").then((res) => {
-      console.log(res);
-
       const assetOpts = res.data.data?.map((e) => {
         return {
           label: `${e.assetName} ${e.model}`,
@@ -71,7 +68,6 @@ const MaintenanceAndRepairs = () => {
         title: maintenanceAndRepairFormJson.title,
         Fields: finalForm,
       });
-      console.log(template);
     });
   }, []);
 
@@ -127,7 +123,6 @@ const MaintenanceAndRepairs = () => {
       axiosInstance
         .patch("/api/maintenanceAndRepairs/status/" + statusRow._id, update)
         .then((res) => {
-          console.log(res);
           fetchMaintenanceAndRepairs();
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -148,7 +143,6 @@ const MaintenanceAndRepairs = () => {
     axiosInstance
       .delete(`/api/maintenanceAndRepairs/${row._id}`)
       .then((res) => {
-        console.log(res);
         fetchMaintenanceAndRepairs();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)

@@ -20,13 +20,11 @@ const EmployeeReport = () => {
   useEffect(() => {
     // fetchEmployee()
     axiosInstance.get("/employees").then((e) => {
-      console.log(e.data.employees);
       setemployees(e?.data?.employees);
     });
     // setemployees(allEmployees);
   }, []);
 
-  console.log(employees);
   const imageUrl = "https://erp.outsourceglobal.com";
   const males = [male, male2, male3];
   const females = [female, female2, female3];

@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import tokenService from "../../../services/token.service";
 import axiosInstance from "../../../services/api";
@@ -9,93 +9,85 @@ import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
 import moment from "moment";
 const LeavesUser = () => {
-  const {allEmployees, combineRequest, showAlert} = useAppContext();
-  const [userId, setuserId] = useState('')
-  const [user, setuser] = useState(null)
-  const [usedLeaves, setusedLeaves] = useState(0)
+  const { allEmployees, combineRequest, showAlert } = useAppContext();
+  const [userId, setuserId] = useState("");
+  const [user, setuser] = useState(null);
+  const [usedLeaves, setusedLeaves] = useState(0);
   const [template, settemplate] = useState(null);
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
-  const [allLeaves, setallLeaves] = useState([])
+  const [allLeaves, setallLeaves] = useState([]);
   const [annual, setannual] = useState(0);
   const [casual, setcasual] = useState(0);
-  const [medical, setmedical] = useState(0)
+  const [medical, setmedical] = useState(0);
   const [remaining, setremaining] = useState(0);
-  const [formMode, setformMode] = useState('add')
-  const [fetched, setfetched] = useState(false)
-  const [loadedSelect, setloadedSelect] = useState(false)
-  const [loadLeaves, setloadLeaves] = useState(false)
-  const fetchLeaves = () =>{
-    
-    axiosInstance.get('/leave-application').then(e =>{
-      console.log(userId, 'USERID')
-      console.log(e, 'USERID')
-      
-      const leaves = e?.data?.data?.filter(f => f?.employee_id?._id == userId);
-      const casual = leaves.filter(e => e.leave_type_id !== 'Sick').length;
-      const medic = leaves.filter(e => e.leave_type_id === 'Sick').length;
-      const open = leaves.filter(l => l.status === 'open').length;
-      let count = 0
-      leaves.forEach(e =>{
-          let a = moment(new Date(e.from_date));
-          let b = moment(new Date(e.to_date));
-          count += b.diff(a, 'days') + 1
-      })
-      console.log(count)
-      setusedLeaves(count)
+  const [formMode, setformMode] = useState("add");
+  const [fetched, setfetched] = useState(false);
+  const [loadedSelect, setloadedSelect] = useState(false);
+  const [loadLeaves, setloadLeaves] = useState(false);
+  const fetchLeaves = () => {
+    axiosInstance.get("/leave-application").then((e) => {
+      const leaves = e?.data?.data?.filter(
+        (f) => f?.employee_id?._id == userId
+      );
+      const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
+      const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
+      const open = leaves.filter((l) => l.status === "open").length;
+      let count = 0;
+      leaves.forEach((e) => {
+        let a = moment(new Date(e.from_date));
+        let b = moment(new Date(e.to_date));
+        count += b.diff(a, "days") + 1;
+      });
+
+      setusedLeaves(count);
       setannual(annual);
       setcasual(casual);
-      setmedical(medic)
+      setmedical(medic);
 
-      console.log('LEAVES', leaves)
-      setallLeaves(leaves)
-      if(allLeaves.length){
-        setloadLeaves(true)
+      setallLeaves(leaves);
+      if (allLeaves.length) {
+        setloadLeaves(true);
       }
-      console.log(leaves)
-      console.log(userId)
-
-    })
-  }
- useEffect(() => {
-  let user = tokenService.getUser()
-    setuser(user)
-    setuserId(user._id)
-    if(userId){
-      fetchLeaves()
+    });
+  };
+  useEffect(() => {
+    let user = tokenService.getUser();
+    setuser(user);
+    setuserId(user._id);
+    if (userId) {
+      fetchLeaves();
     }
-    console.log(userId)
- }, [userId])
+  }, [userId]);
   useEffect(() => {
     if (!fetched) {
-      console.log('FETCHED')
       fetchLeaves();
     }
   }, [allEmployees, fetched]);
 
   useEffect(() => {
-    let user = tokenService.getUser()
-   console.log(formValue, submitted)
-   const values = {
-     ...formValue,
-   }
-   if(submitted){
-    axiosInstance.post('/leave-application', values).then( e =>{
-      console.log(e)
-      showAlert(true, e?.data?.message, "alert alert-success");
-      fetchLeaves()
-    }).catch(err =>{
-      console.log(err)
-      showAlert(true, err?.data?.message, "alert alert-danger");
-    })
-   }
-  }, [formValue, submitted])
+    let user = tokenService.getUser();
+
+    const values = {
+      ...formValue,
+    };
+    if (submitted) {
+      axiosInstance
+        .post("/leave-application", values)
+        .then((e) => {
+          showAlert(true, e?.data?.message, "alert alert-success");
+          fetchLeaves();
+        })
+        .catch((err) => {
+          console.log(err);
+          showAlert(true, err?.data?.message, "alert alert-danger");
+        });
+    }
+  }, [formValue, submitted]);
   useEffect(() => {
-    console.log(allEmployees)
     combineRequest()
       .then((res) => {
-        console.log(res)
         const { employees } = res.data.createEmployeeFormSelection;
         const employeeOpts = employees.map((e) => {
           return {
@@ -110,24 +102,18 @@ const LeavesUser = () => {
           }
           return field;
         });
-        // console.log(finalForm)
+
         settemplate({
           title: LeaveApplicationFormJSON.title,
           Fields: finalForm,
         });
-        if(!loadedSelect){
-          setloadedSelect(true)
-          console.log('loaded')
-    
+        if (!loadedSelect) {
+          setloadedSelect(true);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-   
-    console.log(template)
-    
-    // console.log(template)
   }, [loadedSelect]);
   const columns = [
     {
@@ -135,39 +121,32 @@ const LeavesUser = () => {
       text: "Leave Type",
       sort: true,
       // headerStyle: {minWidth: "100px"},
-      
     },
     {
-        dataField: "from_date",
-        text: "From Date",
-        sort: true,
-        formatter: (val, row) =>(
-          <p>{new Date(val).toDateString()}</p>
-        )
+      dataField: "from_date",
+      text: "From Date",
+      sort: true,
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
       //   filter: dateFilter({
       //     style: { display: 'flex' },
       //     getFilter: (filter) => {
       //         attendanceDateFilter = filter;
       //     }
       //   }),
-        // headerStyle: {minWidth: "150px"},
-      },
-      {
-        dataField: "to_date",
-        text: "To Date",
-        sort: true,
-        formatter: (val, row) =>(
-          <p>{new Date(val).toDateString()}</p>
-        )
-
-      },
+      // headerStyle: {minWidth: "150px"},
+    },
+    {
+      dataField: "to_date",
+      text: "To Date",
+      sort: true,
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
     {
       dataField: "reason",
       text: "Reason",
       sort: true,
 
       // headerStyle: {minWidth: "100px", textAlign:'center'},
-
     },
     {
       dataField: "status",
@@ -175,23 +154,26 @@ const LeavesUser = () => {
       sort: true,
       // headerStyle: {minWidth: "120px"},
       formatter: (value, row) => (
-          <>
-           {value === 'approved' ?
-                <span className="btn btn-gray btn-sm btn-rounded"
-                ><i className="fa fa-dot-circle-o text-success"></i> {value}</span>
-             : value === 'cancelled' ?
-             <span className="btn btn-gray btn-sm btn-rounded"
-             ><i className="fa fa-dot-circle-o text-danger"></i> {value}</span>
-
-             : value === 'open' ?
-             <span className="btn btn-gray btn-sm btn-rounded "
-            ><i className="fa fa-dot-circle-o text-primary"></i> {value}</span>
-             :
-             <span className="btn btn-gray btn-sm btn-rounded"><i className="fa fa-dot-circle-o text-purple"></i> Approved</span>}
-
+        <>
+          {value === "approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "cancelled" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+            </span>
+          ) : value === "open" ? (
+            <span className="btn btn-gray btn-sm btn-rounded ">
+              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+            </span>
+          ) : (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-purple"></i> Approved
+            </span>
+          )}
         </>
-        ),
-
+      ),
     },
     {
       dataField: "leave_approver",
@@ -201,9 +183,8 @@ const LeavesUser = () => {
         <>
           {row.leave_approver.first_name} {row.leave_approver.last_name}
         </>
-        )
+      ),
       // headerStyle: {minWidth: "80px", textAlign:'center'},
-
     },
   ];
   return (
@@ -220,18 +201,17 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadedSelect &&
+            {loadedSelect && (
               <a
-                  href="#"
-                  className="btn add-btn"
-                  data-toggle="modal"
-                  onClick={() => setformMode('add')}
-                  data-target="#FormModal"
-                >
-                  <i className="fa fa-plus"></i> Add Leave
-                </a>
-            
-            }
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                onClick={() => setformMode("add")}
+                data-target="#FormModal"
+              >
+                <i className="fa fa-plus"></i> Add Leave
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -262,20 +242,19 @@ const LeavesUser = () => {
         </div>
       </div>
       <div className="row">
-          <div className="col-12">
+        <div className="col-12">
           <LeavesTable columns={columns} data={allLeaves} />
-          </div>
+        </div>
       </div>
-      {loadedSelect &&
-       <FormModal2
-        title="Leave Application"
-        editData={editData}
-        setformValue={setformValue}
-        template={helper.formArrayToObject(template.Fields)}
-        setsubmitted={setsubmitted}
-      />
-     
-      }
+      {loadedSelect && (
+        <FormModal2
+          title="Leave Application"
+          editData={editData}
+          setformValue={setformValue}
+          template={helper.formArrayToObject(template.Fields)}
+          setsubmitted={setsubmitted}
+        />
+      )}
     </>
   );
 };

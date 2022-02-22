@@ -578,7 +578,7 @@ a.nav-link {
 
 }
 .job-field{
-  font-weight: bold;
+  font-weight: 500;
 }
 .job-field::first-letter{
   text-transform: uppercase

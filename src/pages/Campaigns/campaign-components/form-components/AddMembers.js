@@ -54,7 +54,6 @@ const AddMembers = ({ campaign_info }) => {
     axiosInstance
       .patch(`/api/project/add-team-member/${campaign_info?._id}`, newData)
       .then((res) => {
-        console.log("actual response", res.data);
         showAlert(true, "Team members added.", "alert alert-success");
         reset();
         $("#FormModalMembers").modal("toggle");
