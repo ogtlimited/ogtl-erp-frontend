@@ -1,4 +1,4 @@
 {
     "ApiUrl": "https://erp-api.outsourceglobal.com",
-    "BaseUrl": "http://localhost:3001"
+    "BaseUrl": "https://erp.outsourceglobal.com"
 }

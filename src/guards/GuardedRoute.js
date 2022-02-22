@@ -13,14 +13,15 @@ GuardedRoute.propTypes = {
   children: PropTypes.node,
 };
 
-export default function GuardedRoute({title, dept, children }) {
-
+export default function GuardedRoute({ title, dept, children }) {
   const [user, setuser] = useState(tokenService.getUser());
-
 
   const AllAccess = ["Super", "CEO", "HR Manager"];
   const canView = (title, dept) => {
-    if (user?.department?.department === dept || AllAccess.includes(user?.role?.title)) {
+    if (
+      user?.department?.department === dept ||
+      AllAccess.includes(user?.role?.title)
+    ) {
       return true;
     } else if (dept === "All") {
       return true;
