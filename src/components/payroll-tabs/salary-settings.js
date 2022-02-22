@@ -9,12 +9,14 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
   const { showAlert, user } = useAppContext();
 
   const handleChange = (type) => {
+    console.log(type);
     setformType(type);
   };
   const fetchSalaryAssignments = () => {
     axiosInstance
       .get(`/api/salary-setting`)
       .then((res) => {
+        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -38,6 +40,7 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
       axiosInstance
         .post("/api/salary-setting", newValue)
         .then((res) => {
+          console.log(res);
           fetchSalaryAssignments();
           showAlert(true, "Salary settings created.", "alert alert-success");
         })

@@ -114,7 +114,7 @@ const AccountingDashboard = () => {
                       )}
                     </div>
                   </div>
-                  <h3 className="mb-3">${stat.currMonth}</h3>
+                  <h3 className="mb-3"> ₦{stat.currMonth}</h3>
                   <div className="progress mb-2" style={{ height: "5px" }}>
                     <div
                       className="progress-bar bg-primary"
@@ -127,7 +127,7 @@ const AccountingDashboard = () => {
                   </div>
                   <p className="mb-0">
                     Previous Month{" "}
-                    <span className="text-muted">${stat.prevMonths}</span>
+                    <span className="text-muted"> ₦{stat.prevMonths}</span>
                   </p>
                 </div>
               </div>

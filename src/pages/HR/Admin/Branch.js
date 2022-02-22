@@ -1,5 +1,8 @@
 import React, { useMemo, useState, useEffect, useContext } from "react";
 
+
+
+
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import Select from "react-select";
 
@@ -9,6 +12,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import { branchFormJSON } from "../../../components/FormJSON/HR/Employee/branch";
 import helper from "../../../services/helper";
+
 
 const Branch = () => {
   const [allBranch, setallBranch] = useState([]);
@@ -38,25 +42,25 @@ const Branch = () => {
   }, []);
 
   const handleClick = (i) => {
+    console.log(i, unfiltered)
     if (i?.value === "All" || i === null) {
       setallBranch(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) => {
-        console.log(e);
-        return i.label.includes(e.branch);
-      });
+      const filt = unfiltered.filter((e) => { console.log(e); return i.label.includes(e.branch)} );
 
       setallBranch(filt);
     }
   };
 
   useEffect(() => {
+    console.log(formValue);
     fetchBranch();
     if (formValue) {
       if (!formUpdate) {
         axiosInstance
           .post("/branch", formValue)
           .then((e) => {
+            console.log(e);
             setformValue(null);
           })
           .catch((err) => {
@@ -64,10 +68,12 @@ const Branch = () => {
             console.log(err);
           });
       } else {
+        console.log(editData);
         formValue._id = formUpdate._id;
         axiosInstance
           .put("/branch/" + formUpdate._id, formValue)
           .then((e) => {
+            console.log(e);
             setformValue(null);
             fetchBranch();
           })

@@ -30,6 +30,7 @@ const Clients = () => {
     axiosInstance
       .get("/api/client")
       .then((res) => {
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -44,6 +45,7 @@ const Clients = () => {
   useEffect(() => {
     if (formValue) {
       if (!editData) {
+        console.log(formValue);
         axiosInstance
           .post("/api/client", formValue)
           .then((res) => {
@@ -88,6 +90,7 @@ const Clients = () => {
     axiosInstance
       .delete(`/api/client/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

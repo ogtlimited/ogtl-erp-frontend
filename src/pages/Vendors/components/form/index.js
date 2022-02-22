@@ -94,6 +94,7 @@ export const BillForm = ({ fetchBills }) => {
     axiosInstance
       .get("/api/product-service")
       .then((res) => {
+        console.log(res.data.data);
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.product,
@@ -333,7 +334,7 @@ export const BillForm = ({ fetchBills }) => {
                                     _id: product.productId,
                                     units: parseInt(e.target.value),
                                   };
-
+                                  console.log(product);
                                   handleChange(newValue, index);
                                 }}
                                 // {...register("units")}
@@ -374,10 +375,7 @@ export const BillForm = ({ fetchBills }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i
-                          className="las la-plus"
-                          style={{ fontSize: "21px" }}
-                        ></i>
+                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
                       </a>
                     </tfoot>
                   </table>

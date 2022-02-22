@@ -45,7 +45,7 @@ export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
     values[index].tax = editorState.tax;
 
     values[index].units = editorState.units;
-
+    console.log(values);
     setProductItems(values);
   };
   const handleRemoveFields = (index) => {
@@ -88,6 +88,7 @@ export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
     axiosInstance
       .get("/api/product-service")
       .then((res) => {
+        console.log(res.data.data);
         const prodOpt = res.data.data.map((e) => {
           return {
             label: e.product,
@@ -126,6 +127,7 @@ export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
     axiosInstance
       .patch(`/api/invoice/${editData._id}`, newData)
       .then((res) => {
+        console.log(res);
         fetchInvoice();
         showAlert(true, res.data.message, "alert alert-success");
         reset();
@@ -148,6 +150,8 @@ export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
         setLoading(false);
       });
   };
+
+  console.log("def", defaultValues);
 
   return (
     <>
@@ -360,10 +364,7 @@ export const EditInvoiceForm = ({ fetchInvoice, editData }) => {
                         style={{ paddingLeft: "2px" }}
                         onClick={handleAddFields}
                       >
-                        <i
-                          className="las la-plus"
-                          style={{ fontSize: "21px" }}
-                        ></i>
+                        <i className="las la-plus" style={{ fontSize: "21px" }}></i>
                       </a>
                     </tfoot>
                   </table>

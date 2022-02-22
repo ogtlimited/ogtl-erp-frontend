@@ -37,15 +37,18 @@ const AppProvider = (props) => {
 
     socket.current.emit("notification", user?.company_email);
     socket.current.on("messages", (data) => {
-      const newArr = data && data.map((e) => JSON.parse(e));
-      if (newArr) {
+      const newArr =  data && data.map((e) => JSON.parse(e));
+      if(newArr){
         setNotifications((prev) => [...newArr, ...prev]);
+
       }
     });
     return () => socket.current.close();
   }, [user?.company_email]);
 
-  useEffect(() => {}, [showAlertMsg]);
+  useEffect(() => {
+    // console.log("alert message");
+  }, [showAlertMsg]);
 
   const clearNotifications = () => {
     if (socket) {

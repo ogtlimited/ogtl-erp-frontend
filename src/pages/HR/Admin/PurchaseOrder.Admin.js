@@ -24,7 +24,7 @@ const PurchaseOrder = () => {
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
   const user = tokenService.getUser();
-  const [loadSelect, setloadSelect] = useState(false);
+  const [loadSelect, setloadSelect] = useState(false)
   const editRow = (row) => {
     setformUpdate(row);
     setclickedRow(row);
@@ -34,6 +34,7 @@ const PurchaseOrder = () => {
     axiosInstance
       .get("/api/purchase-order")
       .then((res) => {
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -46,6 +47,7 @@ const PurchaseOrder = () => {
 
   useEffect(() => {
     combineRequest().then((res) => {
+      console.log(res);
       const { departments, branches, projects } =
         res.data.createEmployeeFormSelection;
       const departmentOpts = departments?.map((e) => {
@@ -84,7 +86,8 @@ const PurchaseOrder = () => {
         title: PurchaseOrderFormJson.title,
         Fields: finalForm,
       });
-      if (!loadSelect) setloadSelect(true);
+      if(!loadSelect) setloadSelect(true)
+      console.log(template);
     });
   }, []);
 
@@ -92,15 +95,15 @@ const PurchaseOrder = () => {
   useEffect(() => {
     if (formValue) {
       if (!editData) {
-        let newFormValue = {
+        let newFormValue = { 
           ...formValue,
-        };
-        if (newFormValue.projectId == "") {
-          delete newFormValue.projectId;
-        } else if (newFormValue.departmentId == "") {
-          delete newFormValue.departmentId;
-        }
-
+         };
+         if(newFormValue.projectId == ""){
+           delete newFormValue.projectId
+         }else if(newFormValue.departmentId == ""){
+           delete newFormValue.departmentId
+         }
+        console.log(newFormValue);
         axiosInstance
           .post("/api/purchase-order", newFormValue)
           .then((res) => {
@@ -144,6 +147,7 @@ const PurchaseOrder = () => {
       .delete(`/api/purchase-order/${row._id}`)
 
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -194,9 +198,7 @@ const PurchaseOrder = () => {
       dataField: "projectId",
       text: "Project",
       sort: true,
-      formatter: (value, row) => (
-        <h2>{row?.projectId?.project_name || "N/A"} </h2>
-      ),
+      formatter: (value, row) => <h2>{row?.projectId?.project_name || "N/A"} </h2>,
     },
 
     {
@@ -274,7 +276,7 @@ const PurchaseOrder = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && (
+            {loadSelect && 
               <a
                 href="#"
                 className="btn add-btn"
@@ -283,7 +285,8 @@ const PurchaseOrder = () => {
               >
                 <i className="fa fa-plus"></i> Add Purchase Order
               </a>
-            )}
+            
+            }
           </div>
         </div>
       </div>
@@ -292,7 +295,7 @@ const PurchaseOrder = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && (
+      {loadSelect && 
         <FormModal2
           title="Create Purchase Order"
           editData={editData}
@@ -300,7 +303,8 @@ const PurchaseOrder = () => {
           template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
-      )}
+      
+      }
       <ConfirmModal
         title="Purchase Order"
         selectedRow={selectedRow}

@@ -22,6 +22,7 @@ const WarningLetter = () => {
     axiosInstance
       .get("/api/warningLetter")
       .then((res) => {
+        console.log(res.data.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -34,6 +35,7 @@ const WarningLetter = () => {
 
   useEffect(() => {
     createPerfomance().then((res) => {
+      console.log(res);
       const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -53,11 +55,13 @@ const WarningLetter = () => {
         Fields: finalForm,
       });
       if (!loadSelect) setloadSelect(true);
+      console.log(template);
     });
   }, []);
 
   //create warning Letter
   useEffect(() => {
+    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/api/warningLetter", formValue)
@@ -72,6 +76,7 @@ const WarningLetter = () => {
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
+    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete aptitude test
@@ -79,6 +84,7 @@ const WarningLetter = () => {
     axiosInstance
       .delete(`/api/warningLetter/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

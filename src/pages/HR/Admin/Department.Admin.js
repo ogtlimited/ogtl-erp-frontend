@@ -35,6 +35,7 @@ const Departments = () => {
   const fetchDept = () => {
     settemplate(departmentFormJson);
     axiosInstance.get("/department").then((e) => {
+      // console.log(e.data.data);
       setallDepartments(e?.data?.data);
       setunfiltered(e?.data?.data);
       const departOpts = e.data.data.map((e) => {
@@ -57,6 +58,7 @@ const Departments = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
+      // console.log(i);
     }
     setmode("add");
     setformValue(initialValues);
@@ -78,11 +80,14 @@ const Departments = () => {
   }, []);
 
   useEffect(() => {
+    console.log(formValue);
+    console.log(editData);
     if (submitted) {
       if (mode == "add") {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {
+            console.log(e);
             // setformValue({});
             fetchDept();
             showAlert(true, "New department created", "alert alert-success");
@@ -92,6 +97,8 @@ const Departments = () => {
             console.log(err);
           });
       } else {
+        console.log(editData);
+        console.log(formValue);
         axiosInstance
           .put("/department/" + editData._id, formValue)
           .then((e) => {

@@ -45,6 +45,8 @@ const JobOffer = () => {
   const [loadSelect, setloadSelect] = useState(false);
   const [mode, setmode] = useState("add");
   const editRow = (row) => {
+    // setformUpdate(null)
+    console.log(row);
     setmode("edit");
     setformUpdate(row);
     setclickedRow(row);
@@ -53,6 +55,7 @@ const JobOffer = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
+      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -63,6 +66,7 @@ const JobOffer = () => {
     axiosInstance
       .get("/api/jobOffer")
       .then((res) => {
+        console.log(res.data.data);
         setData(res.data.data);
         setunfiltered(res?.data?.data);
       })
@@ -85,6 +89,7 @@ const JobOffer = () => {
   useEffect(() => {
     createRecruitmens()
       .then((res) => {
+        console.log(res);
         const { designations, passedApplicants } =
           res.data.createRecruitmentForm;
         const designationOpts = designations?.map((e) => {
@@ -116,6 +121,7 @@ const JobOffer = () => {
         if (!loadSelect) {
           setloadSelect(true);
         }
+        console.log(template);
       })
       .catch((error) => {
         console.log(error);

@@ -6,28 +6,31 @@ import { useAppContext } from "../../../Context/AppContext";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 
 const Interviewees = () => {
+
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
-
+ 
   const [status, setStatus] = useState("");
   const [editData, seteditData] = useState({});
-  const [formMode, setformMode] = useState("add");
+  const [formMode, setformMode] = useState('add')
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
   const fetchIntervieews = () => {
     axiosInstance.get("/leave-application").then((e) => {
       const leaves = e.data.data;
       setallLeaves(e.data.data);
-
+      console.log(leaves);
       const approved = leaves.filter((e) => e.status === "approved").length;
       const open = leaves.filter((l) => l.status === "open").length;
-
+      console.log(open, approved);
+    
       setfetched(true);
     });
   };
 
+
   useEffect(() => {
-    fetchIntervieews();
+      fetchIntervieews();
   }, []);
 
   const columns = [
@@ -52,11 +55,10 @@ const Interviewees = () => {
       sort: true,
       formatter: (value, row) => (
         <>
-          {row?.job_opening_id?.job_title ? (
-            <h2>{row?.job_opening_id?.job_title}</h2>
-          ) : (
-            <h2>{row?.default_job_opening_id?.job_title}</h2>
-          )}
+        {row?.job_opening_id?.job_title ? <h2>{row?.job_opening_id?.job_title}</h2>
+        :
+        <h2>{row?.default_job_opening_id?.job_title}</h2>
+      }
         </>
       ),
     },
@@ -68,6 +70,9 @@ const Interviewees = () => {
         <h2>{row.interview_date ? row.interview_date : "Not Set"}</h2>
       ),
     },
+
+
+
   ];
   return (
     <>
@@ -82,7 +87,9 @@ const Interviewees = () => {
               <li className="breadcrumb-item active">Interviewees</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto"></div>
+          <div className="col-auto float-right ml-auto">
+            
+          </div>
         </div>
       </div>
       {/* <div className="row">
@@ -118,6 +125,7 @@ const Interviewees = () => {
           <LeavesTable columns={columns} data={allLeaves} />
         </div>
       </div>
+    
     </>
   );
 };

@@ -22,6 +22,7 @@ const Termination = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
+      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -31,6 +32,7 @@ const Termination = () => {
     axiosInstance
       .get("/api/termination")
       .then((res) => {
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -43,6 +45,7 @@ const Termination = () => {
 
   useEffect(() => {
     createPerfomance().then((res) => {
+      console.log(res);
       const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -62,11 +65,13 @@ const Termination = () => {
         Fields: finalForm,
       });
       if (!loadSelect) setloadSelect(true);
+      console.log(template);
     });
   }, []);
 
   //create termination
   useEffect(() => {
+    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/api/termination", formValue)
@@ -82,6 +87,7 @@ const Termination = () => {
           showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
+    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete score card
@@ -89,6 +95,7 @@ const Termination = () => {
     axiosInstance
       .delete(`/api/termination/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -104,6 +111,7 @@ const Termination = () => {
     axiosInstance
       .patch(`/api/termination/${row._id}`, row)
       .then((res) => {
+        console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchTermination();
         showAlert(true, res.data.message, "alert alert-success");

@@ -30,6 +30,7 @@ const Asset = () => {
     axiosInstance
       .get("/api/assets")
       .then((res) => {
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -42,6 +43,7 @@ const Asset = () => {
 
   useEffect(() => {
     combineRequest().then((res) => {
+      console.log(res);
       const { allPurchaseOrders } = res.data.createEmployeeFormSelection;
 
       const AssetOpts = allPurchaseOrders?.map((e) => {
@@ -64,6 +66,7 @@ const Asset = () => {
       if (!loadSelect) {
         setloadSelect(true);
       }
+      console.log(template);
     });
   }, [loadSelect]);
 
@@ -72,6 +75,10 @@ const Asset = () => {
     if (formValue) {
       if (!editData) {
         let newFormValue = { ...formValue };
+<<<<<<< HEAD
+=======
+        console.log(newFormValue);
+>>>>>>> parent of 280c1c0 (removed console)
         axiosInstance
           .post("/api/assets", newFormValue)
           .then((res) => {
@@ -112,6 +119,7 @@ const Asset = () => {
     axiosInstance
       .delete(`/api/assets/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

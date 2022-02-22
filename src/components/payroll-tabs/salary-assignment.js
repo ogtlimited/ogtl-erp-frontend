@@ -17,6 +17,7 @@ const SalaryAssignment = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/salary-structure-assignment?ogId=${ogid}`)
       .then((res) => {
+        console.log(res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -26,6 +27,7 @@ const SalaryAssignment = ({ salaryStructure }) => {
 
   useEffect(() => {
     createPayroll().then((res) => {
+      console.log(res);
       const { employees } = res.data.createPayrollForm;
       const employeeOpts = employees?.map((e) => {
         return {

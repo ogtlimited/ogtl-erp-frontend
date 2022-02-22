@@ -15,6 +15,7 @@ import helper from "../../../services/helper";
 let qualityFilter;
 
 const Designations = () => {
+  // console.log(uniqueArray)
   const [allDesignation, setallDesignation] = useState([]);
   const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
@@ -30,6 +31,7 @@ const Designations = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
+      // console.log(i);
     }
     setmode("add");
     setformValue(initialValues);
@@ -62,10 +64,12 @@ const Designations = () => {
   }, []);
 
   const handleClick = (i) => {
+    console.log(i, unfiltered);
     if (i?.value === "All" || i === null) {
       setallDesignation(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => {
+        console.log(e);
         return i.label.includes(e.designation);
       });
 
@@ -74,13 +78,15 @@ const Designations = () => {
   };
 
   useEffect(() => {
+    console.log(formValue);
     fetchDesignation();
-
+    console.log(submitted, mode);
     if (submitted) {
       if (mode == "add") {
         axiosInstance
           .post("/designation", formValue)
           .then((e) => {
+            console.log(e);
             showAlert(
               true,
               "Designation successfully created",
@@ -94,10 +100,13 @@ const Designations = () => {
             console.log(err);
           });
       } else {
+        console.log(editData);
+        console.log(formValue);
         // formValue._id = formUpdate._id;
         axiosInstance
           .put("/designation/" + formUpdate._id, formValue)
           .then((e) => {
+            console.log(e);
             showAlert(
               true,
               "Designation successfully updated",

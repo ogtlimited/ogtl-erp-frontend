@@ -17,10 +17,13 @@ const SalaryStructureModal = ({ type, fetchSalaryStructures }) => {
     earnings: [],
     deductions: [],
   };
-  useEffect(() => {}, [type]);
+  useEffect(() => {
+    console.log("my type", type);
+  }, [type]);
 
   useEffect(() => {
     combineRequest().then((res) => {
+      console.log(res);
       const { departments, projects } = res.data.createEmployeeFormSelection;
       const departmentsOpts = departments?.map((e) => {
         return {
@@ -100,6 +103,8 @@ const SalaryStructureModal = ({ type, fetchSalaryStructures }) => {
                 enableReinitialize
                 initialValues={initialValues}
                 onSubmit={(values, { setSubmitting }) => {
+                  console.log(values);
+
                   let earnings = values.earnings.map(
                     (earning) => earning.value
                   );
@@ -112,10 +117,11 @@ const SalaryStructureModal = ({ type, fetchSalaryStructures }) => {
                     title: values.title,
                     [type]: values.type,
                   };
-
+                  console.log("my new values", newValues);
                   axiosInstance
                     .post("/api/salary-structure", newValues)
                     .then((res) => {
+                      console.log(res);
                       fetchSalaryStructures();
                       showAlert(
                         true,

@@ -124,6 +124,7 @@ const VendorPayments = () => {
     axiosInstance
       .delete(`/api/payment/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );

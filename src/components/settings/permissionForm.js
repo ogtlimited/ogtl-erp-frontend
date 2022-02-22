@@ -39,6 +39,7 @@ const PermissionForm = ({ role, fetchRole }) => {
   const { showAlert } = useAppContext();
   const [defaultValues, setDefaultValues] = useState(initialValues);
   useEffect(() => {
+    console.log("ROLE", role);
     if (role !== undefined && role && Object.keys(role).length > 0) {
       setDefaultValues(role);
     }
@@ -56,9 +57,11 @@ const PermissionForm = ({ role, fetchRole }) => {
             enableReinitialize
             onSubmit={(values, { setSubmitting }) => {
               setTimeout(() => {
+                console.log(values);
                 axiosInstance
                   .put(`/api/role/${role._id}`, values)
                   .then((res) => {
+                    // console.log(res);
                     // setupdated(true)
                     fetchRole();
                     showAlert(true, res.data?.message, "alert alert-success");

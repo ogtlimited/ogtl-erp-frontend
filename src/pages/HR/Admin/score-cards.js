@@ -20,6 +20,7 @@ const ScoreCards = () => {
     axiosInstance
       .get("/scoreCard")
       .then((res) => {
+        console.log(res.data);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -32,6 +33,7 @@ const ScoreCards = () => {
 
   useEffect(() => {
     createPerfomance().then((res) => {
+      console.log(res);
       const { employees } = res.data.createPerformanceForm;
       const employeeOpts = employees?.map((e) => {
         return {
@@ -51,17 +53,21 @@ const ScoreCards = () => {
         Fields: finalForm,
       });
       if (!loadSelect) setloadSelect(true);
+      console.log(template);
     });
   }, []);
 
   //create score card
   useEffect(() => {
+    console.log(submitted);
     if (submitted === true) {
       axiosInstance
         .post("/scoreCard", formValue)
         .then((res) => {
           setSubmitted(false);
           fetchScoreCard();
+
+          console.log(res);
 
           showAlert(true, res.data.message, "alert alert-success");
         })
@@ -70,6 +76,7 @@ const ScoreCards = () => {
           showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
+    console.log(formValue);
   }, [submitted, formValue]);
 
   //delete score card
@@ -77,6 +84,7 @@ const ScoreCards = () => {
     axiosInstance
       .delete(`/scoreCard/${row._id}`)
       .then((res) => {
+        console.log(res);
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
@@ -93,6 +101,7 @@ const ScoreCards = () => {
     axiosInstance
       .patch(`/scoreCard/${row._id}`, row)
       .then((res) => {
+        console.log(res);
         setData((prevData) => [...data, res.data.data]);
         fetchScoreCard();
         showAlert(true, res.data.message, "alert alert-success");

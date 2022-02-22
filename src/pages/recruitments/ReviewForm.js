@@ -7,18 +7,21 @@ import success from "../../assets/img/success.svg";
 const ReviewForm = () => {
   let navigate = useNavigate();
   const { jobApplication } = useNoAuthContext();
-  useEffect(() => {}, [jobApplication]);
+  useEffect(() => {
+    console.log(jobApplication);
+  }, [jobApplication]);
   const handleSubmit = () => {
-    delete jobApplication.referred;
-    axios
+    
+      delete jobApplication.referred
+      axios
       .post(config.ApiUrl + "/api/jobApplicant", jobApplication)
       .then((res) => {
-        document.getElementById("applyBtn").click();
-
+          document.getElementById("applyBtn").click();
+        console.log(res);
         setTimeout(() => {
           // setafterSuccess(false)
           document.getElementById("closeBtn").click();
-          navigate("/recruitment");
+          navigate("/recruitment")
         }, 5000);
       });
   };
@@ -59,16 +62,16 @@ const ReviewForm = () => {
           Submit
         </button>
       </div>
-      <button
-        style={{ opacity: 0 }}
-        type="submit"
-        id="applyBtn"
-        data-toggle="modal"
-        data-target="#exampleModal"
-        className="btn btn-primary submit-btn"
-      >
-        Submit
-      </button>
+        <button
+          style={{opacity: 0}}
+          type="submit"
+          id="applyBtn"
+          data-toggle="modal"
+          data-target="#exampleModal"
+          className="btn btn-primary submit-btn"
+        >
+          Submit
+        </button>
 
       <div
         className="modal custom-modal fade show"
@@ -86,16 +89,9 @@ const ReviewForm = () => {
               <h5 className="modal-title" id="exampleModalLabel">
                 Application submitted successfully
               </h5>
-              <button
-                id="closeBtn"
-                style={{ opacity: 0 }}
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <button id="closeBtn" style={{opacity: 0}} type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
             </div>
             <div className="modal-body">
               <div className="d-flex row justify-content-center p-5 m-5">

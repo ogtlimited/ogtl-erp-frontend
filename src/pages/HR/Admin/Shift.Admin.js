@@ -33,6 +33,7 @@ const ShiftAdmin = () => {
     let initialValues = {};
     for (let i in template) {
       initialValues[i] = "";
+      // console.log(i);
     }
     setmode("add");
     setFormValue(initialValues);
@@ -68,6 +69,7 @@ const ShiftAdmin = () => {
     }
   };
   useEffect(() => {
+    console.log(formValue);
     if (submitted) {
       if (mode == "add") {
         axiosInstance
@@ -88,6 +90,8 @@ const ShiftAdmin = () => {
             );
           });
       } else {
+        // formValue._id = editData._id;
+        console.log(formValue);
         axiosInstance
           .patch("/api/shiftType/" + editData._id, formValue)
           .then((res) => {
@@ -118,6 +122,7 @@ const ShiftAdmin = () => {
     axiosInstance
       .delete(`/api/shiftType/${row._id}`)
       .then((res) => {
+        console.log(res);
         fetchTypesShift();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)

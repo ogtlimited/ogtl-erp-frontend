@@ -55,6 +55,7 @@ const AllCampaigns = () => {
 
   useEffect(() => {
     createCampaign().then((res) => {
+      console.log(res);
       const { employees, clientS } = res.data.createCampaignForm;
       const emp = employees?.map((e) => {
         return {
@@ -83,7 +84,7 @@ const AllCampaigns = () => {
         return c;
       });
       campaignFormJson.Fields = formatted;
-
+      console.log(campaignFormJson);
       setTemplate(campaignFormJson);
       // if (type === "projectId") {
       //   setFormOptions(projectsOpts);
@@ -110,6 +111,7 @@ const AllCampaigns = () => {
       axiosInstance
         .post("/api/project", newValue)
         .then((res) => {
+          console.log(res);
           setFormValue(null);
           fetchCampaign();
           showAlert(true, res.data?.message, "alert alert-success");

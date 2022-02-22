@@ -7,12 +7,13 @@ import axiosInstance from "../../services/api";
 const SingleEmail = () => {
   const location = useParams();
 
-  const [inbox, setinbox] = useState({});
-
+  const [inbox, setinbox] = useState({})
+  console.log(location)
   const fetchEmail = () => {
     axiosInstance
       .get(`api/email/single/${location.id}`)
       .then((res) => {
+        console.log(res)
         setinbox(res.data.data);
       })
       .catch((error) => {
@@ -20,22 +21,25 @@ const SingleEmail = () => {
       });
   };
   useEffect(() => {
-    fetchEmail();
-  }, []);
+    fetchEmail()
+  }, [])
 
   useEffect(() => {
     let data = {
       is_read: true,
     };
-    if (Object.keys(inbox).length > 0) {
+    if(Object.keys(inbox).length > 0){
       if (!inbox?.is_read) {
         axiosInstance
           .put(`api/email/${inbox?._id}`, data)
-          .then((res) => {})
+          .then((res) => {
+            console.log(res.data);
+          })
           .catch((error) => {
             console.log(error);
           });
       }
+
     }
   }, [inbox?.is_read, inbox?._id]);
 

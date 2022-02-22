@@ -41,7 +41,7 @@ const InvoiceModal = () => {
         const payload = {
           ...values,
         };
-
+        console.log(payload);
         setTimeout(() => {
           if (isEdit) {
             // alert('edit')
@@ -49,6 +49,7 @@ const InvoiceModal = () => {
             axiosInstance
               .put(coachingUrl, payload)
               .then((res) => {
+                console.log(res);
                 setsubmitted(true);
               })
               .catch((err) => {
@@ -62,6 +63,7 @@ const InvoiceModal = () => {
             axiosInstance
               .post(coachingUrl, payload)
               .then((res) => {
+                console.log(res);
                 setsubmitted(true);
               })
               .catch((err) => {
@@ -94,7 +96,8 @@ const InvoiceModal = () => {
           setFieldTouched,
           isValid,
         } = props;
-
+        // console.log(isValid);
+        // console.log(values);
         console.log(errors);
         return (
           <div
@@ -194,10 +197,7 @@ const InvoiceModal = () => {
                       </div>
                       <div className="col-sm-6">
                         <div className="form-group">
-                          <label
-                            className="col-form-label"
-                            for="payment-status"
-                          >
+                          <label className="col-form-label" for="payment-status">
                             Payment Status
                           </label>
                           <input
@@ -275,10 +275,7 @@ const InvoiceModal = () => {
                     </div>
                     <div className="row">
                       <div className="col-sm-12">
-                        <button
-                          className="btn btn-primary btn-add"
-                          type="submit"
-                        >
+                        <button className="btn btn-primary btn-add" type="submit">
                           Submit
                         </button>
                       </div>

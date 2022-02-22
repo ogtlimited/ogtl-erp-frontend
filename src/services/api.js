@@ -1,18 +1,21 @@
 import axios from "axios";
 import tokenService from "./token.service";
-import config from "../config.json";
+import config from '../config.json'
 // import { useAppContext } from "../Context/AppContext";
 let headers = {};
 const token = localStorage.getItem("token");
 
+
 if (token) {
   headers.Authorization = `Bearer ${token}`;
 }
-
+// console.log(token);
 const axiosInstance = axios.create({
   baseURL: config.ApiUrl,
 });
 axiosInstance.interceptors.request.use((config) => {
+
+  // console.log(config)
   const token = localStorage.getItem("token");
   if (!token) {
     throw new axios.Cancel("Token is not available. Do login, please.");
@@ -24,6 +27,7 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (response) =>
     new Promise((resolve, reject) => {
+      // console.log(response)
       resolve(response);
     }),
   (error) => {
@@ -33,8 +37,8 @@ axiosInstance.interceptors.response.use(
       });
     }
     if (error.response.status === 401) {
-      tokenService.removeToken();
-
+      tokenService.removeToken()
+      // console.log("tokrn");
       window.location = "/auth";
     } else {
       return new Promise((resolve, reject) => {

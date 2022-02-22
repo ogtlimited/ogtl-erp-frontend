@@ -24,6 +24,7 @@ const ExpenseHeads = () => {
   };
   const fetchDept = () => {
     axiosInstance.get("/department").then((e) => {
+      console.log(e.data.data);
       const departOpts = e.data.data.map((e) => {
         return {
           label: e.department,
@@ -111,6 +112,7 @@ const ExpenseHeads = () => {
     axiosInstance
       .delete(`/api/expense-head-draft/${row._id}`)
       .then((res) => {
+        console.log(res);
         fetchVendor();
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
