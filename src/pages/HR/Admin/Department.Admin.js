@@ -49,7 +49,9 @@ const Departments = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
+    console.log(formatted)
     setmode("edit");
+    // seteditData(formatted)
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -113,8 +115,9 @@ const Departments = () => {
   }, [formValue]);
   // CAUSE object.keys() bug
   // useEffect(() => {
+  //   console.log(clickedRow)
   //   seteditData(clickedRow);
-  // }, [clickedRow, submitted]);
+  // }, [editData ]);
   const columns = [
     {
       dataField: "",

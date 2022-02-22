@@ -320,8 +320,7 @@ const AptitudeTest = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {/* && user?.role?.hr?.create */}
-            {loadSelect && (
+            {loadSelect && user?.role?.hr?.create && (
               <a
                 href=""
                 className="btn add-btn m-r-5"
