@@ -58,6 +58,7 @@ export const PATH_DASHBOARD = {
     jobApplicants: path(ROOTS_DASHBOARD, "/recruitment/job-applicants"),
     aptitudeTests: path(ROOTS_DASHBOARD, "/recruitment/aptitude-test"),
     interviewees: path(ROOTS_DASHBOARD, "/recruitment/interviewees"),
+    shadowing: path(ROOTS_DASHBOARD, "/recruitment/shadowing"),
   },
   performance: {
     root: path(ROOTS_DASHBOARD, "/performance"),
@@ -118,6 +119,7 @@ export const PATH_DASHBOARD = {
       ROOTS_DASHBOARD,
       "/maintenance/maintenance-and-repair"
     ),
+    shadowing: path(ROOTS_DASHBOARD, "/maintenance/shadowing"),
   },
 
   purchaseOrder: path(ROOTS_DASHBOARD, "/purchase-order"),
