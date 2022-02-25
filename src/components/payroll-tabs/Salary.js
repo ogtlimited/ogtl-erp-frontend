@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import helper from "../../services/helper";
+import GeneralUpload from "../Modal/GeneralUpload";
 
 import SalaryAssignmentModal from "../Modal/SalaryAssignmentModal";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
@@ -10,6 +12,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 const Salary = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
+  const [toggleModal, settoggleModal] = useState(false);
   const { createPayroll, user } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
 
@@ -24,6 +27,7 @@ const Salary = ({ salaryStructure }) => {
         console.log(error?.response);
       });
   };
+  
 
   useEffect(() => {
     axiosInstance
@@ -64,64 +68,64 @@ const Salary = ({ salaryStructure }) => {
       text: "Basic",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val?.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
 
     },
     {
       dataField: "medical",
-      text: "medical",
+      text: "Medical",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowance",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlySalary",
       text: "Monthly Salary",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "",
       text: "Annual Salary",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{(row.monthlySalary * 12).toFixed(2)}</p>
+      formatter: (val, row) => <p>{helper.handleMoneyFormat((row.monthlySalary * 12).toFixed(2))}</p>
     },
     {
       dataField: "totalRelief",
       text: "Total Relief",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val?.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{val} </p>,
     },
     {
       dataField: "monthlyIncomeTax",
       text: "Monthly IncomeTax",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val.toFixed(2)} </p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "",
@@ -138,14 +142,14 @@ const Salary = ({ salaryStructure }) => {
       <div className="tab-pane show active" id="tab_salaries">
         <div className="text-right mb-4 ">
           {user?.role?.hr?.create && (
-            <button
-              className="btn btn-primary add-btn"
-              type="button"
+            <a
+              className="btn add-btn m-r-5"
               data-toggle="modal"
-              data-target="#SalaryAssignmentModal"
+              data-target="#uploadAttendance"
+              onClick={() => settoggleModal(true)}
             >
-              <i className="fa fa-plus"></i> Add Assignment
-            </button>
+              Upload Attendance
+            </a>
           )}
         </div>
         <div className="col-5 mb-4">
@@ -162,7 +166,14 @@ const Salary = ({ salaryStructure }) => {
 
         <LeavesTable data={data} columns={columns} />
       </div>
-      {/* <SalaryAssignmentModal salaryStructure={salaryStructure} /> */}
+      {toggleModal && (
+        <GeneralUpload
+          settoggleModal={settoggleModal}
+          title="Upload Payroll"
+          url="/api/employees-salary"
+        />
+
+      )}
     </>
   );
 };

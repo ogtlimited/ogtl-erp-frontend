@@ -179,9 +179,6 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
                       </button>
                     </div>
                   </Form>
-                ) 
-                 
-                
               </div>
        
       )}
