@@ -46,7 +46,7 @@ export function TextField(props) {
           name={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-        
+          defaultValue={defaultValue ? defaultValue : ""}
           {...rest}
         />
 

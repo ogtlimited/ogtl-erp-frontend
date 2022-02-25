@@ -74,12 +74,20 @@ const EmployeeUser = () => {
       });
   }, []);
   useEffect(() => {
-    const fetchQuotes = async () => {
-      const result = await fetch("https://quotes.rest/qod?language=en");
-      const data = await result.json();
-      setQuotes(data?.contents.quotes[0]);
-    };
-    fetchQuotes();
+    try {
+      const fetchQuotes = async () => {
+        const result = await fetch("https://quotes.rest/qod?language=en");
+        const data = await result.json();
+        if(data){
+          setQuotes(data?.contents.quotes[0]);
+
+        }
+      };
+      fetchQuotes();
+    } catch (error) {
+      console.log(error)
+    }
+   
   }, []);
   // let arr = []
   // let unique = []
