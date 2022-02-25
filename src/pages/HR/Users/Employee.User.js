@@ -74,20 +74,15 @@ const EmployeeUser = () => {
       });
   }, []);
   useEffect(() => {
-    try {
-      const fetchQuotes = async () => {
-        const result = await fetch("https://quotes.rest/qod?language=en");
-        const data = await result.json();
-        if(data){
-          setQuotes(data?.contents.quotes[0]);
-
-        }
-      };
-      fetchQuotes();
-    } catch (error) {
-      console.log(error)
-    }
-   
+    const fetchQuotes = async () => {
+      try {
+        const result = await axiosInstance.get("https://favqs.com/api/qotd");
+        setQuotes(result?.data?.quote);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchQuotes();
   }, []);
   // let arr = []
   // let unique = []
@@ -294,7 +289,7 @@ const EmployeeUser = () => {
                 <div className="card-body text-center">
                   <figure>
                     <blockquote>
-                      <h4 className="holiday-title">{quotes?.quote}</h4>
+                      <h4 className="holiday-title">{quotes?.body}</h4>
                     </blockquote>
                     <figcaption>—{quotes?.author}</figcaption>
                   </figure>

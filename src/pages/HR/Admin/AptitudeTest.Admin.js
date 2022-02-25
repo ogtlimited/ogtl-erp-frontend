@@ -55,8 +55,7 @@ const AptitudeTest = () => {
     seteditData(row);
     setmode("edit");
     let formatted = helper.handleEdit(row);
-    console.log(formatted, "formatted")
-    seteditData(formatted)
+    seteditData(formatted);
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -88,7 +87,9 @@ const AptitudeTest = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/api/jobApplicant-accepted")
+      .get("/api/jobApplicant", {
+        params: { interview_status: "Scheduled for interview" },
+      })
       .then((res) => {
         const jobApplicantsOpts = res?.data?.data?.map((e) => {
           return {
