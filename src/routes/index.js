@@ -170,6 +170,7 @@ export default function Router() {
             { path: "interviewees", element: <GuardedRoute title="Interviewees" dept="Facility"><Interviewees /></GuardedRoute> },
             { path: "aptitude-test", element: <GuardedRoute title="" dept="HR"><AptitudeTest /></GuardedRoute> },
             { path: "job-offer", element: <GuardedRoute title="" dept="HR"><JobOffer /></GuardedRoute> },
+            { path: "shadowing", element: <GuardedRoute title="" dept="HR"><Shadowing /></GuardedRoute> },
           ],
         },
         {
@@ -270,6 +271,10 @@ export default function Router() {
             {
               path: "maintenance-and-repair",
               element: <GuardedRoute title="" dept="FACILITY"><MaintenanceAndRepairs /></GuardedRoute>,
+            },
+            {
+              path: "shadowing",
+              element: <GuardedRoute title="" dept="FACILITY"><Shadowing /></GuardedRoute>,
             },
           ],
         },
@@ -487,3 +492,4 @@ const RolePermission = Loadable(
 const RoleAssignment = Loadable(
   lazy(() => import("../pages/settings/rolesAssignment"))
 );
+const Shadowing = Loadable(lazy(() => import("../pages/HR/Admin/Shadowing.Admin")))
