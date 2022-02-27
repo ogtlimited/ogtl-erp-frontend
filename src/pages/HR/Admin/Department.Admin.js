@@ -9,7 +9,6 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import Select from "react-select";
 import helper from "../../../services/helper";
-import { create } from "yup/lib/Reference";
 
 const Departments = () => {
   const [template, settemplate] = useState({});
@@ -51,7 +50,7 @@ const Departments = () => {
     let formatted = helper.handleEdit(row);
     console.log(formatted)
     setmode("edit");
-    // seteditData(formatted)
+    seteditData(formatted)
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -81,6 +80,7 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
+      console.log(formValue)
       if (mode == "add") {
         axiosInstance
           .post("/department", formValue)
@@ -91,6 +91,7 @@ const Departments = () => {
           })
           .catch((err) => {
             // setformValue(null);
+            setsubmitted(false)
             console.log(err);
           });
       } else {
@@ -108,6 +109,7 @@ const Departments = () => {
           })
           .catch((err) => {
             setformValue(null);
+            setsubmitted(false)
             console.log(err);
           });
       }
