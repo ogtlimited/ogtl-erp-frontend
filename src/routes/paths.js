@@ -99,6 +99,7 @@ export const PATH_DASHBOARD = {
     clients: path(ROOTS_DASHBOARD, "/clients/all"),
     invoices: path(ROOTS_DASHBOARD, "/clients/invoices"),
     payments: path(ROOTS_DASHBOARD, "/clients/payments"),
+    leaveApprovals: path(ROOTS_DASHBOARD, "/clients/leave-approval"),
   },
   vendors: {
     root: path(ROOTS_DASHBOARD, "/vendors/"),

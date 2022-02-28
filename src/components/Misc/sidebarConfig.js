@@ -291,6 +291,11 @@ const sidebarConfig = [
             title: "Branch",
             path: PATH_DASHBOARD.campaign.branch,
           },
+          {
+            canView: "Super",
+            title: "Client Leave Approvals",
+            path: PATH_DASHBOARD.clients.leaveApprovals,
+          },
         ],
       },
       {
@@ -397,7 +402,6 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.clients.root,
         icon: ICONS.user,
         children: [
-          
           {
             canView: "Accounting",
             title: "Invoices",
