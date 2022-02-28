@@ -6,7 +6,8 @@ import { useAppContext } from "../../../Context/AppContext";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 
 const Interviewees = () => {
-  const [allLeaves, setallLeaves] = useState([]);
+
+  const [allInterviewees, setallInterviewees] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
 
   const [status, setStatus] = useState("");
@@ -15,9 +16,9 @@ const Interviewees = () => {
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
   const fetchIntervieews = () => {
-    axiosInstance.get("/leave-application").then((e) => {
+    axiosInstance.get("/api/jobApplicant-accepted").then((e) => {
       const leaves = e.data.data;
-      setallLeaves(e.data.data);
+      setallInterviewees(e.data.data);
 
       const approved = leaves.filter((e) => e.status === "approved").length;
       const open = leaves.filter((l) => l.status === "open").length;
@@ -65,7 +66,7 @@ const Interviewees = () => {
       text: "Interview Date",
       sort: true,
       formatter: (value, row) => (
-        <h2>{row.interview_date ? row.interview_date : "Not Set"}</h2>
+        <h2>{row.interview_date ? new Date(row.interview_date).toUTCString() : "Not Set"}</h2>
       ),
     },
   ];
@@ -115,7 +116,7 @@ const Interviewees = () => {
       </div> */}
       <div className="row">
         <div className="col-12">
-          <LeavesTable columns={columns} data={allLeaves} />
+          <LeavesTable columns={columns} data={allInterviewees} />
         </div>
       </div>
     </>
