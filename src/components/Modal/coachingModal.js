@@ -28,14 +28,19 @@ const initForm = {
   status: "",
   user_response: "",
 };
-const CoachingModal = ({ coachingForm, setformSubmitted }) => {
+const CoachingModal = ({
+  coachingForm,
+  setformSubmitted,
+  fetchCoachingForms,
+  coachingFormEdit,
+}) => {
   const {
     allEmployees,
-    coachingFormEdit,
+    // coachingFormEdit,
     setcoachingFormSubmitted,
     showAlert,
   } = useAppContext();
-  const user = tokenService.getUser();
+  // const user = tokenService.getUser();
 
   const [isEdit, setisEdit] = useState(false);
   const [initialValues, setinitialValues] = useState(initForm);
@@ -137,7 +142,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
             axiosInstance
               .put(coachingUrl, payload)
               .then((res) => {
-                showAlert(true, "coaching form created", "alert alert-success");
+                showAlert(true, "coaching form updated", "alert alert-success");
                 setcoachingFormSubmitted(true);
               })
               .catch((err) => {
@@ -146,7 +151,6 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                   "Unable to update coaching form",
                   "alert alert-danger"
                 );
-                console.log(err.response?.data);
               });
           } else {
             const coachingUrl = `/api/coaching-form`;
@@ -157,11 +161,12 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
               .post(coachingUrl, payload)
               .then((res) => {
                 showAlert(true, "coaching form created", "alert alert-success");
-                setcoachingFormSubmitted(true);
+                // setcoachingFormSubmitted(true);
                 setformSubmitted(true);
+                fetchCoachingForms();
               })
               .catch((err) => {
-                console.log(err.response?.data);
+                console.log(err);
                 showAlert(
                   true,
                   "Unable to create coaching form",
@@ -241,7 +246,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 name="employee_name"
-                                value={values.employee_name}
+                                value={`${values.employee_id?.first_name} ${values.employee_id.last_name}`}
                                 readOnly
                                 className="form-control "
                                 type="text"
@@ -282,7 +287,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                               onChange={handleChange}
                               onBlur={handleBlur}
                               name="ogid"
-                              value={values.ogid}
+                              value={values.employee_id.ogid}
                               className="form-control "
                               type="text"
                             />
@@ -667,15 +672,26 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                       )}
                     </div>
                     <div className="submit-section">
-                      <button
-                        type="submit"
-                        onClick={handleSubmit}
-                        disabled={!isValid || validCount}
-                        data-dismiss="modal"
-                        className="btn btn-primary submit-btn"
-                      >
-                        Submit
-                      </button>
+                      {isEdit ? (
+                        <button
+                          type="submit"
+                          onClick={handleSubmit}
+                          data-dismiss="modal"
+                          className="btn btn-primary submit-btn"
+                        >
+                          Submit
+                        </button>
+                      ) : (
+                        <button
+                          type="submit"
+                          onClick={handleSubmit}
+                          disabled={!isValid || validCount}
+                          data-dismiss="modal"
+                          className="btn btn-primary submit-btn"
+                        >
+                          Submit
+                        </button>
+                      )}
                     </div>
                   </form>
                 </div>

@@ -4,6 +4,8 @@ import AcceptDeclineModal from "../../../components/Modal/AcceptDeclineModal";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import tokenService from "../../../services/token.service";
+import ReactHtmlParser from "react-html-parser";
+
 // import logo from '../assets/img/outsource.png'
 // import PageHeader from '../components/page-header'
 // import Pdf from "react-to-pdf";
@@ -16,29 +18,40 @@ const options = {
 };
 
 const CoachingEmployee = () => {
-  const { fetchEmployeeCoachingList, updateEmployeeCoachingList, user } =
-    useAppContext();
+  const {
+    fetchEmployeeCoachingList,
+    updateEmployeeCoachingList,
+    user,
+    showAlert,
+  } = useAppContext();
   const [submitAction, setsubmitAction] = useState("");
   const [showReason, setshowReason] = useState(false);
   const [reason, setreason] = useState("");
   const [noForm, setnoForm] = useState(false);
   const [file, setfile] = useState(null);
 
-  const [coachingForm, setcoachingForm] = useState({});
-  useEffect(() => {
+  const [coachingForm, setcoachingForm] = useState(null);
+  const fetchPendingForms = () => {
     const user = tokenService.getUser();
 
     axiosInstance
       .get("/api/coaching-form/employee/" + user?._id)
       .then((res) => {
-        if (res.data.data.length === 0) {
+        const pending = res.data.data.filter(
+          (data) => data.user_response === "pending"
+        );
+        if (pending.length === 0) {
           setnoForm(false);
         } else {
+          setcoachingForm(pending[0]);
           setnoForm(true);
-          setcoachingForm(res.data?.data[0]);
         }
       });
+  };
+  useEffect(() => {
+    fetchPendingForms();
   }, [noForm]);
+
   useEffect(() => {
     if (submitAction.length) {
       const payload = {
@@ -52,7 +65,12 @@ const CoachingEmployee = () => {
           if (res.data.data.length === 0) {
             setnoForm(false);
           }
-          setcoachingForm(res.data?.data[0]);
+          showAlert(true, res.data.message, "alert alert-success");
+          fetchPendingForms();
+          // setcoachingForm(res.data?.data[0]);
+        })
+        .catch((error) => {
+          showAlert(true, error.response.data.message, "alert alert-danger");
         });
       // updateEmployeeCoachingList(payload).then((res) => {
 
@@ -60,6 +78,7 @@ const CoachingEmployee = () => {
     }
   }, [submitAction, file]);
   const breadcrumb = "Coaching Review";
+
   return (
     <>
       <div className="page-header">
@@ -111,14 +130,14 @@ const CoachingEmployee = () => {
                           <td>
                             <strong>Title / Position</strong>{" "}
                             <span className="float-right">
-                              {user?.designation}
+                              {coachingForm?.employee_id?.designation}
                             </span>
                           </td>
                           <td>
                             <strong>Supervisor</strong>{" "}
                             <span className="float-right">
                               {coachingForm?.supervisor?.first_name}{" "}
-                              {coachingForm?.employee_id?.last_name}
+                              {coachingForm?.supervisor?.last_name}
                             </span>
                           </td>
                         </tr>
@@ -149,13 +168,8 @@ const CoachingEmployee = () => {
                       aria-labelledby="headingOne"
                       data-parent="#accordion"
                     >
-                      <div
-                        className="card-body"
-                        dangerouslySetInnerHTML={{
-                          __html: coachingForm?.goals,
-                        }}
-                      >
-                        {/* {coachingForm?.goals} */}
+                      <div className="card-body">
+                        {ReactHtmlParser(coachingForm?.goals)}
                       </div>
                     </div>
                   </div>
@@ -179,13 +193,8 @@ const CoachingEmployee = () => {
                       aria-labelledby="headingTwo"
                       data-parent="#accordion"
                     >
-                      <div
-                        className="card-body"
-                        dangerouslySetInnerHTML={{
-                          __html: coachingForm?.reality,
-                        }}
-                      >
-                        {/* {coachingForm?.reality} */}
+                      <div className="card-body">
+                        {ReactHtmlParser(coachingForm?.reality)}
                       </div>
                     </div>
                   </div>
@@ -210,12 +219,9 @@ const CoachingEmployee = () => {
                       aria-labelledby="headingFour"
                       data-parent="#accordion"
                     >
-                      <div
-                        className="card-body"
-                        dangerouslySetInnerHTML={{
-                          __html: coachingForm?.opportunities,
-                        }}
-                      ></div>
+                      <div className="card-body">
+                        {ReactHtmlParser(coachingForm?.opportunities)}
+                      </div>
                     </div>
                   </div>
                   <div className="card col-sm-12 px-0">
@@ -238,13 +244,8 @@ const CoachingEmployee = () => {
                       aria-labelledby="headingFive"
                       data-parent="#accordion"
                     >
-                      <div
-                        className="card-body"
-                        dangerouslySetInnerHTML={{
-                          __html: coachingForm?.way_forward,
-                        }}
-                      >
-                        {/* {coachingForm?.way_forward} */}
+                      <div className="card-body">
+                        {ReactHtmlParser(coachingForm?.way_forward)}
                       </div>
                     </div>
                   </div>

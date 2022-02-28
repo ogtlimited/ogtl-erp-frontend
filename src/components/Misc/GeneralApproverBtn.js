@@ -7,6 +7,7 @@ const GeneralApproverBtn = ({
   row,
   value,
 }) => {
+  console.log({ value });
   const handleStatus = (status) => {
     setStatus(status);
     setstatusRow(row);
@@ -23,7 +24,10 @@ const GeneralApproverBtn = ({
         </a>
         <div className="dropdown-menu dropdown-menu-right">
           {options.map((opt) => (
-            <a className="dropdown-item" onClick={() => handleStatus(opt.title)}>
+            <a
+              className="dropdown-item"
+              onClick={() => handleStatus(opt.title)}
+            >
               <i className={"fa fa-dot-circle-o " + opt.color}></i>
               {opt.title}
             </a>
