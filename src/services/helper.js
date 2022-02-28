@@ -168,5 +168,8 @@ class HelperService {
     delete hash.slug;
     return hash;
   }
+  handleMoneyFormat(number){
+   return new Intl.NumberFormat('en-NG', { maximumSignificantDigits: 3 }).format(number)
+  }
 }
 export default new HelperService();

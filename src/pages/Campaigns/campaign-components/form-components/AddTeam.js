@@ -112,6 +112,7 @@ const AddTeam = ({ campaign_info }) => {
                                 <Link
                                   className=" ml-2  text-center pos-relative"
                                   onClick={() => removeFromList(emp.value)}
+                                  to=""
                                 >
                                   <i
                                     className="las la-minus"

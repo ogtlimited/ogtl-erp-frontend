@@ -20,6 +20,7 @@ const ICONS = {
   productItems: getIcon("la-box"),
   settings: getIcon("la-shopping-cart"),
   rolesAssignment: getIcon("la-lock"),
+  shadowing: getIcon("la-users"),
 };
 
 const sidebarConfig = [
@@ -213,6 +214,11 @@ const sidebarConfig = [
             canView: "Facility",
             title: "Interviewees",
             path: PATH_DASHBOARD.recruitment.interviewees,
+          },
+          {
+            canView: "HR",
+            title: "Shadowing",
+            path: PATH_DASHBOARD.recruitment.shadowing,
           },
         ],
       },
@@ -496,6 +502,12 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.facility.maintenanceRepair,
           },
         ],
+      },
+      {
+        canView: "Facility",
+        title: "Shadowing",
+        path: PATH_DASHBOARD.facility.shadowing,
+        icon: ICONS.shadowing,
       },
     ],
   },

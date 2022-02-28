@@ -39,7 +39,8 @@ const PaySlip = () => {
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
-        const res = await axiosInstance.get(`/api/salary-slip/${id}`);
+        const res = await axiosInstance.get(`/api/employees-salary/${id}`);
+        // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
 
         setPaySlip(res.data.data.employeeSlip);
       } catch (error) {

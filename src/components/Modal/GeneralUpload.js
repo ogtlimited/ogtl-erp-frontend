@@ -100,7 +100,7 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      accept=".csv,.xlsx,.xls"
+                      accept=".csv"
                       onChange={(e) => onFileUpload(e)}
                     />
                     <i

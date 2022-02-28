@@ -262,6 +262,14 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            {
+              path: "payslip/:id",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PaySlip />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -345,6 +353,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <JobOffer />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "shadowing",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Shadowing />
                 </GuardedRoute>
               ),
             },
@@ -587,6 +603,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="FACILITY">
                   <MaintenanceAndRepairs />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "shadowing",
+              element: (
+                <GuardedRoute title="" dept="FACILITY">
+                  <Shadowing />
                 </GuardedRoute>
               ),
             },
@@ -868,4 +892,7 @@ const RolePermission = Loadable(
 
 const RoleAssignment = Loadable(
   lazy(() => import("../pages/settings/rolesAssignment"))
+);
+const Shadowing = Loadable(
+  lazy(() => import("../pages/HR/Admin/Shadowing.Admin"))
 );

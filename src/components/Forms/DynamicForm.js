@@ -123,7 +123,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const onSubmit = (values, { setSubmitting, resetForm, setStatus }) => {
     $("#FormModal").modal("toggle");
     setvalue(values);
-    console.log(values)
+    console.log(values);
     setformSubmitted(true);
   };
   return (

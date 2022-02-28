@@ -11,6 +11,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 let qualityFilter;
 
@@ -115,6 +116,22 @@ const Designations = () => {
     // setallDepartments(departments);
   }, [formValue]);
 
+  const deleteDesignation = (row) => {
+    axiosInstance
+      .delete(`/designation/${row._id}`)
+      .then((res) => {
+        fetchDesignation();
+        setallDesignation((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
+
   const defaultSorted = [
     {
       dataField: "designation",
@@ -171,13 +188,14 @@ const Designations = () => {
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
             )}
+
             {user?.role?.hr?.delete && (
               <a
                 className="dropdown-item"
-                onClick={() => console.log(row)}
+                onClick={() => setdeleteData(row)}
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#exampleModal"
               >
                 <i className="fa fa-trash m-r-5"></i> Delete
               </a>
@@ -234,11 +252,16 @@ const Designations = () => {
         />
       </div>
       <FormModal2
-        title="Create Department"
+        title="Create Designation"
         editData={editData}
         setformValue={setformValue}
         template={template}
         setsubmitted={setsubmitted}
+      />
+      <ConfirmModal
+        title="Designation"
+        selectedRow={deleteData}
+        deleteFunction={deleteDesignation}
       />
     </>
   );
