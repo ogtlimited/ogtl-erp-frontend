@@ -195,12 +195,12 @@ const ClientApproval = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaves</h3>
+            <h3 className="page-title">Leave Approval</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item active">Leave Approval</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto"></div>
