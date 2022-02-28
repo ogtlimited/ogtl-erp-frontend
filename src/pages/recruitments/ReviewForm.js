@@ -1,12 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
 import axios from "axios";
 import config from "../../config.json";
 import { useParams, useNavigate } from "react-router-dom";
 import success from "../../assets/img/success.svg";
+import info from "../../assets/img/info-danger.svg";
 const ReviewForm = () => {
   let navigate = useNavigate();
   const { jobApplication } = useNoAuthContext();
+  const [message, setmessage] = useState("Application submitted successfully")
+  const [resIcon, setresIcon] = useState(success)
   useEffect(() => {}, [jobApplication]);
   const handleSubmit = () => {
     delete jobApplication.referred;
@@ -14,11 +17,23 @@ const ReviewForm = () => {
       .post(config.ApiUrl + "/api/jobApplicant", jobApplication)
       .then((res) => {
         document.getElementById("applyBtn").click();
-
+        setmessage("Application submitted successfully");
+        setresIcon(info)
         setTimeout(() => {
           // setafterSuccess(false)
           document.getElementById("closeBtn").click();
           navigate("/recruitment");
+        }, 5000);
+      }).catch(err =>{
+        console.log(err.response)
+        setmessage(err?.response?.data?.message)
+        setresIcon(info)
+        document.getElementById("applyBtn").click();
+
+        setTimeout(() => {
+          // setafterSuccess(false)
+          document.getElementById("closeBtn").click();
+          // navigate("/recruitment");
         }, 5000);
       });
   };
@@ -84,7 +99,7 @@ const ReviewForm = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Application submitted successfully
+                {message}
               </h5>
               <button
                 id="closeBtn"
@@ -98,11 +113,12 @@ const ReviewForm = () => {
               </button>
             </div>
             <div className="modal-body">
-              <div className="d-flex row justify-content-center p-5 m-5">
+              <div className="d-flex row justify-content-center p-5 mx-5 mb-5">
                 {" "}
                 <img
-                  style={{ width: "100px", alignSelf: "center" }}
-                  src={success}
+                  
+                  style={{ width: "100px", alignSelf: "center",color:"red" }}
+                  src={resIcon}
                 />
               </div>
             </div>

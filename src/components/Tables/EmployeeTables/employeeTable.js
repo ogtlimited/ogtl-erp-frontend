@@ -61,7 +61,7 @@ const EmployeesTable = ({
       }
     }
     setmode("edit");
-
+    console.log(hash)
     seteditData(hash);
   };
   const clearFilter = (e) => {

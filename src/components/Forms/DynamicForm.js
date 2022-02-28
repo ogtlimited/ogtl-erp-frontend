@@ -79,7 +79,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
     const props = {
       name: elementName,
       label: elementSchema.label,
-      // defaultValue: formData[elementName] ? formData[elementName] : "",
+      defaultValue: formData[elementName] ? formData[elementName] : "",
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,

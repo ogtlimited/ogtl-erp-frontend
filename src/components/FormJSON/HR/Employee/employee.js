@@ -1,29 +1,29 @@
 export const employeeFormJson = {
   title: "Employee Form",
   Fields: [
-    {
-      name: "applicant",
-      type: "select",
-      title: "Applicant",
-      required: {
-        value: true,
-        message: "applicant is required",
-      },
-      options: [],
-    },
-    {
-      name: "password",
-      type: "text",
-      disabled: true,
-      title: "Password",
-      required: {
-        value: true,
-        message: "Password is required",
-      },
-      validation: function (val) {
-        return val.length >= 5 || "Min Length is 5";
-      },
-    },
+    // {
+    //   name: "applicant",
+    //   type: "select",
+    //   title: "Applicant",
+    //   required: {
+    //     value: true,
+    //     message: "applicant is required",
+    //   },
+    //   options: [],
+    // },
+    // {
+    //   name: "password",
+    //   type: "text",
+    //   disabled: true,
+    //   title: "Password",
+    //   required: {
+    //     value: true,
+    //     message: "Password is required",
+    //   },
+    //   validation: function (val) {
+    //     return val.length >= 5 || "Min Length is 5";
+    //   },
+    // },
     {
       name: "company_email",
       type: "email",
@@ -45,15 +45,6 @@ export const employeeFormJson = {
         message: "Reports to is required",
       },
       options: [],
-    },
-    {
-      name: "isAdmin",
-      type: "check",
-      title: "Admin User",
-      required: {
-        value: true,
-        message: "Admin User is required",
-      },
     },
     {
       name: "date_of_joining",
@@ -109,6 +100,25 @@ export const employeeFormJson = {
       type: "select",
       title: "Branch",
       options: [],
+    },
+    
+    {
+      name: "isAdmin",
+      type: "check",
+      title: "Admin User",
+      required: {
+        value: true,
+        message: "Admin User is required",
+      },
+    },
+    {
+      name: "isExpatriate",
+      type: "check",
+      title: "Expatriate",
+      required: {
+        value: true,
+        message: "Admin User is required",
+      },
     },
     {
       name: "employeeType",
@@ -193,6 +203,18 @@ export const employeeFormJson = {
           options: [],
         },
       ],
+    },
+    {
+       name: "leaveCount",
+      type: "number",
+      title: "Leave Count",
+      required: {
+        value: false,
+        message: "Password is required",
+      },
+      validation: function (val) {
+        return val.length >= 5 || "Min Length is 5";
+      },
     },
     {
       name: "image",
