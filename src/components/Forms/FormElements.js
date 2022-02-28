@@ -40,13 +40,14 @@ export function TextField(props) {
             {label}
           </label>
         )}
-        <input
+        <Field
           className="form-control"
           type="text"
           name={name}
+          id={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-        
+
           {...rest}
         />
 

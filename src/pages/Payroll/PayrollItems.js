@@ -4,6 +4,7 @@ import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/sala
 import { salarySettingsFormJson } from "../../components/FormJSON/payroll/salary-settings";
 import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
 import FormModal from "../../components/Modal/Modal";
+import Salary from "../../components/payroll-tabs/Salary";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalarySettings from "../../components/payroll-tabs/salary-settings";
@@ -109,23 +110,9 @@ const PayrollItems = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
-                  href="#tab_components"
+                  href="#tab_salaries"
                 >
-                  Salary Components
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_structure">
-                  Salary Structure
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-toggle="tab"
-                  href="#tab_assignment"
-                >
-                  Salary Assigment
+                  Salary
                 </a>
               </li>
               <li className="nav-item">
@@ -138,18 +125,13 @@ const PayrollItems = () => {
         </div>
       </div>
       <div className="tab-content">
-        <SalaryComponents
+        <Salary
           setformType={setformType}
           submitted={submitted}
           formValue={formValue}
           loadSelect={loadSelect}
         />
-        <SalaryStructure
-          data={data}
-          loadSelect={loadSelect}
-          fetchSalaryStructures={fetchSalaryStructures}
-        />
-        <SalaryAssignment loadSelect={loadSelect} salaryStructure={data} />
+
         <SalarySettings
           setformType={setformType}
           submitted={submitted}
@@ -157,15 +139,7 @@ const PayrollItems = () => {
           loadSelect={loadSelect}
         />
       </div>
-      {loadSelect && (
-        <FormModal
-          editData={editData}
-          setformValue={setformValue}
-          settemplate={settemplate}
-          template={template}
-          setsubmitted={setsubmitted}
-        />
-      )}
+
     </>
   );
 };
