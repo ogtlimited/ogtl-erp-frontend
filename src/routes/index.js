@@ -140,6 +140,7 @@ export default function Router() {
             },
             { path: "salaries", element: <GuardedRoute title="" dept="HR"><EmployeeSalary /></GuardedRoute> },
             { path: "payroll-items", element: <GuardedRoute title="" dept="HR"><PayrollItems /></GuardedRoute> },
+            { path: "payslip/:id", element: <GuardedRoute title="" dept="HR"><PaySlip /></GuardedRoute> },
           ],
         },
         {
