@@ -1,5 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -129,13 +130,21 @@ const Salary = ({ salaryStructure }) => {
     },
     {
       dataField: "",
-      text: "",
-      headerStyle: { minWidth: "100px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "16px",
-      },
-    },
+      text: "Action",
+      headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => (
+        <Link
+          className="btn btn-sm btn-primary"
+          // to={`/admin/payslip/${row?._id}`}
+          to={{
+            pathname: `/dashboard/payroll/payslip/${row?.employeeId?._id}`,
+            state: { employee: row?.employeeId },
+          }}
+        >
+          Generate Slip
+        </Link>
+      ),
+    }
   ];
   return (
     <>

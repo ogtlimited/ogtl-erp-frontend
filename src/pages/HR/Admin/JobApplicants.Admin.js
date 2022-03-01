@@ -125,11 +125,6 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "email_address",
-      text: "Email Address",
-      sort: true,
-    },
-    {
       dataField: "job_opening_id",
       text: "Job Opening",
       sort: true,
@@ -148,7 +143,7 @@ const JobApplicants = () => {
       text: "Interview Date",
       sort: true,
       formatter: (value, row) => (
-        <h2>{row.interview_date ? row.interview_date : "Not Set"}</h2>
+        <h2>{row.interview_date ? new Date(row.interview_date).toUTCString() : "Not Set"}</h2>
       ),
     },
     {
