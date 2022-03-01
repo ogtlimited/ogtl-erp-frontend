@@ -1,37 +1,32 @@
 import React, { useState, useEffect } from "react";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { leaveList } from "../../../db/leaves";
-import male from "../../../assets/img/male_avater.png";
-import FormModal from "../../../components/Modal/Modal";
-import { LeaveApplicationFormJSON } from "../../../components/FormJSON/HR/Leave/application";
-import axiosInstance from "../../../services/api";
-import HelperService from "../../../services/helper";
-import { useAppContext } from "../../../Context/AppContext";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
-import GeneralUpload from "../../../components/Modal/GeneralUpload";
-const LeavesAdmin = () => {
+import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import { leaveList } from "../../db/leaves";
+import male from "../../assets/img/male_avater.png";
+import FormModal from "../../components/Modal/Modal";
+import { LeaveApplicationFormJSON } from "../../components/FormJSON/HR/Leave/application";
+import axiosInstance from "../../services/api";
+import HelperService from "../../services/helper";
+import { useAppContext } from "../../Context/AppContext";
+import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
+import GeneralUpload from "../../components/Modal/GeneralUpload";
+import tokenService from "../../services/token.service";
+const ClientApproval = () => {
   const [approval, setApproval] = useState([
     {
       title: "open",
       color: "text-secondary",
     },
-    {
-      title: "approved by supervisor",
-      color: "text-info",
-    },
+
     {
       title: "approved",
       color: "text-success",
-    },
-    {
-      title: "cancelled",
-      color: "text-warning",
     },
     {
       title: "rejected",
       color: "text-danger",
     },
   ]);
+
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -46,91 +41,32 @@ const LeavesAdmin = () => {
   const [formMode, setformMode] = useState("add");
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
-  const fetchLeaves = () => {
-    axiosInstance.get("/leave-application").then((e) => {
-      const leaves = e.data.data;
-      setallLeaves(e.data.data);
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
-
-      setapprovedLeaves(approved);
-      setplanned(open);
-      setpresent(allEmployees.length - approved);
-      setfetched(true);
-    });
-  };
-  useEffect(() => {
-    if (status.length) {
-      const update = {
-        ...statusRow,
-        status: status,
-        leave_approver: statusRow.employee_id._id,
-        employee_id: statusRow.leave_approver._id,
-        from_date: new Date(statusRow.from_date),
-        to_date: new Date(statusRow.to_date),
-        posting_date: new Date(statusRow.posting_date),
-      };
-
-      delete update.createdAt;
-      delete update.updatedAt;
-      delete update.__v;
-      axiosInstance
-        .put("/leave-application/" + statusRow._id, update)
-        .then((e) => {
-          fetchLeaves();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [status]);
-  useEffect(() => {
-    const employeeOpts = allEmployees.map((e) => {
-      return {
-        label: e.first_name + " " + e.last_name + " (" + e.ogid + ")",
-        value: e._id,
-      };
-    });
-    const finalForm = LeaveApplicationFormJSON.Fields.map((field) => {
-      if (field.name === "employee_id") {
-        field.options = employeeOpts;
-        return field;
-      }
-      return field;
-    });
-    settemplate({
-      title: LeaveApplicationFormJSON.title,
-      Fields: finalForm,
-    });
-  }, [allEmployees]);
-  useEffect(() => {
-    if (!fetched) {
-      fetchLeaves();
-    }
-  }, [allEmployees, fetched]);
-  useEffect(() => {
-    if (submitted === true) {
-      axiosInstance
-        .post("/leave-application", formValue)
-        .then((res) => {
-          setsubmitted(false);
-          showAlert(
-            true,
-            "Leave Application submitted successfully",
-            "alert-success"
-          );
-          fetchLeaves();
-        })
-        .catch((err) => {
-          console.log(err);
-          showAlert(true, "Unable to submit leave application", "alert-danger");
-        });
-    }
-  }, [submitted, formValue]);
   const handleEdit = (row) => {
     setformMode("edit");
     seteditData(row);
   };
+  const user = tokenService.getUser();
+  console.log("userrrrrr", user);
+
+  const fetchLeaves = () => {
+    axiosInstance
+      .get(`/leave-application/client-approval/${user?.projectId?._id}`)
+      .then((e) => {
+        const leaves = e.data.data;
+        setallLeaves(e.data.data);
+
+        const approved = leaves.filter((e) => e.status === "approved").length;
+        const open = leaves.filter((l) => l.status === "open").length;
+
+        setapprovedLeaves(approved);
+        setplanned(open);
+        setpresent(allEmployees.length - approved);
+        setfetched(true);
+      });
+  };
+  useEffect(() => {
+    fetchLeaves();
+  }, []);
   const columns = [
     {
       dataField: "employee_id",
@@ -259,12 +195,12 @@ const LeavesAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaves</h3>
+            <h3 className="page-title">Leave Approval</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item active">Leave Approval</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto"></div>
@@ -321,4 +257,4 @@ const LeavesAdmin = () => {
   );
 };
 
-export default LeavesAdmin;
+export default ClientApproval;

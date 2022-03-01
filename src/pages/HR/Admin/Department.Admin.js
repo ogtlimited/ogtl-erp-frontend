@@ -10,6 +10,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import Select from "react-select";
 import helper from "../../../services/helper";
 import { create } from "yup/lib/Reference";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const Departments = () => {
   const [template, settemplate] = useState({});
@@ -49,9 +50,9 @@ const Departments = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
-    console.log(formatted)
+    console.log(formatted);
     setmode("edit");
-    // seteditData(formatted)
+    seteditData(formatted);
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -81,6 +82,7 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
+      console.log(formValue);
       if (mode == "add") {
         axiosInstance
           .post("/department", formValue)
@@ -91,6 +93,7 @@ const Departments = () => {
           })
           .catch((err) => {
             // setformValue(null);
+            setsubmitted(false);
             console.log(err);
           });
       } else {
@@ -108,6 +111,7 @@ const Departments = () => {
           })
           .catch((err) => {
             setformValue(null);
+            setsubmitted(false);
             console.log(err);
           });
       }
@@ -118,6 +122,22 @@ const Departments = () => {
   //   console.log(clickedRow)
   //   seteditData(clickedRow);
   // }, [editData ]);
+
+  const deleteDepartment = (row) => {
+    axiosInstance
+      .delete(`/department/${row._id}`)
+      .then((res) => {
+        fetchDept();
+        setallDepartments((prevData) =>
+          prevData.filter((pdata) => pdata._id !== row._id)
+        );
+        showAlert(true, res.data.message, "alert alert-success");
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, "alert alert-danger");
+      });
+  };
   const columns = [
     {
       dataField: "",
@@ -157,13 +177,14 @@ const Departments = () => {
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
             )}
+
             {user?.role?.hr?.delete && (
               <a
                 className="dropdown-item"
                 onClick={() => setdeleteData(row)}
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#exampleModal"
               >
                 <i className="fa fa-trash m-r-5"></i> Delete
               </a>
@@ -226,6 +247,11 @@ const Departments = () => {
         setformValue={setformValue}
         template={template}
         setsubmitted={setsubmitted}
+      />
+      <ConfirmModal
+        title="Department"
+        selectedRow={deleteData}
+        deleteFunction={deleteDepartment}
       />
     </>
   );
