@@ -27,7 +27,11 @@ const CoachingAdmin = () => {
   const [coachingList, setcoachingList] = useState([]);
   const { allEmployees, showAlert } = useAppContext();
   const [editData, seteditData] = useState({});
+  const [isEdit, setisEdit] = useState(false);
   const [coachingFormEdit, setcoachingFormEdit] = useState("");
+  const create = () => {
+    setcoachingFormEdit("add");
+  };
   useEffect(() => {
     if (formSubmitted == true) {
       fetchCoachingForms();
@@ -340,6 +344,7 @@ const CoachingAdmin = () => {
               className="btn add-btn"
               data-toggle="modal"
               data-target="#coachingForm"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Coaching Form
             </a>

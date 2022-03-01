@@ -130,7 +130,10 @@ const CoachingEmployee = () => {
                           <td>
                             <strong>Title / Position</strong>{" "}
                             <span className="float-right">
-                              {coachingForm?.employee_id?.designation}
+                              {
+                                coachingForm?.employee_id?.designation
+                                  ?.designation
+                              }
                             </span>
                           </td>
                           <td>
