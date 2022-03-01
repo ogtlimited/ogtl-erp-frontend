@@ -6,6 +6,14 @@ import { coachingFormJSON } from "../../../components/FormJSON/CoachingForm/coac
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import CoachingModal from "../../../components/Modal/coachingModal";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+
+const statusOptions = [
+  {
+    title: "submitted",
+    color: "text-primary",
+  },
+];
 
 const CoachingAdmin = () => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -19,6 +27,11 @@ const CoachingAdmin = () => {
   const [coachingList, setcoachingList] = useState([]);
   const { allEmployees, showAlert } = useAppContext();
   const [editData, seteditData] = useState({});
+  const [isEdit, setisEdit] = useState(false);
+  const [coachingFormEdit, setcoachingFormEdit] = useState("");
+  const create = () => {
+    setcoachingFormEdit("add");
+  };
   useEffect(() => {
     if (formSubmitted == true) {
       fetchCoachingForms();
@@ -97,23 +110,32 @@ const CoachingAdmin = () => {
       const update = {
         ...statusRow,
         status: status,
-        employee_id: statusRow.employee_id._id,
       };
 
       delete update.__v;
+      delete update._id;
+      delete update.employee_id;
       axiosInstance
-        .put("/leave-application/" + statusRow._id, update)
-        .then((e) => {
+        .put("/api/coaching-form/" + statusRow._id, update)
+        .then((res) => {
           // fetchLeaves();
+          fetchCoachingForms();
+          showAlert(true, res.data.message, "alert alert-success");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, "alert alert-danger");
         });
     }
-  }, [status]);
+    return () => {
+      setStatus("");
+      setstatusRow(null);
+      showAlert(false);
+    };
+  }, [status, statusRow]);
   const editAction = (row) => {
-    // setcoachingForm(row)
-    // setcoachingFormEdit('edit')
+    setcoachingForm(row);
+    setcoachingFormEdit("edit");
   };
   const duplicate = (row) => {
     // setcoachingForm(row)
@@ -161,7 +183,14 @@ const CoachingAdmin = () => {
       headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-          {value == "submitted" ? (
+          <GeneralApproverBtn
+            options={statusOptions}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
+          {/* {value == "submitted" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
@@ -188,7 +217,11 @@ const CoachingAdmin = () => {
                 }}
                 x-placement="bottom-end"
               >
-                <a className="dropdown-item" href="">
+                <a
+                  className="dropdown-item"
+                  href=""
+                  onClick={() => setStatus("submitted")}
+                >
                   <i className="fa fa-dot-circle-o text-primary"></i> Submitted
                 </a>
                 <a className="dropdown-item" href="">
@@ -196,7 +229,7 @@ const CoachingAdmin = () => {
                 </a>
               </div>
             </div>
-          )}
+          )} */}
         </>
       ),
     },
@@ -311,6 +344,7 @@ const CoachingAdmin = () => {
               className="btn add-btn"
               data-toggle="modal"
               data-target="#coachingForm"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Coaching Form
             </a>
@@ -410,6 +444,8 @@ const CoachingAdmin = () => {
         <CoachingModal
           setformSubmitted={setformSubmitted}
           coachingForm={coachingForm}
+          fetchCoachingForms={fetchCoachingForms}
+          coachingFormEdit={coachingFormEdit}
         />
       </div>
     </>
