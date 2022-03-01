@@ -1,21 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
-
+import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import Select from "react-select";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useAppContext } from "../../Context/AppContext";
-import tokenService from "../../services/token.service";
 import axiosInstance from "../../services/api";
-const statusOptions = [
-  { value: "draft", label: "Draft" },
-  { value: "submit", label: "Submit" },
-];
-const baseURL = "http://15.236.1.91";
+// const statusOptions = [
+//   { value: "draft", label: "Draft" },
+//   { value: "submit", label: "Submit" },
+// ];
+// const baseURL = "http://15.236.1.91";
 const initForm = {
   employee_id: "",
   incident_date: "",
@@ -28,14 +24,19 @@ const initForm = {
   status: "",
   user_response: "",
 };
-const CoachingModal = ({ coachingForm, setformSubmitted }) => {
+const CoachingModal = ({
+  coachingForm,
+  setformSubmitted,
+  fetchCoachingForms,
+  coachingFormEdit,
+}) => {
   const {
     allEmployees,
-    coachingFormEdit,
+    // coachingFormEdit,
     setcoachingFormSubmitted,
     showAlert,
   } = useAppContext();
-  const user = tokenService.getUser();
+  // const user = tokenService.getUser();
 
   const [isEdit, setisEdit] = useState(false);
   const [initialValues, setinitialValues] = useState(initForm);
@@ -64,15 +65,20 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
     setinitialValues({
       ...initialValues,
     });
-    if (coachingFormEdit == "edit") {
+    if (coachingFormEdit === "edit") {
       setisEdit(true);
-      setinitialValues(coachingForm);
+      setinitialValues({
+        ...coachingForm,
+        // employee_name: `${coachingForm?.employee_id?.first_name} ${coachingForm?.employee_id?.first_name}`,
+        ogid: coachingForm?.employee_id?.ogid,
+        employee_id: coachingForm?.employee_id?._id,
+      });
       setgoals(coachingForm.goals);
       setreality(coachingForm.reality);
       setopportunities(coachingForm.opportunities);
       setway_forward(coachingForm.way_forward);
       //   set(coachingForm.type);
-    } else if (coachingFormEdit == "duplicate") {
+    } else if (coachingFormEdit === "duplicate") {
       setisEdit(false);
       setinitialValues({
         ...coachingForm,
@@ -80,10 +86,15 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
         employee_id: "",
         coaching_type: "",
       });
-    } else {
+    } else if (coachingFormEdit === "add") {
       setisEdit(false);
+      setgoals("");
+      setreality("");
+      setopportunities("");
+      setway_forward("");
       setinitialValues({
         ...initForm,
+        ogid: "",
       });
     }
     setemployeeOptions(emp);
@@ -129,16 +140,20 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
           reality,
           way_forward,
         };
-
         setTimeout(() => {
           if (isEdit) {
             // alert('edit')
-            const coachingUrl = `/api/coaching-form`;
+            const coachingUrl = `/api/coaching-form/${payload._id}`;
+            delete payload.ogid;
+            delete payload.__v;
+            delete payload.employee_id;
+
             axiosInstance
               .put(coachingUrl, payload)
               .then((res) => {
-                showAlert(true, "coaching form created", "alert alert-success");
-                setcoachingFormSubmitted(true);
+                showAlert(true, "coaching form updated", "alert alert-success");
+                // setcoachingFormSubmitted(true);
+                fetchCoachingForms();
               })
               .catch((err) => {
                 showAlert(
@@ -146,7 +161,6 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                   "Unable to update coaching form",
                   "alert alert-danger"
                 );
-                console.log(err.response?.data);
               });
           } else {
             const coachingUrl = `/api/coaching-form`;
@@ -157,11 +171,12 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
               .post(coachingUrl, payload)
               .then((res) => {
                 showAlert(true, "coaching form created", "alert alert-success");
-                setcoachingFormSubmitted(true);
+                // setcoachingFormSubmitted(true);
                 setformSubmitted(true);
+                fetchCoachingForms();
               })
               .catch((err) => {
-                console.log(err.response?.data);
+                console.log(err);
                 showAlert(
                   true,
                   "Unable to create coaching form",
@@ -200,7 +215,6 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
           setFieldTouched,
           isValid,
         } = props;
-
         return (
           <div
             className="modal custom-modal fade"
@@ -241,7 +255,7 @@ const CoachingModal = ({ coachingForm, setformSubmitted }) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 name="employee_name"
-                                value={values.employee_name}
+                                value={`${coachingForm.employee_id?.first_name} ${coachingForm.employee_id.last_name}`}
                                 readOnly
                                 className="form-control "
                                 type="text"
