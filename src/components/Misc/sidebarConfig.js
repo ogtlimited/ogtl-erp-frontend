@@ -297,6 +297,11 @@ const sidebarConfig = [
             title: "Branch",
             path: PATH_DASHBOARD.campaign.branch,
           },
+          {
+            canView: "Super",
+            title: "Client Leave Approvals",
+            path: PATH_DASHBOARD.clients.leaveApprovals,
+          },
         ],
       },
       {

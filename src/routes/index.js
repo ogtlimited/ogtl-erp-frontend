@@ -44,9 +44,11 @@ export default function Router() {
     },
     {
       path: "recruitment",
-      element: <NoAuthContextProvider>
+      element: (
+        <NoAuthContextProvider>
           <RecruitmentLayout />
-      </NoAuthContextProvider>,
+        </NoAuthContextProvider>
+      ),
       children: [
         { path: "", element: <Navigate to="/recruitment/joblist" replace /> },
         {
@@ -77,12 +79,39 @@ export default function Router() {
         {
           children: [
             { path: "", element: <Navigate to="/dashboard/main" replace /> },
-            { path: "main", element: <GuardedRoute title="" dept="Super"><AdminDashboard /> </GuardedRoute>},
-            { path: "hr-dashboard", element: <GuardedRoute title="" dept="Super"><HRDashboard /> </GuardedRoute>  },
-            { path: "account-dashboard", element: <GuardedRoute title="" dept="Accounting">
-                 <AccountingDashboard /> </GuardedRoute> },
+            {
+              path: "main",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <AdminDashboard />{" "}
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "hr-dashboard",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <HRDashboard />{" "}
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "account-dashboard",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <AccountingDashboard />{" "}
+                </GuardedRoute>
+              ),
+            },
             { path: "employee-dashboard", element: <EmployeeUser /> },
-            { path: "job-dashboard", element: <GuardedRoute title="" dept="HR"><JobDashboard /></GuardedRoute> },
+            {
+              path: "job-dashboard",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <JobDashboard />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -96,7 +125,14 @@ export default function Router() {
             { path: "email/:id", element: <ViewEmail /> },
             { path: "email-signature", element: <SignatureGenerator /> },
             { path: "file-manager", element: <FileManager /> },
-            { path: "notifications", element: <GuardedRoute title="" dept="HR"><Notifications /></GuardedRoute> },
+            {
+              path: "notifications",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Notifications />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -104,12 +140,35 @@ export default function Router() {
           children: [
             {
               path: "",
-              element: <Navigate to="/dashboard/operations/campaigns" replace />,
+              element: (
+                <Navigate to="/dashboard/operations/campaigns" replace />
+              ),
             },
-            { path: "campaigns", element: <GuardedRoute title="" dept="Super"><AllCampaigns /></GuardedRoute> },
-            { path: "campaign-info/:id", element: <GuardedRoute title="" dept="Super"><CampaignInfo /></GuardedRoute> },
+            {
+              path: "campaigns",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <AllCampaigns />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "campaign-info/:id",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <CampaignInfo />
+                </GuardedRoute>
+              ),
+            },
             { path: "leads", element: <Leads /> },
-            { path: "branch", element: <GuardedRoute title="" dept="Super"><Branch /></GuardedRoute> }
+            {
+              path: "branch",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <Branch />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -119,15 +178,64 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/hr/all-employees" replace />,
             },
-            { path: "all-employees", element: <GuardedRoute title=""  dept="HR"><AllEmployeesAdmin /></GuardedRoute> },
-            { path: "leaves-admin", element: <GuardedRoute title="" dept="HR"><LeavesAdmin /></GuardedRoute> },
+            {
+              path: "all-employees",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllEmployeesAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "leaves-admin",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeavesAdmin />
+                </GuardedRoute>
+              ),
+            },
             { path: "leaves", element: <LeavesUser /> },
-            { path: "attendance-admin", element: <GuardedRoute title="" dept="HR"><AttendanceAdmin /></GuardedRoute> },
+            {
+              path: "attendance-admin",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AttendanceAdmin />
+                </GuardedRoute>
+              ),
+            },
             { path: "attendance", element: <EmployeeAttendance /> },
-            { path: "departments", element: <GuardedRoute title="" dept="HR"><Departments /></GuardedRoute> },
-            { path: "designations", element: <GuardedRoute title="" dept="HR"><Designations /></GuardedRoute> },
-            { path: "shifts", element: <GuardedRoute title="" dept="HR"><ShiftAdmin /></GuardedRoute> },
-            { path: "shift-assignment", element: <GuardedRoute title="" dept="HR"><ShiftAssignment /></GuardedRoute> },
+            {
+              path: "departments",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Departments />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "designations",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Designations />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "shifts",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <ShiftAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "shift-assignment",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <ShiftAssignment />
+                </GuardedRoute>
+              ),
+            },
             { path: "shift-request", element: <ShiftRequest /> },
           ],
         },
@@ -138,9 +246,30 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/payroll/salaries" replace />,
             },
-            { path: "salaries", element: <GuardedRoute title="" dept="HR"><EmployeeSalary /></GuardedRoute> },
-            { path: "payroll-items", element: <GuardedRoute title="" dept="HR"><PayrollItems /></GuardedRoute> },
-            { path: "payslip/:id", element: <GuardedRoute title="" dept="HR"><PaySlip /></GuardedRoute> },
+            {
+              path: "salaries",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <EmployeeSalary />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payroll-items",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PayrollItems />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payslip/:id",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PaySlip />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -152,9 +281,30 @@ export default function Router() {
                 <Navigate to="/dashboard/reports/employee-reports" replace />
               ),
             },
-            { path: "employee-reports", element: <GuardedRoute title="" dept="HR"><EmployeeReport /></GuardedRoute> },
-            { path: "attendance-reports", element: <GuardedRoute title="" dept="HR"><AttendanceReport /></GuardedRoute> },
-            { path: "payslip-reports", element: <GuardedRoute title="" dept="HR"><PayrollReports /></GuardedRoute> },
+            {
+              path: "employee-reports",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <EmployeeReport />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "attendance-reports",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AttendanceReport />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payslip-reports",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PayrollReports />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -166,12 +316,54 @@ export default function Router() {
                 <Navigate to="/dashboard/recruitment/job-opening" replace />
               ),
             },
-            { path: "job-opening", element: <GuardedRoute title="" dept="HR"><JobOpening /></GuardedRoute> },
-            { path: "job-applicants", element: <GuardedRoute title="Job Applicants" dept="HR"><JobApplicants /></GuardedRoute> },
-            { path: "interviewees", element: <GuardedRoute title="Interviewees" dept="Facility"><Interviewees /></GuardedRoute> },
-            { path: "aptitude-test", element: <GuardedRoute title="" dept="HR"><AptitudeTest /></GuardedRoute> },
-            { path: "job-offer", element: <GuardedRoute title="" dept="HR"><JobOffer /></GuardedRoute> },
-            { path: "shadowing", element: <GuardedRoute title="" dept="HR"><Shadowing /></GuardedRoute> },
+            {
+              path: "job-opening",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <JobOpening />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "job-applicants",
+              element: (
+                <GuardedRoute title="Job Applicants" dept="HR">
+                  <JobApplicants />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "interviewees",
+              element: (
+                <GuardedRoute title="Interviewees" dept="Facility">
+                  <Interviewees />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "aptitude-test",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AptitudeTest />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "job-offer",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <JobOffer />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "shadowing",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Shadowing />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -183,8 +375,22 @@ export default function Router() {
                 <Navigate to="/dashboard/performance/warning-letter" replace />
               ),
             },
-            { path: "warning-letter", element: <GuardedRoute title="" dept="HR"><WarningLetter /></GuardedRoute> },
-            { path: "score-cards", element: <GuardedRoute title="" dept="HR"><ScoreCards /></GuardedRoute> },
+            {
+              path: "warning-letter",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <WarningLetter />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "score-cards",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <ScoreCards />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -196,11 +402,46 @@ export default function Router() {
                 <Navigate to="/dashboard/accounts/chart-of-account" replace />
               ),
             },
-            { path: "chart-of-account", element: <GuardedRoute title="" dept="Accounting"><ChartOfAccounts /></GuardedRoute> },
-            { path: "budgets", element: <GuardedRoute title="" dept="Accounting"><Budget /></GuardedRoute> },
-            { path: "journals", element: <GuardedRoute title="" dept="Accounting"><Journals /></GuardedRoute> },
-            { path: "expense-heads", element: <GuardedRoute title="" dept="Accounting"><ExpenseHeads /></GuardedRoute> },
-            { path: "ledger", element: <GuardedRoute title="" dept="Accounting"><GeneralLedger /></GuardedRoute> },
+            {
+              path: "chart-of-account",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <ChartOfAccounts />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "budgets",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <Budget />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "journals",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <Journals />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "expense-heads",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <ExpenseHeads />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "ledger",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <GeneralLedger />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -215,8 +456,22 @@ export default function Router() {
                 />
               ),
             },
-            { path: "payroll-reports", element: <GuardedRoute title="" dept="Accounting"><PayrollReports /></GuardedRoute> },
-            { path: "balance-sheet", element: <GuardedRoute title="" dept="Accounting"><BalanceSheet /></GuardedRoute> },
+            {
+              path: "payroll-reports",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <PayrollReports />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "balance-sheet",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <BalanceSheet />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -226,9 +481,38 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/clients/all" replace />,
             },
-            { path: "all", element: <GuardedRoute title="" dept="Super"><Clients /></GuardedRoute> },
-            { path: "invoices", element: <GuardedRoute title="" dept="Super"><Invoices /></GuardedRoute> },
-            { path: "payments", element: <GuardedRoute title="" dept="Super"><ClientPayments /></GuardedRoute> },
+            {
+              path: "all",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <Clients />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "invoices",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <Invoices />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payments",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <ClientPayments />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "leave-approval",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <ClientApprovals />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -238,9 +522,30 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/vendors/all" replace />,
             },
-            { path: "all", element: <GuardedRoute title="" dept="Accounting"><Vendors /></GuardedRoute> },
-            { path: "bills", element: <GuardedRoute title="" dept="Accounting"><VendorBills /></GuardedRoute> },
-            { path: "payments", element: <GuardedRoute title="" dept="Accounting"><VendorPayments /></GuardedRoute> },
+            {
+              path: "all",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <Vendors />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "bills",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <VendorBills />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payments",
+              element: (
+                <GuardedRoute title="" dept="Accounting">
+                  <VendorPayments />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -250,14 +555,31 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/assets/all" replace />,
             },
-            { path: "all", element: <GuardedRoute title="" dept="HR"><Asset /></GuardedRoute> },
-            { path: "assignment", element: <GuardedRoute title="" dept="HR"><AssetAssignmentForm /></GuardedRoute> },
+            {
+              path: "all",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Asset />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "assignment",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AssetAssignmentForm />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
           path: "user",
           children: [
-            { path: '', element: <Navigate to="/dashboard/user/profile/:id" replace /> },
+            {
+              path: "",
+              element: <Navigate to="/dashboard/user/profile/:id" replace />,
+            },
             { path: "profile/:id", element: <Profile /> },
           ],
         },
@@ -268,14 +590,29 @@ export default function Router() {
               path: "",
               element: <Navigate to="/dashboard/maintenance/reports" replace />,
             },
-            { path: "reports", element: <GuardedRoute title="" dept="FACILITY"><MaintenanceReport /></GuardedRoute> },
+            {
+              path: "reports",
+              element: (
+                <GuardedRoute title="" dept="FACILITY">
+                  <MaintenanceReport />
+                </GuardedRoute>
+              ),
+            },
             {
               path: "maintenance-and-repair",
-              element: <GuardedRoute title="" dept="FACILITY"><MaintenanceAndRepairs /></GuardedRoute>,
+              element: (
+                <GuardedRoute title="" dept="FACILITY">
+                  <MaintenanceAndRepairs />
+                </GuardedRoute>
+              ),
             },
             {
               path: "shadowing",
-              element: <GuardedRoute title="" dept="FACILITY"><Shadowing /></GuardedRoute>,
+              element: (
+                <GuardedRoute title="" dept="FACILITY">
+                  <Shadowing />
+                </GuardedRoute>
+              ),
             },
           ],
         },
@@ -288,24 +625,80 @@ export default function Router() {
                 <Navigate to="/dashboard/settings/roles-permissionss" replace />
               ),
             },
-            { path: "roles-permissions", element: <GuardedRoute title="" dept="Super"><RolePermission /></GuardedRoute> },
-            { path: "roles-assignment", element: <GuardedRoute title="" dept="Super"><RoleAssignment /></GuardedRoute> },
+            {
+              path: "roles-permissions",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <RolePermission />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "roles-assignment",
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <RoleAssignment />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         { path: "employee-coaching", element: <CoachingEmployee /> },
-        { path: "product-items", element: <GuardedRoute title="" dept="Procurements"><ProductItems /></GuardedRoute> },
-        { path: "coaching", element: <GuardedRoute title="" dept="HR"><CoachingAdmin /></GuardedRoute> },
-        { path: "purchase-order", element: <GuardedRoute title="" dept="Procurements"><PurchaseOrder /></GuardedRoute> },
-        { path: "promotion", element: <GuardedRoute title="" dept="HR"><Promotion /></GuardedRoute> },
-        { path: "resignation", element: <GuardedRoute title="" dept="HR"><Resignation /></GuardedRoute> },
-        { path: "termination", element: <GuardedRoute title="" dept="HR"><Termination /></GuardedRoute> },
+        {
+          path: "product-items",
+          element: (
+            <GuardedRoute title="" dept="Procurements">
+              <ProductItems />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: "coaching",
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <CoachingAdmin />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: "purchase-order",
+          element: (
+            <GuardedRoute title="" dept="Procurements">
+              <PurchaseOrder />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: "promotion",
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <Promotion />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: "resignation",
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <Resignation />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: "termination",
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <Termination />
+            </GuardedRoute>
+          ),
+        },
         //   { path: 'finance', element: <Finance /> },
       ],
     },
 
-      { path: '*', element: <Navigate to="/404" replace /> },
-      { path: '/404', element: <NotFound /> },
-      { path: '/403', element: <Unauthorized /> }
+    { path: "*", element: <Navigate to="/404" replace /> },
+    { path: "/404", element: <NotFound /> },
+    { path: "/403", element: <Unauthorized /> },
   ]);
 }
 const AllCampaigns = Loadable(
@@ -431,8 +824,12 @@ const PurchaseOrder = Loadable(
 // const AccountingDashboard = Loadable(
 //   lazy(() => import("../pages/Accounting/AccountingDashboard"))
 // );
-const AccountingDashboard = Loadable(lazy(() => import("../pages/Accounting/AccountingDashboard.js")));
-const JobDashboard = Loadable(lazy(() => import("../pages/Dashboard/JobsDashboard")));
+const AccountingDashboard = Loadable(
+  lazy(() => import("../pages/Accounting/AccountingDashboard.js"))
+);
+const JobDashboard = Loadable(
+  lazy(() => import("../pages/Dashboard/JobsDashboard"))
+);
 const Clients = Loadable(lazy(() => import("../pages/Clients/Client")));
 const Vendors = Loadable(lazy(() => import("../pages/Vendors/Vendors")));
 const Invoices = Loadable(lazy(() => import("../pages/Accounting/Invoices")));
@@ -444,6 +841,9 @@ const VendorPayments = Loadable(
 );
 const ClientPayments = Loadable(
   lazy(() => import("../pages/Clients/ClientPayment"))
+);
+const ClientApprovals = Loadable(
+  lazy(() => import("../pages/Clients/ClientApproval"))
 );
 const ChartOfAccounts = Loadable(
   lazy(() => import("../pages/Accounting/chartOfAccounts"))
@@ -493,4 +893,6 @@ const RolePermission = Loadable(
 const RoleAssignment = Loadable(
   lazy(() => import("../pages/settings/rolesAssignment"))
 );
-const Shadowing = Loadable(lazy(() => import("../pages/HR/Admin/Shadowing.Admin")))
+const Shadowing = Loadable(
+  lazy(() => import("../pages/HR/Admin/Shadowing.Admin"))
+);
