@@ -26,26 +26,17 @@ const Login = () => {
     instance
       .loginPopup(loginRequest)
       .then((e) => {
-        instance
-          .acquireTokenSilent({
-            ...loginRequest,
-            account: accounts[0],
-          })
-          .then((response) => {
-            callMsGraph(response.accessToken).then((response) => {
-              setGraphData(response);
-            });
-          });
+        
         console.log(e);
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
-        localStorage.setItem(
-          "microsoftAccessToken",
-          JSON.stringify(e.accessToken)
-        );
+        // localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
+        // localStorage.setItem(
+        //   "microsoftAccessToken",
+        //   JSON.stringify(e.accessToken)
+        // );
 
         axios
           .post(config.ApiUrl + "/api/login", obj)
@@ -60,7 +51,6 @@ const Login = () => {
           })
           .catch((err) => {
             console.log(err);
-            console.log(JSON.stringify(err));
             seterrorMsg(
               "Unable to login either username or password is incorrect"
             );

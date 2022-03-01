@@ -171,5 +171,8 @@ class HelperService {
   handleMoneyFormat(number){
    return new Intl.NumberFormat('en-NG', { maximumSignificantDigits: 3 }).format(number)
   }
+  capitalize(str){
+   return str.charAt(0).toUpperCase() + str.slice(1)
+  }
 }
 export default new HelperService();
