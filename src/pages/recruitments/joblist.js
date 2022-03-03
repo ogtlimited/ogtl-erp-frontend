@@ -89,7 +89,7 @@ const Joblist = () => {
                 <div className="job-list-footer">
                   <ul>
                     <li>
-                      <i className="fa fa-map-signs"></i> {job?.location.branch}
+                      <i className="fa fa-map-signs"></i> {job?.location?.branch}
                     </li>
                     <li>
                       <i className="fa fa-money"></i> ₦{job?.salary}
