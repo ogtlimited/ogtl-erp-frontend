@@ -583,5 +583,19 @@ a.nav-link {
 .job-field::first-letter{
   text-transform: uppercase
 }
+.sliding-text{
+  transition: all 1s ease;
+  overflow: hidden;
 
+}
+.sliding-text div{
+    overflow: hidden;
+    display: flex;
+    animation: scrollText 33s infinite linear;
+}
+
+@keyframes scrollText {
+  from   { transform: translateX(100%); }
+  to { transform: translateX(0%); }
+}
 /* multi-step form */
