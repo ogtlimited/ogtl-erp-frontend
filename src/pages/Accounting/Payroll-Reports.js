@@ -1,27 +1,72 @@
+import { update } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import ViewModal from "../../components/Modal/ViewModal";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import { useAppContext } from "../../Context/AppContext";
+import AlertSvg from "../../layouts/AlertSvg";
 import axiosInstance from "../../services/api";
 import { formatter } from "../../services/numberFormatter";
 
 const PayrollReports = () => {
+  const { combineRequest, showAlert } = useAppContext();
   const ref = useRef(null);
   const [val, setval] = useState("");
   const [counter, setcounter] = useState(0);
   const [data, setData] = useState([]);
+  const [card, setcard] = useState([
+    {
+      title: "Total salary",
+      amount: "₦" + 0,
+      icon: "las la-money-bill-wave-alt",
+      id: 1,
+    },
+    {
+      title: "No. Campaign",
+      amount: 0,
+      icon: "las la-project-diagram",
+      id: 3,
+    },
+    {
+      title: "No. Employees",
+      amount: 0,
+      icon: "las la-project-diagram",
+      id: 3,
+    },
+  ])
   const click = () => {
     setval(ref.current.value);
     ref.current.value = val + ref.current.value;
   };
-  useEffect(() => {
-    setcounter(counter + 1);
-  });
+
   const fetchEmployeeSalary = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        setData(res.data.data);
+        const totalSalary = formatter.format(res.data.data[1].total[0].salaries)
+        setData(res.data.data[0].salarySlips);
+        combineRequest().then((res) => {
+          const { departments, projects, employees  } = res.data.createEmployeeFormSelection;
+          let total = [totalSalary, projects.length, employees.length]
+          let updated = card.map((e, i) => {
+            return {
+              ...e,
+              amount: total[i]
+            }
+          })
+          setcard(updated)
+        });
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  };
+  const generatePayroll = () => {
+    axiosInstance
+      .get("/api/salary-slip")
+      .then((res) => {
+        setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
         console.log(error?.response);
@@ -45,15 +90,6 @@ const PayrollReports = () => {
       ),
     },
     {
-      dataField: "ogid",
-      text: "Employee ID",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => (
-        <p>{row?.employeeId?.ogid || "Not Available"}</p>
-      ),
-    },
-    {
       dataField: "company_email",
       text: "Email",
       sort: true,
@@ -63,12 +99,15 @@ const PayrollReports = () => {
       ),
     },
 
-    // // {
-    // //   dataField: "designation",
-    // //   text: "Designation",
-    // //   sort: true,
-    // //   headerStyle: { minWidth: "150px" },
-    // // },
+    {
+      dataField: "",
+      text: "Designation",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => (
+        <p>{row?.employeeId?.designation.designation || "Not Available"}</p>
+      ),
+    },
     {
       dataField: "joining_date",
       text: "Joining Date",
@@ -95,7 +134,7 @@ const PayrollReports = () => {
           className="btn btn-sm btn-primary"
           // to={`/admin/payslip/${row?._id}`}
           to={{
-            pathname: `/admin/payslip/${row?._id}`,
+            pathname: `/dashboard/payroll/payslip/${row?.employeeId._id}`,
             state: { employee: row?.employeeId },
           }}
         >
@@ -109,25 +148,45 @@ const PayrollReports = () => {
       title: "Total salary",
       amount: "₦" + "18,000,000",
       icon: "las la-money-bill-wave-alt",
+      id: 1,
     },
     {
       title: "No. Departments",
       amount: 0,
       icon: "las la-object-group",
+      id: 2,
     },
     {
       title: "No. Campaign",
       amount: 0,
       icon: "las la-project-diagram",
+      id: 3,
     },
     {
-      title: "Invoices",
-      amount: "23,000",
-      icon: "las la-file-invoice-dollar",
+      title: "No. Employees",
+      amount: 0,
+      icon: "las la-project-diagram",
+      id: 3,
     },
   ];
   return (
     <>
+      <div class="alert alert-primary sliding-text" role="alert">
+        <div>
+        <AlertSvg />
+          <svg
+            className="bi flex-shrink-0 me-2"
+            width="24"
+            height="24"
+            role="img"
+          >
+            <use xlinkHref="#info-fill" />
+          </svg>
+          <span className="pl-3">Payroll is generated on the 25th of every month</span>
+          <span className="pl-3"> | &nbsp; You can click the generate button to generate payroll for the current month</span>
+
+        </div>
+      </div>
       <div className="page-header">
         <div className="row">
           <div className="col">
@@ -137,11 +196,16 @@ const PayrollReports = () => {
               <li className="breadcrumb-item active">Payroll Reports</li>
             </ul>
           </div>
+          <div class="col-auto float-end ms-auto">
+            <a  href="/#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#generalModal"><i class="fa fa-plus"></i> Generate Payroll</a></div>
         </div>
       </div>
       <div className="row">
-        {cards.map((card) => (
-          <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        {card.map((card) => (
+          <div key={card.id} className="col-md-6 col-sm-6 col-lg-6 col-xl-4">
             <div className="card dash-widget">
               <div className="card-body">
                 <span className="dash-widget-icon">
@@ -161,6 +225,8 @@ const PayrollReports = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
+
+      <ViewModal title="Payroll Generated Successfully" content={<>S</>} />
     </>
   );
 };
