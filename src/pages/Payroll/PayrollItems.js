@@ -137,6 +137,7 @@ const PayrollItems = () => {
           submitted={submitted}
           formValue={formValue}
           loadSelect={loadSelect}
+          setsubmitted={setsubmitted}
         />
       </div>
 
