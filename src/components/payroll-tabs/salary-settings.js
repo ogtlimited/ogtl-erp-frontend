@@ -5,7 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 
-const SalarySettings = ({ setformType, formValue, submitted }) => {
+const SalarySettings = ({ setformType, formValue, submitted, setsubmitted }) => {
   const [data, setData] = useState([]);
   const { showAlert, user } = useAppContext();
 
@@ -14,9 +14,9 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
   };
   const fetchSalaryAssignments = () => {
     axiosInstance
-      .get(`/api/salary-setting`)
+      .get(`/api/salary-settings`)
       .then((res) => {
-        setData(res.data.data);
+        setData(res.data.data[0]);
       })
       .catch((error) => {
         console.log(error?.response);
@@ -29,15 +29,18 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
   useEffect(() => {
     if (submitted === true) {
       let newValue = {
-        title: formValue.title,
-        percentage: parseInt(formValue.percentage),
-        type: formValue.type,
-        startRange: parseInt(formValue.startRange),
-        endRange: parseInt(formValue.endRange),
+        basic: formValue.basic/100,
+        medical: formValue.medical/100,
+        housing: formValue.housing/100,
+        transport: formValue.transport/100,
+        monthlyEmployeePension: formValue.monthlyEmployeePension/100,
+        CRA: formValue.CRA/100,
+        CRABonusAmount: formValue.CRABonusAmount,
+        active: true
       };
 
       axiosInstance
-        .post("/api/salary-setting", newValue)
+        .post("/api/salary-settings", newValue)
         .then((res) => {
           fetchSalaryAssignments();
           showAlert(true, "Salary settings created.", "alert alert-success");
@@ -49,23 +52,23 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
     }
   }, [submitted, formValue]);
   const handleSubmit = (e, field) => {
-    // setprogress(65)
+    setsubmitted(true);
 
   };
 
   return (
     <>
       <div className="tab-pane" id="tab_settings">
-       
         <Formik
+        enableReinitialize
       initialValues={{
-        basic:"",
-        medical: "",
-        housing: "",
-        transport: "",
-        monthlyEmployeePension: "",
-        CRA:"",
-        CRABonusAmount:"",
+        basic: data.basic * 100,
+        medical: data.medical * 100,
+        housing: data.housing * 100,
+        transport: data.transport * 100,
+        monthlyEmployeePension: data.monthlyEmployeePension * 100,
+        CRA: data.CRA * 100,
+        CRABonusAmount: data.CRABonusAmount,
         active: true
       }}
       validationSchema={Yup.object().shape({
@@ -84,102 +87,160 @@ const SalarySettings = ({ setformType, formValue, submitted }) => {
         console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({ errors, status, touched, setFieldValue }) => (
-        <div id="tab_settings" >
-       
-                
-                  <Form>
-                    <div className="form-group row">
-                      <div className="col-md-6">
-                        <label htmlFor="basic">Basic</label>
-                        <Field
-                          name="basic"
-                          type="number"
-                          className={
-                            "form-control" +
-                            (errors.basic && touched.basic
-                              ? " is-invalid"
-                              : "")
-                          }
-                        />
-                        <ErrorMessage
-                          name="basic"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <label htmlFor="medical">Medical</label>
-                        <Field
-                          name="medical"
-                          type="text"
-                          className={
-                            "form-control" +
-                            (errors.medical && touched.medical
-                              ? " is-invalid"
-                              : "")
-                          }
-                        />
-                        <ErrorMessage
-                          name="medical"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <div className="col-md-6">
-                        <label>Transport</label>
-                        <Field
-                          name="transport"
-                          type="text"
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <label htmlFor="email_address">Email</label>
-                        <Field
-                          name="email_address"
-                          type="text"
-                          className={
-                            "form-control" +
-                            (errors.email_address && touched.email_address
-                              ? " is-invalid"
-                              : "")
-                          }
-                        />
-                        <ErrorMessage
-                          name="email_address"
-                          component="div"
-                          className="invalid-feedback"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label>Cover Letter</label>
-                      <Field
-                        component="textarea"
-                        rows="4"
-                        name="cover_letter"
-                        className="form-control"
-                      ></Field>
-                    </div>
-                    
-                    <div className="submit-section">
-                      <button
-                        type="submit"
-                        className="btn btn-primary submit-btn"
-                      >
-                        {/* Submit */}
-                        {submitted ? (
-                          <div className="spinner-grow" role="status"></div>
-                        ) : (
-                          "Submit"
-                        )}
-                      </button>
-                    </div>
-                  </Form>
+        <div id="tab_settings" >  
+          <Form>
+            <div className="form-group row">
+              <div className="col-md-6">
+                <label htmlFor="basic">Basic</label>
+                <Field
+                  name="basic"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.basic && touched.basic
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="basic"
+                  component="div"
+                  className="invalid-feedback"
+                />
               </div>
+              <div className="col-md-6">
+                <label htmlFor="medical">Medical</label>
+                <Field
+                  name="medical"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.medical && touched.medical
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="medical"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <div className="col-md-6">
+                <label>Housing</label>
+                <Field
+                  name="housing"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.housing && touched.housing
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="housing"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Transport</label>
+                <Field
+                  name="transport"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.transport && touched.transport
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="transport"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+            </div>
+
+            <div className="form-group row">
+              <div className="col-md-6">
+                <label>Monthly Employee Pension</label>
+                <Field
+                  name="monthlyEmployeePension"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.monthlyEmployeePension && touched.monthlyEmployeePension
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="monthlyEmployeePension"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+              <div className="col-md-6">
+                <label>CRA</label>
+                <Field
+                  name="CRA"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.CRA && touched.CRA
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="CRA"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+            </div>
+
+            <div className="form-group row">
+              <div className="col-md-6">
+                <label>CRA Bonus Amount</label>
+                <Field
+                  name="CRABonusAmount"
+                  type="number"
+                  className={
+                    "form-control" +
+                    (errors.CRABonusAmount && touched.CRABonusAmount
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="CRABonusAmount"
+                  component="div"
+                  className="invalid-feedback"
+                />
+              </div>
+            </div>
+            
+            <div className="submit-section">
+              <button
+                type="submit"
+                className="btn btn-primary submit-btn"
+              >
+                {/* Submit */}
+                {submitted ? (
+                  <div className="spinner-grow" role="status"></div>
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
+          </Form>
+        </div>
        
       )}
     />
