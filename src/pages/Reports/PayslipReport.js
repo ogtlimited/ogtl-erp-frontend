@@ -11,8 +11,11 @@ const PayslipReport = () => {
 
   useEffect(() => {
     const fetchPaySlips = () => {
+      const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+        const endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
+      const query = `?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
       axiosInstance
-        .get("/api/salary-slip")
+        .get("/api/salary-slip"+ query)
         .then((res) => {
           setData(res.data.data);
         })
