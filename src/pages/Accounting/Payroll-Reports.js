@@ -44,7 +44,6 @@ const PayrollReports = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        console.log(res.data.data[1].total[0].salaries);
         const totalSalary = formatter.format(res.data.data[1].total[0].salaries)
         setData(res.data.data[0].salarySlips);
         combineRequest().then((res) => {
@@ -57,7 +56,6 @@ const PayrollReports = () => {
             }
           })
           setcard(updated)
-          console.log(updated)
         });
       })
       .catch((error) => {
@@ -68,7 +66,6 @@ const PayrollReports = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        console.log(res.data.data[1]);
         setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
