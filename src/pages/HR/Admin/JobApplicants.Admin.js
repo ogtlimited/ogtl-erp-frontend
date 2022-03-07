@@ -39,14 +39,26 @@ const JobApplicants = () => {
   const [interview_status, setInterviewStatus] = useState("");
   const [process_stage, setprocessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
+  const [viewRow, setViewRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState("schedule-interview");
   const fetchJobApplicants = () => {
     axiosInstance
       .get("/api/jobApplicant")
       .then((res) => {
-        setData(res.data.data);
-        setunfiltered(res?.data?.data);
+        let resData = res?.data?.data
+        let formatted = resData.map(e => ({...e, full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name}))
+        console.log(user)
+        if(user?.isRepSiever){
+          const userApplications = formatted.filter(apl => apl.rep_sieving_call?._id === user._id)
+          console.log(userApplications)
+          setData(userApplications);
+          setunfiltered(userApplications);
+        }else{
+          setData(formatted);
+          setunfiltered(formatted);
+
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -115,7 +127,7 @@ const JobApplicants = () => {
 
   const columns = [
     {
-      dataField: "",
+      dataField: "full_name",
       text: "Job Applicant",
       sort: true,
       formatter: (value, row) => (
@@ -225,7 +237,7 @@ const JobApplicants = () => {
                 data-target="#generalModal"
                 onClick={() => {
                   setmodalType("view-details");
-                  setSelectedRow(helper.handleEdit(row));
+                  setViewRow(row);
                 }}
               >
                 <i className="fa fa-eye m-r-5"></i> View
@@ -267,7 +279,7 @@ const JobApplicants = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <div className="col-3 mb-2">
+          {/* <div className="col-3 mb-2">
             <Select
               defaultValue={[]}
               onChange={handleClick}
@@ -277,7 +289,7 @@ const JobApplicants = () => {
               style={{ display: "inline-block" }}
               // formatGroupLabel={formatGroupLabel}
             />
-          </div>
+          </div> */}
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
@@ -289,7 +301,7 @@ const JobApplicants = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Applicant Details"
-          content={<JobApplicationContent jobApplication={selectedRow} />}
+          content={<JobApplicationContent jobApplication={viewRow} />}
         />
       ) : (
         <ViewModal
