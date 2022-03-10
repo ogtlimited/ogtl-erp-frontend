@@ -47,18 +47,21 @@ const LeavesAdmin = () => {
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
   const fetchLeaves = () => {
-    axiosInstance.get("/leave-application").then((e) => {
-      const leaves = e.data.data;
-      setallLeaves(e.data.data);
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
+    axiosInstance
+      .get("/leave-application?status=approved%20by%20supervisor")
+      .then((e) => {
+        const leaves = e.data.data;
+        setallLeaves(e.data.data);
+        const approved = leaves.filter((e) => e.status === "approved").length;
+        const open = leaves.filter((l) => l.status === "open").length;
 
-      setapprovedLeaves(approved);
-      setplanned(open);
-      setpresent(allEmployees.length - approved);
-      setfetched(true);
-    });
+        setapprovedLeaves(approved);
+        setplanned(open);
+        setpresent(allEmployees.length - approved);
+        setfetched(true);
+      });
   };
+
   useEffect(() => {
     if (status.length) {
       const update = {
@@ -204,7 +207,7 @@ const LeavesAdmin = () => {
           </a>
           <a href="">
             {value?.first_name + " " + value?.last_name}{" "}
-            <span>{value?.designation.designation}</span>
+            <span>{value?.designation?.designation}</span>
           </a>
         </h2>
       ),
