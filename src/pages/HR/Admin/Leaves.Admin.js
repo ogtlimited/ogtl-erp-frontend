@@ -44,7 +44,8 @@ const LeavesAdmin = () => {
   const [approvedLeaves, setapprovedLeaves] = useState(0);
   const [subordinatespresent, setSubordinatesPresent] = useState(0);
   const [subordinatesplanned, setSubordinatesPlanned] = useState(0);
-  const [approvedSubordinatesLeaves, setapprovedSubordinatesLeaves] = useState(0);
+  const [approvedSubordinatesLeaves, setapprovedSubordinatesLeaves] =
+    useState(0);
   const [toggleModal, settoggleModal] = useState(false);
   const [status, setStatus] = useState("");
   const [editData, seteditData] = useState({});
@@ -55,29 +56,34 @@ const LeavesAdmin = () => {
   const user = tokenService.getUser();
 
   const fetchLeaves = () => {
-    axiosInstance.get("/leave-application").then((e) => {
-      const leaves = e.data.data;
-      setallLeaves(e.data.data);
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
+    axiosInstance
+      .get("/leave-application?status=approved%20by%20supervisor")
+      .then((e) => {
+        const leaves = e.data.data;
+        setallLeaves(e.data.data);
+        const approved = leaves.filter((e) => e.status === "approved").length;
+        const open = leaves.filter((l) => l.status === "open").length;
 
-      setapprovedLeaves(approved);
-      setplanned(open);
-      setpresent(allEmployees.length - approved);
-    });
+        setapprovedLeaves(approved);
+        setplanned(open);
+        setpresent(allEmployees.length - approved);
+      });
 
-    axiosInstance.get(`/leave-application?leave_approver=${user?._id}`).then((e) => {
-      const leaves = e.data.data;
-      setallSubordinatesLeaves(e.data.data);
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
+    axiosInstance
+      .get(`/leave-application?leave_approver=${user?._id}`)
+      .then((e) => {
+        const leaves = e.data.data;
+        setallSubordinatesLeaves(e.data.data);
+        const approved = leaves.filter((e) => e.status === "approved").length;
+        const open = leaves.filter((l) => l.status === "open").length;
 
-      setapprovedSubordinatesLeaves(approved);
-      setSubordinatesPlanned(open);
-      setSubordinatesPresent(allEmployees.length - approved);
-      setfetched(true);
-    });
+        setapprovedSubordinatesLeaves(approved);
+        setSubordinatesPlanned(open);
+        setSubordinatesPresent(allEmployees.length - approved);
+        setfetched(true);
+      });
   };
+
   useEffect(() => {
     if (status.length) {
       const update = {
@@ -223,7 +229,7 @@ const LeavesAdmin = () => {
           </a>
           <a href="">
             {value?.first_name + " " + value?.last_name}{" "}
-            <span>{value?.designation.designation}</span>
+            <span>{value?.designation?.designation}</span>
           </a>
         </h2>
       ),
@@ -303,7 +309,11 @@ const LeavesAdmin = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_subordinates-leaves">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_subordinates-leaves"
+                >
                   Leaves by Subordinates
                 </a>
               </li>
