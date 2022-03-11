@@ -18,16 +18,22 @@ const LeavesUser = () => {
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
   const [allLeaves, setallLeaves] = useState([]);
+  const [allSubordinatesLeaves, setallSubordinatesLeaves] = useState([]);
   const [annual, setannual] = useState(0);
   const [casual, setcasual] = useState(0);
   const [medical, setmedical] = useState(0);
+  const [Subordinatesannual, setSubordinatesannual] = useState(0);
+  const [Subordinatescasual, setSubordinatescasual] = useState(0);
+  const [Subordinatesmedical, setSubordinatesmedical] = useState(0);
   const [remaining, setremaining] = useState(0);
   const [formMode, setformMode] = useState("add");
   const [fetched, setfetched] = useState(false);
   const [loadedSelect, setloadedSelect] = useState(false);
   const [loadLeaves, setloadLeaves] = useState(false);
+
+  const currentUser = tokenService.getUser();
   const fetchLeaves = () => {
-    axiosInstance.get("/leave-application").then((e) => {
+    axiosInstance.get(`/leave-application?employee_id=${currentUser?._id}`).then((e) => {
       const leaves = e?.data?.data?.filter(
         (f) => f?.employee_id?._id == userId
       );
@@ -50,6 +56,22 @@ const LeavesUser = () => {
       if (allLeaves.length) {
         setloadLeaves(true);
       }
+    });
+
+    axiosInstance.get(`/leave-application?leave_approver=${currentUser?._id}`).then((e) => {
+      const leaves = e.data.data;
+
+      const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
+      const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
+
+      setSubordinatesannual(annual);
+      setSubordinatescasual(casual);
+      setSubordinatesmedical(medic);
+      setallSubordinatesLeaves(e.data.data);
+      // setapprovedSubordinatesLeaves(approved);
+      // setSubordinatesPlanned(open);
+      // setSubordinatesPresent(allEmployees.length - approved);
+      // setfetched(true);
     });
   };
   useEffect(() => {
@@ -215,7 +237,32 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
+      <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_leaves"
+                >
+                  Your Leaves
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" data-toggle="tab" href="#tab_subordinates-leaves">
+                  Leaves by Subordinates
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div className="row">
+      <div className="row tab-content">
+        <div id="tab_leaves" className="col-12 tab-pane show active">
+        <div className="row">
         <div className="col-md-3">
           <div className="stats-info">
             <h6>Used Leave</h6>
@@ -241,10 +288,38 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12">
           <LeavesTable columns={columns} data={allLeaves} />
         </div>
+        <div id="tab_subordinates-leaves" className="col-12 tab-pane">
+        <div className="row">
+        <div className="col-md-3">
+          <div className="stats-info">
+            <h6>Used Leave</h6>
+            <h4>{usedLeaves}</h4>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="stats-info">
+            <h6>Medical Leave</h6>
+            <h4>{Subordinatesmedical}</h4>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="stats-info">
+            <h6>Other Leave</h6>
+            <h4>{Subordinatescasual}</h4>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="stats-info">
+            <h6>Remaining Leave</h6>
+            <h4>{user?.leaveCount}</h4>
+          </div>
+        </div>
+      </div>
+          <LeavesTable columns={columns} data={allSubordinatesLeaves} />
+        </div>
+      </div>
       </div>
       {loadedSelect && (
         <FormModal2
