@@ -68,20 +68,6 @@ const LeavesAdmin = () => {
         setplanned(open);
         setpresent(allEmployees.length - approved);
       });
-
-    axiosInstance
-      .get(`/leave-application?leave_approver=${user?._id}`)
-      .then((e) => {
-        const leaves = e.data.data;
-        setallSubordinatesLeaves(e.data.data);
-        const approved = leaves.filter((e) => e.status === "approved").length;
-        const open = leaves.filter((l) => l.status === "open").length;
-
-        setapprovedSubordinatesLeaves(approved);
-        setSubordinatesPlanned(open);
-        setSubordinatesPresent(allEmployees.length - approved);
-        setfetched(true);
-      });
   };
 
   useEffect(() => {
@@ -295,32 +281,7 @@ const LeavesAdmin = () => {
           <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
-      <div className="page-menu">
-        <div className="row">
-          <div className="col-sm-12">
-            <ul className="nav nav-tabs nav-tabs-bottom">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  data-toggle="tab"
-                  href="#tab_leaves"
-                >
-                  Leaves
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-toggle="tab"
-                  href="#tab_subordinates-leaves"
-                >
-                  Leaves by Subordinates
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
+
       <div className="row tab-content">
         <div id="tab_leaves" className="col-12 tab-pane show active">
           <div className="row">
