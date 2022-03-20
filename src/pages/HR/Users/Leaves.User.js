@@ -80,8 +80,8 @@ const LeavesUser = () => {
           fetchLeaves();
         })
         .catch((err) => {
-          console.log(err);
-          showAlert(true, err?.data?.message, "alert alert-danger");
+          console.log(err.response);
+          showAlert(true, err?.response.data?.message, "alert alert-danger");
         });
     }
   }, [formValue, submitted]);

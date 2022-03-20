@@ -45,8 +45,16 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
 
   const uploadData = () => {
     setloading(true);
+    let obj = {}
+    if(path === '/api/employees-salary'){
+      obj = {
+        data: data
+      }
+    }else{
+      obj = data
+    }
     axiosInstance
-      .post(path, data)
+      .post(path, obj)
       .then((res) => {
         showAlert(true, "Data successfully uploaded", "alert alert-success");
         settoggleModal(false);
