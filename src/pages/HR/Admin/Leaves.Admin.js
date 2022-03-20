@@ -9,6 +9,7 @@ import HelperService from "../../../services/helper";
 import { useAppContext } from "../../../Context/AppContext";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import GeneralUpload from "../../../components/Modal/GeneralUpload";
+import tokenService from "../../../services/token.service";
 const LeavesAdmin = () => {
   const [approval, setApproval] = useState([
     {
@@ -33,6 +34,7 @@ const LeavesAdmin = () => {
     },
   ]);
   const [allLeaves, setallLeaves] = useState([]);
+  const [allSubordinatesLeaves, setallSubordinatesLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
   const [submitted, setsubmitted] = useState(false);
@@ -40,25 +42,34 @@ const LeavesAdmin = () => {
   const [present, setpresent] = useState(0);
   const [planned, setplanned] = useState(0);
   const [approvedLeaves, setapprovedLeaves] = useState(0);
+  const [subordinatespresent, setSubordinatesPresent] = useState(0);
+  const [subordinatesplanned, setSubordinatesPlanned] = useState(0);
+  const [approvedSubordinatesLeaves, setapprovedSubordinatesLeaves] =
+    useState(0);
   const [toggleModal, settoggleModal] = useState(false);
   const [status, setStatus] = useState("");
   const [editData, seteditData] = useState({});
   const [formMode, setformMode] = useState("add");
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
-  const fetchLeaves = () => {
-    axiosInstance.get("/leave-application").then((e) => {
-      const leaves = e.data.data;
-      setallLeaves(e.data.data);
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
 
-      setapprovedLeaves(approved);
-      setplanned(open);
-      setpresent(allEmployees.length - approved);
-      setfetched(true);
-    });
+  const user = tokenService.getUser();
+
+  const fetchLeaves = () => {
+    axiosInstance
+      .get("/leave-application?status=approved%20by%20supervisor")
+      .then((e) => {
+        const leaves = e.data.data;
+        setallLeaves(e.data.data);
+        const approved = leaves.filter((e) => e.status === "approved").length;
+        const open = leaves.filter((l) => l.status === "open").length;
+
+        setapprovedLeaves(approved);
+        setplanned(open);
+        setpresent(allEmployees.length - approved);
+      });
   };
+
   useEffect(() => {
     if (status.length) {
       const update = {
@@ -204,7 +215,7 @@ const LeavesAdmin = () => {
           </a>
           <a href="">
             {value?.first_name + " " + value?.last_name}{" "}
-            <span>{value?.designation.designation}</span>
+            <span>{value?.designation?.designation}</span>
           </a>
         </h2>
       ),
@@ -270,37 +281,70 @@ const LeavesAdmin = () => {
           <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Today Presents</h6>
-            <h4>
-              {present} / {allEmployees.length}
-            </h4>
+
+      <div className="row tab-content">
+        <div id="tab_leaves" className="col-12 tab-pane show active">
+          <div className="row">
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Today Presents</h6>
+                <h4>
+                  {present} / {allEmployees.length}
+                </h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Opened Leaves</h6>
+                <h4>{planned} &nbsp;</h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Approved Leaves</h6>
+                <h4>{approvedLeaves}</h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Pending Requests</h6>
+                <h4> {planned}</h4>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Opened Leaves</h6>
-            <h4>{planned} &nbsp;</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Approved Leaves</h6>
-            <h4>{approvedLeaves}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Pending Requests</h6>
-            <h4> {planned}</h4>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-12">
           <LeavesTable columns={columns} data={allLeaves} />
+        </div>
+
+        <div id="tab_subordinates-leaves" className="col-12 tab-pane">
+          <div className="row">
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Today Presents</h6>
+                <h4>
+                  {subordinatespresent} / {allEmployees.length}
+                </h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Opened Leaves</h6>
+                <h4>{subordinatesplanned} &nbsp;</h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Approved Leaves</h6>
+                <h4>{approvedSubordinatesLeaves}</h4>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="stats-info">
+                <h6>Pending Requests</h6>
+                <h4> {subordinatesplanned}</h4>
+              </div>
+            </div>
+          </div>
+          <LeavesTable columns={columns} data={allSubordinatesLeaves} />
         </div>
       </div>
       <FormModal

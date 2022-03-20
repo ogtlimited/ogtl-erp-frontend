@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import sample from "./recruitment-supervision.json";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";
-import { useAppContext } from "../../Context/AppContext";
 import moment from "moment";
 
 const RecruitmentSupervision = () => {
@@ -22,15 +20,10 @@ const RecruitmentSupervision = () => {
   const columns = [
     {
       dataField: "company_email",
-      text: "Employee Name",
+      text: "Employee Email",
       sort: true,
       headerStyle: { minWidth: "200px" },
-      formatter: (value, row) => (
-        <h2>
-          {" "}
-          {row?.company_email?.first_name} {row?.company_email?.last_name}
-        </h2>
-      ),
+      formatter: (value, row) => <h2>{row?.in_house_agent?.company_email}</h2>,
     },
     {
       dataField: "sieving",
@@ -47,6 +40,12 @@ const RecruitmentSupervision = () => {
     {
       dataField: "scheduled_for_interview",
       text: "Interview Schedule",
+      sort: true,
+      headerStyle: { minWidth: "200px" },
+    },
+    {
+      dataField: "total_assigned_records",
+      text: "Total Assigned Records",
       sort: true,
       headerStyle: { minWidth: "200px" },
     },

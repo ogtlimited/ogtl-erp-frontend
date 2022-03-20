@@ -132,8 +132,16 @@ const JobOpening = () => {
   useEffect(() => {
     if (submitted) {
       if (mode == "add") {
+        let hash = {}
+        for (const [key, value] of Object.entries(formValue)) {
+          if(value !== ''){
+            hash[key] = value
+          }
+        }
+        console.log(hash)
+        
         axiosInstance
-          .post("/api/jobOpening", formValue)
+          .post("/api/jobOpening", hash)
           .then((res) => {
             // setFormValue(null);
             setSubmitted(false);
