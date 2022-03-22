@@ -53,6 +53,7 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
           annualGrossSalary: parseInt(e.annualGrossSalary)
         }
       })
+      console.log(formatted)
       obj = {
         data: formatted
       }
