@@ -26,7 +26,7 @@ const ClientApproval = () => {
       color: "text-danger",
     },
   ]);
-
+  const [uploadSuccess, setUploadSuccess] = useState(false)
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -251,6 +251,7 @@ const ClientApproval = () => {
           settoggleModal={settoggleModal}
           title="Upload Attendance"
           url="'/api/attendance/bulk'"
+          setUploadSuccess={setUploadSuccess}
         />
       )}
     </>

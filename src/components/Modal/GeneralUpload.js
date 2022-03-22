@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import helper from "../../services/helper";
 import { object } from "yup/lib/locale";
 import { useAppContext } from "../../Context/AppContext";
-const GeneralUpload = ({ settoggleModal, title, url }) => {
+const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
   const { combineRequest, showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
@@ -67,6 +67,7 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
         settoggleModal(false);
         setloading(false);
         buttonRef.click();
+        setUploadSuccess(true)
         //   fetchEmployee()
       })
       .catch((err) => {
