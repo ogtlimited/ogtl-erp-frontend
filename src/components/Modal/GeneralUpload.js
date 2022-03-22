@@ -50,7 +50,7 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
       const formatted = data.map(e => {
         return {
           ...e,
-          annualGrossSalary: parseInt(e.annualGrossSalary)
+          annualGrossSalary: Number(e.annualGrossSalary.replace(/[^0-9.-]+/g,""))
         }
       })
       console.log(formatted)
