@@ -15,6 +15,7 @@ const AttendanceAdmin = () => {
   const [designation, setdesignation] = useState([]);
   const [projects, setprojects] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false)
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
       setdepartments(res.data.createEmployeeFormSelection.departments);
@@ -158,6 +159,7 @@ const AttendanceAdmin = () => {
           settoggleModal={settoggleModal}
           title="Upload Attendance"
           url="/api/attendance/bulk"
+          setUploadSuccess={setUploadSuccess}
         />
       )}
     </>

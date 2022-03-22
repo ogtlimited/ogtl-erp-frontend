@@ -52,7 +52,7 @@ const LeavesAdmin = () => {
   const [formMode, setformMode] = useState("add");
   const [fetched, setfetched] = useState(false);
   const [statusRow, setstatusRow] = useState({});
-
+  const [uploadSuccess, setUploadSuccess] = useState(false)
   const user = tokenService.getUser();
 
   const fetchLeaves = () => {
@@ -359,6 +359,7 @@ const LeavesAdmin = () => {
           settoggleModal={settoggleModal}
           title="Upload Attendance"
           url="'/api/attendance/bulk'"
+          setUploadSuccess={setUploadSuccess}
         />
       )}
     </>

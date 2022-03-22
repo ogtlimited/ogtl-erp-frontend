@@ -14,6 +14,7 @@ const Salary = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false)
   const { createPayroll, user } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
 
@@ -23,6 +24,7 @@ const Salary = ({ salaryStructure }) => {
       .then((res) => {
         console.log(res)
         setData(res.data.data);
+        setUploadSuccess(false)
       })
       .catch((error) => {
         console.log(error?.response);
@@ -51,6 +53,12 @@ const Salary = ({ salaryStructure }) => {
       setEmployeeOpts(employeeOpts);
     });
   }, []);
+  useEffect(() => {
+    if(uploadSuccess){
+      fetchSalaryAssignments()
+    }
+  }, [uploadSuccess])
+  
 
   const columns = [
     {
@@ -180,6 +188,7 @@ const Salary = ({ salaryStructure }) => {
           settoggleModal={settoggleModal}
           title="Upload Payroll"
           url="/api/employees-salary"
+          setUploadSuccess={setUploadSuccess}
         />
 
       )}
