@@ -47,8 +47,14 @@ const GeneralUpload = ({ settoggleModal, title, url }) => {
     setloading(true);
     let obj = {}
     if(path === '/api/employees-salary'){
+      const formatted = data.map(e => {
+        return {
+          ...e,
+          annualGrossSalary: parseInt(e.annualGrossSalary)
+        }
+      })
       obj = {
-        data: data
+        data: formatted
       }
     }else{
       obj = data
