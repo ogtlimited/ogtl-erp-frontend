@@ -14,8 +14,8 @@ const Interviewees = () => {
       .then((e) => {
         setallInterviewees(e.data.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
