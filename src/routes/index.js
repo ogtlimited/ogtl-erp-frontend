@@ -335,7 +335,7 @@ export default function Router() {
             {
               path: "interviewees",
               element: (
-                <GuardedRoute title="Interviewees" dept="Facility">
+                <GuardedRoute title="Interview Schedule List" dept="Facility">
                   <Interviewees />
                 </GuardedRoute>
               ),
@@ -611,6 +611,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="FACILITY">
                   <Shadowing />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "interviewees",
+              element: (
+                <GuardedRoute title="Interview Schedule List" dept="Facility">
+                  <Interviewees />
                 </GuardedRoute>
               ),
             },
