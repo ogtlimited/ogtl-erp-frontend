@@ -51,9 +51,11 @@ const JobOffer = () => {
   };
   const create = () => {
     let initialValues = {};
-    for (let i in template) {
+    let temp = HelperService.formArrayToObject(template.Fields);
+    for (let i in temp) {
       initialValues[i] = "";
     }
+    console.log(initialValues)
     setmode("add");
     setFormValue(initialValues);
     seteditData(initialValues);
@@ -124,13 +126,15 @@ const JobOffer = () => {
 
   //create job offer
   useEffect(() => {
-    if (submitted) {
+    console.log(submitted)
+    if (submitted === true) {
+
       if (mode === "add") {
         axiosInstance
           .post("/api/jobOffer", formValue)
           .then((res) => {
             // setFormValue(null);
-            setData((prevData) => [...prevData, res.data.data]);
+            fetchJobOffers()
             setSubmitted(false);
             fetchJobOffers();
             showAlert(true, res.data?.message, "alert alert-success");
@@ -165,11 +169,11 @@ const JobOffer = () => {
           });
       }
     }
-  }, [formValue, editData, data]);
+  }, [formValue, data]);
 
-  useEffect(() => {
-    seteditData(clickedRow);
-  }, [clickedRow, submitted]);
+  // useEffect(() => {
+  //   seteditData(clickedRow);
+  // }, [clickedRow, submitted]);
 
   //delete job offer
   const deleteJobOffer = (row) => {
