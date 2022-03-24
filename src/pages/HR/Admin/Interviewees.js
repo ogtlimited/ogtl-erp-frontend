@@ -8,9 +8,7 @@ const Interviewees = () => {
 
   const fetchIntervieews = () => {
     axiosInstance
-      .get("/api/jobApplicant", {
-        params: { interview_status: "Scheduled for interview" },
-      })
+      .get("/api/jobApplicant/scheduled")
       .then((e) => {
         setallInterviewees(e.data.data);
       })
