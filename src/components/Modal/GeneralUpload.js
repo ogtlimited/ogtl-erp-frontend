@@ -47,19 +47,23 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
     setloading(true);
     let obj = {}
     if(path === '/api/employees-salary'){
+      console.log(data)
       const formatted = data.map(e => {
         return {
           ...e,
-          annualGrossSalary: Number(e.annualGrossSalary.replace(/[^0-9.-]+/g,""))
+          annualGrossSalary:  Number(e.annualGrossSalary.replace(/[^0-9.-]+/g,""))
         }
       })
       console.log(formatted)
       obj = {
         data: formatted
       }
+      
     }else{
       obj = data
     }
+
+    return
     axiosInstance
       .post(path, obj)
       .then((res) => {
