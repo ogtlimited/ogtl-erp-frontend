@@ -13,6 +13,7 @@ import avater4 from "../../assets/img/female_avatar.png";
 import avater5 from "../../assets/img/female_avatar2.png";
 import EmployeePromotions from "./promotions";
 import EmployeeWarningLetters from "./warningLetters";
+import { useAppContext } from "../../Context/AppContext";
 const ProfileCards = ({
   setformType,
   userData,
@@ -23,6 +24,8 @@ const ProfileCards = ({
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
+  const { user } = useAppContext();
+
   const [avaterList, setavaterList] = useState([
     avater,
     avater2,
@@ -61,7 +64,7 @@ const ProfileCards = ({
                 <a
                   href="#bank_statutory"
                   data-toggle="tab"
-                  className="nav-link"
+                  className={`nav-link ${!user?.isAdmin && "disabled"}`}
                 >
                   Bank &amp; Statutory{" "}
                   <small className="text-danger">(Admin Only)</small>
