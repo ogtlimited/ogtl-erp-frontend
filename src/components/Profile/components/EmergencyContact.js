@@ -63,9 +63,16 @@ const EmergencyContact = ({
 
   useEffect(() => {
     if (submitted === true) {
+      let obj = {};
+      for (const item in formValue) {
+        console.log(item);
+        if (item !== "Fields" && item !== "title") {
+          obj[item] = formValue[item];
+        }
+      }
       let newFormValue = {
         employee_id: id,
-        ...formValue,
+        ...obj,
       };
       axiosInstance
         .post("/EmergencyContact", newFormValue)

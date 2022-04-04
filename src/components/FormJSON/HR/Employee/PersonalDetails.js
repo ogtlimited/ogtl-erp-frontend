@@ -18,6 +18,10 @@ export const PersonalDetailJson = {
           value: "Drivers License",
           label: "Drivers License",
         },
+        {
+          value: "Voters Card",
+          label: "Voters Card",
+        },
       ],
     },
     {
