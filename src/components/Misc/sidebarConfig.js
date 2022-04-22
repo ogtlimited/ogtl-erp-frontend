@@ -144,18 +144,18 @@ const sidebarConfig = [
         ],
       },
       {
-        canView: "HR",
+        canView: "Super",
         title: "Payroll",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
         children: [
           {
-            canView: "HR",
+            canView: "Super",
             title: "Employee Salary",
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
-            canView: "HR",
+            canView: "Super",
             title: "Payroll Items",
             path: PATH_DASHBOARD.payroll.payrollItem,
           },
@@ -173,7 +173,7 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.reports.employeeReport,
           },
           {
-            canView: "HR",
+            canView: "Super",
             title: "Payslip Reports",
             path: PATH_DASHBOARD.reports.payslipReport,
           },
@@ -219,6 +219,11 @@ const sidebarConfig = [
             canView: "HR",
             title: "Shadowing",
             path: PATH_DASHBOARD.recruitment.shadowing,
+          },
+          {
+            canView: "HR",
+            title: "Orientation And Training",
+            path: PATH_DASHBOARD.recruitment.orientationAndTraining,
           },
         ],
       },
@@ -305,18 +310,18 @@ const sidebarConfig = [
         ],
       },
       {
-        canView: "HR",
+        canView: "Super",
         title: "Payroll",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
         children: [
           {
-            canView: "HR",
+            canView: "Super",
             title: "Employee Salary",
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
-            canView: "HR",
+            canView: "Super",
             title: "Payroll Items",
             path: PATH_DASHBOARD.payroll.payrollItem,
           },
@@ -334,7 +339,7 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.reports.employeeReport,
           },
           {
-            canView: "HR",
+            canView: "Super",
             title: "Payslip Reports",
             path: PATH_DASHBOARD.reports.payslipReport,
           },
@@ -478,6 +483,12 @@ const sidebarConfig = [
         title: "Assets Purchase Order",
         path: PATH_DASHBOARD.purchaseOrder,
         icon: ICONS.purchaseOrder,
+      },
+      {
+        canView: "Accounting",
+        title: "Id Request",
+        path: PATH_DASHBOARD.IdRequest,
+        icon: ICONS.user,
       },
     ],
   },
