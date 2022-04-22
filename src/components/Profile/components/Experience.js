@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import { canView } from "../../../services/canView";
@@ -60,11 +60,17 @@ const Experience = ({
 
   useEffect(() => {
     if (submitted === true) {
+      let obj = {};
+      for (const item in formValue) {
+        console.log(item);
+        if (item !== "Fields" && item !== "title") {
+          obj[item] = formValue[item];
+        }
+      }
       let newFormValue = {
         employee_id: id,
-        ...formValue,
+        ...obj,
       };
-
       axiosInstance
         .post("/WorkExperience", newFormValue)
         .then((res) => {
