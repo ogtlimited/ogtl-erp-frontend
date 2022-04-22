@@ -476,6 +476,10 @@ export const applicationTestFormJson = {
           value: "Qualify for Bootcamp",
           label: "Qualify for Bootcamp",
         },
+        {
+          value: "Not Qualified",
+          label: "Not Qualified",
+        },
       ],
     },
   ],

@@ -61,7 +61,7 @@ const EmployeesTable = ({
       }
     }
     setmode("edit");
-    console.log(hash)
+    console.log(hash);
     seteditData(hash);
   };
   const clearFilter = (e) => {
@@ -128,7 +128,7 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{"Resigned"}</span>
+              <span className="ml-4 d-block">{"RESIGNED"}</span>
             </a>
           ) : value === "terminated" ? (
             <a href="" className="pos-relative">
