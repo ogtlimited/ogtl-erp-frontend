@@ -2,29 +2,19 @@ import React, { useState, useEffect } from "react";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 
 import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 
 const Interviewees = () => {
-
   const [allInterviewees, setallInterviewees] = useState([]);
-  const { showAlert, allEmployees, combineRequest } = useAppContext();
 
-  const [status, setStatus] = useState("");
-  const [editData, seteditData] = useState({});
-  const [formMode, setformMode] = useState("add");
-  const [fetched, setfetched] = useState(false);
-  const [statusRow, setstatusRow] = useState({});
   const fetchIntervieews = () => {
-    axiosInstance.get("/api/jobApplicant-accepted").then((e) => {
-      const leaves = e.data.data;
-      setallInterviewees(e.data.data);
-
-      const approved = leaves.filter((e) => e.status === "approved").length;
-      const open = leaves.filter((l) => l.status === "open").length;
-
-      setfetched(true);
-    });
+    axiosInstance
+      .get("/api/jobApplicant/scheduled")
+      .then((e) => {
+        setallInterviewees(e.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -66,7 +56,11 @@ const Interviewees = () => {
       text: "Interview Date",
       sort: true,
       formatter: (value, row) => (
-        <h2>{row.interview_date ? new Date(row.interview_date).toUTCString() : "Not Set"}</h2>
+        <h2>
+          {row.interview_date
+            ? new Date(row.interview_date).toUTCString()
+            : "Not Set"}
+        </h2>
       ),
     },
   ];
@@ -75,45 +69,20 @@ const Interviewees = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Interviewees</h3>
+            <h3 className="page-title">Interview Scheduled Lists</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
               </li>
-              <li className="breadcrumb-item active">Interviewees</li>
+              <li className="breadcrumb-item active">
+                Interview Scheduled Lists
+              </li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
-      {/* <div className="row">
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Today Presents</h6>
-            <h4>
-             0
-            </h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Opened Leaves</h6>
-            <h4>0 &nbsp;</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Approved Leaves</h6>
-            <h4>0</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Pending Requests</h6>
-            <h4> 0</h4>
-          </div>
-        </div>
-      </div> */}
+
       <div className="row">
         <div className="col-12">
           <LeavesTable columns={columns} data={allInterviewees} />

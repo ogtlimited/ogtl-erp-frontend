@@ -212,7 +212,7 @@ const sidebarConfig = [
           },
           {
             canView: "Facility",
-            title: "Interviewees",
+            title: "Interview Schedule List",
             path: PATH_DASHBOARD.recruitment.interviewees,
           },
           {
@@ -518,6 +518,12 @@ const sidebarConfig = [
         canView: "Facility",
         title: "Shadowing",
         path: PATH_DASHBOARD.facility.shadowing,
+        icon: ICONS.shadowing,
+      },
+      {
+        canView: "Facility",
+        title: "Interview Schedule List",
+        path: PATH_DASHBOARD.recruitment.interviewees,
         icon: ICONS.shadowing,
       },
     ],

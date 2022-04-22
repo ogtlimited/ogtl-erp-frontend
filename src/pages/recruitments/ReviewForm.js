@@ -18,7 +18,7 @@ const ReviewForm = () => {
       .then((res) => {
         document.getElementById("applyBtn").click();
         setmessage("Application submitted successfully");
-        setresIcon(info)
+        setresIcon(success)
         setTimeout(() => {
           // setafterSuccess(false)
           document.getElementById("closeBtn").click();
