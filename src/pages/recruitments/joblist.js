@@ -77,7 +77,7 @@ const Joblist = () => {
               <Link to={"/recruitment/joblist/" + job._id} className="job-list">
                 <div className="job-list-det">
                   <div className="job-list-desc">
-                    <h3 className="job-list-title">{job?.title}</h3>
+                    <h3 className="job-list-title">{job?.job_title}</h3>
                     <h4 className="job-department">
                       {job?.designation_id?.designation}
                     </h4>
@@ -89,7 +89,8 @@ const Joblist = () => {
                 <div className="job-list-footer">
                   <ul>
                     <li>
-                      <i className="fa fa-map-signs"></i> {job?.location?.branch}
+                      <i className="fa fa-map-signs"></i>{" "}
+                      {job?.location?.branch}
                     </li>
                     <li>
                       <i className="fa fa-money"></i> ₦{job?.salary}

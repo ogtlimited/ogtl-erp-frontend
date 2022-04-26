@@ -13,6 +13,8 @@ import moment from "moment";
 import { historyJson } from "../../components/FormJSON/HR/Employee/history";
 import { useAppContext } from "../../Context/AppContext";
 import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
+import FormModal2 from "../../components/Modal/FormModal2";
+import helper from "../../services/helper";
 
 const Profile = () => {
   const [formType, setformType] = useState("");
@@ -62,19 +64,23 @@ const Profile = () => {
   useEffect(() => {
     switch (formType) {
       case "WorkExperience":
-        return settemplate(WorkExperienceJson);
+        return settemplate(helper.formArrayToObject(WorkExperienceJson.Fields));
       case "ContactDetails":
-        return settemplate(ContactDetailJson);
+        return settemplate(helper.formArrayToObject(ContactDetailJson.Fields));
       case "EmergencyContact":
-        return settemplate(EmergencyDetailJson);
+        return settemplate(
+          helper.formArrayToObject(EmergencyDetailJson.Fields)
+        );
       case "EmployeeEducation":
-        return settemplate(EmployeeEducationJson);
+        return settemplate(
+          helper.formArrayToObject(EmployeeEducationJson.Fields)
+        );
       case "History":
-        return settemplate(historyJson);
+        return settemplate(helper.formArrayToObject(historyJson.Fields));
       case "SalaryDetails":
-        return settemplate(SalaryDetailJson);
+        return settemplate(helper.formArrayToObject(SalaryDetailJson.Fields));
       default:
-        return settemplate(PersonalDetailJson);
+        return settemplate(helper.formArrayToObject(PersonalDetailJson.Fields));
     }
   }, [formType]);
 
@@ -287,7 +293,7 @@ const Profile = () => {
         setFormValue={setFormValue}
         fetchUserInfo={fetchUserInfo}
       />
-      <FormModal
+      <FormModal2
         template={template}
         setformValue={setFormValue}
         setsubmitted={setSubmitted}

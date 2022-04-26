@@ -57,12 +57,20 @@ export const jobOpeningFormJson = {
       title: "Mode of engagement",
       options: [
         {
-          value: "Full Time",
-          label: "Full Time",
+          value: "Full Time: Remote",
+          label: "Full Time: Remote",
         },
         {
-          value: "Part Time",
-          label: "Part Time",
+          value: "Full Time: Onsite",
+          label: "Full Time: Onsite",
+        },
+        {
+          value: "Part Time: Remote",
+          label: "Part Time: Remote",
+        },
+        {
+          value: "Part Time: Onsite",
+          label: "Part Time: Onsite",
         },
       ],
     },

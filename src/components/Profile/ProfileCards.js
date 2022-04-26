@@ -22,6 +22,7 @@ const ProfileCards = ({
   setFormValue,
   fetchUserInfo,
 }) => {
+  console.log(formValue);
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
   const { user } = useAppContext();
@@ -34,6 +35,7 @@ const ProfileCards = ({
     avater5,
   ]);
   const handleChange = (type) => {
+    setFormValue(null);
     setformType(type);
   };
   useEffect(() => {

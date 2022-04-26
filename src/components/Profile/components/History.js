@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import tokenService from "../../../services/token.service";
 import { useAppContext } from "../../../Context/AppContext";
@@ -59,9 +59,16 @@ const History = ({
 
   useEffect(() => {
     if (submitted === true) {
+      let obj = {};
+      for (const item in formValue) {
+        console.log(item);
+        if (item !== "Fields" && item !== "title") {
+          obj[item] = formValue[item];
+        }
+      }
       let newFormValue = {
         employee_id: id,
-        ...formValue,
+        ...obj,
       };
       axiosInstance
         .post("/History", newFormValue)

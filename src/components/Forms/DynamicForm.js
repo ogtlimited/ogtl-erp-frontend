@@ -26,6 +26,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const { formUpdate } = useAppContext();
   const [validationSchema, setValidationSchema] = useState({});
   useEffect(() => {
+    console.log(formSchema)
     if (formSchema) {
       initForm(formSchema, value);
     }
@@ -57,9 +58,14 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       } else if (formSchema[key].type === "textarea") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "select") {
-        _validationSchema[key] = Yup.string()
-          .nullable(true)
-          .oneOf([null, ...formSchema[key].options.map((o) => o.value)]);
+        if(formSchema[key].isMulti){
+          _validationSchema[key] = Yup.array()
+        }else{
+          _validationSchema[key] = Yup.string()
+            .nullable(true)
+            .oneOf([null, ...formSchema[key].options.map((o) => o.value)]);
+
+        }
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
       } else if (formSchema[key].type === "time") {
@@ -83,6 +89,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,
+      isMulti: elementSchema.isMulti ? true: false
     };
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
