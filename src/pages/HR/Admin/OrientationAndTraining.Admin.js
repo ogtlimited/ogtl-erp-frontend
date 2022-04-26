@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { orientationFormJson } from "../../../components/FormJSON/HR/recruitment/orientationAndTraining";
-import FormModal from "../../../components/Modal/Modal";
+import FormModal2 from "../../../components/Modal/Modal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -19,8 +19,32 @@ const OrientationAndTraining = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false);
+  const [clickedRow, setclickedRow] = useState(null);
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
 
   const [mode, setmode] = useState("add");
+  const editRow = (row) => {
+    setmode("edit");
+    seteditData(row);
+    let formatted = helper.handleEdit(row);
+    setformUpdate(formatted);
+    setclickedRow(formatted);
+  };
+
+  const create = () => {
+    let initialValues = {};
+    let temp = HelperService.formArrayToObject(template.Fields);
+    for (let i in temp) {
+      initialValues[i] = "";
+    }
+    setmode("add");
+
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
+
+  console.log("templatee", template);
 
   const fetchOrientation = () => {
     axiosInstance
@@ -117,6 +141,21 @@ const OrientationAndTraining = () => {
       });
   };
 
+  //   //update orientation
+  //   useEffect(() => {
+  //     axiosInstance
+  //     .patch(`/api/orientation-and-training/${row._id}`, row)
+  //     .then((res) => {
+  //       setData((prevData) => [...data, res.data.data]);
+  //       fetchOrientation();
+  //       showAlert(true, res?.data?.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error?.response?.data?.message, "alert alert-danger");
+  //     });
+  //     };
+
   const columns = [
     {
       dataField: "department_id",
@@ -171,6 +210,7 @@ const OrientationAndTraining = () => {
               className="dropdown-item"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
@@ -214,6 +254,7 @@ const OrientationAndTraining = () => {
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Schedule
             </a>
@@ -227,10 +268,11 @@ const OrientationAndTraining = () => {
         </div>
       </div>
       {loadSelect && (
-        <FormModal
+        <FormModal2
+          title="Create Orientation and Training"
           editData={editData}
           setformValue={setFormValue}
-          template={template}
+          template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
       )}
