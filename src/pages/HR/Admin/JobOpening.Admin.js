@@ -103,6 +103,7 @@ const JobOpening = () => {
           };
         });
         const finalForm = jobOpeningFormJson.Fields.map((field) => {
+          console.log(field);
           if (field.name === "designation_id") {
             field.options = designationOpts;
             return field;

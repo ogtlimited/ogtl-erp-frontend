@@ -317,7 +317,7 @@ export function TextareaField(props) {
 }
 
 export function SelectField(props) {
-  const { name, label, options, defaultValue, setFieldValue } = props;
+  const { name, label, options, defaultValue, setFieldValue, isMulti } = props;
   let val = options.filter((e) => e.value === defaultValue)[0];
   return (
     <>
@@ -330,11 +330,14 @@ export function SelectField(props) {
         <Field
           options={options}
           component={Select}
+          isMulti={isMulti ? true : false}
           defaultValue={val}
           key={val}
           name={name}
           onChange={(opt) => {
-            setFieldValue(name, opt.value);
+            console.log( opt, typeof opt.value)
+            let val = typeof opt?.value !== 'string' ? opt.map(op => op.value) : opt.value
+            setFieldValue(name, val);
             // setFieldValue("employee_name", opt.value);
           }}
           className=" ml-0 w-100"

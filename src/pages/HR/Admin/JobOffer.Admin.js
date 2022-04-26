@@ -34,7 +34,7 @@ const JobOffer = () => {
   const [formValue, setFormValue] = useState(null);
   const [data, setData] = useState([]);
   const { showAlert, createRecruitmens, setformUpdate, user } = useAppContext();
-  const [template, setTemplate] = useState(jobOpeningFormJson);
+  const [template, setTemplate] = useState(jobOfferFormJson);
   const [submitted, setSubmitted] = useState(false);
   const [editData, seteditData] = useState(null);
   const [statusRow, setstatusRow] = useState(null);
@@ -55,7 +55,6 @@ const JobOffer = () => {
     for (let i in temp) {
       initialValues[i] = "";
     }
-    console.log(initialValues)
     setmode("add");
     setFormValue(initialValues);
     seteditData(initialValues);
@@ -126,15 +125,13 @@ const JobOffer = () => {
 
   //create job offer
   useEffect(() => {
-    console.log(submitted)
     if (submitted === true) {
-
       if (mode === "add") {
         axiosInstance
           .post("/api/jobOffer", formValue)
           .then((res) => {
             // setFormValue(null);
-            fetchJobOffers()
+            fetchJobOffers();
             setSubmitted(false);
             fetchJobOffers();
             showAlert(true, res.data?.message, "alert alert-success");
@@ -197,10 +194,11 @@ const JobOffer = () => {
         status: status,
         designation_id: statusRow.designation_id._id,
         job_applicant_id: statusRow.job_applicant_id._id,
-        job_offer_terms: statusRow.job_offer_terms[0],
       };
-
       delete update.__v;
+      delete update.createdAt;
+      delete update.updatedAt;
+
       axiosInstance
         .patch("/api/jobOffer/" + statusRow._id, update)
         .then((res) => {
