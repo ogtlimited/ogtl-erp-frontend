@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { orientationFormJson } from "../../../components/FormJSON/HR/recruitment/orientationAndTraining";
-import FormModal2 from "../../../components/Modal/Modal";
+import FormModal2 from "../../../components/Modal/FormModal2";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -12,6 +12,7 @@ import helper from "../../../services/helper";
 
 const OrientationAndTraining = () => {
   const [template, setTemplate] = useState(orientationFormJson);
+  console.log(orientationFormJson)
   const { createEmployee, showAlert, setformUpdate } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
@@ -43,8 +44,6 @@ const OrientationAndTraining = () => {
     setFormValue(initialValues);
     seteditData(initialValues);
   };
-
-  console.log("templatee", template);
 
   const fetchOrientation = () => {
     axiosInstance
@@ -85,29 +84,36 @@ const OrientationAndTraining = () => {
         }
         return field;
       });
-      setTemplate({
-        title: orientationFormJson.title,
-        Fields: finalForm,
-      });
+      console.log(orientationFormJson)
+      // console.log(finalForm)
+      // setTemplate({
+      //   title: orientationFormJson.title,
+      //   Fields: HelperService.formArrayToObject(finalForm),
+      // });
       if (!loadSelect) setloadSelect(true);
     });
   }, []);
 
   useEffect(() => {
     if (submitted === true) {
-      axiosInstance
-        .post("/api/orientation-and-training", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchOrientation();
-          setData((prevData) => [...data, res.data.data]);
+      if(mode === 'add'){
+        axiosInstance
+          .post("/api/orientation-and-training", formValue)
+          .then((res) => {
+            setSubmitted(false);
+            fetchOrientation();
+            setData((prevData) => [...data, res.data.data]);
+  
+            showAlert(true, res.data.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+            showAlert(true, error.response.data.message, "alert alert-danger");
+          });
 
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+      }else{
+        
+      }
     }
   }, [submitted, formValue]);
 
@@ -272,7 +278,7 @@ const OrientationAndTraining = () => {
           title="Create Orientation and Training"
           editData={editData}
           setformValue={setFormValue}
-          template={HelperService.formArrayToObject(template.Fields)}
+          template={helper.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
       )}
