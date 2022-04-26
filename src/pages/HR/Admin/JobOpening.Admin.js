@@ -103,6 +103,7 @@ const JobOpening = () => {
           };
         });
         const finalForm = jobOpeningFormJson.Fields.map((field) => {
+          console.log(field)
           if (field.name === "designation_id") {
             field.options = designationOpts;
             return field;
@@ -133,6 +134,7 @@ const JobOpening = () => {
     if (submitted) {
       if (mode == "add") {
         let hash = {}
+        console.log(formValue)
         for (const [key, value] of Object.entries(formValue)) {
           if(value !== ''){
             hash[key] = value

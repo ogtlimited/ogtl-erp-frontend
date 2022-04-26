@@ -20,10 +20,19 @@ const PersonalInfo = ({
 
   useEffect(() => {
     if (submitted === true) {
+      let obj = {};
+      console.log(formValue, "FORM VALUE");
+      for (const item in formValue) {
+        console.log(item);
+        if (item !== "Fields" && item !== "title") {
+          obj[item] = formValue[item];
+        }
+      }
+      console.log(obj, "OBJECT");
       let newFormValue = {
         _id: personalDetails?.personalDetails?._id,
         employee_id: id,
-        ...formValue,
+        ...obj,
       };
       axiosInstance
         .post("/PersonalDetails", newFormValue)

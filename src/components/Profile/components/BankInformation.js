@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import { canView } from "../../../services/canView";
@@ -18,10 +18,17 @@ const BankInformation = ({
   const user = tokenService.getUser();
   useEffect(() => {
     if (submitted === true) {
+      let obj = {};
+      for (const item in formValue) {
+        console.log(item);
+        if (item !== "Fields" && item !== "title") {
+          obj[item] = formValue[item];
+        }
+      }
       let newFormValue = {
         _id: salaryDetails?.salaryDetails?._id,
         employee_id: id,
-        ...formValue,
+        ...obj,
       };
       axiosInstance
         .post("/SalaryDetails", newFormValue)

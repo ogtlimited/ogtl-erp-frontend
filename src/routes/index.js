@@ -368,6 +368,14 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            {
+              path: "orientation-and-training",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <OrientationAndTraining />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -681,6 +689,14 @@ export default function Router() {
           ),
         },
         {
+          path: "id-request",
+          element: (
+            <GuardedRoute title="" dept="Procurements">
+              <IdRequest />
+            </GuardedRoute>
+          ),
+        },
+        {
           path: "promotion",
           element: (
             <GuardedRoute title="" dept="HR">
@@ -908,4 +924,12 @@ const RoleAssignment = Loadable(
 );
 const Shadowing = Loadable(
   lazy(() => import("../pages/HR/Admin/Shadowing.Admin"))
+);
+
+const IdRequest = Loadable(
+  lazy(() => import("../pages/HR/Admin/IdRequest.Admin"))
+);
+
+const OrientationAndTraining = Loadable(
+  lazy(() => import("../pages/HR/Admin/OrientationAndTraining.Admin"))
 );
