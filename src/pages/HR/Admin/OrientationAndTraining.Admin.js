@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { orientationFormJson } from "../../../components/FormJSON/HR/recruitment/orientationAndTraining";
-import FormModal2 from "../../../components/Modal/Modal";
+import FormModal2 from "../../../components/Modal/FormModal2";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -62,7 +62,7 @@ const OrientationAndTraining = () => {
 
   useEffect(() => {
     createEmployee().then((res) => {
-      const { departments } = res.data.createEmployeeForm;
+      const { departments, employees } = res.data.createEmployeeForm;
       const newDepartments = departments.filter(
         (e) =>
           e.department === "HR" ||
@@ -78,9 +78,21 @@ const OrientationAndTraining = () => {
           value: e._id,
         };
       });
+
+      const EmpOpts = employees?.map((e) => {
+        return {
+          label: `${e.first_name}  ${e.last_name}`,
+          value: e._id,
+        };
+      });
       const finalForm = orientationFormJson.Fields.map((field) => {
         if (field.name === "department_id") {
           field.options = deptOpts;
+          return field;
+        }
+
+        if (field.name === "employee_id") {
+          field.options = EmpOpts;
           return field;
         }
         return field;
@@ -95,19 +107,23 @@ const OrientationAndTraining = () => {
 
   useEffect(() => {
     if (submitted === true) {
-      axiosInstance
-        .post("/api/orientation-and-training", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchOrientation();
-          setData((prevData) => [...data, res.data.data]);
+      if (mode === "add") {
+        axiosInstance
+          .post("/api/orientation-and-training", formValue)
+          .then((res) => {
+            setSubmitted(false);
+            fetchOrientation();
+            setData((prevData) => [...data, res.data.data]);
 
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+            showAlert(true, res.data.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+            showAlert(true, error.response.data.message, "alert alert-danger");
+          });
+      } else {
+        updateOrientation(editData);
+      }
     }
   }, [submitted, formValue]);
 
@@ -141,21 +157,6 @@ const OrientationAndTraining = () => {
       });
   };
 
-  //   //update orientation
-  //   useEffect(() => {
-  //     axiosInstance
-  //     .patch(`/api/orientation-and-training/${row._id}`, row)
-  //     .then((res) => {
-  //       setData((prevData) => [...data, res.data.data]);
-  //       fetchOrientation();
-  //       showAlert(true, res?.data?.message, "alert alert-success");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       showAlert(true, error?.response?.data?.message, "alert alert-danger");
-  //     });
-  //     };
-
   const columns = [
     {
       dataField: "department_id",
@@ -187,6 +188,13 @@ const OrientationAndTraining = () => {
     {
       dataField: "attendance",
       text: "Attendance",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+
+    {
+      dataField: "employee_id",
+      text: "Candidates",
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
