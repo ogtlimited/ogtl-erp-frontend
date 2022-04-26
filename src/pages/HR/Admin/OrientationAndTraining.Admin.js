@@ -12,6 +12,7 @@ import helper from "../../../services/helper";
 
 const OrientationAndTraining = () => {
   const [template, setTemplate] = useState(orientationFormJson);
+  console.log(orientationFormJson);
   const { createEmployee, showAlert, setformUpdate } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
@@ -43,8 +44,6 @@ const OrientationAndTraining = () => {
     setFormValue(initialValues);
     seteditData(initialValues);
   };
-
-  console.log("templatee", template);
 
   const fetchOrientation = () => {
     axiosInstance
@@ -97,10 +96,12 @@ const OrientationAndTraining = () => {
         }
         return field;
       });
-      setTemplate({
-        title: orientationFormJson.title,
-        Fields: finalForm,
-      });
+      console.log(orientationFormJson);
+      // console.log(finalForm)
+      // setTemplate({
+      //   title: orientationFormJson.title,
+      //   Fields: HelperService.formArrayToObject(finalForm),
+      // });
       if (!loadSelect) setloadSelect(true);
     });
   }, []);
@@ -280,7 +281,7 @@ const OrientationAndTraining = () => {
           title="Create Orientation and Training"
           editData={editData}
           setformValue={setFormValue}
-          template={HelperService.formArrayToObject(template.Fields)}
+          template={helper.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
       )}
