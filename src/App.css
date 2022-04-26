@@ -598,4 +598,30 @@ a.nav-link {
   from   { transform: translateX(100%); }
   to { transform: translateX(0%); }
 }
+
+.letter-box {
+  width: 80%;
+  margin: 10% auto;
+}
+
+.offer-letter-content {
+  padding: 5em;
+}
+
+.confirmation {
+  text-align: center;
+}
+
+.confirmation-btns {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-btn {
+  margin: 10px;
+}
+
+.applicant-signature {
+  font-family: 'Babylonica', cursive;
+}
 /* multi-step form */
