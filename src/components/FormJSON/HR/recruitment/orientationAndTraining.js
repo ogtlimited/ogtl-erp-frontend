@@ -8,6 +8,13 @@ export const orientationFormJson = {
       options: [],
     },
     {
+      name: "employee_id",
+      type: "select",
+      title: "Candidates",
+      options: [],
+      isMulti: true,
+    },
+    {
       name: "start_date",
       type: "date",
       title: "Start Date",

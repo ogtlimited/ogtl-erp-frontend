@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { orientationFormJson } from "../../../components/FormJSON/HR/recruitment/orientationAndTraining";
-import FormModal from "../../../components/Modal/Modal";
+import FormModal2 from "../../../components/Modal/FormModal2";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -12,6 +12,7 @@ import helper from "../../../services/helper";
 
 const OrientationAndTraining = () => {
   const [template, setTemplate] = useState(orientationFormJson);
+  console.log(orientationFormJson);
   const { createEmployee, showAlert, setformUpdate } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
@@ -19,14 +20,37 @@ const OrientationAndTraining = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false);
+  const [clickedRow, setclickedRow] = useState(null);
+  const [statusRow, setstatusRow] = useState(null);
+  const [status, setStatus] = useState("");
 
   const [mode, setmode] = useState("add");
+  const editRow = (row) => {
+    setmode("edit");
+    seteditData(row);
+    let formatted = helper.handleEdit(row);
+    setformUpdate(formatted);
+    setclickedRow(formatted);
+  };
+
+  const create = () => {
+    let initialValues = {};
+    let temp = HelperService.formArrayToObject(template.Fields);
+    for (let i in temp) {
+      initialValues[i] = "";
+    }
+    setmode("add");
+
+    setFormValue(initialValues);
+    seteditData(initialValues);
+  };
 
   const fetchOrientation = () => {
     axiosInstance
       .get("/api/orientation-and-training")
       .then((res) => {
         setData(res.data.data);
+        console.log("data", res.data.data)
       })
       .catch((error) => {
         console.log(error);
@@ -38,7 +62,7 @@ const OrientationAndTraining = () => {
 
   useEffect(() => {
     createEmployee().then((res) => {
-      const { departments } = res.data.createEmployeeForm;
+      const { departments, employees } = res.data.createEmployeeForm;
       const newDepartments = departments.filter(
         (e) =>
           e.department === "HR" ||
@@ -54,41 +78,68 @@ const OrientationAndTraining = () => {
           value: e._id,
         };
       });
+
+      const EmpOpts = employees?.map((e) => {
+        return {
+          label: `${e.first_name}  ${e.last_name}`,
+          value: e._id,
+        };
+      });
       const finalForm = orientationFormJson.Fields.map((field) => {
         if (field.name === "department_id") {
           field.options = deptOpts;
           return field;
         }
+
+        if (field.name === "employee_id") {
+          field.options = EmpOpts;
+          return field;
+        }
         return field;
       });
-      setTemplate({
-        title: orientationFormJson.title,
-        Fields: finalForm,
-      });
+      console.log(orientationFormJson);
+      // console.log(finalForm)
+      // setTemplate({
+      //   title: orientationFormJson.title,
+      //   Fields: HelperService.formArrayToObject(finalForm),
+      // });
       if (!loadSelect) setloadSelect(true);
     });
   }, []);
 
   useEffect(() => {
     if (submitted === true) {
-      axiosInstance
-        .post("/api/orientation-and-training", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchOrientation();
-          setData((prevData) => [...data, res.data.data]);
+      if (mode === "add") {
+        axiosInstance
+          .post("/api/orientation-and-training", formValue)
+          .then((res) => {
+            setSubmitted(false);
+            fetchOrientation();
+            setData((prevData) => [...data, res.data.data]);
 
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
+            showAlert(true, res.data.message, "alert alert-success");
+          })
+          .catch((error) => {
+            console.log(error.response.data);
+            showAlert(true, error.response.data.message, "alert alert-danger");
+          });
+      } else {
+        const editInfo = {
+          ...editData,
+          department_id: editData.department_id?._id,
+        }
+        console.log("editttttt", editInfo);
+        delete editInfo.createdAt;
+        delete editInfo.updatedAt;
+        delete editInfo.__v;
+        updateOrientation(editInfo);
+      }
     }
   }, [submitted, formValue]);
 
   //delete score card
   const deleteOrientation = (row) => {
+    
     axiosInstance
       .delete(`/api/orientation-and-training/${row._id}`)
       .then((res) => {
@@ -151,6 +202,25 @@ const OrientationAndTraining = () => {
       sort: true,
       headerStyle: { minWidth: "100px" },
     },
+
+    {
+      dataField: "employee_id",
+      text: "Candidates",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <div className="dropdown">
+      <button className="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Candidates
+      </button>
+      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {row.employee_id.map(employee =>(
+             <a key= {employee._id} className="dropdown-item" href="#">{employee.first_name.toUpperCase()} {employee.last_name.toUpperCase()}</a>
+        ))}
+       
+      </div>
+    </div>
+
+    },
     {
       dataField: "",
       text: "Action",
@@ -171,6 +241,7 @@ const OrientationAndTraining = () => {
               className="dropdown-item"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => editRow(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
             </a>
@@ -214,6 +285,7 @@ const OrientationAndTraining = () => {
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#FormModal"
+              onClick={() => create()}
             >
               <i className="fa fa-plus"></i> Schedule
             </a>
@@ -227,10 +299,11 @@ const OrientationAndTraining = () => {
         </div>
       </div>
       {loadSelect && (
-        <FormModal
+        <FormModal2
+          title="Create Orientation and Training"
           editData={editData}
           setformValue={setFormValue}
-          template={template}
+          template={helper.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
       )}

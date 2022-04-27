@@ -21,12 +21,12 @@ import { useAppContext } from "../../Context/AppContext";
 import { Formik } from "formik";
 
 const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
-  console.log(formSchema, value);
   const [formData, setFormData] = useState({});
   const [editRow, seteditRow] = useState(null);
   const { formUpdate } = useAppContext();
   const [validationSchema, setValidationSchema] = useState({});
   useEffect(() => {
+    console.log(formSchema)
     if (formSchema) {
       initForm(formSchema, value);
     }
@@ -42,9 +42,8 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const initForm = (formSchema, value) => {
     let _formData = {};
     let _validationSchema = {};
-    console.log(Object.keys(formSchema));
+
     for (var key of Object.keys(formSchema)) {
-      console.log(key);
       if (formUpdate !== null) {
         _formData[key] = formUpdate[key];
       } else {
@@ -59,9 +58,14 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       } else if (formSchema[key].type === "textarea") {
         _validationSchema[key] = Yup.string();
       } else if (formSchema[key].type === "select") {
-        _validationSchema[key] = Yup.string()
-          .nullable(true)
-          .oneOf([null, ...formSchema[key].options.map((o) => o.value)]);
+        if(formSchema[key].isMulti){
+          _validationSchema[key] = Yup.array()
+        }else{
+          _validationSchema[key] = Yup.string()
+            .nullable(true)
+            .oneOf([null, ...formSchema[key].options.map((o) => o.value)]);
+
+        }
       } else if (formSchema[key].type === "number") {
         _validationSchema[key] = Yup.number();
       } else if (formSchema[key].type === "time") {
@@ -85,6 +89,7 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
       options: elementSchema.options,
       disabled: elementSchema.disabled,
       setFieldValue: setFieldValue,
+      isMulti: elementSchema.isMulti ? true: false
     };
     if (elementSchema.type === "text" || elementSchema.type === "email") {
       return <TextField {...props} />;
@@ -136,47 +141,36 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {(props) => {
-          const { handleSubmit, setFieldValue } = props;
-          return (
-            <form onSubmit={handleSubmit}>
-              <div className="row">
-                {Object.keys(formSchema).length &&
-                  Object.keys(formSchema).map((key, ind) => (
-                    <div
-                      className={
-                        formSchema[key]?.type === "textarea" ||
-                        formSchema[key]?.type === "richText"
-                          ? "col-sm-12"
-                          : formSchema[key]?.type === "file"
-                          ? "col-sm-12"
-                          : "col-sm-6"
-                      }
-                      key={key}
-                    >
-                      {getFormElement(
-                        key,
-                        formSchema[key],
-                        setFieldValue,
-                        formData[key]
-                      )}
-                    </div>
-                  ))}
-              </div>
-              <div className="row">
-                <div className="col-sm-12">
-                  <button
-                    type="submit"
-                    // data-dismiss="modal"
-                    className="btn btn-primary submit-btn"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </form>
-          );
-        }}
+         {(props) => {
+        const {
+          handleSubmit,
+          setFieldValue
+        } = props;
+        return (
+          <form onSubmit={handleSubmit}>
+          <div className="row">
+          { Object.keys(formSchema).length && Object.keys(formSchema).map((key, ind) => (
+            <div className={(formSchema[key]?.type === 'textarea' ||formSchema[key]?.type ===  'richText') ?  "col-sm-12" : formSchema[key]?.type === 'file' ? "col-sm-12" :  "col-sm-6"} key={key} >
+              {getFormElement(key, formSchema[key], setFieldValue, formData[key])}
+            </div>
+          ))}
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+          <button
+                        type="submit"
+
+                        // data-dismiss="modal"
+                        className="btn btn-primary submit-btn"
+                      >
+                        Submit
+                      </button>
+          </div>
+        </div>
+        </form>
+        );
+      }}
+
       </Formik>
     </div>
   );
