@@ -50,6 +50,7 @@ const OrientationAndTraining = () => {
       .get("/api/orientation-and-training")
       .then((res) => {
         setData(res.data.data);
+        console.log("data", res.data.data)
       })
       .catch((error) => {
         console.log(error);
@@ -123,13 +124,22 @@ const OrientationAndTraining = () => {
             showAlert(true, error.response.data.message, "alert alert-danger");
           });
       } else {
-        updateOrientation(editData);
+        const editInfo = {
+          ...editData,
+          department_id: editData.department_id?._id,
+        }
+        console.log("editttttt", editInfo);
+        delete editInfo.createdAt;
+        delete editInfo.updatedAt;
+        delete editInfo.__v;
+        updateOrientation(editInfo);
       }
     }
   }, [submitted, formValue]);
 
   //delete score card
   const deleteOrientation = (row) => {
+    
     axiosInstance
       .delete(`/api/orientation-and-training/${row._id}`)
       .then((res) => {
@@ -198,6 +208,18 @@ const OrientationAndTraining = () => {
       text: "Candidates",
       sort: true,
       headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => <div className="dropdown">
+      <button className="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Candidates
+      </button>
+      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {row.employee_id.map(employee =>(
+             <a key= {employee._id} className="dropdown-item" href="#">{employee.first_name.toUpperCase()} {employee.last_name.toUpperCase()}</a>
+        ))}
+       
+      </div>
+    </div>
+
     },
     {
       dataField: "",
