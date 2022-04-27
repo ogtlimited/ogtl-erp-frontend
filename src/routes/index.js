@@ -66,6 +66,10 @@ export default function Router() {
       ],
     },
     {
+      path: "recruitment/accept-joboffer/:id",
+      element: <AcceptJoboffer />,
+    },
+    {
       path: "dashboard",
       element: (
         <AppProvider>
@@ -735,6 +739,7 @@ const ConsentPage = Loadable(
   lazy(() => import("../pages/recruitments/Consent"))
 );
 const JobView = Loadable(lazy(() => import("../pages/recruitments/jobview")));
+const AcceptJoboffer = Loadable(lazy(() => import("../pages/recruitments/acceptJoboffer")));
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AdminDashboard = Loadable(
   lazy(() => import("../pages/Dashboard/AdminDashboard"))
