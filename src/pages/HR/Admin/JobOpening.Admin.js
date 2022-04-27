@@ -103,7 +103,7 @@ const JobOpening = () => {
           };
         });
         const finalForm = jobOpeningFormJson.Fields.map((field) => {
-          console.log(field)
+          console.log(field);
           if (field.name === "designation_id") {
             field.options = designationOpts;
             return field;
@@ -133,15 +133,14 @@ const JobOpening = () => {
   useEffect(() => {
     if (submitted) {
       if (mode == "add") {
-        let hash = {}
-        console.log(formValue)
+        let hash = {};
         for (const [key, value] of Object.entries(formValue)) {
-          if(value !== ''){
-            hash[key] = value
+          if (value !== "") {
+            hash[key] = value;
           }
         }
-        console.log(hash)
-        
+        console.log(hash);
+
         axiosInstance
           .post("/api/jobOpening", hash)
           .then((res) => {
