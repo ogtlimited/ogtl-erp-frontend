@@ -624,4 +624,12 @@ a.nav-link {
 .applicant-signature {
   font-family: 'Babylonica', cursive;
 }
+
+.signature-line {
+  width: 50%;
+}
+
+.signature-line > hr {
+  background: black;
+}
 /* multi-step form */

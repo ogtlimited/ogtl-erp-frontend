@@ -1,30 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Pdf from "react-to-pdf";
 import logo from "../../assets/img/outsource.png";
 // import jobs from "./job.json";
-// import { useParams } from "react-router-dom";
-// import config from "../../config.json";
-// import axios from "axios";
+import { useParams } from "react-router-dom";
+import config from "../../config.json";
+import axios from "axios";
 import RecruitmentHeader from "./recruitmentHeader";
 
 const AcceptJoboffer = () => {
   const [applicantName, setApplicantName] = useState();
   const [submitted, setSubmitted] = useState(false);
+  const [response, setResponse] = useState();
   const ref = React.createRef();
 
-  // let { id } = useParams();
-  // const [state, setstate] = useState({});
-  // const fetchJobOpening = () => {
-  //   axios.get(config.ApiUrl + "/api/jobOpening/" + id).then((res) => {
-  //     setstate(res.data.data);
-  //   });
-  // };
+  let { id } = useParams();
+  const [state, setstate] = useState({});
+  const fetchJobOpening = () => {
+    axios.get(config.ApiUrl + "/api/jobOffer/" + id).then((res) => {
+      setstate(res.data.data);
+    });
+  };
 
-  // useEffect(() => {
-  //   fetchJobOpening();
-  // }, []);
+  const jobOpening = (status) => {
+    const data = {
+      _id: id,
+      job_applicant_id: state.job_applicant_id?._id,
+      status: status,
+      offer_date: state.offer_date,
+      designation_id: state.designation_id?._id,
+      job_offer_terms: PopStateEvent.job_offer_terms,
+      terms_and_conditions: state.terms_and_conditions,
+  }
+    axios.patch(config.ApiUrl + "/api/jobOffer/" + id, data).then((res) => {
+      setResponse(res.data.message)
+    })
+  };
+
+  useEffect(() => {
+    fetchJobOpening();
+  }, []);
 
   const handleApplicantName = (full_name) => {
     setApplicantName(full_name);
@@ -32,7 +48,13 @@ const AcceptJoboffer = () => {
 
   const handleSubmit = (e, field) => {
     setSubmitted(true);
+    jobOpening('Accepted');
   };
+
+  const handleReject = () => {
+    setSubmitted(true);
+    jobOpening('Rejected');
+  }
 
   return (
     <>
@@ -55,17 +77,18 @@ const AcceptJoboffer = () => {
                     </ul>
                   </div>
                   <div className="offer-letter-content">
-                    <p>We are delighted to extend this offer of employment for the position of <b>[Job_title]</b> with <b>Outsource Global Limited</b>. 
+                    <p>Dear {state.job_applicant_id?.first_name} {state.job_applicant_id?.middle_name} {state.job_applicant_id?.last_name}</p>
+                    <p>We are delighted to extend this offer of employment for the position of <b>{state.designation_id?.designation}</b> with <b>Outsource Global Limited</b>. 
                       We believe your skills and experience are excellent match for this role.
                     </p>
 
-                    <p>
-                    In this role you will be required to <em>[list of generalised possible tasks]</em>. 
-                    If you accept this offer, your start date will be <b>[Start Date]</b> or another mutually agreed upon date, and you would report to <b>[Manager_name]</b>.
-                    </p>
+                    <p>{state.job_offer_terms}</p>
+
+                    <p>{state.terms_and_conditions}</p>
 
                     <p>Accepted by</p>
                     <h3 className="applicant-signature">{applicantName}</h3>
+                    <div className="signature-line"><hr /></div>
                   </div>
                 </div>
               </div>
@@ -88,6 +111,7 @@ const AcceptJoboffer = () => {
           <button
             type="button"
             className="btn btn-secondary confirmation-btn"
+            onClick={handleReject}
           >
             Decline
           </button>
@@ -188,8 +212,8 @@ const AcceptJoboffer = () => {
               </div>
             </div>
           </div>
-)}
-/>
+        )}
+      />
     </>
   );
 };
