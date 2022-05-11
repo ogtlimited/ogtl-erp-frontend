@@ -328,7 +328,7 @@ const Profile = () => {
       />
       <ViewModal
         title="Social Media Handle"
-        content={<SocialHandleForm id={id} />}
+        content={<SocialHandleForm userData={userData} id={id} />}
       />
     </>
   );
