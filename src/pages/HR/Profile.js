@@ -298,6 +298,10 @@ const Profile = () => {
         setformValue={setFormValue}
         setsubmitted={setSubmitted}
       />
+      <ViewModal
+        title="Social Media Handle"
+        content={<SocialHandleForm userData={userData} id={id} />}
+      />
     </>
   );
 };
