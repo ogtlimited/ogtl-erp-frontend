@@ -240,14 +240,14 @@ const IdRequest = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Permanent Id Request</h3>
+            <h3 className="page-title">Permanent ID Request</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
 
               <li className="breadcrumb-item active">
-                Permanent Id Request List
+                Permanent ID Request List
               </li>
             </ul>
           </div>

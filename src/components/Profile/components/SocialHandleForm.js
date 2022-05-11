@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import config from "../../config.json";
-import success from "../../assets/img/success.svg";
+import success from "../../../assets/img/success.svg";
+import axiosInstance from "../../../services/api";
 
-const SocialHandleForm = () => {
+const SocialHandleForm = ({ id }) => {
   const [submitted, setsubmitted] = useState(false);
   const [progress, setprogress] = useState(10);
   const [fileName, setfileName] = useState("");
@@ -17,14 +17,13 @@ const SocialHandleForm = () => {
     // setprogress(65)
     setsubmitted(true);
 
-    axios.post(config.ApiUrl + "/api/employee", field).then((res) => {
+    axiosInstance.put("/employees/" + id, field).then((res) => {
       console.log(res);
       setsubmitted(false);
       setafterSuccess(true);
       setheader("Your Application has been submitted sucessfully");
       setTimeout(() => {
         setafterSuccess(false);
-        document.getElementById("closeBtn").click();
       }, 4000);
     });
   };
@@ -35,10 +34,11 @@ const SocialHandleForm = () => {
       initialValues={{
         twitter: "",
         facebook: "",
-        middle_name: "",
+        instagram: "",
+        linkedIn: "",
       }}
       onSubmit={(fields) => {
-        handleSubmit(null, fields);
+        handleSubmit(null, { socialHandle: fields });
         console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
@@ -51,17 +51,12 @@ const SocialHandleForm = () => {
         handleChange,
       }) => (
         <div className="card">
-          <div className="card-header application-form-header">
-            Application Form
-          </div>
           <div className="card-body">
             {!afterSuccess ? (
               <Form>
                 <div className="form-group row">
                   <div className="col-md-6">
-                    <label htmlFor="twitter">
-                      Twitter <span className="text-danger">*</span>
-                    </label>
+                    <label htmlFor="twitter">Twitter</label>
                     <Field
                       name="twitter"
                       type="text"
@@ -77,9 +72,7 @@ const SocialHandleForm = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="facebook">
-                      Facebook <span className="text-danger">*</span>
-                    </label>
+                    <label htmlFor="facebook">Facebook</label>
                     <Field
                       name="facebook"
                       type="text"
@@ -101,27 +94,25 @@ const SocialHandleForm = () => {
                   <div className="col-md-6">
                     <label>LinkedIn</label>
                     <Field
-                      name="middle_name"
+                      name="linkedIn"
                       type="text"
                       className="form-control"
                     />
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="linkedIn">
-                      Email <span className="text-danger">*</span>
-                    </label>
+                    <label htmlFor="instagram">Instagram</label>
                     <Field
-                      name="linkedIn"
+                      name="instagram"
                       type="text"
                       className={
                         "form-control" +
-                        (errors.linkedIn && touched.linkedIn
+                        (errors.instagram && touched.instagram
                           ? " is-invalid"
                           : "")
                       }
                     />
                     <ErrorMessage
-                      name="linkedIn"
+                      name="instagram"
                       component="div"
                       className="invalid-feedback"
                     />
@@ -138,7 +129,7 @@ const SocialHandleForm = () => {
                     aria-expanded="false"
                     aria-controls={"collapse3"}
                   >
-                    Next
+                    Submit
                   </button>
                 </div>
               </Form>
