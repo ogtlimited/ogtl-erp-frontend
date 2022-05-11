@@ -486,7 +486,7 @@ const sidebarConfig = [
       },
       {
         canView: "Accounting",
-        title: "ID Request",
+        title: "Id Request",
         path: PATH_DASHBOARD.IdRequest,
         icon: ICONS.user,
       },

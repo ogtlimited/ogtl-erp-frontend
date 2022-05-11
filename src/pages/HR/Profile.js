@@ -15,8 +15,6 @@ import { useAppContext } from "../../Context/AppContext";
 import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
 import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
-import ViewModal from "../../components/Modal/ViewModal";
-import SocialHandleForm from "../../components/Profile/components/SocialHandleForm";
 
 const Profile = () => {
   const [formType, setformType] = useState("");
@@ -268,32 +266,6 @@ const Profile = () => {
                             </a>
                           </div>
                         </li>
-                        <li>
-                          <div className="title">Social Handle</div>
-                          <div className="text">
-                            {userData?.employee?.socialHandle &&
-                              Object.keys(userData?.employee?.socialHandle).map(
-                                (e) => (
-                                  <>
-                                    <a
-                                      href={userData?.employee?.socialHandle[e]}
-                                    >
-                                      {helper.capitalize(e)}
-                                    </a>{" "}
-                                    &nbsp;
-                                  </>
-                                )
-                              )}
-
-                            <a
-                              class="edit-icon"
-                              data-toggle="modal"
-                              data-target="#generalModal"
-                            >
-                              <i class="fa fa-pencil"></i>
-                            </a>
-                          </div>
-                        </li>
                       </ul>
                     </div>
                   </div>
@@ -325,10 +297,6 @@ const Profile = () => {
         template={template}
         setformValue={setFormValue}
         setsubmitted={setSubmitted}
-      />
-      <ViewModal
-        title="Social Media Handle"
-        content={<SocialHandleForm id={id} />}
       />
     </>
   );
