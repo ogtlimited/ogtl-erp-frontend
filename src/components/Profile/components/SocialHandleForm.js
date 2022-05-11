@@ -13,8 +13,6 @@ const SocialHandleForm = ({ id }) => {
   const [header, setheader] = useState("Add Your Details");
 
   const handleSubmit = (e, field) => {
-    console.log(field);
-    // setprogress(65)
     setsubmitted(true);
 
     axiosInstance.put("/employees/" + id, field).then((res) => {
@@ -39,7 +37,6 @@ const SocialHandleForm = ({ id }) => {
       }}
       onSubmit={(fields) => {
         handleSubmit(null, { socialHandle: fields });
-        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
         errors,
