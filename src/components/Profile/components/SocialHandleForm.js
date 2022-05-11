@@ -5,9 +5,7 @@ import axios from "axios";
 import config from "../../config.json";
 import success from "../../assets/img/success.svg";
 
-
 const SocialHandleForm = () => {
-
   const [submitted, setsubmitted] = useState(false);
   const [progress, setprogress] = useState(10);
   const [fileName, setfileName] = useState("");
@@ -19,17 +17,16 @@ const SocialHandleForm = () => {
     // setprogress(65)
     setsubmitted(true);
 
-    axios.post(config.ApiUrl +'/api/employee',field ).then(res =>{
-        console.log(res)
-        setsubmitted(false)
-        setafterSuccess(true)
-        setheader('Your Application has been submitted sucessfully')
-        setTimeout(() => {
-            setafterSuccess(false)
-            document.getElementById("closeBtn").click()
-        }, 4000);
-
-    })
+    axios.post(config.ApiUrl + "/api/employee", field).then((res) => {
+      console.log(res);
+      setsubmitted(false);
+      setafterSuccess(true);
+      setheader("Your Application has been submitted sucessfully");
+      setTimeout(() => {
+        setafterSuccess(false);
+        document.getElementById("closeBtn").click();
+      }, 4000);
+    });
   };
 
   return (
@@ -40,12 +37,6 @@ const SocialHandleForm = () => {
         facebook: "",
         middle_name: "",
       }}
-      validationSchema={Yup.object().shape({
-        twitter: Yup.string().required("First Name is required"),
-        facebook: Yup.string().required("Last Name is required"),
-        linkedIn: Yup.string().required("Last Name is required"),
-
-      })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
         console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
@@ -67,14 +58,6 @@ const SocialHandleForm = () => {
             {!afterSuccess ? (
               <Form>
                 <div className="form-group row">
-                  <div className="col-md-6 ml-1">
-                    <label>
-                      All field with <span className="text-danger">*</span> are
-                      required
-                    </label>
-                  </div>
-                </div>
-                <div className="form-group row">
                   <div className="col-md-6">
                     <label htmlFor="twitter">
                       Twitter <span className="text-danger">*</span>
@@ -84,9 +67,7 @@ const SocialHandleForm = () => {
                       type="text"
                       className={
                         "form-control" +
-                        (errors.twitter && touched.twitter
-                          ? " is-invalid"
-                          : "")
+                        (errors.twitter && touched.twitter ? " is-invalid" : "")
                       }
                     />
                     <ErrorMessage
@@ -146,30 +127,8 @@ const SocialHandleForm = () => {
                     />
                   </div>
                 </div>
-                <div className="form-group row">
-                  <div className="col-md-6">
-                    <label htmlFor="mobile">
-                      Mobile <span className="text-danger">*</span>
-                    </label>
-                    <Field
-                      name="mobile"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.mobile && touched.mobile ? " is-invalid" : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="mobile"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
-                 
-                </div>
 
                 <div className="row flex justify-content-between px-3">
-                  
                   <button
                     type="submit"
                     disabled={!(dirty && isValid)}
