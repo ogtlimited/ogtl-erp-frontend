@@ -5,18 +5,20 @@ import axios from "axios";
 import success from "../../../assets/img/success.svg";
 import axiosInstance from "../../../services/api";
 
-const SocialHandleForm = ({ id }) => {
+const SocialHandleForm = ({ id, userData }) => {
   const [submitted, setsubmitted] = useState(false);
   const [progress, setprogress] = useState(10);
   const [fileName, setfileName] = useState("");
   const [afterSuccess, setafterSuccess] = useState(false);
+  const [employee, setemployee] = useState({})
   const [header, setheader] = useState("Add Your Details");
+  useEffect(() => {
+    setemployee(userData?.employee)
+   console.log(userData?.employee)
+  }, [userData])
 
   const handleSubmit = (e, field) => {
-    console.log(field);
-    // setprogress(65)
     setsubmitted(true);
-
     axiosInstance.put("/employees/" + id, field).then((res) => {
       console.log(res);
       setsubmitted(false);
@@ -30,16 +32,15 @@ const SocialHandleForm = ({ id }) => {
 
   return (
     <Formik
-      enableReinitialize={false}
+      enableReinitialize={true}
       initialValues={{
-        twitter: "",
-        facebook: "",
-        instagram: "",
-        linkedIn: "",
+        twitter: employee?.socialHandle?.twitter,
+        facebook: employee?.socialHandle?.facebook,
+        instagram: employee?.socialHandle?.instagram,
+        linkedIn: employee?.socialHandle?.linkedIn,
       }}
       onSubmit={(fields) => {
         handleSubmit(null, { socialHandle: fields });
-        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
         errors,
