@@ -259,8 +259,8 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-      <div className="row tab-content">
+      <div>
+      <div className=" tab-content">
         <div id="tab_leaves" className="col-12 tab-pane show active">
         <div className="row">
         <div className="col-md-3">

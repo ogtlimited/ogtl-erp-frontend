@@ -787,7 +787,7 @@ const PayslipReport = Loadable(
   lazy(() => import("../pages/Reports/PayslipReport"))
 );
 const JobOpening = Loadable(
-  lazy(() => import("../pages/HR/Admin/JobOpening.Admin"))
+  lazy(() => import("../pages/HR/Admin/JobOpeningContainer"))
 );
 const JobOffer = Loadable(
   lazy(() => import("../pages/HR/Admin/JobOffer.Admin"))
