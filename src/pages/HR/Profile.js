@@ -268,6 +268,32 @@ const Profile = () => {
                             </a>
                           </div>
                         </li>
+                        <li>
+                          <div className="title">Social Handle</div>
+                          <div className="text">
+                            {userData?.employee?.socialHandle &&
+                              Object.keys(userData?.employee?.socialHandle).map(
+                                (e) => (
+                                  <>
+                                    <a
+                                      href={userData?.employee?.socialHandle[e]}
+                                    >
+                                      {helper.capitalize(e)}
+                                    </a>{" "}
+                                    &nbsp;
+                                  </>
+                                )
+                              )}
+
+                            <a
+                              class="edit-icon"
+                              data-toggle="modal"
+                              data-target="#generalModal"
+                            >
+                              <i class="fa fa-pencil"></i>
+                            </a>
+                          </div>
+                        </li>
                       </ul>
                     </div>
                   </div>
