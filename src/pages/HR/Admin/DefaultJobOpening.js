@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { jobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/JobOpening";
+import { DefaultjobOpeningFormJson } from "../../../components/FormJSON/HR/recruitment/JobOpening";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -23,9 +23,9 @@ const jobOpts = [
   },
 ];
 
-const JobOpening = () => {
+const DefaultJobOpening = () => {
   const [formValue, setFormValue] = useState(null);
-  const [template, setTemplate] = useState(jobOpeningFormJson);
+  const [template, setTemplate] = useState(DefaultjobOpeningFormJson);
   const [submitted, setSubmitted] = useState(false);
   const { createRecruitmens, showAlert, setformUpdate, user } = useAppContext();
   const [data, setData] = useState([]);
@@ -40,8 +40,6 @@ const JobOpening = () => {
   const editRow = (row) => {
     setmode("edit");
     seteditData(row);
-    alert('edit')
-    console.log('edit')
     let formatted = helper.handleEdit(row);
     setformUpdate(formatted);
     setclickedRow(formatted);
@@ -60,8 +58,9 @@ const JobOpening = () => {
 
   const fetchJobOpenings = () => {
     axiosInstance
-      .get("/api/jobOpening")
+      .get("/api/jobOpening/defaultJobs")
       .then((res) => {
+          console.log(res)
         setData(res.data.data);
         setunfiltered(res?.data?.data);
       })
@@ -81,55 +80,7 @@ const JobOpening = () => {
       setData(filt);
     }
   };
-  useEffect(() => {
-    createRecruitmens()
-      .then((res) => {
-        const { projects, designations, branches } =
-          res.data.createRecruitmentForm;
-        const projectsOpts = projects?.map((e) => {
-          return {
-            label: e.project_name,
-            value: e._id,
-          };
-        });
-        const designationOpts = designations?.map((e) => {
-          return {
-            label: e.designation,
-            value: e._id,
-          };
-        });
-        const branchOpts = branches?.map((e) => {
-          return {
-            label: e.branch,
-            value: e._id,
-          };
-        });
-        const finalForm = jobOpeningFormJson.Fields.map((field) => {
-          console.log(field);
-          if (field.name === "designation_id") {
-            field.options = designationOpts;
-            return field;
-          } else if (field.name === "project_id") {
-            field.options = projectsOpts;
-            return field;
-          } else if (field.name === "location") {
-            field.options = branchOpts;
-            return field;
-          }
-          return field;
-        });
-        // setTemplate({
-        //   title: jobOpeningFormJson.title,
-        //   Fields: finalForm,
-        // });
-        if (!loadSelect) {
-          setloadSelect(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [loadSelect]);
+
 
   //create job opening
   useEffect(() => {
@@ -144,7 +95,7 @@ const JobOpening = () => {
         console.log(hash);
 
         axiosInstance
-          .post("/api/jobOpening", hash)
+          .post("/api/jobOpening/defaultJobs", hash)
           .then((res) => {
             // setFormValue(null);
             setSubmitted(false);
@@ -165,12 +116,8 @@ const JobOpening = () => {
           });
       } else {
         formValue._id = editData._id;
-        // delete formValue.__v;
-        // delete formValue.createdAt;
-        // delete formValue.updatedAt;
-
         axiosInstance
-          .patch("/api/jobOpening/" + editData._id, formValue)
+          .patch("/api/jobOpening/defaultJobs/" + editData._id, formValue)
           .then((res) => {
             // setFormValue(null);
             setSubmitted(false);
@@ -199,7 +146,7 @@ const JobOpening = () => {
   //delete job opening
   const deleteJobOpening = (row) => {
     axiosInstance
-      .delete(`/api/jobOpening/${row._id}`)
+      .delete(`/api/jobOpening/defaultJobs/${row._id}`)
       .then((res) => {
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
@@ -239,48 +186,6 @@ const JobOpening = () => {
       text: "Job Title",
       sort: true,
       headerStyle: { minWidth: "150px" },
-    },
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => (
-        <>
-          <ApproverBtn
-            setstatusRow={setstatusRow}
-            setStatus={setStatus}
-            value={value}
-            row={row}
-            context="job_opening"
-          />
-        </>
-      ),
-    },
-    {
-      dataField: "designation_id",
-      text: "Designation",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => <h2>{row?.designation_id?.designation}</h2>,
-    },
-    {
-      dataField: "project_id",
-      text: "Project",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => (
-        <h2>{row?.project_id?.project_name || "Not Available"}</h2>
-      ),
-    },
-    {
-      dataField: "location",
-      text: "Location",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (value, row) => (
-        <h2>{row?.location?.branch || "Not Available"}</h2>
-      ),
     },
     {
       dataField: "",
@@ -330,7 +235,7 @@ const JobOpening = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Opening List</h3>
+            <h3 className="page-title">Default Job Opening List</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
@@ -338,17 +243,26 @@ const JobOpening = () => {
               <li className="breadcrumb-item">
                 <Link to="/">Employees</Link>
               </li>
-              <li className="breadcrumb-item active">Job Opening List</li>
+              <li className="breadcrumb-item active"> Default Job Opening List</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+          <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#FormModal"
+                onClick={() => create('default')}
+              >
+                Add Default Job
+              </a>
             {loadSelect && user?.role?.hr?.create && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={() => create()}
+                onClick={() => create('normal')}
               >
                 Add Job Opening
               </a>
@@ -372,15 +286,15 @@ const JobOpening = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && (
+      
         <FormModal2
-          title="Create Job Opening"
+          title="Default Job Opening Form"
           editData={editData}
           setformValue={setFormValue}
           template={HelperService.formArrayToObject(template.Fields)}
           setsubmitted={setSubmitted}
         />
-      )}
+     
       <ConfirmModal
         title="Job Opening"
         selectedRow={selectedRow}
@@ -390,4 +304,4 @@ const JobOpening = () => {
   );
 };
 
-export default JobOpening;
+export default DefaultJobOpening;
