@@ -91,3 +91,13 @@ export const jobOpeningFormJson = {
     },
   ],
 };
+export const DefaultjobOpeningFormJson = {
+  title: "Job Opening Form",
+  Fields: [
+    {
+      name: "job_title",
+      type: "text",
+      title: "Job Title",
+    }
+  ],
+};
