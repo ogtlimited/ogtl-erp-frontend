@@ -167,19 +167,9 @@ const Deductions = () => {
     },
   ];
   return (
-    <>
-      <div className="page-header" id="tab_deductions">
+    <div className="tab-pane" id="tab_deductions">
+      <div>
         <div className="row">
-          <div className="col">
-            <h3 className="page-title">Employee Deductions List</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
-
-              <li className="breadcrumb-item active">Deductions List</li>
-            </ul>
-          </div>
           <div className="col-auto float-right ml-auto">
             <a
               href="#"
@@ -212,7 +202,7 @@ const Deductions = () => {
         selectedRow={selectedRow}
         deleteFunction={deleteDeductions}
       />
-    </>
+    </div>
   );
 };
 
