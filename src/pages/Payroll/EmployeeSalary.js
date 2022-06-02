@@ -87,7 +87,7 @@ const EmployeeSalary = () => {
           className="btn btn-sm btn-primary"
           // to={`/admin/payslip/${row?._id}`}
           to={{
-            pathname: `/admin/payslip/${row?._id}`,
+            pathname: `/dashboard/payroll/payslip/${row?.employeeId._id}`,
             state: { employee: row?.employeeId },
           }}
         >

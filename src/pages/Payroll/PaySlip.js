@@ -38,6 +38,7 @@ const PaySlip = () => {
   const breadcrumb = "Payslip";
   const { id } = useParams();
   const location = useLocation();
+  const [employee, setemployee] = useState({})
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
   const [fetched, setfetched] = useState(false)
@@ -62,6 +63,7 @@ const PaySlip = () => {
 
         }
         console.log('TOTAL', totalDeduction)
+        setemployee(employeeSalary.employeeId)
         delete employeeSalary.createdAt
         delete employeeSalary.updatedAt
         delete employeeSalary.employeeId
@@ -168,14 +170,14 @@ const PaySlip = () => {
                     <li>
                       <h5 className="mb-0">
                         <strong>
-                          {location?.state?.employee?.first_name}{" "}
-                          {location?.state?.employee?.middle_name}{" "}
-                          {location?.state?.employee?.last_name}
+                          {employee?.first_name}{" "}
+                          {employee?.middle_name}{" "}
+                          {employee?.last_name}
                         </strong>
                       </h5>
                     </li>
                     <li>{/* <span>Web Designer</span> */}</li>
-                    <li>Employee ID: {location?.state?.employee?.ogid}</li>
+                    <li>Employee ID: {employee?.ogid}</li>
                     <li>
                       Joining Date:{" "}
                       {moment(
@@ -198,9 +200,12 @@ const PaySlip = () => {
                             <tr key={index}>
                               <td>
                                 <strong>{earning}</strong>{" "}
+                                {earning != 'department' ? 
                                 <span className="float-right">
                                   {formatter.format(earnings[earning])}
                                 </span>
+                                : ''
+                              }
                               </td>
                             </tr>
                           )
