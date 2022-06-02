@@ -12,7 +12,8 @@ const EmployeeSalary = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        setData(res.data.data);
+        console.log(res)
+        setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
         console.log(error?.response);
