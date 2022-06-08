@@ -82,7 +82,6 @@ const JobModal = () => {
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
-        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({ errors, status, touched, setFieldValue }) => (
         <div

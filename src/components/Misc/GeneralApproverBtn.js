@@ -7,7 +7,6 @@ const GeneralApproverBtn = ({
   row,
   value,
 }) => {
-  console.log({ value });
   const handleStatus = (status) => {
     setStatus(status);
     setstatusRow(row);
