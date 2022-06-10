@@ -12,7 +12,8 @@ const EmployeeSalary = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        setData(res.data.data);
+        console.log(res)
+        setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
         console.log(error?.response);
@@ -86,7 +87,7 @@ const EmployeeSalary = () => {
           className="btn btn-sm btn-primary"
           // to={`/admin/payslip/${row?._id}`}
           to={{
-            pathname: `/admin/payslip/${row?._id}`,
+            pathname: `/dashboard/payroll/payslip/${row?.employeeId._id}`,
             state: { employee: row?.employeeId },
           }}
         >

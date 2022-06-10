@@ -11,6 +11,7 @@ import { formatter } from "../../services/numberFormatter";
 
 const PayrollReports = () => {
   const { combineRequest, showAlert } = useAppContext();
+  const [generating, setgenerating] = useState(false);
   const ref = useRef(null);
   const [val, setval] = useState("");
   const [counter, setcounter] = useState(0);
@@ -34,7 +35,7 @@ const PayrollReports = () => {
       icon: "las la-project-diagram",
       id: 3,
     },
-  ])
+  ]);
   const click = () => {
     setval(ref.current.value);
     ref.current.value = val + ref.current.value;
@@ -44,18 +45,21 @@ const PayrollReports = () => {
     axiosInstance
       .get("/api/salary-slip")
       .then((res) => {
-        const totalSalary = formatter.format(res.data.data[1].total[0].salaries)
+        const totalSalary = formatter.format(
+          res.data.data[1].total[0].salaries
+        );
         setData(res.data.data[0].salarySlips);
         combineRequest().then((res) => {
-          const { departments, projects, employees  } = res.data.createEmployeeFormSelection;
-          let total = [totalSalary, projects.length, employees.length]
+          const { departments, projects, employees } =
+            res.data.createEmployeeFormSelection;
+          let total = [totalSalary, projects.length, employees.length];
           let updated = card.map((e, i) => {
             return {
               ...e,
-              amount: total[i]
-            }
-          })
-          setcard(updated)
+              amount: total[i],
+            };
+          });
+          setcard(updated);
         });
       })
       .catch((error) => {
@@ -63,10 +67,13 @@ const PayrollReports = () => {
       });
   };
   const generatePayroll = () => {
+    setgenerating(true);
     axiosInstance
-      .get("/api/salary-slip")
+      .post("/api/salary-slip/generate", { action: "generate" })
       .then((res) => {
-        setData(res.data.data[0].salarySlips);
+        fetchEmployeeSalary();
+        setgenerating(false);
+        // setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
         console.log(error?.response);
@@ -173,7 +180,7 @@ const PayrollReports = () => {
     <>
       <div class="alert alert-primary sliding-text" role="alert">
         <div>
-        <AlertSvg />
+          <AlertSvg />
           <svg
             className="bi flex-shrink-0 me-2"
             width="24"
@@ -182,9 +189,14 @@ const PayrollReports = () => {
           >
             <use xlinkHref="#info-fill" />
           </svg>
-          <span className="pl-3">Payroll is generated on the 25th of every month</span>
-          <span className="pl-3"> | &nbsp; You can click the generate button to generate payroll for the current month</span>
-
+          <span className="pl-3">
+            Payroll is generated on the 25th of every month
+          </span>
+          <span className="pl-3">
+            {" "}
+            | &nbsp; You can click the generate button to generate payroll for
+            the current month
+          </span>
         </div>
       </div>
       <div className="page-header">
@@ -197,10 +209,16 @@ const PayrollReports = () => {
             </ul>
           </div>
           <div class="col-auto float-end ms-auto">
-            <a  href="/#"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#generalModal"><i class="fa fa-plus"></i> Generate Payroll</a></div>
+            <button className="btn add-btn" onClick={generatePayroll}>
+              {!generating ? (
+                <>
+                  <i class="fa fa-plus"></i> Generate Payroll
+                </>
+              ) : (
+                <div class="spinner-border text-light pl-2" role="status"></div>
+              )}
+            </button>
+          </div>
         </div>
       </div>
       <div className="row">
