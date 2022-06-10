@@ -6,6 +6,10 @@ export const salaryDeductionsFormJson = {
       type: "select",
       title: "Deduction Type",
       options: [],
+      required: {
+        value: true,
+        message: "Deduction type  is required",
+      },
     },
 
     {
@@ -13,12 +17,20 @@ export const salaryDeductionsFormJson = {
       type: "select",
       title: "Employee",
       options: [],
+      required: {
+        value: true,
+        message: "employee  is required",
+      },
     },
 
     {
-      name: "quantity",
+      name: "amount",
       type: "number",
-      title: "Quantity",
+      title: "Amount",
+      required: {
+        value: true,
+        message: "amount  is required",
+      },
     },
   ],
 };

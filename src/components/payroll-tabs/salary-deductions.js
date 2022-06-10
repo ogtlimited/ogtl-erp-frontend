@@ -11,7 +11,7 @@ import HelperService from "../../services/helper";
 
 const Deductions = () => {
   const [template, setTemplate] = useState(salaryDeductionsFormJson);
-  const { createEmployee, showAlert, setformUpdate } = useAppContext();
+  const { createEmployee, showAlert, combineRequest } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState({});
@@ -39,7 +39,7 @@ const Deductions = () => {
 
   useEffect(() => {
     createEmployee().then((res) => {
-      const { employees } = res.data.createEmployeeForm;
+      const { employees, deductionTypes } = res.data.createEmployeeForm;
 
       const deptOpts = employees?.map((e) => {
         return {
@@ -47,13 +47,23 @@ const Deductions = () => {
           value: e._id,
         };
       });
+      const dedTypeOpts = deductionTypes?.map((e) => {
+        return {
+          label: `${e.title}`,
+          value: e._id,
+        };
+      });
       const finalForm = salaryDeductionsFormJson.Fields.map((field) => {
         if (field.name === "employeeId") {
           field.options = deptOpts;
           return field;
+        } else if (field.name === "deductionTypeId") {
+          field.options = dedTypeOpts;
+          return field;
         }
         return field;
       });
+      console.log(finalForm);
       setTemplate({
         title: salaryDeductionsFormJson.title,
         Fields: finalForm,
@@ -111,26 +121,27 @@ const Deductions = () => {
 
   const columns = [
     {
-      dataField: "employee_id",
+      dataField: "employeeId",
       text: "Employee",
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <h2>
-          {row.employee_id.first_name} {row.employee_id.last_name}
+          {row?.employeeId?.first_name} {row?.employeeId?.last_name}
         </h2>
       ),
     },
+
     {
       dataField: "deductionTypeId",
-      text: "Deduction Type",
+      text: "Deduction",
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => <h2>{row?.deductionTypeId?.title}</h2>,
     },
     {
-      dataField: "quantity",
-      text: "Quantity",
+      dataField: "amount",
+      text: "Amount",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
@@ -177,7 +188,7 @@ const Deductions = () => {
               data-toggle="modal"
               data-target="#FormModal"
             >
-              Add Deduction
+              Add
             </a>
           </div>
         </div>
@@ -188,15 +199,15 @@ const Deductions = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-      {loadSelect && (
-        <FormModal2
-          title="Add Deduction"
-          editData={editData}
-          setformValue={setFormValue}
-          template={HelperService.formArrayToObject(template.Fields)}
-          setsubmitted={setSubmitted}
-        />
-      )}
+
+      <FormModal2
+        title="Add Deduction"
+        editData={editData}
+        setformValue={setFormValue}
+        template={HelperService.formArrayToObject(template.Fields)}
+        setsubmitted={setSubmitted}
+      />
+
       <ConfirmModal
         title="Deductions"
         selectedRow={selectedRow}

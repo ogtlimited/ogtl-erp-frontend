@@ -134,7 +134,16 @@ const PayrollItems = () => {
                   data-toggle="tab"
                   href="#tab_deductions"
                 >
-                  Salary Deductions
+                  Deductions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_deduction_types"
+                >
+                  Deduction Types
                 </a>
               </li>
             </ul>
@@ -164,13 +173,13 @@ const PayrollItems = () => {
           loadSelect={loadSelect}
           setsubmitted={setsubmitted}
         />
-        {/* <DeductionType
+        <DeductionType
           setformType={setformType}
           submitted={submitted}
           formValue={formValue}
           loadSelect={loadSelect}
           setsubmitted={setsubmitted}
-        /> */}
+        />
       </div>
     </>
   );

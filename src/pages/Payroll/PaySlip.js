@@ -40,63 +40,69 @@ const PaySlip = () => {
   const location = useLocation();
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
-  const [fetched, setfetched] = useState(false)
-  const [totalDeduction, settotalDeduction] = useState(0)
-  const [deductionsBreakDown, setdeductionsBreakDown] = useState([])
+  const [fetched, setfetched] = useState(false);
+  const [totalDeduction, settotalDeduction] = useState(0);
+  const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
-        const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-        const endOfMonth   = moment().endOf('month').format('YYYY-MM-DD');
-        console.log(startOfMonth, endOfMonth)
-        const res = await axiosInstance.get
-        (`/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`);
+        const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+        const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+        console.log(startOfMonth, endOfMonth);
+        const res = await axiosInstance.get(
+          `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
+        );
+
         // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        console.log(res)
+        console.log(res);
         setPaySlip(res.data.data.employeeSlip);
-        const earnings = {}
-        const {employeeSalary, deductionsBreakDown} = res.data.data.employeeSlip
-        setdeductionsBreakDown(deductionsBreakDown)
-        if(paySlip?.additionalDeductions){
-          settotalDeduction(Object.values(paySlip?.additionalDeductions).reduce((a, b) => a + b, 0))
-
+        const earnings = {};
+        const { employeeSalary, deductionsBreakDown } =
+          res.data.data.employeeSlip;
+        setdeductionsBreakDown(deductionsBreakDown);
+        if (paySlip?.additionalDeductions) {
+          settotalDeduction(
+            Object.values(paySlip?.additionalDeductions).reduce(
+              (a, b) => a + b,
+              0
+            )
+          );
         }
-        console.log('TOTAL', totalDeduction)
-        delete employeeSalary.createdAt
-        delete employeeSalary.updatedAt
-        delete employeeSalary.employeeId
-        delete employeeSalary._id
-        delete employeeSalary.__v
-       Object.keys(employeeSalary).forEach(e =>{
-        switch (e) {
-          case 'monthlyEmployeePension':
-            earnings['Pension'] = employeeSalary[e]
-            break;
-          case 'monthlyIncomeTax':
-            earnings['Tax'] = employeeSalary[e]
-            break;
-          case 'monthlySalary':
-            earnings['Salary'] = employeeSalary[e]
-            break;
-          case 'netPay':
-            earnings['Net Pay'] = employeeSalary[e]
-            break;
-          case 'otherAllowances':
-            earnings['Other Allowances'] = employeeSalary[e]
-            break;
-          case 'monthlyEmployeePension':
-            earnings['Pension'] = employeeSalary[e]
-            break;
-          default:
-            let key = e.charAt(0).toUpperCase() + e.slice(1)
-            earnings[key] = employeeSalary[e]
-            break;
-        }
-       })
-       setEarnings(earnings)
-       setfetched(true)
-       console.log(earnings)
-
+        console.log("TOTAL", totalDeduction);
+        delete employeeSalary.createdAt;
+        delete employeeSalary.updatedAt;
+        delete employeeSalary.employeeId;
+        delete employeeSalary._id;
+        delete employeeSalary.__v;
+        Object.keys(employeeSalary).forEach((e) => {
+          switch (e) {
+            case "monthlyEmployeePension":
+              earnings["Pension"] = employeeSalary[e];
+              break;
+            case "monthlyIncomeTax":
+              earnings["Tax"] = employeeSalary[e];
+              break;
+            case "monthlySalary":
+              earnings["Salary"] = employeeSalary[e];
+              break;
+            case "netPay":
+              earnings["Net Pay"] = employeeSalary[e];
+              break;
+            case "otherAllowances":
+              earnings["Other Allowances"] = employeeSalary[e];
+              break;
+            case "monthlyEmployeePension":
+              earnings["Pension"] = employeeSalary[e];
+              break;
+            default:
+              let key = e.charAt(0).toUpperCase() + e.slice(1);
+              earnings[key] = employeeSalary[e];
+              break;
+          }
+        });
+        setEarnings(earnings);
+        setfetched(true);
+        console.log(earnings);
       } catch (error) {
         console.log(error);
       }
@@ -193,8 +199,8 @@ const PaySlip = () => {
                     </h4>
                     <table className="table table-bordered">
                       <tbody>
-                        {fetched && Object.keys(earnings).map(
-                          (earning, index) => (
+                        {fetched &&
+                          Object.keys(earnings).map((earning, index) => (
                             <tr key={index}>
                               <td>
                                 <strong>{earning}</strong>{" "}
@@ -203,8 +209,7 @@ const PaySlip = () => {
                                 </span>
                               </td>
                             </tr>
-                          )
-                        )}
+                          ))}
                       </tbody>
                     </table>
                   </div>
@@ -216,36 +221,45 @@ const PaySlip = () => {
                     </h4>
                     <table className="table table-bordered">
                       <tbody>
-                      {fetched && Object.keys(paySlip?.additionalDeductions).map(deduction =>(
+                        {fetched &&
+                          Object.keys(paySlip?.additionalDeductions).map(
+                            (deduction) => (
+                              <tr>
+                                <td>
+                                  <strong>
+                                    {deduction === "incompleteHours"
+                                      ? "Incomplete Hours"
+                                      : deduction.toUpperCase()}
+                                  </strong>{" "}
+                                  <span className="float-right">
+                                    {formatter.format(
+                                      paySlip?.additionalDeductions[deduction]
+                                    )}
+                                  </span>
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        {fetched && (
                           <tr>
                             <td>
-                              <strong>{deduction === 'incompleteHours' ? 'Incomplete Hours' : deduction.toUpperCase() }</strong>{" "}
+                              <strong>Total Deductions</strong>{" "}
                               <span className="float-right">
-                                {formatter.format(
-                                  paySlip?.additionalDeductions[deduction]
-                                )}
+                                {formatter.format(totalDeduction)}
                               </span>
                             </td>
                           </tr>
-
-                        ))}
-                      {fetched && 
-                        <tr>
-                              <td>
-                                <strong>Total Deductions</strong>{" "}
-                                <span className="float-right">
-                                  {formatter.format(
-                                    totalDeduction
-                                  )}
-                                </span>
-                              </td>
-                            </tr>
-                      
-                      } 
+                        )}
                       </tbody>
                     </table>
-                    <button type="button" data-toggle="modal"
-                data-target="#generalModal" class="btn btn-outline-primary">View Deductions</button>
+                    <button
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#generalModal"
+                      class="btn btn-outline-primary"
+                    >
+                      View Deductions
+                    </button>
                   </div>
                 </div>
                 <div className="col-sm-12">
@@ -263,7 +277,9 @@ const PaySlip = () => {
       {fetched && (
         <ViewModal
           title="Salary Deduction Breakdown"
-          content={<SalaryDeductionContent deductionsBreakDown={deductionsBreakDown} />}
+          content={
+            <SalaryDeductionContent deductionsBreakDown={deductionsBreakDown} />
+          }
         />
       )}
     </>

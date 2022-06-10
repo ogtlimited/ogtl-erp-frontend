@@ -1,16 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
+import { salaryPayrollNotesFormJson } from "../../components/FormJSON/payroll/payroll-notes";
 import FormModal2 from "../../components/Modal/FormModal2";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import moment from "moment";
 import HelperService from "../../services/helper";
+import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
 
-const DeductionType = () => {
-  const [template, setTemplate] = useState(salaryDeductionTypesFormJson);
+const statusOptions = [
+  {
+    title: "Pending",
+    color: "text-primary",
+  },
+  {
+    title: "Seen by accounts",
+    color: "text-secondary",
+  },
+  {
+    title: "In progress",
+    color: "text-info",
+  },
+  {
+    title: "Completed",
+    color: "text-success",
+  },
+];
+
+const PayrollNotes = () => {
+  const [template, setTemplate] = useState(salaryPayrollNotesFormJson);
   const { createEmployee, showAlert, setformUpdate } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
@@ -23,9 +43,9 @@ const DeductionType = () => {
 
   const [mode, setmode] = useState("add");
 
-  const fetchDeductionType = () => {
+  const fetchPayrollNotes = () => {
     axiosInstance
-      .get("/api/deductionType")
+      .get("/api/notes")
       .then((res) => {
         setData(res.data.data);
       })
@@ -34,31 +54,28 @@ const DeductionType = () => {
       });
   };
   useEffect(() => {
-    fetchDeductionType();
+    fetchPayrollNotes();
   }, []);
 
   useEffect(() => {
     createEmployee().then((res) => {
-      const { departments } = res.data.createEmployeeForm;
-      console.log("departments", departments);
+      const { employees } = res.data.createEmployeeForm;
 
-      const deptOpts = departments?.map((e) => {
+      const empOpts = employees?.map((e) => {
         return {
-          label: `${e.department}`,
+          label: `${e.first_name}  ${e.last_name}`,
           value: e._id,
         };
       });
-      console.log("departments again", deptOpts);
-      const finalForm = salaryDeductionTypesFormJson.Fields.map((field) => {
-        if (field.name === "departmentId") {
-          field.options = deptOpts;
+      const finalForm = salaryPayrollNotesFormJson.Fields.map((field) => {
+        if (field.name === "employeeId") {
+          field.options = empOpts;
           return field;
         }
         return field;
       });
-
       setTemplate({
-        title: salaryDeductionTypesFormJson.title,
+        title: salaryPayrollNotesFormJson.title,
         Fields: finalForm,
       });
       if (!loadSelect) setloadSelect(true);
@@ -68,10 +85,10 @@ const DeductionType = () => {
   useEffect(() => {
     if (submitted === true) {
       axiosInstance
-        .post("/api/deductionType", formValue)
+        .post("/api/notes", formValue)
         .then((res) => {
           setSubmitted(false);
-          fetchDeductionType();
+          fetchPayrollNotes();
           setData((prevData) => [...data, res.data.data]);
 
           showAlert(true, res.data.message, "alert alert-success");
@@ -83,10 +100,9 @@ const DeductionType = () => {
     }
   }, [submitted, formValue]);
 
-  //delete score card
-  const deleteDeductionType = (row) => {
+  const deletePayrollNotes = (row) => {
     axiosInstance
-      .delete(`/api/deductionType/${row._id}`)
+      .delete(`/api/notes/${row._id}`)
       .then((res) => {
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
@@ -99,12 +115,12 @@ const DeductionType = () => {
       });
   };
 
-  const updateDeductionType = (row) => {
+  const updatePayrollNotes = (row) => {
     axiosInstance
-      .patch(`/api/deductionType/${row._id}`, row)
+      .patch(`/api/notes/${row._id}`, row)
       .then((res) => {
         setData((prevData) => [...data, res.data.data]);
-        fetchDeductionType();
+        fetchPayrollNotes();
         showAlert(true, res?.data?.message, "alert alert-success");
       })
       .catch((error) => {
@@ -115,23 +131,44 @@ const DeductionType = () => {
 
   const columns = [
     {
-      dataField: "departmentId",
-      text: "Department",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => <h2>{row?.departmentId?.department}</h2>,
-    },
-    {
       dataField: "title",
       text: "Title",
       sort: true,
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "amount",
-      text: "Amount",
+      dataField: "employeeId",
+      text: "Employee",
       sort: true,
       headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => (
+        <h2>
+          {row?.employeeId?.first_name} {row?.employeeId?.last_name}
+        </h2>
+      ),
+    },
+    {
+      dataField: "description",
+      text: "Description",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (value, row) => (
+        <>
+          <GeneralApproverBtn
+            options={statusOptions}
+            setStatus={setStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
+        </>
+      ),
     },
 
     {
@@ -166,17 +203,29 @@ const DeductionType = () => {
     },
   ];
   return (
-    <div className="tab-pane" id="tab_deduction_types">
-      <div>
+    <>
+      <div className="page-header">
         <div className="row">
+          <div className="col">
+            <h3 className="page-title">
+              Payroll Addition and Subtraction Notes
+            </h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/">Dashboard</Link>
+              </li>
+
+              <li className="breadcrumb-item active">Payroll Notes List</li>
+            </ul>
+          </div>
           <div className="col-auto float-right ml-auto">
             <a
               href="#"
               className="btn add-btn m-r-5"
               data-toggle="modal"
-              data-target="#test1"
+              data-target="#FormModal"
             >
-              Add Deduction Type
+              Add Payroll Note
             </a>
           </div>
         </div>
@@ -187,23 +236,22 @@ const DeductionType = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-
-      <FormModal2
-        id="test1"
-        title="Add Deduction Type"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
-
+      {loadSelect && (
+        <FormModal2
+          title="Add Note"
+          editData={editData}
+          setformValue={setFormValue}
+          template={HelperService.formArrayToObject(template.Fields)}
+          setsubmitted={setSubmitted}
+        />
+      )}
       <ConfirmModal
-        title="Deduction Types"
+        title="Payroll Note"
         selectedRow={selectedRow}
-        deleteFunction={deleteDeductionType}
+        deleteFunction={deletePayrollNotes}
       />
-    </div>
+    </>
   );
 };
 
-export default DeductionType;
+export default PayrollNotes;
