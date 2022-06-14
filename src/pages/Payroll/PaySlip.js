@@ -89,15 +89,8 @@ const PaySlip = () => {
             case "netPay":
               earnings["Net Pay"] = employeeSalary[e];
               break;
-            case "otherAllowances":
-              earnings["Other Allowances"] = employeeSalary[e];
-              break;
-            case "monthlyEmployeePension":
-              earnings["Pension"] = employeeSalary[e];
-              break;
             default:
               let key = e.charAt(0).toUpperCase() + e.slice(1);
-              earnings[key] = employeeSalary[e];
               break;
           }
         });
