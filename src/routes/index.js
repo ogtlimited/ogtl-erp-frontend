@@ -10,6 +10,7 @@ import RecruitmentLayout from "../layouts/RecruitmentLayout";
 import Login from "../pages/Auth/Login";
 import NotFound from "../pages/Error/NotFound";
 import Unauthorized from "../pages/Error/unauthorized";
+import PayrollNotes from "../pages/Payroll/PayrollNotes";
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
@@ -263,6 +264,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <PayrollItems />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payroll-notes",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PayrollNotes />
                 </GuardedRoute>
               ),
             },
@@ -739,7 +748,9 @@ const ConsentPage = Loadable(
   lazy(() => import("../pages/recruitments/Consent"))
 );
 const JobView = Loadable(lazy(() => import("../pages/recruitments/jobview")));
-const AcceptJoboffer = Loadable(lazy(() => import("../pages/recruitments/acceptJoboffer")));
+const AcceptJoboffer = Loadable(
+  lazy(() => import("../pages/recruitments/acceptJoboffer"))
+);
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AdminDashboard = Loadable(
   lazy(() => import("../pages/Dashboard/AdminDashboard"))

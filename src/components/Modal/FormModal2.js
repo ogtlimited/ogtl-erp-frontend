@@ -7,6 +7,7 @@ const FormModal2 = ({
   setsubmitted,
   title,
   formValue,
+  id,
 }) => {
   const [value, setvalue] = useState(null);
   const [formSubmitted, setformSubmitted] = useState(false);
@@ -30,7 +31,7 @@ const FormModal2 = ({
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id={id || "FormModal"}
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"

@@ -3,12 +3,16 @@ import { salaryAssignmentFormJson } from "../../components/FormJSON/payroll/sala
 import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/salary-component";
 import { salarySettingsFormJson } from "../../components/FormJSON/payroll/salary-settings";
 import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
+import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
+import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
 import FormModal from "../../components/Modal/Modal";
 import Salary from "../../components/payroll-tabs/Salary";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalarySettings from "../../components/payroll-tabs/salary-settings";
 import SalaryStructure from "../../components/payroll-tabs/salary-structure";
+import Deductions from "../../components/payroll-tabs/salary-deductions";
+import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
@@ -32,6 +36,10 @@ const PayrollItems = () => {
       settemplate(salaryAssignmentFormJson);
     } else if (formType === "settings") {
       settemplate(salarySettingsFormJson);
+    } else if (formType === "deductions") {
+      settemplate(salaryDeductionsFormJson);
+    } else if (formType === "deductiontypes") {
+      settemplate(salaryDeductionTypesFormJson);
     }
   }, [formType, template]);
 
@@ -120,6 +128,24 @@ const PayrollItems = () => {
                   Salary Settings
                 </a>
               </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_deductions"
+                >
+                  Deductions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_deduction_types"
+                >
+                  Deduction Types
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -139,8 +165,22 @@ const PayrollItems = () => {
           loadSelect={loadSelect}
           setsubmitted={setsubmitted}
         />
-      </div>
 
+        <Deductions
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+          setsubmitted={setsubmitted}
+        />
+        <DeductionType
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+          setsubmitted={setsubmitted}
+        />
+      </div>
     </>
   );
 };

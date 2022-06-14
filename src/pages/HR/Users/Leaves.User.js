@@ -33,46 +33,50 @@ const LeavesUser = () => {
 
   const currentUser = tokenService.getUser();
   const fetchLeaves = () => {
-    axiosInstance.get(`/leave-application?employee_id=${currentUser?._id}`).then((e) => {
-      const leaves = e?.data?.data?.filter(
-        (f) => f?.employee_id?._id == userId
-      );
-      const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
-      const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
-      const open = leaves.filter((l) => l.status === "open").length;
-      let count = 0;
-      leaves.forEach((e) => {
-        let a = moment(new Date(e.from_date));
-        let b = moment(new Date(e.to_date));
-        count += b.diff(a, "days") + 1;
+    axiosInstance
+      .get(`/leave-application?employee_id=${currentUser?._id}`)
+      .then((e) => {
+        const leaves = e?.data?.data?.filter(
+          (f) => f?.employee_id?._id == userId
+        );
+        const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
+        const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
+        const open = leaves.filter((l) => l.status === "open").length;
+        let count = 0;
+        leaves.forEach((e) => {
+          let a = moment(new Date(e.from_date));
+          let b = moment(new Date(e.to_date));
+          count += b.diff(a, "days") + 1;
+        });
+
+        setusedLeaves(count);
+        setannual(annual);
+        setcasual(casual);
+        setmedical(medic);
+
+        setallLeaves(leaves);
+        if (allLeaves.length) {
+          setloadLeaves(true);
+        }
       });
 
-      setusedLeaves(count);
-      setannual(annual);
-      setcasual(casual);
-      setmedical(medic);
+    axiosInstance
+      .get(`/leave-application?leave_approver=${currentUser?._id}`)
+      .then((e) => {
+        const leaves = e.data.data;
 
-      setallLeaves(leaves);
-      if (allLeaves.length) {
-        setloadLeaves(true);
-      }
-    });
+        const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
+        const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
 
-    axiosInstance.get(`/leave-application?leave_approver=${currentUser?._id}`).then((e) => {
-      const leaves = e.data.data;
-
-      const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
-      const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
-
-      setSubordinatesannual(annual);
-      setSubordinatescasual(casual);
-      setSubordinatesmedical(medic);
-      setallSubordinatesLeaves(e.data.data);
-      // setapprovedSubordinatesLeaves(approved);
-      // setSubordinatesPlanned(open);
-      // setSubordinatesPresent(allEmployees.length - approved);
-      // setfetched(true);
-    });
+        setSubordinatesannual(annual);
+        setSubordinatescasual(casual);
+        setSubordinatesmedical(medic);
+        setallSubordinatesLeaves(e.data.data);
+        // setapprovedSubordinatesLeaves(approved);
+        // setSubordinatesPlanned(open);
+        // setSubordinatesPresent(allEmployees.length - approved);
+        // setfetched(true);
+      });
   };
   useEffect(() => {
     let user = tokenService.getUser();
@@ -251,7 +255,11 @@ const LeavesUser = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_subordinates-leaves">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_subordinates-leaves"
+                >
                   Leaves by Subordinates
                 </a>
               </li>
@@ -260,66 +268,66 @@ const LeavesUser = () => {
         </div>
       </div>
       <div>
-      <div className=" tab-content">
-        <div id="tab_leaves" className="col-12 tab-pane show active">
-        <div className="row">
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Used Leave</h6>
-            <h4>{usedLeaves}</h4>
+        <div className=" tab-content">
+          <div id="tab_leaves" className="col-12 tab-pane show active">
+            <div className="row">
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Used Leave</h6>
+                  <h4>{usedLeaves}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Medical Leave</h6>
+                  <h4>{medical}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Other Leave</h6>
+                  <h4>{casual}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Remaining Leave</h6>
+                  <h4>{user?.leaveCount}</h4>
+                </div>
+              </div>
+            </div>
+            <LeavesTable columns={columns} data={allLeaves} />
+          </div>
+          <div id="tab_subordinates-leaves" className="col-12 tab-pane">
+            <div className="row">
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Used Leave</h6>
+                  <h4>{usedLeaves}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Medical Leave</h6>
+                  <h4>{Subordinatesmedical}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Other Leave</h6>
+                  <h4>{Subordinatescasual}</h4>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="stats-info">
+                  <h6>Remaining Leave</h6>
+                  <h4>{user?.leaveCount}</h4>
+                </div>
+              </div>
+            </div>
+            <LeavesTable columns={columns} data={allSubordinatesLeaves} />
           </div>
         </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Medical Leave</h6>
-            <h4>{medical}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Other Leave</h6>
-            <h4>{casual}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Remaining Leave</h6>
-            <h4>{user?.leaveCount}</h4>
-          </div>
-        </div>
-      </div>
-          <LeavesTable columns={columns} data={allLeaves} />
-        </div>
-        <div id="tab_subordinates-leaves" className="col-12 tab-pane">
-        <div className="row">
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Used Leave</h6>
-            <h4>{usedLeaves}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Medical Leave</h6>
-            <h4>{Subordinatesmedical}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Other Leave</h6>
-            <h4>{Subordinatescasual}</h4>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="stats-info">
-            <h6>Remaining Leave</h6>
-            <h4>{user?.leaveCount}</h4>
-          </div>
-        </div>
-      </div>
-          <LeavesTable columns={columns} data={allSubordinatesLeaves} />
-        </div>
-      </div>
       </div>
       {loadedSelect && (
         <FormModal2

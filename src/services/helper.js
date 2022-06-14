@@ -39,14 +39,13 @@ class HelperService {
     const objTemplate = {};
     arr.forEach((e) => {
       if (e.type === "select") {
-        console.log(e)
         objTemplate[e.name] = {
           type: e.type,
           label: e.title,
           value: e.value,
           required: e.required ? true : false,
           options: e.options,
-          isMulti: e.isMulti ? true : false
+          isMulti: e.isMulti ? true : false,
         };
       } else {
         objTemplate[e.name] = {
@@ -170,11 +169,13 @@ class HelperService {
     delete hash.slug;
     return hash;
   }
-  handleMoneyFormat(number){
-   return new Intl.NumberFormat('en-NG', { minimumFractionDigits: 2 }).format(number)
+  handleMoneyFormat(number) {
+    return new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
+      number
+    );
   }
-  capitalize(str){
-   return str.charAt(0).toUpperCase() + str.slice(1)
+  capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 }
 export default new HelperService();
