@@ -7,10 +7,12 @@ const FormModal2 = ({
   setsubmitted,
   title,
   formValue,
+  id,
 }) => {
   const [value, setvalue] = useState(null);
   const [formSubmitted, setformSubmitted] = useState(false);
   useEffect(() => {
+    console.log(formValue);
     setvalue(value);
   }, [value]);
   useEffect(() => {}, [editData]);
@@ -19,6 +21,7 @@ const FormModal2 = ({
     if (formSubmitted) {
       console.log(value);
       setformValue(value);
+      console.log(formSubmitted, "FORM SUBMITTED");
       setsubmitted(formSubmitted);
       setformSubmitted(false);
     }
@@ -28,7 +31,7 @@ const FormModal2 = ({
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id={id || "FormModal"}
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
