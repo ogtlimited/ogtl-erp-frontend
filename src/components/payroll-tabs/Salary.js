@@ -14,34 +14,59 @@ const Salary = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [selected, setselected] = useState([]);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const { createPayroll, user } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
+
+  const handleOnSelect = (row, isSelect) => {
+    console.log(row)
+    if (isSelect) {
+      const sel = [...selected, row.id];
+      setselected(sel);
+    } else {
+      const sel = selected.filter((x) => x !== row.id);
+      setselected(sel);
+    }
+  };
+
+  const handleOnSelectAll = (isSelect, rows) => {
+    const ids = rows.map((r) => r.id);
+    if (isSelect) {
+      setselected(ids);
+    } else {
+      setselected([]);
+    }
+  };
 
   const fetchSalaryAssignments = () => {
     axiosInstance
       .get(`/api/employees-salary`)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         setData(res.data.data);
-        setUploadSuccess(false)
+        setUploadSuccess(false);
       })
       .catch((error) => {
         console.log(error?.response);
       });
   };
-  
 
   useEffect(() => {
     axiosInstance
-    .get(`/api/employees-salary`)
-    .then((res) => {
-      console.log(res)
-      setData(res.data.data);
-    })
-    .catch((error) => {
-      console.log(error?.response);
-    });
+      .get(`/api/employees-salary`)
+      .then((res) => {
+        console.log(res);
+        let formatted = res.data.data.map((e) => ({
+          ...e,
+          id: e.employeeId.ogid,
+          employee: e.employeeId?.first_name + ' ' + e.employeeId?.last_name
+        }));
+        setData(formatted);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
     createPayroll().then((res) => {
       const { employees } = res.data.createPayrollForm;
       const employeeOpts = employees?.map((e) => {
@@ -54,23 +79,23 @@ const Salary = ({ salaryStructure }) => {
     });
   }, []);
   useEffect(() => {
-    if(uploadSuccess){
-      fetchSalaryAssignments()
+    if (uploadSuccess) {
+      fetchSalaryAssignments();
     }
-  }, [uploadSuccess])
-  
+  }, [uploadSuccess]);
 
   const columns = [
     {
-      dataField: "employeeId",
+      dataField: "id",
+      text: "Employee ID",
+      hidden: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "employee",
       text: "Employee",
       sort: true,
       headerStyle: { minWidth: "300px" },
-      formatter: (val, row) => (
-        <p>
-          {row?.employeeId?.first_name} {row?.employeeId?.last_name}
-        </p>
-      ),
     },
     {
       dataField: "basic",
@@ -78,7 +103,6 @@ const Salary = ({ salaryStructure }) => {
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
-
     },
     {
       dataField: "medical",
@@ -116,11 +140,20 @@ const Salary = ({ salaryStructure }) => {
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
+      dataField: "netPay",
+      text: "Net Pay",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
       dataField: "",
       text: "Annual Salary",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat((row.monthlySalary * 12).toFixed(2))}</p>
+      formatter: (val, row) => (
+        <p>{helper.handleMoneyFormat((row.monthlySalary * 12).toFixed(2))}</p>
+      ),
     },
     {
       dataField: "totalRelief",
@@ -152,12 +185,20 @@ const Salary = ({ salaryStructure }) => {
           Generate Slip
         </Link>
       ),
-    }
+    },
   ];
   return (
     <>
       <div className="tab-pane show active" id="tab_salaries">
         <div className="text-right mb-4 ">
+          {selected.length > 0 && (
+            <a
+              className="btn add-btn m-r-5"
+              onClick={() => console.log(true)}
+            >
+              Apply Bulk payment {}
+            </a>
+          )}
           {user?.role?.hr?.create && (
             <a
               className="btn add-btn m-r-5"
@@ -181,7 +222,14 @@ const Salary = ({ salaryStructure }) => {
           />
         </div>
 
-        <LeavesTable data={data} columns={columns} />
+        <LeavesTable
+          data={data}
+          columns={columns}
+          clickToSelect={true}
+          selected={selected}
+          handleOnSelect={handleOnSelect}
+          handleOnSelectAll={handleOnSelectAll}
+        />
       </div>
       {toggleModal && (
         <GeneralUpload
@@ -190,7 +238,6 @@ const Salary = ({ salaryStructure }) => {
           url="/api/employees-salary"
           setUploadSuccess={setUploadSuccess}
         />
-
       )}
     </>
   );
