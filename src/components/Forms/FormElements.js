@@ -318,7 +318,7 @@ export function TextareaField(props) {
 
 export function SelectField(props) {
   const { name, label, options, defaultValue, setFieldValue, isMulti } = props;
-  let val = options.filter((e) => e.value === defaultValue)[0];
+  let val = options?.filter((e) => e.value === defaultValue)[0];
   return (
     <>
       <div className="form-group">

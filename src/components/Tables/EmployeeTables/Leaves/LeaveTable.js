@@ -13,9 +13,24 @@ import filterFactory, {
 
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-const LeavesTable = ({ data, columns, context }) => {
+const LeavesTable = ({
+  data,
+  columns,
+  context,
+  clickToSelect = false,
+  selected,
+  handleOnSelect,
+  handleOnSelectAll,
+}) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
+  const selectRow = {
+    mode: 'checkbox',
+    clickToSelect: clickToSelect,
+    selected: selected,
+    onSelect: handleOnSelect,
+    onSelectAll: handleOnSelectAll
+  };
   const [mobileView, setmobileView] = useState(false);
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -85,6 +100,7 @@ const LeavesTable = ({ data, columns, context }) => {
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
+                selectRow={selectRow}
                 filter={filterFactory()}
                 headerClasses="header-class"
                 classes={
