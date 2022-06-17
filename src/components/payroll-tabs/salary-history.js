@@ -156,41 +156,50 @@ const SalaryHistory = ({ salaryStructure }) => {
       ),
     },
     {
-      dataField: "totalRelief",
-      text: "Total Relief",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{val} </p>,
-    },
-    {
       dataField: "monthlyIncomeTax",
       text: "Monthly IncomeTax",
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
-    {
-      dataField: "",
-      text: "Action",
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <Link
-          className="btn btn-sm btn-primary"
-          // to={`/admin/payslip/${row?._id}`}
-          to={{
-            pathname: `/dashboard/payroll/payslip/${row?.employeeId?._id}`,
-            state: { employee: row?.employeeId },
-          }}
-        >
-          Generate Slip
-        </Link>
-      ),
-    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { minWidth: "150px" },
+    //   formatter: (value, row) => (
+    //     <Link
+    //       className="btn btn-sm btn-primary"
+    //       // to={`/admin/payslip/${row?._id}`}
+    //       to={{
+    //         pathname: `/dashboard/payroll/payslip/${row?.employeeId?._id}`,
+    //         state: { employee: row?.employeeId },
+    //       }}
+    //     >
+    //       Generate Slip
+    //     </Link>
+    //   ),
+    // },
   ];
   return (
-    <>
-      <div className="tab-pane show active" id="tab_archive">
-        <div className="text-right mb-4 "></div>
+    <div className="tab-pane" id="tab_archive">
+      <div>
+        <div className="text-right mb-4 ">
+          {selected.length > 0 && (
+            <a className="btn add-btn m-r-5" onClick={() => console.log(true)}>
+              Apply Bulk payment {}
+            </a>
+          )}
+          {/* {user?.role?.hr?.create && (
+            <a
+              className="btn add-btn m-r-5"
+              data-toggle="modal"
+              data-target="#uploadAttendance"
+              onClick={() => settoggleModal(true)}
+            >
+              Upload New Salary
+            </a>
+          )} */}
+        </div>
         <div className="col-5 mb-4">
           <Select
             defaultValue={[]}
@@ -202,17 +211,26 @@ const SalaryHistory = ({ salaryStructure }) => {
             // formatGroupLabel={formatGroupLabel}
           />
         </div>
-
-        <LeavesTable
-          data={data}
-          columns={columns}
-          clickToSelect={true}
-          selected={selected}
-          handleOnSelect={handleOnSelect}
-          handleOnSelectAll={handleOnSelectAll}
-        />
       </div>
-    </>
+
+      <LeavesTable
+        data={data}
+        columns={columns}
+        clickToSelect={true}
+        selected={selected}
+        handleOnSelect={handleOnSelect}
+        handleOnSelectAll={handleOnSelectAll}
+      />
+
+      {toggleModal && (
+        <GeneralUpload
+          settoggleModal={settoggleModal}
+          title="Upload Payroll"
+          url="/api/employees-salary"
+          setUploadSuccess={setUploadSuccess}
+        />
+      )}
+    </div>
   );
 };
 export default SalaryHistory;
