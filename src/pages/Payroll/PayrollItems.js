@@ -7,6 +7,7 @@ import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/sala
 import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
 import FormModal from "../../components/Modal/Modal";
 import Salary from "../../components/payroll-tabs/Salary";
+import SalaryHistory from "../../components/payroll-tabs/salary-history";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
 import SalarySettings from "../../components/payroll-tabs/salary-settings";
@@ -146,6 +147,11 @@ const PayrollItems = () => {
                   Deduction Types
                 </a>
               </li>
+              <li className="nav-item">
+                <a className="nav-link" data-toggle="tab" href="#tab_archive">
+                  Archive
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -174,6 +180,13 @@ const PayrollItems = () => {
           setsubmitted={setsubmitted}
         />
         <DeductionType
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+          setsubmitted={setsubmitted}
+        />
+        <SalaryHistory
           setformType={setformType}
           submitted={submitted}
           formValue={formValue}

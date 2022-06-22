@@ -12,7 +12,6 @@ const FormModal2 = ({
   const [value, setvalue] = useState(null);
   const [formSubmitted, setformSubmitted] = useState(false);
   useEffect(() => {
-    console.log(formValue);
     setvalue(value);
   }, [value]);
   useEffect(() => {}, [editData]);

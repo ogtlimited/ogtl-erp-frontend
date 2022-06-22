@@ -11,7 +11,11 @@ const AppContext = createContext();
 
 const AppProvider = (props) => {
   const [allEmployees, setallEmployees] = useState([]);
-  const [showProgress, setshowProgress] = useState(false);
+  const [showProgress, setshowProgress] = useState({
+    count: 25,
+    state: false
+  });
+  const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
@@ -20,6 +24,7 @@ const AppProvider = (props) => {
     msg: "",
     class: "",
   });
+
   const [employeeAttendance, setemployeeAttendance] = useState([]);
   const [user, setuser] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
@@ -46,6 +51,7 @@ const AppProvider = (props) => {
   }, [user?.company_email]);
 
   useEffect(() => {}, [showAlertMsg]);
+  useEffect(() => {}, [showProgress]);
 
   const clearNotifications = () => {
     if (socket) {
@@ -65,6 +71,32 @@ const AppProvider = (props) => {
     axiosInstance.get("/employees").then((e) => {
       setallEmployees(e?.data?.employees);
       setloggedIn(false);
+    });
+  };
+  const handleProgress = ({count, state}) => {
+    console.log(count, state)
+    setshowProgress({
+      count: count,
+      state: state
+    })
+  }
+  const uploadProgress = async () => {
+    await pause(800);
+    handleProgress({
+      state: true,
+      count: 35
+    });
+
+    await pause(900);
+    handleProgress({
+      state: true,
+      count: 65
+    });
+
+    await pause(1000);
+    handleProgress({
+      state: true,
+      count: 85
     });
   };
   const showAlert = (state, msg, className) => {
@@ -160,6 +192,8 @@ const AppProvider = (props) => {
       value={{
         fetchTypesShift,
         showProgress,
+        uploadProgress,
+        handleProgress,
         combineRequest,
         employeeAttendance,
         adminDashboardData,

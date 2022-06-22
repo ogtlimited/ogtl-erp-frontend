@@ -16,11 +16,19 @@ const Salary = ({ salaryStructure }) => {
   const [toggleModal, settoggleModal] = useState(false);
   const [selected, setselected] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const { createPayroll, user } = useAppContext();
+  const { createPayroll, user, showAlert, handleProgress, uploadProgress } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
+  const [filterObj, setfilterObj] = useState({});
+  const [months, setmonths] = useState(
+    moment.monthsShort().map((e) => ({
+      label: e,
+      value: e,
+    }))
+  );
+
 
   const handleOnSelect = (row, isSelect) => {
-    console.log(row)
+    console.log(row);
     if (isSelect) {
       const sel = [...selected, row.id];
       setselected(sel);
@@ -38,10 +46,62 @@ const Salary = ({ salaryStructure }) => {
       setselected([]);
     }
   };
+  const handleFilter = (key, val) => {
+    if(val){
+      setfilterObj({
+        ...filterObj,
+        [key]: val,
+      });
+      
+      console.log(filterObj, key, val)
+
+    }else{
+      delete filterObj[key]
+      setfilterObj(filterObj)
+    }
+  };
+  const handleBulkPayment = () => {
+    console.log(selected);
+    let mapData = data.map((d) => {
+      return {
+        _id: d.id,
+        employeeId: d.employeeId,
+        paid: selected.includes(d.id) ? true : false,
+      };
+    });
+    console.log(data);
+    console.log(mapData);
+    uploadProgress()
+    axiosInstance
+      .post(`/api/payroll/uploadPayment`, { slips: mapData })
+      .then((res) => {
+        setTimeout(() => {
+          handleProgress({
+            state: false,
+            count: 25
+          });
+          showAlert(true, "uploaded successfully", "alert alert-success");
+          
+        }, 5000);
+        console.log(res);
+        setUploadSuccess(false);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+        handleProgress({
+          state: false,
+          count: 25
+        });
+        setTimeout(() => {
+          showAlert(true, "failed to uploaded", "alert alert-danger");
+          
+        }, 5000);
+      });
+  };
 
   const fetchSalaryAssignments = () => {
     axiosInstance
-      .get(`/api/employees-salary`)
+      .get(`/api/salary-slip`)
       .then((res) => {
         console.log(res);
         setData(res.data.data);
@@ -51,16 +111,54 @@ const Salary = ({ salaryStructure }) => {
         console.log(error?.response);
       });
   };
+  const handleSubmitFilter = () =>{
+    let dateString = filterObj.month + " " + filterObj.year
+    const date =  moment(new Date(new Date(dateString))).startOf("month").format("YYYY-MM-DD")
+    const enddate = moment(new Date(new Date(dateString))).endOf("month").format("YYYY-MM-DD")
+    const obj = {
+      startOfMonth: date,
+      endOfMonth: enddate
+    }
+    if(filterObj.employee ){
+      obj['employee'] = filterObj.employee
+    }
+    const queryString = Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
+
+    axiosInstance
+      .get(`/api/payroll-archive?${queryString}`)
+      .then((res) => {
+        console.log(res.data.data);
+
+        setData(handleResponse(res.data.data));
+        setUploadSuccess(false);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  }
+  const handleResponse = (res) => {
+    return res.map((e) => ({
+      ...e,
+      ...e?.salarySlip?.employeeSalary,
+      id: e?.employee.ogid,
+      employee: e.employee?.first_name + " " + e?.employee?.last_name,
+      netPay: e.salarySlip?.netPay,
+      ead: e.salarySlip?.salaryAfterDeductions,
+      totalDeduction: e?.salarySlip?.totalDeductions,
+    }));
+  };
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/employees-salary`)
+      .get(`/api/salary-slip`)
       .then((res) => {
-        console.log(res);
-        let formatted = res.data.data.map((e) => ({
+        console.log(res.data.data[0]);
+        let formatted = res.data.data[0].salarySlips.map((e) => ({
           ...e,
-          id: e.employeeId.ogid,
-          employee: e.employeeId?.first_name + ' ' + e.employeeId?.last_name
+          ...e.employeeSalary,
+          ogid: e.employeeId.ogid,
+          id: e._id,
+          employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
         }));
         setData(formatted);
       })
@@ -194,7 +292,7 @@ const Salary = ({ salaryStructure }) => {
           {selected.length > 0 && (
             <a
               className="btn add-btn m-r-5"
-              onClick={() => console.log(true)}
+              onClick={() => handleBulkPayment()}
             >
               Apply Bulk payment {}
             </a>
@@ -210,16 +308,50 @@ const Salary = ({ salaryStructure }) => {
             </a>
           )}
         </div>
-        <div className="col-5 mb-4">
-          <Select
-            defaultValue={[]}
-            onChange={(val) => fetchSalaryAssignments(val?.value)}
-            options={employeeOpts}
-            placeholder="Filter Employees"
-            isClearable={true}
-            style={{ display: "inline-block" }}
-            // formatGroupLabel={formatGroupLabel}
-          />
+        <div className="row">
+          <div className="col-3 mb-4 ml-3">
+            <Select
+              defaultValue={[]}
+              onChange={(e) => handleFilter("employee", e?.value)}
+              options={employeeOpts}
+              placeholder="Filter Employees"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
+          <div className="col-4 mb-4">
+            <div className="row">
+              <div className="col-6">
+                <Select
+                  defaultValue={[]}
+                  onChange={(e) => handleFilter("month", e?.value)}
+                  options={months}
+                  placeholder="Filter Month"
+                  isClearable={true}
+                  style={{ display: "inline-block" }}
+                  // formatGroupLabel={formatGroupLabel}
+                />
+              </div>
+              <div className="col-6">
+                <Select
+                  defaultValue={[]}
+                  onChange={(e) => handleFilter("year", e?.value)}
+                  options={helper.generateArrayOfYears()}
+                  placeholder="Filter Year"
+                  isClearable={true}
+                  style={{ display: "inline-block" }}
+                  // formatGroupLabel={formatGroupLabel}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-2 mt-2 mb-1 ml-4">
+            {/* <br /> */}
+            <button disabled={Object.keys(filterObj).length === 0} class="form-control btn btn-primary add-btn pt-2" onClick={() =>handleSubmitFilter(filterObj)} role="button">
+              Filter
+            </button>
+          </div>
         </div>
 
         <LeavesTable

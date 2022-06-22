@@ -177,5 +177,18 @@ class HelperService {
   capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+  generateArrayOfYears = () => {
+    var max = new Date().getFullYear();
+    var min = max - 9;
+    var years = [];
+
+    for (var i = max; i >= min; i--) {
+      years.push(i);
+    }
+    return years.map((e) => ({
+      label: e,
+      value: e,
+    }));
+  };
 }
 export default new HelperService();
