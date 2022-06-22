@@ -26,7 +26,6 @@ const DynamicForm = ({ formSchema, value, setvalue, setformSubmitted }) => {
   const { formUpdate } = useAppContext();
   const [validationSchema, setValidationSchema] = useState({});
   useEffect(() => {
-    console.log(formSchema);
     if (formSchema) {
       initForm(formSchema, value);
     }

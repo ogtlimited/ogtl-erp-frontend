@@ -1,5 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import { selectFilter } from "react-bootstrap-table2-filter";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
@@ -18,6 +19,14 @@ const SalaryHistory = ({ salaryStructure }) => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const { createPayroll, user } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
+  const [filterObj, setfilterObj] = useState({});
+  const [months, setmonths] = useState(
+    moment.monthsShort().map((e) => ({
+      label: e,
+      value: e,
+    }))
+  );
+
 
   const handleOnSelect = (row, isSelect) => {
     console.log(row);
@@ -39,12 +48,65 @@ const SalaryHistory = ({ salaryStructure }) => {
     }
   };
 
-  const fetchSalaryAssignments = () => {
+  const handleResponse = (res) => {
+    return res.map((e) => ({
+      ...e,
+      ...e?.salarySlip?.employeeSalary,
+      id: e?.employee.ogid,
+      employee: e.employee?.first_name + " " + e?.employee?.last_name,
+      netPay: e.salarySlip?.netPay,
+      ead: e.salarySlip?.salaryAfterDeductions,
+      totalDeduction: e?.salarySlip?.totalDeductions,
+    }));
+  };
+
+  const handleFilter = (key, val) => {
+    if(val){
+      setfilterObj({
+        ...filterObj,
+        [key]: val,
+      });
+      
+      console.log(filterObj, key, val)
+
+    }else{
+      delete filterObj[key]
+      setfilterObj(filterObj)
+    }
+  };
+  const handleSubmitFilter = () =>{
+    let dateString = filterObj.month + " " + filterObj.year
+    const date =  moment(new Date(new Date(dateString))).startOf("month").format("YYYY-MM-DD")
+    const enddate = moment(new Date(new Date(dateString))).endOf("month").format("YYYY-MM-DD")
+    const obj = {
+      startOfMonth: date,
+      endOfMonth: enddate
+    }
+    if(filterObj.employee ){
+      obj['employee'] = filterObj.employee
+    }
+    const queryString = Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
+
     axiosInstance
-      .get(`/api/employees-salary`)
+      .get(`/api/payroll-archive?${queryString}`)
       .then((res) => {
-        console.log(res);
-        setData(res.data.data);
+        console.log(res.data.data);
+
+        setData(handleResponse(res.data.data));
+        setUploadSuccess(false);
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  }
+
+  const fetchArchive = () => {
+    axiosInstance
+      .get(`/api/payroll-archive`)
+      .then((res) => {
+        console.log(res.data.data);
+
+        setData(handleResponse(res.data.data));
         setUploadSuccess(false);
       })
       .catch((error) => {
@@ -54,14 +116,11 @@ const SalaryHistory = ({ salaryStructure }) => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/employees-salary`)
+      .get(`/api/payroll-archive`)
       .then((res) => {
         console.log(res);
-        let formatted = res.data.data.map((e) => ({
-          ...e,
-          id: e.employeeId.ogid,
-          employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
-        }));
+        let formatted = handleResponse(res.data.data);
+        console.log(formatted);
         setData(formatted);
       })
       .catch((error) => {
@@ -72,7 +131,7 @@ const SalaryHistory = ({ salaryStructure }) => {
       const employeeOpts = employees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
-          value: e.ogid,
+          value: e._id,
         };
       });
       setEmployeeOpts(employeeOpts);
@@ -80,7 +139,7 @@ const SalaryHistory = ({ salaryStructure }) => {
   }, []);
   useEffect(() => {
     if (uploadSuccess) {
-      fetchSalaryAssignments();
+      fetchArchive();
     }
   }, [uploadSuccess]);
 
@@ -95,7 +154,27 @@ const SalaryHistory = ({ salaryStructure }) => {
       dataField: "employee",
       text: "Employee",
       sort: true,
-      headerStyle: { minWidth: "300px" },
+      headerStyle: { minWidth: "250px" },
+    },
+    {
+      dataField: "paid",
+      text: "Status",
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          {value === true ? (
+            <a href="" className="pos-relative">
+              <span className="status-online"></span>{" "}
+              <span className="ml-4 d-block">Paid</span>
+            </a>
+          ) : (
+            <a href="" className="pos-relative">
+              <span className="status-pending"></span>{" "}
+              <span className="ml-4 d-block">{"Processing"}</span>
+            </a>
+          )}
+        </>
+      ),
     },
     {
       dataField: "basic",
@@ -142,6 +221,13 @@ const SalaryHistory = ({ salaryStructure }) => {
     {
       dataField: "netPay",
       text: "Net Pay",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "ead",
+      text: "Earing after Ded.",
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
@@ -200,16 +286,50 @@ const SalaryHistory = ({ salaryStructure }) => {
             </a>
           )} */}
         </div>
-        <div className="col-5 mb-4">
-          <Select
-            defaultValue={[]}
-            onChange={(val) => fetchSalaryAssignments(val?.value)}
-            options={employeeOpts}
-            placeholder="Filter Employees"
-            isClearable={true}
-            style={{ display: "inline-block" }}
-            // formatGroupLabel={formatGroupLabel}
-          />
+        <div className="row">
+          <div className="col-3 mb-4 ml-3">
+            <Select
+              defaultValue={[]}
+              onChange={(e) => handleFilter("employee", e?.value)}
+              options={employeeOpts}
+              placeholder="Filter Employees"
+              isClearable={true}
+              style={{ display: "inline-block" }}
+              // formatGroupLabel={formatGroupLabel}
+            />
+          </div>
+          <div className="col-4 mb-4">
+            <div className="row">
+              <div className="col-6">
+                <Select
+                  defaultValue={[]}
+                  onChange={(e) => handleFilter("month", e?.value)}
+                  options={months}
+                  placeholder="Filter Month"
+                  isClearable={true}
+                  style={{ display: "inline-block" }}
+                  // formatGroupLabel={formatGroupLabel}
+                />
+              </div>
+              <div className="col-6">
+                <Select
+                  defaultValue={[]}
+                  onChange={(e) => handleFilter("year", e?.value)}
+                  options={helper.generateArrayOfYears()}
+                  placeholder="Filter Year"
+                  isClearable={true}
+                  style={{ display: "inline-block" }}
+                  // formatGroupLabel={formatGroupLabel}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-2 mt-2 mb-1 ml-4">
+            {/* <br /> */}
+            <button disabled={Object.keys(filterObj).length === 0} class="form-control btn btn-primary add-btn pt-2" onClick={() =>handleSubmitFilter(filterObj)} role="button">
+              Filter
+            </button>
+          </div>
         </div>
       </div>
 

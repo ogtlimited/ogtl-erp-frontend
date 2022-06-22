@@ -9,7 +9,7 @@ import AlertSvg from "./AlertSvg";
 const AdminLayout = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
-  const { showAlertMsg } = useAppContext();
+  const { showAlertMsg, showProgress } = useAppContext();
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
@@ -42,6 +42,19 @@ const AdminLayout = (props) => {
               <div className="pl-3">{showAlertMsg.msg}</div>
             </div>
           ) : null}
+          {showProgress.state === true ? 
+          
+          <div class="progress mb-3">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              aria-valuenow="75"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{width: showProgress.count + '%'}}
+            ></div>
+          </div>
+          : null}
           <Outlet />
         </div>
       </div>
