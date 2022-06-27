@@ -81,6 +81,8 @@ const sidebarConfig = [
             title: "Notifications",
             path: PATH_DASHBOARD.apps.notification,
           },
+          { canView: "All", title: "Tickets", path: PATH_DASHBOARD.apps.tickets },
+          { canView: "HR", title: "Ticket Manager", path: PATH_DASHBOARD.apps.ticketManager },
         ],
       },
     ],

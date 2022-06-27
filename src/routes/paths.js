@@ -26,6 +26,8 @@ export const PATH_DASHBOARD = {
     signature: path(ROOTS_DASHBOARD, "/apps/email-signature"),
     fileManager: path(ROOTS_DASHBOARD, "/apps/file-manager"),
     notification: path(ROOTS_DASHBOARD, "/apps/notifications"),
+    tickets: path(ROOTS_DASHBOARD, "/apps/tickets"),
+    ticketManager: path(ROOTS_DASHBOARD, "/apps/ticket-manager"),
   },
   hr: {
     root: path(ROOTS_DASHBOARD, "/hr"),
