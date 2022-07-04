@@ -18,7 +18,7 @@ export const ticketFormJson = {
     },
     options: [],
   },
-  description: {
+  content: {
     type: "richText",
     title: "Description",
     label:'Description',
