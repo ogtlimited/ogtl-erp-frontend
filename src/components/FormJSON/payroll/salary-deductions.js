@@ -22,6 +22,12 @@ export const salaryDeductionsFormJson = {
         message: "employee  is required",
       },
     },
+    {
+      name: "useDailyRate",
+      type: "radio",
+      title: "Use Daily Rate",
+      
+    },
 
     {
       name: "amount",
