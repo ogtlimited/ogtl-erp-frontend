@@ -17,8 +17,10 @@ import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
 import ViewModal from "../../components/Modal/ViewModal";
 import SocialHandleForm from "../../components/Profile/components/SocialHandleForm";
+import tokenService from "../../services/token.service";
 
 const Profile = () => {
+  const user = tokenService.getUser();
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(PersonalDetailJson);
   const { id } = useParams();
@@ -165,7 +167,7 @@ const Profile = () => {
                             "Not Available"}
                         </small>
                         <div className="staff-id">
-                          Employee ID : {userData?.employee?.ogid}
+                          & Employee ID : {userData?.employee?.ogid}
                         </div>
                         <div className="small doj text-muted">
                           Date Joined :{" "}
@@ -176,9 +178,13 @@ const Profile = () => {
                             : "Not Available"}
                         </div>
                         <div className="staff-msg">
-                          <a className="btn btn-custom" href="chat.html">
-                            Send Message
-                          </a>
+                          <Link
+                            className="btn btn-custom"
+                            to={`/dashboard/payroll/payslip/${user?._id}`}
+                          >
+                            <i class="las la-file-invoice-dollar mr-2"></i>
+                            Payslip
+                          </Link>
                         </div>
                       </div>
                     </div>
