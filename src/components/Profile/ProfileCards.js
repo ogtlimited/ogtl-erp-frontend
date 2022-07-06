@@ -49,7 +49,7 @@ const ProfileCards = ({
           <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
             <ul className="nav nav-tabs nav-tabs-bottom">
               <li className="nav-item">
-                <a href="#emp_profile" data-toggle="tab" className="nav-link ">
+                <a href="#emp_profile" data-toggle="tab" className="nav-link active">
                   Profile
                 </a>
               </li>
@@ -57,7 +57,7 @@ const ProfileCards = ({
                 <a
                   href="#emp_campaign"
                   data-toggle="tab"
-                  className="nav-link active"
+                  className="nav-link"
                 >
                   Campaign
                 </a>
@@ -91,7 +91,7 @@ const ProfileCards = ({
         </div>
       </div>
       <div className="tab-content">
-        <div id="emp_profile" className="pro-overview tab-pane ">
+        <div id="emp_profile" className="pro-overview tab-pane active ">
           <div className="row">
             <div className="col-md-6 d-flex">
               <PersonalInfo

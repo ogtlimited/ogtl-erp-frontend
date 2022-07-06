@@ -62,8 +62,6 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
     }else{
       obj = data
     }
-
-    return
     axiosInstance
       .post(path, obj)
       .then((res) => {
