@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
-import FormModal2 from "../../components/Modal/FormModal2";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
-import moment from "moment";
-import HelperService from "../../services/helper";
+import { DeductionForm } from "../Forms/DeductionForm";
 
 const Deductions = () => {
-  const [template, setTemplate] = useState(salaryDeductionsFormJson);
-  const { createEmployee, showAlert, combineRequest } = useAppContext();
+  const { showAlert } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState({});
-  const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [loadSelect, setloadSelect] = useState(false);
   const [statusRow, setstatusRow] = useState({});
   const [status, setStatus] = useState("");
-
-  const [mode, setmode] = useState("add");
 
   const fetchDeductions = () => {
     axiosInstance
@@ -36,59 +27,6 @@ const Deductions = () => {
   useEffect(() => {
     fetchDeductions();
   }, []);
-
-  useEffect(() => {
-    createEmployee().then((res) => {
-      const { employees, deductionTypes } = res.data.createEmployeeForm;
-
-      const deptOpts = employees?.map((e) => {
-        return {
-          label: `${e.first_name}  ${e.last_name}`,
-          value: e._id,
-        };
-      });
-      const dedTypeOpts = deductionTypes?.map((e) => {
-        return {
-          label: `${e.title}`,
-          value: e._id,
-        };
-      });
-      const finalForm = salaryDeductionsFormJson.Fields.map((field) => {
-        if (field.name === "employeeId") {
-          field.options = deptOpts;
-          return field;
-        } else if (field.name === "deductionTypeId") {
-          field.options = dedTypeOpts;
-          return field;
-        }
-        return field;
-      });
-      console.log(finalForm);
-      setTemplate({
-        title: salaryDeductionsFormJson.title,
-        Fields: finalForm,
-      });
-      if (!loadSelect) setloadSelect(true);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (submitted === true) {
-      axiosInstance
-        .post("/api/deduction", formValue)
-        .then((res) => {
-          setSubmitted(false);
-          fetchDeductions();
-          setData((prevData) => [...data, res.data.data]);
-
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          showAlert(true, error.response.data.message, "alert alert-danger");
-        });
-    }
-  }, [submitted, formValue]);
 
   const deleteDeductions = (row) => {
     axiosInstance
@@ -199,14 +137,7 @@ const Deductions = () => {
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
-
-      <FormModal2
-        title="Add Deduction"
-        editData={editData}
-        setformValue={setFormValue}
-        template={HelperService.formArrayToObject(template.Fields)}
-        setsubmitted={setSubmitted}
-      />
+      <DeductionForm fetchDeductions={fetchDeductions} />
 
       <ConfirmModal
         title="Deductions"
