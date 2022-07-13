@@ -85,15 +85,7 @@ const Header = () => {
           </div>
         </li>
 
-        <li className="nav-item">
-          <Link
-            className="dropdown-toggle nav-link"
-            to={`/dashboard/payroll/payslip/${user?._id}`}
-          >
-            <i className="fa fa-ticket mr-2" aria-hidden="true"></i>
-            Payslip
-          </Link>
-        </li>
+        
 
         <li className="nav-item dropdown has-arrow main-drop">
           <a

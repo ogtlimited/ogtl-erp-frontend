@@ -276,7 +276,7 @@ const Salary = ({ salaryStructure }) => {
           className="btn btn-sm btn-primary"
           // to={`/admin/payslip/${row?._id}`}
           to={{
-            pathname: `/dashboard/payroll/payslip/${row?.employeeId?._id}`,
+            pathname: `/dashboard/payroll/payslip/${row?.employeeId}`,
             state: { employee: row?.employeeId },
           }}
         >
