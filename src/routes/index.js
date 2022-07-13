@@ -138,6 +138,15 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            { path: "tickets", element: <Tickets /> },
+            {
+              path: "ticket-manager",
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <TicketManager />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -943,4 +952,12 @@ const IdRequest = Loadable(
 
 const OrientationAndTraining = Loadable(
   lazy(() => import("../pages/HR/Admin/OrientationAndTraining.Admin"))
+);
+
+const Tickets = Loadable(
+  lazy(() => import("../pages/In-Apps/tickets"))
+);
+
+const TicketManager = Loadable(
+  lazy(() => import("../pages/In-Apps/TicketManager"))
 );
