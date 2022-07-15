@@ -10,7 +10,7 @@ const SalaryDeductionContent = ({deductionsBreakDown = []}) => {
                         {  deductionsBreakDown.map(
                           (deduction, index) => (
                             <tr key={index}>
-                              <td> {deduction.description === 'incompleteHours' ? 'Incomplete Hours' :helper.capitalize(deduction.description)} </td>
+                              <td> {deduction.description === 'incompleteHours' ? 'Incomplete Hours' :helper.capitalize(deduction?.deductionTypeId?.title)} </td>
                               <td> {formatter.format(deduction.amount)} </td>
                               <td> {new Date(deduction.createdAt).toUTCString()} </td>
                             </tr>

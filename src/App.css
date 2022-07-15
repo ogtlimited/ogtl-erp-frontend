@@ -167,7 +167,6 @@ a {
   width: 100%;
 }
 .css-yk16xz-control {
-  margin-top: 7px;
   min-height: 44px !important;
 }
 .sortable {
@@ -228,7 +227,8 @@ a {
 }
 .status-online,
 .status-pending,
-.status-terminated {
+.status-terminated,
+.status-ticket {
   border: 2px solid #fff;
   bottom: 3px;
   height: 15px;
@@ -236,14 +236,19 @@ a {
   position: absolute;
   left: 0;
   width: 15px;
-  background-color: #55ce63;
   border-radius: 50%;
+}
+.status-online {
+  background-color: #55ce63;
 }
 .status-pending {
   background-color: #ceb255;
 }
 .status-terminated {
   background-color: #c41717;
+}
+.status-open {
+  background-color: #2dcecc;
 }
 .btn-gray {
   background: #fff;
