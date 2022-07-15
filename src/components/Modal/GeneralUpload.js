@@ -27,12 +27,14 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
       Papa.parse(files[0], {
         complete: function (results) {
           const jsonData = helper.arrayToJSONObject(results.data);
-
+          console.log(jsonData);
           if (
-            Object.values(jsonData[jsonData.length - 1]).includes(undefined)
+            Object.values(jsonData[jsonData.length - 1]).includes(undefined) || Object.values(jsonData[jsonData.length - 1]).includes("")
+            
           ) {
             setData(jsonData.slice(0, jsonData.length - 1));
             // setinvalid(true)
+            console.log("invalid value")
           } else {
             setinvalid(false);
             setData(jsonData);
