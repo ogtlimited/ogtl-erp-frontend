@@ -26,8 +26,17 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
       setfileName(files[0]?.name);
       Papa.parse(files[0], {
         complete: function (results) {
-          const jsonData = helper.arrayToJSONObject(results.data);
-          console.log(jsonData);
+          const res = helper.arrayToJSONObject(results.data);
+           const jsonData = res.filter(element => {
+            if(typeof element == "object") {
+              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length == 0 : true).length
+              console.log(emptyStringCount);
+              if(Object.values(element).length != emptyStringCount){
+                return element
+              }
+            }
+
+           });
           if (
             Object.values(jsonData[jsonData.length - 1]).includes(undefined) || Object.values(jsonData[jsonData.length - 1]).includes("")
             
