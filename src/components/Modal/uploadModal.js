@@ -41,11 +41,11 @@ const UploadModal = ({
                 return element
               }
             }
-            
-            
+
            });
+           console.log(jsonData)
           if (
-            Object.values(jsonData[jsonData.length - 1]).includes(undefined) || Object.values(jsonData[jsonData.length - 1]).includes("")
+            Object.values(jsonData[jsonData.length - 1]).includes(undefined)
           ) {
             setData(jsonData.slice(0, jsonData.length - 1));
             // setinvalid(true)
