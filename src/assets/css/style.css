@@ -7513,7 +7513,8 @@ ul.comment-list li ul.children {
     display: flex;
     flex-wrap: wrap;
     margin-left: 300px;
-	transition: 0.4s ease-in-out;
+		width: 100%;
+		transition: 0.4s ease-in-out;
 }
 .file-wrap .file-cont-wrap .file-cont-inner {
 	flex: 0 0 100%;

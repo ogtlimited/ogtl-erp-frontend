@@ -32,13 +32,24 @@ const UploadModal = ({
       setfileName(files[0]?.name);
       Papa.parse(files[0], {
         complete: function (results) {
-          const jsonData = helper.arrayToJSONObject(results.data);
+          const res = helper.arrayToJSONObject(results.data);
+           const jsonData = res.filter(element => {
+            if(typeof element == "object") {
+              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length == 0 : true).length
+              console.log(emptyStringCount);
+              if(Object.values(element).length != emptyStringCount){
+                return element
+              }
+            }
 
+           });
+           console.log(jsonData)
           if (
             Object.values(jsonData[jsonData.length - 1]).includes(undefined)
           ) {
             setData(jsonData.slice(0, jsonData.length - 1));
             // setinvalid(true)
+            console.log("invalid data")
           } else {
             setinvalid(false);
             setData(jsonData);
