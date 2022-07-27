@@ -31,7 +31,13 @@ const Termination = () => {
     axiosInstance
       .get("/api/termination")
       .then((res) => {
-        setData(res.data.data);
+        const map = res.data.data.map((e) => {
+          return {
+            ...e,
+            fullName: `${e.employee.first_name} ${e.employee.last_name}`,
+          };
+        });
+        setData(map);
       })
       .catch((error) => {
         console.log(error);
@@ -116,15 +122,10 @@ const Termination = () => {
 
   const columns = [
     {
-      dataField: "employee",
+      dataField: "fullName",
       text: "Employee name",
       sort: true,
       headerStyle: { width: "350px" },
-      formatter: (value, row) => (
-        <h2>
-          {row?.employee?.first_name} {row?.employee?.last_name}
-        </h2>
-      ),
     },
     {
       dataField: "reason",

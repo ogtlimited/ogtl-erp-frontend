@@ -20,7 +20,13 @@ const Resignation = () => {
     axiosInstance
       .get("/Exit")
       .then((res) => {
-        setData(res.data.data);
+        const map = res.data.data.map(e => {
+          return {
+            ...e,
+            fullName: `${e.employee_id.first_name} ${e.employee_id.last_name}`
+          }
+        })
+        setData(map);
       })
       .catch((error) => {
         console.log(error);
@@ -104,15 +110,15 @@ const Resignation = () => {
 
   const columns = [
     {
-      dataField: "employee_id",
+      dataField: "fullName",
       text: "Employee name",
       sort: true,
       headerStyle: { width: "350px" },
-      formatter: (value, row) => (
-        <h2>
-          {row?.employee_id?.first_name} {row?.employee_id?.last_name}
-        </h2>
-      ),
+      // formatter: (value, row) => (
+      //   <h2>
+      //     {row?.employee_id?.first_name} {row?.employee_id?.last_name}
+      //   </h2>
+      // ),
     },
     {
       dataField: "reason_for_resignation",
