@@ -59,6 +59,25 @@ const AppProvider = (props) => {
     }
   };
 
+ 
+
+  const fetchEmployee = () => {
+    axiosInstance.get("/employees").then((e) => {
+      console.log(e)
+      const mapp = e?.data?.employees.map(emp => {
+        return {
+          ...emp,
+          fullName: emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
+          designation_name: emp?.designation?.designation,
+          department_name: emp?.department?.department
+          // project: emp?.projectId?.project_name,
+        }
+      })
+      console.log(mapp)
+      setallEmployees(mapp);
+      // setloggedIn(false);
+    });
+  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -66,13 +85,6 @@ const AppProvider = (props) => {
       fetchEmployeeAttendance();
     }
   }, [userToken]);
-
-  const fetchEmployee = () => {
-    axiosInstance.get("/employees").then((e) => {
-      setallEmployees(e?.data?.employees);
-      setloggedIn(false);
-    });
-  };
   const handleProgress = ({count, state}) => {
     console.log(count, state)
     setshowProgress({

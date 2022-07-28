@@ -86,7 +86,7 @@ const EmployeesTable = ({
 
   const columns = [
     {
-      dataField: "",
+      dataField: "fullName",
       text: "Employee Name",
       sort: true,
       headerStyle: { minWidth: "250px" },
@@ -105,8 +105,8 @@ const EmployeesTable = ({
             />
           </a>
           <Link to={`/dashboard/user/profile/${row._id}`}>
-            {row.first_name} {row.last_name}{" "}
-            <span>{row?.designation?.designation}</span>
+            {value}{" "}
+            <span>{row?.designation_name}</span>
           </Link>
         </h2>
       ),
@@ -153,14 +153,14 @@ const EmployeesTable = ({
       headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: "department",
+      dataField: "department_name",
       text: "Department",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <span>{val?.department.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: "designation.designation",
+      dataField: "designation_name",
       text: "Designation",
       sort: true,
       headerStyle: { minWidth: "150px" },
