@@ -52,7 +52,7 @@ const MaintenanceAndRepairs = () => {
     axiosInstance.get("api/assets").then((res) => {
       const assetOpts = res.data.data?.map((e) => {
         return {
-          label: `${e.assetName} ${e.model}`,
+          label: `${e?.assetName?.productName} ${e?.assetName?.model}`,
           value: e._id,
         };
       });
