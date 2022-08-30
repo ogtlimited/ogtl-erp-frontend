@@ -4,7 +4,7 @@ const ViewModal = ({title, content,}) => {
   return (
     <div
       id="generalModal"
-      className="modal custom-modal fade show"
+      className="modal custom-modal fade show "
       role="dialog"
       aria-modal="true"
     >

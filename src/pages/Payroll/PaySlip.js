@@ -253,7 +253,7 @@ const PaySlip = () => {
                       type="button"
                       data-toggle="modal"
                       data-target="#generalModal"
-                      class="btn btn-outline-primary"
+                      className="btn btn-outline-primary"
                     >
                       View Deductions
                     </button>

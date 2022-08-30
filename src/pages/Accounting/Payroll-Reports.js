@@ -1,6 +1,6 @@
 import { update } from "lodash";
 import moment from "moment";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ViewModal from "../../components/Modal/ViewModal";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
@@ -8,6 +8,7 @@ import { useAppContext } from "../../Context/AppContext";
 import AlertSvg from "../../layouts/AlertSvg";
 import axiosInstance from "../../services/api";
 import { formatter } from "../../services/numberFormatter";
+import ApprovePayroll from "./ApprovePayroll";
 
 const PayrollReports = () => {
   const { combineRequest, showAlert } = useAppContext();
@@ -15,6 +16,8 @@ const PayrollReports = () => {
   const ref = useRef(null);
   const [val, setval] = useState("");
   const [counter, setcounter] = useState(0);
+  const [previewData, setpreviewData] = useState(null)
+  const [totalSalary, settotalSalary] = useState(0);
   const [data, setData] = useState([]);
   const [card, setcard] = useState([
     {
@@ -41,31 +44,56 @@ const PayrollReports = () => {
     ref.current.value = val + ref.current.value;
   };
 
-  const fetchEmployeeSalary = () => {
+  const fetchEmployeeSalary = useCallback(() => {
+    const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+    const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
+    console.log(startOfMonth, endOfMonth);
     axiosInstance
-      .get("/api/salary-slip")
+      .get(`/api/salary-slip?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`)
       .then((res) => {
-        const totalSalary = formatter.format(
+        settotalSalary(formatter.format(
           res.data.data[1].total[0].salaries
-        );
-        setData(res.data.data[0].salarySlips);
-        combineRequest().then((res) => {
-          const { departments, projects, employees } =
-            res.data.createEmployeeFormSelection;
-          let total = [totalSalary, projects.length, employees.length];
-          let updated = card.map((e, i) => {
-            return {
-              ...e,
-              amount: total[i],
-            };
-          });
-          setcard(updated);
-        });
+        ));
+        console.log(res.data.data[0].salarySlips)
+        const mapped = res.data.data[0].salarySlips.map(e => { 
+          return {
+            employee: e.employeeId?.first_name + ' ' +  e.employeeId?.last_name  + ' ' + e.employeeId?.middle_name,
+            email: e.employeeId.company_email,
+            date_of_joining: e.employeeId.date_of_joining,
+            designation: e.employeeId?.designation.designation,
+            salary: e.employeeSalary.netPay,
+            employeeId: e.employeeId,
+            id: e.employeeId._id
+          }
+        })
+        setData(mapped);
+        console.log(mapped);
       })
       .catch((error) => {
         console.log(error?.response);
       });
-  };
+  }, []);
+
+  useEffect(() => {
+    axiosInstance.get('/collection-count').then((res) => {
+      const { projects, employees } =
+        res.data.count;
+      let total = [totalSalary, projects, employees];
+      setpreviewData({
+        salary: totalSalary,
+        projects: projects,
+        employees: employees
+      })
+      let updated = card.map((e, i) => {
+        return {
+          ...e,
+          amount: total[i],
+        };
+      });
+      setcard(updated);
+    });
+  }, [card, combineRequest, totalSalary])
+
   const generatePayroll = () => {
     setgenerating(true);
     axiosInstance
@@ -79,40 +107,40 @@ const PayrollReports = () => {
         console.log(error?.response);
       });
   };
+
   useEffect(() => {
     fetchEmployeeSalary();
   }, []);
 
   const columns = [
     {
-      dataField: "",
+      dataField: "employee",
       text: "Employee Name",
       sort: true,
       headerStyle: { minWidth: "250px" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          {row?.employeeId?.first_name} {row?.employeeId?.middle_name}{" "}
-          {row?.employeeId?.last_name}
+          {value}
         </h2>
       ),
     },
     {
-      dataField: "company_email",
+      dataField: "email",
       text: "Email",
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => (
-        <p>{row?.employeeId?.company_email || "Not Available"}</p>
+        <p>{val || "Not Available"}</p>
       ),
     },
 
     {
-      dataField: "",
+      dataField: "designation",
       text: "Designation",
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (val, row) => (
-        <p>{row?.employeeId?.designation.designation || "Not Available"}</p>
+        <p>{val || "Not Available"}</p>
       ),
     },
     {
@@ -121,18 +149,18 @@ const PayrollReports = () => {
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (val, row) => (
-        <p>{moment(row?.employeeId?.date_of_joining).format("L")}</p>
+        <p>{moment(val).format("L")}</p>
       ),
     },
     {
-      dataField: "netPay",
+      dataField: "salary",
       text: "Salary",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{formatter.format(row?.netPay)}</p>,
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
-      dataField: "",
+      dataField: "id",
       text: "Action",
       sort: true,
       headerStyle: { minWidth: "150px" },
@@ -141,8 +169,8 @@ const PayrollReports = () => {
           className="btn btn-sm btn-primary"
           // to={`/admin/payslip/${row?._id}`}
           to={{
-            pathname: `/dashboard/payroll/payslip/${row?.employeeId._id}`,
-            state: { employee: row?.employeeId },
+            pathname: `/dashboard/payroll/payslip/${value}`,
+            state: { employee: value },
           }}
         >
           View Pay Slip
@@ -178,7 +206,7 @@ const PayrollReports = () => {
   ];
   return (
     <>
-      <div class="alert alert-primary sliding-text" role="alert">
+      <div className="alert alert-primary sliding-text" role="alert">
         <div>
           <AlertSvg />
           <svg
@@ -208,14 +236,28 @@ const PayrollReports = () => {
               <li className="breadcrumb-item active">Payroll Reports</li>
             </ul>
           </div>
-          <div class="col-auto float-end ms-auto">
+          <div className="col-auto float-end ms-auto">
             <button className="btn add-btn" onClick={generatePayroll}>
               {!generating ? (
                 <>
-                  <i class="fa fa-plus"></i> Generate Payroll
+                  <i className="fa fa-plus"></i> Generate Payroll
                 </>
               ) : (
-                <div class="spinner-border text-light pl-2" role="status"></div>
+                <div className="spinner-border text-light pl-2" role="status"></div>
+              )}
+            </button>
+            
+            <button
+              data-toggle="modal"
+              data-target="#generalModal"
+              className="btn add-btn mx-5"
+            >
+              {!generating ? (
+                <>
+                  <i className="fa fa-check"></i>Preview and approve payroll
+                </>
+              ) : (
+                <div className="spinner-border text-light pl-2" role="status"></div>
               )}
             </button>
           </div>
@@ -244,7 +286,10 @@ const PayrollReports = () => {
         </div>
       </div>
 
-      <ViewModal title="Payroll Generated Successfully" content={<>S</>} />
+      <ViewModal
+        title="Payroll Approval for August 2022"
+        content={<ApprovePayroll previewData={previewData} />}
+      />
     </>
   );
 };
