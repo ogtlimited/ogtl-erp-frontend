@@ -11,12 +11,16 @@ import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
 
 const PayrollReports = () => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
+  const handleClose = () => {};
   const [generating, setgenerating] = useState(false);
   const ref = useRef(null);
   const [val, setval] = useState("");
+  const year = moment().format("YYYY");
+  const currMonthName = moment().format("MMMM");
   const [counter, setcounter] = useState(0);
-  const [previewData, setpreviewData] = useState(null)
+  const [displayState, setdisplayState] = useState("")
+  const [previewData, setpreviewData] = useState(null);
   const [totalSalary, settotalSalary] = useState(0);
   const [data, setData] = useState([]);
   const [card, setcard] = useState([
@@ -33,7 +37,7 @@ const PayrollReports = () => {
       id: 3,
     },
     {
-      title: "No. Employees",
+      title: "No. Active Employees",
       amount: 0,
       icon: "las la-project-diagram",
       id: 3,
@@ -49,23 +53,28 @@ const PayrollReports = () => {
     const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
     console.log(startOfMonth, endOfMonth);
     axiosInstance
-      .get(`/api/salary-slip?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`)
+      .get(
+        `/api/salary-slip?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
+      )
       .then((res) => {
-        settotalSalary(formatter.format(
-          res.data.data[1].total[0].salaries
-        ));
-        console.log(res.data.data[0].salarySlips)
-        const mapped = res.data.data[0].salarySlips.map(e => { 
+        settotalSalary(formatter.format(res.data.data[1].total[0].salaries));
+        console.log(res.data.data[0].salarySlips);
+        const mapped = res.data.data[0].salarySlips.map((e) => {
           return {
-            employee: e.employeeId?.first_name + ' ' +  e.employeeId?.last_name  + ' ' + e.employeeId?.middle_name,
+            employee:
+              e.employeeId?.first_name +
+              " " +
+              e.employeeId?.last_name +
+              " " +
+              e.employeeId?.middle_name,
             email: e.employeeId.company_email,
             date_of_joining: e.employeeId.date_of_joining,
             designation: e.employeeId?.designation.designation,
             salary: e.employeeSalary.netPay,
             employeeId: e.employeeId,
-            id: e.employeeId._id
-          }
-        })
+            id: e.employeeId._id,
+          };
+        });
         setData(mapped);
         console.log(mapped);
       })
@@ -75,15 +84,14 @@ const PayrollReports = () => {
   }, []);
 
   useEffect(() => {
-    axiosInstance.get('/collection-count').then((res) => {
-      const { projects, employees } =
-        res.data.count;
+    axiosInstance.get("/collection-count").then((res) => {
+      const { projects, employees } = res.data.count;
       let total = [totalSalary, projects, employees];
       setpreviewData({
         salary: totalSalary,
         projects: projects,
-        employees: employees
-      })
+        employees: employees,
+      });
       let updated = card.map((e, i) => {
         return {
           ...e,
@@ -92,7 +100,7 @@ const PayrollReports = () => {
       });
       setcard(updated);
     });
-  }, [card, combineRequest, totalSalary])
+  }, [totalSalary]);
 
   const generatePayroll = () => {
     setgenerating(true);
@@ -118,20 +126,14 @@ const PayrollReports = () => {
       text: "Employee Name",
       sort: true,
       headerStyle: { minWidth: "250px" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          {value}
-        </h2>
-      ),
+      formatter: (value, row) => <h2 className="table-avatar">{value}</h2>,
     },
     {
       dataField: "email",
       text: "Email",
       sort: true,
       headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => (
-        <p>{val || "Not Available"}</p>
-      ),
+      formatter: (val, row) => <p>{val || "Not Available"}</p>,
     },
 
     {
@@ -139,18 +141,14 @@ const PayrollReports = () => {
       text: "Designation",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => (
-        <p>{val || "Not Available"}</p>
-      ),
+      formatter: (val, row) => <p>{val || "Not Available"}</p>,
     },
     {
       dataField: "joining_date",
       text: "Joining Date",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => (
-        <p>{moment(val).format("L")}</p>
-      ),
+      formatter: (val, row) => <p>{moment(val).format("L")}</p>,
     },
     {
       dataField: "salary",
@@ -178,32 +176,7 @@ const PayrollReports = () => {
       ),
     },
   ];
-  let cards = [
-    {
-      title: "Total salary",
-      amount: "₦" + "18,000,000",
-      icon: "las la-money-bill-wave-alt",
-      id: 1,
-    },
-    {
-      title: "No. Departments",
-      amount: 0,
-      icon: "las la-object-group",
-      id: 2,
-    },
-    {
-      title: "No. Campaign",
-      amount: 0,
-      icon: "las la-project-diagram",
-      id: 3,
-    },
-    {
-      title: "No. Employees",
-      amount: 0,
-      icon: "las la-project-diagram",
-      id: 3,
-    },
-  ];
+
   return (
     <>
       <div className="alert alert-primary sliding-text" role="alert">
@@ -243,22 +216,23 @@ const PayrollReports = () => {
                   <i className="fa fa-plus"></i> Generate Payroll
                 </>
               ) : (
-                <div className="spinner-border text-light pl-2" role="status"></div>
+                <div
+                  className="spinner-border text-light pl-2"
+                  role="status"
+                ></div>
               )}
             </button>
-            
+
             <button
               data-toggle="modal"
               data-target="#generalModal"
               className="btn add-btn mx-5"
+              onClick={() => {
+                setdisplayState("raw")
+                console.log('state', displayState)
+              }}
             >
-              {!generating ? (
-                <>
-                  <i className="fa fa-check"></i>Preview and approve payroll
-                </>
-              ) : (
-                <div className="spinner-border text-light pl-2" role="status"></div>
-              )}
+              Preview and approve payroll
             </button>
           </div>
         </div>
@@ -287,8 +261,9 @@ const PayrollReports = () => {
       </div>
 
       <ViewModal
-        title="Payroll Approval for August 2022"
-        content={<ApprovePayroll previewData={previewData} />}
+        closeModal={handleClose}
+        title={`Payroll Approval for ${currMonthName}  ${year}`}
+        content={<ApprovePayroll setdisplayState={setdisplayState} state={displayState} previewData={previewData} />}
       />
     </>
   );
