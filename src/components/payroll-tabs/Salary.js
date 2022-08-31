@@ -348,7 +348,7 @@ const Salary = ({ salaryStructure }) => {
           </div>
           <div className="col-2 mt-2 mb-1 ml-4">
             {/* <br /> */}
-            <button disabled={Object.keys(filterObj).length === 0} class="form-control btn btn-primary add-btn pt-2" onClick={() =>handleSubmitFilter(filterObj)} role="button">
+            <button disabled={Object.keys(filterObj).length === 0} className="form-control btn btn-primary add-btn pt-2" onClick={() =>handleSubmitFilter(filterObj)} role="button">
               Filter
             </button>
           </div>

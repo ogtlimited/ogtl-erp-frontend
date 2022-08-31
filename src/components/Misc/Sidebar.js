@@ -71,7 +71,7 @@ const Sidebar = () => {
               {sidebarConfig.map((nav) => (
                 <>
                   {canView(nav?.canView) && (
-                    <li className="menu-title">
+                    <li key={nav?.subheader} className="menu-title">
                       <span>{nav?.subheader}</span>
                     </li>
                   )}
@@ -102,7 +102,7 @@ const Sidebar = () => {
                                 {item.children.map((child) => (
                                   <>
                                     {canView(child?.canView) && (
-                                      <li className="">
+                                      <li key={child.path} className="">
                                         <Link to={`${child.path}`} className="">
                                           {child.title}
                                         </Link>

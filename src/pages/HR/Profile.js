@@ -182,7 +182,7 @@ const Profile = () => {
                             className="btn btn-custom"
                             to={`/dashboard/payroll/payslip/${user?._id}`}
                           >
-                            <i class="las la-file-invoice-dollar mr-2"></i>
+                            <i className="las la-file-invoice-dollar mr-2"></i>
                             Payslip
                           </Link>
                         </div>
@@ -292,11 +292,11 @@ const Profile = () => {
                               )}
 
                             <a
-                              class="edit-icon"
+                              className="edit-icon"
                               data-toggle="modal"
                               data-target="#generalModal"
                             >
-                              <i class="fa fa-pencil"></i>
+                              <i className="fa fa-pencil"></i>
                             </a>
                           </div>
                         </li>
