@@ -109,11 +109,13 @@ const PayrollReports = () => {
       .then((res) => {
         fetchEmployeeSalary();
         setgenerating(false);
+        showAlert(true, "payroll generated successfully", "alert alert-success");
         // setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
         setgenerating(false);
-        console.log(error?.response);
+        showAlert(true, error?.response?.data.message, "alert alert-danger");
+        console.log(error?.response?.data.message);
       });
   };
 
