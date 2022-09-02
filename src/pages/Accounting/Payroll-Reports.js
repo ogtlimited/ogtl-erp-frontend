@@ -112,11 +112,13 @@ const PayrollReports = () => {
         // setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
+        setgenerating(false);
         console.log(error?.response);
       });
   };
 
   useEffect(() => {
+    console.log('salary')
     fetchEmployeeSalary();
   }, []);
 
@@ -246,7 +248,7 @@ const PayrollReports = () => {
                   <i className={card.icon}></i>
                 </span>
                 <div className="dash-widget-info">
-                  <h3>{card.amount}</h3>
+                  <h4>{card.amount}</h4>
                   <span>{card.title}</span>
                 </div>
               </div>
