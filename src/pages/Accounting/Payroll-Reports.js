@@ -248,7 +248,7 @@ const PayrollReports = () => {
                   <i className={card.icon}></i>
                 </span>
                 <div className="dash-widget-info">
-                  <h3>{card.amount}</h3>
+                  <h4>{card.amount}</h4>
                   <span>{card.title}</span>
                 </div>
               </div>
