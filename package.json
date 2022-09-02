@@ -2,6 +2,7 @@
   "name": "ogtl-erp-frontend",
   "version": "0.1.0",
   "private": true,
+  "ci": false,
   "dependencies": {
     "@azure/msal-browser": "^2.18.0",
     "@azure/msal-react": "^1.1.0",
