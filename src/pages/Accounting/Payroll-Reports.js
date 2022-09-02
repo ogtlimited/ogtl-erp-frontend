@@ -112,11 +112,13 @@ const PayrollReports = () => {
         // setData(res.data.data[0].salarySlips);
       })
       .catch((error) => {
+        setgenerating(false);
         console.log(error?.response);
       });
   };
 
   useEffect(() => {
+    console.log('salary')
     fetchEmployeeSalary();
   }, []);
 
