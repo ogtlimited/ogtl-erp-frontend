@@ -23,7 +23,7 @@ import { PUBLIC_HOLIDAY } from '../FormJSON/PublicHoliday';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 100,
+    maxWidth: '100%',
   },
   root: {
     display: 'flex',
@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(1),
-    margin: 0,
+    marginTop: 5,
+    marginBottom: 10,
     maxWidth: '100%',
     maxHeight: 130,
     overflow: 'hidden',
