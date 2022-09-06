@@ -1,11 +1,9 @@
-import React from 'react'
+/** @format */
+
+import React from 'react';
 
 const Holiday = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return <div></div>;
+};
 
-export default Holiday
+export default Holiday;
