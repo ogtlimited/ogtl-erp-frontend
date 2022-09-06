@@ -60,9 +60,9 @@ const RecruitmentSupervision = () => {
   ];
 
   return (
-    <div class="row">
-      <div class="col-md-12">
-        <h3 class="card-title mb-1s">Recruitment Supervision Sheet</h3>
+    <div className="row">
+      <div className="col-md-12">
+        <h3 className="card-title mb-1s">Recruitment Supervision Sheet</h3>
         <LeavesTable columns={columns} data={data} />
       </div>
     </div>
