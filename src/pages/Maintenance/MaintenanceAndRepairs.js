@@ -204,7 +204,7 @@ const MaintenanceAndRepairs = () => {
       sort: true,
 
       formatter: (value, row) => (
-        <h2>{moment(row?.date_of_maintenance).format("L")}</h2>
+        <h2>{moment(row?.date_of_maintenance).format("DD/MM/YY")}</h2>
       ),
     },
 
