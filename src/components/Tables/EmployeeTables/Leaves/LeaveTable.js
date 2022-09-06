@@ -44,6 +44,7 @@ const LeavesTable = ({
       setmobileView(true);
     }
   };
+
   useEffect(() => {
     resizeTable();
     window.addEventListener('resize', () => {
@@ -112,7 +113,11 @@ const LeavesTable = ({
                     ? 'table table-responsive'
                     : 'table table-responsive'
                 }
-                noDataIndication="No Maintenance Records"
+                noDataIndication={
+                  data.length === 0
+                    ? 'No Maintenance Report'
+                    : 'Fetching Data...'
+                }
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}
