@@ -100,7 +100,7 @@ const LeavesTable = ({
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
-                selectRow={selectRow}
+                // selectRow={selectRow}
                 filter={filterFactory()}
                 headerClasses="header-class"
                 classes={
