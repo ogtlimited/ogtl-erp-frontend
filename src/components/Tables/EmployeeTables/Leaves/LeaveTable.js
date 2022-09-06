@@ -110,7 +110,7 @@ const LeavesTable = ({
                     ? "table table-responsive"
                     : "table table-responsive"
                 }
-                noDataIndication="No Data..."
+                noDataIndication={data? "Fetching Data..." : "No Data"}
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}
