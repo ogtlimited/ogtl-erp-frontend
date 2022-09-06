@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
+/** @format */
+
+import React, { useState, useEffect } from 'react';
+import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from "react-bootstrap-table2-toolkit";
-import Select from "react-select";
+} from 'react-bootstrap-table2-toolkit';
+import Select from 'react-select';
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from "react-bootstrap-table2-filter";
+} from 'react-bootstrap-table2-filter';
 
-import paginationFactory from "react-bootstrap-table2-paginator";
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const LeavesTable = ({
   data,
@@ -29,7 +31,7 @@ const LeavesTable = ({
     clickToSelect: clickToSelect,
     selected: selected,
     onSelect: handleOnSelect,
-    onSelectAll: handleOnSelectAll
+    onSelectAll: handleOnSelectAll,
   };
   const [mobileView, setmobileView] = useState(false);
   const resizeTable = () => {
@@ -44,12 +46,12 @@ const LeavesTable = ({
   };
   useEffect(() => {
     resizeTable();
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       resizeTable();
     });
   }, [mobileView]);
 
-  const imageUrl = "https://erp.outsourceglobal.com";
+  const imageUrl = 'https://erp.outsourceglobal.com';
 
   //          }
   //          total.push(user)
@@ -75,7 +77,7 @@ const LeavesTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: "12%" }}
+                style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               />
 
@@ -105,12 +107,12 @@ const LeavesTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? "table "
+                    ? 'table '
                     : context
-                    ? "table table-responsive"
-                    : "table table-responsive"
+                    ? 'table table-responsive'
+                    : 'table table-responsive'
                 }
-                noDataIndication="No Maintenance Report..."
+                noDataIndication="No Maintenance Records"
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}
