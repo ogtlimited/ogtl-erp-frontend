@@ -111,7 +111,7 @@ const LeavesTable = ({
                     ? "table table-responsive"
                     : "table table-responsive"
                 }
-                noDataIndication={loading ? "Fetching Data..." : "No Records or Check Your Internet Connection"}
+                // noDataIndication={loading ? "Fetching Data..." : "No Records or Check Your Internet Connection"}
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}
