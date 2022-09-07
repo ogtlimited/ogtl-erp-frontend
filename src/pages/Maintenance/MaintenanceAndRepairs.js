@@ -71,7 +71,7 @@ const MaintenanceAndRepairs = () => {
     });
   }, []);
 
-  console.log(formValue)
+  
   useEffect(() => {
     if (formValue) {
       if (!editData) {
@@ -96,6 +96,7 @@ const MaintenanceAndRepairs = () => {
         delete newFormValue.__v;
         delete newFormValue.createdAt;
         delete newFormValue.updatedAt;
+        delete newFormValue.status;
         axiosInstance
           .patch("/api/maintenanceAndRepairs/" + editData._id, newFormValue)
           .then((res) => {
@@ -110,7 +111,7 @@ const MaintenanceAndRepairs = () => {
           });
       }
     }
-  }, [formValue, editData]);
+  }, [formValue,editData]);
   
   useEffect(() => {
     seteditData(clickedRow);
