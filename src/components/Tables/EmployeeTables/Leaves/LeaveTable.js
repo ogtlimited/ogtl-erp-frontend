@@ -118,11 +118,6 @@ const LeavesTable = ({
                     ? 'table table-responsive'
                     : 'table table-responsive'
                 }
-                // noDataIndication={
-                //   data.length === 0
-                //     ? 'No Maintenance Report'
-                //     : 'Fetching Data...'
-                // }
                 noDataIndication={
                   loading ? (
                     <div className="spinner-border text-primary" role="status">
