@@ -26,6 +26,7 @@ const LeavesTable = ({
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
+  const [loading, setLoading] = useState(true);
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: clickToSelect,
@@ -47,9 +48,13 @@ const LeavesTable = ({
 
   useEffect(() => {
     resizeTable();
+    setLoading(true);
     window.addEventListener('resize', () => {
       resizeTable();
     });
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
   }, [mobileView]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';
@@ -113,10 +118,19 @@ const LeavesTable = ({
                     ? 'table table-responsive'
                     : 'table table-responsive'
                 }
+                // noDataIndication={
+                //   data.length === 0
+                //     ? 'No Maintenance Report'
+                //     : 'Fetching Data...'
+                // }
                 noDataIndication={
-                  data.length === 0
-                    ? 'No Maintenance Report'
-                    : 'Fetching Data...'
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    'No Maintenance Report'
+                  )
                 }
                 pagination={paginationFactory()}
 
