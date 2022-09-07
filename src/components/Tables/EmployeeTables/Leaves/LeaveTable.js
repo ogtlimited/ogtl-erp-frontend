@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
+/** @format */
+
+import React, { useState, useEffect } from 'react';
+import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from "react-bootstrap-table2-toolkit";
-import Select from "react-select";
+} from 'react-bootstrap-table2-toolkit';
+import Select from 'react-select';
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from "react-bootstrap-table2-filter";
+} from 'react-bootstrap-table2-filter';
 
-import paginationFactory from "react-bootstrap-table2-paginator";
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const LeavesTable = ({
   data,
@@ -25,12 +27,13 @@ const LeavesTable = ({
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
+  const [loading, setLoading] = useState(true);
   const selectRow = {
     mode: 'checkbox',
     clickToSelect: clickToSelect,
     selected: selected,
     onSelect: handleOnSelect,
-    onSelectAll: handleOnSelectAll
+    onSelectAll: handleOnSelectAll,
   };
   const [mobileView, setmobileView] = useState(false);
   const resizeTable = () => {
@@ -43,14 +46,19 @@ const LeavesTable = ({
       setmobileView(true);
     }
   };
+
   useEffect(() => {
     resizeTable();
-    window.addEventListener("resize", () => {
+    setLoading(true);
+    window.addEventListener('resize', () => {
       resizeTable();
     });
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
   }, [mobileView]);
 
-  const imageUrl = "https://erp.outsourceglobal.com";
+  const imageUrl = 'https://erp.outsourceglobal.com';
 
   //          }
   //          total.push(user)
@@ -76,7 +84,7 @@ const LeavesTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: "12%" }}
+                style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               />
 
@@ -106,12 +114,20 @@ const LeavesTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? "table "
+                    ? 'table '
                     : context
-                    ? "table table-responsive"
-                    : "table table-responsive"
+                    ? 'table table-responsive'
+                    : 'table table-responsive'
                 }
-               
+                noDataIndication={
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    'No Maintenance Report'
+                  )
+                }
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}

@@ -1,0 +1,147 @@
+/** ----------------------
+ *     Public Holiday Modal
+ * ------------------------- 
+ * @format
+ */
+
+.public-holiday-modal {
+  position: absolute;
+  top: 9%;
+  left: 0;
+  width: 100vw;
+  height: 91vh;
+  background: linear-gradient(to right, #00c5fbbb 0%, #0253ccbb 100%);
+  z-index: 1000;
+}
+
+.public-holiday-modal-container {
+  position: absolute;
+  left: 20%;
+  top: 5%;
+  width: 43%;
+  padding: 20px;
+  height: 90%;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.534);
+}
+
+.public-holiday-modal-close {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 30px;
+  height: 30px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  color: #0253cc;
+  transition: 0.2s;
+}
+.public-holiday-modal-close:hover {
+  color: red;
+  transition: 0.2s;
+}
+
+.public-holiday-modal-info {
+  position: relative;
+  top: 10%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.public-holiday-form-area {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.public-holiday-entry-div {
+  position: relative;
+  margin-bottom: 10%;
+}
+
+.public-holiday-input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  padding: 0 20px;
+  width: 100%;
+  color: #414141;
+  border: 1px solid #414141;
+  font-size: 18px;
+  outline: none;
+  background: none;
+  z-index: 1;
+}
+
+::placeholder {
+  color: transparent;
+}
+
+.public-holiday-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0 4px;
+  color: #ccc;
+  background-color: #f5f5f5;
+  font-weight: 600;
+  font-size: 16px;
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.public-holiday-input:focus + .public-holiday-label {
+  top: -10px;
+  left: 3px;
+  z-index: 10;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0253cc;
+}
+
+.public-holiday-input:focus {
+  border: 2px solid #0253cc;
+}
+
+.public-holiday-input:not(:placeholder-shown) + .public-holiday-label {
+  top: -10px;
+  left: 3px;
+  z-index: 10;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Material UI */
+
+#date-picker-dialog-label {
+  color: #000;
+  font-weight: 600;
+}
+
+#demo-controlled-open-select-label {
+  color: #000;
+  font-weight: 600;
+}
+
+#public-holiday-button {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #00c5fb;
+}
+
+/* ----------------------
+    Public Holiday Page
+------------------------- */
