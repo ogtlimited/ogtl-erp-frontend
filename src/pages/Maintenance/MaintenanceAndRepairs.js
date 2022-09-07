@@ -71,6 +71,7 @@ const MaintenanceAndRepairs = () => {
     });
   }, []);
 
+  console.log(formValue)
   useEffect(() => {
     if (formValue) {
       if (!editData) {
@@ -110,6 +111,7 @@ const MaintenanceAndRepairs = () => {
       }
     }
   }, [formValue, editData]);
+  
   useEffect(() => {
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
@@ -279,6 +281,7 @@ const MaintenanceAndRepairs = () => {
       <div className="row">
         <div className="col-12">
           <LeavesTable data={data} columns={columns} />
+          
         </div>
       </div>
       <FormModal2
