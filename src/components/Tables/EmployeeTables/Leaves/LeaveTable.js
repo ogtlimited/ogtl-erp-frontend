@@ -17,6 +17,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const LeavesTable = ({
   data,
+  loading,
   columns,
   context,
   clickToSelect = false,
@@ -108,7 +109,7 @@ const LeavesTable = ({
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
-                selectRow={selectRow}
+                // selectRow={selectRow}
                 filter={filterFactory()}
                 headerClasses="header-class"
                 classes={
