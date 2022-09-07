@@ -15,6 +15,7 @@ import paginationFactory from "react-bootstrap-table2-paginator";
 
 const LeavesTable = ({
   data,
+  loading,
   columns,
   context,
   clickToSelect = false,
@@ -110,7 +111,7 @@ const LeavesTable = ({
                     ? "table table-responsive"
                     : "table table-responsive"
                 }
-                noDataIndication={data? "Fetching Data..." : "No Data"}
+                noDataIndication={loading ? "Fetching Data..." : "No Records or Check Your Internet Connection"}
                 pagination={paginationFactory()}
 
                 // defaultSorted={defaultSorted}

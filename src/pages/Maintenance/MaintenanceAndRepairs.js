@@ -19,6 +19,7 @@ const MaintenanceAndRepairs = () => {
   const [editData, seteditData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true)
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [template, setTemplate] = useState(maintenanceAndRepairFormJson);
@@ -42,10 +43,15 @@ const MaintenanceAndRepairs = () => {
       .catch((error) => {
         console.log(error);
       });
+      
+
   };
 
   useEffect(() => {
     fetchMaintenanceAndRepairs();
+    setTimeout(()=>{
+      setLoading(false)
+    },6000)
   }, []);
 
   useEffect(() => {
@@ -281,7 +287,7 @@ const MaintenanceAndRepairs = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <LeavesTable data={data} columns={columns} />
+          <LeavesTable data={data} columns={columns} loading={loading}/>
           
         </div>
       </div>
