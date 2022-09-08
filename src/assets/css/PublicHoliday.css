@@ -1,5 +1,5 @@
-/** ----------------------
- *     Public Holiday Modal
+/** ------------------------
+ *    Public Holiday Modal
  * ------------------------- 
  * @format
  */
@@ -159,6 +159,164 @@
   border-radius: 25px;
 }
 
-/* ----------------------
-    Public Holiday Page
-------------------------- */
+/* -------------------------
+    Public Holiday Table
+---------------------------- */
+
+.public-holiday-list {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 20vh;
+  margin: 8.5% auto;
+}
+
+.public-holiday-table {
+  width: 100%;
+  height: 100%;
+}
+
+/****** Table Head *******/
+
+.public-holiday-table-head {
+  width: 100%;
+  border-bottom: 2px solid #999;
+}
+
+.public-holiday-table-th th:nth-child(1),
+.public-holiday-table-th th:nth-child(2) {
+  padding-left: 2%;
+  width: 20%;
+  height: 50px;
+}
+
+.public-holiday-table-th th:nth-child(3) {
+  text-align: center;
+  width: 60%;
+  height: 50px;
+}
+
+/****** Table Body *******/
+
+.public-holiday-table-body {
+  width: 100%;
+  height: 15%;
+}
+
+.public-holiday-table-td td:nth-child(1),
+.public-holiday-table-td td:nth-child(2) {
+  padding-left: 2%;
+  width: 20%;
+  height: 50px;
+}
+.public-holiday-table-td td:nth-child(3) {
+  width: 600%;
+  height: 50px;
+}
+
+.req-table-btn {
+  border: none;
+  width: 30%;
+  height: 40px;
+  padding: 5px 10px;
+  margin: 5% 1%;
+  border-radius: 20px;
+  color: #fff;
+  transition: 0.2s;
+}
+
+.view-holiday-btn {
+  background-color: #999;
+  transition: 0.2s;
+  font-weight: 600;
+}
+.view-holiday-btn:hover {
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.356);
+  background-color: rgb(94, 93, 93);
+  transition: 0.2s;
+}
+
+.delete-holiday-btn {
+  background-color: rgb(220, 0, 78);
+  transition: 0.2s;
+  font-weight: 600;
+}
+.delete-holiday-btn:hover {
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.356);
+  background-color: #c70000;
+  transition: 0.2s;
+}
+
+.edit-holiday-btn {
+  background-color: #1976d2;
+  transition: 0.2s;
+  font-weight: 600;
+}
+.edit-holiday-btn:hover {
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.356);
+  background-color: #0d47a1;
+  transition: 0.2s;
+}
+
+/* -------------------------
+    Public Holiday View Modal
+---------------------------- */
+
+.public-holiday-view-modal {
+  position: absolute;
+  top: 9%;
+  left: 0;
+  width: 100vw;
+  height: 91vh;
+  background-color: #00000080;
+  z-index: 1000;
+}
+
+.public-holiday-view-modal-container {
+  position: absolute;
+  left: 19%;
+  top: 16%;
+  width: 30%;
+  padding: 20px;
+  height: 70%;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #00000080;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.534);
+}
+
+.public-holiday-view-modal-close {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 30px;
+  height: 30px;
+  background-color: #999;
+  border-radius: 50%;
+  color: #fff;
+  transition: 0.2s;
+}
+.public-holiday-view-modal-close:hover {
+  background-color: red;
+  transition: 0.2s;
+}
+
+.public-holiday-view-modal-info {
+  position: relative;
+  top: 10%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.ph-info {
+  border-bottom: #00000080 1px solid;
+}
+
+.ph-span {
+  float: right;
+}
