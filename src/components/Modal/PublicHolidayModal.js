@@ -38,9 +38,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     overflowY: 'scroll',
   },
-  chip: {
-    margin: theme.spacing(0.5),
-  },
 }));
 
 function PublicHolidayModal({ closeModal }) {
@@ -48,11 +45,12 @@ function PublicHolidayModal({ closeModal }) {
   const [department, setDepartment] = React.useState('');
   const [PublicHoliday, setPublicHoliday] = React.useState(PUBLIC_HOLIDAY);
   const [open, setOpen] = React.useState(false);
+  const [chipData, setChipData] = React.useState([]);
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DDT00:00:00'))
+    new Date(moment().format('YYYY-MM-DD'))
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DDT23:59:59'))
+    new Date(moment().format('YYYY-MM-DD'))
   );
 
   const handleStartDateChange = (date) => {
@@ -77,21 +75,20 @@ function PublicHolidayModal({ closeModal }) {
     setOpen(true);
   };
 
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: 'Admin' },
-    { key: 1, label: 'HR' },
-    { key: 2, label: 'Employee' },
-    { key: 4, label: 'SUPER' },
-  ]);
-
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
     );
   };
+  const handleAdd = () => {
+    setChipData([...chipData, { key: chipData.length, label: department }]);
+  };
 
-  const handleSubmit = () => {
+  const handleSubmitPublicHoliday = (e) => {
+    e.preventDefault();
     console.log(PublicHoliday);
+    setPublicHoliday(PUBLIC_HOLIDAY);
+    closeModal(false);
   };
 
   return (
@@ -103,7 +100,7 @@ function PublicHolidayModal({ closeModal }) {
             onClick={() => closeModal(false)}
           />
           <div className="public-holiday-modal-info">
-            <form className="public-holiday-form-area" onSubmit={handleSubmit}>
+            <form className="public-holiday-form-area" onSubmit={handleSubmitPublicHoliday}>
               <div className="public-holiday-entry-div public-holiday-title-div">
                 <input
                   className="public-holiday-input"
@@ -152,17 +149,18 @@ function PublicHolidayModal({ closeModal }) {
                         icon={icon}
                         label={data.label}
                         onDelete={handleDelete(data)}
-                        className={classes.chip}
+                        id="pub-hol-chip"
                       />
                     </li>
                   );
                 })}
               </Paper>
               <FormControl className={classes.formControl}>
-                <InputLabel id="demo-controlled-open-select-label">
+                <InputLabel htmlFor='department' id="demo-controlled-open-select-label">
                   DEPARTMENT
                 </InputLabel>
                 <Select
+                  name='department'
                   labelId="demo-controlled-open-select-label"
                   id="demo-controlled-open-select"
                   open={open}
@@ -170,13 +168,12 @@ function PublicHolidayModal({ closeModal }) {
                   onOpen={handleOpen}
                   value={department}
                   onChange={handleChange}
+                  onClick={handleAdd}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
                   <MenuItem value={'HR'}>HR</MenuItem>
                   <MenuItem value={'Admin'}>Admin</MenuItem>
                   <MenuItem value={'Employee'}>Employee</MenuItem>
+                  <MenuItem value={'SUPER'}>SUPER</MenuItem>
                 </Select>
               </FormControl>
               <Button
@@ -185,7 +182,7 @@ function PublicHolidayModal({ closeModal }) {
                 color="primary"
                 type="submit"
               >
-                Create Public Holiday
+                Submit
               </Button>
             </form>
           </div>

@@ -4,13 +4,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PublicHolidayModal from '../../components/Modal/PublicHolidayModal';
+// import { DataGrid } from '@material-ui/data-grid';
 
 const PublicHoliday = () => {
-  const [holidayModel, setHolidayModel] = useState(false);
+  const [holidayModal, setHolidayModal] = useState(false);
+
 
   return (
     <>
-      {holidayModel && <PublicHolidayModal closeModal={setHolidayModel} />}
+      {holidayModal && <PublicHolidayModal closeModal={setHolidayModal} />}
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -24,7 +26,7 @@ const PublicHoliday = () => {
           </div>
           <div className="col-auto float-right ml-auto">
             <button
-              onClick={() => setHolidayModel(true)}
+              onClick={() => setHolidayModal(true)}
               className="btn add-btn"
               data-toggle="modal"
               data-target="#add_public_holiday"
@@ -35,9 +37,7 @@ const PublicHoliday = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-md-12"></div>
-      </div>
+
     </>
   );
 };
