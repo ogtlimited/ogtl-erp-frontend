@@ -4,15 +4,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PublicHolidayModal from '../../components/Modal/PublicHolidayModal';
-import HolidayListModal from '../../components/Modal/HolidayListModal';
+import HolidayListModal from '../../components/Modal/PublicHolidayViewModal';
+import PublicHolidayEditModal from '../../components/Modal/PublicHolidayEditModal';
 import { PublicHolidayList } from '../../components/FormJSON/PublicHolidayList';
 
 const PublicHoliday = () => {
   const [holidayModal, setHolidayModal] = useState(false);
   const [viewHoliday, setViewHoliday] = useState(false);
+  const [editModal, setEditModal] = useState(false);
   const [data, setData] = useState(PublicHolidayList);
   const [list, setList] = useState([]);
-  const [edit, setEdit] = useState(null);
 
   // View Public Holiday
   const handleViewHoliday = (publicHoliday) => () => {
@@ -29,13 +30,16 @@ const PublicHoliday = () => {
 
   // Edit Public Holiday
   const handleEditHoliday = (publicHoliday) => () => {
-    setHolidayModal(true);
+    setEditModal(true);
     setList(publicHoliday);
   };
 
   return (
     <>
       {holidayModal && <PublicHolidayModal closeModal={setHolidayModal} />}
+      {editModal && (
+        <PublicHolidayEditModal closeModal={setEditModal} list={list} />
+      )}
       {viewHoliday && (
         <HolidayListModal closeModal={setViewHoliday} list={list} />
       )}
