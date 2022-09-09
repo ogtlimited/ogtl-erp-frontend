@@ -12,7 +12,7 @@ const PublicHoliday = () => {
   const [holidayModal, setHolidayModal] = useState(false);
   const [viewHoliday, setViewHoliday] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [data, setData] = useState(PublicHolidayList);
+  const [data] = useState(PublicHolidayList);
   const [allData, setAllData] = useState([]);
   const [filterData, setFilterData] = useState(allData);
   const [list, setList] = useState([]);
