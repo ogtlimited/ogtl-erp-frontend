@@ -13,7 +13,18 @@ const PublicHoliday = () => {
   const [viewHoliday, setViewHoliday] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [data, setData] = useState(PublicHolidayList);
+  const [allData, setAllData] = useState([]);
+  const [filterData, setFilterData] = useState(allData);
   const [list, setList] = useState([]);
+
+  // Search Function
+  const handlePublicHolidaySearch = (e) => {
+    const search = e.target.value;
+    const filteredData = allData.filter((data) => {
+      return data.title.toLowerCase().includes(search.toLowerCase());
+    });
+    setFilterData(filteredData);
+  };
 
   // View Public Holiday
   const handleViewHoliday = (publicHoliday) => () => {
@@ -23,7 +34,7 @@ const PublicHoliday = () => {
 
   //  Delete Public Holiday
   const handleDeleteHoliday = (publicHolidayToRemove) => () => {
-    setData((holidays) =>
+    setFilterData((holidays) =>
       holidays.filter((holiday) => holiday.id !== publicHolidayToRemove.id)
     );
   };
@@ -33,6 +44,12 @@ const PublicHoliday = () => {
     setEditModal(true);
     setList(publicHoliday);
   };
+
+  useEffect(() => {
+    setAllData(data);
+    setFilterData(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -67,6 +84,16 @@ const PublicHoliday = () => {
           </div>
         </div>
       </div>
+
+      {/* Start of Search bar */}
+      <input
+        type="search"
+        className="public-holiday-search"
+        placeholder="Search..."
+        onChange={(e) => handlePublicHolidaySearch(e)}
+      />
+      {/* End of Search bar */}
+
       <div className="public-holiday-list">
         <table className="public-holiday-table">
           <thead className="public-holiday-table-head">
@@ -77,30 +104,36 @@ const PublicHoliday = () => {
             </tr>
           </thead>
           <tbody className="public-holiday-table-body">
-            {data.map((publicHoliday) => (
-              <tr key={publicHoliday.id} className="public-holiday-table-td">
-                <td>{publicHoliday.title}</td>
-                <td>{publicHoliday.date_of_Application}</td>
-                <button
-                  className="req-table-btn view-holiday-btn"
-                  onClick={handleViewHoliday(publicHoliday)}
-                >
-                  View
-                </button>
-                <button
-                  className="req-table-btn delete-holiday-btn"
-                  onClick={handleDeleteHoliday(publicHoliday)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="req-table-btn edit-holiday-btn"
-                  onClick={handleEditHoliday(publicHoliday)}
-                >
-                  Edit
-                </button>
-              </tr>
-            ))}
+            {filterData.length > 0 ? (
+              filterData.map((publicHoliday) => (
+                <tr key={publicHoliday.id} className="public-holiday-table-td">
+                  <td>{publicHoliday.title}</td>
+                  <td>{publicHoliday.date_of_Application}</td>
+                  <button
+                    className="req-table-btn view-holiday-btn"
+                    onClick={handleViewHoliday(publicHoliday)}
+                  >
+                    View
+                  </button>
+                  <button
+                    className="req-table-btn delete-holiday-btn"
+                    onClick={handleDeleteHoliday(publicHoliday)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="req-table-btn edit-holiday-btn"
+                    onClick={handleEditHoliday(publicHoliday)}
+                  >
+                    Edit
+                  </button>
+                </tr>
+              ))
+            ) : (
+              <div className="no-ph-div">
+                <p className="no-ph">No Public Holiday Record</p>
+              </div>
+            )}
           </tbody>
         </table>
       </div>
