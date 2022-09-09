@@ -2,11 +2,15 @@ name: GitHub Pages
 
 on:
   push:
+    branches:
+    - dev
+    - main
+    - '**'
   pull_request:
     branches:
     - dev
     - main
-    - 'feature/**'
+    - '**'
 
 jobs:
   build-and-deployment:
@@ -42,3 +46,13 @@ jobs:
       if: endsWith(github.ref, '/master')
       run: |
         echo "deploying to production"
+    - name: Slack Notification
+      uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+        channel: '#everyone'
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
