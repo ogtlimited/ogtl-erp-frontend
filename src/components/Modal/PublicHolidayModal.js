@@ -42,32 +42,21 @@ const useStyles = makeStyles((theme) => ({
 
 function PublicHolidayModal({ closeModal }) {
   const classes = useStyles();
-  const [department, setDepartment] = React.useState('');
   const [PublicHoliday, setPublicHoliday] = React.useState(PUBLIC_HOLIDAY);
+
+  const [department, setDepartment] = React.useState('');
+  const [project, setProject] = React.useState('');
+
   const [open, setOpen] = React.useState(false);
   const [chipData, setChipData] = React.useState([]);
-  const [selectedStartDate, setSelectedStartDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DD'))
-  );
-  const [selectedEndDate, setSelectedEndDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DD'))
-  );
 
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date);
-  };
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-  };
-
-  const handleFormChange = (e) => {
-    e.preventDefault();
-    setPublicHoliday({ ...PublicHoliday, [e.target.name]: e.target.value });
-  };
-
-  const handleChange = (event) => {
+  const handleDepartmentChange = (event) => {
     setDepartment(event.target.value);
   };
+  const handleProjectChange = (event) => {
+    setProject(event.target.value);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -75,16 +64,21 @@ function PublicHolidayModal({ closeModal }) {
     setOpen(true);
   };
 
+  // onChange Event
+  const handleFormChange = (e) => {
+    e.preventDefault();
+    setPublicHoliday({ ...PublicHoliday, [e.target.name]: e.target.value });
+  };
+
+  // Delete Campaign Chips
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) =>
       chips.filter((chip) => chip.key !== chipToDelete.key)
     );
   };
-  const handleAdd = () => {
-    setChipData([...chipData, { key: chipData.length, label: department }]);
-  };
 
-  const handleSubmitPublicHoliday = (e) => {
+  // onSubmit Event
+  const submitPublicHoliday = (e) => {
     e.preventDefault();
     console.log(PublicHoliday);
     setPublicHoliday(PUBLIC_HOLIDAY);
@@ -100,7 +94,10 @@ function PublicHolidayModal({ closeModal }) {
             onClick={() => closeModal(false)}
           />
           <div className="public-holiday-modal-info">
-            <form className="public-holiday-form-area" onSubmit={handleSubmitPublicHoliday}>
+            <form
+              className="public-holiday-form-area"
+              onSubmit={submitPublicHoliday}
+            >
               <div className="public-holiday-entry-div public-holiday-title-div">
                 <input
                   className="public-holiday-input"
@@ -120,8 +117,13 @@ function PublicHolidayModal({ closeModal }) {
                   id="date-picker-dialog"
                   label="START DATE"
                   format="yyyy-MM-dd"
-                  value={selectedStartDate}
-                  onChange={handleStartDateChange}
+                  value={PublicHoliday.start_date}
+                  onChange={(date) => {
+                    setPublicHoliday({
+                      ...PublicHoliday,
+                      start_date: moment(date).format('YYYY-MM-DD'),
+                    });
+                  }}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -133,8 +135,13 @@ function PublicHolidayModal({ closeModal }) {
                   id="date-picker-dialog"
                   label="END DATE"
                   format="yyyy-MM-dd"
-                  value={selectedEndDate}
-                  onChange={handleEndDateChange}
+                  value={PublicHoliday.end_date}
+                  onChange={(date) => {
+                    setPublicHoliday({
+                      ...PublicHoliday,
+                      end_date: moment(date).format('YYYY-MM-DD'),
+                    });
+                  }}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -155,27 +162,37 @@ function PublicHolidayModal({ closeModal }) {
                   );
                 })}
               </Paper>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor='department' id="demo-controlled-open-select-label">
-                  DEPARTMENT
-                </InputLabel>
-                <Select
-                  name='department'
-                  labelId="demo-controlled-open-select-label"
-                  id="demo-controlled-open-select"
-                  open={open}
-                  onClose={handleClose}
-                  onOpen={handleOpen}
-                  value={department}
-                  onChange={handleChange}
-                  onClick={handleAdd}
-                >
-                  <MenuItem value={'HR'}>HR</MenuItem>
-                  <MenuItem value={'Admin'}>Admin</MenuItem>
-                  <MenuItem value={'Employee'}>Employee</MenuItem>
-                  <MenuItem value={'SUPER'}>SUPER</MenuItem>
-                </Select>
-              </FormControl>
+
+                <FormControl className={classes.formControl}>
+                  <InputLabel
+                    htmlFor="department"
+                    id="demo-controlled-open-select-label"
+                  >
+                    DEPARTMENT
+                  </InputLabel>
+                  <Select
+                    name="department"
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    open={open}
+                    onClose={handleClose}
+                    onOpen={handleOpen}
+                    value={department}
+                    onChange={handleDepartmentChange}
+                    onClick={() =>
+                      setChipData([
+                        ...chipData,
+                        { key: chipData.length, label: department },
+                      ])
+                    }
+                  >
+                    <MenuItem value={'HR'}>HR</MenuItem>
+                    <MenuItem value={'Admin'}>Admin</MenuItem>
+                    <MenuItem value={'Employee'}>Employee</MenuItem>
+                    <MenuItem value={'SUPER'}>SUPER</MenuItem>
+                  </Select>
+                </FormControl>
+              
               <Button
                 id="public-holiday-button"
                 variant="contained"

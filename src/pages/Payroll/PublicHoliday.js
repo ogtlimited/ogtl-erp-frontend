@@ -17,7 +17,7 @@ const PublicHoliday = () => {
   const [filterData, setFilterData] = useState(allData);
   const [list, setList] = useState([]);
 
-  // Search Function
+  // Search Public Holiday
   const handlePublicHolidaySearch = (e) => {
     const search = e.target.value;
     const filteredData = allData.filter((data) => {
@@ -94,6 +94,7 @@ const PublicHoliday = () => {
       />
       {/* End of Search bar */}
 
+      {/* Start of Public Holiday Table*/}
       <div className="public-holiday-list">
         <table className="public-holiday-table">
           <thead className="public-holiday-table-head">
@@ -137,6 +138,10 @@ const PublicHoliday = () => {
           </tbody>
         </table>
       </div>
+      {/* End of Public Holiday Table*/}
+
+      {/* Start of Pagination */}
+      {/* End of Pagination */}
     </>
   );
 };
