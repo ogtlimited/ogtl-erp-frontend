@@ -1,7 +1,7 @@
 /** @format */
 
 import '../../assets/css/PublicHoliday.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import moment from 'moment';
 import 'date-fns';
@@ -19,7 +19,9 @@ import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { PUBLIC_HOLIDAY } from '../FormJSON/PublicHoliday';
+import { PublicHolidayValidation } from '../../utils/PublicHolidayValidation';
 
+// Material UI styles
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -30,11 +32,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
     listStyle: 'none',
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.5),
     marginTop: 5,
     marginBottom: 10,
     maxWidth: '100%',
-    maxHeight: 130,
+    maxHeight: 100,
+    backgroundColor: '#f5f5f5',
     overflow: 'hidden',
     overflowY: 'scroll',
   },
@@ -42,21 +45,58 @@ const useStyles = makeStyles((theme) => ({
 
 function PublicHolidayModal({ closeModal }) {
   const classes = useStyles();
-  const [PublicHoliday, setPublicHoliday] = React.useState(PUBLIC_HOLIDAY);
+  const [error, setError] = useState('');
 
-  const [department, setDepartment] = React.useState('');
-  const [project, setProject] = React.useState('');
+  // Unique tracker for each dataChip
+  const [tracker, setTracker] = useState([]);
 
-  const [open, setOpen] = React.useState(false);
+  // Public Holiday data
+  const [PublicHoliday, setPublicHoliday] = useState(PUBLIC_HOLIDAY);
+
+  // eslint-disable-next-line no-unused-vars
+  const [department, setDepartment] = useState('');
+  // eslint-disable-next-line no-unused-vars
+  const [project, setProject] = useState('');
+
+  // Select dropdown State
+  const [open, setOpen] = useState(false);
+
+  // Chips for department and project
   const [chipData, setChipData] = React.useState([]);
 
-  const handleDepartmentChange = (event) => {
-    setDepartment(event.target.value);
+  // State for switching between department and project
+  const [departmentChecked, setDepartmentChecked] = useState(false);
+  const [departmentShow, setDepartmentShow] = useState(false);
+  const [projectChecked, setProjectChecked] = useState(false);
+  const [projectShow, setProjectShow] = useState(false);
+
+  //  Setting department active and project inactive
+  const toggleDepartment = () => {
+    setDepartmentChecked(!departmentChecked);
+    setDepartmentShow(!departmentShow);
+    setProjectShow(false);
+    setProjectChecked(false);
   };
-  const handleProjectChange = (event) => {
-    setProject(event.target.value);
+  //  Setting project active and department inactive
+  const toggleProject = () => {
+    setProjectChecked(!projectChecked);
+    setProjectShow(!projectShow);
+    setDepartmentShow(false);
+    setDepartmentChecked(false);
   };
 
+  //  Enable department to be selected
+  const handleDepartmentChange = (event) => {
+    const { value } = event.target;
+    setDepartment((prevState) => ({ ...prevState, value }));
+  };
+  // Enable project to be selected
+  const handleProjectChange = (event) => {
+    const { value } = event.target;
+    setProject((prevState) => ({ ...prevState, value }));
+  };
+
+  //  Open and close the select input
   const handleClose = () => {
     setOpen(false);
   };
@@ -64,31 +104,60 @@ function PublicHolidayModal({ closeModal }) {
     setOpen(true);
   };
 
-  // onChange Event
-  const handleFormChange = (e) => {
+  //  Add Unique department and project chips
+  const handleAddChip = (e) => {
     e.preventDefault();
-    setPublicHoliday({ ...PublicHoliday, [e.target.name]: e.target.value });
+    if (
+      e.target.value !== 0 &&
+      !tracker.includes(e.target.value) &&
+      tracker.length !== undefined
+    ) {
+      setChipData((prevState) => [
+        ...prevState,
+        { id: chipData.length, label: e.target.value },
+      ]);
+      setTracker((prevState) => [...prevState, e.target.value]);
+    }
   };
 
   // Delete Campaign Chips
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
+    setChipData((chips) => chips.filter((chip) => chip.id !== chipToDelete.id));
+    setTracker((prevState) =>
+      prevState.filter((item) => item !== chipToDelete.label)
     );
   };
 
-  // onSubmit Event
+  // Form onChange Event
+  const handleFormChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setPublicHoliday((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  // Form onSubmit Event
   const submitPublicHoliday = (e) => {
     e.preventDefault();
-    console.log(PublicHoliday);
+    if (PublicHolidayValidation(PublicHoliday)) {
+      return setError('Please fill all fields');
+    }
+    PUBLIC_HOLIDAY.campaign.push(...chipData);
+    console.log('This is the submitted data', PublicHoliday); // Substitute the console.log with the API call to [POST] public holiday
     setPublicHoliday(PUBLIC_HOLIDAY);
+    setError('');
     closeModal(false);
   };
+
+  useEffect(() => {
+    PublicHoliday.campaign = [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
       <div className="public-holiday-modal">
         <div className="public-holiday-modal-container">
+          {error && <p className="ph-error">{error}</p>}
           <RiCloseCircleFill
             className="public-holiday-modal-close"
             onClick={() => closeModal(false)}
@@ -98,6 +167,7 @@ function PublicHolidayModal({ closeModal }) {
               className="public-holiday-form-area"
               onSubmit={submitPublicHoliday}
             >
+              {/* Title Start */}
               <div className="public-holiday-entry-div public-holiday-title-div">
                 <input
                   className="public-holiday-input"
@@ -111,6 +181,9 @@ function PublicHolidayModal({ closeModal }) {
                   TITLE
                 </label>
               </div>
+              {/* Title End */}
+
+              {/* Start Date End */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   margin="normal"
@@ -129,6 +202,9 @@ function PublicHolidayModal({ closeModal }) {
                   }}
                 />
               </MuiPickersUtilsProvider>
+              {/* Start Date End */}
+
+              {/* End Date End */}
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   margin="normal"
@@ -147,22 +223,52 @@ function PublicHolidayModal({ closeModal }) {
                   }}
                 />
               </MuiPickersUtilsProvider>
+              {/* End Date End */}
+
+              {/* Pills Start */}
               <Paper component="ul" className={classes.root}>
                 {chipData.map((data) => {
                   let icon;
                   return (
-                    <li key={data.key}>
-                      <Chip
-                        icon={icon}
-                        label={data.label}
-                        onDelete={handleDelete(data)}
-                        id="pub-hol-chip"
-                      />
-                    </li>
+                    <Chip
+                      icon={icon}
+                      label={data.label}
+                      key={data.id}
+                      onDelete={handleDelete(data)}
+                      id="pub-hol-chip"
+                    />
                   );
                 })}
               </Paper>
+              {/* Pills End */}
 
+              {/* Checkbox Start */}
+              <div className="department-project-div">
+                <div className="department-checkbox">
+                  <label>Department</label>
+                  <input
+                    type="checkbox"
+                    checked={departmentChecked}
+                    onChange={(e) =>
+                      setDepartmentChecked(e.target.departmentChecked)
+                    }
+                    onClick={toggleDepartment}
+                  />
+                </div>
+                <div className="project-checkbox">
+                  <label>Project</label>
+                  <input
+                    type="checkbox"
+                    checked={projectChecked}
+                    onChange={(e) => setProjectChecked(e.target.projectChecked)}
+                    onClick={toggleProject}
+                  />
+                </div>
+              </div>
+              {/* Checkbox End */}
+
+              {/* Department-Project Select Start */}
+              {departmentShow ? (
                 <FormControl className={classes.formControl}>
                   <InputLabel
                     htmlFor="department"
@@ -175,16 +281,11 @@ function PublicHolidayModal({ closeModal }) {
                     labelId="demo-controlled-open-select-label"
                     id="demo-controlled-open-select"
                     open={open}
-                    onClose={handleClose}
+                    value={PublicHoliday.department}
                     onOpen={handleOpen}
-                    value={department}
+                    onClose={handleClose}
                     onChange={handleDepartmentChange}
-                    onClick={() =>
-                      setChipData([
-                        ...chipData,
-                        { key: chipData.length, label: department },
-                      ])
-                    }
+                    onClick={handleAddChip}
                   >
                     <MenuItem value={'HR'}>HR</MenuItem>
                     <MenuItem value={'Admin'}>Admin</MenuItem>
@@ -192,7 +293,35 @@ function PublicHolidayModal({ closeModal }) {
                     <MenuItem value={'SUPER'}>SUPER</MenuItem>
                   </Select>
                 </FormControl>
-              
+              ) : projectShow ? (
+                <FormControl className={classes.formControl}>
+                  <InputLabel
+                    htmlFor="department"
+                    id="demo-controlled-open-select-label"
+                  >
+                    PROJECT
+                  </InputLabel>
+                  <Select
+                    name="department"
+                    labelId="demo-controlled-open-select-label"
+                    id="demo-controlled-open-select"
+                    open={open}
+                    value={PublicHoliday.project}
+                    onOpen={handleOpen}
+                    onClose={handleClose}
+                    onChange={handleProjectChange}
+                    onClick={handleAddChip}
+                  >
+                    <MenuItem value={'OGTL-ERP'}>OGTL-ERP</MenuItem>
+                    <MenuItem value={'EAS'}>EAS</MenuItem>
+                    <MenuItem value={'Wax'}>Wax</MenuItem>
+                    <MenuItem value={'Easy Pay'}>Easy pay</MenuItem>
+                  </Select>
+                </FormControl>
+              ) : null}
+              {/* Department-Project Select End */}
+
+              {/* Submit Button Start */}
               <Button
                 id="public-holiday-button"
                 variant="contained"
@@ -201,6 +330,7 @@ function PublicHolidayModal({ closeModal }) {
               >
                 Submit
               </Button>
+              {/* Submit Button End */}
             </form>
           </div>
         </div>

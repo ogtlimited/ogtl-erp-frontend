@@ -34,6 +34,8 @@ const PublicHoliday = () => {
 
   //  Delete Public Holiday
   const handleDeleteHoliday = (publicHolidayToRemove) => () => {
+
+    // Call [DELETE] API to delete public holiday
     setFilterData((holidays) =>
       holidays.filter((holiday) => holiday.id !== publicHolidayToRemove.id)
     );
@@ -41,11 +43,15 @@ const PublicHoliday = () => {
 
   // Edit Public Holiday
   const handleEditHoliday = (publicHoliday) => () => {
+
+    // Call [PUT] API to edit public holiday
     setEditModal(true);
     setList(publicHoliday);
   };
 
   useEffect(() => {
+
+    //  [GET] Public Holiday from API and set to state variable allData to aid filtering
     setAllData(data);
     setFilterData(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
