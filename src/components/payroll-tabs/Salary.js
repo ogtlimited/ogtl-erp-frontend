@@ -13,6 +13,7 @@ import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
 const Salary = ({ salaryStructure }) => {
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const [selected, setselected] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -28,7 +29,7 @@ const Salary = ({ salaryStructure }) => {
 
 
   const handleOnSelect = (row, isSelect) => {
-    console.log(row);
+    // console.log(row);
     if (isSelect) {
       const sel = [...selected, row.id];
       setselected(sel);
@@ -53,7 +54,7 @@ const Salary = ({ salaryStructure }) => {
         [key]: val,
       });
       
-      console.log(filterObj, key, val)
+      // console.log(filterObj, key, val)
 
     }else{
       delete filterObj[key]
@@ -61,7 +62,7 @@ const Salary = ({ salaryStructure }) => {
     }
   };
   const handleBulkPayment = () => {
-    console.log(selected);
+    // console.log(selected);
     let mapData = data.map((d) => {
       return {
         _id: d.id,
@@ -69,8 +70,8 @@ const Salary = ({ salaryStructure }) => {
         paid: selected.includes(d.id) ? true : false,
       };
     });
-    console.log(data);
-    console.log(mapData);
+    // console.log(data);
+    // console.log(mapData);
     uploadProgress()
     axiosInstance
       .post(`/api/payroll/uploadPayment`, { slips: mapData })
@@ -83,11 +84,11 @@ const Salary = ({ salaryStructure }) => {
           showAlert(true, "uploaded successfully", "alert alert-success");
           
         }, 5000);
-        console.log(res);
+        // console.log(res);
         setUploadSuccess(false);
       })
       .catch((error) => {
-        console.log(error?.response);
+        // console.log(error?.response);
         handleProgress({
           state: false,
           count: 25
@@ -103,7 +104,7 @@ const Salary = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/salary-slip`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setData(res.data.data);
         setUploadSuccess(false);
       })
@@ -127,7 +128,7 @@ const Salary = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/payroll-archive?${queryString}`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
 
         setData(handleResponse(res.data.data));
         setUploadSuccess(false);
@@ -152,13 +153,14 @@ const Salary = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/salary-slip`)
       .then((res) => {
-        console.log(res.data.data[0]);
+        // console.log(res.data.data[0]);
         let formatted = res.data.data[0].salarySlips.map((e) => ({
           ...e,
           ...e.employeeSalary,
           ogid: e.employeeId.ogid,
           id: e._id,
           employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
+
         }));
         setData(formatted);
       })
@@ -176,6 +178,35 @@ const Salary = ({ salaryStructure }) => {
       setEmployeeOpts(employeeOpts);
     });
   }, []);
+
+  //Debugging
+  useEffect(() => {
+    axiosInstance
+      .get(`/api/employees-salary`)
+      .then((res)=>{
+        let formatted2 = res.data.data.map((e) => ({
+          ...e,
+          ogid: e.employeeId.ogid,
+          id: e._id,
+          employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
+          // basic: e.basic,
+          // medical: e.medical,
+          // housing: e.housing,
+          // transport: e.transport,
+          // otherAllowances: e.otherAllowances,
+          // monthlySalary: e.monthlySalary
+
+        }));
+        setData2(formatted2);
+        console.log({employeeSalary:data2})
+      })
+      .catch((error) => {
+        console.log(error?.response);
+      });
+  }, [data2]);
+
+
+
   useEffect(() => {
     if (uploadSuccess) {
       fetchSalaryAssignments();
@@ -355,7 +386,7 @@ const Salary = ({ salaryStructure }) => {
         </div>
 
         <LeavesTable
-          data={data}
+          data={data2}
           columns={columns}
           clickToSelect={true}
           selected={selected}
