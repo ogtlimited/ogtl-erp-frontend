@@ -167,16 +167,16 @@ const Salary = ({ salaryStructure }) => {
       .catch((error) => {
         console.log(error?.response);
       });
-    createPayroll().then((res) => {
-      const { employees } = res.data.createPayrollForm;
-      const employeeOpts = employees?.map((e) => {
-        return {
-          label: `${e.first_name} ${e.last_name}`,
-          value: e.ogid,
-        };
-      });
-      setEmployeeOpts(employeeOpts);
-    });
+    // createPayroll().then((res) => {
+    //   const { employees } = res.data.createPayrollForm;
+    //   const employeeOpts = employees?.map((e) => {
+    //     return {
+    //       label: `${e.first_name} ${e.last_name}`,
+    //       value: e.ogid,
+    //     };
+    //   });
+    //   setEmployeeOpts(employeeOpts);
+    // });
   }, []);
 
   //Debugging
@@ -186,15 +186,10 @@ const Salary = ({ salaryStructure }) => {
       .then((res)=>{
         let formatted2 = res.data.data.map((e) => ({
           ...e,
+          employeeId:e.employeeId._id,
           ogid: e.employeeId.ogid,
           id: e._id,
           employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
-          // basic: e.basic,
-          // medical: e.medical,
-          // housing: e.housing,
-          // transport: e.transport,
-          // otherAllowances: e.otherAllowances,
-          // monthlySalary: e.monthlySalary
 
         }));
         setData2(formatted2);
@@ -202,6 +197,16 @@ const Salary = ({ salaryStructure }) => {
       })
       .catch((error) => {
         console.log(error?.response);
+      });
+      createPayroll().then((res) => {
+        const { employees } = res.data.createPayrollForm;
+        const employeeOpts = employees?.map((e) => {
+          return {
+            label: `${e.first_name} ${e.last_name}`,
+            value: e.ogid,
+          };
+        });
+        setEmployeeOpts(employeeOpts);
       });
   }, [data2]);
 
