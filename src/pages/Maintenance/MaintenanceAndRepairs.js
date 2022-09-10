@@ -19,6 +19,7 @@ const MaintenanceAndRepairs = () => {
   const [editData, seteditData] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true)
   const [selectedRow, setSelectedRow] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
   const [template, setTemplate] = useState(maintenanceAndRepairFormJson);
@@ -42,10 +43,15 @@ const MaintenanceAndRepairs = () => {
       .catch((error) => {
         console.log(error);
       });
+      
+
   };
 
   useEffect(() => {
     fetchMaintenanceAndRepairs();
+    setTimeout(()=>{
+      setLoading(false)
+    },6000)
   }, []);
 
   useEffect(() => {
@@ -71,6 +77,7 @@ const MaintenanceAndRepairs = () => {
     });
   }, []);
 
+  
   useEffect(() => {
     if (formValue) {
       if (!editData) {
@@ -95,6 +102,7 @@ const MaintenanceAndRepairs = () => {
         delete newFormValue.__v;
         delete newFormValue.createdAt;
         delete newFormValue.updatedAt;
+        delete newFormValue.status;
         axiosInstance
           .patch("/api/maintenanceAndRepairs/" + editData._id, newFormValue)
           .then((res) => {
@@ -109,7 +117,8 @@ const MaintenanceAndRepairs = () => {
           });
       }
     }
-  }, [formValue, editData]);
+  }, [formValue,editData]);
+  
   useEffect(() => {
     seteditData(clickedRow);
   }, [clickedRow, submitted]);
@@ -204,7 +213,7 @@ const MaintenanceAndRepairs = () => {
       sort: true,
 
       formatter: (value, row) => (
-        <h2>{moment(row?.date_of_maintenance).format("L")}</h2>
+        <h2>{moment(row?.date_of_maintenance).add(1,"days").format("DD/MM/YY")}</h2>
       ),
     },
 
@@ -278,7 +287,8 @@ const MaintenanceAndRepairs = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <LeavesTable data={data} columns={columns} />
+          <LeavesTable data={data} columns={columns} loading={loading}/>
+          
         </div>
       </div>
       <FormModal2
