@@ -54,7 +54,7 @@ const LeavesTable = ({
     });
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 10000);
   }, [mobileView]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';
@@ -124,7 +124,7 @@ const LeavesTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No Maintenance Report'
+                    'No Record Found'
                   )
                 }
                 pagination={paginationFactory()}

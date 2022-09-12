@@ -1,7 +1,7 @@
 /** @format */
 
 import '../../assets/css/PublicHoliday.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import moment from 'moment';
 import 'date-fns';
@@ -40,25 +40,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PublicHolidayModal({ closeModal }) {
+function PublicHolidayEditModal({ closeModal, list }) {
   const classes = useStyles();
   const [department, setDepartment] = React.useState('');
   const [PublicHoliday, setPublicHoliday] = React.useState(PUBLIC_HOLIDAY);
   const [open, setOpen] = React.useState(false);
   const [chipData, setChipData] = React.useState([]);
-  const [selectedStartDate, setSelectedStartDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DD'))
-  );
-  const [selectedEndDate, setSelectedEndDate] = React.useState(
-    new Date(moment().format('YYYY-MM-DD'))
-  );
-
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date);
-  };
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
-  };
 
   const handleFormChange = (e) => {
     e.preventDefault();
@@ -91,6 +78,10 @@ function PublicHolidayModal({ closeModal }) {
     closeModal(false);
   };
 
+  useEffect(() => {
+    console.log('list going to edit modal', list);
+  }, [list]);
+
   return (
     <>
       <div className="public-holiday-modal">
@@ -100,14 +91,17 @@ function PublicHolidayModal({ closeModal }) {
             onClick={() => closeModal(false)}
           />
           <div className="public-holiday-modal-info">
-            <form className="public-holiday-form-area" onSubmit={handleSubmitPublicHoliday}>
+            <form
+              className="public-holiday-form-area"
+              onSubmit={handleSubmitPublicHoliday}
+            >
               <div className="public-holiday-entry-div public-holiday-title-div">
                 <input
                   className="public-holiday-input"
                   type="text"
                   name="title"
                   placeholder="TITLE"
-                  value={PublicHoliday.title}
+                  value={list.title}
                   onChange={handleFormChange}
                 />
                 <label htmlFor="title" className="public-holiday-label">
@@ -120,8 +114,8 @@ function PublicHolidayModal({ closeModal }) {
                   id="date-picker-dialog"
                   label="START DATE"
                   format="yyyy-MM-dd"
-                  value={selectedStartDate}
-                  onChange={handleStartDateChange}
+                  value={list.start_date}
+                  onChange={handleFormChange}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
@@ -133,21 +127,21 @@ function PublicHolidayModal({ closeModal }) {
                   id="date-picker-dialog"
                   label="END DATE"
                   format="yyyy-MM-dd"
-                  value={selectedEndDate}
-                  onChange={handleEndDateChange}
+                  value={list.end_Date}
+                  onChange={handleFormChange}
                   KeyboardButtonProps={{
                     'aria-label': 'change date',
                   }}
                 />
               </MuiPickersUtilsProvider>
               <Paper component="ul" className={classes.root}>
-                {chipData.map((data) => {
+                {list.campaign.map((data) => {
                   let icon;
                   return (
                     <li key={data.key}>
                       <Chip
                         icon={icon}
-                        label={data.label}
+                        label={data.name}
                         onDelete={handleDelete(data)}
                         id="pub-hol-chip"
                       />
@@ -156,18 +150,21 @@ function PublicHolidayModal({ closeModal }) {
                 })}
               </Paper>
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor='department' id="demo-controlled-open-select-label">
+                <InputLabel
+                  htmlFor="department"
+                  id="demo-controlled-open-select-label"
+                >
                   DEPARTMENT
                 </InputLabel>
                 <Select
-                  name='department'
+                  name="department"
                   labelId="demo-controlled-open-select-label"
                   id="demo-controlled-open-select"
                   open={open}
                   onClose={handleClose}
                   onOpen={handleOpen}
                   value={department}
-                  onChange={handleChange}
+                  onChange={handleFormChange}
                   onClick={handleAdd}
                 >
                   <MenuItem value={'HR'}>HR</MenuItem>
@@ -192,4 +189,4 @@ function PublicHolidayModal({ closeModal }) {
   );
 }
 
-export default PublicHolidayModal;
+export default PublicHolidayEditModal;
