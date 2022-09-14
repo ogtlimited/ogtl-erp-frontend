@@ -4,14 +4,14 @@
     /* display: inline-block; */
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    /* justify-content: ; */
     margin-bottom: 30px;
     font-family: 'Roboto', sans-serif;
     color:#1f1f1f;
 }
 
-.monthly_filter, .interview_status_filter, .processing_stage_filter{
-   
+.interview_status_filter{
+   margin-right: 20px;
     
 }
 
