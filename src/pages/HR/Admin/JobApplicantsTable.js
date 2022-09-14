@@ -64,6 +64,8 @@ const LeavesTable = ({
     // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems)
     setLoading(false)
+    setprocessingStageFilter("")
+    // console.log("Processing Status",processingStageFilter)
   }
 
   const handleProcessingStageFilter = (e)=>{
@@ -73,7 +75,7 @@ const LeavesTable = ({
     // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems)
     setLoading(false)
-    // setIntervieStatusFilter(" ")
+    setIntervieStatusFilter("")
   }
 
 
@@ -153,6 +155,7 @@ const LeavesTable = ({
                   <select 
                   onChange={(e) => handleIntervieStatusFilter(e)}
                   defaultValue={intervieStatusFilter}
+                  value={intervieStatusFilter}
                   >
                      <option value="" disabled selected hidden>Filter By Interview Status</option>
                      {/* <option>All</option> */}
@@ -167,6 +170,7 @@ const LeavesTable = ({
                   <select 
                   onChange={(e) => handleProcessingStageFilter(e)}
                   defaultValue={processingStageFilter}
+                  value={processingStageFilter}
                   >
                     <option value="" disabled selected hidden>Filter By Processing Stage</option>
                     {/* <option>All</option> */}
