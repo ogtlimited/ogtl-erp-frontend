@@ -17,7 +17,7 @@ const PublicHoliday = () => {
   const [filterData, setFilterData] = useState(allData);
   const [list, setList] = useState([]);
 
-  // Search Public Holiday
+  // Search Function
   const handlePublicHolidaySearch = (e) => {
     const search = e.target.value;
     const filteredData = allData.filter((data) => {
@@ -34,8 +34,6 @@ const PublicHoliday = () => {
 
   //  Delete Public Holiday
   const handleDeleteHoliday = (publicHolidayToRemove) => () => {
-
-    // Call [DELETE] API to delete public holiday
     setFilterData((holidays) =>
       holidays.filter((holiday) => holiday.id !== publicHolidayToRemove.id)
     );
@@ -43,15 +41,11 @@ const PublicHoliday = () => {
 
   // Edit Public Holiday
   const handleEditHoliday = (publicHoliday) => () => {
-
-    // Call [PUT] API to edit public holiday
     setEditModal(true);
     setList(publicHoliday);
   };
 
   useEffect(() => {
-
-    //  [GET] Public Holiday from API and set to state variable allData to aid filtering
     setAllData(data);
     setFilterData(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,7 +94,6 @@ const PublicHoliday = () => {
       />
       {/* End of Search bar */}
 
-      {/* Start of Public Holiday Table*/}
       <div className="public-holiday-list">
         <table className="public-holiday-table">
           <thead className="public-holiday-table-head">
@@ -144,10 +137,6 @@ const PublicHoliday = () => {
           </tbody>
         </table>
       </div>
-      {/* End of Public Holiday Table*/}
-
-      {/* Start of Pagination */}
-      {/* End of Pagination */}
     </>
   );
 };
