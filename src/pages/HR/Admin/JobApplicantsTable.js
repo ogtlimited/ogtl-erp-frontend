@@ -17,6 +17,7 @@ const LeavesTable = ({
   data,
   setData,
   loading,
+  setLoading,
   columns,
   context,
   clickToSelect = false,
@@ -57,18 +58,24 @@ const LeavesTable = ({
 
   const handleIntervieStatusFilter = (e)=>{
     setIntervieStatusFilter(e.target.value)
-    const filteredItems = dataToFilter.filter((item)=>item.interview_status===e.target.value)
-    console.log("FilterStatus", filteredItems)
-    // if(filteredItems.length===0) return
+    const filteredItems = data.filter((item)=>item.interview_status===e.target.value)
+    // console.log("FilterStatus", filteredItems)
+    if(filteredItems===null) {setDataToFilter(data)}
+    // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems)
-    // setData(filteredItems)
+    setLoading(false)
+    setprocessingStageFilter("")
+    // console.log("Processing Status",processingStageFilter)
   }
 
   const handleProcessingStageFilter = (e)=>{
     setprocessingStageFilter(e.target.value)
-    const filteredItems = dataToFilter.filter((item)=>item.process_stage===e.target.value)
+    const filteredItems = data.filter((item)=>item.process_stage===e.target.value)
     // if(filteredItems.length===0) return
+    // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems)
+    setLoading(false)
+    setIntervieStatusFilter("")
   }
 
 
@@ -91,6 +98,9 @@ const LeavesTable = ({
 
   useEffect(() => {
     setDataToFilter(data)
+    setTimeout(()=>{
+      setLoading(true)
+    },7000)
   }, [data]);
 
   // useEffect(() => {
@@ -145,9 +155,10 @@ const LeavesTable = ({
                   <select 
                   onChange={(e) => handleIntervieStatusFilter(e)}
                   defaultValue={intervieStatusFilter}
+                  value={intervieStatusFilter}
                   >
                      <option value="" disabled selected hidden>Filter By Interview Status</option>
-                     <option>All</option>
+                     {/* <option>All</option> */}
                     {statusInterview.map((option, idx) => (
                         <option key={idx}>{option.title}</option>
                       ))}
@@ -159,9 +170,10 @@ const LeavesTable = ({
                   <select 
                   onChange={(e) => handleProcessingStageFilter(e)}
                   defaultValue={processingStageFilter}
+                  value={processingStageFilter}
                   >
                     <option value="" disabled selected hidden>Filter By Processing Stage</option>
-                    <option>All</option>
+                    {/* <option>All</option> */}
                     {processingStage.map((option, idx) => (
                         <option key={idx}>{option.title}</option>
                       ))}
