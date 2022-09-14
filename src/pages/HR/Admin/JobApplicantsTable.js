@@ -60,8 +60,8 @@ const LeavesTable = ({
     const filteredItems = dataToFilter.filter((item)=>item.interview_status===e.target.value)
     console.log("FilterStatus", filteredItems)
     if(filteredItems.length===0) return
-    // setDataToFilter(filteredItems)
-    setData(filteredItems)
+    setDataToFilter(filteredItems)
+    // setData(filteredItems)
   }
 
   const handleProcessingStageFilter = (e)=>{
