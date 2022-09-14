@@ -59,7 +59,7 @@ const LeavesTable = ({
     setIntervieStatusFilter(e.target.value)
     const filteredItems = dataToFilter.filter((item)=>item.interview_status===e.target.value)
     console.log("FilterStatus", filteredItems)
-    if(filteredItems.length===0) return
+    // if(filteredItems.length===0) return
     setDataToFilter(filteredItems)
     // setData(filteredItems)
   }
@@ -67,7 +67,7 @@ const LeavesTable = ({
   const handleProcessingStageFilter = (e)=>{
     setprocessingStageFilter(e.target.value)
     const filteredItems = dataToFilter.filter((item)=>item.process_stage===e.target.value)
-    if(filteredItems.length===0) return
+    // if(filteredItems.length===0) return
     setDataToFilter(filteredItems)
   }
 
@@ -101,12 +101,12 @@ const LeavesTable = ({
 
   return (
     <>
-      {data && (
+      {dataToFilter && (
 
         
         <ToolkitProvider
           keyField="id"
-          data={data}
+          data={dataToFilter}
           columns={columns}
           search
           exportCSV
