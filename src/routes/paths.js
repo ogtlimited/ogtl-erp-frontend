@@ -44,6 +44,7 @@ export const PATH_DASHBOARD = {
   },
   payroll: {
     root: path(ROOTS_DASHBOARD, "/payroll"),
+    publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
     payrollItem: path(ROOTS_DASHBOARD, "/payroll/payroll-items"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
@@ -53,6 +54,7 @@ export const PATH_DASHBOARD = {
     employeeReport: path(ROOTS_DASHBOARD, "/reports/employee-reports"),
     payslipReport: path(ROOTS_DASHBOARD, "/reports/payslip-reports"),
     attendanceReports: path(ROOTS_DASHBOARD, "/reports/attendance-reports"),
+    academyReports: path(ROOTS_DASHBOARD, "/reports/academy-reports"),
   },
   recruitment: {
     root: path(ROOTS_DASHBOARD, "/recruitment"),
