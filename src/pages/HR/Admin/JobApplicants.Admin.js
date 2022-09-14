@@ -154,6 +154,7 @@ const JobApplicants = () => {
       dataField: 'job_opening_id',
       text: 'Job Opening',
       sort: true,
+      csvExport: false,
       formatter: (value, row) => (
         <>
           {row?.job_opening_id?.job_title ? (
