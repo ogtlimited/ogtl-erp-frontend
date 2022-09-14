@@ -204,6 +204,11 @@ const sidebarConfig = [
             title: 'Attendance Reports',
             path: PATH_DASHBOARD.reports.attendanceReports,
           },
+          {
+            canView: 'HR',
+            title: 'Academy Reports',
+            path: PATH_DASHBOARD.reports.academyReports,
+          },
         ],
       },
       {
@@ -375,6 +380,11 @@ const sidebarConfig = [
             title: 'Attendance Reports',
             path: PATH_DASHBOARD.reports.attendanceReports,
           },
+          {
+            canView: 'HR',
+            title: 'Academy Reports',
+            path: PATH_DASHBOARD.reports.academyReports,
+          }
         ],
       },
     ],

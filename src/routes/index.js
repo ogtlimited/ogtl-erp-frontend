@@ -330,6 +330,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'academy-reports',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AcademyReport />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'payslip-reports',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -809,6 +817,9 @@ const EmployeeSalary = Loadable(
 const PaySlip = Loadable(lazy(() => import('../pages/Payroll/PaySlip')));
 const AttendanceReport = Loadable(
   lazy(() => import('../pages/Reports/AttendanceReport'))
+);
+const AcademyReport = Loadable(
+  lazy(() => import('../pages/Reports/AcademyReport'))
 );
 const EmployeeReport = Loadable(
   lazy(() => import('../pages/Reports/EmployeeReport'))
