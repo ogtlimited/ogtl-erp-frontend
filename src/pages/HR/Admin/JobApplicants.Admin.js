@@ -1,33 +1,36 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import Select from "react-select";
-import helper from "../../../services/helper";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
+import axiosInstance from '../../../services/api';
+import { useAppContext } from '../../../Context/AppContext';
+import ConfirmModal from '../../../components/Modal/ConfirmModal';
+import Select from 'react-select';
+import helper from '../../../services/helper';
+import GeneralApproverBtn from '../../../components/Misc/GeneralApproverBtn';
 import {
   InterviewProcessStageOptions,
   InterviewStatusOptions,
-} from "../../../constants";
-import ViewModal from "../../../components/Modal/ViewModal";
-import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
-import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
+} from '../../../constants';
+import ViewModal from '../../../components/Modal/ViewModal';
+import JobApplicationContent from '../../../components/ModalContents/JobApplicationContent';
+import ScheduleInterview from '../../../components/ModalContents/ScheduleInterview';
 
 const jobOpts = [
   {
-    label: "Rejected",
-    value: "Rejected",
+    label: 'Rejected',
+    value: 'Rejected',
   },
   {
-    label: "Accepted",
-    value: "Accepted",
+    label: 'Accepted',
+    value: 'Accepted',
   },
   {
-    label: "Open",
-    value: "Open",
+    label: 'Open',
+    value: 'Open',
   },
 ];
 
@@ -36,28 +39,32 @@ const JobApplicants = () => {
   const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [processingStageRow, setprocessingStageRow] = useState(null);
-  const [interview_status, setInterviewStatus] = useState("");
-  const [process_stage, setprocessingStage] = useState("");
+  const [interview_status, setInterviewStatus] = useState('');
+  const [process_stage, setprocessingStage] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [modalType, setmodalType] = useState("schedule-interview");
+  const [modalType, setmodalType] = useState('schedule-interview');
   const fetchJobApplicants = () => {
     axiosInstance
-      .get("/api/jobApplicant")
+      .get('/api/jobApplicant')
       .then((res) => {
-        let resData = res?.data?.data
-        let formatted = resData.map(e => ({...e, full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name}))
-        console.log(user)
-        if(user?.isRepSiever){
-          const userApplications = formatted.filter(apl => apl.rep_sieving_call?._id === user._id)
-          console.log(userApplications)
+        let resData = res?.data?.data;
+        let formatted = resData.map((e) => ({
+          ...e,
+          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+        }));
+        console.log(user);
+        if (user?.isRepSiever) {
+          const userApplications = formatted.filter(
+            (apl) => apl.rep_sieving_call?._id === user._id
+          );
+          console.log(userApplications);
           setData(userApplications);
           setunfiltered(userApplications);
-        }else{
+        } else {
           setData(formatted);
           setunfiltered(formatted);
-
         }
       })
       .catch((error) => {
@@ -68,7 +75,7 @@ const JobApplicants = () => {
     fetchJobApplicants();
   }, []);
   const handleClick = (i) => {
-    if (i?.value === "All" || i === null) {
+    if (i?.value === 'All' || i === null) {
       setData(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => i.label.includes(e.status));
@@ -84,27 +91,28 @@ const JobApplicants = () => {
         setData((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
-        showAlert(true, res.data.message, "alert alert-success");
+        showAlert(true, res.data.message, 'alert alert-success');
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error.response.data.message, 'alert alert-danger');
       });
   };
   //update jobOpening
   const handleUpdate = useCallback((id, update) => {
-    console.log(update)
+    console.log(update);
     axiosInstance
-      .patch("/api/jobApplicant/" + id, update)
+      .patch('/api/jobApplicant/' + id, update)
       .then((res) => {
         fetchJobApplicants();
-        showAlert(true, res.data.message, "alert alert-success");
+        showAlert(true, res.data.message, 'alert alert-success');
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error.response.data.message, 'alert alert-danger');
       });
   }, []);
+   
   useEffect(() => {
     if (interview_status.length) {
       const update = {
@@ -127,8 +135,8 @@ const JobApplicants = () => {
 
   const columns = [
     {
-      dataField: "full_name",
-      text: "Job Applicant",
+      dataField: 'full_name',
+      text: 'Job Applicant',
       sort: true,
       formatter: (value, row) => (
         <h2>
@@ -137,30 +145,34 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "job_opening_id",
-      text: "Job Opening",
+      dataField: 'job_opening_id',
+      text: 'Job Opening',
       sort: true,
       formatter: (value, row) => (
         <>
-          {row?.job_opening_id?.job_title ? (
-            <h2>{row?.job_opening_id?.job_title}</h2>
+          {row.job_opening_id ? (
+            <h2>{row.job_opening_id.job_title}</h2>
           ) : (
-            <h2>{row?.default_job_opening_id?.job_title}</h2>
+            <h2>{row.default_job_opening_id.job_title}</h2>
           )}
         </>
       ),
     },
     {
-      dataField: "interview_date",
-      text: "Interview Date",
+      dataField: 'interview_date',
+      text: 'Interview Date',
       sort: true,
       formatter: (value, row) => (
-        <h2>{row.interview_date ? new Date(row.interview_date).toUTCString() : "Not Set"}</h2>
+        <h2>
+          {row.interview_date
+            ? new Date(row.interview_date).toUTCString()
+            : 'Not Set'}
+        </h2>
       ),
     },
     {
-      dataField: "interview_status",
-      text: "Interview Status",
+      dataField: 'interview_status',
+      text: 'Interview Status',
       sort: true,
       formatter: (value, row) => (
         <>
@@ -175,8 +187,8 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "process_stage",
-      text: "Processing Stage",
+      dataField: 'process_stage',
+      text: 'Processing Stage',
       sort: true,
 
       formatter: (value, row) => (
@@ -192,8 +204,8 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "resume_attachment",
-      text: "Resume Attachment",
+      dataField: 'resume_attachment',
+      text: 'Resume Attachment',
       sort: true,
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
@@ -202,10 +214,11 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "",
-      text: "Action",
+      dataField: '',
+      text: 'Action',
+      csvExport: false,
       sort: true,
-      headerStyle: { minWidth: "70px", textAlign: "left" },
+      headerStyle: { minWidth: '70px', textAlign: 'left' },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <>
@@ -236,7 +249,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType("view-details");
+                  setmodalType('view-details');
                   setViewRow(row);
                 }}
               >
@@ -247,7 +260,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType("schedule-interview");
+                  setmodalType('schedule-interview');
                   setSelectedRow(helper.handleEdit(row));
                 }}
               >
@@ -298,7 +311,7 @@ const JobApplicants = () => {
         selectedRow={selectedRow}
         deleteFunction={deleteJobApplicant}
       />
-      {modalType === "view-details" ? (
+      {modalType === 'view-details' ? (
         <ViewModal
           title="Applicant Details"
           content={<JobApplicationContent jobApplication={viewRow} />}
