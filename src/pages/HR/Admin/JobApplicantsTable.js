@@ -60,9 +60,9 @@ const LeavesTable = ({
     setIntervieStatusFilter(e.target.value)
     const filteredItems = data.filter((item)=>item.interview_status===e.target.value)
     // console.log("FilterStatus", filteredItems)
-    // if(filteredItems.length===0) return
+    if(filteredItems===null) {setDataToFilter(data)}
     // setDataToFilter(filteredItems)
-    setData(filteredItems)
+    setDataToFilter(filteredItems)
     setLoading(false)
   }
 
@@ -71,8 +71,9 @@ const LeavesTable = ({
     const filteredItems = data.filter((item)=>item.process_stage===e.target.value)
     // if(filteredItems.length===0) return
     // setDataToFilter(filteredItems)
-    setData(filteredItems)
+    setDataToFilter(filteredItems)
     setLoading(false)
+    // setIntervieStatusFilter(" ")
   }
 
 
@@ -154,7 +155,7 @@ const LeavesTable = ({
                   defaultValue={intervieStatusFilter}
                   >
                      <option value="" disabled selected hidden>Filter By Interview Status</option>
-                     <option>All</option>
+                     {/* <option>All</option> */}
                     {statusInterview.map((option, idx) => (
                         <option key={idx}>{option.title}</option>
                       ))}
@@ -168,7 +169,7 @@ const LeavesTable = ({
                   defaultValue={processingStageFilter}
                   >
                     <option value="" disabled selected hidden>Filter By Processing Stage</option>
-                    <option>All</option>
+                    {/* <option>All</option> */}
                     {processingStage.map((option, idx) => (
                         <option key={idx}>{option.title}</option>
                       ))}
