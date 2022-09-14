@@ -79,7 +79,7 @@ const JobApplicants = () => {
     fetchJobApplicants();
     setTimeout(() => {
       setLoading(false);
-    }, 7000);
+    }, 10000);
   }, []);
   const handleClick = (i) => {
     if (i?.value === 'All' || i === null) {
@@ -314,6 +314,7 @@ const JobApplicants = () => {
           <LeavesTable
             data={data}
             loading={loading}
+            setLoading={setLoading}
             setData={setData}
             columns={columns}
             statusInterview={InterviewStatusOptions}
