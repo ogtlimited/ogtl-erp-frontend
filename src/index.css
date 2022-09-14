@@ -1,0 +1,29 @@
+
+
+.filter{
+    /* display: inline-block; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+    color:#1f1f1f;
+}
+
+.monthly_filter, .interview_status_filter, .processing_stage_filter{
+   
+    
+}
+
+
+.monthly_filter select, .interview_status_filter select, .processing_stage_filter select{
+    
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px ;
+        border-color: #00C5FB;
+        border-radius: 5px;
+    
+}
+
+
