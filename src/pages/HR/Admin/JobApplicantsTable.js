@@ -17,6 +17,7 @@ const LeavesTable = ({
   data,
   setData,
   loading,
+  setLoading,
   columns,
   context,
   clickToSelect = false,
@@ -57,18 +58,21 @@ const LeavesTable = ({
 
   const handleIntervieStatusFilter = (e)=>{
     setIntervieStatusFilter(e.target.value)
-    const filteredItems = dataToFilter.filter((item)=>item.interview_status===e.target.value)
-    console.log("FilterStatus", filteredItems)
+    const filteredItems = data.filter((item)=>item.interview_status===e.target.value)
+    // console.log("FilterStatus", filteredItems)
     // if(filteredItems.length===0) return
-    setDataToFilter(filteredItems)
-    // setData(filteredItems)
+    // setDataToFilter(filteredItems)
+    setData(filteredItems)
+    setLoading(false)
   }
 
   const handleProcessingStageFilter = (e)=>{
     setprocessingStageFilter(e.target.value)
-    const filteredItems = dataToFilter.filter((item)=>item.process_stage===e.target.value)
+    const filteredItems = data.filter((item)=>item.process_stage===e.target.value)
     // if(filteredItems.length===0) return
-    setDataToFilter(filteredItems)
+    // setDataToFilter(filteredItems)
+    setData(filteredItems)
+    setLoading(false)
   }
 
 
@@ -91,6 +95,9 @@ const LeavesTable = ({
 
   useEffect(() => {
     setDataToFilter(data)
+    setTimeout(()=>{
+      setLoading(true)
+    },7000)
   }, [data]);
 
   // useEffect(() => {
