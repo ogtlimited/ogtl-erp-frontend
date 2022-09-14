@@ -17,10 +17,10 @@
 .public-holiday-modal-container {
   position: absolute;
   left: 15%;
-  top: 5%;
+  top: 2%;
   width: 43%;
   padding: 20px;
-  height: 90%;
+  height: 95%;
   background-color: #fff;
   border-radius: 10px;
   border: 1px solid #00000080;
@@ -45,8 +45,8 @@
 
 .public-holiday-modal-info {
   position: relative;
-  top: 10%;
-  height: 90%;
+  top: 7%;
+  height: 94%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -109,7 +109,7 @@
   top: -15px;
   left: 0;
   z-index: 10;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #1f1f1f;
 }
@@ -125,9 +125,30 @@
   top: -15px;
   left: 0;
   z-index: 10;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #1f1f1f;
+}
+
+.department-project-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.department-checkbox,
+.project-checkbox {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+}
+
+.ph-error {
+  position: absolute;
+  top: 5%;
+  left: 30%;
+  color: red;
+  font-size: 16px;
 }
 
 /* Material UI */
@@ -155,6 +176,7 @@
   position: relative;
   margin: 2px;
   color: #1f1f1f;
+  border: 1px solid #999;
   font-size: 14px;
   border-radius: 25px;
 }
