@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import LeavesTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -15,6 +15,7 @@ import {
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
+
 
 const jobOpts = [
   {
@@ -42,6 +43,10 @@ const JobApplicants = () => {
   const [viewRow, setViewRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState("schedule-interview");
+  const [loading, setLoading] = useState(true);
+
+ 
+ 
   const fetchJobApplicants = () => {
     axiosInstance
       .get("/api/jobApplicant")
@@ -66,6 +71,9 @@ const JobApplicants = () => {
   };
   useEffect(() => {
     fetchJobApplicants();
+    setTimeout(()=>{
+      setLoading(false)
+    },7000)
   }, []);
   const handleClick = (i) => {
     if (i?.value === "All" || i === null) {
@@ -290,7 +298,9 @@ const JobApplicants = () => {
               // formatGroupLabel={formatGroupLabel}
             />
           </div> */}
-          <LeavesTable data={data} columns={columns} />
+
+  
+          <LeavesTable data={data} loading={loading} setData={setData} columns={columns} statusInterview={ InterviewStatusOptions } processingStage ={InterviewProcessStageOptions}/>
         </div>
       </div>
       <ConfirmModal
