@@ -16,7 +16,7 @@ const AcademyStatistics = ({stats, chartData, chartTitle}) => {
   };
   return (
     <>
-     <div style={{position: 'absolute', top: '11%', left: '55%', width: '38%'}}>
+     <div style={{position: 'absolute', top: '180px', left: '55%'}}>
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">{chartTitle}</h4>

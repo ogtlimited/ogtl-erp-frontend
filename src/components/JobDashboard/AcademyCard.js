@@ -7,19 +7,6 @@ const AcademyCard = ({ data }) => {
         <div className="card dash-widget">
           <div className="card-body">
             <span className="dash-widget-icon">
-              <i className="fa fa-briefcase"></i>
-            </span>
-            <div className="dash-widget-info">
-              <h3>0</h3>
-              <span>Jobs</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-        <div className="card dash-widget">
-          <div className="card-body">
-            <span className="dash-widget-icon">
               <i className="fa fa-users"></i>
             </span>
             <div className="dash-widget-info">
