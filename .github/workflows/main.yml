@@ -43,7 +43,7 @@ jobs:
         echo "deploying to dev"
         aws s3 sync ./build s3://ogtl-erp-test
     - name: Prod
-      if: endsWith(github.ref, '/master')
+      if: endsWith(github.ref, '/main')
       run: |
         echo "deploying to production"
     - name: Slack Notification
