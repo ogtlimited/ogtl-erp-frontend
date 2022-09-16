@@ -1699,6 +1699,34 @@ table.dataTable thead > tr > td.sorting {
 .add-btn i {
 	margin-right: 5px;
 }
+
+.add-academy-btn {
+	position: absolute;
+	top: -60px;
+	right: 0;
+  background-color: #00c5fb;
+  border: 1px solid #00c5fb;
+  border-radius: 50px;
+  color: #fff;
+  float: right;
+  font-weight: 500;
+  min-width: 140px;
+}
+.add-academy-btn:hover,
+.add-academy-btn:focus,
+.add-academy-btn:active {
+	background-color: #00b7ed;
+	border: 1px solid #00b7ed;
+    color: #fff;
+}
+.add-academy-btn i {
+	margin-right: 5px;
+}
+
+.academy-pieChart {
+	margin-left: 10%;
+}
+
 .cal-icon {
 	position: relative;
 	width: 100%;
@@ -1823,6 +1851,15 @@ table.dataTable thead > tr > td.sorting {
 }
 .card-table .card-body {
 	padding: 0;
+}
+.card-body-application {
+	cursor: pointer;
+}
+.card-body-application:hover {
+  border: 1px solid #00c5fb;
+  font-weight: 600;
+  box-shadow: 0px 0px 10px #00c5fb;
+  transition: 0.2s;
 }
 .card-table .card-footer {
 	background-color: #fff;
@@ -2228,6 +2265,7 @@ table.dataTable thead > tr > td.sorting {
     height: 120px;
     width: 120px;
 }
+
 .fileupload.btn {
 	position: absolute;
 	right: 0;

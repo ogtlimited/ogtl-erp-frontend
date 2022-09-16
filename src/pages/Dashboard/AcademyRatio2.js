@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { chartColors } from '../../components/charts/chart-colors';
-import AcademyStackStatistics from '../../components/charts/academy-statistics';
+import AcademyStatistics2 from '../../components/charts/academy-statistics-2';
 import { useAppContext } from '../../Context/AppContext';
 import helper from '../../services/helper';
 
-const AcademyRatio = () => {
+const AcademyRatio2 = () => {
   const { combineRequest, showAlert } = useAppContext();
   const initialChartState = { labels: [], datasets: [] };
   const [data, setdata] = useState(initialChartState);
@@ -99,7 +99,7 @@ const AcademyRatio = () => {
   return (
     <>
       <div className="row">
-        <AcademyStackStatistics
+        <AcademyStatistics2
           title="Employee By Department"
           data={data}
           chartTitle="Stack"
@@ -110,4 +110,4 @@ const AcademyRatio = () => {
   );
 };
 
-export default AcademyRatio;
+export default AcademyRatio2;
