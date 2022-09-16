@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
   "ApiUrl": "http://localhost:3000",
   "BaseUrl": "http://localhost:3001"
 }
+=======
+  "ApiUrl": "https://ogtl-erp.outsourceglobal.com",
+  "BaseUrl": "https://erp.outsourceglobal.com"
+}
+>>>>>>> db0c9902328d568edf8ae09c85ee953f58dcce04
