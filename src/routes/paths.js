@@ -61,6 +61,7 @@ export const PATH_DASHBOARD = {
     jobOpening: path(ROOTS_DASHBOARD, "/recruitment/job-opening"),
     jobOffer: path(ROOTS_DASHBOARD, "/recruitment/job-offer"),
     jobApplicants: path(ROOTS_DASHBOARD, "/recruitment/job-applicants"),
+    academyApplicants: path(ROOTS_DASHBOARD, "/recruitment/academy-applicants"),
     aptitudeTests: path(ROOTS_DASHBOARD, "/recruitment/aptitude-test"),
     interviewees: path(ROOTS_DASHBOARD, "/recruitment/interviewees"),
     shadowing: path(ROOTS_DASHBOARD, "/recruitment/shadowing"),

@@ -1,7 +1,10 @@
-import React from "react";
-import AcademyChart from "./AcademyChart";
+/** @format */
 
-const AcademyOverview = ({ data, empStats }) => {;
+import React from 'react';
+import AcademyChart from './AcademyChart';
+import AcademyRatio from '../../pages/Dashboard/AcademyRatio';
+
+const AcademyOverview = ({ data, empStats }) => {
   return (
     <div className="row">
       <div className="col-md-12">
@@ -22,6 +25,7 @@ const AcademyOverview = ({ data, empStats }) => {;
               </div>
             </div>
           </div>
+                <AcademyRatio />
         </div>
       </div>
     </div>

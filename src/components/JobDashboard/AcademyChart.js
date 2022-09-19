@@ -4,19 +4,14 @@ import BaseOptionChart from "../../utils/BaseOptionChart";
 
 const CHART_DATA = [
   {
-    name: "Members",
-    type: "column",
-    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-  },
-  {
     name: "Applicants",
     type: "area",
-    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0],
   },
   {
-    name: "Turn Over Rate",
-    type: "line",
-    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+    name: "Accepted Offers",
+    type: "area",
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 0],
   },
 ];
 
@@ -34,8 +29,8 @@ export default function AcademyChart({ data }) {
       "06/01/2022",
       "07/01/2022",
       "08/01/2022",
-      "09/01/2022",
-      "10/01/2022",
+      "09/13/2022",
+      "09/14/2022",
       "11/01/2022",
     ],
     xaxis: { type: "datetime" },

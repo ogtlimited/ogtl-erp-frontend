@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Link } from "react-router-dom";
