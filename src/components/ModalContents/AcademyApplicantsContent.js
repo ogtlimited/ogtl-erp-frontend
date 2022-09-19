@@ -10,6 +10,7 @@ const AcademyApplicantsContent = ({ jobApplication = {} }) => {
   delete jobApplication.last_name
   delete jobApplication.first_name
   delete jobApplication.other_option
+  delete jobApplication.fav_programming_lang
 
 
   
