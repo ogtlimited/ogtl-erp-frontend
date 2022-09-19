@@ -12,13 +12,7 @@ const AcademyRatio2 = () => {
   const { combineRequest, showAlert } = useAppContext();
   const [applicantData, setApplicantData] = useState([]);
 
-  const initialChartState = { labels: ["No data"], datasets: [{
-    label: "# of Votes",
-    data: 1,
-    backgroundColor: ["#dc3545", "#17a2b8"],
-    borderColor: ["#dc3545", "#17a2b8"],
-    borderWidth: 1,
-  },] };
+  const initialChartState = { keys: ["No Record Found"], values: [0] };
   const [chartData1, setChartData1] = useState([]);
   const [chartData2, setChartData2] = useState([]);
   const [chartData3, setChartData3] = useState([]);
@@ -31,8 +25,8 @@ const AcademyRatio2 = () => {
       .then((res) => {
         console.log("response data", res?.data?.data)
         const data = res?.data?.data
+        setApplicantData(data);
         if (data.length === 0) {
-          console.log('No data');
           return setError("No Academy Data")
         }
         const interested_position = {};
@@ -103,12 +97,17 @@ const AcademyRatio2 = () => {
 
   useEffect(() => {
     fetchAcademyApplicants();
-  }, []);
+  }, [applicantData]);
 
   return (
     <>
       <div className="row">
-       { error ? <p>{error}</p> : <AcademyStatistics2
+       { error ? <AcademyStatistics2
+          chartData1={initialChartState}
+          chartData2={initialChartState}
+          chartData3={initialChartState}
+          chartData4={initialChartState}
+        /> : <AcademyStatistics2
           chartData1={chartData1}
           chartData2={chartData2}
           chartData3={chartData3}
