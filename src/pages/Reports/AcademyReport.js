@@ -53,7 +53,7 @@ const AcademyReport = () => {
           <AcademyUpload
             settoggleModal={settoggleModal}
             title="Upload Records"
-            url="/api/employees-salary"
+            url="/api/academy"
             setUploadSuccess={setUploadSuccess}
           />
         </div>

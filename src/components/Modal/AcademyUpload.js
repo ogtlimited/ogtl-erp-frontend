@@ -20,6 +20,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
     setfileName("");
     setinvalid(false);
   };
+
   const onFileUpload = (e) => {
     const files = e.target.files;
 
@@ -44,47 +45,61 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
             
           ) {
             setData(jsonData.slice(0, jsonData.length - 1));
-            // setinvalid(true)
             console.log("invalid value")
           } else {
             setinvalid(false);
             setData(jsonData);
-            console.log("this is the json data", jsonData);
           }
         },
       });
     }
   };
+
   useEffect(() => {}, [uploadState]);
 
   const uploadData = () => {
     setloading(true);
     let obj = {}
-    if(path === '/api/employees-salary'){
-      console.log(data)
+    if(path === '/api/academy') {
+      // console.log("This very", data)
       const formatted = data.map(e => {
         return {
-          ...e,
-          annualGrossSalary:  Number(e.annualGrossSalary.replace(/[^0-9.-]+/g,""))
+          timestamp: e["Timestamp"],
+          user_name: e["Username"],
+          first_name: e["First Name"],
+          middle_name: e["Middle Name"],
+          last_name: e["Last Name"],
+          mobile_number: e["Mobile Number"],
+          alt_mobile_number: e["Alternate Phone Number"],
+          highest_qualification_attained: e["Highest Qualification Attained"],
+          other_option: e["If 'Other' was selected above, please state which."],
+          interested_position: e["Interested position"],
+          mode_of_engagement: e["What mode of engagement would you prefer"],
+          weekly_hours: e["How many hours in a week can you commit to this program"],
+          stack: e["What is your Stack?"],
+          fav_programming_lang: [e["Favored Programming Language(s)"]],
+          years_of_experience: e["Years of Experience"],
+          certifications: e["Certifications"],
+          consent: e["Consent"],
         }
       })
-      console.log(formatted)
+      // console.log("this is the formatted data", formatted)
       obj = {
         data: formatted
-      }
-      
-    }else{
-      obj = data
+      } 
     }
+    
+    // console.log("The submitted data is", obj.data.length)	
+    // console.log("this is the submitted data", obj.data)
+
     axiosInstance
-      .post(path, obj)
+      .post(path, obj.data)
       .then((res) => {
         showAlert(true, "Data successfully uploaded", "alert alert-success");
         settoggleModal(false);
         setloading(false);
         buttonRef.click();
         setUploadSuccess(true)
-        //   fetchEmployee()
       })
       .catch((err) => {
         console.log(err);
@@ -94,6 +109,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
         settoggleModal(false);
       });
   };
+  
   return (
     <div
       className="modal fade"
