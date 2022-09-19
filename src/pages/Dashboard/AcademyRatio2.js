@@ -23,7 +23,6 @@ const AcademyRatio2 = () => {
     axiosInstance
       .get('/api/academy')
       .then((res) => {
-        console.log("response data", res?.data?.data)
         const data = res?.data?.data
         setApplicantData(data);
         if (data.length === 0) {
