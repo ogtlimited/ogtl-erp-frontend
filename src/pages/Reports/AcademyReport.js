@@ -1,5 +1,6 @@
 /** @format */
 import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../services/api';
 import AcademyCard from '../../components/JobDashboard/AcademyCard';
 import AcademyRatio2 from '../Dashboard/AcademyRatio2';
 import AcademyOverview from '../../components/JobDashboard/AcademyOverview';
@@ -9,6 +10,25 @@ import AcademyUpload from '../../components/Modal/AcademyUpload';
 const AcademyReport = () => {
   const [toggleModal, settoggleModal] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [academyData, setAcademyData] = useState([]);
+  const [cardData, setCardData] = useState("");
+
+  const fetchAcademyApplicants = () => {
+    axiosInstance
+      .get('/api/academy')
+      .then((res) => {
+        setAcademyData(res?.data?.data);
+        setCardData(res?.data?.data.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchAcademyApplicants();
+  }, []);
+
 
   useEffect(() => {
     if (uploadSuccess) {
@@ -33,7 +53,7 @@ const AcademyReport = () => {
       </div>
       <div className="row">
         <div className="col-sm-12">
-          <AcademyCard />
+          <AcademyCard cardData={cardData} />
           <button
             className="btn add-academy-btn m-r-5"
             data-toggle="modal"

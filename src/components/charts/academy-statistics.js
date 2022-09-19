@@ -1,15 +1,15 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
-const AcademyStackStatistics = ({stats, chartData, chartTitle}) => {
+const AcademyStackStatistics = ({chartData, chartTitle}) => {
   const data = {
-    labels: ["Stack 1", "Stack 2"],
+    labels: ["Male", "Female"],
     datasets: [
       {
         label: "# of Votes",
-        data: [120000, 190000],
-        backgroundColor: ["#6c757d", "#ffc107"],
-        borderColor: ["#6c757d", "#ffc107"],
+        data: [6, 4],
+        backgroundColor: ["#007bff", "#e83e8c"],
+        borderColor: ["#007bff", "#e83e8c"],
         borderWidth: 1,
       },
     ],

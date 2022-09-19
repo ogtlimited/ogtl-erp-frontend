@@ -44,7 +44,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
             Object.values(jsonData[jsonData.length - 1]).includes(undefined) || Object.values(jsonData[jsonData.length - 1]).includes("")
             
           ) {
-            setData(jsonData.slice(0, jsonData.length - 1));
+            setData(jsonData.slice(0, jsonData.length));
             console.log("invalid value")
           } else {
             setinvalid(false);
