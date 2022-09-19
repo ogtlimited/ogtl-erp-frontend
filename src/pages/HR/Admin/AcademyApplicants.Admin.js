@@ -153,9 +153,13 @@ const AcademyApplicants = () => {
       text: 'Mobile Number',
       sort: true,
       formatter: (value, row) => (
-        <h2>
-          {row?.alt_mobile_number}
-        </h2>
+        <>
+          {row?.alt_mobile_number === "" ? (
+            <h2>None</h2>
+          ) : (
+            <h2>{row?.alt_mobile_number}</h2>
+          )}
+        </>
       ),
     },
     {
