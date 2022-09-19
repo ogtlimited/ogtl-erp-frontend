@@ -4,14 +4,14 @@ import AcademyTable from './AcademyApplicantsTable';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 // import ConfirmModal from '../../../components/Modal/ConfirmModal';
-// import helper from '../../../services/helper';
+import helper from '../../../services/helper';
 // import GeneralApproverBtn from '../../../components/Misc/GeneralApproverBtn';
 // import {
 //   InterviewProcessStageOptions,
 //   InterviewStatusOptions,
 // } from '../../../constants';
-// import ViewModal from '../../../components/Modal/ViewModal';
-// import JobApplicationContent from '../../../components/ModalContents/JobApplicationContent';
+import ViewModal from '../../../components/Modal/ViewModal';
+import AcademyApplicantsContent from '../../../components/ModalContents/AcademyApplicantsContent';
 // import ScheduleInterview from '../../../components/ModalContents/ScheduleInterview';
 
 
@@ -25,7 +25,7 @@ const AcademyApplicants = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [modalType, setmodalType] = useState('schedule-interview');
+  const [modalType, setmodalType] = useState('');
   const [loading, setLoading] = useState(true);
 
   const fetchAcademyApplicants = () => {
@@ -219,64 +219,40 @@ const AcademyApplicants = () => {
     //   ),
     // },
 
-    // {
-    //   dataField: '',
-    //   text: 'Action',
-    //   sort: true,
-    //   csvExport: false,
-    //   headerStyle: { minWidth: '70px', textAlign: 'left' },
-    //   formatter: (value, row) => (
-    //     <div className="dropdown dropdown-action text-right">
-    //       <>
-    //         <a
-    //           href="#"
-    //           className="action-icon dropdown-toggle"
-    //           data-toggle="dropdown"
-    //           aria-expanded="false"
-    //         >
-    //           <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //         </a>
-    //         <div className="dropdown-menu dropdown-menu-right">
-    //           {user?.role?.hr?.delete && (
-    //             <a
-    //               className="dropdown-item"
-    //               data-toggle="modal"
-    //               data-target="#exampleModal"
-    //               onClick={() => {
-    //                 setmodalType();
-    //                 setSelectedRow(helper.handleEdit(row));
-    //               }}
-    //             >
-    //               <i className="fa fa-trash m-r-5"></i> Delete
-    //             </a>
-    //           )}
-    //           <a
-    //             className="dropdown-item"
-    //             data-toggle="modal"
-    //             data-target="#generalModal"
-    //             onClick={() => {
-    //               setmodalType('view-details');
-    //               setViewRow(row);
-    //             }}
-    //           >
-    //             <i className="fa fa-eye m-r-5"></i> View
-    //           </a>
-    //           <a
-    //             className="dropdown-item"
-    //             data-toggle="modal"
-    //             data-target="#generalModal"
-    //             onClick={() => {
-    //               setmodalType('schedule-interview');
-    //               setSelectedRow(helper.handleEdit(row));
-    //             }}
-    //           >
-    //             <i className="fa fa-clock m-r-5"></i> Schedule Interview
-    //           </a>
-    //         </div>
-    //       </>
-    //     </div>
-    //   ),
-    // },
+    {
+      dataField: '',
+      text: 'Action',
+      sort: true,
+      csvExport: false,
+      headerStyle: { minWidth: '70px', textAlign: 'left' },
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right">
+          <>
+            <a
+              href="#"
+              className="action-icon dropdown-toggle"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </a>
+            <div className="dropdown-menu dropdown-menu-right">
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#generalModal"
+                onClick={() => {
+                  setmodalType('view-details');
+                  setViewRow(row);
+                }}
+              >
+                <i className="fa fa-eye m-r-5"></i> View
+              </a>
+            </div>
+          </>
+        </div>
+      ),
+    },
   ];
   return (
     <>
@@ -330,22 +306,13 @@ const AcademyApplicants = () => {
         // deleteFunction={deleteJobApplicant}
       /> */}
 
-      {/* {modalType === 'view-details' ? (
+      {modalType === 'view-details' ? (
         <ViewModal
           title="Applicant Details"
-          content={<JobApplicationContent jobApplication={viewRow} />}
+          content={<AcademyApplicantsContent jobApplication={viewRow} />}
         />
-      ) : (
-        <ViewModal
-          title="Schedule Interview"
-          content={
-            <ScheduleInterview
-              // handleUpdate={handleUpdate}
-              jobApplication={selectedRow}
-            />
-          }
-        />
-      )} */}
+      ) : ""
+      }
     </>
   );
 };
