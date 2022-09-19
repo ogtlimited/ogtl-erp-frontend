@@ -64,7 +64,7 @@ const AcademyReport = () => {
           </button>
           <AcademyOverview />
           <AcademyRatio2 />
-          <AcademyRecruitmentSupervision />
+          {/* <AcademyRecruitmentSupervision /> */}
         </div>
       </div>
 
