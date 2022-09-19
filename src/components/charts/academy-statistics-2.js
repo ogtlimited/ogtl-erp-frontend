@@ -2,12 +2,14 @@ import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
 const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
+ console.log(chartData);
+ console.log(Object.keys(chartData[0]));
   const data1 = {
-    labels: ["Data Science", "Software Development"],
+    labels: [Object.keys(chartData[0])],
     datasets: [
       {
         label: "# of Votes",
-        data: [2, 8],
+        data: [],
         backgroundColor: ["#dc3545", "#17a2b8"],
         borderColor: ["#dc3545", "#17a2b8"],
         borderWidth: 1,
@@ -15,7 +17,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
     ],
   };
   const data2 = {
-    labels: ["Bachelors Degree", "Secondary School Certificate"],
+    labels: [],
     datasets: [
       {
         label: "# of Votes",
@@ -27,7 +29,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
     ],
   };
   const data3 = {
-    labels: ["Full Time (M-F)", "Part Time (3 days a week)"],
+    labels: [chartData[2]],
     datasets: [
       {
         label: "# of Votes",
