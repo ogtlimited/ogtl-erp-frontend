@@ -84,6 +84,7 @@ const AcademyRatio2 = () => {
           ].map((y) => stk.filter((z) => z === y).length);
         });
 
+        setApplicantData(interested_position, highest_qualification_attained, mode_of_engagement, stack);
         setChartData1(interested_position);
         setChartData2(highest_qualification_attained);
         setChartData3(mode_of_engagement);
