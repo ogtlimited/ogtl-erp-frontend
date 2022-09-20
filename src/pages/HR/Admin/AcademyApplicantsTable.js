@@ -188,9 +188,13 @@ const AcademyTable = ({
                     : 'table table-responsive'
                 }
                 noDataIndication={
-                  loading
-                    ? 'Fetching Data...'
-                    : 'No Academy Records or Check Your Internet Connection'
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    'No Record Found'
+                  )
                 }
                 pagination={paginationFactory()}
 

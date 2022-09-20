@@ -1,51 +1,117 @@
-import React from "react";
-import { Doughnut } from "react-chartjs-2";
+/** @format */
 
-const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+
+const AcademyStatistics2 = ({
+  stats,
+  chartData1,
+  chartData2,
+  chartData3,
+  chartData4,
+  chartTitle,
+}) => {
+
   const data1 = {
-    labels: ["Data Science", "Software Development"],
+    labels: chartData1.keys,
     datasets: [
       {
-        label: "# of Votes",
-        data: [2, 8],
-        backgroundColor: ["#dc3545", "#17a2b8"],
-        borderColor: ["#dc3545", "#17a2b8"],
+        label: '# of Votes',
+        data: chartData1.values,
+        backgroundColor: [
+          '#dc3545',
+          '#17a2b8',
+          '#fd7e14',
+          '#28a745',
+          '#6610f2',
+          '#e83e8c',
+        ],
+        borderColor: [
+          '#dc3545',
+          '#17a2b8',
+          '#fd7e14',
+          '#28a745',
+          '#6610f2',
+          '#e83e8c',
+        ],
         borderWidth: 1,
       },
     ],
   };
   const data2 = {
-    labels: ["Bachelors Degree", "Secondary School Certificate"],
+    labels: chartData2.keys,
     datasets: [
       {
-        label: "# of Votes",
-        data: [8, 2],
-        backgroundColor: ["#fd7e14", "#28a745"],
-        borderColor: ["#fd7e14", "#28a745"],
+        label: '# of Votes',
+        data: chartData2.values,
+        backgroundColor: [
+          '#fd7e14',
+          '#28a745',
+          '#6610f2',
+          '#e83e8c',
+          '#dc3545',
+          '#17a2b8',
+        ],
+        borderColor: [
+          '#fd7e14',
+          '#28a745',
+          '#6610f2',
+          '#e83e8c',
+          '#dc3545',
+          '#17a2b8',
+        ],
         borderWidth: 1,
       },
     ],
   };
   const data3 = {
-    labels: ["Full Time (M-F)", "Part Time (3 days a week)"],
+    labels: chartData3.keys,
     datasets: [
       {
-        label: "# of Votes",
-        data: [7, 3],
-        backgroundColor: ["#6610f2", "#e83e8c"],
-        borderColor: ["#6610f2", "#e83e8c"],
+        label: '# of Votes',
+        data: chartData3.values,
+        backgroundColor: [
+          '#6610f2',
+          '#e83e8c',
+          '#dc3545',
+          '#17a2b8',
+          '#28a745',
+          '#ffc107',
+        ],
+        borderColor: [
+          '#6610f2',
+          '#e83e8c',
+          '#dc3545',
+          '#17a2b8',
+          '#28a745',
+          '#ffc107',
+        ],
         borderWidth: 1,
       },
     ],
   };
   const data4 = {
-    labels: ["Back-End", "Front-End", "Full-Stack", "Not Applicable"],
+    labels: chartData4.keys,
     datasets: [
       {
-        label: "# of Votes",
-        data: [1, 2, 6, 1],
-        backgroundColor: ["#28a745", "#ffc107", "#e83e8c", "#002564"],
-        borderColor: ["#28a745", "#ffc107", "#e83e8c", "#002564"],
+        label: '# of Votes',
+        data: chartData4.values,
+        backgroundColor: [
+          '#28a745',
+          '#ffc107',
+          '#e83e8c',
+          '#002564',
+          '#dc3545',
+          '#17a2b8',
+        ],
+        borderColor: [
+          '#28a745',
+          '#ffc107',
+          '#e83e8c',
+          '#002564',
+          '#dc3545',
+          '#17a2b8',
+        ],
         borderWidth: 1,
       },
     ],
@@ -53,7 +119,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
 
   return (
     <>
-     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">Interested Positions</h4>
@@ -61,7 +127,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
           </div>
         </div>
       </div>
-     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">Highest Qualification Attained</h4>
@@ -69,7 +135,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
           </div>
         </div>
       </div>
-     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">Mode of Engagement</h4>
@@ -77,7 +143,7 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
           </div>
         </div>
       </div>
-     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">Stack</h4>
@@ -85,7 +151,6 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
           </div>
         </div>
       </div>
-     
     </>
   );
 };

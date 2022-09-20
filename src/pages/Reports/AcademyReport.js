@@ -26,15 +26,12 @@ const AcademyReport = () => {
   };
 
   useEffect(() => {
-    fetchAcademyApplicants();
-  }, []);
-
-
-  useEffect(() => {
     if (uploadSuccess) {
-      console.log('Successfully uploaded!');
-    }
-  }, [uploadSuccess]);
+    console.log('Successfully uploaded!');
+  }
+    fetchAcademyApplicants();
+  }, [academyData, cardData, uploadSuccess]);
+
 
   return (
     <>
@@ -64,7 +61,7 @@ const AcademyReport = () => {
           </button>
           <AcademyOverview />
           <AcademyRatio2 />
-          <AcademyRecruitmentSupervision />
+          {/* <AcademyRecruitmentSupervision /> */}
         </div>
       </div>
 
