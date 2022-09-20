@@ -1,15 +1,15 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
-const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
- console.log(chartData);
- console.log(Object.keys(chartData[0]));
+const AcademyStatistics2 = ({stats, chartData1, chartData2, chartData3, chartData4, chartTitle}) => {
+  console.log("this chart data", chartData1)
+
   const data1 = {
-    labels: [Object.keys(chartData[0])],
+    labels: chartData1.keys,
     datasets: [
       {
         label: "# of Votes",
-        data: [],
+        data: chartData1.values,
         backgroundColor: ["#dc3545", "#17a2b8"],
         borderColor: ["#dc3545", "#17a2b8"],
         borderWidth: 1,
@@ -17,11 +17,11 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
     ],
   };
   const data2 = {
-    labels: [],
+    labels: chartData2.keys,
     datasets: [
       {
         label: "# of Votes",
-        data: [8, 2],
+        data: chartData2.values,
         backgroundColor: ["#fd7e14", "#28a745"],
         borderColor: ["#fd7e14", "#28a745"],
         borderWidth: 1,
@@ -29,11 +29,11 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
     ],
   };
   const data3 = {
-    labels: [chartData[2]],
+    labels:  chartData3.keys,
     datasets: [
       {
         label: "# of Votes",
-        data: [7, 3],
+        data: chartData3.values,
         backgroundColor: ["#6610f2", "#e83e8c"],
         borderColor: ["#6610f2", "#e83e8c"],
         borderWidth: 1,
@@ -41,11 +41,11 @@ const AcademyStatistics2 = ({stats, chartData, chartTitle}) => {
     ],
   };
   const data4 = {
-    labels: ["Back-End", "Front-End", "Full-Stack", "Not Applicable"],
+    labels: chartData4.keys,
     datasets: [
       {
         label: "# of Votes",
-        data: [1, 2, 6, 1],
+        data:  chartData4.values,
         backgroundColor: ["#28a745", "#ffc107", "#e83e8c", "#002564"],
         borderColor: ["#28a745", "#ffc107", "#e83e8c", "#002564"],
         borderWidth: 1,
