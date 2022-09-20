@@ -26,7 +26,7 @@ export default function AcademyChart() {
    
     useEffect(() => {
       fetchAcademyApplicants();
-    }, [data]);
+    }, []);
 
     const getOnlyDate = applicationDate.map(item=>(moment(item).format("MM/DD/YY")))
     const sortedDate = getOnlyDate.sort()

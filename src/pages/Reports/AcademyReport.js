@@ -30,7 +30,7 @@ const AcademyReport = () => {
     console.log('Successfully uploaded!');
   }
     fetchAcademyApplicants();
-  }, [academyData, cardData, uploadSuccess]);
+  }, []);
 
 
   return (

@@ -97,7 +97,7 @@ const AcademyRatio2 = () => {
 
   useEffect(() => {
     fetchAcademyApplicants();
-  }, [applicantData]);
+  }, []);
 
   return (
     <>
