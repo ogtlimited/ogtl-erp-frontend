@@ -105,6 +105,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
         showAlert(true, 'Data successfully uploaded', 'alert alert-success');
         settoggleModal(false);
         setloading(false);
+        window.location.reload(true);
         buttonRef.click();
         setUploadSuccess(true);
       })
