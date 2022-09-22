@@ -302,6 +302,14 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            {
+              path: 'salary-breakdown/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <SalaryBreakdown />
+                </GuardedRoute>
+              ),
+            },
           ],
         },
         {
@@ -823,6 +831,7 @@ const EmployeeSalary = Loadable(
   lazy(() => import('../pages/Payroll/EmployeeSalary'))
 );
 const PaySlip = Loadable(lazy(() => import('../pages/Payroll/PaySlip')));
+const SalaryBreakdown = Loadable(lazy(() => import('../pages/Payroll/SalaryBreakdown')));
 const AttendanceReport = Loadable(
   lazy(() => import('../pages/Reports/AttendanceReport'))
 );
