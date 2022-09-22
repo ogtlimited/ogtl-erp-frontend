@@ -7,7 +7,7 @@ import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salar
 import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
 import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
 import FormModal from "../../components/Modal/Modal";
-import Salary from "../../components/payroll-tabs/Salary";
+import SalaryDetails from "../../components/payroll-tabs/SalaryDetails";
 import SalaryHistory from "../../components/payroll-tabs/salary-history";
 import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
 import SalaryComponents from "../../components/payroll-tabs/salary-components";
@@ -138,7 +138,7 @@ const EmployeeSalary = () => {
       </div>
 
       <div className="tab-content">
-        <Salary
+        <SalaryDetails
           setformType={setformType}
           submitted={submitted}
           formValue={formValue}
