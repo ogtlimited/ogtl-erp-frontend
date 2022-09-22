@@ -88,6 +88,7 @@ const Deductions = () => {
       dataField: "",
       text: "Action",
       sort: true,
+      csvExport: false,
       headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
