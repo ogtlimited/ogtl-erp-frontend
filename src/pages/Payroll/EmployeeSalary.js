@@ -1,101 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import { salaryAssignmentFormJson } from "../../components/FormJSON/payroll/salary-assignments";
+import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/salary-component";
+import { salarySettingsFormJson } from "../../components/FormJSON/payroll/salary-settings";
+import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
+import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
+import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
+import FormModal from "../../components/Modal/Modal";
+import Salary from "../../components/payroll-tabs/Salary";
+import SalaryHistory from "../../components/payroll-tabs/salary-history";
+import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
+import SalaryComponents from "../../components/payroll-tabs/salary-components";
+import SalarySettings from "../../components/payroll-tabs/salary-settings";
+import SalaryStructure from "../../components/payroll-tabs/salary-structure";
+import Deductions from "../../components/payroll-tabs/salary-deductions";
+import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
+import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import moment from "moment";
-import { formatter } from "../../services/numberFormatter";
 
 const EmployeeSalary = () => {
-  const [data, setData] = useState([]);
-
-  const fetchEmployeeSalary = () => {
-    axiosInstance
-      .get("/api/salary-slip")
-      .then((res) => {
-        console.log(res)
-        setData(res.data.data[0].salarySlips);
-      })
-      .catch((error) => {
-        console.log(error?.response);
+    const [formType, setformType] = useState("");
+    const [template, settemplate] = useState(salaryComponentsFormJson);
+    const [formValue, setformValue] = useState({});
+    const [submitted, setsubmitted] = useState(false);
+    const [path, setpath] = useState("/personal-details");
+    const [editData, seteditData] = useState({});
+    const [data, setData] = useState([]);
+    const [loadSelect, setloadSelect] = useState(false);
+    const { createPayroll } = useAppContext();
+  
+    useEffect(() => {
+      if (formType === "components") {
+        settemplate(salaryComponentsFormJson);
+      } else if (formType === "structure") {
+        settemplate(salaryStructureFormJson);
+      } else if (formType === "assignment") {
+        settemplate(salaryAssignmentFormJson);
+      } else if (formType === "settings") {
+        settemplate(salarySettingsFormJson);
+      } else if (formType === "deductions") {
+        settemplate(salaryDeductionsFormJson);
+      } else if (formType === "deductiontypes") {
+        settemplate(salaryDeductionTypesFormJson);
+      }
+    }, [formType, template]);
+  
+    const fetchedCombineRequest = useCallback(() => {
+      createPayroll().then((res) => {
+        const { departments, projects } = res.data.createPayrollForm;
+        const departmentsOpts = departments?.map((e) => {
+          return {
+            label: e.department,
+            value: e._id,
+          };
+        });
+        const projectsOpts = projects?.map((e) => {
+          return {
+            label: e.project_name,
+            value: e._id,
+          };
+        });
+        const finalForm = template.Fields.map((field) => {
+          if (field.name === "departmentId") {
+            field.options = departmentsOpts;
+            return field;
+          } else if (field.name === "projectId") {
+            field.options = projectsOpts;
+            return field;
+          }
+          return field;
+        });
+        settemplate({
+          title: template.title,
+          Fields: finalForm,
+        });
+        if (template !== null) {
+          setloadSelect(true);
+        }
       });
-  };
-  useEffect(() => {
-    fetchEmployeeSalary();
-  }, []);
+    }, [template, createPayroll, loadSelect]);
+  
+    useEffect(() => {
+      fetchedCombineRequest();
+    }, []);
+  
+    const fetchSalaryStructures = () => {
+      axiosInstance
+        .get("/api/salary-structure")
+        .then((res) => {
+          setData(res.data.data);
+        })
+        .catch((error) => {
+          console.log(error?.response);
+        });
+    };
+    useEffect(() => {
+      fetchSalaryStructures();
+    }, []);
 
-  const columns = [
-    {
-      dataField: "",
-      text: "Employee Name",
-      sort: true,
-      headerStyle: { minWidth: "250px" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          {row?.employeeId?.first_name} {row?.employeeId?.middle_name}{" "}
-          {row?.employeeId?.last_name}
-        </h2>
-      ),
-    },
-    {
-      dataField: "ogid",
-      text: "Employee ID",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => (
-        <p>{row?.employeeId?.ogid || "Not Available"}</p>
-      ),
-    },
-    {
-      dataField: "company_email",
-      text: "Email",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => (
-        <p>{row?.employeeId?.company_email || "Not Available"}</p>
-      ),
-    },
-
-    // // {
-    // //   dataField: "designation",
-    // //   text: "Designation",
-    // //   sort: true,
-    // //   headerStyle: { minWidth: "150px" },
-    // // },
-    {
-      dataField: "joining_date",
-      text: "Joining Date",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => (
-        <p>{moment(row?.employeeId?.date_of_joining).format("L")}</p>
-      ),
-    },
-    {
-      dataField: "netPay",
-      text: "Salary",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{formatter.format(row?.netPay)}</p>,
-    },
-    {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (value, row) => (
-        <Link
-          className="btn btn-sm btn-primary"
-          // to={`/admin/payslip/${row?._id}`}
-          to={{
-            pathname: `/dashboard/payroll/payslip/${row?.employeeId._id}`,
-            state: { employee: row?.employeeId },
-          }}
-        >
-          Generate Slip
-        </Link>
-      ),
-    },
-  ];
+  
   return (
     <>
       <div className="page-header">
@@ -109,21 +112,46 @@ const EmployeeSalary = () => {
               <li className="breadcrumb-item active">Salary</li>
             </ul>
           </div>
-          {/* <div className="col-auto float-right ml-auto">
-            <a
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#add_salary"
-            >
-              <i className="fa fa-plus"></i> Add Salary
-            </a>
-          </div> */}
         </div>
       </div>
-      <div className="row">
-        <div className="col-md-12">
-          <LeavesTable data={data} columns={columns} />
+      <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_salaries"
+                >
+                  Salary
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" data-toggle="tab" href="#tab_settings">
+                  Salary Settings
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
+      </div>
+
+      <div className="tab-content">
+        <Salary
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+        />
+
+        <SalarySettings
+          setformType={setformType}
+          submitted={submitted}
+          formValue={formValue}
+          loadSelect={loadSelect}
+          setsubmitted={setsubmitted}
+        />
       </div>
     </>
   );
