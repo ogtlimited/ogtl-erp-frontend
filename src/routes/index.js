@@ -287,6 +287,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'archive',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Archive />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'payroll-items',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -885,6 +893,9 @@ const PublicHoliday = Loadable(
 );
 const PayrollDeductions = Loadable(
   lazy(() => import('../pages/Payroll/Deductions'))
+);
+const Archive = Loadable(
+  lazy(() => import('../pages/Payroll/Archive'))
 );
 const PayrollItems = Loadable(
   lazy(() => import('../pages/Payroll/PayrollItems'))
