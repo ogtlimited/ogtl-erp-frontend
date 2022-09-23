@@ -1,22 +1,22 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
-const AcademyStatistics = ({stats, chartData, chartTitle}) => {
+const AcademyStackStatistics = ({chartData, chartTitle}) => {
   const data = {
-    labels: ["Female", "Male"],
+    labels: ["Male", "Female"],
     datasets: [
       {
         label: "# of Votes",
-        data: [120000, 190000],
-        backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgba(54, 162, 235, 0.5)"],
-        borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+        data: [6, 4],
+        backgroundColor: ["#007bff", "#e83e8c"],
+        borderColor: ["#007bff", "#e83e8c"],
         borderWidth: 1,
       },
     ],
   };
   return (
     <>
-     <div style={{position: 'absolute', top: '11%', left: '55%', width: '38%'}}>
+     <div className="academy-pieChart">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">{chartTitle}</h4>
@@ -28,4 +28,4 @@ const AcademyStatistics = ({stats, chartData, chartTitle}) => {
   );
 };
 
-export default AcademyStatistics;
+export default AcademyStackStatistics;

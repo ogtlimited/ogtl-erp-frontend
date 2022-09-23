@@ -373,6 +373,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'academy-applicants',
+              element: (
+                <GuardedRoute title="Academy Applicants" dept="HR">
+                  <AcademyApplicants />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'interviewees',
               element: (
                 <GuardedRoute title="Interview Schedule List" dept="Facility">
@@ -835,6 +843,9 @@ const JobOffer = Loadable(
 );
 const JobApplicants = Loadable(
   lazy(() => import('../pages/HR/Admin/JobApplicants.Admin'))
+);
+const AcademyApplicants = Loadable(
+  lazy(() => import('../pages/HR/Admin/AcademyApplicants.Admin'))
 );
 const Interviewees = Loadable(
   lazy(() => import('../pages/HR/Admin/Interviewees'))

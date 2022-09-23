@@ -229,6 +229,11 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
+            title: 'Academy Applicants',
+            path: PATH_DASHBOARD.recruitment.academyApplicants,
+          },
+          {
+            canView: 'HR',
             title: 'Interview',
             path: PATH_DASHBOARD.recruitment.aptitudeTests,
           },
