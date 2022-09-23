@@ -183,11 +183,6 @@ const sidebarConfig = [
           },
           {
             canView: 'Super',
-            title: 'Payroll Items',
-            path: PATH_DASHBOARD.payroll.payrollItem,
-          },
-          {
-            canView: 'Super',
             title: 'Payroll Notes',
             path: PATH_DASHBOARD.payroll.payrollNotes,
           },

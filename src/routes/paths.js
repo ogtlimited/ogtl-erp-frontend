@@ -48,7 +48,6 @@ export const PATH_DASHBOARD = {
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
-    payrollItem: path(ROOTS_DASHBOARD, "/payroll/payroll-items"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
   },
   reports: {

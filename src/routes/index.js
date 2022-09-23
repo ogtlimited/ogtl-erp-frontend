@@ -295,14 +295,6 @@ export default function Router() {
               ),
             },
             {
-              path: 'payroll-items',
-              element: (
-                <GuardedRoute title="" dept="HR">
-                  <PayrollItems />
-                </GuardedRoute>
-              ),
-            },
-            {
               path: 'payroll-notes',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -905,9 +897,6 @@ const PayrollDeductions = Loadable(
 );
 const Archive = Loadable(
   lazy(() => import('../pages/Payroll/Archive'))
-);
-const PayrollItems = Loadable(
-  lazy(() => import('../pages/Payroll/PayrollItems'))
 );
 const ScoreCards = Loadable(
   lazy(() => import('../pages/HR/Admin/score-cards'))
