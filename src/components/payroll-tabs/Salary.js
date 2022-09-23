@@ -317,7 +317,7 @@ const Salary = ({ salaryStructure }) => {
             state: { employee: row?.employeeId },
           }}
         >
-          Generate Slip
+          View
         </Link>
       ),
     },
