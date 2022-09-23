@@ -116,12 +116,12 @@ const PaySlip = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Payslip</h3>
+            <h3 className="page-title">Salary Breakdown</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Payslip</li>
+              <li className="breadcrumb-item active">Salary Breakdown</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
