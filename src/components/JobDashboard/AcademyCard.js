@@ -15,7 +15,7 @@ const AcademyCard = ({ cardData }) => {
             </span>
             <div className="dash-widget-info">
               <h3>{cardData}</h3>
-              <span>Accepted Offers</span>
+              <span>Acknowledgments Sent</span>
             </div>
           </div>
         </div>
