@@ -40,7 +40,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
               const emptyStringCount = Object.values(element).filter((e) =>
                 typeof e == 'string' ? e.length === 0 : true
               ).length;
-              console.log(emptyStringCount);
+              // console.log(emptyStringCount);
               if (Object.values(element).length !== emptyStringCount) {
                 return element;
               }
@@ -51,7 +51,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
             Object.values(jsonData[jsonData.length - 1]).includes('')
           ) {
             setData(jsonData.slice(0, jsonData.length));
-            console.log('invalid value');
+            // console.log('invalid value');
           } else {
             setinvalid(false);
             setData(jsonData);
@@ -79,7 +79,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           alt_mobile_number: e['Alternate Phone Number'],
           highest_qualification_attained: e['Highest Qualification Attained'],
           other_option: e["If 'Other' was selected above, please state which."],
-          interested_position: e['Interested position'],
+          interested_program: e['Interested program'],
           mode_of_engagement: e['What mode of engagement would you prefer'],
           weekly_hours:
             e['How many hours in a week can you commit to this program'],
@@ -97,7 +97,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
     }
 
     // console.log("The submitted data is", obj.data.length)
-    console.log('this is the submitted data', obj.data);
+    // console.log('this is the submitted data', obj.data);
 
     axiosInstance
       .post(path, obj.data)

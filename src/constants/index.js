@@ -13,3 +13,13 @@ export const InterviewProcessStageOptions = [
   { title: "Phone screening", color: "text-info" },
   { title: "Interviews scheduled", color: "text-success" }
 ];
+export const AcademyStatusOptions = [
+  { title: "Open", color: "text-danger" },
+  { title: "Acknowledgment Sent", color: "text-primary" },
+  { title: "Onboarded", color: "text-warning" },
+];
+export const AcademyInterviewProcessStageOptions = [
+  { title: "Open", color: "text-danger" },
+  { title: "Sieving", color: "text-warning" },
+  { title: "Phone screening", color: "text-info" },
+];

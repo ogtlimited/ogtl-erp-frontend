@@ -1,7 +1,7 @@
 import React from "react";
 
 const AcademyApplicantsContent = ({ jobApplication = {} }) => {
-  console.log(jobApplication)
+  // console.log(jobApplication)
   delete jobApplication.__v
   delete jobApplication._id
   delete jobApplication.__updatedAt
