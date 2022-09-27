@@ -47,7 +47,7 @@ export default function AcademyChart() {
         data: Object.values(uniqueDateCount),
       },
       {
-        name: "Accepted Offers",
+        name: "Acknowledgements Sent",
         type: "area",
         data: Object.values(uniqueDateCount),
       },

@@ -1,22 +1,31 @@
-import React from "react";
-import { Doughnut } from "react-chartjs-2";
 
-const AcademyStackStatistics = ({chartData, chartTitle}) => {
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+
+const AcademyStatistics = ({ chartData, chartTitle }) => {
   const data = {
-    labels: ["Male", "Female"],
+    labels: chartData.keys,
     datasets: [
       {
-        label: "# of Votes",
-        data: [6, 4],
-        backgroundColor: ["#007bff", "#e83e8c"],
-        borderColor: ["#007bff", "#e83e8c"],
+        label: '# of Votes',
+        data: chartData.values,
+        backgroundColor: [
+          '#fd7e14',
+          '#007bff',
+          '#e83e8c',
+        ],
+        borderColor: [
+          '#fd7e14',
+          '#007bff',
+          '#e83e8c',
+        ],
         borderWidth: 1,
       },
     ],
   };
   return (
     <>
-     <div className="academy-pieChart">
+      <div className="academy-pieChart">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">{chartTitle}</h4>
@@ -28,4 +37,4 @@ const AcademyStackStatistics = ({chartData, chartTitle}) => {
   );
 };
 
-export default AcademyStackStatistics;
+export default AcademyStatistics;

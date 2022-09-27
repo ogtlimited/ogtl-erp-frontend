@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AcademyTable from './AcademyApplicantsTable';
@@ -5,11 +7,11 @@ import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 // import ConfirmModal from '../../../components/Modal/ConfirmModal';
 import helper from '../../../services/helper';
-// import GeneralApproverBtn from '../../../components/Misc/GeneralApproverBtn';
-// import {
-//   InterviewProcessStageOptions,
-//   InterviewStatusOptions,
-// } from '../../../constants';
+import AcademyApproverBtn from '../../../components/Misc/AcademyApproveBtn';
+import {
+  AcademyInterviewProcessStageOptions,
+  AcademyStatusOptions,
+} from '../../../constants';
 import ViewModal from '../../../components/Modal/ViewModal';
 import AcademyApplicantsContent from '../../../components/ModalContents/AcademyApplicantsContent';
 // import ScheduleInterview from '../../../components/ModalContents/ScheduleInterview';
@@ -37,8 +39,10 @@ const AcademyApplicants = () => {
         let formatted = resData.map((e) => ({
           ...e,
           full_name: e.first_name + ' ' + e.last_name,
+          cv: e.cv !== null ? e.cv.split("'")[1] : "",
         }));
         
+         console.log('This formatted', formatted);
          console.log('This app user', user);
          if (user?.isRepSiever) {
            const userApplications = formatted.filter(
@@ -91,42 +95,47 @@ const AcademyApplicants = () => {
   //     });
   // };
 
-  //update jobOpening
-  // const handleUpdate = useCallback((id, update) => {
-  //   console.log(update);
-  //   axiosInstance
-  //     .patch('/api/jobApplicant/' + id, update)
-  //     .then((res) => {
-  //       fetchAcademyApplicants();
-  //       showAlert(true, res.data.message, 'alert alert-success');
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       showAlert(true, error.response.data.message, 'alert alert-danger');
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  // update Academy
+  const handleUpdate = useCallback((id, update) => {
+    console.log("update this body", update);
+    console.log("id to update", id);
+    axiosInstance
+      .patch('/api/academy/update/' + id, update)
+      .then((res) => {
+        fetchAcademyApplicants();
+        showAlert(true, res.data.message, 'alert alert-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, 'alert alert-danger');
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useEffect(() => {
-  //   if (interview_status.length) {
-  //     const update = {
-  //       interview_status,
-  //       _id: statusRow?._id,
-  //     };
-  //     handleUpdate(statusRow._id, update);
-  //   }
-  // }, [interview_status, statusRow, handleUpdate]);
+  // For Interview Stage
+  useEffect(() => {
+    if (interview_status.length) {
+      const update = {
+        interview_status,
+        // _id: statusRow?._id,
+      };
+      handleUpdate(statusRow._id, update);
+    }
+  }, [interview_status, statusRow, handleUpdate]);
 
-  // useEffect(() => {
-  //   if (process_stage.length) {
-  //     const update = {
-  //       process_stage,
-  //       _id: processingStageRow?._id,
-  //     };
-  //     handleUpdate(processingStageRow._id, update);
-  //   }
-  // }, [process_stage, processingStageRow, handleUpdate]);
+  // For Processing Stage
+  useEffect(() => {
+    if (process_stage.length) {
+      const update = {
+        process_stage,
+        // _id: processingStageRow?._id,
+      };
+      handleUpdate(processingStageRow._id, update);
+    }
+  }, [process_stage, processingStageRow, handleUpdate]);
 
+
+  // Table for Academy
   const columns = [
     {
       dataField: 'full_name',
@@ -134,7 +143,7 @@ const AcademyApplicants = () => {
       sort: true,
       formatter: (value, row) => (
         <h2>
-          {row?.first_name} {row?.last_name}
+          {row?.full_name}
         </h2>
       ),
     },
@@ -163,61 +172,49 @@ const AcademyApplicants = () => {
       ),
     },
     {
-      dataField: 'certifications',
-      text: 'Certifications',
+      dataField: 'interview_status',
+      text: 'Academy Status',
       sort: true,
       formatter: (value, row) => (
-        <h2>
-          {row?.certifications}
-        </h2>
+        <>
+          <AcademyApproverBtn
+            options={AcademyStatusOptions}
+            setStatus={setInterviewStatus}
+            value={value}
+            row={row}
+            setstatusRow={setstatusRow}
+          />
+        </>
       ),
     },
 
-    // {
-    //   dataField: 'interview_status',
-    //   text: 'Interview Status',
-    //   sort: true,
-    //   formatter: (value, row) => (
-    //     <>
-    //       <GeneralApproverBtn
-    //         options={InterviewStatusOptions}
-    //         setStatus={setInterviewStatus}
-    //         value={value}
-    //         row={row}
-    //         setstatusRow={setstatusRow}
-    //       />
-    //     </>
-    //   ),
-    // },
+    {
+      dataField: 'process_stage',
+      text: 'Processing Stage',
+      sort: true,
+      formatter: (value, row) => (
+        <>
+          <AcademyApproverBtn
+            options={AcademyInterviewProcessStageOptions}
+            setStatus={setprocessingStage}
+            value={value}
+            row={row}
+            setstatusRow={setprocessingStageRow}
+          />
+        </>
+      ),
+    },
 
-    // {
-    //   dataField: 'process_stage',
-    //   text: 'Processing Stage',
-    //   sort: true,
-
-    //   formatter: (value, row) => (
-    //     <>
-    //       <GeneralApproverBtn
-    //         options={InterviewProcessStageOptions}
-    //         setStatus={setprocessingStage}
-    //         value={value}
-    //         row={row}
-    //         setstatusRow={setprocessingStageRow}
-    //       />
-    //     </>
-    //   ),
-    // },
-
-    // {
-    //   dataField: 'resume_attachment',
-    //   text: 'Resume Attachment',
-    //   sort: true,
-    //   formatter: (value, row) => (
-    //     <a href={value} className="btn btn-sm btn-primary" download>
-    //       <i className="fa fa-download"></i> Download
-    //     </a>
-    //   ),
-    // },
+    {
+      dataField: 'resume_attachment',
+      text: 'Resume Attachment',
+      sort: true,
+      formatter: (value, row) => (
+        <a href={row?.cv} className="btn btn-sm btn-primary" download>
+          <i className="fa fa-download"></i> Download
+        </a>
+      ),
+    },
 
     {
       dataField: '',
@@ -294,8 +291,8 @@ const AcademyApplicants = () => {
             setLoading={setLoading}
             setData={setData}
             columns={columns}
-            // statusInterview={InterviewStatusOptions}
-            // processingStage={InterviewProcessStageOptions}
+            statusInterview={AcademyStatusOptions}
+            processingStage={AcademyInterviewProcessStageOptions}
           />
         </div>
       </div>
