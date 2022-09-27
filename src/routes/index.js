@@ -279,10 +279,18 @@ export default function Router() {
               ),
             },
             {
-              path: 'payroll-items',
+              path: 'deductions',
               element: (
                 <GuardedRoute title="" dept="HR">
-                  <PayrollItems />
+                  <PayrollDeductions />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'archive',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <Archive />
                 </GuardedRoute>
               ),
             },
@@ -299,6 +307,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <PaySlip />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'salary-breakdown/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <SalaryBreakdown />
                 </GuardedRoute>
               ),
             },
@@ -823,6 +839,7 @@ const EmployeeSalary = Loadable(
   lazy(() => import('../pages/Payroll/EmployeeSalary'))
 );
 const PaySlip = Loadable(lazy(() => import('../pages/Payroll/PaySlip')));
+const SalaryBreakdown = Loadable(lazy(() => import('../pages/Payroll/SalaryBreakdown')));
 const AttendanceReport = Loadable(
   lazy(() => import('../pages/Reports/AttendanceReport'))
 );
@@ -875,8 +892,11 @@ const JobsDashboard = Loadable(
 const PublicHoliday = Loadable(
   lazy(() => import('../pages/Payroll/PublicHoliday'))
 );
-const PayrollItems = Loadable(
-  lazy(() => import('../pages/Payroll/PayrollItems'))
+const PayrollDeductions = Loadable(
+  lazy(() => import('../pages/Payroll/Deductions'))
+);
+const Archive = Loadable(
+  lazy(() => import('../pages/Payroll/Archive'))
 );
 const ScoreCards = Loadable(
   lazy(() => import('../pages/HR/Admin/score-cards'))
