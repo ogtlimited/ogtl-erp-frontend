@@ -10,12 +10,12 @@ const AcademyStatistics = ({ chartData, chartTitle }) => {
         label: '# of Votes',
         data: chartData.values,
         backgroundColor: [
-          '#ffffff',
+          '#fd7e14',
           '#007bff',
           '#e83e8c',
         ],
         borderColor: [
-          '#000000',
+          '#fd7e14',
           '#007bff',
           '#e83e8c',
         ],
