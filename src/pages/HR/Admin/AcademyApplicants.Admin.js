@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,7 @@ import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 // import ConfirmModal from '../../../components/Modal/ConfirmModal';
 import helper from '../../../services/helper';
-import GeneralApproverBtn from '../../../components/Misc/GeneralApproverBtn';
+import AcademyApproverBtn from '../../../components/Misc/AcademyApproveBtn';
 import {
   AcademyInterviewProcessStageOptions,
   AcademyStatusOptions,
@@ -176,7 +177,7 @@ const AcademyApplicants = () => {
       sort: true,
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
+          <AcademyApproverBtn
             options={AcademyStatusOptions}
             setStatus={setInterviewStatus}
             value={value}
@@ -193,7 +194,7 @@ const AcademyApplicants = () => {
       sort: true,
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
+          <AcademyApproverBtn
             options={AcademyInterviewProcessStageOptions}
             setStatus={setprocessingStage}
             value={value}
