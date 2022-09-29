@@ -90,7 +90,7 @@ const SalaryHistory = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/payroll-archive?${queryString}`)
       .then((res) => {
-        console.log(res.data.data);
+        console.log("initial Salary?", res.data.data);
 
         setData(handleResponse(res.data.data));
         setUploadSuccess(false);
@@ -104,7 +104,7 @@ const SalaryHistory = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/payroll-archive`)
       .then((res) => {
-        console.log(res.data.data);
+        console.log("Salary?", res.data.data);
 
         setData(handleResponse(res.data.data));
         setUploadSuccess(false);
@@ -120,7 +120,7 @@ const SalaryHistory = ({ salaryStructure }) => {
       .then((res) => {
         console.log(res);
         let formatted = handleResponse(res.data.data);
-        console.log(formatted);
+        console.log("Salary Breakdown", formatted);
         setData(formatted);
       })
       .catch((error) => {
