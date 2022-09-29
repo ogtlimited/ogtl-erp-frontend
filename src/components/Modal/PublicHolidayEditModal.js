@@ -73,13 +73,13 @@ function PublicHolidayEditModal({ closeModal, list }) {
 
   const handleSubmitPublicHoliday = (e) => {
     e.preventDefault();
-    console.log(PublicHoliday);
+    // console.log(PublicHoliday);
     setPublicHoliday(PUBLIC_HOLIDAY);
     closeModal(false);
   };
 
   useEffect(() => {
-    console.log('list going to edit modal', list);
+    // console.log('list going to edit modal', list);
   }, [list]);
 
   return (

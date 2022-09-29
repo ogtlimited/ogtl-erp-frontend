@@ -12,6 +12,7 @@ const AcademyReport = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [academyData, setAcademyData] = useState([]);
   const [cardData, setCardData] = useState("");
+  const [acknowledgements, setAcknowledgments] = useState("");
 
   const fetchAcademyApplicants = () => {
     axiosInstance
@@ -19,6 +20,7 @@ const AcademyReport = () => {
       .then((res) => {
         setAcademyData(res?.data?.data);
         setCardData(res?.data?.data.length);
+        setAcknowledgments(res?.data?.data.filter((e) => e.interview_status === "Acknowledgment Sent").length);
       })
       .catch((error) => {
         console.log(error);
@@ -50,7 +52,7 @@ const AcademyReport = () => {
       </div>
       <div className="row">
         <div className="col-sm-12">
-          <AcademyCard cardData={cardData} />
+          <AcademyCard cardData={cardData}  acknowledgements={acknowledgements} />
           <button
             className="btn add-academy-btn m-r-5"
             data-toggle="modal"

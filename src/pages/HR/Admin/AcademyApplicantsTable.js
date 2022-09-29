@@ -24,8 +24,8 @@ const AcademyTable = ({
   selected,
   handleOnSelect,
   handleOnSelectAll,
-  // statusInterview,
-  // processingStage
+  statusInterview,
+  processingStage
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -147,7 +147,7 @@ const AcademyTable = ({
                 </select>
               </div> */}
 
-                {/* <div class="interview_status_filter">
+                <div class="interview_status_filter">
                   <select 
                   onChange={(e) => handleIntervieStatusFilter(e)}
                   defaultValue={intervieStatusFilter}
@@ -158,9 +158,9 @@ const AcademyTable = ({
                         <option key={idx}>{option.title}</option>
                       ))}
                   </select>
-              </div> */}
+              </div>
 
-                {/* <div class="processing_stage_filter">
+                <div class="processing_stage_filter">
                   <select 
                   onChange={(e) => handleProcessingStageFilter(e)}
                   defaultValue={processingStageFilter}
@@ -171,7 +171,7 @@ const AcademyTable = ({
                         <option key={idx}>{option.title}</option>
                       ))}
                   </select>
-              </div> */}
+              </div>
               </div>
 
               <BootstrapTable

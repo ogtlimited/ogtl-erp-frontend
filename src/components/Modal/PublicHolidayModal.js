@@ -86,7 +86,7 @@ function PublicHolidayModal({ closeModal }) {
 
   const handleSubmitPublicHoliday = (e) => {
     e.preventDefault();
-    console.log(PublicHoliday);
+    // console.log(PublicHoliday);
     setPublicHoliday(PUBLIC_HOLIDAY);
     closeModal(false);
   };

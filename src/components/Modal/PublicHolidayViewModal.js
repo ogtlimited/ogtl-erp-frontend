@@ -6,7 +6,7 @@ import { RiCloseCircleFill } from 'react-icons/ri';
 
 function HolidayListModal({ closeModal, list }) {
   useEffect(() => {
-    console.log("list going to view modal", list);
+    // console.log("list going to view modal", list);
   }, [list]);
 
   return (

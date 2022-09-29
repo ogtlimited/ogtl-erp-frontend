@@ -19,7 +19,6 @@ const AcademyStatistics2 = ({
         label: '# of Votes',
         data: chartData1.values,
         backgroundColor: [
-          '#dc3545',
           '#17a2b8',
           '#fd7e14',
           '#28a745',
@@ -33,7 +32,6 @@ const AcademyStatistics2 = ({
           'rgb(88, 177, 159)'
         ],
         borderColor: [
-          '#dc3545',
           '#17a2b8',
           '#fd7e14',
           '#28a745',
@@ -59,7 +57,6 @@ const AcademyStatistics2 = ({
         backgroundColor: [
           '#B33771',
           'rgb(37, 204, 247)',
-          '#6C3483',
           '#2C3A47',
           'rgb(88, 177, 159)',
           '#fd7e14',
@@ -68,12 +65,10 @@ const AcademyStatistics2 = ({
           '#e83e8c',
           '#dc3545',
           '#17a2b8',
-          '#fd7e14',
         ],
         borderColor: [
           '#B33771',
           'rgb(37, 204, 247)',
-          '#6C3483',
           '#2C3A47',
           'rgb(88, 177, 159)',
           '#fd7e14',
@@ -82,7 +77,6 @@ const AcademyStatistics2 = ({
           '#e83e8c',
           '#dc3545',
           '#17a2b8',
-          '#fd7e14',
         ],
         borderWidth: 1,
       },
@@ -96,31 +90,27 @@ const AcademyStatistics2 = ({
         data: chartData3.values,
         backgroundColor: [
           '#17a2b8',
-          '#fd7e14',
-          'rgb(37, 204, 247)',
           '#6C3483',
           '#2C3A47',
           'rgb(88, 177, 159)',
+          '#B33771',
           '#fd7e14',
           '#28a745',
           '#6610f2',
           '#e83e8c',
-          '#B33771',
-          '#dc3545'
+          '#dc3545',
         ],
         borderColor: [
           '#17a2b8',
-          '#fd7e14',
-          'rgb(37, 204, 247)',
           '#6C3483',
           '#2C3A47',
           'rgb(88, 177, 159)',
+          '#B33771',
           '#fd7e14',
           '#28a745',
           '#6610f2',
           '#e83e8c',
-          '#B33771',
-          '#dc3545'
+          '#dc3545',
         ],
         borderWidth: 1,
       },
@@ -134,31 +124,27 @@ const AcademyStatistics2 = ({
         data: chartData4.values,
         backgroundColor: [
           '#2C3A47',
-          'rgb(88, 177, 159)',
-          '#fd7e14',
           '#28a745',
+          '#fd7e14',
           '#6610f2',
           '#e83e8c',
           '#B33771',
           '#dc3545',
           '#17a2b8',
-          '#fd7e14',
-          'rgb(37, 204, 247)',
           '#6C3483',
+          'rgb(37, 204, 247)',
         ],
         borderColor: [
           '#2C3A47',
-          'rgb(88, 177, 159)',
-          '#fd7e14',
           '#28a745',
+          '#fd7e14',
           '#6610f2',
           '#e83e8c',
           '#B33771',
           '#dc3545',
           '#17a2b8',
-          '#fd7e14',
-          'rgb(37, 204, 247)',
           '#6C3483',
+          'rgb(37, 204, 247)',
         ],
         borderWidth: 1,
       },
@@ -170,7 +156,7 @@ const AcademyStatistics2 = ({
       <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
-            <h4 className="card-title">Interested Positions</h4>
+            <h4 className="card-title">Interested Program</h4>
             <Doughnut data={data1} />
           </div>
         </div>

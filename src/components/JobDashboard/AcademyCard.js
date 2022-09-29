@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const AcademyCard = ({ cardData }) => {
+const AcademyCard = ({ cardData, acknowledgements }) => {
   const navigate = useNavigate();
-  
   
   return (
     <div className="row">
@@ -14,8 +13,8 @@ const AcademyCard = ({ cardData }) => {
               <i className="fa fa-users"></i>
             </span>
             <div className="dash-widget-info">
-              <h3>{cardData}</h3>
-              <span>Accepted Offers</span>
+              <h3>{acknowledgements}</h3>
+              <span>Acknowledgments Sent</span>
             </div>
           </div>
         </div>
