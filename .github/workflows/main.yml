@@ -46,6 +46,10 @@ jobs:
       if: endsWith(github.ref, '/main')
       run: |
         echo "deploying to production"
+        aws s3 sync ./build s3://ogtl-erp-frontend
+        sleep 10
+        aws cloudfront create-invalidation --distribution-id E301WD6BY9YF54 --paths "/*"
+        
     - name: Slack Notification
       uses: act10ns/slack@v1
       with:
