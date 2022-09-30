@@ -32,7 +32,7 @@ export default function AcademyChart() {
 
   // All Created Dates
   const allCreatedDate = data.map((date) =>
-    moment(date.createdAt).format("MM/DD/YYYY")
+    moment(date.application_date).format("MM/DD/YYYY")
   );
   // All Acknowledgments Sent
   const AcknowledgmentsSentData = data.filter(
@@ -40,7 +40,7 @@ export default function AcademyChart() {
   );
   // All Acknowledgments Sent Date
   const allApprovedDate = AcknowledgmentsSentData.map((date) =>
-    moment(date.createdAt).format("MM/DD/YYYY")
+    moment(date.application_date).format("MM/DD/YYYY")
   );
 
   // Total Requests Received
@@ -49,13 +49,13 @@ export default function AcademyChart() {
     // All Dates
     all_Unique_Dates["dates"] = [
       ...new Set(
-        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+        data.map((item) => moment(item.application_date).format("MM/DD/YYYY"))
       ),
     ];
     // Total Request
     all_Unique_Dates["Applicants"] = [
       ...new Set(
-        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+        data.map((item) => moment(item.application_date).format("MM/DD/YYYY"))
       ),
     ].map((y) => allCreatedDate.filter((z) => z === y).length);
   });
@@ -66,16 +66,19 @@ export default function AcademyChart() {
     // All Dates
     all_Unique_AcknowledgmentsSent_Dates["dates"] = [
       ...new Set(
-        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+        data.map((item) => moment(item.application_date).format("MM/DD/YYYY"))
       ),
     ];
     // Total Acknowledgments Sent
     all_Unique_AcknowledgmentsSent_Dates["AcknowledgementsSent"] = [
       ...new Set(
-        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+        data.map((item) => moment(item.application_date).format("MM/DD/YYYY"))
       ),
     ].map((y) => allApprovedDate.filter((z) => z === y).length);
   });
+
+  console.log("for applicants", all_Unique_Dates, all_Unique_AcknowledgmentsSent_Dates);
+  console.log("for acknowledgment Sent", all_Unique_AcknowledgmentsSent_Dates);
    
     const CHART_DATA = [
       {
