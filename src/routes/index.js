@@ -375,7 +375,7 @@ export default function Router() {
             {
               path: 'job-opening',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="Job Opening" dept="HR">
                   <JobOpening />
                 </GuardedRoute>
               ),
@@ -407,7 +407,7 @@ export default function Router() {
             {
               path: 'aptitude-test',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="Interview" dept="HR">
                   <AptitudeTest />
                 </GuardedRoute>
               ),
@@ -415,7 +415,7 @@ export default function Router() {
             {
               path: 'job-offer',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="Job Offer" dept="HR">
                   <JobOffer />
                 </GuardedRoute>
               ),
@@ -423,7 +423,7 @@ export default function Router() {
             {
               path: 'shadowing',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="Shadowing" dept="HR">
                   <Shadowing />
                 </GuardedRoute>
               ),
@@ -431,7 +431,7 @@ export default function Router() {
             {
               path: 'orientation-and-training',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="Orientation and Training" dept="HR">
                   <OrientationAndTraining />
                 </GuardedRoute>
               ),

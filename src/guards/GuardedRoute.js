@@ -26,7 +26,42 @@ export default function GuardedRoute({ title, dept, children }) {
     } else if (dept === "All") {
       return true;
     } else if (
+      title === "Job Opening" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else if (
       title === "Job Applicants" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else if (
+      title === "Academy Applicants" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    }  else if (
+      title === "Interview" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else if (
+      title === "Job Offer" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    }  else if (
+      title === "Interview Schedule List" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else if (
+      title === "Shadowing" &&
+      user?.role?.title === "HR In-House Agent"
+    ) {
+      return true;
+    } else if (
+      title === "Orientation and Training" &&
       user?.role?.title === "HR In-House Agent"
     ) {
       return true;

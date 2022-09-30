@@ -6,50 +6,87 @@ import axiosInstance from "../../services/api";
 import moment from "moment";
 import { object } from "prop-types";
 
-
-
-
 // export default function AcademyChart({ data }) {
 export default function AcademyChart() {
   const [data, setData] = useState([])
   const [applicationDate, setApplicationDate] = useState([])
   const [numbersOfApplicants, setNumbersOfApplicants] = useState([])
+
   const fetchAcademyApplicants = () => {
     axiosInstance
       .get('/api/academy')
       .then((res) => {
         setData(res.data.data)
+        // console.log("use this for overview", res.data.data)
         setApplicationDate(res.data.data.map(item => (item.application_date) ))
       })
     }
 
-   
     useEffect(() => {
       fetchAcademyApplicants();
     }, []);
 
-    const getOnlyDate = applicationDate.map(item=>(moment(item).format("MM/DD/YY")))
-    const sortedDate = getOnlyDate.sort()
-    const eachDate = sortedDate.map(item=> (item))
+    // All Created Unique Data
+  const all_Unique_Dates = {};
+  const all_Unique_AcknowledgmentsSent_Dates = {};
 
-    let uniqueDateCount = {};
-    for (let i=0; i<sortedDate.length; i++){
-      let num = sortedDate[i]
+  // All Created Dates
+  const allCreatedDate = data.map((date) =>
+    moment(date.createdAt).format("MM/DD/YYYY")
+  );
+  // All Acknowledgments Sent
+  const AcknowledgmentsSentData = data.filter(
+    (data) => data.interview_status === "Acknowledgment Sent"
+  );
+  // All Acknowledgments Sent Date
+  const allApprovedDate = AcknowledgmentsSentData.map((date) =>
+    moment(date.createdAt).format("MM/DD/YYYY")
+  );
 
-      uniqueDateCount[num] = uniqueDateCount[num] ? uniqueDateCount[num] + 1 : 1
+  // Total Requests Received
+  // eslint-disable-next-line no-unused-vars
+  const created_at_count = allCreatedDate.forEach(() => {
+    // All Dates
+    all_Unique_Dates["dates"] = [
+      ...new Set(
+        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+      ),
+    ];
+    // Total Request
+    all_Unique_Dates["Applicants"] = [
+      ...new Set(
+        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+      ),
+    ].map((y) => allCreatedDate.filter((z) => z === y).length);
+  });
 
-    }
+  // All Acknowledgments Sent
+  // eslint-disable-next-line no-unused-vars
+  const allApprovedDate_count = allApprovedDate.forEach(() => {
+    // All Dates
+    all_Unique_AcknowledgmentsSent_Dates["dates"] = [
+      ...new Set(
+        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+      ),
+    ];
+    // Total Acknowledgments Sent
+    all_Unique_AcknowledgmentsSent_Dates["AcknowledgementsSent"] = [
+      ...new Set(
+        data.map((item) => moment(item.createdAt).format("MM/DD/YYYY"))
+      ),
+    ].map((y) => allApprovedDate.filter((z) => z === y).length);
+  });
    
     const CHART_DATA = [
       {
         name: "Applicants",
         type: "area",
-        data: Object.values(uniqueDateCount),
+        data: all_Unique_Dates.Applicants,
       },
       {
         name: "Acknowledgements Sent",
         type: "area",
-        data: Object.values(uniqueDateCount),
+        data: all_Unique_AcknowledgmentsSent_Dates.AcknowledgementsSent,
       },
     ];
         
@@ -57,7 +94,7 @@ export default function AcademyChart() {
     stroke: { width: [0, 2, 3] },
     plotOptions: { bar: { columnWidth: "14%" } },
     fill: { type: ["solid", "gradient", "solid"] },
-    labels: Object.keys(uniqueDateCount),
+    labels: all_Unique_Dates.dates,
   
     xaxis: { type: "datetime" },
     tooltip: {
@@ -69,6 +106,16 @@ export default function AcademyChart() {
             return `${y.toFixed(0)} request`;
           }
           return y;
+        },
+      },
+      x: {
+        show: true,
+        format: "dd MMM yyyy",
+        formatter: function (
+          value,
+          { series, seriesIndex, dataPointIndex, w }
+        ) {
+          return new Date(value).toDateString();
         },
       },
     },
