@@ -383,7 +383,7 @@ export default function Router() {
             {
               path: 'job-applicants',
               element: (
-                <GuardedRoute title="Job Applicants" dept="HR">
+                <GuardedRoute title="" dept="HR">
                   <JobApplicants />
                 </GuardedRoute>
               ),
@@ -391,7 +391,7 @@ export default function Router() {
             {
               path: 'academy-applicants',
               element: (
-                <GuardedRoute title="Academy Applicants" dept="HR">
+                <GuardedRoute title="" dept="HR">
                   <AcademyApplicants />
                 </GuardedRoute>
               ),
@@ -399,7 +399,7 @@ export default function Router() {
             {
               path: 'interviewees',
               element: (
-                <GuardedRoute title="Interview Schedule List" dept="Facility">
+                <GuardedRoute title="" dept="Facility">
                   <Interviewees />
                 </GuardedRoute>
               ),

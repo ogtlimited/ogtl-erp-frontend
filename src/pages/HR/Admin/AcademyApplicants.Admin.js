@@ -39,7 +39,6 @@ const AcademyApplicants = () => {
         let formatted = resData.map((e) => ({
           ...e,
           full_name: e.first_name + ' ' + e.last_name,
-          cv: e.cv !== null ? e.cv.split("'")[1] : "",
         }));
         
          console.log('This formatted', formatted);

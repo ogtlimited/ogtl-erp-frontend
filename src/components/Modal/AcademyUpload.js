@@ -81,6 +81,10 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           other_option: e["If 'Other' was selected above, please state which."],
           interested_program: e['Interested program'],
           mode_of_engagement: e['What mode of engagement would you prefer'],
+          gender: e['Please select your gender'],
+          cv: e['Please upload your CV.'],
+          process_stage: e['process_stage'],
+          interview_status: e['interview_status'],
           weekly_hours:
             e['How many hours in a week can you commit to this program'],
           stack: e['What is your Stack?'],
