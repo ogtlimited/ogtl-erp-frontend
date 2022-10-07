@@ -9,7 +9,6 @@ import helper from '../../services/helper';
 
 const AcademyRatio2 = () => {
   const { combineRequest, showAlert } = useAppContext();
-  const [applicantData, setApplicantData] = useState([]);
 
   const initialChartState = { keys: ['No Record Found'], values: [0] };
   const [chartData1, setChartData1] = useState([]);
@@ -18,109 +17,103 @@ const AcademyRatio2 = () => {
   const [chartData4, setChartData4] = useState([]);
   const [error, setError] = useState('');
 
-  const fetchAcademyApplicants = () => {
+  const fetchInterestedPrograms = () => {
     axiosInstance
-      .get('/api/academy')
-      .then((res) => {
-        const data = res?.data?.data;
-        setApplicantData(data);
-        if (data.length === 0) {
-          return setError('No Academy Data');
-        }
-        const interested_program = {};
-        const highest_qualification_attained = {};
-        const mode_of_engagement = {};
-        const stack = {};
+    .get('/api/academy/interested_program')
+    .then((res) => {
+      const data = res?.data?.data;
+      
+      if (data.length === 0) {
+        return setError('No Academy Data');
+      }
+      const interested_program = {};
 
-        const intPos = data.map((item) => item.interested_program);
-        const hiQuAt = data.map((item) => item.highest_qualification_attained);
-        const modOfEng = data.map((item) => item.mode_of_engagement);
-        const stk = data.map((item) => item.stack);
+      interested_program['keys'] = data.map((item) =>
+        item._id && item._id !== null ? item._id : 'No Interested Program Specified'
+      );
+      interested_program['values'] = data.map((item) => item.count);
 
-        // eslint-disable-next-line no-unused-vars
-        const interested_program_count = intPos.forEach((x) => {
-          interested_program['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.interested_program &&
-                item.interested_program !== undefined
-                  ? item.interested_program
-                  : 'No Interested Program Specified'
-              )
-            ),
-          ];
-          interested_program['values'] = [
-            ...new Set(data.map((item) => item.interested_program)),
-          ].map((y) => intPos.filter((z) => z === y).length);
-        });
+      setChartData1(interested_program);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
-        // eslint-disable-next-line no-unused-vars
-        const highest_qualification_attained_count = hiQuAt.forEach((x) => {
-          highest_qualification_attained['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.highest_qualification_attained &&
-                item.highest_qualification_attained !== undefined
-                  ? item.highest_qualification_attained
-                  : 'No Highest Qualification Attained Specified'
-              )
-            ),
-          ];
-          highest_qualification_attained['values'] = [
-            ...new Set(data.map((item) => item.highest_qualification_attained)),
-          ].map((y) => hiQuAt.filter((z) => z === y).length);
-        });
+  const fetchQualifications = () => {
+    axiosInstance
+    .get('/api/academy/qualification')
+    .then((res) => {
+      const data = res?.data?.data;
 
-        // eslint-disable-next-line no-unused-vars
-        const mode_of_engagement_count = modOfEng.forEach((x) => {
-          mode_of_engagement['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.mode_of_engagement && item.mode_of_engagement !== undefined
-                  ? item.mode_of_engagement
-                  : 'No Mode of Engagement Specified'
-              )
-            ),
-          ];
-          mode_of_engagement['values'] = [
-            ...new Set(data.map((item) => item.mode_of_engagement)),
-          ].map((y) => modOfEng.filter((z) => z === y).length);
-        });
+      if (data.length === 0) {
+        return setError('No Academy Data');
+      }
+      const highest_qualification_attained = {};
 
-        // eslint-disable-next-line no-unused-vars
-        const stack_count = stk.forEach((x) => {
-          stack['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.stack && item.stack !== undefined
-                  ? item.stack
-                  : 'No Stack Specified'
-              )
-            ),
-          ];
-          stack['values'] = [...new Set(data.map((item) => item.stack))].map(
-            (y) => stk.filter((z) => z === y).length
-          );
-        });
+      highest_qualification_attained['keys'] = data.map((item) =>
+        item._id && item._id !== null ? item._id : 'No Highest Qualification Attained Specified'
+      );
+      highest_qualification_attained['values'] = data.map((item) => item.count);
 
-        setApplicantData(
-          interested_program,
-          highest_qualification_attained,
-          mode_of_engagement,
-          stack
-        );
-        setChartData1(interested_program);
-        setChartData2(highest_qualification_attained);
-        setChartData3(mode_of_engagement);
-        setChartData4(stack);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+      setChartData2(highest_qualification_attained);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const fetchEngagement = () => {
+    axiosInstance
+    .get('/api/academy/mode')
+    .then((res) => {
+      const data = res?.data?.data;
+
+      if (data.length === 0) {
+        return setError('No Academy Data');
+      }
+      const mode_of_engagement = {};
+
+      mode_of_engagement['keys'] = data.map((item) =>
+        item._id && item._id !== null ? item._id : 'No Mode of Engagement Specified'
+      );
+      mode_of_engagement['values'] = data.map((item) => item.count);
+
+      setChartData3(mode_of_engagement);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  const fetchStack = () => {
+    axiosInstance
+    .get('/api/academy/stack')
+    .then((res) => {
+      const data = res?.data?.data;
+
+      if (data.length === 0) {
+        return setError('No Academy Data');
+      }
+      const stack = {};
+
+      stack['keys'] = data.map((item) =>
+        item._id && item._id !== null ? item._id : 'No Stack Specified'
+      );
+      stack['values'] = data.map((item) => item.count);
+
+      setChartData4(stack);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   useEffect(() => {
-    fetchAcademyApplicants();
+    fetchInterestedPrograms();
+    fetchQualifications();
+    fetchEngagement();
+    fetchStack();
   }, []);
 
   return (
