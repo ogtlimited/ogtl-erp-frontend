@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/** @format */
 
 import React, { useState, useEffect } from 'react';
 import { chartColors } from '../../components/charts/chart-colors';
@@ -10,37 +9,29 @@ import helper from '../../services/helper';
 
 const AcademyRatio = () => {
   const { combineRequest, showAlert } = useAppContext();
-  const [applicantData, setApplicantData] = useState([]);
-  
-  const initialChartState = { keys: ["No Record Found"], values: [0] };
+  const [genderData, setGenderData] = useState([]);
+
+  const initialChartState = { keys: ['No Record Found'], values: [0] };
   const [chartData, setChartData] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
-
-  const fetchAcademyApplicants = () => {
+  const fetchByGender = () => {
     axiosInstance
-      .get('/api/academy')
+      .get('/api/academy/gender')
       .then((res) => {
-        const data = res?.data?.data
-        setApplicantData(data);
+        const data = res?.data?.data;
+        setGenderData(data);
+
         if (data.length === 0) {
-          return setError("No Academy Data")
+          return setError('No Academy Data');
         }
         const gender = {};
 
-        const sex = data.map((item) => item.gender);
-
-        // eslint-disable-next-line no-unused-vars
-        const gender_count = sex.forEach((x) => {
-          gender['keys'] = [
-            ...new Set(data.map((item) => item.gender && item.gender !== undefined ? item.gender : "No Gender Specified")),
-          ];
-          gender['values'] = [
-            ...new Set(data.map((item) => item.gender)),
-          ].map((y) => sex.filter((z) => z === y).length);
-        });
-        
-        setApplicantData(gender);
+        gender['keys'] = data.map((item) =>
+          item._id && item._id !== null ? item._id : 'No Gender Specified'
+        );
+        gender['values'] = data.map((item) => item.count);
+        setGenderData(gender);
         setChartData(gender);
       })
       .catch((error) => {
@@ -49,19 +40,20 @@ const AcademyRatio = () => {
   };
 
   useEffect(() => {
-    fetchAcademyApplicants();
+    fetchByGender();
   }, []);
-  
+
   return (
     <>
       <div className="row">
-        {error ? <AcademyStatistics
-          chartTitle="Gender"
-          chartData={initialChartState}
-        /> : <AcademyStatistics
-          chartTitle="Gender"
-          chartData={chartData}
-        />}
+        {error ? (
+          <AcademyStatistics
+            chartTitle="Gender"
+            chartData={initialChartState}
+          />
+        ) : (
+          <AcademyStatistics chartTitle="Gender" chartData={chartData} />
+        )}
       </div>
     </>
   );
