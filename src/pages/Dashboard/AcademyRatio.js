@@ -17,9 +17,9 @@ const AcademyRatio = () => {
 
   const fetchByGender = () => {
     axiosInstance
-      .get('/api/academy/gender')
+      .get('/api/academy/report/all')
       .then((res) => {
-        const data = res?.data?.data;
+        const data = res?.data?.data[0].gender;
         setGenderData(data);
 
         if (data.length === 0) {
@@ -30,7 +30,8 @@ const AcademyRatio = () => {
         gender['keys'] = data.map((item) =>
           item._id && item._id !== null ? item._id : 'No Gender Specified'
         );
-        gender['values'] = data.map((item) => item.count);
+        gender['values'] = data.map((item) => item.total);
+
         setGenderData(gender);
         setChartData(gender);
       })

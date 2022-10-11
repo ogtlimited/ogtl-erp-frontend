@@ -50,7 +50,7 @@ export default function AcademyChart() {
     );
     // All Acknowledgments Sent
     const AcknowledgmentsSentData = data.filter(
-      (data) => data.interview_status === 'Acknowledgment Sent'
+      (data) => data.interview_status === 'acknowledgment sent'
     );
     // All Acknowledgments Sent Date
     const allApprovedDate = AcknowledgmentsSentData.map((date) =>
