@@ -37,12 +37,8 @@ const PayrollBatchesTable = ({
     onSelectAll: handleOnSelectAll,
   };
 
-  // const months = ["Not set","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
   const [mobileView, setmobileView] = useState(false);
-  const [monthlyFilter, setMonthlyFilter] = useState('');
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
-  const [processingStageFilter, setprocessingStageFilter] = useState('');
   const [dataToFilter, setDataToFilter] = useState('');
 
 
@@ -70,9 +66,6 @@ const PayrollBatchesTable = ({
     }, 7000);
   }, [data]);
 
-  // useEffect(() => {
-  //   setNewList(dataToFilter)
-  // }, [dataToFilter,newList]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';
 
@@ -128,8 +121,6 @@ const PayrollBatchesTable = ({
                   )
                 }
                 pagination={paginationFactory()}
-
-                // defaultSorted={defaultSorted}
               />
             </div>
           )}
