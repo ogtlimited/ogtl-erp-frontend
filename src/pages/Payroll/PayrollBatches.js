@@ -1,11 +1,15 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/**
+ * /* eslint-disable jsx-a11y/anchor-is-valid
+ *
+ * @format
+ */
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import PayrollBatchesTable from "../../components/Tables/payrollBatchesTable";
+import PayrollBatchesTable from '../../components/Tables/payrollBatchesTable';
 import axiosInstance from '../../services/api';
 import ViewModal from '../../components/Modal/ViewModal';
 import PayrollBatchesContent from '../../components/ModalContents/PayrollBatchesContent';
-
 
 const PayrollBatches = () => {
   const [data, setData] = useState([]);
@@ -40,11 +44,7 @@ const PayrollBatches = () => {
       dataField: 'batch_id',
       text: 'Batch ID',
       sort: true,
-      formatter: (value, row) => (
-        <h2>
-          {row?.batch_id}
-        </h2>
-      ),
+      formatter: (value, row) => <h2>{row?.batch_id}</h2>,
     },
     {
       dataField: 'reference_id',
@@ -62,9 +62,7 @@ const PayrollBatches = () => {
       sort: true,
       formatter: (value, row) => (
         <>
-         <h2>
-          {row?.approved ? 'Approved' : 'Not Approved'}
-         </h2>
+          <h2>{row?.approved ? 'Approved' : 'Not Approved'}</h2>
         </>
       ),
     },
@@ -76,29 +74,19 @@ const PayrollBatches = () => {
       csvExport: false,
       headerStyle: { minWidth: '70px', textAlign: 'left' },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
+        <div className="dropdown payroll-batch-dropdown-action text-right">
           <>
-            <a
-              href="#"
-              className="action-icon dropdown-toggle"
-              data-toggle="dropdown"
-              aria-expanded="false"
+            <button
+              className="payroll-batch-dropdown-item"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType('view-details');
+                setViewRow(row);
+              }}
             >
-              <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-            </a>
-            <div className="dropdown-menu dropdown-menu-right">
-              <a
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#generalModal"
-                onClick={() => {
-                  setmodalType('view-details');
-                  setViewRow(row);
-                }}
-              >
-                <i className="fa fa-eye m-r-5"></i> View
-              </a>
-            </div>
+              View
+            </button>
           </>
         </div>
       ),
@@ -115,16 +103,13 @@ const PayrollBatches = () => {
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">
-                Payroll Batches
-              </li>
+              <li className="breadcrumb-item active">Payroll Batches</li>
             </ul>
           </div>
         </div>
       </div>
       <div className="row">
         <div className="col-12">
-
           <PayrollBatchesTable
             data={data}
             loading={loading}
@@ -140,8 +125,9 @@ const PayrollBatches = () => {
           title="Batch Details"
           content={<PayrollBatchesContent payrollBatch={viewRow} />}
         />
-      ) : ""
-      }
+      ) : (
+        ''
+      )}
     </>
   );
 };
