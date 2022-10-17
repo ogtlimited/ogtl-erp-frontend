@@ -5956,6 +5956,18 @@ table.table-inbox tbody tr.checked {
 	50. Payroll Items
 -----------------------*/
 
+.payroll-batch-dropdown-action {
+	display: flex;
+}
+
+.payroll-batch-dropdown-item {
+	padding: 5px 10px;
+	border: none;
+	width: 80px;
+	border-radius: 5px;
+	background-color: #00c5fb;
+}
+
 .page-menu .nav-tabs > li > a {
 	font-size: 18px;
 }
