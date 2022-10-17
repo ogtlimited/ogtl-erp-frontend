@@ -182,7 +182,26 @@ const PayrollReports = () => {
 
   return (
     <>
-      <div className="alert alert-primary sliding-text" role="alert">
+      {user?.role?.title === "CEO" ? <div className="alert alert-primary sliding-text" role="alert">
+        <div>
+          <AlertSvg />
+          <svg
+            className="bi flex-shrink-0 me-2"
+            width="24"
+            height="24"
+            role="img"
+          >
+            <use xlinkHref="#info-fill" />
+          </svg>
+          <span className="pl-3">
+            Payroll is generated on the 25th of every month
+          </span>
+          <span className="pl-3">
+            {" "}
+            | &nbsp; You can preview and approve payroll once generated 
+          </span>
+        </div>
+      </div> : <div className="alert alert-primary sliding-text" role="alert">
         <div>
           <AlertSvg />
           <svg
@@ -202,7 +221,7 @@ const PayrollReports = () => {
             the current month
           </span>
         </div>
-      </div>
+      </div>}
       <div className="page-header">
         <div className="row">
           <div className="col">
