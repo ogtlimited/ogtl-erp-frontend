@@ -25,11 +25,6 @@ export default function GuardedRoute({ title, dept, children }) {
       return true;
     } else if (dept === "All") {
       return true;
-    } else if (
-      title === "" &&
-      user?.role?.title === "HR In-House Agent"
-    ) {
-      return true;
     } else {
       return false;
     }
