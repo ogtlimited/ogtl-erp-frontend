@@ -132,57 +132,7 @@ const Sidebar = () => {
                   ))}
                 </>
               ))}
-              {user?.role?.title === 'HR In-House Agent' && (
-                <li className="submenu">
-                  <a
-                    href=""
-                    onClick={(e) => e.preventDefault()}
-                    className="subdrop"
-                  >
-                    <i className="la la-cube"></i>
-                    <span>Recruitment</span>
-                    <span className="menu-arrow"></span>
-                  </a>
-                  <ul style={{ display: 'none' }}>
-                    <Link to="/dashboard/recruitment/job-opening" className="">
-                      Job Opening
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/job-applicants"
-                      className=""
-                    >
-                      Job Applicants
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/academy-applicants"
-                      className=""
-                    >
-                      Academy Applicants
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/aptitude-test"
-                      className=""
-                    >
-                      Interview
-                    </Link>
-                    <Link to="/dashboard/recruitment/job-offer" className="">
-                      Job Offer
-                    </Link>
-                    <Link to="/dashboard/recruitment/interviewees" className="">
-                      Interview Schedule List
-                    </Link>
-                    <Link to="/dashboard/recruitment/shadowing" className="">
-                      Shadowing
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/orientation-and-training"
-                      className=""
-                    >
-                      Orientation and Training
-                    </Link>
-                  </ul>
-                </li>
-              )}
+             
             </ul>
           </div>
         </div>
