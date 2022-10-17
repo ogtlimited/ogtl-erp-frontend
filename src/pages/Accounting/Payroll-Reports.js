@@ -11,7 +11,7 @@ import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
 
 const PayrollReports = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, user  } = useAppContext();
   const handleClose = () => {};
   const [generating, setgenerating] = useState(false);
   const ref = useRef(null);
@@ -120,6 +120,7 @@ const PayrollReports = () => {
   useEffect(() => {
     console.log('salary')
     fetchEmployeeSalary();
+    
   }, []);
 
   const columns = [
@@ -212,7 +213,7 @@ const PayrollReports = () => {
             </ul>
           </div>
           <div className="col-auto float-end ms-auto">
-            <button className="btn add-btn" onClick={generatePayroll}>
+            {user?.role?.title !== "CEO" && <button className="btn add-btn" onClick={generatePayroll}>
               {!generating ? (
                 <>
                   <i className="fa fa-plus"></i> Generate Payroll
@@ -223,9 +224,9 @@ const PayrollReports = () => {
                   role="status"
                 ></div>
               )}
-            </button>
+            </button>}
 
-            <button
+           {user?.role?.title === "CEO" &&  <button
               data-toggle="modal"
               data-target="#generalModal"
               className="btn add-btn mx-5"
@@ -235,7 +236,7 @@ const PayrollReports = () => {
               }}
             >
               Preview and approve payroll
-            </button>
+            </button>}
           </div>
         </div>
       </div>
