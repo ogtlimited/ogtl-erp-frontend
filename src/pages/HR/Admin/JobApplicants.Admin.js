@@ -30,7 +30,7 @@ const JobApplicants = () => {
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
+  const [sizePerPage, setSizePerPage] = useState(20);
 
   const [prevPage, setPrevPage] = useState('');
   const [nextPage, setNextPage] = useState('');
@@ -52,19 +52,19 @@ const JobApplicants = () => {
         let resOptions = res?.data;
         console.log('This application data:', resOptions);
         const thisPreviousPage =
-          resOptions.totalJobApplicants >= 10 &&
+          resOptions.totalJobApplicants >= 20 &&
           resOptions.paginationData.next.page === 2
             ? null
             : resOptions.paginationData.previous.page;
         const thisCurrentPage =
-          resOptions.totalJobApplicants >= 10
+          resOptions.totalJobApplicants >= 20
             ? resOptions.paginationData.next.page - 1
             : resOptions.paginationData.previous.page + 1;
         const thisNextPage =
-          resOptions.totalJobApplicants >= 10
+          resOptions.totalJobApplicants >= 20
             ? resOptions.paginationData.next.page
             : null;
-        const thisPageLimit = 10;
+        const thisPageLimit = 20;
         const thisTotalPageSize = resOptions.paginationData.numberOfPages;
 
         console.log("total job applicant in this page: " + resOptions.totalJobApplicants)
