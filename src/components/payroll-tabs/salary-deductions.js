@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";
@@ -28,34 +30,34 @@ const Deductions = () => {
     fetchDeductions();
   }, []);
 
-  const deleteDeductions = (row) => {
-    axiosInstance
-      .delete(`/api/deduction/${row._id}`)
-      .then((res) => {
-        setData((prevData) =>
-          prevData.filter((pdata) => pdata._id !== row._id)
-        );
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
-  };
+  // const deleteDeductions = (row) => {
+  //   axiosInstance
+  //     .delete(`/api/deduction/${row._id}`)
+  //     .then((res) => {
+  //       setData((prevData) =>
+  //         prevData.filter((pdata) => pdata._id !== row._id)
+  //       );
+  //       showAlert(true, res.data.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error.response.data.message, "alert alert-danger");
+  //     });
+  // };
 
-  const updateDeductions = (row) => {
-    axiosInstance
-      .patch(`/api/deduction/${row._id}`, row)
-      .then((res) => {
-        setData((prevData) => [...data, res.data.data]);
-        fetchDeductions();
-        showAlert(true, res?.data?.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error?.response?.data?.message, "alert alert-danger");
-      });
-  };
+  // const updateDeductions = (row) => {
+  //   axiosInstance
+  //     .patch(`/api/deduction/${row._id}`, row)
+  //     .then((res) => {
+  //       setData((prevData) => [...data, res.data.data]);
+  //       fetchDeductions();
+  //       showAlert(true, res?.data?.message, "alert alert-success");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       showAlert(true, error?.response?.data?.message, "alert alert-danger");
+  //     });
+  // };
 
   const columns = [
     {
@@ -84,37 +86,37 @@ const Deductions = () => {
       headerStyle: { minWidth: "150px" },
     },
 
-    {
-      dataField: "",
-      text: "Action",
-      sort: true,
-      csvExport: false,
-      headerStyle: { minWidth: "70px", textAlign: "left" },
-      formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   sort: true,
+    //   csvExport: false,
+    //   headerStyle: { minWidth: "70px", textAlign: "left" },
+    //   formatter: (value, row) => (
+    //     <div className="dropdown dropdown-action text-right">
+    //       <a
+    //         href="#"
+    //         className="action-icon dropdown-toggle"
+    //         data-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //       </a>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         <a
+    //           className="dropdown-item"
+    //           data-toggle="modal"
+    //           data-target="#exampleModal"
+    //           onClick={() => {
+    //             setSelectedRow(row);
+    //           }}
+    //         >
+    //           <i className="fa fa-trash m-r-5"></i> Delete
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
   return (
     <div className="tab-pane" id="tab_deductions">
@@ -143,7 +145,7 @@ const Deductions = () => {
       <ConfirmModal
         title="Deductions"
         selectedRow={selectedRow}
-        deleteFunction={deleteDeductions}
+        // deleteFunction={deleteDeductions}
       />
     </div>
   );

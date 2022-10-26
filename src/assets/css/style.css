@@ -1,5 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Babylonica&display=swap');
 
+/*--------------------------
+	Job applicant pagination
+----------------------------*/
+
+.application-table-pagination {
+  padding: 5px;
+}
+
+.css-wjh20t-MuiPagination-ul {
+  width: fit-content;
+  margin: auto !important;
+}
+.css-wjh20t-MuiPagination-ul > li > button {
+  color: black;
+}
+.Mui-selected {
+  background-color: #00c5fb !important;
+  color: #fff;
+}
 
 
 /*-----------------
