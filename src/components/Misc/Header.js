@@ -1,23 +1,14 @@
-import React, { useContext } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+
+import React from "react";
 // import "./header.css";
 import logo from "../../assets/img/og-white-logo.png";
 import cropped from "../../assets/img/cropped-white.png";
 // import { AppContext } from "../context/AppContext";
 import { Link, useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
-import { NotificationBox } from "./NotificationBox";
 import { useMsal } from "@azure/msal-react";
-
-const toggle_sidebar = (e) => {
-  e.preventDefault();
-  // alert('clicked')
-  const body = document.getElementById("main-body");
-  if (body.classList.value === "mini-sidebar") {
-    body.classList.remove("mini-sidebar");
-  } else {
-    body.classList.add("mini-sidebar");
-  }
-};
 
 const Header = () => {
   let navigate = useNavigate();
@@ -26,7 +17,8 @@ const Header = () => {
     e.preventDefault();
     tokenService.clearStorage();
     instance
-      .logoutPopup()
+      // .ssoSilent() //<-- This will silently logout the user without having to select an account
+      .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
       .then((e) => {
         navigate("/auth");
       })

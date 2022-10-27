@@ -129,7 +129,6 @@ const LeavesTable = ({
 
   const handleChange = (e, p) => {
     setPage(p);
-    fetchJobApplicants(p);
     _DATA.jump(p);
   };
 
@@ -168,7 +167,6 @@ const LeavesTable = ({
                     <option value="" disabled selected hidden>
                       Filter By Interview Status
                     </option>
-                    {/* <option>All</option> */}
                     {statusInterview.map((option, idx) => (
                       <option key={idx}>{option.title}</option>
                     ))}
@@ -217,10 +215,17 @@ const LeavesTable = ({
                     </div>
                   )
                 }
+                pagination={paginationFactory({
+                  onSizePerPageChange: (page, sizePerPage) => {
+                    setSizePerPage(page);
+                    setPage(sizePerPage);
+                  },
+                })}
               />
               <div className="application-table-pagination">
                 <Stack spacing={2}>
                   <Pagination
+                    className='job-applicant-pagination'
                     count={count}
                     page={page}
                     boundaryCount={4}
@@ -228,6 +233,8 @@ const LeavesTable = ({
                     color="primary"
                     showFirstButton 
                     showLastButton
+                    variant="outlined" 
+                    shape="rounded" 
                   />
                 </Stack>
               </div>

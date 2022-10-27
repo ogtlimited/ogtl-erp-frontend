@@ -25,21 +25,23 @@ const JobApplicants = () => {
   const [process_stage, setprocessingStage] = useState('');
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState('schedule-interview');
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(20);
+  const [sizePerPage, setSizePerPage] = useState(10);
 
   const [prevPage, setPrevPage] = useState('');
   const [nextPage, setNextPage] = useState('');
   const [totalPages, setTotalPages] = useState('');
 
-  const fetchJobApplicants = useCallback((page) => {
+  const fetchJobApplicants = useCallback(() => {
     setLoading(true);
-    
+
     axiosInstance
+      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner is you want
       .get('/api/jobApplicant', {
         params: {
           page: page,
@@ -47,27 +49,25 @@ const JobApplicants = () => {
         },
       })
       .then((res) => {
-        let resData = res?.data?.data;
+        let resData = res?.data?.data?.jobApplicants;
+        const pageData = res?.data?.data?.totalNumberofApplicants;
+        let resOptions = res?.data?.data?.pagination;
 
-        let resOptions = res?.data;
-        console.log('This application data:', resOptions);
         const thisPreviousPage =
-          resOptions.totalJobApplicants >= 20 &&
-          resOptions.paginationData.next.page === 2
+          pageData >= sizePerPage && resOptions.next.page === 2
             ? null
-            : resOptions.paginationData.previous.page;
-        const thisCurrentPage =
-          resOptions.totalJobApplicants >= 20
-            ? resOptions.paginationData.next.page - 1
-            : resOptions.paginationData.previous.page + 1;
-        const thisNextPage =
-          resOptions.totalJobApplicants >= 20
-            ? resOptions.paginationData.next.page
-            : null;
-        const thisPageLimit = 20;
-        const thisTotalPageSize = resOptions.paginationData.numberOfPages;
+            : resOptions.previous.page;
 
-        console.log("total job applicant in this page: " + resOptions.totalJobApplicants)
+        const thisCurrentPage =
+          pageData >= sizePerPage
+            ? resOptions.next.page - 1
+            : resOptions.previous.page + 1;
+
+        const thisNextPage =
+          pageData >= sizePerPage ? resOptions.next.page : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
 
         setPrevPage(thisPreviousPage);
         setPage(thisCurrentPage);
@@ -79,12 +79,13 @@ const JobApplicants = () => {
           ...e,
           full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
         }));
+
         console.log(user);
         if (user?.isRepSiever) {
           const userApplications = formatted.filter(
             (apl) => apl.rep_sieving_call?._id === user._id
           );
-          console.log(userApplications);
+          console.log('This user application', userApplications);
           setData(userApplications);
           setunfiltered(userApplications);
         } else {
@@ -97,21 +98,21 @@ const JobApplicants = () => {
       });
 
     setLoading(false);
-  }, [sizePerPage, user]);
+  }, [page, sizePerPage, user]);
 
   useEffect(() => {
     fetchJobApplicants();
   }, [fetchJobApplicants]);
 
-  const handleClick = (i) => {
-    if (i?.value === 'All' || i === null) {
-      setData(unfiltered);
-    } else {
-      const filt = unfiltered.filter((e) => i.label.includes(e.status));
+  // const handleClick = (i) => {
+  //   if (i?.value === 'All' || i === null) {
+  //     setData(unfiltered);
+  //   } else {
+  //     const filt = unfiltered.filter((e) => i.label.includes(e.status));
 
-      setData(filt);
-    }
-  };
+  //     setData(filt);
+  //   }
+  // };
 
   //delete job opening
   const deleteJobApplicant = (row) => {
@@ -131,18 +132,21 @@ const JobApplicants = () => {
 
   //update jobOpening
   const handleUpdate = useCallback((id, update) => {
-    console.log(update);
-    axiosInstance
-      .patch('/api/jobApplicant/' + id, update)
-      .then((res) => {
-        fetchJobApplicants();
-        showAlert(true, res.data.message, 'alert alert-success');
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, 'alert alert-danger');
-      });
-  }, []);
+      if (user?.isRepSiever  === false) {
+        return showAlert(true, "You are not authorized to perform this action", 'alert alert-danger');
+      }
+      axiosInstance
+        .patch('/api/jobApplicant/' + id, update)
+        .then((res) => {
+          fetchJobApplicants();
+          showAlert(true, res.data.message, 'alert alert-success');
+        })
+        .catch((error) => {
+          console.log(error);
+          showAlert(true, error.response.data.message, 'alert alert-danger');
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
   useEffect(() => {
     if (interview_status.length) {
