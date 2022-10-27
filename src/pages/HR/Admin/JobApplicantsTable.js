@@ -194,8 +194,6 @@ const LeavesTable = ({
                 {...props.baseProps}
                 bordered={false}
                 filter={filterFactory()}
-                data={data}
-                columns={columns}
                 headerClasses="header-class"
                 classes={
                   !mobileView
