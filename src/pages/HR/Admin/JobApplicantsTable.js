@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
+import { useAppContext } from '../../../Context/AppContext';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
@@ -53,6 +54,7 @@ const LeavesTable = ({
     onSelectAll: handleOnSelectAll,
   };
 
+  const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [monthlyFilter, setMonthlyFilter] = useState('');
   const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
@@ -213,6 +215,9 @@ const LeavesTable = ({
                 }
                 pagination={paginationFactory({
                   onSizePerPageChange: (page, sizePerPage) => {
+                    // if (user?.isRepSiever) {
+                    // setSizePerPage();
+                    // }
                     setSizePerPage(page);
                     setPage(sizePerPage);
                   },
@@ -221,16 +226,16 @@ const LeavesTable = ({
               <div className="application-table-pagination">
                 <Stack spacing={2}>
                   <Pagination
-                    className='job-applicant-pagination'
+                    className="job-applicant-pagination"
                     count={count}
                     page={page}
                     boundaryCount={4}
                     onChange={handleChange}
                     color="primary"
-                    showFirstButton 
+                    showFirstButton
                     showLastButton
-                    variant="outlined" 
-                    shape="rounded" 
+                    variant="outlined"
+                    shape="rounded"
                   />
                 </Stack>
               </div>

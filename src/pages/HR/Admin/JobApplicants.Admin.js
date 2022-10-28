@@ -39,7 +39,7 @@ const JobApplicants = () => {
 
   const fetchJobApplicants = useCallback(() => {
     axiosInstance
-      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner is you want
+      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner if you want
       .get('/api/jobApplicant', {
         params: {
           page: page,
@@ -78,12 +78,13 @@ const JobApplicants = () => {
           full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
         }));
 
-        console.log(user);
+        console.log("this user", user);
         if (user?.isRepSiever) {
           const userApplications = formatted.filter(
             (apl) => apl.rep_sieving_call?._id === user._id
           );
           console.log('This user application', userApplications);
+          // setSizePerPage(50);
           setData(userApplications);
           setunfiltered(userApplications);
         } else {
