@@ -144,42 +144,42 @@ const Sidebar = () => {
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={{ display: 'none' }}>
-                    <Link to="/dashboard/recruitment/job-opening" className="">
+                    {/* <Link to="/dashboard/recruitment/job-opening" className="">
                       Job Opening
-                    </Link>
+                    </Link> */}
                     <Link
                       to="/dashboard/recruitment/job-applicants"
                       className=""
                     >
                       Job Applicants
                     </Link>
-                    <Link
+                    {/* <Link
                       to="/dashboard/recruitment/academy-applicants"
                       className=""
                     >
                       Academy Applicants
-                    </Link>
-                    <Link
+                    </Link> */}
+                    {/* <Link
                       to="/dashboard/recruitment/aptitude-test"
                       className=""
                     >
                       Interview
-                    </Link>
-                    <Link to="/dashboard/recruitment/job-offer" className="">
+                    </Link> */}
+                    {/* <Link to="/dashboard/recruitment/job-offer" className="">
                       Job Offer
-                    </Link>
-                    <Link to="/dashboard/recruitment/interviewees" className="">
+                    </Link> */}
+                    {/* <Link to="/dashboard/recruitment/interviewees" className="">
                       Interview Schedule List
-                    </Link>
-                    <Link to="/dashboard/recruitment/shadowing" className="">
+                    </Link> */}
+                    {/* <Link to="/dashboard/recruitment/shadowing" className="">
                       Shadowing
-                    </Link>
-                    <Link
+                    </Link> */}
+                    {/* <Link
                       to="/dashboard/recruitment/orientation-and-training"
                       className=""
                     >
                       Orientation and Training
-                    </Link>
+                    </Link> */}
                   </ul>
                 </li>
               )}

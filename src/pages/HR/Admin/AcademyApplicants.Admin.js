@@ -96,8 +96,6 @@ const AcademyApplicants = () => {
 
   // update Academy
   const handleUpdate = useCallback((id, update) => {
-    console.log("update this body", update);
-    console.log("id to update", id);
     axiosInstance
       .patch('/api/academy/update/' + id, update)
       .then((res) => {

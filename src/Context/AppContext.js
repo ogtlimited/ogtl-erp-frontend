@@ -146,6 +146,11 @@ const AppProvider = (props) => {
     return axiosInstance.get("/create-employee-form");
   };
 
+  //for Job Applications
+  const createJobApplications = () => {
+    return axiosInstance.get("/api/jobApplicant");
+  };
+
   //for creating shifts
   const createShifts = () => {
     return axiosInstance.get("/create-shift-form");
@@ -231,6 +236,7 @@ const AppProvider = (props) => {
         createPerfomance,
         createCampaign,
         createRoleAssignment,
+        createJobApplications,
       }}
     >
       {props.children}

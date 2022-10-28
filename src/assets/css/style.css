@@ -1,5 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Babylonica&display=swap');
 
+/*--------------------------
+	Job applicant pagination
+----------------------------*/
+
+.application-table-pagination {
+	position: relative;
+  padding: 5px;
+	margin-top: -5.5%;
+	z-index: 900 !important;
+	width: 75%;
+	margin-left: 16%;
+	background-color: #f8f9fa !important;
+}
+
+.job-applicant-pagination {
+	background-color: #f8f9fa !important;
+}
+
+.css-wjh20t-MuiPagination-ul {
+  width: fit-content;
+  margin: auto !important;
+}
+.css-wjh20t-MuiPagination-ul > li > button {
+  color: black;
+}
+.Mui-selected {
+  background-color: #00c5fb !important;
+  color: #fff !important;
+}
+
+@media only screen and (max-width: 765px) {
+	.application-table-pagination {
+		position: absolute;
+		padding: 5px;
+		margin-top: -5.5%;
+		z-index: 1000 !important;
+		width: 80%;
+		margin-left: 10%;
+		background-color: #fff !important;
+	}
+}
 
 
 /*-----------------

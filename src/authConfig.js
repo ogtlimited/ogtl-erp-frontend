@@ -1,8 +1,9 @@
+/* eslint-disable default-case */
 /*
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-
+import * as msal from "@azure/msal-browser";
 import { LogLevel } from "@azure/msal-browser";
 import config from './config.json'
 /**
@@ -10,6 +11,8 @@ import config from './config.json'
  * For a full list of MSAL.js configuration parameters, visit:
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md 
  */
+
+
 export const msalConfig = {
     auth: {
         clientId: "1657a1b8-dc54-4586-814b-3f5235ba2dad",
@@ -45,14 +48,16 @@ export const msalConfig = {
     }
 };
 
+export const msalInstance = new msal.PublicClientApplication(msalConfig);
+
 /**
  * Scopes you add here will be prompted for user consent during sign-in.
  * By default, MSAL.js will add OIDC scopes (openid, profile, email) to any login request.
  * For more information about OIDC scopes, visit: 
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
-export const loginRequest = {
-    scopes: ["User.Read", "profile"]
+export const silentRequest = {
+    scopes: ["User.Read", "profile"],
 };
 
 /**
