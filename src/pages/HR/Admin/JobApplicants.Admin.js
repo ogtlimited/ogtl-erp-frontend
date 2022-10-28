@@ -28,7 +28,7 @@ const JobApplicants = () => {
   // eslint-disable-next-line no-unused-vars
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState('schedule-interview');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -38,8 +38,6 @@ const JobApplicants = () => {
   const [totalPages, setTotalPages] = useState('');
 
   const fetchJobApplicants = useCallback(() => {
-    setLoading(true);
-
     axiosInstance
       // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner is you want
       .get('/api/jobApplicant', {
@@ -96,12 +94,13 @@ const JobApplicants = () => {
       .catch((error) => {
         console.log(error);
       });
-
-    setLoading(false);
   }, [page, sizePerPage, user]);
 
   useEffect(() => {
     fetchJobApplicants();
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
   }, [fetchJobApplicants]);
 
   // const handleClick = (i) => {
