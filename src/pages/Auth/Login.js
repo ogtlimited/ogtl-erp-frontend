@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { msalInstance, silentRequest } from "../../authConfig";
 import config from "../../config.json";
+// import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
+  // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const {register, handleSubmit, formState: { errors }} = useForm();
@@ -52,6 +54,7 @@ const Login = () => {
               .then((res) => {
                 tokenService.setUser(res.data.employee);
                 tokenService.setToken(res.data.token.token);
+                // createEmployee();
                 window.location.href = "/dashboard/employee-dashboard";
               })
               .catch((err) => {
