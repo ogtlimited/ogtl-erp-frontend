@@ -28,7 +28,7 @@ const JobApplicants = () => {
   // eslint-disable-next-line no-unused-vars
   const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState('schedule-interview');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -38,10 +38,54 @@ const JobApplicants = () => {
   const [totalPages, setTotalPages] = useState('');
 
   const fetchJobApplicants = useCallback(() => {
-    setLoading(true);
+    if (user?.isRepSiever) {
+      axiosInstance.get('api/jobApplicant/rep-siever/applicants', {
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
+      }).then((res) => {
+        let resData = res?.data?.data?.jobApplicants;
+        const pageData = res?.data?.data?.totalNumberofApplicants;
+        let resOptions = res?.data?.data?.pagination;
 
+        const thisPreviousPage =
+          pageData >= sizePerPage && resOptions.next.page === 2
+            ? null
+            : resOptions.previous.page;
+
+        const thisCurrentPage =
+          pageData >= sizePerPage
+            ? resOptions.next.page - 1
+            : resOptions.previous.page + 1;
+
+        const thisNextPage =
+          pageData >= sizePerPage ? resOptions.next.page : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+
+        setPrevPage(thisPreviousPage);
+        setPage(thisCurrentPage);
+        setNextPage(thisNextPage);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+        }));
+
+        // console.log("this user", user);
+        setData(formatted);
+        setunfiltered(formatted);
+        setLoading(false);
+      });
+      return;
+    } 
     axiosInstance
-      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner is you want
+      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner if you want
       .get('/api/jobApplicant', {
         params: {
           page: page,
@@ -80,28 +124,21 @@ const JobApplicants = () => {
           full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
         }));
 
-        console.log(user);
-        if (user?.isRepSiever) {
-          const userApplications = formatted.filter(
-            (apl) => apl.rep_sieving_call?._id === user._id
-          );
-          console.log('This user application', userApplications);
-          setData(userApplications);
-          setunfiltered(userApplications);
-        } else {
-          setData(formatted);
-          setunfiltered(formatted);
-        }
+        // console.log("this user", user);
+        setData(formatted);
+        setunfiltered(formatted);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
-
-    setLoading(false);
   }, [page, sizePerPage, user]);
 
   useEffect(() => {
     fetchJobApplicants();
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
   }, [fetchJobApplicants]);
 
   // const handleClick = (i) => {
