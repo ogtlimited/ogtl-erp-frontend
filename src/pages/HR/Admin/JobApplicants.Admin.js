@@ -39,7 +39,7 @@ const JobApplicants = () => {
 
   const fetchJobApplicants = useCallback(() => {
     if (user?.isRepSiever) {
-      axiosInstance.get('api/jobApplicant/rep-siever/applicants', {
+      axiosInstance.get('/api/job-sievers/job-applicants', {
         params: {
           page: page,
           limit: sizePerPage,
