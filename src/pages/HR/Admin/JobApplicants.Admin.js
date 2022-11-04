@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import LeavesTable from './JobApplicantsTable';
+import JobApplicantsTable from './JobApplicantsTable';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 import ConfirmModal from '../../../components/Modal/ConfirmModal';
@@ -39,51 +39,58 @@ const JobApplicants = () => {
 
   const fetchJobApplicants = useCallback(() => {
     if (user?.isRepSiever) {
-      axiosInstance.get('/api/job-sievers/job-applicants', {
-        params: {
-          page: page,
-          limit: sizePerPage,
-        },
-      }).then((res) => {
-        let resData = res?.data?.data?.jobApplicants;
-        const pageData = res?.data?.data?.totalNumberofApplicants;
-        let resOptions = res?.data?.data?.pagination;
+      axiosInstance
+        .get('/api/job-sievers/job-applicants', {
+          params: {
+            page: page,
+            limit: sizePerPage,
+          },
+        })
+        .then((res) => {
+          let resData = res?.data?.data?.jobApplicants;
+          const pageData = res?.data?.data?.totalNumberofApplicants;
+          let resOptions = res?.data?.data?.pagination;
 
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : resOptions.previous.page;
+          const thisPreviousPage =
+            pageData >= sizePerPage && resOptions.next.page === 2
+              ? null
+              : resOptions.previous.page;
 
-        const thisCurrentPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page - 1
-            : resOptions.previous.page + 1;
+          const thisCurrentPage =
+            pageData >= sizePerPage
+              ? resOptions.next.page - 1
+              : resOptions.previous.page + 1;
 
-        const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : null;
+          const thisNextPage =
+            pageData >= sizePerPage ? resOptions.next.page : null;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = resOptions.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
-        setPage(thisCurrentPage);
-        setNextPage(thisNextPage);
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+          setPrevPage(thisPreviousPage);
+          setPage(thisCurrentPage);
+          setNextPage(thisNextPage);
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
 
+          let formatted = resData.map((e) => ({
+            ...e,
+            full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+            interview_date: e.interview_date
+              ? new Date(e.interview_date).toUTCString()
+              : 'Not Set',
+            job_opening_id: e.job_opening_id?.job_title
+              ? e.job_opening_id?.job_title
+              : e.default_job_opening_id?.job_title,
+          }));
 
-        let formatted = resData.map((e) => ({
-          ...e,
-          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-        }));
-
-        // console.log("this user", user);
-        setData(formatted);
-        setunfiltered(formatted);
-        setLoading(false);
-      });
+          // console.log("this user", user);
+          setData(formatted);
+          setunfiltered(formatted);
+          setLoading(false);
+        });
       return;
-    } 
+    }
     axiosInstance
       // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner if you want
       .get('/api/jobApplicant', {
@@ -122,9 +129,16 @@ const JobApplicants = () => {
         let formatted = resData.map((e) => ({
           ...e,
           full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+          interview_date: e.interview_date
+            ? new Date(e.interview_date).toUTCString()
+            : 'Not Set',
+          job_opening_id: e.job_opening_id?.job_title
+            ? e.job_opening_id?.job_title
+            : e.default_job_opening_id?.job_title || "-",
         }));
 
         // console.log("this user", user);
+        // console.log('this job data', formatted);
         setData(formatted);
         setunfiltered(formatted);
         setLoading(false);
@@ -169,21 +183,25 @@ const JobApplicants = () => {
 
   //update jobOpening
   const handleUpdate = useCallback((id, update) => {
-      if (user?.isRepSiever  === false) {
-        return showAlert(true, "You are not authorized to perform this action", 'alert alert-danger');
-      }
-      axiosInstance
-        .patch('/api/jobApplicant/' + id, update)
-        .then((res) => {
-          fetchJobApplicants();
-          showAlert(true, res.data.message, 'alert alert-success');
-        })
-        .catch((error) => {
-          console.log(error);
-          showAlert(true, error.response.data.message, 'alert alert-danger');
-        });
+    if (user?.isRepSiever === false) {
+      return showAlert(
+        true,
+        'You are not authorized to perform this action',
+        'alert alert-danger'
+      );
+    }
+    axiosInstance
+      .patch('/api/jobApplicant/' + id, update)
+      .then((res) => {
+        fetchJobApplicants();
+        showAlert(true, res.data.message, 'alert alert-success');
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, 'alert alert-danger');
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[]);
+  }, []);
 
   useEffect(() => {
     if (interview_status.length) {
@@ -210,24 +228,15 @@ const JobApplicants = () => {
       dataField: 'full_name',
       text: 'Job Applicant',
       sort: true,
-      formatter: (value, row) => (
-        <h2>
-          {row?.first_name} {row?.middle_name} {row?.last_name}
-        </h2>
-      ),
+      formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
       dataField: 'job_opening_id',
       text: 'Job Opening',
       sort: true,
-      csvExport: false,
       formatter: (value, row) => (
         <>
-          {row?.job_opening_id?.job_title ? (
-            <h2>{row?.job_opening_id?.job_title}</h2>
-          ) : (
-            <h2>{row?.default_job_opening_id?.job_title}</h2>
-          )}
+          <h2>{row?.job_opening_id}</h2>
         </>
       ),
     },
@@ -235,13 +244,7 @@ const JobApplicants = () => {
       dataField: 'interview_date',
       text: 'Interview Date',
       sort: true,
-      formatter: (value, row) => (
-        <h2>
-          {row.interview_date
-            ? new Date(row.interview_date).toUTCString()
-            : 'Not Set'}
-        </h2>
-      ),
+      formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
     {
       dataField: 'interview_status',
@@ -366,7 +369,7 @@ const JobApplicants = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <LeavesTable
+          <JobApplicantsTable
             data={data}
             loading={loading}
             setLoading={setLoading}

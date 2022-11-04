@@ -19,7 +19,7 @@ import usePagination from './JobApplicantsPagination.Admin';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const LeavesTable = ({
+const JobApplicantsTable = ({
   data,
   setData,
   loading,
@@ -159,8 +159,8 @@ const LeavesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div class="filter">
-                <div class="interview_status_filter">
+              <div className="filter">
+                <div className="interview_status_filter">
                   <select
                     onChange={(e) => handleIntervieStatusFilter(e)}
                     defaultValue={intervieStatusFilter}
@@ -175,7 +175,7 @@ const LeavesTable = ({
                   </select>
                 </div>
 
-                <div class="processing_stage_filter">
+                <div className="processing_stage_filter">
                   <select
                     onChange={(e) => handleProcessingStageFilter(e)}
                     defaultValue={processingStageFilter}
@@ -215,9 +215,6 @@ const LeavesTable = ({
                 }
                 pagination={paginationFactory({
                   onSizePerPageChange: (page, sizePerPage) => {
-                    // if (user?.isRepSiever) {
-                    // setSizePerPage();
-                    // }
                     setSizePerPage(page);
                     setPage(sizePerPage);
                   },
@@ -247,4 +244,4 @@ const LeavesTable = ({
   );
 };
 
-export default LeavesTable;
+export default JobApplicantsTable;
