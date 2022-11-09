@@ -37,6 +37,10 @@ const JobApplicants = () => {
   const [nextPage, setNextPage] = useState('');
   const [totalPages, setTotalPages] = useState('');
 
+  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
+  const [processingStageFilter, setprocessingStageFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
   const fetchJobApplicants = useCallback(() => {
     if (user?.isRepSiever) {
       axiosInstance
@@ -95,6 +99,8 @@ const JobApplicants = () => {
       // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner if you want
       .get('/api/jobApplicant', {
         params: {
+          interview_status: intervieStatusFilter,
+          process_stage: processingStageFilter,
           page: page,
           limit: sizePerPage,
         },
@@ -146,7 +152,7 @@ const JobApplicants = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [page, sizePerPage, user]);
+  }, [intervieStatusFilter, page, processingStageFilter, sizePerPage, user?.isRepSiever]);
 
   useEffect(() => {
     fetchJobApplicants();
@@ -388,6 +394,13 @@ const JobApplicants = () => {
             setSizePerPage={setSizePerPage}
             setTotalPages={setTotalPages}
             fetchJobApplicants={fetchJobApplicants}
+            intervieStatusFilter={intervieStatusFilter}
+            setIntervieStatusFilter={setIntervieStatusFilter}
+            processingStageFilter={processingStageFilter}
+            setprocessingStageFilter={setprocessingStageFilter}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+
           />
         </div>
       </div>

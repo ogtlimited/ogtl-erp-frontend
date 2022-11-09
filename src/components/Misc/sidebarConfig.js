@@ -40,14 +40,19 @@ const sidebarConfig = [
         children: [
           { canView: '', title: 'Dashboard', path: PATH_DASHBOARD.main.main },
           {
-            canView: 'HR',
-            title: 'HR Dashboard',
-            path: PATH_DASHBOARD.main.hrDashboard,
-          },
-          {
             canView: 'Accounting',
             title: 'Account Dashboard',
             path: PATH_DASHBOARD.main.accountDashboard,
+          },
+          {
+            canView: 'HR',
+            title: 'Client Dashboard',
+            path: PATH_DASHBOARD.main.clientDashboard,
+          },
+          {
+            canView: 'HR',
+            title: 'HR Dashboard',
+            path: PATH_DASHBOARD.main.hrDashboard,
           },
           {
             canView: 'HR',

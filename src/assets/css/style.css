@@ -1,8 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Babylonica&display=swap');
 
 /*--------------------------
+	Client Login
+----------------------------*/
+
+.go-to-client {
+	margin-top: 20px;
+}
+
+.go-to-client > p{
+	text-align: center;
+	font-family: 'Outfit', sans-serif;
+	font-size: 18px;
+}
+
+.go-to-client-link {
+	color: #009ce7;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.go-to-client-link:hover {
+	color: #007bff;
+	transition: 0.2s;
+}
+
+/*--------------------------
 	Job applicant pagination
 ----------------------------*/
+
+.job-app-search {
+	display: flex;
+	margin-bottom: 20px;
+}
 
 .application-table-pagination {
 	position: relative;

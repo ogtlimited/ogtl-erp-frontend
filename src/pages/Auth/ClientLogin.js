@@ -9,7 +9,7 @@ import { msalInstance, silentRequest } from '../../authConfig';
 import config from '../../config.json';
 // import { useAppContext } from '../../Context/AppContext';
 
-const Login = () => {
+const ClientLogin = () => {
   // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,69 +21,72 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    setLoading(true);
-    msalInstance
-      .ssoSilent(silentRequest)
-      .then((e) => {
-        console.log(e);
+    console.log("This client login data", data);
+    window.location.href = '/dashboard/client-dashboard';
 
-        const obj = {
-          company_email: data.company_email.trim(),
-        };
+    // setLoading(true);
+    // msalInstance
+    //   .ssoSilent(silentRequest)
+    //   .then((e) => {
+    //     console.log(e);
 
-        axios
-          .post(config.ApiUrl + '/api/login', obj)
-          .then((res) => {
-            tokenService.setUser(res.data.employee);
-            tokenService.setToken(res.data.token.token);
-            window.location.href = '/dashboard/employee-dashboard';
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      })
-      .catch((e) => {
-        if (e.name === 'InteractionRequiredAuthError') {
-          msalInstance
-            .loginPopup(silentRequest)
-            .then((e) => {
-              console.log(e);
+    //     const obj = {
+    //       company_email: data.company_email.trim(),
+    //     };
 
-              const obj = {
-                company_email: data.company_email.trim(),
-              };
+    //     axios
+    //       .post(config.ApiUrl + '/api/login', obj)
+    //       .then((res) => {
+    //         tokenService.setUser(res.data.employee);
+    //         tokenService.setToken(res.data.token.token);
+    //         window.location.href = '/dashboard/client-dashboard';
+    //       })
+    //       .catch((err) => {
+    //         console.log(err);
+    //       })
+    //       .finally(() => {
+    //         setLoading(false);
+    //       });
+    //   })
+    //   .catch((e) => {
+    //     if (e.name === 'InteractionRequiredAuthError') {
+    //       msalInstance
+    //         .loginPopup(silentRequest)
+    //         .then((e) => {
+    //           console.log(e);
 
-              axios
-                .post(config.ApiUrl + '/api/login', obj)
-                .then((res) => {
-                  tokenService.setUser(res.data.employee);
-                  tokenService.setToken(res.data.token.token);
-                  // createEmployee();
-                  window.location.href = '/dashboard/employee-dashboard';
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          console.log(e);
-          setErrorMsg(
-            'Unable to login either username or password is incorrect'
-          );
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    //           const obj = {
+    //             company_email: data.company_email.trim(),
+    //           };
+
+    //           axios
+    //             .post(config.ApiUrl + '/api/login', obj)
+    //             .then((res) => {
+    //               tokenService.setUser(res.data.employee);
+    //               tokenService.setToken(res.data.token.token);
+    //               // createEmployee();
+    //               window.location.href = '/dashboard/employee-dashboard';
+    //             })
+    //             .catch((err) => {
+    //               console.log(err);
+    //             })
+    //             .finally(() => {
+    //               setLoading(false);
+    //             });
+    //         })
+    //         .catch((error) => {
+    //           console.log(error);
+    //         });
+    //     } else {
+    //       console.log(e);
+    //       setErrorMsg(
+    //         'Unable to login either username or password is incorrect'
+    //       );
+    //     }
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
   return (
     <div className="main-wrapper">
@@ -100,7 +103,7 @@ const Login = () => {
           </div>
           <div className="account-box">
             <div className="account-wrapper">
-              <h3 className="account-title">Login</h3>
+              <h3 className="account-title">Client Login</h3>
               <p className="account-subtitle">Access to our dashboard</p>
               <h6 className="text-center">
                 <small className="account-subtitle text-center error">
@@ -122,7 +125,7 @@ const Login = () => {
                       <span className="error">Email is required</span>
                     )}
                 </div>
-                {/* <div className="form-group mt-2">
+                <div className="form-group mt-2">
                   <div className="row">
                     <div className="col">
                       <label htmlFor="password">Password</label>
@@ -143,7 +146,7 @@ const Login = () => {
                   {errors.password && errors.password.type === "required" && (
                     <span className="error">Password is required</span>
                   )}
-                </div> */}
+                </div>
                 <div className="form-group text-center">
                   <button
                     className="btn btn-primary account-btn"
@@ -166,12 +169,12 @@ const Login = () => {
           </div>
           <div className="go-to-client">
             <p>
-              Not a staff of Outsource Global, login as a{' '}
+              A staff of Outsource Global, login as a{' '}
               <strong
                 className="go-to-client-link"
-                onClick={() => navigate('/auth/client-login')}
+                onClick={() => navigate('/auth/login')}
               >
-                client
+                staff
               </strong>
             </p>
           </div>
@@ -181,4 +184,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ClientLogin;

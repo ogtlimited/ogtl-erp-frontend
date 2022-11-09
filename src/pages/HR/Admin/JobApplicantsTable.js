@@ -1,6 +1,7 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
@@ -18,6 +19,25 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import usePagination from './JobApplicantsPagination.Admin';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+
+const MySearch = (props) => {
+  let input;
+  const handleClick = () => {
+    props.onSearch(input.value);
+    console.log("Search this biko", input.value)
+  };
+  return (
+    <div className='job-app-search'>
+      <input
+        className="form-control"
+        style={ { backgroundColor: '#fff', width: '33.5%', marginRight: '20px' } }
+        ref={ n => input = n }
+        type="text"
+      />
+      <button className="btn btn-primary" onClick={ handleClick }>Search</button>
+    </div>
+  );
+};
 
 const JobApplicantsTable = ({
   data,
@@ -43,6 +63,12 @@ const JobApplicantsTable = ({
   setNextPage,
   setSizePerPage,
   setTotalPages,
+  intervieStatusFilter,
+  setIntervieStatusFilter,
+  processingStageFilter,
+  setprocessingStageFilter,
+  searchTerm,
+  setSearchTerm
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -57,37 +83,161 @@ const JobApplicantsTable = ({
   const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [monthlyFilter, setMonthlyFilter] = useState('');
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
-  const [processingStageFilter, setprocessingStageFilter] = useState('');
   const [dataToFilter, setDataToFilter] = useState('');
 
   const handleIntervieStatusFilter = (e) => {
     setIntervieStatusFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.interview_status === e.target.value
-    );
-    // console.log("FilterStatus", filteredItems)
-    if (filteredItems === null) {
-      setDataToFilter(data);
-    }
-    // setDataToFilter(filteredItems)
-    setDataToFilter(filteredItems);
-    setLoading(false);
-    setprocessingStageFilter('');
-    // console.log("Processing Status",processingStageFilter)
+    setPage(1)
+
+    axiosInstance
+    .get('/api/jobApplicant', {
+      params: {
+        interview_status: e.target.value,
+        page: page,
+        limit: sizePerPage,
+      },
+    })
+    .then((res) => {
+      let resData = res?.data?.data?.jobApplicants;
+      const pageData = res?.data?.data?.totalNumberofApplicants;
+      let resOptions = res?.data?.data?.pagination;
+
+      const thisPreviousPage =
+        pageData >= sizePerPage && resOptions.next.page === 2
+          ? null
+          : resOptions.previous.page;
+
+      const thisNextPage =
+        pageData >= sizePerPage ? resOptions.next.page : null;
+
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = resOptions.numberOfPages;
+
+      setPrevPage(thisPreviousPage);
+      setNextPage(thisNextPage);
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
+
+      let formatted = resData.map((e) => ({
+        ...e,
+        full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+        interview_date: e.interview_date
+          ? new Date(e.interview_date).toUTCString()
+          : 'Not Set',
+        job_opening_id: e.job_opening_id?.job_title
+          ? e.job_opening_id?.job_title
+          : e.default_job_opening_id?.job_title,
+      }));
+
+      setData(formatted);
+      setDataToFilter(formatted)
+      setLoading(false);
+      setprocessingStageFilter('');
+    });
   };
 
   const handleProcessingStageFilter = (e) => {
     setprocessingStageFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.process_stage === e.target.value
-    );
-    // if(filteredItems.length===0) return
-    // setDataToFilter(filteredItems)
-    setDataToFilter(filteredItems);
-    setLoading(false);
-    setIntervieStatusFilter('');
+    setPage(1)
+
+    axiosInstance
+    .get('/api/jobApplicant', {
+      params: {
+        process_stage: e.target.value,
+        page: page,
+        limit: sizePerPage,
+      },
+    })
+    .then((res) => {
+      let resData = res?.data?.data?.jobApplicants;
+      const pageData = res?.data?.data?.totalNumberofApplicants;
+      let resOptions = res?.data?.data?.pagination;
+
+      const thisPreviousPage =
+        pageData >= sizePerPage && resOptions.next.page === 2
+          ? null
+          : resOptions.previous.page;
+
+      const thisNextPage =
+        pageData >= sizePerPage ? resOptions.next.page : null;
+
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = resOptions.numberOfPages;
+
+      setPrevPage(thisPreviousPage);
+      setNextPage(thisNextPage);
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
+
+      let formatted = resData.map((e) => ({
+        ...e,
+        full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+        interview_date: e.interview_date
+          ? new Date(e.interview_date).toUTCString()
+          : 'Not Set',
+        job_opening_id: e.job_opening_id?.job_title
+          ? e.job_opening_id?.job_title
+          : e.default_job_opening_id?.job_title,
+      }));
+
+      setData(formatted);
+      setDataToFilter(formatted)
+      setLoading(false);
+      setIntervieStatusFilter('');
+    });
   };
+
+  const handleSearchChange = (props) => {
+    const searchTerm = props
+    console.log(searchTerm)
+    // setSearchTerm(searchTerm)
+    // setPage(1)
+
+    // axiosInstance
+    // .get('/api/jobApplicant', {
+    //   params: {
+    //     search: searchTerm,
+    //     page: page,
+    //     limit: sizePerPage,
+    //   },
+    // })
+    // .then((res) => {
+    //   let resData = res?.data?.data?.jobApplicants;
+    //   const pageData = res?.data?.data?.totalNumberofApplicants;
+    //   let resOptions = res?.data?.data?.pagination;
+
+    //   const thisPreviousPage =
+    //     pageData >= sizePerPage && resOptions.next.page === 2
+    //       ? null
+    //       : resOptions.previous.page;
+
+    //   const thisNextPage =
+    //     pageData >= sizePerPage ? resOptions.next.page : null;
+
+    //   const thisPageLimit = sizePerPage;
+    //   const thisTotalPageSize = resOptions.numberOfPages;
+
+    //   setPrevPage(thisPreviousPage);
+    //   setNextPage(thisNextPage);
+    //   setSizePerPage(thisPageLimit);
+    //   setTotalPages(thisTotalPageSize);
+
+    //   let formatted = resData.map((e) => ({
+    //     ...e,
+    //     full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+    //     interview_date: e.interview_date
+    //       ? new Date(e.interview_date).toUTCString()
+    //       : 'Not Set',
+    //     job_opening_id: e.job_opening_id?.job_title
+    //       ? e.job_opening_id?.job_title
+    //       : e.default_job_opening_id?.job_title,
+    //   }));
+
+    //   setData(formatted);
+    //   setDataToFilter(formatted)
+    //   setLoading(false);
+    // });
+  }
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -109,9 +259,9 @@ const JobApplicantsTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-      setLoading(true);
-    }, 7000);
+    // setTimeout(() => {
+    //   setLoading(true);
+    // }, 7000);
   }, [data]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';
@@ -146,8 +296,9 @@ const JobApplicantsTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <SearchBar
+              <MySearch
                 {...props.searchProps}
+                onChange={handleSearchChange(props.searchProps.searchText)}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               />
