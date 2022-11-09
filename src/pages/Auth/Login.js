@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
-import { msalInstance, silentRequest } from '../../authConfig';
+import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
 // import { useAppContext } from '../../Context/AppContext';
 
@@ -23,7 +23,7 @@ const Login = () => {
   const onSubmit = (data) => {
     setLoading(true);
     msalInstance
-      .ssoSilent(silentRequest)
+      .loginPopup(loginRequest)
       .then((e) => {
         console.log(e);
 
@@ -48,7 +48,7 @@ const Login = () => {
       .catch((e) => {
         if (e.name === 'InteractionRequiredAuthError') {
           msalInstance
-            .loginPopup(silentRequest)
+            .loginPopup(loginRequest)
             .then((e) => {
               console.log(e);
 
