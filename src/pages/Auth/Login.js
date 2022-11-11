@@ -23,7 +23,7 @@ const Login = () => {
   const onSubmit = (data) => {
     setLoading(true);
     msalInstance
-      .loginPopup(loginRequest)
+      .ssoSilent(loginRequest)
       .then((e) => {
         console.log(e);
 

@@ -46,6 +46,9 @@ const JobApplicants = () => {
       axiosInstance
         .get('/api/job-sievers/job-applicants', {
           params: {
+            search: searchTerm,
+            interview_status: intervieStatusFilter,
+            process_stage: processingStageFilter,
             page: page,
             limit: sizePerPage,
           },
@@ -85,7 +88,8 @@ const JobApplicants = () => {
               : 'Not Set',
             job_opening_id: e.job_opening_id?.job_title
               ? e.job_opening_id?.job_title
-              : e.default_job_opening_id?.job_title,
+              : e.default_job_opening_id?.job_title || '-',
+            application_date: new Date(e.createdAt).toUTCString(),
           }));
 
           // console.log("this user", user);
@@ -95,10 +99,11 @@ const JobApplicants = () => {
         });
       return;
     }
+    
     axiosInstance
-      // .get(`/api/jobApplicant?page=${page}&limit=${sizePerPage}`) //<-- Or use a one liner if you want
       .get('/api/jobApplicant', {
         params: {
+          search: searchTerm,
           interview_status: intervieStatusFilter,
           process_stage: processingStageFilter,
           page: page,
@@ -113,6 +118,8 @@ const JobApplicants = () => {
         const thisPreviousPage =
           pageData >= sizePerPage && resOptions.next.page === 2
             ? null
+            : pageData <= sizePerPage && !resOptions.previous.page
+            ? null
             : resOptions.previous.page;
 
         const thisCurrentPage =
@@ -121,7 +128,11 @@ const JobApplicants = () => {
             : resOptions.previous.page + 1;
 
         const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : null;
+          pageData >= sizePerPage
+            ? resOptions.next.page
+            : pageData <= sizePerPage && !resOptions.next.page
+            ? null
+            : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
@@ -140,7 +151,8 @@ const JobApplicants = () => {
             : 'Not Set',
           job_opening_id: e.job_opening_id?.job_title
             ? e.job_opening_id?.job_title
-            : e.default_job_opening_id?.job_title || "-",
+            : e.default_job_opening_id?.job_title || '-',
+          application_date: new Date(e.createdAt).toUTCString(),
         }));
 
         // console.log("this user", user);
@@ -152,13 +164,20 @@ const JobApplicants = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [intervieStatusFilter, page, processingStageFilter, sizePerPage, user?.isRepSiever]);
+  }, [
+    intervieStatusFilter,
+    page,
+    processingStageFilter,
+    searchTerm,
+    sizePerPage,
+    user?.isRepSiever,
+  ]);
 
   useEffect(() => {
     fetchJobApplicants();
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 60000);
   }, [fetchJobApplicants]);
 
   // const handleClick = (i) => {
@@ -245,6 +264,12 @@ const JobApplicants = () => {
           <h2>{row?.job_opening_id}</h2>
         </>
       ),
+    },
+    {
+      dataField: 'application_date',
+      text: 'Application Date',
+      sort: true,
+      formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
       dataField: 'interview_date',
@@ -400,7 +425,6 @@ const JobApplicants = () => {
             setprocessingStageFilter={setprocessingStageFilter}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-
           />
         </div>
       </div>
