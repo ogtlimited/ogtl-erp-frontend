@@ -1,21 +1,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Babylonica&display=swap');
 
 /*--------------------------
+	Client Login
+----------------------------*/
+
+.go-to-client {
+	margin-top: 20px;
+}
+
+.go-to-client > p{
+	text-align: center;
+	font-family: 'Outfit', sans-serif;
+	font-size: 18px;
+}
+
+.go-to-client-link {
+	color: #009ce7;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.go-to-client-link:hover {
+	color: #007bff;
+	transition: 0.2s;
+}
+
+/*--------------------------
 	Job applicant pagination
 ----------------------------*/
 
-.application-table-pagination {
-	position: relative;
-  padding: 5px;
-	margin-top: -5.5%;
-	z-index: 900 !important;
-	width: 75%;
-	margin-left: 16%;
-	background-color: #f8f9fa !important;
+.job-app-search {
+	display: flex;
+	margin-bottom: 20px;
 }
 
-.job-applicant-pagination {
-	background-color: #f8f9fa !important;
+.application-table-pagination {
+	position: relative;
+	display: flex;
+  padding: 5px;
+	width: 100%;
+}
+.application-table-pagination-stack {
+	margin: auto !important;
+}
+
+.application-table-sizePerPage {
+	background-color: #00c5fb;
+	width: 80px;
+	border: none;
+	height: 40px;
+	border-radius: 5px;
+	color: #fff;
+	padding: 0 5px;
+}
+.application-table-sizePerPage:focus {
+	outline: none;
+}
+
+.application-table-sizePerPage > option {
+	background-color: #fff;
+	border: none;
+	height: 50px;
+	border-radius: 5px;
+	color: #000;
+	padding: 0 5px;
 }
 
 .css-wjh20t-MuiPagination-ul {
@@ -27,18 +75,13 @@
 }
 .Mui-selected {
   background-color: #00c5fb !important;
-  color: #fff !important;
+  color: #f8f9fa !important;
 }
 
 @media only screen and (max-width: 765px) {
 	.application-table-pagination {
-		position: absolute;
 		padding: 5px;
-		margin-top: -5.5%;
-		z-index: 1000 !important;
-		width: 80%;
-		margin-left: 10%;
-		background-color: #fff !important;
+		width: 100% !important;
 	}
 }
 

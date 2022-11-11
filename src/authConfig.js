@@ -17,6 +17,7 @@ export const msalConfig = {
     auth: {
         clientId: "1657a1b8-dc54-4586-814b-3f5235ba2dad",
         authority: "https://login.microsoftonline.com/515060b6-5478-49e6-a65b-8de5f555e50c",
+        knownAuthorities: [],
         redirectUri: config.BaseUrl + '/auth/login'
     },
     cache: {
@@ -56,7 +57,7 @@ export const msalInstance = new msal.PublicClientApplication(msalConfig);
  * For more information about OIDC scopes, visit: 
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
-export const silentRequest = {
+export const loginRequest = {
     scopes: ["User.Read", "profile"],
 };
 

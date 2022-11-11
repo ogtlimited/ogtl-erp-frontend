@@ -8,6 +8,7 @@ const ROOTS_DASHBOARD = "/dashboard";
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, "/login"),
+  clientLogin: path(ROOTS_AUTH, "/client-login"),
 };
 
 export const PATH_DASHBOARD = {
@@ -17,6 +18,7 @@ export const PATH_DASHBOARD = {
     main: path(ROOTS_DASHBOARD, "/main"),
     hrDashboard: path(ROOTS_DASHBOARD, "/hr-dashboard"),
     accountDashboard: path(ROOTS_DASHBOARD, "/account-dashboard"),
+    clientDashboard: path(ROOTS_DASHBOARD, "/client-dashboard"),
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
   },

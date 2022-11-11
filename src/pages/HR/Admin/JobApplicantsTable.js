@@ -1,13 +1,11 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
-import { useAppContext } from '../../../Context/AppContext';
+import axiosInstance from '../../../services/api';
+// import { useAppContext } from '../../../Context/AppContext';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, {
-  Search,
-  CSVExport,
-} from 'react-bootstrap-table2-toolkit';
-import Select from 'react-select';
+import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
+// import Select from 'react-select';
 import filterFactory, {
   textFilter,
   selectFilter,
@@ -19,7 +17,7 @@ import usePagination from './JobApplicantsPagination.Admin';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const LeavesTable = ({
+const JobApplicantsTable = ({
   data,
   setData,
   loading,
@@ -43,50 +41,222 @@ const LeavesTable = ({
   setNextPage,
   setSizePerPage,
   setTotalPages,
+  intervieStatusFilter,
+  setIntervieStatusFilter,
+  processingStageFilter,
+  setprocessingStageFilter,
+  searchTerm,
+  setSearchTerm,
 }) => {
-  const { SearchBar, ClearSearchButton } = Search;
-  const { ExportCSVButton } = CSVExport;
-  const selectRow = {
-    mode: 'checkbox',
-    clickToSelect: clickToSelect,
-    selected: selected,
-    onSelect: handleOnSelect,
-    onSelectAll: handleOnSelectAll,
-  };
+  // const { SearchBar, ClearSearchButton } = Search;
 
-  const { user } = useAppContext();
+  // const selectRow = {
+  //   mode: 'checkbox',
+  //   clickToSelect: clickToSelect,
+  //   selected: selected,
+  //   onSelect: handleOnSelect,
+  //   onSelectAll: handleOnSelectAll,
+  // };
+
+  // const { user } = useAppContext();
+  // const [monthlyFilter, setMonthlyFilter] = useState('');
+
+  const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
-  const [monthlyFilter, setMonthlyFilter] = useState('');
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
-  const [processingStageFilter, setprocessingStageFilter] = useState('');
   const [dataToFilter, setDataToFilter] = useState('');
+  const [info, setInfo] = useState({
+    sizePerPage: 10,
+  });
 
   const handleIntervieStatusFilter = (e) => {
     setIntervieStatusFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.interview_status === e.target.value
-    );
-    // console.log("FilterStatus", filteredItems)
-    if (filteredItems === null) {
-      setDataToFilter(data);
-    }
-    // setDataToFilter(filteredItems)
-    setDataToFilter(filteredItems);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+      .get('/api/jobApplicant', {
+        params: {
+          interview_status: e.target.value,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.jobApplicants;
+        const pageData = res?.data?.data?.totalNumberofApplicants;
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPreviousPage =
+          pageData >= sizePerPage && resOptions.next.page === 2
+            ? null
+            : resOptions.previous.page;
+
+        const thisNextPage =
+          pageData >= sizePerPage ? resOptions.next.page : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+
+        setPrevPage(thisPreviousPage);
+        setNextPage(thisNextPage);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+          interview_date: e.interview_date
+            ? new Date(e.interview_date).toUTCString()
+            : 'Not Set',
+          job_opening_id: e.job_opening_id?.job_title
+            ? e.job_opening_id?.job_title
+            : e.default_job_opening_id?.job_title || '-',
+          application_date: new Date(e.createdAt).toUTCString(),
+        }));
+
+        setData(formatted);
+        setDataToFilter(formatted);
+        setprocessingStageFilter('');
+      });
     setLoading(false);
-    setprocessingStageFilter('');
-    // console.log("Processing Status",processingStageFilter)
   };
 
   const handleProcessingStageFilter = (e) => {
     setprocessingStageFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.process_stage === e.target.value
-    );
-    // if(filteredItems.length===0) return
-    // setDataToFilter(filteredItems)
-    setDataToFilter(filteredItems);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+      .get('/api/jobApplicant', {
+        params: {
+          process_stage: e.target.value,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.jobApplicants;
+        const pageData = res?.data?.data?.totalNumberofApplicants;
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPreviousPage =
+          pageData >= sizePerPage && resOptions.next.page === 2
+            ? null
+            : resOptions.previous.page;
+
+        const thisNextPage =
+          pageData >= sizePerPage ? resOptions.next.page : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+
+        setPrevPage(thisPreviousPage);
+        setNextPage(thisNextPage);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+          interview_date: e.interview_date
+            ? new Date(e.interview_date).toUTCString()
+            : 'Not Set',
+          job_opening_id: e.job_opening_id?.job_title
+            ? e.job_opening_id?.job_title
+            : e.default_job_opening_id?.job_title || '-',
+          application_date: new Date(e.createdAt).toUTCString(),
+        }));
+
+        setData(formatted);
+        setDataToFilter(formatted);
+        setIntervieStatusFilter('');
+      });
     setLoading(false);
-    setIntervieStatusFilter('');
+  };
+
+  const MySearch = (props) => {
+    let input;
+    const handleClick = () => {
+      setPage(1);
+      setLoading(true);
+      props.onSearch(input.value);
+      const searchTerm = input.value;
+      setSearchTerm(searchTerm);
+
+      if (page === 1) {
+        axiosInstance
+          .get('/api/jobApplicant', {
+            params: {
+              search: searchTerm,
+              page: page,
+              limit: sizePerPage,
+            },
+          })
+          .then((res) => {
+            let resData = res?.data?.data?.jobApplicants;
+            const pageData = res?.data?.data?.totalNumberofApplicants;
+            let resOptions = res?.data?.data?.pagination;
+
+            const thisPreviousPage =
+              pageData >= sizePerPage && resOptions.next.page === 2
+                ? null
+                : pageData < 10
+                ? null
+                : resOptions.previous.page;
+
+            const thisNextPage =
+              pageData >= sizePerPage
+                ? resOptions.next.page
+                : pageData <= sizePerPage && resOptions === undefined
+                ? null
+                : null;
+
+            const thisPageLimit = sizePerPage;
+            const thisTotalPageSize = resOptions.numberOfPages;
+
+            setPrevPage(thisPreviousPage);
+            setNextPage(thisNextPage);
+            setSizePerPage(thisPageLimit);
+            setTotalPages(thisTotalPageSize);
+
+            let formatted = resData.map((e) => ({
+              ...e,
+              full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
+              interview_date: e.interview_date
+                ? new Date(e.interview_date).toUTCString()
+                : 'Not Set',
+              job_opening_id: e.job_opening_id?.job_title
+                ? e.job_opening_id?.job_title
+                : e.default_job_opening_id?.job_title || '-',
+              application_date: new Date(e.createdAt).toUTCString(),
+            }));
+
+            setData(formatted);
+            setDataToFilter(formatted);
+            setIntervieStatusFilter('');
+            setprocessingStageFilter('');
+          });
+      }
+      setLoading(false);
+    };
+
+    return (
+      <div className="job-app-search">
+        <input
+          className="form-control"
+          style={{
+            backgroundColor: '#fff',
+            width: '33.5%',
+            marginRight: '20px',
+          }}
+          ref={(n) => (input = n)}
+          type="text"
+        />
+        <button className="btn btn-primary" onClick={handleClick}>
+          Search
+        </button>
+      </div>
+    );
   };
 
   const resizeTable = () => {
@@ -105,15 +275,17 @@ const LeavesTable = ({
     window.addEventListener('resize', () => {
       resizeTable();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
     setDataToFilter(data);
     setTimeout(() => {
       setLoading(true);
-    }, 7000);
-  }, [data]);
+    }, 5000);
+  }, [data, setLoading]);
 
+  // eslint-disable-next-line no-unused-vars
   const imageUrl = 'https://erp.outsourceglobal.com';
 
   console.log(
@@ -134,6 +306,15 @@ const LeavesTable = ({
     _DATA.jump(p);
   };
 
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
+
+    setSizePerPage(e.target.value);
+    setPage(1);
+  };
+
   return (
     <>
       {dataToFilter && (
@@ -146,7 +327,7 @@ const LeavesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <SearchBar
+              <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
@@ -159,8 +340,8 @@ const LeavesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div class="filter">
-                <div class="interview_status_filter">
+              <div className="filter">
+                <div className="interview_status_filter">
                   <select
                     onChange={(e) => handleIntervieStatusFilter(e)}
                     defaultValue={intervieStatusFilter}
@@ -175,7 +356,7 @@ const LeavesTable = ({
                   </select>
                 </div>
 
-                <div class="processing_stage_filter">
+                <div className="processing_stage_filter">
                   <select
                     onChange={(e) => handleProcessingStageFilter(e)}
                     defaultValue={processingStageFilter}
@@ -213,18 +394,21 @@ const LeavesTable = ({
                     'No Data Found'
                   )
                 }
-                pagination={paginationFactory({
-                  onSizePerPageChange: (page, sizePerPage) => {
-                    // if (user?.isRepSiever) {
-                    // setSizePerPage();
-                    // }
-                    setSizePerPage(page);
-                    setPage(sizePerPage);
-                  },
-                })}
               />
+
+              <select
+                className="application-table-sizePerPage"
+                name="sizePerPage"
+                value={info.sizePerPage}
+                onChange={handleChangeSizePerPage}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+              </select>
               <div className="application-table-pagination">
-                <Stack spacing={2}>
+                <Stack className="application-table-pagination-stack">
                   <Pagination
                     className="job-applicant-pagination"
                     count={count}
@@ -247,4 +431,4 @@ const LeavesTable = ({
   );
 };
 
-export default LeavesTable;
+export default JobApplicantsTable;

@@ -10,6 +10,7 @@ import GuestGuard from '../guards/GuestGuard';
 import AdminLayout from '../layouts/Admin';
 import RecruitmentLayout from '../layouts/RecruitmentLayout';
 import Login from '../pages/Auth/Login';
+import ClientLogin from '../pages/Auth/ClientLogin';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
@@ -40,6 +41,20 @@ export default function Router() {
           element: (
             <GuestGuard>
               <Login />
+            </GuestGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: 'auth',
+      children: [
+        { path: '', element: <Navigate to="/auth/client-login" replace /> },
+        {
+          path: 'client-login',
+          element: (
+            <GuestGuard>
+              <ClientLogin />
             </GuestGuard>
           ),
         },
@@ -93,6 +108,15 @@ export default function Router() {
                   <AdminDashboard />{' '}
                 </GuardedRoute>
               ),
+            },
+            {
+              path: 'client-dashboard',
+              // element: (
+              //   <GuardedRoute title="" dept="Super">
+              //     <ClientUser />{' '}
+              //   </GuardedRoute>
+              // ),
+              element: <ClientUser />
             },
             {
               path: 'hr-dashboard',
@@ -836,6 +860,9 @@ const ShiftAdmin = Loadable(
 const Profile = Loadable(lazy(() => import('../pages/HR/Profile')));
 const EmployeeAttendance = Loadable(
   lazy(() => import('../pages/HR/Users/Attendance.Users'))
+);
+const ClientUser = Loadable(
+  lazy(() => import('../pages/HR/Users/Client.User'))
 );
 const EmployeeUser = Loadable(
   lazy(() => import('../pages/HR/Users/Employee.User'))
