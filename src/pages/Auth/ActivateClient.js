@@ -1,11 +1,11 @@
 /** @format */
-
+import axios from "axios";
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Link, useLocation, useNavigate} from 'react-router-dom';
-import axiosInstance from '../../services/api';
+import config from '../../config.json';
 
 const ActivateClient = () => {
   const navigate = useNavigate();
@@ -36,9 +36,14 @@ const ActivateClient = () => {
           activated: true,
         };
 
+    console.log({
+      payload: obj,
+      id: clientId,
+    })
+
     try {
-      const res = await axiosInstance.patch(`api/client_account/${clientId}`, obj);
-      const resData = res;
+      const res = await axios.patch(config.ApiUrl + `/api/client_account/${clientId}`, obj);
+      const resData = res.data.data;
       console.log('activated account', resData);
 
       navigate('/auth/client-login');

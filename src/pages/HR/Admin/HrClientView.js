@@ -6,16 +6,20 @@ import HrClientViewProjectTable from './HrClientViewProjectTable';
 import axiosInstance from '../../../services/api';
 import { CreateAccountModal } from '../../../components/Modal/CreateAccountModal';
 import ViewModal from '../../../components/Modal/ViewModal';
+import ConfirmStatusModal from '../../../components/Modal/ConfirmStatusModal';
 import ClientProjectContent from '../../../components/ModalContents/ClientProjectContent';
 
 const HrClientView = () => {
   const { id } = useParams();
+  const [clientId, setClientId] = useState('');
+  const [statusModal, setStatusModal] = useState(false);
   const [client, setClient] = useState([]);
   const [clientAccount, setClientAccount] = useState([]);
   const [projects, setProjects] = useState([]);
   const [projectData, setProjectData] = useState([]);
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
+
   const fetchClientAccount = async () => {
     try {
       const res = await axiosInstance.get(`api/client_account/${id}`);
@@ -59,6 +63,24 @@ const HrClientView = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleStatusModal = (clientAccount) => {
+    if (clientAccount.activated) {
+      setClientId(clientAccount._id);
+      setStatusModal(true);
+      return;
+    }
+    // if (!clientAccount.activated) {
+    //   axiosInstance.post(`/api/client_status/${id}`).then((res) => {
+    //     let resData = res.data
+    //     console.log("this activate response", resData)
+    //   }).catch((error) => {
+    //     console.log(error)
+    //   })
+    //   fetchClient()
+    //   return;
+    // }
   };
 
   useEffect(() => {
@@ -143,7 +165,15 @@ const HrClientView = () => {
   ];
 
   return (
-    <>
+    <> 
+    {statusModal && (  
+      <ConfirmStatusModal
+        closeModal={setStatusModal}
+        id={clientId}
+        fetchClient={fetchClient}
+        fetchClientAccount={fetchClientAccount}
+      />
+    )}
       <CreateAccountModal
         data={client}
         onClick={fetchClient}
@@ -168,7 +198,8 @@ const HrClientView = () => {
           </div>
 
           {clientAccount.activated === true ? (
-            <div className="col-auto float-right ml-auto">
+            <div className="col-auto float-right ml-auto" 
+            onClick={() => handleStatusModal(clientAccount)}>
               <a href="#" className="btn add-btn m-r-5">
                 Deactivate
               </a>

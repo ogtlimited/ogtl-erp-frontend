@@ -3,15 +3,16 @@
 import { RiCloseCircleFill } from 'react-icons/ri';
 import axiosInstance from '../../services/api';
 
-function ConfirmStatusModal({ closeModal, id, fetchClients}) {
+function ConfirmStatusModal({ closeModal, id, fetchClient, fetchClientAccount}) {
   const handleClientStatusChange = async (id) => {
     try {
       const res = await axiosInstance.post(`/api/client_status/${id}`);
-      console.log('the result of deactivating', res);
+      console.log('this deactivated account', res.data.data);
     } catch (error) {
       console.log(error);
     }
-    fetchClients();
+    fetchClient();
+    fetchClientAccount();
     closeModal(false);
   };
 
@@ -27,16 +28,16 @@ function ConfirmStatusModal({ closeModal, id, fetchClients}) {
             <p>Are you sure you want to deactivate this account?</p>
             <div className="deactivate-modal-btns">
               <button
-                className="deactivate-modal-yes btn-primary"
-                onClick={() => handleClientStatusChange(id)}
-              >
-                Yes
-              </button>
-              <button
                 className="deactivate-modal-cancel btn-secondary"
                 onClick={() => closeModal(false)}
               >
                 Cancel
+              </button>
+              <button
+                className="deactivate-modal-yes btn-success"
+                onClick={() => handleClientStatusChange(id)}
+              >
+                Yes
               </button>
             </div>
           </div>

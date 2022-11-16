@@ -128,7 +128,7 @@
   height: 50%;
   background-color: #fff;
   border-radius: 10px;
-  border: 1px solid #00000080;
+  border: 2px solid #00000080;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -151,9 +151,11 @@
 }
 
 .deactivate-modal-items > p{
-	color: #000;
+	color: #ff0000;
 	text-align: center;
-	padding: 10% 0 5% 0;
+	padding: 15% 0 5% 0;
+	font-family: 'poppins', sans-serif;
+	font-size: 18px;
 	font-weight: 600;
 }
 

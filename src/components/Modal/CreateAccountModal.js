@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CREATE_ACCOUNT } from '../FormJSON/CreateAccount';
 // import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
