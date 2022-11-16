@@ -9,7 +9,7 @@ export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, "/login"),
   clientLogin: path(ROOTS_AUTH, "/client-login"),
-  activateClient: path(ROOTS_AUTH, "/activate?id"),
+  activateClient: path(ROOTS_AUTH, "/activate"),
 };
 
 export const PATH_DASHBOARD = {

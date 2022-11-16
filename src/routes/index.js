@@ -64,7 +64,7 @@ export default function Router() {
     {
       path: 'auth',
       children: [
-        { path: '', element: <Navigate to="/auth/activate?id" replace /> },
+        { path: '', element: <Navigate to="/auth/activate" replace /> },
         {
           path: 'activate',
           element: (

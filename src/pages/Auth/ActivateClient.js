@@ -4,12 +4,13 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate} from 'react-router-dom';
 import axiosInstance from '../../services/api';
-import config from '../../config.json';
 
 const ActivateClient = () => {
-  const {id} = useParams();
+  const navigate = useNavigate();
+  const id = new URLSearchParams(useLocation().search);
+  const clientId = id.get("id");
   const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -31,23 +32,19 @@ const ActivateClient = () => {
     setLoading(true);
 
         const obj = {
-          email: data.email,
           password: data.password,
           activated: true,
         };
 
-    console.log('This activate account data', obj, "this account id", id);
-    window.location.href = '/auth/client-login';
+    try {
+      const res = await axiosInstance.patch(`api/client_account/${clientId}`, obj);
+      const resData = res;
+      console.log('activated account', resData);
 
-    // try {
-    //   const res = await axiosInstance.post('api/client_account', obj);
-    //   const resData = res.data.data;
-    //   console.log('activated account', resData);
-
-    // //         window.location.href = '/auth/client-login';
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      navigate('/auth/client-login');
+    } catch (error) {
+      console.log(error);
+    }
     setLoading(false);
    
   };
