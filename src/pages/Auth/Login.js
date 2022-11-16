@@ -40,6 +40,7 @@ const Login = () => {
           })
           .catch((err) => {
             console.log(err);
+            setErrorMsg(err.message + ", please try again");
           })
           .finally(() => {
             setLoading(false);
