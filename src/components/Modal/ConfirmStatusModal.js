@@ -9,8 +9,9 @@ function ConfirmStatusModal({ closeModal, id, fetchClient, fetchClientAccount}) 
   const { showAlert } = useAppContext();
   const handleClientStatusChange = async (id) => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const res = await axiosInstance.post(`/api/client_status/${id}`);
-      console.log('this deactivated account', res.data.data);
+      // console.log('this deactivated account', res.data.data);
       showAlert(true, "Account Deactivated", 'alert alert-success');
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
- /* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,9 +8,11 @@ import { CreateAccountModal } from '../../../components/Modal/CreateAccountModal
 import ViewModal from '../../../components/Modal/ViewModal';
 import ConfirmStatusModal from '../../../components/Modal/ConfirmStatusModal';
 import ClientProjectContent from '../../../components/ModalContents/ClientProjectContent';
+import { useAppContext } from '../../../Context/AppContext';
 
 const HrClientView = () => {
   const { id } = useParams();
+  const { showAlert } = useAppContext();
   const [clientId, setClientId] = useState('');
   const [statusModal, setStatusModal] = useState(false);
   const [client, setClient] = useState([]);
@@ -73,17 +75,19 @@ const HrClientView = () => {
       setClientId(clientAccount._id);
       setStatusModal(true);
       return;
+    } else if (!clientAccount.activated && !clientAccount.spammy) {
+      axiosInstance.post(`/api/client_status/${clientAccount._id}`).then((res) => {
+        // eslint-disable-next-line no-unused-vars
+        let resData = res.data
+        // console.log("this activate response", resData)
+        showAlert(true, "Account Activated", 'alert alert-success');
+        fetchClient()
+        fetchClientAccount();
+      }).catch((error) => {
+        console.log(error)
+      })
+      return;
     }
-    // if (!clientAccount.activated) {
-    //   axiosInstance.post(`/api/client_status/${id}`).then((res) => {
-    //     let resData = res.data
-    //     console.log("this activate response", resData)
-    //   }).catch((error) => {
-    //     console.log(error)
-    //   })
-    //   fetchClient()
-    //   return;
-    // }
   };
 
   useEffect(() => {
@@ -200,7 +204,8 @@ const HrClientView = () => {
             </a>
           </div>
 
-          {clientAccount.activated === true ? (
+          {clientAccount.activated === true &&
+          clientAccount.spammy === false ? (
             <div
               className="col-auto float-right ml-auto"
               onClick={() => handleStatusModal(clientAccount)}
@@ -209,16 +214,27 @@ const HrClientView = () => {
                 Deactivate
               </a>
             </div>
-          ) : clientAccount.activated === false ? (
+          ) : clientAccount.activated === false &&
+            clientAccount.spammy === true ? (
             <div className="col-auto float-right ml-auto">
               <a href="#" className="btn add-btn m-r-5">
                 Activation Pending
               </a>
             </div>
+          ) : clientAccount.activated === false &&
+            clientAccount.spammy === false ? (
+            <div className="col-auto float-right ml-auto" 
+              onClick={() => handleStatusModal(clientAccount)}>
+              <a href="#" className="btn add-btn m-r-5">
+                Activate
+              </a>
+            </div>
           ) : loadingStatus ? (
             <button className="btn add-btn loading-btn">
-            <div className="spinner-border loading-spinner" role="status">
-            </div>
+              <div
+                className="spinner-border loading-spinner"
+                role="status"
+              ></div>
             </button>
           ) : (
             <div className="col-auto float-right ml-auto">

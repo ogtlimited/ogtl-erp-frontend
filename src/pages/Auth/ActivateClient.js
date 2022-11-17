@@ -34,6 +34,7 @@ const ActivateClient = () => {
         const obj = {
           password: data.password,
           activated: true,
+          spammy: false,
         };
 
     console.log({
