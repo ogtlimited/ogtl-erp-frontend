@@ -2,12 +2,16 @@
 
 import { RiCloseCircleFill } from 'react-icons/ri';
 import axiosInstance from '../../services/api';
+// import $ from 'jquery';
+import { useAppContext } from '../../Context/AppContext';
 
 function ConfirmStatusModal({ closeModal, id, fetchClient, fetchClientAccount}) {
+  const { showAlert } = useAppContext();
   const handleClientStatusChange = async (id) => {
     try {
       const res = await axiosInstance.post(`/api/client_status/${id}`);
       console.log('this deactivated account', res.data.data);
+      showAlert(true, "Account Deactivated", 'alert alert-success');
     } catch (error) {
       console.log(error);
     }
