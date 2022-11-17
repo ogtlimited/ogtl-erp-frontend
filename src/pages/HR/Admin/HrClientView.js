@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+ /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -19,8 +19,10 @@ const HrClientView = () => {
   const [projectData, setProjectData] = useState([]);
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
 
   const fetchClientAccount = async () => {
+    setLoadingStatus(true);
     try {
       const res = await axiosInstance.get(`api/client_account/${id}`);
       console.log('client account', res.data.data);
@@ -28,6 +30,7 @@ const HrClientView = () => {
     } catch (error) {
       console.log('404?', error.message);
     }
+    setLoadingStatus(false);
   };
 
   const fetchClient = () => {
@@ -165,15 +168,15 @@ const HrClientView = () => {
   ];
 
   return (
-    <> 
-    {statusModal && (  
-      <ConfirmStatusModal
-        closeModal={setStatusModal}
-        id={clientId}
-        fetchClient={fetchClient}
-        fetchClientAccount={fetchClientAccount}
-      />
-    )}
+    <>
+      {statusModal && (
+        <ConfirmStatusModal
+          closeModal={setStatusModal}
+          id={clientId}
+          fetchClient={fetchClient}
+          fetchClientAccount={fetchClientAccount}
+        />
+      )}
       <CreateAccountModal
         data={client}
         onClick={fetchClient}
@@ -198,8 +201,10 @@ const HrClientView = () => {
           </div>
 
           {clientAccount.activated === true ? (
-            <div className="col-auto float-right ml-auto" 
-            onClick={() => handleStatusModal(clientAccount)}>
+            <div
+              className="col-auto float-right ml-auto"
+              onClick={() => handleStatusModal(clientAccount)}
+            >
               <a href="#" className="btn add-btn m-r-5">
                 Deactivate
               </a>
@@ -210,6 +215,11 @@ const HrClientView = () => {
                 Activation Pending
               </a>
             </div>
+          ) : loadingStatus ? (
+            <button className="btn add-btn loading-btn">
+            <div className="spinner-border loading-spinner" role="status">
+            </div>
+            </button>
           ) : (
             <div className="col-auto float-right ml-auto">
               <a

@@ -38,7 +38,7 @@ function ConfirmStatusModal({ closeModal, id, fetchClient, fetchClientAccount}) 
                 Cancel
               </button>
               <button
-                className="deactivate-modal-yes btn-success"
+                className="deactivate-modal-yes btn-primary"
                 onClick={() => handleClientStatusChange(id)}
               >
                 Yes

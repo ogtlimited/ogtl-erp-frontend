@@ -72,7 +72,7 @@ export const CreateAccountModal = ({ data, onClick, setClientAccount }) => {
                   <input
                     type="text"
                     name="user_name"
-                    value={(client.user_name = data.client_name)}
+                    value={client.user_name}
                     onChange={handleFormChange}
                     className="form-control"
                   />

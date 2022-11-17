@@ -151,7 +151,7 @@
 }
 
 .deactivate-modal-items > p{
-	color: #ff0000;
+	color: #000;
 	text-align: center;
 	padding: 15% 0 5% 0;
 	font-family: 'poppins', sans-serif;
@@ -173,6 +173,14 @@
 	border-radius: 5px;
 	font-weight: 600;
 	font-family: 'Outfit', sans-serif;
+}
+
+.loading-spinner {
+	margin-top: -5px !important;
+}
+
+.loading-btn {
+	height: 38px !important;
 }
 
 /* ---- */
