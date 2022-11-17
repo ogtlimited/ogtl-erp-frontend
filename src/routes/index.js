@@ -11,6 +11,7 @@ import AdminLayout from '../layouts/Admin';
 import RecruitmentLayout from '../layouts/RecruitmentLayout';
 import Login from '../pages/Auth/Login';
 import ClientLogin from '../pages/Auth/ClientLogin';
+import ActivateClient from '../pages/Auth/ActivateClient';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
@@ -55,6 +56,20 @@ export default function Router() {
           element: (
             <GuestGuard>
               <ClientLogin />
+            </GuestGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: 'auth',
+      children: [
+        { path: '', element: <Navigate to="/auth/activate" replace /> },
+        {
+          path: 'activate',
+          element: (
+            <GuestGuard>
+              <ActivateClient />
             </GuestGuard>
           ),
         },
@@ -765,6 +780,22 @@ export default function Router() {
           ),
         },
         {
+          path: 'hr-clients',
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <HrClients />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: 'hr-client/:id',
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <HrClientView />
+            </GuardedRoute>
+          ),
+        },
+        {
           path: 'coaching',
           element: (
             <GuardedRoute title="" dept="HR">
@@ -853,6 +884,8 @@ const AllEmployeesAdmin = Loadable(
 const LeavesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Leaves.Admin'))
 );
+const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
+const HrClientView = Loadable(lazy(() => import('../pages/HR/Admin/HrClientView')));
 const Promotion = Loadable(lazy(() => import('../pages/HR/Admin/Promotion')));
 const ShiftAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Shift.Admin'))

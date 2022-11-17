@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
-import { msalInstance, silentRequest } from '../../authConfig';
+import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
 // import { useAppContext } from '../../Context/AppContext';
 
@@ -22,71 +22,73 @@ const ClientLogin = () => {
 
   const onSubmit = (data) => {
     console.log("This client login data", data);
-    window.location.href = '/dashboard/client-dashboard';
+    // window.location.href = '/dashboard/client-dashboard';
 
-    // setLoading(true);
-    // msalInstance
-    //   .ssoSilent(silentRequest)
-    //   .then((e) => {
-    //     console.log(e);
+    setLoading(true);
+    msalInstance
+      .ssoSilent(loginRequest)
+      .then((e) => {
+        console.log(e);
 
-    //     const obj = {
-    //       company_email: data.company_email.trim(),
-    //     };
+        const obj = {
+          company_email: data.company_email,
+        };
 
-    //     axios
-    //       .post(config.ApiUrl + '/api/login', obj)
-    //       .then((res) => {
-    //         tokenService.setUser(res.data.employee);
-    //         tokenService.setToken(res.data.token.token);
-    //         window.location.href = '/dashboard/client-dashboard';
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       })
-    //       .finally(() => {
-    //         setLoading(false);
-    //       });
-    //   })
-    //   .catch((e) => {
-    //     if (e.name === 'InteractionRequiredAuthError') {
-    //       msalInstance
-    //         .loginPopup(silentRequest)
-    //         .then((e) => {
-    //           console.log(e);
+        
+        console.log("this login obj", obj);
 
-    //           const obj = {
-    //             company_email: data.company_email.trim(),
-    //           };
+        axios
+          .post(config.ApiUrl + '/api/login', obj)
+          .then((res) => {
+            tokenService.setUser(res.data.employee);
+            tokenService.setToken(res.data.token.token);
+            window.location.href = '/dashboard/client-dashboard';
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      })
+      .catch((e) => {
+        if (e.name === 'InteractionRequiredAuthError') {
+          msalInstance
+            .loginPopup(loginRequest)
+            .then((e) => {
+              console.log(e);
 
-    //           axios
-    //             .post(config.ApiUrl + '/api/login', obj)
-    //             .then((res) => {
-    //               tokenService.setUser(res.data.employee);
-    //               tokenService.setToken(res.data.token.token);
-    //               // createEmployee();
-    //               window.location.href = '/dashboard/employee-dashboard';
-    //             })
-    //             .catch((err) => {
-    //               console.log(err);
-    //             })
-    //             .finally(() => {
-    //               setLoading(false);
-    //             });
-    //         })
-    //         .catch((error) => {
-    //           console.log(error);
-    //         });
-    //     } else {
-    //       console.log(e);
-    //       setErrorMsg(
-    //         'Unable to login either username or password is incorrect'
-    //       );
-    //     }
-    //   })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
+              const obj = {
+                company_email: data.company_email.trim(),
+              };
+
+              axios
+                .post(config.ApiUrl + '/api/login', obj)
+                .then((res) => {
+                  tokenService.setUser(res.data.employee);
+                  tokenService.setToken(res.data.token.token);
+                  window.location.href = '/dashboard/employee-dashboard';
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log(e);
+          setErrorMsg(
+            'Unable to login either username or password is incorrect'
+          );
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <div className="main-wrapper">
@@ -129,11 +131,6 @@ const ClientLogin = () => {
                   <div className="row">
                     <div className="col">
                       <label htmlFor="password">Password</label>
-                    </div>
-                    <div className="col-auto">
-                      <a className="text-muted" href="/">
-                        Forgot password?
-                      </a>
                     </div>
                   </div>
                   <input

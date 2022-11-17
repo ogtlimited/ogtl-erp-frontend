@@ -26,6 +26,245 @@
 }
 
 /*--------------------------
+	HR Client
+----------------------------*/
+
+.client-card-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 40px;
+}
+
+.client-info-card{
+	width: 60%;
+	border-radius: 15px;
+  background-color: #fff;
+	padding: 2% 5%;box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.client-count-card {
+	width: 30%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border-radius: 15px;
+  background-color: #fff;
+	padding: 2% 5%;box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.client-title {
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 20px;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.client-list {
+	font-size: 16px;
+	font-family: 'Poppins', sans-serif;
+}
+
+.client-card-div > p {
+	text-align: center;
+	font-size: 50px;
+	font-family: 'Poppins', sans-serif;
+}
+
+.client-count-title {
+	font-family: 'Outfit', sans-serif;
+	word-spacing: 5px;
+	margin-bottom: 20px;
+	font-weight: 600;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.create-account-modal {
+  position: fixed;
+  top: 8%;
+  left: 0;
+  width: 100vw;
+  height: 92vh;
+  z-index: 900;
+}
+
+.create-account-modal-container {
+  position: absolute;
+  left: 35%;
+  top: 5%;
+  width: 43%;
+  padding: 20px;
+  z-index: 1000;
+  height: 90%;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #00000080;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.disable-create-account {
+	pointer-events: none;
+}
+
+.deactivate-modal {
+  position: fixed;
+  top: 8%;
+  left: 0;
+  width: 100vw;
+  height: 92vh;
+  z-index: 900;
+}
+
+.deactivate-modal-container {
+  position: absolute;
+  left: 35%;
+  top: 25%;
+  width: 43%;
+  padding: 20px;
+  z-index: 1000;
+  height: 50%;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 2px solid #00000080;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.deactivate-modal-close {
+	font-size: 25px;
+	cursor: pointer;
+	transition: 0.2s;
+	float: right;
+}
+
+.deactivate-modal-close:hover {
+	font-size: 25px;
+	cursor: pointer;
+	color: #999;
+	transition: 0.2s;
+}
+
+.deactivate-modal-items {
+	height: 90%;
+}
+
+.deactivate-modal-items > p{
+	color: #000;
+	text-align: center;
+	padding: 15% 0 5% 0;
+	font-family: 'poppins', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.deactivate-modal-btns {
+	display: flex;
+	justify-content: space-evenly;
+	height: 45px;
+}
+
+.deactivate-modal-yes,
+.deactivate-modal-cancel {
+	height: 100%;
+	width: 100px;
+	border: 1px solid #999;
+	border-radius: 5px;
+	font-weight: 600;
+	font-family: 'Outfit', sans-serif;
+}
+
+.loading-spinner {
+	margin-top: -5px !important;
+}
+
+.loading-btn {
+	height: 38px !important;
+}
+
+/* ---- */
+
+
+.success-modal {
+  position: fixed;
+  top: 8%;
+  left: 0;
+  width: 100vw;
+  height: 92vh;
+  z-index: 900;
+}
+
+.success-modal-container {
+  position: absolute;
+  left: 35%;
+  top: 10%;
+  width: 43%;
+  padding: 20px;
+  z-index: 1000;
+  height: 80%;
+  border-radius: 10px;
+	background-color: #fff;
+  border: 1px solid #00000080;
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.success-modal-close {
+	font-size: 25px;
+	cursor: pointer;
+	transition: 0.2s;
+	float: right;
+}
+
+.success-modal-close:hover {
+	font-size: 25px;
+	cursor: pointer;
+	color: #999;
+	transition: 0.2s;
+}
+
+.success-modal-items {
+	height: 100%;
+}
+
+.success-modal-img {
+	display: flex;
+	justify-content: center;
+}
+
+.success-modal-img > img {
+  width: 40%;
+  height: 40%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.success-info {
+	color: #000;
+	text-align: center;
+	padding: 2% 0 2% 0;
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.success-modal-btns {
+	display: flex;
+	justify-content: space-evenly;
+	height: 45px;
+}
+
+.success-modal-yes,
+.success-modal-cancel {
+	height: 100%;
+	width: 100px;
+	border: 1px solid #999;
+	border-radius: 5px;
+	font-weight: 600;
+	font-family: 'Outfit', sans-serif;
+}
+
+
+/*--------------------------
 	Job applicant pagination
 ----------------------------*/
 

@@ -9,6 +9,7 @@ export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, "/login"),
   clientLogin: path(ROOTS_AUTH, "/client-login"),
+  activateClient: path(ROOTS_AUTH, "/activate"),
 };
 
 export const PATH_DASHBOARD = {
@@ -79,6 +80,8 @@ export const PATH_DASHBOARD = {
     warningLetter: path(ROOTS_DASHBOARD, "/performance/warning-letter"),
     scoreCards: path(ROOTS_DASHBOARD, "/performance/score-cards"),
   },
+  hrclients: path(ROOTS_DASHBOARD, "/hr-clients"),
+  hrclient: path(ROOTS_DASHBOARD, "/hr-client"),
   coaching: path(ROOTS_DASHBOARD, "/coaching"),
   employeeCoaching: path(ROOTS_DASHBOARD, "/employee-coaching"),
   promotion: path(ROOTS_DASHBOARD, "/promotion"),
