@@ -21,21 +21,16 @@ const ClientLogin = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    console.log("This client login data", data);
     // window.location.href = '/dashboard/client-dashboard';
 
     setLoading(true);
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        console.log(e);
 
         const obj = {
           company_email: data.company_email,
         };
-
-        
-        console.log("this login obj", obj);
 
         axios
           .post(config.ApiUrl + '/api/login', obj)
@@ -56,7 +51,6 @@ const ClientLogin = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              console.log(e);
 
               const obj = {
                 company_email: data.company_email.trim(),

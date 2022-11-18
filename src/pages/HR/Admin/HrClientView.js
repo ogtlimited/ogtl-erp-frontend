@@ -27,7 +27,6 @@ const HrClientView = () => {
     setLoadingStatus(true);
     try {
       const res = await axiosInstance.get(`api/client_account/${id}`);
-      console.log('client account', res.data.data);
       setClientAccount(res.data.data);
     } catch (error) {
       console.log('404?', error.message);
@@ -41,7 +40,6 @@ const HrClientView = () => {
       .then((res) => {
         const resData = res.data.data;
         setClient(resData);
-        console.log('this good client', resData);
       })
       .catch((error) => {
         console.log(error);
@@ -54,7 +52,6 @@ const HrClientView = () => {
       .then((res) => {
         const clientData = res.data.data;
         setProjects(clientData);
-        console.log('My projects', res.data.data);
 
         let formatted = clientData.clientProjects.map((e) => ({
           ...e,
@@ -79,7 +76,6 @@ const HrClientView = () => {
       axiosInstance.post(`/api/client_status/${clientAccount._id}`).then((res) => {
         // eslint-disable-next-line no-unused-vars
         let resData = res.data
-        // console.log("this activate response", resData)
         showAlert(true, "Account Activated", 'alert alert-success');
         fetchClient()
         fetchClientAccount();

@@ -12,6 +12,7 @@ const HRDashboard = () => {
   const [dougnutData, setdougnutData] = useState(initialChartState);
   const [headACount, setheadACount] = useState(0);
   const [gender, setgender] = useState(initialChartState);
+
   useEffect(() => {
     combineRequest().then((res) => {
       const { employees, projects, departments } =
@@ -94,6 +95,7 @@ const HRDashboard = () => {
       });
     });
   }, []);
+  
   return (
     <div>
       <div className="page-header">
