@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardChart from "../../components/charts/dashboard-charts";
 import DashboardStatistics from "../../components/charts/dashboard-statistics";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import DashboardTable from "../../components/Tables/Dashboard/dashboard-table";
 // import AdminCards from '../components/adminCards'
+import axiosInstance from "../../services/api";
 
 const AdminDashboard = () => {
+  const [invoices, setInvoices] = useState([]);
+  const [payments, setPayments] = useState([]);
   const data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
@@ -32,6 +35,24 @@ const AdminDashboard = () => {
       },
     ],
   };
+
+  const fetchInvoicePayment = () => {
+    axiosInstance
+      .get("/accounts-dashboard")
+      .then((res) => {
+        setInvoices(res.data.getAccountsData.invoices.slice(0, 3));
+        setPayments(res.data.getAccountsData.payments.slice(0, 3));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchInvoicePayment();
+  }, []);
+
+
   return (
     <div>
       <div className="page-header">
@@ -65,7 +86,7 @@ const AdminDashboard = () => {
                 <i className="fa fa-usd"></i>
               </span>
               <div className="dash-widget-info">
-                <h3>44</h3>
+                <h3>11</h3>
                 <span>Clients</span>
               </div>
             </div>
@@ -98,28 +119,25 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
       <div className="row">
-        <DashboardChart title="" data={data} />
-          
+        <DashboardChart title="Employee By Department" data={data} />
       </div>
+
       <div className="row">
         <DashboardStats />
-          
       </div>
+
       <div className="row">
-        <DashboardStatistics />
-          
+        <DashboardStatistics chartData={data} chartTitle="Employee By Department" />
       </div>
-      <div className="row">
-        <DashboardStatistics />
-          
-      </div>
+
       <div className="row">
         <DashboardTable title="Invoices" />
         <DashboardTable title="Payments" />
-          
       </div>
       <>
+
       {/* <AdminCards /> */}</>
     </div>
   );

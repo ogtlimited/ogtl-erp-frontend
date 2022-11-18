@@ -131,7 +131,7 @@ export default function Router() {
               //     <ClientUser />{' '}
               //   </GuardedRoute>
               // ),
-              element: <ClientUser />
+              element: <ClientUser />,
             },
             {
               path: 'hr-dashboard',
@@ -885,7 +885,9 @@ const LeavesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Leaves.Admin'))
 );
 const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
-const HrClientView = Loadable(lazy(() => import('../pages/HR/Admin/HrClientView')));
+const HrClientView = Loadable(
+  lazy(() => import('../pages/HR/Admin/HrClientView'))
+);
 const Promotion = Loadable(lazy(() => import('../pages/HR/Admin/Promotion')));
 const ShiftAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Shift.Admin'))
@@ -907,7 +909,9 @@ const EmployeeSalary = Loadable(
   lazy(() => import('../pages/Payroll/EmployeeSalary'))
 );
 const PaySlip = Loadable(lazy(() => import('../pages/Payroll/PaySlip')));
-const SalaryBreakdown = Loadable(lazy(() => import('../pages/Payroll/SalaryBreakdown')));
+const SalaryBreakdown = Loadable(
+  lazy(() => import('../pages/Payroll/SalaryBreakdown'))
+);
 const AttendanceReport = Loadable(
   lazy(() => import('../pages/Reports/AttendanceReport'))
 );
@@ -966,9 +970,7 @@ const PayrollBatches = Loadable(
 const PayrollDeductions = Loadable(
   lazy(() => import('../pages/Payroll/Deductions'))
 );
-const Archive = Loadable(
-  lazy(() => import('../pages/Payroll/Archive'))
-);
+const Archive = Loadable(lazy(() => import('../pages/Payroll/Archive')));
 const ScoreCards = Loadable(
   lazy(() => import('../pages/HR/Admin/score-cards'))
 );
