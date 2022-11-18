@@ -18,7 +18,6 @@ const HrClients = () => {
       .then((res) => {
         const resData = res.data.data;
         setData(resData);
-        console.log('this Data: ', resData);
       })
       .catch((error) => {
         console.log(error);

@@ -39,15 +39,10 @@ const ActivateClient = () => {
           spammy: false,
         };
 
-    console.log({
-      payload: obj,
-      id: clientId,
-    })
-
     try {
       const res = await axios.patch(config.ApiUrl + `/api/client_account/${clientId}`, obj);
+      // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      console.log('activated account', resData);
 
       navigate('/auth/client-login');
     } catch (error) {
