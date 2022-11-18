@@ -15,9 +15,11 @@ const ActivateClient = () => {
 
   const validationSchema = Yup.object().shape({
     password: Yup.string()
-      .required('Password is required'),
+      .required('Password is required')
+      .min(8, 'Minimum of 8 characters'),
     confirmPassword: Yup.string()
       .required('Confirm Password is required')
+      .min(8, 'Minimum of 8 characters')
       .oneOf([Yup.ref('password')], 'Passwords must match'),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -34,6 +36,7 @@ const ActivateClient = () => {
         const obj = {
           password: data.password,
           activated: true,
+          spammy: false,
         };
 
     console.log({
