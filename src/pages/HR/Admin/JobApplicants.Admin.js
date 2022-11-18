@@ -42,6 +42,7 @@ const JobApplicants = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchJobApplicants = useCallback(() => {
+    setLoading(true);
     if (user?.isRepSiever) {
       axiosInstance
         .get('/api/job-sievers/job-applicants', {
@@ -69,7 +70,7 @@ const JobApplicants = () => {
               : resOptions.previous.page + 1;
 
           const thisNextPage =
-            pageData >= sizePerPage ? resOptions.next.page : null;
+          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
           const thisPageLimit = sizePerPage;
           const thisTotalPageSize = resOptions.numberOfPages;
@@ -99,7 +100,7 @@ const JobApplicants = () => {
         });
       return;
     }
-    
+    setLoading(true);
     axiosInstance
       .get('/api/jobApplicant', {
         params: {
@@ -128,11 +129,7 @@ const JobApplicants = () => {
             : resOptions.previous.page + 1;
 
         const thisNextPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page
-            : pageData <= sizePerPage && !resOptions.next.page
-            ? null
-            : null;
+          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
