@@ -180,7 +180,7 @@ const JobApplicantsTable = ({
     const handleClick = () => {
       if (loading) {
         setData([])
-      setDataToFilter([])
+        setDataToFilter([])
       }
       setPage(1);
       setLoading(true);
