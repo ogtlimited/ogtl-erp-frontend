@@ -33,6 +33,8 @@ export const CreateAccountModal = ({ data, onClick, setClientAccount }) => {
       setSuccessModal(true);
     } catch (error) {
       console.log(error);
+      onClick();
+      $('#FormModal').modal('toggle');
     }
     setLoading(false);
   };

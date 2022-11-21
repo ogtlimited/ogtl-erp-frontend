@@ -40,7 +40,7 @@ const ActivateClient = () => {
         };
 
     try {
-      const res = await axios.patch(config.ApiUrl + `/api/client_account/${clientId}`, obj);
+      const res = await axios.patch(config.ApiUrl + `/api/reset-password/client-account/${clientId}`, obj);
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
 
