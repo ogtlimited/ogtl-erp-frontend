@@ -265,6 +265,53 @@
 
 
 /*--------------------------
+	HR Dashboard
+----------------------------*/
+
+.hr-dashboard-card-group {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.hr-dashboard-card {
+	background-color: #fff;
+	min-width: 20%;
+	border: 1px solid #ededed;
+}
+
+.hr-dashboard-card > span {
+	font-size: 16px;
+	float: right;
+	margin: 0 20px 10px 20px;
+}
+
+.card-info > h3 {
+	color: #000;
+	font-size: 30px;
+	font-weight: 600;
+	margin-top: 10px;
+	text-align: center;
+}
+
+@media only screen and (max-width: 765px) {
+	.hr-dashboard-card-group {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+		margin-bottom: 30px;
+	}
+
+	.hr-dashboard-card {
+		background-color: #fff;
+		min-width: 20%;
+		border: 1px solid #ededed;
+		margin-bottom: 10px;
+	}
+	
+}
+
+/*--------------------------
 	Job applicant pagination
 ----------------------------*/
 
@@ -2215,6 +2262,7 @@ table.dataTable thead > tr > td.sorting {
 .table.custom-table > thead > tr > th:last-child {
 	padding-right: 15px;
 }
+
 .dash-widget-icon {
 	background-color: rgba(0, 197, 251, 0.2);
 	border-radius: 100%;

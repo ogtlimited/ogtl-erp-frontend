@@ -16,15 +16,6 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
   };
   return (
     <>
-     <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
-        <div className="card flex-fill">
-          <div className="card-body">
-            <h4 className="card-title">{chartTitle}</h4>
-            <Doughnut data={chartData} />
-            
-          </div>
-        </div>
-      </div>
       <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
         <div className="card flex-fill dash-statistics">
           <div className="card-body">

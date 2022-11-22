@@ -1,8 +1,72 @@
 import React from "react";
-// import DoughnutChart from "./dougnut";
+import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 
-const DashboardChart = ({title, data}) => {
+const DashboardChart = ({title, employeeData, employeeLabel, genderLabel, genderData}) => {
+
+  const employee = {
+    labels: employeeLabel,
+    datasets: [
+      {
+        label: 'Employees',
+        data: employeeData,
+        backgroundColor: [
+          'rgba(255, 99, 132)',
+          'rgba(54, 162, 235)',
+          'rgba(255, 206, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(153, 102, 255)',
+          'rgba(255, 159, 64)',
+          'rgba(205, 19, 84)',
+          'rgba(55, 159, 64)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(205, 19, 84, 1)',
+          'rgba(55, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const gender = {
+    labels: genderLabel,
+    datasets: [
+      {
+        label: 'Employees',
+        data: genderData,
+        backgroundColor: [
+          'rgba(255, 99, 132)',
+          'rgba(54, 162, 235)',
+          'rgba(255, 206, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(153, 102, 255)',
+          'rgba(255, 159, 64)',
+          'rgba(205, 19, 84)',
+          'rgba(55, 159, 64)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(205, 19, 84, 1)',
+          'rgba(55, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+
   return (
    
       <div className="col-md-12">
@@ -11,19 +75,18 @@ const DashboardChart = ({title, data}) => {
             <div className="card">
               <div className="card-body">
                 <h3 className="card-title">{title}</h3>
-
-                <VerticalBar data={data} />
+                <VerticalBar data={employee}/>
               </div>
             </div>
           </div>
-          {/* <div className="col-md-6 text-center">
+          <div className="col-md-6 text-center">
             <div  className="card">
               <div className="card-body">
-                <h3 className="card-title">{dougnutTitle}</h3>
-                <DoughnutChart data={dougnutData} />
+                <h3 className="card-title">Employee By Gender</h3>
+                <DoughnutChart data={gender} />
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
    
