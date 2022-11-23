@@ -1,19 +1,33 @@
-import React from "react";
-import { Doughnut } from "react-chartjs-2";
+/** @format */
 
-const DashboardStatistics = ({stats, chartData, chartTitle}) => {
-  const data = {
-    labels: ["Profit", "Expenses"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [120000, 190000],
-        backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgba(54, 162, 235, 0.5)"],
-        borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
-        borderWidth: 1,
-      },
-    ],
-  };
+import React from 'react';
+// import { Doughnut } from "react-chartjs-2";
+
+const DashboardStatistics = ({
+  stats,
+  chartData,
+  chartTitle,
+  totalInvoice,
+  pendingInvoice,
+  processingTickets,
+  openTickets,
+  closedTickets,
+  totalTickets,
+  completedProjects,
+  totalProjects,
+}) => {
+  // const data = {
+  //   labels: ["Profit", "Expenses"],
+  //   datasets: [
+  //     {
+  //       label: "# of Votes",
+  //       data: [120000, 190000],
+  //       backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgba(54, 162, 235, 0.5)"],
+  //       borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
   return (
     <>
       <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
@@ -23,16 +37,16 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
             <div className="stats-list">
               <div className="stats-info">
                 <p>
-                  Today Leave{" "}
+                  Today Leave{' '}
                   <strong>
-                    4 <small>/ 65</small>
+                    - <small>/ -</small>
                   </strong>
                 </p>
                 <div className="progress">
                   <div
                     className="progress-bar bg-primary"
                     role="progressbar"
-                    style={{ width: "31%" }}
+                    style={{ width: '0%' }}
                     aria-valuenow="31"
                     aria-valuemin="0"
                     aria-valuemax="100"
@@ -41,16 +55,16 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
               </div>
               <div className="stats-info">
                 <p>
-                  Pending Invoice{" "}
+                  Pending Invoice{' '}
                   <strong>
-                    15 <small>/ 92</small>
+                    {pendingInvoice} <small>/ {totalInvoice}</small>
                   </strong>
                 </p>
                 <div className="progress">
                   <div
                     className="progress-bar bg-warning"
                     role="progressbar"
-                    style={{ width: "31%" }}
+                    style={{ width: `${pendingInvoice * (100 / totalInvoice)}%` }}
                     aria-valuenow="31"
                     aria-valuemin="0"
                     aria-valuemax="100"
@@ -59,16 +73,16 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
               </div>
               <div className="stats-info">
                 <p>
-                  Completed Projects{" "}
+                  Completed Projects{' '}
                   <strong>
-                    85 <small>/ 112</small>
+                    {completedProjects} <small>/ {totalProjects}</small>
                   </strong>
                 </p>
                 <div className="progress">
                   <div
                     className="progress-bar bg-success"
                     role="progressbar"
-                    sstyle={{ width: "62%" }}
+                    style={{ width: `${completedProjects * (100 / totalProjects)}%` }}
                     aria-valuenow="62"
                     aria-valuemin="0"
                     aria-valuemax="100"
@@ -77,34 +91,52 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
               </div>
               <div className="stats-info">
                 <p>
-                  Open Tickets{" "}
+                  Open Tickets{' '}
                   <strong>
-                    190 <small>/ 212</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-danger"
-                    role="progressbar"
-                    style={{ width: "62%" }}
-                    aria-valuenow="62"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div className="stats-info">
-                <p>
-                  Closed Tickets{" "}
-                  <strong>
-                    22 <small>/ 212</small>
+                    {openTickets} <small>/ {totalTickets}</small>
                   </strong>
                 </p>
                 <div className="progress">
                   <div
                     className="progress-bar bg-info"
                     role="progressbar"
-                    style={{ width: "22%" }}
+                    style={{ width: `${openTickets * (100 / totalTickets)}%` }}
+                    aria-valuenow="62"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div className="stats-info">
+                <p>
+                  Pending Tickets{' '}
+                  <strong>
+                    {processingTickets} <small>/ {totalTickets}</small>
+                  </strong>
+                </p>
+                <div className="progress">
+                  <div
+                    className="progress-bar bg-warning"
+                    role="progressbar"
+                    style={{ width: `${openTickets * (100 / totalTickets)}%` }}
+                    aria-valuenow="62"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div className="stats-info">
+                <p>
+                  Closed Tickets{' '}
+                  <strong>
+                    {closedTickets} <small>/ {totalTickets}</small>
+                  </strong>
+                </p>
+                <div className="progress">
+                  <div
+                    className="progress-bar bg-danger"
+                    role="progressbar"
+                    style={{ width: `${closedTickets * (100 / totalTickets)}%` }}
                     aria-valuenow="22"
                     aria-valuemin="0"
                     aria-valuemax="100"
@@ -115,7 +147,7 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
           </div>
         </div>
       </div>
-      <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      {/* <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="card-body">
             <h4 className="card-title">Task Statistics</h4>
@@ -211,8 +243,7 @@ const DashboardStatistics = ({stats, chartData, chartTitle}) => {
             </div>
           </div>
         </div>
-      </div>
-     
+      </div> */}
     </>
   );
 };

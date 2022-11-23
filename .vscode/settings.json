@@ -3,9 +3,11 @@
   "git.ignoreLimitWarning": true,
   "cSpell.words": [
     "datalabels",
+    "progressbar",
     "setdata",
     "setdougnut",
     "setgender",
-    "sethead"
+    "sethead",
+    "valuenow"
   ]
 }

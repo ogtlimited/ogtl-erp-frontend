@@ -23,6 +23,14 @@ const HRDashboard = () => {
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
+  const [totalInvoice, setTotalInvoice] = useState(0);
+  const [pendingInvoice, setPendingInvoice] = useState(0);
+  const [processingTickets, setProcessingTickets] = useState(0);
+  const [openTickets, setOpenTickets] = useState(0);
+  const [closedTickets, setClosedTickets] = useState(0);
+  const [totalTickets, setTotalTickets] = useState(0);
+  const [completedProjects, setCompletedProjects] = useState(0);
+  const [totalProjects, setTotalProjects] = useState(0);
 
   const fetchHeadCount = async () => {
     try {
@@ -97,11 +105,69 @@ const HRDashboard = () => {
     }
   };
 
+  const fetchInvoice = async () => {
+    try {
+      const response = await axiosInstance.get('/api/invoice/status');
+      const resData = response.data.data[0]["Invoice status"];
+
+      const publishedCount = resData.filter((data) => data._id === 'Published');
+      const pendingCount = resData.filter((data) => data._id === 'Draft');
+      setPendingInvoice(pendingCount[0].total);
+
+      const totalCount = publishedCount[0].total + pendingCount[0].total;
+      setTotalInvoice(totalCount);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchTickets = async () => {
+    try {
+      const response = await axiosInstance.get('/api/ticketing/status');
+      const resData = response.data.data[0]["Tickets status"];
+
+      const closedCount = resData.filter((data) => data._id === 'Resolved');
+      const openCount = resData.filter((data) => data._id === 'Open');
+      const processingCount = resData.filter((data) => data._id === 'Processing');
+
+      setOpenTickets(openCount[0].total);
+      setClosedTickets(closedCount[0].total);
+      setProcessingTickets(processingCount[0].total);
+
+      const total = openCount[0].total + closedCount[0].total + processingCount[0].total;
+      setTotalTickets(total);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axiosInstance.get('/api/project/status');
+      const resData = response.data.data[0]["Project status"];
+      setCompletedProjects(resData[0].total)
+      setTotalProjects(resData[0].total)
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchHeadCount();
     fetchEmployeeData();
     fetchEmployeeGender();
     fetchGenderDiversityRatio();
+    fetchInvoice();
+    fetchTickets();
+    fetchProjects();
   }, []);
 
   // const fetchEmployeeData = async () => {
@@ -214,6 +280,7 @@ const HRDashboard = () => {
         ],
       });
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -285,14 +352,22 @@ const HRDashboard = () => {
         />
       </div>
 
-      {/* <div className="row">
+      <div className="row">
         <DashboardStatistics
           title="Employee By Department"
           data={data}
           chartTitle="Employee By Gender"
           chartData={gender}
+          totalInvoice={totalInvoice}
+          pendingInvoice={pendingInvoice}
+          processingTickets={processingTickets}
+          openTickets={openTickets}
+          closedTickets={closedTickets}
+          totalTickets={totalTickets}
+          completedProjects={completedProjects}
+          totalProjects={totalProjects}
         />
-      </div> */}
+      </div>
 
     </div>
   );

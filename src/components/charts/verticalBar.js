@@ -40,7 +40,7 @@ const options = {
 
 const VerticalBar = ({data}) => (
   <>
-    <Bar data={data} plugins={[ChartDataLabels]}  options={options} />
+    <Bar data={data} plugins={[ChartDataLabels]} options={options} />
   </>
 );
 
