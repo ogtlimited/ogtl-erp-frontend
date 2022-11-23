@@ -35,7 +35,7 @@ const DashboardStatistics = ({
           <div className="card-body">
             <h5 className="card-title">Statistics</h5>
             <div className="stats-list">
-              <div className="stats-info">
+              {/* <div className="stats-info">
                 <p>
                   Today Leave{' '}
                   <strong>
@@ -52,7 +52,7 @@ const DashboardStatistics = ({
                     aria-valuemax="100"
                   ></div>
                 </div>
-              </div>
+              </div> */}
               <div className="stats-info">
                 <p>
                   Pending Invoice{' '}
