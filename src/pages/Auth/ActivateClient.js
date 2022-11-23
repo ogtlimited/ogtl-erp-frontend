@@ -9,8 +9,8 @@ import config from '../../config.json';
 
 const ActivateClient = () => {
   const navigate = useNavigate();
-  const id = new URLSearchParams(useLocation().search);
-  const clientId = id.get("id");
+  const token = new URLSearchParams(useLocation().search);
+  const activateToken = token.get("token");
   const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -35,14 +35,15 @@ const ActivateClient = () => {
 
         const obj = {
           password: data.password,
-          activated: true,
-          spammy: false,
+          token: activateToken,
         };
 
+        console.log("activate this", obj)
+
     try {
-      const res = await axios.patch(config.ApiUrl + `/api/reset-password/client-account/${clientId}`, obj);
+      const res = await axios.post(config.ApiUrl + '/api/reset-password/client-account', obj);
       // eslint-disable-next-line no-unused-vars
-      const resData = res.data.data;
+      const resData = res;
 
       navigate('/auth/client-login');
     } catch (error) {

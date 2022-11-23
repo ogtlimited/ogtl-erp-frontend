@@ -27,7 +27,7 @@ const HrClientView = () => {
   const fetchClientAccount = async () => {
     setLoadingStatus(true);
     try {
-      const res = await axiosInstance.get(`api/client_account/${id}`);
+      const res = await axiosInstance.get(`/api/clients-accounts/${id}`);
       setClientAccount(res.data.data);
     } catch (error) {
       console.log(error.message);
