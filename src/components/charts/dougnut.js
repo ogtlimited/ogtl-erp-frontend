@@ -19,8 +19,8 @@ const DoughnutChart = ({data}) => (
   <div className="d-flex justify-content-center" >
    
     <Doughnut
-    width="500"
-    height="300"
+    width="440"
+    height="240"
     options={options}
     data={data} />
   </div>

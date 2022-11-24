@@ -91,8 +91,9 @@ const JobApplicantsTable = ({
             ? null
             : resOptions.previous.page;
 
+      
         const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : null;
+          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
@@ -143,9 +144,9 @@ const JobApplicantsTable = ({
           pageData >= sizePerPage && resOptions.next.page === 2
             ? null
             : resOptions.previous.page;
-
+    
         const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : null;
+          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
@@ -177,6 +178,10 @@ const JobApplicantsTable = ({
   const MySearch = (props) => {
     let input;
     const handleClick = () => {
+      if (loading) {
+        setData([])
+        setDataToFilter([])
+      }
       setPage(1);
       setLoading(true);
       props.onSearch(input.value);
@@ -204,12 +209,9 @@ const JobApplicantsTable = ({
                 ? null
                 : resOptions.previous.page;
 
+          
             const thisNextPage =
-              pageData >= sizePerPage
-                ? resOptions.next.page
-                : pageData <= sizePerPage && resOptions === undefined
-                ? null
-                : null;
+              pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
             const thisPageLimit = sizePerPage;
             const thisTotalPageSize = resOptions.numberOfPages;
@@ -289,7 +291,7 @@ const JobApplicantsTable = ({
   const imageUrl = 'https://erp.outsourceglobal.com';
 
   console.log(
-    'This application options from Backend:',
+    'Pagination:',
     prevPage,
     page,
     nextPage,
@@ -304,6 +306,11 @@ const JobApplicantsTable = ({
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
+    if (loading) {
+      setData([])
+      setDataToFilter([])
+    }
+    return;
   };
 
   const handleChangeSizePerPage = (e) => {
@@ -313,6 +320,12 @@ const JobApplicantsTable = ({
 
     setSizePerPage(e.target.value);
     setPage(1);
+    
+    if (loading) {
+      setData([])
+      setDataToFilter([])
+    }
+    return;
   };
 
   return (
@@ -373,7 +386,7 @@ const JobApplicantsTable = ({
                 </div>
               </div>
 
-              <BootstrapTable
+             <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
                 filter={filterFactory()}

@@ -1,4 +1,13 @@
 {
-    "terminal.integrated.fontSize": 16,
-    "git.ignoreLimitWarning": true
+  "terminal.integrated.fontSize": 16,
+  "git.ignoreLimitWarning": true,
+  "cSpell.words": [
+    "datalabels",
+    "progressbar",
+    "setdata",
+    "setdougnut",
+    "setgender",
+    "sethead",
+    "valuenow"
+  ]
 }

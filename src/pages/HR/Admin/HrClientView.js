@@ -22,16 +22,24 @@ const HrClientView = () => {
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
+  const [noAccess, setNoAccess] = useState(false);
 
   const fetchClientAccount = async () => {
     setLoadingStatus(true);
     try {
-      const res = await axiosInstance.get(`api/client_account/${id}`);
+      const res = await axiosInstance.get(`/api/clients-accounts/${id}`);
       setClientAccount(res.data.data);
     } catch (error) {
-      console.log('404?', error.message);
+      console.log(error.message);
+      if (error.message === "Request failed with status code 403") {
+        setNoAccess(true);
+        setLoadingStatus(false);
+        return;
+      }
+      setNoAccess(false);
     }
     setLoadingStatus(false);
+    setNoAccess(false);
   };
 
   const fetchClient = () => {
@@ -73,7 +81,7 @@ const HrClientView = () => {
       setStatusModal(true);
       return;
     } else if (!clientAccount.activated && !clientAccount.spammy) {
-      axiosInstance.post(`/api/client_status/${clientAccount._id}`).then((res) => {
+      axiosInstance.patch(`/api/activate/client-account/${clientAccount._id}`).then((res) => {
         // eslint-disable-next-line no-unused-vars
         let resData = res.data
         showAlert(true, "Account Activated", 'alert alert-success');
@@ -201,7 +209,7 @@ const HrClientView = () => {
           </div>
 
           {clientAccount.activated === true &&
-          clientAccount.spammy === false ? (
+          clientAccount.spammy === false && !noAccess ? (
             <div
               className="col-auto float-right ml-auto"
               onClick={() => handleStatusModal(clientAccount)}
@@ -211,28 +219,28 @@ const HrClientView = () => {
               </a>
             </div>
           ) : clientAccount.activated === false &&
-            clientAccount.spammy === true ? (
+            clientAccount.spammy === true && !noAccess ? (
             <div className="col-auto float-right ml-auto">
               <a href="#" className="btn add-btn m-r-5">
                 Activation Pending
               </a>
             </div>
           ) : clientAccount.activated === false &&
-            clientAccount.spammy === false ? (
+            clientAccount.spammy === false && !noAccess ? (
             <div className="col-auto float-right ml-auto" 
               onClick={() => handleStatusModal(clientAccount)}>
               <a href="#" className="btn add-btn m-r-5">
                 Activate
               </a>
             </div>
-          ) : loadingStatus ? (
+          ) : loadingStatus && !noAccess ? (
             <button className="btn add-btn loading-btn">
               <div
                 className="spinner-border loading-spinner"
                 role="status"
               ></div>
             </button>
-          ) : (
+          ) : !noAccess ? (
             <div className="col-auto float-right ml-auto">
               <a
                 href="#"
@@ -243,18 +251,8 @@ const HrClientView = () => {
                 Create Account
               </a>
             </div>
-          )}
+          ) : null}
 
-          {/* <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Create Account
-            </a>
-          </div> */}
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import DashboardChart from "../../components/charts/dashboard-charts";
+import AccountDashboardChart from "../../components/charts/account-dashboard-charts";
 import DashboardStatistics from "../../components/charts/dashboard-statistics";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import DashboardTable from "../../components/Tables/Dashboard/dashboard-table";
@@ -98,7 +98,7 @@ const AccountingDashboard = () => {
       </div>
 
       <div className="row">
-        <DashboardChart title="Employee By Department" data={data} />
+        <AccountDashboardChart title="Employee By Department" data={data} />
       </div>
 
       <div className="row">
