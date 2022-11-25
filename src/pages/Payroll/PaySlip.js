@@ -49,13 +49,18 @@ const PaySlip = () => {
       try {
         const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
         const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
-        console.log(startOfMonth, endOfMonth);
+        // console.log({
+        //   id: id,
+        //   startOfMonth: startOfMonth,
+        //   endOfMonth: endOfMonth,
+        // });
         const res = await axiosInstance.get(
           `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
         );
-        // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        console.log(res);
+        // //const res = await axiosInstance.get(`/api/salary-slip/${id}`);
+        // console.log("This payslip:", res);
         setPaySlip(res.data.data.employeeSlip);
+        // console.log("main payslip data", res.data.data.employeeSlip);
         const earnings = {};
         const { employeeSalary, deductionsBreakDown } =
           res.data.data.employeeSlip;
@@ -187,9 +192,9 @@ const PaySlip = () => {
               <div className="row">
                 <div className="col-sm-6">
                   <div>
-                    <h4 className="m-b-10">
+                    {paySlip.netPay ? <h4 className="m-b-10">
                       <strong>Earnings</strong>
-                    </h4>
+                    </h4> : null}
                     <table className="table table-bordered">
                       <tbody>
                         {fetched &&
@@ -213,9 +218,9 @@ const PaySlip = () => {
                 </div>
                 <div className="col-sm-6">
                   <div>
-                    <h4 className="m-b-10">
+                    {paySlip.netPay ? <h4 className="m-b-10">
                       <strong>Deductions</strong>
-                    </h4>
+                    </h4> : null}
                     <table className="table table-bordered">
                       <tbody>
                         {fetched &&
@@ -249,21 +254,21 @@ const PaySlip = () => {
                         )}
                       </tbody>
                     </table>
-                    <button
+                    {paySlip.netPay ? <button
                       type="button"
                       data-toggle="modal"
                       data-target="#generalModal"
                       className="btn btn-outline-primary"
                     >
                       View Deductions
-                    </button>
+                    </button> : null}
                   </div>
                 </div>
                 <div className="col-sm-12">
                   <p>
-                    <strong>
+                    {paySlip.netPay ? <strong>
                       Net Salary: {formatter.format(paySlip?.netPay)}
-                    </strong>
+                    </strong> : null}
                   </p>
                 </div>
               </div>
