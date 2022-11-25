@@ -239,17 +239,7 @@ const AllEmployeesAdmin = () => {
                 </button>
               </>
             )}
-            <div className="view-icons">
-              <a
-                href="employees.html"
-                className="grid-view btn btn-link active"
-              >
-                <i className="fa fa-th"></i>
-              </a>
-              <a href="employees-list.html" className="list-view btn btn-link">
-                <i className="fa fa-bars"></i>
-              </a>
-            </div>
+            
           </div>
         </div>
       </div>
