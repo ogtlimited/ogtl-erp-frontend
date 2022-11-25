@@ -34,6 +34,7 @@ const Profile = () => {
       .get(`/profile-dashboard/${id}`)
       .then((res) => {
         setUserdata(res.data.getEmployeeFullData);
+        // console.log("user data", res.data.getEmployeeFullData)
       })
       .catch((error) => {
         console.log(error);
@@ -193,7 +194,7 @@ const Profile = () => {
                         <li>
                           <div className="title">Phone:</div>
                           <div className="text">
-                            {userData?.contactDetails?.mobile || "xxx-xxx-xxx"}
+                            {userData?.contactDetails?.mobile || "Not Available"}
                           </div>
                         </li>
 
@@ -212,7 +213,7 @@ const Profile = () => {
                               ? moment(
                                   userData?.personalDetails?.date_of_birth
                                 ).format("MMMM Do")
-                              : "xxxx-xx-xx"}
+                              : "Not Available"}
                           </div>
                         </li>
                         <li>
