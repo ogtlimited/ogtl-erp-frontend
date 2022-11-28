@@ -1,14 +1,30 @@
-import React from "react";
-import DoughnutChart from "./dougnut";
-import VerticalBar from "./verticalBar";
+/** @format */
 
-const DashboardChart = ({title, employeeData, employeeLabel, genderLabel, genderData}) => {
+import React from 'react';
+import { useNavigate } from "react-router-dom";
+import DoughnutChart from './dougnut';
+import VerticalBar from './verticalBar';
+
+const DashboardChart = ({
+  title,
+  employeeData,
+  employeeLabel,
+  genderLabel,
+  genderData,
+}) => {
+  const navigate = useNavigate();
+  const handleChartClick = (element, employeeLabel) => {
+    if (element.length > 0) {
+      const dataIndex = element[0].index;
+      console.log("result of employee in:", employeeLabel[dataIndex]);
+      navigate("/dashboard/hr/all-employees/department")
+    }
+  };
 
   const employee = {
     labels: employeeLabel,
     datasets: [
       {
-        label: 'Employees',
         data: employeeData,
         backgroundColor: [
           'rgba(255, 99, 132)',
@@ -39,7 +55,6 @@ const DashboardChart = ({title, employeeData, employeeLabel, genderLabel, gender
     labels: genderLabel,
     datasets: [
       {
-        label: 'Employees',
         data: genderData,
         backgroundColor: [
           'rgba(255, 99, 132)',
@@ -66,30 +81,32 @@ const DashboardChart = ({title, employeeData, employeeLabel, genderLabel, gender
     ],
   };
 
-
   return (
-   
-      <div className="col-md-12">
-        <div className="row">
-          <div className="col-md-6 text-center">
-            <div className="card">
-              <div className="card-body">
-                <h3 className="card-title">{title}</h3>
-                <VerticalBar data={employee}/>
-              </div>
+    <div className="col-md-12">
+      <div className="row">
+        <div className="col-md-6 text-center">
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title">{title}</h3>
+              <VerticalBar
+                data={employee}
+                handleChartClick={(element) =>
+                  handleChartClick(element, employeeLabel)
+                }
+              />
             </div>
           </div>
-          <div className="col-md-6 text-center">
-            <div  className="card">
-              <div className="card-body">
-                <h3 className="card-title">Employee By Gender</h3>
-                <DoughnutChart data={gender} />
-              </div>
+        </div>
+        <div className="col-md-6 text-center">
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title">Employee By Gender</h3>
+              <DoughnutChart data={gender} />
             </div>
           </div>
         </div>
       </div>
-   
+    </div>
   );
 };
 

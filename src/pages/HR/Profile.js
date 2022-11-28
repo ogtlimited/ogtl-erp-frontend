@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import avater from "../../assets/img/profile.png";
-import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
-import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
-import { EmployeeEducationJson } from "../../components/FormJSON/HR/Employee/EmployeeEducation";
-import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
-import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
-import FormModal from "../../components/Modal/Modal";
-import ProfileCards from "../../components/Profile/ProfileCards";
-import axiosInstance from "../../services/api";
-import moment from "moment";
-import { historyJson } from "../../components/FormJSON/HR/Employee/history";
-import { useAppContext } from "../../Context/AppContext";
-import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
-import FormModal2 from "../../components/Modal/FormModal2";
-import helper from "../../services/helper";
-import ViewModal from "../../components/Modal/ViewModal";
-import SocialHandleForm from "../../components/Profile/components/SocialHandleForm";
-import tokenService from "../../services/token.service";
+/* eslint-disable jsx-a11y/anchor-is-valid*/
+
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import avater from '../../assets/img/profile.png';
+import { ContactDetailJson } from '../../components/FormJSON/HR/Employee/ContactDetails';
+import { EmergencyDetailJson } from '../../components/FormJSON/HR/Employee/EmergencyContact';
+import { EmployeeEducationJson } from '../../components/FormJSON/HR/Employee/EmployeeEducation';
+import { PersonalDetailJson } from '../../components/FormJSON/HR/Employee/PersonalDetails';
+import { WorkExperienceJson } from '../../components/FormJSON/HR/Employee/WorkExperience';
+import FormModal from '../../components/Modal/Modal';
+import ProfileCards from '../../components/Profile/ProfileCards';
+import axiosInstance from '../../services/api';
+import moment from 'moment';
+import { historyJson } from '../../components/FormJSON/HR/Employee/history';
+import { useAppContext } from '../../Context/AppContext';
+import { SalaryDetailJson } from '../../components/FormJSON/HR/Employee/SalaryDetails';
+import FormModal2 from '../../components/Modal/FormModal2';
+import helper from '../../services/helper';
+import ViewModal from '../../components/Modal/ViewModal';
+import SocialHandleForm from '../../components/Profile/components/SocialHandleForm';
+import tokenService from '../../services/token.service';
 
 const Profile = () => {
   const user = tokenService.getUser();
-  const [formType, setformType] = useState("");
+  const [formType, setformType] = useState('');
   const [template, settemplate] = useState(PersonalDetailJson);
   const { id } = useParams();
   const [userData, setUserdata] = useState(null);
@@ -67,21 +69,21 @@ const Profile = () => {
 
   useEffect(() => {
     switch (formType) {
-      case "WorkExperience":
+      case 'WorkExperience':
         return settemplate(helper.formArrayToObject(WorkExperienceJson.Fields));
-      case "ContactDetails":
+      case 'ContactDetails':
         return settemplate(helper.formArrayToObject(ContactDetailJson.Fields));
-      case "EmergencyContact":
+      case 'EmergencyContact':
         return settemplate(
           helper.formArrayToObject(EmergencyDetailJson.Fields)
         );
-      case "EmployeeEducation":
+      case 'EmployeeEducation':
         return settemplate(
           helper.formArrayToObject(EmployeeEducationJson.Fields)
         );
-      case "History":
+      case 'History':
         return settemplate(helper.formArrayToObject(historyJson.Fields));
-      case "SalaryDetails":
+      case 'SalaryDetails':
         return settemplate(helper.formArrayToObject(SalaryDetailJson.Fields));
       default:
         return settemplate(helper.formArrayToObject(PersonalDetailJson.Fields));
@@ -105,10 +107,10 @@ const Profile = () => {
         };
       });
       const finalForm = historyJson.Fields.map((field) => {
-        if (field.name === "branch_id") {
+        if (field.name === 'branch_id') {
           field.options = branchesOpts;
           return field;
-        } else if (field.name === "designation_id") {
+        } else if (field.name === 'designation_id') {
           field.options = designationsOpts;
           return field;
         }
@@ -153,8 +155,8 @@ const Profile = () => {
                     <div className="col-md-5">
                       <div className="profile-info-left">
                         <h3 className="user-name m-t-0 mb-0">
-                          {userData?.employee?.first_name}{" "}
-                          {userData?.employee?.middle_name}{" "}
+                          {userData?.employee?.first_name}{' '}
+                          {userData?.employee?.middle_name}{' '}
                           {userData?.employee?.last_name}
                         </h3>
                         <h6 className="text-muted">
@@ -164,18 +166,18 @@ const Profile = () => {
                         </h6>
                         <small className="text-muted">
                           {userData?.employee?.designation?.designation ||
-                            "Not Available"}
+                            'Not Available'}
                         </small>
                         <div className="staff-id">
                           & Employee ID : {userData?.employee?.ogid}
                         </div>
                         <div className="small doj text-muted">
-                          Date Joined :{" "}
+                          Date Joined :{' '}
                           {userData?.employee?.date_of_joining
                             ? moment(
                                 userData?.employee?.date_of_joining
-                              ).format("L")
-                            : "Not Available"}
+                              ).format('L')
+                            : 'Not Available'}
                         </div>
                         <div className="staff-msg">
                           <Link
@@ -193,7 +195,8 @@ const Profile = () => {
                         <li>
                           <div className="title">Phone:</div>
                           <div className="text">
-                            {userData?.contactDetails?.mobile || "xxx-xxx-xxx"}
+                            {userData?.contactDetails?.mobile ||
+                              'Not Available'}
                           </div>
                         </li>
 
@@ -201,7 +204,7 @@ const Profile = () => {
                           <div className="title">Email:</div>
                           <div className="text">
                             {userData?.employee?.company_email ||
-                              "Not Available"}
+                              'Not Available'}
                           </div>
                         </li>
 
@@ -211,42 +214,51 @@ const Profile = () => {
                             {userData?.personalDetails?.date_of_birth
                               ? moment(
                                   userData?.personalDetails?.date_of_birth
-                                ).format("MMMM Do")
-                              : "xxxx-xx-xx"}
+                                ).format('MMMM Do')
+                              : 'Not Available'}
                           </div>
                         </li>
                         <li>
                           <div className="title">Address:</div>
                           <div className="text">
                             {userData?.contactDetails?.permanent_address ||
-                              "Not Available"}
+                              'Not Available'}
                           </div>
                         </li>
 
                         <li>
                           <div className="title">Gender:</div>
                           <div className="text">
-                            {userData?.employee?.gender || "Not Available"}
+                            {userData?.employee?.gender || 'Not Available'}
                           </div>
                         </li>
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {userData?.employee?.leaveCount || "Not Available"}
+                            {userData?.employee?.leaveCount || 'Not Available'}
                           </div>
                         </li>
                         <li>
                           <div className="title">Branch:</div>
                           <div className="text">
                             {userData?.employee?.branch?.branch ||
-                              "Not Available"}
+                              'Not Available'}
                           </div>
                         </li>
                         <li>
                           <div className="title">Shift:</div>
                           <div className="text">
-                            {userData?.employee?.default_shift?.shift_name ||
-                              "Not Available"}
+                            {userData?.employee?.default_shift?.shift_name
+                              ? moment(
+                                  userData?.employee?.default_shift?.start_time,
+                                  ['HH.mm']
+                                ).format('hh:mm a') +
+                                ' to ' +
+                                moment(
+                                  userData?.employee?.default_shift?.end_time,
+                                  ['HH.mm']
+                                ).format('hh:mm a')
+                              : 'Not Available'}
                             <a
                               href="#"
                               className="btn btn-custom  float-right mb-2"
@@ -270,7 +282,7 @@ const Profile = () => {
                             </div>
                             <a href="profile.html">
                               {userData?.employee?.reports_to?.last_name ||
-                                "Not Available"}
+                                'Not Available'}
                             </a>
                           </div>
                         </li>
@@ -285,7 +297,7 @@ const Profile = () => {
                                       href={userData?.employee?.socialHandle[e]}
                                     >
                                       {helper.capitalize(e)}
-                                    </a>{" "}
+                                    </a>{' '}
                                     &nbsp;
                                   </>
                                 )
