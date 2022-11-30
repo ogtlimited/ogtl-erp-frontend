@@ -14,6 +14,7 @@ import Papa from "papaparse";
 import helper from "../../../services/helper";
 import UploadModal from "../../../components/Modal/uploadModal";
 import EmployeeHelperService from "./employee.helper";
+
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
   const {
@@ -26,6 +27,7 @@ const AllEmployeesAdmin = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
+  const [loading, setLoading] = useState(false);
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);

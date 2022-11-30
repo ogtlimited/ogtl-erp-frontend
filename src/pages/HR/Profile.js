@@ -169,7 +169,7 @@ const Profile = () => {
                             'Not Available'}
                         </small>
                         <div className="staff-id">
-                          & Employee ID : {userData?.employee?.ogid}
+                          Employee ID : {userData?.employee?.ogid}
                         </div>
                         <div className="small doj text-muted">
                           Date Joined :{' '}

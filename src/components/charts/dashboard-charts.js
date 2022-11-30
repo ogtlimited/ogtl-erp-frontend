@@ -11,13 +11,21 @@ const DashboardChart = ({
   employeeLabel,
   genderLabel,
   genderData,
+  formattedData
 }) => {
   const navigate = useNavigate();
-  const handleChartClick = (element, employeeLabel) => {
-    if (element.length > 0) {
-      const dataIndex = element[0].index;
-      console.log("result of employee in:", employeeLabel[dataIndex]);
-      navigate("/dashboard/hr/all-employees/department")
+  const handleChartClick = async (element, employeeLabel) => {
+    try {
+      if (element.length > 0) {
+        const dataIndex = element[0].index;
+        const departmentId = formattedData.filter((data) => data.labels === employeeLabel[dataIndex])
+        const id = departmentId[0].id;
+        const department = departmentId[0].labels;
+        localStorage.setItem("department", department);
+        navigate(`/dashboard/hr/all-employees/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
