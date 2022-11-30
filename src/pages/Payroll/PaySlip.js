@@ -51,8 +51,8 @@ const PaySlip = () => {
     const fetchPaySlip = async () => {
       setLoading(true);
       try {
-        const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-        const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+        const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
+        const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
         // console.log({
         //   id: id,
         //   startOfMonth: startOfMonth,
@@ -204,19 +204,67 @@ const PaySlip = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div>
-                      {paySlip.netPay ? (
-                        <h4 className="m-b-10">
-                          <strong>Earnings</strong>
-                        </h4>
-                      ) : null}
-                      <table className="table table-bordered">
-                        <tbody>
-                          {fetched &&
-                            Object.keys(earnings).map((earning, index) => (
-                              <tr key={index}>
+              </div>
+              <div className="row">
+                <div className="col-lg-12 m-b-20">
+                  <ul className="list-unstyled">
+                    <li>
+                      <h5 className="mb-0">
+                        <strong>
+                          {employee?.first_name} {employee?.middle_name}{" "}
+                          {employee?.last_name}
+                        </strong>
+                      </h5>
+                    </li>
+                    <li>{/* <span>Web Designer</span> */}</li>
+                    <li>Employee ID: {employee?.ogid}</li>
+                    <li>
+                      Joining Date:{" "}
+                      {moment(
+                        location?.state?.employee?.date_of_joining
+                      ).format("L")}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-6">
+                  <div>
+                    {paySlip.netPay ? <h4 className="m-b-10">
+                      <strong>Earnings</strong>
+                    </h4> : null}
+                    <table className="table table-bordered">
+                      <tbody>
+                        {fetched &&
+                          Object.keys(earnings).map((earning, index) => (
+                            <tr key={index}>
+                              <td>
+                                <strong>{earning}</strong>{" "}
+                                {earning != "department" ? (
+                                  <span className="float-right">
+                                    {formatter.format(earnings[earning])}
+                                  </span>
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div>
+                    {paySlip.netPay ? <h4 className="m-b-10">
+                      <strong>Deductions</strong>
+                    </h4> : null}
+                    <table className="table table-bordered">
+                      <tbody>
+                        {fetched &&
+                          Object.keys(paySlip?.additionalDeductions).map(
+                            (deduction) => (
+                              <tr>
                                 <td>
                                   <strong>{earning}</strong>{' '}
                                   {earning != 'department' ? (
@@ -271,29 +319,34 @@ const PaySlip = () => {
                               </td>
                             </tr>
                           )}
-                        </tbody>
-                      </table>
-                      {paySlip.netPay ? (
-                        <button
-                          type="button"
-                          data-toggle="modal"
-                          data-target="#generalModal"
-                          className="btn btn-outline-primary"
-                        >
-                          View Deductions
-                        </button>
-                      ) : null}
-                    </div>
+                        {fetched && (
+                          <tr>
+                            <td>
+                              <strong>Total Deductions</strong>{" "}
+                              <span className="float-right">
+                                {formatter.format(totalDeduction)}
+                              </span>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                    {paySlip.netPay ? <button
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#generalModal"
+                      className="btn btn-outline-primary"
+                    >
+                      View Deductions
+                    </button> : null}
                   </div>
-                  <div className="col-sm-12">
-                    <p>
-                      {paySlip.netPay ? (
-                        <strong>
-                          Net Salary: {formatter.format(paySlip?.netPay)}
-                        </strong>
-                      ) : null}
-                    </p>
-                  </div>
+                </div>
+                <div className="col-sm-12">
+                  <p>
+                    {paySlip.netPay ? <strong>
+                      Net Salary: {formatter.format(paySlip?.netPay)}
+                    </strong> : null}
+                  </p>
                 </div>
               </div>
             </div>

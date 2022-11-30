@@ -13,10 +13,6 @@
     "setfilters",
     "setgender",
     "sethead",
-    "setload",
-    "setlogged",
-    "setmode",
-    "setuploading",
     "Userdata",
     "valuenow"
   ]
