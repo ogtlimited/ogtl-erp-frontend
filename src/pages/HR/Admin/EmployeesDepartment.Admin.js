@@ -58,6 +58,7 @@ const AllEmployeesDepartmentAdmin = () => {
       const response = await axiosInstance.get(
         `/departments/gender-count/${id}`
       );
+      console.log("gender data:", response.data.data);
 
       const formattedFemale =
         response.data?.data?.genderCountByDepartment.filter(
@@ -104,31 +105,32 @@ const AllEmployeesDepartmentAdmin = () => {
         let resOptions = res?.data?.data?.pagination;
         console.log('resOptions:', resOptions);
 
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : pageData <= sizePerPage && !resOptions.previous.page
-            ? null
-            : resOptions.previous.page;
+        // const thisPreviousPage =
+        //   pageData >= sizePerPage && resOptions.next.page === 2
+        //     ? null
+        //     : pageData <= sizePerPage && !resOptions.previous.page
+        //     ? null
+        //     : resOptions.previous.page;
 
-        const thisCurrentPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page - 1
-            : resOptions.previous.page + 1;
+        // const thisCurrentPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions.next.page - 1
+        //     : resOptions.previous.page + 1;
 
-        const thisNextPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page
-            : pageData < sizePerPage + 1
-            ? null
-            : null;
+        // const thisNextPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions.next.page
+        //     : pageData < sizePerPage + 1
+        //     ? null
+        //     : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
+        console.log("data length:", resData.length)
 
-        setPrevPage(thisPreviousPage);
-        setPage(thisCurrentPage);
-        setNextPage(thisNextPage);
+        // setPrevPage(thisPreviousPage);
+        // setPage(thisCurrentPage);
+        // setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -139,8 +141,6 @@ const AllEmployeesDepartmentAdmin = () => {
           department_name: e?.department?.department,
         }));
 
-        // console.log("this user", user);
-        // console.log('this job data', formatted);
         setallEmployees(formatted);
         setunfiltered(formatted);
         setLoading(false);
@@ -154,7 +154,7 @@ const AllEmployeesDepartmentAdmin = () => {
     fetchEmployeeByDepartment ();
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 10000);
   }, [ fetchEmployeeByDepartment ]);
 
   useEffect(() => {
@@ -186,6 +186,7 @@ const AllEmployeesDepartmentAdmin = () => {
         employees
       );
       const service = empHelper.mapRecords();
+      
 
       setfilters([
         // {
@@ -204,6 +205,7 @@ const AllEmployeesDepartmentAdmin = () => {
           options: service.designationOpts,
         },
       ]);
+      console.log("THIS GUY:::", service.designationOpts)
       const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
       // settemplate(
       //   {

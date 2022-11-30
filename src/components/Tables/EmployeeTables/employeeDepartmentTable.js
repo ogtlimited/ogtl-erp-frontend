@@ -223,6 +223,14 @@ const EmployeesDepartmentTable = ({
 
   console.log('Pagination:', prevPage, page, nextPage, sizePerPage, totalPages);
 
+  // const designation = data.map((dept) => ({
+  //   designation: dept.designation.designation
+  // }))
+
+  // const newSet = new Set(data.map((dept) => dept.designation.designation));
+  // const val = newSet.forEach((val) => val)
+  // console.log("DESIGNATION:", val)
+
   const handleChangeDesignation = (e, f) => {
     setDesignationFilter(e.label);
     setPage(1);
@@ -241,23 +249,23 @@ const EmployeesDepartmentTable = ({
         const pageData = res?.data?.data?.totalEmployees;
         let resOptions = res?.data?.data?.pagination;
 
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : pageData < 10
-            ? null
-            : resOptions.previous.page;
+        // const thisPreviousPage =
+        //   pageData >= sizePerPage && resOptions.next.page === 2
+        //     ? null
+        //     : pageData < 10
+        //     ? null
+        //     : resOptions.previous.page;
 
       
-        const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+        // const thisNextPage =
+        //   pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
 
-        setPrevPage(thisPreviousPage);
-        setNextPage(thisNextPage);
+        // setPrevPage(thisPreviousPage);
+        // setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -301,23 +309,23 @@ const EmployeesDepartmentTable = ({
             const pageData = res?.data?.data?.totalEmployees;
             let resOptions = res?.data?.data?.pagination;
 
-            const thisPreviousPage =
-              pageData >= sizePerPage && resOptions.next.page === 2
-                ? null
-                : pageData < 10
-                ? null
-                : resOptions.previous.page;
+            // const thisPreviousPage =
+            //   pageData >= sizePerPage && resOptions.next.page === 2
+            //     ? null
+            //     : pageData < 10
+            //     ? null
+            //     : resOptions.previous.page;
 
           
-            const thisNextPage =
-              pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+            // const thisNextPage =
+            //   pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
             const thisPageLimit = sizePerPage;
             const thisTotalPageSize = resOptions.numberOfPages;
 
 
-            setPrevPage(thisPreviousPage);
-            setNextPage(thisNextPage);
+            // setPrevPage(thisPreviousPage);
+            // setNextPage(thisNextPage);
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
 
