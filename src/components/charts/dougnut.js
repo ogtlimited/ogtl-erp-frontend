@@ -1,5 +1,6 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
 
 const options = {
@@ -12,7 +13,38 @@ const options = {
             boxWidth: 10,
             padding: 10
         }
+    },
+    
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: false,
+          },
+        },
+      ],
+    },
+  plugins: {
+    datalabels: {
+      display: true,
+      color: "black",
+      align: "center",
+      padding: {
+        right: 2
+      },
+      labels: {
+        padding: { top: 10 },
+        title: {
+          font: {
+            weight: "bold"
+          }
+        },
+        value: {
+          color: "#00000080",
+        }
+      },
     }
+  }
     
   };
 const DoughnutChart = ({data}) => (
@@ -22,7 +54,9 @@ const DoughnutChart = ({data}) => (
     width="440"
     height="240"
     options={options}
-    data={data} />
+    data={data}
+    plugins={[ChartDataLabels]}
+    />
   </div>
 );
 

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { employeeFormJson } from "../../../components/FormJSON/HR/Employee/employee";
@@ -12,6 +14,7 @@ import Papa from "papaparse";
 import helper from "../../../services/helper";
 import UploadModal from "../../../components/Modal/uploadModal";
 import EmployeeHelperService from "./employee.helper";
+
 const AllEmployeesAdmin = () => {
   const breadcrumb = "All Employees";
   const {
@@ -24,6 +27,7 @@ const AllEmployeesAdmin = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
+  const [loading, setLoading] = useState(false);
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);
@@ -239,17 +243,7 @@ const AllEmployeesAdmin = () => {
                 </button>
               </>
             )}
-            <div className="view-icons">
-              <a
-                href="employees.html"
-                className="grid-view btn btn-link active"
-              >
-                <i className="fa fa-th"></i>
-              </a>
-              <a href="employees-list.html" className="list-view btn btn-link">
-                <i className="fa fa-bars"></i>
-              </a>
-            </div>
+            
           </div>
         </div>
       </div>

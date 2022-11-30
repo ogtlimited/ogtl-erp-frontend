@@ -29,6 +29,7 @@ const EmployeesTable = ({
   seteditData,
   setmode,
   loadForm,
+  loading,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -258,7 +259,15 @@ const EmployeesTable = ({
                 classes={!mobileView ? "table" : "table table-responsive"}
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
-                noDataIndication="Fetching Data"
+                noDataIndication={
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    'No Record Found'
+                  )
+                }
               />
             </div>
           )}
