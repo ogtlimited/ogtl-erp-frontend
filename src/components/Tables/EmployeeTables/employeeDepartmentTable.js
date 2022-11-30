@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
+/** @format */
+
+import React, { useState, useEffect } from 'react';
+import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from "react-bootstrap-table2-toolkit";
-import Select from "react-select";
+} from 'react-bootstrap-table2-toolkit';
+import Select from 'react-select';
+import axiosInstance from '../../../services/api';
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from "react-bootstrap-table2-filter";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
-import { Link } from "react-router-dom";
-import { useAppContext } from "../../../Context/AppContext";
+} from 'react-bootstrap-table2-filter';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import female from '../../../assets/img/female_avatar.png';
+import female2 from '../../../assets/img/female_avatar2.png';
+import female3 from '../../../assets/img/female_avatar3.png';
+import male from '../../../assets/img/male_avater.png';
+import male2 from '../../../assets/img/male_avater2.png';
+import male3 from '../../../assets/img/male_avater3.png';
+import { Link, useParams } from 'react-router-dom';
+import { useAppContext } from '../../../Context/AppContext';
+import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
 const EmployeesDepartmentTable = ({
   data,
+  setData,
   defaultSorted,
   selectedOption,
   filters,
@@ -30,6 +38,22 @@ const EmployeesDepartmentTable = ({
   setmode,
   loadForm,
   loading,
+  setLoading,
+  prevPage,
+  page,
+  nextPage,
+  sizePerPage,
+  totalPages,
+  setPrevPage,
+  setPage,
+  setNextPage,
+  setSizePerPage,
+  setTotalPages,
+  fetchEmployeeByDepartment,
+  designationFilter,
+  setDesignationFilter,
+  searchTerm,
+  setSearchTerm,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -38,12 +62,17 @@ const EmployeesDepartmentTable = ({
   const [allEmployee, setAllEmployee] = useState([]);
   const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = "https://erp.outsourceglobal.com";
+  const imageUrl = 'https://erp.outsourceglobal.com';
   const { user } = useAppContext();
+  const [dataToFilter, setDataToFilter] = useState('');
+  const [info, setInfo] = useState({
+    sizePerPage: 10,
+  });
+  const { id } = useParams();
 
   useEffect(() => {}, [filters, loadForm]);
   const handleClick = (i, type) => {
-    if (i?.value === "All" || i == null) {
+    if (i?.value === 'All' || i == null) {
       setAllEmployee(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => i.value == e[type]?._id);
@@ -55,13 +84,13 @@ const EmployeesDepartmentTable = ({
     let hash = {};
     seteditData(null);
     for (let d in row) {
-      if (typeof row[d] == "object" && row[d] !== null) {
+      if (typeof row[d] == 'object' && row[d] !== null) {
         hash[d] = row[d]._id;
       } else {
         hash[d] = row[d];
       }
     }
-    setmode("edit");
+    setmode('edit');
     console.log(hash);
     seteditData(hash);
   };
@@ -76,7 +105,7 @@ const EmployeesDepartmentTable = ({
     setunfiltered(data);
   }, [data]);
   useEffect(() => {
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
         setmobileView(false);
       } else {
@@ -87,10 +116,10 @@ const EmployeesDepartmentTable = ({
 
   const columns = [
     {
-      dataField: "fullName",
-      text: "Employee Name",
+      dataField: 'fullName',
+      text: 'Employee Name',
       sort: true,
-      headerStyle: { minWidth: "250px" },
+      headerStyle: { minWidth: '250px' },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -99,48 +128,47 @@ const EmployeesDepartmentTable = ({
               src={
                 row.image
                   ? imageUrl + row.image
-                  : row.gender === "male"
+                  : row.gender === 'male'
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
             />
           </a>
           <Link to={`/dashboard/user/profile/${row._id}`}>
-            {value}{" "}
-            <span>{row?.designation_name}</span>
+            {value} <span>{row?.designation_name}</span>
           </Link>
         </h2>
       ),
     },
     {
-      dataField: "status",
-      text: "Status",
+      dataField: 'status',
+      text: 'Status',
       sort: true,
-      headerStyle: { minWidth: "120px" },
+      headerStyle: { minWidth: '120px' },
       formatter: (value, row) => (
         <>
-          {value === "active" ? (
+          {value === 'active' ? (
             <a href="" className="pos-relative">
-              {" "}
-              <span className="status-online"></span>{" "}
+              {' '}
+              <span className="status-online"></span>{' '}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
-          ) : value === "left" ? (
+          ) : value === 'left' ? (
             <a href="" className="pos-relative">
-              {" "}
-              <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{"RESIGNED"}</span>
+              {' '}
+              <span className="status-pending"></span>{' '}
+              <span className="ml-4 d-block">{'RESIGNED'}</span>
             </a>
-          ) : value === "terminated" ? (
+          ) : value === 'terminated' ? (
             <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
+              {' '}
+              <span className="status-terminated"></span>{' '}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           ) : (
             <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
+              {' '}
+              <span className="status-terminated"></span>{' '}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           )}
@@ -148,43 +176,42 @@ const EmployeesDepartmentTable = ({
       ),
     },
     {
-      dataField: "ogid",
-      text: "Employee ID",
+      dataField: 'ogid',
+      text: 'Employee ID',
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: "designation_name",
-      text: "Designation",
+      dataField: 'designation_name',
+      text: 'Designation',
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: "company_email",
-      text: "Company Email",
+      dataField: 'company_email',
+      text: 'Company Email',
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { minWidth: '100px' },
     },
     {
-      dataField: "",
-      text: "Action",
+      dataField: '',
+      text: 'Action',
       sort: true,
-      headerStyle: { minWidth: "70px", textAlign: "left" },
+      headerStyle: { minWidth: '70px', textAlign: 'left' },
       formatter: (value, row) => (
         <>
           {filters && user?.role?.hr?.update && (
             <div className="dropdown dropdown-action text-right">
-              
-            <button
-                  className="dropdown-item btn-primary"
-                  style={{borderRadius: '5px'}}
-                  onClick={() => handleEdit(row)}
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#FormModal"
-                >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </button>
+              <button
+                className="dropdown-item btn-primary"
+                style={{ borderRadius: '5px' }}
+                onClick={() => handleEdit(row)}
+                href="#"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </button>
               {/* <div className="dropdown-menu dropdown-menu-right">
               </div> */}
             </div>
@@ -193,6 +220,170 @@ const EmployeesDepartmentTable = ({
       ),
     },
   ];
+
+  console.log('Pagination:', prevPage, page, nextPage, sizePerPage, totalPages);
+
+  const handleChangeDesignation = (e, f) => {
+    setDesignationFilter(e.label);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+      .get(`/departments/${id}`, {
+        params: {
+          designation: e.label,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data.employeesByDepartment;
+        const pageData = res?.data?.data?.totalEmployees;
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPreviousPage =
+          pageData >= sizePerPage && resOptions.next.page === 2
+            ? null
+            : pageData < 10
+            ? null
+            : resOptions.previous.page;
+
+      
+        const thisNextPage =
+          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+
+
+        setPrevPage(thisPreviousPage);
+        setNextPage(thisNextPage);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
+          designation_name: e?.designation?.designation,
+          department_name: e?.department?.department,
+        }));
+
+        setData(formatted);
+        setunfiltered(formatted);
+      });
+    setLoading(false);
+  };
+
+  const MySearch = (props) => {
+    let input;
+    const handleClick = () => {
+      if (loading) {
+        setData([]);
+        setDataToFilter([]);
+      }
+      setPage(1);
+      setLoading(true);
+      props.onSearch(input.value);
+      const searchTerm = input.value;
+      setSearchTerm(searchTerm);
+
+      if (page === 1) {
+        axiosInstance
+          .get(`/departments/${id}`, {
+            params: {
+              search: searchTerm,
+              page: page,
+              limit: sizePerPage,
+            },
+          })
+          .then((res) => {
+            let resData = res?.data?.data.employeesByDepartment;
+            const pageData = res?.data?.data?.totalEmployees;
+            let resOptions = res?.data?.data?.pagination;
+
+            const thisPreviousPage =
+              pageData >= sizePerPage && resOptions.next.page === 2
+                ? null
+                : pageData < 10
+                ? null
+                : resOptions.previous.page;
+
+          
+            const thisNextPage =
+              pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+
+            const thisPageLimit = sizePerPage;
+            const thisTotalPageSize = resOptions.numberOfPages;
+
+
+            setPrevPage(thisPreviousPage);
+            setNextPage(thisNextPage);
+            setSizePerPage(thisPageLimit);
+            setTotalPages(thisTotalPageSize);
+
+            let formatted = resData.map((e) => ({
+              ...e,
+              fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
+              designation_name: e?.designation?.designation,
+              department_name: e?.department?.department,
+            }));
+
+            setData(formatted);
+            setunfiltered(formatted);
+            setDesignationFilter("");
+          });
+      }
+      setLoading(false);
+    };
+
+    return (
+      <div className="job-app-search">
+        <input
+          className="form-control"
+          style={{
+            backgroundColor: '#fff',
+            width: '33.5%',
+            marginRight: '20px',
+          }}
+          ref={(n) => (input = n)}
+          type="text"
+        />
+        <button className="btn btn-primary" onClick={handleClick}>
+          Search
+        </button>
+      </div>
+    );
+  };
+
+  // Pagination
+  const count = totalPages;
+  const _DATA = usePagination(data, sizePerPage, totalPages);
+
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
+    if (loading) {
+      setData([]);
+      setDataToFilter([]);
+    }
+    return;
+  };
+
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
+
+    setSizePerPage(e.target.value);
+    setPage(1);
+
+    if (loading) {
+      setData([]);
+      setDataToFilter([]);
+    }
+    return;
+  };
+
   return (
     <>
       {allEmployee && (
@@ -205,23 +396,21 @@ const EmployeesDepartmentTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <SearchBar
+              <MySearch
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: "12%" }}
+                style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               />
-              <ClearSearchButton className="clear" {...props.searchProps} />
               <div className="d-flex row mb-3">
                 {filters &&
                   filters.map((f) => (
                     <div className="col-md-3">
                       <Select
                         defaultValue={selectedOption}
-                        onChange={(i) => handleClick(i, f.name)}
+                        onChange={(e) => handleChangeDesignation(e, f)}
                         options={f.options}
                         placeholder={f.placeholder}
-                        isClearable={true}
-                        style={{ display: "inline-block" }}
+                        style={{ display: 'inline-block' }}
                         // formatGroupLabel={formatGroupLabel}
                       />
                     </div>
@@ -243,9 +432,8 @@ const EmployeesDepartmentTable = ({
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : "table table-responsive"}
+                classes={!mobileView ? 'table' : 'table table-responsive'}
                 defaultSorted={defaultSorted}
-                pagination={paginationFactory()}
                 noDataIndication={
                   loading ? (
                     <div className="spinner-border text-primary" role="status">
@@ -256,6 +444,34 @@ const EmployeesDepartmentTable = ({
                   )
                 }
               />
+
+              <select
+                className="application-table-sizePerPage"
+                name="sizePerPage"
+                value={info.sizePerPage}
+                onChange={handleChangeSizePerPage}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+              </select>
+              <div className="application-table-pagination">
+                <Stack className="application-table-pagination-stack">
+                  <Pagination
+                    className="job-applicant-pagination"
+                    count={count}
+                    page={page}
+                    boundaryCount={4}
+                    onChange={handleChange}
+                    color="primary"
+                    showFirstButton
+                    showLastButton
+                    variant="outlined"
+                    shape="rounded"
+                  />
+                </Stack>
+              </div>
             </div>
           )}
         </ToolkitProvider>

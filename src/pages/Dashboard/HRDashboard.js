@@ -50,7 +50,7 @@ const HRDashboard = () => {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axiosInstance.get('/employees/department/count');
+      const response = await axiosInstance.get('/departments/count');
       const resData = response.data.data.employeesByDepartment;
 
       const formatted = resData.map((e) => ({

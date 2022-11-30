@@ -1,9 +1,8 @@
-
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
 
 import FormModal2 from '../../../components/Modal/FormModal2';
@@ -24,7 +23,7 @@ const AllEmployeesDepartmentAdmin = () => {
   const [female, setFemale] = useState(0);
   const [totalGenderCount, setTotalGenderCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [department, setDepartment] = useState("");
+  const [department, setDepartment] = useState('');
 
   const { fetchEmployee, createEmployee, showAlert } = useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
@@ -40,39 +39,45 @@ const AllEmployeesDepartmentAdmin = () => {
   const [loadForm, setloadForm] = useState(false);
   const [mode, setmode] = useState('add');
   const { user } = useAppContext();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams();
+  const [unfiltered, setunfiltered] = useState([]);
 
-  const fetchEmployeeByDepartment = async () => {
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+
+  const [prevPage, setPrevPage] = useState('');
+  const [nextPage, setNextPage] = useState('');
+  const [totalPages, setTotalPages] = useState('');
+
+  const [designationFilter, setDesignationFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fetchGenderByDepartment = async () => {
     try {
-      const response = await axiosInstance.get(`/employees/department/${id}`);
-      console.log('this department data', response?.data?.data);
-      const headCount = response?.data?.data?.totalEmployeesInDepartment;
-      setTotalGenderCount(headCount);
+      const response = await axiosInstance.get(
+        `/departments/gender-count/${id}`
+      );
 
-      const male = response?.data?.data?.gender?.males;
-      setMale(male);
-
-      const female = response?.data?.data?.gender?.females;
+      const formattedFemale =
+        response.data?.data?.genderCountByDepartment.filter(
+          (gender) => gender._id === 'female'
+        );
+      const female = formattedFemale[0].total;
       setFemale(female);
 
-      const members = response?.data?.data?.employeesByDepartment.map((emp) => {
-        return {
-          ...emp,
-          fullName:
-            emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
-          designation_name: emp?.designation?.designation,
-          department_name: emp?.department?.department,
-          // project: emp?.projectId?.project_name,
-        };
-      });
+      const formattedMale = response.data?.data?.genderCountByDepartment.filter(
+        (gender) => gender._id === 'male'
+      );
+      const male = formattedMale[0].total;
+      setMale(male);
 
-      const department = localStorage.getItem("department");
+      const headCount = male + female;
+      setTotalGenderCount(headCount);
+
+      const department = localStorage.getItem('department');
       setDepartment(department);
 
-      setallEmployees(members);
-      console.log("members:", members)
-      console.log("dept:", members.department_name)
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -80,8 +85,80 @@ const AllEmployeesDepartmentAdmin = () => {
     }
   };
 
+  const fetchEmployeeByDepartment = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+      .get(`/departments/${id}`, {
+        params: {
+          designation: designationFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data.employeesByDepartment;
+        console.log('resData:', resData);
+        const pageData = res?.data?.data?.totalEmployees;
+        console.log('pageData:', pageData);
+        let resOptions = res?.data?.data?.pagination;
+        console.log('resOptions:', resOptions);
+
+        const thisPreviousPage =
+          pageData >= sizePerPage && resOptions.next.page === 2
+            ? null
+            : pageData <= sizePerPage && !resOptions.previous.page
+            ? null
+            : resOptions.previous.page;
+
+        const thisCurrentPage =
+          pageData >= sizePerPage
+            ? resOptions.next.page - 1
+            : resOptions.previous.page + 1;
+
+        const thisNextPage =
+          pageData >= sizePerPage
+            ? resOptions.next.page
+            : pageData < sizePerPage + 1
+            ? null
+            : null;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+
+        setPrevPage(thisPreviousPage);
+        setPage(thisCurrentPage);
+        setNextPage(thisNextPage);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
+          designation_name: e?.designation?.designation,
+          department_name: e?.department?.department,
+        }));
+
+        // console.log("this user", user);
+        // console.log('this job data', formatted);
+        setallEmployees(formatted);
+        setunfiltered(formatted);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [designationFilter, id, page, searchTerm, sizePerPage]);
+
   useEffect(() => {
-    fetchEmployeeByDepartment();
+    fetchEmployeeByDepartment ();
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  }, [ fetchEmployeeByDepartment ]);
+
+  useEffect(() => {
+    fetchGenderByDepartment();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
     settemplate(obj);
   }, []);
@@ -346,13 +423,30 @@ const AllEmployeesDepartmentAdmin = () => {
 
       <EmployeesDepartmentTable
         data={allEmployees}
+        setData={setallEmployees}
         loading={loading}
+        setLoading={setLoading}
         seteditData={seteditData}
         setmode={setmode}
         filters={filters}
         loadForm={loadForm}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
+        prevPage={prevPage}
+        page={page}
+        nextPage={nextPage}
+        sizePerPage={sizePerPage}
+        totalPages={totalPages}
+        setPrevPage={setPrevPage}
+        setPage={setPage}
+        setNextPage={setNextPage}
+        setSizePerPage={setSizePerPage}
+        setTotalPages={setTotalPages}
+        fetchEmployeeByDepartment={fetchEmployeeByDepartment}
+        designationFilter={designationFilter}
+        setDesignationFilter={setDesignationFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
       {toggleModal && (
         <UploadModal
