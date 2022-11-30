@@ -38,8 +38,6 @@ const ActivateClient = () => {
           token: activateToken,
         };
 
-        console.log("activate this", obj)
-
     try {
       const res = await axios.post(config.ApiUrl + '/api/reset-password/client-account', obj);
       // eslint-disable-next-line no-unused-vars

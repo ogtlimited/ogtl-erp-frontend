@@ -36,6 +36,7 @@ const Profile = () => {
       .get(`/profile-dashboard/${id}`)
       .then((res) => {
         setUserdata(res.data.getEmployeeFullData);
+        // console.log("user data", res.data.getEmployeeFullData)
       })
       .catch((error) => {
         console.log(error);
