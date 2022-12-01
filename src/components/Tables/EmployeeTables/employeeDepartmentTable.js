@@ -29,6 +29,7 @@ import Stack from '@mui/material/Stack';
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
 const EmployeesDepartmentTable = ({
+  designation,
   data,
   setData,
   defaultSorted,
@@ -69,6 +70,8 @@ const EmployeesDepartmentTable = ({
     sizePerPage: 10,
   });
   const { id } = useParams();
+
+  console.log("Designation", designation)
 
   useEffect(() => {}, [filters, loadForm]);
   const handleClick = (i, type) => {
@@ -223,13 +226,13 @@ const EmployeesDepartmentTable = ({
 
   console.log('Pagination:', prevPage, page, nextPage, sizePerPage, totalPages);
 
-  const handleChangeDesignation = (e, f) => {
-    setDesignationFilter(e.label);
+  const handleChangeDesignation = (e) => {
+    setDesignationFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get(`/departments/${id}`, {
+      .get(`/departments/employees/${id}`, {
         params: {
           designation: e.label,
           page: page,
@@ -383,7 +386,7 @@ const EmployeesDepartmentTable = ({
     }
     return;
   };
-
+// console.log("Designation", designation)
   return (
     <>
       {allEmployee && (
@@ -402,19 +405,21 @@ const EmployeesDepartmentTable = ({
                 className="inputSearch"
               />
               <div className="d-flex row mb-3">
-                {filters &&
-                  filters.map((f) => (
-                    <div className="col-md-3">
-                      <Select
-                        defaultValue={selectedOption}
-                        onChange={(e) => handleChangeDesignation(e, f)}
-                        options={f.options}
-                        placeholder={f.placeholder}
-                        style={{ display: 'inline-block' }}
-                        // formatGroupLabel={formatGroupLabel}
-                      />
-                    </div>
-                  ))}
+                  <div className="col-md-3 processing_stage_filter">
+                  <select
+                    onChange={(e) => handleChangeDesignation(e)}
+                    value={designationFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                    Filter By Designation
+                    </option>
+                    {designation.map((option, idx) => (
+                      <option key={idx} placeholder="Filter By designation">{option}</option>
+                    ))}
+                  </select>
+                </div>
+
+               
                 <div className="col-md-3 pt-3 float-right">
                   {filters && (
                     <ExportCSVButton
