@@ -173,7 +173,7 @@ const AllEmployeesDepartmentAdmin = () => {
     fetchEmployeeByDepartment ();
     setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 10000);
   }, [ fetchEmployeeByDepartment ]);
 
   useEffect(() => {

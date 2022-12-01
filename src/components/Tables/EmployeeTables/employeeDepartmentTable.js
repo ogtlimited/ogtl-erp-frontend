@@ -443,7 +443,7 @@ const EmployeesDepartmentTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No Record Found'
+                    ''
                   )
                 }
               />
