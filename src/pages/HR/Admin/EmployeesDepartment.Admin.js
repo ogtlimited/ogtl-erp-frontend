@@ -24,7 +24,7 @@ const AllEmployeesDepartmentAdmin = () => {
   const [totalGenderCount, setTotalGenderCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [department, setDepartment] = useState('');
-
+  const [designation, setDesignation] = useState([]);
   const { fetchEmployee, createEmployee, showAlert } = useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
@@ -63,13 +63,13 @@ const AllEmployeesDepartmentAdmin = () => {
         response.data?.data?.genderCountByDepartment.filter(
           (gender) => gender._id === 'female'
         );
-      const female = formattedFemale[0].total;
+      const female = formattedFemale[0] ? formattedFemale[0]?.total : 0;
       setFemale(female);
 
       const formattedMale = response.data?.data?.genderCountByDepartment.filter(
         (gender) => gender._id === 'male'
       );
-      const male = formattedMale[0].total;
+      const male = formattedMale[0] ? formattedMale[0]?.total :0;
       setMale(male);
 
       const headCount = male + female;
@@ -88,7 +88,7 @@ const AllEmployeesDepartmentAdmin = () => {
   const fetchEmployeeByDepartment = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/departments/${id}`, {
+      .get(`/departments/employees/${id}`, {
         params: {
           designation: designationFilter,
           search: searchTerm,
@@ -104,32 +104,32 @@ const AllEmployeesDepartmentAdmin = () => {
         let resOptions = res?.data?.data?.pagination;
         console.log('resOptions:', resOptions);
 
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
+
+        
+          const thisPreviousPage =
+          pageData >= sizePerPage && resOptions?.next?.page === 2
             ? null
-            : pageData <= sizePerPage && !resOptions.previous.page
+            : pageData <= sizePerPage && !resOptions?.previous?.page
             ? null
-            : resOptions.previous.page;
+            : resOptions?.previous?.page;
 
         const thisCurrentPage =
           pageData >= sizePerPage
-            ? resOptions.next.page - 1
-            : resOptions.previous.page + 1;
+            ? resOptions?.next?.page - 1
+            : resOptions?.previous?.page + 1;
 
         const thisNextPage =
           pageData >= sizePerPage
-            ? resOptions.next.page
+            ? resOptions?.next?.page
             : pageData < sizePerPage + 1
             ? null
             : null;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
+        const thisTotalPageSize = resOptions?.numberOfPages;
 
         setPrevPage(thisPreviousPage);
         setPage(thisCurrentPage);
         setNextPage(thisNextPage);
-        setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
         let formatted = resData.map((e) => ({
@@ -139,16 +139,39 @@ const AllEmployeesDepartmentAdmin = () => {
           department_name: e?.department?.department,
         }));
 
-        // console.log("this user", user);
+        
+        // console.log("next page", resOptions?.next?.page);
+        // console.log("previous page", resOptions?.previous?.page);
         // console.log('this job data', formatted);
         setallEmployees(formatted);
         setunfiltered(formatted);
         setLoading(false);
+        
       })
       .catch((error) => {
         console.log(error);
       });
   }, [designationFilter, id, page, searchTerm, sizePerPage]);
+
+
+  const fetchDesignationByDepartment =useCallback(() => {  
+  axiosInstance
+      .get(`/departments/employees/designations/${id}`)
+      .then((res) => {
+        let resData = res?.data?.data.designationsByDepartment;
+        let formattedDesignation = resData.map((e) => e?._id?.designation);
+        setDesignation(formattedDesignation);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }, []);
+  
+  // console.log("ALL Employees",arraysOfEmployeesDesignation)
+  // console.log("ALL Employees",allEmployees)
+  useEffect(() => {
+    fetchDesignationByDepartment();
+  }, [ fetchDesignationByDepartment ]);
 
   useEffect(() => {
     fetchEmployeeByDepartment ();
@@ -229,6 +252,7 @@ const AllEmployeesDepartmentAdmin = () => {
       if (!loadForm) setloadForm(true);
     });
   }, [mode]);
+  console.log("Filters", filters)
   const create = () => {
     let initialValues = {};
     for (let i in template) {
@@ -420,8 +444,9 @@ const AllEmployeesDepartmentAdmin = () => {
           </div>
         </div>
       </div>
-
+         
       <EmployeesDepartmentTable
+        designation={designation}
         data={allEmployees}
         setData={setallEmployees}
         loading={loading}
