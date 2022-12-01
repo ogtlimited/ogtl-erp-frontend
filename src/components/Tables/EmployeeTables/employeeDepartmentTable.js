@@ -65,7 +65,6 @@ const EmployeesDepartmentTable = ({
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
   const { user } = useAppContext();
-  const [dataToFilter, setDataToFilter] = useState('');
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -278,10 +277,6 @@ const EmployeesDepartmentTable = ({
   const MySearch = (props) => {
     let input;
     const handleClick = () => {
-      if (loading) {
-        setData([]);
-        setDataToFilter([]);
-      }
       setPage(1);
       setLoading(true);
       props.onSearch(input.value);
@@ -363,11 +358,6 @@ const EmployeesDepartmentTable = ({
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
-    if (loading) {
-      setData([]);
-      setDataToFilter([]);
-    }
-    return;
   };
 
   const handleChangeSizePerPage = (e) => {
@@ -377,12 +367,6 @@ const EmployeesDepartmentTable = ({
 
     setSizePerPage(e.target.value);
     setPage(1);
-
-    if (loading) {
-      setData([]);
-      setDataToFilter([]);
-    }
-    return;
   };
 // console.log("Designation", designation)
   return (
