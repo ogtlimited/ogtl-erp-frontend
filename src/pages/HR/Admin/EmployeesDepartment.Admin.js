@@ -54,6 +54,9 @@ const AllEmployeesDepartmentAdmin = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchGenderByDepartment = async () => {
+    const department = localStorage.getItem('department');
+    setDepartment(department);
+
     try {
       const response = await axiosInstance.get(
         `/departments/gender-count/${id}`
@@ -75,9 +78,6 @@ const AllEmployeesDepartmentAdmin = () => {
       const headCount = male + female;
       setTotalGenderCount(headCount);
 
-      const department = localStorage.getItem('department');
-      setDepartment(department);
-
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -98,12 +98,8 @@ const AllEmployeesDepartmentAdmin = () => {
       })
       .then((res) => {
         let resData = res?.data?.data.employeesByDepartment;
-        console.log('resData:', resData);
         const pageData = res?.data?.data?.totalEmployees;
-        console.log('pageData:', pageData);
         let resOptions = res?.data?.data?.pagination;
-        console.log('resOptions:', resOptions);
-
 
         
           const thisPreviousPage =
