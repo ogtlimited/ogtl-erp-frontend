@@ -62,6 +62,8 @@ const AllEmployeesDepartmentAdmin = () => {
         `/departments/gender-count/${id}`
       );
 
+      console.log("Gender distribution:", response.data?.data?.genderCountByDepartment)
+
       const formattedFemale =
         response.data?.data?.genderCountByDepartment.filter(
           (gender) => gender._id === 'female'

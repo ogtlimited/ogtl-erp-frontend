@@ -69,6 +69,10 @@ const AllEmployeesAdmin = () => {
       );
       const service = empHelper.mapRecords();
 
+      // console.log("For Status:", service);
+
+      // const status = []
+
       setfilters([
         {
           name: "projectId",
@@ -85,7 +89,15 @@ const AllEmployeesAdmin = () => {
           placeholder: "Filter by designation",
           options: service.designationOpts,
         },
+        // {
+        //   name: "status",
+        //   placeholder: "Filter by status",
+        //   options: service.designationOpts,
+        // },
       ]);
+
+      // console.log("Option:", service.designationOpts)
+
       const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
       // settemplate(
       //   {

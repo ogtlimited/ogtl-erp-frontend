@@ -224,6 +224,18 @@ const EmployeesTable = ({
                 className="inputSearch"
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
+              
+              <div className="col-md-3 pt-3 float-right">
+                  {filters && (
+                    <ExportCSVButton
+                      className="float-right btn export-csv"
+                      {...props.csvProps}
+                    >
+                      Export CSV
+                    </ExportCSVButton>
+                  )}
+                </div>
+                
               <div className="d-flex row mb-3">
                 {filters &&
                   filters.map((f) => (
@@ -239,17 +251,9 @@ const EmployeesTable = ({
                       />
                     </div>
                   ))}
-                <div className="col-md-3 pt-3 float-right">
-                  {filters && (
-                    <ExportCSVButton
-                      className="float-right btn export-csv"
-                      {...props.csvProps}
-                    >
-                      Export CSV
-                    </ExportCSVButton>
-                  )}
-                </div>
+                  
               </div>
+              
 
               <BootstrapTable
                 {...props.baseProps}
