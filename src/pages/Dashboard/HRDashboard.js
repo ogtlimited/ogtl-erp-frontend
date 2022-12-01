@@ -20,6 +20,7 @@ const HRDashboard = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [genderLabel, setGenderLabel] = useState([]);
   const [genderData, setGenderData] = useState([]);
+  const [formattedData, setFormattedData] = useState([]);
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
@@ -49,17 +50,21 @@ const HRDashboard = () => {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axiosInstance.get('/employees/department/count');
+      const response = await axiosInstance.get('/departments/employees/count');
       const resData = response.data.data.employeesByDepartment;
 
-      const formatted = resData.map((e) => ({
-        labels: e._id === null ? 'Not Specified' : e._id['department'],
+      const dept = resData.filter((item) => item._id !== null)
+
+      const formatted = dept.map((e) => ({
+        id: e._id === null ? null : e._id['_id'],
+        labels: e._id === null ? null : e._id['department'],
         data: e.total,
       }));
 
       const label = [...formatted.map((e) => e.labels)];
       const data = [...formatted.map((e) => e.data)];
 
+      setFormattedData(formatted);
       setEmployeeLabel(label);
       setEmployeeData(data);
 
@@ -318,7 +323,7 @@ const HRDashboard = () => {
           </div>
           <span>Month Attrition Rate</span>
         </div>
-        <div className="hr-dashboard-card">
+        {/* <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i className="fa fa-diamond"></i>
@@ -328,17 +333,17 @@ const HRDashboard = () => {
             </div>
           </div>
           <span>Absenteeism Per Month</span>
-        </div>
+        </div> */}
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
-              <i className="las la-percent"></i>
+              <i className="las la-restroom" style={{transform: "scaleX(-1)"}}></i>
             </span>
             <div className="card-info">
-              {loading ? <h3>-</h3> : <h3>{genderRatio}</h3>}
+              {loading ? <h3>-</h3> : <h3> {genderRatio} </h3>}
             </div>
           </div>
-          <span>Gender Diversity Ratio</span>
+          <span>Gender Diversity Ratio (Females : Males)</span>
         </div>
       </div>
 
@@ -349,6 +354,7 @@ const HRDashboard = () => {
           employeeLabel={employeeLabel}
           genderLabel={genderLabel}
           genderData={genderData}
+          formattedData={formattedData}
         />
       </div>
 

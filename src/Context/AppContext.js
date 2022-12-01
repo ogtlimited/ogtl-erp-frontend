@@ -73,7 +73,7 @@ const AppProvider = (props) => {
           // project: emp?.projectId?.project_name,
         }
       })
-      console.log(mapp)
+      // console.log("All Employees:", mapp)
       setallEmployees(mapp);
       // setloggedIn(false);
     });
