@@ -41,7 +41,6 @@ const AllEmployeesDepartmentAdmin = () => {
   const { user } = useAppContext();
   // const navigate = useNavigate();
   const { id } = useParams();
-  const [unfiltered, setunfiltered] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -54,6 +53,9 @@ const AllEmployeesDepartmentAdmin = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchGenderByDepartment = async () => {
+    const department = localStorage.getItem('department');
+    setDepartment(department);
+
     try {
       const response = await axiosInstance.get(
         `/departments/gender-count/${id}`
@@ -64,20 +66,17 @@ const AllEmployeesDepartmentAdmin = () => {
         response.data?.data?.genderCountByDepartment.filter(
           (gender) => gender._id === 'female'
         );
-      const female = formattedFemale[0].total;
+      const female = formattedFemale.length ? formattedFemale[0].total : 0;
       setFemale(female);
 
       const formattedMale = response.data?.data?.genderCountByDepartment.filter(
         (gender) => gender._id === 'male'
       );
-      const male = formattedMale[0].total;
+      const male = formattedMale.length ? formattedMale[0].total : 0;
       setMale(male);
 
       const headCount = male + female;
       setTotalGenderCount(headCount);
-
-      const department = localStorage.getItem('department');
-      setDepartment(department);
 
       setLoading(false);
     } catch (error) {
@@ -99,38 +98,12 @@ const AllEmployeesDepartmentAdmin = () => {
       })
       .then((res) => {
         let resData = res?.data?.data.employeesByDepartment;
-        console.log('resData:', resData);
-        const pageData = res?.data?.data?.totalEmployees;
-        console.log('pageData:', pageData);
+        console.log("Data:", resData);
         let resOptions = res?.data?.data?.pagination;
-        console.log('resOptions:', resOptions);
-
-        // const thisPreviousPage =
-        //   pageData >= sizePerPage && resOptions.next.page === 2
-        //     ? null
-        //     : pageData <= sizePerPage && !resOptions.previous.page
-        //     ? null
-        //     : resOptions.previous.page;
-
-        // const thisCurrentPage =
-        //   pageData >= sizePerPage
-        //     ? resOptions.next.page - 1
-        //     : resOptions.previous.page + 1;
-
-        // const thisNextPage =
-        //   pageData >= sizePerPage
-        //     ? resOptions.next.page
-        //     : pageData < sizePerPage + 1
-        //     ? null
-        //     : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
-        console.log("data length:", resData.length)
 
-        // setPrevPage(thisPreviousPage);
-        // setPage(thisCurrentPage);
-        // setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -141,8 +114,27 @@ const AllEmployeesDepartmentAdmin = () => {
           department_name: e?.department?.department,
         }));
 
+        const dept = resData?.map((e) => ({
+          label: e.designation ? e.designation.designation : "",
+          value: e.designation ? e.designation._id : "",
+        }))
+        
+        const uniqueArray = dept.filter((value, index) => {
+          const _value = JSON.stringify(value);
+          return index === dept.findIndex(obj => {
+            return JSON.stringify(obj) === _value;
+          });
+        });
+
+        setfilters([
+          {
+            name: 'designation',
+            placeholder: 'Filter by designation',
+            options: uniqueArray,
+          },
+        ]);
+
         setallEmployees(formatted);
-        setunfiltered(formatted);
         setLoading(false);
       })
       .catch((error) => {
@@ -188,31 +180,15 @@ const AllEmployeesDepartmentAdmin = () => {
       const service = empHelper.mapRecords();
       
 
-      setfilters([
-        // {
-        //   name: "projectId",
-        //   placeholder: "Filter by campaign",
-        //   options: service.campaingOpts,
-        // },
-        // {
-        //   name: "department",
-        //   placeholder: "Filter by department",
-        //   options: service.deptopts,
-        // },
-        {
-          name: 'designation',
-          placeholder: 'Filter by designation',
-          options: service.designationOpts,
-        },
-      ]);
-      console.log("THIS GUY:::", service.designationOpts)
-      const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
-      // settemplate(
+      // setfilters([
       //   {
-      //     title: employeeFormJson.title,
-      //     Fields: finalForm
-      //   }
-      // )
+      //     name: 'designation',
+      //     placeholder: 'Filter by designation',
+      //     options: service.designationOpts,
+      //   },
+      // ]);
+      
+      const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
       const obj = helper.formArrayToObject(finalForm);
       let initialValues = {
         leaveCount: 0,

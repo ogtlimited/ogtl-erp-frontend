@@ -64,7 +64,6 @@ const EmployeesDepartmentTable = ({
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
   const { user } = useAppContext();
-  const [dataToFilter, setDataToFilter] = useState('');
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -246,26 +245,11 @@ const EmployeesDepartmentTable = ({
       })
       .then((res) => {
         let resData = res?.data?.data.employeesByDepartment;
-        const pageData = res?.data?.data?.totalEmployees;
         let resOptions = res?.data?.data?.pagination;
-
-        // const thisPreviousPage =
-        //   pageData >= sizePerPage && resOptions.next.page === 2
-        //     ? null
-        //     : pageData < 10
-        //     ? null
-        //     : resOptions.previous.page;
-
-      
-        // const thisNextPage =
-        //   pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
-
-        // setPrevPage(thisPreviousPage);
-        // setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -287,7 +271,6 @@ const EmployeesDepartmentTable = ({
     const handleClick = () => {
       if (loading) {
         setData([]);
-        setDataToFilter([]);
       }
       setPage(1);
       setLoading(true);
@@ -306,26 +289,11 @@ const EmployeesDepartmentTable = ({
           })
           .then((res) => {
             let resData = res?.data?.data.employeesByDepartment;
-            const pageData = res?.data?.data?.totalEmployees;
             let resOptions = res?.data?.data?.pagination;
-
-            // const thisPreviousPage =
-            //   pageData >= sizePerPage && resOptions.next.page === 2
-            //     ? null
-            //     : pageData < 10
-            //     ? null
-            //     : resOptions.previous.page;
-
-          
-            // const thisNextPage =
-            //   pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
             const thisPageLimit = sizePerPage;
             const thisTotalPageSize = resOptions.numberOfPages;
 
-
-            // setPrevPage(thisPreviousPage);
-            // setNextPage(thisNextPage);
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
 
@@ -372,7 +340,6 @@ const EmployeesDepartmentTable = ({
     _DATA.jump(p);
     if (loading) {
       setData([]);
-      setDataToFilter([]);
     }
     return;
   };
@@ -387,7 +354,6 @@ const EmployeesDepartmentTable = ({
 
     if (loading) {
       setData([]);
-      setDataToFilter([]);
     }
     return;
   };
@@ -410,6 +376,7 @@ const EmployeesDepartmentTable = ({
                 className="inputSearch"
               />
               <div className="d-flex row mb-3">
+
                 {filters &&
                   filters.map((f) => (
                     <div className="col-md-3">
@@ -423,6 +390,7 @@ const EmployeesDepartmentTable = ({
                       />
                     </div>
                   ))}
+
                 <div className="col-md-3 pt-3 float-right">
                   {filters && (
                     <ExportCSVButton
