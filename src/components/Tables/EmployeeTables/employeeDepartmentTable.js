@@ -71,8 +71,6 @@ const EmployeesDepartmentTable = ({
   });
   const { id } = useParams();
 
-  console.log("Designation", designation)
-
   useEffect(() => {}, [filters, loadForm]);
   const handleClick = (i, type) => {
     if (i?.value === 'All' || i == null) {
