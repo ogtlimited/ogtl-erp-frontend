@@ -225,6 +225,7 @@ const EmployeesDepartmentTable = ({
 
   const handleChangeDesignation = (e) => {
     setDesignationFilter(e.target.value);
+    console.log("Search for this:", e.target.value);
     setPage(1);
     setLoading(true);
 
@@ -237,35 +238,36 @@ const EmployeesDepartmentTable = ({
         },
       })
       .then((res) => {
-        let resData = res?.data?.data.employeesByDepartment;
-        const pageData = res?.data?.data?.totalEmployees;
+        let resData = res?.data?.data?.employeesByDepartment;
+        console.log("Get this guy as result:", resData)
+        // const pageData = res?.data?.data?.totalEmployees;
         let resOptions = res?.data?.data?.pagination;
 
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : pageData < 10
-            ? null
-            : resOptions.previous.page;
+        // const thisPreviousPage =
+        //   pageData >= sizePerPage && resOptions?.next?.page === 2
+        //     ? null
+        //     : pageData < 10
+        //     ? null
+        //     : resOptions?.previous?.page;
 
         // const thisCurrentPage =
         //   pageData >= sizePerPage
         //     ? resOptions?.next?.page - 1
         //     : resOptions?.previous?.page + 1;
 
-        const thisNextPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page
-            : pageData < sizePerPage + 1
-            ? null
-            : null;
+        // const thisNextPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions?.next?.page
+        //     : pageData < sizePerPage + 1
+        //     ? null
+        //     : null;
 
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
+        const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
+        // setPrevPage(thisPreviousPage);
         // setPage(thisCurrentPage);
-        setNextPage(thisNextPage);
+        // setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -301,35 +303,35 @@ const EmployeesDepartmentTable = ({
             },
           })
           .then((res) => {
-            let resData = res?.data?.data.employeesByDepartment;
-            const pageData = res?.data?.data?.totalEmployees;
+            let resData = res?.data?.data?.employeesByDepartment;
+            // const pageData = res?.data?.data?.totalEmployees;
             let resOptions = res?.data?.data?.pagination;
 
-            const thisPreviousPage =
-              pageData >= sizePerPage && resOptions.next.page === 2
-                ? null
-                : pageData < 10
-                ? null
-                : resOptions.previous.page;
+            // const thisPreviousPage =
+            //   pageData >= sizePerPage && resOptions?.next?.page === 2
+            //     ? null
+            //     : pageData < 10
+            //     ? null
+            //     : resOptions?.previous?.page;
 
             // const thisCurrentPage =
             //   pageData >= sizePerPage
             //     ? resOptions?.next?.page - 1
             //     : resOptions?.previous?.page + 1;
 
-            const thisNextPage =
-              pageData >= sizePerPage
-                ? resOptions.next.page
-                : pageData < sizePerPage + 1
-                ? null
-                : null;
+            // const thisNextPage =
+            //   pageData >= sizePerPage
+            //     ? resOptions?.next?.page
+            //     : pageData < sizePerPage + 1
+            //     ? null
+            //     : null;
 
             const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions.numberOfPages;
+            const thisTotalPageSize = resOptions?.numberOfPages;
 
-            setPrevPage(thisPreviousPage);
+            // setPrevPage(thisPreviousPage);
             // setPage(thisCurrentPage);
-            setNextPage(thisNextPage);
+            // setNextPage(thisNextPage);
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
 

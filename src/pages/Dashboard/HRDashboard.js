@@ -53,9 +53,11 @@ const HRDashboard = () => {
       const response = await axiosInstance.get('/departments/employees/count');
       const resData = response.data.data.employeesByDepartment;
 
-      const formatted = resData.map((e) => ({
-        id: e._id === null ? 'Not Specified' : e._id['_id'],
-        labels: e._id === null ? 'Not Specified' : e._id['department'],
+      const dept = resData.filter((item) => item._id !== null)
+
+      const formatted = dept.map((e) => ({
+        id: e._id === null ? null : e._id['_id'],
+        labels: e._id === null ? null : e._id['department'],
         data: e.total,
       }));
 

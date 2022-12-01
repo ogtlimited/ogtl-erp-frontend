@@ -98,34 +98,34 @@ const AllEmployeesDepartmentAdmin = () => {
       })
       .then((res) => {
         let resData = res?.data?.data.employeesByDepartment;
-        const pageData = res?.data?.data?.totalEmployees;
+        // const pageData = res?.data?.data?.totalEmployees;
         let resOptions = res?.data?.data?.pagination;
-
+        console.log("Null Data:",resData)
         
-          const thisPreviousPage =
-          pageData >= sizePerPage && resOptions?.next?.page === 2
-            ? null
-            : pageData <= sizePerPage && !resOptions?.previous?.page
-            ? null
-            : resOptions?.previous?.page;
+          // const thisPreviousPage =
+          // pageData >= sizePerPage && resOptions?.next?.page === 2
+          //   ? null
+          //   : pageData <= sizePerPage && !resOptions?.previous?.page
+          //   ? null
+          //   : resOptions?.previous?.page;
 
-        const thisCurrentPage =
-          pageData >= sizePerPage
-            ? resOptions?.next?.page - 1
-            : resOptions?.previous?.page + 1;
+        // const thisCurrentPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions?.next?.page - 1
+        //     : resOptions?.previous?.page + 1;
 
-        const thisNextPage =
-          pageData >= sizePerPage
-            ? resOptions?.next?.page
-            : pageData < sizePerPage + 1
-            ? null
-            : null;
+        // const thisNextPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions?.next?.page
+        //     : pageData < sizePerPage + 1
+        //     ? null
+        //     : null;
 
         const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
-        setPage(thisCurrentPage);
-        setNextPage(thisNextPage);
+        // setPrevPage(thisPreviousPage);
+        // setPage(thisCurrentPage);
+        // setNextPage(thisNextPage);
         setTotalPages(thisTotalPageSize);
 
         let formatted = resData.map((e) => ({
@@ -248,7 +248,6 @@ const AllEmployeesDepartmentAdmin = () => {
       if (!loadForm) setloadForm(true);
     });
   }, [mode]);
-  console.log("Filters", filters)
   const create = () => {
     let initialValues = {};
     for (let i in template) {
