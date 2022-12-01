@@ -248,15 +248,23 @@ const EmployeesDepartmentTable = ({
             ? null
             : resOptions.previous.page;
 
-      
+        // const thisCurrentPage =
+        //   pageData >= sizePerPage
+        //     ? resOptions?.next?.page - 1
+        //     : resOptions?.previous?.page + 1;
+
         const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+          pageData >= sizePerPage
+            ? resOptions.next.page
+            : pageData < sizePerPage + 1
+            ? null
+            : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
-
         setPrevPage(thisPreviousPage);
+        // setPage(thisCurrentPage);
         setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -304,15 +312,23 @@ const EmployeesDepartmentTable = ({
                 ? null
                 : resOptions.previous.page;
 
-          
+            // const thisCurrentPage =
+            //   pageData >= sizePerPage
+            //     ? resOptions?.next?.page - 1
+            //     : resOptions?.previous?.page + 1;
+
             const thisNextPage =
-              pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
+              pageData >= sizePerPage
+                ? resOptions.next.page
+                : pageData < sizePerPage + 1
+                ? null
+                : null;
 
             const thisPageLimit = sizePerPage;
             const thisTotalPageSize = resOptions.numberOfPages;
 
-
             setPrevPage(thisPreviousPage);
+            // setPage(thisCurrentPage);
             setNextPage(thisNextPage);
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
@@ -326,7 +342,7 @@ const EmployeesDepartmentTable = ({
 
             setData(formatted);
             setunfiltered(formatted);
-            setDesignationFilter("");
+            setDesignationFilter('');
           });
       }
       setLoading(false);
@@ -368,7 +384,7 @@ const EmployeesDepartmentTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
   };
-// console.log("Designation", designation)
+  // console.log("Designation", designation)
   return (
     <>
       {allEmployee && (
@@ -387,21 +403,22 @@ const EmployeesDepartmentTable = ({
                 className="inputSearch"
               />
               <div className="d-flex row mb-3">
-                  <div className="col-md-3 processing_stage_filter">
+                <div className="col-md-3 processing_stage_filter">
                   <select
                     onChange={(e) => handleChangeDesignation(e)}
                     value={designationFilter}
                   >
                     <option value="" disabled selected hidden>
-                    Filter By Designation
+                      Filter By Designation
                     </option>
                     {designation.map((option, idx) => (
-                      <option key={idx} placeholder="Filter By designation">{option}</option>
+                      <option key={idx} placeholder="Filter By designation">
+                        {option}
+                      </option>
                     ))}
                   </select>
                 </div>
 
-               
                 <div className="col-md-3 pt-3 float-right">
                   {filters && (
                     <ExportCSVButton
