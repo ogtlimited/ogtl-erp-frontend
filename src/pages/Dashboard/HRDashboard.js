@@ -50,7 +50,7 @@ const HRDashboard = () => {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axiosInstance.get('/departments/count');
+      const response = await axiosInstance.get('/departments/employees/count');
       const resData = response.data.data.employeesByDepartment;
 
       const formatted = resData.map((e) => ({
@@ -338,10 +338,10 @@ const HRDashboard = () => {
               <i className="las la-restroom" style={{transform: "scaleX(-1)"}}></i>
             </span>
             <div className="card-info">
-              {loading ? <h3>-</h3> : <h3>{genderRatio}</h3>}
+              {loading ? <h3>-</h3> : <h3> {genderRatio} </h3>}
             </div>
           </div>
-          <span>Gender Diversity Ratio</span>
+          <span>Gender Diversity Ratio (Females : Males)</span>
         </div>
       </div>
 
