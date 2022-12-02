@@ -318,8 +318,7 @@
 }
 
 .employee-gender-pie {
-  min-width: 480px;
-  min-height: 240px;
+  min-height: 35vh;
 }
 
 
