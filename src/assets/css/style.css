@@ -551,9 +551,7 @@ select.form-control[size] {
   width: 100%;
 }
 .table {
-  color: #333; 
-  display: block;
-  overflow: auto;
+  color: #333;
 }
 .table.table-white {
   background-color: #fff;
