@@ -28,7 +28,7 @@ import Stack from '@mui/material/Stack';
 
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
-const EmployeesDepartmentTable = ({
+const EmployeesGenderTable = ({
   designation,
   data,
   setData,
@@ -50,7 +50,7 @@ const EmployeesDepartmentTable = ({
   setNextPage,
   setSizePerPage,
   setTotalPages,
-  fetchEmployeeByDepartment,
+  fetchEmployeeByGender,
   designationFilter,
   setDesignationFilter,
   searchTerm,
@@ -435,4 +435,4 @@ const EmployeesDepartmentTable = ({
   );
 };
 
-export default EmployeesDepartmentTable;
+export default EmployeesGenderTable;

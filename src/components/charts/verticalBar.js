@@ -5,6 +5,7 @@ import { Bar } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const options = {
+  responsive: true,
   scales: {
     yAxes: [
       {

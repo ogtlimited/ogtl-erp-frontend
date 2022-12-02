@@ -285,8 +285,9 @@
 
 .hr-dashboard-card > span {
   font-size: 16px;
-  float: right;
-  margin: 0 20px 10px 20px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
 }
 
 .card-info > h3 {
@@ -311,8 +312,14 @@
 
 .dept-dashboard-card > span {
   font-size: 16px;
-  float: right;
-  margin: 0 20px 10px 20px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+}
+
+.employee-gender-pie {
+  min-width: 480px;
+  min-height: 240px;
 }
 
 
@@ -545,7 +552,9 @@ select.form-control[size] {
   width: 100%;
 }
 .table {
-  color: #333;
+  color: #333; 
+  display: block;
+  overflow: auto;
 }
 .table.table-white {
   background-color: #fff;

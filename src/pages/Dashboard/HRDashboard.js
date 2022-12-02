@@ -21,6 +21,7 @@ const HRDashboard = () => {
   const [genderLabel, setGenderLabel] = useState([]);
   const [genderData, setGenderData] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
+  const [formattedGender, setFormattedGender] = useState([]);
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
@@ -86,6 +87,7 @@ const HRDashboard = () => {
       const label = [...formatted.map((e) => e.labels)];
       const data = [...formatted.map((e) => e.data)];
 
+      setFormattedGender(formatted)
       setGenderLabel(label);
       setGenderData(data);
       setLoading(false);
@@ -341,7 +343,7 @@ const HRDashboard = () => {
               {loading ? <h3>-</h3> : <h3> {genderRatio} </h3>}
             </div>
           </div>
-          <span>Gender Diversity Ratio (Females : Males)</span>
+          <span>Gender Diversity Ratio (Females to Males)</span>
         </div>
       </div>
 
@@ -353,6 +355,7 @@ const HRDashboard = () => {
           genderLabel={genderLabel}
           genderData={genderData}
           formattedData={formattedData}
+          formattedGender={formattedGender}
         />
       </div>
 
