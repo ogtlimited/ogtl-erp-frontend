@@ -23,6 +23,8 @@ const AllEmployeesAdmin = () => {
     allEmployees,
     createEmployee,
     showAlert,
+    employeeStatus,
+    status
   } = useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
@@ -65,13 +67,13 @@ const AllEmployeesAdmin = () => {
         departments,
         projects,
         acceptedJobOffers,
-        employees
+        employees,
+        status
       );
       const service = empHelper.mapRecords();
 
-      // console.log("For Status:", service);
-
       // const status = []
+      
 
       setfilters([
         {
@@ -89,14 +91,12 @@ const AllEmployeesAdmin = () => {
           placeholder: "Filter by designation",
           options: service.designationOpts,
         },
-        // {
-        //   name: "status",
-        //   placeholder: "Filter by status",
-        //   options: service.designationOpts,
-        // },
+        {
+          name: "status",
+          placeholder: "Filter by status",
+          options: service.employeestatusOpts,
+        },
       ]);
-
-      // console.log("Option:", service.designationOpts)
 
       const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
       // settemplate(

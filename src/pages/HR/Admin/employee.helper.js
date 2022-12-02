@@ -6,7 +6,8 @@ export default class EmployeeHelperService {
     departments,
     projects,
     acceptedJobOffers,
-    employees
+    employees,
+    employeestatus,
   ) {
     this.shifts = shifts;
     this.designations = designations;
@@ -15,6 +16,7 @@ export default class EmployeeHelperService {
     this.projects = projects;
     this.acceptedJobOffers = acceptedJobOffers;
     this.employees = employees;
+    this.employeestatus = employeestatus;
   }
   mapRecords() {
     const appOpts =
@@ -73,6 +75,13 @@ export default class EmployeeHelperService {
         value: e._id,
       };
     });
+    const employeestatusOpts = this.employeestatus?.map((e) => {
+      return {
+        label: e.status,
+        value: e._id,
+      };
+    });
+
     return {
       reportstoOpts,
       shiftsopts,
@@ -81,6 +90,7 @@ export default class EmployeeHelperService {
       deptopts,
       designationOpts,
       appOpts,
+      employeestatusOpts
     };
   }
 
@@ -110,6 +120,9 @@ export default class EmployeeHelperService {
         return field;
       } else if (field.name === "reports_to") {
         field.options = service.reportstoOpts;
+        return field;
+      } else if (field.name === "status") {
+        field.options = service.employeestatusOpts;
         return field;
       }
       return field;
@@ -142,6 +155,9 @@ export default class EmployeeHelperService {
         return field;
       } else if (field.name === "reports_to") {
         field.options = service.reportstoOpts;
+        return field;
+      }else if (field.name === "status") {
+        field.options = service.employeestatusOpts;
         return field;
       }
       return field;

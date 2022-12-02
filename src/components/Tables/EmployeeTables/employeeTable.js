@@ -45,8 +45,9 @@ const EmployeesTable = ({
   const handleClick = (i, type) => {
     if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
-    } else {
-      const filt = unfiltered.filter((e) => i.value == e[type]?._id);
+    } 
+    else {
+      const filt = unfiltered.filter((e) => i.value == e[type]?._id || i.value== e[type] );
 
       setAllEmployee(filt);
     }
@@ -237,7 +238,9 @@ const EmployeesTable = ({
                 </div>
                 
               <div className="d-flex row mb-3">
-                {filters &&
+                {console.log("filters",filters)}
+                {
+                filters &&
                   filters.map((f) => (
                     <div className="col-md-3">
                       <Select
