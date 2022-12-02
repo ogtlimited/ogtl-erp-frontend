@@ -1,4 +1,9 @@
-/* eslint-disable eqeqeq */
+/**
+ * /* eslint-disable eqeqeq
+ *
+ * @format
+ */
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -6,7 +11,7 @@ import { Link, useParams } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
 
 import FormModal2 from '../../../components/Modal/FormModal2';
-import EmployeesDepartmentTable from '../../../components/Tables/EmployeeTables/employeeDepartmentTable';
+import EmployeesGenderTable from '../../../components/Tables/EmployeeTables/employeeGenderTable';
 
 import { useAppContext } from '../../../Context/AppContext';
 
@@ -16,14 +21,13 @@ import helper from '../../../services/helper';
 import UploadModal from '../../../components/Modal/uploadModal';
 import EmployeeHelperService from './employee.helper';
 
-const AllEmployeesDepartmentAdmin = () => {
+const AllEmployeesGenderAdmin = () => {
   const breadcrumb = 'All Employees';
   const [allEmployees, setallEmployees] = useState([]);
   const [male, setMale] = useState(0);
   const [female, setFemale] = useState(0);
   const [totalGenderCount, setTotalGenderCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [department, setDepartment] = useState('');
   const [designation, setDesignation] = useState([]);
   const { fetchEmployee, createEmployee, showAlert } = useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
@@ -53,44 +57,14 @@ const AllEmployeesDepartmentAdmin = () => {
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchGenderByDepartment = async () => {
-    const department = localStorage.getItem('department');
-    setDepartment(department);
+  const genderData = JSON.parse(localStorage.getItem('gender'));
+  const genderTitle = genderData.labels;
+  const genderCount = genderData.data;
 
-    try {
-      const response = await axiosInstance.get(
-        `/departments/gender-count/${id}`
-      );
-
-      console.log("Gender distribution:", response.data?.data?.genderCountByDepartment)
-
-      const formattedFemale =
-        response.data?.data?.genderCountByDepartment.filter(
-          (gender) => gender._id === 'female'
-        );
-      const female = formattedFemale[0] ? formattedFemale[0]?.total : 0;
-      setFemale(female);
-
-      const formattedMale = response.data?.data?.genderCountByDepartment.filter(
-        (gender) => gender._id === 'male'
-      );
-      const male = formattedMale[0] ? formattedMale[0]?.total :0;
-      setMale(male);
-
-      const headCount = male + female;
-      setTotalGenderCount(headCount);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchEmployeeByDepartment = useCallback(() => {
+  const fetchEmployeeByGender = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/departments/employees/${id}`, {
+      .get(`/employees/gender/${id}`, {
         params: {
           designation: designationFilter,
           search: searchTerm,
@@ -99,9 +73,9 @@ const AllEmployeesDepartmentAdmin = () => {
         },
       })
       .then((res) => {
-        let resData = res?.data?.data.employeesByDepartment;
-        let resOptions = res?.data?.data?.pagination;
-        
+        let resData = res?.data?.data?.employeesByGender.employeesByGender;
+        let resOptions = res?.data?.data?.employeesByGender.pagination;
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions?.numberOfPages;
 
@@ -118,40 +92,37 @@ const AllEmployeesDepartmentAdmin = () => {
         setallEmployees(formatted);
         setunfiltered(formatted);
         setLoading(false);
-        
       })
       .catch((error) => {
         console.log(error);
       });
   }, [designationFilter, id, page, searchTerm, sizePerPage]);
 
-
-  const fetchDesignationByDepartment =useCallback(() => {  
-  axiosInstance
-      .get(`/departments/employees/designations/${id}`)
+  const fetchDesignationByGender = useCallback(() => {
+    axiosInstance
+      .get(`/employees-gender/designations/${id}`)
       .then((res) => {
-        let resData = res?.data?.data.designationsByDepartment;
+        let resData = res?.data?.data?.designationsByGender;
         let formattedDesignation = resData.map((e) => e?._id?.designation);
         setDesignation(formattedDesignation);
       })
       .catch((error) => {
         console.log(error);
-      })
-    }, []);
-  
-  useEffect(() => {
-    fetchDesignationByDepartment();
-  }, [ fetchDesignationByDepartment ]);
+      });
+  }, []);
 
   useEffect(() => {
-    fetchEmployeeByDepartment ();
+    fetchEmployeeByGender();
+    fetchDesignationByGender();
+  }, [fetchDesignationByGender, fetchEmployeeByGender]);
+
+  useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 10000);
-  }, [ fetchEmployeeByDepartment ]);
+  }, []);
 
   useEffect(() => {
-    fetchGenderByDepartment();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
     settemplate(obj);
   }, []);
@@ -322,59 +293,14 @@ const AllEmployeesDepartmentAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{department}</h3>
+            <h3 className="page-title">{genderTitle}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Department</li>
+              <li className="breadcrumb-item active">Gender</li>
             </ul>
           </div>
-          {/* <div className="col-auto float-right ml-auto">
-            {user?.role?.hr?.create && (
-              <>
-                <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  data-target="#FormModal"
-                  onClick={() => create()}
-                >
-                  <i className="fa fa-plus"></i> Add Employee
-                </a>
-                <button
-                  onClick={() => settoggleModal(true)}
-                  type="button"
-                  className="btn add-btn mx-3"
-                  data-toggle="modal"
-                  data-target="#uploadModal"
-                >
-                  <i className="fa fa-cloud-upload"></i>
-                  Bulk Upload
-                </button>
-              </>
-            )}
-            <div className="view-icons">
-              <a
-                href="employees.html"
-                className="grid-view btn btn-link active"
-              >
-                <i className="fa fa-th"></i>
-              </a>
-              <a href="employees-list.html" className="list-view btn btn-link">
-                <i className="fa fa-bars"></i>
-              </a>
-            </div>
-          </div> */}
-
-          {/* <button
-            onClick={() => navigate("/dashboard/hr/all-employees")}
-            type="button"
-            className="btn add-btn mx-3"
-          >
-            <i className="fa fa-users"></i>
-            All Employees
-          </button> */}
 
           <div className="dept-dashboard-card-group">
             <div className="dept-dashboard-card">
@@ -383,39 +309,16 @@ const AllEmployeesDepartmentAdmin = () => {
                   <i className="las la-users"></i>
                 </span>
                 <div className="card-info">
-                  <h3>{totalGenderCount}</h3>
+                  <h3>{genderCount}</h3>
                 </div>
               </div>
               <span>Head Count</span>
-            </div>
-            <div className="dept-dashboard-card">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className="las la-male"></i>
-                </span>
-                <div className="card-info">
-                  <h3>{male}</h3>
-                </div>
-              </div>
-              <span>Male</span>
-            </div>
-            <div className="dept-dashboard-card">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className="las la-female"></i>
-                </span>
-                <div className="card-info">
-                  <h3>{female}</h3>
-                </div>
-              </div>
-              <span>Female</span>
             </div>
           </div>
         </div>
       </div>
 
-    
-      <EmployeesDepartmentTable
+      <EmployeesGenderTable
         designation={designation}
         data={allEmployees}
         setData={setallEmployees}
@@ -437,13 +340,12 @@ const AllEmployeesDepartmentAdmin = () => {
         setNextPage={setNextPage}
         setSizePerPage={setSizePerPage}
         setTotalPages={setTotalPages}
-        fetchEmployeeByDepartment={fetchEmployeeByDepartment}
+        fetchEmployeeByGender={fetchEmployeeByGender}
         designationFilter={designationFilter}
         setDesignationFilter={setDesignationFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
-         
       {toggleModal && (
         <UploadModal
           setUploadSuccess={setUploadSuccess}
@@ -463,4 +365,4 @@ const AllEmployeesDepartmentAdmin = () => {
   );
 };
 
-export default AllEmployeesDepartmentAdmin;
+export default AllEmployeesGenderAdmin;

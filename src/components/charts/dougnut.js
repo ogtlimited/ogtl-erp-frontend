@@ -47,7 +47,7 @@ const options = {
   }
     
   };
-const DoughnutChart = ({data}) => (
+const DoughnutChart = ({ data, handleChartClick }) => (
   <div className="d-flex justify-content-center" >
    
     <Doughnut
@@ -56,6 +56,7 @@ const DoughnutChart = ({data}) => (
     options={options}
     data={data}
     plugins={[ChartDataLabels]}
+    getElementAtEvent={handleChartClick}
     />
   </div>
 );

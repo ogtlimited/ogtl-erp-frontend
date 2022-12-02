@@ -11,10 +11,12 @@ const DashboardChart = ({
   employeeLabel,
   genderLabel,
   genderData,
-  formattedData
+  formattedData,
+  formattedGender
 }) => {
   const navigate = useNavigate();
-  const handleChartClick = async (element, employeeLabel) => {
+  
+  const handleDepartmentChartClick = async (element, employeeLabel) => {
     try {
       if (element.length > 0) {
         const dataIndex = element[0].index;
@@ -22,7 +24,24 @@ const DashboardChart = ({
         const id = departmentId[0].id;
         const department = departmentId[0].labels;
         localStorage.setItem("department", department);
-        navigate(`/dashboard/hr/all-employees/${id}`);
+        localStorage.removeItem("gender");
+        navigate(`/dashboard/hr/all-employees/department/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGenderChartClick = async (element, genderLabel) => {
+    try {
+      if (element.length > 0) {
+        const dataIndex = element[0].index;
+        const genderId = formattedGender.filter((data) => data.labels === genderLabel[dataIndex])
+        const id = genderId[0].labels;
+        const gender = genderId[0];
+        localStorage.setItem("gender", JSON.stringify(gender));
+        localStorage.removeItem("department");
+        navigate(`/dashboard/hr/all-employees/gender/${id}`);
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +108,7 @@ const DashboardChart = ({
               <VerticalBar
                 data={employee}
                 handleChartClick={(element) =>
-                  handleChartClick(element, employeeLabel)
+                  handleDepartmentChartClick(element, employeeLabel)
                 }
               />
             </div>
@@ -99,7 +118,10 @@ const DashboardChart = ({
           <div className="card">
             <div className="card-body">
               <h3 className="card-title">Employee By Gender</h3>
-              <DoughnutChart data={gender} />
+              <DoughnutChart data={gender} 
+                handleChartClick={(element) =>
+                  handleGenderChartClick(element, genderLabel)
+                }/>
             </div>
           </div>
         </div>
