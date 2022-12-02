@@ -30,6 +30,7 @@ const EmployeesTable = ({
   setmode,
   loadForm,
   loading,
+  context
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -263,7 +264,13 @@ const EmployeesTable = ({
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : "table table-responsive"}
+                classes={
+                  !mobileView
+                    ? 'table '
+                    : context
+                    ? 'table table-responsive'
+                    : 'table table-responsive'
+                }
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
                 noDataIndication={

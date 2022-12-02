@@ -44,12 +44,11 @@ const PaySlip = () => {
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
   const [fetched, setfetched] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [totalDeduction, settotalDeduction] = useState(0);
   const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
   useEffect(() => {
     const fetchPaySlip = async () => {
-      setLoading(true);
       try {
         const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
         const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');

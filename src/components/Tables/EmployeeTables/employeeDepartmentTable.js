@@ -55,6 +55,7 @@ const EmployeesDepartmentTable = ({
   setDesignationFilter,
   searchTerm,
   setSearchTerm,
+  context,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -386,7 +387,13 @@ const EmployeesDepartmentTable = ({
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                className={!mobileView ? 'table' : 'table table-responsive'}
+                classes={
+                  !mobileView
+                    ? 'table '
+                    : context
+                    ? 'table table-responsive'
+                    : 'table table-responsive'
+                }
                 defaultSorted={defaultSorted}
                 noDataIndication={
                   loading ? (
