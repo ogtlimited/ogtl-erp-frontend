@@ -29,7 +29,23 @@ const AppProvider = (props) => {
   const [user, setuser] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
   const [notifications, setNotifications] = useState([]);
+  const [employeeStatus, setEmployeeStatus] = useState([]);
   let socket = useRef();
+
+  const status = [
+    {
+        _id: "active",
+        status: "ACTIVE"
+    },
+    {
+        _id: "left",
+        status: "RESIGNED"
+    },
+    {
+        _id: "terminated",
+        status: "TERMINATED"
+    }
+]
 
   // let socketRef;
   //Fetching notifications
@@ -183,6 +199,7 @@ const AppProvider = (props) => {
   const adminDashboardData = () => {
     return axiosInstance.get("/admin-dashboard");
   };
+
   const fetchEmployeeAttendance = () => {
     const date = new Date();
     const firstDay = new Date(
@@ -203,7 +220,6 @@ const AppProvider = (props) => {
         setemployeeAttendance(e?.data?.data);
       });
   };
-
   return (
     <AppContext.Provider
       value={{
@@ -237,6 +253,7 @@ const AppProvider = (props) => {
         createCampaign,
         createRoleAssignment,
         createJobApplications,
+        status
       }}
     >
       {props.children}
