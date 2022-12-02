@@ -29,7 +29,7 @@ const AllEmployeesAdmin = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);
@@ -137,6 +137,13 @@ const AllEmployeesAdmin = () => {
     setformValue(initialValues);
     seteditData(initialValues);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+  }, []);
+
   // Submit
   useEffect(() => {
     if (submitted) {
@@ -260,6 +267,7 @@ const AllEmployeesAdmin = () => {
         </div>
       </div>
       <EmployeesTable
+        loading={loading}
         data={allEmployees}
         seteditData={seteditData}
         setmode={setmode}

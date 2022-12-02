@@ -343,7 +343,7 @@ const HRDashboard = () => {
               {loading ? <h3>-</h3> : <h3> {genderRatio} </h3>}
             </div>
           </div>
-          <span>Gender Diversity Ratio (Females : Males)</span>
+          <span>Gender Diversity Ratio (Females to Males)</span>
         </div>
       </div>
 
