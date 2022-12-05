@@ -111,6 +111,7 @@ const LeavesUser = () => {
         });
     }
   }, [formValue, submitted]);
+  
   useEffect(() => {
     combineRequest()
       .then((res) => {
@@ -133,6 +134,7 @@ const LeavesUser = () => {
           title: LeaveApplicationFormJSON.title,
           Fields: finalForm,
         });
+
         if (!loadedSelect) {
           setloadedSelect(true);
         }
@@ -260,7 +262,7 @@ const LeavesUser = () => {
                   data-toggle="tab"
                   href="#tab_subordinates-leaves"
                 >
-                  Leaves by Subordinates
+                  Leaves by Reportees
                 </a>
               </li>
             </ul>

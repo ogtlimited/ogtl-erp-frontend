@@ -43,10 +43,11 @@ const PaySlip = () => {
   const [employee, setemployee] = useState({});
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
-  const [fetched, setfetched] = useState(false);
+  const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   const [totalDeduction, settotalDeduction] = useState(0);
   const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
+
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
@@ -57,26 +58,29 @@ const PaySlip = () => {
         //   startOfMonth: startOfMonth,
         //   endOfMonth: endOfMonth,
         // });
+
         const res = await axiosInstance.get(
           `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
         );
+        const resData = res.data.data.employeeSlip;
+        setPaySlip(resData);
+        console.log('1. Employee Slip', resData);
+
         // //const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        // console.log("This payslip:", res);
-        setPaySlip(res.data.data.employeeSlip);
-        // console.log("main payslip data", res.data.data.employeeSlip);
+
         const earnings = {};
         const { employeeSalary, deductionsBreakDown } =
           res.data.data.employeeSlip;
+
         setdeductionsBreakDown(deductionsBreakDown);
-        if (paySlip?.additionalDeductions) {
-          settotalDeduction(
-            Object.values(paySlip?.additionalDeductions).reduce(
-              (a, b) => a + b,
-              0
-            )
-          );
+        if (resData?.additionalDeductions) {
+          let totalDeductions = Object.values(
+            resData?.additionalDeductions
+          ).reduce((a, b) => a + b, 0);
+
+          settotalDeduction(totalDeductions);
         }
-        console.log('TOTAL', totalDeduction);
+
         setemployee(employeeSalary.employeeId);
         delete employeeSalary.createdAt;
         delete employeeSalary.updatedAt;
@@ -102,8 +106,9 @@ const PaySlip = () => {
               break;
           }
         });
+
         setEarnings(earnings);
-        setfetched(true);
+        setFetched(true);
         console.log(earnings);
         setLoading(false);
       } catch (error) {
