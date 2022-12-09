@@ -5,42 +5,25 @@ import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveT
 import AdminLeavesTable from '../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable';
 import tokenService from '../../../services/token.service';
 import axiosInstance from '../../../services/api';
-import axios from 'axios';
 import ViewModal from '../../../components/Modal/ViewModal';
 import { ApplyLeaveModal } from '../../../components/Modal/ApplyLeaveModal';
 import { EditLeaveModal } from '../../../components/Modal/EditLeaveModal';
-import { LeaveApplicationFormJSON } from '../../../components/FormJSON/HR/Leave/application';
 import { useAppContext } from '../../../Context/AppContext';
 import LeaveApplicationContent from '../../../components/ModalContents/LeaveApplicationContent';
-import helper from '../../../services/helper';
 import RejectLeaveModal from '../../../components/Modal/RejectLeaveModal';
-import moment from 'moment';
-import LeaveJSON from './leaves.json';
 
 const LeavesUser = () => {
-  const { allEmployees, combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [userId, setuserId] = useState('');
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
   const [user, setuser] = useState(null);
   const [usedLeaves, setusedLeaves] = useState(0);
-  const [template, settemplate] = useState(null);
-  const [submitted, setsubmitted] = useState(false);
-  const [formValue, setformValue] = useState({});
-  const [editData, seteditData] = useState({});
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
   const [annual, setannual] = useState(0);
   const [casual, setcasual] = useState(0);
   const [medical, setmedical] = useState(0);
-  const [Subordinatesannual, setSubordinatesannual] = useState(0);
-  const [Subordinatescasual, setSubordinatescasual] = useState(0);
-  const [Subordinatesmedical, setSubordinatesmedical] = useState(0);
-  const [remaining, setremaining] = useState(0);
-  const [formMode, setformMode] = useState('add');
-  const [fetched, setfetched] = useState(false);
-  const [loadedSelect, setloadedSelect] = useState(false);
-  const [loadLeaves, setloadLeaves] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [isLead, setIsLead] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,9 +68,6 @@ const LeavesUser = () => {
       setallLeaves(formatter);
       setLoading(false);
 
-      if (allLeaves.length) {
-        setloadLeaves(true);
-      }
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -98,7 +78,6 @@ const LeavesUser = () => {
     try {
       const response = await axiosInstance.get(`leads-leave-applications`);
       const leaves = response?.data?.data?.application;
-      console.log("from requestor", leaves);
 
       const formatter = leaves.map((leave) => ({
         ...leave,
@@ -125,6 +104,7 @@ const LeavesUser = () => {
     }
   };
 
+
   useEffect(() => {
     checkUserLevel();
     fetchReporteesLeaves();
@@ -141,9 +121,9 @@ const LeavesUser = () => {
   const handleApproveLeave = async (row) => {
     const id = row._id;
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(`leads-leave-approval/${id}`)
       showAlert(true, 'Leave Approved', 'alert alert-success');
-      console.log("Successful Approval", response?.data);
       fetchReporteesLeaves();
     } catch (error) {
       console.log(error);
@@ -277,7 +257,7 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            <a
+            {row.acted_on === false && <a
               href="#"
               className="dropdown-item"
               data-toggle="modal"
@@ -285,7 +265,7 @@ const LeavesUser = () => {
               onClick={() => handleEditApplication(row)}
             >
               <i className="fa fa-edit m-r-5"></i> Edit
-            </a>
+            </a>}
           </div>
         </div>
       ),
@@ -471,13 +451,11 @@ const LeavesUser = () => {
         <RejectLeaveModal
           rejectLeave={rejectLeave}
           closeModal={setRejectModal}
-          fetchYourLeaves={fetchYourLeaves}
           fetchReporteesLeaves={fetchReporteesLeaves}
         />
       )}
       <ApplyLeaveModal
         fetchYourLeaves={fetchYourLeaves}
-        fetchReporteesLeaves={fetchReporteesLeaves}
       />
       <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} />
       <div className="page-header">
@@ -503,7 +481,7 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      <div className="page-menu">
+      {isLead && <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
@@ -516,7 +494,6 @@ const LeavesUser = () => {
                   Your Leaves
                 </a>
               </li>
-              {isLead && (
                 <li className="nav-item">
                   <a
                     className="nav-link"
@@ -526,11 +503,10 @@ const LeavesUser = () => {
                     Leaves by Reportees
                   </a>
                 </li>
-              )}
             </ul>
           </div>
         </div>
-      </div>
+      </div>}
       <div>
         <div className=" tab-content">
           <div id="tab_leaves" className="col-12 tab-pane show active">

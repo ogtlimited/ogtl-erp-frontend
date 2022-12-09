@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClientProjectContent = ({ clientProject = {} }) => {
-  console.log('show this modal', clientProject);
 
   delete clientProject.updatedAt;
   delete clientProject.createdAt;

@@ -3,7 +3,6 @@
 import React from 'react';
 
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
-  console.log('show this modal', leaveContent);
   delete leaveContent.__v;
   delete leaveContent.updatedAt;
   delete leaveContent.createdAt;

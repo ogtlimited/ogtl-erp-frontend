@@ -426,7 +426,7 @@
 
 .rejection-textarea {
   width: 100%;
-  min-height: 15vh;
+  height: 20vh !important;
 }
 
 

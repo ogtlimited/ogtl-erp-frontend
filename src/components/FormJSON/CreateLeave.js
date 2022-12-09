@@ -14,3 +14,7 @@ export const EDIT_LEAVE = {
   to_date: new Date(),
   reason_for_application: '',
 }
+
+export const REJECT_LEAVE = {
+  rejection_reason: '',
+}

@@ -1,21 +1,18 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import axiosInstance from '../../services/api';
-import { CREATE_LEAVE } from '../FormJSON/CreateLeave';
-// import $ from 'jquery';
+import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
 
 function RejectLeaveModal({
   closeModal,
   rejectLeave,
-  fetchYourLeaves,
   fetchReporteesLeaves,
 }) {
-  console.log('Reject this leave', rejectLeave);
   const { showAlert } = useAppContext();
-  const [leave, setLeave] = useState(CREATE_LEAVE);
+  const [leave, setLeave] = useState(REJECT_LEAVE);
   const [loading, setLoading] = useState(false);
 
   const handleFormChange = (e) => {
@@ -23,22 +20,20 @@ function RejectLeaveModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async (id) => {
-    setLoading(true);
-    try {
-      // eslint-disable-next-line no-unused-vars
-      // const res = await axiosInstance.patch(`/api/deactivate/client-account/${id}`);
-      console.log('rejection reason', leave);
-      showAlert(true, 'Leave Rejected', 'alert alert-success');
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-    setLoading(false);
-    fetchYourLeaves();
-    fetchReporteesLeaves();
-    closeModal(false);
-  };
+  const handleRejectLeave = useCallback(async () => {
+      const id = rejectLeave._id;
+      setLoading(true);
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.post(`leads-leave-rejection/${id}`, leave)
+        showAlert(true, 'Leave Rejected', 'alert alert-success');
+  
+        fetchReporteesLeaves();
+        closeModal(false);
+      } catch (error) {
+        console.log(error);
+      }
+  }, [closeModal, fetchReporteesLeaves, leave, rejectLeave._id, showAlert])
 
   return (
     <>
@@ -52,11 +47,11 @@ function RejectLeaveModal({
             <form onSubmit={handleRejectLeave}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="reason_for_application">
+                  <label htmlFor="rejection_reason">
                     Reason for Rejection
                   </label>
                   <textarea
-                    name="reason_for_application"
+                    name="rejection_reason"
                     className="form-control rejection-textarea"
                     value={leave.reason_for_application}
                     onChange={handleFormChange}

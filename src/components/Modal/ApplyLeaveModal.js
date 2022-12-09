@@ -7,7 +7,7 @@ import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
-export const ApplyLeaveModal = ({ fetchYourLeaves, fetchReporteesLeaves }) => {
+export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves, fetchReporteesLeaves }) => {
 
       showAlert(true, 'Your leave application is successful, please await an approval', 'alert alert-success');
       fetchYourLeaves()
-      fetchReporteesLeaves()
       setLeave(CREATE_LEAVE);
       $('#FormModal').modal('toggle');
     } catch (error) {
