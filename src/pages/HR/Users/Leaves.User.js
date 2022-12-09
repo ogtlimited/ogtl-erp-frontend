@@ -42,132 +42,91 @@ const LeavesUser = () => {
   const [loadedSelect, setloadedSelect] = useState(false);
   const [loadLeaves, setloadLeaves] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
+  const [isLead, setIsLead] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [editLeave, setEditLeave] = useState([]);
+  const [rejectLeave, setRejectLeave] = useState([]);
 
   const currentUser = tokenService.getUser();
 
-  // const fetchLeaves = () => {
-  //   axiosInstance
-  //     .get(`/leave-application?employee_id=${currentUser?._id}`)
-  //     .then((e) => {
-  //       const leaves = e?.data?.data?.filter(
-  //         (f) => f?.employee_id?._id == userId
-  //       );
-
-  //       const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
-  //       const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
-  //       const open = leaves.filter((l) => l.status === "open").length;
-  //       let count = 0;
-  //       leaves.forEach((e) => {
-  //         let a = moment(new Date(e.from_date));
-  //         let b = moment(new Date(e.to_date));
-  //         count += b.diff(a, "days") + 1;
-  //       });
-
-  //       setusedLeaves(count);
-  //       setannual(annual);
-  //       setcasual(casual);
-  //       setmedical(medic);
-
-  //       setallLeaves(leaves);
-  //       if (allLeaves.length) {
-  //         setloadLeaves(true);
-  //       }
-  //     });
-
-  //   axiosInstance
-  //     .get(`/leave-application?leave_approver=${currentUser?._id}`)
-  //     .then((e) => {
-  //       const leaves = e.data.data;
-
-  //       const casual = leaves.filter((e) => e.leave_type_id !== "Sick").length;
-  //       const medic = leaves.filter((e) => e.leave_type_id === "Sick").length;
-
-  //       setSubordinatesannual(annual);
-  //       setSubordinatescasual(casual);
-  //       setSubordinatesmedical(medic);
-  //       setallSubordinatesLeaves(e.data.data);
-  //       // setapprovedSubordinatesLeaves(approved);
-  //       // setSubordinatesPlanned(open);
-  //       // setSubordinatesPresent(allEmployees.length - approved);
-  //       // setfetched(true);
-  //     });
-  // };
+  const checkUserLevel = async () => {
+    try {
+      const response = await axiosInstance.get('is-user-a-lead');
+      const data = response.data.data;
+      setIsLead(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchYourLeaves = async () => {
+    const id = currentUser._id;
     try {
-      // const response = axios.get(
-      //   'https://my.api.mockaroo.com/leave_model.json?key=9ae185d0'
-      // );
-      const resData = LeaveJSON;
-      // const resData = response?.data;
-      console.log('all leaves to get my leaves:', resData);
-
-      const leaves = resData.filter((f) => f?.employee_id === 1);
-      console.log('My Leaves', leaves);
+      const response = await axiosInstance.get(`leave-application/${id}`);
+      const leaves = response?.data?.data;
 
       const formatter = leaves.map((leave) => ({
         ...leave,
-        requested_leave_days:
-          new Date(leave.to_date) -
-          new Date(leave.from_date) / (1000 * 3600 * 24),
+        from_date: new Date(leave.from_date).toDateString(),
+        to_date: new Date(leave.to_date).toDateString(),
+        requested_leave_days: Math.ceil(
+          (new Date(leave.to_date) - new Date(leave.from_date)) /
+            (1000 * 3600 * 24)
+        ),
       }));
 
-      const annual = leaves.filter((e) => e.leave_type_id === 'Annual').length;
-      console.log('Annual Leave', annual);
-      const casual = leaves.filter((e) => e.leave_type_id !== 'Sick').length;
-      console.log('Casual Leave', casual);
-      const medic = leaves.filter((e) => e.leave_type_id === 'Sick').length;
-      console.log('Medical Leave', medic);
+      const annual = leaves.filter((e) => e.leave_type === 'Annual').length;
+      const casual = leaves.filter((e) => e.leave_type !== 'Sick').length;
+      const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
       setannual(annual);
       setcasual(casual);
       setmedical(medic);
-
       setallLeaves(formatter);
+      setLoading(false);
 
       if (allLeaves.length) {
         setloadLeaves(true);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
   const fetchReporteesLeaves = async () => {
     try {
-      // const response = axios.get(
-      //   'https://my.api.mockaroo.com/leave_model.json?key=9ae185d0'
-      // );
-      const resData = LeaveJSON;
-      // const resData = response?.data;
-      console.log('all leaves', resData);
-
-      const leaves = resData.filter((f) => f?.approval_level === 1 && f?.status === "pending");
+      const response = await axiosInstance.get(`leads-leave-applications`);
+      const leaves = response?.data?.data?.application;
+      console.log("from requestor", leaves);
 
       const formatter = leaves.map((leave) => ({
         ...leave,
-        requested_leave_days:
-          new Date(leave.to_date) -
-          new Date(leave.from_date) / (1000 * 3600 * 24),
+        full_name:
+          leave?.employee.first_name +
+          ' ' +
+          leave?.employee.middle_name +
+          ' ' +
+          leave?.employee.last_name,
+        reportee_department: leave?.department?.department,
+        from_date: new Date(leave.from_date).toDateString(),
+        to_date: new Date(leave.to_date).toDateString(),
+        requested_leave_days: Math.ceil(
+          (new Date(leave.to_date) - new Date(leave.from_date)) /
+            (1000 * 3600 * 24)
+        ),
       }));
 
       setAllReporteesLeaves(formatter);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
-  // useEffect(() => {
-  //   let user = tokenService.getUser();
-  //   setuser(user);
-  //   setuserId(user._id);
-  //   if (userId) {
-  //     fetchLeaves();
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userId]);
-
   useEffect(() => {
+    checkUserLevel();
     fetchReporteesLeaves();
 
     let user = tokenService.getUser();
@@ -179,38 +138,45 @@ const LeavesUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
-  // useEffect(() => {
-  //   if (!fetched) {
-  //     fetchLeaves();
-  //   }
-  // }, [allEmployees, fetched]);
+  const handleApproveLeave = async (row) => {
+    const id = row._id;
+    try {
+      const response = await axiosInstance.post(`leads-leave-approval/${id}`)
+      showAlert(true, 'Leave Approved', 'alert alert-success');
+      console.log("Successful Approval", response?.data);
+      fetchReporteesLeaves();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleApproveLeave = () => {
-    console.log("Approve this leave!")
-    showAlert(true, 'Leave Approved', 'alert alert-success');
-  }
-
-  const handleRejectLeave = () => {
+  const handleRejectLeave = (row) => {
+    setRejectLeave(row)
     setRejectModal(true);
-  }
+  };
+
+  const handleEditApplication = (row) => {
+    setEditLeave(row);
+  };
 
   const userColumns = [
     {
-      dataField: 'leave_type_id',
+      dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
+      formatter: (val, row) => <p>{val + ' leave'}</p>,
     },
     {
       dataField: 'from_date',
       text: 'From Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'to_date',
       text: 'To Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'status',
@@ -245,8 +211,9 @@ const LeavesUser = () => {
       headerStyle: { width: '100px' },
       formatter: (value, row) => (
         <>
-          {/* {row.requested_leave_days} */}
-          {4 + ' days'}
+          {row.requested_leave_days > 1
+            ? row.requested_leave_days + ' days'
+            : row.requested_leave_days + ' day'}
         </>
       ),
     },
@@ -314,7 +281,8 @@ const LeavesUser = () => {
               href="#"
               className="dropdown-item"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#EditModal"
+              onClick={() => handleEditApplication(row)}
             >
               <i className="fa fa-edit m-r-5"></i> Edit
             </a>
@@ -329,18 +297,20 @@ const LeavesUser = () => {
       dataField: 'full_name',
       text: 'Full Name',
       sort: true,
+      headerStyle: { width: '150px' },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
-      dataField: 'department',
+      dataField: 'reportee_department',
       text: 'Department',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { width: '100px' },
     },
     {
-      dataField: 'leave_type_id',
+      dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
+      formatter: (val, row) => <p>{val + ' leave'}</p>,
     },
     {
       dataField: 'from_date',
@@ -387,8 +357,9 @@ const LeavesUser = () => {
       headerStyle: { width: '100px' },
       formatter: (value, row) => (
         <>
-          {/* {row.requested_leave_days} */}
-          {4 + ' days'}
+          {row.requested_leave_days > 1
+            ? row.requested_leave_days + ' days'
+            : row.requested_leave_days + ' day'}
         </>
       ),
     },
@@ -469,21 +440,25 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {value === "pending" ? <a
-              href="#"
-              className="dropdown-item"
-              onClick={() => handleApproveLeave()}
-            >
-              <i className="fa fa-check m-r-5"></i> Approve
-            </a> : null}
+            {value === 'pending' ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleApproveLeave(row)}
+              >
+                <i className="fa fa-check m-r-5"></i> Approve
+              </a>
+            ) : null}
 
-            {value === "pending" ? <a
-              href="#"
-              className="dropdown-item"
-              onClick={() => handleRejectLeave()}
-            >
-              <i className="fa fa-ban m-r-5"></i> Reject
-            </a> : null}
+            {value === 'pending' ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleRejectLeave(row)}
+              >
+                <i className="fa fa-ban m-r-5"></i> Reject
+              </a>
+            ) : null}
           </div>
         </div>
       ),
@@ -491,16 +466,20 @@ const LeavesUser = () => {
   ];
 
   return (
-    <>{rejectModal && (
-      <RejectLeaveModal
-        // id={employee_id}
-        closeModal={setRejectModal}
+    <>
+      {rejectModal && (
+        <RejectLeaveModal
+          rejectLeave={rejectLeave}
+          closeModal={setRejectModal}
+          fetchYourLeaves={fetchYourLeaves}
+          fetchReporteesLeaves={fetchReporteesLeaves}
+        />
+      )}
+      <ApplyLeaveModal
         fetchYourLeaves={fetchYourLeaves}
         fetchReporteesLeaves={fetchReporteesLeaves}
       />
-    )}
-      <ApplyLeaveModal />
-      <EditLeaveModal allLeaves={allLeaves} />
+      <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -537,15 +516,17 @@ const LeavesUser = () => {
                   Your Leaves
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-toggle="tab"
-                  href="#tab_subordinates-leaves"
-                >
-                  Leaves by Reportees
-                </a>
-              </li>
+              {isLead && (
+                <li className="nav-item">
+                  <a
+                    className="nav-link"
+                    data-toggle="tab"
+                    href="#tab_subordinates-leaves"
+                  >
+                    Leaves by Reportees
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -609,7 +590,11 @@ const LeavesUser = () => {
                 </div>
               </div>
             </div> */}
-            <AdminLeavesTable columns={reporteeColumns} data={allReporteesLeaves} />
+            <AdminLeavesTable
+              columns={reporteeColumns}
+              data={allReporteesLeaves}
+              loading={loading}
+            />
           </div>
         </div>
       </div>

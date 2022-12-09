@@ -3,74 +3,67 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../Context/AppContext';
 import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
+import { EDIT_LEAVE } from '../FormJSON/CreateLeave';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
-import LeaveJSON from '..//..//pages/HR/Users/allShift.json';
 
-export const EditLeaveModal = ({ allLeaves }) => {
+export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   const { showAlert } = useAppContext();
-  const [leave, setLeave] = useState(allLeaves);
+  const [leave, setLeave] = useState(EDIT_LEAVE);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
-  const user = JSON.parse(localStorage.getItem('user'));
-  console.log("Edit this details:", allLeaves)
 
-  const fetchYourLeaves = async () => {
-    try {
-      // const response = axios.get(
-      //   'https://my.api.mockaroo.com/leave_model.json?key=9ae185d0'
-      // );
-      const resData = LeaveJSON;
-      // const resData = response?.data;
-      console.log('all leaves to get my leaves:', resData);
-      setLeave(resData);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
   const handleFormChange = (e) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleCreateAccount = async (e) => {
+  const handleEditLeave = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    console.log('Create this Leave:', leave);
-    // try {
-    //   const res = await axiosInstance.post('api/clients-accounts/client-account', leave);
-    //   const resData = res.data.data;
+    try {
+      const res = await axiosInstance.put(
+        `leave-application/${editLeave._id}`,
+        {
+          leave_type: leave.leave_type,
+          from_date: new Date(leave.from_date).toISOString(),
+          to_date: new Date(leave.to_date).toISOString(),
+          reason_for_application: leave.reason_for_application,
+        }
+      );
+      // eslint-disable-next-line no-unused-vars
+      const resData = res.data.data;
+      console.log(resData);
 
-    //   console.log("created account", resData)
-
-    //   // setClientAccount(resData);
-    //   // showAlert(true, 'Account created successfully', 'alert alert-success');
-    //   // onClick();
-    //   $('#FormModal').modal('toggle');
-    // } catch (error) {
-    //   console.log(error);
-    //   // onClick();
-    //   $('#FormModal').modal('toggle');
-    // }
+      showAlert(
+        true,
+        'Your leave application has been successfully updated, please await an approval',
+        'alert alert-success'
+      );
+      fetchYourLeaves();
+      $('#EditModal').modal('toggle');
+    } catch (error) {
+      const errorMsg = error.response?.data?.message;
+      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+    }
     setLoading(false);
   };
 
   useEffect(() => {
+    setLeave(editLeave);
     const fetchLeavesType = () => {
       const types = LeaveApplicationFormJSON.Fields[0].options;
       setLeaveType(types);
     };
     fetchLeavesType();
-  }, []);
+  }, [editLeave]);
 
   return (
     <>
       <div
         className="modal fade"
-        id="FormModal"
+        id="EditModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -92,7 +85,7 @@ export const EditLeaveModal = ({ allLeaves }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateAccount}>
+              <form onSubmit={handleEditLeave}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -102,8 +95,7 @@ export const EditLeaveModal = ({ allLeaves }) => {
                         name="from_date"
                         value={leave.from_date}
                         onChange={handleFormChange}
-                        className="form-control "
-                        required
+                        className="form-control"
                       />
                     </div>
                   </div>
@@ -115,8 +107,7 @@ export const EditLeaveModal = ({ allLeaves }) => {
                         name="to_date"
                         value={leave.to_date}
                         onChange={handleFormChange}
-                        className="form-control "
-                        required
+                        className="form-control"
                       />
                     </div>
                   </div>
@@ -125,12 +116,11 @@ export const EditLeaveModal = ({ allLeaves }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                    <label htmlFor="leave_type_id">Leave Type</label>
+                      <label htmlFor="leave_type">Leave Type</label>
                       <select
                         onChange={handleFormChange}
                         className="form-control "
-                        name="leave_type_id"
-                        required
+                        name="leave_type"
                       >
                         <option value="" disabled selected hidden>
                           Select leave type...
@@ -149,9 +139,7 @@ export const EditLeaveModal = ({ allLeaves }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="reason_for_application">
-                        Reason
-                      </label>
+                      <label htmlFor="reason_for_application">Reason</label>
                       <textarea
                         name="reason_for_application"
                         className="form-control "
@@ -160,25 +148,6 @@ export const EditLeaveModal = ({ allLeaves }) => {
                       />
                     </div>
                   </div>
-                </div>
- 
-                <div>
-                  <input
-                    value={(leave.employee_id = user?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.project_id = user?.projectId)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.department_id = user?.department?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.leave_approver = user?.reports_to)}
-                    style={{ display: 'none' }}
-                  />
                 </div>
 
                 <div className="modal-footer">

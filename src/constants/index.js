@@ -36,3 +36,13 @@ export const LeaveTypeOptions = [
   { title: "Without Pay", color: "text-success" },
   { title: "Maternity", color: "text-success" },
 ];
+export const department = [
+  { title: 'HR' },
+  { title: 'IT' },
+  { title: 'Accounting' },
+  { title: 'Assets' },
+  { title: 'Operations' },
+  { title: 'Facility' },
+  { title: 'Procurements' },
+  { title: 'Software Development' },
+];

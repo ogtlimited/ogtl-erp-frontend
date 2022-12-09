@@ -11,7 +11,11 @@ import filterFactory, {
   selectFilter,
   dateFilter,
 } from 'react-bootstrap-table2-filter';
-import { LeaveStatusOptions, LeaveTypeOptions } from '../..//..//..//constants/index';
+import {
+  LeaveStatusOptions,
+  LeaveTypeOptions,
+  department
+} from '../..//..//..//constants/index';
 
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
@@ -19,6 +23,7 @@ const AdminLeavesTable = ({
   data,
   columns,
   context,
+  loading,
   // clickToSelect = false,
   // selected,
   // handleOnSelect,
@@ -26,9 +31,8 @@ const AdminLeavesTable = ({
 }) => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
-  const [loading, setLoading] = useState(true);
   const [departmentFilter, setDepartmentFilter] = useState('');
-  const [leaveStatusFilter, setLeaveStatusFilter] = useState('');
+  // const [leaveStatusFilter, setLeaveStatusFilter] = useState('');
   const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const [dataToFilter, setDataToFilter] = useState('');
   const [mobileView, setmobileView] = useState(false);
@@ -39,13 +43,6 @@ const AdminLeavesTable = ({
   //   onSelect: handleOnSelect,
   //   onSelectAll: handleOnSelectAll,
   // };
-
-  const department = [
-    { title: "Software Engineering", color: "text-warning" },
-    { title: "Operations", color: "text-danger" },
-    { title: "Team Lead", color: "text-primary" },
-    { title: "HR Manager", color: "text-success" }
-  ];
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -60,57 +57,52 @@ const AdminLeavesTable = ({
 
   useEffect(() => {
     resizeTable();
-    setLoading(true);
     window.addEventListener('resize', () => {
       resizeTable();
     });
-    setTimeout(() => {
-      setLoading(false);
-    }, 10000);
   }, [mobileView]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';
 
   const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
-    const filteredItems = data.filter((item) => item.department === e.target.value);
+    const filteredItems = data.filter(
+      (item) => item.reportee_department === e.target.value
+    );
     if (filteredItems === null) {
       setDataToFilter(data);
     }
     setDataToFilter(filteredItems);
-    setLoading(false);
     setLeaveTypeFilter('');
-    setLeaveStatusFilter('');
   };
 
-  const handleLeaveStatusFilter = (e) => {
-    setLeaveStatusFilter(e.target.value);
-    const filteredItems = data.filter((item) => item.status === e.target.value);
-    if (filteredItems === null) {
-      setDataToFilter(data);
-    }
-    setDataToFilter(filteredItems);
-    setLoading(false);
-    setLeaveTypeFilter('');
-    setDepartmentFilter('')
-  };
+  // const handleLeaveStatusFilter = (e) => {
+  //   setLeaveStatusFilter(e.target.value);
+  //   const filteredItems = data.filter((item) => item.status === e.target.value);
+  //   if (filteredItems === null) {
+  //     setDataToFilter(data);
+  //   }
+  //   setDataToFilter(filteredItems);
+  //   setLoading(false);
+  //   setLeaveTypeFilter('');
+  //   setDepartmentFilter('')
+  // };
 
   const handleLeaveTypeFilter = (e) => {
-    setLeaveStatusFilter(e.target.value);
-    const filteredItems = data.filter((item) => item.leave_type_id === e.target.value);
+    setLeaveTypeFilter(e.target.value);
+    const filteredItems = data.filter(
+      (item) => item.leave_type === e.target.value
+    );
     if (filteredItems === null) {
       setDataToFilter(data);
     }
     setDataToFilter(filteredItems);
-    setLoading(false);
-    setLeaveStatusFilter('');
-    setDepartmentFilter('')
+    setDepartmentFilter('');
   };
 
   useEffect(() => {
     setDataToFilter(data);
     setTimeout(() => {
-      setLoading(true);
     }, 7000);
   }, [data]);
 
@@ -156,7 +148,7 @@ const AdminLeavesTable = ({
                   </select>
                 </div>
 
-                <div className="col-md-3">
+                {/* <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleLeaveStatusFilter(e)}
@@ -170,7 +162,7 @@ const AdminLeavesTable = ({
                       <option key={idx}>{option.title}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 <div className="col-md-3">
                   <select

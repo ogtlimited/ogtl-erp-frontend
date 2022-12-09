@@ -9,10 +9,11 @@ import { useAppContext } from '../../Context/AppContext';
 
 function RejectLeaveModal({
   closeModal,
-  id,
+  rejectLeave,
   fetchYourLeaves,
   fetchReporteesLeaves,
 }) {
+  console.log('Reject this leave', rejectLeave);
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [loading, setLoading] = useState(false);

@@ -7,12 +7,16 @@ import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
-export const ApplyLeaveModal = () => {
+export const ApplyLeaveModal = ({ fetchYourLeaves, fetchReporteesLeaves }) => {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
   const user = JSON.parse(localStorage.getItem('user'));
+
+  const cancelEvent = () => {
+    setLeave(CREATE_LEAVE);
+  }
 
   const handleFormChange = (e) => {
     e.preventDefault();
@@ -23,22 +27,20 @@ export const ApplyLeaveModal = () => {
     e.preventDefault();
 
     setLoading(true);
-    console.log('Create this Leave:', leave);
-    // try {
-    //   const res = await axiosInstance.post('api/clients-accounts/client-account', leave);
-    //   const resData = res.data.data;
+    try {
+      const res = await axiosInstance.post('leave-application', leave);
+      // eslint-disable-next-line no-unused-vars
+      const resData = res.data.data;
 
-    //   console.log("created account", resData)
-
-    //   // setClientAccount(resData);
-    //   // showAlert(true, 'Account created successfully', 'alert alert-success');
-    //   // onClick();
-    //   $('#FormModal').modal('toggle');
-    // } catch (error) {
-    //   console.log(error);
-    //   // onClick();
-    //   $('#FormModal').modal('toggle');
-    // }
+      showAlert(true, 'Your leave application is successful, please await an approval', 'alert alert-success');
+      fetchYourLeaves()
+      fetchReporteesLeaves()
+      setLeave(CREATE_LEAVE);
+      $('#FormModal').modal('toggle');
+    } catch (error) {
+      const errorMsg = error.response?.data?.message
+      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+    }
     setLoading(false);
   };
 
@@ -109,11 +111,11 @@ export const ApplyLeaveModal = () => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                    <label htmlFor="leave_type_id">Leave Type</label>
+                      <label htmlFor="leave_type">Leave Type</label>
                       <select
                         onChange={handleFormChange}
                         className="form-control "
-                        name="leave_type_id"
+                        name="leave_type"
                         required
                       >
                         <option value="" disabled selected hidden>
@@ -124,6 +126,7 @@ export const ApplyLeaveModal = () => {
                             key={idx}
                             value={leave.value}
                             placeholder="Leave Type"
+                            required
                           >
                             {leave.label}
                           </option>
@@ -133,9 +136,7 @@ export const ApplyLeaveModal = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="reason_for_application">
-                        Reason
-                      </label>
+                      <label htmlFor="reason_for_application">Reason</label>
                       <textarea
                         name="reason_for_application"
                         className="form-control "
@@ -145,14 +146,10 @@ export const ApplyLeaveModal = () => {
                     </div>
                   </div>
                 </div>
- 
+
                 <div>
                   <input
                     value={(leave.employee_id = user?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.project_id = user?.projectId)}
                     style={{ display: 'none' }}
                   />
                   <input
@@ -170,6 +167,7 @@ export const ApplyLeaveModal = () => {
                     type="button"
                     className="btn btn-secondary"
                     data-dismiss="modal"
+                    onClick={cancelEvent}
                   >
                     Cancel
                   </button>
