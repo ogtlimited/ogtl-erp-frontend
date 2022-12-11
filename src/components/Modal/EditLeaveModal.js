@@ -22,9 +22,10 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     e.preventDefault();
 
     setLoading(true);
+    const id = editLeave._id;
     try {
       const res = await axiosInstance.put(
-        `leave-application/${editLeave._id}`,
+        `leave-application/${id}`,
         {
           leave_type: leave.leave_type,
           from_date: new Date(leave.from_date).toISOString(),

@@ -6,10 +6,10 @@ import axiosInstance from '../../services/api';
 import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
 
-function RejectLeaveModal({
+function RejectAdminLeaveModal({
   closeModal,
-  rejectLeave,
-  fetchReporteesLeaves,
+  hrReject,
+  fetchAllLeaves,
 }) {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
@@ -21,19 +21,18 @@ function RejectLeaveModal({
   };
 
   const handleRejectLeave = async () => {
-      const id = rejectLeave._id;
+      const id = hrReject._id;
       setLoading(true);
       try {
-        const response = await axiosInstance.post(`leads-leave-rejection/${id}`, leave)
-        console.log("Leave rejection response:", response)
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.post(`hr-leave-applications/reject/${id}`, leave)
         showAlert(true, 'Leave Rejected', 'alert alert-success');
   
         closeModal(false);
       } catch (error) {
         console.log(error);
-        console.log("Leave rejection error:", error.response)
       }
-      fetchReporteesLeaves();
+      // fetchAllLeaves();
   }
 
   return (
@@ -87,4 +86,4 @@ function RejectLeaveModal({
   );
 }
 
-export default RejectLeaveModal;
+export default RejectAdminLeaveModal;

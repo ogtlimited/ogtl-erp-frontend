@@ -76,7 +76,7 @@ const ReporteeLeavesTable = ({
   const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
     const filteredItems = data.filter(
-      (item) => item.department === e.target.value
+      (item) => item.reportee_department === e.target.value
     );
     
     if (filteredItems === null) {

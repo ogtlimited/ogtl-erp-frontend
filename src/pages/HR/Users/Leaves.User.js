@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import AdminLeavesTable from '../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable';
+import ReporteeLeavesTable from '../../../components/Tables/EmployeeTables/Leaves/ReporteeLeaveTable';
 import tokenService from '../../../services/token.service';
 import axiosInstance from '../../../services/api';
 import ViewModal from '../../../components/Modal/ViewModal';
@@ -18,17 +18,24 @@ const LeavesUser = () => {
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
   const [user, setuser] = useState(null);
-  const [usedLeaves, setusedLeaves] = useState(0);
+  const [usedLeaves, setUsedLeaves] = useState(0);
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
-  const [annual, setannual] = useState(0);
-  const [casual, setcasual] = useState(0);
-  const [medical, setmedical] = useState(0);
+  const [remainingLeaves, setRemainingLeaves] = useState(0);
   const [rejectModal, setRejectModal] = useState(false);
   const [isLead, setIsLead] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editLeave, setEditLeave] = useState([]);
+  const [otherLeaves, setOtherLeaves] = useState(0);
   const [rejectLeave, setRejectLeave] = useState([]);
+  const [medicalLeave, setMedicalLeave] = useState(0);
+
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState('');
+
+  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const currentUser = tokenService.getUser();
 
@@ -58,56 +65,149 @@ const LeavesUser = () => {
         ),
       }));
 
-      const annual = leaves.filter((e) => e.leave_type === 'Annual').length;
-      const casual = leaves.filter((e) => e.leave_type !== 'Sick').length;
       const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
-      setannual(annual);
-      setcasual(casual);
-      setmedical(medic);
+      setMedicalLeave(medic);
       setallLeaves(formatter);
       setLoading(false);
-
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
   };
 
-  const fetchReporteesLeaves = async () => {
+  // const fetchReporteesLeaves = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(`leads-leave-applications`);
+  //     const leaves = response?.data?.data?.application;
+  //     console.log("Reportees's leave", response?.data)
+
+  //     const formatter = leaves.map((leave) => ({
+  //       ...leave,
+  //       full_name:
+  //         leave?.employee.first_name +
+  //         ' ' +
+  //         leave?.employee.middle_name +
+  //         ' ' +
+  //         leave?.employee.last_name,
+  //       reportee_department: leave?.department?.department,
+  //       from_date: new Date(leave.from_date).toDateString(),
+  //       to_date: new Date(leave.to_date).toDateString(),
+  //       requested_leave_days: Math.ceil(
+  //         (new Date(leave.to_date) - new Date(leave.from_date)) /
+  //           (1000 * 3600 * 24)
+  //       ),
+  //     }));
+
+  //     setAllReporteesLeaves(formatter);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchReporteesLeaves = useCallback(() => {
+    axiosInstance
+      .get(`leads-leave-applications`, {
+        params: {
+          department: departmentFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        console.log("Reportees", res?.data)
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const formatted = resData.map((leave) => ({
+          ...leave,
+          full_name:
+            leave?.employee.first_name +
+            ' ' +
+            leave?.employee.middle_name +
+            ' ' +
+            leave?.employee.last_name,
+          department: leave?.department?.department,
+          from_date: new Date(leave.from_date).toDateString(),
+          to_date: new Date(leave.to_date).toDateString(),
+          requested_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave.from_date)) /
+              (1000 * 3600 * 24)
+          ),
+        }));
+
+        setAllReporteesLeaves(formatted);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [departmentFilter, page, searchTerm, sizePerPage]);
+
+  const fetchRemainingLeaves = async () => {
     try {
-      const response = await axiosInstance.get(`leads-leave-applications`);
-      const leaves = response?.data?.data?.application;
+      const response = await axiosInstance.get(`leave-count/remaining-leaves`);
+      const resData = response?.data?.data;
 
-      const formatter = leaves.map((leave) => ({
-        ...leave,
-        full_name:
-          leave?.employee.first_name +
-          ' ' +
-          leave?.employee.middle_name +
-          ' ' +
-          leave?.employee.last_name,
-        reportee_department: leave?.department?.department,
-        from_date: new Date(leave.from_date).toDateString(),
-        to_date: new Date(leave.to_date).toDateString(),
-        requested_leave_days: Math.ceil(
-          (new Date(leave.to_date) - new Date(leave.from_date)) /
-            (1000 * 3600 * 24)
-        ),
-      }));
-
-      setAllReporteesLeaves(formatter);
-      setLoading(false);
+      setRemainingLeaves(resData);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
 
+  // TODO: Endpoint to be updated to working endpoint...
+  const fetchOtherLeaves = async () => {
+    try {
+      const response = await axiosInstance.get(`leave-count/other-leaves`);
+      const resData = response?.data?.data;
+
+      setOtherLeaves(resData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchMedicalLeaves = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `leave-count/used-medical-leaves`
+      );
+      const resData = response?.data?.data;
+
+      setMedicalLeave(resData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUsedLeaves = async () => {
+    try {
+      const response = await axiosInstance.get(`leave-count/used-leaves`);
+      const resData = response?.data?.data;
+
+      setUsedLeaves(resData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     checkUserLevel();
     fetchReporteesLeaves();
+    fetchRemainingLeaves();
+    fetchOtherLeaves();
+    fetchMedicalLeaves();
+    fetchUsedLeaves();
 
     let user = tokenService.getUser();
     setuser(user);
@@ -115,23 +215,25 @@ const LeavesUser = () => {
     if (userId) {
       fetchYourLeaves();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchReporteesLeaves, userId]);
 
   const handleApproveLeave = async (row) => {
     const id = row._id;
+    console.log('approve this req:', row._id);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`leads-leave-approval/${id}`)
+      const response = await axiosInstance.post(`leads-leave-approval/${id}`);
+      console.log('Leave Approval Response', response?.data);
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchReporteesLeaves();
     } catch (error) {
-      console.log(error);
+      console.log('Leave approval error:', error.response);
     }
   };
 
   const handleRejectLeave = (row) => {
-    setRejectLeave(row)
+    setRejectLeave(row);
     setRejectModal(true);
   };
 
@@ -257,15 +359,17 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.acted_on === false && <a
-              href="#"
-              className="dropdown-item"
-              data-toggle="modal"
-              data-target="#EditModal"
-              onClick={() => handleEditApplication(row)}
-            >
-              <i className="fa fa-edit m-r-5"></i> Edit
-            </a>}
+            {row.status === "pending" && (
+              <a
+                href="#"
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#EditModal"
+                onClick={() => handleEditApplication(row)}
+              >
+                <i className="fa fa-edit m-r-5"></i> Edit
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -281,7 +385,7 @@ const LeavesUser = () => {
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
-      dataField: 'reportee_department',
+      dataField: 'department',
       text: 'Department',
       sort: true,
       headerStyle: { width: '100px' },
@@ -454,9 +558,7 @@ const LeavesUser = () => {
           fetchReporteesLeaves={fetchReporteesLeaves}
         />
       )}
-      <ApplyLeaveModal
-        fetchYourLeaves={fetchYourLeaves}
-      />
+      <ApplyLeaveModal fetchYourLeaves={fetchYourLeaves} />
       <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} />
       <div className="page-header">
         <div className="row align-items-center">
@@ -481,19 +583,20 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      {isLead && <div className="page-menu">
-        <div className="row">
-          <div className="col-sm-12">
-            <ul className="nav nav-tabs nav-tabs-bottom">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  data-toggle="tab"
-                  href="#tab_leaves"
-                >
-                  Your Leaves
-                </a>
-              </li>
+      {isLead && (
+        <div className="page-menu">
+          <div className="row">
+            <div className="col-sm-12">
+              <ul className="nav nav-tabs nav-tabs-bottom">
+                <li className="nav-item">
+                  <a
+                    className="nav-link active"
+                    data-toggle="tab"
+                    href="#tab_leaves"
+                  >
+                    Your Leaves
+                  </a>
+                </li>
                 <li className="nav-item">
                   <a
                     className="nav-link"
@@ -503,10 +606,11 @@ const LeavesUser = () => {
                     Leaves by Reportees
                   </a>
                 </li>
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>}
+      )}
       <div>
         <div className=" tab-content">
           <div id="tab_leaves" className="col-12 tab-pane show active">
@@ -520,19 +624,20 @@ const LeavesUser = () => {
               <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Medical Leave</h6>
-                  <h4>{medical}</h4>
+                  <h4>{medicalLeave}</h4>
                 </div>
               </div>
               <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Other Leave</h6>
-                  <h4>{casual}</h4>
+                  {/* <h4>{otherLeaves}</h4> */}
+                  <h4>0</h4>
                 </div>
               </div>
               <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Remaining Leave</h6>
-                  <h4>{user?.leaveCount}</h4>
+                  <h4>{remainingLeaves}</h4>
                 </div>
               </div>
             </div>
@@ -540,36 +645,22 @@ const LeavesUser = () => {
           </div>
 
           <div id="tab_subordinates-leaves" className="col-12 tab-pane">
-            {/* <div className="row">
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Used Leave</h6>
-                  <h4>{usedLeaves}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Medical Leave</h6>
-                  <h4>{Subordinatesmedical}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Other Leave</h6>
-                  <h4>{Subordinatescasual}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Remaining Leave</h6>
-                  <h4>{user?.leaveCount}</h4>
-                </div>
-              </div>
-            </div> */}
-            <AdminLeavesTable
+            <ReporteeLeavesTable
               columns={reporteeColumns}
               data={allReporteesLeaves}
+              setData={setAllReporteesLeaves}
               loading={loading}
+              page={page}
+              setPage={setPage}
+              sizePerPage={sizePerPage}
+              setSizePerPage={setSizePerPage}
+              totalPages={totalPages}
+              setTotalPages={setTotalPages}
+              departmentFilter={departmentFilter}
+              setDepartmentFilter={setDepartmentFilter}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              setLoading={setLoading}
             />
           </div>
         </div>
