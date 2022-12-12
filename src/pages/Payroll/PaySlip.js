@@ -277,7 +277,7 @@ const PaySlip = () => {
                           )}
                         </tbody>
                       </table>
-                      {paySlip.netPay ? (
+                      {paySlip.netPay && totalDeduction !== 0 ? (
                         <button
                           type="button"
                           data-toggle="modal"
