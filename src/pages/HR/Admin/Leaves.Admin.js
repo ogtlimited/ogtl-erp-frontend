@@ -242,7 +242,6 @@ const LeavesAdmin = () => {
       );
       console.log('HR Leave Approval Response', response?.data);
       showAlert(true, 'Leave Approved', 'alert alert-success');
-      // fetchAllLeaves();
       fetchHRLeaves();
     } catch (error) {
       console.log('HR Leave approval error:', error.response);

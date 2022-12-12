@@ -165,10 +165,9 @@ const LeavesUser = () => {
     }
   };
 
-  // TODO: Endpoint to be updated to working endpoint...
   const fetchOtherLeaves = async () => {
     try {
-      const response = await axiosInstance.get(`leave-count/other-leaves`);
+      const response = await axiosInstance.get(`leave-count/other-used-leaves`);
       const resData = response?.data?.data;
 
       setOtherLeaves(resData);
@@ -630,8 +629,7 @@ const LeavesUser = () => {
               <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Other Leave</h6>
-                  {/* <h4>{otherLeaves}</h4> */}
-                  <h4>0</h4>
+                  <h4>{otherLeaves}</h4>
                 </div>
               </div>
               <div className="col-md-3">
