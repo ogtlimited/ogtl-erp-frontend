@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AcademyApplicantsContent = ({ jobApplication = {} }) => {
-  console.log("show this modal", jobApplication)
   const classes = useStyles();
   delete jobApplication.__v;
   delete jobApplication.__updatedAt;

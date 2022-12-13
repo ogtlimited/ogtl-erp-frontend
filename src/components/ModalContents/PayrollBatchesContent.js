@@ -3,7 +3,6 @@
 import React from 'react';
 
 const PayrollBatchesContent = ({ payrollBatch = {} }) => {
-  console.log('show this modal', payrollBatch);
   delete payrollBatch.__v;
   delete payrollBatch._id;
   delete payrollBatch.updatedAt;

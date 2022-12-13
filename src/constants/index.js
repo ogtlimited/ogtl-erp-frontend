@@ -23,3 +23,26 @@ export const AcademyInterviewProcessStageOptions = [
   { title: "sieving", color: "text-warning" },
   { title: "phone screening", color: "text-info" },
 ];
+export const LeaveStatusOptions = [
+  { title: "pending", color: "text-warning" },
+  { title: "rejected", color: "text-danger" },
+  { title: "cancelled", color: "text-primary" },
+  { title: "approved", color: "text-success" },
+];
+export const LeaveTypeOptions = [
+  { title: "Annual", color: "text-warning" },
+  { title: "Casual", color: "text-danger" },
+  { title: "Sick", color: "text-primary" },
+  { title: "Without Pay", color: "text-success" },
+  { title: "Maternity", color: "text-success" },
+];
+export const department = [
+  { title: 'HR' },
+  { title: 'IT' },
+  { title: 'Accounting' },
+  { title: 'Assets' },
+  { title: 'Operations' },
+  { title: 'Facility' },
+  { title: 'Procurements' },
+  { title: 'Software Development' },
+];

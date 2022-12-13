@@ -76,7 +76,6 @@ const PayrollReports = () => {
           };
         });
         setData(mapped);
-        console.log(mapped);
       })
       .catch((error) => {
         console.log(error?.response);

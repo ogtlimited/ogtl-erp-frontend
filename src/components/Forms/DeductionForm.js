@@ -150,7 +150,7 @@ export const DeductionForm = ({ fetchDeductions }) => {
                   </div>
                   <div className="row">
                     <div className="col-md-6">
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label htmlFor="useDailyRate" className="mr-4">
                           Use Daily Rate
                         </label>
@@ -165,7 +165,7 @@ export const DeductionForm = ({ fetchDeductions }) => {
                           type="checkbox"
                           {...register('useDailyRate')}
                         />
-                      </div>
+                      </div> */}
                     </div>
                     {!willUseDailyRate && (
                       <div className="col-md-6">
