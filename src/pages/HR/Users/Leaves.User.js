@@ -65,9 +65,9 @@ const LeavesUser = () => {
         ),
       }));
 
-      const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
+      // const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
-      setMedicalLeave(medic);
+      // setMedicalLeave(medic);
       setallLeaves(formatter);
       setLoading(false);
     } catch (error) {
@@ -192,6 +192,7 @@ const LeavesUser = () => {
   const fetchUsedLeaves = async () => {
     try {
       const response = await axiosInstance.get(`leave-count/used-leaves`);
+      console.log("Used Leaves", response?.data);
       const resData = response?.data?.data;
 
       setUsedLeaves(resData);

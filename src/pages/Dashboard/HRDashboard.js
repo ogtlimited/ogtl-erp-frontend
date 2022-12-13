@@ -164,7 +164,7 @@ const HRDashboard = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchHeadCount();
     fetchEmployeeData();
@@ -192,14 +192,6 @@ const HRDashboard = () => {
     combineRequest().then((res) => {
       const { employees, projects, departments } =
         res.data.createEmployeeFormSelection;
-      console.log(
-        '1. employees',
-        employees,
-        '2. projects',
-        projects,
-        '3. departments',
-        departments
-      );
       const deptHash = {};
       const campHash = {};
       const genderHash = { male: 0, female: 0 };
@@ -213,7 +205,6 @@ const HRDashboard = () => {
       });
 
       setheadACount(employees.length);
-      console.log('i need this to show', deptHash, campHash, genderHash);
 
       employees?.forEach((e) => {
         if (e.department) {
