@@ -117,11 +117,11 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="leave_type">Leave Type</label>
+                      <label htmlFor="leave_type_id">Leave Type</label>
                       <select
                         onChange={handleFormChange}
                         className="form-control "
-                        name="leave_type"
+                        name="leave_type_id"
                       >
                         <option value="" disabled selected hidden>
                           Select leave type...
