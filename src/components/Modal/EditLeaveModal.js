@@ -28,7 +28,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
       const res = await axiosInstance.put(
         `leave-application/${id}`,
         {
-          leave_type_id: leave.leave_type_id,
+          leave_type_id: leave.leave_type_id._id,
           from_date: new Date(leave.from_date).toISOString(),
           to_date: new Date(leave.to_date).toISOString(),
           reason_for_application: leave.reason_for_application,
@@ -58,6 +58,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
       const resData = response?.data?.data;
 
       setLeaveTypeOption(resData);
+      console.log("resData Leave types", resData)
     } catch (error) {
       console.log(error);
     }
@@ -130,7 +131,6 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                         onChange={handleFormChange}
                         className="form-control "
                         name="leave_type_id"
-                        required
                       >
                         <option value="" disabled selected hidden>
                           Select leave type...
@@ -140,7 +140,6 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                             key={idx}
                             value={leave._id}
                             placeholder="Leave Type"
-                            required
                           >
                             {leave.leave_type}
                           </option>

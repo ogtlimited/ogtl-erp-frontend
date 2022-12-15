@@ -46,9 +46,9 @@ const LeavesUser = () => {
 
       const formatter = leaves.map((leave) => ({
         ...leave,
-        leave_type: leave.leave_type_id.leave_type,
-        from_date: new Date(leave.from_date).toDateString(),
-        to_date: new Date(leave.to_date).toDateString(),
+        leave_type: leave?.leave_type_id?.leave_type,
+        from_date: new Date(leave?.from_date).toDateString(),
+        to_date: new Date(leave?.to_date).toDateString(),
         requested_leave_days: Math.ceil(
           (new Date(leave.to_date) - new Date(leave.from_date)) /
             (1000 * 3600 * 24)
@@ -127,16 +127,18 @@ const LeavesUser = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
-          leave_type: leave.leave_type_id.leave_type,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
+          leave_type: leave?.leave_type_id?.leave_type,
+          from_date: new Date(leave?.from_date).toDateString(),
+          to_date: new Date(leave?.to_date).toDateString(),
+          department: leave?.department?.department,
           requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
+            (new Date(leave.to_date) - new Date(leave?.from_date)) /
               (1000 * 3600 * 24)
           ),
         }));
 
         console.log('Formatted Reportees', formatted);
+        console.log('resData', resData);
         setAllReporteesLeaves(formatted);
         setLoading(false);
       })
@@ -342,13 +344,11 @@ const LeavesUser = () => {
       dataField: 'from_date',
       text: 'From Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'to_date',
       text: 'To Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'status',
