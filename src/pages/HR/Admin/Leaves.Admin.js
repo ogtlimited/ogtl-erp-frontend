@@ -40,6 +40,7 @@ const LeavesAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
+  const [headCount, setheadCount] = useState([]);
   const user = tokenService.getUser();
 
   const [page, setPage] = useState(1);
@@ -210,6 +211,21 @@ const LeavesAdmin = () => {
     }
   };
 
+  const fetchHeadCount = async () => {
+    try {
+      const response = await axiosInstance.get('/employees/head-count');
+      const resData = response.data.data.headCount;
+
+      const count = resData.filter((data) => data._id === 'active');
+
+      setheadCount(count[0].total);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
+
   // const fetchDepartment = useCallback(() => {
   //   axiosInstance
   //       .get(`/departments/employees/designations/${id}`)
@@ -230,6 +246,7 @@ const LeavesAdmin = () => {
     fetchAllHrPending();
     fetchAllEmpOnLeave();
     fetchHRLeaves();
+    fetchHeadCount()
     // fetchDepartment()
   }, [fetchHRLeaves]);
 
@@ -493,7 +510,7 @@ const LeavesAdmin = () => {
               <div className="stats-info">
                 <h6>Today Presents</h6>
                 <h4>
-                  {onLeave} / {allEmployees.length}
+                  {onLeave} / {headCount}
                 </h4>
               </div>
             </div>

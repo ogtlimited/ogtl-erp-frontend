@@ -53,7 +53,6 @@ export const AddLeaveApprovalLevelModal = () => {
         approval_level: +approvalLevel.approval_level,
       });
       const resData = res.data.data;
-      console.log("created approval level?", resData);
 
       showAlert(
         true,

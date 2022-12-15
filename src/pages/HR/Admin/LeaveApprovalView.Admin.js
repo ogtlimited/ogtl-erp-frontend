@@ -158,7 +158,7 @@ const LeaveApprovalView = () => {
             defaultValue={[]}
             onChange={handleClick}
             options={departMentOpts}
-            placeholder="Filter Departments"
+            placeholder="Filter Designation"
             isClearable={true}
             style={{ display: "inline-block" }}
             // formatGroupLabel={formatGroupLabel}
