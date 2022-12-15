@@ -439,7 +439,14 @@
   padding: 0 0 0 10px ;
 }
 
+.leave-card-body {
+  padding: 20px;
+}
 
+.remaining-leave-row {
+  margin-left: 1.5%;
+  width: 17.5%;
+}
 
 /*-----------------
 	1. General
