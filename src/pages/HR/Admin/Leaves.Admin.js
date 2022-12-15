@@ -497,24 +497,6 @@ const LeavesAdmin = () => {
                 </h4>
               </div>
             </div>
-            <div className="col-md-3">
-              <div className="stats-info">
-                <h6>Pending Requests</h6>
-                <h4>{pendingLeaves}</h4>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="stats-info">
-                <h6>Approved Leaves</h6>
-                <h4>{approvedLeaves}</h4>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="stats-info">
-                <h6>Rejected Leaves</h6>
-                <h4>{rejectedLeaves} &nbsp;</h4>
-              </div>
-            </div>
           </div>
           <AdminLeavesTable
             columns={columns}
