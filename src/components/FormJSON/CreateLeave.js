@@ -18,3 +18,7 @@ export const EDIT_LEAVE = {
 export const REJECT_LEAVE = {
   rejection_reason: '',
 }
+
+export const CREATE_LEAVE_TYPE = {
+  leave_type: '',
+}

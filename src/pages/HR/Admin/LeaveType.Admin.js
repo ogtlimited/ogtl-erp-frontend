@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState, useEffect, useContext } from "react";
 
 import departments from "../../../db/designationList.json";
@@ -11,12 +12,12 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import LeaveTypes from "./LeaveType.json";
+import ConfirmDeleteLeaveTypeModal from "../../../components/Modal/ConfirmDeleteLeaveTypeModal";
+import { AddLeaveTypeModal } from '../../../components/Modal/AddLeaveType';
 let qualityFilter;
 
 const LeaveType = () => {
-  const [allDesignation, setallDesignation] = useState([]);
+  const [leaveType, setAllLeaveType] = useState([]);
   const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
@@ -26,6 +27,7 @@ const LeaveType = () => {
   const [template, settemplate] = useState({});
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
+  const [typeToDelete, setTypeToDelete] = useState([]);
   const [mode, setmode] = useState("add");
 
   const create = () => {
@@ -45,29 +47,13 @@ const LeaveType = () => {
     setclickedRow(formatted);
   };
 
-  // const fetchDesignation = () => {
-  //   settemplate(designation);
-  //   axiosInstance.get("/designation").then((res) => {
-  //     setallDesignation(res.data.data);
-  //     console.log("show this leaves", res.data.data);
-  //     setunfiltered(res?.data?.data);
-  //     const depsigOpts = res.data.data.map((e) => {
-  //       return {
-  //         label: e.designation,
-  //         value: e._id,
-  //       };
-  //     });
-  //     setDesignationOts(depsigOpts);
-  //   });
-  // };
-
-  const fetchDesignation = () => {
-    settemplate(leaveType);
-    axiosInstance.get("/designation").then((res) => {
-      setallDesignation(LeaveTypes);
-      console.log("show this leave type", LeaveTypes);
-      setunfiltered(LeaveTypes);
-      const depsigOpts = LeaveTypes.map((e) => {
+  const fetchLeaveType = () => {
+    axiosInstance.get("/leave-type").then((res) => {
+      const resData = res?.data?.data
+      console.log("All Leave types", resData)
+      setAllLeaveType(resData);
+      setunfiltered(resData);
+      const depsigOpts = resData.map((e) => {
         return {
           label: e.leave_type,
           value: e._id,
@@ -78,77 +64,29 @@ const LeaveType = () => {
   };
 
   useEffect(() => {
-    fetchDesignation();
+    fetchLeaveType();
   }, []);
 
   const handleClick = (i) => {
     if (i?.value === "All" || i === null) {
-      setallDesignation(unfiltered);
+      setAllLeaveType(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => {
         return i.label.includes(e.leave_type);
       });
 
-      setallDesignation(filt);
+      setAllLeaveType(filt);
     }
   };
 
   useEffect(() => {
-    fetchDesignation();
+    fetchLeaveType();
 
-    if (submitted) {
-      if (mode == "add") {
-        axiosInstance
-          .post("/designation", formValue)
-          .then((e) => {
-            showAlert(
-              true,
-              "Designation successfully created",
-              "alert alert-success"
-            );
-            // setformValue(null);
-            fetchDesignation();
-          })
-          .catch((err) => {
-            // setformValue(null);
-            console.log(err);
-          });
-      } else {
-        // formValue._id = formUpdate._id;
-        axiosInstance
-          .put("/designation/" + formUpdate._id, formValue)
-          .then((e) => {
-            showAlert(
-              true,
-              "Designation successfully updated",
-              "alert alert-success"
-            );
-            setformValue(null);
-            fetchDesignation();
-          })
-          .catch((err) => {
-            setformValue(null);
-            console.log(err);
-          });
-      }
-    }
     // setallDepartments(departments);
   }, [formValue]);
 
   const deleteLeaveType = (row) => {
-    axiosInstance
-      .delete(`/designation/${row._id}`)
-      .then((res) => {
-        fetchDesignation();
-        setallDesignation((prevData) =>
-          prevData.filter((pdata) => pdata._id !== row._id)
-        );
-        showAlert(true, res.data.message, "alert alert-success");
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
-      });
+    setTypeToDelete(row)
   };
 
   const columns = [
@@ -170,48 +108,23 @@ const LeaveType = () => {
       sort: true,
       headerStyle: { width: "20%" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
+    },    {
+      dataField: '',
+      text: 'Actions',
+      sort: true,
+      csvExport: false,
+      headerStyle: { minWidth: '70px', textAlign: 'center' },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            {user?.role?.hr?.update && (
-              <a
-                className="dropdown-item"
-                onClick={() => {
-                  setmode("edit");
-                  setformUpdate(helper.handleEdit(row));
-                }}
-                href="#"
-                data-toggle="modal"
-                data-target="#FormModal"
-              >
-                <i className="fa fa-pencil m-r-5"></i> Edit
-              </a>
-            )}
-
-            {user?.role?.hr?.delete && (
-              <a
-                className="dropdown-item"
-                onClick={() => setdeleteData(row)}
-                href="#"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-trash m-r-5"></i> Delete
-              </a>
-            )}
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => deleteLeaveType(row)}
+            >
+              Delete
+            </button>
           </div>
         </div>
       ),
@@ -219,6 +132,7 @@ const LeaveType = () => {
   ];
   return (
     <>
+    <AddLeaveTypeModal fetchLeaveType={fetchLeaveType} />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -237,9 +151,8 @@ const LeaveType = () => {
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={() => create()}
               >
-                <i className="fa fa-plus"></i> Add Leave
+                <i className="fa fa-plus"></i> Add Leave Type
               </a>
             )}
           </div>
@@ -258,7 +171,7 @@ const LeaveType = () => {
           />
         </div>
         <LeaveTable
-          data={allDesignation}
+          data={leaveType}
           // defaultSorted={defaultSorted}
           columns={columns}
         />
@@ -270,10 +183,10 @@ const LeaveType = () => {
         template={template}
         setsubmitted={setsubmitted}
       />
-      <ConfirmModal
+      <ConfirmDeleteLeaveTypeModal
         title="Leave Type"
-        selectedRow={deleteData}
-        deleteFunction={deleteLeaveType}
+        typeToDelete={typeToDelete}
+        fetchLeaveType={fetchLeaveType}
       />
     </>
   );
