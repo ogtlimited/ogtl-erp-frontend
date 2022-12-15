@@ -17,18 +17,13 @@ const LeavesUser = () => {
   const [userId, setuserId] = useState('');
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
-  const [user, setuser] = useState(null);
-  const [usedLeaves, setUsedLeaves] = useState(0);
+  const [user, setuser] = useState([]);
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
-  const [remainingLeaves, setRemainingLeaves] = useState(0);
   const [rejectModal, setRejectModal] = useState(false);
-  const [isLead, setIsLead] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editLeave, setEditLeave] = useState([]);
-  const [otherLeaves, setOtherLeaves] = useState(0);
   const [rejectLeave, setRejectLeave] = useState([]);
-  const [medicalLeave, setMedicalLeave] = useState(0);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -38,16 +33,6 @@ const LeavesUser = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const currentUser = tokenService.getUser();
-
-  const checkUserLevel = async () => {
-    try {
-      const response = await axiosInstance.get('is-user-a-lead');
-      const data = response.data.data;
-      setIsLead(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchYourLeaves = async () => {
     const id = currentUser._id;
@@ -154,62 +139,11 @@ const LeavesUser = () => {
       });
   }, [departmentFilter, page, searchTerm, sizePerPage]);
 
-  const fetchRemainingLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/remaining-leaves`);
-      const resData = response?.data?.data;
-
-      setRemainingLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchOtherLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/other-used-leaves`);
-      const resData = response?.data?.data;
-
-      setOtherLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchMedicalLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `leave-count/used-medical-leaves`
-      );
-      const resData = response?.data?.data;
-
-      setMedicalLeave(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchUsedLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/used-leaves`);
-      console.log("Used Leaves", response?.data);
-      const resData = response?.data?.data;
-
-      setUsedLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    checkUserLevel();
     fetchReporteesLeaves();
-    fetchRemainingLeaves();
-    fetchOtherLeaves();
-    fetchMedicalLeaves();
-    fetchUsedLeaves();
 
     let user = tokenService.getUser();
+    console.log("Logged In User", user);
     setuser(user);
     setuserId(user._id);
     if (userId) {
@@ -583,7 +517,7 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      {isLead && (
+      {user.leaveApprover && (
         <div className="page-menu">
           <div className="row">
             <div className="col-sm-12">
@@ -614,29 +548,11 @@ const LeavesUser = () => {
       <div>
         <div className=" tab-content">
           <div id="tab_leaves" className="col-12 tab-pane show active">
-            <div className="row">
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Used Leave</h6>
-                  <h4>{usedLeaves}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Medical Leave</h6>
-                  <h4>{medicalLeave}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Other Leave</h6>
-                  <h4>{otherLeaves}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
+            <div className="remaining-leave-row">
+              <div className="remaining-leave-row-card">
                 <div className="stats-info">
                   <h6>Remaining Leave</h6>
-                  <h4>{remainingLeaves}</h4>
+                  <h4>{user.leaveCount}</h4>
                 </div>
               </div>
             </div>

@@ -1,8 +1,7 @@
 /** @format */
 
 import React from 'react';
-// import { Doughnut } from "react-chartjs-2";
-import VerticalBar from './verticalBar';
+import LeaveVerticalBar from './leaveVerticalBar';
 
 const DashboardStatistics = ({
   stats,
@@ -16,14 +15,17 @@ const DashboardStatistics = ({
   totalTickets,
   completedProjects,
   totalProjects,
+  leaveStatusLabel,
+  leaveStatusData,
+  leaveTypeLabel,
+  leaveTypeData
 }) => {
-  
-  
+
   const leaveType = {
-    labels: ["Annual","Casual","Sick","Without Pay","Maternity"],
+    labels: leaveTypeLabel,
     datasets: [
       {
-        data: [2, 1, 0, 3, 1],
+        data: leaveTypeData,
         backgroundColor: [
           'rgba(255, 99, 132)',
           'rgba(54, 162, 235)',
@@ -50,10 +52,10 @@ const DashboardStatistics = ({
   };
 
   const leaveStatus = {
-    labels:  ['pending','rejected','cancelled', 'approved'],
+    labels:  leaveStatusLabel,
     datasets: [
       {
-        data:  [8, 4, 0, 11],
+        data:  leaveStatusData,
         backgroundColor: [
           'rgba(153, 102, 255)',
           'rgba(255, 159, 64)',
@@ -78,7 +80,6 @@ const DashboardStatistics = ({
       },
     ],
   };
-
 
   return (
     <>
@@ -199,8 +200,26 @@ const DashboardStatistics = ({
           </div>
         </div>
       </div>
-      <div className="col-md-12">
-    </div>
+      <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
+        <div className="card flex-fill">
+            <div className="leave-card-body">
+              <h3 className="card-title">Leave Type</h3>
+              <LeaveVerticalBar
+                data={leaveType}
+              />
+            </div>
+        </div>
+      </div>
+      <div className="col-md-12 col-lg-8 col-xl-4 d-flex">
+        <div className="card flex-fill">
+        <div className="leave-card-body">
+              <h3 className="card-title">Leave Status</h3>
+              <LeaveVerticalBar
+                data={leaveStatus}
+              />
+            </div>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,61 +1,77 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
-import { CREATE_LEAVE } from '../FormJSON/CreateLeave';
+import { create_designation } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
-import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
-export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
+export const AddDesignationModal = () => {
   const { showAlert } = useAppContext();
-  const [leave, setLeave] = useState(CREATE_LEAVE);
+  const [createDesignation, setCreateDesignation] =
+    useState(create_designation);
   const [loading, setLoading] = useState(false);
-  const [leaveType, setLeaveType] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [designations, setDesignations] = useState([]);
+  const [designationInfo, setDesignationInfo] = useState(
+    'Select designation ...'
+  );
   const user = JSON.parse(localStorage.getItem('user'));
 
   const cancelEvent = () => {
-    setLeave(CREATE_LEAVE);
-  }
+    setCreateDesignation(create_designation);
+  };
 
   const handleFormChange = (e) => {
     e.preventDefault();
-    setLeave({ ...leave, [e.target.name]: e.target.value });
+    setCreateDesignation({
+      ...createDesignation,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  const handleCreateAccount = async (e) => {
+  const handleCreateDesignation = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('leave-application', leave);
-      // eslint-disable-next-line no-unused-vars
+      const res = await axiosInstance.post('/designation', {
+        department_id: createDesignation.department,
+        designation: createDesignation.designation,
+      });
       const resData = res.data.data;
+      console.log('created designation?', resData);
 
-      showAlert(true, 'Your leave application is successful, please await an approval', 'alert alert-success');
-      fetchYourLeaves()
-      setLeave(CREATE_LEAVE);
+      showAlert(
+        true,
+        'Designation successfully created',
+        'alert alert-success'
+      );
+      setCreateDesignation(create_designation);
       $('#FormModal').modal('toggle');
     } catch (error) {
-      const errorMsg = error.response?.data?.message
+      const errorMsg = error.response?.data?.message;
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
     }
     setLoading(false);
   };
 
-  const fetchLeavesType = async () => {
+  const fetchDepartment = async () => {
     try {
-      const response = await axiosInstance.get(`leave-type`);
+      const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
+      console.log('All Departments:', resData);
 
-      setLeaveType(resData);
+      setDepartments(resData);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchLeavesType();
+    fetchDepartment();
   }, []);
 
   return (
@@ -71,7 +87,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Leave Application
+                Designation
               </h4>
               <button
                 type="button"
@@ -84,57 +100,28 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateAccount}>
+              <form onSubmit={handleCreateDesignation}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="from_date">From Date</label>
-                      <input
-                        type="date"
-                        name="from_date"
-                        value={leave.from_date}
-                        onChange={handleFormChange}
-                        className="form-control "
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="to_date">To Date</label>
-                      <input
-                        type="date"
-                        name="to_date"
-                        value={leave.to_date}
-                        onChange={handleFormChange}
-                        className="form-control "
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_type">Leave Type</label>
+                      <label htmlFor="department">Department</label>
                       <select
                         onChange={handleFormChange}
                         className="form-control "
-                        name="leave_type"
+                        name="department"
                         required
                       >
                         <option value="" disabled selected hidden>
-                          Select leave type...
+                          Select department ...
                         </option>
-                        {leaveType.map((leave, idx) => (
+                        {departments.map((department, idx) => (
                           <option
                             key={idx}
-                            value={leave._id}
-                            placeholder="Leave Type"
+                            value={department._id}
+                            placeholder="Department"
                             required
                           >
-                            {leave.leave_type}
+                            {department.department}
                           </option>
                         ))}
                       </select>
@@ -142,30 +129,36 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="reason_for_application">Reason</label>
-                      <textarea
-                        name="reason_for_application"
-                        className="form-control "
-                        value={leave.reason_for_application}
+                      <label htmlFor="designation">Designation</label>
+                      <input
+                        name="designation"
+                        type="text"
+                        className="form-control"
+                        value={createDesignation.designation}
                         onChange={handleFormChange}
+                        required
                       />
+                      {/* <select
+                        onChange={handleFormChange}
+                        className="form-control "
+                        name="designation"
+                        required
+                      >
+                        <option value="" disabled selected hidden>
+                          {designationInfo}
+                        </option>
+                        {designations.map((designation) => (
+                          <option
+                            key={designation._id}
+                            value={designation._id}
+                            placeholder="Designation"
+                          >
+                            {designation.designation}
+                          </option>
+                        ))}
+                      </select> */}
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  <input
-                    value={(leave.employee_id = user?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.department_id = user?.department?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.leave_approver = user?.reports_to)}
-                    style={{ display: 'none' }}
-                  />
                 </div>
 
                 <div className="modal-footer">

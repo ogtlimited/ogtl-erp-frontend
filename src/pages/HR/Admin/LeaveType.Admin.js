@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import React, { useMemo, useState, useEffect, useContext } from "react";
+
 import departments from "../../../db/designationList.json";
-import { designation } from "../../../components/FormJSON/HR/Employee/designation";
+import { leaveType } from "../../../components/FormJSON/HR/Employee/leaveType";
 import list from "../../../designation.json";
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import Select from "react-select";
@@ -12,19 +11,16 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
-import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
-import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
-
+import LeaveTypes from "./LeaveType.json";
 let qualityFilter;
 
-const Designations = () => {
+const LeaveType = () => {
   const [allDesignation, setallDesignation] = useState([]);
   const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
-  const [editDesignation, setEditDesignation] = useState([]);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
   const [template, settemplate] = useState({});
@@ -41,7 +37,6 @@ const Designations = () => {
     setformValue(initialValues);
     seteditData(initialValues);
   };
-
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
@@ -50,24 +45,38 @@ const Designations = () => {
     setclickedRow(formatted);
   };
 
-  const handleEditApplication = (row) => {
-    setEditDesignation(row);
-  };
+  // const fetchDesignation = () => {
+  //   settemplate(designation);
+  //   axiosInstance.get("/designation").then((res) => {
+  //     setallDesignation(res.data.data);
+  //     console.log("show this leaves", res.data.data);
+  //     setunfiltered(res?.data?.data);
+  //     const depsigOpts = res.data.data.map((e) => {
+  //       return {
+  //         label: e.designation,
+  //         value: e._id,
+  //       };
+  //     });
+  //     setDesignationOts(depsigOpts);
+  //   });
+  // };
 
   const fetchDesignation = () => {
-    settemplate(designation);
+    settemplate(leaveType);
     axiosInstance.get("/designation").then((res) => {
-      setallDesignation(res.data.data);
-      setunfiltered(res?.data?.data);
-      const depsigOpts = res.data.data.map((e) => {
+      setallDesignation(LeaveTypes);
+      console.log("show this leave type", LeaveTypes);
+      setunfiltered(LeaveTypes);
+      const depsigOpts = LeaveTypes.map((e) => {
         return {
-          label: e.designation,
+          label: e.leave_type,
           value: e._id,
         };
       });
       setDesignationOts(depsigOpts);
     });
   };
+
   useEffect(() => {
     fetchDesignation();
   }, []);
@@ -77,7 +86,7 @@ const Designations = () => {
       setallDesignation(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => {
-        return i.label.includes(e.designation);
+        return i.label.includes(e.leave_type);
       });
 
       setallDesignation(filt);
@@ -88,7 +97,7 @@ const Designations = () => {
     fetchDesignation();
 
     if (submitted) {
-      if (mode === "add") {
+      if (mode == "add") {
         axiosInstance
           .post("/designation", formValue)
           .then((e) => {
@@ -126,7 +135,7 @@ const Designations = () => {
     // setallDepartments(departments);
   }, [formValue]);
 
-  const deleteDesignation = (row) => {
+  const deleteLeaveType = (row) => {
     axiosInstance
       .delete(`/designation/${row._id}`)
       .then((res) => {
@@ -142,13 +151,6 @@ const Designations = () => {
       });
   };
 
-  const defaultSorted = [
-    {
-      dataField: "designation",
-      order: "desc",
-    },
-  ];
-  const breadcrumb = "Departments";
   const columns = [
     {
       dataField: "",
@@ -157,8 +159,8 @@ const Designations = () => {
       formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
     },
     {
-      dataField: "designation",
-      text: "Designation",
+      dataField: "leave_type",
+      text: "Leave Type",
       sort: true,
       headerStyle: { width: "70%" },
     },
@@ -187,10 +189,13 @@ const Designations = () => {
             {user?.role?.hr?.update && (
               <a
                 className="dropdown-item"
+                onClick={() => {
+                  setmode("edit");
+                  setformUpdate(helper.handleEdit(row));
+                }}
                 href="#"
                 data-toggle="modal"
-                data-target="#FormEditModal"
-                onClick={() => handleEditApplication(row)}
+                data-target="#FormModal"
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -214,17 +219,15 @@ const Designations = () => {
   ];
   return (
     <>
-    <AddDesignationModal />
-    <EditDesignationModal editDesignation={editDesignation} fetchDesignation={fetchDesignation} />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Designations</h3>
+            <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Designations</li>
+              <li className="breadcrumb-item active">Leave Types</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -234,9 +237,9 @@ const Designations = () => {
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
-                // onClick={() => create()}
+                onClick={() => create()}
               >
-                <i className="fa fa-plus"></i> Add Designation
+                <i className="fa fa-plus"></i> Add Leave
               </a>
             )}
           </div>
@@ -248,7 +251,7 @@ const Designations = () => {
             defaultValue={[]}
             onChange={handleClick}
             options={designationOpts}
-            placeholder="Filter Designations"
+            placeholder="Filter Leave Type"
             isClearable={true}
             style={{ display: "inline-block" }}
             // formatGroupLabel={formatGroupLabel}
@@ -261,19 +264,19 @@ const Designations = () => {
         />
       </div>
       <FormModal2
-        title="Create Designation"
+        title="Create Leave Type"
         editData={editData}
         setformValue={setformValue}
         template={template}
         setsubmitted={setsubmitted}
       />
       <ConfirmModal
-        title="Designation"
+        title="Leave Type"
         selectedRow={deleteData}
-        deleteFunction={deleteDesignation}
+        deleteFunction={deleteLeaveType}
       />
     </>
   );
 };
 
-export default Designations;
+export default LeaveType;

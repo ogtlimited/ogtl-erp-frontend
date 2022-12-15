@@ -22,6 +22,10 @@ const HRDashboard = () => {
   const [genderData, setGenderData] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
   const [formattedGender, setFormattedGender] = useState([]);
+  const [leaveStatusLabel, setLeaveStatusLabel] = useState([]);
+  const [leaveStatusData, setLeaveStatusData] = useState([]);
+  const [leaveTypeLabel, setLeaveTypeLabel] = useState([]);
+  const [leaveTypeData, setLeaveTypeData] = useState([]);
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
@@ -164,6 +168,57 @@ const HRDashboard = () => {
       setLoading(false);
     }
   };
+
+  const fetchLeaveStatusData = async () => {
+    try {
+      const response = await axiosInstance.get('/hr-leave-applications/hr-dashboard-analytics');
+      const resData = response?.data?.data
+
+      const formatted = resData.map((e) => ({
+        labels: e._id === null ? "Not Specified"  : e._id,
+        data: e.total,
+      }));
+      
+
+      const label = [...formatted.map((e) => e.labels)];
+      const data = [...formatted.map((e) => e.data)];
+
+      
+      setLeaveStatusLabel(label);
+      setLeaveStatusData(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchLeaveTypeData = async () => {
+    try {
+      const response = await axiosInstance.get('/hr-leave-applications/leave-types-taken');
+      const resData = response?.data?.data
+      console.log("Leave Type Response", resData)
+
+      const formatted = resData.map((e) => ({
+        labels: e._id === null ? "Not Specified"  : e._id,
+        data: e.total,
+      }));
+      
+
+      const label = [...formatted.map((e) => e.labels)];
+      const data = [...formatted.map((e) => e.data)];
+
+      
+      setLeaveTypeLabel(label);
+      setLeaveTypeData(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   
   useEffect(() => {
     fetchHeadCount();
@@ -173,6 +228,8 @@ const HRDashboard = () => {
     fetchInvoice();
     fetchTickets();
     fetchProjects();
+    fetchLeaveStatusData();
+    fetchLeaveTypeData();
   }, []);
 
   // const fetchEmployeeData = async () => {
@@ -364,6 +421,10 @@ const HRDashboard = () => {
           totalTickets={totalTickets}
           completedProjects={completedProjects}
           totalProjects={totalProjects}
+          leaveStatusLabel={leaveStatusLabel}
+          leaveStatusData={leaveStatusData}
+          leaveTypeLabel={leaveTypeLabel}
+          leaveTypeData={leaveTypeData}
         />
       </div>
 
