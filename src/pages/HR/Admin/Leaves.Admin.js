@@ -260,7 +260,7 @@ const LeavesAdmin = () => {
       dataField: 'full_name',
       text: 'Employee Name',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -281,13 +281,13 @@ const LeavesAdmin = () => {
       dataField: 'department',
       text: 'Department',
       sort: true,
-      headerStyle: { minWidth: '180px' },
+      headerStyle: { minWidth: '100px' },
     },
     {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (value, row) => (
         <>
           {value === 'approved' ? (
@@ -320,14 +320,14 @@ const LeavesAdmin = () => {
       dataField: 'from_date',
       text: 'From Date',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'to_date',
       text: 'To Date',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     // {
