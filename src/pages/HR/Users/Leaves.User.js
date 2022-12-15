@@ -1,4 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/**
+ * eslint-disable jsx-a11y/anchor-is-valid
+ *
+ * @format
+ */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
@@ -51,7 +55,7 @@ const LeavesUser = () => {
         ),
       }));
 
-      console.log("Show my leaves:", formatter)
+      console.log('Show my leaves:', formatter);
       // const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
       // setMedicalLeave(medic);
@@ -106,7 +110,7 @@ const LeavesUser = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log("Reportees", res?.data?.data?.application)
+        console.log('Reportees data abeg', res?.data?.data?.application);
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -124,7 +128,6 @@ const LeavesUser = () => {
             ' ' +
             leave?.employee.last_name,
           leave_type: leave.leave_type_id.leave_type,
-          department: leave?.department?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
           requested_leave_days: Math.ceil(
@@ -133,12 +136,12 @@ const LeavesUser = () => {
           ),
         }));
 
-        console.log("Formatted Reportees", formatted)
+        console.log('Formatted Reportees', formatted);
         setAllReporteesLeaves(formatted);
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('reportee error:', error);
         setLoading(false);
       });
   }, [departmentFilter, page, searchTerm, sizePerPage]);
@@ -147,13 +150,13 @@ const LeavesUser = () => {
     fetchReporteesLeaves();
 
     let user = tokenService.getUser();
-    console.log("Logged In User", user);
+    console.log('Logged In User', user);
     setuser(user);
     setuserId(user._id);
     if (userId) {
       fetchYourLeaves();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchReporteesLeaves, userId]);
 
   const handleApproveLeave = async (row) => {
@@ -177,6 +180,7 @@ const LeavesUser = () => {
 
   const handleEditApplication = (row) => {
     setEditLeave(row);
+    console.log('this row riiight', row);
   };
 
   const userColumns = [
@@ -297,7 +301,7 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === "pending" && (
+            {row.status === 'pending' && (
               <a
                 href="#"
                 className="dropdown-item"

@@ -11,7 +11,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(EDIT_LEAVE);
   const [loading, setLoading] = useState(false);
-  const [leaveType, setLeaveType] = useState([]);
+  const [leaveTypeOption, setLeaveTypeOption] = useState([]);
 
   const handleFormChange = (e) => {
     e.preventDefault();
@@ -23,11 +23,12 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
 
     setLoading(true);
     const id = editLeave._id;
+    console.log("edit please", editLeave)
     try {
       const res = await axiosInstance.put(
         `leave-application/${id}`,
         {
-          leave_type: leave.leave_type,
+          leave_type_id: leave.leave_type_id,
           from_date: new Date(leave.from_date).toISOString(),
           to_date: new Date(leave.to_date).toISOString(),
           reason_for_application: leave.reason_for_application,
@@ -35,7 +36,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
       );
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      console.log(resData);
+      console.log("god have mercy", resData);
 
       showAlert(
         true,
@@ -51,13 +52,20 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     setLoading(false);
   };
 
+  const fetchLeavesType = async () => {
+    try {
+      const response = await axiosInstance.get(`/leave-type`);
+      const resData = response?.data?.data;
+
+      setLeaveTypeOption(resData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    setLeave(editLeave);
-    const fetchLeavesType = () => {
-      const types = LeaveApplicationFormJSON.Fields[0].options;
-      setLeaveType(types);
-    };
     fetchLeavesType();
+    setLeave(editLeave);
   }, [editLeave]);
 
   return (
@@ -122,17 +130,19 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                         onChange={handleFormChange}
                         className="form-control "
                         name="leave_type_id"
+                        required
                       >
                         <option value="" disabled selected hidden>
                           Select leave type...
                         </option>
-                        {leaveType.map((leave, idx) => (
+                        {leaveTypeOption.map((leave, idx) => (
                           <option
                             key={idx}
-                            value={leave.value}
+                            value={leave._id}
                             placeholder="Leave Type"
+                            required
                           >
-                            {leave.label}
+                            {leave.leave_type}
                           </option>
                         ))}
                       </select>

@@ -15,6 +15,7 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   delete leaveContent.employee;
   delete leaveContent.emp_department;
   delete leaveContent._id;
+  delete leaveContent.leave_type_id;
 
   return (
     <div className="row d-flex justify-content-center">
