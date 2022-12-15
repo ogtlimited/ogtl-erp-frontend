@@ -17,18 +17,16 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
-
   const handleEditLeave = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     const id = editLeave._id;
-    console.log("edit please", editLeave)
     try {
       const res = await axiosInstance.put(
         `leave-application/${id}`,
         {
-          leave_type_id: leave.leave_type_id._id,
+          leave_type_id: leave.leave_type_id,
           from_date: new Date(leave.from_date).toISOString(),
           to_date: new Date(leave.to_date).toISOString(),
           reason_for_application: leave.reason_for_application,
@@ -36,8 +34,6 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
       );
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      console.log("god have mercy", resData);
-
       showAlert(
         true,
         'Your leave application has been successfully updated, please await an approval',
@@ -58,7 +54,6 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
       const resData = response?.data?.data;
 
       setLeaveTypeOption(resData);
-      console.log("resData Leave types", resData)
     } catch (error) {
       console.log(error);
     }

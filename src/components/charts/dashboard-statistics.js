@@ -83,7 +83,7 @@ const DashboardStatistics = ({
 
   return (
     <>
-      <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-12 col-xl-12 d-flex">
         <div className="card flex-fill dash-statistics">
           <div className="card-body">
             <h5 className="card-title">Statistics</h5>

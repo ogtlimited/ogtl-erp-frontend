@@ -514,7 +514,7 @@ const LeavesAdmin = () => {
                 </h4>
               </div>
             </div>
-            <div className="col-md-3">
+            {/* <div className="col-md-3">
               <div className="stats-info">
                 <h6>Pending Leaves</h6>
                 <h4>{pendingLeaves} &nbsp;</h4>
@@ -531,7 +531,7 @@ const LeavesAdmin = () => {
                 <h6>Rejected Leaves</h6>
                 <h4> {rejectedLeaves}</h4>
               </div>
-            </div>
+            </div> */}
           </div>
           <AdminLeavesTable
             columns={columns}

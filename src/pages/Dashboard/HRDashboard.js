@@ -173,17 +173,8 @@ const HRDashboard = () => {
     try {
       const response = await axiosInstance.get('/hr-leave-applications/hr-dashboard-analytics');
       const resData = response?.data?.data
-
-      const formatted = resData.map((e) => ({
-        labels: e._id === null ? "Not Specified"  : e._id,
-        data: e.total,
-      }));
-      
-
-      const label = [...formatted.map((e) => e.labels)];
-      const data = [...formatted.map((e) => e.data)];
-
-      
+      const label = Object.keys(resData);
+      const data = Object.values(resData)
       setLeaveStatusLabel(label);
       setLeaveStatusData(data);
 
@@ -198,7 +189,7 @@ const HRDashboard = () => {
     try {
       const response = await axiosInstance.get('/hr-leave-applications/leave-types-taken');
       const resData = response?.data?.data
-      console.log("Leave Type Response", resData)
+      console.log("Leave Type Response", resData )
 
       const formatted = resData.map((e) => ({
         labels: e._id === null ? "Not Specified"  : e._id,
