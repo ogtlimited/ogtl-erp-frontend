@@ -448,6 +448,15 @@
   width: 17.5%;
 }
 
+.Hr-cards {
+  display: flex;
+}
+
+.hr-filter-select {
+  display: flex;
+  margin-bottom: 20px;
+}
+
 /*-----------------
 	1. General
 -----------------------*/

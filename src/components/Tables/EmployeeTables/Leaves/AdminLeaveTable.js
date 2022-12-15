@@ -279,8 +279,8 @@ const ReporteeLeavesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="d-flex row mb-3">
-                <div className="col-md-3">
+              <div className="hr-filter-select">
+                <div>
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}

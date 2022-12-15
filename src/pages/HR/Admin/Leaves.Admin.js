@@ -505,7 +505,7 @@ const LeavesAdmin = () => {
 
       <div className="row tab-content">
         <div id="tab_leaves" className="col-12 tab-pane show active">
-          <div className="row">
+          <div className="Hr-cards">
             <div className="col-md-3">
               <div className="stats-info">
                 <h6>Today Presents</h6>
