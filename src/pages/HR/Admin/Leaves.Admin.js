@@ -109,6 +109,7 @@ const LeavesAdmin = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
+          leave_type: leave.leave_type_id.leave_type,
           department: leave?.department?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),

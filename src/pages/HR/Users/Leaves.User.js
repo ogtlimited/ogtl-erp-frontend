@@ -42,6 +42,7 @@ const LeavesUser = () => {
 
       const formatter = leaves.map((leave) => ({
         ...leave,
+        leave_type: leave.leave_type_id.leave_type,
         from_date: new Date(leave.from_date).toDateString(),
         to_date: new Date(leave.to_date).toDateString(),
         requested_leave_days: Math.ceil(
@@ -50,6 +51,7 @@ const LeavesUser = () => {
         ),
       }));
 
+      console.log("Show my leaves:", formatter)
       // const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
       // setMedicalLeave(medic);
@@ -104,7 +106,7 @@ const LeavesUser = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log("Reportees", res?.data)
+        console.log("Reportees", res?.data?.data?.application)
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -121,6 +123,7 @@ const LeavesUser = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
+          leave_type: leave.leave_type_id.leave_type,
           department: leave?.department?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
@@ -130,6 +133,7 @@ const LeavesUser = () => {
           ),
         }));
 
+        console.log("Formatted Reportees", formatted)
         setAllReporteesLeaves(formatted);
         setLoading(false);
       })
@@ -180,7 +184,7 @@ const LeavesUser = () => {
       dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
-      formatter: (val, row) => <p>{val + ' leave'}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'from_date',
@@ -328,7 +332,7 @@ const LeavesUser = () => {
       dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
-      formatter: (val, row) => <p>{val + ' leave'}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'from_date',
