@@ -292,6 +292,30 @@ export default function Router() {
               ),
             },
             {
+              path: 'leave-approval',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveApproval />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leave-approvals/department/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveApprovalView />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leave-type',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveType />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'shifts',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -893,6 +917,15 @@ const Departments = Loadable(
 );
 const Designations = Loadable(
   lazy(() => import('../pages/HR/Admin/Designation.Admin'))
+);
+const LeaveApproval = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveApproval.Admin'))
+);
+const LeaveApprovalView = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveApprovalView.Admin'))
+);
+const LeaveType = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveType.Admin'))
 );
 const AllEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Employees.Admin'))

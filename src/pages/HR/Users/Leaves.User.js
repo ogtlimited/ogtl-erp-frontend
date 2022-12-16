@@ -1,4 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/**
+ * eslint-disable jsx-a11y/anchor-is-valid
+ *
+ * @format
+ */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
@@ -17,18 +21,13 @@ const LeavesUser = () => {
   const [userId, setuserId] = useState('');
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
-  const [user, setuser] = useState(null);
-  const [usedLeaves, setUsedLeaves] = useState(0);
+  const [user, setuser] = useState([]);
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
-  const [remainingLeaves, setRemainingLeaves] = useState(0);
   const [rejectModal, setRejectModal] = useState(false);
-  const [isLead, setIsLead] = useState(false);
   const [loading, setLoading] = useState(true);
   const [editLeave, setEditLeave] = useState([]);
-  const [otherLeaves, setOtherLeaves] = useState(0);
   const [rejectLeave, setRejectLeave] = useState([]);
-  const [medicalLeave, setMedicalLeave] = useState(0);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -39,16 +38,6 @@ const LeavesUser = () => {
 
   const currentUser = tokenService.getUser();
 
-  const checkUserLevel = async () => {
-    try {
-      const response = await axiosInstance.get('is-user-a-lead');
-      const data = response.data.data;
-      setIsLead(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchYourLeaves = async () => {
     const id = currentUser._id;
     try {
@@ -57,17 +46,19 @@ const LeavesUser = () => {
 
       const formatter = leaves.map((leave) => ({
         ...leave,
-        from_date: new Date(leave.from_date).toDateString(),
-        to_date: new Date(leave.to_date).toDateString(),
+        leave_type: leave?.leave_type_id?.leave_type,
+        from_date: new Date(leave?.from_date).toDateString(),
+        to_date: new Date(leave?.to_date).toDateString(),
         requested_leave_days: Math.ceil(
           (new Date(leave.to_date) - new Date(leave.from_date)) /
             (1000 * 3600 * 24)
         ),
       }));
 
-      const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
+      console.log('Show my leaves:', formatter);
+      // const medic = leaves.filter((e) => e.leave_type === 'Sick').length;
 
-      setMedicalLeave(medic);
+      // setMedicalLeave(medic);
       setallLeaves(formatter);
       setLoading(false);
     } catch (error) {
@@ -119,7 +110,7 @@ const LeavesUser = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log("Reportees", res?.data)
+        console.log('Reportees data abeg', res?.data?.data?.application);
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -136,85 +127,38 @@ const LeavesUser = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
+          leave_type: leave?.leave_type_id?.leave_type,
+          from_date: new Date(leave?.from_date).toDateString(),
+          to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
           requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
+            (new Date(leave.to_date) - new Date(leave?.from_date)) /
               (1000 * 3600 * 24)
           ),
         }));
 
+        console.log('Formatted Reportees', formatted);
+        console.log('resData', resData);
         setAllReporteesLeaves(formatted);
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log('reportee error:', error);
         setLoading(false);
       });
   }, [departmentFilter, page, searchTerm, sizePerPage]);
 
-  const fetchRemainingLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/remaining-leaves`);
-      const resData = response?.data?.data;
-
-      setRemainingLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchOtherLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/other-used-leaves`);
-      const resData = response?.data?.data;
-
-      setOtherLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchMedicalLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `leave-count/used-medical-leaves`
-      );
-      const resData = response?.data?.data;
-
-      setMedicalLeave(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchUsedLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`leave-count/used-leaves`);
-      const resData = response?.data?.data;
-
-      setUsedLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    checkUserLevel();
     fetchReporteesLeaves();
-    fetchRemainingLeaves();
-    fetchOtherLeaves();
-    fetchMedicalLeaves();
-    fetchUsedLeaves();
 
     let user = tokenService.getUser();
+    console.log('Logged In User', user);
     setuser(user);
     setuserId(user._id);
     if (userId) {
       fetchYourLeaves();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchReporteesLeaves, userId]);
 
   const handleApproveLeave = async (row) => {
@@ -238,6 +182,7 @@ const LeavesUser = () => {
 
   const handleEditApplication = (row) => {
     setEditLeave(row);
+    console.log('this row riiight', row);
   };
 
   const userColumns = [
@@ -245,7 +190,7 @@ const LeavesUser = () => {
       dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
-      formatter: (val, row) => <p>{val + ' leave'}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'from_date',
@@ -358,7 +303,7 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === "pending" && (
+            {row.status === 'pending' && (
               <a
                 href="#"
                 className="dropdown-item"
@@ -393,19 +338,17 @@ const LeavesUser = () => {
       dataField: 'leave_type',
       text: 'Leave Type',
       sort: true,
-      formatter: (val, row) => <p>{val + ' leave'}</p>,
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: 'from_date',
       text: 'From Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'to_date',
       text: 'To Date',
       sort: true,
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'status',
@@ -582,7 +525,7 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      {isLead && (
+      {user.leaveApprover && (
         <div className="page-menu">
           <div className="row">
             <div className="col-sm-12">
@@ -613,29 +556,11 @@ const LeavesUser = () => {
       <div>
         <div className=" tab-content">
           <div id="tab_leaves" className="col-12 tab-pane show active">
-            <div className="row">
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Used Leave</h6>
-                  <h4>{usedLeaves}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Medical Leave</h6>
-                  <h4>{medicalLeave}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Other Leave</h6>
-                  <h4>{otherLeaves}</h4>
-                </div>
-              </div>
-              <div className="col-md-3">
+            <div className="remaining-leave-row">
+              <div className="remaining-leave-row-card">
                 <div className="stats-info">
                   <h6>Remaining Leave</h6>
-                  <h4>{remainingLeaves}</h4>
+                  <h4>{user.leaveCount}</h4>
                 </div>
               </div>
             </div>

@@ -40,6 +40,7 @@ const LeavesAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
+  const [headCount, setheadCount] = useState([]);
   const user = tokenService.getUser();
 
   const [page, setPage] = useState(1);
@@ -109,6 +110,7 @@ const LeavesAdmin = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
+          leave_type: leave.leave_type_id.leave_type,
           department: leave?.department?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
@@ -209,6 +211,21 @@ const LeavesAdmin = () => {
     }
   };
 
+  const fetchHeadCount = async () => {
+    try {
+      const response = await axiosInstance.get('/employees/head-count');
+      const resData = response.data.data.headCount;
+
+      const count = resData.filter((data) => data._id === 'active');
+
+      setheadCount(count[0].total);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
+
   // const fetchDepartment = useCallback(() => {
   //   axiosInstance
   //       .get(`/departments/employees/designations/${id}`)
@@ -229,6 +246,7 @@ const LeavesAdmin = () => {
     fetchAllHrPending();
     fetchAllEmpOnLeave();
     fetchHRLeaves();
+    fetchHeadCount()
     // fetchDepartment()
   }, [fetchHRLeaves]);
 
@@ -259,7 +277,7 @@ const LeavesAdmin = () => {
       dataField: 'full_name',
       text: 'Employee Name',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -280,13 +298,13 @@ const LeavesAdmin = () => {
       dataField: 'department',
       text: 'Department',
       sort: true,
-      headerStyle: { minWidth: '180px' },
+      headerStyle: { minWidth: '100px' },
     },
     {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (value, row) => (
         <>
           {value === 'approved' ? (
@@ -319,14 +337,14 @@ const LeavesAdmin = () => {
       dataField: 'from_date',
       text: 'From Date',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: 'to_date',
       text: 'To Date',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     // {
@@ -487,19 +505,19 @@ const LeavesAdmin = () => {
 
       <div className="row tab-content">
         <div id="tab_leaves" className="col-12 tab-pane show active">
-          <div className="row">
+          <div className="Hr-cards">
             <div className="col-md-3">
               <div className="stats-info">
                 <h6>Today Presents</h6>
                 <h4>
-                  {onLeave} / {allEmployees.length}
+                  {onLeave} / {headCount}
                 </h4>
               </div>
             </div>
-            <div className="col-md-3">
+            {/* <div className="col-md-3">
               <div className="stats-info">
-                <h6>Pending Requests</h6>
-                <h4>{pendingLeaves}</h4>
+                <h6>Pending Leaves</h6>
+                <h4>{pendingLeaves} &nbsp;</h4>
               </div>
             </div>
             <div className="col-md-3">
@@ -511,9 +529,9 @@ const LeavesAdmin = () => {
             <div className="col-md-3">
               <div className="stats-info">
                 <h6>Rejected Leaves</h6>
-                <h4>{rejectedLeaves} &nbsp;</h4>
+                <h4> {rejectedLeaves}</h4>
               </div>
-            </div>
+            </div> */}
           </div>
           <AdminLeavesTable
             columns={columns}

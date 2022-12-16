@@ -41,6 +41,8 @@ export const PATH_DASHBOARD = {
     attendanceEmployee: path(ROOTS_DASHBOARD, "/hr/attendance"),
     department: path(ROOTS_DASHBOARD, "/hr/departments"),
     designations: path(ROOTS_DASHBOARD, "/hr/designations"),
+    leaveApproval: path(ROOTS_DASHBOARD, "/hr/leave-approval"),
+    leaveType: path(ROOTS_DASHBOARD, "/hr/leave-type"),
     shifts: path(ROOTS_DASHBOARD, "/hr/shifts"),
     shiftAssignment: path(ROOTS_DASHBOARD, "/hr/shift-assignment"),
     shiftRequest: path(ROOTS_DASHBOARD, "/hr/shift-request"),

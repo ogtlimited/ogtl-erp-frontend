@@ -1,5 +1,6 @@
-import React, { useMemo, useState, useEffect, useContext } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
+import React, { useMemo, useState, useEffect, useContext } from "react";
 import departments from "../../../db/designationList.json";
 import { designation } from "../../../components/FormJSON/HR/Employee/designation";
 import list from "../../../designation.json";
@@ -11,6 +12,8 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import helper from "../../../services/helper";
+import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
+import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 let qualityFilter;
@@ -21,12 +24,14 @@ const Designations = () => {
   const [submitted, setsubmitted] = useState(false);
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
+  const [editDesignation, setEditDesignation] = useState([]);
   const [clickedRow, setclickedRow] = useState(null);
   const [deleteData, setdeleteData] = useState(null);
   const [template, settemplate] = useState({});
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [mode, setmode] = useState("add");
+
   const create = () => {
     let initialValues = {};
     for (let i in template) {
@@ -36,12 +41,17 @@ const Designations = () => {
     setformValue(initialValues);
     seteditData(initialValues);
   };
+
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
     setmode("edit");
     setformUpdate(formatted);
     setclickedRow(formatted);
+  };
+
+  const handleEditApplication = (row) => {
+    setEditDesignation(row);
   };
 
   const fetchDesignation = () => {
@@ -78,7 +88,7 @@ const Designations = () => {
     fetchDesignation();
 
     if (submitted) {
-      if (mode == "add") {
+      if (mode === "add") {
         axiosInstance
           .post("/designation", formValue)
           .then((e) => {
@@ -177,13 +187,10 @@ const Designations = () => {
             {user?.role?.hr?.update && (
               <a
                 className="dropdown-item"
-                onClick={() => {
-                  setmode("edit");
-                  setformUpdate(helper.handleEdit(row));
-                }}
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#FormEditModal"
+                onClick={() => handleEditApplication(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -207,6 +214,8 @@ const Designations = () => {
   ];
   return (
     <>
+    <AddDesignationModal />
+    <EditDesignationModal editDesignation={editDesignation} fetchDesignation={fetchDesignation} />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -225,7 +234,7 @@ const Designations = () => {
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={() => create()}
+                // onClick={() => create()}
               >
                 <i className="fa fa-plus"></i> Add Designation
               </a>

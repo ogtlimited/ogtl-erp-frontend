@@ -2,25 +2,17 @@
 
 import React from 'react';
 
-const LeaveApplicationContent = ({ leaveContent = {} }) => {
-  delete leaveContent.__v;
-  delete leaveContent.updatedAt;
-  delete leaveContent.createdAt;
-  delete leaveContent.acted_on;
-  delete leaveContent.hr_stage;
-  delete leaveContent.approval_level;
-  delete leaveContent.leave_approver;
-  delete leaveContent.department_id;
-  delete leaveContent.employee_id;
-  delete leaveContent.employee;
-  delete leaveContent.emp_department;
-  delete leaveContent._id;
-  delete leaveContent.leave_type_id;
+const LeaveApprovalContent = ({ leaveApprovalContent = {} }) => {
+  delete leaveApprovalContent.__v;
+  delete leaveApprovalContent.updatedAt;
+  delete leaveApprovalContent.createdAt;
+  delete leaveApprovalContent.slug;
+  delete leaveApprovalContent._id;
 
   return (
     <div className="row d-flex justify-content-center">
-      {Object.keys(leaveContent).length &&
-        Object.keys(leaveContent)
+      {Object.keys(leaveApprovalContent).length &&
+        Object.keys(leaveApprovalContent)
           .map((e) => (
             <>
               <div className="col-md-6 ">
@@ -37,15 +29,15 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
                   }
                 ) : e === 'rep_sieving_call' ? (
                   <p>
-                    {leaveContent[e]?.first_name} {leaveContent[e]?.last_name}
+                    {leaveApprovalContent[e]?.first_name} {leaveApprovalContent[e]?.last_name}
                   </p>
                 ) : (
                   <p className="">
-                    {typeof leaveContent[e] === 'string'
-                      ? leaveContent[e]
-                      : leaveContent[e] === null
+                    {typeof leaveApprovalContent[e] === 'string'
+                      ? leaveApprovalContent[e]
+                      : leaveApprovalContent[e] === null
                       ? 'Not Provided'
-                      : leaveContent[e]}
+                      : leaveApprovalContent[e]}
                   </p>
                 )}
               </div>
@@ -55,4 +47,4 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   );
 };
 
-export default LeaveApplicationContent;
+export default LeaveApprovalContent;

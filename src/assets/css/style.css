@@ -439,7 +439,23 @@
   padding: 0 0 0 10px ;
 }
 
+.leave-card-body {
+  padding: 20px;
+}
 
+.remaining-leave-row {
+  margin-left: 1.5%;
+  width: 17.5%;
+}
+
+.Hr-cards {
+  display: flex;
+}
+
+.hr-filter-select {
+  display: flex;
+  margin-bottom: 20px;
+}
 
 /*-----------------
 	1. General

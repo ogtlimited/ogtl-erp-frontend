@@ -150,7 +150,7 @@ const ReporteeLeavesTable = ({
     setLeaveTypeFilter(e.target.value);
     setSearchTerm("");
     const filteredItems = data.filter(
-      (item) => item.leave_type === e.target.value
+      (item) => item.leave_type_id.leave_type === e.target.value
     );
     if (filteredItems === null) {
       setDataToFilter(data);
@@ -279,8 +279,8 @@ const ReporteeLeavesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="d-flex row mb-3">
-                <div className="col-md-3">
+              <div className="hr-filter-select">
+                <div>
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}

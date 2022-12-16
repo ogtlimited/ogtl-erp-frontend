@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-// import { Doughnut } from "react-chartjs-2";
+import LeaveVerticalBar from './leaveVerticalBar';
 
 const DashboardStatistics = ({
   stats,
@@ -15,22 +15,75 @@ const DashboardStatistics = ({
   totalTickets,
   completedProjects,
   totalProjects,
+  leaveStatusLabel,
+  leaveStatusData,
+  leaveTypeLabel,
+  leaveTypeData
 }) => {
-  // const data = {
-  //   labels: ["Profit", "Expenses"],
-  //   datasets: [
-  //     {
-  //       label: "# of Votes",
-  //       data: [120000, 190000],
-  //       backgroundColor: ["rgba(255, 99, 132, 0.5)", "rgba(54, 162, 235, 0.5)"],
-  //       borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
+
+  const leaveType = {
+    labels: leaveTypeLabel,
+    datasets: [
+      {
+        data: leaveTypeData,
+        backgroundColor: [
+          'rgba(255, 99, 132)',
+          'rgba(54, 162, 235)',
+          'rgba(255, 206, 86)',
+          'rgba(75, 192, 192)',
+          'rgba(153, 102, 255)',
+          'rgba(255, 159, 64)',
+          'rgba(205, 19, 84)',
+          'rgba(55, 159, 64)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(205, 19, 84, 1)',
+          'rgba(55, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const leaveStatus = {
+    labels:  leaveStatusLabel,
+    datasets: [
+      {
+        data:  leaveStatusData,
+        backgroundColor: [
+          'rgba(153, 102, 255)',
+          'rgba(255, 159, 64)',
+          'rgba(205, 19, 84)',
+          'rgba(55, 159, 64)',
+          'rgba(255, 99, 132)',
+          'rgba(54, 162, 235)',
+          'rgba(255, 206, 86)',
+          'rgba(75, 192, 192)',
+        ],
+        borderColor: [
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(205, 19, 84, 1)',
+          'rgba(55, 159, 64, 1)',
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <>
-      <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
+      <div className="col-md-12 col-lg-12 col-xl-12 d-flex">
         <div className="card flex-fill dash-statistics">
           <div className="card-body">
             <h5 className="card-title">Statistics</h5>
@@ -147,103 +200,26 @@ const DashboardStatistics = ({
           </div>
         </div>
       </div>
-      {/* <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+      <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
-          <div className="card-body">
-            <h4 className="card-title">Task Statistics</h4>
-            <div className="statistics">
-              <div className="row">
-                <div className="col-md-6 col-6 text-center">
-                  <div className="stats-box mb-4">
-                    <p>Total Tasks</p>
-                    <h3>385</h3>
-                  </div>
-                </div>
-                <div className="col-md-6 col-6 text-center">
-                  <div className="stats-box mb-4">
-                    <p>Overdue Tasks</p>
-                    <h3>19</h3>
-                  </div>
-                </div>
-              </div>
+            <div className="leave-card-body">
+              <h3 className="card-title">Leave Type</h3>
+              <LeaveVerticalBar
+                data={leaveType}
+              />
             </div>
-            <div className="progress mb-4">
-              <div
-                className="progress-bar bg-purple"
-                role="progressbar"
-                style={{ width: "30%" }}
-                aria-valuenow="30"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                30%
-              </div>
-              <div
-                className="progress-bar bg-warning"
-                role="progressbar"
-                style={{ width: "20%" }}
-                aria-valuenow="18"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                22%
-              </div>
-              <div
-                className="progress-bar bg-success"
-                role="progressbar"
-                style={{ width: "22%" }}
-                aria-valuenow="12"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                24%
-              </div>
-              <div
-                className="progress-bar bg-danger"
-                role="progressbar"
-                style={{ width: "24%" }}
-                aria-valuenow="14"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                21%
-              </div>
-              <div
-                className="progress-bar bg-info"
-                role="progressbar"
-                style={{ width: "24%" }}
-                aria-valuenow="14"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
-                10%
-              </div>
-            </div>
-            <div>
-              <p>
-                <i className="fa fa-dot-circle-o text-purple mr-2"></i>Completed
-                Tasks <span className="float-right">166</span>
-              </p>
-              <p>
-                <i className="fa fa-dot-circle-o text-warning mr-2"></i>
-                Inprogress Tasks <span className="float-right">115</span>
-              </p>
-              <p>
-                <i className="fa fa-dot-circle-o text-success mr-2"></i>On Hold
-                Tasks <span className="float-right">31</span>
-              </p>
-              <p>
-                <i className="fa fa-dot-circle-o text-danger mr-2"></i>Pending
-                Tasks <span className="float-right">47</span>
-              </p>
-              <p className="mb-0">
-                <i className="fa fa-dot-circle-o text-info mr-2"></i>Review
-                Tasks <span className="float-right">5</span>
-              </p>
-            </div>
-          </div>
         </div>
-      </div> */}
+      </div>
+      <div className="col-md-12 col-lg-8 col-xl-4 d-flex">
+        <div className="card flex-fill">
+        <div className="leave-card-body">
+              <h3 className="card-title">Leave Status</h3>
+              <LeaveVerticalBar
+                data={leaveStatus}
+              />
+            </div>
+        </div>
+      </div>
     </>
   );
 };
