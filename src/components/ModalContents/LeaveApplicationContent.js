@@ -12,6 +12,7 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   delete leaveContent.leave_approver;
   delete leaveContent.department_id;
   delete leaveContent.employee_id;
+  delete leaveContent.project_id;
   delete leaveContent.employee;
   delete leaveContent.emp_department;
   delete leaveContent._id;

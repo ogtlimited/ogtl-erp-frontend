@@ -22,12 +22,12 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleCreateAccount = async (e) => {
+  const handleApplyLeave = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('leave-application', leave);
+      const res = await axiosInstance.post('/leave-application', leave);
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
 
@@ -83,7 +83,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateAccount}>
+              <form onSubmit={handleApplyLeave}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">

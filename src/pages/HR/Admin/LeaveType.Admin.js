@@ -48,7 +48,11 @@ const LeaveType = () => {
   };
 
   const fetchLeaveType = () => {
-    axiosInstance.get("/leave-type").then((res) => {
+    axiosInstance.get("/leave-type", {
+      params: {
+        delete: false,
+      },
+    }).then((res) => {
       const resData = res?.data?.data
       console.log("All Leave types", resData)
       setAllLeaveType(resData);

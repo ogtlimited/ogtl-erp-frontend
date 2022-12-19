@@ -190,7 +190,13 @@ const LeavesUser = () => {
   };
 
   const handleEditApplication = (row) => {
-    setEditLeave(row);
+    const formatted = {}
+    formatted._id = row._id
+    formatted.from_date = row.from_date;
+    formatted.to_date = row.to_date;
+    formatted.leave_type_id = row.leave_type_id._id;
+    formatted.reason_for_application = row.reason_for_application;
+    setEditLeave(formatted);
   };
 
   const userColumns = [

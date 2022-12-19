@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../Context/AppContext';
-import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
 import { EDIT_LEAVE } from '../FormJSON/CreateLeave';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
@@ -22,6 +21,13 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
 
     setLoading(true);
     const id = editLeave._id;
+    console.log("Submit this edited leave:", 
+    {
+      leave_type_id: leave?.leave_type_id,
+      from_date: new Date(leave.from_date).toISOString(),
+      to_date: new Date(leave.to_date).toISOString(),
+      reason_for_application: leave.reason_for_application,
+    })
     try {
       const res = await axiosInstance.put(
         `leave-application/${id}`,
@@ -52,6 +58,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     try {
       const response = await axiosInstance.get(`/leave-type`);
       const resData = response?.data?.data;
+      console.log("leave type", resData)
 
       setLeaveTypeOption(resData);
     } catch (error) {
