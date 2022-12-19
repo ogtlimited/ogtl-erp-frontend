@@ -40,8 +40,6 @@ const LeaveApproval = () => {
 
   const [allDepartments, setallDepartments] = useState([]);
 
-  const breadcrumb = "Departments";
-
   const fetchDept = () => {
     settemplate(departmentFormJson);
     axiosInstance.get("/department").then((e) => {
@@ -129,11 +127,6 @@ const LeaveApproval = () => {
       }
     }
   }, [formValue]);
-  // CAUSE object.keys() bug
-  // useEffect(() => {
-  //   console.log(clickedRow)
-  //   seteditData(clickedRow);
-  // }, [editData ]);
 
   const deleteDepartment = (row) => {
     axiosInstance

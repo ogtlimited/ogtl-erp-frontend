@@ -16,7 +16,7 @@ const ConfirmDeleteLeaveTypeModal = ({
     const id = typeToDelete._id
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.delete(`/leave-type/${id}`)
+      const response = await axiosInstance.patch(`/leave-type/${id}`)
       showAlert(true, "Leave Type Deleted", "alert alert-success");
       $("#exampleModal").modal("toggle");
       fetchLeaveType();

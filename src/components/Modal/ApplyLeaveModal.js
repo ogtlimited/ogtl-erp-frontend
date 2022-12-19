@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { CREATE_LEAVE } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
-import { LeaveApplicationFormJSON } from '../FormJSON/HR/Leave/application';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
@@ -151,21 +150,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       />
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  <input
-                    value={(leave.employee_id = user?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.department_id = user?.department?._id)}
-                    style={{ display: 'none' }}
-                  />
-                  <input
-                    value={(leave.leave_approver = user?.reports_to)}
-                    style={{ display: 'none' }}
-                  />
                 </div>
 
                 <div className="modal-footer">

@@ -34,14 +34,22 @@ const LeavesUser = () => {
   const [totalPages, setTotalPages] = useState('');
 
   const [departmentFilter, setDepartmentFilter] = useState('');
+  const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [departments, setDepartments] = useState([]);
+  const [leaveTypes, setLeaveTypes] = useState([]);
 
   const currentUser = tokenService.getUser();
 
   const fetchYourLeaves = async () => {
     const id = currentUser._id;
     try {
-      const response = await axiosInstance.get(`leave-application/${id}`);
+      const response = await axiosInstance.get(`/leave-application`, {
+        params: {
+          id: id,
+        },
+      });
       const leaves = response?.data?.data;
 
       const formatter = leaves.map((leave) => ({
@@ -67,42 +75,12 @@ const LeavesUser = () => {
     }
   };
 
-  // const fetchReporteesLeaves = async () => {
-  //   try {
-  //     const response = await axiosInstance.get(`leads-leave-applications`);
-  //     const leaves = response?.data?.data?.application;
-  //     console.log("Reportees's leave", response?.data)
-
-  //     const formatter = leaves.map((leave) => ({
-  //       ...leave,
-  //       full_name:
-  //         leave?.employee.first_name +
-  //         ' ' +
-  //         leave?.employee.middle_name +
-  //         ' ' +
-  //         leave?.employee.last_name,
-  //       reportee_department: leave?.department?.department,
-  //       from_date: new Date(leave.from_date).toDateString(),
-  //       to_date: new Date(leave.to_date).toDateString(),
-  //       requested_leave_days: Math.ceil(
-  //         (new Date(leave.to_date) - new Date(leave.from_date)) /
-  //           (1000 * 3600 * 24)
-  //       ),
-  //     }));
-
-  //     setAllReporteesLeaves(formatter);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchReporteesLeaves = useCallback(() => {
     axiosInstance
       .get(`leads-leave-applications`, {
         params: {
           department: departmentFilter,
+          leave_type: leaveTypeFilter,
           search: searchTerm,
           page: page,
           limit: sizePerPage,
@@ -110,7 +88,6 @@ const LeavesUser = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log('Reportees data abeg', res?.data?.data?.application);
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -146,13 +123,47 @@ const LeavesUser = () => {
         console.log('reportee error:', error);
         setLoading(false);
       });
-  }, [departmentFilter, page, searchTerm, sizePerPage]);
+  }, [departmentFilter, leaveTypeFilter, page, searchTerm, sizePerPage]);
+
+  
+  const fetchDepartment = async () => {
+    try {
+      const response = await axiosInstance.get('/department');
+      const resData = response?.data?.data;
+
+      const formatted = resData.map((e) => ({
+        department: e.department
+      }))
+
+      setDepartments(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchLeavesType = async () => {
+    try {
+      const response = await axiosInstance.get(`leave-type`);
+      const resData = response?.data?.data;
+      
+      const formatted = resData.map((e) => ({
+        leave_type: e.leave_type
+      }))
+
+      setLeaveTypes(formatted);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     fetchReporteesLeaves();
+    fetchDepartment()
+    fetchLeavesType();
 
     let user = tokenService.getUser();
-    console.log('Logged In User', user);
     setuser(user);
     setuserId(user._id);
     if (userId) {
@@ -163,11 +174,9 @@ const LeavesUser = () => {
 
   const handleApproveLeave = async (row) => {
     const id = row._id;
-    console.log('approve this req:', row._id);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`leads-leave-approval/${id}`);
-      console.log('Leave Approval Response', response?.data);
+      const response = await axiosInstance.patch(`leads-leave-approval/${id}`);
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchReporteesLeaves();
     } catch (error) {
@@ -182,7 +191,6 @@ const LeavesUser = () => {
 
   const handleEditApplication = (row) => {
     setEditLeave(row);
-    console.log('this row riiight', row);
   };
 
   const userColumns = [
@@ -581,9 +589,13 @@ const LeavesUser = () => {
               setTotalPages={setTotalPages}
               departmentFilter={departmentFilter}
               setDepartmentFilter={setDepartmentFilter}
+              leaveTypeFilter={leaveTypeFilter}
+              setLeaveTypeFilter={setLeaveTypeFilter}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               setLoading={setLoading}
+              departments={departments}
+              leaveTypes={leaveTypes}
             />
           </div>
         </div>

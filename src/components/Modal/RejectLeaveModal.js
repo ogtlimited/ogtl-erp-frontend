@@ -24,7 +24,7 @@ function RejectLeaveModal({
       const id = rejectLeave._id;
       setLoading(true);
       try {
-        const response = await axiosInstance.post(`leads-leave-rejection/${id}`, leave)
+        const response = await axiosInstance.patch(`leads-leave-rejection/${id}`, leave)
         console.log("Leave rejection response:", response)
         showAlert(true, 'Leave Rejected', 'alert alert-success');
   
