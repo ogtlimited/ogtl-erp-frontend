@@ -47,7 +47,7 @@ const LeavesUser = () => {
     try {
       const response = await axiosInstance.get(`/leave-application`, {
         params: {
-          id: id,
+          employee_id: id,
         },
       });
       const leaves = response?.data?.data;
