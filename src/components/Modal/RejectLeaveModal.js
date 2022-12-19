@@ -9,11 +9,12 @@ import { useAppContext } from '../../Context/AppContext';
 function RejectLeaveModal({
   closeModal,
   rejectLeave,
-  fetchReporteesLeaves,
+  loading,
+  setLoading,
+  // fetchReporteesLeaves,
 }) {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
-  const [loading, setLoading] = useState(false);
 
   const handleFormChange = (e) => {
     e.preventDefault();
@@ -21,19 +22,19 @@ function RejectLeaveModal({
   };
 
   const handleRejectLeave = async () => {
+    setLoading(false);
       const id = rejectLeave._id;
-      setLoading(true);
       try {
         const response = await axiosInstance.patch(`leads-leave-rejection/${id}`, leave)
         console.log("Leave rejection response:", response)
         showAlert(true, 'Leave Rejected', 'alert alert-success');
   
-        closeModal(false);
+        // closeModal(false);
       } catch (error) {
         console.log(error);
         console.log("Leave rejection error:", error.response)
       }
-      fetchReporteesLeaves();
+      // fetchReporteesLeaves();
   }
 
   return (
@@ -68,15 +69,7 @@ function RejectLeaveModal({
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  {loading ? (
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                  ) : (
-                    'Submit'
-                  )}
+                  Submit
                 </button>
               </div>
             </form>

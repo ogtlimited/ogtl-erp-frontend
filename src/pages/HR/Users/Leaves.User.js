@@ -114,8 +114,6 @@ const LeavesUser = () => {
           ),
         }));
 
-        console.log('Formatted Reportees', formatted);
-        console.log('resData', resData);
         setAllReporteesLeaves(formatted);
         setLoading(false);
       })
@@ -511,6 +509,8 @@ const LeavesUser = () => {
         <RejectLeaveModal
           rejectLeave={rejectLeave}
           closeModal={setRejectModal}
+          loading={loading}
+          setLoading={setLoading}
           fetchReporteesLeaves={fetchReporteesLeaves}
         />
       )}
