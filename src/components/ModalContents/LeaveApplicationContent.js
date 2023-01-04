@@ -10,10 +10,14 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   delete leaveContent.hr_stage;
   delete leaveContent.approval_level;
   delete leaveContent.leave_approver;
+  delete leaveContent.first_approver;
+  delete leaveContent.list_of_approvers;
+  delete leaveContent.status_action;
   delete leaveContent.department_id;
   delete leaveContent.employee_id;
   delete leaveContent.project_id;
   delete leaveContent.employee;
+  delete leaveContent.isAppealled;
   delete leaveContent.emp_department;
   delete leaveContent._id;
   delete leaveContent.leave_type_id;
