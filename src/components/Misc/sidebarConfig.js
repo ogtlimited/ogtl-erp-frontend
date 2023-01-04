@@ -44,11 +44,11 @@ const sidebarConfig = [
             title: 'Account Dashboard',
             path: PATH_DASHBOARD.main.accountDashboard,
           },
-          {
-            canView: 'HR',
-            title: 'Client Dashboard',
-            path: PATH_DASHBOARD.main.clientDashboard,
-          },
+          // {
+          //   canView: 'HR',
+          //   title: 'Client Dashboard',
+          //   path: PATH_DASHBOARD.main.clientDashboard,
+          // },
           {
             canView: 'HR',
             title: 'HR Dashboard',
