@@ -16,6 +16,14 @@ export const REJECT_LEAVE = {
   rejection_reason: '',
 }
 
+export const REQUEST_EDIT = {
+  reasons: '',
+}
+
+export const APPEAL_REJECTION = {
+  reasons: '',
+}
+
 export const CREATE_LEAVE_TYPE = {
   leave_type: '',
 }
