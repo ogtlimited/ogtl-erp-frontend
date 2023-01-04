@@ -17,7 +17,7 @@ import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Ad
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const ReporteeLeavesTable = ({
+const AdminLeavesTable = ({
   data,
   setData,
   columns,
@@ -100,10 +100,12 @@ const ReporteeLeavesTable = ({
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
-          reportee_department: leave?.department?.department,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          department: leave?.department_id?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
-          requested_leave_days: Math.ceil(
+          total_leave_days: Math.ceil(
             (new Date(leave.to_date) - new Date(leave.from_date)) /
               (1000 * 3600 * 24)
           ),
@@ -147,10 +149,12 @@ const ReporteeLeavesTable = ({
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
-          reportee_department: leave?.department?.department,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          department: leave?.department_id?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
-          requested_leave_days: Math.ceil(
+          total_leave_days: Math.ceil(
             (new Date(leave.to_date) - new Date(leave.from_date)) /
               (1000 * 3600 * 24)
           ),
@@ -197,7 +201,7 @@ const ReporteeLeavesTable = ({
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
 
-            let formatted = resData.map((leave) => ({
+            const formatted = resData.map((leave) => ({
               ...leave,
               full_name:
                 leave?.employee.first_name +
@@ -205,10 +209,12 @@ const ReporteeLeavesTable = ({
                 leave?.employee.middle_name +
                 ' ' +
                 leave?.employee.last_name,
-              reportee_department: leave?.department?.department,
+              status_action: leave?.status,
+              leave_type: leave?.leave_type_id?.leave_type,
+              department: leave?.department_id?.department,
               from_date: new Date(leave.from_date).toDateString(),
               to_date: new Date(leave.to_date).toDateString(),
-              requested_leave_days: Math.ceil(
+              total_leave_days: Math.ceil(
                 (new Date(leave.to_date) - new Date(leave.from_date)) /
                   (1000 * 3600 * 24)
               ),
@@ -292,7 +298,7 @@ const ReporteeLeavesTable = ({
                     value={departmentFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by department
+                      Filter by Department
                     </option>
                     {departments.map((option, idx) => (
                       <option key={idx}>{option.department}</option>
@@ -308,7 +314,7 @@ const ReporteeLeavesTable = ({
                     value={leaveTypeFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by leave type
+                      Filter by Leave Type
                     </option>
                     {leaveTypes.map((option, index) => (
                       <option key={index}>{option.leave_type}</option>
@@ -336,7 +342,7 @@ const ReporteeLeavesTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No Record Found'
+                    null
                   )
                 }
               />
@@ -377,4 +383,4 @@ const ReporteeLeavesTable = ({
   );
 };
 
-export default ReporteeLeavesTable;
+export default AdminLeavesTable;
