@@ -291,7 +291,7 @@ const ReporteeLeavesTable = ({
                     value={departmentFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by department
+                      Filter by Department
                     </option>
                     {departments.map((option, idx) => (
                       <option key={idx}>{option.department}</option>
@@ -307,7 +307,7 @@ const ReporteeLeavesTable = ({
                     value={leaveTypeFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by leave type
+                      Filter by Leave Type
                     </option>
                     {leaveTypes.map((option, index) => (
                       <option key={index}>{option.leave_type}</option>
