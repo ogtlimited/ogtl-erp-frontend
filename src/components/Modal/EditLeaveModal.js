@@ -179,6 +179,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={today}
+                          max={maxDate}
                         />
                       ) : (
                         <input
@@ -204,6 +205,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={today}
+                          max={maxDate}
                         />
                       ) : (
                         <input
