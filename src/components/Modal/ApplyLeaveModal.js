@@ -178,6 +178,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={today}
+                          max={maxDate}
                           required
                         />
                       ) : (
@@ -205,6 +206,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={today}
+                          max={maxDate}
                           required
                         />
                       ) : (
