@@ -11,7 +11,7 @@ function RejectLeaveModal({
   rejectLeave,
   loading,
   setLoading,
-  // fetchReporteesLeaves,
+  fetchReporteesLeaves,
 }) {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
@@ -21,21 +21,27 @@ function RejectLeaveModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async () => {
-    setLoading(false);
-      const id = rejectLeave._id;
-      try {
-        const response = await axiosInstance.patch(`leads-leave-rejection/${id}`, leave)
-        console.log("Leave rejection response:", response)
-        showAlert(true, 'Leave Rejected', 'alert alert-success');
-  
-        // closeModal(false);
-      } catch (error) {
-        console.log(error);
-        console.log("Leave rejection error:", error.response)
-      }
-      // fetchReporteesLeaves();
-  }
+  const handleRejectLeave = async (e) => {
+    e.preventDefault();
+    const id = rejectLeave._id;
+    setLoading(true);
+    try {
+      const response = await axiosInstance.patch(
+        `leads-leave-rejection/${id}`,
+        leave
+      );
+      console.log('Leave rejection response:', response);
+      showAlert(true, 'Leave Rejected', 'alert alert-success');
+
+      closeModal(false);
+      setLoading(<i class="fas fa-bullseye    "></i>);
+    } catch (error) {
+      console.log(error);
+      console.log('Leave rejection error:', error.response);
+      setLoading(false);
+    }
+    fetchReporteesLeaves();
+  };
 
   return (
     <>
@@ -49,14 +55,13 @@ function RejectLeaveModal({
             <form onSubmit={handleRejectLeave}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="rejection_reason">
-                    Reason for Rejection
-                  </label>
+                  <label htmlFor="rejection_reason">Reason for Rejection</label>
                   <textarea
                     name="rejection_reason"
                     className="form-control rejection-textarea"
                     value={leave.rejection_reason}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
@@ -69,7 +74,15 @@ function RejectLeaveModal({
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Submit
+                  {loading ? (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  ) : (
+                    'Submit'
+                  )}
                 </button>
               </div>
             </form>
