@@ -26,6 +26,17 @@ const AllLeaveTypeAdmin = () => {
   const  id  = localStorage.getItem('leave type');;
 
   const [departments, setDepartments] = useState([]);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  
+  const fetchFromAndToDates = () => {
+    localStorage.removeItem('firstDay');
+    localStorage.removeItem('lastDay');
+    const from = localStorage.getItem('firstDay2');
+    const to = localStorage.getItem('lastDay2');
+    setFrom(from);
+    setTo(to);
+  }
 
   const fetchTypeHeader = async () => {
     const header = localStorage.getItem('leave type');
@@ -35,7 +46,13 @@ const AllLeaveTypeAdmin = () => {
   const fetchLeaveType = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/hr-leave-applications/leave-type/employees?leave_type=${id}`)
+      .get(`/hr-leave-applications/leave-type/employees`, {
+        params: {
+          leave_type: id,
+          from: from,
+          to: to,
+        }
+      })
       .then((res) => {
         let resData = res?.data?.data;
         console.log('Leave Type Response Data:', resData);
@@ -68,8 +85,7 @@ const AllLeaveTypeAdmin = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [id]);
-
+  }, [from, id, to]);
   
   const fetchDepartment = async () => {
     try {
@@ -89,6 +105,7 @@ const AllLeaveTypeAdmin = () => {
   };
 
   useEffect(() => {
+    fetchFromAndToDates();
     fetchTypeHeader();
     fetchLeaveType();
     fetchDepartment();
