@@ -177,7 +177,7 @@ const LeaveStatusTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No data available'
+                    null
                   )
                 }
                 pagination={paginationFactory()}
