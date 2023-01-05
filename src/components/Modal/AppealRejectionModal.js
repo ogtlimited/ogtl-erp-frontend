@@ -27,7 +27,7 @@ function AppealRejectionModal({
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.patch(
         `/leave-application/appeal-rejected-leave?_id=${id}`,
         leave
       );
