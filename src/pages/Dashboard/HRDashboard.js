@@ -196,7 +196,7 @@ const HRDashboard = () => {
     })
     .then((res) => {
       let resData = res?.data?.data?.leaveStatus;
-      console.log("Generate Report Data", resData);
+      // console.log("Generate Status Report Data", resData);
 
       const label = Object.keys(resData);
       const data = Object.values(resData);
@@ -224,17 +224,12 @@ const HRDashboard = () => {
     })
     .then((res) => {
       let resData = res?.data?.data?.typesOfLeaveTaken;
-      console.log("Generate Report Data", resData);
+      // console.log("Generate Type Report Data", resData);
 
-      const formatted = resData.map((e) => ({
-        labels: e._id === null ? 'Not Specified' : e._id,
-        data: e.total,
-      }));
+      const label = Object.keys(resData);
+      const data = Object.values(resData);;
 
-      const label = [...formatted.map((e) => e.labels)];
-      const data = [...formatted.map((e) => e.data)];
-
-      setFormattedLeaveType(formatted);
+      setFormattedLeaveType(label);
       setLeaveTypeLabel(label);
       setLeaveTypeData(data);
 

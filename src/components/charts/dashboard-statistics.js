@@ -54,7 +54,7 @@ const DashboardStatistics = ({
     try {
       if (element.length > 0) {
         const dataIndex = element[0].index;
-        const leaveType = leaveTypeLabel;
+        const leaveType = formattedLeaveType;
         const leave_type = leaveType[dataIndex];
         const id = leaveType[dataIndex];
         localStorage.setItem("leave type", leave_type);

@@ -325,6 +325,7 @@ const LeavesUser = () => {
       const response = await axiosInstance.patch(`leads-leave-approval/${id}`);
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchReporteesLeaves();
+      fetchReporteesAppealedLeaves();
     } catch (error) {
       console.log('Leave approval error:', error.response);
     }
@@ -1014,6 +1015,7 @@ const LeavesUser = () => {
           closeModal={setAppealRejectionModal}
           loading={loading}
           setLoading={setLoading}
+          fetchYourLeaves={fetchYourLeaves}
           fetchReporteesLeaves={fetchReporteesLeaves}
         />
       )}

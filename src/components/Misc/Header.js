@@ -94,23 +94,6 @@ const Header = () => {
           <i className="fa fa-bars"></i>
         </a>
 
-        {user?.role?.title === 'HR Manager' ? (
-          <div
-            className="home-notification-div"
-            onClick={handleNotificationRequest}
-          >
-            {count === 0 ? null : (
-              <div className="home-notification-count">
-                <p>{count}</p>
-              </div>
-            )}
-            {count === 0 ? (
-              <BsBell className="home-notification-icon" />
-            ) : (
-              <BsBell className="home-notification-icon-active" />
-            )}
-          </div>
-        ) : null}
         <audio ref={audioPlayer} src={NotificationSound} allow="autoplay" />
 
         <ul className="nav user-menu">
@@ -162,7 +145,9 @@ const Header = () => {
               </a>
             </div>
           </li>
+
         </ul>
+        
 
         <div className="dropdown mobile-user-menu">
           <a
@@ -188,6 +173,25 @@ const Header = () => {
             </a>
           </div>
         </div>
+        
+          
+        {user?.role?.title === 'HR Manager' ? (
+          <div
+            className="home-notification-div"
+            onClick={handleNotificationRequest}
+          >
+            {count === 0 ? null : (
+              <div className="home-notification-count">
+                <p>{count}</p>
+              </div>
+            )}
+            {count === 0 ? (
+              <BsBell className="home-notification-icon" />
+            ) : (
+              <BsBell className="home-notification-icon-active" />
+            )}
+          </div>
+        ) : null}
       </div>
     </>
   );

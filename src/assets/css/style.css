@@ -526,22 +526,6 @@
   margin-bottom: 20px;
 }
 
-.home-notification-div {
-  position: absolute;
-  left: 65%;
-  top: 15%;
-  background-color: #fff;
-  height: 40px;
-  width: 40px;
-  border-radius: 8px;
-  margin: 0 30px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.home-notification-div:hover {
-  box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.4);
-  transition: all 0.2s;
-}
 
 .home-notification-count {
   position: absolute;
@@ -613,13 +597,100 @@
 @media only screen and (min-width: 991px) {
   .home-notification-div {
     position: absolute;
-    left: 45%;
+    display: flex;
+    right: 1.5%;
     top: 15%;
     background-color: #fff;
     height: 40px;
     width: 40px;
     border-radius: 8px;
-    margin: 0 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .home-notification-div:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+  }
+
+  .home-notification-count {
+    position: absolute;
+    top: -15%;
+    right: -15%;
+    background-color: #ff0000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    height: 50%;
+    width: 50%;
+    border-radius: 50%;
+  }
+
+  .home-notification-count > p {
+    text-align: center;
+    padding: 1px;
+    font-weight: 600;
+  }
+
+  .home-notification-icon {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+  }
+
+  .home-notification-icon-active {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0);
+    }
+    15% {
+      transform: rotate(10deg);
+    }
+    30% {
+      transform: rotate(-10deg);
+    }
+    45% {
+      transform: rotate(7deg);
+    }
+    60% {
+      transform: rotate(-7deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    85% {
+      transform: rotate(-5deg);
+    }
+    92% {
+      transform: rotate(3deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  .home-notification-div {
+    position: absolute;
+    display: flex;
+    right: 15%;
+    top: 15%;
+    background-color: #fff;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -2022,7 +2093,7 @@ table.dataTable thead > tr > td.sorting {
 }
 .user-menu {
   float: right;
-  margin: 0;
+  margin-right: 5%;
   position: relative;
   z-index: 99;
 }

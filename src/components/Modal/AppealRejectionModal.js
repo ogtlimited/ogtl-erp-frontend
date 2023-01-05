@@ -11,6 +11,7 @@ function AppealRejectionModal({
   appealRejection,
   loading,
   setLoading,
+  fetchYourLeaves,
   fetchReporteesLeaves,
 }) {
   const { showAlert } = useAppContext();
@@ -39,6 +40,7 @@ function AppealRejectionModal({
       console.log('Appeal Rejection error:', error.response);
       setLoading(false);
     }
+    fetchYourLeaves();
     fetchReporteesLeaves();
   };
 
