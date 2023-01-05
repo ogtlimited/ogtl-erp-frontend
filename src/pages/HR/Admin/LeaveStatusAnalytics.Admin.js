@@ -27,6 +27,17 @@ const AllLeaveStatusAdmin = () => {
 
   const [departments, setDepartments] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+
+  const fetchFromAndToDates = () => {
+    localStorage.removeItem('firstDay2');
+    localStorage.removeItem('lastDay2');
+    const from = localStorage.getItem('firstDay');
+    const to = localStorage.getItem('lastDay');
+    setFrom(from);
+    setTo(to);
+  }
 
   const fetchStatusHeader = async () => {
     const header = localStorage.getItem('leave status');
@@ -37,10 +48,16 @@ const AllLeaveStatusAdmin = () => {
   const fetchLeaveStatus = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/hr-leave-applications/leave-status/employees?status=${id}`)
+      .get(`/hr-leave-applications/leave-status/employees`, {
+        params: {
+          status: id,
+          from: from,
+          to: to,
+        }
+      })
       .then((res) => {
         let resData = res?.data?.data;
-        console.log('Status Response Data:', resData);
+        console.log('Leave Status Response Data:', resData);
 
         const formatted = resData.map((leave) => ({
           ...leave,
@@ -70,7 +87,7 @@ const AllLeaveStatusAdmin = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [id]);
+  }, [from, id, to]);
 
   
   const fetchDepartment = async () => {
@@ -111,6 +128,7 @@ const AllLeaveStatusAdmin = () => {
     fetchLeaveStatus();
     fetchDepartment();
     fetchLeavesType();
+    fetchFromAndToDates();
     setTimeout(() => {
       setLoading(false);
     }, 10000);
