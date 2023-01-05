@@ -24,6 +24,7 @@
     "setload",
     "setloaded",
     "setmedical",
+    "setmode",
     "setused",
     "setuser",
     "Subordinatesannual",
