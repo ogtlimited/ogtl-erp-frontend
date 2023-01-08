@@ -185,8 +185,6 @@ const HRDashboard = () => {
   };
 
   const fetchLeaveStatusData = useCallback(() => {
-    localStorage.setItem('firstDay', fromDate);
-    localStorage.setItem('lastDay', toDate);
     axiosInstance
     .get('/hr-leave-applications/generate-report', {
       params: {
@@ -213,8 +211,6 @@ const HRDashboard = () => {
   }, [fromDate, toDate]);
 
   const fetchLeaveTypeData = useCallback(() => {
-    localStorage.setItem('firstDay2', fromDate2);
-    localStorage.setItem('lastDay2', toDate2);
     axiosInstance
     .get('/hr-leave-applications/generate-report', {
       params: {
