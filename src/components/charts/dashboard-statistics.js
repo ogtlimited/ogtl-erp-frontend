@@ -39,11 +39,8 @@ const DashboardStatistics = ({
       if (element.length > 0) {
         const dataIndex = element[0].index;
         const leaveStatus = formattedLeaveStatus;
-        const status = leaveStatus[dataIndex];
         const id = leaveStatus[dataIndex];
-        localStorage.setItem("leave status", status);
-        localStorage.removeItem("leave type");
-        navigate(`/dashboard/hr/leaves-admin/application/leave-status/${id}`);
+        navigate(`/dashboard/hr/leaves-admin/application/leave-status/${id}/${fromDate}/${toDate}`);
       }
     } catch (error) {
       console.log(error);
@@ -55,11 +52,8 @@ const DashboardStatistics = ({
       if (element.length > 0) {
         const dataIndex = element[0].index;
         const leaveType = formattedLeaveType;
-        const leave_type = leaveType[dataIndex];
         const id = leaveType[dataIndex];
-        localStorage.setItem("leave type", leave_type);
-        localStorage.removeItem("leave status");
-        navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}`);
+        navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
       }
     } catch (error) {
       console.log(error);
