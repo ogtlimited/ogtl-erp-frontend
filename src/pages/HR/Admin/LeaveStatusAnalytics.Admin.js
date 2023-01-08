@@ -23,27 +23,20 @@ const AllLeaveStatusAdmin = () => {
   const [allApplications, setallApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [header, setHeader] = useState('');
-  const { id } = useParams();
+  const { id, from_date, to_date} = useParams();
 
   const [departments, setDepartments] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
 
-  const fetchFromAndToDates = () => {
-    localStorage.removeItem('firstDay2');
-    localStorage.removeItem('lastDay2');
-    const from = localStorage.getItem('firstDay');
-    const to = localStorage.getItem('lastDay');
-    setFrom(from);
-    setTo(to);
-  }
-
-  const fetchStatusHeader = async () => {
-    const header = localStorage.getItem('leave status');
+  const fetchParams = useCallback(() => {
+    const header = id
     const Header = header[0].toUpperCase() + header.substring(1);
     setHeader(Header);
-  };
+    setFrom(from_date);
+    setTo(to_date);
+  }, [from_date, id, to_date])
 
   const fetchLeaveStatus = useCallback(() => {
     setLoading(true);
@@ -124,15 +117,14 @@ const AllLeaveStatusAdmin = () => {
   };
 
   useEffect(() => {
-    fetchStatusHeader();
     fetchLeaveStatus();
     fetchDepartment();
     fetchLeavesType();
-    fetchFromAndToDates();
+    fetchParams();
     setTimeout(() => {
       setLoading(false);
     }, 10000);
-  }, [fetchLeaveStatus]);
+  }, [fetchLeaveStatus, fetchParams]);
 
   const columns = [
     {
