@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import LeaveTypeTable from '../../../components/Tables/EmployeeTables/leaveTypeTable';
 import axiosInstance from '../../../services/api';
 import female from '../../../assets/img/female_avatar.png';
@@ -23,25 +23,20 @@ const AllLeaveTypeAdmin = () => {
   const [allApplications, setallApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [header, setHeader] = useState('');
-  const  id  = localStorage.getItem('leave type');;
+  const { id, from_date, to_date} = useParams();
 
   const [departments, setDepartments] = useState([]);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   
-  const fetchFromAndToDates = () => {
-    localStorage.removeItem('firstDay');
-    localStorage.removeItem('lastDay');
-    const from = localStorage.getItem('firstDay2');
-    const to = localStorage.getItem('lastDay2');
-    setFrom(from);
-    setTo(to);
-  }
-
-  const fetchTypeHeader = async () => {
-    const header = localStorage.getItem('leave type');
-    setHeader(header);
-  };
+  
+  const fetchParams = useCallback(() => {
+    const header = id;
+    const Header = header[0].toUpperCase() + header.substring(1);
+    setHeader(Header);
+    setFrom(from_date);
+    setTo(to_date);
+  }, [from_date, id, to_date])
 
   const fetchLeaveType = useCallback(() => {
     setLoading(true);
@@ -105,14 +100,13 @@ const AllLeaveTypeAdmin = () => {
   };
 
   useEffect(() => {
-    fetchFromAndToDates();
-    fetchTypeHeader();
+    fetchParams();
     fetchLeaveType();
     fetchDepartment();
     setTimeout(() => {
       setLoading(false);
     }, 10000);
-  }, [fetchLeaveType]);
+  }, [fetchLeaveType, fetchParams]);
 
   const columns = [
     {
