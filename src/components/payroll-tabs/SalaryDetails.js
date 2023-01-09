@@ -341,7 +341,7 @@ const SalaryDetails = ({ salaryStructure }) => {
               data-target="#uploadAttendance"
               onClick={() => settoggleModal(true)}
             >
-              Upload New Salary
+              Add New Salary
             </a>
           )}
         </div>

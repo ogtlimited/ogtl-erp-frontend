@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-
-import React, { useRef, useEffect, useCallback, useState } from 'react';
 // import "./header.css";
+
+// import axiosInstance from '../../services/api';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import logo from '../../assets/img/og-white-logo.png';
 import cropped from '../../assets/img/cropped-white.png';
-import axiosInstance from '../../services/api';
-// import { AppContext } from "../context/AppContext";
+import { useAppContext } from "../../Context/AppContext";
 import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { BsBell } from 'react-icons/bs';
@@ -15,6 +15,7 @@ import { useMsal } from '@azure/msal-react';
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
+  const { fetchHRLeavesNotificationCount, count } = useAppContext();
   const audioPlayer = useRef(null);
   let navigate = useNavigate();
   const { instance } = useMsal();
@@ -33,7 +34,6 @@ const Header = () => {
   };
 
   const user = tokenService.getUser();
-  const [count, setCount] = useState(0);
 
   function playAudio() {
     audioPlayer.current.play();
@@ -42,26 +42,16 @@ const Header = () => {
   const handleNotificationRequest = () => {
     navigate('/dashboard/hr/leaves-admin');
   };
-
-  const fetchHRLeavesNotificationCount = useCallback(() => {
-    axiosInstance
-      .get('hr-leave-applications')
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        const dataCount = resData.length;
-        setCount(dataCount);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  
+  useEffect(() => {
+    fetchHRLeavesNotificationCount()
+  }, [fetchHRLeavesNotificationCount]);
 
   useEffect(() => {
-    fetchHRLeavesNotificationCount();
     if (user?.role?.title === 'HR Manager' && count > 0) {
       playAudio();
     }
-  }, [count, fetchHRLeavesNotificationCount, user?.role?.title]);
+  }, [count, user?.role?.title]);
 
   //   const { user } = useContext(AppContext);
   //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;

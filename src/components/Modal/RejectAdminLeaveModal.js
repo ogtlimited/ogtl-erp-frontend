@@ -10,8 +10,9 @@ function RejectAdminLeaveModal({
   closeModal,
   hrReject,
   fetchAllLeaves,
+  fetchHRLeaveHistory
 }) {
-  const { showAlert } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +35,8 @@ function RejectAdminLeaveModal({
         console.log(error);
       }
       fetchAllLeaves();
+      fetchHRLeaveHistory();
+      fetchHRLeavesNotificationCount();
   }
 
   return (

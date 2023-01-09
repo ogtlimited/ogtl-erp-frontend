@@ -14,7 +14,7 @@ function RejectLeaveModal({
   fetchReporteesLeaves,
   fetchLeaveHistory
 }) {
-  const { showAlert } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
 
   const handleFormChange = (e) => {
@@ -43,7 +43,7 @@ function RejectLeaveModal({
     }
     fetchReporteesLeaves();
     fetchLeaveHistory();
-
+    fetchHRLeavesNotificationCount();
   };
 
   return (
