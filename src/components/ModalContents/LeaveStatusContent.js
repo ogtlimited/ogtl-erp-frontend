@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const LeaveApplicationContent = ({ leaveContent = {} }) => {
+const LeaveStatusContent = ({ leaveContent = {} }) => {
   delete leaveContent.__v;
   delete leaveContent.updatedAt;
   delete leaveContent.createdAt;
@@ -20,6 +20,7 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   delete leaveContent.isAppealled;
   delete leaveContent.emp_department;
   delete leaveContent._id;
+  delete leaveContent.email;
   delete leaveContent.leave_type_id;
 
   return (
@@ -60,4 +61,4 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   );
 };
 
-export default LeaveApplicationContent;
+export default LeaveStatusContent;

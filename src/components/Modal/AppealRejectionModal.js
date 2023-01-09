@@ -3,37 +3,46 @@
 import React, { useState } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import axiosInstance from '../../services/api';
-import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
+import { APPEAL_REJECTION } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
 
-function RejectAdminLeaveModal({
+function AppealRejectionModal({
   closeModal,
-  hrReject,
-  fetchAllLeaves,
+  appealRejection,
+  loading,
+  setLoading,
+  fetchYourLeaves,
+  fetchReporteesLeaves,
 }) {
   const { showAlert } = useAppContext();
-  const [leave, setLeave] = useState(REJECT_LEAVE);
-  const [loading, setLoading] = useState(false);
+  const [leave, setLeave] = useState(APPEAL_REJECTION);
 
   const handleFormChange = (e) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async () => {
-      const id = hrReject._id;
-      setLoading(true);
-      try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await axiosInstance.patch(`hr-leave-applications/reject/${id}`, leave)
-        showAlert(true, 'Leave Rejected', 'alert alert-success');
-  
-        closeModal(false);
-      } catch (error) {
-        console.log(error);
-      }
-      // fetchAllLeaves();
-  }
+  const handleAppealRejection = async (e) => {
+    e.preventDefault();
+    const id = appealRejection._id;
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/leave-application/appeal-rejected-leave?_id=${id}`,
+        leave
+      );
+      showAlert(true, 'Appeal Sent Successfully', 'alert alert-success');
+      closeModal(false);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      console.log('Appeal Rejection error:', error.response);
+      setLoading(false);
+    }
+    fetchYourLeaves();
+    fetchReporteesLeaves();
+  };
 
   return (
     <>
@@ -44,17 +53,16 @@ function RejectAdminLeaveModal({
             onClick={() => closeModal(false)}
           />
           <div className="rejection-modal-body">
-            <form onSubmit={handleRejectLeave}>
+            <form onSubmit={handleAppealRejection}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="rejection_reason">
-                    Reason for Rejection
-                  </label>
+                  <label htmlFor="reasons">Appeal Rejection</label>
                   <textarea
-                    name="rejection_reason"
+                    name="reasons"
                     className="form-control rejection-textarea"
-                    value={leave.rejection_reason}
+                    value={leave.reasons}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
@@ -86,4 +94,4 @@ function RejectAdminLeaveModal({
   );
 }
 
-export default RejectAdminLeaveModal;
+export default AppealRejectionModal;

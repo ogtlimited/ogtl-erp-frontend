@@ -265,6 +265,22 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            {
+              path: 'leaves-admin/application/leave-status/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllLeaveStatusAdmin/>
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leaves-admin/application/leave-type/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllLeaveTypeAdmin/>
+                </GuardedRoute>
+              ),
+            },
             { path: 'leaves', element: <LeavesUser /> },
             {
               path: 'attendance-admin',
@@ -938,6 +954,12 @@ const AllEmployeesGenderAdmin = Loadable(
 );
 const LeavesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Leaves.Admin'))
+);
+const AllLeaveStatusAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveStatusAnalytics.Admin'))
+);
+const AllLeaveTypeAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveTypeAnalytics.Admin'))
 );
 const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
 const HrClientView = Loadable(

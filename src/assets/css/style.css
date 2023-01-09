@@ -279,7 +279,7 @@
 .hr-dashboard-card {
   background-color: #fff;
   min-width: 20%;
-	margin-left: 20px;
+  margin-left: 20px;
   border: 1px solid #ededed;
 }
 
@@ -320,7 +320,6 @@
 .employee-gender-pie {
   min-height: 35vh;
 }
-
 
 @media only screen and (max-width: 765px) {
   .hr-dashboard-card-group {
@@ -429,14 +428,13 @@
   height: 20vh !important;
 }
 
-
 .leave-filter-control {
   border-color: #e3e3e3;
   box-shadow: none;
   font-size: 15px;
   height: 44px;
   width: 100%;
-  padding: 0 0 0 10px ;
+  padding: 0 0 0 10px;
 }
 
 .leave-card-body {
@@ -444,8 +442,79 @@
 }
 
 .remaining-leave-row {
+  display: flex;
+  flex-direction: row;
   margin-left: 1.5%;
-  width: 17.5%;
+  position: relative;
+}
+
+.remaining-leave-row-card {
+  width: 17%;
+}
+
+.leave-application-progress {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  right: 20%;
+}
+
+.leave-application-progress > p {
+  text-align: center;
+}
+.leave-application-progress > div {
+  display: flex;
+}
+
+.approver-progress-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.approver-progress {
+  background-color: #fff;
+  border-radius: 25px;
+  -webkit-box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
+  box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
+  border: none;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  padding: 12px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 0 5px;
+}
+
+.approver-progress-name {
+  margin-bottom: 0;
+  margin-right: 8px;
+}
+
+.approver-progress-status {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.approver-progress-icon,
+.approver-status-icon {
+  font-size: 20px;
+}
+
+.approver-progress-user-icon {
+  font-size: 45px;
+  margin-top: 1%;
+  display: flex;
+}
+
+#leave-application-count {
+  color: #fff;
+  background-color: #999;
+  padding: 4px 10px;
+  border-radius: 50%;
+  margin-left: 5px;
 }
 
 .Hr-cards {
@@ -455,6 +524,247 @@
 .hr-filter-select {
   display: flex;
   margin-bottom: 20px;
+}
+
+
+.home-notification-count {
+  position: absolute;
+  top: -15%;
+  right: -15%;
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  height: 50%;
+  width: 50%;
+  border-radius: 50%;
+}
+
+.home-notification-count > p {
+  text-align: center;
+  padding: 1px;
+  font-weight: 600;
+}
+
+.home-notification-icon {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  font-size: 20px;
+  color: #002564;
+}
+
+.home-notification-icon-active {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  font-size: 20px;
+  color: #002564;
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  45% {
+    transform: rotate(7deg);
+  }
+  60% {
+    transform: rotate(-7deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+  85% {
+    transform: rotate(-5deg);
+  }
+  92% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+
+@media only screen and (min-width: 991px) {
+  .home-notification-div {
+    position: absolute;
+    display: flex;
+    right: 1.5%;
+    top: 15%;
+    background-color: #fff;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .home-notification-div:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+  }
+
+  .home-notification-count {
+    position: absolute;
+    top: -15%;
+    right: -15%;
+    background-color: #ff0000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    height: 50%;
+    width: 50%;
+    border-radius: 50%;
+  }
+
+  .home-notification-count > p {
+    text-align: center;
+    padding: 1px;
+    font-weight: 600;
+  }
+
+  .home-notification-icon {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+  }
+
+  .home-notification-icon-active {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0);
+    }
+    15% {
+      transform: rotate(10deg);
+    }
+    30% {
+      transform: rotate(-10deg);
+    }
+    45% {
+      transform: rotate(7deg);
+    }
+    60% {
+      transform: rotate(-7deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    85% {
+      transform: rotate(-5deg);
+    }
+    92% {
+      transform: rotate(3deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  .home-notification-div {
+    position: absolute;
+    display: flex;
+    right: 15%;
+    top: 15%;
+    background-color: #fff;
+    height: 40px;
+    width: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .home-notification-div:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+  }
+
+  .home-notification-count {
+    position: absolute;
+    top: -15%;
+    right: -15%;
+    background-color: #ff0000;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    height: 50%;
+    width: 50%;
+    border-radius: 50%;
+  }
+
+  .home-notification-count > p {
+    text-align: center;
+    padding: 1px;
+    font-weight: 600;
+  }
+
+  .home-notification-icon {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+  }
+
+  .home-notification-icon-active {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 20px;
+    color: #002564;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0);
+    }
+    15% {
+      transform: rotate(10deg);
+    }
+    30% {
+      transform: rotate(-10deg);
+    }
+    45% {
+      transform: rotate(7deg);
+    }
+    60% {
+      transform: rotate(-7deg);
+    }
+    75% {
+      transform: rotate(5deg);
+    }
+    85% {
+      transform: rotate(-5deg);
+    }
+    92% {
+      transform: rotate(3deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
 }
 
 /*-----------------
@@ -1783,7 +2093,7 @@ table.dataTable thead > tr > td.sorting {
 }
 .user-menu {
   float: right;
-  margin: 0;
+  margin-right: 5%;
   position: relative;
   z-index: 99;
 }

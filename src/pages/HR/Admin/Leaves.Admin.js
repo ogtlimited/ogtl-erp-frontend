@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import AdminLeavesTable from '../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable';
+import AdminLeavesHistoryTable from '../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable';
 import male from '../../../assets/img/male_avater.png';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
@@ -9,6 +10,7 @@ import tokenService from '../../../services/token.service';
 import ViewModal from '../../../components/Modal/ViewModal';
 import LeaveApplicationContent from '../../../components/ModalContents/LeaveApplicationContent';
 import RejectAdminLeaveModal from '../../../components/Modal/RejectAdminLeaveModal';
+import { CropLandscapeOutlined } from '@material-ui/icons';
 
 const LeavesAdmin = () => {
   const [approval, setApproval] = useState([
@@ -30,10 +32,11 @@ const LeavesAdmin = () => {
     },
   ]);
   const [allLeaves, setallLeaves] = useState([]);
-  const { showAlert, allEmployees, combineRequest } = useAppContext();
-  const [approvedLeaves, setApprovedLeaves] = useState(0);
-  const [rejectedLeaves, setRejectedLeaves] = useState(0);
-  const [pendingLeaves, setPendingLeaves] = useState(0);
+  const [leaveHistory, setLeaveHistory] = useState([]);
+  const { showAlert } = useAppContext();
+  // const [approvedLeaves, setApprovedLeaves] = useState(0);
+  // const [rejectedLeaves, setRejectedLeaves] = useState(0);
+  // const [pendingLeaves, setPendingLeaves] = useState(0);
   const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
@@ -48,44 +51,19 @@ const LeavesAdmin = () => {
   const [totalPages, setTotalPages] = useState('');
 
   const [departmentFilter, setDepartmentFilter] = useState('');
+  const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // const fetchHRLeaves = async () => {
-  //   try {
-  //     const response = await axiosInstance.get(`hr-leave-applications`);
-  //     const resData = response?.data?.data?.application;
-
-  //     const formatter = resData.map((leave) => ({
-  //       ...leave,
-  //       full_name:
-  //         leave?.employee.first_name +
-  //         ' ' +
-  //         leave?.employee.middle_name +
-  //         ' ' +
-  //         leave?.employee.last_name,
-  //       department: leave?.department?.department,
-  //       from_date: new Date(leave.from_date).toDateString(),
-  //       to_date: new Date(leave.to_date).toDateString(),
-  //       total_leave_days: Math.ceil(
-  //         (new Date(leave.to_date) - new Date(leave.from_date)) /
-  //           (1000 * 3600 * 24)
-  //       ),
-  //     }));
-
-  //     setallLeaves(formatter);
-  //     console.log('This leave', formatter);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //     setLoading(false);
-  //   }
-  // };
+  const [departments, setDepartments] = useState([]);
+  const [leaveTypes, setLeaveTypes] = useState([]);
 
   const fetchHRLeaves = useCallback(() => {
     axiosInstance
       .get('hr-leave-applications', {
         params: {
           department: departmentFilter,
+          leave_type: leaveTypeFilter,
           search: searchTerm,
           page: page,
           limit: sizePerPage,
@@ -93,7 +71,6 @@ const LeavesAdmin = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log('Reportees', res?.data);
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -110,8 +87,9 @@ const LeavesAdmin = () => {
             leave?.employee.middle_name +
             ' ' +
             leave?.employee.last_name,
-          leave_type: leave.leave_type_id.leave_type,
-          department: leave?.department?.department,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          department: leave?.department_id?.department,
           from_date: new Date(leave.from_date).toDateString(),
           to_date: new Date(leave.to_date).toDateString(),
           total_leave_days: Math.ceil(
@@ -127,76 +105,96 @@ const LeavesAdmin = () => {
         console.log(error);
         setLoading(false);
       });
-  }, [departmentFilter, page, searchTerm, sizePerPage]);
+  }, [departmentFilter, leaveTypeFilter, page, searchTerm, sizePerPage]);
 
-  // const fetchAllLeaves = async () => {
+  const fetchHRLeaveHistory = useCallback(() => {
+    axiosInstance
+      .get('hr-leave-applications/history', {
+        params: {
+          department: departmentFilter,
+          leave_type: leaveTypeFilter,
+          status: statusFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        let resOptions = res?.data?.data?.pagination;
+        console.log("HR Leave History:", resData)
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const formatted = resData.map((leave) => ({
+          ...leave,
+          full_name:
+            leave?.employee.first_name +
+            ' ' +
+            leave?.employee.middle_name +
+            ' ' +
+            leave?.employee.last_name,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          department: leave?.department_id?.department,
+          from_date: new Date(leave.from_date).toDateString(),
+          to_date: new Date(leave.to_date).toDateString(),
+          total_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave.from_date)) /
+              (1000 * 3600 * 24)
+          ),
+        }));
+
+        console.log("HR Leave History Formatted:", formatted)
+        setLeaveHistory(formatted);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [departmentFilter, leaveTypeFilter, page, searchTerm, sizePerPage, statusFilter]);
+
+  // const fetchAllHrApproved = async () => {
   //   try {
-  //     const response = await axiosInstance.get(`leave-application`);
+  //     const response = await axiosInstance.get(
+  //       `hr-leave-applications/approved`
+  //     );
   //     const resData = response?.data?.data;
 
-  //     const formatter = resData.map((leave) => ({
-  //       ...leave,
-  //       full_name: leave?.employee_id?.first_name +
-  //       ' ' +
-  //       leave?.employee_id.middle_name +
-  //       ' ' +
-  //       leave?.employee_id.last_name,
-  //       emp_department: leave?.department?.department,
-  //       reportee_department: leave?.department?.department,
-  //       from_date: new Date(leave.from_date).toDateString(),
-  //       to_date: new Date(leave.to_date).toDateString(),
-  //       total_leave_days: Math.ceil(
-  //         (new Date(leave.to_date) - new Date(leave.from_date)) /
-  //           (1000 * 3600 * 24)
-  //       ),
-
-  //     }))
-
-  //     setallLeaves(formatter);
-  //     setLoading(false);
+  //     setApprovedLeaves(resData);
   //   } catch (error) {
   //     console.log(error);
-  //     setLoading(false);
   //   }
-
   // };
 
-  const fetchAllHrApproved = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `hr-leave-applications/approved`
-      );
-      const resData = response?.data?.data;
+  // const fetchAllHrRejected = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       `hr-leave-applications/rejected`
+  //     );
+  //     const resData = response?.data?.data;
 
-      setApprovedLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setRejectedLeaves(resData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const fetchAllHrRejected = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `hr-leave-applications/rejected`
-      );
-      const resData = response?.data?.data;
+  // const fetchAllHrPending = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(`hr-leave-applications/pending`);
+  //     const resData = response?.data?.data;
 
-      setRejectedLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchAllHrPending = async () => {
-    try {
-      const response = await axiosInstance.get(`hr-leave-applications/pending`);
-      const resData = response?.data?.data;
-
-      setPendingLeaves(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setPendingLeaves(resData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const fetchAllEmpOnLeave = async () => {
     try {
@@ -226,39 +224,57 @@ const LeavesAdmin = () => {
     }
   }
 
-  // const fetchDepartment = useCallback(() => {
-  //   axiosInstance
-  //       .get(`/departments/employees/designations/${id}`)
-  //       .then((res) => {
-  //         let resData = res?.data?.data.designationsByDepartment;
-  //         let formattedDesignation = resData.map((e) => e?._id?.designation);
-  //         setDepartment(formattedDesignation);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       })
-  // }, []);
+  const fetchDepartment = async () => {
+    try {
+      const response = await axiosInstance.get('/department');
+      const resData = response?.data?.data;
+
+      const formatted = resData.map((e) => ({
+        department: e.department
+      }))
+
+      setDepartments(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchLeavesType = async () => {
+    try {
+      const response = await axiosInstance.get(`leave-type`);
+      const resData = response?.data?.data;
+      
+      const formatted = resData.map((e) => ({
+        leave_type: e.leave_type
+      }))
+
+      setLeaveTypes(formatted);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
-    // fetchAllLeaves();
-    fetchAllHrApproved();
-    fetchAllHrRejected();
-    fetchAllHrPending();
+    // fetchAllHrApproved();
+    // fetchAllHrRejected();
+    // fetchAllHrPending();
     fetchAllEmpOnLeave();
     fetchHRLeaves();
+    fetchHRLeaveHistory();
     fetchHeadCount()
-    // fetchDepartment()
-  }, [fetchHRLeaves]);
+    fetchDepartment()
+    fetchLeavesType();
+  }, [fetchHRLeaveHistory, fetchHRLeaves]);
 
   const handleApproveLeave = async (row) => {
     const id = row._id;
-    console.log('approve this req:', row._id);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.patch(
         `hr-leave-applications/approve/${id}`
       );
-      console.log('HR Leave Approval Response', response?.data);
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchHRLeaves();
     } catch (error) {
@@ -270,6 +286,7 @@ const LeavesAdmin = () => {
     setHrReject(row);
     setRejectModal(true);
   };
+  
 
   const columns = [
     {
@@ -277,19 +294,18 @@ const LeavesAdmin = () => {
       dataField: 'full_name',
       text: 'Employee Name',
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { width: '80px' },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
+          <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
           {/* <a href="">
             {value?.first_name + " " + value?.last_name}{" "}
             <span>{value?.designation?.designation}</span>
           </a> */}
-          <a href="">
+          <a href="#">
             {row?.full_name}
-            {/* <span>{row?.employee_id?.designation?.designation}</span> */}
           </a>
         </h2>
       ),
@@ -304,7 +320,7 @@ const LeavesAdmin = () => {
       dataField: 'status',
       text: 'Status',
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: '150px' },
       formatter: (value, row) => (
         <>
           {value === 'approved' ? (
@@ -377,56 +393,8 @@ const LeavesAdmin = () => {
         </>
       ),
     },
-    // {
-    //   dataField: 'status',
-    //   text: 'Actions',
-    //   sort: true,
-    //   csvExport: false,
-    //   headerStyle: { minWidth: '100px', textAlign: 'center' },
-    //   formatter: (value, row) => (
-    //     <div className="text-center">
-    //       <div className="leave-reportee-action-btns">
-    //         {value === 'pending' ? (
-    //           <button
-    //             className="btn btn-sm btn-success leave-btn"
-    //             onClick={() => handleApproveLeave()}
-    //           >
-    //             Approve
-    //           </button>
-    //         ) : (
-    //           <button className="btn btn-sm btn-secondary leave-btn" disabled>
-    //             Approve
-    //           </button>
-    //         )}
-    //         {value === 'pending' ? (
-    //           <button
-    //             className="btn btn-sm btn-danger leave-btn"
-    //             onClick={() => handleRejectLeave()}
-    //           >
-    //             Reject
-    //           </button>
-    //         ) : (
-    //           <button className="btn btn-sm btn-secondary leave-btn" disabled>
-    //             Reject
-    //           </button>
-    //         )}
-    //         <button
-    //           className="btn btn-sm btn-primary leave-btn"
-    //           data-toggle="modal"
-    //           data-target="#generalModal"
-    //           onClick={() => {
-    //             setmodalType('view-details');
-    //             setViewRow(row);
-    //           }}
-    //         >
-    //           View
-    //         </button>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
     {
-      dataField: 'status',
+      dataField: 'status_action',
       text: 'Action',
       csvExport: false,
       headerStyle: { width: '10%' },
@@ -473,6 +441,16 @@ const LeavesAdmin = () => {
                 <i className="fa fa-ban m-r-5"></i> Reject
               </a>
             ) : null}
+
+            {/* {value === 'rejected' ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleRejectLeave(row)}
+              >
+                <i className="fa fa-ban m-r-5"></i> Appeal Rejection
+              </a>
+            ) : null} */}
           </div>
         </div>
       ),
@@ -502,9 +480,36 @@ const LeavesAdmin = () => {
           <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
+      
+      <div className="page-menu">
+          <div className="row">
+            <div className="col-sm-12">
+              <ul className="nav nav-tabs nav-tabs-bottom">
+                <li className="nav-item">
+                  <a
+                    className="nav-link active"
+                    data-toggle="tab"
+                    href="#tab_hr-leave-application"
+                  >
+                    Leaves Applications
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link"
+                    data-toggle="tab"
+                    href="#tab_hr-leave-history"
+                  >
+                    Leave History
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
       <div className="row tab-content">
-        <div id="tab_leaves" className="col-12 tab-pane show active">
+        <div id="tab_hr-leave-application" className="col-12 tab-pane show active">
           <div className="Hr-cards">
             <div className="col-md-3">
               <div className="stats-info">
@@ -546,12 +551,42 @@ const LeavesAdmin = () => {
             setTotalPages={setTotalPages}
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
+            leaveTypeFilter={leaveTypeFilter}
+            setLeaveTypeFilter={setLeaveTypeFilter}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             setLoading={setLoading}
+            departments={departments}
+            leaveTypes={leaveTypes}
           />
         </div>
-      </div>
+        
+        <div id="tab_hr-leave-history" className="col-12 tab-pane">
+          <AdminLeavesHistoryTable
+            columns={columns}
+            data={leaveHistory}
+            setData={setLeaveHistory}
+            loading={loading}
+            page={page}
+            setPage={setPage}
+            sizePerPage={sizePerPage}
+            setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
+            setTotalPages={setTotalPages}
+            departmentFilter={departmentFilter}
+            setDepartmentFilter={setDepartmentFilter}
+            leaveTypeFilter={leaveTypeFilter}
+            setLeaveTypeFilter={setLeaveTypeFilter}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            setLoading={setLoading}
+            departments={departments}
+            leaveTypes={leaveTypes}
+          />
+          </div>
+        </div>
 
       {modalType === 'view-details' ? (
         <ViewModal

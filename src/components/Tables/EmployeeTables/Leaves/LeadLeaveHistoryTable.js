@@ -12,12 +12,11 @@ import filterFactory, {
   selectFilter,
   dateFilter,
 } from 'react-bootstrap-table2-filter';
-import paginationFactory from 'react-bootstrap-table2-paginator';
 import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Admin';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const AdminLeavesTable = ({
+const LeadLeaveHistoryTable = ({
   data,
   setData,
   columns,
@@ -33,12 +32,24 @@ const AdminLeavesTable = ({
   setDepartmentFilter,
   leaveTypeFilter,
   setLeaveTypeFilter,
+  statusFilter,
+  setStatusFilter,
   searchTerm,
   setSearchTerm,
   setLoading,
   departments,
   leaveTypes,
 }) => {
+  const status = [
+    {
+      code: 'pending',
+      label: 'Pending',
+    },
+    {
+      code:'rejected',
+      label: 'Rejected',
+    },
+  ]
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState('');
@@ -69,13 +80,13 @@ const AdminLeavesTable = ({
 
   const imageUrl = 'https://erp.outsourceglobal.com';
 
-  const handleDepartmentFilter = (e) => {
+ const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get(`leads-leave-applications`, {
+      .get(`/leads-leave-applications/history`, {
         params: {
           department: e.target.value,
           page: page,
@@ -102,11 +113,11 @@ const AdminLeavesTable = ({
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
+          from_date: new Date(leave?.from_date).toDateString(),
+          to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
+          requested_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave?.from_date)) /
               (1000 * 3600 * 24)
           ),
         }));
@@ -116,15 +127,16 @@ const AdminLeavesTable = ({
       });
     setLoading(false);
     setLeaveTypeFilter("");
+    setStatusFilter("");
   };
-
+  
   const handleLeaveTypeFilter = (e) => {
     setLeaveTypeFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get(`leads-leave-applications`, {
+      .get(`/leads-leave-applications/history`, {
         params: {
           leave_type: e.target.value,
           page: page,
@@ -151,11 +163,11 @@ const AdminLeavesTable = ({
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
+          from_date: new Date(leave?.from_date).toDateString(),
+          to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
+          requested_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave?.from_date)) /
               (1000 * 3600 * 24)
           ),
         }));
@@ -165,6 +177,57 @@ const AdminLeavesTable = ({
       });
     setLoading(false);
     setDepartmentFilter("");
+    setStatusFilter("");
+  };
+
+  const handleStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+      .get(`/leads-leave-applications/history`, {
+        params: {
+          status: e.target.value,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const formatted = resData.map((leave) => ({
+          ...leave,
+          full_name:
+            leave?.employee.first_name +
+            ' ' +
+            leave?.employee.middle_name +
+            ' ' +
+            leave?.employee.last_name,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          from_date: new Date(leave?.from_date).toDateString(),
+          to_date: new Date(leave?.to_date).toDateString(),
+          department: leave?.department_id?.department,
+          requested_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave?.from_date)) /
+              (1000 * 3600 * 24)
+          ),
+        }));
+
+        setData(formatted);
+        setunfiltered(formatted);
+      });
+    setLoading(false);
+    setDepartmentFilter("");
+    setLeaveTypeFilter("");
   };
 
   useEffect(() => {
@@ -184,7 +247,7 @@ const AdminLeavesTable = ({
 
       if (page === 1) {
         axiosInstance
-          .get(`leads-leave-applications`, {
+          .get(`/leads-leave-applications/history`, {
             params: {
               search: searchTerm,
               page: page,
@@ -211,17 +274,19 @@ const AdminLeavesTable = ({
                 leave?.employee.last_name,
               status_action: leave?.status,
               leave_type: leave?.leave_type_id?.leave_type,
+              from_date: new Date(leave?.from_date).toDateString(),
+              to_date: new Date(leave?.to_date).toDateString(),
               department: leave?.department_id?.department,
-              from_date: new Date(leave.from_date).toDateString(),
-              to_date: new Date(leave.to_date).toDateString(),
-              total_leave_days: Math.ceil(
-                (new Date(leave.to_date) - new Date(leave.from_date)) /
+              requested_leave_days: Math.ceil(
+                (new Date(leave.to_date) - new Date(leave?.from_date)) /
                   (1000 * 3600 * 24)
               ),
             }));
 
             setData(formatted);
             setDepartmentFilter('');
+            setStatusFilter('');
+            setLeaveTypeFilter('');
           });
       }
       setLoading(false);
@@ -289,8 +354,8 @@ const AdminLeavesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select">
-                <div>
+              <div className="d-flex row mb-3">
+                <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}
@@ -321,6 +386,22 @@ const AdminLeavesTable = ({
                     ))}
                   </select>
                 </div>
+
+                <div className="col-md-3">
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleStatusFilter(e)}
+                    defaultValue={statusFilter}
+                    value={statusFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Filter by Status
+                    </option>
+                    {status.map((option, index) => (
+                      <option key={index} value={option.code}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <BootstrapTable
@@ -342,7 +423,7 @@ const AdminLeavesTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    null
+                    'No Record Found'
                   )
                 }
               />
@@ -383,4 +464,4 @@ const AdminLeavesTable = ({
   );
 };
 
-export default AdminLeavesTable;
+export default LeadLeaveHistoryTable;

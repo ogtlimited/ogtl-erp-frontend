@@ -58,7 +58,6 @@ const PayrollReports = () => {
       )
       .then((res) => {
         settotalSalary(formatter.format(res.data.data[1].total[0].salaries));
-        console.log(res.data.data[0].salarySlips);
         const mapped = res.data.data[0].salarySlips.map((e) => {
           return {
             employee:
@@ -79,6 +78,7 @@ const PayrollReports = () => {
       })
       .catch((error) => {
         console.log(error?.response);
+        console.log("All payslips error:", error.response);
       });
   }, []);
 

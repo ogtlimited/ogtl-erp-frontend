@@ -17,7 +17,7 @@ import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Ad
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const AdminLeavesTable = ({
+const AdminLeavesHistoryTable = ({
   data,
   setData,
   columns,
@@ -33,12 +33,24 @@ const AdminLeavesTable = ({
   setDepartmentFilter,
   leaveTypeFilter,
   setLeaveTypeFilter,
+  statusFilter,
+  setStatusFilter,
   searchTerm,
   setSearchTerm,
   setLoading,
   departments,
   leaveTypes,
 }) => {
+  const status = [
+    {
+      code: 'approved',
+      label: 'Approved',
+    },
+    {
+      code:'rejected',
+      label: 'Rejected',
+    },
+  ]
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState('');
@@ -75,7 +87,7 @@ const AdminLeavesTable = ({
     setLoading(true);
 
     axiosInstance
-      .get(`leads-leave-applications`, {
+      .get(`hr-leave-applications/history`, {
         params: {
           department: e.target.value,
           page: page,
@@ -116,6 +128,7 @@ const AdminLeavesTable = ({
       });
     setLoading(false);
     setLeaveTypeFilter("");
+    setStatusFilter("");
   };
 
   const handleLeaveTypeFilter = (e) => {
@@ -124,7 +137,7 @@ const AdminLeavesTable = ({
     setLoading(true);
 
     axiosInstance
-      .get(`leads-leave-applications`, {
+      .get(`hr-leave-applications/history`, {
         params: {
           leave_type: e.target.value,
           page: page,
@@ -165,6 +178,57 @@ const AdminLeavesTable = ({
       });
     setLoading(false);
     setDepartmentFilter("");
+    setStatusFilter("");
+  };
+
+  const handleLeaveStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+      .get(`hr-leave-applications/history`, {
+        params: {
+          status: e.target.value,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        let resOptions = res?.data?.data?.pagination;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const formatted = resData.map((leave) => ({
+          ...leave,
+          full_name:
+            leave?.employee.first_name +
+            ' ' +
+            leave?.employee.middle_name +
+            ' ' +
+            leave?.employee.last_name,
+          status_action: leave?.status,
+          leave_type: leave?.leave_type_id?.leave_type,
+          department: leave?.department_id?.department,
+          from_date: new Date(leave.from_date).toDateString(),
+          to_date: new Date(leave.to_date).toDateString(),
+          total_leave_days: Math.ceil(
+            (new Date(leave.to_date) - new Date(leave.from_date)) /
+              (1000 * 3600 * 24)
+          ),
+        }));
+
+        setData(formatted);
+        setunfiltered(formatted);
+      });
+    setLoading(false);
+    setDepartmentFilter("");
+    setLeaveTypeFilter("");
   };
 
   useEffect(() => {
@@ -222,6 +286,8 @@ const AdminLeavesTable = ({
 
             setData(formatted);
             setDepartmentFilter('');
+            setStatusFilter('');
+            setLeaveTypeFilter('');
           });
       }
       setLoading(false);
@@ -321,7 +387,25 @@ const AdminLeavesTable = ({
                     ))}
                   </select>
                 </div>
+
+                <div className="col-md-3">
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleLeaveStatusFilter(e)}
+                    defaultValue={statusFilter}
+                    value={statusFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Filter by Status
+                    </option>
+                    {status.map((option, index) => (
+                      <option key={index} value={option.code}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
+
+              
 
               <BootstrapTable
                 {...props.baseProps}
@@ -383,4 +467,4 @@ const AdminLeavesTable = ({
   );
 };
 
-export default AdminLeavesTable;
+export default AdminLeavesHistoryTable;

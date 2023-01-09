@@ -3,37 +3,45 @@
 import React, { useState } from 'react';
 import { RiCloseCircleFill } from 'react-icons/ri';
 import axiosInstance from '../../services/api';
-import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
+import { REQUEST_EDIT } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
 
-function RejectAdminLeaveModal({
+function RequestEditModal({
   closeModal,
-  hrReject,
-  fetchAllLeaves,
+  requestEdit,
+  loading,
+  setLoading,
+  fetchReporteesLeaves,
 }) {
   const { showAlert } = useAppContext();
-  const [leave, setLeave] = useState(REJECT_LEAVE);
-  const [loading, setLoading] = useState(false);
+  const [leave, setLeave] = useState(REQUEST_EDIT);
 
   const handleFormChange = (e) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async () => {
-      const id = hrReject._id;
-      setLoading(true);
-      try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await axiosInstance.patch(`hr-leave-applications/reject/${id}`, leave)
-        showAlert(true, 'Leave Rejected', 'alert alert-success');
-  
-        closeModal(false);
-      } catch (error) {
-        console.log(error);
-      }
-      // fetchAllLeaves();
-  }
+  const handleRejectLeave = async (e) => {
+    e.preventDefault();
+    const id = requestEdit._id;
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        `/leads-leave-applications/request-modification?_id=${id}`,
+        leave
+      );
+      showAlert(true, 'Modification Request Sent Successfully', 'alert alert-success');
+
+      closeModal(false);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      console.log('Leave Modification error:', error.response);
+      setLoading(false);
+    }
+    fetchReporteesLeaves();
+  };
 
   return (
     <>
@@ -47,14 +55,13 @@ function RejectAdminLeaveModal({
             <form onSubmit={handleRejectLeave}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="rejection_reason">
-                    Reason for Rejection
-                  </label>
+                  <label htmlFor="reasons">Reason for Modification</label>
                   <textarea
-                    name="rejection_reason"
+                    name="reasons"
                     className="form-control rejection-textarea"
-                    value={leave.rejection_reason}
+                    value={leave.reasons}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
@@ -86,4 +93,4 @@ function RejectAdminLeaveModal({
   );
 }
 
-export default RejectAdminLeaveModal;
+export default RequestEditModal;

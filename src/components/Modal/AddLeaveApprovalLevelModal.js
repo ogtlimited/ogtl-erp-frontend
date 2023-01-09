@@ -27,9 +27,10 @@ export const AddLeaveApprovalLevelModal = () => {
 
     const id = e.target.value;
     axiosInstance
-      .get(`/designation-by-departmentId/${id}`)
+      .get(`/department-designation/${id}`)
       .then((res) => {
         const resData = res.data.data;
+        console.log("designations for this dept", resData);
         if (!resData.length) {
           setDesignationInfo('No Designation');
         } else {
