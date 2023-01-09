@@ -266,7 +266,7 @@ export default function Router() {
               ),
             },
             {
-              path: 'leaves-admin/application/leave-status/:id',
+              path: 'leaves-admin/application/leave-status/:id/:from_date/:to_date',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <AllLeaveStatusAdmin/>
@@ -274,7 +274,7 @@ export default function Router() {
               ),
             },
             {
-              path: 'leaves-admin/application/leave-type/:id',
+              path: 'leaves-admin/application/leave-type/:id/:from_date/:to_date',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <AllLeaveTypeAdmin/>

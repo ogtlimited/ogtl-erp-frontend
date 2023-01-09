@@ -26,7 +26,7 @@ function RejectAdminLeaveModal({
       try {
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.patch(`hr-leave-applications/reject/${id}`, leave)
-        showAlert(true, 'Leave Rejected', 'alert alert-success');
+        showAlert(true, 'Leave Rejected', 'alert alert-info');
   
         closeModal(false);
       } catch (error) {

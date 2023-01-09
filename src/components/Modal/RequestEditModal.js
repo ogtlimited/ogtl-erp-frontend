@@ -21,7 +21,7 @@ function RequestEditModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async (e) => {
+  const handleRequestEditLeave = async (e) => {
     e.preventDefault();
     const id = requestEdit._id;
     setLoading(true);
@@ -52,7 +52,7 @@ function RequestEditModal({
             onClick={() => closeModal(false)}
           />
           <div className="rejection-modal-body">
-            <form onSubmit={handleRejectLeave}>
+            <form onSubmit={handleRequestEditLeave}>
               <div>
                 <div className="form-group">
                   <label htmlFor="reasons">Reason for Modification</label>

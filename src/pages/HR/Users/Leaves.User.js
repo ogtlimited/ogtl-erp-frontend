@@ -326,6 +326,7 @@ const LeavesUser = () => {
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchReporteesLeaves();
       fetchReporteesAppealedLeaves();
+      fetchLeaveHistory();
     } catch (error) {
       console.log('Leave approval error:', error.response);
     }
@@ -996,6 +997,7 @@ const LeavesUser = () => {
           loading={loading}
           setLoading={setLoading}
           fetchReporteesLeaves={fetchReporteesLeaves}
+          fetchLeaveHistory={fetchLeaveHistory}
         />
       )}
 
