@@ -20,7 +20,8 @@ function RejectAdminLeaveModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async () => {
+  const handleRejectLeave = async (e) => {
+      e.preventDefault();
       const id = hrReject._id;
       setLoading(true);
       try {
@@ -32,7 +33,7 @@ function RejectAdminLeaveModal({
       } catch (error) {
         console.log(error);
       }
-      // fetchAllLeaves();
+      fetchAllLeaves();
   }
 
   return (
