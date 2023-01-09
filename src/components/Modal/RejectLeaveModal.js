@@ -12,6 +12,7 @@ function RejectLeaveModal({
   loading,
   setLoading,
   fetchReporteesLeaves,
+  fetchLeaveHistory
 }) {
   const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
@@ -31,7 +32,7 @@ function RejectLeaveModal({
         leave
       );
       console.log('Leave rejection response:', response);
-      showAlert(true, 'Leave Rejected', 'alert alert-success');
+      showAlert(true, 'Leave Rejected', 'alert alert-info');
 
       closeModal(false);
       setLoading(<i class="fas fa-bullseye    "></i>);
@@ -41,6 +42,8 @@ function RejectLeaveModal({
       setLoading(false);
     }
     fetchReporteesLeaves();
+    fetchLeaveHistory();
+
   };
 
   return (

@@ -20,19 +20,20 @@ function RejectAdminLeaveModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async () => {
+  const handleRejectLeave = async (e) => {
+      e.preventDefault();
       const id = hrReject._id;
       setLoading(true);
       try {
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.patch(`hr-leave-applications/reject/${id}`, leave)
-        showAlert(true, 'Leave Rejected', 'alert alert-success');
+        showAlert(true, 'Leave Rejected', 'alert alert-info');
   
         closeModal(false);
       } catch (error) {
         console.log(error);
       }
-      // fetchAllLeaves();
+      fetchAllLeaves();
   }
 
   return (
