@@ -165,7 +165,7 @@ const Login = () => {
               </form>
             </div>
           </div>
-          <div className="go-to-client">
+          {/* <div className="go-to-client">
             <p>
               Not a staff of Outsource Global, login as a{' '}
               <strong
@@ -175,7 +175,7 @@ const Login = () => {
                 client
               </strong>
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
