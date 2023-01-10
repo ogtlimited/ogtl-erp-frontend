@@ -44,6 +44,7 @@ const PaySlip = () => {
   const [fetched, setfetched] = useState(false);
   const [totalDeduction, settotalDeduction] = useState(0);
   const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
+
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
@@ -54,7 +55,7 @@ const PaySlip = () => {
           `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
         );
         // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        console.log(res);
+        // console.log("Salary Breakdown Response:", res);
         setPaySlip(res.data.data.employeeSlip);
         const earnings = {};
         const { employeeSalary, deductionsBreakDown } =
@@ -68,7 +69,7 @@ const PaySlip = () => {
             )
           );
         }
-        console.log("TOTAL", totalDeduction);
+        // console.log("TOTAL DEDUCTIONS:", totalDeduction);
         setemployee(employeeSalary.employeeId);
         delete employeeSalary.createdAt;
         delete employeeSalary.updatedAt;
@@ -109,7 +110,7 @@ const PaySlip = () => {
       }
     };
     fetchPaySlip();
-  }, [id]);
+  }, [id, paySlip?.additionalDeductions, totalDeduction]);
 
   return (
     <>

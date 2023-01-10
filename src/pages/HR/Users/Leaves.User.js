@@ -20,10 +20,11 @@ import {
   FcClock,
   FcBusinessman,
   FcBusinesswoman,
+  FcCancel
 } from 'react-icons/fc';
 
 const LeavesUser = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [userId, setuserId] = useState('');
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] = useState(0);
@@ -51,6 +52,7 @@ const LeavesUser = () => {
   const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [userStatus, setUserStatus] = useState('');
 
   const [departments, setDepartments] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
@@ -66,6 +68,7 @@ const LeavesUser = () => {
         '/leave-application/leave-application-progress'
       );
       const resData = response?.data?.data;
+      console.log("Approver:", resData)
 
       const approver = Object.keys(resData);
       const status = Object.values(resData);
@@ -102,7 +105,11 @@ const LeavesUser = () => {
         ),
       }));
 
+      const status = leaves[0].status;
+      setUserStatus(status);
+
       setallLeaves(formatter);
+      console.log('Show my leavezz:', formatter)
       fetchLeaveApplicationProgress();
       setLoading(false);
     } catch (error) {
@@ -327,6 +334,7 @@ const LeavesUser = () => {
       fetchReporteesLeaves();
       fetchReporteesAppealedLeaves();
       fetchLeaveHistory();
+      fetchHRLeavesNotificationCount();
     } catch (error) {
       console.log('Leave approval error:', error.response);
     }
@@ -476,7 +484,7 @@ const LeavesUser = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === 'pending' && (
+            {row.status === 'pending' && row.acted_on === false ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -486,7 +494,7 @@ const LeavesUser = () => {
               >
                 <i className="fa fa-edit m-r-5"></i> Edit
               </a>
-            )}
+            ) : null}
 
             {row.status === 'rejected' && row.hr_stage === false ? (
               <a
@@ -882,6 +890,26 @@ const LeavesUser = () => {
                   ) : leaveApprover.length && user?.gender === 'female' ? (
                     <FcBusinesswoman className="approver-progress-user-icon" />
                   ) : null}
+                  
+                  {/* {leaveApprover.map((item, index) => (
+                    <div className="approver-progress-container" key={index}>
+                      <FcRight className="approver-progress-icon" />
+                      <div className="approver-progress">
+                        <p className="approver-progress-name">
+                          {leaveApprover[index]}
+                        </p>
+                        <p className="approver-progress-status">
+                          {leaveStatus[index] === 'done' && userStatus === 'approved' ? (
+                            <FcApproval className="approver-status-icon" />
+                          ) : leaveStatus[index] === 'not done' && userStatus === 'rejected' ? (
+                            <FcCancel className="approver-status-icon" /> 
+                          ) : <FcClock className="approver-status-icon" /> }
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  {console.log('My returned leaves status:', userStatus, "Progress Bar", leaveStatus[0])} */}
+                  
                   {leaveApprover.map((item, index) => (
                     <div className="approver-progress-container" key={index}>
                       <FcRight className="approver-progress-icon" />
@@ -892,9 +920,7 @@ const LeavesUser = () => {
                         <p className="approver-progress-status">
                           {leaveStatus[index] === 'done' ? (
                             <FcApproval className="approver-status-icon" />
-                          ) : (
-                            <FcClock className="approver-status-icon" />
-                          )}
+                          ) : <FcClock className="approver-status-icon" /> }
                         </p>
                       </div>
                     </div>

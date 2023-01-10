@@ -13,27 +13,9 @@ import RejectAdminLeaveModal from '../../../components/Modal/RejectAdminLeaveMod
 import { CropLandscapeOutlined } from '@material-ui/icons';
 
 const LeavesAdmin = () => {
-  const [approval, setApproval] = useState([
-    {
-      title: 'approved by supervisor',
-      color: 'text-info',
-    },
-    {
-      title: 'approved',
-      color: 'text-success',
-    },
-    {
-      title: 'cancelled',
-      color: 'text-warning',
-    },
-    {
-      title: 'rejected',
-      color: 'text-danger',
-    },
-  ]);
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   // const [approvedLeaves, setApprovedLeaves] = useState(0);
   // const [rejectedLeaves, setRejectedLeaves] = useState(0);
   // const [pendingLeaves, setPendingLeaves] = useState(0);
@@ -277,8 +259,10 @@ const LeavesAdmin = () => {
       );
       showAlert(true, 'Leave Approved', 'alert alert-success');
       fetchHRLeaves();
+      fetchHRLeaveHistory();
+      fetchHRLeavesNotificationCount();
     } catch (error) {
-      console.log('HR Leave approval error:', error.response);
+      console.log('HR Leave approval error:', error.response.message);
     }
   };
 
@@ -464,6 +448,7 @@ const LeavesAdmin = () => {
           hrReject={hrReject}
           closeModal={setRejectModal}
           fetchAllLeaves={fetchHRLeaves}
+          fetchHRLeaveHistory={fetchHRLeaveHistory}
         />
       )}
       <div className="page-header">

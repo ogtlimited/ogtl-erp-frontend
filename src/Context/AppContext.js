@@ -17,6 +17,7 @@ const AppProvider = (props) => {
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
+  const [count, setCount] = useState(0);
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
@@ -94,6 +95,20 @@ const AppProvider = (props) => {
       // setloggedIn(false);
     });
   };
+
+   // For Leave Application Notification
+   const fetchHRLeavesNotificationCount = () => {
+    axiosInstance.get('/hr-leave-applications')
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        const dataCount = resData.length;
+        setCount(dataCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });;
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -232,6 +247,8 @@ const AppProvider = (props) => {
         adminDashboardData,
         setallEmployees,
         allEmployees,
+        count,
+        setCount,
         showAlert,
         showAlertMsg,
         fetchEmployeeAttendance,
@@ -253,6 +270,7 @@ const AppProvider = (props) => {
         createCampaign,
         createRoleAssignment,
         createJobApplications,
+        fetchHRLeavesNotificationCount,
         status
       }}
     >
