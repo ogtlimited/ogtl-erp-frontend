@@ -3,7 +3,7 @@ export const employeeFormJson = {
   Fields: [
     // {
     //   name: "applicant",
-    //   type: "select",
+    //   type: "text",
     //   title: "Applicant",
     //   required: {
     //     value: true,
@@ -11,6 +11,33 @@ export const employeeFormJson = {
     //   },
     //   options: [],
     // },
+    {
+      name: "first_name",
+      type: "text",
+      title: "First Name",
+      required: {
+        value: true,
+        message: "applicant first name is required",
+      },
+    },
+    {
+      name: "middle_name",
+      type: "text",
+      title: "Middle Name",
+      required: {
+        value: true,
+        message: "applicant middle name is required",
+      },
+    },
+    {
+      name: "last_name",
+      type: "text",
+      title: "Last Name",
+      required: {
+        value: true,
+        message: "applicant last name is required",
+      },
+    },
     // {
     //   name: "password",
     //   type: "text",
@@ -37,14 +64,22 @@ export const employeeFormJson = {
       },
     },
     {
-      name: "reports_to",
+      name: "gender",
       type: "select",
-      title: "Reports to",
+      title: "Gender",
       required: {
         value: true,
-        message: "Reports to is required",
       },
-      options: [],
+      options: [
+        {
+          label: "Female",
+          value: "female",
+        },
+        {
+          label: "Male",
+          value: "male",
+        },
+      ],
     },
     {
       name: "date_of_joining",
@@ -54,6 +89,16 @@ export const employeeFormJson = {
         value: true,
         message: "Date of joining is required",
       },
+    },
+    {
+      name: "reports_to",
+      type: "select",
+      title: "Reports to",
+      required: {
+        value: true,
+        message: "Reports to is required",
+      },
+      options: [],
     },
     {
       name: "designation",
@@ -101,7 +146,6 @@ export const employeeFormJson = {
       title: "Branch",
       options: [],
     },
-    
     {
       name: "isAdmin",
       type: "check",
@@ -155,21 +199,6 @@ export const employeeFormJson = {
         {
           label: "FullTime",
           value: "FullTime",
-        },
-      ],
-    },
-    {
-      name: "gender",
-      type: "select",
-      title: "Gender",
-      options: [
-        {
-          label: "Female",
-          value: "female",
-        },
-        {
-          label: "Male",
-          value: "male",
         },
       ],
     },

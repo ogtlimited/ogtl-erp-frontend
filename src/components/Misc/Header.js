@@ -3,7 +3,7 @@
 // import "./header.css";
 
 // import axiosInstance from '../../services/api';
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import logo from '../../assets/img/og-white-logo.png';
 import cropped from '../../assets/img/cropped-white.png';
 import { useAppContext } from "../../Context/AppContext";

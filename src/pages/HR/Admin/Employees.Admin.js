@@ -16,14 +16,11 @@ import UploadModal from "../../../components/Modal/uploadModal";
 import EmployeeHelperService from "./employee.helper";
 
 const AllEmployeesAdmin = () => {
-  const breadcrumb = "All Employees";
   const {
-    setallEmployees,
     fetchEmployee,
     allEmployees,
     createEmployee,
     showAlert,
-    employeeStatus,
     status
   } = useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
@@ -48,6 +45,7 @@ const AllEmployeesAdmin = () => {
   }, []);
 
   useEffect(() => {}, [editData, mode]);
+
   useEffect(() => {
     createEmployee().then((res) => {
       setcombinedData(res);
@@ -60,6 +58,7 @@ const AllEmployeesAdmin = () => {
         acceptedJobOffers,
         employees,
       } = res.data.createEmployeeForm;
+
       const empHelper = new EmployeeHelperService(
         shifts,
         designations,
@@ -70,10 +69,8 @@ const AllEmployeesAdmin = () => {
         employees,
         status
       );
-      const service = empHelper.mapRecords();
 
-      // const status = []
-      
+      const service = empHelper.mapRecords();
 
       setfilters([
         {
@@ -99,21 +96,10 @@ const AllEmployeesAdmin = () => {
       ]);
 
       const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
-      // settemplate(
-      //   {
-      //     title: employeeFormJson.title,
-      //     Fields: finalForm
-      //   }
-      // )
-      const obj = helper.formArrayToObject(finalForm);
-      let initialValues = {
-        leaveCount: 0,
-      };
-      for (let i in obj) {
-        initialValues[i] = "";
-      }
 
-      if (mode == "add") {
+      const obj = helper.formArrayToObject(finalForm);
+
+      if (mode === "add") {
         // seteditData(initialValues);
         settemplate(obj);
       } else {
@@ -122,16 +108,23 @@ const AllEmployeesAdmin = () => {
 
       if (!loadForm) setloadForm(true);
     });
-  }, [mode]);
+  }, [createEmployee, loadForm, mode, status]);
+
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      if (i == "isAdmin") {
+      if (i === "isAdmin") {
         initialValues[i] = false;
-      } else if (i == "date_of_joining") {
+      } else if (i === "date_of_joining") {
         initialValues[i] = new Date().toISOString().slice(0, 10);
+      } else if (i === "isExpatriate") {
+        initialValues[i] = false;
+      } else if (i === "branch") {
+        initialValues[i] = null;
+      } else if (i === "leaveCount") {
+        initialValues[i] = 0;
       } else {
-        initialValues[i] = "";
+        initialValues[i] = '';
       }
     }
     setformValue(initialValues);
@@ -148,16 +141,19 @@ const AllEmployeesAdmin = () => {
   useEffect(() => {
     if (submitted) {
       formValue.image = "";
-      const fullName = formValue.applicant?.split("-");
-      if (mode === "add") {
-        formValue["first_name"] = fullName[0];
-        formValue["last_name"] = fullName[1];
-        formValue["middle_name"] = fullName[2];
-        delete formValue.applicant;
-      }
+      // const fullName = formValue.applicant?.split(" ");
+      // if (mode === "add") {
+      //   formValue["first_name"] = fullName[0];
+      //   formValue["last_name"] = fullName[1];
+      //   formValue["middle_name"] = fullName[2];
+      //   delete formValue.applicant;
+      // }
 
       if (mode === "add") {
-        axiosInstance.post("/employees", formValue).then((res) => {
+        axiosInstance.post("/employees", {
+          ...formValue,
+          password: '',
+        }).then((res) => {
           fetchEmployee();
           setsubmitted(false);
           showAlert(
@@ -186,7 +182,7 @@ const AllEmployeesAdmin = () => {
         });
       }
     }
-  }, [submitted, formValue]);
+  }, [submitted, formValue, mode, fetchEmployee, showAlert, editData._id, template]);
 
   // File upload
   const onFileUpload = (e) => {

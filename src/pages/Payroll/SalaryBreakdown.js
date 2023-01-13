@@ -69,6 +69,7 @@ const PaySlip = () => {
             )
           );
         }
+        console.log("EMPLOYEE SALARY:", employeeSalary);
         // console.log("TOTAL DEDUCTIONS:", totalDeduction);
         setemployee(employeeSalary.employeeId);
         delete employeeSalary.createdAt;
@@ -76,26 +77,47 @@ const PaySlip = () => {
         delete employeeSalary.employeeId;
         delete employeeSalary._id;
         delete employeeSalary.__v;
+        
+        // Object.keys(employeeSalary).forEach((e) => {
+        //   switch (e) {
+        //     case "monthlySalary":
+        //       earnings["Pension"] = employeeSalary[e] * 0.08;
+        //       // earnings["Monthly Salary"] = employeeSalary[e];
+        //       break;
+        //     case "monthlyIncomeTax":
+        //       earnings["Tax"] = employeeSalary[e];
+        //       break;
+        //     case "medical":
+        //       earnings["Medical"] = employeeSalary[e] / 12;
+        //       break;
+        //     case "housing":
+        //       earnings["Housing"] = employeeSalary[e]  / 12;
+        //       break;
+        //     case "transport":
+        //       earnings["Transport"] = employeeSalary[e]  / 12;
+        //       break;
+        //     case "otherAllowances":
+        //       earnings["Other Allowances"] = employeeSalary[e]  / 12;
+        //       break;
+        //     default:
+        //       let key = e.charAt(0).toUpperCase() + e.slice(1);
+        //       break;
+        //   }
+        // });
+
         Object.keys(employeeSalary).forEach((e) => {
           switch (e) {
-            case "monthlySalary":
-              earnings["Pension"] = employeeSalary[e] * 0.08;
-              // earnings["Monthly Salary"] = employeeSalary[e];
+            case "monthlyEmployeePension":
+              earnings["Monthly Employee Pension"] = employeeSalary[e];
               break;
             case "monthlyIncomeTax":
-              earnings["Tax"] = employeeSalary[e];
+              earnings["Monthly Income Tax"] = employeeSalary[e];
               break;
-            case "medical":
-              earnings["Medical"] = employeeSalary[e] / 12;
+            case "monthlySalary":
+              earnings["Monthly Salary"] = employeeSalary[e];
               break;
-            case "housing":
-              earnings["Housing"] = employeeSalary[e]  / 12;
-              break;
-            case "transport":
-              earnings["Transport"] = employeeSalary[e]  / 12;
-              break;
-            case "otherAllowances":
-              earnings["Other Allowances"] = employeeSalary[e]  / 12;
+            case "netPay":
+              earnings["Net Pay"] = employeeSalary[e];
               break;
             default:
               let key = e.charAt(0).toUpperCase() + e.slice(1);
@@ -189,7 +211,7 @@ const PaySlip = () => {
                             <tr key={index}>
                               <td>
                                 <strong>{earning}</strong>{" "}
-                                {earning != "department" ? (
+                                {earning !== "department" ? (
                                   <span className="float-right">
                                     {formatter.format(earnings[earning])}
                                   </span>

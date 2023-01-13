@@ -24,8 +24,8 @@ const AddNewSalaryForm = ({ fetchAllEmployeeSalaries }) => {
   useEffect(() => {
     createEmployee().then((res) => {
       const { employees } = res.data.createEmployeeForm;
-
-      const empOpts = employees?.map((e) => {
+      const activeEmployees = employees.filter(employee => employee.status === 'active')
+      const empOpts = activeEmployees?.map((e) => {
         return {
           // label: `${e.first_name}  ${e.last_name}`,
           label: e.company_email,
@@ -34,13 +34,11 @@ const AddNewSalaryForm = ({ fetchAllEmployeeSalaries }) => {
       });
 
       setEmployeeOpts(empOpts);
-      console.log('emp Opts', empOpts);
     });
   }, [createEmployee]);
 
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
-    console.log('onEditorStateChange:', name, 'Editor State:', editorState);
   };
 
   const onSubmit = (data) => {
