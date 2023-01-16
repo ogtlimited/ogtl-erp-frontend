@@ -823,6 +823,17 @@ a:focus {
   text-decoration: none;
   outline: none;
 }
+.checkbox-group {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 0 20px 0
+}
+.checkbox-control {
+  display: flex;
+  justify-content: center;
+}
 .form-control {
   border-color: #e3e3e3;
   box-shadow: none;
@@ -950,6 +961,7 @@ table.table td h2.table-avatar {
   vertical-align: middle;
   white-space: nowrap;
 }
+
 table.table td h2.table-avatar.blue-link a {
   color: #007bff;
 }
@@ -3376,7 +3388,7 @@ table.dataTable thead > tr > td.sorting {
   max-width: 60%;
 }
 .avatar {
-  background-color: #aaa;
+  background-color: #fff;
   border-radius: 50%;
   color: #fff;
   display: inline-block;

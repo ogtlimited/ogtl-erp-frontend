@@ -245,11 +245,11 @@ export const employeeFormJson = {
         return val.length >= 5 || "Min Length is 5";
       },
     },
-    {
-      name: "image",
-      type: "file",
-      title: "Employee Image",
-    },
+    // {
+    //   name: "image",
+    //   type: "file",
+    //   title: "Employee Image",
+    // },
     // {
     //     name:'role' ,
     //     type:'role',
