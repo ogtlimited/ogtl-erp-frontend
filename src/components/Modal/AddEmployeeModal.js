@@ -166,7 +166,6 @@ export const AddEmployeeModal = () => {
         'New Employee created successfully',
         'alert alert-success'
       );
-      setEmployee(CREATE_PROFILE);
       $('#AddEmployeeFormModal').modal('toggle');
     } catch (error) {
       const errorMsg = error.response?.data?.message;
@@ -176,6 +175,7 @@ export const AddEmployeeModal = () => {
       setLoading(false);
     }
     fetchEmployee();
+    setEmployee(CREATE_PROFILE);
     setLoading(false);
   };
 
