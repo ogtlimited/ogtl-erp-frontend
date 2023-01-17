@@ -1,26 +1,24 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import moment from 'moment';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import helper from '../../services/helper';
 import AddNewSalaryForm from '../Forms/AddNewSalaryForm';
-import GeneralUpload from '../Modal/GeneralUpload';
-import SalaryAssignmentModal from '../Modal/SalaryAssignmentModal';
+// import GeneralUpload from '../Modal/GeneralUpload';
+// import SalaryAssignmentModal from '../Modal/SalaryAssignmentModal';
 import LeavesTable from '../Tables/EmployeeTables/Leaves/LeaveTable';
 
 const SalaryDetails = ({ salaryStructure }) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
-  const [viewingAddNewSalaryModal, setViewingAddNewSalaryModal] =
-    useState(false);
+  // const [viewingAddNewSalaryModal, setViewingAddNewSalaryModal] = useState(false);
   const [selected, setselected] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const { createPayroll, user, showAlert, handleProgress, uploadProgress } =
-    useAppContext();
+  const { createPayroll, user, showAlert, handleProgress, uploadProgress } = useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
   const [filterObj, setfilterObj] = useState({});
 
@@ -204,7 +202,8 @@ const SalaryDetails = ({ salaryStructure }) => {
 
     createPayroll().then((res) => {
       const { employees } = res.data.createPayrollForm;
-      const employeeOpts = employees?.map((e) => {
+      const activeEmployees = employees.filter(employee => employee.status === 'active')
+      const employeeOpts = activeEmployees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
           value: e.ogid,
@@ -343,7 +342,7 @@ const SalaryDetails = ({ salaryStructure }) => {
               className="btn add-btn m-r-5"
               data-toggle="modal"
               data-target="#AddNewSalary"
-              onClick={() => setViewingAddNewSalaryModal(true)}
+              // onClick={() => setViewingAddNewSalaryModal(true)}
             >
               Add New Salary
             </a>

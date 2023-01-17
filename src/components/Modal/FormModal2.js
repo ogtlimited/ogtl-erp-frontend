@@ -11,9 +11,11 @@ const FormModal2 = ({
 }) => {
   const [value, setvalue] = useState(null);
   const [formSubmitted, setformSubmitted] = useState(false);
+
   useEffect(() => {
     setvalue(value);
   }, [value]);
+
   useEffect(() => {}, [editData]);
 
   useEffect(() => {
@@ -24,8 +26,10 @@ const FormModal2 = ({
       setsubmitted(formSubmitted);
       setformSubmitted(false);
     }
-  }, [value, formSubmitted]);
+  }, [value, formSubmitted, setformValue, setsubmitted]);
+
   useEffect(() => {}, [template, formValue]);
+
   return (
     <>
       <div

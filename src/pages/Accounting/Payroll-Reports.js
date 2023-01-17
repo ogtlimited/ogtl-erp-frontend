@@ -75,6 +75,7 @@ const PayrollReports = () => {
           };
         });
         setData(mapped);
+        console.log("This payslips for CEO and HR:", mapped);
       })
       .catch((error) => {
         console.log(error?.response);

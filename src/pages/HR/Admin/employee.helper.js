@@ -103,7 +103,7 @@ export default class EmployeeHelperService {
         field.options = service.shiftsopts;
         return field;
       } else if (field.name === "applicant") {
-        if (mode == "add") {
+        if (mode === "add") {
           field.options = service.appOpts;
         } else {
           field.options = service.reportstoOpts;
@@ -118,45 +118,12 @@ export default class EmployeeHelperService {
       } else if (field.name === "projectId") {
         field.options = service.campaingOpts;
         return field;
+      } else if (field.name === "employment_type") {
+        field.options = service.empTypeopts;
       } else if (field.name === "reports_to") {
         field.options = service.reportstoOpts;
         return field;
       } else if (field.name === "status") {
-        field.options = service.employeestatusOpts;
-        return field;
-      }
-      return field;
-    });
-  }
-
-  finalForm(employeeFormJson, service, mode) {
-    return employeeFormJson.Fields.map((field) => {
-      if (field.name === "designation") {
-        field.options = service.designationOpts;
-        return field;
-      } else if (field.name === "default_shift") {
-        field.options = service.shiftsopts;
-        return field;
-      } else if (field.name === "applicant") {
-        if (mode == "add") {
-          field.options = service.appOpts;
-        } else {
-          field.options = service.reportstoOpts;
-        }
-        return field;
-      } else if (field.name === "department") {
-        field.options = service.deptopts;
-        return field;
-      } else if (field.name === "employment_type") {
-        field.options = service.empTypeopts;
-        return field;
-      } else if (field.name === "projectId") {
-        field.options = service.campaingOpts;
-        return field;
-      } else if (field.name === "reports_to") {
-        field.options = service.reportstoOpts;
-        return field;
-      }else if (field.name === "status") {
         field.options = service.employeestatusOpts;
         return field;
       }

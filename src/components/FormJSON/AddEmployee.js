@@ -1,0 +1,21 @@
+export const CREATE_PROFILE = {
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  company_email: '',
+  gender: '',
+  date_of_joining: new Date(),
+  reports_to: '',
+  designation: null,
+  department: null,
+  projectId: '',
+  default_shift: '',
+  branch: null,
+  isAdmin: false,
+  isExpatriate: false,
+  employeeType: '',
+  status: 'active',
+  leaveCount: 0,
+  password: '',
+  image: ''
+}

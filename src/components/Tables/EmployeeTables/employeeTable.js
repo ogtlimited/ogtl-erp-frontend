@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -239,7 +240,6 @@ const EmployeesTable = ({
                 </div>
                 
               <div className="d-flex row mb-3">
-                {console.log("filters",filters)}
                 {
                 filters &&
                   filters.map((f) => (
