@@ -926,6 +926,15 @@ select.form-control[size] {
 	2. Table
 -----------------------*/
 
+.earnings-table-header {
+  font-weight: 600;
+  margin-left: 20px;
+  font-size: 18px;
+  text-align: center;
+  border-top: 2px solid #999;
+  border-bottom: 2px solid #999;
+}
+
 .table-responsive {
   white-space: nowrap;
   width: 100%;
@@ -2602,6 +2611,11 @@ table.dataTable thead > tr > td.sorting {
 .account-box .form-group {
   margin-bottom: 25px;
 }
+
+.form-group > label > span {
+  color: red;
+}
+
 .account-box .account-btn {
   background: #00c5fb;
   background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
