@@ -20,20 +20,24 @@ import {
   FcClock,
   FcBusinessman,
   FcBusinesswoman,
-  FcCancel
+  FcCancel,
 } from 'react-icons/fc';
+import moment from 'moment';
 
 const LeavesUser = () => {
   const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [userId, setuserId] = useState('');
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
-  const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] = useState(0);
+  const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
+    useState(0);
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
   const [user, setuser] = useState([]);
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
-  const [allReporteesAppealedLeaves, setAllReporteesAppealedLeaves] = useState([]);
+  const [allReporteesAppealedLeaves, setAllReporteesAppealedLeaves] = useState(
+    []
+  );
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [rejectModal, setRejectModal] = useState(false);
   const [requestEditModal, setRequestEditModal] = useState(false);
@@ -62,13 +66,26 @@ const LeavesUser = () => {
 
   const currentUser = tokenService.getUser();
 
+  // Calculates Leave Days for Business Days
+  function calcBusinessDays(startDate, endDate) {
+    var day = moment(startDate);
+    var businessDays = 0;
+
+    while (day.isSameOrBefore(endDate, 'day')) {
+      if (day.day() !== 0 && day.day() !== 6) businessDays++;
+      day.add(1, 'd');
+    }
+    return businessDays;
+  }
+
   const fetchLeaveApplicationProgress = async () => {
     try {
       const response = await axiosInstance.get(
         '/leave-application/leave-application-progress'
       );
       const resData = response?.data?.data;
-      console.log("Approver:", resData)
+      // console.log('Approver response:', response);
+      // console.log('Approver:', resData);
 
       const approver = Object.keys(resData);
       const status = Object.values(resData);
@@ -99,17 +116,14 @@ const LeavesUser = () => {
         leave_type: leave?.leave_type_id?.leave_type,
         from_date: new Date(leave?.from_date).toDateString(),
         to_date: new Date(leave?.to_date).toDateString(),
-        requested_leave_days: Math.ceil(
-          (new Date(leave.to_date) - new Date(leave.from_date)) /
-            (1000 * 3600 * 24)
-        ),
+        requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
       }));
 
       const status = leaves[0].status;
       setUserStatus(status);
 
       setallLeaves(formatter);
-      console.log('Show my leavezz:', formatter)
+      console.log('Show my leaves:', formatter);
       fetchLeaveApplicationProgress();
       setLoading(false);
     } catch (error) {
@@ -228,7 +242,7 @@ const LeavesUser = () => {
   const fetchReporteesAppealedLeaves = useCallback(() => {
     axiosInstance
       .get(`/leads-leave-applications/appealed-leaves`, {
-          params: {
+        params: {
           department: departmentFilter,
           leave_type: leaveTypeFilter,
           search: searchTerm,
@@ -238,7 +252,7 @@ const LeavesUser = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.application;
-        console.log('Leave Appealed Leaves - isAppealed:', resData);
+        // console.log('Leave Appealed Leaves - isAppealed:', resData);
         let resOptions = res?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
@@ -322,8 +336,13 @@ const LeavesUser = () => {
     if (userId) {
       fetchYourLeaves();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchLeaveHistory, fetchReporteesAppealedLeaves, fetchReporteesLeaves, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    fetchLeaveHistory,
+    fetchReporteesAppealedLeaves,
+    fetchReporteesLeaves,
+    userId,
+  ]);
 
   const handleApproveLeave = async (row) => {
     const id = row._id;
@@ -890,26 +909,7 @@ const LeavesUser = () => {
                   ) : leaveApprover.length && user?.gender === 'female' ? (
                     <FcBusinesswoman className="approver-progress-user-icon" />
                   ) : null}
-                  
-                  {/* {leaveApprover.map((item, index) => (
-                    <div className="approver-progress-container" key={index}>
-                      <FcRight className="approver-progress-icon" />
-                      <div className="approver-progress">
-                        <p className="approver-progress-name">
-                          {leaveApprover[index]}
-                        </p>
-                        <p className="approver-progress-status">
-                          {leaveStatus[index] === 'done' && userStatus === 'approved' ? (
-                            <FcApproval className="approver-status-icon" />
-                          ) : leaveStatus[index] === 'not done' && userStatus === 'rejected' ? (
-                            <FcCancel className="approver-status-icon" /> 
-                          ) : <FcClock className="approver-status-icon" /> }
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                  {console.log('My returned leaves status:', userStatus, "Progress Bar", leaveStatus[0])} */}
-                  
+
                   {leaveApprover.map((item, index) => (
                     <div className="approver-progress-container" key={index}>
                       <FcRight className="approver-progress-icon" />
@@ -920,11 +920,14 @@ const LeavesUser = () => {
                         <p className="approver-progress-status">
                           {leaveStatus[index] === 'done' ? (
                             <FcApproval className="approver-status-icon" />
+                          ) : leaveStatus[index] === 'rejected' ? (
+                            <FcCancel className="approver-status-icon" /> 
                           ) : <FcClock className="approver-status-icon" /> }
                         </p>
                       </div>
                     </div>
                   ))}
+
                 </div>
               </div>
             </div>
