@@ -58,6 +58,7 @@ const AptitudeTest = () => {
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
+
   const create = () => {
     let initialValues = {};
     let temp = HelperService.formArrayToObject(template.Fields);
@@ -73,11 +74,11 @@ const AptitudeTest = () => {
     axiosInstance
       .get("/api/test")
       .then((res) => {
-        setData(res.data.data);
-        console.log("First Test Data", res.data.data)
+        setData(res?.data?.data);
+        console.log("Interview Test Data:", res.data.data)
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Interview Test Error:", error?.response);
       });
   };
 
@@ -114,7 +115,7 @@ const AptitudeTest = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Interview List Error:", error?.response);
       });
   }, [loadSelect]);
 
