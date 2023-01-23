@@ -21,10 +21,10 @@ const Resignation = () => {
     axiosInstance
       .get("/Exit")
       .then((res) => {
-        const map = res.data.data.map(e => {
+        const map = res?.data?.data.map(e => {
           return {
             ...e,
-            fullName: `${e.employee_id.first_name} ${e.employee_id.last_name}`
+            fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`
           }
         })
         setData(map);
