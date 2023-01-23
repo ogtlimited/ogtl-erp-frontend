@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -29,6 +30,8 @@ const EmployeesTable = ({
   seteditData,
   setmode,
   loadForm,
+  loading,
+  context
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
   const males = [male, male2, male3];
@@ -44,8 +47,9 @@ const EmployeesTable = ({
   const handleClick = (i, type) => {
     if (i?.value === "All" || i == null) {
       setAllEmployee(unfiltered);
-    } else {
-      const filt = unfiltered.filter((e) => i.value == e[type]?._id);
+    } 
+    else {
+      const filt = unfiltered.filter((e) => i.value == e[type]?._id || i.value== e[type] );
 
       setAllEmployee(filt);
     }
@@ -223,8 +227,21 @@ const EmployeesTable = ({
                 className="inputSearch"
               />
               <ClearSearchButton className="clear" {...props.searchProps} />
+              
+              <div className="col-md-3 pt-3 float-right">
+                  {filters && (
+                    <ExportCSVButton
+                      className="float-right btn export-csv"
+                      {...props.csvProps}
+                    >
+                      Export CSV
+                    </ExportCSVButton>
+                  )}
+                </div>
+                
               <div className="d-flex row mb-3">
-                {filters &&
+                {
+                filters &&
                   filters.map((f) => (
                     <div className="col-md-3">
                       <Select
@@ -238,27 +255,33 @@ const EmployeesTable = ({
                       />
                     </div>
                   ))}
-                <div className="col-md-3 pt-3 float-right">
-                  {filters && (
-                    <ExportCSVButton
-                      className="float-right btn export-csv"
-                      {...props.csvProps}
-                    >
-                      Export CSV
-                    </ExportCSVButton>
-                  )}
-                </div>
+                  
               </div>
+              
 
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
                 filter={filterFactory()}
                 headerClasses="header-class"
-                classes={!mobileView ? "table" : "table table-responsive"}
+                classes={
+                  !mobileView
+                    ? 'table '
+                    : context
+                    ? 'table table-responsive'
+                    : 'table table-responsive'
+                }
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
-                noDataIndication="Fetching Data"
+                noDataIndication={
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    'No Record Found'
+                  )
+                }
               />
             </div>
           )}

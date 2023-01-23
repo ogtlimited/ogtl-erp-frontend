@@ -9,7 +9,6 @@ import helper from '../../services/helper';
 
 const AcademyRatio2 = () => {
   const { combineRequest, showAlert } = useAppContext();
-  const [applicantData, setApplicantData] = useState([]);
 
   const initialChartState = { keys: ['No Record Found'], values: [0] };
   const [chartData1, setChartData1] = useState([]);
@@ -18,13 +17,19 @@ const AcademyRatio2 = () => {
   const [chartData4, setChartData4] = useState([]);
   const [error, setError] = useState('');
 
-  const fetchAcademyApplicants = () => {
+  const fetchChartData = () => {
     axiosInstance
-      .get('/api/academy')
+      .get('/api/academy/report/all')
       .then((res) => {
-        const data = res?.data?.data;
-        setApplicantData(data);
-        if (data.length === 0) {
+        const data1 = res?.data?.data[0].interested_program;
+        const data2 = res?.data?.data[0].qualification;
+        const data3 = res?.data?.data[0].engagement_mode;
+        const data4 = res?.data?.data[0].stacks;
+
+        const dataSamp = res?.data?.data;
+        console.log('Chart data:', dataSamp);
+
+        if (!data1.length || !data2.length || !data3.length || !data4.length) {
           return setError('No Academy Data');
         }
         const interested_program = {};
@@ -32,86 +37,44 @@ const AcademyRatio2 = () => {
         const mode_of_engagement = {};
         const stack = {};
 
-        const intPos = data.map((item) => item.interested_program);
-        const hiQuAt = data.map((item) => item.highest_qualification_attained);
-        const modOfEng = data.map((item) => item.mode_of_engagement);
-        const stk = data.map((item) => item.stack);
-
-        // eslint-disable-next-line no-unused-vars
-        const interested_program_count = intPos.forEach((x) => {
-          interested_program['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.interested_program &&
-                item.interested_program !== undefined
-                  ? item.interested_program
-                  : 'No Interested Program Specified'
-              )
-            ),
-          ];
-          interested_program['values'] = [
-            ...new Set(data.map((item) => item.interested_program)),
-          ].map((y) => intPos.filter((z) => z === y).length);
-        });
-
-        // eslint-disable-next-line no-unused-vars
-        const highest_qualification_attained_count = hiQuAt.forEach((x) => {
-          highest_qualification_attained['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.highest_qualification_attained &&
-                item.highest_qualification_attained !== undefined
-                  ? item.highest_qualification_attained
-                  : 'No Highest Qualification Attained Specified'
-              )
-            ),
-          ];
-          highest_qualification_attained['values'] = [
-            ...new Set(data.map((item) => item.highest_qualification_attained)),
-          ].map((y) => hiQuAt.filter((z) => z === y).length);
-        });
-
-        // eslint-disable-next-line no-unused-vars
-        const mode_of_engagement_count = modOfEng.forEach((x) => {
-          mode_of_engagement['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.mode_of_engagement && item.mode_of_engagement !== undefined
-                  ? item.mode_of_engagement
-                  : 'No Mode of Engagement Specified'
-              )
-            ),
-          ];
-          mode_of_engagement['values'] = [
-            ...new Set(data.map((item) => item.mode_of_engagement)),
-          ].map((y) => modOfEng.filter((z) => z === y).length);
-        });
-
-        // eslint-disable-next-line no-unused-vars
-        const stack_count = stk.forEach((x) => {
-          stack['keys'] = [
-            ...new Set(
-              data.map((item) =>
-                item.stack && item.stack !== undefined
-                  ? item.stack
-                  : 'No Stack Specified'
-              )
-            ),
-          ];
-          stack['values'] = [...new Set(data.map((item) => item.stack))].map(
-            (y) => stk.filter((z) => z === y).length
-          );
-        });
-
-        setApplicantData(
-          interested_program,
-          highest_qualification_attained,
-          mode_of_engagement,
-          stack
+        // Interested Program
+        interested_program['keys'] = data1.map((item) =>
+          item._id && item._id !== null
+            ? item._id
+            : 'No Interested Program Specified'
         );
+        interested_program['values'] = data1.map((item) => item.total);
+
         setChartData1(interested_program);
+
+        // Highest Qualification Attained
+        highest_qualification_attained['keys'] = data2.map((item) =>
+          item._id && item._id !== null
+            ? item._id
+            : 'No Highest Qualification Attained Specified'
+        );
+        highest_qualification_attained['values'] = data2.map(
+          (item) => item.total
+        );
+
         setChartData2(highest_qualification_attained);
+
+        // Mode of Engagement
+        mode_of_engagement['keys'] = data3.map((item) =>
+          item._id && item._id !== null
+            ? item._id
+            : 'No Mode of Engagement Specified'
+        );
+        mode_of_engagement['values'] = data3.map((item) => item.total);
+
         setChartData3(mode_of_engagement);
+
+        // Stack
+        stack['keys'] = data4.map((item) =>
+          item._id && item._id !== null ? item._id : 'No Stack Specified'
+        );
+        stack['values'] = data4.map((item) => item.total);
+
         setChartData4(stack);
       })
       .catch((error) => {
@@ -120,7 +83,7 @@ const AcademyRatio2 = () => {
   };
 
   useEffect(() => {
-    fetchAcademyApplicants();
+    fetchChartData();
   }, []);
 
   return (

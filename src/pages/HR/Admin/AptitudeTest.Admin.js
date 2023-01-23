@@ -10,7 +10,6 @@ import { useAppContext } from "../../../Context/AppContext";
 import ReactHtmlParser from "react-html-parser";
 import ViewModal from "../../../components/Modal/ViewModal";
 import HelperService from "../../../services/helper";
-
 import helper from "../../../services/helper";
 import InterviewContent from "../../../components/ModalContents/interviewContents";
 import FormModal2 from "../../../components/Modal/FormModal2";
@@ -75,6 +74,7 @@ const AptitudeTest = () => {
       .get("/api/test")
       .then((res) => {
         setData(res.data.data);
+        console.log("First Test Data", res.data.data)
       })
       .catch((error) => {
         console.log(error);

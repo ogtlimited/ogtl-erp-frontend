@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { employeeFormJson } from "../../../components/FormJSON/HR/Employee/employee";
+/*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import FormModal2 from "../../../components/Modal/FormModal2";
-import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
+import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
 
-import { useAppContext } from "../../../Context/AppContext";
+import FormModal2 from '../../../components/Modal/FormModal2';
+import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
 
-import axiosInstance from "../../../services/api";
-import Papa from "papaparse";
-import helper from "../../../services/helper";
-import UploadModal from "../../../components/Modal/uploadModal";
-import EmployeeHelperService from "./employee.helper";
+import { useAppContext } from '../../../Context/AppContext';
+
+import axiosInstance from '../../../services/api';
+import Papa from 'papaparse';
+import helper from '../../../services/helper';
+import UploadModal from '../../../components/Modal/uploadModal';
+import EmployeeHelperService from './employee.helper';
+
 const AllEmployeesAdmin = () => {
-  const breadcrumb = "All Employees";
-  const {
-    setallEmployees,
-    fetchEmployee,
-    allEmployees,
-    createEmployee,
-    showAlert,
-  } = useAppContext();
+  const { fetchEmployee, allEmployees, createEmployee, showAlert, status } =
+    useAppContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
+  const [loading, setLoading] = useState(true);
   const [template, settemplate] = useState({});
   const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);
@@ -32,7 +31,7 @@ const AllEmployeesAdmin = () => {
   const [combinedData, setcombinedData] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
-  const [mode, setmode] = useState("add");
+  const [mode, setmode] = useState('add');
   const { user } = useAppContext();
 
   useEffect(() => {
@@ -42,6 +41,7 @@ const AllEmployeesAdmin = () => {
   }, []);
 
   useEffect(() => {}, [editData, mode]);
+
   useEffect(() => {
     createEmployee().then((res) => {
       setcombinedData(res);
@@ -54,6 +54,7 @@ const AllEmployeesAdmin = () => {
         acceptedJobOffers,
         employees,
       } = res.data.createEmployeeForm;
+
       const empHelper = new EmployeeHelperService(
         shifts,
         designations,
@@ -61,43 +62,40 @@ const AllEmployeesAdmin = () => {
         departments,
         projects,
         acceptedJobOffers,
-        employees
+        employees,
+        status
       );
+
       const service = empHelper.mapRecords();
 
       setfilters([
         {
-          name: "projectId",
-          placeholder: "Filter by campaign",
+          name: 'projectId',
+          placeholder: 'Filter by campaign',
           options: service.campaingOpts,
         },
         {
-          name: "department",
-          placeholder: "Filter by department",
+          name: 'department',
+          placeholder: 'Filter by department',
           options: service.deptopts,
         },
         {
-          name: "designation",
-          placeholder: "Filter by designation",
+          name: 'designation',
+          placeholder: 'Filter by designation',
           options: service.designationOpts,
         },
+        {
+          name: 'status',
+          placeholder: 'Filter by status',
+          options: service.employeestatusOpts,
+        },
       ]);
-      const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
-      // settemplate(
-      //   {
-      //     title: employeeFormJson.title,
-      //     Fields: finalForm
-      //   }
-      // )
-      const obj = helper.formArrayToObject(finalForm);
-      let initialValues = {
-        leaveCount: 0,
-      };
-      for (let i in obj) {
-        initialValues[i] = "";
-      }
 
-      if (mode == "add") {
+      const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
+
+      const obj = helper.formArrayToObject(finalForm);
+
+      if (mode === 'add') {
         // seteditData(initialValues);
         settemplate(obj);
       } else {
@@ -106,43 +104,62 @@ const AllEmployeesAdmin = () => {
 
       if (!loadForm) setloadForm(true);
     });
-  }, [mode]);
+  }, [createEmployee, loadForm, mode, status]);
+
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      if (i == "isAdmin") {
+      if (i === 'isAdmin') {
         initialValues[i] = false;
-      } else if (i == "date_of_joining") {
+      } else if (i === 'date_of_joining') {
         initialValues[i] = new Date().toISOString().slice(0, 10);
+      } else if (i === 'isExpatriate') {
+        initialValues[i] = false;
+      } else if (i === 'branch') {
+        initialValues[i] = null;
+      } else if (i === 'leaveCount') {
+        initialValues[i] = 0;
       } else {
-        initialValues[i] = "";
+        initialValues[i] = '';
       }
     }
     setformValue(initialValues);
     seteditData(initialValues);
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+  }, []);
+
   // Submit
   useEffect(() => {
     if (submitted) {
-      formValue.image = "";
-      const fullName = formValue.applicant?.split("-");
-      if (mode === "add") {
-        formValue["first_name"] = fullName[0];
-        formValue["last_name"] = fullName[1];
-        formValue["middle_name"] = fullName[2];
-        delete formValue.applicant;
-      }
+      formValue.image = '';
+      // const fullName = formValue.applicant?.split(" ");
+      // if (mode === "add") {
+      //   formValue["first_name"] = fullName[0];
+      //   formValue["last_name"] = fullName[1];
+      //   formValue["middle_name"] = fullName[2];
+      //   delete formValue.applicant;
+      // }
 
-      if (mode === "add") {
-        axiosInstance.post("/employees", formValue).then((res) => {
-          fetchEmployee();
-          setsubmitted(false);
-          showAlert(
-            true,
-            "New Employee created successfully",
-            "alert alert-success"
-          );
-        });
+      if (mode === 'add') {
+        axiosInstance
+          .post('/employees', {
+            ...formValue,
+            password: '',
+          })
+          .then((res) => {
+            fetchEmployee();
+            setsubmitted(false);
+            showAlert(
+              true,
+              'New Employee created successfully',
+              'alert alert-success'
+            );
+          });
       } else {
         let id = editData._id;
 
@@ -150,55 +167,64 @@ const AllEmployeesAdmin = () => {
         for (let i in template) {
           values[i] = formValue[i];
         }
-        axiosInstance.put("/employees/" + id, values).then((res) => {
+        axiosInstance.put('/employees/' + id, values).then((res) => {
           fetchEmployee();
           setsubmitted(false);
           seteditData({});
 
           showAlert(
             true,
-            "Employee Details successfully updated",
-            "alert alert-success"
+            'Employee Details successfully updated',
+            'alert alert-success'
           );
         });
       }
     }
-  }, [submitted, formValue]);
+  }, [
+    submitted,
+    formValue,
+    mode,
+    fetchEmployee,
+    showAlert,
+    editData._id,
+    template,
+  ]);
 
   // File upload
-  const onFileUpload = (e) => {
-    const files = e.target.files;
+  // const onFileUpload = (e) => {
+  //   const files = e.target.files;
 
-    if (files) {
-      Papa.parse(files[0], {
-        complete: function (results) {
-          const jsonData = helper.arrayToJSONObject(results.data);
+  //   if (files) {
+  //     Papa.parse(files[0], {
+  //       complete: function (results) {
+  //         const jsonData = helper.arrayToJSONObject(results.data);
 
-          axiosInstance
-            .post("/employees/bulk", jsonData)
-            .then((res) => {
-              showAlert(
-                true,
-                "Data uploaded successfully",
-                "alert alert-success"
-              );
-              fetchEmployee();
-            })
-            .catch((err) => {
-              console.log(err);
-              showAlert(true, err?.message, "alert alert-danger");
-            });
-        },
-      });
-    }
-  };
+  //         axiosInstance
+  //           .post("/employees/bulk", jsonData)
+  //           .then((res) => {
+  //             showAlert(
+  //               true,
+  //               "Data uploaded successfully",
+  //               "alert alert-success"
+  //             );
+  //             fetchEmployee();
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //             showAlert(true, err?.message, "alert alert-danger");
+  //           });
+  //       },
+  //     });
+  //   }
+  // };
 
   const defaultSorted = [
     {
-      dataField: "designation",
-      order: "desc",
+      dataField: 'designation',
+      order: 'desc',
     },
   ];
+
   return (
     <>
       {/* { uploading && <div className="progress mb-3">
@@ -222,11 +248,20 @@ const AllEmployeesAdmin = () => {
                   href="#"
                   className="btn add-btn "
                   data-toggle="modal"
+                  data-target="#AddEmployeeFormModal"
+                >
+                  <i className="fa fa-plus"></i> Add Employee
+                </a>
+
+                {/* <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
                   data-target="#FormModal"
                   onClick={() => create()}
                 >
                   <i className="fa fa-plus"></i> Add Employee
-                </a>
+                </a> */}
                 <button
                   onClick={() => settoggleModal(true)}
                   type="button"
@@ -239,21 +274,11 @@ const AllEmployeesAdmin = () => {
                 </button>
               </>
             )}
-            <div className="view-icons">
-              <a
-                href="employees.html"
-                className="grid-view btn btn-link active"
-              >
-                <i className="fa fa-th"></i>
-              </a>
-              <a href="employees-list.html" className="list-view btn btn-link">
-                <i className="fa fa-bars"></i>
-              </a>
-            </div>
           </div>
         </div>
       </div>
       <EmployeesTable
+        loading={loading}
         data={allEmployees}
         seteditData={seteditData}
         setmode={setmode}
@@ -270,6 +295,8 @@ const AllEmployeesAdmin = () => {
           fetchEmployee={fetchEmployee}
         />
       )}
+
+      <AddEmployeeModal />
 
       <FormModal2
         editData={editData}

@@ -20,7 +20,7 @@ const AcademyReport = () => {
       .then((res) => {
         setAcademyData(res?.data?.data);
         setCardData(res?.data?.data.length);
-        setAcknowledgments(res?.data?.data.filter((e) => e.interview_status === "Acknowledgment Sent").length);
+        setAcknowledgments(res?.data?.data.filter((e) => e.interview_status === "acknowledgment sent").length);
       })
       .catch((error) => {
         console.log(error);

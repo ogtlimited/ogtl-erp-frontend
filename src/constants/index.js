@@ -14,10 +14,35 @@ export const InterviewProcessStageOptions = [
   { title: "Interviews scheduled", color: "text-success" }
 ];
 export const AcademyStatusOptions = [
-  { title: "Acknowledgment Sent", color: "text-primary" },
-  { title: "Onboarded", color: "text-warning" },
+  { title: "open", color: "text-danger" },
+  { title: "acknowledgment sent", color: "text-primary" },
+  { title: "onboarded", color: "text-warning" },
 ];
 export const AcademyInterviewProcessStageOptions = [
-  { title: "Sieving", color: "text-warning" },
-  { title: "Phone screening", color: "text-info" },
+  { title: "open", color: "text-danger" },
+  { title: "sieving", color: "text-warning" },
+  { title: "phone screening", color: "text-info" },
+];
+export const LeaveStatusOptions = [
+  { title: "pending", color: "text-warning" },
+  { title: "rejected", color: "text-danger" },
+  { title: "cancelled", color: "text-primary" },
+  { title: "approved", color: "text-success" },
+];
+export const LeaveTypeOptions = [
+  { title: "Annual", color: "text-warning" },
+  { title: "Casual", color: "text-danger" },
+  { title: "Sick", color: "text-primary" },
+  { title: "Without Pay", color: "text-success" },
+  { title: "Maternity", color: "text-success" },
+];
+export const department = [
+  { title: 'HR' },
+  { title: 'IT' },
+  { title: 'Accounting' },
+  { title: 'Assets' },
+  { title: 'Operations' },
+  { title: 'Facility' },
+  { title: 'Procurements' },
+  { title: 'Software Development' },
 ];

@@ -39,7 +39,6 @@ const AcademyApplicants = () => {
         let formatted = resData.map((e) => ({
           ...e,
           full_name: e.first_name + ' ' + e.last_name,
-          cv: e.cv !== null ? e.cv.split("'")[1] : "",
         }));
         
          console.log('This formatted', formatted);
@@ -97,8 +96,6 @@ const AcademyApplicants = () => {
 
   // update Academy
   const handleUpdate = useCallback((id, update) => {
-    console.log("update this body", update);
-    console.log("id to update", id);
     axiosInstance
       .patch('/api/academy/update/' + id, update)
       .then((res) => {

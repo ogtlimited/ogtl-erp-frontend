@@ -1,7 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import { formatter } from "../../../services/numberFormatter";
+/** @format */
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import { formatter } from '../../../services/numberFormatter';
 
 const DashboardTable = ({ title, data }) => {
   return (
@@ -16,26 +18,26 @@ const DashboardTable = ({ title, data }) => {
               <table className="table table-nowrap custom-table mb-0">
                 <thead>
                   <tr>
-                    <th>{title === "Invoices" ? "Invoice ID" : "Number"}</th>
-                    <th>{title === "Invoices" ? "Client" : "Status"}</th>
-                    <th>{title === "Invoices" ? "Due Date" : "Date"}</th>
+                    <th>{title === 'Invoices' ? 'Invoice ID' : 'Number'}</th>
+                    <th>{title === 'Invoices' ? 'Client' : 'Status'}</th>
+                    <th>{title === 'Invoices' ? 'Due Date' : 'Date'}</th>
                     <th>Total</th>
                     <th>
-                      {title === "Invoices" ? "Status" : "Payment Status"}
+                      {title === 'Invoices' ? 'Status' : 'Payment Status'}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {data?.map((dt, index) => (
                     <tr key={index}>
-                      <td>{title === "Invoices" ? dt?.ref : dt?.number}</td>
+                      <td>{title === 'Invoices' ? dt?.ref : dt?.number}</td>
                       <td>
-                        {title === "Invoices" ? (
+                        {title === 'Invoices' ? (
                           dt?.customer?.company
                         ) : (
                           <span
                             className={`badge bg-inverse-${
-                              dt.status === "Published" ? "success" : "warning"
+                              dt.status === 'Published' ? 'success' : 'warning'
                             }`}
                           >
                             {dt.status}
@@ -43,16 +45,16 @@ const DashboardTable = ({ title, data }) => {
                         )}
                       </td>
                       <td>
-                        {title === "Invoices"
-                          ? moment(dt?.due_date).format("L")
-                          : moment(dt?.date).format("L")}
+                        {title === 'Invoices'
+                          ? moment(dt?.due_date).format('L')
+                          : moment(dt?.date).format('L')}
                       </td>
                       <td>{formatter.format(dt?.total_amount)}</td>
                       <td>
-                        {title === "Invoices" ? (
+                        {title === 'Invoices' ? (
                           <span
                             className={`badge bg-inverse-${
-                              dt.status === "Published" ? "success" : "warning"
+                              dt.status === 'Published' ? 'success' : 'warning'
                             }`}
                           >
                             {dt.status}
@@ -60,9 +62,9 @@ const DashboardTable = ({ title, data }) => {
                         ) : (
                           <span
                             className={`badge bg-inverse-${
-                              dt.paymentStatus === "Full Payment"
-                                ? "success"
-                                : "warning"
+                              dt.paymentStatus === 'Full Payment'
+                                ? 'success'
+                                : 'warning'
                             }`}
                           >
                             {dt.paymentStatus}
@@ -76,7 +78,11 @@ const DashboardTable = ({ title, data }) => {
             </div>
           </div>
           <div className="card-footer">
-            <Link to="invoices">View all {title}</Link>
+            {title === 'Invoices' ? (
+              <Link to="/dashboard/clients/invoices">View all Invoices</Link>
+            ) : (
+              <Link to="/dashboard/clients/payments">View all Payments</Link>
+            )}
           </div>
         </div>
       </div>

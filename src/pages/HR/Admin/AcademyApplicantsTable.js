@@ -153,7 +153,7 @@ const AcademyTable = ({
                   defaultValue={intervieStatusFilter}
                   value={intervieStatusFilter}
                   >
-                     <option value="" disabled selected hidden>Filter By Interview Status</option>
+                     <option value="" disabled selected hidden>Filter By Academy Status</option>
                     {statusInterview.map((option, idx) => (
                         <option key={idx}>{option.title}</option>
                       ))}

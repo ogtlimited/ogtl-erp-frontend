@@ -40,14 +40,19 @@ const sidebarConfig = [
         children: [
           { canView: '', title: 'Dashboard', path: PATH_DASHBOARD.main.main },
           {
-            canView: 'HR',
-            title: 'HR Dashboard',
-            path: PATH_DASHBOARD.main.hrDashboard,
-          },
-          {
             canView: 'Accounting',
             title: 'Account Dashboard',
             path: PATH_DASHBOARD.main.accountDashboard,
+          },
+          // {
+          //   canView: 'HR',
+          //   title: 'Client Dashboard',
+          //   path: PATH_DASHBOARD.main.clientDashboard,
+          // },
+          {
+            canView: 'HR',
+            title: 'HR Dashboard',
+            path: PATH_DASHBOARD.main.hrDashboard,
           },
           {
             canView: 'HR',
@@ -142,6 +147,16 @@ const sidebarConfig = [
             title: 'Designations',
             path: PATH_DASHBOARD.hr.designations,
           },
+          {
+            canView: 'HR',
+            title: 'Leave Approval',
+            path: PATH_DASHBOARD.hr.leaveApproval,
+          },
+          {
+            canView: 'HR',
+            title: 'Leave Types',
+            path: PATH_DASHBOARD.hr.leaveType,
+          },
           { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
           {
             canView: 'HR',
@@ -170,6 +185,11 @@ const sidebarConfig = [
             canView: 'Super',
             title: 'Employee Salary',
             path: PATH_DASHBOARD.payroll.salary,
+          },
+          {
+            canView: 'Super',
+            title: 'Payroll Batches',
+            path: PATH_DASHBOARD.payroll.payrollBatches,
           },
           {
             canView: 'Super',
@@ -281,6 +301,12 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.performance.scoreCards,
           },
         ],
+      },
+      {
+        canView: '',
+        title: 'Clients',
+        path: PATH_DASHBOARD.hrclients,
+        icon: ICONS.user,
       },
       {
         canView: '',

@@ -11,7 +11,7 @@ import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
 
 const PayrollReports = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, user  } = useAppContext();
   const handleClose = () => {};
   const [generating, setgenerating] = useState(false);
   const ref = useRef(null);
@@ -58,7 +58,6 @@ const PayrollReports = () => {
       )
       .then((res) => {
         settotalSalary(formatter.format(res.data.data[1].total[0].salaries));
-        console.log(res.data.data[0].salarySlips);
         const mapped = res.data.data[0].salarySlips.map((e) => {
           return {
             employee:
@@ -76,10 +75,11 @@ const PayrollReports = () => {
           };
         });
         setData(mapped);
-        console.log(mapped);
+        console.log("This payslips for CEO and HR:", mapped);
       })
       .catch((error) => {
         console.log(error?.response);
+        console.log("All payslips error:", error.response);
       });
   }, []);
 
@@ -120,6 +120,7 @@ const PayrollReports = () => {
   useEffect(() => {
     console.log('salary')
     fetchEmployeeSalary();
+    
   }, []);
 
   const columns = [
@@ -181,7 +182,26 @@ const PayrollReports = () => {
 
   return (
     <>
-      <div className="alert alert-primary sliding-text" role="alert">
+      {user?.role?.title === "CEO" ? <div className="alert alert-primary sliding-text" role="alert">
+        <div>
+          <AlertSvg />
+          <svg
+            className="bi flex-shrink-0 me-2"
+            width="24"
+            height="24"
+            role="img"
+          >
+            <use xlinkHref="#info-fill" />
+          </svg>
+          <span className="pl-3">
+            Payroll is generated on the 25th of every month
+          </span>
+          <span className="pl-3">
+            {" "}
+            | &nbsp; You can preview and approve payroll once generated 
+          </span>
+        </div>
+      </div> : <div className="alert alert-primary sliding-text" role="alert">
         <div>
           <AlertSvg />
           <svg
@@ -201,7 +221,7 @@ const PayrollReports = () => {
             the current month
           </span>
         </div>
-      </div>
+      </div>}
       <div className="page-header">
         <div className="row">
           <div className="col">
@@ -212,7 +232,7 @@ const PayrollReports = () => {
             </ul>
           </div>
           <div className="col-auto float-end ms-auto">
-            <button className="btn add-btn" onClick={generatePayroll}>
+            {user?.role?.title !== "CEO" && <button className="btn add-btn" onClick={generatePayroll}>
               {!generating ? (
                 <>
                   <i className="fa fa-plus"></i> Generate Payroll
@@ -223,9 +243,9 @@ const PayrollReports = () => {
                   role="status"
                 ></div>
               )}
-            </button>
+            </button>}
 
-            <button
+           {user?.role?.title === "CEO" &&  <button
               data-toggle="modal"
               data-target="#generalModal"
               className="btn add-btn mx-5"
@@ -235,7 +255,7 @@ const PayrollReports = () => {
               }}
             >
               Preview and approve payroll
-            </button>
+            </button>}
           </div>
         </div>
       </div>

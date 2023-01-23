@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import DashboardChart from "../../components/charts/dashboard-charts";
+import AccountDashboardChart from "../../components/charts/account-dashboard-charts";
 import DashboardStatistics from "../../components/charts/dashboard-statistics";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import DashboardTable from "../../components/Tables/Dashboard/dashboard-table";
 import axiosInstance from "../../services/api";
+
 const AccountingDashboard = () => {
   const [invoices, setInvoices] = useState([]);
   const [payments, setPayments] = useState([]);
+
   const sampleStats = [
     {
       title: "Earnings",
@@ -38,6 +40,7 @@ const AccountingDashboard = () => {
       prevMonths: "75,852",
     },
   ];
+
   const data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
@@ -65,7 +68,6 @@ const AccountingDashboard = () => {
     ],
   };
   
-
   const fetchInvoicePayment = () => {
     axiosInstance
       .get("/accounts-dashboard")
@@ -77,9 +79,11 @@ const AccountingDashboard = () => {
         console.log(error);
       });
   };
+
   useEffect(() => {
     fetchInvoicePayment();
   }, []);
+
   return (
     <div>
       <div className="page-header">
@@ -94,13 +98,14 @@ const AccountingDashboard = () => {
       </div>
 
       <div className="row">
-        <DashboardChart title="Employee By Department" data={data} />
+        <AccountDashboardChart title="Employee By Department" data={data} />
       </div>
+
       <div className="row">
         <div className="col-md-12">
           <div className="card-group m-b-30">
-            {sampleStats.map((stat) => (
-              <div className="card">
+            {sampleStats.map((stat, index) => (
+              <div className="card" key={index}>
                 <div className="card-body">
                   <div className="d-flex justify-content-between mb-3">
                     <div>
@@ -135,15 +140,17 @@ const AccountingDashboard = () => {
           </div>
         </div>
       </div>
+
       <div className="row">
-        <DashboardStatistics />
+        <DashboardStatistics chartData={data} chartTitle="Employee By Department" />
       </div>
-      <div className="row"></div>
+
       <div className="row">
         <DashboardTable title="Invoices" data={invoices} />
         <DashboardTable title="Payments" data={payments} />
       </div>
-      <>{/* <AdminCards /> */}</>
+
+      {/* <><AdminCards /></> */}
     </div>
   );
 };

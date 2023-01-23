@@ -1,69 +1,86 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../../services/api";
-import tokenService from "../../services/token.service";
-import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "../../authConfig";
-import config from "../../config.json";
-import { useAppContext } from "../../Context/AppContext";
-import { callMsGraph } from "../../graph";
+/** @format */
+
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import tokenService from '../../services/token.service';
+import { msalInstance, loginRequest } from '../../authConfig';
+import config from '../../config.json';
+// import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
-  const { instance, accounts } = useMsal();
-  const [graphData, setGraphData] = useState(null);
-  let navigate = useNavigate();
-  const [errorMsg, seterrorMsg] = useState("");
+  // const { createEmployee } = useAppContext();
+  const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+
   const onSubmit = (data) => {
     setLoading(true);
-    instance
-      .loginPopup(loginRequest)
+    msalInstance
+      .ssoSilent(loginRequest)
       .then((e) => {
-        
         console.log(e);
+
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        // localStorage.setItem("microsoftAccount", JSON.stringify(e.account));
-        // localStorage.setItem(
-        //   "microsoftAccessToken",
-        //   JSON.stringify(e.accessToken)
-        // );
-
         axios
-          .post(config.ApiUrl + "/api/login", obj)
+          .post(config.ApiUrl + '/api/login', obj)
           .then((res) => {
             tokenService.setUser(res.data.employee);
-            // fetchEmployee()
-            // fetchEmployeeAttendance()
             tokenService.setToken(res.data.token.token);
-            // setuserToken(res.data.token.token)
-            // navigate("/dashboard/employee-dashboard");
-            window.location.href = "/dashboard/employee-dashboard";
+            window.location.href = '/dashboard/employee-dashboard';
           })
           .catch((err) => {
             console.log(err);
-            seterrorMsg(
-              "Unable to login either username or password is incorrect"
-            );
-            // setInterval(() => {
-            //     seterrorMsg('')
-            // }, 5000);
+            setErrorMsg(err.message + ", please try again");
           })
           .finally(() => {
             setLoading(false);
           });
       })
       .catch((e) => {
-        console.log(e);
+        if (e.name === 'InteractionRequiredAuthError') {
+          msalInstance
+            .loginPopup(loginRequest)
+            .then((e) => {
+              console.log(e);
+
+              const obj = {
+                company_email: data.company_email.trim(),
+              };
+
+              axios
+                .post(config.ApiUrl + '/api/login', obj)
+                .then((res) => {
+                  tokenService.setUser(res.data.employee);
+                  tokenService.setToken(res.data.token.token);
+                  // createEmployee();
+                  window.location.href = '/dashboard/employee-dashboard';
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+                .finally(() => {
+                  setLoading(false);
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log(e);
+          setErrorMsg(
+            'Unable to login either username or password is incorrect'
+          );
+        }
       })
       .finally(() => {
         setLoading(false);
@@ -98,11 +115,11 @@ const Login = () => {
                     type="text"
                     name="company_email"
                     id="company_email"
-                    {...register("company_email", { required: true })}
+                    {...register('company_email', { required: true })}
                     className="form-control"
                   />
                   {errors.company_email &&
-                    errors.company_email.type === "required" && (
+                    errors.company_email.type === 'required' && (
                       <span className="error">Email is required</span>
                     )}
                 </div>
@@ -141,13 +158,24 @@ const Login = () => {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      "Login"
+                      'Login'
                     )}
                   </button>
                 </div>
               </form>
             </div>
           </div>
+          {/* <div className="go-to-client">
+            <p>
+              Not a staff of Outsource Global, login as a{' '}
+              <strong
+                className="go-to-client-link"
+                onClick={() => navigate('/auth/client-login')}
+              >
+                client
+              </strong>
+            </p>
+          </div> */}
         </div>
       </div>
     </div>

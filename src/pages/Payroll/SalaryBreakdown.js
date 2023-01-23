@@ -41,9 +41,11 @@ const PaySlip = () => {
   const [employee, setemployee] = useState({});
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
+  const [deductions, setDeductions] = useState({});
   const [fetched, setfetched] = useState(false);
   const [totalDeduction, settotalDeduction] = useState(0);
   const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
+
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
@@ -54,12 +56,16 @@ const PaySlip = () => {
           `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
         );
         // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
-        console.log(res);
+        // console.log("Salary Breakdown Response:", res?.data?.data?.employeeSlip);
         setPaySlip(res.data.data.employeeSlip);
         const earnings = {};
+        const deductions = {};
+
         const { employeeSalary, deductionsBreakDown } =
           res.data.data.employeeSlip;
+
         setdeductionsBreakDown(deductionsBreakDown);
+
         if (paySlip?.additionalDeductions) {
           settotalDeduction(
             Object.values(paySlip?.additionalDeductions).reduce(
@@ -68,48 +74,176 @@ const PaySlip = () => {
             )
           );
         }
-        console.log("TOTAL", totalDeduction);
-        setemployee(employeeSalary.employeeId);
-        delete employeeSalary.createdAt;
-        delete employeeSalary.updatedAt;
-        delete employeeSalary.employeeId;
-        delete employeeSalary._id;
-        delete employeeSalary.__v;
-        Object.keys(employeeSalary).forEach((e) => {
+
+        const empSalary = [employeeSalary]
+        const formattedSalary = empSalary.map((salary) => ({
+          ...salary,
+          leaveBuyout: 0,
+          attendanceBonus: 0,
+          WFHAllowance: 0,
+          hourlyDeductions: 0,
+          hourlyDeductionAmount: 0,
+          hourlyDeductionDates: '',
+          DailyDeductionsCount: 0,
+          DailyDeductionsDays: '',
+          DailyDeductionsAmount: 0,
+          NCNSCount: 0,
+          NCNSDays: '',
+          NCNSAmount: 0,
+          phoneOnCallFloorCount: 0,
+          phoneOnCallFloorDays: '',
+          phoneOnCallFloorAmount: 0,
+          thirtyMinShiftCount: 0,
+          oneHourShiftCount: 0,
+          breakdownOfDaysWorked: 0,
+          loanAndOtherDeductions: 0,
+          totalDeductions: 0,
+          loanAndOtherDeductionsExplanation: '',
+          otherAdditions: 0,
+          otherAdditionsExplanation: '',
+        }))
+
+        const employeeSalarySlip = formattedSalary[0]
+        // console.log("EMPLOYEE SALARY:", employeeSalarySlip);
+        setemployee(employeeSalarySlip.employeeId);
+        delete employeeSalarySlip.createdAt;
+        delete employeeSalarySlip.updatedAt;
+        delete employeeSalarySlip.employeeId;
+        delete employeeSalarySlip._id;
+        delete employeeSalarySlip.__v;
+        
+        // Object.keys(employeeSalary).forEach((e) => {
+        //   switch (e) {
+        //     case "monthlySalary":
+        //       earnings["Pension"] = employeeSalary[e] * 0.08;
+        //       // earnings["Monthly Salary"] = employeeSalary[e];
+        //       break;
+        //     case "monthlyIncomeTax":
+        //       earnings["Tax"] = employeeSalary[e];
+        //       break;
+        //     case "medical":
+        //       earnings["Medical"] = employeeSalary[e] / 12;
+        //       break;
+        //     case "housing":
+        //       earnings["Housing"] = employeeSalary[e]  / 12;
+        //       break;
+        //     case "transport":
+        //       earnings["Transport"] = employeeSalary[e]  / 12;
+        //       break;
+        //     case "otherAllowances":
+        //       earnings["Other Allowances"] = employeeSalary[e]  / 12;
+        //       break;
+        //     default:
+        //       let key = e.charAt(0).toUpperCase() + e.slice(1);
+        //       break;
+        //   }
+        // });
+
+        Object.keys(employeeSalarySlip).forEach((e) => {
           switch (e) {
             case "monthlySalary":
-              earnings["Pension"] = employeeSalary[e] * 0.08;
-              // earnings["Monthly Salary"] = employeeSalary[e];
-              break;
-            case "monthlyIncomeTax":
-              earnings["Tax"] = employeeSalary[e];
-              break;
-            case "medical":
-              earnings["Medical"] = employeeSalary[e] / 12;
-              break;
-            case "housing":
-              earnings["Housing"] = employeeSalary[e]  / 12;
+              earnings["Monthly Salary"] = employeeSalary[e];
               break;
             case "transport":
-              earnings["Transport"] = employeeSalary[e]  / 12;
+              earnings["Transportation"] = employeeSalary[e];
               break;
-            case "otherAllowances":
-              earnings["Other Allowances"] = employeeSalary[e]  / 12;
+            case "medical":
+              earnings["HMO Coverage"] = employeeSalary[e];
+              break;
+            case "leaveBuyout":
+              earnings["Leave Buyout"] = employeeSalary[e];
+              break;
+            case "attendanceBonus":
+              earnings["Attendance Bonus"] = employeeSalary[e];
+              break;
+            case "WFHAllowance":
+              earnings["WHF Allowance"] = employeeSalary[e];
+              break;
+            case "monthlyIncomeTax":
+              deductions["Monthly Income Tax"] = employeeSalary[e];
+              break;
+            case "monthlyEmployeePension":
+              deductions["Monthly Employee Pension"] = employeeSalary[e];
+              break;
+            case "hourlyDeductions":
+              deductions["Hourly Deductions"] = employeeSalary[e];
+              break;
+            case "hourlyDeductionAmount":
+              deductions["Hourly Deduction Amount"] = employeeSalary[e];
+              break;
+            case "hourlyDeductionDates":
+              deductions["Hourly Deduction Dates"] = employeeSalary[e];
+              break;
+            case "DailyDeductionsCount":
+              deductions["Daily Deductions Count"] = employeeSalary[e];
+              break;
+            case "DailyDeductionsDays":
+              deductions["Daily Deductions Days"] = employeeSalary[e];
+              break;
+            case "DailyDeductionsAmount":
+              deductions["Daily Deductions Amount"] = employeeSalary[e];
+              break;
+            case "NCNSCount":
+              deductions["NCNS Count"] = employeeSalary[e];
+              break;
+            case "NCNSDays":
+              deductions["NCNS Days"] = employeeSalary[e];
+              break;
+            case "NCNSAmount":
+              deductions["NCNS Amount"] = employeeSalary[e];
+              break;
+            case "phoneOnCallFloorCount":
+              deductions["Phone on the call floor count"] = employeeSalary[e];
+              break;
+            case "phoneOnCallFloorDays":
+              deductions["Phone on the call floor days"] = employeeSalary[e];
+              break;
+            case "phoneOnCallFloorAmount":
+              deductions["Phone on the call floor amount"] = employeeSalary[e];
+              break;
+            case "thirtyMinShiftCount":
+              deductions["30mins shift count (20th - 25th)"] = employeeSalary[e];
+              break;
+            case "oneHourShiftCount":
+              deductions["1 hour shift count"] = employeeSalary[e];
+              break;
+            case "breakdownOfDaysWorked":
+              deductions["Breakdown of days worked"] = employeeSalary[e];
+              break;
+            case "loanAndOtherDeductions":
+              deductions["Loan & Other Deductions"] = employeeSalary[e];
+              break;
+            case "totalDeductions":
+              deductions["Total Deductions"] = employeeSalary[e];
+              break;
+            case "loanAndOtherDeductionsExplanation":
+              deductions["Loan & Other Deduction Explanation"] = employeeSalary[e];
+              break;
+            case "otherAdditions":
+              deductions["Other Additions"] = employeeSalary[e];
+              break;
+            case "otherAdditionsExplanation":
+              deductions["Other Addition Explanation"] = employeeSalary[e];
+              break;
+            case "netPay":
+              deductions["Net Pay:"] = employeeSalary[e];
               break;
             default:
               let key = e.charAt(0).toUpperCase() + e.slice(1);
               break;
           }
-        });
+        })
+
         setEarnings(earnings);
+        setDeductions(deductions);
         setfetched(true);
-        console.log(earnings);
       } catch (error) {
         console.log(error);
       }
     };
     fetchPaySlip();
-  }, [id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -181,14 +315,18 @@ const PaySlip = () => {
                     <h4 className="m-b-10">
                       <strong>Breakdown of Employee Salary</strong>
                     </h4>
+
                     <table className="table table-bordered">
+                    <thead className="earnings-table-header">
+                      Earnings
+                    </thead>
                       <tbody>
                         {fetched &&
                           Object.keys(earnings).map((earning, index) => (
                             <tr key={index}>
                               <td>
                                 <strong>{earning}</strong>{" "}
-                                {earning != "department" ? (
+                                {earnings[earning] !== undefined ? (
                                   <span className="float-right">
                                     {formatter.format(earnings[earning])}
                                   </span>
@@ -199,7 +337,28 @@ const PaySlip = () => {
                             </tr>
                           ))}
                       </tbody>
+                    <thead className="earnings-table-header">
+                      Deductions
+                    </thead>
+                      <tbody>
+                        {fetched &&
+                          Object.keys(deductions).map((deduction, index) => (
+                            <tr key={index}>
+                              <td>
+                                <strong>{deduction}</strong>{" "}
+                                {deductions[deduction] !== undefined ? (
+                                  <span className="float-right">
+                                    {formatter.format(deductions[deduction])}
+                                  </span>
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
                     </table>
+
                   </div>
                 </div>
               </div>

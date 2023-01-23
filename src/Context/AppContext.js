@@ -17,6 +17,7 @@ const AppProvider = (props) => {
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
+  const [count, setCount] = useState(0);
   const [loggedIn, setloggedIn] = useState(false);
   const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
@@ -29,7 +30,23 @@ const AppProvider = (props) => {
   const [user, setuser] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
   const [notifications, setNotifications] = useState([]);
+  const [employeeStatus, setEmployeeStatus] = useState([]);
   let socket = useRef();
+
+  const status = [
+    {
+        _id: "active",
+        status: "ACTIVE"
+    },
+    {
+        _id: "left",
+        status: "RESIGNED"
+    },
+    {
+        _id: "terminated",
+        status: "TERMINATED"
+    }
+]
 
   // let socketRef;
   //Fetching notifications
@@ -73,11 +90,25 @@ const AppProvider = (props) => {
           // project: emp?.projectId?.project_name,
         }
       })
-      console.log(mapp)
+      // console.log("All Employees:", mapp)
       setallEmployees(mapp);
       // setloggedIn(false);
     });
   };
+
+   // For Leave Application Notification
+   const fetchHRLeavesNotificationCount = () => {
+    axiosInstance.get('/hr-leave-applications')
+      .then((res) => {
+        let resData = res?.data?.data?.application;
+        const dataCount = resData.length;
+        setCount(dataCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });;
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -146,6 +177,11 @@ const AppProvider = (props) => {
     return axiosInstance.get("/create-employee-form");
   };
 
+  //for Job Applications
+  const createJobApplications = () => {
+    return axiosInstance.get("/api/jobApplicant");
+  };
+
   //for creating shifts
   const createShifts = () => {
     return axiosInstance.get("/create-shift-form");
@@ -178,6 +214,7 @@ const AppProvider = (props) => {
   const adminDashboardData = () => {
     return axiosInstance.get("/admin-dashboard");
   };
+
   const fetchEmployeeAttendance = () => {
     const date = new Date();
     const firstDay = new Date(
@@ -198,7 +235,6 @@ const AppProvider = (props) => {
         setemployeeAttendance(e?.data?.data);
       });
   };
-
   return (
     <AppContext.Provider
       value={{
@@ -211,6 +247,8 @@ const AppProvider = (props) => {
         adminDashboardData,
         setallEmployees,
         allEmployees,
+        count,
+        setCount,
         showAlert,
         showAlertMsg,
         fetchEmployeeAttendance,
@@ -231,6 +269,9 @@ const AppProvider = (props) => {
         createPerfomance,
         createCampaign,
         createRoleAssignment,
+        createJobApplications,
+        fetchHRLeavesNotificationCount,
+        status
       }}
     >
       {props.children}

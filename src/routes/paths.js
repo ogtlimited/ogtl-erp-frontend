@@ -8,6 +8,8 @@ const ROOTS_DASHBOARD = "/dashboard";
 export const PATH_AUTH = {
   root: ROOTS_AUTH,
   login: path(ROOTS_AUTH, "/login"),
+  clientLogin: path(ROOTS_AUTH, "/client-login"),
+  activateClient: path(ROOTS_AUTH, "/activate"),
 };
 
 export const PATH_DASHBOARD = {
@@ -17,6 +19,7 @@ export const PATH_DASHBOARD = {
     main: path(ROOTS_DASHBOARD, "/main"),
     hrDashboard: path(ROOTS_DASHBOARD, "/hr-dashboard"),
     accountDashboard: path(ROOTS_DASHBOARD, "/account-dashboard"),
+    clientDashboard: path(ROOTS_DASHBOARD, "/client-dashboard"),
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
   },
@@ -38,6 +41,8 @@ export const PATH_DASHBOARD = {
     attendanceEmployee: path(ROOTS_DASHBOARD, "/hr/attendance"),
     department: path(ROOTS_DASHBOARD, "/hr/departments"),
     designations: path(ROOTS_DASHBOARD, "/hr/designations"),
+    leaveApproval: path(ROOTS_DASHBOARD, "/hr/leave-approval"),
+    leaveType: path(ROOTS_DASHBOARD, "/hr/leave-type"),
     shifts: path(ROOTS_DASHBOARD, "/hr/shifts"),
     shiftAssignment: path(ROOTS_DASHBOARD, "/hr/shift-assignment"),
     shiftRequest: path(ROOTS_DASHBOARD, "/hr/shift-request"),
@@ -46,6 +51,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, "/payroll"),
     publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
+    payrollBatches: path(ROOTS_DASHBOARD, "/payroll/payroll-batches"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
@@ -76,6 +82,8 @@ export const PATH_DASHBOARD = {
     warningLetter: path(ROOTS_DASHBOARD, "/performance/warning-letter"),
     scoreCards: path(ROOTS_DASHBOARD, "/performance/score-cards"),
   },
+  hrclients: path(ROOTS_DASHBOARD, "/hr-clients"),
+  hrclient: path(ROOTS_DASHBOARD, "/hr-client"),
   coaching: path(ROOTS_DASHBOARD, "/coaching"),
   employeeCoaching: path(ROOTS_DASHBOARD, "/employee-coaching"),
   promotion: path(ROOTS_DASHBOARD, "/promotion"),

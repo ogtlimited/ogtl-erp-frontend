@@ -10,6 +10,8 @@ import GuestGuard from '../guards/GuestGuard';
 import AdminLayout from '../layouts/Admin';
 import RecruitmentLayout from '../layouts/RecruitmentLayout';
 import Login from '../pages/Auth/Login';
+import ClientLogin from '../pages/Auth/ClientLogin';
+import ActivateClient from '../pages/Auth/ActivateClient';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
@@ -40,6 +42,34 @@ export default function Router() {
           element: (
             <GuestGuard>
               <Login />
+            </GuestGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: 'auth',
+      children: [
+        { path: '', element: <Navigate to="/auth/client-login" replace /> },
+        {
+          path: 'client-login',
+          element: (
+            <GuestGuard>
+              <ClientLogin />
+            </GuestGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: 'auth',
+      children: [
+        { path: '', element: <Navigate to="/auth/activate" replace /> },
+        {
+          path: 'activate',
+          element: (
+            <GuestGuard>
+              <ActivateClient />
             </GuestGuard>
           ),
         },
@@ -93,6 +123,15 @@ export default function Router() {
                   <AdminDashboard />{' '}
                 </GuardedRoute>
               ),
+            },
+            {
+              path: 'client-dashboard',
+              // element: (
+              //   <GuardedRoute title="" dept="Super">
+              //     <ClientUser />{' '}
+              //   </GuardedRoute>
+              // ),
+              element: <ClientUser />,
             },
             {
               path: 'hr-dashboard',
@@ -203,10 +242,42 @@ export default function Router() {
               ),
             },
             {
+              path: 'all-employees/department/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllEmployeesDepartmentAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'all-employees/gender/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllEmployeesGenderAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'leaves-admin',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <LeavesAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leaves-admin/application/leave-status/:id/:from_date/:to_date',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllLeaveStatusAdmin/>
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leaves-admin/application/leave-type/:id/:from_date/:to_date',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AllLeaveTypeAdmin/>
                 </GuardedRoute>
               ),
             },
@@ -233,6 +304,30 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <Designations />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leave-approval',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveApproval />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leave-approvals/department/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveApprovalView />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'leave-type',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeaveType />
                 </GuardedRoute>
               ),
             },
@@ -275,6 +370,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <EmployeeSalary />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'payroll-batches',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <PayrollBatches />
                 </GuardedRoute>
               ),
             },
@@ -383,7 +486,7 @@ export default function Router() {
             {
               path: 'job-applicants',
               element: (
-                <GuardedRoute title="Job Applicants" dept="HR">
+                <GuardedRoute title="" dept="HR">
                   <JobApplicants />
                 </GuardedRoute>
               ),
@@ -391,7 +494,7 @@ export default function Router() {
             {
               path: 'academy-applicants',
               element: (
-                <GuardedRoute title="Academy Applicants" dept="HR">
+                <GuardedRoute title="" dept="HR">
                   <AcademyApplicants />
                 </GuardedRoute>
               ),
@@ -399,7 +502,7 @@ export default function Router() {
             {
               path: 'interviewees',
               element: (
-                <GuardedRoute title="Interview Schedule List" dept="Facility">
+                <GuardedRoute title="" dept="Facility">
                   <Interviewees />
                 </GuardedRoute>
               ),
@@ -733,6 +836,22 @@ export default function Router() {
           ),
         },
         {
+          path: 'hr-clients',
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <HrClients />
+            </GuardedRoute>
+          ),
+        },
+        {
+          path: 'hr-client/:id',
+          element: (
+            <GuardedRoute title="" dept="HR">
+              <HrClientView />
+            </GuardedRoute>
+          ),
+        },
+        {
           path: 'coaching',
           element: (
             <GuardedRoute title="" dept="HR">
@@ -815,11 +934,36 @@ const Departments = Loadable(
 const Designations = Loadable(
   lazy(() => import('../pages/HR/Admin/Designation.Admin'))
 );
+const LeaveApproval = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveApproval.Admin'))
+);
+const LeaveApprovalView = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveApprovalView.Admin'))
+);
+const LeaveType = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveType.Admin'))
+);
 const AllEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Employees.Admin'))
 );
+const AllEmployeesDepartmentAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/EmployeesDepartment.Admin'))
+);
+const AllEmployeesGenderAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/EmployeesGender.Admin'))
+);
 const LeavesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Leaves.Admin'))
+);
+const AllLeaveStatusAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveStatusAnalytics.Admin'))
+);
+const AllLeaveTypeAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeaveTypeAnalytics.Admin'))
+);
+const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
+const HrClientView = Loadable(
+  lazy(() => import('../pages/HR/Admin/HrClientView'))
 );
 const Promotion = Loadable(lazy(() => import('../pages/HR/Admin/Promotion')));
 const ShiftAdmin = Loadable(
@@ -828,6 +972,9 @@ const ShiftAdmin = Loadable(
 const Profile = Loadable(lazy(() => import('../pages/HR/Profile')));
 const EmployeeAttendance = Loadable(
   lazy(() => import('../pages/HR/Users/Attendance.Users'))
+);
+const ClientUser = Loadable(
+  lazy(() => import('../pages/HR/Users/Client.User'))
 );
 const EmployeeUser = Loadable(
   lazy(() => import('../pages/HR/Users/Employee.User'))
@@ -839,7 +986,9 @@ const EmployeeSalary = Loadable(
   lazy(() => import('../pages/Payroll/EmployeeSalary'))
 );
 const PaySlip = Loadable(lazy(() => import('../pages/Payroll/PaySlip')));
-const SalaryBreakdown = Loadable(lazy(() => import('../pages/Payroll/SalaryBreakdown')));
+const SalaryBreakdown = Loadable(
+  lazy(() => import('../pages/Payroll/SalaryBreakdown'))
+);
 const AttendanceReport = Loadable(
   lazy(() => import('../pages/Reports/AttendanceReport'))
 );
@@ -892,12 +1041,13 @@ const JobsDashboard = Loadable(
 const PublicHoliday = Loadable(
   lazy(() => import('../pages/Payroll/PublicHoliday'))
 );
+const PayrollBatches = Loadable(
+  lazy(() => import('../pages/Payroll/PayrollBatches'))
+);
 const PayrollDeductions = Loadable(
   lazy(() => import('../pages/Payroll/Deductions'))
 );
-const Archive = Loadable(
-  lazy(() => import('../pages/Payroll/Archive'))
-);
+const Archive = Loadable(lazy(() => import('../pages/Payroll/Archive')));
 const ScoreCards = Loadable(
   lazy(() => import('../pages/HR/Admin/score-cards'))
 );
