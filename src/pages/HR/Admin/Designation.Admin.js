@@ -68,6 +68,7 @@ const Designations = () => {
       setDesignationOts(depsigOpts);
     });
   };
+  
   useEffect(() => {
     fetchDesignation();
   }, []);
