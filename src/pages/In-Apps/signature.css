@@ -8,13 +8,14 @@ body {
 .signature {
   display: flex;
   flex-direction: row;
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
 }
 
 .signature-info {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  /* height: 15.7rem; */
   width: 70%;
   padding: 0 1%;
 }
@@ -41,7 +42,7 @@ body {
 .signature-info__upper-left-socials {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   height: 40%;
 }
 
@@ -106,9 +107,17 @@ body {
   border-top: 1px solid #095864;
   height: 35%;
   padding: 3px 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 5px;
+}
+
+.signature-info__lower-first {
+    display: flex;
+    justify-content: left;
+}
+
+.signature-info__lower-second {
+    display: flex;
+    justify-content: left;
+    width: 85%;
 }
 
 .signature-info__lower-awards {
@@ -120,10 +129,13 @@ body {
 }
 
 .signature-info__lower-awards-info > p {
-  margin-bottom: 0;
   margin-left: 3px;
   font-size: 7px;
+  height: 100%;
   font-family: 'poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  line-break: break-all;
 }
 
 .signature-image {

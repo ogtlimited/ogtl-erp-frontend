@@ -156,24 +156,6 @@ export const employeeFormJson = {
       options: [],
     },
     {
-      name: "isAdmin",
-      type: "check",
-      title: "Admin User",
-      required: {
-        value: true,
-        message: "Admin User is required",
-      },
-    },
-    {
-      name: "isExpatriate",
-      type: "check",
-      title: "Expatriate",
-      required: {
-        value: true,
-        message: "Admin User is required",
-      },
-    },
-    {
       name: "employeeType",
       type: "select",
       title: "Employment type",
@@ -210,6 +192,24 @@ export const employeeFormJson = {
           value: "FullTime",
         },
       ],
+    },
+    {
+      name: "isAdmin",
+      type: "check",
+      title: "Admin User",
+      required: {
+        value: true,
+        message: "Admin User is required",
+      },
+    },
+    {
+      name: "isExpatriate",
+      type: "check",
+      title: "Expatriate",
+      required: {
+        value: true,
+        message: "Admin User is required",
+      },
     },
     {
       name: "status",

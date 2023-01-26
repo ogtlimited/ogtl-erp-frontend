@@ -149,90 +149,106 @@ const Signature = (props) => {
               </div>
             </div>
           </div>
+
           <div className="signature-info__lower">
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '50px' }}
-                  src={GBSAward}
-                  alt="Location"
-                />
+            <div className="signature-info__lower-first">
+              <a href={'https://gbs.world/profile/outsource-global/'}>
+                <div className="signature-info__lower-awards">
+                  <div className="signature-info__lower-awards-img">
+                    <img
+                      style={{ width: '40px' }}
+                      src={GBSAward}
+                      alt="Location"
+                    />
+                  </div>
+                  <div className="signature-info__lower-awards-info">
+                    <p>GBS Certified Service Provider</p>
+                  </div>
+                </div>
+              </a>
+
+              <div className="signature-info__lower-awards">
+                <div className="signature-info__lower-awards-img">
+                  <img style={{ width: '25px' }} src={EEAward} alt="Location" />
+                </div>
+                <div className="signature-info__lower-awards-info">
+                  <p>Export Excellence Award 2021</p>
+                </div>
               </div>
-              <div className="signature-info__lower-awards-info">
-                <p>GBS Certified Service Provider</p>
-              </div>
-            </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '25px' }}
-                  src={EEAward}
-                  alt="Location"
-                />
-              </div>
-              <div className="signature-info__lower-awards-info">
-                <p>Export Excellence Award 2021</p>
-              </div>
-            </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '20px' }}
-                  src={SECAward}
-                  alt="Location"
-                />
-              </div>
-              <div className="signature-info__lower-awards-info">
-                <p>Service Exporting Company of the Year Award 2019</p>
-              </div>
-            </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '26px' }}
-                  src={PSEAward}
-                  alt="Location"
-                />
-              </div>
-              <div className="signature-info__lower-awards-info">
-                <p>UNDP's Private Sector Excellence Award</p>
-              </div>
-            </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '20px' }}
-                  src={BSEAward}
-                  alt="Location"
-                />
-              </div>
-              <div className="signature-info__lower-awards-info">
-                <p>Best sectoral exporter 2022</p>
+
+              <a
+                href={
+                  'https://guardian.ng/technology/outsource-global-wins-award/'
+                }
+              >
+                <div className="signature-info__lower-awards">
+                  <div className="signature-info__lower-awards-img">
+                    <img
+                      style={{ width: '20px' }}
+                      src={SECAward}
+                      alt="Location"
+                    />
+                  </div>
+                  <div className="signature-info__lower-awards-info">
+                    <p>Service Exporting Company of the Year Award 2019</p>
+                  </div>
+                </div>
+              </a>
+
+              <div className="signature-info__lower-awards">
+                <div className="signature-info__lower-awards-img">
+                  <img
+                    style={{ width: '26px' }}
+                    src={PSEAward}
+                    alt="Location"
+                  />
+                </div>
+                <div className="signature-info__lower-awards-info">
+                  <p>UNDP's Private Sector Excellence Award</p>
+                </div>
               </div>
             </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '25px' }}
-                  src={SSAward}
-                  alt="Location"
-                />
+            <div className="signature-info__lower-second">
+              <div className="signature-info__lower-awards">
+                <div className="signature-info__lower-awards-img">
+                  <img
+                    style={{ width: '20px' }}
+                    src={BSEAward}
+                    alt="Location"
+                  />
+                </div>
+                <div className="signature-info__lower-awards-info">
+                  <p>Best sectoral exporter 2022</p>
+                </div>
               </div>
-              <div className="signature-info__lower-awards-info">
-                <p>Outstanding achievement in the services sector 2020</p>
+
+              <div className="signature-info__lower-awards">
+                <div className="signature-info__lower-awards-img">
+                  <img style={{ width: '25px' }} src={SSAward} alt="Location" />
+                </div>
+                <div className="signature-info__lower-awards-info">
+                  <p>Outstanding achievement in the services sector 2020</p>
+                </div>
               </div>
-            </div>
-            <div className="signature-info__lower-awards">
-              <div className="signature-info__lower-awards-img">
-                <img
-                  style={{ width: '18px' }}
-                  src={NTAward}
-                  alt="Location"
-                />
-              </div>
-              <div className="signature-info__lower-awards-info">
-                <p>2018 Innovative Contact Center and BPO Operator</p>
-              </div>
+
+              <a
+                href={
+                  'https://medium.com/outsourceglobal/outsource-global-wins-award-for-innovative-contact-centre-and-bpo-operator-of-the-year-355dcf7c29cb'
+                }
+              >
+                <div className="signature-info__lower-awards">
+                  <div className="signature-info__lower-awards-img">
+                    <img
+                      style={{ width: '18px' }}
+                      src={NTAward}
+                      alt="Location"
+                    />
+                  </div>
+                  <div className="signature-info__lower-awards-info">
+                    <p>2018 Innovative Contact Center and BPO Operator</p>
+                  </div>
+                </div>
+              </a>
             </div>
           </div>
         </div>
