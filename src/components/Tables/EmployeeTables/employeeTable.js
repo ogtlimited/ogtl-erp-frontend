@@ -281,7 +281,7 @@ const EmployeesTable = ({
 
       if (page === 1) {
         axiosInstance
-          .get('/employees/v2', {
+          .get('/employees/paginated-employees', {
             params: {
               department: departmentFilter,
               designation: designationFilter,
@@ -348,7 +348,7 @@ const EmployeesTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/v2', {
+      .get('/employees/paginated-employees', {
         params: {
           department: dataToFilter,
           designation: designationFilter,
@@ -395,7 +395,7 @@ const EmployeesTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/v2', {
+      .get('/employees/paginated-employees', {
         params: {
           department: departmentFilter,
           designation: dataToFilter,
@@ -442,7 +442,7 @@ const EmployeesTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/v2', {
+      .get('/employees/paginated-employees', {
         params: {
           department: departmentFilter,
           designation: designationFilter,

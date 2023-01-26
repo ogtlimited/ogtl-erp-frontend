@@ -38,6 +38,15 @@ export const employeeFormJson = {
         message: "applicant last name is required",
       },
     },
+    {
+      name: "ogid",
+      type: "text",
+      title: "OGID",
+      required: {
+        value: true,
+        message: "applicant OGID is required",
+      },
+    },
     // {
     //   name: "password",
     //   type: "text",

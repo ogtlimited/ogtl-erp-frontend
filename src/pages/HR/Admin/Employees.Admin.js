@@ -49,7 +49,7 @@ const AllEmployeesAdmin = () => {
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
-      .get('/employees/v2', {
+      .get('/employees/paginated-employees', {
         params: {
           department: departmentFilter,
           designation: designationFilter,
@@ -362,7 +362,7 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-plus"></i> Add Employee
                 </a> */}
-                <button
+                {/* <button
                   onClick={() => settoggleModal(true)}
                   type="button"
                   className="btn add-btn mx-3"
@@ -371,7 +371,7 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-cloud-upload"></i>
                   Bulk Upload
-                </button>
+                </button> */}
               </>
             )}
           </div>
