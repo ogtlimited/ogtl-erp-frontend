@@ -96,7 +96,6 @@ const Signature = (props) => {
                         alt="Telephone"
                       />
                     </span>
-                    &nbsp;
                     <span className="phone-td"> {props.phone} </span>
                   </td>
                 </tr>
@@ -109,7 +108,6 @@ const Signature = (props) => {
                         alt="Email"
                       />
                     </span>
-                    &nbsp;
                     <span className="phone-td"> {props.email} </span>
                   </td>
                 </tr>
@@ -122,7 +120,6 @@ const Signature = (props) => {
                         alt="Website"
                       />
                     </span>
-                    &nbsp;
                     <span className="phone-td">
                       <a href="https://www.outsourceglobal.com/">
                         www.outsourceglobal.com
@@ -139,7 +136,6 @@ const Signature = (props) => {
                         alt="Location"
                       />
                     </span>
-                    &nbsp;
                     <span className="phone-td">
                       2nd Floor, ASTA GALLERY Plot 1185, Parkway Road, Cadastral
                       Zone, Mabushi District, Abuja FCT, Nigeria

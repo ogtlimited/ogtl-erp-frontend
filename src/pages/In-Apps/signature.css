@@ -101,6 +101,7 @@ body {
 
 .phone-td-container {
   display: flex;
+  flex-direction: row;
 }
 
 .signature-info__lower {
@@ -162,7 +163,7 @@ body {
   bottom: 0;
 }
 
-/* .gfuSqG {
+.gfuSqG {
     display: flex;
     position: relative;
     padding-top: 3%;
@@ -177,7 +178,7 @@ body {
     margin-bottom: 30px;
     -webkit-transition: all 0.5s ease-in-out;
     transition: all 0.5s ease-in-out;
-} */
+}
 
 /* .title {
     margin-left: 50px;
