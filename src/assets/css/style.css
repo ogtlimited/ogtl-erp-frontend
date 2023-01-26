@@ -437,6 +437,11 @@
   padding: 0 0 0 10px;
 }
 
+.signature-card-body {
+  height: 100%;
+  width: 100%;
+}
+
 .leave-card-body {
   padding: 20px;
 }
