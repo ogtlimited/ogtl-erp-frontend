@@ -35,7 +35,10 @@ const Signature = (props) => {
                 />
               </div>
               <div className="signature-info__upper-left-socials">
-                <a href={'https://www.instagram.com/outsourcegbl/'}>
+                <a
+                  href={'https://www.instagram.com/outsourcegbl/'}
+                  style={{ marginRight: '5px' }}
+                >
                   <img
                     style={{ width: '20px' }}
                     className="social-icon"
@@ -43,7 +46,10 @@ const Signature = (props) => {
                     alt="Instagram"
                   />
                 </a>
-                <a href={'https://twitter.com/OutSourceGbl'}>
+                <a
+                  href={'https://twitter.com/OutSourceGbl'}
+                  style={{ marginRight: '5px' }}
+                >
                   <img
                     style={{ width: '25px' }}
                     className="social-icon-2"
@@ -51,7 +57,10 @@ const Signature = (props) => {
                     alt="Twitter"
                   />
                 </a>
-                <a href={'https://www.facebook.com/OutsourceGbl/'}>
+                <a
+                  href={'https://www.facebook.com/OutsourceGbl/'}
+                  style={{ marginRight: '5px' }}
+                >
                   <img
                     style={{ width: '20px' }}
                     className="social-icon"
@@ -63,6 +72,7 @@ const Signature = (props) => {
                   href={
                     'https://www.linkedin.com/company/outsourceglobal/mycompany/'
                   }
+                  style={{ marginRight: '5px' }}
                 >
                   <img
                     style={{ width: '20px' }}
@@ -71,7 +81,10 @@ const Signature = (props) => {
                     alt="LinkedIn"
                   />
                 </a>
-                <a href={'https://www.youtube.com/watch?v=qEarHDoWvWs&t=3s'}>
+                <a
+                  href={'https://www.youtube.com/watch?v=qEarHDoWvWs&t=3s'}
+                  style={{ marginRight: '5px' }}
+                >
                   <img
                     style={{ width: '25px' }}
                     className="social-icon-2"
@@ -87,8 +100,8 @@ const Signature = (props) => {
                 <p className="s-position">{props.position}</p>
               </div>
               <div className="signature-info__upper-right-body">
-                <tr className="phone-tr">
-                  <td colSpan={3} className="phone-td-container">
+                <div className="phone-tr">
+                  <div colSpan={3} className="phone-td-container">
                     <span>
                       <img
                         style={{ width: '15px' }}
@@ -97,51 +110,51 @@ const Signature = (props) => {
                       />
                     </span>
                     <span className="phone-td"> {props.phone} </span>
-                  </td>
-                </tr>
-                <tr className="phone-tr">
-                  <td colSpan={3} className="phone-td-container">
-                    <span>
+                  </div>
+                </div>
+                <div className="phone-tr">
+                  <div colSpan={3} className="phone-td-container">
+                    <div>
                       <img
                         style={{ width: '15px' }}
                         src={EmailLogo}
                         alt="Email"
                       />
-                    </span>
-                    <span className="phone-td"> {props.email} </span>
-                  </td>
-                </tr>
-                <tr className="phone-tr">
-                  <td colSpan={3} className="phone-td-container">
-                    <span>
+                    </div>
+                    <div className="phone-td"> {props.email} </div>
+                  </div>
+                </div>
+                <div className="phone-tr">
+                  <div colSpan={3} className="phone-td-container">
+                    <div>
                       <img
                         style={{ width: '14px' }}
                         src={BrowserLogo}
                         alt="Website"
                       />
-                    </span>
-                    <span className="phone-td">
+                    </div>
+                    <div className="phone-td">
                       <a href="https://www.outsourceglobal.com/">
                         www.outsourceglobal.com
                       </a>
-                    </span>
-                  </td>
-                </tr>
-                <tr className="phone-tr">
-                  <td colSpan={3} className="phone-td-container">
-                    <span>
+                    </div>
+                  </div>
+                </div>
+                <div className="phone-tr">
+                  <div colSpan={3} className="phone-td-container">
+                    <div>
                       <img
                         style={{ width: '14px' }}
                         src={LocationLogo}
                         alt="Location"
                       />
-                    </span>
-                    <span className="phone-td">
+                    </div>
+                    <div className="phone-td">
                       2nd Floor, ASTA GALLERY Plot 1185, Parkway Road, Cadastral
                       Zone, Mabushi District, Abuja FCT, Nigeria
-                    </span>
-                  </td>
-                </tr>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
