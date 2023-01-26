@@ -220,12 +220,10 @@ const SignatureGenerator = () => {
         </div>
         <div className="col-xl-7 d-flex ">
           <div className="gfuSqG flex-fill">
-            <div className="signature-card-body">{enoughData()}</div>
+            <div className="card-body">{enoughData()}</div>
           </div>
         </div>
       </div>
-      {/* custom generator */}
-      {/* <img style={{width: '50px'}} src={logo} alt={"logo"}/> */}
     </>
   );
 };
