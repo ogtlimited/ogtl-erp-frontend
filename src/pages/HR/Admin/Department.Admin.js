@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import departments from "../../../db/departments.json";
 
@@ -82,8 +83,8 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
-      console.log(formValue);
-      if (mode == "add") {
+      console.log("Add department:", formValue);
+      if (mode === "add") {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {

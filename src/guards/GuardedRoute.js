@@ -30,10 +30,15 @@ export default function GuardedRoute({ title, dept, children }) {
       user?.role?.title === "HR In-House Agent"
     ) {
       return true;
+    } else if (
+      user?.role?.title === "HR Associate"
+    ) {
+      return true;
     } else {
       return false;
     }
   };
+
   if (!canView(title, dept)) {
     return <Navigate to="/403" />;
   }
