@@ -79,7 +79,7 @@ const AppProvider = (props) => {
  
 
   const fetchEmployee = () => {
-    axiosInstance.get("/employees/v2").then((e) => {
+    axiosInstance.get("/employees/paginated-employees").then((e) => {
       // console.log("All Employees Context:", e?.data)
       const mapp = e?.data?.employees.map(emp => {
         return {
