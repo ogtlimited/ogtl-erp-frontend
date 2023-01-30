@@ -73,7 +73,6 @@ export const AddLeaveApprovalLevelModal = () => {
     try {
       const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
-      console.log('All Departments:', resData);
 
       setDepartments(resData);
       setLoading(false);

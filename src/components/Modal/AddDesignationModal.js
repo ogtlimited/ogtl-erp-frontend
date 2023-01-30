@@ -6,7 +6,7 @@ import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
-export const AddDesignationModal = () => {
+export const AddDesignationModal = ({ allDesignation }) => {
   const { showAlert } = useAppContext();
   const [createDesignation, setCreateDesignation] =
     useState(create_designation);
@@ -38,9 +38,9 @@ export const AddDesignationModal = () => {
       const res = await axiosInstance.post('/designation', {
         department_id: createDesignation.department,
         designation: createDesignation.designation,
+        approval_level: +createDesignation.approval_level
       });
       const resData = res.data.data;
-      console.log('created designation?', resData);
 
       showAlert(
         true,
@@ -54,13 +54,13 @@ export const AddDesignationModal = () => {
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
     }
     setLoading(false);
+    allDesignation()
   };
 
   const fetchDepartment = async () => {
     try {
       const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
-      console.log('All Departments:', resData);
 
       setDepartments(resData);
       setLoading(false);
@@ -157,6 +157,19 @@ export const AddDesignationModal = () => {
                           </option>
                         ))}
                       </select> */}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="approval_level">Approval Level</label>
+                      <input
+                        name="approval_level"
+                        type="number"
+                        className="form-control"
+                        value={createDesignation.approval_level}
+                        onChange={handleFormChange}
+                        required
+                      />
                     </div>
                   </div>
                 </div>

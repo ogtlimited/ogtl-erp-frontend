@@ -51,7 +51,6 @@ const Departments = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
-    console.log(formatted);
     setmode("edit");
     seteditData(formatted);
     setformUpdate(formatted);
@@ -83,7 +82,6 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
-      console.log("Add department:", formValue);
       if (mode === "add") {
         axiosInstance
           .post("/department", formValue)
@@ -95,13 +93,12 @@ const Departments = () => {
           .catch((err) => {
             // setformValue(null);
             setsubmitted(false);
-            console.log(err);
+            showAlert(true, err?.response?.data?.message, "alert alert-danger");
           });
       } else {
         axiosInstance
           .put("/department/" + editData._id, formValue)
           .then((e) => {
-            console.log(e);
             setformValue(null);
             showAlert(
               true,
@@ -113,11 +110,12 @@ const Departments = () => {
           .catch((err) => {
             setformValue(null);
             setsubmitted(false);
-            console.log(err);
+            showAlert(true, err?.response?.data?.message, "alert alert-danger");
           });
       }
     }
   }, [formValue]);
+
   // CAUSE object.keys() bug
   // useEffect(() => {
   //   console.log(clickedRow)

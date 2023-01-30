@@ -15,6 +15,7 @@ import helper from "../../../services/helper";
 import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
 import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import $ from 'jquery';
 
 let qualityFilter;
 
@@ -57,7 +58,7 @@ const Designations = () => {
   const fetchDesignation = () => {
     settemplate(designation);
     axiosInstance.get("/designation").then((res) => {
-      setallDesignation(res.data.data);
+      setallDesignation(res?.data?.data);
       setunfiltered(res?.data?.data);
       const depsigOpts = res.data.data.map((e) => {
         return {
@@ -128,35 +129,32 @@ const Designations = () => {
   }, [formValue]);
 
   const deleteDesignation = (row) => {
+    console.log("Id:", row._id);
     axiosInstance
-      .delete(`/designation/${row._id}`)
+      .patch(`/designation/${row._id}`)
       .then((res) => {
+        console.log("this:", res);
+        // setallDesignation((prevData) =>
+        //   prevData.filter((pdata) => pdata._id !== row._id)
+        // );
+        showAlert(true, res?.data?.message, "alert alert-info");
         fetchDesignation();
-        setallDesignation((prevData) =>
-          prevData.filter((pdata) => pdata._id !== row._id)
-        );
-        showAlert(true, res.data.message, "alert alert-success");
+        window.location.reload();
+        // $('#exampleModal').modal('toggle');
       })
       .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        console.log("That:", error?.response?.data?.message);
+        showAlert(true, error?.response?.data?.message, "alert alert-danger");
       });
   };
 
-  const defaultSorted = [
-    {
-      dataField: "designation",
-      order: "desc",
-    },
-  ];
-  const breadcrumb = "Departments";
   const columns = [
-    {
-      dataField: "",
-      text: "#",
-      headerStyle: { width: "5%" },
-      formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
-    },
+    // {
+    //   dataField: "",
+    //   text: "#",
+    //   headerStyle: { width: "5%" },
+    //   formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
+    // },
     {
       dataField: "designation",
       text: "Designation",
@@ -213,9 +211,10 @@ const Designations = () => {
       ),
     },
   ];
+
   return (
     <>
-    <AddDesignationModal />
+    <AddDesignationModal allDesignation={fetchDesignation} />
     <EditDesignationModal editDesignation={editDesignation} fetchDesignation={fetchDesignation} />
       <div className="page-header">
         <div className="row align-items-center">
