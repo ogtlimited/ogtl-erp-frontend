@@ -1,4 +1,9 @@
-/* eslint-disable no-unused-vars */
+/**
+ * eslint-disable no-unused-vars
+ *
+ * @format
+ */
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useEffect, useState } from 'react';
@@ -13,7 +18,7 @@ import sidebarConfig from './sidebarConfig';
 
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
-  const AllAccess = ['Super', 'CEO', 'HR Manager'];
+  const AllAccess = ['Super', 'CEO', 'HR Manager', 'HR Associate'];
   const canView = (dept) => {
     if (
       user?.department?.department === dept ||
@@ -54,6 +59,7 @@ const Sidebar = () => {
   const dNone = {
     display: 'none',
   };
+
   return (
     <div className="sidebar" id="sidebar">
       <div
@@ -71,6 +77,7 @@ const Sidebar = () => {
         >
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
+            
               {sidebarConfig.map((nav) => (
                 <>
                   {canView(nav?.canView) && (
@@ -128,10 +135,33 @@ const Sidebar = () => {
                           )}
                         </>
                       )}
+
+                      {/* {user?.role?.title === 'HR Associate' && (
+                        <li className="submenu">
+                          <a
+                            href=""
+                            onClick={(e) => e.preventDefault()}
+                            className="subdrop"
+                          >
+                            <i className="la la-cube"></i>
+                            <span>Operations</span>
+                            <span className="menu-arrow"></span>
+                          </a>
+                          <ul style={{ display: 'none' }}>
+                            <Link
+                              to="/dashboard/operations/campaigns"
+                              className=""
+                            >
+                              All Campaigns
+                            </Link>
+                          </ul>
+                        </li>
+                      )} */}
                     </>
                   ))}
                 </>
               ))}
+
               {user?.role?.title === 'HR In-House Agent' && (
                 <li className="submenu">
                   <a
