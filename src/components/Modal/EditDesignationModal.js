@@ -37,8 +37,8 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
         department_id: createDesignation.department,
         designation: createDesignation.designation,
       });
+      // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      console.log('Edited designation?', resData);
 
       showAlert(
         true,
@@ -59,7 +59,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
     try {
       const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
-      console.log('All Departments:', resData);
 
       setDepartments(resData);
       setLoading(false);
@@ -109,7 +108,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                         onChange={handleFormChange}
                         className="form-control "
                         name="department"
-                        required
                       >
                         <option value="" disabled selected hidden>
                           Select department ...
@@ -119,7 +117,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                             key={idx}
                             value={department._id}
                             placeholder="Department"
-                            required
                           >
                             {department.department}
                           </option>
@@ -136,7 +133,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                         className="form-control"
                         value={createDesignation.designation}
                         onChange={handleFormChange}
-                        required
                       />
                       {/* <select
                         onChange={handleFormChange}
@@ -157,6 +153,18 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                           </option>
                         ))}
                       </select> */}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="approval_level">Approval Level</label>
+                      <input
+                        name="approval_level"
+                        type="number"
+                        className="form-control"
+                        value={createDesignation.approval_level}
+                        onChange={handleFormChange}
+                      />
                     </div>
                   </div>
                 </div>

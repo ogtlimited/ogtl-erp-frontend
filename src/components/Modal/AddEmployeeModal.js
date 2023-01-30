@@ -170,6 +170,7 @@ export const AddEmployeeModal = () => {
     } catch (error) {
       const errorMsg = error.response?.data?.message;
       console.log("Add Employee Record Error:", errorMsg);
+      setEmployee(CREATE_PROFILE);
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
       $('#AddEmployeeFormModal').modal('toggle');
       setLoading(false);
@@ -217,7 +218,7 @@ export const AddEmployeeModal = () => {
               ) : (
                 <form onSubmit={handleAddEmployee}>
                   <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="first_name">First Name</label>
                         <input
@@ -230,7 +231,7 @@ export const AddEmployeeModal = () => {
                         />
                       </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="middle_name">Middle Name</label>
                         <input
@@ -243,7 +244,7 @@ export const AddEmployeeModal = () => {
                         />
                       </div>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="last_name">Last Name</label>
                         <input
@@ -251,6 +252,19 @@ export const AddEmployeeModal = () => {
                           name="last_name"
                           type="text"
                           value={employee.last_name}
+                          onChange={handleFormChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="ogid">OGID</label>
+                        <input
+                          className="form-control"
+                          name="ogid"
+                          type="text"
+                          value={employee.ogid}
                           onChange={handleFormChange}
                           required
                         />
