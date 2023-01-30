@@ -224,8 +224,6 @@ const SignatureGenerator = () => {
           </div>
         </div>
       </div>
-      {/* custom generator */}
-      {/* <img style={{width: '50px'}} src={logo} alt={"logo"}/> */}
     </>
   );
 };

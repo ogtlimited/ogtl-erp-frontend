@@ -104,7 +104,6 @@ const LeavesAdmin = () => {
       .then((res) => {
         let resData = res?.data?.data?.application;
         let resOptions = res?.data?.data?.pagination;
-        console.log("HR Leave History:", resData)
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions?.numberOfPages;
@@ -528,6 +527,7 @@ const LeavesAdmin = () => {
             data={allLeaves}
             setData={setallLeaves}
             loading={loading}
+            
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}

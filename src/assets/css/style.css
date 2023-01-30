@@ -437,6 +437,11 @@
   padding: 0 0 0 10px;
 }
 
+.signature-card-body {
+  width: 100%;
+  /* background-color: green; */
+}
+
 .leave-card-body {
   padding: 20px;
 }

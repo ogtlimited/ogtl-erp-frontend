@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import departments from "../../../db/departments.json";
 
@@ -50,7 +51,6 @@ const Departments = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
-    console.log(formatted);
     setmode("edit");
     seteditData(formatted);
     setformUpdate(formatted);
@@ -82,8 +82,7 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
-      console.log(formValue);
-      if (mode == "add") {
+      if (mode === "add") {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {
@@ -94,13 +93,12 @@ const Departments = () => {
           .catch((err) => {
             // setformValue(null);
             setsubmitted(false);
-            console.log(err);
+            showAlert(true, err?.response?.data?.message, "alert alert-danger");
           });
       } else {
         axiosInstance
           .put("/department/" + editData._id, formValue)
           .then((e) => {
-            console.log(e);
             setformValue(null);
             showAlert(
               true,
@@ -112,11 +110,12 @@ const Departments = () => {
           .catch((err) => {
             setformValue(null);
             setsubmitted(false);
-            console.log(err);
+            showAlert(true, err?.response?.data?.message, "alert alert-danger");
           });
       }
     }
   }, [formValue]);
+
   // CAUSE object.keys() bug
   // useEffect(() => {
   //   console.log(clickedRow)

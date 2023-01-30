@@ -1,84 +1,161 @@
+/** @format */
+
 body {
-    background: #F2F5F9;
+  background: #f2f5f9;
 }
 
 .gfuSqG {
-    display: flex;
-    position: relative;
-    padding-top: 3%;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    border-radius: 0;
-    -webkit-box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
-    box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
-    border: none;
-    margin-bottom: 30px;
-    -webkit-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out;
+  display: flex;
+  position: relative;
+  padding-top: 3%;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  border-radius: 0;
+  -webkit-box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
+  box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
+  border: none;
+  margin-bottom: 30px;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .title {
-    margin-left: 50px;
-    padding: 5px 0px;
+  margin-left: 50px;
+  padding: 5px 0px;
 }
 .title p {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 14px;
-    color: rgb(129, 129, 129);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 14px;
+  color: rgb(129, 129, 129);
 }
-.s-title  {
-    font-style: normal;
-    font-weight: bold;
-    font-size: 22px;
-    line-height: 27px;
-    color: rgb(51, 51, 51);
+.s-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 27px;
+  color: rgb(51, 51, 51);
 }
 
 .bottom {
-    display: flex;
-    background-color: rgb(241, 252, 255);
-    padding: 35px 0px;
+  display: flex;
+  background-color: rgb(241, 252, 255);
+  padding: 35px 0px;
 }
-.lab{
-    font-size: 30px;
+.lab {
+  font-size: 30px;
 }
-.las{
-    font-size: 18px;
+.las {
+  font-size: 18px;
 }
 .detail-link {
-    display: flex;
-    margin-bottom: 15px;
-    max-width: 90%;
+  display: flex;
+  margin-bottom: 15px;
+  max-width: 90%;
 }
 .detail-link span {
-    font-style: normal;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 18px;
-    color: rgb(68, 68, 68);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  color: rgb(68, 68, 68);
 }
 .vertical-line {
-    width: 0;
-    height: 100%;
-    border-right: 1px solid grey;
-    margin-right: 9px;
-    margin-left: 10px;
+  width: 0;
+  height: 100%;
+  border-right: 1px solid grey;
+  margin-right: 9px;
+  margin-left: 10px;
 }
 .signature tbody {
-    background-color: aliceblue !important;
-    padding-top: 9px !important;
+  background-color: aliceblue !important;
+  padding-top: 9px !important;
 }
 .signature tr {
-    background-color: none !important;
-    padding-top: 9px !important;
+  background-color: none !important;
+  padding-top: 9px !important;
 }
-.signature tr {
-   
-    height:  29px !important;
-}
+/* .signature tr {
+  height: 29px !important;
+} */
 .blue {
-    color: rgb(0, 175, 239);
+  color: rgb(0, 175, 239);
+}
+.email-signature-div {
+  background-color: #479be4;
+  height: 17.8rem;
+  display: flex;
+  align-items: center;
+}
+.email-signature-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.signature-info__upper-right-header {
+  padding: 5px 0 5px 10px;
+  height: 30%;
+}
+
+.s-fullName {
+  color: rgba(0, 0, 0, 0.884);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0;
+  font-family: 'poppins', sans-serif;
+}
+
+.s-position {
+  color: rgba(0, 0, 0, 0.884);
+  font-size: 13px;
+  margin-bottom: 0;
+  font-family: 'poppins', sans-serif;
+}
+.phone-td {
+  font-size: 9px;
+  font-family: 'poppins', sans-serif;
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  width: 98%;
+  margin-left: 2%;
+}
+.phone-td-container {
+  background-color: #f6f6f6;
+  margin-bottom: 0;
+}
+
+.signature-info__lower-awards {
+  display: flex;
+}
+
+.signature-info__lower-awards-info {
+  width: 100%;
+}
+
+.signature-info__lower-awards-info > p {
+  margin-left: 3px;
+  font-size: 8px;
+  height: 100%;
+  font-family: 'poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  line-break: break-all;
+}
+.signature-info__lower-first {
+  margin-top: 5px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.signature-info__lower-second {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 85%;
 }

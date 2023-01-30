@@ -1,6 +1,6 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
 import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
@@ -17,8 +17,8 @@ import UploadModal from '../../../components/Modal/uploadModal';
 import EmployeeHelperService from './employee.helper';
 
 const AllEmployeesAdmin = () => {
-  const { fetchEmployee, allEmployees, createEmployee, showAlert, status } =
-    useAppContext();
+  const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
+  const [allEmployees, setallEmployees] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
@@ -34,11 +34,111 @@ const AllEmployeesAdmin = () => {
   const [mode, setmode] = useState('add');
   const { user } = useAppContext();
 
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState('');
+
+  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [designationFilter, setDesignationFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [ogidFilter, setOgidFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const [departments, setDepartments] = useState([]);
+  const [designations, setDesignations] = useState([]);
+
+  const fetchAllEmployee = useCallback(() => {
+    axiosInstance
+      .get('/employees/paginated-employees', {
+        params: {
+          department: departmentFilter,
+          designation: designationFilter,
+          status: statusFilter,
+          ogid: ogidFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((e) => {
+        let resData = e?.data?.employees;
+        let resOptions = e?.data?.pagination;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName:
+              emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
+            designation_name: emp?.designation?.designation,
+            department_name: emp?.department?.department,
+            // project: emp?.projectId?.project_name,
+          };
+        });
+
+        setallEmployees(mapp);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [
+    departmentFilter,
+    designationFilter,
+    ogidFilter,
+    page,
+    searchTerm,
+    sizePerPage,
+    statusFilter,
+  ]);
+
+  const fetchDepartment = async () => {
+    try {
+      const response = await axiosInstance.get('/department');
+      const resData = response?.data?.data;
+
+      const formatted = resData.map((e) => ({
+        department: e.department,
+      }));
+
+      setDepartments(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchDesignation = async () => {
+    try {
+      const response = await axiosInstance.get('/designation');
+      const resData = response?.data?.data;
+
+      const formatted = resData.map((e) => ({
+        designation: e.designation,
+      }));
+
+      setDesignations(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // fetchEmployee();
+    fetchAllEmployee();
+    fetchDepartment();
+    fetchDesignation();
     const obj = helper.formArrayToObject(employeeFormJson.Fields);
     settemplate(obj);
-  }, []);
+  }, [fetchAllEmployee]);
 
   useEffect(() => {}, [editData, mode]);
 
@@ -262,7 +362,7 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-plus"></i> Add Employee
                 </a> */}
-                <button
+                {/* <button
                   onClick={() => settoggleModal(true)}
                   type="button"
                   className="btn add-btn mx-3"
@@ -271,7 +371,7 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-cloud-upload"></i>
                   Bulk Upload
-                </button>
+                </button> */}
               </>
             )}
           </div>
@@ -280,12 +380,33 @@ const AllEmployeesAdmin = () => {
       <EmployeesTable
         loading={loading}
         data={allEmployees}
+        setData={setallEmployees}
         seteditData={seteditData}
         setmode={setmode}
         filters={filters}
         loadForm={loadForm}
         defaultSorted={defaultSorted}
         selectedOption={selectedOption}
+        departments={departments}
+        designations={designations}
+
+        page={page}
+        setPage={setPage}
+        sizePerPage={sizePerPage}
+        setSizePerPage={setSizePerPage}
+        totalPages={totalPages}
+        setTotalPages={setTotalPages}
+        departmentFilter={departmentFilter}
+        setDepartmentFilter={setDepartmentFilter}
+        designationFilter={designationFilter}
+        setDesignationFilter={setDesignationFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        ogidFilter={ogidFilter}
+        setOgidFilter={setOgidFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        setLoading={setLoading}
       />
       {toggleModal && (
         <UploadModal

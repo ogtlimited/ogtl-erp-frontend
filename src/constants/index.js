@@ -9,7 +9,8 @@ export const InterviewStatusOptions = [
   { title: "call back", color: "text-info" },
 ];
 export const InterviewProcessStageOptions = [
-  { title: "Sieving", color: "text-primary" },
+  { title: "Open", color: "text-primary" },
+  { title: "Sieving", color: "text-warning" },
   { title: "Phone screening", color: "text-info" },
   { title: "Interviews scheduled", color: "text-success" }
 ];
