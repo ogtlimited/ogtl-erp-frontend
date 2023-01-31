@@ -269,6 +269,7 @@ const AllEmployeesAdmin = () => {
         }
         axiosInstance.put('/employees/' + id, values).then((res) => {
           fetchEmployee();
+          fetchAllEmployee();
           setsubmitted(false);
           seteditData({});
 
