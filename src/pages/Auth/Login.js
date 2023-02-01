@@ -7,12 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
+import { useMsal } from '@azure/msal-react';
 // import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
   // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const { instance } = useMsal();
   const {
     register,
     handleSubmit,
@@ -22,14 +24,23 @@ const Login = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
-    msalInstance
+    instance
       .ssoSilent(loginRequest)
       .then((e) => {
-        console.log(e);
+        console.log("This login user Msal:", e);
+        console.log("This login name Msal:", e?.account?.username);
+        // const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
+
+        // if (obj !== activeUser) {
+        //   setErrorMsg(
+        //     'There is an active account on this device'
+        //   );
+        //   return;
+        // }
 
         axios
           .post(config.ApiUrl + '/api/login', obj)
@@ -51,7 +62,8 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              console.log(e);
+              console.log("This login new user Msal:", e);
+              console.log("This login new name Msal:", e?.account?.username);
 
               const obj = {
                 company_email: data.company_email.trim(),
@@ -62,8 +74,7 @@ const Login = () => {
                 .then((res) => {
                   tokenService.setUser(res.data.employee);
                   tokenService.setToken(res.data.token.token);
-                  // createEmployee();
-                  window.location.href = '/dashboard/employee-dashboard';
+                  // window.location.href = '/dashboard/employee-dashboard';
                 })
                 .catch((err) => {
                   console.log(err);
@@ -86,6 +97,7 @@ const Login = () => {
         setLoading(false);
       });
   };
+
   return (
     <div className="main-wrapper">
       <div className="account-content">
