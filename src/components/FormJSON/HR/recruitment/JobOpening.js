@@ -91,6 +91,7 @@ export const jobOpeningFormJson = {
     },
   ],
 };
+
 export const DefaultjobOpeningFormJson = {
   title: "Job Opening Form",
   Fields: [
