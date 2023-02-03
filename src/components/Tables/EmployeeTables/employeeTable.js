@@ -1,6 +1,6 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import axiosInstance from '../../../services/api';
 import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
@@ -70,6 +70,7 @@ const EmployeesTable = ({
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState('');
   const [unfiltered, setunfiltered] = useState([]);
+  const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
   const { user } = useAppContext();
@@ -115,10 +116,10 @@ const EmployeesTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-      setLoading(true);
-    }, 5000);
-  }, [data, setLoading]);
+    // setTimeout(() => {
+    //   setLoading(true);
+    // }, 5000);
+  }, [data]);
 
   // Pagination
   const count = totalPages;
@@ -127,11 +128,11 @@ const EmployeesTable = ({
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
-    if (loading) {
-      setData([])
-      setDataToFilter([])
-    }
-    return;
+    // if (loading) {
+    //   setData([])
+    //   setDataToFilter([])
+    // }
+    // return;
   };
 
   const handleChangeSizePerPage = (e) => {
@@ -142,11 +143,11 @@ const EmployeesTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
 
-    if (loading) {
-      setData([])
-      setDataToFilter([])
-    }
-    return;
+    // if (loading) {
+    //   setData([])
+    //   setDataToFilter([])
+    // }
+    // return;
   };
 
   const columns = [
@@ -270,77 +271,105 @@ const EmployeesTable = ({
     },
   ];
 
-  const MySearch = (props) => {
-    let input;
-    const handleClick = () => {
-      setPage(1);
-      setLoading(true);
-      props.onSearch(input.value);
-      const searchTerm = input.value;
-      setSearchTerm(searchTerm);
+  const MySearch = useCallback(
+    (props) => {
+      let input;
+      const handleClick = () => {
+        setPage(1);
+        setLoading(true);
+        props.onSearch(input.value);
+        const searchTerm = input.value;
+        setSearchTerm(searchTerm);
 
-      if (page === 1) {
-        axiosInstance
-          .get('/employees/paginated-employees', {
-            params: {
-              department: departmentFilter,
-              designation: designationFilter,
-              status: statusFilter,
-              ogid: ogidFilter,
-              search: searchTerm,
-              page: page,
-              limit: sizePerPage,
-            },
-          })
-          .then((e) => {
-            let resData = e?.data?.employees;
-            let resOptions = e?.data?.pagination;
+        if (page === 1) {
+          axiosInstance
+            .get('/employees/paginated-employees', {
+              params: {
+                department: departmentFilter,
+                designation: designationFilter,
+                status: statusFilter,
+                ogid: ogidFilter,
+                search: searchTerm,
+                page: page,
+                limit: sizePerPage,
+              },
+            })
+            .then((e) => {
+              let resData = e?.data?.employees;
+              let resOptions = e?.data?.pagination;
 
-            const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions?.numberOfPages;
+              const thisPageLimit = sizePerPage;
+              const thisTotalPageSize = resOptions?.numberOfPages;
 
-            setSizePerPage(thisPageLimit);
-            setTotalPages(thisTotalPageSize);
+              setSizePerPage(thisPageLimit);
+              setTotalPages(thisTotalPageSize);
 
-            const mapp = resData.map((emp) => {
-              return {
-                ...emp,
-                fullName:
-                  emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
-                designation_name: emp?.designation?.designation,
-                department_name: emp?.department?.department,
-                // project: emp?.projectId?.project_name,
-              };
+              const mapp = resData.map((emp) => {
+                return {
+                  ...emp,
+                  fullName:
+                    emp.first_name +
+                    ' ' +
+                    emp.last_name +
+                    ' ' +
+                    emp?.middle_name,
+                  designation_name: emp?.designation?.designation,
+                  department_name: emp?.department?.department,
+                  // project: emp?.projectId?.project_name,
+                };
+              });
+              setData(mapp);
+              setunfiltered(mapp);
+              // setDepartmentFilter('');
+              // setDesignationFilter('');
+              // setOgidFilter('');
+              // setStatusFilter('');
+            })
+            .catch((error) => {
+              console.log(error);
+              setLoading(false);
             });
-            setData(mapp);
-            setunfiltered(mapp);
-            setDepartmentFilter('');
-            setDesignationFilter('');
-            setOgidFilter('');
-            setStatusFilter('');
-          });
-      }
-      setLoading(false);
-    };
+        }
+        setLoading(false);
+      };
 
-    return (
-      <div className="job-app-search">
-        <input
-          className="form-control"
-          style={{
-            backgroundColor: '#fff',
-            width: '33.5%',
-            marginRight: '20px',
-          }}
-          ref={(n) => (input = n)}
-          type="text"
-        />
-        <button className="btn btn-primary" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    );
-  };
+      return (
+        <div className="job-app-search">
+          <input
+            className="form-control"
+            style={{
+              backgroundColor: '#fff',
+              width: '33.5%',
+              marginRight: '20px',
+            }}
+            ref={(n) => (input = n)}
+            type="text"
+          />
+          <button className="btn btn-primary" onClick={handleClick}>
+            Search
+          </button>
+        </div>
+      );
+    },
+    [
+      departmentFilter,
+      designationFilter,
+      ogidFilter,
+      page,
+      setData,
+      setDepartmentFilter,
+      setDesignationFilter,
+      setLoading,
+      setOgidFilter,
+      setPage,
+      setSearchTerm,
+      setSizePerPage,
+      setStatusFilter,
+      setTotalPages,
+      sizePerPage,
+      statusFilter,
+    ]
+  );
 
   const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
@@ -382,11 +411,15 @@ const EmployeesTable = ({
 
         setData(mapp);
         setunfiltered(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
       });
     setLoading(false);
-    setDesignationFilter('');
-    setOgidFilter('');
-    setStatusFilter('');
+    // setDesignationFilter('');
+    // setOgidFilter('');
+    // setStatusFilter('');
   };
 
   const handleDesignationFilter = (e) => {
@@ -429,11 +462,15 @@ const EmployeesTable = ({
 
         setData(mapp);
         setunfiltered(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
       });
     setLoading(false);
-    setDepartmentFilter('');
-    setOgidFilter('');
-    setStatusFilter('');
+    // setDepartmentFilter('');
+    // setOgidFilter('');
+    // setStatusFilter('');
   };
 
   const handleStatusFilter = (e) => {
@@ -476,11 +513,22 @@ const EmployeesTable = ({
 
         setData(mapp);
         setunfiltered(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
       });
     setLoading(false);
-    setDepartmentFilter('');
-    setDesignationFilter('');
-    setOgidFilter('');
+    // setDepartmentFilter('');
+    // setDesignationFilter('');
+    // setOgidFilter('');
+  };
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
   };
 
   return (
@@ -577,7 +625,9 @@ const EmployeesTable = ({
                     <div className="spinner-border text-primary" role="status">
                       <span className="sr-only">Loading...</span>
                     </div>
-                  ) : null
+                  ) : (
+                    showNullMessage()
+                  )
                 }
               />
 
@@ -608,7 +658,6 @@ const EmployeesTable = ({
                   />
                 </Stack>
               </div>
-
             </div>
           )}
         </ToolkitProvider>
