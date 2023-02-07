@@ -28,21 +28,19 @@ const Login = () => {
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        console.log('This login user Msal:', e);
-        console.log('This login name Msal:', e?.account?.username);
         const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        console.log("Trying to login:", obj.company_email, "Has an active session:", activeUser);
-
         if (obj.company_email !== activeUser) {
           return setErrorMsg(
             'There is an active account on this device'
           );
         }
+
+        setErrorMsg("")
 
         axios
           .post(config.ApiUrl + '/api/login', obj)
@@ -64,8 +62,6 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              console.log('This login new user Msal:', e);
-              console.log('This login new name Msal:', e?.account?.username);
               const activeUser = e?.account?.username;
 
               const obj = {
@@ -77,6 +73,8 @@ const Login = () => {
                   'Please login with your credentials'
                 );
               }
+
+              setErrorMsg("")
 
               axios
                 .post(config.ApiUrl + '/api/login', obj)
