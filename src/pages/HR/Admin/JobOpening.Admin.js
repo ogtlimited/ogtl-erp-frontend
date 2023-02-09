@@ -61,7 +61,7 @@ const JobOpening = () => {
 
   const fetchJobOpenings = () => {
     axiosInstance
-      .get('/api/jobOpening')
+      .get('/api/jobOpening/open-and-closed')
       .then((res) => {
         setData(res.data.data);
         setunfiltered(res?.data?.data);
