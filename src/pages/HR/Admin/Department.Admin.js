@@ -1,17 +1,20 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import departments from "../../../db/departments.json";
+/* eslint-disable jsx-a11y/anchor-is-valid*/
 
-import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { Link } from "react-router-dom";
-import { departmentFormJson } from "../../../components/FormJSON/HR/Employee/department";
-import FormModal2 from "../../../components/Modal/FormModal2";
-import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
-import Select from "react-select";
-import helper from "../../../services/helper";
-import { create } from "yup/lib/Reference";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import React, { useState, useEffect } from 'react';
+import departments from '../../../db/departments.json';
+
+import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
+import { Link } from 'react-router-dom';
+import { departmentFormJson } from '../../../components/FormJSON/HR/Employee/department';
+import FormModal2 from '../../../components/Modal/FormModal2';
+import axiosInstance from '../../../services/api';
+import { useAppContext } from '../../../Context/AppContext';
+import Select from 'react-select';
+import helper from '../../../services/helper';
+import { create } from 'yup/lib/Reference';
+import ConfirmModal from '../../../components/Modal/ConfirmModal';
+import ClipboardCopyNotification from './ClipboardCopyNotification';
+import { format } from 'date-fns';
 
 const Departments = () => {
   const [template, settemplate] = useState({});
@@ -23,22 +26,53 @@ const Departments = () => {
   const [deleteData, setdeleteData] = useState(null);
   const [departMentOpts, setDepartmentOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [mode, setmode] = useState("add");
+  const [mode, setmode] = useState('add');
+  const [isCopied, setIsCopied] = useState(false);
+
   const defaultSorted = [
     {
-      dataField: "designation",
-      order: "desc",
+      dataField: 'designation',
+      order: 'desc',
     },
   ];
 
   const [allDepartments, setallDepartments] = useState([]);
 
-  const breadcrumb = "Departments";
+  // Clipboard Copy Async Function
+  async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+  // Clipboard copy onclick event
+  const handleCopyClick = (row) => {
+    copyTextToClipboard(row._id)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   const fetchDept = () => {
     settemplate(departmentFormJson);
-    axiosInstance.get("/department").then((e) => {
-      setallDepartments(e?.data?.data);
-      setunfiltered(e?.data?.data);
+    axiosInstance.get('/department').then((e) => {
+      const res = e?.data?.data;
+
+      const formatted = res.map((e, idx) => ({
+        ...e,
+        index: idx + 1,
+      }))
+      setallDepartments(formatted);
+
+      setunfiltered(formatted);
       const departOpts = e.data.data.map((e) => {
         return {
           label: e.department,
@@ -51,7 +85,7 @@ const Departments = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
-    setmode("edit");
+    setmode('edit');
     seteditData(formatted);
     setformUpdate(formatted);
     setclickedRow(formatted);
@@ -59,15 +93,15 @@ const Departments = () => {
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      initialValues[i] = "";
+      initialValues[i] = '';
     }
-    setmode("add");
+    setmode('add');
     setformValue(initialValues);
     seteditData(initialValues);
   };
 
   const handleClick = (i) => {
-    if (i?.value === "All" || i === null) {
+    if (i?.value === 'All' || i === null) {
       setallDepartments(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => i.label.includes(e.department));
@@ -82,35 +116,35 @@ const Departments = () => {
 
   useEffect(() => {
     if (submitted) {
-      if (mode === "add") {
+      if (mode === 'add') {
         axiosInstance
-          .post("/department", formValue)
+          .post('/department', formValue)
           .then((e) => {
             // setformValue({});
             fetchDept();
-            showAlert(true, "New department created", "alert alert-success");
+            showAlert(true, 'New department created', 'alert alert-success');
           })
           .catch((err) => {
             // setformValue(null);
             setsubmitted(false);
-            showAlert(true, err?.response?.data?.message, "alert alert-danger");
+            showAlert(true, err?.response?.data?.message, 'alert alert-danger');
           });
       } else {
         axiosInstance
-          .put("/department/" + editData._id, formValue)
+          .put('/department/' + editData._id, formValue)
           .then((e) => {
             setformValue(null);
             showAlert(
               true,
-              "Department successfully updated",
-              "alert alert-success"
+              'Department successfully updated',
+              'alert alert-success'
             );
             fetchDept();
           })
           .catch((err) => {
             setformValue(null);
             setsubmitted(false);
-            showAlert(true, err?.response?.data?.message, "alert alert-danger");
+            showAlert(true, err?.response?.data?.message, 'alert alert-danger');
           });
       }
     }
@@ -130,30 +164,52 @@ const Departments = () => {
         setallDepartments((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
-        showAlert(true, res.data.message, "alert alert-success");
+        showAlert(true, res.data.message, 'alert alert-success');
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, "alert alert-danger");
+        showAlert(true, error.response.data.message, 'alert alert-danger');
       });
   };
   const columns = [
     {
-      dataField: "",
-      text: "#",
-      headerStyle: { width: "5%" },
-      formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
+      dataField: 'index',
+      text: '#',
+      headerStyle: { width: '5%' },
     },
     {
-      dataField: "department",
-      text: "Department",
+      dataField: 'department',
+      text: 'Department',
       sort: true,
-      headerStyle: { width: "85%" },
+      headerStyle: { width: '40%' },
     },
     {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
+      dataField: '_id',
+      text: 'Department ID',
+      sort: true,
+      headerStyle: { width: '10%' },
+    },
+    {
+      dataField: '',
+      text: '',
+      headerStyle: { width: '20%' },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={() => handleCopyClick(row)}
+            >
+              Copy to clipboard <i className="fa fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      ),
+    },
+    {
+      dataField: '',
+      text: 'Action',
+      headerStyle: { width: '10%' },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -229,7 +285,7 @@ const Departments = () => {
             options={departMentOpts}
             placeholder="Filter Departments"
             isClearable={true}
-            style={{ display: "inline-block" }}
+            style={{ display: 'inline-block' }}
             // formatGroupLabel={formatGroupLabel}
           />
         </div>
@@ -252,6 +308,7 @@ const Departments = () => {
         selectedRow={deleteData}
         deleteFunction={deleteDepartment}
       />
+      {isCopied && <ClipboardCopyNotification />}
     </>
   );
 };
