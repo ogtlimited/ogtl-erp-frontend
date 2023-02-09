@@ -31,27 +31,23 @@ export const campaignFormJson = {
       required: { value: true, message: "Field is required" },
     },
     {
-      name: "shift_start",
-      type: "time",
-      title: "Shift Start",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "shift_end",
-      type: "time",
-      title: "Shift End",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "start_date",
-      type: "date",
-      title: "Start date",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "end_date",
-      type: "date",
-      title: "End date",
+      name: "diallers",
+      type: "select",
+      title: "Diallers",
+      options: [
+        {
+          label: "In House",
+          value: "inhouse",
+        },
+        {
+          label: "External",
+          value: "external",
+        },
+        {
+          label: "Others",
+          value: "others",
+        },
+      ],
       required: { value: true, message: "Field is required" },
     },
     {
@@ -85,23 +81,27 @@ export const campaignFormJson = {
       required: { value: true, message: "Field is required" },
     },
     {
-      name: "diallers",
-      type: "select",
-      title: "Diallers",
-      options: [
-        {
-          label: "In House",
-          value: "inhouse",
-        },
-        {
-          label: "External",
-          value: "external",
-        },
-        {
-          label: "Others",
-          value: "others",
-        },
-      ],
+      name: "shift_start",
+      type: "time",
+      title: "Shift Start",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "shift_end",
+      type: "time",
+      title: "Shift End",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "start_date",
+      type: "date",
+      title: "Start date",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "end_date",
+      type: "date",
+      title: "End date",
       required: { value: true, message: "Field is required" },
     },
     // {
@@ -129,16 +129,14 @@ export const campaignFormJson = {
     //   required: { value: true, message: "Field is required" },
     // },
     {
-      name: "supervisor",
-
+      name: "manager",
       type: "select",
       options: [],
-      title: "Supervisor",
+      title: "Manager",
       required: { value: true, message: "Field is required" },
     },
     {
       name: "quality_analyst",
-
       type: "select",
       options: [],
       title: "Quality analyst",
