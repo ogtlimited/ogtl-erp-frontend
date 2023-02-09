@@ -118,7 +118,7 @@ const AllCampaigns = () => {
           // console.log("Created Campaign:", res);
           setFormValue(null);
           fetchCampaign();
-          showAlert(true, res.data?.message, "alert alert-success");
+          showAlert(true, "Project Created Successfully!", "alert alert-success");
         })
         .catch((error) => {
           console.log(error);
@@ -204,7 +204,6 @@ const AllCampaigns = () => {
       headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{value?.company}</h2>,
     },
-
     {
       dataField: "status",
       text: "Status",
