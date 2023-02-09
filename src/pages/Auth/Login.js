@@ -7,12 +7,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
+// import { useMsal } from '@azure/msal-react';
 // import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
+  // const { instance } = useMsal();
   // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
   const {
     register,
     handleSubmit,
@@ -25,11 +28,19 @@ const Login = () => {
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        console.log(e);
+        const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
+
+        if (obj.company_email !== activeUser) {
+          return setErrorMsg(
+            'There is an active account on this device'
+          );
+        }
+
+        setErrorMsg("")
 
         axios
           .post(config.ApiUrl + '/api/login', obj)
@@ -40,7 +51,7 @@ const Login = () => {
           })
           .catch((err) => {
             console.log(err);
-            setErrorMsg(err.message + ", please try again");
+            setErrorMsg(err.message + ', please try again');
           })
           .finally(() => {
             setLoading(false);
@@ -51,18 +62,25 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              console.log(e);
+              const activeUser = e?.account?.username;
 
               const obj = {
                 company_email: data.company_email.trim(),
               };
+
+              if (obj.company_email !== activeUser) {
+                return setErrorMsg(
+                  'Please login with your credentials'
+                );
+              }
+
+              setErrorMsg("")
 
               axios
                 .post(config.ApiUrl + '/api/login', obj)
                 .then((res) => {
                   tokenService.setUser(res.data.employee);
                   tokenService.setToken(res.data.token.token);
-                  // createEmployee();
                   window.location.href = '/dashboard/employee-dashboard';
                 })
                 .catch((err) => {
@@ -77,15 +95,19 @@ const Login = () => {
             });
         } else {
           console.log(e);
-          setErrorMsg(
-            'Unable to login either username or password is incorrect'
-          );
+          setCount(() => count + 1);
+          if (count > 2) {
+            return setErrorMsg('Unable to login. Please contact HR');
+          }
+          setErrorMsg('Unable to login. Please try again');
+          console.log('error count', count);
         }
       })
       .finally(() => {
         setLoading(false);
       });
   };
+
   return (
     <div className="main-wrapper">
       <div className="account-content">
