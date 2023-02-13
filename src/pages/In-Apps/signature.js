@@ -11,12 +11,12 @@ const Signature = (props) => {
       <div className="row signature">
         <table cellPadding={0} cellSpacing={0}>
           <tbody>
-            <tr className="pt-1">
+            <tr className="pt-1" style={{backgroundColor: "#fff"}}>
               <td
                 style={{
                   height: '30%',
                   width: '35%',
-                  borderRight: '1px solid #095864',
+                  borderRight: '2px solid #0A6D9199',
                 }}
                 className="pl-2"
                 rowSpan={5}
@@ -24,49 +24,46 @@ const Signature = (props) => {
                 <img
                   style={{ width: '100%' }}
                   src="https://www.outsourceglobal.com/logo.png"
-                  alt={''}
+                  alt="Outsource Global Logo"
                 />
                 <div className="social-logos-frame mt-3 ml-1">
                   <a
-                    className="mr-1"
                     href={'https://www.instagram.com/outsourcegbl/'}
                   >
                     <img
-                      src="https://res.cloudinary.com/dhantey/image/upload/v1674750314/OGTL/instagram-img_txhbym.png"
-                      style={{ width: '20px' }}
+                      src="https://res.cloudinary.com/dhantey/image/upload/v1676299735/OGTL/instagram_y9ynet.png"
+                      style={{ width: '32px' }}
                       alt="instagram"
                     />
                   </a>
 
-                  <a className="mr-1" href={'https://twitter.com/OutSourceGbl'}>
+                  <a href={'https://twitter.com/OutSourceGbl'}>
                     <img
-                      src="https://res.cloudinary.com/dhantey/image/upload/v1674750345/OGTL/twitter-img_fsg1iu.png"
-                      style={{ width: '25px' }}
+                      src="https://res.cloudinary.com/dhantey/image/upload/v1676299847/OGTL/twitter_ha6cpo.png"
+                      style={{ width: '27px' }}
                       alt="twitter"
                     />
                   </a>
 
                   <a
-                    className="mr-1"
                     href={'https://www.facebook.com/OutsourceGbl/'}
                   >
                     <img
-                      src="https://res.cloudinary.com/dhantey/image/upload/v1674750345/OGTL/facebook-img_yv1trq.png"
-                      style={{ width: '21px' }}
+                      src="https://res.cloudinary.com/dhantey/image/upload/v1676299914/OGTL/facebook_vjov6p.png"
+                      style={{ width: '27px' }}
                       alt="facebook"
                     />
                   </a>
 
                   <a
-                    className="mr-1"
                     href={
                       'https://www.linkedin.com/company/outsourceglobal/mycompany/'
                     }
                   >
                     <img
-                      src="https://res.cloudinary.com/dhantey/image/upload/v1674750345/OGTL/linkedIn-img_kcuefc.png"
-                      style={{ width: '20px' }}
-                      alt="facebook"
+                      src="https://res.cloudinary.com/dhantey/image/upload/v1676299979/OGTL/linkedin_jpqiro.png"
+                      style={{ width: '27px' }}
+                      alt="linkedIn"
                     />
                   </a>
 
@@ -75,9 +72,9 @@ const Signature = (props) => {
                     href={'https://www.youtube.com/watch?v=qEarHDoWvWs&t=3s'}
                   >
                     <img
-                      src="https://res.cloudinary.com/dhantey/image/upload/v1674750346/OGTL/youtube-img_ds37qz.png"
-                      style={{ width: '25px' }}
-                      alt="facebook"
+                      src="https://res.cloudinary.com/dhantey/image/upload/v1676300054/OGTL/youtube_a8hkfw.png"
+                      style={{ width: '32px' }}
+                      alt="youtube"
                     />
                   </a>
                 </div>
@@ -90,32 +87,32 @@ const Signature = (props) => {
               </td>
 
               <td
-                style={{ height: '30%', width: '35%', background: '#00c5fb' }}
+                style={{ height: '30%', width: '35%', background: 'rgb(10, 109, 145, 0.6)' }}
                 className="pl-3"
                 rowSpan={8}
               >
                 <div className="email-signature-div">
                   <img
                     className="email-signature-img"
-                    src="https://res.cloudinary.com/dhantey/image/upload/v1674753172/OGTL/Email-Signature-Image_suqym1.png"
+                    src="https://res.cloudinary.com/dhantey/image/upload/v1676297071/OGTL/Email-Signature-Image.png"
                     alt="Achieving the Impossible"
                   />
                 </div>
               </td>
             </tr>
 
-            <tr className="phone-td-container">
+            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
               <td
                 rowSpan={1}
                 style={{
-                  padding: '0 10px 0 5px',
+                  padding: '0 10px 0 0',
                   display: 'flex',
                 }}
               >
                 <span>
                   <img
-                    style={{ width: '15px' }}
-                    src="https://res.cloudinary.com/dhantey/image/upload/v1674757070/OGTL/telephone-img_hrgs0n.png"
+                    style={{ width: '27px' }}
+                    src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/telephone_kxnkr1.png"
                     alt="Telephone"
                   />
                 </span>
@@ -123,18 +120,18 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container">
+            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
               <td
                 rowSpan={1}
                 style={{
-                  padding: '0 10px 0 5px',
+                  padding: '0 10px 0 0',
                   display: 'flex',
                 }}
               >
                 <span>
                   <img
-                    style={{ width: '15px' }}
-                    src="https://res.cloudinary.com/dhantey/image/upload/v1674757070/OGTL/email-img_ohnxno.png"
+                    style={{ width: '26px' }}
+                    src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/email_v5uk8a.png"
                     alt="Email"
                   />
                 </span>
@@ -142,18 +139,18 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container">
+            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
               <td
                 rowSpan={1}
                 style={{
-                  padding: '0 10px 0 5px',
+                  padding: '0 10px 0 0',
                   display: 'flex',
                 }}
               >
                 <span>
                   <img
-                    style={{ width: '15px' }}
-                    src="https://res.cloudinary.com/dhantey/image/upload/v1674757085/OGTL/browser-img_porgcv.png"
+                    style={{ width: '25px' }}
+                    src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/browser_cth9w5.png"
                     alt="Browser"
                   />
                 </span>
@@ -166,18 +163,18 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container">
+            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
               <td
                 rowSpan={1}
                 style={{
-                  padding: '0 10px 5px 5px',
+                  padding: '0 10px 5px 0',
                   display: 'flex',
                 }}
               >
                 <span>
                   <img
-                    style={{ width: '15px' }}
-                    src="https://res.cloudinary.com/dhantey/image/upload/v1674757070/OGTL/location-img_o7jsdf.png"
+                    style={{ width: '25px' }}
+                    src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/location_suj6f8.png"
                     alt="Location"
                   />
                 </span>
@@ -189,7 +186,7 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr style={{ background: '#f6f6f6', borderTop: '1px solid #095864' }} >
+            <tr style={{ background: '#fff', borderTop: '2px solid #0A6D9199' }} >
               <td rowSpan={1} colSpan={2} >
                 <div className="signature-info__lower-first">
                   <a href={'https://gbs.world/profile/outsource-global/'}>
@@ -255,7 +252,7 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr>
+            <tr style={{backgroundColor: "#fff"}}>
               <td rowSpan={1} colSpan={2}>
                 <div className="signature-info__lower-second">
                   <div className="signature-info__lower-awards">
