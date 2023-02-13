@@ -189,7 +189,7 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            {/* <tr style={{ background: '#f6f6f6', borderTop: '1px solid #095864' }} >
+            <tr style={{ background: '#f6f6f6', borderTop: '1px solid #095864' }} >
               <td rowSpan={1} colSpan={2} >
                 <div className="signature-info__lower-first">
                   <a href={'https://gbs.world/profile/outsource-global/'}>
@@ -253,9 +253,9 @@ const Signature = (props) => {
                   </div>
                 </div>
               </td>
-            </tr> */}
+            </tr>
 
-            {/* <tr>
+            <tr>
               <td rowSpan={1} colSpan={2}>
                 <div className="signature-info__lower-second">
                   <div className="signature-info__lower-awards">
@@ -304,7 +304,7 @@ const Signature = (props) => {
                   </a>
                 </div>
               </td>
-            </tr> */}
+            </tr>
 
           </tbody>
         </table>
