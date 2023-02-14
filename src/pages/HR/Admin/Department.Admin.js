@@ -11,10 +11,9 @@ import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 import Select from 'react-select';
 import helper from '../../../services/helper';
-import { create } from 'yup/lib/Reference';
 import ConfirmModal from '../../../components/Modal/ConfirmModal';
 import ClipboardCopyNotification from './ClipboardCopyNotification';
-import { format } from 'date-fns';
+import { AddDepartmentModal } from '../../../components/Modal/AddDepartmentModal';
 
 const Departments = () => {
   const [template, settemplate] = useState({});
@@ -28,13 +27,6 @@ const Departments = () => {
   const [unfiltered, setunfiltered] = useState([]);
   const [mode, setmode] = useState('add');
   const [isCopied, setIsCopied] = useState(false);
-
-  const defaultSorted = [
-    {
-      dataField: 'designation',
-      order: 'desc',
-    },
-  ];
 
   const [allDepartments, setallDepartments] = useState([]);
 
@@ -268,8 +260,9 @@ const Departments = () => {
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#FormModal"
-                onClick={() => create()}
+                data-target="#DepartmentFormModal"
+                // data-target="#FormModal"
+                // onClick={() => create()}
               >
                 <i className="fa fa-plus"></i> Add Department
               </a>
@@ -295,7 +288,6 @@ const Departments = () => {
           columns={columns}
         />
       </div>
-      {/* departmentFormJson */}
       <FormModal2
         title="Create Department"
         editData={editData}
@@ -308,6 +300,9 @@ const Departments = () => {
         selectedRow={deleteData}
         deleteFunction={deleteDepartment}
       />
+
+      <AddDepartmentModal getAllDepartments={fetchDept} />
+      
       {isCopied && <ClipboardCopyNotification />}
     </>
   );

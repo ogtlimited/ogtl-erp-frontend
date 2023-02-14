@@ -10,3 +10,11 @@ export const create_designation = {
   approval_level: '',
 }
 
+export const create_department = {
+  department: '',
+  leave_approval_level: '',
+  start_time: '',
+  end_time: '',
+  shift_name: '',
+}
+

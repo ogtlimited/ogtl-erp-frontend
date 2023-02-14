@@ -6,7 +6,7 @@ export const departmentFormJson = {
     label: 'Department',
     required: {
       value: true,
-      message: 'Name is required',
+      message: 'Department is required',
     },
   },
   leave_approval_level: {
@@ -14,7 +14,32 @@ export const departmentFormJson = {
     label: 'Highest Leave Approval Level',
     required: {
       value: true,
-      message: 'Level is required',
+      message: 'Approval level is required',
+    },
+  },
+  
+  start_time: {
+    type: 'date',
+    label: 'Start Time',
+    required: {
+      value: true,
+      message: 'Start time is required',
+    },
+  },
+  end_time: {
+    type: 'date',
+    label: 'End Time',
+    required: {
+      value: true,
+      message: 'End time is required',
+    },
+  },
+  shift_name: {
+    type: 'text',
+    label: 'Shift Name',
+    required: {
+      value: true,
+      message: 'Shift name is required',
     },
   },
 };
