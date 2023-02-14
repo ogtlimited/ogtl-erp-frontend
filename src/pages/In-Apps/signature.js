@@ -87,7 +87,7 @@ const Signature = (props) => {
               </td>
 
               <td
-                style={{ height: '30%', width: '35%', background: 'rgb(10, 109, 145, 0.6)' }}
+                style={{ height: '30%', background: 'rgb(10, 109, 145, 0.6)' }}
                 className="pl-3"
                 rowSpan={8}
               >
@@ -189,113 +189,14 @@ const Signature = (props) => {
             <tr style={{ background: '#fff', borderTop: '2px solid #0A6D9199' }} >
               <td rowSpan={1} colSpan={2} >
                 <div className="signature-info__lower-first">
-                  <a href={'https://gbs.world/profile/outsource-global/'}>
+                  <a href={'https://ogtl-awards.netlify.app/'}>
                     <div className="signature-info__lower-awards">
                       <div className="signature-info__lower-awards-img">
                         <img
-                          style={{ width: '40px' }}
-                          src="https://res.cloudinary.com/dhantey/image/upload/v1674758818/OGTL/GBS_jm0vps.png"
-                          alt="GBS Certified Service Provider"
+                          style={{ width: '100%' }}
+                          src="https://res.cloudinary.com/dhantey/image/upload/v1676382156/OGTL/list-of-awards_vjga7d.jpg"
+                          alt="OGTL Awards"
                         />
-                      </div>
-                      <div className="signature-info__lower-awards-info">
-                        <p>GBS Certified Service Provider</p>
-                      </div>
-                    </div>
-                  </a>
-
-                  <div className="signature-info__lower-awards">
-                    <div className="signature-info__lower-awards-img">
-                      <img
-                        style={{ width: '25px' }}
-                        src="https://res.cloudinary.com/dhantey/image/upload/v1674758819/OGTL/Export-Excellence-Award-2021_llhpg0.png"
-                        alt="Export Excellence Award 2021"
-                      />
-                    </div>
-                    <div className="signature-info__lower-awards-info">
-                      <p>Export Excellence Award 2021</p>
-                    </div>
-                  </div>
-
-                  <a
-                    href={
-                      'https://guardian.ng/technology/outsource-global-wins-award/'
-                    }
-                  >
-                    <div className="signature-info__lower-awards">
-                      <div className="signature-info__lower-awards-img">
-                        <img
-                          style={{ width: '20px' }}
-                          src="https://res.cloudinary.com/dhantey/image/upload/v1674758819/OGTL/Service-Exporting-Company-of-the-Year-2022_nfns1l.png"
-                          alt="Service Exporting Company of the Year Award 2019"
-                        />
-                      </div>
-                      <div className="signature-info__lower-awards-info">
-                        <p>Service Exporting Company of the Year Award 2019</p>
-                      </div>
-                    </div>
-                  </a>
-
-                  <div className="signature-info__lower-awards">
-                    <div className="signature-info__lower-awards-img">
-                      <img
-                        style={{ width: '26px' }}
-                        src="https://res.cloudinary.com/dhantey/image/upload/v1674758819/OGTL/Private-Sector-Excellence_rlzqpu.png"
-                        alt="UNDP's Private Sector Excellence Award"
-                      />
-                    </div>
-                    <div className="signature-info__lower-awards-info">
-                      <p>UNDP's Private Sector Excellence Award</p>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <tr style={{backgroundColor: "#fff"}}>
-              <td rowSpan={1} colSpan={2}>
-                <div className="signature-info__lower-second">
-                  <div className="signature-info__lower-awards">
-                    <div className="signature-info__lower-awards-img">
-                      <img
-                        style={{ width: '20px' }}
-                        src="https://res.cloudinary.com/dhantey/image/upload/v1674758819/OGTL/Best-sectoral-exporter_sicfob.png"
-                        alt="Best sectoral exporter 2022"
-                      />
-                    </div>
-                    <div className="signature-info__lower-awards-info">
-                      <p>Best sectoral exporter 2022</p>
-                    </div>
-                  </div>
-
-                  <div className="signature-info__lower-awards">
-                    <div className="signature-info__lower-awards-img">
-                      <img
-                        style={{ width: '25px' }}
-                        src="https://res.cloudinary.com/dhantey/image/upload/v1674758820/OGTL/Services-Sector-Award_gnn6km.png"
-                        alt="Outstanding achievement in the services sector 2020"
-                      />
-                    </div>
-                    <div className="signature-info__lower-awards-info">
-                      <p>Outstanding achievement in the services sector 2020</p>
-                    </div>
-                  </div>
-
-                  <a
-                    href={
-                      'https://medium.com/outsourceglobal/outsource-global-wins-award-for-innovative-contact-centre-and-bpo-operator-of-the-year-355dcf7c29cb'
-                    }
-                  >
-                    <div className="signature-info__lower-awards">
-                      <div className="signature-info__lower-awards-img">
-                        <img
-                          style={{ width: '18px' }}
-                          src="https://res.cloudinary.com/dhantey/image/upload/v1674758819/OGTL/Nigeria-Tech-Awards_sd0tgm.png"
-                          alt="2018 Innovative Contact Center and BPO Operator"
-                        />
-                      </div>
-                      <div className="signature-info__lower-awards-info">
-                        <p>2018 Innovative Contact Center and BPO Operator</p>
                       </div>
                     </div>
                   </a>
