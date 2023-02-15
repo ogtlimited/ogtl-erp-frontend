@@ -1,34 +1,35 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import GeneralTable from "../../components/Tables/Table";
-import data from "../../db/campaigns.json";
-import avater from "../../assets/img/male_avater.png";
-import { Link } from "react-router-dom";
-import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { object } from "yup/lib/locale";
-import FormModal2 from "../../components/Modal/FormModal2";
-import helper from "../../services/helper";
-import { campaignFormJson } from "../../components/FormJSON/campaignForm";
-import { useAppContext } from "../../Context/AppContext";
-import axiosInstance from "../../services/api";
-import GeneralApproverBtn from "../../components/Misc/GeneralApproverBtn";
+/*eslint-disable jsx-a11y/anchor-is-valid*/
+
+import React, { useState, useEffect } from 'react';
+import GeneralTable from '../../components/Tables/Table';
+import data from '../../db/campaigns.json';
+import avater from '../../assets/img/male_avater.png';
+import { Link } from 'react-router-dom';
+import LeavesTable from '../../components/Tables/EmployeeTables/Leaves/LeaveTable';
+import { object } from 'yup/lib/locale';
+import FormModal2 from '../../components/Modal/FormModal2';
+import helper from '../../services/helper';
+import { campaignFormJson } from '../../components/FormJSON/campaignForm';
+import { useAppContext } from '../../Context/AppContext';
+import axiosInstance from '../../services/api';
+import GeneralApproverBtn from '../../components/Misc/GeneralApproverBtn';
 
 const approval = [
   {
-    title: "open",
-    color: "text-primary",
+    title: 'open',
+    color: 'text-primary',
   },
   {
-    title: "approved",
-    color: "text-success",
+    title: 'approved',
+    color: 'text-success',
   },
   {
-    title: "suspended",
-    color: "text-warning",
+    title: 'suspended',
+    color: 'text-warning',
   },
   {
-    title: "rejected",
-    color: "text-danger",
+    title: 'rejected',
+    color: 'text-danger',
   },
 ];
 
@@ -40,12 +41,12 @@ const AllCampaigns = () => {
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [loadedSelect, setloadedSelect] = useState(false);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState('');
   const [statusRow, setstatusRow] = useState(null);
 
   const fetchCampaign = () => {
     axiosInstance
-      .get("/api/project")
+      .get('/api/project')
       .then((res) => {
         // console.log("Campaign Data:", res);
         setData(res.data.data);
@@ -61,7 +62,7 @@ const AllCampaigns = () => {
 
       const emp = employees?.map((e) => {
         return {
-          label: e.first_name + " " + e.last_name,
+          label: e.first_name + ' ' + e.last_name,
           value: e._id,
         };
       });
@@ -74,12 +75,12 @@ const AllCampaigns = () => {
       });
 
       const formatted = campaignFormJson.Fields.map((c) => {
-        if (c.name === "manager" || c.name === "quality_analyst") {
+        if (c.name === 'manager' || c.name === 'quality_analyst') {
           return {
             ...c,
             options: emp,
           };
-        } else if (c.name === "client_id") {
+        } else if (c.name === 'client_id') {
           c.options = clients;
           return c;
         }
@@ -109,21 +110,26 @@ const AllCampaigns = () => {
       let newValue = {
         ...formValue,
         creator: user?._id,
+        office_type: 'campaign',
       };
 
-      // console.log("To Be Created:", newValue);
+      const formData = Object.fromEntries(Object.entries(newValue).filter(([_, v]) => v));
+      
       axiosInstance
-        .post("/api/project", newValue)
+        .post('/office', formData)
         .then((res) => {
-          // console.log("Created Campaign:", res);
-          setFormValue(null);
+          console.log("Created Campaign:", res);
           fetchCampaign();
-          showAlert(true, "Project Created Successfully!", "alert alert-success");
+          showAlert(
+            true,
+            'Campaign Created Successfully!',
+            'alert alert-success'
+          );
         })
         .catch((error) => {
           console.log(error);
           setFormValue(null);
-          showAlert(true, error?.response?.data?.message, "alert alert-danger");
+          showAlert(true, error?.response?.data?.message, 'alert alert-danger');
         });
     }
   }, [formValue, user?._id]);
@@ -135,18 +141,18 @@ const AllCampaigns = () => {
       };
 
       axiosInstance
-        .patch("/api/project/approve/" + statusRow._id, update)
+        .patch('/api/project/approve/' + statusRow._id, update)
         .then((res) => {
           fetchCampaign();
-          showAlert(true, "Status updated", "alert alert-success");
+          showAlert(true, 'Status updated', 'alert alert-success');
         })
         .catch((error) => {
           console.log(error.response);
-          showAlert(true, error.response.data.data, "alert alert-danger");
+          showAlert(true, error.response.data.data, 'alert alert-danger');
         });
     }
     return () => {
-      setStatus("");
+      setStatus('');
       setstatusRow(null);
       showAlert(false);
     };
@@ -154,10 +160,10 @@ const AllCampaigns = () => {
 
   const columns = [
     {
-      dataField: "project_name",
-      text: "Campaign name",
+      dataField: 'project_name',
+      text: 'Campaign name',
       sort: true,
-      headerStyle: { width: "250px" },
+      headerStyle: { width: '250px' },
       formatter: (value, row) => (
         <Link to={`/dashboard/operations/campaign-info/${row._id}`}>
           {value}
@@ -165,25 +171,25 @@ const AllCampaigns = () => {
       ),
     },
     {
-      dataField: "type",
-      text: "Type",
+      dataField: 'type',
+      text: 'Type',
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: "createdAt",
-      text: "Created",
+      dataField: 'createdAt',
+      text: 'Created',
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { minWidth: '100px' },
       formatter: (value, row) => (
         <span>{new Date(value).toLocaleDateString()}</span>
       ),
     },
     {
-      dataField: "manager",
-      text: "Manager",
+      dataField: 'manager',
+      text: 'Manager',
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: '200px' },
       formatter: (value, row) => (
         <ul className="team-members">
           <li className="row">
@@ -198,17 +204,17 @@ const AllCampaigns = () => {
       ),
     },
     {
-      dataField: "client_id",
-      text: "Client",
+      dataField: 'client_id',
+      text: 'Client',
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { minWidth: '200px' },
       formatter: (value, row) => <h2>{value?.company}</h2>,
     },
     {
-      dataField: "status",
-      text: "Status",
+      dataField: 'status',
+      text: 'Status',
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { minWidth: '150px' },
       formatter: (value, row) => (
         <>
           <GeneralApproverBtn
@@ -219,6 +225,31 @@ const AllCampaigns = () => {
             setstatusRow={setstatusRow}
           />
         </>
+      ),
+    },
+    {
+      dataField: '',
+      text: 'Actions',
+      sort: true,
+      csvExport: false,
+      headerStyle: { minWidth: '70px', textAlign: 'center' },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#generalModal"
+              // onClick={() => {
+              //   setmodalType('view-details');
+              //   setViewRow(row);
+              // }}
+              // onClick={() => handleDepartmentSwitch(row)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
       ),
     },
   ];
@@ -240,19 +271,26 @@ const AllCampaigns = () => {
               <a
                 className="btn add-btn"
                 data-toggle="modal"
+                // data-target="#AddCampaignFormModal"
                 data-target="#FormModal"
               >
                 <i className="fa fa-plus"></i> Create Project
               </a>
-            ) : <a
+            ) : (
+              <a
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"
               >
-                <div className="spinner-border" role="status" style={{height: "20px", width: "20px"}}>
+                <div
+                  className="spinner-border"
+                  role="status"
+                  style={{ height: '20px', width: '20px' }}
+                >
                   <span className="sr-only">Loading...</span>
                 </div>
-              </a>}
+              </a>
+            )}
             <div className="view-icons">
               <a href="projects" className="grid-view btn btn-link">
                 <i className="fa fa-th"></i>

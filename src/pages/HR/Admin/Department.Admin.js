@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import departments from '../../../db/departments.json';
 
 import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { departmentFormJson } from '../../../components/FormJSON/HR/Employee/department';
 import FormModal2 from '../../../components/Modal/FormModal2';
 import axiosInstance from '../../../services/api';
@@ -16,6 +16,7 @@ import ClipboardCopyNotification from './ClipboardCopyNotification';
 import { AddDepartmentModal } from '../../../components/Modal/AddDepartmentModal';
 
 const Departments = () => {
+  const navigate = useNavigate();
   const [template, settemplate] = useState({});
   const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
   const [submitted, setsubmitted] = useState(false);
@@ -136,17 +137,16 @@ const Departments = () => {
           .catch((err) => {
             setformValue(null);
             setsubmitted(false);
-            showAlert(true, err?.response?.data?.message, 'alert alert-danger');
+            // showAlert(true, err?.response?.data?.message, 'alert alert-danger');
           });
       }
     }
   }, [formValue]);
 
-  // CAUSE object.keys() bug
-  // useEffect(() => {
-  //   console.log(clickedRow)
-  //   seteditData(clickedRow);
-  // }, [editData ]);
+  const viewShifts = (row) => {
+    localStorage.setItem("department", row.department);
+    navigate(`/dashboard/hr/departments/shifts/${row._id}`)
+  }
 
   const deleteDepartment = (row) => {
     axiosInstance
@@ -156,7 +156,7 @@ const Departments = () => {
         setallDepartments((prevData) =>
           prevData.filter((pdata) => pdata._id !== row._id)
         );
-        showAlert(true, res.data.message, 'alert alert-success');
+        showAlert(true, res.data.message, 'alert alert-info');
       })
       .catch((error) => {
         console.log(error);
@@ -236,6 +236,16 @@ const Departments = () => {
                 <i className="fa fa-trash m-r-5"></i> Delete
               </a>
             )}
+            
+            <a
+                className="dropdown-item"
+                onClick={() => viewShifts(row)}
+                href="#"
+                data-toggle="modal"
+                data-target="#ShiftFormModal"
+              >
+                <i className="fa fa-clock m-r-5"></i> Shifts
+              </a>
           </div>
         </div>
       ),

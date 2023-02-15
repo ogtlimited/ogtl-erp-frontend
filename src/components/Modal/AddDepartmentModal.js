@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /** @format */
 
 import React, { useState, useEffect } from 'react';
@@ -30,8 +31,12 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/department', createDepartment);
-      const resData = res.data.data;
+      const res = await axiosInstance.post('/office', {
+        ...createDepartment,
+        leave_approval_level: +createDepartment.leave_approval_level
+      });
+      const resData = res?.data?.data;
+      console.log(resData)
 
       showAlert(
         true,
@@ -128,7 +133,7 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
                       <label htmlFor="start_time">Start Time</label>
                       <input
                         name="start_time"
-                        type="date"
+                        type="time"
                         className="form-control"
                         value={createDepartment.start_time}
                         onChange={handleFormChange}
@@ -141,7 +146,7 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
                       <label htmlFor="end_time">End Time</label>
                       <input
                         name="end_time"
-                        type="date"
+                        type="time"
                         className="form-control"
                         value={createDepartment.end_time}
                         onChange={handleFormChange}

@@ -300,6 +300,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'departments/shifts/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <DepartmentShiftView />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'designations',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -939,6 +947,9 @@ const LeaveApproval = Loadable(
 );
 const LeaveApprovalView = Loadable(
   lazy(() => import('../pages/HR/Admin/LeaveApprovalView.Admin'))
+);
+const DepartmentShiftView = Loadable(
+  lazy(() => import('../pages/HR/Admin/DepartmentShiftView.Admin'))
 );
 const LeaveType = Loadable(
   lazy(() => import('../pages/HR/Admin/LeaveType.Admin'))
