@@ -14,6 +14,7 @@ import axiosInstance from '../../../services/api';
 import Papa from 'papaparse';
 import helper from '../../../services/helper';
 import UploadModal from '../../../components/Modal/uploadModal';
+import BulkEmployeeUploadModal from '../../../components/Modal/bulkEmployeeUploadModal';
 import EmployeeHelperService from './employee.helper';
 
 const AllEmployeesAdmin = () => {
@@ -46,6 +47,8 @@ const AllEmployeesAdmin = () => {
 
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
+
+  const [bulkEmployeeUploadData, setBulkEmployeeUploadData] = useState([])
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
@@ -299,21 +302,21 @@ const AllEmployeesAdmin = () => {
   //     Papa.parse(files[0], {
   //       complete: function (results) {
   //         const jsonData = helper.arrayToJSONObject(results.data);
-
-  //         axiosInstance
-  //           .post("/employees/bulk", jsonData)
-  //           .then((res) => {
-  //             showAlert(
-  //               true,
-  //               "Data uploaded successfully",
-  //               "alert alert-success"
-  //             );
-  //             fetchEmployee();
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //             showAlert(true, err?.message, "alert alert-danger");
-  //           });
+  //         console.log("csv Data", jsonData)
+          // axiosInstance
+          //   .post("/employees/bulk", jsonData)
+          //   .then((res) => {
+          //     showAlert(
+          //       true,
+          //       "Data uploaded successfully",
+          //       "alert alert-success"
+          //     );
+          //     fetchEmployee();
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //     showAlert(true, err?.message, "alert alert-danger");
+          //   });
   //       },
   //     });
   //   }
@@ -326,6 +329,7 @@ const AllEmployeesAdmin = () => {
     },
   ];
 
+ 
   return (
     <>
       {/* { uploading && <div className="progress mb-3">
@@ -363,8 +367,10 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-plus"></i> Add Employee
                 </a> */}
-                {/* <button
-                  onClick={() => settoggleModal(true)}
+                <button
+                  onClick={() => {
+                    settoggleModal(true);
+                  }}
                   type="button"
                   className="btn add-btn mx-3"
                   data-toggle="modal"
@@ -372,7 +378,7 @@ const AllEmployeesAdmin = () => {
                 >
                   <i className="fa fa-cloud-upload"></i>
                   Bulk Upload
-                </button> */}
+                </button>
               </>
             )}
           </div>
@@ -410,11 +416,13 @@ const AllEmployeesAdmin = () => {
         setLoading={setLoading}
       />
       {toggleModal && (
-        <UploadModal
+        <BulkEmployeeUploadModal
           setUploadSuccess={setUploadSuccess}
           setuploading={setuploading}
           settoggleModal={settoggleModal}
           fetchEmployee={fetchEmployee}
+          setBulkEmployeeUploadData={setBulkEmployeeUploadData}
+          bulkEmployeeUploadData={bulkEmployeeUploadData}
         />
       )}
 
