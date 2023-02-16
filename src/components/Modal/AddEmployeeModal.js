@@ -432,7 +432,7 @@ export const AddEmployeeModal = () => {
                       <div className="form-group">
                         {!validShift.length ? (
                           <label htmlFor="default_shift">
-                            Default Shift
+                            Shift
                           </label>
                         ) : (
                           <label htmlFor="default_shift">
