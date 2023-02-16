@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import GeneralTable from "../../components/Tables/Table";
 import data from "../../db/campaigns.json";
@@ -46,6 +47,7 @@ const AllCampaigns = () => {
     axiosInstance
       .get("/api/project")
       .then((res) => {
+        // console.log("Campaign Data:", res);
         setData(res.data.data);
       })
       .catch((error) => {
@@ -56,6 +58,7 @@ const AllCampaigns = () => {
   useEffect(() => {
     createCampaign().then((res) => {
       const { employees, clientS } = res.data.createCampaignForm;
+
       const emp = employees?.map((e) => {
         return {
           label: e.first_name + " " + e.last_name,
@@ -82,6 +85,7 @@ const AllCampaigns = () => {
         }
         return c;
       });
+
       campaignFormJson.Fields = formatted;
 
       setTemplate(campaignFormJson);
@@ -107,12 +111,14 @@ const AllCampaigns = () => {
         creator: user?._id,
       };
 
+      // console.log("To Be Created:", newValue);
       axiosInstance
         .post("/api/project", newValue)
         .then((res) => {
+          // console.log("Created Campaign:", res);
           setFormValue(null);
           fetchCampaign();
-          showAlert(true, res.data?.message, "alert alert-success");
+          showAlert(true, "Project Created Successfully!", "alert alert-success");
         })
         .catch((error) => {
           console.log(error);
@@ -136,7 +142,7 @@ const AllCampaigns = () => {
         })
         .catch((error) => {
           console.log(error.response);
-          showAlert(true, error.response.data.message, "alert alert-danger");
+          showAlert(true, error.response.data.data, "alert alert-danger");
         });
     }
     return () => {
@@ -198,7 +204,6 @@ const AllCampaigns = () => {
       headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2>{value?.company}</h2>,
     },
-
     {
       dataField: "status",
       text: "Status",
@@ -231,7 +236,7 @@ const AllCampaigns = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.role?.projects?.create && (
+            {loadedSelect && user?.role?.projects?.create ? (
               <a
                 className="btn add-btn"
                 data-toggle="modal"
@@ -239,7 +244,15 @@ const AllCampaigns = () => {
               >
                 <i className="fa fa-plus"></i> Create Project
               </a>
-            )}
+            ) : <a
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#FormModal"
+              >
+                <div className="spinner-border" role="status" style={{height: "20px", width: "20px"}}>
+                  <span className="sr-only">Loading...</span>
+                </div>
+              </a>}
             <div className="view-icons">
               <a href="projects" className="grid-view btn btn-link">
                 <i className="fa fa-th"></i>

@@ -1,21 +1,21 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useMemo, useState, useEffect, useContext } from "react";
-import departments from "../../../db/designationList.json";
-import { designation } from "../../../components/FormJSON/HR/Employee/designation";
-import list from "../../../designation.json";
-import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import Select from "react-select";
-import dates from "./dates.json";
-import { Link } from "react-router-dom";
-import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
-import FormModal2 from "../../../components/Modal/FormModal2";
-import helper from "../../../services/helper";
+import React, { useMemo, useState, useEffect, useContext } from 'react';
+import departments from '../../../db/designationList.json';
+import { designation } from '../../../components/FormJSON/HR/Employee/designation';
+import list from '../../../designation.json';
+import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
+import Select from 'react-select';
+import dates from './dates.json';
+import { Link } from 'react-router-dom';
+import axiosInstance from '../../../services/api';
+import { useAppContext } from '../../../Context/AppContext';
+import FormModal2 from '../../../components/Modal/FormModal2';
+import helper from '../../../services/helper';
 import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
 import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
-import $ from 'jquery';
+import ConfirmModal from '../../../components/Modal/ConfirmModal';
+import ClipboardCopyNotification from './ClipboardCopyNotification';
 
 let qualityFilter;
 
@@ -31,14 +31,38 @@ const Designations = () => {
   const [template, settemplate] = useState({});
   const [designationOpts, setDesignationOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
-  const [mode, setmode] = useState("add");
+  const [mode, setmode] = useState('add');
+  const [isCopied, setIsCopied] = useState(false);
+
+  // Clipboard Copy Async Function
+  async function copyTextToClipboard(text) {
+    if ('clipboard' in navigator) {
+      return await navigator.clipboard.writeText(text);
+    } else {
+      return document.execCommand('copy', true, text);
+    }
+  }
+
+  // Clipboard copy onclick event
+  const handleCopyClick = (row) => {
+    copyTextToClipboard(row._id)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      initialValues[i] = "";
+      initialValues[i] = '';
     }
-    setmode("add");
+    setmode('add');
     setformValue(initialValues);
     seteditData(initialValues);
   };
@@ -46,7 +70,7 @@ const Designations = () => {
   const editRow = (row) => {
     // setformUpdate(null)
     let formatted = helper.handleEdit(row);
-    setmode("edit");
+    setmode('edit');
     setformUpdate(formatted);
     setclickedRow(formatted);
   };
@@ -57,9 +81,16 @@ const Designations = () => {
 
   const fetchDesignation = () => {
     settemplate(designation);
-    axiosInstance.get("/designation").then((res) => {
-      setallDesignation(res?.data?.data);
-      setunfiltered(res?.data?.data);
+    axiosInstance.get('/designation').then((res) => {
+      const response = res?.data?.data;
+
+      const formatted = response.map((e, idx) => ({
+        ...e,
+        index: idx + 1,
+      }))
+      setallDesignation(formatted);
+
+      setunfiltered(formatted);
       const depsigOpts = res.data.data.map((e) => {
         return {
           label: e.designation,
@@ -69,13 +100,13 @@ const Designations = () => {
       setDesignationOts(depsigOpts);
     });
   };
-  
+
   useEffect(() => {
     fetchDesignation();
   }, []);
 
   const handleClick = (i) => {
-    if (i?.value === "All" || i === null) {
+    if (i?.value === 'All' || i === null) {
       setallDesignation(unfiltered);
     } else {
       const filt = unfiltered.filter((e) => {
@@ -90,14 +121,14 @@ const Designations = () => {
     fetchDesignation();
 
     if (submitted) {
-      if (mode === "add") {
+      if (mode === 'add') {
         axiosInstance
-          .post("/designation", formValue)
+          .post('/designation', formValue)
           .then((e) => {
             showAlert(
               true,
-              "Designation successfully created",
-              "alert alert-success"
+              'Designation successfully created',
+              'alert alert-success'
             );
             // setformValue(null);
             fetchDesignation();
@@ -109,12 +140,12 @@ const Designations = () => {
       } else {
         // formValue._id = formUpdate._id;
         axiosInstance
-          .put("/designation/" + formUpdate._id, formValue)
+          .put('/designation/' + formUpdate._id, formValue)
           .then((e) => {
             showAlert(
               true,
-              "Designation successfully updated",
-              "alert alert-success"
+              'Designation successfully updated',
+              'alert alert-success'
             );
             setformValue(null);
             fetchDesignation();
@@ -129,49 +160,71 @@ const Designations = () => {
   }, [formValue]);
 
   const deleteDesignation = (row) => {
-    console.log("Id:", row._id);
+    console.log('Id:', row._id);
     axiosInstance
       .patch(`/designation/${row._id}`)
       .then((res) => {
-        console.log("this:", res);
+        console.log('this:', res);
         // setallDesignation((prevData) =>
         //   prevData.filter((pdata) => pdata._id !== row._id)
         // );
-        showAlert(true, res?.data?.message, "alert alert-info");
+        showAlert(true, res?.data?.message, 'alert alert-info');
         fetchDesignation();
         window.location.reload();
         // $('#exampleModal').modal('toggle');
       })
       .catch((error) => {
-        console.log("That:", error?.response?.data?.message);
-        showAlert(true, error?.response?.data?.message, "alert alert-danger");
+        console.log('That:', error?.response?.data?.message);
+        showAlert(true, error?.response?.data?.message, 'alert alert-danger');
       });
   };
 
   const columns = [
-    // {
-    //   dataField: "",
-    //   text: "#",
-    //   headerStyle: { width: "5%" },
-    //   formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
-    // },
     {
-      dataField: "designation",
-      text: "Designation",
-      sort: true,
-      headerStyle: { width: "70%" },
+      dataField: "index",
+      text: "#",
+      headerStyle: { width: "5%" },
     },
     {
-      dataField: "createdAt",
-      text: "Created",
+      dataField: 'designation',
+      text: 'Designation',
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: '40%' },
+    },
+    {
+      dataField: '_id',
+      text: 'Designation ID',
+      sort: true,
+      headerStyle: { width: '10%' },
+    },
+    {
+      dataField: '',
+      text: '',
+      headerStyle: { width: '20%' },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={() => handleCopyClick(row)}
+            >
+              Copy to clipboard <i className="fa fa-copy"></i>
+            </button>
+          </div>
+        </div>
+      ),
+    },
+    {
+      dataField: 'createdAt',
+      text: 'Created',
+      sort: true,
+      headerStyle: { width: '20%' },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
+      dataField: '',
+      text: 'Action',
+      headerStyle: { width: '10%' },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -214,8 +267,11 @@ const Designations = () => {
 
   return (
     <>
-    <AddDesignationModal allDesignation={fetchDesignation} />
-    <EditDesignationModal editDesignation={editDesignation} fetchDesignation={fetchDesignation} />
+      <AddDesignationModal allDesignation={fetchDesignation} />
+      <EditDesignationModal
+        editDesignation={editDesignation}
+        fetchDesignation={fetchDesignation}
+      />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -250,7 +306,7 @@ const Designations = () => {
             options={designationOpts}
             placeholder="Filter Designations"
             isClearable={true}
-            style={{ display: "inline-block" }}
+            style={{ display: 'inline-block' }}
             // formatGroupLabel={formatGroupLabel}
           />
         </div>
@@ -272,6 +328,7 @@ const Designations = () => {
         selectedRow={deleteData}
         deleteFunction={deleteDesignation}
       />
+      {isCopied && <ClipboardCopyNotification />}
     </>
   );
 };

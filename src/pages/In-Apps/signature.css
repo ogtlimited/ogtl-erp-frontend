@@ -1,7 +1,7 @@
 /** @format */
 
 body {
-  background: #f2f5f9;
+  background: #fff;
 }
 
 .gfuSqG {
@@ -41,7 +41,7 @@ body {
 
 .bottom {
   display: flex;
-  background-color: rgb(241, 252, 255);
+  background-color: #fff;
   padding: 35px 0px;
 }
 .lab {
@@ -70,7 +70,7 @@ body {
   margin-left: 10px;
 }
 .signature tbody {
-  background-color: aliceblue !important;
+  background-color: #fff!important;
   padding-top: 9px !important;
 }
 .signature tr {
@@ -84,13 +84,14 @@ body {
   color: rgb(0, 175, 239);
 }
 .email-signature-div {
-  background-color: #479be4;
+  background-color: rgb(10, 109, 145);
   height: 17.8rem;
   display: flex;
   align-items: center;
+  justify-content: right;
 }
 .email-signature-img {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   object-fit: cover;
 }
@@ -124,7 +125,7 @@ body {
   margin-left: 2%;
 }
 .phone-td-container {
-  background-color: #f6f6f6;
+  background-color: #fff;
   margin-bottom: 0;
 }
 
