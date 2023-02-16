@@ -1,63 +1,84 @@
-/* eslint-disable no-unused-vars */
-/** @format */
+/*eslint-disable no-unused-vars*/
 
 import React, { useState, useEffect } from 'react';
-import { create_department } from '../FormJSON/CreateLeaveApprovalLevel';
+import { edit_department_shifts } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
-export const AddDepartmentModal = ({ getAllDepartments }) => {
+export const EditDepartmentShiftModal = ({ fetchDeptShift, department, editShift }) => {
+  const { id } = useParams();
   const { showAlert } = useAppContext();
-  const [createDepartment, setCreateDepartment] =
-    useState(create_department);
+  const [createDepartmentShift, setCreateDepartmentShift] = useState(
+    edit_department_shifts
+  );
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
+  useEffect(() => {
+    setCreateDepartmentShift(editShift);
+  }, [editShift]);
+
   const cancelEvent = () => {
-    setCreateDepartment(create_department);
+    setCreateDepartmentShift(edit_department_shifts);
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
-    setCreateDepartment({
-      ...createDepartment,
+    setCreateDepartmentShift({
+      ...createDepartmentShift,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleCreateDepartment = async (e) => {
+  const handleCreateDepartmentShift = async (e) => {
     e.preventDefault();
+
+    function convertH2M(timeInHour) {
+      var timeParts = timeInHour.split(':');
+      return Number(timeParts[0]) * 60 + Number(timeParts[1]);
+    }
+
+    function toHoursAndMinutes(totalMinutes) {
+      const minutes = totalMinutes % 60;
+      const hours = Math.floor(totalMinutes / 60);
+      return `${hours < 1 ? hours + 24 : hours}h${minutes > 0 ? ` ${minutes}m` : ''}`;
+    }
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/office', {
-        ...createDepartment,
-        leave_approval_level: +createDepartment.leave_approval_level
+      const res = await axiosInstance.patch(`/api/shiftType/${editShift._id}`, {
+        ...createDepartmentShift,
+        departmentId: id,
+        expectedWorkTime: toHoursAndMinutes(
+          convertH2M(createDepartmentShift.end_time) -
+            convertH2M(createDepartmentShift.start_time)
+        ),
       });
       const resData = res?.data?.data;
-      console.log(resData)
 
       showAlert(
         true,
-        'Department created successfully!',
+        `${department} shift updated successfully!`,
         'alert alert-success'
       );
-      setCreateDepartment(create_department);
-      $('#DepartmentFormModal').modal('toggle');
+      setCreateDepartmentShift(edit_department_shifts);
+      $('#EditDepartmentShiftFormModal').modal('toggle');
+      setLoading(false);
+      fetchDeptShift();
     } catch (error) {
       const errorMsg = error.response?.data?.message;
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
+      setLoading(false);
     }
-    setLoading(false);
-    getAllDepartments()
   };
 
   return (
     <>
       <div
         className="modal fade"
-        id="DepartmentFormModal"
+        id="EditDepartmentShiftFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -66,7 +87,7 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Create Department
+                Edit {department} shift
               </h4>
               <button
                 type="button"
@@ -79,41 +100,7 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateDepartment}>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="department">Department</label>
-                      <input
-                        name="department"
-                        type="text"
-                        className="form-control"
-                        value={createDepartment.department}
-                        onChange={handleFormChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_approval_level">Highest Leave Approval Level</label>
-                      <input
-                        name="leave_approval_level"
-                        type="number"
-                        className="form-control"
-                        value={createDepartment.leave_approval_level}
-                        onChange={handleFormChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-              <hr className='horizontal-department-rule'/>
-              <h5 style={{marginBottom: "20px"}}>
-                Department Shift
-              </h5>
-                
+              <form onSubmit={handleCreateDepartmentShift}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -122,9 +109,8 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
                         name="shift_name"
                         type="text"
                         className="form-control"
-                        value={createDepartment.shift_name}
+                        value={createDepartmentShift.shift_name}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
@@ -135,9 +121,8 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
                         name="start_time"
                         type="time"
                         className="form-control"
-                        value={createDepartment.start_time}
+                        value={createDepartmentShift.start_time}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
@@ -148,9 +133,8 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
                         name="end_time"
                         type="time"
                         className="form-control"
-                        value={createDepartment.end_time}
+                        value={createDepartmentShift.end_time}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
