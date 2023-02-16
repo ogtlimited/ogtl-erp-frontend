@@ -9,16 +9,13 @@ import Select from 'react-select';
 import EmployeeHelperService from '../../pages/HR/Admin/employee.helper';
 
 export const AddEmployeeModal = () => {
-  const { fetchEmployee, createEmployee, showAlert, status } =
-    useAppContext();
+  const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(CREATE_PROFILE);
   const [loading, setLoading] = useState(false);
 
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
-  const [isDepartmentValid, setIsDepartmentValid] = useState(false);
-  const [isDesignationValid, setIsDesignationValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
 
   const [services, setServices] = useState([]);
@@ -29,25 +26,34 @@ export const AddEmployeeModal = () => {
   const [projectId, setProjectId] = useState('');
   const [employeeStatus, setEmployeeStatus] = useState('');
   const [defaultShift, setDefaultShift] = useState('');
+  const [validShift, setValidShift] = useState('');
+  const [officeType, setOfficeType] = useState('');
+  const [officeId, setOfficeId] = useState('');
 
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     setIsGenderValid(employee.gender ? true : false);
     setIsReportToValid(employee.reports_to ? true : false);
-    setIsDepartmentValid(employee.department ? true : false);
-    setIsDesignationValid(employee.designation ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
     setIsAllValid(
-      employee.gender &&
-        employee.reports_to &&
-        employee.department &&
-        employee.designation &&
-        employee.employeeType
+      employee.gender && employee.reports_to && employee.employeeType
         ? true
         : false
     );
   }, [employee]);
+
+  const handleDepartmentClick = (e) => {
+    setEmployee({ ...employee, department: e?.value });
+    setOfficeType('Department ');
+    setOfficeId(e.value);
+  };
+
+  const handleCampaignClick = (e) => {
+    setEmployee({ ...employee, projectId: e?.value });
+    setOfficeType('Campaign ');
+    setOfficeId(e.value);
+  };
 
   useEffect(() => {
     createEmployee().then((res) => {
@@ -88,7 +94,11 @@ export const AddEmployeeModal = () => {
       setProjectId(projectId);
 
       const default_shift = service.shiftsopts;
+      const validShift = default_shift.filter(
+        (shift) => shift.officeId === officeId
+      );
       setDefaultShift(default_shift);
+      setValidShift(validShift);
 
       const branch = service.branchOpts;
       setBranch(branch);
@@ -96,7 +106,7 @@ export const AddEmployeeModal = () => {
       const emp_status = service.employeestatusOpts;
       setEmployeeStatus(emp_status);
     });
-  }, [createEmployee, status]);
+  }, [createEmployee, officeId, status]);
 
   const genders = [
     {
@@ -169,7 +179,7 @@ export const AddEmployeeModal = () => {
       $('#AddEmployeeFormModal').modal('toggle');
     } catch (error) {
       const errorMsg = error.response?.data?.message;
-      console.log("Add Employee Record Error:", errorMsg);
+      console.log('Add Employee Record Error:', errorMsg);
       setEmployee(CREATE_PROFILE);
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
       $('#AddEmployeeFormModal').modal('toggle');
@@ -330,25 +340,28 @@ export const AddEmployeeModal = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="department">
-                          Department {!isDepartmentValid && <span>*</span>}
-                        </label>
-                        <Select
-                          options={department}
-                          isSearchable={true}
-                          isClearable={true}
-                          onChange={(e) =>
-                            setEmployee({ ...employee, department: e?.value })
-                          }
-                          style={{ display: 'inline-block' }}
-                        />
+                        <label htmlFor="department">Department</label>
+                        {officeType === 'Campaign ' ? (
+                          <Select
+                            options={department}
+                            isSearchable={true}
+                            value={employee.department === null}
+                            onChange={(e) => handleDepartmentClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        ) : (
+                          <Select
+                            options={department}
+                            isSearchable={true}
+                            onChange={(e) => handleDepartmentClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="designation">
-                          Designation {!isDesignationValid && <span>*</span>}
-                        </label>
+                        <label htmlFor="designation">Designation</label>
                         <Select
                           options={designation}
                           isSearchable={true}
@@ -397,22 +410,39 @@ export const AddEmployeeModal = () => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="projectId">Campaign</label>
-                        <Select
-                          options={projectId}
-                          isSearchable={true}
-                          isClearable={true}
-                          onChange={(e) =>
-                            setEmployee({ ...employee, projectId: e?.value })
-                          }
-                          style={{ display: 'inline-block' }}
-                        />
+                        {officeType === 'Department ' ? (
+                          <Select
+                            options={projectId}
+                            isSearchable={true}
+                            value={employee.projectId === null}
+                            onChange={(e) => handleCampaignClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        ) : (
+                          <Select
+                            options={projectId}
+                            isSearchable={true}
+                            onChange={(e) => handleCampaignClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="default_shift">Shift</label>
+                        {!validShift.length ? (
+                          <label htmlFor="default_shift">
+                            Default Shift
+                          </label>
+                        ) : (
+                          <label htmlFor="default_shift">
+                            {officeType} Shift
+                          </label>
+                        )}
                         <Select
-                          options={defaultShift}
+                          options={
+                            !validShift.length ? defaultShift : validShift
+                          }
                           isSearchable={true}
                           isClearable={true}
                           onChange={(e) =>

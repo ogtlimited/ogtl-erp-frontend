@@ -47,6 +47,24 @@ export default class EmployeeHelperService {
 
     const shiftsopts = this.shifts?.map((e) => {
       return {
+        officeType:
+          e.departmentId === null && e.campaignId === null
+            ? null
+            : e.departmentId === null && e.campaignId !== null
+            ? 'campaign'
+            : e.departmentId !== null && e.campaignId === null
+            ? 'department'
+            : null,
+        officeId:
+        e.departmentId === null && e.campaignId === null
+          ? null
+          : e.departmentId === null && e.campaignId !== null
+          ? e.campaignId
+          : e.departmentId !== null && e.campaignId === null
+          ? e.departmentId
+          : null,
+        campaignId: e.campaignId,
+        departmentId: e.departmentId,
         label: e.shift_name,
         value: e._id,
       };
