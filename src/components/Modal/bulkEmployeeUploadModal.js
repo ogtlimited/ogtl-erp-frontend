@@ -71,7 +71,6 @@ const UploadModal = ({
                 res.data.message,
                 "alert alert-success"
               );
-              // console.log("responds", res.data.message)
               settoggleModal(false);
               setuploading(false);
               setloading(false);
@@ -79,9 +78,8 @@ const UploadModal = ({
               fetchEmployee();
             })
             .catch((err) => {
-              console.log("error responds", err)
               settoggleModal(false);
-              showAlert(true, "Error uploading data", "alert alert-danger");
+              showAlert(true, err.message, "alert alert-danger");
               setloading(false);
               buttonRef.click();
               settoggleModal(false);
