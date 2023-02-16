@@ -68,10 +68,10 @@ const UploadModal = ({
             .then((res) => {
               showAlert(
                 true,
-                "Data uploaded successfully",
+                res.data.message,
                 "alert alert-success"
               );
-              console.log("responds", res.data.message)
+              // console.log("responds", res.data.message)
               settoggleModal(false);
               setuploading(false);
               setloading(false);
@@ -79,32 +79,13 @@ const UploadModal = ({
               fetchEmployee();
             })
             .catch((err) => {
-              showAlert(false, "Error uploading data", "alert alert-success");
+              console.log("error responds", err)
+              settoggleModal(false);
+              showAlert(true, "Error uploading data", "alert alert-danger");
               setloading(false);
               buttonRef.click();
               settoggleModal(false);
             });
-
-    // axiosInstance({
-    //   method: path === "/leave-application/update-leavecount" ? "PUT" : "POST",
-    //   baseURL: config.ApiUrl + path,
-    //   data: data,
-    // })
-    //   .then((res) => {
-    //     showAlert(true, "Data successfully uploaded", "alert alert-success");
-    //     settoggleModal(false);
-    //     setuploading(false);
-    //     setloading(false);
-    //     buttonRef.click();
-    //     fetchEmployee();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     showAlert(false, "Error uploading data", "alert alert-success");
-    //     setloading(false);
-    //     buttonRef.click();
-    //     settoggleModal(false);
-    //   });
   };
   return (
     <div
