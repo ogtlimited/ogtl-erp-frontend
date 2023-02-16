@@ -16,6 +16,7 @@ export const AddEmployeeModal = () => {
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
+  const [isDesignationValid, setIsDesignationValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
 
   const [services, setServices] = useState([]);
@@ -35,9 +36,13 @@ export const AddEmployeeModal = () => {
   useEffect(() => {
     setIsGenderValid(employee.gender ? true : false);
     setIsReportToValid(employee.reports_to ? true : false);
+    setIsDesignationValid(employee.designation ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
     setIsAllValid(
-      employee.gender && employee.reports_to && employee.employeeType
+      employee.gender &&
+        employee.reports_to &&
+        employee.designation &&
+        employee.employeeType
         ? true
         : false
     );
@@ -361,16 +366,23 @@ export const AddEmployeeModal = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="designation">Designation</label>
-                        <Select
-                          options={designation}
-                          isSearchable={true}
-                          isClearable={true}
-                          onChange={(e) =>
-                            setEmployee({ ...employee, designation: e?.value })
-                          }
-                          style={{ display: 'inline-block' }}
-                        />
+                        <label htmlFor="projectId">Campaign</label>
+                        {officeType === 'Department ' ? (
+                          <Select
+                            options={projectId}
+                            isSearchable={true}
+                            value={employee.projectId === null}
+                            onChange={(e) => handleCampaignClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        ) : (
+                          <Select
+                            options={projectId}
+                            isSearchable={true}
+                            onChange={(e) => handleCampaignClick(e)}
+                            style={{ display: 'inline-block' }}
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -409,40 +421,32 @@ export const AddEmployeeModal = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="projectId">Campaign</label>
-                        {officeType === 'Department ' ? (
-                          <Select
-                            options={projectId}
-                            isSearchable={true}
-                            value={employee.projectId === null}
-                            onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: 'inline-block' }}
-                          />
-                        ) : (
-                          <Select
-                            options={projectId}
-                            isSearchable={true}
-                            onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: 'inline-block' }}
-                          />
-                        )}
+                        <label htmlFor="designation">
+                          Designation {!isDesignationValid && <span>*</span>}
+                        </label>
+                        <Select
+                          options={designation}
+                          isSearchable={true}
+                          isClearable={true}
+                          onChange={(e) =>
+                            setEmployee({ ...employee, designation: e?.value })
+                          }
+                          style={{ display: 'inline-block' }}
+                        />
                       </div>
                     </div>
+
                     <div className="col-md-6">
                       <div className="form-group">
                         {!validShift.length ? (
-                          <label htmlFor="default_shift">
-                            Shift
-                          </label>
+                          <label htmlFor="default_shift">Shift</label>
                         ) : (
                           <label htmlFor="default_shift">
                             {officeType} Shift
                           </label>
                         )}
                         <Select
-                          options={
-                            !validShift.length ? defaultShift : validShift
-                          }
+                          options={!validShift.length ? validShift : validShift}
                           isSearchable={true}
                           isClearable={true}
                           onChange={(e) =>
