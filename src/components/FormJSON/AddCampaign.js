@@ -1,0 +1,18 @@
+export const CREATE_CAMPAIGN = {
+  project_name: '',
+  client_id: null,
+  type: null,
+  diallers: null,
+  number_of_employees: '',
+  billing_structure: null,
+  start_date: new Date(),
+  end_date: new Date(),
+  manager: null,
+  quality_analyst: null,
+  objectives: '',
+  office_type: 'campaign',
+  start_time: '',
+  end_time: '',
+  shift_name: '',
+  creator: '',
+}

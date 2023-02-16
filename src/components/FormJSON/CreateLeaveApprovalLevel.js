@@ -20,3 +20,29 @@ export const create_department = {
   end_time: '',
   shift_name: '',
 };
+
+export const create_department_shifts = {
+  departmentId: '',
+  shift_name: '',
+  start_time: '',
+  end_time: '',
+};
+export const edit_department_shifts = {
+  departmentId: '',
+  shift_name: '',
+  start_time: '',
+  end_time: '',
+};
+
+export const create_campaign_shifts = {
+  campaignId: '',
+  shift_name: '',
+  start_time: '',
+  end_time: '',
+};
+export const edit_campaign_shifts = {
+  campaignId: '',
+  shift_name: '',
+  start_time: '',
+  end_time: '',
+};

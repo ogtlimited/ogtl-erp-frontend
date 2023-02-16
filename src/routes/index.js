@@ -208,6 +208,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'campaigns/shifts/:id',
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <CampaignShiftView />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'campaign-info/:id',
               element: (
                 <GuardedRoute title="" dept="Super">
@@ -950,6 +958,9 @@ const LeaveApprovalView = Loadable(
 );
 const DepartmentShiftView = Loadable(
   lazy(() => import('../pages/HR/Admin/DepartmentShiftView.Admin'))
+);
+const CampaignShiftView = Loadable(
+  lazy(() => import('../pages/Campaigns/CampaignShiftView'))
 );
 const LeaveType = Loadable(
   lazy(() => import('../pages/HR/Admin/LeaveType.Admin'))

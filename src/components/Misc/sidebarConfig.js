@@ -157,17 +157,17 @@ const sidebarConfig = [
             title: 'Leave Types',
             path: PATH_DASHBOARD.hr.leaveType,
           },
-          { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
-          {
-            canView: 'HR',
-            title: 'Shift Assignments',
-            path: PATH_DASHBOARD.hr.shiftAssignment,
-          },
-          {
-            canView: 'All',
-            title: 'Shift Request',
-            path: PATH_DASHBOARD.hr.shiftRequest,
-          },
+          // { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
+          // {
+          //   canView: 'HR',
+          //   title: 'Shift Assignments',
+          //   path: PATH_DASHBOARD.hr.shiftAssignment,
+          // },
+          // {
+          //   canView: 'All',
+          //   title: 'Shift Request',
+          //   path: PATH_DASHBOARD.hr.shiftRequest,
+          // },
         ],
       },
       {

@@ -23,7 +23,7 @@ const Departments = () => {
   const [formValue, setformValue] = useState(null);
   const [editData, seteditData] = useState(null);
   const [clickedRow, setclickedRow] = useState(null);
-  const [deleteData, setdeleteData] = useState(null);
+  const [deleteData, setDeleteData] = useState(null);
   const [departMentOpts, setDepartmentOts] = useState(null);
   const [unfiltered, setunfiltered] = useState([]);
   const [mode, setmode] = useState('add');
@@ -228,7 +228,7 @@ const Departments = () => {
             {user?.role?.hr?.delete && (
               <a
                 className="dropdown-item"
-                onClick={() => setdeleteData(row)}
+                onClick={() => setDeleteData(row)}
                 href="#"
                 data-toggle="modal"
                 data-target="#exampleModal"
@@ -294,7 +294,6 @@ const Departments = () => {
         </div>
         <LeaveTable
           data={allDepartments}
-          // defaultSorted={defaultSorted}
           columns={columns}
         />
       </div>

@@ -1,34 +1,34 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 
-import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import LeaveTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
-import { AddDepartmentShiftModal } from "../../../components/Modal/AddDepartmentShiftModal";
-import { EditDepartmentShiftModal } from "../../../components/Modal/EditDepartmentShiftModal";
+import axiosInstance from "../../services/api";
+import { useAppContext } from "../../Context/AppContext";
+import { AddCampaignShiftModal } from "../../components/Modal/AddCampaignShiftModal";
+import { EditCampaignShiftModal } from "../../components/Modal/EditCampaignShiftModal";
 
-const DepartmentShiftView = () => {
+const CampaignShiftView = () => {
   const { id } = useParams();
   const { user } = useAppContext();
   const [editShift, setEditShift] = useState([]);
-  const [department, setDepartment] = useState('');
+  const [campaign, setCampaign] = useState('');
 
-  const [allDepartmentsShifts, setallDepartmentsShifts] = useState([]);
+  const [allCampaignsShifts, setallCampaignShifts] = useState([]);
 
-  const fetchDeptShift = () => {
-    const department = localStorage.getItem('department');
-    setDepartment(department);
+  const fetchCampaignShift = () => {
+    const campaign = localStorage.getItem('campaign');
+    setCampaign(campaign);
 
-    axiosInstance.get(`/api/shiftType/office?departmentId=${id}`).then((e) => {
+    axiosInstance.get(`/api/shiftType/office?campaignId=${id}`).then((e) => {
       const resData = e?.data?.shiftData;
-      setallDepartmentsShifts(resData);
+      setallCampaignShifts(resData);
     });
   };
 
 
   useEffect(() => {
-    fetchDeptShift();
+    fetchCampaignShift();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -70,7 +70,7 @@ const DepartmentShiftView = () => {
             <button
               className="btn btn-sm btn-primary"
                 data-toggle="modal"
-                data-target="#EditDepartmentShiftFormModal"
+                data-target="#EditCampaignShiftFormModal"
                 onClick={() => handleEditShift(row)}
             >
               Edit
@@ -86,12 +86,12 @@ const DepartmentShiftView = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{department} Shifts</h3>
+            <h3 className="page-title">{campaign} Shifts</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Department</li>
+              <li className="breadcrumb-item active">Campaign</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -100,7 +100,7 @@ const DepartmentShiftView = () => {
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#DepartmentShiftFormModal"
+                data-target="#CampaignShiftFormModal"
               >
                 <i className="fa fa-plus"></i> Add Shift
               </a>
@@ -110,15 +110,15 @@ const DepartmentShiftView = () => {
       </div>
       <div className="row">
         <LeaveTable
-          data={allDepartmentsShifts}
+          data={allCampaignsShifts}
           columns={columns}
         />
       </div>
 
-      <AddDepartmentShiftModal fetchDeptShift={fetchDeptShift} department={department} />
-      <EditDepartmentShiftModal fetchDeptShift={fetchDeptShift} department={department} editShift={editShift} />
+      <AddCampaignShiftModal fetchCampaignShift={fetchCampaignShift} campaign={campaign} />
+      <EditCampaignShiftModal fetchCampaignShift={fetchCampaignShift} campaign={campaign} editShift={editShift} />
     </>
   );
 };
 
-export default DepartmentShiftView ;
+export default CampaignShiftView;
