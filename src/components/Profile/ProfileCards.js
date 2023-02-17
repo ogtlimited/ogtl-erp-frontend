@@ -34,10 +34,12 @@ const ProfileCards = ({
     avater4,
     avater5,
   ]);
+  
   const handleChange = (type) => {
     setFormValue(null);
     setformType(type);
   };
+
   useEffect(() => {
     setemployeeDetails(userData?.employee);
     setcampaign(userData?.employee?.projectId);
