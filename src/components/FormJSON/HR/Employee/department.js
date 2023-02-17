@@ -5,16 +5,17 @@ export const departmentFormJson = {
     type: 'text',
     label: 'Department',
     required: {
-      value: true,
-      message: 'Name is required',
+      value: false,
+      // message: 'Department is required',
     },
   },
+
   leave_approval_level: {
     type: 'number',
     label: 'Highest Leave Approval Level',
     required: {
-      value: true,
-      message: 'Level is required',
+      value: false,
+      // message: 'Approval level is required',
     },
   },
 };
