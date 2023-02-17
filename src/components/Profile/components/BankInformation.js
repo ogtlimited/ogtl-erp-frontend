@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
@@ -16,6 +17,7 @@ const BankInformation = ({
   const { id } = useParams();
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
+
   useEffect(() => {
     if (submitted === true) {
       let obj = {};
@@ -42,7 +44,8 @@ const BankInformation = ({
           showAlert(true, error?.response?.data?.message, "alert alert-danger");
         });
     }
-  }, [submitted, formValue, id, salaryDetails?.salaryDetails?._id]);
+  }, [submitted, formValue, id, salaryDetails?.salaryDetails?._id, fetchUserInfo, setFormValue, showAlert]);
+  
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
