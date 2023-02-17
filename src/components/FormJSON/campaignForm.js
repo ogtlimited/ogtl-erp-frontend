@@ -48,13 +48,11 @@ export const campaignFormJson = {
           value: "others",
         },
       ],
-      required: { value: true, message: "Field is required" },
     },
     {
       name: "number_of_employees",
       type: "text",
       title: "Number of employees",
-      required: { value: true, message: "Field is required" },
     },
     {
       name: "billing_structure",
@@ -78,19 +76,6 @@ export const campaignFormJson = {
           value: "per_hour/seat",
         },
       ],
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "shift_start",
-      type: "time",
-      title: "Shift Start",
-      required: { value: true, message: "Field is required" },
-    },
-    {
-      name: "shift_end",
-      type: "time",
-      title: "Shift End",
-      required: { value: true, message: "Field is required" },
     },
     {
       name: "start_date",
@@ -102,7 +87,6 @@ export const campaignFormJson = {
       name: "end_date",
       type: "date",
       title: "End date",
-      required: { value: true, message: "Field is required" },
     },
     // {
     //   name: "status",
@@ -133,13 +117,29 @@ export const campaignFormJson = {
       type: "select",
       options: [],
       title: "Manager",
-      required: { value: true, message: "Field is required" },
     },
     {
       name: "quality_analyst",
       type: "select",
       options: [],
       title: "Quality analyst",
+    },
+    {
+      name: "shift_start",
+      type: "time",
+      title: "Shift Start",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "shift_end",
+      type: "time",
+      title: "Shift End",
+      required: { value: true, message: "Field is required" },
+    },
+    {
+      name: "shift_name",
+      type: "text",
+      title: "Shift Name",
       required: { value: true, message: "Field is required" },
     },
 
@@ -147,7 +147,6 @@ export const campaignFormJson = {
       name: "objectives",
       type: "textarea",
       title: "Objectives",
-      required: { value: true, message: "Field is required" },
     },
   ],
 };
