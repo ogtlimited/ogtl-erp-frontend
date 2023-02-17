@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { bank_details } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
+import Select from 'react-select';
 import $ from 'jquery';
 
 export const AddBankInformationModal = ({ salaryDetails, fetchUserInfo }) => {
@@ -74,7 +75,7 @@ export const AddBankInformationModal = ({ salaryDetails, fetchUserInfo }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Leave Approval Level
+                Bank Information
               </h4>
               <button
                 type="button"
@@ -91,32 +92,27 @@ export const AddBankInformationModal = ({ salaryDetails, fetchUserInfo }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="department">Department</label>
-                      <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="department"
-                        required
-                      >
-                        <option value="" disabled selected hidden>
-                          Select department ...
-                        </option>
-                        {salaryMode.map((department, idx) => (
-                          <option
-                            key={idx}
-                            value={department._id}
-                            placeholder="Department"
-                            required
-                          >
-                            {department.department}
-                          </option>
-                        ))}
-                      </select>
+                      <label htmlFor="department">Salary Mode</label>
+                      <Select
+                          options={salaryMode}
+                          isSearchable={true}
+                          isClearable={true}
+                          onChange={(e) =>
+                            setBankDetails({ ...bankDetails, salary_mode: e?.value })
+                          }
+                          style={{ display: 'inline-block' }}
+                        />
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="designation">Designation</label>
+                      <label htmlFor="bank_name">Bank Name</label>
+                      <input 
+                        name="bank_name"
+                        type="text"
+                        className="form-control"
+                        value={bankDetails.bank_name}
+                        onChange={handleFormChange}/>
                     </div>
                   </div>
                 </div>
@@ -124,12 +120,25 @@ export const AddBankInformationModal = ({ salaryDetails, fetchUserInfo }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="approval_level">Approval Level</label>
+                      <label htmlFor="bank_code">Bank Code</label>
                       <input
-                        name="approval_level"
-                        type="number"
+                        name="bank_code"
+                        type="text"
                         className="form-control"
-                        // value={approvalLevel.approval_level}
+                        value={bankDetails.bank_code}
+                        onChange={handleFormChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="bank_account_number">Account Number</label>
+                      <input
+                        name="bank_account_number"
+                        type="text"
+                        className="form-control"
+                        value={bankDetails.bank_account_number}
                         onChange={handleFormChange}
                         required
                       />
