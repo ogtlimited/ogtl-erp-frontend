@@ -1,12 +1,12 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { CREATE_PROFILE } from '../FormJSON/AddEmployee';
-import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
-import $ from 'jquery';
-import Select from 'react-select';
-import EmployeeHelperService from '../../pages/HR/Admin/employee.helper';
+import React, { useState, useEffect, useCallback } from "react";
+import { CREATE_PROFILE } from "../FormJSON/AddEmployee";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
+import Select from "react-select";
+import EmployeeHelperService from "../../pages/HR/Admin/employee.helper";
 
 export const AddEmployeeModal = () => {
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
@@ -16,32 +16,32 @@ export const AddEmployeeModal = () => {
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
-  const [isDesignationValid, setIsDesignationValid] = useState(false);
+  // const [isDesignationValid, setIsDesignationValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
 
   const [services, setServices] = useState([]);
-  const [reportsTo, setReportsTo] = useState('');
-  const [department, setDepartment] = useState('');
-  const [designation, setDesignation] = useState('');
-  const [branch, setBranch] = useState('');
-  const [projectId, setProjectId] = useState('');
-  const [employeeStatus, setEmployeeStatus] = useState('');
-  const [defaultShift, setDefaultShift] = useState('');
-  const [validShift, setValidShift] = useState('');
-  const [officeType, setOfficeType] = useState('');
-  const [officeId, setOfficeId] = useState('');
+  // const [DesignationServices, setDesignationServices] = useState([]);
+  const [reportsTo, setReportsTo] = useState("");
+  const [department, setDepartment] = useState("");
+  const [branch, setBranch] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [employeeStatus, setEmployeeStatus] = useState("");
+  const [validShift, setValidShift] = useState("");
+  const [validDesignation, setValidDesignation] = useState("");
+  const [officeType, setOfficeType] = useState("");
+  const [officeId, setOfficeId] = useState("");
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     setIsGenderValid(employee.gender ? true : false);
     setIsReportToValid(employee.reports_to ? true : false);
-    setIsDesignationValid(employee.designation ? true : false);
+    // setIsDesignationValid(employee.designation ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
     setIsAllValid(
       employee.gender &&
         employee.reports_to &&
-        employee.designation &&
+        // employee.designation &&
         employee.employeeType
         ? true
         : false
@@ -50,14 +50,44 @@ export const AddEmployeeModal = () => {
 
   const handleDepartmentClick = (e) => {
     setEmployee({ ...employee, department: e?.value });
-    setOfficeType('Department ');
+    setOfficeType("Department ");
     setOfficeId(e.value);
+
+    // axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
+    //   const response = e?.data?.data;
+    //   const designationOpts = response?.map((e) => {
+    //     return {
+    //       officeType: "department",
+    //       officeId: e.department_id,
+    //       label: e.designation,
+    //       value: e._id,
+    //     };
+    //   });
+    //   setValidDesignation(designationOpts);
+    // }).catch((e) => {
+    //   console.log("designation error:", e);
+    // });
   };
 
   const handleCampaignClick = (e) => {
     setEmployee({ ...employee, projectId: e?.value });
-    setOfficeType('Campaign ');
+    setOfficeType("Campaign ");
     setOfficeId(e.value);
+
+    // axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
+    //   const response = e?.data?.data;
+    //   const designationOpts = response?.map((e) => {
+    //     return {
+    //       officeType: "department",
+    //       officeId: e.department_id,
+    //       label: e.designation,
+    //       value: e._id,
+    //     };
+    //   });
+    //   setValidDesignation(designationOpts);
+    // }).catch((e) => {
+    //   console.log("designation error:", e);
+    // });
   };
 
   useEffect(() => {
@@ -93,7 +123,10 @@ export const AddEmployeeModal = () => {
       setDepartment(department);
 
       const designation = service.designationOpts;
-      setDesignation(designation);
+      const validDesignation = designation.filter(
+        (designation) => designation.officeId === officeId
+      );
+      setValidDesignation(validDesignation);
 
       const projectId = service.campaingOpts;
       setProjectId(projectId);
@@ -102,7 +135,6 @@ export const AddEmployeeModal = () => {
       const validShift = default_shift.filter(
         (shift) => shift.officeId === officeId
       );
-      setDefaultShift(default_shift);
       setValidShift(validShift);
 
       const branch = service.branchOpts;
@@ -115,43 +147,43 @@ export const AddEmployeeModal = () => {
 
   const genders = [
     {
-      label: 'Female',
-      value: 'female',
+      label: "Female",
+      value: "female",
     },
     {
-      label: 'Male',
-      value: 'male',
+      label: "Male",
+      value: "male",
     },
   ];
 
   const employmentTypes = [
     {
-      label: 'Apprentice',
-      value: 'Apprentice',
+      label: "Apprentice",
+      value: "Apprentice",
     },
     {
-      label: 'Intern',
-      value: 'Intern',
+      label: "Intern",
+      value: "Intern",
     },
     {
-      label: 'Commission',
-      value: 'Commission',
+      label: "Commission",
+      value: "Commission",
     },
     {
-      label: 'Contract',
-      value: 'Contract',
+      label: "Contract",
+      value: "Contract",
     },
     {
-      label: 'Probation',
-      value: 'Probation',
+      label: "Probation",
+      value: "Probation",
     },
     {
-      label: 'PartTime',
-      value: 'PartTime',
+      label: "PartTime",
+      value: "PartTime",
     },
     {
-      label: 'FullTime',
-      value: 'FullTime',
+      label: "FullTime",
+      value: "FullTime",
     },
   ];
 
@@ -169,7 +201,7 @@ export const AddEmployeeModal = () => {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/employees', {
+      const res = await axiosInstance.post("/employees", {
         ...employee,
         leaveCount: +employee.leaveCount,
       });
@@ -178,16 +210,16 @@ export const AddEmployeeModal = () => {
 
       showAlert(
         true,
-        'New Employee created successfully',
-        'alert alert-success'
+        "New Employee created successfully",
+        "alert alert-success"
       );
-      $('#AddEmployeeFormModal').modal('toggle');
+      $("#AddEmployeeFormModal").modal("toggle");
     } catch (error) {
       const errorMsg = error.response?.data?.message;
-      console.log('Add Employee Record Error:', errorMsg);
+      console.log("Add Employee Record Error:", errorMsg);
       setEmployee(CREATE_PROFILE);
-      showAlert(true, `${errorMsg}`, 'alert alert-warning');
-      $('#AddEmployeeFormModal').modal('toggle');
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#AddEmployeeFormModal").modal("toggle");
       setLoading(false);
     }
     fetchEmployee();
@@ -223,7 +255,7 @@ export const AddEmployeeModal = () => {
             <div className="modal-body">
               {!services.length ? (
                 <>
-                  <p style={{ textAlign: 'center' }}>Loading Form...</p>
+                  <p style={{ textAlign: "center" }}>Loading Form...</p>
                   <span
                     className="spinner-border spinner-border-sm"
                     role="status"
@@ -310,7 +342,7 @@ export const AddEmployeeModal = () => {
                           onChange={(e) =>
                             setEmployee({ ...employee, gender: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -339,27 +371,27 @@ export const AddEmployeeModal = () => {
                           onChange={(e) =>
                             setEmployee({ ...employee, reports_to: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="department">Department</label>
-                        {officeType === 'Campaign ' ? (
+                        {officeType === "Campaign " ? (
                           <Select
                             options={department}
                             isSearchable={true}
                             value={employee.department === null}
                             onChange={(e) => handleDepartmentClick(e)}
-                            style={{ display: 'inline-block' }}
+                            style={{ display: "inline-block" }}
                           />
                         ) : (
                           <Select
                             options={department}
                             isSearchable={true}
                             onChange={(e) => handleDepartmentClick(e)}
-                            style={{ display: 'inline-block' }}
+                            style={{ display: "inline-block" }}
                           />
                         )}
                       </div>
@@ -367,20 +399,20 @@ export const AddEmployeeModal = () => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="projectId">Campaign</label>
-                        {officeType === 'Department ' ? (
+                        {officeType === "Department " ? (
                           <Select
                             options={projectId}
                             isSearchable={true}
                             value={employee.projectId === null}
                             onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: 'inline-block' }}
+                            style={{ display: "inline-block" }}
                           />
                         ) : (
                           <Select
                             options={projectId}
                             isSearchable={true}
                             onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: 'inline-block' }}
+                            style={{ display: "inline-block" }}
                           />
                         )}
                       </div>
@@ -421,11 +453,15 @@ export const AddEmployeeModal = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="designation">
-                          Designation {!isDesignationValid && <span>*</span>}
-                        </label>
+                        {!validDesignation.length ? (
+                          <label htmlFor="designation">Designation</label>
+                        ) : (
+                          <label htmlFor="designation">
+                            {officeType} Designation
+                          </label>
+                        )}
                         <Select
-                          options={designation}
+                          options={!validDesignation.length ? validDesignation : validDesignation}
                           isSearchable={true}
                           isClearable={true}
                           onChange={(e) =>
@@ -455,14 +491,14 @@ export const AddEmployeeModal = () => {
                               default_shift: e?.value,
                             })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="employeeType">
-                          Employment Type{' '}
+                          Employment Type{" "}
                           {!isEmploymentTypeValid && <span>*</span>}
                         </label>
                         <Select
@@ -472,7 +508,7 @@ export const AddEmployeeModal = () => {
                           onChange={(e) =>
                             setEmployee({ ...employee, employeeType: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -486,7 +522,7 @@ export const AddEmployeeModal = () => {
                           onChange={(e) =>
                             setEmployee({ ...employee, branch: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -500,7 +536,7 @@ export const AddEmployeeModal = () => {
                           onChange={(e) =>
                             setEmployee({ ...employee, status: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -540,7 +576,7 @@ export const AddEmployeeModal = () => {
                           aria-hidden="true"
                         ></span>
                       ) : (
-                        'Submit'
+                        "Submit"
                       )}
                     </button>
                   </div>
