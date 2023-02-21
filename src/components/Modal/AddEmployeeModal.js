@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { CREATE_PROFILE } from "../FormJSON/AddEmployee";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -9,6 +9,7 @@ import Select from "react-select";
 import EmployeeHelperService from "../../pages/HR/Admin/employee.helper";
 
 export const AddEmployeeModal = () => {
+  const selectInputRef = useRef();
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(CREATE_PROFILE);
   const [loading, setLoading] = useState(false);
@@ -53,20 +54,32 @@ export const AddEmployeeModal = () => {
     setOfficeType("Department ");
     setOfficeId(e.value);
 
-    // axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
-    //   const response = e?.data?.data;
-    //   const designationOpts = response?.map((e) => {
-    //     return {
-    //       officeType: "department",
-    //       officeId: e.department_id,
-    //       label: e.designation,
-    //       value: e._id,
-    //     };
-    //   });
-    //   setValidDesignation(designationOpts);
-    // }).catch((e) => {
-    //   console.log("designation error:", e);
-    // });
+    selectInputRef.current.select.clearValue();
+    axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
+      const response = e?.data?.data;
+      const designationOpts = response?.map((e) => {
+        return {
+          label: e.designation,
+          value: e._id,
+        };
+      });
+      setValidDesignation(designationOpts);
+    }).catch((e) => {
+      console.log("designation error:", e);
+    });
+
+    axiosInstance.get(`/api/shiftType/office?departmentId=${e.value}`).then((e) => {
+      const response = e?.data?.shiftData;
+      const shiftOpts = response?.map((e) => {
+        return {
+          label: e.shift_name,
+          value: e._id,
+        };
+      });
+      setValidShift(shiftOpts);
+    }).catch((e) => {
+      console.log("shift error:", e);
+    });
   };
 
   const handleCampaignClick = (e) => {
@@ -74,20 +87,32 @@ export const AddEmployeeModal = () => {
     setOfficeType("Campaign ");
     setOfficeId(e.value);
 
-    // axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
-    //   const response = e?.data?.data;
-    //   const designationOpts = response?.map((e) => {
-    //     return {
-    //       officeType: "department",
-    //       officeId: e.department_id,
-    //       label: e.designation,
-    //       value: e._id,
-    //     };
-    //   });
-    //   setValidDesignation(designationOpts);
-    // }).catch((e) => {
-    //   console.log("designation error:", e);
-    // });
+    selectInputRef.current.select.clearValue();
+    axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
+      const response = e?.data?.data;
+      const designationOpts = response?.map((e) => {
+        return {
+          label: e.designation,
+          value: e._id,
+        };
+      });
+      setValidDesignation(designationOpts);
+    }).catch((e) => {
+      console.log("designation error:", e);
+    });
+
+    axiosInstance.get(`/api/shiftType/office?campaignId=${e.value}`).then((e) => {
+      const response = e?.data?.shiftData;
+      const shiftOpts = response?.map((e) => {
+        return {
+          label: e.shift_name,
+          value: e._id,
+        };
+      });
+      setValidShift(shiftOpts);
+    }).catch((e) => {
+      console.log("shift error:", e);
+    });
   };
 
   useEffect(() => {
@@ -122,20 +147,21 @@ export const AddEmployeeModal = () => {
       const department = service.deptopts;
       setDepartment(department);
 
-      const designation = service.designationOpts;
-      const validDesignation = designation.filter(
-        (designation) => designation.officeId === officeId
-      );
-      setValidDesignation(validDesignation);
-
       const projectId = service.campaingOpts;
       setProjectId(projectId);
 
-      const default_shift = service.shiftsopts;
-      const validShift = default_shift.filter(
-        (shift) => shift.officeId === officeId
-      );
-      setValidShift(validShift);
+      // const designation = service.designationOpts;
+      // const validDesignation = designation.filter(
+      //   (designation) => designation.officeId === officeId
+      // );
+      // setValidDesignation(validDesignation);
+
+
+      // const default_shift = service.shiftsopts;
+      // const validShift = default_shift.filter(
+      //   (shift) => shift.officeId === officeId
+      // );
+      // setValidShift(validShift);
 
       const branch = service.branchOpts;
       setBranch(branch);
@@ -464,6 +490,7 @@ export const AddEmployeeModal = () => {
                           options={!validDesignation.length ? validDesignation : validDesignation}
                           isSearchable={true}
                           isClearable={true}
+                          ref={selectInputRef}
                           onChange={(e) =>
                             setEmployee({ ...employee, designation: e?.value })
                           }
