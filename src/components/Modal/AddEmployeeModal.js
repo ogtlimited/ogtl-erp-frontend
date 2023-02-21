@@ -31,6 +31,8 @@ export const AddEmployeeModal = () => {
   const [validDesignation, setValidDesignation] = useState("");
   const [officeType, setOfficeType] = useState("");
   const [officeId, setOfficeId] = useState("");
+  const [deptError, setDeptError] = useState("");
+  const [desError, setDesError] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -65,7 +67,9 @@ export const AddEmployeeModal = () => {
       });
       setValidDesignation(designationOpts);
     }).catch((e) => {
-      console.log("designation error:", e);
+      setValidDesignation([]);
+      setDeptError(e?.response?.data?.message);
+      setDesError("");
     });
 
     axiosInstance.get(`/api/shiftType/office?departmentId=${e.value}`).then((e) => {
@@ -78,6 +82,7 @@ export const AddEmployeeModal = () => {
       });
       setValidShift(shiftOpts);
     }).catch((e) => {
+      setValidShift([]);
       console.log("shift error:", e);
     });
   };
@@ -98,7 +103,9 @@ export const AddEmployeeModal = () => {
       });
       setValidDesignation(designationOpts);
     }).catch((e) => {
-      console.log("designation error:", e);
+      setValidDesignation([]);
+      setDesError(e?.response?.data?.message);
+      setDeptError("");
     });
 
     axiosInstance.get(`/api/shiftType/office?campaignId=${e.value}`).then((e) => {
@@ -111,6 +118,7 @@ export const AddEmployeeModal = () => {
       });
       setValidShift(shiftOpts);
     }).catch((e) => {
+      setValidShift([]);
       console.log("shift error:", e);
     });
   };
@@ -420,6 +428,7 @@ export const AddEmployeeModal = () => {
                             style={{ display: "inline-block" }}
                           />
                         )}
+                        <span style={{color: "red"}}>{deptError}</span>
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -441,6 +450,7 @@ export const AddEmployeeModal = () => {
                             style={{ display: "inline-block" }}
                           />
                         )}
+                        <span style={{color: "red"}}>{desError}</span>
                       </div>
                     </div>
                     <div className="col-md-6">
