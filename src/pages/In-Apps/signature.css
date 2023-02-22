@@ -89,7 +89,7 @@ body {
 .email-signature-img {
   height: 100%;
   object-fit: cover;
-  border-left: 20px solid rgb(42, 167, 189);
+  border-left: 15px solid rgb(42, 167, 189);
 }
 
 .signature-info__upper-right-header {
