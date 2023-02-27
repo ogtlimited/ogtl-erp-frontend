@@ -22,30 +22,29 @@ body {
 }
 .title {
   margin-left: 50px;
-  padding: 5px 0px;
 }
 .title p {
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
-  line-height: 14px;
+  line-height: 10px;
   color: rgb(129, 129, 129);
 }
 .s-title {
   font-style: normal;
   font-weight: bold;
   font-size: 22px;
-  line-height: 27px;
+  line-height: 10px;
   color: rgb(51, 51, 51);
 }
 
 .bottom {
   display: flex;
   background-color: #fff;
-  padding: 35px 0px;
+  padding: 5px 0px;
 }
 .lab {
-  font-size: 30px;
+  font-size: 20px;
 }
 .las {
   font-size: 18px;
@@ -53,47 +52,44 @@ body {
 .detail-link {
   display: flex;
   margin-bottom: 15px;
-  max-width: 90%;
+  max-width: 80%;
 }
 .detail-link span {
   font-style: normal;
   font-weight: normal;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 10px;
   color: rgb(68, 68, 68);
 }
 .vertical-line {
   width: 0;
-  height: 100%;
+  height: 80%;
   border-right: 1px solid grey;
   margin-right: 9px;
   margin-left: 10px;
 }
+
 .signature tbody {
   background-color: #fff!important;
-  padding-top: 9px !important;
 }
 .signature tr {
   background-color: none !important;
-  padding-top: 9px !important;
 }
-/* .signature tr {
-  height: 29px !important;
-} */
+
 .blue {
   color: rgb(0, 175, 239);
 }
 .email-signature-div {
   background-color: rgb(10, 109, 145);
-  height: 17.8rem;
+  height: 15rem;
   display: flex;
   align-items: center;
   justify-content: right;
 }
 .email-signature-img {
-  /* width: 100%; */
   height: 100%;
   object-fit: cover;
+  border-left: 15px solid rgb(42, 167, 189);
 }
 
 .signature-info__upper-right-header {
@@ -106,27 +102,39 @@ body {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 0;
-  font-family: 'poppins', sans-serif;
+  font-family: 'montserrat', sans-serif !important;
 }
 
 .s-position {
   color: rgba(0, 0, 0, 0.884);
   font-size: 13px;
   margin-bottom: 0;
-  font-family: 'poppins', sans-serif;
+  font-family: 'montserrat', sans-serif !important;
 }
 .phone-td {
   font-size: 9px;
-  font-family: 'poppins', sans-serif;
+  font-family: 'montserrat', sans-serif !important;
   display: flex;
   font-weight: 600;
-  align-items: center;
+  align-items: end;
   width: 98%;
   margin-left: 2%;
 }
+
 .phone-td-container {
-  background-color: #fff;
   margin-bottom: 0;
+  padding: 0;
+}
+.phone-td-container-tr {
+  background-color: #fff;
+  height: 9px;
+}
+
+.phone-td-container-children {
+  background-color: #fff;
+  padding: 0;
+  align-items: center;
+  display: flex;
 }
 
 .signature-info__lower-awards {
@@ -141,17 +149,16 @@ body {
   margin-left: 3px;
   font-size: 8px;
   height: 100%;
-  font-family: 'poppins', sans-serif;
+  font-family: 'montserrat', sans-serif !important;
   display: flex;
   align-items: center;
   font-weight: 600;
   line-break: break-all;
 }
 .signature-info__lower-first {
-  margin-top: 5px;
   display: flex;
-  justify-content: left;
-  align-items: center;
+  justify-content: center;
+  align-items: start;
 }
 
 .signature-info__lower-second {
@@ -159,4 +166,11 @@ body {
   justify-content: left;
   align-items: center;
   width: 85%;
+}
+
+.signature-info__lower-awards-img > img {
+  display: flex;
+  width: 90%;
+  padding: 5px;
+  object-fit: cover;
 }
