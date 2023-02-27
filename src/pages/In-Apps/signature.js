@@ -1,22 +1,17 @@
 /** @format */
 
 import React from 'react';
-import LocationSvg from '../../assets/img/location.svg';
-import PhoneSvg from '../../assets/img/phone.svg';
-import AnchorSvg from '../../assets/img/anchor.svg';
-import Mail from '../../assets/img/mail.svg';
 const Signature = (props) => {
   return (
     <>
-      <div className="row signature">
+      <div className="signature">
         <table cellPadding={0} cellSpacing={0}>
           <tbody>
             <tr className="pt-1" style={{backgroundColor: "#fff"}}>
               <td
                 style={{
-                  height: '30%',
                   width: '35%',
-                  borderRight: '2px solid #0A6D9199',
+                  borderRight: '1px solid #0A6D9199',
                 }}
                 className="pl-2"
                 rowSpan={5}
@@ -87,9 +82,8 @@ const Signature = (props) => {
               </td>
 
               <td
-                style={{ height: '30%', background: 'rgb(10, 109, 145, 0.6)' }}
-                className="pl-3"
-                rowSpan={8}
+                className="pl-2"
+                rowSpan={6}
               >
                 <div className="email-signature-div">
                   <img
@@ -101,17 +95,14 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
+            <tr className="phone-td-container-tr">
               <td
                 rowSpan={1}
-                style={{
-                  padding: '0 10px 0 0',
-                  display: 'flex',
-                }}
+                className='phone-td-container-children'
               >
                 <span>
                   <img
-                    style={{ width: '27px' }}
+                    style={{ width: '22px' }}
                     src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/telephone_kxnkr1.png"
                     alt="Telephone"
                   />
@@ -120,17 +111,14 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
+            <tr className="phone-td-container-tr">
               <td
                 rowSpan={1}
-                style={{
-                  padding: '0 10px 0 0',
-                  display: 'flex',
-                }}
+                className='phone-td-container-children'
               >
                 <span>
                   <img
-                    style={{ width: '26px' }}
+                    style={{ width: '21px' }}
                     src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/email_v5uk8a.png"
                     alt="Email"
                   />
@@ -139,17 +127,14 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
+            <tr className="phone-td-container-tr">
               <td
                 rowSpan={1}
-                style={{
-                  padding: '0 10px 0 0',
-                  display: 'flex',
-                }}
+                className='phone-td-container-children'
               >
                 <span>
                   <img
-                    style={{ width: '25px' }}
+                    style={{ width: '21px' }}
                     src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/browser_cth9w5.png"
                     alt="Browser"
                   />
@@ -163,22 +148,19 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr className="phone-td-container" style={{backgroundColor: "#fff"}}>
+            <tr className="phone-td-container-tr">
               <td
                 rowSpan={1}
-                style={{
-                  padding: '0 10px 5px 0',
-                  display: 'flex',
-                }}
+                className='phone-td-container-children'
               >
                 <span>
                   <img
-                    style={{ width: '25px' }}
+                    style={{ width: '21px', marginTop: '-20px' }}
                     src="https://res.cloudinary.com/dhantey/image/upload/v1676301699/OGTL/location_suj6f8.png"
                     alt="Location"
                   />
                 </span>
-                <span className="phone-td">
+                <span className="phone-td" style={{paddingBottom: '5px'}}>
                   {' '}
                   2nd Floor, ASTA GALLERY Plot 1185, Parkway Road, Cadastral
                   Zone, Mabushi District, Abuja FCT, Nigeria
@@ -186,21 +168,16 @@ const Signature = (props) => {
               </td>
             </tr>
 
-            <tr style={{ background: '#fff', borderTop: '2px solid #0A6D9199' }} >
+            <tr style={{ background: '#fff', borderTop: '1px solid #0A6D9199' }} >
               <td rowSpan={1} colSpan={2} >
-                <div className="signature-info__lower-first">
                   <a href={'https://ogtl-awards.netlify.app/'}>
-                    <div className="signature-info__lower-awards">
                       <div className="signature-info__lower-awards-img">
                         <img
-                          style={{ width: '100%' }}
                           src="https://res.cloudinary.com/dhantey/image/upload/v1676382156/OGTL/list-of-awards_vjga7d.jpg"
                           alt="OGTL Awards"
                         />
-                      </div>
                     </div>
                   </a>
-                </div>
               </td>
             </tr>
 
