@@ -89,6 +89,22 @@ export default class EmployeeHelperService {
     });
     const designationOpts = this.designations?.map((e) => {
       return {
+        officeType:
+          e.department_id === undefined && e.campaign_id === undefined
+            ? undefined
+            : e.department_id === undefined && e.campaign_id !== undefined
+            ? 'campaign'
+            : e.department_id !== undefined && e.campaign_id === undefined
+            ? 'department'
+            : undefined,
+        officeId:
+        e.department_id === undefined && e.campaign_id === undefined
+          ? undefined
+          : e.department_id === undefined && e.campaign_id !== undefined
+          ? e.campaign_id
+          : e.department_id !== undefined && e.campaign_id === undefined
+          ? e.department_id
+          : undefined,
         label: e.designation,
         value: e._id,
       };
