@@ -54,7 +54,7 @@ const LeavesTable = ({
     });
     setTimeout(() => {
       setLoading(false);
-    }, 60000);
+    }, 5000);
   }, [mobileView]);
 
   const imageUrl = 'https://erp.outsourceglobal.com';

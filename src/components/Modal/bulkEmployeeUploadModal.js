@@ -63,29 +63,27 @@ const UploadModal = ({
   useEffect(() => {}, [uploadState]);
 
   const uploadData = () => {
-    setuploading(true);
-    setloading(true);
-
-    axiosInstance({
-      method: path === "/leave-application/update-leavecount" ? "PUT" : "POST",
-      baseURL: config.ApiUrl + path,
-      data: data,
-    })
-      .then((res) => {
-        showAlert(true, "Data successfully uploaded", "alert alert-success");
-        settoggleModal(false);
-        setuploading(false);
-        setloading(false);
-        buttonRef.click();
-        fetchEmployee();
-      })
-      .catch((err) => {
-        console.log(err);
-        showAlert(false, "Error uploading data", "alert alert-success");
-        setloading(false);
-        buttonRef.click();
-        settoggleModal(false);
-      });
+    axiosInstance
+            .post("/employees/bulk-upload", data)
+            .then((res) => {
+              showAlert(
+                true,
+                res.data.message,
+                "alert alert-success"
+              );
+              settoggleModal(false);
+              setuploading(false);
+              setloading(false);
+              buttonRef.click();
+              fetchEmployee();
+            })
+            .catch((err) => {
+              settoggleModal(false);
+              showAlert(true, err.message, "alert alert-danger");
+              setloading(false);
+              buttonRef.click();
+              settoggleModal(false);
+            });
   };
   return (
     <div
@@ -136,92 +134,7 @@ const UploadModal = ({
                     aria-controls="v-pills-home"
                     aria-selected="true"
                   >
-                    New User
-                  </a>
-                  <a
-                    onClick={() =>
-                      updateState(
-                        "/EmergencyContact/bulk-upload",
-                        "Upload Emergency Contact"
-                      )
-                    }
-                    className="nav-link mb-3"
-                    id="v-pills-profile-tab"
-                    data-toggle="pill"
-                    href="#v-pills-home"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                  >
-                    Emergency Contacts
-                  </a>
-                  <a
-                    onClick={() =>
-                      updateState(
-                        "/ContactDetails/bulk-upload",
-                        "Upload Contact Details"
-                      )
-                    }
-                    className="nav-link mb-3"
-                    id="v-pills-messages-tab"
-                    data-toggle="pill"
-                    href="#v-pills-home"
-                    role="tab"
-                    aria-controls="v-pills-messages"
-                    aria-selected="false"
-                  >
-                    Contact Details
-                  </a>
-                  <a
-                    onClick={() =>
-                      updateState(
-                        "/PersonalDetails/bulk-upload",
-                        "Upload Personal Details"
-                      )
-                    }
-                    className="nav-link mb-3"
-                    id="v-pills-personal-tab"
-                    data-toggle="pill"
-                    href="#v-pills-home"
-                    role="tab"
-                    aria-controls="v-pills-personal"
-                    aria-selected="false"
-                  >
-                    Personal Details
-                  </a>
-                  <a
-                    onClick={() =>
-                      updateState(
-                        "/SalaryDetails/bulk-upload",
-                        "Upload Salary Details"
-                      )
-                    }
-                    className="nav-link mb-3"
-                    id="v-pills-settings-tab"
-                    data-toggle="pill"
-                    href="#v-pills-home"
-                    role="tab"
-                    aria-controls="v-pills-settings"
-                    aria-selected="false"
-                  >
-                    Salary Details
-                  </a>
-                  <a
-                    onClick={() =>
-                      updateState(
-                        "/leave-application/update-leavecount",
-                        "Upload Leave"
-                      )
-                    }
-                    className="nav-link mb-3"
-                    id="v-pills-settings-tab"
-                    data-toggle="pill"
-                    href="#v-pills-home"
-                    role="tab"
-                    aria-controls="v-pills-settings"
-                    aria-selected="false"
-                  >
-                    Employee Leave
+                    BULK EMPLOYEES UPLOAD
                   </a>
                 </div>
               </div>
