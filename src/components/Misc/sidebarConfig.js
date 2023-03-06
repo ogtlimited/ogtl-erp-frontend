@@ -259,7 +259,7 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
-            title: 'Interview',
+            title: 'Recruitment Result',
             path: PATH_DASHBOARD.recruitment.aptitudeTests,
           },
           {

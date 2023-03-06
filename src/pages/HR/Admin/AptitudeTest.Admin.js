@@ -14,6 +14,8 @@ import helper from "../../../services/helper";
 import InterviewContent from "../../../components/ModalContents/interviewContents";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import RecruitmentResultUpload from "../../../components/Modal/RecruitmentResultUpload";
+
 
 const statusOptions = [
   {
@@ -35,6 +37,8 @@ const statusOptions = [
 ];
 
 const AptitudeTest = () => {
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formValue, setFormValue] = useState({});
   const [data, setData] = useState([]);
   const { showAlert, user, setformUpdate } = useAppContext();
@@ -310,28 +314,27 @@ const AptitudeTest = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Interview List</h3>
+            <h3 className="page-title">Recruitment Result</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
               <li className="breadcrumb-item">
-                <Link to="/">Employees</Link>
+                <Link to="/">Recruitment</Link>
               </li>
-              <li className="breadcrumb-item active">Interview List</li>
+              <li className="breadcrumb-item active">Recruitment Result</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && user?.role?.hr?.create && (
-              <a
-                href=""
+            {user?.role?.hr?.create && (
+              <button
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#FormModal"
-                onClick={() => create()}
+                data-target="#uploadRecruitmentResult"
+                onClick={() => settoggleModal(true)}
               >
-                Add New Interview
-              </a>
+            Import Results
+          </button>
             )}
           </div>
         </div>
@@ -357,6 +360,17 @@ const AptitudeTest = () => {
           title="Interview Details"
           content={<InterviewContent interviewContent={selectedRow} />}
         />
+      )}
+
+      {toggleModal && (
+        <div>
+          <RecruitmentResultUpload
+            settoggleModal={settoggleModal}
+            title="Upload Result"
+            url="/api/academy"
+            setUploadSuccess={setUploadSuccess}
+          />
+        </div>
       )}
     </>
   );
