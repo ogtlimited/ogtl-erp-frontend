@@ -139,16 +139,6 @@ const JobApplicants = () => {
     }, 60000);
   }, [fetchJobApplicants]);
 
-  // const handleClick = (i) => {
-  //   if (i?.value === 'All' || i === null) {
-  //     setData(unfiltered);
-  //   } else {
-  //     const filt = unfiltered.filter((e) => i.label.includes(e.status));
-
-  //     setData(filt);
-  //   }
-  // };
-
   //delete job opening
   const deleteJobApplicant = (row) => {
     axiosInstance
