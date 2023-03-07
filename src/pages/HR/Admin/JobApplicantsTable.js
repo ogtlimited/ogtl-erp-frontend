@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axiosInstance from '../../../services/api';
 // import { useAppContext } from '../../../Context/AppContext';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -30,17 +30,13 @@ const JobApplicantsTable = ({
   handleOnSelectAll,
   statusInterview,
   processingStage,
-  prevPage,
   page,
-  nextPage,
-  sizePerPage,
-  totalPages,
   setPage,
-  fetchJobApplicants,
-  setPrevPage,
-  setNextPage,
+  sizePerPage,
   setSizePerPage,
+  totalPages,
   setTotalPages,
+  fetchJobApplicants,
   intervieStatusFilter,
   setIntervieStatusFilter,
   processingStageFilter,
@@ -48,25 +44,21 @@ const JobApplicantsTable = ({
   searchTerm,
   setSearchTerm,
 }) => {
-  // const { SearchBar, ClearSearchButton } = Search;
-
-  // const selectRow = {
-  //   mode: 'checkbox',
-  //   clickToSelect: clickToSelect,
-  //   selected: selected,
-  //   onSelect: handleOnSelect,
-  //   onSelectAll: handleOnSelectAll,
-  // };
-
-  // const { user } = useAppContext();
-  // const [monthlyFilter, setMonthlyFilter] = useState('');
 
   const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
+  const [show, setShow] = React.useState(false);
   const [dataToFilter, setDataToFilter] = useState('');
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
+  };
 
   const handleIntervieStatusFilter = (e) => {
     setIntervieStatusFilter(e.target.value);
@@ -83,23 +75,11 @@ const JobApplicantsTable = ({
       })
       .then((res) => {
         let resData = res?.data?.data?.jobApplicants;
-        const pageData = res?.data?.data?.totalNumberofApplicants;
         let resOptions = res?.data?.data?.pagination;
-
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : resOptions.previous.page;
-
-      
-        const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
-        setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -137,22 +117,11 @@ const JobApplicantsTable = ({
       })
       .then((res) => {
         let resData = res?.data?.data?.jobApplicants;
-        const pageData = res?.data?.data?.totalNumberofApplicants;
         let resOptions = res?.data?.data?.pagination;
-
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : resOptions.previous.page;
-    
-        const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
-        setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -175,13 +144,13 @@ const JobApplicantsTable = ({
     setLoading(false);
   };
 
-  const MySearch = (props) => {
+  const MySearch = useCallback((props) => {
     let input;
     const handleClick = () => {
-      if (loading) {
-        setData([])
-        setDataToFilter([])
-      }
+      // if (loading) {
+      //   setData([])
+      //   setDataToFilter([])
+      // }
       setPage(1);
       setLoading(true);
       props.onSearch(input.value);
@@ -199,25 +168,11 @@ const JobApplicantsTable = ({
           })
           .then((res) => {
             let resData = res?.data?.data?.jobApplicants;
-            const pageData = res?.data?.data?.totalNumberofApplicants;
             let resOptions = res?.data?.data?.pagination;
-
-            const thisPreviousPage =
-              pageData >= sizePerPage && resOptions.next.page === 2
-                ? null
-                : pageData < 10
-                ? null
-                : resOptions.previous.page;
-
-          
-            const thisNextPage =
-              pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
             const thisPageLimit = sizePerPage;
             const thisTotalPageSize = resOptions.numberOfPages;
 
-            setPrevPage(thisPreviousPage);
-            setNextPage(thisNextPage);
             setSizePerPage(thisPageLimit);
             setTotalPages(thisTotalPageSize);
 
@@ -237,6 +192,10 @@ const JobApplicantsTable = ({
             setDataToFilter(formatted);
             setIntervieStatusFilter('');
             setprocessingStageFilter('');
+          })
+          .catch((error) => {
+            console.log(error);
+            setLoading(false);
           });
       }
       setLoading(false);
@@ -259,7 +218,7 @@ const JobApplicantsTable = ({
         </button>
       </div>
     );
-  };
+  }, [page, setData, setIntervieStatusFilter, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, setprocessingStageFilter, sizePerPage]);
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -282,9 +241,9 @@ const JobApplicantsTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-      setLoading(true);
-    }, 5000);
+    // setTimeout(() => {
+    //   setLoading(true);
+    // }, 5000);
   }, [data, setLoading]);
 
   // eslint-disable-next-line no-unused-vars
@@ -292,9 +251,7 @@ const JobApplicantsTable = ({
 
   console.log(
     'Pagination:',
-    prevPage,
     page,
-    nextPage,
     sizePerPage,
     totalPages
   );
@@ -404,7 +361,7 @@ const JobApplicantsTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No Data Found'
+                    showNullMessage()
                   )
                 }
               />

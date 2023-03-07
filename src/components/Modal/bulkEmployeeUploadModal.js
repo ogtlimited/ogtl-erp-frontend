@@ -19,9 +19,11 @@ const UploadModal = ({
   const [invalid, setinvalid] = useState(false);
   const [data, setData] = useState([]);
   const [path, setpath] = useState("/employees/bulk-upload");
-  const updateState = (path, msg) => {
+  const [currentOption, setcurrentOption] = useState('employees')
+  const updateState = (path, msg, option) => {
     setpath(path);
     setuploadState(msg);
+    setcurrentOption(option)
     setfileName("");
     setinvalid(false);
   };
@@ -45,7 +47,7 @@ const UploadModal = ({
             }
 
            });
-          //  console.log("jsonData", jsonData)
+           console.log("jsonData", jsonData)
           if (
             Object.values(jsonData[jsonData.length - 1]).includes(undefined)
           ) {
@@ -80,6 +82,29 @@ const UploadModal = ({
             .catch((err) => {
               settoggleModal(false);
               showAlert(true, err.message, "alert alert-danger");
+              setloading(false);
+              buttonRef.click();
+              settoggleModal(false);
+            });
+  };
+  const uploadBankDetails = () => {
+    axiosInstance
+      .post("/SalaryDetails/bulk-upload", data)
+            .then((res) => {
+              showAlert(
+                true,
+                res.data.message,
+                "alert alert-success"
+              );
+              settoggleModal(false);
+              setuploading(false);
+              setloading(false);
+              buttonRef.click();
+              fetchEmployee();
+            })
+            .catch((err) => {
+              settoggleModal(false);
+              showAlert(true, err?.response?.data?.message, "alert alert-danger");
               setloading(false);
               buttonRef.click();
               settoggleModal(false);
@@ -123,7 +148,7 @@ const UploadModal = ({
                     onClick={() =>
                       updateState(
                         "/employees/bulk-upload",
-                        "Upload New employees"
+                        "Upload New employees","employees"
                       )
                     }
                     className="nav-link active mb-3"
@@ -134,7 +159,24 @@ const UploadModal = ({
                     aria-controls="v-pills-home"
                     aria-selected="true"
                   >
-                    BULK EMPLOYEES UPLOAD
+                    Employees Upload
+                  </a>
+                  <a
+                    onClick={() =>
+                      updateState(
+                        "/SalaryDetails/bulk-upload",
+                        "Upload Salary Details","bankDetails"
+                      )
+                    }
+                    className="nav-link mb-3"
+                    id="v-pills-settings-tab"
+                    data-toggle="pill"
+                    href="#v-pills-home"
+                    role="tab"
+                    aria-controls="v-pills-settings"
+                    aria-selected="false"
+                  >
+                    Salary Details
                   </a>
                 </div>
               </div>
@@ -190,7 +232,12 @@ const UploadModal = ({
             </button>
 
             <button
-              onClick={() => uploadData()}
+              onClick={() => 
+                currentOption === "employees" ? uploadData() 
+                :
+                currentOption === "bankDetails" ? uploadBankDetails() 
+                : ""
+              }
               type="button"
               className="btn btn-primary"
             >
