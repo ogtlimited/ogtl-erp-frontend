@@ -60,41 +60,47 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
 
   const uploadData = () => {
     setloading(true);
-    // let obj = {};
-    // if (path === 'api/recruitment-result/bulk-upload') {
-    //   const formatted = data.map((e) => {
-    //     return {
-    //       application_date: e['Timestamp'],
-    //       user_name: e['Username'],
-    //       first_name: e['First Name'],
-    //       middle_name: e['Middle Name'],
-    //       last_name: e['Last Name'],
-    //       mobile_number: e['Mobile Number'],
-    //       alt_mobile_number: e['Alternate Phone Number'],
-    //       highest_qualification_attained: e['Highest Qualification Attained'],
-    //       other_option: e["If 'Other' was selected above, please state which."],
-    //       interested_program: e['Interested program'],
-    //       mode_of_engagement: e['What mode of engagement would you prefer'],
-    //       gender: e['Please select your gender'],
-    //       cv: e['Please upload your CV.'],
-    //       process_stage: e['process_stage'],
-    //       interview_status: e['interview_status'],
-    //       weekly_hours:
-    //         e['How many hours in a week can you commit to this program'],
-    //       stack: e['What is your Stack?'],
-    //       fav_programming_lang: [e['Favored Programming Language(s)']],
-    //       years_of_experience: e['Years of Experience'],
-    //       certifications: e['Certifications'],
-    //       consent: e['Consent'],
-    //     };
-    //   });
-    //   obj = {
-    //     data: formatted,
-    //   };
-    // }
+    let obj = {};
+    if (path === 'api/recruitment-result/bulk-upload') {
+      const formatted = data.map((e) => {
+        return {
+          typing_speed_score: e['Typing Speed Score'],
+          typing_accuracy_score: e['Typing Accuracy Score/100'],
+          interviewer: e['Interviewer'],
+          email_address: e['Email Address'],
+          status: e['Status'],
+          accent_test_score: e['Accent Test Score/100'],
+          attention_to_details_test: e['Attention to Details Test/6'],
+          multitasking_skills_test: e['Multitasking Skills Test/6'],
+          professional_writing_email_test: e["Professional Writing Email Test/10"],
+          dictation_test: e['Dictation Test/10'],
+          testGorilla_invitation_date: e['Testgorilla Invitation Date'],
+          send_for_testGorilla_skype_interview: e['Send for Testgorilla/Skype/Interview?'],
+          assessment_completion_date: e['Assessment Completion Date'],
+          stage: e['Stage'],
+          personality_score: e['16 Types Personality Score'],
+          average_score: e['Average Score'],
+          attention_to_detail_score: e['Attention to Detail (textual) Score'],
+          communication_score: e['Communication Score'],
+          english_score: e['English (intermediate/B1) Score'],
+          disc_profile_score: e['DISC Profile Score'],
+          filed_out_only_once_from_ip_address: e['Filled Out Only Once From IP Address?'],
+          webcam_enabled: e['Webcam Enabled?'],
+          full_screen_mode_always_active: e['Full-Screen Mode Always Active?'],
+          mouse_always_in_assessment_window: e['Mouse Always In Assessment Window?'],
+          interviewer_rating: e["Interviewer's Rating"],
+          notes: e['Notes On Candidate or Assessment'],
+          interview_status: e['Interview Status'],
+        };
+      });
+
+      obj = {
+        data: formatted,
+      };
+    }
 
     axiosInstance
-      .post(path, data)
+      .post(path, obj.data)
       .then((res) => {
         showAlert(true, 'Data successfully uploaded', 'alert alert-success');
         settoggleModal(false);
@@ -105,7 +111,7 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
       })
       .catch((err) => {
         console.log(err);
-        showAlert(true, 'Error uploading data', 'alert alert-danger');
+        showAlert(true, err?.response?.data?.message, 'alert alert-danger');
         setloading(false);
         buttonRef.click();
         settoggleModal(false);
