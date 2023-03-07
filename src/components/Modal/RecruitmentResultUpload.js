@@ -1,8 +1,3 @@
-/**
- * /* eslint-disable no-unused-vars
- *
- * @format
- */
 
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/api';
@@ -51,7 +46,7 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
             Object.values(jsonData[jsonData.length - 1]).includes('')
           ) {
             setData(jsonData.slice(0, jsonData.length));
-            // console.log('invalid value');
+            // console.log('This is the data', jsonData.slice(0, jsonData.length));
           } else {
             setinvalid(false);
             setData(jsonData);
@@ -65,46 +60,41 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
 
   const uploadData = () => {
     setloading(true);
-    let obj = {};
-    if (path === '/api/academy') {
-      // console.log("This very", data)
-      const formatted = data.map((e) => {
-        return {
-          application_date: e['Timestamp'],
-          user_name: e['Username'],
-          first_name: e['First Name'],
-          middle_name: e['Middle Name'],
-          last_name: e['Last Name'],
-          mobile_number: e['Mobile Number'],
-          alt_mobile_number: e['Alternate Phone Number'],
-          highest_qualification_attained: e['Highest Qualification Attained'],
-          other_option: e["If 'Other' was selected above, please state which."],
-          interested_program: e['Interested program'],
-          mode_of_engagement: e['What mode of engagement would you prefer'],
-          gender: e['Please select your gender'],
-          cv: e['Please upload your CV.'],
-          process_stage: e['process_stage'],
-          interview_status: e['interview_status'],
-          weekly_hours:
-            e['How many hours in a week can you commit to this program'],
-          stack: e['What is your Stack?'],
-          fav_programming_lang: [e['Favored Programming Language(s)']],
-          years_of_experience: e['Years of Experience'],
-          certifications: e['Certifications'],
-          consent: e['Consent'],
-        };
-      });
-      // console.log("this is the formatted data", formatted)
-      obj = {
-        data: formatted,
-      };
-    }
-
-    // console.log("The submitted data is", obj.data.length)
-    // console.log('this is the submitted data', obj.data);
+    // let obj = {};
+    // if (path === 'api/recruitment-result/bulk-upload') {
+    //   const formatted = data.map((e) => {
+    //     return {
+    //       application_date: e['Timestamp'],
+    //       user_name: e['Username'],
+    //       first_name: e['First Name'],
+    //       middle_name: e['Middle Name'],
+    //       last_name: e['Last Name'],
+    //       mobile_number: e['Mobile Number'],
+    //       alt_mobile_number: e['Alternate Phone Number'],
+    //       highest_qualification_attained: e['Highest Qualification Attained'],
+    //       other_option: e["If 'Other' was selected above, please state which."],
+    //       interested_program: e['Interested program'],
+    //       mode_of_engagement: e['What mode of engagement would you prefer'],
+    //       gender: e['Please select your gender'],
+    //       cv: e['Please upload your CV.'],
+    //       process_stage: e['process_stage'],
+    //       interview_status: e['interview_status'],
+    //       weekly_hours:
+    //         e['How many hours in a week can you commit to this program'],
+    //       stack: e['What is your Stack?'],
+    //       fav_programming_lang: [e['Favored Programming Language(s)']],
+    //       years_of_experience: e['Years of Experience'],
+    //       certifications: e['Certifications'],
+    //       consent: e['Consent'],
+    //     };
+    //   });
+    //   obj = {
+    //     data: formatted,
+    //   };
+    // }
 
     axiosInstance
-      .post(path, obj.data)
+      .post(path, data)
       .then((res) => {
         showAlert(true, 'Data successfully uploaded', 'alert alert-success');
         settoggleModal(false);
@@ -115,7 +105,7 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
       })
       .catch((err) => {
         console.log(err);
-        showAlert(false, 'Error uploading data', 'alert alert-success');
+        showAlert(true, 'Error uploading data', 'alert alert-danger');
         setloading(false);
         buttonRef.click();
         settoggleModal(false);

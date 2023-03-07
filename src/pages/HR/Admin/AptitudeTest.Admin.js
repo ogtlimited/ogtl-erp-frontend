@@ -408,7 +408,7 @@ const AptitudeTest = () => {
           <RecruitmentResultUpload
             settoggleModal={settoggleModal}
             title="Upload Result"
-            url="/api/academy"
+            url="api/recruitment-result/bulk-upload"
             setUploadSuccess={setUploadSuccess}
           />
         </div>
