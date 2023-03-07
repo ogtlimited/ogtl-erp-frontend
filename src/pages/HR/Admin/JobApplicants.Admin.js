@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /** @format */
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -32,9 +33,6 @@ const JobApplicants = () => {
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
-
-  const [prevPage, setPrevPage] = useState('');
-  const [nextPage, setNextPage] = useState('');
   const [totalPages, setTotalPages] = useState('');
 
   const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
@@ -56,28 +54,11 @@ const JobApplicants = () => {
         })
         .then((res) => {
           let resData = res?.data?.data?.jobApplicants;
-          const pageData = res?.data?.data?.totalNumberofApplicants;
           let resOptions = res?.data?.data?.pagination;
-
-          const thisPreviousPage =
-            pageData >= sizePerPage && resOptions.next.page === 2
-              ? null
-              : resOptions.previous.page;
-
-          const thisCurrentPage =
-            pageData >= sizePerPage
-              ? resOptions.next.page - 1
-              : resOptions.previous.page + 1;
-
-          const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
           const thisPageLimit = sizePerPage;
           const thisTotalPageSize = resOptions.numberOfPages;
 
-          setPrevPage(thisPreviousPage);
-          setPage(thisCurrentPage);
-          setNextPage(thisNextPage);
           setSizePerPage(thisPageLimit);
           setTotalPages(thisTotalPageSize);
 
@@ -113,30 +94,11 @@ const JobApplicants = () => {
       })
       .then((res) => {
         let resData = res?.data?.data?.jobApplicants;
-        const pageData = res?.data?.data?.totalNumberofApplicants;
         let resOptions = res?.data?.data?.pagination;
-
-        const thisPreviousPage =
-          pageData >= sizePerPage && resOptions.next.page === 2
-            ? null
-            : pageData <= sizePerPage && !resOptions.previous.page
-            ? null
-            : resOptions.previous.page;
-
-        const thisCurrentPage =
-          pageData >= sizePerPage
-            ? resOptions.next.page - 1
-            : resOptions.previous.page + 1;
-
-        const thisNextPage =
-          pageData >= sizePerPage ? resOptions.next.page : pageData < sizePerPage + 1 ? null : null;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions.numberOfPages;
 
-        setPrevPage(thisPreviousPage);
-        setPage(thisCurrentPage);
-        setNextPage(thisNextPage);
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
@@ -176,16 +138,6 @@ const JobApplicants = () => {
       setLoading(false);
     }, 60000);
   }, [fetchJobApplicants]);
-
-  // const handleClick = (i) => {
-  //   if (i?.value === 'All' || i === null) {
-  //     setData(unfiltered);
-  //   } else {
-  //     const filt = unfiltered.filter((e) => i.label.includes(e.status));
-
-  //     setData(filt);
-  //   }
-  // };
 
   //delete job opening
   const deleteJobApplicant = (row) => {
@@ -405,15 +357,12 @@ const JobApplicants = () => {
             columns={columns}
             statusInterview={InterviewStatusOptions}
             processingStage={InterviewProcessStageOptions}
-            prevPage={prevPage}
+
             page={page}
-            nextPage={nextPage}
-            sizePerPage={sizePerPage}
-            totalPages={totalPages}
-            setPrevPage={setPrevPage}
             setPage={setPage}
-            setNextPage={setNextPage}
+            sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
             setTotalPages={setTotalPages}
             fetchJobApplicants={fetchJobApplicants}
             intervieStatusFilter={intervieStatusFilter}
