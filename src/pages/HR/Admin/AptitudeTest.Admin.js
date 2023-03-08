@@ -410,6 +410,7 @@ const AptitudeTest = () => {
             title="Upload Result"
             url="api/recruitment-result/bulk-upload"
             setUploadSuccess={setUploadSuccess}
+            fetchAllTests={fetchAllTests}
           />
         </div>
       )}

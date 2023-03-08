@@ -5,7 +5,7 @@ import Papa from 'papaparse';
 import helper from '../../services/helper';
 import { useAppContext } from '../../Context/AppContext';
 
-const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
+const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess, fetchAllTests }) => {
   const { combineRequest, showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
@@ -105,7 +105,7 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess 
         showAlert(true, 'Data successfully uploaded', 'alert alert-success');
         settoggleModal(false);
         setloading(false);
-        window.location.reload(true);
+        fetchAllTests();
         buttonRef.click();
         setUploadSuccess(true);
       })
