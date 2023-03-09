@@ -300,6 +300,15 @@ export default function Router() {
             },
             { path: 'attendance', element: <EmployeeAttendance /> },
             {
+              path: 'resignation-admin',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <ResignationAdmin />
+                </GuardedRoute>
+              ),
+            },
+            { path: 'leaves', element: <LeavesUser /> }, //TODO: change to ResignationUser
+            {
               path: 'departments',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -976,6 +985,9 @@ const AllEmployeesGenderAdmin = Loadable(
 );
 const LeavesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Leaves.Admin'))
+);
+const ResignationAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/Resignation.Admin'))
 );
 const AllLeaveStatusAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/LeaveStatusAnalytics.Admin'))
