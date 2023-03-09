@@ -193,7 +193,7 @@ const Sidebar = () => {
                       to="/dashboard/recruitment/aptitude-test"
                       className=""
                     >
-                      Interview
+                      Recruitment Result
                     </Link>
                     <Link to="/dashboard/recruitment/job-offer" className="">
                       Job Offer

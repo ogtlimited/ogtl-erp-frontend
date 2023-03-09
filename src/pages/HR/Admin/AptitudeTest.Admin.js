@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 // import data from "../../../db/aptitude-test.json";
 // import FormModal from "../../../components/Modal/Modal";
+import RecruitmentResultTable from "./RecruitmentResultTable";
 import { applicationTestFormJson } from "../../../components/FormJSON/HR/recruitment/ApplicationTest";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -14,6 +15,8 @@ import helper from "../../../services/helper";
 import InterviewContent from "../../../components/ModalContents/interviewContents";
 import FormModal2 from "../../../components/Modal/FormModal2";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import RecruitmentResultUpload from "../../../components/Modal/RecruitmentResultUpload";
+
 
 const statusOptions = [
   {
@@ -35,8 +38,11 @@ const statusOptions = [
 ];
 
 const AptitudeTest = () => {
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formValue, setFormValue] = useState({});
   const [data, setData] = useState([]);
+  const [unfiltered, setunfiltered] = useState([]);
   const { showAlert, user, setformUpdate } = useAppContext();
   const [template, setTemplate] = useState(applicationTestFormJson);
   const [submitted, setSubmitted] = useState(false);
@@ -46,6 +52,12 @@ const AptitudeTest = () => {
   const [clickedRow, setclickedRow] = useState(null);
   const [status, setStatus] = useState("");
   const [statusRow, setstatusRow] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [mode, setmode] = useState("add");
 
@@ -70,56 +82,75 @@ const AptitudeTest = () => {
     seteditData(initialValues);
   };
 
-  const fetchAllTests = () => {
+  const fetchAllTests = useCallback(() => {
+    setLoading(true);
     axiosInstance
-      .get("/api/test")
+      .get("/api/recruitment-result", {
+        params: {
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        }
+      })
       .then((res) => {
-        setData(res?.data?.data);
-        console.log("Interview Test Data:", res.data.data)
+        let resData = res?.data?.data?.result;
+        let resOptions = res?.data?.data?.pagination;
+        
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions.numberOfPages;
+        
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        setLoading(false);
+        setData(resData);
+        setunfiltered(resData);
+        // console.log("interview resData", resData)
       })
       .catch((error) => {
         console.log("Interview Test Error:", error?.response);
       });
-  };
+  }, [page, searchTerm, sizePerPage]);
 
   useEffect(() => {
     fetchAllTests();
-  }, []);
+  }, [fetchAllTests]);
 
-  useEffect(() => {
-    axiosInstance
-      .get("/api/jobApplicant", {
-        params: { interview_status: "Scheduled for interview" },
-      })
-      .then((res) => {
-        const jobApplicantsOpts = res?.data?.data?.map((e) => {
-          return {
-            label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
-            value: e._id,
-          };
-        });
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get("/api/jobApplicant", {
+  //       params: { interview_status: "Scheduled for interview" },
+  //     })
+  //     .then((res) => {
+  //       const jobApplicantsOpts = res?.data?.data?.map((e) => {
+  //         return {
+  //           label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
+  //           value: e._id,
+  //         };
+  //       });
 
-        const finalForm = applicationTestFormJson.Fields.map((field) => {
-          if (field.name === "job_applicant_id") {
-            field.options = jobApplicantsOpts;
-            return field;
-          }
-          return field;
-        });
-        // setTemplate({
-        //   title: applicationTestFormJson.title,
-        //   Fields: finalForm,
-        // });
-        if (!loadSelect) {
-          setloadSelect(true);
-        }
-      })
-      .catch((error) => {
-        console.log("Interview List Error:", error?.response);
-      });
-  }, [loadSelect]);
+  //       const finalForm = applicationTestFormJson.Fields.map((field) => {
+  //         if (field.name === "job_applicant_id") {
+  //           field.options = jobApplicantsOpts;
+  //           return field;
+  //         }
+  //         return field;
+  //       });
+  //       // setTemplate({
+  //       //   title: applicationTestFormJson.title,
+  //       //   Fields: finalForm,
+  //       // });
+  //       if (!loadSelect) {
+  //         setloadSelect(true);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Interview List Error:", error?.response);
+  //     });
+  // }, [loadSelect]);
 
   //create aptitude test
+  
   useEffect(() => {
     if (submitted) {
       if (mode === "add") {
@@ -161,9 +192,6 @@ const AptitudeTest = () => {
     }
   }, [formValue, editData, mode]);
 
-  // useEffect(() => {
-  //   seteditData(clickedRow);
-  // }, [clickedRow, submitted]);
 
   //delete aptitude test
   const deleteTest = (row) => {
@@ -305,40 +333,56 @@ const AptitudeTest = () => {
       ),
     },
   ];
+
   return (
     <>
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Interview List</h3>
+            <h3 className="page-title">Recruitment Result</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
               <li className="breadcrumb-item">
-                <Link to="/">Employees</Link>
+                <Link to="/">Recruitment</Link>
               </li>
-              <li className="breadcrumb-item active">Interview List</li>
+              <li className="breadcrumb-item active">Recruitment Result</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadSelect && user?.role?.hr?.create && (
-              <a
-                href=""
+            {user?.role?.hr?.create && (
+              <button
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#FormModal"
-                onClick={() => create()}
+                data-target="#uploadRecruitmentResult"
+                onClick={() => settoggleModal(true)}
               >
-                Add New Interview
-              </a>
+            Import Results
+          </button>
             )}
           </div>
         </div>
       </div>
       <div className="row">
         <div className="col-12">
-          <LeavesTable data={data} columns={columns} context="interview" />
+          <RecruitmentResultTable 
+            data={data} 
+            loading={loading}
+            setLoading={setLoading}
+            setData={setData} 
+            columns={columns} 
+            context="interview"
+            page={page}
+            setPage={setPage}
+            sizePerPage={sizePerPage}
+            setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
+            setTotalPages={setTotalPages}
+            searchTerm={searchTerm}
+            fetchAllTests={fetchAllTests}
+            setSearchTerm={setSearchTerm}
+          />
         </div>
       </div>
       {loadSelect && (
@@ -357,6 +401,18 @@ const AptitudeTest = () => {
           title="Interview Details"
           content={<InterviewContent interviewContent={selectedRow} />}
         />
+      )}
+
+      {toggleModal && (
+        <div>
+          <RecruitmentResultUpload
+            settoggleModal={settoggleModal}
+            title="Upload Result"
+            url="api/recruitment-result/bulk-upload"
+            setUploadSuccess={setUploadSuccess}
+            fetchAllTests={fetchAllTests}
+          />
+        </div>
       )}
     </>
   );

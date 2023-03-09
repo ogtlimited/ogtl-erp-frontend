@@ -4,7 +4,6 @@ import React from "react";
 const InterviewContent = ({ interviewContent = {} }) => {
   const newData = Object.keys(interviewContent).filter((e) => {
     return (
-      e !== "notes" &&
       e !== "_id" &&
       e !== "job_applicant_id" &&
       e !== "interview_date" &&
