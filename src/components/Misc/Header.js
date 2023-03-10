@@ -10,23 +10,25 @@ import { useAppContext } from "../../Context/AppContext";
 import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { BsBell } from 'react-icons/bs';
-// import { msalInstance, loginRequest } from '../../authConfig';
-import { useMsal } from '@azure/msal-react';
+import { msalInstance, loginRequest } from '../../authConfig';
+// import { useMsal } from '@azure/msal-react';
+import config from "../../config.json";
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
   const { fetchHRLeavesNotificationCount, count } = useAppContext();
   const audioPlayer = useRef(null);
   let navigate = useNavigate();
-  const { instance } = useMsal();
+  // const { instance } = useMsal();
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
-    instance
-      // .ssoSilent() //<-- This will silently logout the user without having to select an account
-      .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
+    navigate('/auth/login');
+    msalInstance
+      .ssoSilent() //<-- This will silently logout the user without having to select an account
+      // .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
       .then((e) => {
-        navigate('/auth');
+        console.log(e);
       })
       .catch((e) => {
         console.error(e);
