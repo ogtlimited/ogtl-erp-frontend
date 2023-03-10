@@ -1,8 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-// import "./header.css";
-
-// import axiosInstance from '../../services/api';
 import React, { useRef, useEffect } from 'react';
 import logo from '../../assets/img/og-white-logo.png';
 import cropped from '../../assets/img/cropped-white.png';
@@ -10,9 +7,8 @@ import { useAppContext } from "../../Context/AppContext";
 import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { BsBell } from 'react-icons/bs';
-import { msalInstance, loginRequest } from '../../authConfig';
+import { msalInstance  } from '../../authConfig';
 // import { useMsal } from '@azure/msal-react';
-import config from "../../config.json";
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
