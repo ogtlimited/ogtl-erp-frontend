@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import AttendanceTable from "../../../components/attendance/attendance-table";
 import GeneralUpload from "../../../components/Modal/GeneralUpload";
+import { AddAttendanceModal } from "../../../components/Modal/AddAttendanceModal";
 import AdminAttendanceTable from "../../../components/Tables/EmployeeTables/AttendanceTable";
 
 import { useAppContext } from "../../../Context/AppContext";
@@ -10,23 +11,26 @@ import axiosInstance from "../../../services/api";
 const AttendanceAdmin = () => {
   const [allAttendance, setallAttendance] = useState([]);
   const { combineRequest } = useAppContext();
+  const [loading, setLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState([]);
   const [departments, setdepartments] = useState([]);
   const [designation, setdesignation] = useState([]);
   const [projects, setprojects] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false)
+  const { user } = useAppContext();
+
   const fetchedCombineRequest = useCallback(() => {
     combineRequest().then((res) => {
       setdepartments(res.data.createEmployeeFormSelection.departments);
       setdesignation(res.data.createEmployeeFormSelection.designations);
       setprojects(res.data.createEmployeeFormSelection.projects);
     });
-  }, [departments, designation, , combineRequest]);
+  }, [combineRequest]);
 
   useEffect(() => {
     fetchedCombineRequest();
-  }, []);
+  }, [fetchedCombineRequest]);
 
   const defaultSorted = [
     {
@@ -34,6 +38,7 @@ const AttendanceAdmin = () => {
       order: "desc",
     },
   ];
+
   const columns = [
     {
       dataField: "",
@@ -55,8 +60,28 @@ const AttendanceAdmin = () => {
     },
 
     {
-      dataField: "attendance.daysWorked",
-      text: "Total Days",
+      dataField: "attendance.shiftTypeId",
+      text: "Shift",
+      sort: true,
+      headerStyle: { width: "200px" },
+      style: {
+        fontSize: "12px",
+        lineHeight: "18px",
+      },
+    },
+    {
+      dataField: "attendance.clockInTime",
+      text: "Clock In",
+      sort: true,
+      headerStyle: { width: "200px" },
+      style: {
+        fontSize: "12px",
+        lineHeight: "18px",
+      },
+    },
+    {
+      dataField: "attendance.clockOutTime",
+      text: "Clock Out",
       sort: true,
       headerStyle: { width: "200px" },
       style: {
@@ -94,27 +119,39 @@ const AttendanceAdmin = () => {
         lineHeight: "16px",
       },
     },
-    // {
-    //   dataField: "over_time",
-    //   text: "Overtime",
-    //   headerStyle: { minWidth: "100px" },
-    //   sort: true,
-    //   style: {
-    //     fontSize: "12px",
-    //     lineHeight: "16px",
-    //   },
-    //},
   ];
+
+  // "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
   useEffect(() => {
+    setLoading(true);
     axiosInstance
       .get(
-        "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
+        "/api/attendance"
       )
       .then((e) => {
         const att = e.data.data;
+        console.log("This attendance:", att);
         setallAttendance(att);
       });
+      setLoading(false);
   }, []);
+
+  const fetchAllAttendance = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get("/api/attendance");
+      console.log("This is the attendance", res.data.data);
+      setallAttendance(res.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllAttendance();
+  }, [])
+  
 
   return (
     <>
@@ -130,14 +167,30 @@ const AttendanceAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <a
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#uploadAttendance"
-              onClick={() => settoggleModal(true)}
-            >
-              Upload Attendance
-            </a>
+           
+            
+            {user?.role?.hr?.create && (
+              <>
+                <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
+                  data-target="#AddAttendanceFormModal"
+                >
+                  <i className="fa fa-plus"></i> Add Attendance
+                </a>
+
+                <a
+                  className="btn add-btn mx-3"
+                  data-toggle="modal"
+                  data-target="#uploadAttendance"
+                  onClick={() => settoggleModal(true)}
+                >
+                 <i className="fa fa-cloud-upload"></i>
+                 Upload Attendance
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -150,6 +203,7 @@ const AttendanceAdmin = () => {
             columns={columns}
             designation={designation}
             departments={departments}
+            loading={loading}
           />
         </div>
       </div>
@@ -162,6 +216,8 @@ const AttendanceAdmin = () => {
           setUploadSuccess={setUploadSuccess}
         />
       )}
+
+      <AddAttendanceModal fetchAllAttendance={fetchAllAttendance} />
     </>
   );
 };
