@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { ADD_ATTENDANCE } from "../FormJSON/AddAttendance";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -9,105 +9,23 @@ import Select from "react-select";
 import EmployeeHelperService from "../../pages/HR/Admin/employee.helper";
 
 export const AddAttendanceModal = ({fetchAllAttendance}) => {
-  const selectInputRef = useRef();
   const { createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(ADD_ATTENDANCE);
   const [loading, setLoading] = useState(false);
 
   const [isAllValid, setIsAllValid] = useState(false);
   const [isEmployeeIdValid, setIsEmployeeIdValid] = useState(false);
-  const [isShiftValid, setIsShiftValid] = useState(false);
 
   const [services, setServices] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
-  const [department, setDepartment] = useState("");
-  const [projectId, setProjectId] = useState("");
-  const [validShift, setValidShift] = useState("");
-  const [validDesignation, setValidDesignation] = useState("");
-  const [officeType, setOfficeType] = useState("");
-  const [officeId, setOfficeId] = useState("");
-  const [deptError, setDeptError] = useState("");
-  const [desError, setDesError] = useState("");
+
 
   useEffect(() => {
     setIsEmployeeIdValid(employee.employeeId ? true : false);
-    setIsShiftValid(employee.shiftTypeId ? true : false);
     setIsAllValid(
-      employee.employeeId && employee.shiftTypeId  ? true : false
+      employee.employeeId ? true : false
     );
   }, [employee]);
-
-  const handleDepartmentClick = (e) => {
-    setEmployee({ ...employee, department: e?.value });
-    setOfficeType("Department ");
-    setOfficeId(e.value);
-
-    selectInputRef.current.select.clearValue();
-    axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
-      const response = e?.data?.data;
-      const designationOpts = response?.map((e) => {
-        return {
-          label: e.designation,
-          value: e._id,
-        };
-      });
-      setValidDesignation(designationOpts);
-    }).catch((e) => {
-      setValidDesignation([]);
-      setDeptError(e?.response?.data?.message);
-      setDesError("");
-    });
-
-    axiosInstance.get(`/api/shiftType/office?departmentId=${e.value}`).then((e) => {
-      const response = e?.data?.shiftData;
-      const shiftOpts = response?.map((e) => {
-        return {
-          label: e.shift_name,
-          value: e._id,
-        };
-      });
-      setValidShift(shiftOpts);
-    }).catch((e) => {
-      setValidShift([]);
-      console.log("shift error:", e);
-    });
-  };
-
-  const handleCampaignClick = (e) => {
-    setEmployee({ ...employee, projectId: e?.value });
-    setOfficeType("Campaign ");
-    setOfficeId(e.value);
-
-    selectInputRef.current.select.clearValue();
-    axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
-      const response = e?.data?.data;
-      const designationOpts = response?.map((e) => {
-        return {
-          label: e.designation,
-          value: e._id,
-        };
-      });
-      setValidDesignation(designationOpts);
-    }).catch((e) => {
-      setValidDesignation([]);
-      setDesError(e?.response?.data?.message);
-      setDeptError("");
-    });
-
-    axiosInstance.get(`/api/shiftType/office?campaignId=${e.value}`).then((e) => {
-      const response = e?.data?.shiftData;
-      const shiftOpts = response?.map((e) => {
-        return {
-          label: e.shift_name,
-          value: e._id,
-        };
-      });
-      setValidShift(shiftOpts);
-    }).catch((e) => {
-      setValidShift([]);
-      console.log("shift error:", e);
-    });
-  };
 
   useEffect(() => {
     createEmployee().then((res) => {
@@ -136,15 +54,11 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
       setServices([service]);
 
       const reports_to = service.reportstoOpts;
+      console.log("I need all his info:", reports_to);
       setEmployeeId(reports_to);
 
-      const department = service.deptopts;
-      setDepartment(department);
-
-      const projectId = service.campaingOpts;
-      setProjectId(projectId);
     });
-  }, [createEmployee, officeId, status]);
+  }, [createEmployee, status]);
 
   const cancelEvent = () => {
     setEmployee(ADD_ATTENDANCE);
@@ -157,13 +71,6 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
-
-    // console.log("Submit this employee attendance:", {
-    //   employeeId: employee.employeeId,
-    //   shiftTypeId: employee.shiftTypeId,
-    //   clockInTime: employee.clockInTime,
-    //   clockOutTime: employee.clockOutTime,
-    // });
 
     setLoading(true);
     try {
@@ -179,7 +86,7 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
 
       showAlert(
         true,
-        "Employee Attendance Added successfully",
+        `${employee.employeeName} Attendance Added Successfully`,
         "alert alert-success"
       );
       $("#AddAttendanceFormModal").modal("toggle");
@@ -245,101 +152,27 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
                           isSearchable={true}
                           isClearable={true}
                           onChange={(e) =>
-                            setEmployee({ ...employee, employeeId: e?.value })
-                          }
-                          style={{ display: "inline-block" }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Department</label>
-                        {officeType === "Campaign " ? (
-                          <Select
-                            options={department}
-                            isSearchable={true}
-                            value={employee.department === null}
-                            onChange={(e) => handleDepartmentClick(e)}
-                            style={{ display: "inline-block" }}
-                          />
-                        ) : (
-                          <Select
-                            options={department}
-                            isSearchable={true}
-                            onChange={(e) => handleDepartmentClick(e)}
-                            style={{ display: "inline-block" }}
-                          />
-                        )}
-                        <span style={{color: "red"}}>{deptError}</span>
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Campaign</label>
-                        {officeType === "Department " ? (
-                          <Select
-                            options={projectId}
-                            isSearchable={true}
-                            value={employee.projectId === null}
-                            onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: "inline-block" }}
-                          />
-                        ) : (
-                          <Select
-                            options={projectId}
-                            isSearchable={true}
-                            onChange={(e) => handleCampaignClick(e)}
-                            style={{ display: "inline-block" }}
-                          />
-                        )}
-                        <span style={{color: "red"}}>{desError}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="col-md-6" style={{display: "none"}}>
-                      <div className="form-group">
-                        {!validDesignation.length ? (
-                          <label>Designation</label>
-                        ) : (
-                          <label>
-                            {officeType} Designation
-                          </label>
-                        )}
-                        <Select
-                          options={!validDesignation.length ? validDesignation : validDesignation}
-                          isSearchable={true}
-                          isClearable={true}
-                          ref={selectInputRef}
-                          onChange={(e) =>
-                            setEmployee({ ...employee, designation: e?.value })
-                          }
-                          style={{ display: 'inline-block' }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        {!validShift.length ? (
-                          <label htmlFor="shiftTypeId">Shift {!isShiftValid && <span>*</span>}</label>
-                        ) : (
-                          <label htmlFor="shiftTypeId">
-                            {officeType} Shift {!isShiftValid && <span>*</span>}
-                          </label>
-                        )}
-                        <Select
-                          options={!validShift.length ? validShift : validShift}
-                          isSearchable={true}
-                          isClearable={true}
-                          onChange={(e) =>
-                            setEmployee({
-                              ...employee,
-                              shiftTypeId: e?.value,
+                            setEmployee({ 
+                              ...employee, 
+                              employeeId: e?.value, 
+                              shiftTypeId: e?.shiftTypeId, 
+                              shiftTypeName: e?.shiftTypeName, 
+                              employeeName: e?.label
                             })
                           }
                           style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="form-group">
+                          <label htmlFor="shiftTypeId">Shift</label>
+                        <input
+                          className="form-control"
+                          name="shiftTypeId"
+                          type="text"
+                          value={employee.shiftTypeName}
                         />
                       </div>
                     </div> 

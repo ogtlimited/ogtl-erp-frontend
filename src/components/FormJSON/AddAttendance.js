@@ -3,6 +3,6 @@ export const ADD_ATTENDANCE = {
   shiftTypeId: '',
   clockInTime: '',
   clockOutTime: null,
-  department: null,
-  projectId: '',
+  employeeName: '',
+  shiftTypeName: '',
 }

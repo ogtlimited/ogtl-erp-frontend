@@ -42,6 +42,8 @@ export default class EmployeeHelperService {
       return {
         label: `${e.first_name} ${e.middle_name} ${e.last_name}`,
         value: e._id,
+        shiftTypeName: e?.default_shift?.shift_name,
+        shiftTypeId: e?.default_shift?._id
       };
     });
 
