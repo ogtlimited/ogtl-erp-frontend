@@ -158,12 +158,12 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
 
-    console.log("Submit this employee attendance:", {
-      employeeId: employee.employeeId,
-      shiftTypeId: employee.shiftTypeId,
-      clockInTime: employee.clockInTime,
-      clockOutTime: employee.clockOutTime,
-    });
+    // console.log("Submit this employee attendance:", {
+    //   employeeId: employee.employeeId,
+    //   shiftTypeId: employee.shiftTypeId,
+    //   clockInTime: employee.clockInTime,
+    //   clockOutTime: employee.clockOutTime,
+    // });
 
     setLoading(true);
     try {
