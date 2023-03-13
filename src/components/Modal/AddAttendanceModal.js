@@ -90,17 +90,17 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
         "alert alert-success"
       );
       $("#AddAttendanceFormModal").modal("toggle");
+      fetchAllAttendance();
+      setEmployee(ADD_ATTENDANCE);
+      setLoading(false);
     } catch (error) {
       const errorMsg = error.response?.data?.message;
       console.log("Add Attendance Record Error:", errorMsg);
-      setEmployee(ADD_ATTENDANCE);
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      showAlert(true, `${errorMsg}`, "alert alert-danger");
       $("#AddAttendanceFormModal").modal("toggle");
-      fetchAllAttendance();
+      setEmployee(ADD_ATTENDANCE);
       setLoading(false);
     }
-    setEmployee(ADD_ATTENDANCE);
-    setLoading(false);
   };
 
   return (
