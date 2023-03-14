@@ -131,11 +131,11 @@ const EmployeeUser = () => {
                 !
               </h4>
               <p className="welcome-p">
-                If you havent punched in today, you need to do it right away
+                If you haven't clocked in today, you need to do it right away
               </p>
-              <Link className="go" to="/dashboard/hr/attendance">
+              {/* <Link className="go" to="/dashboard/hr/attendance">
                 Go Now
-              </Link>
+              </Link> */}
             </div>
             <div className="col-md-3">
               <img style={{ width: "100%" }} className="mt-4" src={welcome} />

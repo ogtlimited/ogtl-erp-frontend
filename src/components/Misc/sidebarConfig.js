@@ -129,14 +129,14 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
-            title: 'Attendance (Admin)',
+            title: 'Attendance',
             path: PATH_DASHBOARD.hr.attendanceAdmin,
           },
-          {
-            canView: 'All',
-            title: 'Attendance (Employee)',
-            path: PATH_DASHBOARD.hr.attendanceEmployee,
-          },
+          // {
+          //   canView: 'All',
+          //   title: 'Attendance (Employee)',
+          //   path: PATH_DASHBOARD.hr.attendanceEmployee,
+          // },
           {
             canView: 'HR',
             title: 'Departments',
@@ -259,7 +259,7 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
-            title: 'Interview',
+            title: 'Recruitment Result',
             path: PATH_DASHBOARD.recruitment.aptitudeTests,
           },
           {
