@@ -1,21 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import AdminLeavesHistoryTable from '../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable';
 import male from '../../../assets/img/male_avater.png';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 import ViewModal from '../../../components/Modal/ViewModal';
-import LeaveApplicationContent from '../../../components/ModalContents/LeaveApplicationContent';
+import ResignationContent from '../../../components/ModalContents/ResignationContent';
 import RejectAdminLeaveModal from '../../../components/Modal/RejectAdminLeaveModal';
 import AdminResignationTable from '../../../components/Tables/EmployeeTables/AdminResignationTable';
 import AdminResignationHistoryTable from '../../../components/Tables/EmployeeTables/AdminResignationHistoryTable';
+import moment from 'moment';
 
 const ResignationAdmin = () => {
-  const [allLeaves, setallLeaves] = useState([]);
-  const [leaveHistory, setLeaveHistory] = useState([]);
+  const [data, setData] = useState([]);
+  const [resignationHistory, setResignationHistory] = useState([]);
   const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
-  const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState('');
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,117 +32,128 @@ const ResignationAdmin = () => {
 
   const [departments, setDepartments] = useState([]);
 
-  const fetchHRLeaves = useCallback(() => {
+  // const fetchHRResignation = useCallback(() => {
+  //   axiosInstance
+  //     .get('hr-leave-applications', {
+  //       params: {
+  //         department: departmentFilter,
+  //         search: searchTerm,
+  //         page: page,
+  //         limit: sizePerPage,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       let resData = res?.data?.data?.application;
+  //       let resOptions = res?.data?.data?.pagination;
+
+  //       const thisPageLimit = sizePerPage;
+  //       const thisTotalPageSize = resOptions?.numberOfPages;
+
+  //       setSizePerPage(thisPageLimit);
+  //       setTotalPages(thisTotalPageSize);
+
+  //       const formatted = resData.map((leave) => ({
+  //         ...leave,
+  //         full_name:
+  //           leave?.employee.first_name +
+  //           ' ' +
+  //           leave?.employee.middle_name +
+  //           ' ' +
+  //           leave?.employee.last_name,
+  //         status_action: leave?.status,
+  //         leave_type: leave?.leave_type_id?.leave_type,
+  //         department: leave?.department_id?.department,
+  //         from_date: new Date(leave.from_date).toDateString(),
+  //         to_date: new Date(leave.to_date).toDateString(),
+  //         total_leave_days: Math.ceil(
+  //           (new Date(leave.to_date) - new Date(leave.from_date)) /
+  //             (1000 * 3600 * 24)
+  //         ),
+  //       }));
+
+  //       setallLeaves(formatted);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
+  // }, [departmentFilter, page, searchTerm, sizePerPage]);
+
+  // const fetchHRResignationHistory = useCallback(() => {
+  //   axiosInstance
+  //     .get('hr-leave-applications/history', {
+  //       params: {
+  //         department: departmentFilter,
+  //         status: statusFilter,
+  //         search: searchTerm,
+  //         page: page,
+  //         limit: sizePerPage,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       let resData = res?.data?.data?.application;
+  //       let resOptions = res?.data?.data?.pagination;
+
+  //       const thisPageLimit = sizePerPage;
+  //       const thisTotalPageSize = resOptions?.numberOfPages;
+
+  //       setSizePerPage(thisPageLimit);
+  //       setTotalPages(thisTotalPageSize);
+
+  //       const formatted = resData.map((leave) => ({
+  //         ...leave,
+  //         full_name:
+  //           leave?.employee.first_name +
+  //           ' ' +
+  //           leave?.employee.middle_name +
+  //           ' ' +
+  //           leave?.employee.last_name,
+  //         status_action: leave?.status,
+  //         leave_type: leave?.leave_type_id?.leave_type,
+  //         department: leave?.department_id?.department,
+  //         from_date: new Date(leave.from_date).toDateString(),
+  //         to_date: new Date(leave.to_date).toDateString(),
+  //         total_leave_days: Math.ceil(
+  //           (new Date(leave.to_date) - new Date(leave.from_date)) /
+  //             (1000 * 3600 * 24)
+  //         ),
+  //       }));
+
+  //       console.log("HR Leave History Formatted:", formatted)
+  //       setLeaveHistory(formatted);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
+  // }, [departmentFilter, page, searchTerm, sizePerPage, statusFilter]);
+
+  const fetchResignation = () => {
     axiosInstance
-      .get('hr-leave-applications', {
-        params: {
-          department: departmentFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
+      .get("/Exit")
       .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
+        console.log("Resignation Data:", res?.data?.data)
+        const map = res?.data?.data.map(e => {
+          return {
+            ...e,
+            fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`,
+            resignation_letter_date: new Date(e?.resignation_letter_date).toDateString(),
+            relieving_date: new Date(e?.relieving_date).toDateString(),
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setallLeaves(formatted);
-        setLoading(false);
+          }
+        })
+        setResignationHistory(map);
       })
       .catch((error) => {
         console.log(error);
-        setLoading(false);
       });
-  }, [departmentFilter, page, searchTerm, sizePerPage]);
-
-  const fetchHRLeaveHistory = useCallback(() => {
-    axiosInstance
-      .get('hr-leave-applications/history', {
-        params: {
-          department: departmentFilter,
-          status: statusFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        console.log("HR Leave History Formatted:", formatted)
-        setLeaveHistory(formatted);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }, [departmentFilter, page, searchTerm, sizePerPage, statusFilter]);
-
-
-  const fetchAllEmpOnLeave = async () => {
-    try {
-      const response = await axiosInstance.get(
-        `hr-leave-applications/on-leave`
-      );
-      const resData = response?.data?.data;
-
-      setOnLeave(resData);
-    } catch (error) {
-      console.log(error);
-    }
   };
+  
+  useEffect(() => {
+    fetchResignation();
+  }, []);
 
   const fetchHeadCount = async () => {
     try {
@@ -178,12 +188,11 @@ const ResignationAdmin = () => {
   };
 
   useEffect(() => {
-    fetchAllEmpOnLeave();
-    fetchHRLeaves();
-    fetchHRLeaveHistory();
+    // fetchHRResignation();
+    // fetchHRResignationHistory();
     fetchHeadCount()
     fetchDepartment()
-  }, [fetchHRLeaveHistory, fetchHRLeaves]);
+  }, []);
 
   const handleApproveLeave = async (row) => {
     const id = row._id;
@@ -193,8 +202,8 @@ const ResignationAdmin = () => {
         `hr-leave-applications/approve/${id}`
       );
       showAlert(true, 'Leave Approved', 'alert alert-success');
-      fetchHRLeaves();
-      fetchHRLeaveHistory();
+      // fetchHRResignation();
+      // fetchHRResignationHistory();
       fetchHRLeavesNotificationCount();
     } catch (error) {
       console.log('HR Leave approval error:', error.response.message);
@@ -205,125 +214,231 @@ const ResignationAdmin = () => {
     setHrReject(row);
     setRejectModal(true);
   };
-  
+
+  // const columns = [
+  //   {
+  //     dataField: 'full_name',
+  //     text: 'Employee Name',
+  //     sort: true,
+  //     headerStyle: { width: '80px' },
+  //     formatter: (value, row) => (
+  //       <h2 className="table-avatar">
+  //         <a href="#" className="avatar">
+  //           <img alt="" src={male} />
+  //         </a>
+  //         <a href="#">
+  //           {row?.full_name}
+  //         </a>
+  //       </h2>
+  //     ),
+  //   },
+  //   {
+  //     dataField: 'department',
+  //     text: 'Department',
+  //     sort: true,
+  //     headerStyle: { minWidth: '100px' },
+  //   },
+  //   {
+  //     dataField: 'status',
+  //     text: 'Status',
+  //     sort: true,
+  //     headerStyle: { minWidth: '150px' },
+  //     formatter: (value, row) => (
+  //       <>
+  //         {value === 'approved' ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-success"></i> {value}
+  //           </span>
+  //         ) : value === 'cancelled' ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-primary"></i> {value}
+  //           </span>
+  //         ) : value === 'rejected' ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-danger"></i> {value}
+  //           </span>
+  //         ) : value === 'pending' ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded ">
+  //             <i className="fa fa-dot-circle-o text-warning"></i> {value}
+  //           </span>
+  //         ) : null}
+  //       </>
+  //     ),
+  //   },
+  //   {
+  //     dataField: 'from_date',
+  //     text: 'Resignation Letter Date',
+  //     sort: true,
+  //     headerStyle: { minWidth: '100px' },
+  //     formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+  //   },
+  //   {
+  //     dataField: 'to_date',
+  //     text: 'Effective Resignation Date',
+  //     sort: true,
+  //     headerStyle: { minWidth: '100px' },
+  //     formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+  //   },
+  //   {
+  //     dataField: 'status_action',
+  //     text: 'Action',
+  //     csvExport: false,
+  //     headerStyle: { width: '10%' },
+  //     formatter: (value, row) => (
+  //       <div className="dropdown dropdown-action text-right">
+  //         <a
+  //           href="#"
+  //           className="action-icon dropdown-toggle"
+  //           data-toggle="dropdown"
+  //           aria-expanded="false"
+  //         >
+  //           <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+  //         </a>
+  //         <div className="dropdown-menu dropdown-menu-right">
+  //           <a
+  //             className="dropdown-item"
+  //             href="#"
+  //             data-toggle="modal"
+  //             data-target="#generalModal"
+  //             onClick={() => {
+  //               setmodalType('view-details');
+  //               setViewRow(row);
+  //             }}
+  //           >
+  //             <i className="fa fa-eye m-r-5"></i> View
+  //           </a>
+
+  //           {value === 'pending' ? (
+  //             <a
+  //               href="#"
+  //               className="dropdown-item"
+  //               onClick={() => handleApproveLeave(row)}
+  //             >
+  //               <i className="fa fa-check m-r-5"></i> Approve
+  //             </a>
+  //           ) : null}
+
+  //           {value === 'pending' ? (
+  //             <a
+  //               href="#"
+  //               className="dropdown-item"
+  //               onClick={() => handleRejectLeave(row)}
+  //             >
+  //               <i className="fa fa-ban m-r-5"></i> Reject
+  //             </a>
+  //           ) : null}
+
+  //         </div>
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   const columns = [
     {
-      dataField: 'full_name',
-      text: 'Employee Name',
+      dataField: "fullName",
+      text: "Employee name",
       sort: true,
-      headerStyle: { width: '80px' },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <a href="#" className="avatar">
-            <img alt="" src={male} />
-          </a>
-          <a href="#">
-            {row?.full_name}
-          </a>
-        </h2>
-      ),
+      headerStyle: { width: "250px" },
     },
-    {
-      dataField: 'department',
-      text: 'Department',
-      sort: true,
-      headerStyle: { minWidth: '100px' },
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-      sort: true,
-      headerStyle: { minWidth: '150px' },
-      formatter: (value, row) => (
-        <>
-          {value === 'approved' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
-            </span>
-          ) : value === 'cancelled' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-primary"></i> {value}
-            </span>
-          ) : value === 'rejected' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-danger"></i> {value}
-            </span>
-          ) : value === 'pending' ? (
-            <span className="btn btn-gray btn-sm btn-rounded ">
-              <i className="fa fa-dot-circle-o text-warning"></i> {value}
-            </span>
-          ) : null}
-        </>
-      ),
-    },
-    {
-      dataField: 'from_date',
-      text: 'Resignation Letter Date',
-      sort: true,
-      headerStyle: { minWidth: '100px' },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: 'to_date',
-      text: 'Effective Resignation Date',
-      sort: true,
-      headerStyle: { minWidth: '100px' },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: 'status_action',
-      text: 'Action',
-      csvExport: false,
-      headerStyle: { width: '10%' },
-      formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#generalModal"
-              onClick={() => {
-                setmodalType('view-details');
-                setViewRow(row);
-              }}
-            >
-              <i className="fa fa-eye m-r-5"></i> View
-            </a>
+      {
+        dataField: 'status',
+        text: 'Status',
+        sort: true,
+        headerStyle: { minWidth: '150px' },
+        formatter: (value, row) => (
+          <>
+            {value === 'approved' ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-success"></i> {value}
+              </span>
+            ) : value === 'cancelled' ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-primary"></i> {value}
+              </span>
+            ) : value === 'rejected' ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-danger"></i> {value}
+              </span>
+            ) : value === 'pending' ? (
+              <span className="btn btn-gray btn-sm btn-rounded ">
+                <i className="fa fa-dot-circle-o text-warning"></i> {value}
+              </span>
+            ) : null}
+          </>
+        ),
+      },
+      {
+        dataField: "reason_for_resignation",
+        text: "Reason for Resignation",
+        sort: true,
+      },
 
-            {value === 'pending' ? (
+      {
+        dataField: "resignation_letter_date",
+        text: "Resignation Letter Date",
+        sort: true,
+        headerStyle: { minWidth: "100px" },
+      },
+      {
+        dataField: "relieving_date",
+        text: "Effective Resignation Date",
+        sort: true,
+        headerStyle: { minWidth: "100px" },
+      },
+        {
+          dataField: 'status_action',
+          text: 'Action',
+          csvExport: false,
+          headerStyle: { width: '10%' },
+          formatter: (value, row) => (
+            <div className="dropdown dropdown-action text-right">
               <a
                 href="#"
-                className="dropdown-item"
-                onClick={() => handleApproveLeave(row)}
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
               >
-                <i className="fa fa-check m-r-5"></i> Approve
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
               </a>
-            ) : null}
-
-            {value === 'pending' ? (
-              <a
-                href="#"
-                className="dropdown-item"
-                onClick={() => handleRejectLeave(row)}
-              >
-                <i className="fa fa-ban m-r-5"></i> Reject
-              </a>
-            ) : null}
-
-          </div>
-        </div>
-      ),
-    },
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#generalModal"
+                  onClick={() => {
+                    setmodalType('view-details');
+                    setViewRow(row);
+                  }}
+                >
+                  <i className="fa fa-eye m-r-5"></i> View
+                </a>
+    
+                {value === 'pending' ? (
+                  <a
+                    href="#"
+                    className="dropdown-item"
+                    onClick={() => handleApproveLeave(row)}
+                  >
+                    <i className="fa fa-check m-r-5"></i> Approve
+                  </a>
+                ) : null}
+    
+                {value === 'pending' ? (
+                  <a
+                    href="#"
+                    className="dropdown-item"
+                    onClick={() => handleRejectLeave(row)}
+                  >
+                    <i className="fa fa-ban m-r-5"></i> Reject
+                  </a>
+                ) : null}
+    
+              </div>
+            </div>
+          ),
+        },
   ];
 
   return (
@@ -332,8 +447,8 @@ const ResignationAdmin = () => {
         <RejectAdminLeaveModal
           hrReject={hrReject}
           closeModal={setRejectModal}
-          fetchAllLeaves={fetchHRLeaves}
-          fetchHRLeaveHistory={fetchHRLeaveHistory}
+          // fetchAllLeaves={fetchHRResignation}
+          // fetchHRLeaveHistory={fetchHRResignationHistory}
         />
       )}
       <div className="page-header">
@@ -361,7 +476,7 @@ const ResignationAdmin = () => {
                     data-toggle="tab"
                     href="#tab_hr-leave-application"
                   >
-                    Applications
+                    Pending Resignations
                   </a>
                 </li>
                 <li className="nav-item">
@@ -385,15 +500,15 @@ const ResignationAdmin = () => {
               <div className="stats-info">
                 <h6>Today Presents</h6>
                 <h4>
-                  {onLeave} / {headCount}
+                  {} / {headCount}
                 </h4>
               </div>
             </div>
           </div>
           <AdminResignationTable
             columns={columns}
-            data={allLeaves}
-            setData={setallLeaves}
+            data={data}
+            setData={setData}
             loading={loading}
             
             page={page}
@@ -414,8 +529,8 @@ const ResignationAdmin = () => {
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
           <AdminResignationHistoryTable
             columns={columns}
-            data={leaveHistory}
-            setData={setLeaveHistory}
+            data={resignationHistory}
+            setData={setResignationHistory}
             loading={loading}
             page={page}
             setPage={setPage}
@@ -437,8 +552,8 @@ const ResignationAdmin = () => {
 
       {modalType === 'view-details' ? (
         <ViewModal
-          title="Leave Application Details"
-          content={<LeaveApplicationContent leaveContent={viewRow} />}
+          title="Resignation Application Details"
+          content={<ResignationContent Content={viewRow} />}
         />
       ) : (
         ''

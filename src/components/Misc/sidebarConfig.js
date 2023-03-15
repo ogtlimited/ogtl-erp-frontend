@@ -143,6 +143,11 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.hr.resignationAdmin,
           },
           {
+            canView: 'All',
+            title: 'Resignation (Employee)',
+            path: PATH_DASHBOARD.hr.resignationEmployee,
+          },
+          {
             canView: 'HR',
             title: 'Departments',
             path: PATH_DASHBOARD.hr.department,

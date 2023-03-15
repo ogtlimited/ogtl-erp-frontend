@@ -79,54 +79,54 @@ const AdminResignationHistoryTable = ({
 
   const imageUrl = 'https://erp.outsourceglobal.com';
 
-  const handleDepartmentFilter = (e) => {
-    setDepartmentFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
+  // const handleDepartmentFilter = (e) => {
+  //   setDepartmentFilter(e.target.value);
+  //   setPage(1);
+  //   setLoading(true);
 
-    axiosInstance
-      .get(`hr-leave-applications/history`, {
-        params: {
-          department: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
+  //   axiosInstance
+  //     .get(`hr-leave-applications/history`, {
+  //       params: {
+  //         department: e.target.value,
+  //         page: page,
+  //         limit: sizePerPage,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       let resData = res?.data?.data?.application;
+  //       let resOptions = res?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+  //       const thisPageLimit = sizePerPage;
+  //       const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+  //       setSizePerPage(thisPageLimit);
+  //       setTotalPages(thisTotalPageSize);
 
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
+  //       const formatted = resData.map((leave) => ({
+  //         ...leave,
+  //         full_name:
+  //           leave?.employee.first_name +
+  //           ' ' +
+  //           leave?.employee.middle_name +
+  //           ' ' +
+  //           leave?.employee.last_name,
+  //         status_action: leave?.status,
+  //         leave_type: leave?.leave_type_id?.leave_type,
+  //         department: leave?.department_id?.department,
+  //         from_date: new Date(leave.from_date).toDateString(),
+  //         to_date: new Date(leave.to_date).toDateString(),
+  //         total_leave_days: Math.ceil(
+  //           (new Date(leave.to_date) - new Date(leave.from_date)) /
+  //             (1000 * 3600 * 24)
+  //         ),
+  //       }));
 
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setStatusFilter("");
-  };
+  //       setData(formatted);
+  //       setunfiltered(formatted);
+  //     });
+  //   setLoading(false);
+  //   setStatusFilter("");
+  // };
 
   const handleLeaveStatusFilter = (e) => {
     setStatusFilter(e.target.value);
@@ -301,7 +301,7 @@ const AdminResignationHistoryTable = ({
               </ExportCSVButton>
 
               <div className="hr-filter-select">
-                <div>
+                {/* <div>
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}
@@ -315,7 +315,7 @@ const AdminResignationHistoryTable = ({
                       <option key={idx}>{option.department}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 <div className="col-md-3">
                   <select

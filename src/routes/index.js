@@ -307,7 +307,7 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
-            { path: 'leaves', element: <LeavesUser /> }, //TODO: change to ResignationUser
+            { path: 'resignation', element: <ResignationUser /> },
             {
               path: 'departments',
               element: (
@@ -1015,6 +1015,9 @@ const EmployeeUser = Loadable(
 );
 const LeavesUser = Loadable(
   lazy(() => import('../pages/HR/Users/Leaves.User'))
+);
+const ResignationUser = Loadable(
+  lazy(() => import('../pages/HR/Users/Resignation.User'))
 );
 const EmployeeSalary = Loadable(
   lazy(() => import('../pages/Payroll/EmployeeSalary'))
