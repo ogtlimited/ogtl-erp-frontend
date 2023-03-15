@@ -455,6 +455,10 @@
 .remaining-leave-row-card {
   width: 17%;
 }
+.active-leave-row-card {
+  width: 17%;
+  margin-left: 20px;
+}
 
 .leave-application-progress {
   display: flex;

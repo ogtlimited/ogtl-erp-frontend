@@ -855,7 +855,7 @@ const LeavesUser = () => {
                     data-toggle="tab"
                     href="#tab_subordinates-leaves"
                   >
-                    Leaves Applications{' '}
+                    Leave Applications{' '}
                     {leaveApplicationCount > 0 && (
                       <span id="leave-application-count">
                         {leaveApplicationCount}
@@ -901,6 +901,13 @@ const LeavesUser = () => {
                   <h4>{user.leaveCount}</h4>
                 </div>
               </div>
+              {user?.leaveApprover && 
+              <div className="active-leave-row-card">
+                <div className="stats-info">
+                  <h6>Total Active Leave</h6>
+                  <h4>{0}</h4>
+                </div>
+              </div>}
               <div className="leave-application-progress">
                 {/* {leaveApprover.length ? <p>Leave Application Progress</p> : null} */}
                 <div>
