@@ -28,10 +28,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     const leaveDays = user.leaveCount + 15;
     const maxSec = ms(`${leaveDays}d`);
     const min_date = new Date(+new Date(today) + minSec);
-    const max_date = new Date(+new Date(today) + maxSec);
+    const max_date = new Date(+new Date(leave.from_date) + maxSec);
     setMinDate(moment(min_date).format('yyyy-MM-DD'));
     setMaxDate(moment(max_date).format('yyyy-MM-DD'));
-  }, [today, user.leaveCount]);
+  }, [leave.from_date, today, user.leaveCount]);
 
   const cancelEvent = () => {
     setLeave(CREATE_LEAVE);
@@ -178,7 +178,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={today}
-                          max={maxDate}
                           required
                         />
                       ) : (
@@ -189,7 +188,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           onChange={handleFormChange}
                           className="form-control "
                           min={minDate}
-                          max={maxDate}
                           required
                         />
                       )}
@@ -205,7 +203,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           value={leave.to_date}
                           onChange={handleFormChange}
                           className="form-control "
-                          min={today}
+                          min={leave.from_date}
                           max={maxDate}
                           required
                         />
@@ -216,7 +214,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           value={leave.to_date}
                           onChange={handleFormChange}
                           className="form-control "
-                          min={minDate}
+                          min={leave.from_date}
                           max={maxDate}
                           required
                         />

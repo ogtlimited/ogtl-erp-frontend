@@ -298,7 +298,7 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
-            { path: 'attendance', element: <EmployeeAttendance /> },
+            // { path: 'attendance', element: <EmployeeAttendance /> },
             {
               path: 'resignation-admin',
               element: (

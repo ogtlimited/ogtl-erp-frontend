@@ -27,11 +27,13 @@ const AdminAttendanceTable = ({
   departments,
   columns,
   designation,
+  loading,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
 
   const males = [male, male2, male3];
   const females = [female, female2, female3];
+  const [show, setShow] = React.useState(false);
   const { ExportCSVButton } = CSVExport;
   const [allEmployee, setAllEmployee] = useState([]);
   const [editEmployee, seteditEmployee] = useState({});
@@ -44,6 +46,13 @@ const AdminAttendanceTable = ({
   const breadcrumb = "Admin Attendance";
   const total = [];
   let attendanceDateFilter;
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
+  };
 
   useEffect(() => {
     const departmentOpts = departments.map((e) => {
@@ -164,7 +173,15 @@ const AdminAttendanceTable = ({
                 classes={!mobileView ? "table" : "table table-responsive"}
                 defaultSorted={defaultSorted}
                 pagination={paginationFactory()}
-                noDataIndication="Fetching Data"
+                noDataIndication={
+                  loading ? (
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  ) : (
+                    showNullMessage()
+                  )
+                }
               />
             </div>
           )}
