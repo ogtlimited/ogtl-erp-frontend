@@ -38,6 +38,7 @@ const AdminResignationTable = ({
   const [dataToFilter, setDataToFilter] = useState('');
   const [mobileView, setmobileView] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
+  const [show, setShow] = React.useState(false);
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -73,7 +74,7 @@ const AdminResignationTable = ({
     let input;
     const handleClick = () => {
       setPage(1);
-      setLoading(true);
+      setLoading(true)
       props.onSearch(input.value);
       const searchTerm = input.value;
       setSearchTerm(searchTerm);
@@ -149,6 +150,13 @@ const AdminResignationTable = ({
       setPage(1);
     };
 
+    const showNullMessage = () => {
+      setTimeout(() => {
+        setShow(true);
+      }, 5000);
+      return <>{show ? "No Data Available" : null}</>;
+    };
+
   return (
     <>
       {dataToFilter && (
@@ -193,7 +201,7 @@ const AdminResignationTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    null
+                    showNullMessage()
                   )
                 }
               />

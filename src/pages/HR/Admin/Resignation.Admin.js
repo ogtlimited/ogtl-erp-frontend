@@ -122,7 +122,7 @@ const ResignationAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Resignation</h3>
+            <h3 className="page-title">Resignations</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <a href="index.html">Dashboard</a>
