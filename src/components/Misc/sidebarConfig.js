@@ -336,14 +336,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.promotion,
         icon: ICONS.promotion,
       },
-      // TODO: Delete this when done with the new module
-      {
-        canView: 'HR',
-        title: 'Resignation',
-        path: PATH_DASHBOARD.resignation,
-        icon: ICONS.resignation,
-      },
-      // TODO: Delete this when done with the new module
+      // {
+      //   canView: 'HR',
+      //   title: 'Resignation',
+      //   path: PATH_DASHBOARD.resignation,
+      //   icon: ICONS.resignation,
+      // },
       {
         canView: 'HR',
         title: 'Termination',
