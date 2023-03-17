@@ -8,6 +8,8 @@ const ResignationContent = ({ Content = {} }) => {
   delete Content.createdAt;
   delete Content.employee_id;
   delete Content._id;
+  delete Content.resignation_letter_date
+  delete Content.relieving_date
 
   return (
     <div className="row d-flex justify-content-center">
@@ -17,8 +19,7 @@ const ResignationContent = ({ Content = {} }) => {
             <>
               <div className="col-md-6 ">
                 <p className="job-field">
-                  {e === 'resignation_letter_date' 
-                    ? 'Application Date' : e === 'relieving_date' 
+                  {e === 'effective_date' 
                     ? "Effective Date" : e === 'reason_for_resignation' 
                     ? "Reason for Resignation" : e.replace(/([a-z0-9])([A-Z])/g, '$1 $2')}
                 </p>
@@ -26,7 +27,7 @@ const ResignationContent = ({ Content = {} }) => {
               <div className="col-md-6 ">
                   <p className="">
                     {typeof Content[e] === 'string'
-                      ? Content[e]
+                      ? Content[e] : typeof Content[e] === "boolean" ? Content[e] ? 'Yes' : 'No'
                       : Content[e] === null
                       ? 'Not Provided'
                       : Content[e]}
