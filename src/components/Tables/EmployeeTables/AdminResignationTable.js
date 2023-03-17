@@ -66,15 +66,19 @@ const AdminResignationTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-    }, 7000);
-  }, [data]);
+    if (!data.length) {
+      setLoading(true);
+    }
+    // setTimeout(() => {
+    // }, 7000);
+  }, [data, setLoading]);
 
   const MySearch = useCallback((props) => {
     let input;
     const handleClick = () => {
       setPage(1);
       setLoading(true)
+      setData([]);
       props.onSearch(input.value);
       const searchTerm = input.value;
       setSearchTerm(searchTerm);
@@ -108,6 +112,7 @@ const AdminResignationTable = ({
           })
 
             setData(map);
+            setunfiltered(map);
           });
       }
       setLoading(false);
