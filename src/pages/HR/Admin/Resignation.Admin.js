@@ -32,7 +32,6 @@ const ResignationAdmin = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         let resData = res?.data?.data?.employees;
         let resOptions = res?.data?.data?.pagination;
 
@@ -55,7 +54,7 @@ const ResignationAdmin = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error?.response);
         setLoading(false);
       });
   }, [page, searchTerm, sizePerPage]);
