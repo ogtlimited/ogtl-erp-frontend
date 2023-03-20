@@ -139,6 +139,16 @@ const sidebarConfig = [
           // },
           {
             canView: 'HR',
+            title: 'Resignation (Admin)',
+            path: PATH_DASHBOARD.hr.resignationAdmin,
+          },
+          {
+            canView: 'All',
+            title: 'Resignation (Employee)',
+            path: PATH_DASHBOARD.hr.resignationEmployee,
+          },
+          {
+            canView: 'HR',
             title: 'Departments',
             path: PATH_DASHBOARD.hr.department,
           },
@@ -326,12 +336,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.promotion,
         icon: ICONS.promotion,
       },
-      {
-        canView: 'HR',
-        title: 'Resignation',
-        path: PATH_DASHBOARD.resignation,
-        icon: ICONS.resignation,
-      },
+      // {
+      //   canView: 'HR',
+      //   title: 'Resignation',
+      //   path: PATH_DASHBOARD.resignation,
+      //   icon: ICONS.resignation,
+      // },
       {
         canView: 'HR',
         title: 'Termination',

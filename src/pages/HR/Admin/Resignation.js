@@ -17,6 +17,7 @@ const Resignation = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadSelect, setloadSelect] = useState(false);
+
   const fetchResignation = () => {
     axiosInstance
       .get("/Exit")
@@ -33,6 +34,7 @@ const Resignation = () => {
         console.log(error);
       });
   };
+  
   useEffect(() => {
     fetchResignation();
   }, []);
@@ -217,11 +219,13 @@ const Resignation = () => {
           </div>
         </div>
       </div>
+      
       <div className="row">
         <div className="col-sm-12">
           <LeavesTable data={data} columns={columns} />
         </div>
       </div>
+
       {loadSelect && (
         <FormModal
           editData={editData}
