@@ -97,7 +97,7 @@ const FormModal = ({
                         Cancel
                       </button>
                       <button type="submit" className="btn btn-primary">
-                        Save
+                        Submit
                       </button>
                     </div>
                   </div>

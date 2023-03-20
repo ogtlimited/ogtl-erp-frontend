@@ -38,6 +38,7 @@ const LeavesUser = () => {
   const [allReporteesAppealedLeaves, setAllReporteesAppealedLeaves] = useState(
     []
   );
+  const [allActiveLeaves, setAllActiveLeaves] = useState(0);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [rejectModal, setRejectModal] = useState(false);
   const [requestEditModal, setRequestEditModal] = useState(false);
@@ -100,6 +101,21 @@ const LeavesUser = () => {
     }
   };
 
+  
+  const fetchTotalActiveLeaves = async () => {
+    try {
+      const response = await axiosInstance.get(`/leads-leave-applications/total-active-leaves`);
+      const totalActiveLeave = response?.data?.data;
+
+      setAllActiveLeaves(totalActiveLeave);
+      fetchLeaveApplicationProgress();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   const fetchYourLeaves = async () => {
     const id = currentUser._id;
     try {
@@ -123,7 +139,6 @@ const LeavesUser = () => {
       setUserStatus(status);
 
       setallLeaves(formatter);
-      console.log('Show my leaves:', formatter);
       fetchLeaveApplicationProgress();
       setLoading(false);
     } catch (error) {
@@ -323,6 +338,7 @@ const LeavesUser = () => {
   };
 
   useEffect(() => {
+    fetchTotalActiveLeaves();
     fetchReporteesLeaves();
     fetchReporteesAppealedLeaves();
     fetchLeaveHistory();
@@ -855,7 +871,7 @@ const LeavesUser = () => {
                     data-toggle="tab"
                     href="#tab_subordinates-leaves"
                   >
-                    Leaves Applications{' '}
+                    Leave Applications{' '}
                     {leaveApplicationCount > 0 && (
                       <span id="leave-application-count">
                         {leaveApplicationCount}
@@ -901,6 +917,13 @@ const LeavesUser = () => {
                   <h4>{user.leaveCount}</h4>
                 </div>
               </div>
+              {user?.leaveApprover && 
+              <div className="active-leave-row-card">
+                <div className="stats-info">
+                  <h6>Total Active Leave</h6>
+                  <h4>{allActiveLeaves}</h4>
+                </div>
+              </div>}
               <div className="leave-application-progress">
                 {/* {leaveApprover.length ? <p>Leave Application Progress</p> : null} */}
                 <div>
