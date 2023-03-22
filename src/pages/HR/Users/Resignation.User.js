@@ -141,7 +141,7 @@ const ResignationUser = () => {
         ''
       )}
 
-      <ApplyResignationModal />
+      <ApplyResignationModal fetchResignation={fetchResignation} />
       {/* <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} /> */}
     </>
   );
