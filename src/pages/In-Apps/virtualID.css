@@ -1,0 +1,29 @@
+.add-employee-form {
+  background-color: #fff;
+}
+
+.add-employee-form-loader-div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-employee-form-loader-div > p {
+  margin-right: 10px;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.add-employee-container-card {
+  position: fixed;
+  top: 32%;
+  right: 10%;
+}
+
+.add-employee-card {
+  background-color: pink;
+}
+
+.virtual-card {
+  background-color: rgb(42, 165, 159);
+}
