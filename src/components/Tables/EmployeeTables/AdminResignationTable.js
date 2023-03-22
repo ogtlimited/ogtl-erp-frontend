@@ -43,6 +43,19 @@ const AdminResignationTable = ({
     sizePerPage: 10,
   });
 
+  
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : 
+              <div className="spinner-border text-primary" role="status">
+                  <span className="sr-only">Loading...</span>
+              </div>
+              }
+            </>;
+  }
+
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
       setmobileView(false);
@@ -60,25 +73,19 @@ const AdminResignationTable = ({
     window.addEventListener('resize', () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
-  const imageUrl = 'https://erp.outsourceglobal.com';
 
   useEffect(() => {
     setDataToFilter(data);
-    if (!data.length) {
-      setLoading(true);
-    }
-    // setTimeout(() => {
-    // }, 7000);
-  }, [data, setLoading]);
+  }, [data]);
 
   const MySearch = useCallback((props) => {
     let input;
     const handleClick = () => {
+      setLoading(true);
       setPage(1);
-      setLoading(true)
-      setData([]);
       props.onSearch(input.value);
       const searchTerm = input.value;
       setSearchTerm(searchTerm);
@@ -153,13 +160,6 @@ const AdminResignationTable = ({
   
       setSizePerPage(e.target.value);
       setPage(1);
-    };
-
-    const showNullMessage = () => {
-      setTimeout(() => {
-        setShow(true);
-      }, 5000);
-      return <>{show ? "No Data Available" : null}</>;
     };
 
   return (
