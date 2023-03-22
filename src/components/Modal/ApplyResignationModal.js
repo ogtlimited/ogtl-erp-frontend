@@ -9,7 +9,7 @@ import $ from 'jquery';
 import ms from 'ms';
 import moment from 'moment';
 
-export const ApplyResignationModal = ({ fetchYourResignation }) => {
+export const ApplyResignationModal = ({ fetchResignation }) => {
   const { showAlert } = useAppContext();
   const [resignation, setResignation] = useState(CREATE_RESIGNATION);
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,6 @@ export const ApplyResignationModal = ({ fetchYourResignation }) => {
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
-  const [maxDate, setMaxDate] = useState(null);
 
   useEffect(() => {
     const time = new Date().toDateString();
@@ -48,14 +47,13 @@ export const ApplyResignationModal = ({ fetchYourResignation }) => {
       });
       // eslint-disable-next-line no-unused-vars
       const resData = res?.data?.data;
-      console.log("Created Resignation application", resData)
 
       showAlert(
         true,
-        'Your resignation application is successful, please await an approval',
+        'Your resignation application is successfully submitted',
         'alert alert-success'
       );
-      // fetchYourResignation();
+      fetchResignation();
       setResignation(CREATE_RESIGNATION);
       $('#ResignationFormModal').modal('toggle');
     } catch (error) {
