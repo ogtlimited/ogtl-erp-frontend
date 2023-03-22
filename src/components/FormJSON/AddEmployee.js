@@ -4,7 +4,6 @@ export const CREATE_PROFILE = {
   last_name: '',
   company_email: '',
   gender: '',
-  ogid: '',
   date_of_joining: new Date(),
   reports_to: '',
   designation: null,
