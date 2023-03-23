@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
+import { useReactToPrint } from "react-to-print";
 import BankInformation from "./components/BankInformation";
 import ContactDetails from "./components/ContactDetails";
 import EducationInformation from "./components/EducationInformation";
@@ -16,6 +17,8 @@ import avater5 from "../../assets/img/female_avatar2.png";
 import EmployeePromotions from "./promotions";
 import EmployeeWarningLetters from "./warningLetters";
 import { useAppContext } from "../../Context/AppContext";
+import { BsFillPrinterFill } from 'react-icons/bs';
+
 const ProfileCards = ({
   setformType,
   userData,
@@ -28,6 +31,16 @@ const ProfileCards = ({
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
   const { user } = useAppContext();
+
+  const FrontVirtualIDRef = useRef();
+  const handlePrintFront = useReactToPrint({
+    content: () => FrontVirtualIDRef.current
+  });
+
+  const BackVirtualIDRef = useRef();
+  const handlePrintBack = useReactToPrint({
+    content: () => BackVirtualIDRef.current
+  });
 
   const [avaterList, setavaterList] = useState([
     avater,
@@ -179,14 +192,21 @@ const ProfileCards = ({
 
         <div id="emp_virtualID" className="pro-overview tab-pane fade" style={{backgroundColor: '#fff'}}>   
           <div className="row" style={{padding: '0 20px'}}>
-            {employeeDetails && <FrontVirtualID employeeDetails={employeeDetails} />}
-            {employeeDetails && <BackVirtualID />}
+            {employeeDetails && <FrontVirtualID employeeDetails={employeeDetails} ref={FrontVirtualIDRef} />}
+            {employeeDetails && <BackVirtualID ref={BackVirtualIDRef} />}
           </div>
           {employeeDetails && 
             <button className="btn btn-primary" 
-              style={{margin: '20px 0 10px 20px'}} 
-              onClick={() => window.print()}>
-                Print
+              style={{margin: '20px 0 10px 20px'}}
+              onClick={handlePrintFront}>
+                <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Front
+            </button>
+          }
+          {employeeDetails && 
+            <button className="btn btn-primary" 
+              style={{margin: '20px 0 10px 15%'}}
+              onClick={handlePrintBack}>
+                <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Back
             </button>
           }
         </div>

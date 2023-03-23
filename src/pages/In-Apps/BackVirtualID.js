@@ -2,10 +2,11 @@
 import './backVirtualID.css'
 import React from 'react';
 
-const BackVirtualID = () => {
+const BackVirtualID = React.forwardRef((props, ref) => {
+ 
   return (
     <>
-      <div className="back-card" style={{margin: '10px'}}>
+      <div className="back-card" style={{margin: '10px'}} ref={ref}>
         <div className="back-card-logo">
           <img src="https://res.cloudinary.com/dhantey/image/upload/v1676380670/OGTL/outsource_cdalod.png" alt="Outsource Global logo" />
         </div>
@@ -46,6 +47,6 @@ const BackVirtualID = () => {
       </div>
     </>
   );
-};
+});
 
 export default BackVirtualID;

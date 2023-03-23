@@ -2,11 +2,13 @@
 import './virtualID.css'
 import React from 'react';
 
-const FrontVirtualID = ({ employeeDetails }) => {
-  const data = employeeDetails;
+const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
+  const data = employeeDetails.employeeDetails;
+  console.log("employee Details:", employeeDetails.employeeDetails);
+
   return (
     <>
-      <div className="virtual-card" style={{margin: '10px'}}>
+      <div className="virtual-card" style={{margin: '10px'}} ref={ref}> 
         <div className="virtual-card-logo">
           <img src="https://res.cloudinary.com/dhantey/image/upload/v1676380670/OGTL/outsource_cdalod.png" alt="Outsource Global logo" />
         </div>
@@ -40,6 +42,6 @@ const FrontVirtualID = ({ employeeDetails }) => {
       </div>
     </>
   );
-};
+});
 
 export default FrontVirtualID;
