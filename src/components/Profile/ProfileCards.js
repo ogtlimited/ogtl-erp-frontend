@@ -6,6 +6,7 @@ import EmergencyContact from "./components/EmergencyContact";
 import Experience from "./components/Experience";
 import History from "./components/History";
 import PersonalInfo from "./components/PersonalInfo";
+import ProfileVirtualID from "../../pages/In-Apps/ProfileVirtualID";
 import avater from "../../assets/img/male_avater.png";
 import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
@@ -53,6 +54,11 @@ const ProfileCards = ({
               <li className="nav-item">
                 <a href="#emp_profile" data-toggle="tab" className="nav-link active">
                   Profile
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#emp_virtualID" data-toggle="tab" className="nav-link">
+                  Virtual ID
                 </a>
               </li>
               <li className="nav-item">
@@ -169,6 +175,11 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
+        <div id="emp_virtualID" className="pro-overview tab-pane fade">
+          <ProfileVirtualID employeeDetails={employeeDetails} />
+        </div>
+
         <div id="emp_campaign" className="pro-overview tab-pane fade">
           <div className="row">
             <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
@@ -256,6 +267,7 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
         <div id="bank_statutory" className="pro-overview tab-pane fade">
           <div className="card">
             <div className="card-body">
@@ -349,9 +361,11 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
         <div id="promotions" className="pro-overview tab-pane fade">
           <EmployeePromotions />
         </div>
+
         <div id="warning_letters" className="pro-overview tab-pane fade">
           <EmployeeWarningLetters />
         </div>
