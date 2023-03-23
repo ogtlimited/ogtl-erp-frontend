@@ -4,7 +4,7 @@ export const CREATE_PROFILE = {
   last_name: '',
   company_email: '',
   gender: '',
-  date_of_joining: new Date(),
+  date_of_joining: '',
   reports_to: '',
   designation: null,
   department: null,
@@ -17,5 +17,8 @@ export const CREATE_PROFILE = {
   status: 'active',
   leaveCount: 0,
   password: '',
-  image: ''
+  image: '',
+
+  designationName: '',
+  signature: '',
 }
