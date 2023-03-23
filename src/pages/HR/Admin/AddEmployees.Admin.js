@@ -8,13 +8,18 @@ import { Link, } from 'react-router-dom';
 import { CREATE_PROFILE } from "../../../components/FormJSON/AddEmployee";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
-import $ from "jquery";
 import Select from "react-select";
 import EmployeeHelperService from "./employee.helper";
 
-const AddEmployeesAdmin = () => {  
-  const selectInputRef = useRef();
-  const selectInputRef2 = useRef();
+const AddEmployeesAdmin = () => { 
+  const selectGenderRef = useRef();
+  const selectReportToRef = useRef();
+  const selectDesignationRef = useRef();
+  const selectShiftRef = useRef();
+  const selectEmploymentTypeRef = useRef();
+  const selectBranchRef = useRef();
+  const selectStatusRef = useRef();
+  
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(CREATE_PROFILE);
   const [loading, setLoading] = useState(false);
@@ -59,8 +64,8 @@ const AddEmployeesAdmin = () => {
     setOfficeType("Department ");
     setOfficeId(e.value);
 
-    selectInputRef.current.select.clearValue();
-    selectInputRef2.current.select.clearValue();
+    selectDesignationRef.current.select.clearValue();
+    selectShiftRef.current.select.clearValue();
     axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
       const response = e?.data?.data;
       const designationOpts = response?.map((e) => {
@@ -96,8 +101,8 @@ const AddEmployeesAdmin = () => {
     setOfficeType("Campaign ");
     setOfficeId(e.value);
 
-    selectInputRef.current.select.clearValue();    
-    selectInputRef2.current.select.clearValue();
+    selectDesignationRef.current.select.clearValue();
+    selectShiftRef.current.select.clearValue();
     axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
       const response = e?.data?.data;
       const designationOpts = response?.map((e) => {
@@ -171,6 +176,13 @@ const AddEmployeesAdmin = () => {
     });
   }, [createEmployee, officeId, status]);
 
+const goToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+};
+
   const genders = [
     {
       label: "Female",
@@ -213,7 +225,15 @@ const AddEmployeesAdmin = () => {
     },
   ];
 
-  const cancelEvent = () => {
+  const clearEvent = () => {
+    goToTop();
+    selectGenderRef.current.select.clearValue();
+    selectReportToRef.current.select.clearValue();
+    selectDesignationRef.current.select.clearValue();
+    selectShiftRef.current.select.clearValue();
+    selectEmploymentTypeRef.current.select.clearValue();
+    selectBranchRef.current.select.clearValue();
+    selectStatusRef.current.select.clearValue();
     setEmployee(CREATE_PROFILE);
   };
 
@@ -229,39 +249,34 @@ const AddEmployeesAdmin = () => {
     delete employeeForm.designationName;
     delete employeeForm.signature;
 
-    console.log("Employee Record:", {
-      ...employeeForm,
-      department: officeType === "Department " ? officeId : null,
-      projectId: officeType === "Campaign " ? officeId : null,
-      leaveCount: +employeeForm.leaveCount,
-    })
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("/employees", {
+        ...employeeForm,
+        department: officeType === "Department " ? officeId : '',
+        projectId: officeType === "Campaign " ? officeId : '',
+        leaveCount: +employeeForm.leaveCount,
+      });
+      // eslint-disable-next-line no-unused-vars
+      const resData = res.data.data;
+      goToTop();
 
-    // setLoading(true);
-    // try {
-    //   const res = await axiosInstance.post("/employees", {
-    //     ...employee,
-    //     leaveCount: +employee.leaveCount,
-    //   });
-    //   // eslint-disable-next-line no-unused-vars
-    //   const resData = res.data.data;
+      showAlert(
+        true,
+        "New Employee added successfully",
+        "alert alert-success"
+      );
 
-    //   showAlert(
-    //     true,
-    //     "New Employee created successfully",
-    //     "alert alert-success"
-    //   );
-    //   $("#AddEmployeeFormModal").modal("toggle");
-    // } catch (error) {
-    //   const errorMsg = error.response?.data?.message;
-    //   console.log("Add Employee Record Error:", errorMsg);
-    //   setEmployee(CREATE_PROFILE);
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   $("#AddEmployeeFormModal").modal("toggle");
-    //   setLoading(false);
-    // }
-    // fetchEmployee();
-    // setEmployee(CREATE_PROFILE);
-    // setLoading(false);
+      clearEvent();
+      fetchEmployee();
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.message;
+      clearEvent();
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+      AddEmployeesAdmin();
+    }
   };
 
   const VirtualIDCard = () => {
@@ -378,6 +393,7 @@ const AddEmployeesAdmin = () => {
                         options={genders}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectGenderRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, gender: e?.value })
                         }
@@ -407,6 +423,7 @@ const AddEmployeesAdmin = () => {
                         options={reportsTo}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectReportToRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, reports_to: e?.value })
                         }
@@ -505,7 +522,7 @@ const AddEmployeesAdmin = () => {
                         options={!validDesignation.length ? validDesignation : validDesignation}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectInputRef}
+                        ref={selectDesignationRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, designation: e?.value, designationName: e?.label })
                         }
@@ -527,7 +544,7 @@ const AddEmployeesAdmin = () => {
                         options={!validShift.length ? validShift : validShift}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectInputRef2}
+                        ref={selectShiftRef}
                         onChange={(e) =>
                           setEmployee({
                             ...employee,
@@ -548,6 +565,7 @@ const AddEmployeesAdmin = () => {
                         options={employmentTypes}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectEmploymentTypeRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, employeeType: e?.value })
                         }
@@ -562,6 +580,7 @@ const AddEmployeesAdmin = () => {
                         options={branch}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectBranchRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, branch: e?.value })
                         }
@@ -576,6 +595,7 @@ const AddEmployeesAdmin = () => {
                         options={employeeStatus}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectStatusRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, status: e?.value })
                         }
@@ -602,7 +622,7 @@ const AddEmployeesAdmin = () => {
                     type="button"
                     className="btn btn-secondary"
                     data-dismiss="modal"
-                    onClick={cancelEvent}
+                    onClick={clearEvent}
                   >
                     Cancel
                   </button>
@@ -611,6 +631,7 @@ const AddEmployeesAdmin = () => {
                     className="btn btn-primary"
                     style={{ zIndex: 0 }}
                     disabled={!isAllValid}
+                    onClick={() =>  goToTop()}
                   >
                     {loading ? (
                       <span

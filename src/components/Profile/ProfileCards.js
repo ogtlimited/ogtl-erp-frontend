@@ -6,7 +6,8 @@ import EmergencyContact from "./components/EmergencyContact";
 import Experience from "./components/Experience";
 import History from "./components/History";
 import PersonalInfo from "./components/PersonalInfo";
-import ProfileVirtualID from "../../pages/In-Apps/ProfileVirtualID";
+import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
+import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
 import avater from "../../assets/img/male_avater.png";
 import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
@@ -176,8 +177,18 @@ const ProfileCards = ({
           </div>
         </div>
 
-        <div id="emp_virtualID" className="pro-overview tab-pane fade">
-          <ProfileVirtualID employeeDetails={employeeDetails} />
+        <div id="emp_virtualID" className="pro-overview tab-pane fade" style={{backgroundColor: '#fff'}}>   
+          <div className="row" style={{padding: '0 20px'}}>
+            {employeeDetails && <FrontVirtualID employeeDetails={employeeDetails} />}
+            {employeeDetails && <BackVirtualID />}
+          </div>
+          {employeeDetails && 
+            <button className="btn btn-primary" 
+              style={{margin: '20px 0 10px 20px'}} 
+              onClick={() => window.print()}>
+                Print
+            </button>
+          }
         </div>
 
         <div id="emp_campaign" className="pro-overview tab-pane fade">

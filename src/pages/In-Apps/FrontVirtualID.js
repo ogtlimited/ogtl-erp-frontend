@@ -2,11 +2,11 @@
 import './virtualID.css'
 import React from 'react';
 
-const ProfileVirtualID = ({ employeeDetails }) => {
+const FrontVirtualID = ({ employeeDetails }) => {
   const data = employeeDetails;
   return (
     <>
-      <div className="virtual-card">
+      <div className="virtual-card" style={{margin: '10px'}}>
         <div className="virtual-card-logo">
           <img src="https://res.cloudinary.com/dhantey/image/upload/v1676380670/OGTL/outsource_cdalod.png" alt="Outsource Global logo" />
         </div>
@@ -42,4 +42,4 @@ const ProfileVirtualID = ({ employeeDetails }) => {
   );
 };
 
-export default ProfileVirtualID;
+export default FrontVirtualID;
