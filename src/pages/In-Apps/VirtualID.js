@@ -27,7 +27,7 @@ const VirtualID = (props) => {
         <div className="virtual-card-employee-info-container">
           <div className="virtual-card-employee-info">
             <h3>{props.fullName}</h3>
-            <p style={{color: '#00c5fb', fontSize: '13px', fontWeight: '500'}}>{props.designation}</p>
+            <p style={{color: '#00AEEF', fontSize: '13px', fontWeight: '500'}}>{props.designation}</p>
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679519740/signature-placeholder_xykxnx.png" alt="Employee Signature" />
             <p>Authorized Signature</p>
           </div>

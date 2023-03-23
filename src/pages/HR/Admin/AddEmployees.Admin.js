@@ -264,7 +264,7 @@ const AddEmployeesAdmin = () => {
     // setLoading(false);
   };
 
-  const enoughData = () => {
+  const VirtualIDCard = () => {
     return (
       <>
         <VirtualID
@@ -631,7 +631,7 @@ const AddEmployeesAdmin = () => {
 
         <div className="col-xl-4 d-flex">
           <div className="gfuSqG flex-fill add-employee-container-card">
-          {!services.length ? null : <div className="add-employee-card">{enoughData()}</div>}
+          {!services.length ? null : <div className="add-employee-card">{VirtualIDCard()}</div>}
           </div>
         </div>
       </div>
