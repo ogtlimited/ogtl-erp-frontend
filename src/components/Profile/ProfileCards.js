@@ -195,20 +195,23 @@ const ProfileCards = ({
             {employeeDetails && <FrontVirtualID employeeDetails={employeeDetails} ref={FrontVirtualIDRef} />}
             {employeeDetails && <BackVirtualID ref={BackVirtualIDRef} />}
           </div>
-          {employeeDetails && 
-            <button className="btn btn-primary" 
-              style={{margin: '20px 0 10px 20px'}}
-              onClick={handlePrintFront}>
-                <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Front
-            </button>
-          }
-          {employeeDetails && 
-            <button className="btn btn-primary" 
-              style={{margin: '20px 0 10px 15%'}}
-              onClick={handlePrintBack}>
-                <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Back
-            </button>
-          }
+
+          <div className="row" style={{padding: '0 20px'}}>
+            {employeeDetails && 
+              <button className="btn btn-primary" 
+                onClick={handlePrintFront}
+                style={{margin: '10px'}}>
+                  <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Front
+              </button>
+            }
+            {employeeDetails && 
+              <button className="btn btn-primary" 
+                onClick={handlePrintBack}
+                style={{margin: '10px'}}>
+                  <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Back
+              </button>
+            }
+          </div>
         </div>
 
         <div id="emp_campaign" className="pro-overview tab-pane fade">
