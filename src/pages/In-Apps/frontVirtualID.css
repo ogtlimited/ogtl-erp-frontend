@@ -1,0 +1,134 @@
+
+  .front-card {
+    background-color: #fff;
+    width: 20vw;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  }
+  
+  .front-card-logo {
+    padding: 20px 20px 10px 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .front-card-logo > img {
+    width: 90%;
+    height: 90%;
+  }
+  
+  .front-card-image-container {
+    padding: 0 60px 10px 60px;
+  }
+  
+  .front-card-image {
+    display: flex;
+    justify-content: center;
+    border: 2px solid #000;
+  }
+  
+  .front-card-image > img {
+    width: 90%;
+    height: 90%;
+  }
+  
+  .front-card-employee-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .front-card-employee-info-container {
+    padding: 0 20px;
+  }
+  
+  .front-card-employee-info > img {
+    width: 40%;
+    height: 40%;
+  }
+  
+  .front-card-employee-info > p {
+    font-weight: 600;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .front-card-employee-info > p:nth-child(1) {
+    font-size: 18px;
+  }
+  .front-card-employee-info > p:nth-child(2) {
+    color: #00AEEF;
+    font-size: 13px; 
+    font-weight: 500;
+  }
+  
+  .front-card-employee-info > p:last-child {
+    margin-bottom: 5px;
+  }
+  
+  .front-card-contact-ogid-container {
+    background-color: #00AEEF;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  
+  .front-card-contact-ogid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .front-card-contact-ogid > p {
+    margin: 0;
+    padding: 10px;
+    font-weight: 600;
+    color: #fff;
+  }
+ 
+  @media screen and (max-width: 768px) {
+    .front-card {
+      width: 80vw;
+      margin-bottom: 40px;
+    }
+  }
+  
+  @media all {
+    .page-break {
+      display: none;
+    }
+  }
+  
+  @media print { 
+      html, body {
+      height: initial !important;
+      overflow: initial !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page-break {
+      margin-top: 1rem;
+      display: block;
+      page-break-before: auto;
+    }
+
+    .front-card {
+      width: 40%;
+    }
+
+    .front-card-employee-info > p:nth-child(1) {
+      font-size: 32px;
+    }
+    .front-card-employee-info > p:nth-child(2) {
+      font-size: 25px;
+    }
+    .front-card-employee-info > p:nth-child(4) {
+      font-size: 23px;
+    }
+    .front-card-contact-ogid > p {
+      font-size: 25px;
+    }
+  }
+  

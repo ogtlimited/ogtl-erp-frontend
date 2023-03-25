@@ -1,3 +1,4 @@
+import './profileCard.css'
 import React, { useEffect, useState, useRef  } from "react";
 import { useReactToPrint } from "react-to-print";
 import BankInformation from "./components/BankInformation";
@@ -196,7 +197,7 @@ const ProfileCards = ({
             {employeeDetails && <BackVirtualID ref={BackVirtualIDRef} />}
           </div>
 
-          <div className="row" style={{padding: '0 20px'}}>
+          <div className="row card-print-btn-div">
             {employeeDetails && 
               <button className="btn btn-primary" 
                 onClick={handlePrintFront}

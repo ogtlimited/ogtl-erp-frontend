@@ -1,5 +1,5 @@
 /** @format */
-import './virtualID.css'
+import './frontVirtualID.css'
 import React from 'react';
 
 const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
@@ -8,13 +8,13 @@ const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
 
   return (
     <>
-      <div className="virtual-card" style={{margin: '10px'}} ref={ref}> 
-        <div className="virtual-card-logo">
+      <div className="front-card" ref={ref}> 
+        <div className="front-card-logo">
           <img src="https://res.cloudinary.com/dhantey/image/upload/v1676380670/OGTL/outsource_cdalod.png" alt="Outsource Global logo" />
         </div>
 
-        <div className="virtual-card-image-container">
-          <div className="virtual-card-image">
+        <div className="front-card-image-container">
+          <div className="front-card-image">
             {data?.gender === "female" ? 
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679518841/female-placeholder-image_vbmnxe.webp" alt="Female Employee" />
             : data?.gender === "male" ?
@@ -25,17 +25,17 @@ const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
           </div>
         </div>
 
-        <div className="virtual-card-employee-info-container">
-          <div className="virtual-card-employee-info">
-            {!data ? '' : <h3 style={{fontSize: "18px"}}>{data?.first_name + " " + data?.middle_name + " " + data?.last_name}</h3>}
-            <p style={{color: '#00AEEF', fontSize: '13px', fontWeight: '500'}}>{data?.designation?.designation}</p>
+        <div className="front-card-employee-info-container">
+          <div className="front-card-employee-info">
+            {!data ? '' : <p>{data?.first_name + " " + data?.middle_name + " " + data?.last_name}</p>}
+            <p>{data?.designation?.designation}</p>
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679519740/signature-placeholder_xykxnx.png" alt="Employee Signature" />
             <p>Authorized Signature</p>
           </div>
         </div>
 
-        <div className="virtual-card-contact-ogid-container">
-          <div className="virtual-card-contact-ogid">
+        <div className="front-card-contact-ogid-container">
+          <div className="front-card-contact-ogid">
             <p>{data?.ogid}</p>
           </div>
         </div>
