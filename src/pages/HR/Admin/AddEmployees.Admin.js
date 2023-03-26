@@ -34,7 +34,7 @@ const AddEmployeesAdmin = () => {
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
-  const [isAdminValid, setIsAdminValid] = useState(null);
+  const [isAdminValid, setIsAdminValid] = useState(false);
   const [isDesignationValid, setIsDesignationValid] = useState(false);
   const [isShiftValid, setIsShiftValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
