@@ -260,17 +260,25 @@ const goToTop = () => {
         <VirtualID
           image={employee.image}
           fullName={employee.first_name + " " + employee.middle_name + " " + employee.last_name}
+          admin={employee.isAdmin}
           gender={employee.gender}
           designation={employee.designationName}
           signature={employee.signature}
           ogid={employee.date_of_joining}
         />
         
-        {employee.date_of_joining && 
+        {employee.isAdmin === "yes" ?  
+          <span className="virtual-id-note">
+            Note: OG00001 is just a sample. 
+            After adding the employee, the OGID will be generated automatically.
+          </span> 
+          : employee.isAdmin !== "yes" && employee.date_of_joining ?
           <span className="virtual-id-note">
             Note: OG{moment(employee.date_of_joining).format("YYMMDD")} is just a sample. 
             After adding the employee, the OGID will be generated automatically.
-          </span>
+          </span> 
+          : 
+          null
         }
       </>
     );
