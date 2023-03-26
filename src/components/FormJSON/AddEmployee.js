@@ -22,3 +22,58 @@ export const CREATE_PROFILE = {
   designationName: '',
   signature: '',
 }
+
+
+export const genderOptions = [
+  {
+    label: "Female",
+    value: "female",
+  },
+  {
+    label: "Male",
+    value: "male",
+  },
+];
+
+
+export const employmentTypesOptions = [
+  {
+    label: "Apprentice",
+    value: "Apprentice",
+  },
+  {
+    label: "Intern",
+    value: "Intern",
+  },
+  {
+    label: "Commission",
+    value: "Commission",
+  },
+  {
+    label: "Contract",
+    value: "Contract",
+  },
+  {
+    label: "Probation",
+    value: "Probation",
+  },
+  {
+    label: "PartTime",
+    value: "PartTime",
+  },
+  {
+    label: "FullTime",
+    value: "FullTime",
+  },
+];
+
+export const categoryOptions = [
+  {
+    label: "Yes",
+    value: 'yes',
+  },
+  {
+    label: "No",
+    value: 'no',
+  },
+];

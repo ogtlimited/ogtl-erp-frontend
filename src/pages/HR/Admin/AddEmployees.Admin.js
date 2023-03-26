@@ -5,7 +5,12 @@ import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
 import { Link, } from 'react-router-dom';
-import { CREATE_PROFILE } from "../../../components/FormJSON/AddEmployee";
+import { 
+  CREATE_PROFILE, 
+  genderOptions, 
+  employmentTypesOptions, 
+  categoryOptions 
+} from "../../../components/FormJSON/AddEmployee";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import Select from "react-select";
@@ -19,6 +24,8 @@ const AddEmployeesAdmin = () => {
   const selectEmploymentTypeRef = useRef();
   const selectBranchRef = useRef();
   const selectStatusRef = useRef();
+  const selectAdminRef = useRef();
+  const selectExpatriateRef = useRef();
   
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(CREATE_PROFILE);
@@ -27,7 +34,9 @@ const AddEmployeesAdmin = () => {
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
-  // const [isDesignationValid, setIsDesignationValid] = useState(false);
+  const [isAdminValid, setIsAdminValid] = useState(null);
+  const [isDesignationValid, setIsDesignationValid] = useState(false);
+  const [isShiftValid, setIsShiftValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
 
   const [services, setServices] = useState([]);
@@ -47,12 +56,16 @@ const AddEmployeesAdmin = () => {
   useEffect(() => {
     setIsGenderValid(employee.gender ? true : false);
     setIsReportToValid(employee.reports_to ? true : false);
-    // setIsDesignationValid(employee.designation ? true : false);
+    setIsAdminValid(employee.isAdmin ? true : false);
+    setIsDesignationValid(employee.designation ? true : false);
+    setIsShiftValid(employee.default_shift ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
     setIsAllValid(
-      employee.gender &&
+        employee.gender &&
         employee.reports_to &&
-        // employee.designation &&
+        employee.isAdmin &&
+        employee.designation &&
+        employee.default_shift &&
         employee.employeeType
         ? true
         : false
@@ -183,48 +196,6 @@ const goToTop = () => {
     });
 };
 
-  const genders = [
-    {
-      label: "Female",
-      value: "female",
-    },
-    {
-      label: "Male",
-      value: "male",
-    },
-  ];
-
-  const employmentTypes = [
-    {
-      label: "Apprentice",
-      value: "Apprentice",
-    },
-    {
-      label: "Intern",
-      value: "Intern",
-    },
-    {
-      label: "Commission",
-      value: "Commission",
-    },
-    {
-      label: "Contract",
-      value: "Contract",
-    },
-    {
-      label: "Probation",
-      value: "Probation",
-    },
-    {
-      label: "PartTime",
-      value: "PartTime",
-    },
-    {
-      label: "FullTime",
-      value: "FullTime",
-    },
-  ];
-
   const clearEvent = () => {
     goToTop();
     selectGenderRef.current.select.clearValue();
@@ -234,6 +205,8 @@ const goToTop = () => {
     selectEmploymentTypeRef.current.select.clearValue();
     selectBranchRef.current.select.clearValue();
     selectStatusRef.current.select.clearValue();
+    selectAdminRef.current.select.clearValue();
+    selectExpatriateRef.current.select.clearValue();
     setEmployee(CREATE_PROFILE);
   };
 
@@ -253,6 +226,8 @@ const goToTop = () => {
     try {
       const res = await axiosInstance.post("/employees", {
         ...employeeForm,
+        isAdmin: employee.isAdmin === 'yes' ? true : false,
+        isExpatriate: employee.isExpatriate === 'yes' ? true : false,
         department: officeType === "Department " ? officeId : '',
         projectId: officeType === "Campaign " ? officeId : '',
         leaveCount: +employeeForm.leaveCount,
@@ -347,14 +322,15 @@ const goToTop = () => {
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <label htmlFor="middle_name">Middle Name</label>
+                      <label htmlFor="middle_name">Middle Name{' '} 
+                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                      </label>
                       <input
                         className="form-control"
                         name="middle_name"
                         type="text"
                         value={employee.middle_name}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
@@ -390,7 +366,7 @@ const goToTop = () => {
                         Gender {!isGenderValid && <span>*</span>}
                       </label>
                       <Select
-                        options={genders}
+                        options={genderOptions}
                         isSearchable={true}
                         isClearable={true}
                         ref={selectGenderRef}
@@ -401,6 +377,43 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="isAdmin">Is this Employee an Admin? {!isAdminValid && <span>*</span>}</label>
+                      <Select
+                        options={categoryOptions}
+                        isSearchable={true}
+                        isClearable={true}
+                        ref={selectAdminRef}
+                        onChange={(e) =>
+                          setEmployee({ ...employee, isAdmin: e?.value })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="isExpatriate">Is this Employee an Expatriate?{' '}
+                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                      </label>
+                      <Select
+                        options={categoryOptions}
+                        isSearchable={true}
+                        isClearable={true}
+                        ref={selectExpatriateRef}
+                        onChange={(e) =>
+                          setEmployee({ ...employee, isExpatriate: e?.value })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="date_of_joining">Date of Joining</label>
@@ -475,7 +488,8 @@ const goToTop = () => {
                       <span style={{color: "red"}}>{desError}</span>
                     </div>
                   </div>
-                  <div className="col-md-6">
+
+                  {/* <div className="col-md-6">
                     <div className="checkbox-group">
                       <label htmlFor="isAdmin">Admin</label>
                       <input
@@ -508,14 +522,15 @@ const goToTop = () => {
                         }
                       />
                     </div>
-                  </div>
+                  </div> */}
+
                   <div className="col-md-6">
                     <div className="form-group">
                       {!validDesignation.length ? (
-                        <label htmlFor="designation">Designation</label>
+                        <label htmlFor="designation">Designation {!isDesignationValid && <span>*</span>}</label>
                       ) : (
                         <label htmlFor="designation">
-                          {officeType} Designation
+                          {officeType} Designation {!isDesignationValid && <span>*</span>}
                         </label>
                       )}
                       <Select
@@ -534,10 +549,10 @@ const goToTop = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       {!validShift.length ? (
-                        <label htmlFor="default_shift">Shift</label>
+                        <label htmlFor="default_shift">Shift {!isShiftValid && <span>*</span>}</label>
                       ) : (
                         <label htmlFor="default_shift">
-                          {officeType} Shift
+                          {officeType} Shift {!isShiftValid && <span>*</span>}
                         </label>
                       )}
                       <Select
@@ -562,7 +577,7 @@ const goToTop = () => {
                         {!isEmploymentTypeValid && <span>*</span>}
                       </label>
                       <Select
-                        options={employmentTypes}
+                        options={employmentTypesOptions}
                         isSearchable={true}
                         isClearable={true}
                         ref={selectEmploymentTypeRef}
@@ -575,7 +590,9 @@ const goToTop = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="branch">Branch</label>
+                      <label htmlFor="branch">Branch{' '}
+                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                      </label>
                       <Select
                         options={branch}
                         isSearchable={true}
@@ -590,7 +607,9 @@ const goToTop = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="status">Status</label>
+                      <label htmlFor="status">Status{' '}
+                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                      </label>
                       <Select
                         options={employeeStatus}
                         isSearchable={true}
@@ -605,7 +624,9 @@ const goToTop = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="leaveCount">Leave Count</label>
+                      <label htmlFor="leaveCount">Leave Count{' '}
+                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                      </label>
                       <input
                         className="form-control"
                         name="leaveCount"
