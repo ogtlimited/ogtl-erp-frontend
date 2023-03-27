@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { create_designation } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
+import Select from 'react-select';
 import $ from 'jquery';
 
 export const AddDesignationModal = ({ allDesignation }) => {
@@ -62,7 +63,12 @@ export const AddDesignationModal = ({ allDesignation }) => {
       const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
 
-      setDepartments(resData);
+      const formatted = resData.map((department) => ({
+        label: department?.department,
+        value: department?._id,
+      }));
+
+      setDepartments(formatted);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -105,26 +111,17 @@ export const AddDesignationModal = ({ allDesignation }) => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="department">Department</label>
-                      <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="department"
+                      <Select
+                        onChange={(e) =>
+                          setCreateDesignation({ ...createDesignation, department: e?.value })
+                        }
+                        options={departments}
+                        placeholder="Select department ..."
+                        isClearable={true}
+                        isSearchable={true}
+                        style={{ display: 'inline-block' }}
                         required
-                      >
-                        <option value="" disabled selected hidden>
-                          Select department ...
-                        </option>
-                        {departments.map((department, idx) => (
-                          <option
-                            key={idx}
-                            value={department._id}
-                            placeholder="Department"
-                            required
-                          >
-                            {department.department}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -138,25 +135,6 @@ export const AddDesignationModal = ({ allDesignation }) => {
                         onChange={handleFormChange}
                         required
                       />
-                      {/* <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="designation"
-                        required
-                      >
-                        <option value="" disabled selected hidden>
-                          {designationInfo}
-                        </option>
-                        {designations.map((designation) => (
-                          <option
-                            key={designation._id}
-                            value={designation._id}
-                            placeholder="Designation"
-                          >
-                            {designation.designation}
-                          </option>
-                        ))}
-                      </select> */}
                     </div>
                   </div>
                   <div className="col-md-6">
