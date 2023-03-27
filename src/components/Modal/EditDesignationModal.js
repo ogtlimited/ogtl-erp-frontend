@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { create_designation } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
+import Select from 'react-select';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 
@@ -59,8 +60,13 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
     try {
       const response = await axiosInstance.get('/department');
       const resData = response?.data?.data;
+  
+      const formatted = resData.map((department) => ({
+        label: department?.department,
+        value: department?._id,
+      }));
 
-      setDepartments(resData);
+      setDepartments(formatted);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -104,24 +110,17 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="department">Department</label>
-                      <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="department"
-                      >
-                        <option value="" disabled selected hidden>
-                          Select department ...
-                        </option>
-                        {departments.map((department, idx) => (
-                          <option
-                            key={idx}
-                            value={department._id}
-                            placeholder="Department"
-                          >
-                            {department.department}
-                          </option>
-                        ))}
-                      </select>
+                      <Select
+                        onChange={(e) =>
+                          setCreateDesignation({ ...createDesignation, department: e?.value })
+                        }
+                        options={departments}
+                        placeholder="Select department ..."
+                        isClearable={true}
+                        isSearchable={true}
+                        style={{ display: 'inline-block' }}
+                        required
+                      />
                     </div>
                   </div>
                   <div className="col-md-6">
@@ -134,25 +133,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
                         value={createDesignation.designation}
                         onChange={handleFormChange}
                       />
-                      {/* <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="designation"
-                        required
-                      >
-                        <option value="" disabled selected hidden>
-                          {designationInfo}
-                        </option>
-                        {designations.map((designation) => (
-                          <option
-                            key={designation._id}
-                            value={designation._id}
-                            placeholder="Designation"
-                          >
-                            {designation.designation}
-                          </option>
-                        ))}
-                      </select> */}
                     </div>
                   </div>
                   <div className="col-md-6">

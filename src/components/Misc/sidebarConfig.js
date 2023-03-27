@@ -124,7 +124,7 @@ const sidebarConfig = [
           },
           {
             canView: 'All',
-            title: 'Leaves (Employee)',
+            title: 'Leaves',
             path: PATH_DASHBOARD.hr.leavesEmployee,
           },
           {
@@ -144,7 +144,7 @@ const sidebarConfig = [
           },
           {
             canView: 'All',
-            title: 'Resignation (Employee)',
+            title: 'Resignation',
             path: PATH_DASHBOARD.hr.resignationEmployee,
           },
           {

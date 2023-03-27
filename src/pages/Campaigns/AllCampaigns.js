@@ -354,10 +354,7 @@ const AllCampaigns = () => {
               </a>
             ) : (
               <a
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#FormModal"
-              >
+              className="btn add-btn">
                 <div
                   className="spinner-border"
                   role="status"
