@@ -4,8 +4,7 @@ export const CREATE_PROFILE = {
   last_name: '',
   company_email: '',
   gender: '',
-  ogid: '',
-  date_of_joining: new Date(),
+  date_of_joining: '',
   reports_to: '',
   designation: null,
   department: null,
@@ -18,5 +17,63 @@ export const CREATE_PROFILE = {
   status: 'active',
   leaveCount: 0,
   password: '',
-  image: ''
+  image: '',
+
+  designationName: '',
+  signature: '',
 }
+
+
+export const genderOptions = [
+  {
+    label: "Female",
+    value: "female",
+  },
+  {
+    label: "Male",
+    value: "male",
+  },
+];
+
+
+export const employmentTypesOptions = [
+  {
+    label: "Apprentice",
+    value: "Apprentice",
+  },
+  {
+    label: "Intern",
+    value: "Intern",
+  },
+  {
+    label: "Commission",
+    value: "Commission",
+  },
+  {
+    label: "Contract",
+    value: "Contract",
+  },
+  {
+    label: "Probation",
+    value: "Probation",
+  },
+  {
+    label: "PartTime",
+    value: "PartTime",
+  },
+  {
+    label: "FullTime",
+    value: "FullTime",
+  },
+];
+
+export const categoryOptions = [
+  {
+    label: "Yes",
+    value: 'yes',
+  },
+  {
+    label: "No",
+    value: 'no',
+  },
+];

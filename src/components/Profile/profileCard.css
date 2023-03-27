@@ -1,0 +1,9 @@
+
+.card-print-btn-div {
+    width: 41vw;
+    padding: 10px 0;
+    margin-left: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}

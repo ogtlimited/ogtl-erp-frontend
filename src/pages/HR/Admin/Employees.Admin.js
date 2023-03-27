@@ -1,9 +1,9 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
-import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
+// import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
 
 import FormModal2 from '../../../components/Modal/FormModal2';
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
@@ -11,13 +11,13 @@ import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTa
 import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
-import Papa from 'papaparse';
 import helper from '../../../services/helper';
 import UploadModal from '../../../components/Modal/uploadModal';
 import BulkEmployeeUploadModal from '../../../components/Modal/bulkEmployeeUploadModal';
 import EmployeeHelperService from './employee.helper';
 
 const AllEmployeesAdmin = () => {
+  const navigate = useNavigate();
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -284,6 +284,7 @@ const AllEmployeesAdmin = () => {
         });
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     submitted,
     formValue,
@@ -332,9 +333,6 @@ const AllEmployeesAdmin = () => {
  
   return (
     <>
-      {/* { uploading && <div className="progress mb-3">
-    <div className="progress-bar" role="progressbar" style={{width: "25%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-  </div> } */}
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -353,20 +351,12 @@ const AllEmployeesAdmin = () => {
                   href="#"
                   className="btn add-btn "
                   data-toggle="modal"
-                  data-target="#AddEmployeeFormModal"
+                  // data-target="#AddEmployeeFormModal"
+                  onClick={() => navigate('/dashboard/hr/all-employees/employee/add')}
                 >
                   <i className="fa fa-plus"></i> Add Employee
                 </a>
 
-                {/* <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  data-target="#FormModal"
-                  onClick={() => create()}
-                >
-                  <i className="fa fa-plus"></i> Add Employee
-                </a> */}
                 <button
                   onClick={() => {
                     settoggleModal(true);
@@ -426,7 +416,7 @@ const AllEmployeesAdmin = () => {
         />
       )}
 
-      <AddEmployeeModal />
+      {/* <AddEmployeeModal /> */}
 
       <FormModal2
         editData={editData}
