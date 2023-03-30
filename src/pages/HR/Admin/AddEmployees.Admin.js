@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../In-Apps/virtualID.css";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
@@ -15,12 +15,12 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import Select from "react-select";
 import EmployeeHelperService from "./employee.helper";
+import { AddEmployeeShiftModal } from "../../../components/Modal/AddEmployeeShiftModal";
 
 const AddEmployeesAdmin = () => { 
   const selectGenderRef = useRef();
   const selectReportToRef = useRef();
   const selectDesignationRef = useRef();
-  const selectShiftRef = useRef();
   const selectEmploymentTypeRef = useRef();
   const selectBranchRef = useRef();
   const selectStatusRef = useRef();
@@ -46,7 +46,6 @@ const AddEmployeesAdmin = () => {
   const [branch, setBranch] = useState("");
   const [projectId, setProjectId] = useState("");
   const [employeeStatus, setEmployeeStatus] = useState("");
-  const [validShift, setValidShift] = useState("");
   const [validDesignation, setValidDesignation] = useState("");
   const [officeType, setOfficeType] = useState("");
   const [officeId, setOfficeId] = useState("");
@@ -58,14 +57,14 @@ const AddEmployeesAdmin = () => {
     setIsReportToValid(employee.reports_to ? true : false);
     setIsAdminValid(employee.isAdmin ? true : false);
     setIsDesignationValid(employee.designation ? true : false);
-    setIsShiftValid(employee.default_shift ? true : false);
+    setIsShiftValid(employee.shifts.length ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
     setIsAllValid(
         employee.gender &&
         employee.reports_to &&
         employee.isAdmin &&
         employee.designation &&
-        employee.default_shift &&
+        employee.shifts.length &&
         employee.employeeType
         ? true
         : false
@@ -78,7 +77,7 @@ const AddEmployeesAdmin = () => {
     setOfficeId(e.value);
 
     selectDesignationRef.current.select.clearValue();
-    selectShiftRef.current.select.clearValue();
+
     axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
       const response = e?.data?.data;
       const designationOpts = response?.map((e) => {
@@ -93,20 +92,6 @@ const AddEmployeesAdmin = () => {
       setDeptError(e?.response?.data?.message);
       setDesError("");
     });
-
-    axiosInstance.get(`/api/shiftType/office?departmentId=${e.value}`).then((e) => {
-      const response = e?.data?.shiftData;
-      const shiftOpts = response?.map((e) => {
-        return {
-          label: e.shift_name,
-          value: e._id,
-        };
-      });
-      setValidShift(shiftOpts);
-    }).catch((e) => {
-      setValidShift([]);
-      console.log("shift error:", e);
-    });
   };
 
   const handleCampaignClick = (e) => {
@@ -115,8 +100,9 @@ const AddEmployeesAdmin = () => {
     setOfficeId(e.value);
 
     selectDesignationRef.current.select.clearValue();
-    selectShiftRef.current.select.clearValue();
-    axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
+
+    // axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
+    axiosInstance.get('/designation').then((e) => {
       const response = e?.data?.data;
       const designationOpts = response?.map((e) => {
         return {
@@ -129,20 +115,6 @@ const AddEmployeesAdmin = () => {
       setValidDesignation([]);
       setDesError(e?.response?.data?.message);
       setDeptError("");
-    });
-
-    axiosInstance.get(`/api/shiftType/office?campaignId=${e.value}`).then((e) => {
-      const response = e?.data?.shiftData;
-      const shiftOpts = response?.map((e) => {
-        return {
-          label: e.shift_name,
-          value: e._id,
-        };
-      });
-      setValidShift(shiftOpts);
-    }).catch((e) => {
-      setValidShift([]);
-      console.log("shift error:", e);
     });
   };
 
@@ -189,19 +161,18 @@ const AddEmployeesAdmin = () => {
     });
   }, [createEmployee, officeId, status]);
 
-const goToTop = () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-    });
-};
+  const goToTop = () => {
+      window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+      });
+  };
 
   const clearEvent = () => {
     goToTop();
     selectGenderRef.current.select.clearValue();
     selectReportToRef.current.select.clearValue();
     selectDesignationRef.current.select.clearValue();
-    selectShiftRef.current.select.clearValue();
     selectEmploymentTypeRef.current.select.clearValue();
     selectBranchRef.current.select.clearValue();
     selectStatusRef.current.select.clearValue();
@@ -226,8 +197,8 @@ const goToTop = () => {
     try {
       const res = await axiosInstance.post("/employees", {
         ...employeeForm,
-        isAdmin: employee.isAdmin === 'yes' ? true : false,
-        isExpatriate: employee.isExpatriate === 'yes' ? true : false,
+        isAdmin: employeeForm.isAdmin === 'yes' ? true : false,
+        isExpatriate: employeeForm.isExpatriate === 'yes' ? true : false,
         department: officeType === "Department " ? officeId : '',
         projectId: officeType === "Campaign " ? officeId : '',
         leaveCount: +employeeForm.leaveCount,
@@ -247,10 +218,9 @@ const goToTop = () => {
       setLoading(false);
     } catch (error) {
       const errorMsg = error.response?.data?.message;
-      clearEvent();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      clearEvent();
       setLoading(false);
-      AddEmployeesAdmin();
     }
   };
 
@@ -328,6 +298,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-4">
                     <div className="form-group">
                       <label htmlFor="middle_name">Middle Name{' '} 
@@ -342,6 +313,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-4">
                     <div className="form-group">
                       <label htmlFor="last_name">Last Name</label>
@@ -355,6 +327,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="company_email">Email</label>
@@ -368,6 +341,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="gender">
@@ -385,7 +359,6 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
-
 
                   <div className="col-md-6">
                     <div className="form-group">
@@ -421,7 +394,6 @@ const goToTop = () => {
                     </div>
                   </div>
 
-
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="date_of_joining">Date of Joining</label>
@@ -435,6 +407,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="reports_to">
@@ -452,6 +425,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="department">Department</label>
@@ -474,6 +448,7 @@ const goToTop = () => {
                       <span style={{color: "red"}}>{deptError}</span>
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="projectId">Campaign</label>
@@ -496,41 +471,6 @@ const goToTop = () => {
                       <span style={{color: "red"}}>{desError}</span>
                     </div>
                   </div>
-
-                  {/* <div className="col-md-6">
-                    <div className="checkbox-group">
-                      <label htmlFor="isAdmin">Admin</label>
-                      <input
-                        className="checkbox-control"
-                        name="isAdmin"
-                        type="checkbox"
-                        value={employee.isAdmin}
-                        onChange={(e) =>
-                          setEmployee({
-                            ...employee,
-                            isAdmin: e.target.checked,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="checkbox-group">
-                      <label htmlFor="isExpatriate">Expatriate</label>
-                      <input
-                        className="checkbox-control"
-                        name="isExpatriate"
-                        type="checkbox"
-                        value={employee.isExpatriate}
-                        onChange={(e) =>
-                          setEmployee({
-                            ...employee,
-                            isExpatriate: e.target.checked,
-                          })
-                        }
-                      />
-                    </div>
-                  </div> */}
 
                   <div className="col-md-6">
                     <div className="form-group">
@@ -556,28 +496,24 @@ const goToTop = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      {!validShift.length ? (
-                        <label htmlFor="default_shift">Shift {!isShiftValid && <span>*</span>}</label>
-                      ) : (
-                        <label htmlFor="default_shift">
-                          {officeType} Shift {!isShiftValid && <span>*</span>}
+                        <label htmlFor="shifts">
+                          Shifts {!isShiftValid && <span>*</span>}
                         </label>
-                      )}
-                      <Select
-                        options={!validShift.length ? validShift : validShift}
-                        isSearchable={true}
-                        isClearable={true}
-                        ref={selectShiftRef}
-                        onChange={(e) =>
-                          setEmployee({
-                            ...employee,
-                            default_shift: e?.value,
-                          })
-                        }
-                        style={{ display: "inline-block" }}
+                      <input
+                        className="form-control"
+                        name="shifts"
+                        type="text"
+                        placeholder="Click to add Shifts..."
+                        value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
+                        data-toggle="modal"
+                        data-target="#EmployeeShiftFormModal"
+                        readOnly
+                        autocomplete="off"
+                        style={{ cursor: 'pointer' }}
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="employeeType">
@@ -596,6 +532,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="branch">Branch{' '}
@@ -613,6 +550,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="status">Status{' '}
@@ -630,6 +568,7 @@ const goToTop = () => {
                       />
                     </div>
                   </div>
+                  
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leaveCount">Leave Count{' '}
@@ -685,6 +624,8 @@ const goToTop = () => {
           </div>
         </div>
       </div>
+
+      <AddEmployeeShiftModal employee={employee} setEmployee={setEmployee} />
       
     </>
   );

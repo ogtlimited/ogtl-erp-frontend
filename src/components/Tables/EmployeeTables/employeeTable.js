@@ -91,7 +91,6 @@ const EmployeesTable = ({
       }
     }
     setmode('edit');
-    console.log(hash);
     seteditData(hash);
   };
 
@@ -259,7 +258,7 @@ const EmployeesTable = ({
                   onClick={() => handleEdit(row)}
                   href="#"
                   data-toggle="modal"
-                  data-target="#FormModal"
+                  data-target="#EditEmployeeFormModal"
                 >
                   <i className="fa fa-pencil m-r-5"></i> Edit
                 </a>
