@@ -13,6 +13,7 @@ import $ from "jquery";
 import Select from "react-select";
 import EmployeeHelperService from "../../pages/HR/Admin/employee.helper";
 import { EditEmployeeShiftModal } from "./EditEmployeeShiftModal";
+import moment from "moment";
 
 export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
   const selectDesignationRef = useRef();
@@ -37,6 +38,7 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
 
   useEffect(() => {
     setEmployee(editData);
+    console.log('Edit this data:', editData)
   }, [editData])
 
   const handleDepartmentClick = (e) => {
@@ -361,7 +363,7 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
                           className="form-control"
                           name="date_of_joining"
                           type="date"
-                          value={employee.date_of_joining}
+                          // value={moment(employee.date_of_joining).format()}
                           onChange={handleFormChange}
                         />
                       </div>
@@ -369,7 +371,6 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
 
                     <div className="col-md-6">
                       <div className="form-group">
-                        {console.log('Reports to:', reportsTo)}
                         <label htmlFor="reports_to">
                           Reports To
                         </label>
@@ -465,7 +466,7 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
                           name="shifts"
                           type="text"
                           placeholder="Click to edit Shifts..."
-                          value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
+                          // value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
                           data-toggle="modal"
                           data-target="#EditEmployeeShiftFormModal"
                           readOnly
