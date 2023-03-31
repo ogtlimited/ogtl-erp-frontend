@@ -1,113 +1,49 @@
 
 export const monday_shifts = {
-  day: '',
+  day: 'mon',
   start: null,
   end: null,
+  off: false,
 };
-export const mondayOptions = [
-  {
-    label: "Monday",
-    value: "mon",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
-
 
 export const tuesday_shifts = {
-  day: '',
+  day: 'tue',
   start: null,
   end: null,
+  off: false,
 };
-export const tuesdayOptions = [
-  {
-    label: "Tuesday",
-    value: "tue",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
 
 export const wednesday_shifts = {
-  day: '',
+  day: 'wed',
   start: null,
   end: null,
+  off: false,
 };
-export const wednesdayOptions = [
-  {
-    label: "Wednesday",
-    value: "wed",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
 
 export const thursday_shifts = {
-  day: '',
+  day: 'thur',
   start: null,
   end: null,
+  off: false,
 };
-export const thursdayOptions = [
-  {
-    label: "Thursday",
-    value: "thur",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
 
 export const friday_shifts = {
-  day: '',
+  day: 'fri',
   start: null,
   end: null,
+  off: false,
 };
-export const fridayOptions = [
-  {
-    label: "Friday",
-    value: "fri",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
 
 export const saturday_shifts = {
-  day: '',
+  day: 'sat',
   start: null,
   end: null,
+  off: false,
 };
-export const saturdayOptions = [
-  {
-    label: "Saturday",
-    value: "sat",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
 
 export const sunday_shifts = {
-  day: '',
+  day: 'sun',
   start: null,
   end: null,
+  off: false,
 };
-export const sundayOptions = [
-  {
-    label: "Sunday",
-    value: "sun",
-  },
-  {
-    label: "Day Off",
-    value: "off",
-  },
-];
