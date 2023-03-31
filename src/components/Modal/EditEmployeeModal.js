@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { 
-  CREATE_PROFILE, 
+  PROFILE, 
   genderOptions, 
   employmentTypesOptions, 
   categoryOptions 
@@ -19,7 +19,7 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
   const selectDesignationRef = useRef();
 
   const { createEmployee, showAlert, status } = useAppContext();
-  const [employee, setEmployee] = useState(CREATE_PROFILE);
+  const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
 
   const [services, setServices] = useState([]);

@@ -1,4 +1,4 @@
-export const CREATE_PROFILE = {
+export const PROFILE = {
   first_name: '',
   middle_name: '',
   last_name: '',

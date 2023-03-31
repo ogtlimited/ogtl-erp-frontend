@@ -258,6 +258,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'all-employees/employee/update/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <EditEmployeesAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'all-employees/department/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -987,6 +995,9 @@ const AllEmployeesAdmin = Loadable(
 );
 const AddEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/AddEmployees.Admin'))
+);
+const EditEmployeesAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/EditEmployees.Admin'))
 );
 const AllEmployeesDepartmentAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/EmployeesDepartment.Admin'))

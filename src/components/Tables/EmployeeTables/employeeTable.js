@@ -14,7 +14,7 @@ import female3 from '../../../assets/img/female_avatar3.png';
 import male from '../../../assets/img/male_avater.png';
 import male2 from '../../../assets/img/male_avater2.png';
 import male3 from '../../../assets/img/male_avater3.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../Context/AppContext';
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
@@ -65,6 +65,7 @@ const EmployeesTable = ({
     },
   ];
 
+  const navigate = useNavigate();
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -255,10 +256,11 @@ const EmployeesTable = ({
               <div className="dropdown-menu dropdown-menu-right">
                 <a
                   className="dropdown-item"
-                  onClick={() => handleEdit(row)}
+                  onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
                   href="#"
                   data-toggle="modal"
-                  data-target="#EditEmployeeFormModal"
+                  // data-target="#EditEmployeeFormModal"
+                  // data-target="#FormModal"
                 >
                   <i className="fa fa-pencil m-r-5"></i> Edit
                 </a>

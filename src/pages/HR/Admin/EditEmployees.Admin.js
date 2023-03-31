@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "../../In-Apps/virtualID.css";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
-import { Link, } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { 
   PROFILE, 
   genderOptions, 
@@ -15,32 +15,17 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import Select from "react-select";
 import EmployeeHelperService from "./employee.helper";
-import { AddEmployeeShiftModal } from "../../../components/Modal/AddEmployeeShiftModal";
+import { EditEmployeeShiftModal } from "../../../components/Modal/EditEmployeeShiftModal";
 
-const AddEmployeesAdmin = () => { 
-  const selectGenderRef = useRef();
-  const selectReportToRef = useRef();
-  const selectDesignationRef = useRef();
-  const selectEmploymentTypeRef = useRef();
-  const selectBranchRef = useRef();
-  const selectStatusRef = useRef();
-  const selectAdminRef = useRef();
-  const selectExpatriateRef = useRef();
+const EditEmployeesAdmin = () => { 
+  const { id } = useParams();
+  const navigate = useNavigate();
   
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
 
-  const [isAllValid, setIsAllValid] = useState(false);
-  const [isGenderValid, setIsGenderValid] = useState(false);
-  const [isReportToValid, setIsReportToValid] = useState(false);
-  const [isAdminValid, setIsAdminValid] = useState(false);
-  const [isDesignationValid, setIsDesignationValid] = useState(false);
-  const [isShiftValid, setIsShiftValid] = useState(false);
-  const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
-
   const [services, setServices] = useState([]);
-  // const [DesignationServices, setDesignationServices] = useState([]);
   const [reportsTo, setReportsTo] = useState("");
   const [department, setDepartment] = useState("");
   const [branch, setBranch] = useState("");
@@ -52,31 +37,28 @@ const AddEmployeesAdmin = () => {
   const [deptError, setDeptError] = useState("");
   const [desError, setDesError] = useState("");
 
+  const fetchUserInfo = () => {
+    axiosInstance
+      .get(`/profile-dashboard/${id}`)
+      .then((res) => {
+        console.log("user data", res.data.getEmployeeFullData.employee)
+        const employee = res.data.getEmployeeFullData.employee;
+        setEmployee(employee);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
   useEffect(() => {
-    setIsGenderValid(employee.gender ? true : false);
-    setIsReportToValid(employee.reports_to ? true : false);
-    setIsAdminValid(employee.isAdmin ? true : false);
-    setIsDesignationValid(employee.designation ? true : false);
-    setIsShiftValid(employee.shifts.length ? true : false);
-    setIsEmploymentTypeValid(employee.employeeType ? true : false);
-    setIsAllValid(
-        employee.gender &&
-        employee.reports_to &&
-        employee.isAdmin &&
-        employee.designation &&
-        employee.shifts.length &&
-        employee.employeeType
-        ? true
-        : false
-    );
-  }, [employee]);
+    fetchUserInfo();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDepartmentClick = (e) => {
     setEmployee({ ...employee, department: e?.value });
     setOfficeType("Department ");
     setOfficeId(e.value);
-
-    selectDesignationRef.current.select.clearValue();
 
     axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
       const response = e?.data?.data;
@@ -98,8 +80,6 @@ const AddEmployeesAdmin = () => {
     setEmployee({ ...employee, projectId: e?.value });
     setOfficeType("Campaign ");
     setOfficeId(e.value);
-
-    selectDesignationRef.current.select.clearValue();
 
     // axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
     axiosInstance.get('/designation').then((e) => {
@@ -168,60 +148,70 @@ const AddEmployeesAdmin = () => {
       });
   };
 
-  const clearEvent = () => {
-    goToTop();
-    selectGenderRef.current.select.clearValue();
-    selectReportToRef.current.select.clearValue();
-    selectDesignationRef.current.select.clearValue();
-    selectEmploymentTypeRef.current.select.clearValue();
-    selectBranchRef.current.select.clearValue();
-    selectStatusRef.current.select.clearValue();
-    selectAdminRef.current.select.clearValue();
-    selectExpatriateRef.current.select.clearValue();
-    setEmployee(PROFILE);
-  };
-
   const handleFormChange = (e) => {
     e.preventDefault();
     setEmployee({ ...employee, [e.target.name]: e.target.value });
   };
 
-  const handleAddEmployee = async (e) => {
+  const handleEditEmployee = async (e) => {
     e.preventDefault();
 
-    const employeeForm = employee;
-    delete employeeForm.designationName;
-    delete employeeForm.signature;
+    
+    console.log("edited employee record:", {
+          first_name: employee.first_name,
+          middle_name: employee.middle_name,
+          last_name: employee.last_name,
+          company_email: employee.company_email,
+          gender: employee.gender,
+          date_of_joining: employee.date_of_joining,
+          reports_to: employee.reports_to,
+          designation: employee.designation,
+          shifts: employee.shifts,
+          branch: employee.branch,
+          employeeType: employee.employeeType,
+          status: employee.status,
+          // isAdmin: employee?.isAdmin === 'yes' ? true : false,
+          // isExpatriate: employee?.isExpatriate === 'yes' ? true : false,
+          isAdmin: employee?.isAdmin,
+          isExpatriate: employee?.isExpatriate,
+          department: officeType === "Department " ? officeId : employee.department,
+          projectId: officeType === "Campaign " ? officeId : employee.projectId,
+          leaveCount: +employee.leaveCount,
+        });
 
-    setLoading(true);
-    try {
-      const res = await axiosInstance.post("/employees", {
-        ...employeeForm,
-        isAdmin: employeeForm.isAdmin === 'yes' ? true : false,
-        isExpatriate: employeeForm.isExpatriate === 'yes' ? true : false,
-        department: officeType === "Department " ? officeId : '',
-        projectId: officeType === "Campaign " ? officeId : '',
-        leaveCount: +employeeForm.leaveCount,
-      });
-      // eslint-disable-next-line no-unused-vars
-      const resData = res.data.data;
-      goToTop();
+    // const employeeForm = employee;
+    // delete employeeForm.designationName;
+    // delete employeeForm.signature;
 
-      showAlert(
-        true,
-        "New Employee added successfully",
-        "alert alert-success"
-      );
+    // setLoading(true);
+    // try {
+    //   const res = await axiosInstance.post("/employees", {
+    //     ...employeeForm,
+    //     isAdmin: employeeForm.isAdmin === 'yes' ? true : false,
+    //     isExpatriate: employeeForm.isExpatriate === 'yes' ? true : false,
+    //     department: officeType === "Department " ? officeId : '',
+    //     projectId: officeType === "Campaign " ? officeId : '',
+    //     leaveCount: +employeeForm.leaveCount,
+    //   });
+    //   // eslint-disable-next-line no-unused-vars
+    //   const resData = res.data.data;
+    //   goToTop();
 
-      clearEvent();
-      fetchEmployee();
-      setLoading(false);
-    } catch (error) {
-      const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      clearEvent();
-      setLoading(false);
-    }
+    //   showAlert(
+    //     true,
+    //     "New Employee added successfully",
+    //     "alert alert-success"
+    //   );
+
+    //   clearEvent();
+    //   fetchEmployee();
+    //   setLoading(false);
+    // } catch (error) {
+    //   const errorMsg = error.response?.data?.message;
+    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
+    //   clearEvent();
+    //   setLoading(false);
+    // }
   };
 
   const VirtualIDCard = () => {
@@ -234,23 +224,9 @@ const AddEmployeesAdmin = () => {
           gender={employee.gender}
           designation={employee.designationName}
           signature={employee.signature}
-          ogid={employee.date_of_joining}
-          edit={false}
+          ogid={employee.ogid}
+          edit={true}
         />
-        
-        {employee.isAdmin === "yes" ?  
-          <span className="virtual-id-note">
-            Note: OG00001 is just a sample. 
-            After adding the employee, the OGID will be generated automatically.
-          </span> 
-          : employee.isAdmin !== "yes" && employee.date_of_joining ?
-          <span className="virtual-id-note">
-            Note: OG{moment(employee.date_of_joining).format("YYMMDD")} is just a sample. 
-            After adding the employee, the OGID will be generated automatically.
-          </span> 
-          : 
-          null
-        }
       </>
     );
   };
@@ -260,7 +236,7 @@ const AddEmployeesAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Add Employee</h3>
+            <h3 className="page-title">Edit Employee Details</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
@@ -270,7 +246,6 @@ const AddEmployeesAdmin = () => {
           </div>
         </div>
       </div>
-
       
       <div className="row add-employee-form">
         <div className="col-xl-8 d-flex add-employee-form-container">
@@ -278,15 +253,15 @@ const AddEmployeesAdmin = () => {
             <div className="card-body">
               {!services.length ? (
                 <div className="add-employee-form-loader-div">
-                  <p style={{ textAlign: "left" }}>Loading form, please wait...</p>
+                  <p style={{ textAlign: "left" }}>Loading details, please wait...</p>
                   <div className="spinner-border text-primary" role="status">
                       <span className="sr-only">Loading...</span>
                     </div>
                 </div>
               ) : (
-                <form onSubmit={handleAddEmployee}>
+                <form onSubmit={handleEditEmployee}>
                 <div className="row">
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="first_name">First Name</label>
                       <input
@@ -295,16 +270,13 @@ const AddEmployeesAdmin = () => {
                         type="text"
                         value={employee.first_name}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
 
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="middle_name">Middle Name{' '} 
-                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
-                      </label>
+                      <label htmlFor="middle_name">Middle Name</label>
                       <input
                         className="form-control"
                         name="middle_name"
@@ -315,7 +287,7 @@ const AddEmployeesAdmin = () => {
                     </div>
                   </div>
 
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="last_name">Last Name</label>
                       <input
@@ -324,10 +296,22 @@ const AddEmployeesAdmin = () => {
                         type="text"
                         value={employee.last_name}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
+
+                  <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="ogid">OGID</label>
+                        <input
+                          className="form-control"
+                          name="ogid"
+                          type="text"
+                          value={employee.ogid}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
                   <div className="col-md-6">
                     <div className="form-group">
@@ -338,21 +322,18 @@ const AddEmployeesAdmin = () => {
                         type="email"
                         value={employee.company_email}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="gender">
-                        Gender {!isGenderValid && <span>*</span>}
-                      </label>
+                      <label htmlFor="gender"> Gender</label>
                       <Select
                         options={genderOptions}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectGenderRef}
+                        defaultValue={{label: employee?.gender, value: employee?.gender}}
                         onChange={(e) =>
                           setEmployee({ ...employee, gender: e?.value })
                         }
@@ -363,12 +344,12 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="isAdmin">Is this Employee an Admin? {!isAdminValid && <span>*</span>}</label>
+                      <label htmlFor="isAdmin">Is this Employee an Admin?</label>
                       <Select
                         options={categoryOptions}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectAdminRef}
+                        defaultValue={{label: employee?.isAdmin ? 'Yes' : 'No', value: employee?.isAdmin}}
                         onChange={(e) =>
                           setEmployee({ ...employee, isAdmin: e?.value })
                         }
@@ -379,14 +360,12 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="isExpatriate">Is this Employee an Expatriate?{' '}
-                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
-                      </label>
+                      <label htmlFor="isExpatriate">Is this Employee an Expatriate?</label>
                       <Select
                         options={categoryOptions}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectExpatriateRef}
+                        defaultValue={{label: employee?.isExpatriate ? 'Yes' : 'No', value: employee?.isExpatriate}}
                         onChange={(e) =>
                           setEmployee({ ...employee, isExpatriate: e?.value })
                         }
@@ -402,23 +381,19 @@ const AddEmployeesAdmin = () => {
                         className="form-control"
                         name="date_of_joining"
                         type="date"
-                        value={employee.date_of_joining}
+                        value={employee.date_of_joining.split("T")[0]}
                         onChange={handleFormChange}
-                        required
                       />
                     </div>
                   </div>
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="reports_to">
-                        Reports To {!isReportToValid && <span>*</span>}
-                      </label>
+                      <label htmlFor="reports_to">Reports To</label>
                       <Select
                         options={reportsTo}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectReportToRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, reports_to: e?.value })
                         }
@@ -476,17 +451,16 @@ const AddEmployeesAdmin = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       {!validDesignation.length ? (
-                        <label htmlFor="designation">Designation {!isDesignationValid && <span>*</span>}</label>
+                        <label htmlFor="designation">Designation</label>
                       ) : (
                         <label htmlFor="designation">
-                          {officeType} Designation {!isDesignationValid && <span>*</span>}
+                          {officeType} Designation 
                         </label>
                       )}
                       <Select
                         options={!validDesignation.length ? validDesignation : validDesignation}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectDesignationRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, designation: e?.value, designationName: e?.label })
                         }
@@ -498,16 +472,16 @@ const AddEmployeesAdmin = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                         <label htmlFor="shifts">
-                          Shifts {!isShiftValid && <span>*</span>}
+                          Shifts
                         </label>
                       <input
                         className="form-control"
                         name="shifts"
                         type="text"
-                        placeholder="Click to add Shifts..."
-                        value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
+                        placeholder="Click to edit Shifts..."
+                        // value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
                         data-toggle="modal"
-                        data-target="#EmployeeShiftFormModal"
+                        data-target="#EditEmployeeShiftFormModal"
                         readOnly
                         autocomplete="off"
                         style={{ cursor: 'pointer' }}
@@ -517,15 +491,11 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="employeeType">
-                        Employment Type{" "}
-                        {!isEmploymentTypeValid && <span>*</span>}
-                      </label>
+                      <label htmlFor="employeeType">Employment Type</label>
                       <Select
                         options={employmentTypesOptions}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectEmploymentTypeRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, employeeType: e?.value })
                         }
@@ -536,14 +506,11 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="branch">Branch{' '}
-                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
-                      </label>
+                      <label htmlFor="branch">Branch</label>
                       <Select
                         options={branch}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectBranchRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, branch: e?.value })
                         }
@@ -554,14 +521,11 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="status">Status{' '}
-                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
-                      </label>
+                      <label htmlFor="status">Status</label>
                       <Select
                         options={employeeStatus}
                         isSearchable={true}
                         isClearable={true}
-                        ref={selectStatusRef}
                         onChange={(e) =>
                           setEmployee({ ...employee, status: e?.value })
                         }
@@ -572,9 +536,7 @@ const AddEmployeesAdmin = () => {
                   
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="leaveCount">Leave Count{' '}
-                        <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
-                      </label>
+                      <label htmlFor="leaveCount">Leave Count</label>
                       <input
                         className="form-control"
                         name="leaveCount"
@@ -591,7 +553,7 @@ const AddEmployeesAdmin = () => {
                     type="button"
                     className="btn btn-secondary"
                     data-dismiss="modal"
-                    onClick={clearEvent}
+                    onClick={() => navigate('/dashboard/hr/all-employees')}
                   >
                     Cancel
                   </button>
@@ -599,7 +561,6 @@ const AddEmployeesAdmin = () => {
                     type="submit"
                     className="btn btn-primary"
                     style={{ zIndex: 0 }}
-                    disabled={!isAllValid}
                     onClick={() =>  goToTop()}
                   >
                     {loading ? (
@@ -626,10 +587,10 @@ const AddEmployeesAdmin = () => {
         </div>
       </div>
 
-      <AddEmployeeShiftModal employee={employee} setEmployee={setEmployee} />
+      <EditEmployeeShiftModal employee={employee} setEmployee={setEmployee} />
       
     </>
   );
 };
 
-export default AddEmployeesAdmin;
+export default EditEmployeesAdmin;

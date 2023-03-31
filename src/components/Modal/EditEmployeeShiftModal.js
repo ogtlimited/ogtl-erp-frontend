@@ -152,7 +152,7 @@ export const EditEmployeeShiftModal = ({ employee, setEmployee }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Add shifts
+                Edit shifts
               </h4>
               <button
                 type="button"
