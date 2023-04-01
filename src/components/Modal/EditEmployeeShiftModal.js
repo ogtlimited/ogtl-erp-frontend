@@ -98,9 +98,16 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
     setCreateSundayShift(sunday);
   }, [employeeShifts]);
 
+  const goToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+  };
 
   const handleEditEmployeeShift = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     
     //   const shifts = [];
@@ -130,18 +137,23 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
 
       console.log('submit this shifts:', shifts)
 
-      const response = await axiosInstance.patch(`/api/employee-shifts`, shifts);
-      console.log('shift edit response:', response);
+      const response = await axiosInstance.patch(`/api/employee-shift/`, shifts);
+      console.log('shift edit response:', response?.data?.data);
   
+      setLoading(false);
+      goToTop();
       showAlert(
         true,
         `Shift edited successfully!`,
         'alert alert-success'
       );
-        $('#EditEmployeeShiftFormModal').modal('toggle');
       
     } catch (error) {
-      console.error(error);
+      goToTop();
+      const errorMsg = error?.response?.data?.message;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      console.error(error?.response);
+      setLoading(false);
     }
 
   };
@@ -203,7 +215,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createMondayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createMondayShift?.off} onChange={() => setCreateMondayShift({ ...createMondayShift, off: !createMondayShift?.off })} />
+                       <Switch checked={!createMondayShift?.off} value={createMondayShift?.off} onChange={() => setCreateMondayShift({ ...createMondayShift, off: !createMondayShift?.off })} />
                      </div>
                   </div>
                 </div>
@@ -257,7 +269,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createTuesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createTuesdayShift.off} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, off: !createTuesdayShift.off })} />
+                       <Switch checked={!createTuesdayShift?.off} value={createTuesdayShift.off} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, off: !createTuesdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -311,7 +323,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createWednesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createWednesdayShift.off} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, off: !createWednesdayShift.off })} />
+                       <Switch checked={!createWednesdayShift?.off} value={createWednesdayShift.off} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, off: !createWednesdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -365,7 +377,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createThursdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createThursdayShift.off} onChange={() => setCreateThursdayShift({ ...createThursdayShift, off: !createThursdayShift.off })} />
+                       <Switch checked={!createThursdayShift?.off} value={createThursdayShift.off} onChange={() => setCreateThursdayShift({ ...createThursdayShift, off: !createThursdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -419,7 +431,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createFridayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createFridayShift.off} onChange={() => setCreateFridayShift({ ...createFridayShift, off: !createFridayShift.off })} />
+                       <Switch checked={!createFridayShift?.off} value={createFridayShift.off} onChange={() => setCreateFridayShift({ ...createFridayShift, off: !createFridayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -473,7 +485,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createSaturdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, off: !createSaturdayShift.off })} />
+                       <Switch checked={!createSaturdayShift?.off} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, off: !createSaturdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -527,7 +539,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createSundayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createSundayShift.off} onChange={() => setCreateSundayShift({ ...createSundayShift, off: !createSundayShift.off })} />
+                       <Switch checked={!createSundayShift?.off} value={createSundayShift.off} onChange={() => setCreateSundayShift({ ...createSundayShift, off: !createSundayShift.off })} />
                      </div>
                   </div>
                 </div>

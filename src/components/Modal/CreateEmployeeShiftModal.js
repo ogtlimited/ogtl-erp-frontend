@@ -61,6 +61,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
 
   const handleCreateEmployeeShift = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
 
       const shifts = [];
@@ -73,7 +74,6 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
       shifts.push({ ...createSaturdayShift, ogid: ogid });
       shifts.push({ ...createSundayShift, ogid: ogid });
 
-      setLoading(true);
       const response = await axiosInstance.post(`/api/employee-shift`, shifts);
   
       setLoading(false);
