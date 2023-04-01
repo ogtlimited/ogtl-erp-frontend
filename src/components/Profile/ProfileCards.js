@@ -229,7 +229,7 @@ const ProfileCards = ({
         <div id="emp_shifts" className="pro-overview tab-pane fade">
           <div className="row">
             <div className="col-md-12 d-flex">   
-              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} ogid={ogid} />
+              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} />
               : <CreateEmployeeShiftModal ogid={ogid} setMode={setMode} setEmployeeShifts={setEmployeeShifts} />}
             </div>
           </div>

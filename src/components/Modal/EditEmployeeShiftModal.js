@@ -4,9 +4,8 @@ import { } from '../FormJSON/CreateEmployeeShift';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
-import $ from 'jquery';
 
-export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
+export const EditEmployeeShiftModal = ({ employeeShifts }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});
@@ -109,20 +108,6 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
     e.preventDefault();
     setLoading(true);
 
-    
-    //   const shifts = [];
-  
-    //   shifts.push(createMondayShift);
-    //   shifts.push(createTuesdayShift);
-    //   shifts.push(createWednesdayShift);
-    //   shifts.push(createThursdayShift);
-    //   shifts.push(createFridayShift);
-    //   shifts.push(createSaturdayShift);
-    //   shifts.push(createSundayShift);
-
-    
-    // console.log('submit this shifts:', shifts)
-
     try {
 
       const shifts = [];
@@ -135,16 +120,14 @@ export const EditEmployeeShiftModal = ({ employeeShifts, ogid }) => {
       shifts.push(createSaturdayShift);
       shifts.push(createSundayShift);
 
-      console.log('submit this shifts:', shifts)
-
+      // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.patch(`/api/employee-shift/`, shifts);
-      console.log('shift edit response:', response?.data?.data);
   
       setLoading(false);
       goToTop();
       showAlert(
         true,
-        `Shift edited successfully!`,
+        `Shift updated successfully!`,
         'alert alert-success'
       );
       
