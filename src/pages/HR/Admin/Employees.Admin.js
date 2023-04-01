@@ -390,9 +390,6 @@ const AllEmployeesAdmin = () => {
         />
       )}
 
-      {/* <AddEmployeeModal /> */}
-      <EditEmployeeModal editData={editData} fetchAllEmployee={fetchAllEmployee} />
-
       <FormModal2
         editData={editData}
         setformValue={setformValue}

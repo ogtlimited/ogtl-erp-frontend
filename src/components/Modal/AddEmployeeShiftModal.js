@@ -1,6 +1,5 @@
-/*eslint-disable no-unused-vars*/
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { 
   monday_shifts,
   tuesday_shifts,
@@ -11,9 +10,6 @@ import {
   sunday_shifts,
 } from '../FormJSON/CreateEmployeeShift';
 import { useAppContext } from '../../Context/AppContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import axiosInstance from '../../services/api';
-import Select from 'react-select';
 import Switch from '@mui/material/Switch';
 import $ from 'jquery';
 
@@ -42,8 +38,6 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
     sunday_shifts
   );
 
-  const [loading, setLoading] = useState(false);
-
   const cancelEvent = () => {
     setCreateMondayShift(monday_shifts);
     setCreateTuesdayShift(tuesday_shifts);
@@ -54,7 +48,7 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
     setCreateSundayShift(sunday_shifts);
   };
 
-  const handleCreateEmployeeShift = async (e) => {
+  const handleAddEmployeeSifts = async (e) => {
     e.preventDefault();
 
     const shifts = [];
@@ -66,8 +60,6 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
     shifts.push(createFridayShift);
     shifts.push(createSaturdayShift);
     shifts.push(createSundayShift);
-
-    console.log('All shifts:', shifts);
 
     setEmployee({ ...employee, shifts: shifts });
 
@@ -105,7 +97,7 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateEmployeeShift}>
+              <form onSubmit={handleAddEmployeeSifts}>
 
                 {/* Monday */}
                 <div className="row">
@@ -508,17 +500,7 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">
-                    {loading ? (
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                    ) : (
-                      'Submit'
-                    )}
-                  </button>
+                  <button type="submit" className="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>

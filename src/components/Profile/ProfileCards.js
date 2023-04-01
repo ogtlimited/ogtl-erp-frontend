@@ -10,6 +10,8 @@ import History from "./components/History";
 import PersonalInfo from "./components/PersonalInfo";
 import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
+import { EditEmployeeShiftModal } from '../Modal/EditEmployeeShiftModal';
+import { CreateEmployeeShiftModal } from '../Modal/CreateEmployeeShiftModal';
 import avater from "../../assets/img/male_avater.png";
 import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
@@ -27,6 +29,8 @@ const ProfileCards = ({
   formValue,
   setFormValue,
   fetchUserInfo,
+  employeeShifts,
+  ogid,
 }) => {
   console.log(formValue);
   const [employeeDetails, setemployeeDetails] = useState({});
@@ -74,6 +78,11 @@ const ProfileCards = ({
               <li className="nav-item">
                 <a href="#emp_virtualID" data-toggle="tab" className="nav-link">
                   Virtual ID
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#emp_shifts" data-toggle="tab" className="nav-link">
+                  Shifts
                 </a>
               </li>
               <li className="nav-item">
@@ -212,6 +221,15 @@ const ProfileCards = ({
                   <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Back
               </button>
             }
+          </div>
+        </div>
+
+        <div id="emp_shifts" className="pro-overview tab-pane fade">
+          <div className="row">
+            <div className="col-md-12 d-flex">   
+              <EditEmployeeShiftModal employeeShifts={employeeShifts} ogid={ogid} />
+              <CreateEmployeeShiftModal ogid={ogid} />
+            </div>
           </div>
         </div>
 

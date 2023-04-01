@@ -30,43 +30,45 @@ const Profile = () => {
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest } = useAppContext();
+  const [employeeShifts, setEmployeeShifts] = useState([]);
+  const [ogid, setOgid] = useState(null);
 
-  const fetchUserInfo = () => {
-    axiosInstance
-      .get(`/profile-dashboard/${id}`)
-      .then((res) => {
-        setUserdata(res.data.getEmployeeFullData);
-        // console.log("user data", res.data.getEmployeeFullData)
-      })
-      .catch((error) => {
+  // const fetchUserInfo = () => {
+  //   axiosInstance
+  //     .get(`/profile-dashboard/${id}`)
+  //     .then((res) => {
+  //       setUserdata(res.data.getEmployeeFullData);
+  //       // console.log("user data", res.data.getEmployeeFullData)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  // useEffect(() => {
+  //   fetchUserInfo();
+  // }, [id]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const user = await axiosInstance.get(`/profile-dashboard/${id}`)
+      const employeeDashboard = user.data.getEmployeeFullData;
+      const employee = user.data.getEmployeeFullData.employee;
+      setUserdata(employeeDashboard);
+
+      const ogid = employee?.ogid;
+      const shift = await axiosInstance.get(`/api/employee-shift/${ogid}`);
+      const employeeShifts = shift?.data?.data;
+      setEmployeeShifts(employeeShifts);
+      setOgid(ogid);
+    } catch (error) {
         console.log(error);
-      });
+    }
   };
+
   useEffect(() => {
     fetchUserInfo();
-  }, [id]);
-
-  // useEffect(() => {
-  //   if (formType === "PersonalDetails") {
-  //     settemplate(PersonalDetailJson);
-  //   } else if (formType === "WorkExperience") {
-  //     settemplate(WorkExperienceJson);
-  //   } else if (formType === "ContactDetails") {
-  //     settemplate(ContactDetailJson);
-  //   } else if (formType === "EmergencyContact") {
-  //     settemplate(EmergencyDetailJson);
-  //   } else if (formType === "EmployeeEducation") {
-  //     settemplate(EmployeeEducationJson);
-  //   } else if (formType === "History") {
-  //     settemplate(historyJson);
-  //   } else if (formType === "SalaryDetails") {
-  //     settemplate(SalaryDetailJson);
-  //   }
-
-  //   return () => {
-  //     setformType("");
-  //   };
-  // }, [formType, formValue, submitted, template]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     switch (formType) {
@@ -122,6 +124,7 @@ const Profile = () => {
         Fields: finalForm,
       });
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -338,6 +341,8 @@ const Profile = () => {
         formValue={formValue}
         setFormValue={setFormValue}
         fetchUserInfo={fetchUserInfo}
+        employeeShifts={employeeShifts}
+        ogid={ogid}
       />
       <FormModal2
         template={template}

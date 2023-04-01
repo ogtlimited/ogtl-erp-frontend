@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../In-Apps/virtualID.css";
 import VirtualID from "../../In-Apps/VirtualID";
-import moment from "moment";
 
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -15,7 +14,6 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import Select from "react-select";
 import EmployeeHelperService from "./employee.helper";
-import { EditEmployeeShiftModal } from "../../../components/Modal/EditEmployeeShiftModal";
 
 const EditEmployeesAdmin = () => { 
   const { id } = useParams();
@@ -24,6 +22,8 @@ const EditEmployeesAdmin = () => {
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
+  
+  const selectDesignationRef = useRef();
 
   const [services, setServices] = useState([]);
   const [reportsTo, setReportsTo] = useState("");
@@ -37,18 +37,17 @@ const EditEmployeesAdmin = () => {
   const [deptError, setDeptError] = useState("");
   const [desError, setDesError] = useState("");
 
-  const fetchUserInfo = () => {
-    axiosInstance
-      .get(`/profile-dashboard/${id}`)
-      .then((res) => {
-        console.log("user data", res.data.getEmployeeFullData.employee)
-        const employee = res.data.getEmployeeFullData.employee;
-        setEmployee(employee);
-      })
-      .catch((error) => {
+  const fetchUserInfo = async () => {
+    try {
+      const user = await axiosInstance.get(`/profile-dashboard/${id}`)
+      const employee = user.data.getEmployeeFullData.employee;
+      setEmployee(employee);
+      console.log("employees record:", employee)
+    } catch (error) {
         console.log(error);
-      });
+    }
   };
+
   
   useEffect(() => {
     fetchUserInfo();
@@ -59,6 +58,8 @@ const EditEmployeesAdmin = () => {
     setEmployee({ ...employee, department: e?.value });
     setOfficeType("Department ");
     setOfficeId(e.value);
+    
+    selectDesignationRef.current.select.clearValue();
 
     axiosInstance.get(`/designation/office?department_id=${e.value}`).then((e) => {
       const response = e?.data?.data;
@@ -80,6 +81,8 @@ const EditEmployeesAdmin = () => {
     setEmployee({ ...employee, projectId: e?.value });
     setOfficeType("Campaign ");
     setOfficeId(e.value);
+    
+    selectDesignationRef.current.select.clearValue();
 
     // axiosInstance.get(`/designation/office?campaign_id=${e.value}`).then((e) => {
     axiosInstance.get('/designation').then((e) => {
@@ -138,6 +141,9 @@ const EditEmployeesAdmin = () => {
 
       const emp_status = service.employeestatusOpts;
       setEmployeeStatus(emp_status);
+
+      const designation = service.designationOpts;
+      setValidDesignation(designation);
     });
   }, [createEmployee, officeId, status]);
 
@@ -170,8 +176,6 @@ const EditEmployeesAdmin = () => {
           branch: employee.branch,
           employeeType: employee.employeeType,
           status: employee.status,
-          // isAdmin: employee?.isAdmin === 'yes' ? true : false,
-          // isExpatriate: employee?.isExpatriate === 'yes' ? true : false,
           isAdmin: employee?.isAdmin,
           isExpatriate: employee?.isExpatriate,
           department: officeType === "Department " ? officeId : employee.department,
@@ -222,7 +226,7 @@ const EditEmployeesAdmin = () => {
           fullName={employee.first_name + " " + employee.middle_name + " " + employee.last_name}
           admin={employee.isAdmin}
           gender={employee.gender}
-          designation={employee.designationName}
+          designation={employee?.designationName ? employee?.designationName : employee?.designation?.designation}
           signature={employee.signature}
           ogid={employee.ogid}
           edit={true}
@@ -333,7 +337,7 @@ const EditEmployeesAdmin = () => {
                         options={genderOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={{label: employee?.gender, value: employee?.gender}}
+                        defaultValue={{label: employee?.gender ? employee?.gender : '', value: employee?.gender ? employee?.gender : ''}}
                         onChange={(e) =>
                           setEmployee({ ...employee, gender: e?.value })
                         }
@@ -349,7 +353,7 @@ const EditEmployeesAdmin = () => {
                         options={categoryOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={{label: employee?.isAdmin ? 'Yes' : 'No', value: employee?.isAdmin}}
+                        defaultValue={{label: employee?.isAdmin ? 'Yes' : 'No', value: employee?.isAdmin || employee?.isAdmin === 'yes' ? true : false}}
                         onChange={(e) =>
                           setEmployee({ ...employee, isAdmin: e?.value })
                         }
@@ -365,7 +369,7 @@ const EditEmployeesAdmin = () => {
                         options={categoryOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={{label: employee?.isExpatriate ? 'Yes' : 'No', value: employee?.isExpatriate}}
+                        defaultValue={{label: employee?.isExpatriate ? 'Yes' : 'No', value: employee?.isExpatriate || employee?.isExpatriate === 'yes' ? true : false}}
                         onChange={(e) =>
                           setEmployee({ ...employee, isExpatriate: e?.value })
                         }
@@ -394,6 +398,7 @@ const EditEmployeesAdmin = () => {
                         options={reportsTo}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={{label: employee?.reports_to ? employee?.reports_to?.first_name + " " + employee?.reports_to?.middle_name + " " + employee?.reports_to?.last_name : '', value:  employee?.reports_to ? employee?.reports_to._id : ''}}
                         onChange={(e) =>
                           setEmployee({ ...employee, reports_to: e?.value })
                         }
@@ -417,6 +422,7 @@ const EditEmployeesAdmin = () => {
                         <Select
                           options={department}
                           isSearchable={true}
+                          defaultValue={{label: employee?.department ? employee?.department?.department : '', value: employee?.department ? employee?.department._id : null}}
                           onChange={(e) => handleDepartmentClick(e)}
                           style={{ display: "inline-block" }}
                         />
@@ -440,6 +446,7 @@ const EditEmployeesAdmin = () => {
                         <Select
                           options={projectId}
                           isSearchable={true}
+                          defaultValue={{label: employee?.projectId ? employee?.projectId?.project_name : '', value: employee?.projectId ? employee?.projectId._id : null}}
                           onChange={(e) => handleCampaignClick(e)}
                           style={{ display: "inline-block" }}
                         />
@@ -461,30 +468,12 @@ const EditEmployeesAdmin = () => {
                         options={!validDesignation.length ? validDesignation : validDesignation}
                         isSearchable={true}
                         isClearable={true}
+                        ref={selectDesignationRef}
+                        defaultValue={{label: employee?.designation ? employee?.designation?.designation : '', value: employee?.designation ? employee?.designation._id : null}}
                         onChange={(e) =>
                           setEmployee({ ...employee, designation: e?.value, designationName: e?.label })
                         }
                         style={{ display: 'inline-block' }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                        <label htmlFor="shifts">
-                          Shifts
-                        </label>
-                      <input
-                        className="form-control"
-                        name="shifts"
-                        type="text"
-                        placeholder="Click to edit Shifts..."
-                        // value={employee.shifts.length ? employee.shifts.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
-                        data-toggle="modal"
-                        data-target="#EditEmployeeShiftFormModal"
-                        readOnly
-                        autocomplete="off"
-                        style={{ cursor: 'pointer' }}
                       />
                     </div>
                   </div>
@@ -496,6 +485,7 @@ const EditEmployeesAdmin = () => {
                         options={employmentTypesOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={{label: employee?.employeeType ? employee?.employeeType : '', value: employee?.employeeType ? employee?.employeeType : ''}}
                         onChange={(e) =>
                           setEmployee({ ...employee, employeeType: e?.value })
                         }
@@ -511,6 +501,7 @@ const EditEmployeesAdmin = () => {
                         options={branch}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={{label: employee?.branch ? employee?.branch?.branch : '', value: employee?.branch ? employee?.branch._id : null}}
                         onChange={(e) =>
                           setEmployee({ ...employee, branch: e?.value })
                         }
@@ -525,7 +516,7 @@ const EditEmployeesAdmin = () => {
                       <Select
                         options={employeeStatus}
                         isSearchable={true}
-                        isClearable={true}
+                        isClearable={true} defaultValue={{label: employee?.status ? employee?.status : '', value: employee?.status ? employee?.status : ''}}
                         onChange={(e) =>
                           setEmployee({ ...employee, status: e?.value })
                         }
@@ -586,8 +577,6 @@ const EditEmployeesAdmin = () => {
           </div>
         </div>
       </div>
-
-      <EditEmployeeShiftModal employee={employee} setEmployee={setEmployee} />
       
     </>
   );
