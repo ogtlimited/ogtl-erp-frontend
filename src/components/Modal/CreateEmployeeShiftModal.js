@@ -54,48 +54,48 @@ export const CreateEmployeeShiftModal = ({ ogid }) => {
     setCreateSundayShift(sundayShifts);
   };
 
+  const goToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+  };
+
+
   const handleCreateEmployeeShift = async (e) => {
     e.preventDefault();
+    try {
 
-    const shifts = [];
-
-    shifts.push(createMondayShift);
-    shifts.push(createTuesdayShift);
-    shifts.push(createWednesdayShift);
-    shifts.push(createThursdayShift);
-    shifts.push(createFridayShift);
-    shifts.push(createSaturdayShift);
-    shifts.push(createSundayShift);
-
-    console.log('submit this shifts:', shifts)
-    
-    // try {
-
-    //   const shifts = [];
+      const shifts = [];
   
-    //   shifts.push(createMondayShift);
-    //   shifts.push(createTuesdayShift);
-    //   shifts.push(createWednesdayShift);
-    //   shifts.push(createThursdayShift);
-    //   shifts.push(createFridayShift);
-    //   shifts.push(createSaturdayShift);
-    //   shifts.push(createSundayShift);
+      shifts.push({ ...createMondayShift, ogid: ogid });
+      shifts.push({ ...createTuesdayShift, ogid: ogid });
+      shifts.push({ ...createWednesdayShift, ogid: ogid });
+      shifts.push({ ...createThursdayShift, ogid: ogid });
+      shifts.push({ ...createFridayShift, ogid: ogid });
+      shifts.push({ ...createSaturdayShift, ogid: ogid });
+      shifts.push({ ...createSundayShift, ogid: ogid });
 
-    //   console.log('submit this shifts:', shifts)
+      console.log('submit this shifts:', shifts)
 
-    //   const response = await axiosInstance.patch(`/api/employee-shifts`, shifts);
-    //   console.log('shift edit response:', response);
+      setLoading(true);
+      const response = await axiosInstance.post(`/api/employee-shift`, shifts);
+      console.log('shift create response:', response);
   
-    //   showAlert(
-    //     true,
-    //     `Shift edited successfully!`,
-    //     'alert alert-success'
-    //   );
-    //     $('#EditEmployeeShiftFormModal').modal('toggle');
-      
-    // } catch (error) {
-    //   console.error(error);
-    // }
+      setLoading(false);
+      goToTop();
+      showAlert(
+        true,
+        `Shift created successfully!`,
+        'alert alert-success'
+      );
+    } catch (error) {
+      goToTop();
+      const errorMsg = error?.response?.data?.message;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      console.error(error?.response);
+      setLoading(false);
+    }
 
   };
 

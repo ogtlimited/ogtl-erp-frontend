@@ -33,21 +33,6 @@ const Profile = () => {
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [ogid, setOgid] = useState(null);
 
-  // const fetchUserInfo = () => {
-  //   axiosInstance
-  //     .get(`/profile-dashboard/${id}`)
-  //     .then((res) => {
-  //       setUserdata(res.data.getEmployeeFullData);
-  //       // console.log("user data", res.data.getEmployeeFullData)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  // useEffect(() => {
-  //   fetchUserInfo();
-  // }, [id]);
-
   const fetchUserInfo = async () => {
     try {
       const user = await axiosInstance.get(`/profile-dashboard/${id}`)

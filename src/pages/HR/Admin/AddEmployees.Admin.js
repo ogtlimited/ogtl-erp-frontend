@@ -217,7 +217,8 @@ const AddEmployeesAdmin = () => {
       fetchEmployee();
       setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.message;
+      goToTop();
+      const errorMsg = error?.response?.data?.message;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       clearEvent();
       setLoading(false);
