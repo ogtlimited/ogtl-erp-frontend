@@ -44,23 +44,23 @@ const EditEmployeesAdmin = () => {
       const employee = user.data.getEmployeeFullData.employee;
       setEmployeeDetails(employee);
       setEmployee({
-          first_name: employee?.first_name || '',
-          middle_name: employee?.middle_name || '',
+          first_name: employee?.first_name,
+          middle_name: employee?.middle_name,
           last_name: employee?.last_name,
-          ogid: employee?.ogid || '',
-          company_email: employee?.company_email || '',
-          gender: employee?.gender || '',
-          date_of_joining: employee?.date_of_joining || '',
-          reports_to: employee?.reports_to?._id || '',
-          designation: employee?.designation?._id || null,
-          branch: employee?.branch?.id || null,
-          employeeType: employee?.employeeType || '',
-          status: employee?.status || false,
-          isAdmin: employee?.isAdmin || false,
+          ogid: employee?.ogid,
+          company_email: employee?.company_email,
+          gender: employee?.gender,
+          date_of_joining: employee?.date_of_joining,
+          reports_to: employee?.reports_to?._id,
+          designation: employee?.designation?._id,
+          branch: employee?.branch?.id,
+          employeeType: employee?.employeeType,
+          status: employee?.status,
+          isAdmin: employee?.isAdmin,
           isExpatriate: employee?.isExpatriate,
-          department: employee?.department?._id || null,
-          projectId: employee?.projectId?._id || '',
-          leaveCount: employee?.leaveCount || 0,
+          department: employee?.department?._id,
+          projectId: employee?.projectId?._id,
+          leaveCount: employee?.leaveCount,
       });
       console.log("employees record:", employee)
     } catch (error) {
@@ -76,7 +76,7 @@ const EditEmployeesAdmin = () => {
 
   const handleDepartmentClick = (e) => {
     setEmployee({ ...employee, department: e?.value });
-    setOfficeType("Department ");
+    setOfficeType("Department");
     setOfficeId(e.value);
     
     selectDesignationRef.current.select.clearValue();
@@ -99,7 +99,7 @@ const EditEmployeesAdmin = () => {
 
   const handleCampaignClick = (e) => {
     setEmployee({ ...employee, projectId: e?.value });
-    setOfficeType("Campaign ");
+    setOfficeType("Campaign");
     setOfficeId(e.value);
     
     selectDesignationRef.current.select.clearValue();
@@ -190,8 +190,8 @@ const EditEmployeesAdmin = () => {
     try {
       const res = await axiosInstance.put(`/employees/${id}`, {
       ...employeeForm,
-      department: officeType === "Department " ? officeId : '',
-      projectId: officeType === "Campaign " ? officeId : '',
+      department: officeType === "Department" ? officeId : employeeForm.department,
+      projectId: officeType === "Campaign" ? officeId : employeeForm.projectId,
       leaveCount: +employeeForm?.leaveCount,
     });
       // eslint-disable-next-line no-unused-vars
