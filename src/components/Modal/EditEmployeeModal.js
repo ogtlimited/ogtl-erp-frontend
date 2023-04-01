@@ -38,7 +38,6 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
 
   useEffect(() => {
     setEmployee(editData);
-    console.log('Edit this data:', editData)
   }, [editData])
 
   const handleDepartmentClick = (e) => {
@@ -159,7 +158,6 @@ export const EditEmployeeModal = ({editData, fetchAllEmployee}) => {
     e.preventDefault();
 
     setLoading(true);
-    console.log("edited employee record:", employee);
     
     // let id = employee._id;
     // try {

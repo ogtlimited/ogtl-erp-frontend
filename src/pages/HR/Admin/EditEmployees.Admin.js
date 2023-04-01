@@ -43,6 +43,7 @@ const EditEmployeesAdmin = () => {
       const user = await axiosInstance.get(`/profile-dashboard/${id}`)
       const employee = user.data.getEmployeeFullData.employee;
       setEmployeeDetails(employee);
+      console.log("employee details:", employeeDetails)
       setEmployee({
           first_name: employee?.first_name,
           middle_name: employee?.middle_name,
@@ -91,6 +92,7 @@ const EditEmployeesAdmin = () => {
         };
       });
       setValidDesignation(designationOpts);
+      setEmployee({ ...employee, projectId: null });
     }).catch((e) => {
       setValidDesignation([]);
       setDeptError(e?.response?.data?.message);
@@ -115,6 +117,7 @@ const EditEmployeesAdmin = () => {
         };
       });
       setValidDesignation(designationOpts);
+      setEmployee({ ...employee, department: null });
     }).catch((e) => {
       setValidDesignation([]);
       setDesError(e?.response?.data?.message);
@@ -218,7 +221,6 @@ const EditEmployeesAdmin = () => {
   const VirtualIDCard = () => {
     return (
       <>
-      {console.log("employee ID", employee)}
         <VirtualID
           image={employee.image}
           fullName={employee.first_name + " " + employee.middle_name + " " + employee.last_name}
@@ -408,7 +410,7 @@ const EditEmployeesAdmin = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="department">Department</label>
-                      {officeType === "Campaign " ? (
+                      {officeType === "Campaign" ? (
                         <Select
                           options={department}
                           isSearchable={true}
@@ -432,7 +434,7 @@ const EditEmployeesAdmin = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="projectId">Campaign</label>
-                      {officeType === "Department " ? (
+                      {officeType === "Department" ? (
                         <Select
                           options={projectId}
                           isSearchable={true}

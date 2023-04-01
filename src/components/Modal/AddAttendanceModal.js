@@ -54,7 +54,6 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
       setServices([service]);
 
       const reports_to = service.reportstoOpts;
-      console.log("I need all his info:", reports_to);
       setEmployeeId(reports_to);
 
     });
@@ -82,7 +81,6 @@ export const AddAttendanceModal = ({fetchAllAttendance}) => {
       });
       // eslint-disable-next-line no-unused-vars
       const resData = res?.data?.data;
-      console.log("Add Employee Record Response:", resData)
 
       showAlert(
         true,

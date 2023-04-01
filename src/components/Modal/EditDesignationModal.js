@@ -31,7 +31,6 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
     e.preventDefault();
 
     setLoading(true);
-    console.log("Edit this", createDesignation)
     const id = createDesignation._id;
     try {
       const res = await axiosInstance.put(`/designation/${id}`, {

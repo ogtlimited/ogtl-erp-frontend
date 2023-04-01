@@ -99,7 +99,7 @@ const EmployeesTable = ({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length > 8) {
+    if (columns.length > 5) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -220,6 +220,13 @@ const EmployeesTable = ({
     {
       dataField: 'department_name',
       text: 'Department',
+      sort: true,
+      headerStyle: { minWidth: '150px' },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+    },
+    {
+      dataField: 'project',
+      text: 'Campaign',
       sort: true,
       headerStyle: { minWidth: '150px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
@@ -508,7 +515,7 @@ const EmployeesTable = ({
               emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
             designation_name: emp?.designation?.designation,
             department_name: emp?.department?.department,
-            // project: emp?.projectId?.project_name,
+            project: emp?.projectId?.project_name,
           };
         });
 

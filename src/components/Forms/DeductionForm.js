@@ -73,11 +73,9 @@ export const DeductionForm = ({ fetchDeductions }) => {
         reset();
         $('#FormModal').modal('toggle');
         fetchDeductions();
-        console.log('this deduction data', data);
       })
       .catch((error) => {
         showAlert(true, error.response.data.message, 'alert alert-danger');
-        console.log('this deduction data - error', data);
         console.log('this deduction data', error.response);
       })
       .finally(() => {

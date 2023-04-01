@@ -36,7 +36,6 @@ export const AddDepartmentModal = ({ getAllDepartments }) => {
         leave_approval_level: +createDepartment.leave_approval_level
       });
       const resData = res?.data?.data;
-      console.log(resData)
 
       showAlert(
         true,
