@@ -11,13 +11,10 @@ import {
   sundayShifts,
 } from '../FormJSON/CreateEmployeeShift';
 import { useAppContext } from '../../Context/AppContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
-import Select from 'react-select';
 import Switch from '@mui/material/Switch';
-import $ from 'jquery';
 
-export const CreateEmployeeShiftModal = ({ ogid }) => {
+export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState(
@@ -76,19 +73,18 @@ export const CreateEmployeeShiftModal = ({ ogid }) => {
       shifts.push({ ...createSaturdayShift, ogid: ogid });
       shifts.push({ ...createSundayShift, ogid: ogid });
 
-      console.log('submit this shifts:', shifts)
-
       setLoading(true);
       const response = await axiosInstance.post(`/api/employee-shift`, shifts);
-      console.log('shift create response:', response);
   
       setLoading(false);
       goToTop();
+      setMode('edit');
       showAlert(
         true,
         `Shift created successfully!`,
         'alert alert-success'
       );
+      setEmployeeShifts(response?.data?.data);
     } catch (error) {
       goToTop();
       const errorMsg = error?.response?.data?.message;
@@ -503,7 +499,6 @@ export const CreateEmployeeShiftModal = ({ ogid }) => {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  data-dismiss="modal"
                   onClick={cancelEvent}
                 >
                   Cancel

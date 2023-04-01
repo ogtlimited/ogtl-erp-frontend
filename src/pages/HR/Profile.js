@@ -32,6 +32,7 @@ const Profile = () => {
   const { combineRequest } = useAppContext();
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [ogid, setOgid] = useState(null);
+  const [mode, setMode] = useState('');
 
   const fetchUserInfo = async () => {
     try {
@@ -43,8 +44,15 @@ const Profile = () => {
       const ogid = employee?.ogid;
       const shift = await axiosInstance.get(`/api/employee-shift/${ogid}`);
       const employeeShifts = shift?.data?.data;
-      setEmployeeShifts(employeeShifts);
-      setOgid(ogid);
+
+      if (!employeeShifts.length) {
+        setMode('create');
+        setOgid(ogid);
+      } else if (employeeShifts.length) {
+        setMode('edit');
+        setOgid(ogid);
+        setEmployeeShifts(employeeShifts);
+      }
     } catch (error) {
         console.log(error);
     }
@@ -326,7 +334,10 @@ const Profile = () => {
         formValue={formValue}
         setFormValue={setFormValue}
         fetchUserInfo={fetchUserInfo}
+        mode={mode}
+        setMode={setMode}	
         employeeShifts={employeeShifts}
+        setEmployeeShifts={setEmployeeShifts}
         ogid={ogid}
       />
       <FormModal2

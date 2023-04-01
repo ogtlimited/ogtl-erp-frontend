@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   monday_shifts,
   tuesday_shifts,
@@ -13,7 +13,12 @@ import { useAppContext } from '../../Context/AppContext';
 import Switch from '@mui/material/Switch';
 import $ from 'jquery';
 
-export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
+export const AddEmployeeShiftModal = ({ 
+  employee, 
+  setEmployee, 
+  isSubmitted,
+  setIsSubmitted, 
+}) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState(
@@ -47,6 +52,13 @@ export const AddEmployeeShiftModal = ({ employee, setEmployee }) => {
     setCreateSaturdayShift(saturday_shifts);
     setCreateSundayShift(sunday_shifts);
   };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      cancelEvent();
+      setIsSubmitted(false);
+    }
+  },[isSubmitted, setIsSubmitted])
 
   const handleAddEmployeeSifts = async (e) => {
     e.preventDefault();

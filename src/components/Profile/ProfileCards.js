@@ -30,9 +30,11 @@ const ProfileCards = ({
   setFormValue,
   fetchUserInfo,
   employeeShifts,
+  setEmployeeShifts,
   ogid,
+  mode,
+  setMode,
 }) => {
-  console.log(formValue);
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
   const { user } = useAppContext();
@@ -227,8 +229,8 @@ const ProfileCards = ({
         <div id="emp_shifts" className="pro-overview tab-pane fade">
           <div className="row">
             <div className="col-md-12 d-flex">   
-              {employeeShifts.length ? <EditEmployeeShiftModal employeeShifts={employeeShifts} ogid={ogid} />
-              : <CreateEmployeeShiftModal ogid={ogid} />}
+              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} ogid={ogid} />
+              : <CreateEmployeeShiftModal ogid={ogid} setMode={setMode} setEmployeeShifts={setEmployeeShifts} />}
             </div>
           </div>
         </div>

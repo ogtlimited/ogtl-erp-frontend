@@ -30,6 +30,7 @@ const AddEmployeesAdmin = () => {
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [isAllValid, setIsAllValid] = useState(false);
   const [isGenderValid, setIsGenderValid] = useState(false);
@@ -214,6 +215,7 @@ const AddEmployeesAdmin = () => {
       );
 
       clearEvent();
+      setIsSubmitted(true);
       fetchEmployee();
       setLoading(false);
     } catch (error) {
@@ -627,7 +629,12 @@ const AddEmployeesAdmin = () => {
         </div>
       </div>
 
-      <AddEmployeeShiftModal employee={employee} setEmployee={setEmployee} />
+      <AddEmployeeShiftModal 
+        employee={employee} 
+        setEmployee={setEmployee} 
+        isSubmitted={isSubmitted} 
+        setIsSubmitted={setIsSubmitted}
+      />
       
     </>
   );
