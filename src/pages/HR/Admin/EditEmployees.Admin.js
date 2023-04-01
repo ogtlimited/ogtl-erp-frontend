@@ -53,6 +53,7 @@ const EditEmployeesAdmin = () => {
           date_of_joining: employee?.date_of_joining,
           reports_to: employee?.reports_to?._id,
           designation: employee?.designation?._id,
+          designationName: employee?.designation?.designation,
           branch: employee?.branch?.id,
           employeeType: employee?.employeeType,
           status: employee?.status,
@@ -217,12 +218,13 @@ const EditEmployeesAdmin = () => {
   const VirtualIDCard = () => {
     return (
       <>
+      {console.log("employee ID", employee)}
         <VirtualID
           image={employee.image}
           fullName={employee.first_name + " " + employee.middle_name + " " + employee.last_name}
           admin={employee.isAdmin}
           gender={employee.gender}
-          designation={employee?.designationName ? employee?.designationName : employee?.designation?.designation}
+          designation={employee.designationName}
           signature={employee.signature}
           ogid={employee.ogid}
           edit={true}
