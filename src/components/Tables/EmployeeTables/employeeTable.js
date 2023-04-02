@@ -99,7 +99,7 @@ const EmployeesTable = ({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length > 5) {
+    if (columns.length >= 8) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -250,30 +250,17 @@ const EmployeesTable = ({
       headerStyle: { minWidth: '70px', textAlign: 'left' },
       formatter: (value, row) => (
         <>
-          {filters && user?.role?.hr?.update && (
-            <div className="dropdown dropdown-action text-right">
-              <a
-                href="#"
-                className="action-icon dropdown-toggle"
-                data-toggle="dropdown"
-                aria-expanded="false"
+          <div className="text-center">
+            <div className="leave-user-action-btns">
+              <button
+                className="btn btn-sm btn-primary"
+                data-toggle="modal"
+                onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
               >
-                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a
-                  className="dropdown-item"
-                  onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
-                  href="#"
-                  data-toggle="modal"
-                  // data-target="#EditEmployeeFormModal"
-                  // data-target="#FormModal"
-                >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </a>
-              </div>
+                Edit
+              </button>
             </div>
-          )}
+          </div>
         </>
       ),
     },

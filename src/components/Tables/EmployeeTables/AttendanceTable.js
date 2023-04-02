@@ -28,6 +28,7 @@ const AdminAttendanceTable = ({
   columns,
   designation,
   loading,
+  setLoading,
 }) => {
   const { SearchBar, ClearSearchButton } = Search;
 
@@ -41,18 +42,16 @@ const AdminAttendanceTable = ({
   const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
   const [departmentsOpt, setDepartmentsOpts] = useState([]);
-  const [designarionsOpt, setDesignationsOpts] = useState([]);
-  const imageUrl = "https://erp.outsourceglobal.com";
-  const breadcrumb = "Admin Attendance";
-  const total = [];
-  let attendanceDateFilter;
+  const [designationsOpt, setDesignationsOpts] = useState([]);
+  const [dataToFilter, setDataToFilter] = useState('');
 
-  const showNullMessage = () => {
+  useEffect(() => {
+    setDataToFilter(data);
     setTimeout(() => {
-      setShow(true);
+      setLoading(false);
     }, 5000);
-    return <>{show ? "No Data Available" : null}</>;
-  };
+  }, [data, setLoading]);
+  
 
   useEffect(() => {
     const departmentOpts = departments.map((e) => {
@@ -82,6 +81,7 @@ const AdminAttendanceTable = ({
       setAllEmployee(filt);
     }
   };
+
   const handleDesignation = (i) => {
     if (i?.value === "All" || i === null) {
       setAllEmployee(unfiltered);
@@ -93,6 +93,7 @@ const AdminAttendanceTable = ({
       setAllEmployee(filt);
     }
   };
+
   const clearFilter = (e) => {
     e.preventDefault();
     // attendaceDateFilter('')
@@ -115,10 +116,10 @@ const AdminAttendanceTable = ({
 
   return (
     <>
-      {data && (
+      {dataToFilter && (
         <ToolkitProvider
           keyField="id"
-          data={data}
+          data={dataToFilter}
           columns={columns}
           search
           exportCSV
@@ -147,7 +148,7 @@ const AdminAttendanceTable = ({
                   <Select
                     defaultValue={selectedOption}
                     onChange={handleDesignation}
-                    options={designarionsOpt}
+                    options={designationsOpt}
                     placeholder="Filter Designation"
                     isClearable={true}
                     style={{ display: "inline-block" }}
@@ -179,7 +180,7 @@ const AdminAttendanceTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    showNullMessage()
+                    "No Data Found"
                   )
                 }
               />

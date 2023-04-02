@@ -78,7 +78,7 @@ const AllEmployeesAdmin = () => {
           return {
             ...emp,
             fullName:
-              emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
+              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
             designation_name: emp?.designation?.designation,
             department_name: emp?.department?.department,
             project: emp?.projectId?.project_name,
