@@ -77,7 +77,7 @@ export const AddEmployeeShiftModal = ({
 
     showAlert(
           true,
-          `Shift added successfully!`,
+          `Employee shifts confirmed!`,
           'alert alert-success'
         );
           $('#EmployeeShiftFormModal').modal('toggle');
