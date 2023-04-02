@@ -512,7 +512,7 @@ export const AddEmployeeShiftModal = ({
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">Submit</button>
+                  <button type="submit" className="btn btn-primary">Confirm</button>
                 </div>
               </form>
             </div>
