@@ -35,6 +35,7 @@ const LeavesTable = ({
     onSelectAll: handleOnSelectAll,
   };
   const [mobileView, setmobileView] = useState(false);
+  
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
       setmobileView(false);

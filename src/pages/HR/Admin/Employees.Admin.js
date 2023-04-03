@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
 // import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
+import { EditEmployeeModal } from '../../../components/Modal/EditEmployeeModal';
 
 import FormModal2 from '../../../components/Modal/FormModal2';
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
@@ -77,10 +78,10 @@ const AllEmployeesAdmin = () => {
           return {
             ...emp,
             fullName:
-              emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
+              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
             designation_name: emp?.designation?.designation,
             department_name: emp?.department?.department,
-            // project: emp?.projectId?.project_name,
+            project: emp?.projectId?.project_name,
           };
         });
 
@@ -209,27 +210,6 @@ const AllEmployeesAdmin = () => {
     });
   }, [createEmployee, loadForm, mode, status]);
 
-  const create = () => {
-    let initialValues = {};
-    for (let i in template) {
-      if (i === 'isAdmin') {
-        initialValues[i] = false;
-      } else if (i === 'date_of_joining') {
-        initialValues[i] = new Date().toISOString().slice(0, 10);
-      } else if (i === 'isExpatriate') {
-        initialValues[i] = false;
-      } else if (i === 'branch') {
-        initialValues[i] = null;
-      } else if (i === 'leaveCount') {
-        initialValues[i] = 0;
-      } else {
-        initialValues[i] = '';
-      }
-    }
-    setformValue(initialValues);
-    seteditData(initialValues);
-  };
-
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -240,13 +220,6 @@ const AllEmployeesAdmin = () => {
   useEffect(() => {
     if (submitted) {
       formValue.image = '';
-      // const fullName = formValue.applicant?.split(" ");
-      // if (mode === "add") {
-      //   formValue["first_name"] = fullName[0];
-      //   formValue["last_name"] = fullName[1];
-      //   formValue["middle_name"] = fullName[2];
-      //   delete formValue.applicant;
-      // }
 
       if (mode === 'add') {
         axiosInstance
@@ -405,6 +378,7 @@ const AllEmployeesAdmin = () => {
         setSearchTerm={setSearchTerm}
         setLoading={setLoading}
       />
+      
       {toggleModal && (
         <BulkEmployeeUploadModal
           setUploadSuccess={setUploadSuccess}
@@ -415,8 +389,6 @@ const AllEmployeesAdmin = () => {
           bulkEmployeeUploadData={bulkEmployeeUploadData}
         />
       )}
-
-      {/* <AddEmployeeModal /> */}
 
       <FormModal2
         editData={editData}

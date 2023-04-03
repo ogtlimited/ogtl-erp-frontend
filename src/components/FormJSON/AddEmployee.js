@@ -1,4 +1,4 @@
-export const CREATE_PROFILE = {
+export const PROFILE = {
   first_name: '',
   middle_name: '',
   last_name: '',
@@ -9,7 +9,7 @@ export const CREATE_PROFILE = {
   designation: null,
   department: null,
   projectId: '',
-  default_shift: '',
+  shifts: [],
   branch: null,
   isAdmin: false,
   isExpatriate: false,

@@ -204,6 +204,7 @@ const AttendanceAdmin = () => {
             designation={designation}
             departments={departments}
             loading={loading}
+            setLoading={setLoading}
           />
         </div>
       </div>

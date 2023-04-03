@@ -4,7 +4,6 @@ import React from 'react';
 
 const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
   const data = employeeDetails.employeeDetails;
-  console.log("employee Details:", employeeDetails.employeeDetails);
 
   return (
     <>

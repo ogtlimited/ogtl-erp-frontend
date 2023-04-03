@@ -713,6 +713,16 @@
   }
 }
 
+/* ----- Employee Shift ------- */
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+/* ----- Employee Shift ------- */
+
 
 @media only screen and (max-width: 991px) {
   .home-notification-div {

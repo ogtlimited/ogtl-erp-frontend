@@ -14,7 +14,7 @@ import female3 from '../../../assets/img/female_avatar3.png';
 import male from '../../../assets/img/male_avater.png';
 import male2 from '../../../assets/img/male_avater2.png';
 import male3 from '../../../assets/img/male_avater3.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../Context/AppContext';
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
@@ -65,6 +65,7 @@ const EmployeesTable = ({
     },
   ];
 
+  const navigate = useNavigate();
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -91,7 +92,6 @@ const EmployeesTable = ({
       }
     }
     setmode('edit');
-    console.log(hash);
     seteditData(hash);
   };
 
@@ -99,7 +99,7 @@ const EmployeesTable = ({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length > 8) {
+    if (columns.length >= 8) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -225,6 +225,13 @@ const EmployeesTable = ({
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
+      dataField: 'project',
+      text: 'Campaign',
+      sort: true,
+      headerStyle: { minWidth: '150px' },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+    },
+    {
       dataField: 'designation_name',
       text: 'Designation',
       sort: true,
@@ -243,29 +250,17 @@ const EmployeesTable = ({
       headerStyle: { minWidth: '70px', textAlign: 'left' },
       formatter: (value, row) => (
         <>
-          {filters && user?.role?.hr?.update && (
-            <div className="dropdown dropdown-action text-right">
-              <a
-                href="#"
-                className="action-icon dropdown-toggle"
-                data-toggle="dropdown"
-                aria-expanded="false"
+          <div className="text-center">
+            <div className="leave-user-action-btns">
+              <button
+                className="btn btn-sm btn-primary"
+                data-toggle="modal"
+                onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
               >
-                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a
-                  className="dropdown-item"
-                  onClick={() => handleEdit(row)}
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#FormModal"
-                >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </a>
-              </div>
+                Edit
+              </button>
             </div>
-          )}
+          </div>
         </>
       ),
     },
@@ -507,7 +502,7 @@ const EmployeesTable = ({
               emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
             designation_name: emp?.designation?.designation,
             department_name: emp?.department?.department,
-            // project: emp?.projectId?.project_name,
+            project: emp?.projectId?.project_name,
           };
         });
 

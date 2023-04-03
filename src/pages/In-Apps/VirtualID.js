@@ -32,11 +32,18 @@ const VirtualID = (props) => {
           </div>
         </div>
 
-        <div className="virtual-card-contact-ogid-container">
-          <div className="virtual-card-contact-ogid">
-            {props?.admin === 'yes' ? <p>OG00001</p> : <p>OG{ props?.ogid ? moment(props?.ogid).format("YYMMDD") : ""}</p>}
+        {!props.edit ? 
+          <div className="virtual-card-contact-ogid-container">
+            <div className="virtual-card-contact-ogid">
+              {props?.admin === 'yes' ? <p>OG00001</p> : <p>OG{ props?.ogid ? moment(props?.ogid).format("YYMMDD") : ""}</p>}
+            </div>
+          </div> : 
+          <div className="virtual-card-contact-ogid-container">
+            <div className="virtual-card-contact-ogid">
+              <p>{props?.ogid}</p>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </>
   );
