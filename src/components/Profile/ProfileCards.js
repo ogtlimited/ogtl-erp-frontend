@@ -96,30 +96,34 @@ const ProfileCards = ({
                   Campaign
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  href="#bank_statutory"
-                  data-toggle="tab"
-                  className={`nav-link ${!user?.isAdmin && "disabled"}`}
-                >
-                  Bank &amp; Statutory{" "}
-                  <small className="text-danger">(Admin Only)</small>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#promotions" data-toggle="tab" className="nav-link">
-                  Promotions
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  href="#warning_letters"
-                  data-toggle="tab"
-                  className="nav-link"
-                >
-                  Warning Letters
-                </a>
-              </li>
+              {user?.role?.hr &&
+                <>
+                  <li className="nav-item">
+                  <a
+                    href="#bank_statutory"
+                    data-toggle="tab"
+                    className={`nav-link ${!user?.isAdmin && "disabled"}`}
+                  >
+                    Bank &amp; Statutory{" "}
+                    <small className="text-danger">(Admin Only)</small>
+                  </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#promotions" data-toggle="tab" className="nav-link">
+                      Promotions
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      href="#warning_letters"
+                      data-toggle="tab"
+                      className="nav-link"
+                    >
+                      Warning Letters
+                    </a>
+                  </li>
+                </>
+              }
             </ul>
           </div>
         </div>

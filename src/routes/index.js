@@ -868,6 +868,8 @@ export default function Router() {
           ],
         },
         { path: 'employee-coaching', element: <CoachingEmployee /> },
+        { path: 'leadership/supervisor', element: <SupervisorAdmin /> },
+        { path: 'leadership/team-lead', element: <TeamLeadAdmin /> },
         {
           path: 'product-items',
           element: (
@@ -1118,6 +1120,12 @@ const Resignation = Loadable(
 );
 const CoachingEmployee = Loadable(
   lazy(() => import('../pages/HR/Users/CoachingEmployee'))
+);
+const SupervisorAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/Supervisor.Admin'))
+);
+const TeamLeadAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/TeamLead.Admin'))
 );
 const Email = Loadable(lazy(() => import('../pages/In-Apps/Email')));
 
