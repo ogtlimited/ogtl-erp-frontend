@@ -13,6 +13,7 @@ const ICONS = {
   apps: getIcon('la-cube'),
   performance: getIcon('la-graduation-cap'),
   coaching: getIcon('la-ticket'),
+  leadership: getIcon('la-users'),
   promotion: getIcon('la-bullhorn'),
   resignation: getIcon('la-external-link-square'),
   termination: getIcon('la-times-circle'),
@@ -353,6 +354,24 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.termination,
         icon: ICONS.termination,
       },
+    ],
+  },
+  {
+    subheader: 'Leadership',
+    canView: 'All',
+    items: [
+      {
+        canView: 'All',
+        title: 'Subordinates',
+        path: PATH_DASHBOARD.leadership.supervisor,
+        icon: ICONS.leadership,
+      },
+      // {
+      //   canView: 'All',
+      //   title: 'Team Lead',
+      //   path: PATH_DASHBOARD.leadership.teamLead,
+      //   icon: ICONS.leadership,
+      // },
     ],
   },
   {
