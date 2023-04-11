@@ -6,6 +6,8 @@ export const mondayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const tuesdayShifts = {
@@ -14,6 +16,8 @@ export const tuesdayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const wednesdayShifts = {
@@ -22,6 +26,8 @@ export const wednesdayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const thursdayShifts = {
@@ -30,6 +36,8 @@ export const thursdayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const fridayShifts = {
@@ -38,6 +46,8 @@ export const fridayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const saturdayShifts = {
@@ -46,6 +56,8 @@ export const saturdayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 export const sundayShifts = {
@@ -54,6 +66,8 @@ export const sundayShifts = {
   end: '',
   off: false,
   ogid: '',
+  huddles: false,
+  huddleTime: null,
 };
 
 // Add Employee Shift:
@@ -62,6 +76,8 @@ export const monday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const tuesday_shifts = {
@@ -69,6 +85,8 @@ export const tuesday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const wednesday_shifts = {
@@ -76,6 +94,8 @@ export const wednesday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const thursday_shifts = {
@@ -83,6 +103,8 @@ export const thursday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const friday_shifts = {
@@ -90,6 +112,8 @@ export const friday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const saturday_shifts = {
@@ -97,6 +121,8 @@ export const saturday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
 
 export const sunday_shifts = {
@@ -104,4 +130,58 @@ export const sunday_shifts = {
   start: '',
   end: '',
   off: false,
+  huddles: false,
+  huddleTime: null,
 };
+
+export const huddleOptions = [
+  {
+    label: "5 Minutes",
+    value: "5 mins",
+  },
+  {
+    label: "10 Minutes",
+    value: "10 mins",
+  },
+  {
+    label: "15 Minutes",
+    value: "15 mins",
+  },
+  {
+    label: "20 Minutes",
+    value: "20 mins",
+  },
+  {
+    label: "25 Minutes",
+    value: "25 mins",
+  },
+  {
+    label: "30 Minutes",
+    value: "30 mins",
+  },
+  {
+    label: "35 Minutes",
+    value: "35 mins",
+  },
+  {
+    label: "40 Minutes",
+    value: "40 mins",
+  },
+  {
+    label: "45 Minutes",
+    value: "45 mins",
+  },
+  {
+    label: "50 Minutes",
+    value: "50 mins",
+  },
+  {
+    label: "55 Minutes",
+    value: "55 mins",
+  },
+  {
+    label: "60 Minutes",	
+    value: "60 mins",
+  },
+];
+
