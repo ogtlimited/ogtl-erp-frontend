@@ -54,6 +54,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, "/leadership"),
     supervisor: path(ROOTS_DASHBOARD, "/leadership/supervisor"),
     teamLead: path(ROOTS_DASHBOARD, "/leadership/team-lead"),
+    campaignSchedule: path(ROOTS_DASHBOARD, "/leadership/campaign-schedule"),
   },
   payroll: {
     root: path(ROOTS_DASHBOARD, "/payroll"),
