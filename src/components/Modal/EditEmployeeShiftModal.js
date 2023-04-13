@@ -4,8 +4,9 @@ import { } from '../FormJSON/CreateEmployeeShift';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
+import Select from 'react-select';
 
-export const EditEmployeeShiftModal = ({ employeeShifts }) => {
+export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});
@@ -17,84 +18,70 @@ export const EditEmployeeShiftModal = ({ employeeShifts }) => {
   const [createSundayShift, setCreateSundayShift] = useState({});
 
   const [loading, setLoading] = useState(false);
+  const [scheduleOpts, setScheduleOpts] = useState([]);
 
   useEffect(() => {
-    let monday = {}
-    const monday_shifts = employeeShifts?.filter((shift) => shift.day === 'mon');
+
+    const formattedEmployeeShifts = employeeShifts?.map((shift) => ({
+        day: shift.day,
+        start: shift.start,
+        end: shift.end,
+        off: shift.off,
+        _id: shift._id
+      }) 
+    )
+
+    console.log('employeeShifts: ', formattedEmployeeShifts)
+
+    let monday = {};
+    const monday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'mon');
     for(let i = 0; i < monday_shifts?.length; i++) {
-      monday.day = monday_shifts[i].day
-      monday.start = monday_shifts[i].start
-      monday.end = monday_shifts[i].end
-      monday.off = monday_shifts[i].off
-      monday._id = monday_shifts[i]._id
+      monday = monday_shifts[i]
     }
     setCreateMondayShift(monday);
 
-    let tuesday = {}
-    const tuesday_shifts = employeeShifts?.filter((shift) => shift.day === 'tue');
+    let tuesday = {};
+    const tuesday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'tue');
     for(let i = 0; i < tuesday_shifts?.length; i++) {
-      tuesday.day = tuesday_shifts[i].day
-      tuesday.start = tuesday_shifts[i].start
-      tuesday.end = tuesday_shifts[i].end
-      tuesday.off = tuesday_shifts[i].off
-      tuesday._id = tuesday_shifts[i]._id
+      tuesday = tuesday_shifts[i]
     }
     setCreateTuesdayShift(tuesday);
 
-    let wednesday = {}
-    const wednesday_shifts = employeeShifts?.filter((shift) => shift.day === 'wed');
+    let wednesday = {};
+    const wednesday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'wed');
     for(let i = 0; i < wednesday_shifts?.length; i++) {
-      wednesday.day = wednesday_shifts[i].day
-      wednesday.start = wednesday_shifts[i].start
-      wednesday.end = wednesday_shifts[i].end
-      wednesday.off = wednesday_shifts[i].off
-      wednesday._id = wednesday_shifts[i]._id
+      wednesday = wednesday_shifts[i]
     }
     setCreateWednesdayShift(wednesday);
 
-    let thursday = {}
-    const thursday_shifts = employeeShifts?.filter((shift) => shift.day === 'thur');
+    let thursday = {};
+    const thursday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'thur');
     for(let i = 0; i < thursday_shifts?.length; i++) {
-      thursday.day = thursday_shifts[i].day
-      thursday.start = thursday_shifts[i].start
-      thursday.end = thursday_shifts[i].end
-      thursday.off = thursday_shifts[i].off
-      thursday._id = thursday_shifts[i]._id
+      thursday = thursday_shifts[i]
     }
     setCreateThursdayShift(thursday);
 
-    let friday = {}
-    const friday_shifts = employeeShifts?.filter((shift) => shift.day === 'fri');
+    let friday = {};
+    const friday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'fri');
     for(let i = 0; i < friday_shifts?.length; i++) {
-      friday.day = friday_shifts[i].day
-      friday.start = friday_shifts[i].start
-      friday.end = friday_shifts[i].end
-      friday.off = friday_shifts[i].off
-      friday._id = friday_shifts[i]._id
+      friday = friday_shifts[i]
     }
     setCreateFridayShift(friday);
 
-    let saturday = {}
-    const saturday_shifts = employeeShifts?.filter((shift) => shift.day === 'sat');
+    let saturday = {};
+    const saturday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'sat');
     for(let i = 0; i < saturday_shifts?.length; i++) {
-      saturday.day = saturday_shifts[i].day
-      saturday.start = saturday_shifts[i].start
-      saturday.end = saturday_shifts[i].end
-      saturday.off = saturday_shifts[i].off
-      saturday._id = saturday_shifts[i]._id
+      saturday = saturday_shifts[i]
     }
     setCreateSaturdayShift(saturday);
 
-    let sunday = {}
-    const sunday_shifts = employeeShifts?.filter((shift) => shift.day === 'sun');
+    let sunday = {};
+    const sunday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'sun');
     for(let i = 0; i < sunday_shifts?.length; i++) {
-      sunday.day = sunday_shifts[i].day
-      sunday.start = sunday_shifts[i].start
-      sunday.end = sunday_shifts[i].end
-      sunday.off = sunday_shifts[i].off
-      sunday._id = sunday_shifts[i]._id
+      sunday = sunday_shifts[i]
     }
     setCreateSundayShift(sunday);
+
   }, [employeeShifts]);
 
   const goToTop = () => {
@@ -140,6 +127,120 @@ export const EditEmployeeShiftModal = ({ employeeShifts }) => {
     }
 
   };
+  
+  const fetchOwnersSchedule = async () => {
+    try {
+      const schedules = await axiosInstance.get(`/campaign-schedules`);
+      const schedule = schedules?.data?.data;
+
+      const scheduleOpts = schedule?.map((e) => {
+        return {
+          label: e.title,
+          value: e._id,
+        };
+      });
+      setScheduleOpts(scheduleOpts);
+    } catch (error) {
+      console.error(error?.response);
+    }
+  }
+
+  useEffect(() => {
+    fetchOwnersSchedule();
+  }, []);
+
+  const handleScheduleClick = (e) => {
+    const scheduleId = e?.value;
+
+    axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
+      let resData = e?.data?.data;
+
+      const formatted = resData?.map((e) => ({
+          day: e.day,
+          off: e.off,
+          // start: e.start,
+          // end: e.end,
+        }));
+
+      let monday = {};
+      const monday_shifts = formatted?.filter((shift) => shift?.day === 'mon');
+      for(let i = 0; i < monday_shifts?.length; i++) {
+        monday.day = monday_shifts[i].day
+        monday.off = monday_shifts[i].off
+        monday._id = createMondayShift._id
+        // monday.start = monday_shifts[i].start
+        // monday.end = monday_shifts[i].end
+      }
+      setCreateMondayShift(monday);
+
+      let tuesday = {};
+      const tuesday_shifts = formatted?.filter((shift) => shift?.day === 'tue');
+      for(let i = 0; i < tuesday_shifts?.length; i++) {
+        tuesday.day = tuesday_shifts[i].day
+        tuesday.off = tuesday_shifts[i].off
+        tuesday._id = createTuesdayShift._id
+        // tuesday.start = tuesday_shifts[i].start
+        // tuesday.end = tuesday_shifts[i].end
+      }
+      setCreateTuesdayShift(tuesday);
+
+      let wednesday = {};
+      const wednesday_shifts = formatted?.filter((shift) => shift?.day === 'wed');
+      for(let i = 0; i < wednesday_shifts?.length; i++) {
+        wednesday.day = wednesday_shifts[i].day
+        wednesday.off = wednesday_shifts[i].off
+        wednesday._id = createWednesdayShift._id
+        // wednesday.start = wednesday_shifts[i].start
+        // wednesday.end = wednesday_shifts[i].end
+      }
+      setCreateWednesdayShift(wednesday);
+
+      let thursday = {};
+      const thursday_shifts = formatted?.filter((shift) => shift?.day === 'thur');
+      for(let i = 0; i < thursday_shifts?.length; i++) {
+        thursday.day = thursday_shifts[i].day
+        thursday.off = thursday_shifts[i].off
+        thursday._id = createThursdayShift._id
+        // thursday.start = thursday_shifts[i].start
+        // thursday.end = thursday_shifts[i].end
+      }
+      setCreateThursdayShift(thursday);
+
+      let friday = {};
+      const friday_shifts = formatted?.filter((shift) => shift?.day === 'fri');
+      for(let i = 0; i < friday_shifts?.length; i++) {
+        friday.day = friday_shifts[i].day
+        friday.off = friday_shifts[i].off
+        friday._id = createFridayShift._id
+        // friday.start = friday_shifts[i].start
+        // friday.end = friday_shifts[i].end
+      }
+      setCreateFridayShift(friday);
+
+      let saturday = {};
+      const saturday_shifts = formatted?.filter((shift) => shift?.day === 'sat');
+      for(let i = 0; i < saturday_shifts?.length; i++) {
+        saturday.day = saturday_shifts[i].day
+        saturday.off = saturday_shifts[i].off
+        saturday._id = createSaturdayShift._id
+        // saturday.start = saturday_shifts[i].start
+        // saturday.end = saturday_shifts[i].end
+      }
+      setCreateSaturdayShift(saturday);
+
+      let sunday = {};
+      const sunday_shifts = formatted?.filter((shift) => shift?.day === 'sun');
+      for(let i = 0; i < sunday_shifts?.length; i++) {
+        sunday.day = sunday_shifts[i].day
+        sunday.off = sunday_shifts[i].off
+        sunday._id = createSundayShift._id
+        // sunday.start = sunday_shifts[i].start
+        // sunday.end = sunday_shifts[i].end
+      }
+      setCreateSundayShift(sunday);
+      
+    });
+  }
 
   return (
     <>
@@ -147,6 +248,24 @@ export const EditEmployeeShiftModal = ({ employeeShifts }) => {
           <div className="card-body">
 
             <div className="modal-body">
+
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="schedule">Shift Schedules</label>
+                  <Select
+                    options={scheduleOpts}
+                    isSearchable={true}
+                    placeholder="Select a shift schedule..."
+                    onChange={(e) => handleScheduleClick(e)}
+                    style={{ display: "inline-block" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <hr />
+              
               <form onSubmit={handleEditEmployeeShift}>
 
                 {/* Monday */}

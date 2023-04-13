@@ -16,7 +16,6 @@ const ShiftScheduleList = () => {
   const [allSchedule, setAllSchedules] = useState([]);
   const [editScheduleTitle, setEditScheduleTitle] = useState([]);
   const [editScheduleTime, setEditScheduleTime] = useState([]);
-  const [scheduleId, setScheduleId] = useState('');
   const [deleteData, setDeleteData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user, showAlert } = useAppContext();
@@ -48,9 +47,7 @@ const ShiftScheduleList = () => {
     axiosInstance.get(`/campaign-schedule-items/${row._id}`).then((e) => {
       let resData = e?.data?.data;
       setEditScheduleTime(resData);
-      setScheduleId(row._id);
     });
-    
   };
   
   const deleteCampaignSchedule = (row) => {
@@ -164,7 +161,7 @@ const ShiftScheduleList = () => {
       
       <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} />
       <EditCampaignScheduleTitleModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTitle} />
-      <EditCampaignScheduleTimeModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTime} scheduleId={scheduleId} />
+      <EditCampaignScheduleTimeModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTime} />
       
       <ConfirmModal
         title="Campaign Schedule"

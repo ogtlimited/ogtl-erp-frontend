@@ -6,7 +6,7 @@ import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
 import $ from 'jquery';
 
-export const EditCampaignScheduleTimeModal = ({ fetchAllSchedule, editSchedule, scheduleId }) => {
+export const EditCampaignScheduleTimeModal = ({ fetchAllSchedule, editSchedule }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});

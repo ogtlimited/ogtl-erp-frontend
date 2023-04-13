@@ -76,6 +76,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
       shifts.push({ ...createSaturdayShift, ogid: ogid });
       shifts.push({ ...createSundayShift, ogid: ogid });
 
+      console.log("create this shifts:", shifts)
       const response = await axiosInstance.post(`/api/employee-shift`, shifts);
   
       setLoading(false);
@@ -120,8 +121,25 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
 
   const handleScheduleClick = (e) => {
     const scheduleId = e?.value;
-    const scheduleTitle = e?.label;
-    console.log(scheduleId, scheduleTitle);
+
+    axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
+      let resData = e?.data?.data;
+
+      const formatted = resData?.map((e) => ({
+          day: e.day,
+          off: e.off,
+          // start: e.start,
+          // end: e.end,
+        }));
+
+      setCreateMondayShift(formatted[0]);
+      setCreateTuesdayShift(formatted[1]);
+      setCreateWednesdayShift(formatted[2]);
+      setCreateThursdayShift(formatted[3]);
+      setCreateFridayShift(formatted[4]);
+      setCreateSaturdayShift(formatted[5]);
+      setCreateSundayShift(formatted[6]);
+    });
   }
 
   return (
@@ -138,7 +156,6 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                   <Select
                     options={scheduleOpts}
                     isSearchable={true}
-                    isClearable={true}
                     placeholder="Select a shift schedule..."
                     onChange={(e) => handleScheduleClick(e)}
                     style={{ display: "inline-block" }}
