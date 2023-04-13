@@ -27,6 +27,8 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         start: shift.start,
         end: shift.end,
         off: shift.off,
+        huddles: shift.huddles,
+        huddleTime: shift.huddleTime,
         _id: shift._id
       }) 
     )
@@ -156,8 +158,10 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       const formatted = resData?.map((e) => ({
           day: e.day,
           off: e.off,
-          // start: e.start,
-          // end: e.end,
+          start: e.start,
+          end: e.end,
+          huddles: e.huddles,
+          huddleTime: e.huddleTime,
         }));
 
       let monday = {};
@@ -165,9 +169,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < monday_shifts?.length; i++) {
         monday.day = monday_shifts[i].day
         monday.off = monday_shifts[i].off
+        monday.start = monday_shifts[i].start
+        monday.end = monday_shifts[i].end
+        monday.huddles = monday_shifts[i].huddles
+        monday.huddleTime = monday_shifts[i].huddleTime
         monday._id = createMondayShift._id
-        // monday.start = monday_shifts[i].start
-        // monday.end = monday_shifts[i].end
       }
       setCreateMondayShift(monday);
 
@@ -176,9 +182,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < tuesday_shifts?.length; i++) {
         tuesday.day = tuesday_shifts[i].day
         tuesday.off = tuesday_shifts[i].off
+        tuesday.start = tuesday_shifts[i].start
+        tuesday.end = tuesday_shifts[i].end
+        tuesday.huddles = tuesday_shifts[i].huddles
+        tuesday.huddleTime = tuesday_shifts[i].huddleTime
         tuesday._id = createTuesdayShift._id
-        // tuesday.start = tuesday_shifts[i].start
-        // tuesday.end = tuesday_shifts[i].end
       }
       setCreateTuesdayShift(tuesday);
 
@@ -187,9 +195,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < wednesday_shifts?.length; i++) {
         wednesday.day = wednesday_shifts[i].day
         wednesday.off = wednesday_shifts[i].off
+        wednesday.start = wednesday_shifts[i].start
+        wednesday.end = wednesday_shifts[i].end
+        wednesday.huddles = wednesday_shifts[i].huddles
+        wednesday.huddleTime = wednesday_shifts[i].huddleTime
         wednesday._id = createWednesdayShift._id
-        // wednesday.start = wednesday_shifts[i].start
-        // wednesday.end = wednesday_shifts[i].end
       }
       setCreateWednesdayShift(wednesday);
 
@@ -198,9 +208,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < thursday_shifts?.length; i++) {
         thursday.day = thursday_shifts[i].day
         thursday.off = thursday_shifts[i].off
+        thursday.start = thursday_shifts[i].start
+        thursday.end = thursday_shifts[i].end
+        thursday.huddles = thursday_shifts[i].huddles
+        thursday.huddleTime = thursday_shifts[i].huddleTime
         thursday._id = createThursdayShift._id
-        // thursday.start = thursday_shifts[i].start
-        // thursday.end = thursday_shifts[i].end
       }
       setCreateThursdayShift(thursday);
 
@@ -209,9 +221,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < friday_shifts?.length; i++) {
         friday.day = friday_shifts[i].day
         friday.off = friday_shifts[i].off
+        friday.start = friday_shifts[i].start
+        friday.end = friday_shifts[i].end
+        friday.huddles = friday_shifts[i].huddles
+        friday.huddleTime = friday_shifts[i].huddleTime
         friday._id = createFridayShift._id
-        // friday.start = friday_shifts[i].start
-        // friday.end = friday_shifts[i].end
       }
       setCreateFridayShift(friday);
 
@@ -220,9 +234,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < saturday_shifts?.length; i++) {
         saturday.day = saturday_shifts[i].day
         saturday.off = saturday_shifts[i].off
+        saturday.start = saturday_shifts[i].start
+        saturday.end = saturday_shifts[i].end
+        saturday.huddles = saturday_shifts[i].huddles
+        saturday.huddleTime = saturday_shifts[i].huddleTime
         saturday._id = createSaturdayShift._id
-        // saturday.start = saturday_shifts[i].start
-        // saturday.end = saturday_shifts[i].end
       }
       setCreateSaturdayShift(saturday);
 
@@ -231,9 +247,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       for(let i = 0; i < sunday_shifts?.length; i++) {
         sunday.day = sunday_shifts[i].day
         sunday.off = sunday_shifts[i].off
+        sunday.start = sunday_shifts[i].start
+        sunday.end = sunday_shifts[i].end
+        sunday.huddles = sunday_shifts[i].huddles
+        sunday.huddleTime = sunday_shifts[i].huddleTime
         sunday._id = createSundayShift._id
-        // sunday.start = sunday_shifts[i].start
-        // sunday.end = sunday_shifts[i].end
       }
       setCreateSundayShift(sunday);
       
