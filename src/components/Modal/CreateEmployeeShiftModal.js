@@ -13,6 +13,7 @@ import {
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
+import Select from "react-select";
 
 export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) => {
   const { showAlert } = useAppContext();
@@ -40,6 +41,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
   );
 
   const [loading, setLoading] = useState(false);
+  const [scheduleOpts, setScheduleOpts] = useState([]);
 
   const cancelEvent = () => {
     setCreateMondayShift(mondayShifts);
@@ -95,12 +97,58 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
 
   };
 
+  const fetchOwnersSchedule = async () => {
+    try {
+      const schedules = await axiosInstance.get(`/campaign-schedules`);
+      const schedule = schedules?.data?.data;
+
+      const scheduleOpts = schedule?.map((e) => {
+        return {
+          label: e.title,
+          value: e._id,
+        };
+      });
+      setScheduleOpts(scheduleOpts);
+    } catch (error) {
+      console.error(error?.response);
+    }
+  }
+
+  useEffect(() => {
+    fetchOwnersSchedule();
+  }, []);
+
+  const handleScheduleClick = (e) => {
+    const scheduleId = e?.value;
+    const scheduleTitle = e?.label;
+    console.log(scheduleId, scheduleTitle);
+  }
+
   return (
     <>
       <div className="card profile-box flex-fill">
         <div className="card-body">
 
           <div className="modal-body">
+            
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="schedule">Shift Schedules</label>
+                  <Select
+                    options={scheduleOpts}
+                    isSearchable={true}
+                    isClearable={true}
+                    placeholder="Select a shift schedule..."
+                    onChange={(e) => handleScheduleClick(e)}
+                    style={{ display: "inline-block" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
             <form onSubmit={handleCreateEmployeeShift}>
 
               {/* Monday */}

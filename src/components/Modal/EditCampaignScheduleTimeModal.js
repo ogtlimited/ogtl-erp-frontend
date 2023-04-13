@@ -1,115 +1,154 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  monday_shifts,
-  tuesday_shifts,
-  wednesday_shifts,
-  thursday_shifts,
-  friday_shifts,
-  saturday_shifts,
-  sunday_shifts,
-} from '../FormJSON/CreateShiftSchedule';
 import { useAppContext } from '../../Context/AppContext';
+import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
 import $ from 'jquery';
 
-export const AddShiftScheduleModal = ({ 
-  createCampaignSchedule, 
-  setCreateCampaignSchedule, 
-  isSubmitted,
-  setIsSubmitted, 
-}) => {
+export const EditCampaignScheduleTimeModal = ({ fetchAllSchedule, editSchedule, scheduleId }) => {
   const { showAlert } = useAppContext();
 
-  const [createMondayShift, setCreateMondayShift] = useState(
-    monday_shifts
-  );
-  const [createTuesdayShift, setCreateTuesdayShift] = useState(
-    tuesday_shifts
-  );
-  const [createWednesdayShift, setCreateWednesdayShift] = useState(
-    wednesday_shifts
-  );
-  const [createThursdayShift, setCreateThursdayShift] = useState(
-    thursday_shifts
-  );
-  const [createFridayShift, setCreateFridayShift] = useState(
-    friday_shifts
-  );
-  const [createSaturdayShift, setCreateSaturdayShift] = useState(
-    saturday_shifts
-  );
-  const [createSundayShift, setCreateSundayShift] = useState(
-    sunday_shifts
-  );
+  const [createMondayShift, setCreateMondayShift] = useState({});
+  const [createTuesdayShift, setCreateTuesdayShift] = useState({});
+  const [createWednesdayShift, setCreateWednesdayShift] = useState({});
+  const [createThursdayShift, setCreateThursdayShift] = useState({});
+  const [createFridayShift, setCreateFridayShift] = useState({});
+  const [createSaturdayShift, setCreateSaturdayShift] = useState({});
+  const [createSundayShift, setCreateSundayShift] = useState({});
 
-  const cancelEvent = () => {
-    setCreateMondayShift(monday_shifts);
-    setCreateTuesdayShift(tuesday_shifts);
-    setCreateWednesdayShift(wednesday_shifts);
-    setCreateThursdayShift(thursday_shifts);
-    setCreateFridayShift(friday_shifts);
-    setCreateSaturdayShift(saturday_shifts);
-    setCreateSundayShift(sunday_shifts);
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isSubmitted) {
-      cancelEvent();
-      setIsSubmitted(false);
+    let monday = {}
+    const monday_shifts = editSchedule?.filter((shift) => shift.day === 'mon');
+    for(let i = 0; i < monday_shifts?.length; i++) {
+      monday.day = monday_shifts[i].day
+      monday.off = monday_shifts[i].off
+      monday._id = monday_shifts[i]._id
+      // monday.start = monday_shifts[i].start
+      // monday.end = monday_shifts[i].end
     }
-  },[isSubmitted, setIsSubmitted])
+    setCreateMondayShift(monday);
 
-  const handleAddSiftSchedule = (e) => {
+    let tuesday = {}
+    const tuesday_shifts = editSchedule?.filter((shift) => shift.day === 'tue');
+    for(let i = 0; i < tuesday_shifts?.length; i++) {
+      tuesday.day = tuesday_shifts[i].day
+      tuesday.off = tuesday_shifts[i].off
+      tuesday._id = tuesday_shifts[i]._id
+      // tuesday.start = tuesday_shifts[i].start
+      // tuesday.end = tuesday_shifts[i].end
+    }
+    setCreateTuesdayShift(tuesday);
+
+    let wednesday = {}
+    const wednesday_shifts = editSchedule?.filter((shift) => shift.day === 'wed');
+    for(let i = 0; i < wednesday_shifts?.length; i++) {
+      wednesday.day = wednesday_shifts[i].day
+      wednesday.off = wednesday_shifts[i].off
+      wednesday._id = wednesday_shifts[i]._id
+      // wednesday.start = wednesday_shifts[i].start
+      // wednesday.end = wednesday_shifts[i].end
+    }
+    setCreateWednesdayShift(wednesday);
+
+    let thursday = {}
+    const thursday_shifts = editSchedule?.filter((shift) => shift.day === 'thur');
+    for(let i = 0; i < thursday_shifts?.length; i++) {
+      thursday.day = thursday_shifts[i].day
+      thursday.off = thursday_shifts[i].off
+      thursday._id = thursday_shifts[i]._id
+      // thursday.start = thursday_shifts[i].start
+      // thursday.end = thursday_shifts[i].end
+    }
+    setCreateThursdayShift(thursday);
+
+    let friday = {}
+    const friday_shifts = editSchedule?.filter((shift) => shift.day === 'fri');
+    for(let i = 0; i < friday_shifts?.length; i++) {
+      friday.day = friday_shifts[i].day
+      friday.off = friday_shifts[i].off
+      friday._id = friday_shifts[i]._id
+      // friday.start = friday_shifts[i].start
+      // friday.end = friday_shifts[i].end
+    }
+    setCreateFridayShift(friday);
+
+    let saturday = {}
+    const saturday_shifts = editSchedule?.filter((shift) => shift.day === 'sat');
+    for(let i = 0; i < saturday_shifts?.length; i++) {
+      saturday.day = saturday_shifts[i].day
+      saturday.off = saturday_shifts[i].off
+      saturday._id = saturday_shifts[i]._id
+      // saturday.start = saturday_shifts[i].start
+      // saturday.end = saturday_shifts[i].end
+    }
+    setCreateSaturdayShift(saturday);
+
+    let sunday = {}
+    const sunday_shifts = editSchedule?.filter((shift) => shift.day === 'sun');
+    for(let i = 0; i < sunday_shifts?.length; i++) {
+      sunday.day = sunday_shifts[i].day
+      sunday.off = sunday_shifts[i].off
+      sunday._id = sunday_shifts[i]._id
+      // sunday.start = sunday_shifts[i].start
+      // sunday.end = sunday_shifts[i].end
+    }
+    setCreateSundayShift(sunday);
+  }, [editSchedule]);
+
+  const cancelEvent = () => {
+    $('#EditCampaignScheduleTimeFormModal').modal('toggle');
+  };
+
+  const handleEditEmployeeShift = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const shifts = [];
+    try {
 
-    shifts.push(createMondayShift);
-    shifts.push(createTuesdayShift);
-    shifts.push(createWednesdayShift);
-    shifts.push(createThursdayShift);
-    shifts.push(createFridayShift);
-    shifts.push(createSaturdayShift);
-    shifts.push(createSundayShift);
+      const shifts = [];
+  
+      shifts.push(createMondayShift);
+      shifts.push(createTuesdayShift);
+      shifts.push(createWednesdayShift);
+      shifts.push(createThursdayShift);
+      shifts.push(createFridayShift);
+      shifts.push(createSaturdayShift);
+      shifts.push(createSundayShift);
 
-    setCreateCampaignSchedule({ ...createCampaignSchedule, campaign_schedule_items: shifts });
-
-    showAlert(
-          true,
-          `Campaign schedule items confirmed!`,
-          'alert alert-success'
+      const response = await axiosInstance.patch(`/campaign-schedule-items`, shifts);
+      fetchAllSchedule();
+  
+      showAlert(
+        true,
+        `Campaign schedule time updated successfully!`,
+        'alert alert-success'
         );
-          $('#ShiftScheduleFormModal').modal('toggle');
+        $('#EditCampaignScheduleTimeFormModal').modal('toggle');
+        setLoading(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      console.error(error?.response);
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <div
+    <div
         className="modal fade"
-        id="ShiftScheduleFormModal"
+        id="EditCampaignScheduleTimeFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
-        aria-hidden="true"
-      >
+        aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title" id="FormModalLabel">
-                Add shifts
-              </h4>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
 
             <div className="modal-body">
-              <form onSubmit={handleAddSiftSchedule}>
+              <form onSubmit={handleEditEmployeeShift}>
 
                 {/* Monday */}
                 <div className="row">
@@ -133,11 +172,10 @@ export const AddShiftScheduleModal = ({
                           name="mon_start"
                           type="time"
                           className="form-control"
-                          value={!createMondayShift.off && createMondayShift.start}
+                          value={createMondayShift.start}
                           onChange={(e) =>
                             setCreateMondayShift({ ...createMondayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -150,11 +188,10 @@ export const AddShiftScheduleModal = ({
                           name="mon_end"
                           type="time"
                           className="form-control"
-                          value={!createMondayShift.off && createMondayShift.end}
+                          value={createMondayShift.end}
                           onChange={(e) =>
                             setCreateMondayShift({ ...createMondayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -162,7 +199,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createMondayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createMondayShift.off} onChange={() => setCreateMondayShift({ ...createMondayShift, off: !createMondayShift.off })} />
+                       <Switch checked={!createMondayShift?.off} value={createMondayShift?.off} onChange={() => setCreateMondayShift({ ...createMondayShift, off: !createMondayShift?.off })} />
                      </div>
                   </div>
                 </div>
@@ -193,7 +230,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateTuesdayShift({ ...createTuesdayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -210,7 +246,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateTuesdayShift({ ...createTuesdayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -218,7 +253,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createTuesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createTuesdayShift.off} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, off: !createTuesdayShift.off })} />
+                       <Switch checked={!createTuesdayShift?.off} value={createTuesdayShift.off} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, off: !createTuesdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -249,7 +284,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateWednesdayShift({ ...createWednesdayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -266,7 +300,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateWednesdayShift({ ...createWednesdayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -274,7 +307,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createWednesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createWednesdayShift.off} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, off: !createWednesdayShift.off })} />
+                       <Switch checked={!createWednesdayShift?.off} value={createWednesdayShift.off} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, off: !createWednesdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -305,7 +338,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateThursdayShift({ ...createThursdayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -322,7 +354,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateThursdayShift({ ...createThursdayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -330,7 +361,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createThursdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createThursdayShift.off} onChange={() => setCreateThursdayShift({ ...createThursdayShift, off: !createThursdayShift.off })} />
+                       <Switch checked={!createThursdayShift?.off} value={createThursdayShift.off} onChange={() => setCreateThursdayShift({ ...createThursdayShift, off: !createThursdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -361,7 +392,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateFridayShift({ ...createFridayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -378,7 +408,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateFridayShift({ ...createFridayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -386,7 +415,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createFridayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createFridayShift.off} onChange={() => setCreateFridayShift({ ...createFridayShift, off: !createFridayShift.off })} />
+                       <Switch checked={!createFridayShift?.off} value={createFridayShift.off} onChange={() => setCreateFridayShift({ ...createFridayShift, off: !createFridayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -417,7 +446,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateSaturdayShift({ ...createSaturdayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -434,7 +462,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateSaturdayShift({ ...createSaturdayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -442,7 +469,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createSaturdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createSaturdayShift.off} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, off: !createSaturdayShift.off })} />
+                       <Switch checked={!createSaturdayShift?.off} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, off: !createSaturdayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -473,7 +500,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateSundayShift({ ...createSundayShift, start: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -490,7 +516,6 @@ export const AddShiftScheduleModal = ({
                           onChange={(e) =>
                             setCreateSundayShift({ ...createSundayShift, end: e.target.value })
                           }
-                          required
                         />
                       </div>
                     </div>
@@ -498,7 +523,7 @@ export const AddShiftScheduleModal = ({
                   <div className="col-md-2">
                     <div className="btn-group">
                       {createSundayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createSundayShift.off} onChange={() => setCreateSundayShift({ ...createSundayShift, off: !createSundayShift.off })} />
+                       <Switch checked={!createSundayShift?.off} value={createSundayShift.off} onChange={() => setCreateSundayShift({ ...createSundayShift, off: !createSundayShift.off })} />
                      </div>
                   </div>
                 </div>
@@ -512,7 +537,17 @@ export const AddShiftScheduleModal = ({
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">Confirm</button>
+                  <button type="submit" className="btn btn-primary">
+                    {loading ? (
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    ) : (
+                      'Submit'
+                    )}
+                  </button>
                 </div>
               </form>
             </div>

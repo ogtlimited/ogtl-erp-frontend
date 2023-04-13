@@ -10,18 +10,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 const ShiftScheduleListTable = ({
   loading,
   data,
-  setdata,
   columns,
-
-  page,
-  setPage,
-  sizePerPage,
-  setSizePerPage,
-  totalPages,
-  setTotalPages,
-  searchTerm,
-  setSearchTerm,
-  setLoading,
   context,
 }) => {
 
@@ -31,9 +20,6 @@ const ShiftScheduleListTable = ({
   const [unfiltered, setunfiltered] = useState([]);
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const [info, setInfo] = useState({
-    sizePerPage: 10,
-  });
 
 
   const resizeTable = () => {
@@ -61,87 +47,6 @@ const ShiftScheduleListTable = ({
     //   setLoading(true);
     // }, 5000);
   }, [data]);
-
-  const handleChangeSizePerPage = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setInfo((prevState) => ({ ...prevState, [name]: value }));
-
-    setSizePerPage(e.target.value);
-    setPage(1);
-  };
-
-  // const MySearch = useCallback(
-  //   (props) => {
-  //     let input;
-  //     const handleClick = () => {
-  //       setPage(1);
-  //       setLoading(true);
-  //       props.onSearch(input.value);
-  //       const searchTerm = input.value;
-  //       setSearchTerm(searchTerm);
-
-  //       if (page === 1) {
-  //         axiosInstance
-  //           .get('/employees/paginated-employees', {
-  //             params: {
-  //               search: searchTerm,
-  //               page: page,
-  //               limit: sizePerPage,
-  //             },
-  //           })
-  //           .then((e) => {
-  //             let resData = e?.data?.employees;
-  //             let resOptions = e?.data?.pagination;
-
-  //             const thisPageLimit = sizePerPage;
-  //             const thisTotalPageSize = resOptions?.numberOfPages;
-
-  //             setSizePerPage(thisPageLimit);
-  //             setTotalPages(thisTotalPageSize);
-
-  //             const mapp = resData.map((emp) => {
-  //               return {
-  //                 ...emp,
-  //                 fullName:
-  //                   emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-  //                 designation_name: emp?.designation?.designation,
-  //                 department_name: emp?.department?.department,
-  //                 project: emp?.projectId?.project_name,
-  //               };
-  //             });
-  //             setData(mapp);
-  //             setunfiltered(mapp);
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //             setLoading(false);
-  //           });
-  //       }
-  //       setLoading(false);
-  //     };
-
-  //     return (
-  //       <div className="job-app-search">
-  //         <input
-  //           className="form-control"
-  //           style={{
-  //             backgroundColor: '#fff',
-  //             width: '33.5%',
-  //             marginRight: '20px',
-  //           }}
-  //           ref={(n) => (input = n)}
-  //           type="text"
-  //         />
-  //         <button className="btn btn-primary" onClick={handleClick}>
-  //           Search
-  //         </button>
-  //       </div>
-  //     );
-  //   },
-  //   [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
-  // );
-
 
   const showNullMessage = () => {
     setTimeout(() => {

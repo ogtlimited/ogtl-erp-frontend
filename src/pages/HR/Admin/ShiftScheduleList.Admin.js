@@ -4,29 +4,28 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AddCampaignScheduleModal } from '../../../components/Modal/AddCampaignScheduleModal';
+import { EditCampaignScheduleTitleModal } from '../../../components/Modal/EditCampaignScheduleTitleModal';
+import { EditCampaignScheduleTimeModal } from '../../../components/Modal/EditCampaignScheduleTimeModal';
 import ShiftScheduleListTable from '../../../components/Tables/EmployeeTables/shiftScheduleListTable';
+import ConfirmModal from '../../../components/Modal/ConfirmModal';
 import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
 
 const ShiftScheduleList = () => {
   const [allSchedule, setAllSchedules] = useState([]);
+  const [editScheduleTitle, setEditScheduleTitle] = useState([]);
+  const [editScheduleTime, setEditScheduleTime] = useState([]);
+  const [scheduleId, setScheduleId] = useState('');
+  const [deleteData, setDeleteData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { user } = useAppContext();
-
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
-
-  const [searchTerm, setSearchTerm] = useState('');
-
+  const { user, showAlert } = useAppContext();
 
   const fetchAllSchedule = useCallback(() => {
     axiosInstance
       .get('/campaign-schedules/owner')
       .then((e) => {
         let resData = e?.data?.data;
-        console.log("campaign schedule:", resData);
 
         setAllSchedules(resData);
         setLoading(false);
@@ -37,10 +36,35 @@ const ShiftScheduleList = () => {
       });
   }, []);
 
-
   useEffect(() => {
     fetchAllSchedule();
   }, [fetchAllSchedule, user]);
+
+  const handleEditTitle = (row) => {
+    setEditScheduleTitle(row);
+  };
+
+  const handleEditTime = (row) => {
+    axiosInstance.get(`/campaign-schedule-items/${row._id}`).then((e) => {
+      let resData = e?.data?.data;
+      setEditScheduleTime(resData);
+      setScheduleId(row._id);
+    });
+    
+  };
+  
+  const deleteCampaignSchedule = (row) => {
+    axiosInstance
+      .delete(`/campaign-schedules/${row._id}`)
+      .then((res) => {
+        fetchAllSchedule();
+        showAlert(true, 'Campaign schedule deleted', 'alert alert-info');
+      })
+      .catch((error) => {
+        console.log(error);
+        showAlert(true, error.response.data.message, 'alert alert-danger');
+      });
+  };
 
   const columns = [
     {
@@ -69,15 +93,29 @@ const ShiftScheduleList = () => {
             <a
               href="#"
               className="dropdown-item"
-              // onClick={() => handleApproveLeave(row)}
+              data-toggle="modal"
+              data-target="#EditCampaignScheduleTitleFormModal"
+              onClick={() => handleEditTitle(row)}
             >
-              <i className="fa fa-pencil m-r-5"></i> Edit
+              <i className="fa fa-edit m-r-5"></i> Edit title
             </a>
 
             <a
               href="#"
               className="dropdown-item"
-              // onClick={() => handleRejectLeave(row)}
+              data-toggle="modal"
+              data-target="#EditCampaignScheduleTimeFormModal"
+              onClick={() => handleEditTime(row)}
+            >
+              <i className="fa fa-clock m-r-5"></i> Edit schedule
+            </a>
+
+            <a
+              href="#"
+              className="dropdown-item"
+              onClick={() => setDeleteData(row)}
+              data-toggle="modal"
+              data-target="#exampleModal"
             >
               <i className="fa fa-trash m-r-5"></i> Delete
             </a>
@@ -121,19 +159,18 @@ const ShiftScheduleList = () => {
         data={allSchedule}
         setData={setAllSchedules}
         columns={columns}
-
-        page={page}
-        setPage={setPage}
-        sizePerPage={sizePerPage}
-        setSizePerPage={setSizePerPage}
-        totalPages={totalPages}
-        setTotalPages={setTotalPages}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
         setLoading={setLoading}
       />
       
-      <AddCampaignScheduleModal />
+      <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} />
+      <EditCampaignScheduleTitleModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTitle} />
+      <EditCampaignScheduleTimeModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTime} scheduleId={scheduleId} />
+      
+      <ConfirmModal
+        title="Campaign Schedule"
+        selectedRow={deleteData}
+        deleteFunction={deleteCampaignSchedule}
+      />
     </>
   );
 };

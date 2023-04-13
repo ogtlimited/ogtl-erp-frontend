@@ -1,47 +1,50 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState, useEffect } from 'react';
-import { CampaignSchedule } from '../FormJSON/AddCampaignSchedule';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAppContext } from '../../Context/AppContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
-import { AddShiftScheduleModal } from './AddShiftScheduleModal';
 
-export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
+export const EditCampaignScheduleTitleModal = ({ fetchAllSchedule, editSchedule }) => {
   const { showAlert } = useAppContext();
-  const [createCampaignSchedule, setCreateCampaignSchedule] = useState(CampaignSchedule);
+  const [editCampaignSchedule, setEditCampaignSchedule] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
+
+  useEffect(() => {
+    setEditCampaignSchedule(editSchedule);
+  }, [editSchedule]);
+
   const cancelEvent = () => {
-    setCreateCampaignSchedule(CampaignSchedule);
+    $('#EditCampaignScheduleTitleFormModal').modal('toggle');
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
-    setCreateCampaignSchedule({
-      ...createCampaignSchedule,
+    setEditCampaignSchedule({
+      ...editCampaignSchedule,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleCreateCampaignSchedule = async (e) => {
+  const handleEditCampaignSchedule = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/campaign-schedules', createCampaignSchedule);
-      // console.log("Campaign Schedule created:", res?.data?.data)
+      const res = await axiosInstance.patch(`/campaign-schedules/${editSchedule._id}`, {
+        title: editCampaignSchedule.title,
+      });
 
       showAlert(
         true,
-        `Campaign schedule created successfully!`,
+        `Campaign schedule title updated successfully!`,
         'alert alert-success'
       );
-      setCreateCampaignSchedule(CampaignSchedule);
-      $('#CampaignScheduleFormModal').modal('toggle');
+      $('#EditCampaignScheduleTitleFormModal').modal('toggle');
       setLoading(false);
       fetchAllSchedule();
     } catch (error) {
@@ -55,7 +58,7 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
     <>
       <div
         className="modal fade"
-        id="CampaignScheduleFormModal"
+        id="EditCampaignScheduleTitleFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -64,7 +67,7 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Create Schedule
+                Edit Title
               </h4>
               <button
                 type="button"
@@ -77,38 +80,19 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateCampaignSchedule}>
+              <form onSubmit={handleEditCampaignSchedule}>
                 <div className="row">
 
-                  <div className="col-md-6">
+                  <div className="col-md-12">
                     <div className="form-group">
                       <label htmlFor="title">Title</label>
                       <input
                         name="title"
                         type="text"
                         className="form-control"
-                        value={createCampaignSchedule.title}
+                        value={editCampaignSchedule.title}
                         onChange={handleFormChange}
-                        required
                       />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                        <label htmlFor="campaign_schedule_items">Campaign Schedule</label>
-                        <input
-                          className="form-control"
-                          name="campaign_schedule_items"
-                          type="text"
-                          placeholder="Click to add campaign schedule..."
-                          value={createCampaignSchedule.campaign_schedule_items.length ? createCampaignSchedule.campaign_schedule_items.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
-                          data-toggle="modal"
-                          data-target="#ShiftScheduleFormModal"
-                          readOnly
-                          autocomplete="off"
-                          style={{ cursor: 'pointer' }}
-                        />
                     </div>
                   </div>
 
@@ -140,13 +124,6 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
           </div>
         </div>
       </div>
-
-      <AddShiftScheduleModal 
-        createCampaignSchedule={createCampaignSchedule}
-        setCreateCampaignSchedule={setCreateCampaignSchedule}
-        isSubmitted={isSubmitted} 
-        setIsSubmitted={setIsSubmitted}
-      />
     </>
   );
 };
