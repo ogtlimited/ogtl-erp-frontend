@@ -176,7 +176,7 @@ const Profile = () => {
                               ).format('L')
                             : 'Not Available'}
                         </div>
-                        <div className="staff-msg">
+                        {/* <div className="staff-msg">
                           <Link
                             className="btn btn-custom"
                             to={`/dashboard/payroll/payslip/${user?._id}`}
@@ -184,7 +184,7 @@ const Profile = () => {
                             <i className="las la-file-invoice-dollar mr-2"></i>
                             Payslip
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="col-md-7">
@@ -240,30 +240,6 @@ const Profile = () => {
                             {userData?.employee?.branch?.branch ||
                               'Not Available'}
                           </div>
-                        </li>
-                        <li>
-                          <div className="title">Shift:</div>
-                          <div className="text">
-                            {userData?.employee?.default_shift?.shift_name
-                              ? moment(
-                                  userData?.employee?.default_shift?.start_time,
-                                  ['HH.mm']
-                                ).format('hh:mm a') +
-                                ' to ' +
-                                moment(
-                                  userData?.employee?.default_shift?.end_time,
-                                  ['HH.mm']
-                                ).format('hh:mm a')
-                              : 'Not Available'}
-                            <a
-                              href="#"
-                              className="btn btn-custom  float-right mb-2"
-                              role="button"
-                            >
-                              Request Shift
-                            </a>
-                          </div>
-                          <div className="text"></div>
                         </li>
                         <li>
                           <div className="title">Reports to:</div>
