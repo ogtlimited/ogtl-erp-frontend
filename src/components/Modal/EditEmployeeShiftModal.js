@@ -130,7 +130,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
   
   const fetchOwnersSchedule = async () => {
     try {
-      const schedules = await axiosInstance.get(`/campaign-schedules`);
+      const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
       const schedule = schedules?.data?.data;
 
       const scheduleOpts = schedule?.map((e) => {
