@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import './profileCard.css'
+import React, { useEffect, useState, useRef  } from "react";
+import { useReactToPrint } from "react-to-print";
 import BankInformation from "./components/BankInformation";
 import ContactDetails from "./components/ContactDetails";
 import EducationInformation from "./components/EducationInformation";
@@ -6,6 +8,10 @@ import EmergencyContact from "./components/EmergencyContact";
 import Experience from "./components/Experience";
 import History from "./components/History";
 import PersonalInfo from "./components/PersonalInfo";
+import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
+import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
+import { EditEmployeeShiftModal } from '../Modal/EditEmployeeShiftModal';
+import { CreateEmployeeShiftModal } from '../Modal/CreateEmployeeShiftModal';
 import avater from "../../assets/img/male_avater.png";
 import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
@@ -14,6 +20,8 @@ import avater5 from "../../assets/img/female_avatar2.png";
 import EmployeePromotions from "./promotions";
 import EmployeeWarningLetters from "./warningLetters";
 import { useAppContext } from "../../Context/AppContext";
+import { BsFillPrinterFill } from 'react-icons/bs';
+
 const ProfileCards = ({
   setformType,
   userData,
@@ -21,11 +29,25 @@ const ProfileCards = ({
   formValue,
   setFormValue,
   fetchUserInfo,
+  employeeShifts,
+  setEmployeeShifts,
+  ogid,
+  mode,
+  setMode,
 }) => {
-  console.log(formValue);
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
   const { user } = useAppContext();
+
+  const FrontVirtualIDRef = useRef();
+  const handlePrintFront = useReactToPrint({
+    content: () => FrontVirtualIDRef.current
+  });
+
+  const BackVirtualIDRef = useRef();
+  const handlePrintBack = useReactToPrint({
+    content: () => BackVirtualIDRef.current
+  });
 
   const [avaterList, setavaterList] = useState([
     avater,
@@ -56,6 +78,16 @@ const ProfileCards = ({
                 </a>
               </li>
               <li className="nav-item">
+                <a href="#emp_virtualID" data-toggle="tab" className="nav-link">
+                  Virtual ID
+                </a>
+              </li>
+              <li className="nav-item">
+                <a href="#emp_shifts" data-toggle="tab" className="nav-link">
+                  Shifts
+                </a>
+              </li>
+              <li className="nav-item">
                 <a
                   href="#emp_campaign"
                   data-toggle="tab"
@@ -64,30 +96,34 @@ const ProfileCards = ({
                   Campaign
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  href="#bank_statutory"
-                  data-toggle="tab"
-                  className={`nav-link ${!user?.isAdmin && "disabled"}`}
-                >
-                  Bank &amp; Statutory{" "}
-                  <small className="text-danger">(Admin Only)</small>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a href="#promotions" data-toggle="tab" className="nav-link">
-                  Promotions
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  href="#warning_letters"
-                  data-toggle="tab"
-                  className="nav-link"
-                >
-                  Warning Letters
-                </a>
-              </li>
+              {user?.role?.hr &&
+                <>
+                  <li className="nav-item">
+                  <a
+                    href="#bank_statutory"
+                    data-toggle="tab"
+                    className={`nav-link ${!user?.isAdmin && "disabled"}`}
+                  >
+                    Bank &amp; Statutory{" "}
+                    <small className="text-danger">(Admin Only)</small>
+                  </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="#promotions" data-toggle="tab" className="nav-link">
+                      Promotions
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      href="#warning_letters"
+                      data-toggle="tab"
+                      className="nav-link"
+                    >
+                      Warning Letters
+                    </a>
+                  </li>
+                </>
+              }
             </ul>
           </div>
         </div>
@@ -169,6 +205,40 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
+        <div id="emp_virtualID" className="pro-overview tab-pane fade" style={{backgroundColor: '#fff'}}>   
+          <div className="row" style={{padding: '0 20px'}}>
+            {employeeDetails && <FrontVirtualID employeeDetails={employeeDetails} ref={FrontVirtualIDRef} />}
+            {employeeDetails && <BackVirtualID ref={BackVirtualIDRef} />}
+          </div>
+
+          <div className="row card-print-btn-div">
+            {employeeDetails && 
+              <button className="btn btn-primary" 
+                onClick={handlePrintFront}
+                style={{margin: '10px'}}>
+                  <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Front
+              </button>
+            }
+            {employeeDetails && 
+              <button className="btn btn-primary" 
+                onClick={handlePrintBack}
+                style={{margin: '10px'}}>
+                  <BsFillPrinterFill style={{marginRight: '10px'}} /> Print Back
+              </button>
+            }
+          </div>
+        </div>
+
+        <div id="emp_shifts" className="pro-overview tab-pane fade">
+          <div className="row">
+            <div className="col-md-12 d-flex">   
+              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} setEmployeeShifts={setEmployeeShifts} />
+              : <CreateEmployeeShiftModal ogid={ogid} setMode={setMode} setEmployeeShifts={setEmployeeShifts} />}
+            </div>
+          </div>
+        </div>
+
         <div id="emp_campaign" className="pro-overview tab-pane fade">
           <div className="row">
             <div className="col-lg-4 col-sm-6 col-md-4 col-xl-3">
@@ -256,6 +326,7 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
         <div id="bank_statutory" className="pro-overview tab-pane fade">
           <div className="card">
             <div className="card-body">
@@ -349,9 +420,11 @@ const ProfileCards = ({
             </div>
           </div>
         </div>
+
         <div id="promotions" className="pro-overview tab-pane fade">
           <EmployeePromotions />
         </div>
+
         <div id="warning_letters" className="pro-overview tab-pane fade">
           <EmployeeWarningLetters />
         </div>

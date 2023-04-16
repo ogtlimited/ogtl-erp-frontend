@@ -36,6 +36,7 @@ export const create_department_shifts = {
   start_time: '',
   end_time: '',
 };
+
 export const edit_department_shifts = {
   departmentId: '',
   shift_name: '',
@@ -55,3 +56,4 @@ export const edit_campaign_shifts = {
   start_time: '',
   end_time: '',
 };
+

@@ -13,6 +13,7 @@ const ICONS = {
   apps: getIcon('la-cube'),
   performance: getIcon('la-graduation-cap'),
   coaching: getIcon('la-ticket'),
+  leadership: getIcon('la-users'),
   promotion: getIcon('la-bullhorn'),
   resignation: getIcon('la-external-link-square'),
   termination: getIcon('la-times-circle'),
@@ -23,6 +24,7 @@ const ICONS = {
   settings: getIcon('la-shopping-cart'),
   rolesAssignment: getIcon('la-lock'),
   shadowing: getIcon('la-users'),
+  schedule: getIcon('la-clock-o'),
 };
 
 const sidebarConfig = [
@@ -116,6 +118,11 @@ const sidebarConfig = [
             canView: 'HR',
             title: 'All Employees',
             path: PATH_DASHBOARD.hr.allEmployees,
+          },
+          {
+            canView: 'HR',
+            title: 'Add Employee',
+            path: PATH_DASHBOARD.hr.addEmployees,
           },
           {
             canView: 'HR',
@@ -348,6 +355,30 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.termination,
         icon: ICONS.termination,
       },
+    ],
+  },
+  {
+    subheader: 'Leadership',
+    canView: 'All',
+    items: [
+      {
+        canView: 'All',
+        title: 'Subordinates',
+        path: PATH_DASHBOARD.leadership.supervisor,
+        icon: ICONS.leadership,
+      },
+      {
+        canView: 'All',
+        title: 'Campaign Schedule',
+        path: PATH_DASHBOARD.leadership.campaignSchedule,
+        icon: ICONS.schedule,
+      },
+      // {
+      //   canView: 'All',
+      //   title: 'Team Lead',
+      //   path: PATH_DASHBOARD.leadership.teamLead,
+      //   icon: ICONS.leadership,
+      // },
     ],
   },
   {

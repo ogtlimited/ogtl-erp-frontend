@@ -1,88 +1,61 @@
-/** @format */
+/*eslint-disable no-unused-vars*/
 
 import React, { useState, useEffect } from 'react';
-import { create_designation } from '../FormJSON/CreateLeaveApprovalLevel';
+import { CampaignSchedule } from '../FormJSON/AddCampaignSchedule';
 import { useAppContext } from '../../Context/AppContext';
-import Select from 'react-select';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import { AddShiftScheduleModal } from './AddShiftScheduleModal';
 
-export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
+export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
   const { showAlert } = useAppContext();
-  const [createDesignation, setCreateDesignation] =
-    useState(create_designation);
+  const [createCampaignSchedule, setCreateCampaignSchedule] = useState(CampaignSchedule);
   const [loading, setLoading] = useState(false);
-  const [departments, setDepartments] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
   const cancelEvent = () => {
-    setCreateDesignation(create_designation);
+    setCreateCampaignSchedule(CampaignSchedule);
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
-    setCreateDesignation({
-      ...createDesignation,
+    setCreateCampaignSchedule({
+      ...createCampaignSchedule,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleEditDesignation = async (e) => {
+  const handleCreateCampaignSchedule = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    const id = createDesignation._id;
     try {
-      const res = await axiosInstance.put(`/designation/${id}`, {
-        department_id: createDesignation.department,
-        designation: createDesignation.designation,
-      });
-      // eslint-disable-next-line no-unused-vars
-      const resData = res.data.data;
+      const res = await axiosInstance.post('/campaign-schedules', createCampaignSchedule);
+      // console.log("Campaign Schedule created:", res?.data?.data)
 
       showAlert(
         true,
-        "Designation successfully updated",
+        `Campaign schedule created successfully!`,
         'alert alert-success'
       );
-      setCreateDesignation(create_designation);
-      fetchDesignation();
-      $('#FormEditModal').modal('toggle');
+      setCreateCampaignSchedule(CampaignSchedule);
+      $('#CampaignScheduleFormModal').modal('toggle');
+      setLoading(false);
+      fetchAllSchedule();
     } catch (error) {
       const errorMsg = error.response?.data?.message;
       showAlert(true, `${errorMsg}`, 'alert alert-warning');
-    }
-    setLoading(false);
-  };
-
-  const fetchDepartment = async () => {
-    try {
-      const response = await axiosInstance.get('/department');
-      const resData = response?.data?.data;
-  
-      const formatted = resData.map((department) => ({
-        label: department?.department,
-        value: department?._id,
-      }));
-
-      setDepartments(formatted);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    setCreateDesignation(editDesignation);
-    fetchDepartment();
-  }, [editDesignation]);
 
   return (
     <>
       <div
         className="modal fade"
-        id="FormEditModal"
+        id="CampaignScheduleFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -91,7 +64,7 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Edit Designation
+                Create Schedule
               </h4>
               <button
                 type="button"
@@ -104,48 +77,41 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleEditDesignation}>
+              <form onSubmit={handleCreateCampaignSchedule}>
                 <div className="row">
+
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="department">Department</label>
-                      <Select
-                        onChange={(e) =>
-                          setCreateDesignation({ ...createDesignation, department: e?.value })
-                        }
-                        options={departments}
-                        placeholder="Select department ..."
-                        isClearable={true}
-                        isSearchable={true}
-                        style={{ display: 'inline-block' }}
+                      <label htmlFor="title">Title</label>
+                      <input
+                        name="title"
+                        type="text"
+                        className="form-control"
+                        value={createCampaignSchedule.title}
+                        onChange={handleFormChange}
                         required
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="designation">Designation</label>
-                      <input
-                        name="designation"
-                        type="text"
-                        className="form-control"
-                        value={createDesignation.designation}
-                        onChange={handleFormChange}
-                      />
+                        <label htmlFor="campaign_schedule_items">Campaign Schedule</label>
+                        <input
+                          className="form-control"
+                          name="campaign_schedule_items"
+                          type="text"
+                          placeholder="Click to add campaign schedule..."
+                          value={createCampaignSchedule.campaign_schedule_items.length ? createCampaignSchedule.campaign_schedule_items.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
+                          data-toggle="modal"
+                          data-target="#ShiftScheduleFormModal"
+                          readOnly
+                          autocomplete="off"
+                          style={{ cursor: 'pointer' }}
+                        />
                     </div>
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="approval_level">Approval Level</label>
-                      <input
-                        name="approval_level"
-                        type="number"
-                        className="form-control"
-                        value={createDesignation.approval_level}
-                        onChange={handleFormChange}
-                      />
-                    </div>
-                  </div>
+
                 </div>
 
                 <div className="modal-footer">
@@ -174,6 +140,13 @@ export const EditDesignationModal = ({ editDesignation, fetchDesignation }) => {
           </div>
         </div>
       </div>
+
+      <AddShiftScheduleModal 
+        createCampaignSchedule={createCampaignSchedule}
+        setCreateCampaignSchedule={setCreateCampaignSchedule}
+        isSubmitted={isSubmitted} 
+        setIsSubmitted={setIsSubmitted}
+      />
     </>
   );
 };

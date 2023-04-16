@@ -30,7 +30,6 @@ export const AddLeaveApprovalLevelModal = () => {
       .get(`/department-designation/${id}`)
       .then((res) => {
         const resData = res.data.data;
-        console.log("designations for this dept", resData);
         if (!resData.length) {
           setDesignationInfo('No Designation');
         } else {

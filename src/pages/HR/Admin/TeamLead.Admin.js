@@ -1,39 +1,20 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
-// import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
-import { EditEmployeeModal } from '../../../components/Modal/EditEmployeeModal';
+import { Link } from 'react-router-dom';
 
-import FormModal2 from '../../../components/Modal/FormModal2';
-import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
-
+import TeamLeadTable from '../../../components/Tables/EmployeeTables/teamLeadTable';
 import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
-import helper from '../../../services/helper';
-import UploadModal from '../../../components/Modal/uploadModal';
-import BulkEmployeeUploadModal from '../../../components/Modal/bulkEmployeeUploadModal';
 import EmployeeHelperService from './employee.helper';
 
-const AllEmployeesAdmin = () => {
-  const navigate = useNavigate();
-  const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
+const TeamLeadAdmin = () => {
+  const { createEmployee, status } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [formValue, setformValue] = useState({});
-  const [editData, seteditData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [template, settemplate] = useState({});
-  const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);
-  const [toggleModal, settoggleModal] = useState(false);
-  const [uploading, setuploading] = useState(false);
-  const [combinedData, setcombinedData] = useState(null);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
-  const [mode, setmode] = useState('add');
   const { user } = useAppContext();
 
   const [page, setPage] = useState(1);
@@ -48,8 +29,6 @@ const AllEmployeesAdmin = () => {
 
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
-
-  const [bulkEmployeeUploadData, setBulkEmployeeUploadData] = useState([])
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
@@ -140,15 +119,10 @@ const AllEmployeesAdmin = () => {
     fetchAllEmployee();
     fetchDepartment();
     fetchDesignation();
-    const obj = helper.formArrayToObject(employeeFormJson.Fields);
-    settemplate(obj);
-  }, [fetchAllEmployee]);
-
-  useEffect(() => {}, [editData, mode]);
+  }, [fetchAllEmployee, user]);
 
   useEffect(() => {
     createEmployee().then((res) => {
-      setcombinedData(res);
       const {
         shifts,
         designations,
@@ -195,106 +169,15 @@ const AllEmployeesAdmin = () => {
         },
       ]);
 
-      const finalForm = empHelper.finalForm(employeeFormJson, service, mode);
-
-      const obj = helper.formArrayToObject(finalForm);
-
-      if (mode === 'add') {
-        // seteditData(initialValues);
-        settemplate(obj);
-      } else {
-        // settemplate(obj);
-      }
-
       if (!loadForm) setloadForm(true);
     });
-  }, [createEmployee, loadForm, mode, status]);
+  }, [createEmployee, loadForm, status]);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 10000);
   }, []);
-
-  // Submit
-  useEffect(() => {
-    if (submitted) {
-      formValue.image = '';
-
-      if (mode === 'add') {
-        axiosInstance
-          .post('/employees', {
-            ...formValue,
-            password: '',
-          })
-          .then((res) => {
-            fetchEmployee();
-            setsubmitted(false);
-            showAlert(
-              true,
-              'New Employee created successfully',
-              'alert alert-success'
-            );
-          });
-      } else {
-        let id = editData._id;
-
-        let values = {};
-        for (let i in template) {
-          values[i] = formValue[i];
-        }
-        axiosInstance.put('/employees/' + id, values).then((res) => {
-          fetchEmployee();
-          fetchAllEmployee();
-          setsubmitted(false);
-          seteditData({});
-
-          showAlert(
-            true,
-            'Employee Details successfully updated',
-            'alert alert-success'
-          );
-        });
-      }
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    submitted,
-    formValue,
-    mode,
-    fetchEmployee,
-    showAlert,
-    editData._id,
-    template,
-  ]);
-
-  // File upload
-  // const onFileUpload = (e) => {
-  //   const files = e.target.files;
-
-  //   if (files) {
-  //     Papa.parse(files[0], {
-  //       complete: function (results) {
-  //         const jsonData = helper.arrayToJSONObject(results.data);
-  //         console.log("csv Data", jsonData)
-          // axiosInstance
-          //   .post("/employees/bulk", jsonData)
-          //   .then((res) => {
-          //     showAlert(
-          //       true,
-          //       "Data uploaded successfully",
-          //       "alert alert-success"
-          //     );
-          //     fetchEmployee();
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //     showAlert(true, err?.message, "alert alert-danger");
-          //   });
-  //       },
-  //     });
-  //   }
-  // };
 
   const defaultSorted = [
     {
@@ -309,54 +192,24 @@ const AllEmployeesAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Employee</h3>
+            <h3 className="page-title">Team Lead</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
-              <li className="breadcrumb-item active">Employee</li>
+              <li className="breadcrumb-item active">Leadership</li>
             </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            {user?.role?.hr?.create && (
-              <>
-                <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  // data-target="#AddEmployeeFormModal"
-                  onClick={() => navigate('/dashboard/hr/all-employees/employee/add')}
-                >
-                  <i className="fa fa-plus"></i> Add Employee
-                </a>
-
-                <button
-                  onClick={() => {
-                    settoggleModal(true);
-                  }}
-                  type="button"
-                  className="btn add-btn mx-3"
-                  data-toggle="modal"
-                  data-target="#uploadModal"
-                >
-                  <i className="fa fa-cloud-upload"></i>
-                  Bulk Upload
-                </button>
-              </>
-            )}
           </div>
         </div>
       </div>
-      <EmployeesTable
+
+      <TeamLeadTable
         loading={loading}
         data={allEmployees}
         setData={setallEmployees}
-        seteditData={seteditData}
-        setmode={setmode}
         filters={filters}
         loadForm={loadForm}
         defaultSorted={defaultSorted}
-        selectedOption={selectedOption}
         departments={departments}
         designations={designations}
 
@@ -379,25 +232,8 @@ const AllEmployeesAdmin = () => {
         setLoading={setLoading}
       />
       
-      {toggleModal && (
-        <BulkEmployeeUploadModal
-          setUploadSuccess={setUploadSuccess}
-          setuploading={setuploading}
-          settoggleModal={settoggleModal}
-          fetchEmployee={fetchEmployee}
-          setBulkEmployeeUploadData={setBulkEmployeeUploadData}
-          bulkEmployeeUploadData={bulkEmployeeUploadData}
-        />
-      )}
-
-      <FormModal2
-        editData={editData}
-        setformValue={setformValue}
-        template={template}
-        setsubmitted={setsubmitted}
-      />
     </>
   );
 };
 
-export default AllEmployeesAdmin;
+export default TeamLeadAdmin;

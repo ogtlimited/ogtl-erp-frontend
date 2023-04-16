@@ -250,6 +250,22 @@ export default function Router() {
               ),
             },
             {
+              path: 'all-employees/employee/add',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <AddEmployeesAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'all-employees/employee/update/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <EditEmployeesAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'all-employees/department/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -852,6 +868,9 @@ export default function Router() {
           ],
         },
         { path: 'employee-coaching', element: <CoachingEmployee /> },
+        { path: 'leadership/supervisor', element: <SupervisorAdmin /> },
+        { path: 'leadership/team-lead', element: <TeamLeadAdmin /> },
+        { path: 'leadership/campaign-schedule', element: <ShiftScheduleList /> },
         {
           path: 'product-items',
           element: (
@@ -977,6 +996,12 @@ const LeaveType = Loadable(
 const AllEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Employees.Admin'))
 );
+const AddEmployeesAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/AddEmployees.Admin'))
+);
+const EditEmployeesAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/EditEmployees.Admin'))
+);
 const AllEmployeesDepartmentAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/EmployeesDepartment.Admin'))
 );
@@ -1096,6 +1121,15 @@ const Resignation = Loadable(
 );
 const CoachingEmployee = Loadable(
   lazy(() => import('../pages/HR/Users/CoachingEmployee'))
+);
+const SupervisorAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/Supervisor.Admin'))
+);
+const TeamLeadAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/TeamLead.Admin'))
+);
+const ShiftScheduleList = Loadable(
+  lazy(() => import('../pages/HR/Admin/ShiftScheduleList.Admin'))
 );
 const Email = Loadable(lazy(() => import('../pages/In-Apps/Email')));
 
