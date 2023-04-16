@@ -258,7 +258,7 @@ const Profile = () => {
                             </a>
                           </div>
                         </li>
-                        <li>
+                        {/* <li>
                           <div className="title">Social Handle</div>
                           <div className="text">
                             {userData?.employee?.socialHandle &&
@@ -283,7 +283,7 @@ const Profile = () => {
                               <i className="fa fa-pencil"></i>
                             </a>
                           </div>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>

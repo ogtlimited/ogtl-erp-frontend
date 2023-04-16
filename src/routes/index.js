@@ -870,6 +870,7 @@ export default function Router() {
         { path: 'employee-coaching', element: <CoachingEmployee /> },
         { path: 'leadership/supervisor', element: <SupervisorAdmin /> },
         { path: 'leadership/team-lead', element: <TeamLeadAdmin /> },
+        { path: 'leadership/campaign-schedule', element: <ShiftScheduleList /> },
         {
           path: 'product-items',
           element: (
@@ -1126,6 +1127,9 @@ const SupervisorAdmin = Loadable(
 );
 const TeamLeadAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/TeamLead.Admin'))
+);
+const ShiftScheduleList = Loadable(
+  lazy(() => import('../pages/HR/Admin/ShiftScheduleList.Admin'))
 );
 const Email = Loadable(lazy(() => import('../pages/In-Apps/Email')));
 

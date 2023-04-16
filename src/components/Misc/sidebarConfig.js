@@ -24,6 +24,7 @@ const ICONS = {
   settings: getIcon('la-shopping-cart'),
   rolesAssignment: getIcon('la-lock'),
   shadowing: getIcon('la-users'),
+  schedule: getIcon('la-clock-o'),
 };
 
 const sidebarConfig = [
@@ -365,6 +366,12 @@ const sidebarConfig = [
         title: 'Subordinates',
         path: PATH_DASHBOARD.leadership.supervisor,
         icon: ICONS.leadership,
+      },
+      {
+        canView: 'All',
+        title: 'Campaign Schedule',
+        path: PATH_DASHBOARD.leadership.campaignSchedule,
+        icon: ICONS.schedule,
       },
       // {
       //   canView: 'All',

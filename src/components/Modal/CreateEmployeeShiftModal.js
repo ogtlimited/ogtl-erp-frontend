@@ -42,6 +42,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
   );
 
   const [loading, setLoading] = useState(false);
+  const [scheduleOpts, setScheduleOpts] = useState([]);
 
   const cancelEvent = () => {
     setCreateMondayShift(mondayShifts);
@@ -76,6 +77,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
       shifts.push({ ...createSaturdayShift, ogid: ogid });
       shifts.push({ ...createSundayShift, ogid: ogid });
 
+      console.log("create this shifts:", shifts)
       const response = await axiosInstance.post(`/api/employee-shift`, shifts);
   
       setLoading(false);
@@ -97,12 +99,78 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
 
   };
 
+  const fetchOwnersSchedule = async () => {
+    try {
+      const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
+      const schedule = schedules?.data?.data;
+
+      const scheduleOpts = schedule?.map((e) => {
+        return {
+          label: e.title,
+          value: e._id,
+        };
+      });
+      setScheduleOpts(scheduleOpts);
+    } catch (error) {
+      console.error(error?.response);
+    }
+  }
+
+  useEffect(() => {
+    fetchOwnersSchedule();
+  }, []);
+
+  const handleScheduleClick = (e) => {
+    const scheduleId = e?.value;
+
+    axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
+      let resData = e?.data?.data;
+
+      console.log("This schedule:", resData);
+
+      const formatted = resData?.map((e) => ({
+          day: e.day,
+          off: e.off,
+          start: e.start,
+          end: e.end,
+          huddles: e.huddles,
+          huddleTime: e.huddleTime,
+        }));
+
+      setCreateMondayShift(formatted[0]);
+      setCreateTuesdayShift(formatted[1]);
+      setCreateWednesdayShift(formatted[2]);
+      setCreateThursdayShift(formatted[3]);
+      setCreateFridayShift(formatted[4]);
+      setCreateSaturdayShift(formatted[5]);
+      setCreateSundayShift(formatted[6]);
+    });
+  }
+
   return (
     <>
       <div className="card profile-box flex-fill">
         <div className="card-body">
 
           <div className="modal-body">
+            
+            <div className="row">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="schedule">Shift Schedules</label>
+                  <Select
+                    options={scheduleOpts}
+                    isSearchable={true}
+                    placeholder="Select a shift schedule..."
+                    onChange={(e) => handleScheduleClick(e)}
+                    style={{ display: "inline-block" }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
             <form onSubmit={handleCreateEmployeeShift}>
 
               {/* Monday */}
@@ -174,6 +242,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createMondayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateMondayShift({ ...createMondayShift, huddleTime: e?.value })
                         }
@@ -254,6 +323,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createTuesdayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateTuesdayShift({ ...createTuesdayShift, huddleTime: e?.value })
                         }
@@ -334,6 +404,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createWednesdayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateWednesdayShift({ ...createWednesdayShift, huddleTime: e?.value })
                         }
@@ -414,6 +485,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createThursdayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateThursdayShift({ ...createThursdayShift, huddleTime: e?.value })
                         }
@@ -494,6 +566,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createFridayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateFridayShift({ ...createFridayShift, huddleTime: e?.value })
                         }
@@ -574,6 +647,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createSaturdayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateSaturdayShift({ ...createSaturdayShift, huddleTime: e?.value })
                         }
@@ -654,6 +728,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
+                        defaultValue={huddleOptions.find((option) => option.value === createSundayShift?.huddleTime)}
                         onChange={(e) =>
                           setCreateSundayShift({ ...createSundayShift, huddleTime: e?.value })
                         }

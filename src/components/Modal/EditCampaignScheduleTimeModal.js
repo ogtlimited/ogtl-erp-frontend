@@ -1,12 +1,14 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
-import { huddleOptions, } from '../FormJSON/CreateEmployeeShift';
+import { huddleOptions } from '../FormJSON/CreateShiftSchedule';
 import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
 import Select from 'react-select';
+import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
+import $ from 'jquery';
 
-export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) => {
+export const EditCampaignScheduleTimeModal = ({ fetchAllSchedule, editSchedule }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});
@@ -18,77 +20,72 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
   const [createSundayShift, setCreateSundayShift] = useState({});
 
   const [loading, setLoading] = useState(false);
-  const [scheduleOpts, setScheduleOpts] = useState([]);
 
   useEffect(() => {
-
-    const formattedEmployeeShifts = employeeShifts?.map((shift) => ({
-        day: shift.day,
-        start: shift.start,
-        end: shift.end,
-        off: shift.off,
-        huddles: shift.huddles,
-        huddleTime: shift.huddleTime,
-        _id: shift._id
-      }) 
-    )
+    const formattedShiftSchedule = editSchedule?.map((shift) => ({
+      day: shift.day,
+      start: shift.start,
+      end: shift.end,
+      off: shift.off,
+      huddles: shift.huddles,
+      huddleTime: shift.huddleTime,
+      _id: shift._id
+    }) 
+  )
 
     let monday = {};
-    const monday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'mon');
+    const monday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'mon');
     for(let i = 0; i < monday_shifts?.length; i++) {
       monday = monday_shifts[i]
     }
     setCreateMondayShift(monday);
 
-    let tuesday = {};
-    const tuesday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'tue');
+    let tuesday = {}
+    const tuesday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'tue');
     for(let i = 0; i < tuesday_shifts?.length; i++) {
       tuesday = tuesday_shifts[i]
     }
     setCreateTuesdayShift(tuesday);
 
-    let wednesday = {};
-    const wednesday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'wed');
+    let wednesday = {}
+    const wednesday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'wed');
     for(let i = 0; i < wednesday_shifts?.length; i++) {
       wednesday = wednesday_shifts[i]
     }
     setCreateWednesdayShift(wednesday);
 
-    let thursday = {};
-    const thursday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'thur');
+    let thursday = {}
+    const thursday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'thur');
     for(let i = 0; i < thursday_shifts?.length; i++) {
       thursday = thursday_shifts[i]
     }
     setCreateThursdayShift(thursday);
 
-    let friday = {};
-    const friday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'fri');
+    let friday = {}
+    const friday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'fri');
     for(let i = 0; i < friday_shifts?.length; i++) {
       friday = friday_shifts[i]
     }
     setCreateFridayShift(friday);
 
-    let saturday = {};
-    const saturday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'sat');
+    let saturday = {}
+    const saturday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'sat');
     for(let i = 0; i < saturday_shifts?.length; i++) {
       saturday = saturday_shifts[i]
     }
     setCreateSaturdayShift(saturday);
 
-    let sunday = {};
-    const sunday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'sun');
+    let sunday = {}
+    const sunday_shifts = formattedShiftSchedule?.filter((shift) => shift?.day === 'sun');
     for(let i = 0; i < sunday_shifts?.length; i++) {
       sunday = sunday_shifts[i]
     }
     setCreateSundayShift(sunday);
 
-  }, [employeeShifts]);
+  }, [editSchedule]);
 
-  const goToTop = () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-    });
+  const cancelEvent = () => {
+    $('#EditCampaignScheduleTimeFormModal').modal('toggle');
   };
 
   const handleEditEmployeeShift = async (e) => {
@@ -107,186 +104,56 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       shifts.push(createSaturdayShift);
       shifts.push(createSundayShift);
 
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/employee-shift/`, shifts);
+      console.log("submit this:", shifts);
+
+      const response = await axiosInstance.patch(`/campaign-schedule-items`, shifts);
+      fetchAllSchedule();
   
-      setLoading(false);
-      goToTop();
       showAlert(
         true,
-        `Shift updated successfully!`,
+        `Campaign schedule time updated successfully!`,
         'alert alert-success'
-      );
-      
+        );
+        $('#EditCampaignScheduleTimeFormModal').modal('toggle');
+        setLoading(false);
     } catch (error) {
-      goToTop();
       const errorMsg = error?.response?.data?.message;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       console.error(error?.response);
       setLoading(false);
     }
-
   };
-  
-  const fetchOwnersSchedule = async () => {
-    try {
-      const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
-      const schedule = schedules?.data?.data;
-
-      const scheduleOpts = schedule?.map((e) => {
-        return {
-          label: e.title,
-          value: e._id,
-        };
-      });
-      setScheduleOpts(scheduleOpts);
-    } catch (error) {
-      console.error(error?.response);
-    }
-  }
-
-  useEffect(() => {
-    fetchOwnersSchedule();
-  }, []);
-
-  const handleScheduleClick = (e) => {
-    const scheduleId = e?.value;
-
-    axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
-      let resData = e?.data?.data;
-
-      const formatted = resData?.map((e) => ({
-          day: e.day,
-          off: e.off,
-          start: e.start,
-          end: e.end,
-          huddles: e.huddles,
-          huddleTime: e.huddleTime,
-        }));
-
-      let monday = {};
-      const monday_shifts = formatted?.filter((shift) => shift?.day === 'mon');
-      for(let i = 0; i < monday_shifts?.length; i++) {
-        monday.day = monday_shifts[i].day
-        monday.off = monday_shifts[i].off
-        monday.start = monday_shifts[i].start
-        monday.end = monday_shifts[i].end
-        monday.huddles = monday_shifts[i].huddles
-        monday.huddleTime = monday_shifts[i].huddleTime
-        monday._id = createMondayShift._id
-      }
-      setCreateMondayShift(monday);
-
-      let tuesday = {};
-      const tuesday_shifts = formatted?.filter((shift) => shift?.day === 'tue');
-      for(let i = 0; i < tuesday_shifts?.length; i++) {
-        tuesday.day = tuesday_shifts[i].day
-        tuesday.off = tuesday_shifts[i].off
-        tuesday.start = tuesday_shifts[i].start
-        tuesday.end = tuesday_shifts[i].end
-        tuesday.huddles = tuesday_shifts[i].huddles
-        tuesday.huddleTime = tuesday_shifts[i].huddleTime
-        tuesday._id = createTuesdayShift._id
-      }
-      setCreateTuesdayShift(tuesday);
-
-      let wednesday = {};
-      const wednesday_shifts = formatted?.filter((shift) => shift?.day === 'wed');
-      for(let i = 0; i < wednesday_shifts?.length; i++) {
-        wednesday.day = wednesday_shifts[i].day
-        wednesday.off = wednesday_shifts[i].off
-        wednesday.start = wednesday_shifts[i].start
-        wednesday.end = wednesday_shifts[i].end
-        wednesday.huddles = wednesday_shifts[i].huddles
-        wednesday.huddleTime = wednesday_shifts[i].huddleTime
-        wednesday._id = createWednesdayShift._id
-      }
-      setCreateWednesdayShift(wednesday);
-
-      let thursday = {};
-      const thursday_shifts = formatted?.filter((shift) => shift?.day === 'thur');
-      for(let i = 0; i < thursday_shifts?.length; i++) {
-        thursday.day = thursday_shifts[i].day
-        thursday.off = thursday_shifts[i].off
-        thursday.start = thursday_shifts[i].start
-        thursday.end = thursday_shifts[i].end
-        thursday.huddles = thursday_shifts[i].huddles
-        thursday.huddleTime = thursday_shifts[i].huddleTime
-        thursday._id = createThursdayShift._id
-      }
-      setCreateThursdayShift(thursday);
-
-      let friday = {};
-      const friday_shifts = formatted?.filter((shift) => shift?.day === 'fri');
-      for(let i = 0; i < friday_shifts?.length; i++) {
-        friday.day = friday_shifts[i].day
-        friday.off = friday_shifts[i].off
-        friday.start = friday_shifts[i].start
-        friday.end = friday_shifts[i].end
-        friday.huddles = friday_shifts[i].huddles
-        friday.huddleTime = friday_shifts[i].huddleTime
-        friday._id = createFridayShift._id
-      }
-      setCreateFridayShift(friday);
-
-      let saturday = {};
-      const saturday_shifts = formatted?.filter((shift) => shift?.day === 'sat');
-      for(let i = 0; i < saturday_shifts?.length; i++) {
-        saturday.day = saturday_shifts[i].day
-        saturday.off = saturday_shifts[i].off
-        saturday.start = saturday_shifts[i].start
-        saturday.end = saturday_shifts[i].end
-        saturday.huddles = saturday_shifts[i].huddles
-        saturday.huddleTime = saturday_shifts[i].huddleTime
-        saturday._id = createSaturdayShift._id
-      }
-      setCreateSaturdayShift(saturday);
-
-      let sunday = {};
-      const sunday_shifts = formatted?.filter((shift) => shift?.day === 'sun');
-      for(let i = 0; i < sunday_shifts?.length; i++) {
-        sunday.day = sunday_shifts[i].day
-        sunday.off = sunday_shifts[i].off
-        sunday.start = sunday_shifts[i].start
-        sunday.end = sunday_shifts[i].end
-        sunday.huddles = sunday_shifts[i].huddles
-        sunday.huddleTime = sunday_shifts[i].huddleTime
-        sunday._id = createSundayShift._id
-      }
-      setCreateSundayShift(sunday);
-      
-    });
-  }
 
   return (
     <>
-        <div className="card profile-box flex-fill">
-          <div className="card-body">
-
-            <div className="modal-body">
-
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="schedule">Shift Schedules</label>
-                  <Select
-                    options={scheduleOpts}
-                    isSearchable={true}
-                    placeholder="Select a shift schedule..."
-                    onChange={(e) => handleScheduleClick(e)}
-                    style={{ display: "inline-block" }}
-                  />
-                </div>
-              </div>
+    <div
+        className="modal fade"
+        id="EditCampaignScheduleTimeFormModal"
+        tabIndex="-1"
+        aria-labelledby="FormModalModalLabel"
+        aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="FormModalLabel">
+                Edit shifts
+              </h4>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
 
-            <hr />
-              
+            <div className="modal-body">
               <form onSubmit={handleEditEmployeeShift}>
 
                 {/* Monday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -365,7 +232,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
                 {/* Tuesday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -444,7 +311,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
                 {/* Wednesday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -523,7 +390,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
                 {/* Thursday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -602,7 +469,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
                 {/* Friday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -676,12 +543,12 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
                     </div>
                   </div>}
                 </div>
-                
+
                 <hr/>
 
                 {/* Saturday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -760,7 +627,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
                 {/* Sunday */}
                 <div className="row">
-                  <div className="col-md-2">
+                  <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
@@ -838,6 +705,14 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
                 <br/>
 
                 <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                    onClick={cancelEvent}
+                  >
+                    Cancel
+                  </button>
                   <button type="submit" className="btn btn-primary">
                     {loading ? (
                       <span
@@ -854,6 +729,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
             </div>
           </div>
         </div>
+      </div>
     </>
   );
 };
