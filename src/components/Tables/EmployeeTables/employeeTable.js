@@ -342,24 +342,7 @@ const EmployeesTable = ({
         </div>
       );
     },
-    [
-      departmentFilter,
-      designationFilter,
-      ogidFilter,
-      page,
-      setData,
-      setDepartmentFilter,
-      setDesignationFilter,
-      setLoading,
-      setOgidFilter,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setStatusFilter,
-      setTotalPages,
-      sizePerPage,
-      statusFilter,
-    ]
+    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
   );
 
   const handleDepartmentFilter = (e) => {
