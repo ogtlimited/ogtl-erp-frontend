@@ -149,12 +149,7 @@ const AttendanceRecord = () => {
                   data-toggle="tab"
                   href="#tab_campaigns"
                 >
-                  Campaigns{' '}
-                    {/* {campaigns.length ? (
-                      <span className="office-count">
-                        {campaigns.length}
-                      </span>
-                    ) : null} */}
+                  Campaigns
                 </a>
               </li>
 
@@ -164,12 +159,7 @@ const AttendanceRecord = () => {
                   data-toggle="tab"
                   href="#tab_departments"
                 >
-                  Departments{' '}
-                    {/* {departments.length ? (
-                      <span className="office-count">
-                        {departments.length}
-                      </span>
-                    ) : null} */}
+                  Departments
                 </a>
               </li>
               

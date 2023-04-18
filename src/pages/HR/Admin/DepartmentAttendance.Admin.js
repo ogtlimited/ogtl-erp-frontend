@@ -6,9 +6,6 @@ import axiosInstance from '../../../services/api';
 
 const DepartmentAttendanceAdmin = () => {
   const [allEmployees, setallEmployees] = useState([]);
-  const [male, setMale] = useState(0);
-  const [female, setFemale] = useState(0);
-  const [totalGenderCount, setTotalGenderCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [designation, setDesignation] = useState([]);
   const { department } = useParams();
@@ -21,40 +18,10 @@ const DepartmentAttendanceAdmin = () => {
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchGenderByDepartment = async () => {
-
-    try {
-      const response = await axiosInstance.get(
-        `/departments/gender-count/${id}`
-      );
-
-      const formattedFemale =
-        response.data?.data?.genderCountByDepartment.filter(
-          (gender) => gender._id === 'female'
-        );
-      const female = formattedFemale[0] ? formattedFemale[0]?.total : 0;
-      setFemale(female);
-
-      const formattedMale = response.data?.data?.genderCountByDepartment.filter(
-        (gender) => gender._id === 'male'
-      );
-      const male = formattedMale[0] ? formattedMale[0]?.total :0;
-      setMale(male);
-
-      const headCount = male + female;
-      setTotalGenderCount(headCount);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
   const fetchEmployeeByDepartment = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/departments/employees/${id}`, {
+      .get(`/office/employees?department=${id}`, {
         params: {
           designation: designationFilter,
           search: searchTerm,
@@ -63,7 +30,7 @@ const DepartmentAttendanceAdmin = () => {
         },
       })
       .then((res) => {
-        let resData = res?.data?.data.employeesByDepartment;
+        let resData = res?.data?.data.employees;
         let resOptions = res?.data?.data?.pagination;
         
         const thisPageLimit = sizePerPage;
@@ -112,7 +79,6 @@ const DepartmentAttendanceAdmin = () => {
     }, [id]);
 
   useEffect(() => {
-    fetchGenderByDepartment();
     fetchEmployeeByDepartment();
     fetchDesignationByDepartment();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,42 +96,6 @@ const DepartmentAttendanceAdmin = () => {
               </li>
               <li className="breadcrumb-item active">Department</li>
             </ul>
-          </div>
-
-          <div className="dept-dashboard-card-group">
-            <div className="dept-dashboard-card">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className="las la-users"></i>
-                </span>
-                <div className="card-info">
-                  <h3>{totalGenderCount}</h3>
-                </div>
-              </div>
-              <span>Head Count</span>
-            </div>
-            <div className="dept-dashboard-card">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className="las la-male"></i>
-                </span>
-                <div className="card-info">
-                  <h3>{male}</h3>
-                </div>
-              </div>
-              <span>Male</span>
-            </div>
-            <div className="dept-dashboard-card">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className="las la-female"></i>
-                </span>
-                <div className="card-info">
-                  <h3>{female}</h3>
-                </div>
-              </div>
-              <span>Female</span>
-            </div>
           </div>
 
         </div>

@@ -20,7 +20,7 @@ import Stack from '@mui/material/Stack';
 
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
-const DepartmentAttendanceTable = ({
+const CampaignAttendanceTable = ({
   designation,
   data,
   setData,
@@ -32,7 +32,7 @@ const DepartmentAttendanceTable = ({
   setPage,
   setSizePerPage,
   setTotalPages,
-  fetchEmployeeByDepartment,
+  fetchEmployeeByCampaign,
   designationFilter,
   setDesignationFilter,
   searchTerm,
@@ -86,7 +86,7 @@ const DepartmentAttendanceTable = ({
               }
             />
           </a>
-          <Link to={`/dashboard/hr/department/employee-attendance/${row.fullName}/${row._id}`}>
+          <Link to={`/dashboard/hr/campaign/employee-attendance/${row.fullName}/${row._id}`}>
             {value} <span>{row?.designation_name}</span>
           </Link>
         </h2>
@@ -194,7 +194,7 @@ const DepartmentAttendanceTable = ({
 
       if (page === 1) {
         axiosInstance
-          .get(`/office/employees?department=${id}`, {
+          .get(`/office/employees?campaign=${id}`, {
             params: {
               search: searchTerm,
               page: page,
@@ -374,4 +374,4 @@ const DepartmentAttendanceTable = ({
   );
 };
 
-export default DepartmentAttendanceTable;
+export default CampaignAttendanceTable;
