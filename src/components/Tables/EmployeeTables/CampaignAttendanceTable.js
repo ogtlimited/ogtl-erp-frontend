@@ -44,7 +44,6 @@ const CampaignAttendanceTable = ({
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
   const [allEmployee, setAllEmployee] = useState([]);
-  const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
   const [info, setInfo] = useState({
@@ -54,7 +53,6 @@ const CampaignAttendanceTable = ({
 
   useEffect(() => {
     setAllEmployee(data);
-    setunfiltered(data);
   }, [data]);
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -86,7 +84,7 @@ const CampaignAttendanceTable = ({
               }
             />
           </a>
-          <Link to={`/dashboard/hr/campaign/employee-attendance/${row.fullName}/${row._id}`}>
+          <Link to={`/dashboard/hr/campaign/employee-attendance/${row.fullName}/${row.ogid}`}>
             {value} <span>{row?.designation_name}</span>
           </Link>
         </h2>
@@ -178,7 +176,6 @@ const CampaignAttendanceTable = ({
         }));
 
         setData(formatted);
-        setunfiltered(formatted);
       });
     setLoading(false);
   },[id, page, setData, setDesignationFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
@@ -218,7 +215,6 @@ const CampaignAttendanceTable = ({
             }));
 
             setData(formatted);
-            setunfiltered(formatted);
             setDesignationFilter('');
           });
       }

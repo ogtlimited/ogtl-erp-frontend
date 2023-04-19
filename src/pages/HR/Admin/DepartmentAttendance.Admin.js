@@ -70,7 +70,6 @@ const DepartmentAttendanceAdmin = () => {
             value: e._id?.designation,
           };
         });
-        console.log("formatted designation:", formattedDesignation);
         setDesignation(formattedDesignation);
       })
       .catch((error) => {

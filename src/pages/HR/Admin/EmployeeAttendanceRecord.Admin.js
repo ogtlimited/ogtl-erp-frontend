@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import EmployeeAttendanceRecordTable from '../../../components/Tables/EmployeeTables/EmployeeAttendanceRecordTable';
 import axiosInstance from '../../../services/api';
+import moment from 'moment';
 
 const EmployeeAttendanceRecordAdmin = () => {
   const [employeeAttendance, setEmployeeAttendance] = useState([]);
@@ -10,49 +11,45 @@ const EmployeeAttendanceRecordAdmin = () => {
   const { employee } = useParams();
   const { id } = useParams();
 
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  const firstDay = moment().startOf('month').format('YYYY-MM-DD');
+  const lastDay = moment().endOf('month').format('YYYY-MM-DD');
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+	const [today, setToday] = useState(null);
 
-  const [designationFilter, setDesignationFilter] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  useEffect(() => {
+		const time = new Date().toDateString();
+		const today_date = moment(time).format("yyyy-MM-DD");
+		setToday(today_date);
+	}, []);
   
   const fetchEmployeeAttendanceRecords = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get(`/office/employees?department=${id}`, {
-        params: {
-          designation: designationFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
+    .get('/api/attendance/from-postgres/for-hr', {
+      params: {
+        ogid: id,
+        from: fromDate,
+        to: toDate,
+      },
+    })
       .then((res) => {
-        let resData = res?.data?.data.employees;
-        let resOptions = res?.data?.data?.pagination;
-        
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        let resData = res?.data?.data
 
         let formatted = resData.map((e) => ({
-          ...e,
-          fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
-          designation_name: e?.designation?.designation,
-          department_name: e?.department?.department,
+          ClockIn: e?.ClockIn ? moment(e?.ClockIn, "HH:mm:ss").format("LT") : 'No Clock In',
+          ClockOut: e?.ClockOut ? moment(e?.ClockOut, "HH:mm:ss").format("LT") : 'No Clock Out',
+          Date: e?.Date ? moment(e?.Date).format("ddd, MMMM D, YYYY") : 'No Date',
         }));
 
         setEmployeeAttendance(formatted);
         setLoading(false);
-        
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
-  }, [designationFilter, id, page, searchTerm, sizePerPage]);
+  }, [fromDate, id, toDate]);
 
   useEffect(() => {
     fetchEmployeeAttendanceRecords();
@@ -79,16 +76,11 @@ const EmployeeAttendanceRecordAdmin = () => {
         setData={setEmployeeAttendance}
         loading={loading}
         setLoading={setLoading}
-        page={page}
-        sizePerPage={sizePerPage}
-        totalPages={totalPages}
-        setPage={setPage}
-        setSizePerPage={setSizePerPage}
-        setTotalPages={setTotalPages}
-        designationFilter={designationFilter}
-        setDesignationFilter={setDesignationFilter}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
+        fromDate={fromDate}
+        toDate={toDate}
+        today={today}
+        setFromDate={setFromDate}
+        setToDate={setToDate}
       />
          
     </>

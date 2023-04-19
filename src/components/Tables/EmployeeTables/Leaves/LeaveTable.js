@@ -6,12 +6,7 @@ import ToolkitProvider, {
   Search,
   CSVExport,
 } from 'react-bootstrap-table2-toolkit';
-import Select from 'react-select';
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from 'react-bootstrap-table2-filter';
+import filterFactory from 'react-bootstrap-table2-filter';
 
 import paginationFactory from 'react-bootstrap-table2-paginator';
 
@@ -24,16 +19,9 @@ const LeavesTable = ({
   handleOnSelect,
   handleOnSelectAll,
 }) => {
-  const { SearchBar, ClearSearchButton } = Search;
+  const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [loading, setLoading] = useState(true);
-  const selectRow = {
-    mode: 'checkbox',
-    clickToSelect: clickToSelect,
-    selected: selected,
-    onSelect: handleOnSelect,
-    onSelectAll: handleOnSelectAll,
-  };
   const [mobileView, setmobileView] = useState(false);
   
   const resizeTable = () => {
@@ -56,19 +44,8 @@ const LeavesTable = ({
     setTimeout(() => {
       setLoading(false);
     }, 5000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
-
-  const imageUrl = 'https://erp.outsourceglobal.com';
-
-  //          }
-  //          total.push(user)
-  //         })
-  //         // console.log(total)
-  //         setunfiltered(total)
-  //         setformatted(total)
-
-  //     }, [data, allAttendance])
-  // console.log(total)
 
   return (
     <>
@@ -87,17 +64,6 @@ const LeavesTable = ({
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               />
-
-              {/* <ClearSearchButton className="clear" { ...props.searchProps } /> */}
-              {/* <Select
-              defaultValue={selectedOption}
-              onChange ={handleClick}
-              options={departments}
-              placeholder="Filter Department"
-              isClearable={true}
-              style={{display:"inline-block"}}
-      // formatGroupLabel={formatGroupLabel}
-              /> */}
 
               <ExportCSVButton
                 className="float-right btn export-csv"

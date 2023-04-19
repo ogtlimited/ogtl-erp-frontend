@@ -1,60 +1,33 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, {CSVExport} from 'react-bootstrap-table2-toolkit';
-import Select from 'react-select';
-import axiosInstance from '../../../services/api';
+import ToolkitProvider, {Search, CSVExport} from 'react-bootstrap-table2-toolkit';
 import filterFactory from 'react-bootstrap-table2-filter';
-import female from '../../../assets/img/female_avatar.png';
-import female2 from '../../../assets/img/female_avatar2.png';
-import female3 from '../../../assets/img/female_avatar3.png';
-import male from '../../../assets/img/male_avater.png';
-import male2 from '../../../assets/img/male_avater2.png';
-import male3 from '../../../assets/img/male_avater3.png';
-import { Link, useParams } from 'react-router-dom';
-import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
-// import ToggleTable from '../toggleTable';
-// import EditEmployeeModal from '../modals/EditEmployeeModal';
 const EmployeeAttendanceRecordTable = ({
   designation,
   data,
   setData,
   loading,
   setLoading,
-  page,
-  sizePerPage,
-  totalPages,
-  setPage,
-  setSizePerPage,
-  setTotalPages,
-  fetchEmployeeByDepartment,
-  designationFilter,
-  setDesignationFilter,
-  searchTerm,
-  setSearchTerm,
   context,
+  fromDate,
+  toDate,
+  today,
+  setFromDate,
+  setToDate,
 }) => {
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
+  const { SearchBar } = Search;
   const [show, setShow] = React.useState(false);
   const [allEmployee, setAllEmployee] = useState([]);
-  const [unfiltered, setunfiltered] = useState([]);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = 'https://erp.outsourceglobal.com';
-  const [info, setInfo] = useState({
-    sizePerPage: 10,
-  });
-  const { id } = useParams();
 
   useEffect(() => {
     setAllEmployee(data);
-    setunfiltered(data);
   }, [data]);
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -68,42 +41,24 @@ const EmployeeAttendanceRecordTable = ({
 
   const columns = [
     {
-      dataField: 'ogid',
-      text: 'Employee ID',
+      dataField: 'Date',
+      text: 'Date',
       sort: true,
       headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: 'designation_name',
-      text: 'Designation',
+      dataField: 'ClockIn',
+      text: 'Clock In',
       sort: true,
       headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: 'company_email',
-      text: 'Company Email',
+      dataField: 'ClockOut',
+      text: 'Clock Out',
       sort: true,
       headerStyle: { minWidth: '100px' },
     },
   ];
-
-  // Pagination
-  const count = totalPages;
-  const _DATA = usePagination(data, sizePerPage, totalPages);
-
-  const handleChange = (e, p) => {
-    setPage(p);
-    _DATA.jump(p);
-  };
-
-  const handleChangeSizePerPage = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setInfo((prevState) => ({ ...prevState, [name]: value }));
-
-    setSizePerPage(e.target.value);
-    setPage(1);
-  };
 
   const showNullMessage = () => {
     setTimeout(() => {
@@ -125,14 +80,54 @@ const EmployeeAttendanceRecordTable = ({
         >
           {(props) => (
             <div className="col-12">
-                <div className="col-md-3 pt-3 float-right">
+
+              <SearchBar
+                {...props.searchProps}
+                style={{ marginBottom: 15, paddingLeft: '5%', width: '310px' }}
+                className="inputSearch"
+              />
+
+              <div style={{display: 'flex', justifyContent: "space-between"}}>
+                
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="from_date">From</label>
+                      <input
+                        type="date"
+                        name="from_date"
+                        value={fromDate}
+                        onChange={(e) => setFromDate(e.target.value)}
+                        className="form-control "
+                        max={today}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="to_date">To</label>
+                      <input
+                        type="date"
+                        name="to_date"
+                        value={toDate}
+                        onChange={(e) => setToDate(e.target.value)}
+                        className="form-control "
+                        max={today}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="float-right">
                     <ExportCSVButton
+                      style={{ width: '120%' }}
                       className="float-right btn export-csv"
                       {...props.csvProps}
                     >
                       Export CSV
                     </ExportCSVButton>
                 </div>
+              </div> 
 
               <BootstrapTable
                 {...props.baseProps}
@@ -155,35 +150,8 @@ const EmployeeAttendanceRecordTable = ({
                     showNullMessage()
                   )
                 }
+                pagination={paginationFactory()}
               />
-
-              <select
-                className="application-table-sizePerPage"
-                name="sizePerPage"
-                value={info.sizePerPage}
-                onChange={handleChangeSizePerPage}
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={30}>30</option>
-                <option value={50}>50</option>
-              </select>
-              <div className="application-table-pagination">
-                <Stack className="application-table-pagination-stack">
-                  <Pagination
-                    className="job-applicant-pagination"
-                    count={count}
-                    page={page}
-                    boundaryCount={4}
-                    onChange={handleChange}
-                    color="primary"
-                    showFirstButton
-                    showLastButton
-                    variant="outlined"
-                    shape="rounded"
-                  />
-                </Stack>
-              </div>
             </div>
           )}
         </ToolkitProvider>
