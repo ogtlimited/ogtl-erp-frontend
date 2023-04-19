@@ -56,21 +56,26 @@ const CampaignAttendanceAdmin = () => {
   }, [designationFilter, id, page, searchTerm, sizePerPage]);
 
 
-  const fetchDesignationByDepartment = useCallback(() => {  
+  const fetchDesignationByCampaign = useCallback(() => {  
   axiosInstance
-      .get(`/departments/employees/designations/${id}`)
+      .get(`/office/employees?campaign=${id}`)
       .then((res) => {
-        let resData = res?.data?.data.designationsByDepartment;
+        let resData = res?.data?.data.employees;
         
-        const filteredData = resData.filter((e) => e._id !== null);
+        const filteredData = resData.map((data) => ({
+          designation: data?.designation?.designation,
+        }));
 
-        let formattedDesignation = filteredData.map((e) => {
-          return {
-            label: e._id?.designation,
-            value: e._id?.designation,
-          };
-        });
-        console.log("formatted designation:", formattedDesignation);
+        const filteredDesignation = filteredData.filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.designation === item.designation)
+        );
+
+        const formattedDesignation = filteredDesignation.map((data) => ({
+          label: data.designation,
+          value: data.designation,
+        }));
+
         setDesignation(formattedDesignation);
       })
       .catch((error) => {
@@ -80,9 +85,9 @@ const CampaignAttendanceAdmin = () => {
 
   useEffect(() => {
     fetchEmployeeByCampaign();
-    fetchDesignationByDepartment();
+    fetchDesignationByCampaign();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchDesignationByDepartment, fetchEmployeeByCampaign]);
+  }, [fetchDesignationByCampaign, fetchEmployeeByCampaign]);
 
   return (
     <>

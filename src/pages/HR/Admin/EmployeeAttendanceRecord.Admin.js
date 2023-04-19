@@ -16,6 +16,47 @@ const EmployeeAttendanceRecordAdmin = () => {
 
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const fetchEmployeeAttendanceRecords = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+      .get(`/office/employees?department=${id}`, {
+        params: {
+          designation: designationFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data.employees;
+        let resOptions = res?.data?.data?.pagination;
+        
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        let formatted = resData.map((e) => ({
+          ...e,
+          fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
+          designation_name: e?.designation?.designation,
+          department_name: e?.department?.department,
+        }));
+
+        setEmployeeAttendance(formatted);
+        setLoading(false);
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [designationFilter, id, page, searchTerm, sizePerPage]);
+
+  useEffect(() => {
+    fetchEmployeeAttendanceRecords();
+  }, [fetchEmployeeAttendanceRecords]);
 
   return (
     <>

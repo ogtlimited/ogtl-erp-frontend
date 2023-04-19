@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, {CSVExport} from 'react-bootstrap-table2-toolkit';
-// import Select from 'react-select';
+import Select from 'react-select';
 import axiosInstance from '../../../services/api';
 import filterFactory from 'react-bootstrap-table2-filter';
 import female from '../../../assets/img/female_avatar.png';
@@ -147,41 +147,41 @@ const DepartmentAttendanceTable = ({
     },
   ];
 
-  // const handleChangeDesignation = useCallback((e) => {
-  //   setDesignationFilter(e?.value);
-  //   setPage(1);
-  //   setLoading(true);
+  const handleChangeDesignation = useCallback((e) => {
+    setDesignationFilter(e?.value);
+    setPage(1);
+    setLoading(true);
 
-  //   axiosInstance
-  //     .get(`/office/employees?department=${id}`, {
-  //       params: {
-  //         designation: e.label,
-  //         page: page,
-  //         limit: sizePerPage,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       let resData = res?.data?.data?.employees;
-  //       let resOptions = res?.data?.data?.pagination;
+    axiosInstance
+      .get(`/office/employees?department=${id}`, {
+        params: {
+          designation: e.label,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.employees;
+        let resOptions = res?.data?.data?.pagination;
 
-  //       const thisPageLimit = sizePerPage;
-  //       const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
 
-  //       setSizePerPage(thisPageLimit);
-  //       setTotalPages(thisTotalPageSize);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
 
-  //       let formatted = resData.map((e) => ({
-  //         ...e,
-  //         fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
-  //         designation_name: e?.designation?.designation,
-  //         department_name: e?.department?.department,
-  //       }));
+        let formatted = resData.map((e) => ({
+          ...e,
+          fullName: e.first_name + ' ' + e.last_name + ' ' + e?.middle_name,
+          designation_name: e?.designation?.designation,
+          department_name: e?.department?.department,
+        }));
 
-  //       setData(formatted);
-  //       setunfiltered(formatted);
-  //     });
-  //   setLoading(false);
-  // },[id, page, setData, setDesignationFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+        setData(formatted);
+        setunfiltered(formatted);
+      });
+    setLoading(false);
+  },[id, page, setData, setDesignationFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
 
   const MySearch = useCallback((props) => {
     let input;
@@ -305,8 +305,8 @@ const DepartmentAttendanceTable = ({
               </div>
 
                 
-              {/* <div className="d-flex row mb-3">
-                <div className="col-md-7">
+              <div className="d-flex row mb-3">
+                <div className="col-md-5">
                   <Select
                     options={designation}
                     isSearchable={true}
@@ -314,7 +314,7 @@ const DepartmentAttendanceTable = ({
                     placeholder="Filter by designation..."
                   />
                 </div>
-              </div> */}
+              </div>
 
               <BootstrapTable
                 {...props.baseProps}
