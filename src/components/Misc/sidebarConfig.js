@@ -139,11 +139,11 @@ const sidebarConfig = [
             title: 'Attendance',
             path: PATH_DASHBOARD.hr.attendanceAdmin,
           },
-          // {
-          //   canView: 'All',
-          //   title: 'Attendance (Employee)',
-          //   path: PATH_DASHBOARD.hr.attendanceEmployee,
-          // },
+          {
+            canView: 'HR',
+            title: 'Attendance Record',
+            path: PATH_DASHBOARD.hr.attendanceRecord,
+          },
           {
             canView: 'HR',
             title: 'Resignation (Admin)',
