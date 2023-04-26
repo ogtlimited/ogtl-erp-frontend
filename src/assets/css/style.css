@@ -525,6 +525,23 @@
   margin-left: 5px;
 }
 
+.office-count {
+  color: #fff;
+  background-color: #999;
+  padding: 5px;
+  border-radius: 50%;
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.attendance-record-for-office {
+  color: #000;
+}
+
+.attendance-record-for-office:hover {
+  color: #00c5fb;
+}
+
 .Hr-cards {
   display: flex;
 }
