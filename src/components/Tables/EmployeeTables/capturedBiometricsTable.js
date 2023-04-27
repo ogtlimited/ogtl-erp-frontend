@@ -218,7 +218,7 @@ const CapturedBiometricsTable = ({
                 data-toggle="modal"
                 onClick={() => handleNavigate(row)}
               >
-                {row.shiftStatus === true ? 'View Shift' : 'Add Shift'}
+                {row.shiftStatus === true ? 'Edit Shift' : 'Add Shift'}
               </button>
             </div>
           </div>
