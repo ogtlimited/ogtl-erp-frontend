@@ -74,26 +74,12 @@ const EmployeesTable = ({
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
-  const { user } = useAppContext();
+  const { setIsFromBiometrics } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
 
   useEffect(() => {}, [filters, loadForm]);
-
-  const handleEdit = (row) => {
-    let hash = {};
-    seteditData(null);
-    for (let d in row) {
-      if (typeof row[d] == 'object' && row[d] !== null) {
-        hash[d] = row[d]._id;
-      } else {
-        hash[d] = row[d];
-      }
-    }
-    setmode('edit');
-    seteditData(hash);
-  };
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -150,6 +136,10 @@ const EmployeesTable = ({
     // return;
   };
 
+    const handleNavigate = () => {
+    setIsFromBiometrics(false);
+  }
+
   const columns = [
     {
       dataField: 'fullName',
@@ -157,7 +147,7 @@ const EmployeesTable = ({
       sort: true,
       headerStyle: { minWidth: '250px' },
       formatter: (value, row) => (
-        <h2 className="table-avatar">
+        <h2 className="table-avatar" onClick={handleNavigate}>
           <a href="" className="avatar">
             <img
               alt=""

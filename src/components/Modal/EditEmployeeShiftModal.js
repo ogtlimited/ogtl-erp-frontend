@@ -262,6 +262,9 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
     <>
         <div className="card profile-box flex-fill">
           <div className="card-body">
+          <div className="col" style={{marginBottom: '30px'}}>
+            <h4>Edit Employee Shift</h4>
+          </div>
 
             <div className="modal-body">
 

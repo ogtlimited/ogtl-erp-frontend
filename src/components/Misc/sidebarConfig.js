@@ -141,6 +141,11 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
+            title: 'Captured Biometrics',
+            path: PATH_DASHBOARD.hr.capturedBiometrics,
+          },
+          {
+            canView: 'HR',
             title: 'Attendance Record',
             path: PATH_DASHBOARD.hr.attendanceRecord,
           },
