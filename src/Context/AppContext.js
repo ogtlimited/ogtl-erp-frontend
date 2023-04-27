@@ -29,6 +29,7 @@ const AppProvider = (props) => {
   const [employeeAttendance, setemployeeAttendance] = useState([]);
   const [user, setuser] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
+  const [isFromBiometrics, setIsFromBiometrics] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [employeeStatus, setEmployeeStatus] = useState([]);
   let socket = useRef();
@@ -258,6 +259,8 @@ const AppProvider = (props) => {
         setformUpdate,
         isChecked,
         setIsChecked,
+        isFromBiometrics,
+        setIsFromBiometrics,
         notifications,
         user,
         clearNotifications,

@@ -37,7 +37,7 @@ const ProfileCards = ({
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
-  const { user } = useAppContext();
+  const { user, isFromBiometrics } = useAppContext();
 
   const FrontVirtualIDRef = useRef();
   const handlePrintFront = useReactToPrint({
@@ -73,7 +73,7 @@ const ProfileCards = ({
           <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
             <ul className="nav nav-tabs nav-tabs-bottom">
               <li className="nav-item">
-                <a href="#emp_profile" data-toggle="tab" className="nav-link active">
+                <a href="#emp_profile" data-toggle="tab" className={isFromBiometrics ? "nav-link" : "nav-link active"}>
                   Profile
                 </a>
               </li>
@@ -83,7 +83,7 @@ const ProfileCards = ({
                 </a>
               </li>
               <li className="nav-item">
-                <a href="#emp_shifts" data-toggle="tab" className="nav-link">
+                <a href="#emp_shifts" data-toggle="tab" className={isFromBiometrics ? "nav-link active" : "nav-link"}>
                   Shifts
                 </a>
               </li>
@@ -129,7 +129,7 @@ const ProfileCards = ({
         </div>
       </div>
       <div className="tab-content">
-        <div id="emp_profile" className="pro-overview tab-pane active ">
+        <div id="emp_profile" className={isFromBiometrics ? "pro-overview tab-pane fade" : "pro-overview tab-pane active "}>
           <div className="row">
             <div className="col-md-6 d-flex">
               <PersonalInfo
@@ -230,7 +230,7 @@ const ProfileCards = ({
           </div>
         </div>
 
-        <div id="emp_shifts" className="pro-overview tab-pane fade">
+        <div id="emp_shifts" className={isFromBiometrics ? "pro-overview tab-pane active " : "pro-overview tab-pane fade"}>
           <div className="row">
             <div className="col-md-12 d-flex">   
               {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} setEmployeeShifts={setEmployeeShifts} />
