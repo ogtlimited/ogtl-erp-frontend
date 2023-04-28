@@ -32,7 +32,7 @@ const SupervisorAdmin = () => {
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
-      .get('/employees/leads/subordinates', {
+      .get('/leads/subordinates', {
         params: {
           department: departmentFilter,
           designation: designationFilter,
