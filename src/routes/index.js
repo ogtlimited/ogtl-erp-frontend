@@ -315,6 +315,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'captured-biometrics',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <CapturedBiometricsAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'attendance-record',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -1037,6 +1045,9 @@ const LeaveType = Loadable(
 );
 const AllEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Employees.Admin'))
+);
+const CapturedBiometricsAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/CapturedBiometrics.Admin'))
 );
 const AddEmployeesAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/AddEmployees.Admin'))
