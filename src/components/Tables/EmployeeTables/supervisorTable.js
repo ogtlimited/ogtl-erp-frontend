@@ -245,7 +245,7 @@ const SupervisorTable = ({
 
         if (page === 1) {
           axiosInstance
-            .get('/employees/reportees-for-leads', {
+            .get('/employees/leads/subordinates', {
               params: {
                 department: departmentFilter,
                 designation: designationFilter,
@@ -314,7 +314,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/reportees-for-leads', {
+      .get('/employees/leads/subordinates', {
         params: {
           department: dataToFilter,
           designation: designationFilter,
@@ -365,7 +365,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/reportees-for-leads', {
+      .get('/employees/leads/subordinates', {
         params: {
           department: departmentFilter,
           designation: dataToFilter,
@@ -416,7 +416,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/employees/reportees-for-leads', {
+      .get('/employees/leads/subordinates', {
         params: {
           department: departmentFilter,
           designation: designationFilter,
