@@ -258,7 +258,7 @@ const SupervisorTable = ({
             })
             .then((e) => {
               let resData = e?.data?.data?.employees;
-              let resOptions = e?.data?.pagination;
+              let resOptions = e?.data?.data?.pagination;
 
               const thisPageLimit = sizePerPage;
               const thisTotalPageSize = resOptions?.numberOfPages;
@@ -327,7 +327,7 @@ const SupervisorTable = ({
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.pagination;
+        let resOptions = e?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions?.numberOfPages;
@@ -378,7 +378,7 @@ const SupervisorTable = ({
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.pagination;
+        let resOptions = e?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions?.numberOfPages;
@@ -429,7 +429,7 @@ const SupervisorTable = ({
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.pagination;
+        let resOptions = e?.data?.data?.pagination;
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = resOptions?.numberOfPages;
