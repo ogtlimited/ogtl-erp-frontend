@@ -6,3 +6,12 @@ export const ADD_ATTENDANCE = {
   employeeName: '',
   shiftTypeName: '',
 }
+
+export const ADD_SUPERVISOR_ATTENDANCE = {
+  employeeId: '',
+  reason: '',
+  clockInTime: '',
+  clockOutTime: null,
+  employeeName: '',
+  shiftTypeName: '',
+}
