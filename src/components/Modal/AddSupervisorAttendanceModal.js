@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ADD_SUPERVISOR_ATTENDANCE } from "../FormJSON/AddAttendance";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -9,6 +9,7 @@ import Select from "react-select";
 
 export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinates, today}) => {
   const { showAlert } = useAppContext();
+  const selectSubordinatesRef = useRef();
   const [employee, setEmployee] = useState(ADD_SUPERVISOR_ATTENDANCE);
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +29,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
   const cancelEvent = () => {
     setEmployee(ADD_SUPERVISOR_ATTENDANCE);
+    selectSubordinatesRef.current.select.clearValue();
   };
 
   const handleFormChange = (e) => {
@@ -45,6 +47,8 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
       ClockOut: employee.ClockOut,
       reason: employee.reason,
     };
+    
+    console.log('EmployeeRecord:', employeeRecord)
 
     setLoading(true);
     try {
@@ -59,14 +63,14 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
       );
       $("#AddAttendanceFormModal").modal("toggle");
       // fetchAllAttendance();
-      setEmployee(ADD_SUPERVISOR_ATTENDANCE);
+      cancelEvent();
       setLoading(false);
     } catch (error) {
       const errorMsg = error.response?.data?.message;
       console.log("Add Attendance Record Error:", errorMsg);
       showAlert(true, `${errorMsg}`, "alert alert-danger");
       $("#AddAttendanceFormModal").modal("toggle");
-      setEmployee(ADD_SUPERVISOR_ATTENDANCE);
+      cancelEvent();
       setLoading(false);
     }
   };
@@ -113,7 +117,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="ogid">
-                          Subordinates {!isEmployeeIdValid && <span>*</span>}
+                          Subordinate {!isEmployeeIdValid && <span>*</span>}
                         </label>
                         <Select
                           options={employeeId}
@@ -126,6 +130,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                               employeeName: e?.label, 
                             })
                           }
+                          ref={selectSubordinatesRef}
                           style={{ display: "inline-block" }}
                         />
                       </div>
