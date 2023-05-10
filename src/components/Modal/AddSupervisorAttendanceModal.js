@@ -113,7 +113,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="ogid">
-                          Employee {!isEmployeeIdValid && <span>*</span>}
+                          Subordinates {!isEmployeeIdValid && <span>*</span>}
                         </label>
                         <Select
                           options={employeeId}
