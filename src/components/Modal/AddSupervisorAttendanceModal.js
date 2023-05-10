@@ -52,7 +52,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
         "alert alert-success"
       );
       $("#AddAttendanceFormModal").modal("toggle");
-      fetchAllAttendance();
+      // fetchAllAttendance();
       setEmployee(ADD_SUPERVISOR_ATTENDANCE);
       setLoading(false);
     } catch (error) {

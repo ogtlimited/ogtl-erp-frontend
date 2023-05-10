@@ -21,21 +21,6 @@ const SupervisorAttendanceAdmin = () => {
 		setToday(today_date);
 	}, []);
 
-  // "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
-  useEffect(() => {
-    setLoading(true);
-    axiosInstance
-      .get(
-        "/api/attendance"
-      )
-      .then((e) => {
-        const att = e.data.data;
-        console.log("This attendance:", att);
-        setallAttendance(att);
-      });
-      setLoading(false);
-  }, []);
-
   const fetchAllSubordinates = () => {
     axiosInstance
       .get('/leads/subordinates', {

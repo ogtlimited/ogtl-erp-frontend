@@ -379,12 +379,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.leadership.campaignSchedule,
         icon: ICONS.schedule,
       },
-      {
-        canView: 'All',
-        title: 'Attendance',
-        path: PATH_DASHBOARD.leadership.attendanceBySupervisor,
-        icon: ICONS.attendance,
-      },
+      // {
+      //   canView: 'All',
+      //   title: 'Attendance',
+      //   path: PATH_DASHBOARD.leadership.attendanceBySupervisor,
+      //   icon: ICONS.attendance,
+      // },
     ],
   },
   {
