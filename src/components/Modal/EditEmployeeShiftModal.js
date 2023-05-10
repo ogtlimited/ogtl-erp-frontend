@@ -22,8 +22,6 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
 
   useEffect(() => {
 
-    console.log('Employee Shifts', employeeShifts)
-
     const formattedEmployeeShifts = employeeShifts?.map((shift) => ({
         day: shift.day,
         start: shift.start,

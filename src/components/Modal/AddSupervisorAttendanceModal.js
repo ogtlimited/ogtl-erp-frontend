@@ -38,17 +38,22 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
   const handleAddSubordinateAttendance = async (e) => {
     e.preventDefault();
 
-    console.log("This is the attendance RECORD", employee);
+    const employeeRecord = {
+      ogid: employee.ogid,
+      Date: employee.Date,
+      ClockIn: employee.ClockIn,
+      ClockOut: employee.ClockOut,
+    };
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post("/api/attendance/manual-attendance", employee);
+      const res = await axiosInstance.post("/api/attendance/manual-attendance", employeeRecord);
       // eslint-disable-next-line no-unused-vars
       const resData = res;
 
       showAlert(
         true,
-        "Attendance Added Successfully",
+        `${employee.employeeName} Attendance for ${today} Successfully Added!`,
         "alert alert-success"
       );
       $("#AddAttendanceFormModal").modal("toggle");
@@ -116,7 +121,8 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                           onChange={(e) =>
                             setEmployee({ 
                               ...employee, 
-                              ogid: e?.value, 
+                              ogid: e?.value,
+                              employeeName: e?.label, 
                             })
                           }
                           style={{ display: "inline-block" }}

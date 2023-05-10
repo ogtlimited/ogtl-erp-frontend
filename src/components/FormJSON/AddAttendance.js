@@ -12,4 +12,6 @@ export const ADD_SUPERVISOR_ATTENDANCE = {
   ClockOut: null,
   Date: '',
   ogid: '',
+  
+  employeeName: '',
 }
