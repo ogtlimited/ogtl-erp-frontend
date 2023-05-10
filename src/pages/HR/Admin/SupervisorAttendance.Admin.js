@@ -6,12 +6,20 @@ import SupervisorAttendanceTable from "../../../components/Tables/EmployeeTables
 
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
+import moment from "moment";
 
 const SupervisorAttendanceAdmin = () => {
   const [allAttendance, setallAttendance] = useState([]);
   const [allSubordinates, setAllSubordinates] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAppContext();
+	const [today, setToday] = useState(null);
+
+  useEffect(() => {
+		const time = new Date().toDateString();
+		const today_date = moment(time).format("yyyy-MM-DD");
+		setToday(today_date);
+	}, []);
 
   // "/api/attendance?startOfMonth=2021-09-01&endOfMonth=2021-09-31&departmentId=613a7d5b8f7b0734ccfa1f50"
   useEffect(() => {
@@ -42,7 +50,7 @@ const SupervisorAttendanceAdmin = () => {
           return {
             label:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            value: emp._id,
+            value: emp.ogid,
           };
         });
 
@@ -148,7 +156,7 @@ const SupervisorAttendanceAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Attendance</h3>
+            <h3 className="page-title">Manual Clock In/Out for Subordinates</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
@@ -167,7 +175,7 @@ const SupervisorAttendanceAdmin = () => {
                   data-toggle="modal"
                   data-target="#AddAttendanceFormModal"
                 >
-                  <i className="fa fa-plus"></i> Add Attendance
+                  <i className="fa fa-plus"></i> Manual Clock In/Out
                 </a>
               </>
             )}
@@ -186,7 +194,11 @@ const SupervisorAttendanceAdmin = () => {
         </div>
       </div>
 
-      <AddSupervisorAttendanceModal fetchAllAttendance={fetchAllAttendance} allSubordinates={allSubordinates} />
+      <AddSupervisorAttendanceModal 
+        fetchAllAttendance={fetchAllAttendance} 
+        allSubordinates={allSubordinates} 
+        today={today}
+      />
     </>
   );
 };

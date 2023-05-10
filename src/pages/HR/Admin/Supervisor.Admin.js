@@ -192,7 +192,7 @@ const SupervisorAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Reportee</h3>
+            <h3 className="page-title">Subordinates</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>

@@ -7,7 +7,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinates}) => {
+export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinates, today}) => {
   const { showAlert } = useAppContext();
   const [employee, setEmployee] = useState(ADD_SUPERVISOR_ATTENDANCE);
   const [loading, setLoading] = useState(false);
@@ -17,12 +17,12 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
   const [employeeId, setEmployeeId] = useState("");
 
-
   useEffect(() => {
     setEmployeeId(allSubordinates);
-    setIsEmployeeIdValid(employee.employeeId ? true : false);
+    
+    setIsEmployeeIdValid(employee.ogid ? true : false);
     setIsAllValid(
-      employee.employeeId ? true : false
+      employee.ogid ? true : false
     );
   }, [allSubordinates, employee]);
 
@@ -40,34 +40,29 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
     console.log("This is the attendance RECORD", employee);
 
-    // setLoading(true);
-    // try {
-    //   const res = await axiosInstance.post("/api/attendance", {
-    //     employeeId: employee.employeeId,
-    //     shiftTypeId: employee.shiftTypeId,
-    //     clockInTime: employee.clockInTime,
-    //     clockOutTime: employee.clockOutTime,
-    //   });
-    //   // eslint-disable-next-line no-unused-vars
-    //   const resData = res?.data?.data;
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("/api/attendance/manual-attendance", employee);
+      // eslint-disable-next-line no-unused-vars
+      const resData = res;
 
-    //   showAlert(
-    //     true,
-    //     `${employee.employeeName} Attendance Added Successfully`,
-    //     "alert alert-success"
-    //   );
-    //   $("#AddAttendanceFormModal").modal("toggle");
-    //   fetchAllAttendance();
-    //   setEmployee(ADD_SUPERVISOR_ATTENDANCE);
-    //   setLoading(false);
-    // } catch (error) {
-    //   const errorMsg = error.response?.data?.message;
-    //   console.log("Add Attendance Record Error:", errorMsg);
-    //   showAlert(true, `${errorMsg}`, "alert alert-danger");
-    //   $("#AddAttendanceFormModal").modal("toggle");
-    //   setEmployee(ADD_SUPERVISOR_ATTENDANCE);
-    //   setLoading(false);
-    // }
+      showAlert(
+        true,
+        "Attendance Added Successfully",
+        "alert alert-success"
+      );
+      $("#AddAttendanceFormModal").modal("toggle");
+      fetchAllAttendance();
+      setEmployee(ADD_SUPERVISOR_ATTENDANCE);
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.message;
+      console.log("Add Attendance Record Error:", errorMsg);
+      showAlert(true, `${errorMsg}`, "alert alert-danger");
+      $("#AddAttendanceFormModal").modal("toggle");
+      setEmployee(ADD_SUPERVISOR_ATTENDANCE);
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,7 +78,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Manual Clock In
+                Manual Clock In/Out
               </h4>
               <button
                 type="button"
@@ -111,7 +106,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="employeeId">
+                        <label htmlFor="ogid">
                           Employee {!isEmployeeIdValid && <span>*</span>}
                         </label>
                         <Select
@@ -121,10 +116,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                           onChange={(e) =>
                             setEmployee({ 
                               ...employee, 
-                              employeeId: e?.value, 
-                              shiftTypeId: e?.shiftTypeId, 
-                              shiftTypeName: e?.shiftTypeName, 
-                              employeeName: e?.label
+                              ogid: e?.value, 
                             })
                           }
                           style={{ display: "inline-block" }}
@@ -134,25 +126,26 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
                     <div className="col-md-6">
                       <div className="form-group">
-                          <label htmlFor="reason">Reason</label>
-                        <textarea
+                        <label htmlFor="Date">Date</label>
+                        <input
                           className="form-control"
-                          name="reason"
-                          type="text"
-                          value={employee.reason}
-                          onChange={handleFormChange}
+                          name="Date"
+                          type="date"
+                          value={employee.Date = today}
+                          readOnly
+                          style={{cursor: "not-allowed"}}
                         />
                       </div>
                     </div> 
                     
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="clockInTime">Clock In Time</label>
+                        <label htmlFor="ClockIn">Clock In Time</label>
                         <input
                           className="form-control"
-                          name="clockInTime"
+                          name="ClockIn"
                           type="time"
-                          value={employee.clockInTime}
+                          value={employee.ClockIn}
                           onChange={handleFormChange}
                           required
                         />
@@ -161,12 +154,12 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
 
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="clockOutTime">Clock Out time</label>
+                        <label htmlFor="ClockOut">Clock Out time</label>
                         <input
                           className="form-control"
-                          name="clockOutTime"
+                          name="ClockOut"
                           type="time"
-                          value={employee.clockOutTime}
+                          value={employee.ClockOut}
                           onChange={handleFormChange}
                         />
                       </div>
