@@ -43,6 +43,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
       Date: employee.Date,
       ClockIn: employee.ClockIn,
       ClockOut: employee.ClockOut,
+      reason: employee.reason,
     };
 
     setLoading(true);
@@ -170,6 +171,22 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
                         />
                       </div>
                     </div>
+
+                    
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <label htmlFor="reason">
+                        Reason 
+                      </label>
+                      <textarea
+                        name="reason"
+                        className="form-control "
+                        value={employee.reason}
+                        onChange={handleFormChange}
+                        required
+                      />
+                    </div>
+                  </div>
 
                   </div>
 

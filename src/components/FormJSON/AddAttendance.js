@@ -9,9 +9,10 @@ export const ADD_ATTENDANCE = {
 
 export const ADD_SUPERVISOR_ATTENDANCE = {
   ClockIn: '',
-  ClockOut: null,
+  ClockOut: '',
   Date: '',
   ogid: '',
+  reason: '',
   
   employeeName: '',
 }
