@@ -8,14 +8,18 @@ import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
 import EmployeeHelperService from './employee.helper';
+import { AddSupervisorAttendanceModal } from "../../../components/Modal/AddSupervisorAttendanceModal";
+import moment from "moment";
 
 const SupervisorAdmin = () => {
   const { createEmployee, status } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
+  const [allSubordinates, setAllSubordinates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setfilters] = useState([]);
   const [loadForm, setloadForm] = useState(false);
   const { user } = useAppContext();
+	const [today, setToday] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -29,6 +33,38 @@ const SupervisorAdmin = () => {
 
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
+  
+  useEffect(() => {
+		const time = new Date().toDateString();
+		const today_date = moment(time).format("yyyy-MM-DD");
+		setToday(today_date);
+	}, []);
+  
+  const fetchAllSubordinates = () => {
+    axiosInstance
+      .get('/leads/subordinates', {
+        params: {
+          limit: 1000,
+        },
+      })
+      .then((e) => {
+        let resData = e?.data?.data?.employees;
+
+        const mapp = resData.map((emp) => {
+          return {
+            label:
+              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
+            value: emp.ogid,
+          };
+        });
+
+        setAllSubordinates(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
@@ -116,6 +152,7 @@ const SupervisorAdmin = () => {
   };
 
   useEffect(() => {
+    fetchAllSubordinates();
     fetchAllEmployee();
     fetchDepartment();
     fetchDesignation();
@@ -192,13 +229,26 @@ const SupervisorAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Reportee</h3>
+            <h3 className="page-title">Subordinates</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
               </li>
               <li className="breadcrumb-item active">Leadership</li>
             </ul>
+          </div>
+          
+          <div className="col-auto float-right ml-auto">
+              <>
+                <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
+                  data-target="#AddAttendanceFormModal"
+                >
+                  <i className="fa fa-plus"></i> Manual Clock In/Out
+                </a>
+              </>
           </div>
         </div>
       </div>
@@ -231,7 +281,12 @@ const SupervisorAdmin = () => {
         setSearchTerm={setSearchTerm}
         setLoading={setLoading}
       />
+
       
+      <AddSupervisorAttendanceModal 
+        allSubordinates={allSubordinates} 
+        today={today}
+      />
     </>
   );
 };

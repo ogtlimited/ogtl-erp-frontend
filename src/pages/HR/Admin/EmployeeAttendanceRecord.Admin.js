@@ -23,37 +23,37 @@ const EmployeeAttendanceRecordAdmin = () => {
 		setToday(today_date);
 	}, []);
   
-  // const fetchEmployeeAttendanceRecords = useCallback(() => {
-  //   setLoading(true);
-  //   axiosInstance
-  //   .get('/api/attendance/from-postgres/for-hr', {
-  //     params: {
-  //       ogid: id,
-  //       from: fromDate,
-  //       to: toDate,
-  //     },
-  //   })
-  //     .then((res) => {
-  //       let resData = res?.data?.data
+  const fetchEmployeeAttendanceRecords = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+    .get('/api/attendance/from-postgres/for-hr', {
+      params: {
+        ogid: id,
+        from: fromDate,
+        to: toDate,
+      },
+    })
+      .then((res) => {
+        let resData = res?.data?.data
 
-  //       let formatted = resData.map((e) => ({
-  //         ClockIn: e?.ClockIn ? moment(e?.ClockIn, "HH:mm:ss").format("LT") : 'No Clock In',
-  //         ClockOut: e?.ClockOut ? moment(e?.ClockOut, "HH:mm:ss").format("LT") : 'No Clock Out',
-  //         Date: e?.Date ? moment(e?.Date).format("ddd, MMMM D, YYYY") : 'No Date',
-  //       }));
+        let formatted = resData.map((e) => ({
+          ClockIn: e?.ClockIn ? moment(e?.ClockIn, "HH:mm:ss").format("LT") : 'No Clock In',
+          ClockOut: e?.ClockOut ? moment(e?.ClockOut, "HH:mm:ss").format("LT") : 'No Clock Out',
+          Date: e?.Date ? moment(e?.Date).format("ddd, MMMM D, YYYY") : 'No Date',
+        }));
 
-  //       setEmployeeAttendance(formatted);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setLoading(false);
-  //     });
-  // }, [fromDate, id, toDate]);
+        setEmployeeAttendance(formatted);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [fromDate, id, toDate]);
 
-  // useEffect(() => {
-  //   fetchEmployeeAttendanceRecords();
-  // }, [fetchEmployeeAttendanceRecords]);
+  useEffect(() => {
+    fetchEmployeeAttendanceRecords();
+  }, [fetchEmployeeAttendanceRecords]);
 
   return (
     <>

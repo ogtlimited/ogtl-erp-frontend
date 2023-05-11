@@ -32,57 +32,57 @@ const CapturedBiometricsAdmin = () => {
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
 
-  // const fetchAllCapturedBiometrics = useCallback(() => {
-  //   axiosInstance
-  //     .get('/api/attendance/captured-biometrics', {
-  //       params: {
-  //         department: departmentFilter,
-  //         designation: designationFilter,
-  //         status: statusFilter,
-  //         ogid: ogidFilter,
-  //         search: searchTerm,
-  //         page: page,
-  //         limit: sizePerPage,
-  //       },
-  //     })
-  //     .then((e) => {        
-  //       const resData = e?.data?.staff?.employees;
-  //       console.log('captured:', resData)
-  //       let resOptions = e?.data?.staff?.pagination;
+  const fetchAllCapturedBiometrics = useCallback(() => {
+    axiosInstance
+      .get('/api/attendance/captured-biometrics', {
+        params: {
+          department: departmentFilter,
+          designation: designationFilter,
+          status: statusFilter,
+          ogid: ogidFilter,
+          search: searchTerm,
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+      .then((e) => {        
+        const resData = e?.data?.staff?.employees;
+        console.log('captured:', resData)
+        let resOptions = e?.data?.staff?.pagination;
 
-  //       const thisPageLimit = sizePerPage;
-  //       const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = resOptions?.numberOfPages;
 
-  //       setSizePerPage(thisPageLimit);
-  //       setTotalPages(thisTotalPageSize);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
 
-  //       const mapp = resData.map((emp) => {
-  //         return {
-  //           ...emp,
-  //           fullName:
-  //             emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-  //           designation_name: emp?.designation?.designation,
-  //           department_name: emp?.department?.department,
-  //           project: emp?.projectId?.project_name,
-  //         };
-  //       });
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName:
+              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
+            designation_name: emp?.designation?.designation,
+            department_name: emp?.department?.department,
+            project: emp?.projectId?.project_name,
+          };
+        });
 
-  //       setallEmployees(mapp);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setLoading(false);
-  //     });
-  // }, [
-  //   departmentFilter,
-  //   designationFilter,
-  //   ogidFilter,
-  //   page,
-  //   searchTerm,
-  //   sizePerPage,
-  //   statusFilter,
-  // ]);
+        setallEmployees(mapp);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, [
+    departmentFilter,
+    designationFilter,
+    ogidFilter,
+    page,
+    searchTerm,
+    sizePerPage,
+    statusFilter,
+  ]);
 
   const fetchDepartment = async () => {
     try {
@@ -119,10 +119,10 @@ const CapturedBiometricsAdmin = () => {
   };
 
   useEffect(() => {
-    // fetchAllCapturedBiometrics();
+    fetchAllCapturedBiometrics();
     fetchDepartment();
     fetchDesignation();
-  }, []);
+  }, [fetchAllCapturedBiometrics]);
 
   useEffect(() => {}, [editData, mode]);
 
