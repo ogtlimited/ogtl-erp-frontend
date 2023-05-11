@@ -24,7 +24,8 @@ const ICONS = {
   settings: getIcon('la-shopping-cart'),
   rolesAssignment: getIcon('la-lock'),
   shadowing: getIcon('la-users'),
-  schedule: getIcon('la-clock-o'),
+  schedule: getIcon('la-calendar'),
+  attendance: getIcon('la-clock-o'),
 };
 
 const sidebarConfig = [
@@ -134,21 +135,21 @@ const sidebarConfig = [
             title: 'Leaves',
             path: PATH_DASHBOARD.hr.leavesEmployee,
           },
+          // {
+          //   canView: 'HR',
+          //   title: 'Attendance',
+          //   path: PATH_DASHBOARD.hr.attendanceAdmin,
+          // },
           {
             canView: 'HR',
-            title: 'Attendance',
-            path: PATH_DASHBOARD.hr.attendanceAdmin,
+            title: 'Captured Biometrics',
+            path: PATH_DASHBOARD.hr.capturedBiometrics,
           },
-          // {
-          //   canView: 'HR',
-          //   title: 'Captured Biometrics',
-          //   path: PATH_DASHBOARD.hr.capturedBiometrics,
-          // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Attendance Record',
-          //   path: PATH_DASHBOARD.hr.attendanceRecord,
-          // },
+          {
+            canView: 'HR',
+            title: 'Attendance Record',
+            path: PATH_DASHBOARD.hr.attendanceRecord,
+          },
           {
             canView: 'HR',
             title: 'Resignation (Admin)',
@@ -380,9 +381,9 @@ const sidebarConfig = [
       },
       // {
       //   canView: 'All',
-      //   title: 'Team Lead',
-      //   path: PATH_DASHBOARD.leadership.teamLead,
-      //   icon: ICONS.leadership,
+      //   title: 'Attendance',
+      //   path: PATH_DASHBOARD.leadership.attendanceBySupervisor,
+      //   icon: ICONS.attendance,
       // },
     ],
   },

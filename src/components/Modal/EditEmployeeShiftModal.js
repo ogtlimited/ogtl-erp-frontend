@@ -29,6 +29,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         off: shift.off,
         huddles: shift.huddles,
         huddleTime: shift.huddleTime,
+        ogid: shift.ogid,
         _id: shift._id
       }) 
     )
@@ -106,6 +107,8 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       shifts.push(createFridayShift);
       shifts.push(createSaturdayShift);
       shifts.push(createSundayShift);
+
+      console.log('Edited Shift', shifts)
 
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.patch(`/api/employee-shift/`, shifts);
