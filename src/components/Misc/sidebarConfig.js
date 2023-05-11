@@ -125,16 +125,6 @@ const sidebarConfig = [
             title: 'Add Employee',
             path: PATH_DASHBOARD.hr.addEmployees,
           },
-          {
-            canView: 'HR',
-            title: 'Leaves (Admin)',
-            path: PATH_DASHBOARD.hr.leavesAdmin,
-          },
-          {
-            canView: 'All',
-            title: 'Leaves',
-            path: PATH_DASHBOARD.hr.leavesEmployee,
-          },
           // {
           //   canView: 'HR',
           //   title: 'Attendance',
@@ -149,6 +139,16 @@ const sidebarConfig = [
             canView: 'HR',
             title: 'Attendance Record',
             path: PATH_DASHBOARD.hr.attendanceRecord,
+          },
+          {
+            canView: 'HR',
+            title: 'Leaves (Admin)',
+            path: PATH_DASHBOARD.hr.leavesAdmin,
+          },
+          {
+            canView: 'All',
+            title: 'Leaves',
+            path: PATH_DASHBOARD.hr.leavesEmployee,
           },
           {
             canView: 'HR',
