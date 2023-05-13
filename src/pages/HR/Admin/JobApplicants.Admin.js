@@ -136,7 +136,7 @@ const JobApplicants = () => {
     fetchJobApplicants();
     setTimeout(() => {
       setLoading(false);
-    }, 60000);
+    }, 5000);
   }, [fetchJobApplicants]);
 
   //delete job opening
