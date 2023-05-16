@@ -163,7 +163,7 @@ const Header = () => {
         </div>
         
           
-        {user?.role?.title === 'HR Manager' ? (
+        {user?.role?.title === 'HR Manager' || user?.role?.title === 'HR Associate' ? (
           <div
             className="home-notification-div"
             onClick={handleNotificationRequest}

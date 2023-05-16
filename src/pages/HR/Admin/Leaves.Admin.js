@@ -475,7 +475,7 @@ const LeavesAdmin = () => {
                     data-toggle="tab"
                     href="#tab_hr-leave-application"
                   >
-                    Leaves Applications
+                    Leave Applications
                   </a>
                 </li>
                 <li className="nav-item">
