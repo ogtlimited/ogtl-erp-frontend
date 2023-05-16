@@ -53,6 +53,7 @@ const AdminLeavesHistoryTable = ({
   ]
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
+  const [show, setShow] = useState(false);
   const [dataToFilter, setDataToFilter] = useState('');
   const [mobileView, setmobileView] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
@@ -330,6 +331,13 @@ const AdminLeavesHistoryTable = ({
       setPage(1);
     };
 
+    const showNullMessage = () => {
+      setTimeout(() => {
+        setShow(true);
+      }, 5000);
+      return <>{show ? "No Data Available" : null}</>;
+    };
+
   return (
     <>
       {dataToFilter && (
@@ -426,7 +434,7 @@ const AdminLeavesHistoryTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    null
+                    showNullMessage()
                   )
                 }
               />
