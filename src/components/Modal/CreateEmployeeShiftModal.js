@@ -428,7 +428,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createThursdayShift.day === 'thur' && 'Thursday'}
+                      value={createThursdayShift.day === 'thu' && 'Thursday'}
                       readOnly
                     />
                   </div>
@@ -436,9 +436,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 {!createThursdayShift.off && 
                   <div className="col-md-2">
                     <div className="form-group">
-                      <label htmlFor="thur_start">Start</label>
+                      <label htmlFor="thu_start">Start</label>
                       <input
-                        name="thur_start"
+                        name="thu_start"
                         type="time"
                         className="form-control"
                         value={!createThursdayShift.off && createThursdayShift.start}
@@ -453,9 +453,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 {!createThursdayShift.off &&
                   <div className="col-md-2">
                     <div className="form-group">
-                      <label htmlFor="thur_end">End</label>
+                      <label htmlFor="thu_end">End</label>
                       <input
-                        name="thur_end"
+                        name="thu_end"
                         type="time"
                         className="form-control"
                         value={!createThursdayShift.off && createThursdayShift.end}

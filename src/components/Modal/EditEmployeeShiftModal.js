@@ -56,7 +56,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
     setCreateWednesdayShift(wednesday);
 
     let thursday = {};
-    const thursday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'thur');
+    const thursday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'thu');
     for(let i = 0; i < thursday_shifts?.length; i++) {
       thursday = thursday_shifts[i]
     }
@@ -207,7 +207,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
       setCreateWednesdayShift(wednesday);
 
       let thursday = {};
-      const thursday_shifts = formatted?.filter((shift) => shift?.day === 'thur');
+      const thursday_shifts = formatted?.filter((shift) => shift?.day === 'thu');
       for(let i = 0; i < thursday_shifts?.length; i++) {
         thursday.day = thursday_shifts[i].day
         thursday.off = thursday_shifts[i].off
@@ -536,7 +536,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createThursdayShift.day === 'thur' && 'Thursday'}
+                        value={createThursdayShift.day === 'thu' && 'Thursday'}
                         readOnly
                       />
                     </div>
@@ -544,9 +544,9 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
                   {!createThursdayShift.off && 
                     <div className="col-md-2">
                       <div className="form-group">
-                        <label htmlFor="thur_start">Start</label>
+                        <label htmlFor="thu_start">Start</label>
                         <input
-                          name="thur_start"
+                          name="thu_start"
                           type="time"
                           className="form-control"
                           value={!createThursdayShift.off && createThursdayShift.start}
@@ -560,9 +560,9 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
                   {!createThursdayShift.off &&
                     <div className="col-md-2">
                       <div className="form-group">
-                        <label htmlFor="thur_end">End</label>
+                        <label htmlFor="thu_end">End</label>
                         <input
-                          name="thur_end"
+                          name="thu_end"
                           type="time"
                           className="form-control"
                           value={!createThursdayShift.off && createThursdayShift.end}
