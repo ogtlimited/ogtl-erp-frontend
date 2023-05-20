@@ -27,7 +27,7 @@ export const wednesday_shifts = {
 };
 
 export const thursday_shifts = {
-  day: 'thur',
+  day: 'thu',
   start: '',
   end: '',
   off: false,
