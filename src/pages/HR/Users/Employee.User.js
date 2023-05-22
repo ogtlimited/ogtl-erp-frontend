@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import welcome from "../../../assets/img/welcome.png";
 import { useAppContext } from "../../../Context/AppContext";
@@ -11,12 +11,39 @@ import personal from "./personal.json";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
+  const day = date.split(",")[0].toLowerCase();
   const { notifications, user } = useAppContext();
   const [leaveTaken, setLeaveTaken] = useState(0);
   const [leaveRemaining, setLeaveRemaining] = useState(0);
 
   const [jobOpeningsLength, setJobOpeningsLength] = useState("");
   const [quotes, setQuotes] = useState(null);
+
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const ogid = user?.ogid
+
+  const fetchShiftForToday = useCallback(async () => {
+    try {
+      const data = await axiosInstance.get(`/api/employee-shift/${ogid}`);
+      const dataToFilter = data?.data?.data
+
+      const filteredData = dataToFilter.filter((e) => (e?.day === day))
+
+      const start = filteredData[0]?.start ? moment((filteredData[0]?.start), ["HH:mm"]).format("hh:mm A") : null
+      const end = filteredData[0]?.end ? moment((filteredData[0]?.end), ["HH:mm"]).format("hh:mm A") : null
+
+      setStartTime(start)
+      setEndTime(end)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [day, ogid])
+
+  useEffect(() => {
+    fetchShiftForToday()
+  }, [fetchShiftForToday])
+
 
   const getNextHoliday = () => {
     const year = new Date().getFullYear();
@@ -42,6 +69,7 @@ const EmployeeUser = () => {
       return "";
     }
   };
+
   useEffect(() => {
     axiosInstance.get("/leave-application").then((e) => {
       const leaves = e?.data?.data?.filter(
@@ -73,6 +101,7 @@ const EmployeeUser = () => {
         console.log(error);
       });
   }, []);
+
   useEffect(() => {
     const fetchQuotes = async () => {
       try {
@@ -154,11 +183,11 @@ const EmployeeUser = () => {
                             <i className="fa fa-clock"></i>
                           </div>
                           <div className="dash-card-content">
-                            <p>
+                            {startTime ? <p>
                               Your shift starts at{" "}
-                              {calcShift(user?.default_shift?.start_time)} and
-                              ends at {calcShift(user?.default_shift?.end_time)}{" "}
-                            </p>
+                              <strong>{startTime} </strong>and
+                              ends at <strong>{endTime}</strong>{" "}
+                            </p> : <p>You do not have a shift</p>}
                           </div>
                         </div>
                       </div>
