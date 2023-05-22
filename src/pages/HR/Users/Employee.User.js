@@ -187,7 +187,7 @@ const EmployeeUser = () => {
                               Your shift starts at{" "}
                               <strong>{startTime} </strong>and
                               ends at <strong>{endTime}</strong>{" "}
-                            </p> : <p>You do not have a shift</p>}
+                            </p> : <p>You do not have a shift today</p>}
                           </div>
                         </div>
                       </div>
