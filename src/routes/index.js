@@ -307,6 +307,22 @@ export default function Router() {
             },
             { path: 'leaves', element: <LeavesUser /> },
             {
+              path: 'all-employees/employee/leader',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeadershipAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'all-employees/employee/leader/:employee/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <LeadershipSubordinateAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'attendance-admin',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -1081,6 +1097,12 @@ const AllLeaveStatusAdmin = Loadable(
 );
 const AllLeaveTypeAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/LeaveTypeAnalytics.Admin'))
+);
+const LeadershipAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/Leadership.Admin'))
+);
+const LeadershipSubordinateAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/LeadershipSubordinates.Admin'))
 );
 const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
 const HrClientView = Loadable(
