@@ -68,7 +68,7 @@ const SupervisorAdmin = () => {
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
-      .get('/leads/subordinates', {
+      .get(`/leads/subordinates/${user._id}`, {
         params: {
           department: departmentFilter,
           designation: designationFilter,
@@ -107,15 +107,7 @@ const SupervisorAdmin = () => {
         console.log(error);
         setLoading(false);
       });
-  }, [
-    departmentFilter,
-    designationFilter,
-    ogidFilter,
-    page,
-    searchTerm,
-    sizePerPage,
-    statusFilter,
-  ]);
+  }, [departmentFilter, designationFilter, ogidFilter, page, searchTerm, sizePerPage, statusFilter, user._id]);
 
   const fetchDepartment = async () => {
     try {

@@ -245,7 +245,7 @@ const SupervisorTable = ({
 
         if (page === 1) {
           axiosInstance
-            .get('/leads/subordinates', {
+            .get(`/leads/subordinates/${user._id}`, {
               params: {
                 department: departmentFilter,
                 designation: designationFilter,
@@ -305,7 +305,7 @@ const SupervisorTable = ({
         </div>
       );
     },
-    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
+    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter, user._id]
   );
 
   const handleDepartmentFilter = (e) => {
@@ -314,7 +314,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/leads/subordinates', {
+      .get(`/leads/subordinates/${user._id}`, {
         params: {
           department: dataToFilter,
           designation: designationFilter,
@@ -365,7 +365,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/leads/subordinates', {
+      .get(`/leads/subordinates/${user._id}`, {
         params: {
           department: departmentFilter,
           designation: dataToFilter,
@@ -416,7 +416,7 @@ const SupervisorTable = ({
     setLoading(true);
 
     axiosInstance
-      .get('/leads/subordinates', {
+      .get(`/leads/subordinates/${user._id}`, {
         params: {
           department: departmentFilter,
           designation: designationFilter,
@@ -464,7 +464,7 @@ const SupervisorTable = ({
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 5000);
+    }, 10000);
     return <>{show ? "No Data Available" : null}</>;
   };
 
