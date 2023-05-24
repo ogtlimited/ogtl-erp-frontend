@@ -125,6 +125,11 @@ const sidebarConfig = [
             title: 'Add Employee',
             path: PATH_DASHBOARD.hr.addEmployees,
           },
+          {
+            canView: 'HR',
+            title: 'Leadership',
+            path: PATH_DASHBOARD.hr.leadership,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Attendance',
