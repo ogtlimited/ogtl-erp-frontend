@@ -20,15 +20,14 @@ const LeadershipSubordinateAdmin = () => {
   const { employee } = useParams();
   const { id } = useParams();
 
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  // const [page, setPage] = useState(1);
+  // const [sizePerPage, setSizePerPage] = useState(10);
+  // const [totalPages, setTotalPages] = useState('');
 
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [projectFilter, setProjectFilter] = useState('');
   const [designationFilter, setDesignationFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [ogidFilter, setOgidFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const [departments, setDepartments] = useState([]);
@@ -42,30 +41,29 @@ const LeadershipSubordinateAdmin = () => {
           department: departmentFilter,
           designation: designationFilter,
           status: statusFilter,
-          ogid: ogidFilter,
           search: searchTerm,
-          page: page,
-          limit: sizePerPage,
+          // page: page,
+          // limit: sizePerPage,
         },
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.data?.pagination;
+        // let resOptions = e?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        // const thisPageLimit = sizePerPage;
+        // const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        // setSizePerPage(thisPageLimit);
+        // setTotalPages(thisTotalPageSize);
 
         const mapp = resData.map((emp) => {
           return {
             ...emp,
             fullName:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+              designation_name: emp?.designation ? emp?.designation?.designation : '',
+              department_name: emp?.department ? emp?.department?.department : '',
+              project: emp?.projectId ? emp?.projectId?.project_name : '',
           };
         });
 
@@ -76,7 +74,7 @@ const LeadershipSubordinateAdmin = () => {
         console.log(error);
         setLoading(false);
       });
-  }, [departmentFilter, designationFilter, id, ogidFilter, page, searchTerm, sizePerPage, statusFilter]);
+  }, [departmentFilter, designationFilter, id, searchTerm, statusFilter]);
 
   const fetchDepartment = async () => {
     try {
@@ -229,12 +227,12 @@ const LeadershipSubordinateAdmin = () => {
         projects={projects}
         designations={designations}
 
-        page={page}
-        setPage={setPage}
-        sizePerPage={sizePerPage}
-        setSizePerPage={setSizePerPage}
-        totalPages={totalPages}
-        setTotalPages={setTotalPages}
+        // page={page}
+        // setPage={setPage}
+        // sizePerPage={sizePerPage}
+        // setSizePerPage={setSizePerPage}
+        // totalPages={totalPages}
+        // setTotalPages={setTotalPages}
         departmentFilter={departmentFilter}
         setDepartmentFilter={setDepartmentFilter}
         projectFilter={projectFilter}
@@ -243,8 +241,6 @@ const LeadershipSubordinateAdmin = () => {
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
-        ogidFilter={ogidFilter}
-        setOgidFilter={setOgidFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setLoading={setLoading}

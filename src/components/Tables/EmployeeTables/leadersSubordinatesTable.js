@@ -3,11 +3,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import axiosInstance from '../../../services/api';
-import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
+import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
 import filterFactory from 'react-bootstrap-table2-filter';
-import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+// import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
+// import Pagination from '@mui/material/Pagination';
+// import Stack from '@mui/material/Stack';
 import female from '../../../assets/img/female_avatar.png';
 import female2 from '../../../assets/img/female_avatar2.png';
 import female3 from '../../../assets/img/female_avatar3.png';
@@ -16,6 +16,7 @@ import male2 from '../../../assets/img/male_avater2.png';
 import male3 from '../../../assets/img/male_avater3.png';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAppContext } from '../../../Context/AppContext';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 
 const LeadersSubordinatesTable = ({
   data,
@@ -31,12 +32,12 @@ const LeadersSubordinatesTable = ({
   projects,
   designations,
 
-  page,
-  setPage,
-  sizePerPage,
-  setSizePerPage,
-  totalPages,
-  setTotalPages,
+  // page,
+  // setPage,
+  // sizePerPage,
+  // setSizePerPage,
+  // totalPages,
+  // setTotalPages,
   departmentFilter,
   setDepartmentFilter,
   projectFilter,
@@ -45,13 +46,12 @@ const LeadersSubordinatesTable = ({
   setDesignationFilter,
   statusFilter,
   setStatusFilter,
-  ogidFilter,
-  setOgidFilter,
   searchTerm,
   setSearchTerm,
   setLoading,
   context,
 }) => {
+
   const status = [
     {
       code: 'active',
@@ -68,6 +68,7 @@ const LeadersSubordinatesTable = ({
   ];
 
   const navigate = useNavigate();
+  const { SearchBar } = Search;
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -113,22 +114,22 @@ const LeadersSubordinatesTable = ({
   }, [data]);
 
   // Pagination
-  const count = totalPages;
-  const _DATA = usePagination(data, sizePerPage, totalPages);
+  // const count = totalPages;
+  // const _DATA = usePagination(data, sizePerPage, totalPages);
 
-  const handleChange = (e, p) => {
-    setPage(p);
-    _DATA.jump(p);
-  };
+  // const handleChange = (e, p) => {
+  //   setPage(p);
+  //   _DATA.jump(p);
+  // };
 
-  const handleChangeSizePerPage = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setInfo((prevState) => ({ ...prevState, [name]: value }));
+  // const handleChangeSizePerPage = (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   setInfo((prevState) => ({ ...prevState, [name]: value }));
 
-    setSizePerPage(e.target.value);
-    setPage(1);
-  };
+  //   setSizePerPage(e.target.value);
+  //   setPage(1);
+  // };
 
   const handleNavigate = (row) => {
     setIsFromBiometrics(true);
@@ -251,85 +252,84 @@ const LeadersSubordinatesTable = ({
     },
   ];
 
-  const MySearch = useCallback(
-    (props) => {
-      let input;
-      const handleClick = () => {
-        setPage(1);
-        setLoading(true);
-        props.onSearch(input.value);
-        const searchTerm = input.value;
-        setSearchTerm(searchTerm);
+  // const MySearch = useCallback(
+  //   (props) => {
+  //     let input;
+  //     const handleClick = () => {
+  //       setPage(1);
+  //       setLoading(true);
+  //       props.onSearch(input.value);
+  //       const searchTerm = input.value;
+  //       setSearchTerm(searchTerm);
 
-        if (page === 1) {
-          axiosInstance
-            .get(`/leads/subordinates/${id}`, {
-              params: {
-                department: departmentFilter,
-                project: projectFilter,
-                designation: designationFilter,
-                status: statusFilter,
-                ogid: ogidFilter,
-                search: searchTerm,
-                page: page,
-                limit: sizePerPage,
-              },
-            })
-            .then((e) => {
-              let resData = e?.data?.data?.employees;
-              let resOptions = e?.data?.data?.pagination;
+  //       if (page === 1) {
+  //         axiosInstance
+  //           .get(`/leads/subordinates/${id}`, {
+  //             params: {
+  //               department: departmentFilter,
+  //               project: projectFilter,
+  //               designation: designationFilter,
+  //               status: statusFilter,
+  //               search: searchTerm,
+  //               page: page,
+  //               limit: sizePerPage,
+  //             },
+  //           })
+  //           .then((e) => {
+  //             let resData = e?.data?.data?.employees;
+  //             let resOptions = e?.data?.data?.pagination;
 
-              const thisPageLimit = sizePerPage;
-              const thisTotalPageSize = resOptions?.numberOfPages;
+  //             const thisPageLimit = sizePerPage;
+  //             const thisTotalPageSize = resOptions?.numberOfPages;
 
-              setSizePerPage(thisPageLimit);
-              setTotalPages(thisTotalPageSize);
+  //             setSizePerPage(thisPageLimit);
+  //             setTotalPages(thisTotalPageSize);
 
-              const mapp = resData.map((emp) => {
-                return {
-                  ...emp,
-                  fullName:
-                    emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-                  designation_name: emp?.designation?.designation,
-                  department_name: emp?.department?.department,
-                  project: emp?.projectId?.project_name,
-                };
-              });
-              setData(mapp);
-              setunfiltered(mapp);
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-            });
-        }
-        setLoading(false);
-      };
+  //             const mapp = resData.map((emp) => {
+  //               return {
+  //                 ...emp,
+  //                 fullName:
+  //                   emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
+  //                 designation_name: emp?.designation?.designation,
+  //                 department_name: emp?.department?.department,
+  //                 project: emp?.projectId?.project_name,
+  //               };
+  //             });
+  //             setData(mapp);
+  //             setunfiltered(mapp);
+  //           })
+  //           .catch((error) => {
+  //             console.log(error);
+  //             setLoading(false);
+  //           });
+  //       }
+  //       setLoading(false);
+  //     };
 
-      return (
-        <div className="job-app-search">
-          <input
-            className="form-control"
-            style={{
-              backgroundColor: '#fff',
-              width: '33.5%',
-              marginRight: '20px',
-            }}
-            ref={(n) => (input = n)}
-            type="text"
-          />
-          <button className="btn btn-primary" onClick={handleClick}>
-            Search
-          </button>
-        </div>
-      );
-    },
-    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter, user._id]
-  );
+  //     return (
+  //       <div className="job-app-search">
+  //         <input
+  //           className="form-control"
+  //           style={{
+  //             backgroundColor: '#fff',
+  //             width: '33.5%',
+  //             marginRight: '20px',
+  //           }}
+  //           ref={(n) => (input = n)}
+  //           type="text"
+  //         />
+  //         <button className="btn btn-primary" onClick={handleClick}>
+  //           Search
+  //         </button>
+  //       </div>
+  //     );
+  //   },
+  //   [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter, user._id]
+  // );
 
   const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
-    setPage(1);
+    // setPage(1);
     setLoading(true);
 
     axiosInstance
@@ -339,30 +339,29 @@ const LeadersSubordinatesTable = ({
           project: projectFilter,
           designation: designationFilter,
           status: statusFilter,
-          ogid: ogidFilter,
           search: searchTerm,
-          page: page,
-          limit: sizePerPage,
+          // page: page,
+          // limit: sizePerPage,
         },
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.data?.pagination;
+        // let resOptions = e?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        // const thisPageLimit = sizePerPage;
+        // const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        // setSizePerPage(thisPageLimit);
+        // setTotalPages(thisTotalPageSize);
 
         const mapp = resData.map((emp) => {
           return {
             ...emp,
             fullName:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+              designation_name: emp?.designation ? emp?.designation?.designation : '',
+              department_name: emp?.department ? emp?.department?.department : '',
+              project: emp?.projectId ? emp?.projectId?.project_name : '',
           };
         });
 
@@ -433,7 +432,7 @@ const LeadersSubordinatesTable = ({
 
   const handleDesignationFilter = (e) => {
     setDesignationFilter(e.target.value);
-    setPage(1);
+    // setPage(1);
     setLoading(true);
 
     axiosInstance
@@ -443,30 +442,29 @@ const LeadersSubordinatesTable = ({
           project: projectFilter,
           designation: dataToFilter,
           status: statusFilter,
-          ogid: ogidFilter,
           search: searchTerm,
-          page: page,
-          limit: sizePerPage,
+          // page: page,
+          // limit: sizePerPage,
         },
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.data?.pagination;
+        // let resOptions = e?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        // const thisPageLimit = sizePerPage;
+        // const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        // setSizePerPage(thisPageLimit);
+        // setTotalPages(thisTotalPageSize);
 
         const mapp = resData.map((emp) => {
           return {
             ...emp,
             fullName:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+              designation_name: emp?.designation ? emp?.designation?.designation : '',
+              department_name: emp?.department ? emp?.department?.department : '',
+              project: emp?.projectId ? emp?.projectId?.project_name : '',
           };
         });
 
@@ -485,7 +483,7 @@ const LeadersSubordinatesTable = ({
 
   const handleStatusFilter = (e) => {
     setStatusFilter(e.target.value);
-    setPage(1);
+    // setPage(1);
     setLoading(true);
 
     axiosInstance
@@ -495,30 +493,29 @@ const LeadersSubordinatesTable = ({
           project: projectFilter,
           designation: designationFilter,
           status: dataToFilter,
-          ogid: ogidFilter,
           search: searchTerm,
-          page: page,
-          limit: sizePerPage,
+          // page: page,
+          // limit: sizePerPage,
         },
       })
       .then((e) => {
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.data?.pagination;
+        // let resOptions = e?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        // const thisPageLimit = sizePerPage;
+        // const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        // setSizePerPage(thisPageLimit);
+        // setTotalPages(thisTotalPageSize);
 
         const mapp = resData.map((emp) => {
           return {
             ...emp,
             fullName:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+              designation_name: emp?.designation ? emp?.designation?.designation : '',
+              department_name: emp?.department ? emp?.department?.department : '',
+              project: emp?.projectId ? emp?.projectId?.project_name : '',
           };
         });
 
@@ -554,11 +551,16 @@ const LeadersSubordinatesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
+            <SearchBar
+              {...props.searchProps}
+              style={{ marginBottom: 15, paddingLeft: '12%', width: '300px' }}
+              className="inputSearch"
+            />
+              {/* <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
-              />
+              /> */}
 
               <ExportCSVButton
                 className="float-right btn export-csv"
@@ -656,9 +658,11 @@ const LeadersSubordinatesTable = ({
                     showNullMessage()
                   )
                 }
+                
+                pagination={paginationFactory()}
               />
 
-              <select
+              {/* <select
                 className="application-table-sizePerPage"
                 name="sizePerPage"
                 value={info.sizePerPage}
@@ -668,8 +672,8 @@ const LeadersSubordinatesTable = ({
                 <option value={25}>25</option>
                 <option value={30}>30</option>
                 <option value={50}>50</option>
-              </select>
-              <div className="application-table-pagination">
+              </select> */}
+              {/* <div className="application-table-pagination">
                 <Stack className="application-table-pagination-stack">
                   <Pagination
                     className="job-applicant-pagination"
@@ -684,7 +688,7 @@ const LeadersSubordinatesTable = ({
                     shape="rounded"
                   />
                 </Stack>
-              </div>
+              </div> */}
             </div>
           )}
         </ToolkitProvider>
