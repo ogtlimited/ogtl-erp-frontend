@@ -10,7 +10,7 @@ const SignatureGenerator = () => {
 
   const initialState = {
     fullName: user.first_name + " " + user.last_name || "",
-    position: user.designation.designation || "",
+    position: user?.designation?.designation || "",
     email: user.company_email || "",
     phone: "",
     copied: false,
@@ -33,12 +33,12 @@ const SignatureGenerator = () => {
   const enoughData = () => {
     let progress = 100;
     if (state.withPhoto) {
-      if (state.fullName && state.position && state.email) {
+      if (state.fullName && state?.position && state.email) {
         return (
           <React.Fragment>
             <Signature
               fullName={state.fullName}
-              position={state.position}
+              position={state?.position}
               email={state.email}
               phone={state.phone}
             />
@@ -62,12 +62,12 @@ const SignatureGenerator = () => {
         });
       }
     } else {
-      if (state.fullName && state.position && state.email) {
+      if (state.fullName && state?.position && state.email) {
         return (
           <React.Fragment>
             <Signature
               fullName={state.fullName}
-              position={state.position}
+              position={state?.position}
               email={state.email}
               phone={state.phone}
             />
@@ -90,11 +90,20 @@ const SignatureGenerator = () => {
     }
     if (progress > 0) {
       return (
-        <div className="d-flex justify-content-center">
-          <div className="spinner-border" role="status">
-            {/* <span className="visually-hidden">Loading...</span> */}
-          </div>
-        </div>
+        <React.Fragment>
+          <Signature
+            fullName={state.fullName}
+            position= <p style={{color: 'red'}}><strong>Please enter your designation</strong></p>
+            email={state.email}
+            phone={state.phone}
+          />
+          <br />
+          <button className="btn btn-primary" style={{cursor: 'not-allowed'}}>
+            {state.copied ? "Copied" : "Copy to clipboard"}{" "}
+            {state.copied ? getIcon("la-check") : getIcon("la-copy")}
+          </button>
+        </React.Fragment>
+
       );
     } else {
       return <div>Please, input your data</div>;
@@ -170,7 +179,7 @@ const SignatureGenerator = () => {
                     <input
                       type="text"
                       label="Position"
-                      value={state.position}
+                      value={state?.position}
                       name={"position"}
                       onChange={handleChange}
                       className="form-control"
