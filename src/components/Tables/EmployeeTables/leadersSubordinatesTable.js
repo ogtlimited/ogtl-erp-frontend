@@ -131,11 +131,6 @@ const LeadersSubordinatesTable = ({
   //   setPage(1);
   // };
 
-  const handleNavigate = (row) => {
-    setIsFromBiometrics(true);
-    navigate(`/dashboard/user/profile/${row._id}`);
-  };
-
   const columns = [
     {
       dataField: 'fullName',
@@ -241,9 +236,9 @@ const LeadersSubordinatesTable = ({
               <button
                 className="btn btn-sm btn-primary"
                 data-toggle="modal"
-                onClick={() => handleNavigate(row)}
+                onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
               >
-                Shift
+                Edit
               </button>
             </div>
           </div>
