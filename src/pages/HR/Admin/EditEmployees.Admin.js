@@ -43,7 +43,6 @@ const EditEmployeesAdmin = () => {
       const user = await axiosInstance.get(`/profile-dashboard/${id}`)
       const employee = user.data.getEmployeeFullData.employee;
       setEmployeeDetails(employee);
-      console.log("employee details:", employeeDetails)
       setEmployee({
           first_name: employee?.first_name,
           middle_name: employee?.middle_name,
@@ -59,12 +58,12 @@ const EditEmployeesAdmin = () => {
           employeeType: employee?.employeeType,
           status: employee?.status,
           isAdmin: employee?.isAdmin,
+          remote: employee?.remote,
           isExpatriate: employee?.isExpatriate,
           department: employee?.department?._id,
           projectId: employee?.projectId?._id,
           leaveCount: employee?.leaveCount,
       });
-      console.log("employees record:", employee)
     } catch (error) {
         console.log(error);
     }
@@ -488,6 +487,22 @@ const EditEmployeesAdmin = () => {
                         defaultValue={{label: employee?.employeeType ? employee?.employeeType : ''}}
                         onChange={(e) =>
                           setEmployee({ ...employee, employeeType: e?.value })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="remote">Is this Employee a Remote Staff?</label>
+                      <Select
+                        options={categoryOptions}
+                        isSearchable={true}
+                        isClearable={true}
+                        defaultValue={{label: employee?.remote ? 'Yes' : 'No'}}
+                        onChange={(e) =>
+                          setEmployee({ ...employee, remote: e?.value === 'yes' ? true : false })
                         }
                         style={{ display: "inline-block" }}
                       />
