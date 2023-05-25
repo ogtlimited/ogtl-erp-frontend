@@ -13,6 +13,7 @@ export const PROFILE = {
   branch: null,
   isAdmin: false,
   isExpatriate: false,
+  remote: false,
   employeeType: '',
   status: 'active',
   leaveCount: 0,

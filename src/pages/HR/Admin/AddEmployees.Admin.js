@@ -26,6 +26,7 @@ const AddEmployeesAdmin = () => {
   const selectStatusRef = useRef();
   const selectAdminRef = useRef();
   const selectExpatriateRef = useRef();
+  const selectRemoteRef = useRef();
   
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [employee, setEmployee] = useState(PROFILE);
@@ -36,6 +37,7 @@ const AddEmployeesAdmin = () => {
   const [isGenderValid, setIsGenderValid] = useState(false);
   const [isReportToValid, setIsReportToValid] = useState(false);
   const [isAdminValid, setIsAdminValid] = useState(false);
+  const [isRemoteValid, setIsRemoteValid] = useState(false);
   const [isDesignationValid, setIsDesignationValid] = useState(false);
   const [isShiftValid, setIsShiftValid] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(false);
@@ -57,6 +59,7 @@ const AddEmployeesAdmin = () => {
     setIsGenderValid(employee.gender ? true : false);
     setIsReportToValid(employee.reports_to ? true : false);
     setIsAdminValid(employee.isAdmin ? true : false);
+    setIsRemoteValid(employee.remote ? true : false);
     setIsDesignationValid(employee.designation ? true : false);
     setIsShiftValid(employee.shifts.length ? true : false);
     setIsEmploymentTypeValid(employee.employeeType ? true : false);
@@ -64,6 +67,7 @@ const AddEmployeesAdmin = () => {
         employee.gender &&
         employee.reports_to &&
         employee.isAdmin &&
+        employee.remote &&
         employee.designation &&
         employee.shifts.length &&
         employee.employeeType
@@ -178,6 +182,7 @@ const AddEmployeesAdmin = () => {
     selectBranchRef.current.select.clearValue();
     selectStatusRef.current.select.clearValue();
     selectAdminRef.current.select.clearValue();
+    selectRemoteRef.current.select.clearValue();
     selectExpatriateRef.current.select.clearValue();
     setEmployee(PROFILE);
   };
@@ -200,6 +205,7 @@ const AddEmployeesAdmin = () => {
         ...employeeForm,
         isAdmin: employeeForm.isAdmin === 'yes' ? true : false,
         isExpatriate: employeeForm.isExpatriate === 'yes' ? true : false,
+        remote: employeeForm.remote === 'yes' ? true : false,
         department: officeType === "Department " ? officeId : '',
         projectId: officeType === "Campaign " ? officeId : '',
         leaveCount: +employeeForm.leaveCount,
@@ -539,6 +545,23 @@ const AddEmployeesAdmin = () => {
 
                   <div className="col-md-6">
                     <div className="form-group">
+                      <label htmlFor="remote">Is this Employee a Remote Staff? {!isRemoteValid && <span>*</span>}</label>
+                      <Select
+                        options={categoryOptions}
+                        isSearchable={true}
+                        isClearable={true}
+                        ref={selectRemoteRef}
+                        onChange={(e) =>
+                          setEmployee({ ...employee, remote: e?.value })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+                  
+
+                  <div className="col-md-6">
+                    <div className="form-group">
                       <label htmlFor="branch">Branch{' '}
                         <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
                       </label>
@@ -572,7 +595,7 @@ const AddEmployeesAdmin = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leaveCount">Leave Count{' '}

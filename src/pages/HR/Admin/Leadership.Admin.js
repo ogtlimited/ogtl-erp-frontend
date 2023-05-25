@@ -3,100 +3,65 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-import SupervisorTable from '../../../components/Tables/EmployeeTables/supervisorTable';
+import LeadersTable from '../../../components/Tables/EmployeeTables/leadersTable';
 import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
 import EmployeeHelperService from './employee.helper';
-import { AddSupervisorAttendanceModal } from "../../../components/Modal/AddSupervisorAttendanceModal";
-import moment from "moment";
 
-const SupervisorAdmin = () => {
+const LeadershipAdmin = () => {
   const { createEmployee, status } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
-  const [allSubordinates, setAllSubordinates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setfilters] = useState([]);
   const [loadForm, setloadForm] = useState(false);
   const { user } = useAppContext();
-	const [today, setToday] = useState(null);
 
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  // const [page, setPage] = useState(1);
+  // const [sizePerPage, setSizePerPage] = useState(10);
+  // const [totalPages, setTotalPages] = useState('');
 
   const [departmentFilter, setDepartmentFilter] = useState('');
+  const [projectFilter, setProjectFilter] = useState('');
   const [designationFilter, setDesignationFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [ogidFilter, setOgidFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   const [departments, setDepartments] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [designations, setDesignations] = useState([]);
-  
-  useEffect(() => {
-		const time = new Date().toDateString();
-		const today_date = moment(time).format("yyyy-MM-DD");
-		setToday(today_date);
-	}, []);
-  
-  const fetchAllSubordinates = useCallback(() => {
-    axiosInstance
-      .get(`/leads/subordinates/${user._id}`, {
-        params: {
-          limit: 1000,
-        },
-      })
-      .then((e) => {
-        let resData = e?.data?.data?.employees;
-
-        const mapp = resData.map((emp) => {
-          return {
-            label:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            value: emp.ogid,
-          };
-        });
-
-        setAllSubordinates(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }, [user._id]);
 
   const fetchAllEmployee = useCallback(() => {
     axiosInstance
-      .get(`/leads/subordinates/${user._id}`, {
+      .get('/leads', {
         params: {
           department: departmentFilter,
           designation: designationFilter,
           status: statusFilter,
-          ogid: ogidFilter,
           search: searchTerm,
-          page: page,
-          limit: sizePerPage,
+          // page: page,
+          // limit: sizePerPage,
         },
       })
       .then((e) => {
+        console.log("All leaders:", e?.data?.data)
         let resData = e?.data?.data?.employees;
-        let resOptions = e?.data?.data?.pagination;
+        // let resOptions = e?.data?.data?.pagination;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        // const thisPageLimit = sizePerPage;
+        // const thisTotalPageSize = resOptions?.numberOfPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        // setSizePerPage(thisPageLimit);
+        // setTotalPages(thisTotalPageSize);
 
         const mapp = resData.map((emp) => {
           return {
             ...emp,
             fullName:
               emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+            designation_name: emp?.designation ? emp?.designation?.designation : '',
+            department_name: emp?.department ? emp?.department?.department : '',
+            project: emp?.projectId ? emp?.projectId?.project_name : '',
           };
         });
 
@@ -107,7 +72,7 @@ const SupervisorAdmin = () => {
         console.log(error);
         setLoading(false);
       });
-  }, [departmentFilter, designationFilter, ogidFilter, page, searchTerm, sizePerPage, statusFilter, user._id]);
+  }, [departmentFilter, designationFilter, searchTerm, statusFilter]);
 
   const fetchDepartment = async () => {
     try {
@@ -119,6 +84,23 @@ const SupervisorAdmin = () => {
       })).sort((a, b) => a.department.localeCompare(b.department));
 
       setDepartments(formatted);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axiosInstance.get('/api/project');
+      const resData = response?.data?.data;
+
+      const formatted = resData.map((e) => ({
+        project: e?.project_name        ,
+      })).sort((a, b) => a.project.localeCompare(b.project));
+      
+      setProjects(formatted);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -144,11 +126,11 @@ const SupervisorAdmin = () => {
   };
 
   useEffect(() => {
-    fetchAllSubordinates();
     fetchAllEmployee();
     fetchDepartment();
+    fetchProjects();
     fetchDesignation();
-  }, [fetchAllEmployee, fetchAllSubordinates, user]);
+  }, [fetchAllEmployee, user]);
 
   useEffect(() => {
     createEmployee().then((res) => {
@@ -221,7 +203,7 @@ const SupervisorAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Subordinates</h3>
+            <h3 className="page-title">Leaders <span style={{fontSize: '25px', color: '#999'}}>(Supervisors & Team leads)</span></h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/">Dashboard</Link>
@@ -229,23 +211,10 @@ const SupervisorAdmin = () => {
               <li className="breadcrumb-item active">Leadership</li>
             </ul>
           </div>
-          
-          <div className="col-auto float-right ml-auto">
-              <>
-                <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  data-target="#AddAttendanceFormModal"
-                >
-                  <i className="fa fa-plus"></i> Manual Clock In/Out
-                </a>
-              </>
-          </div>
         </div>
       </div>
 
-      <SupervisorTable
+      <LeadersTable
         loading={loading}
         data={allEmployees}
         setData={setallEmployees}
@@ -253,34 +222,30 @@ const SupervisorAdmin = () => {
         loadForm={loadForm}
         defaultSorted={defaultSorted}
         departments={departments}
+        projects={projects}
         designations={designations}
 
-        page={page}
-        setPage={setPage}
-        sizePerPage={sizePerPage}
-        setSizePerPage={setSizePerPage}
-        totalPages={totalPages}
-        setTotalPages={setTotalPages}
+        // page={page}
+        // setPage={setPage}
+        // sizePerPage={sizePerPage}
+        // setSizePerPage={setSizePerPage}
+        // totalPages={totalPages}
+        // setTotalPages={setTotalPages}
         departmentFilter={departmentFilter}
         setDepartmentFilter={setDepartmentFilter}
+        projectFilter={projectFilter}
+        setProjectFilter={setProjectFilter}
         designationFilter={designationFilter}
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
-        ogidFilter={ogidFilter}
-        setOgidFilter={setOgidFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         setLoading={setLoading}
       />
 
-      
-      <AddSupervisorAttendanceModal 
-        allSubordinates={allSubordinates} 
-        today={today}
-      />
     </>
   );
 };
 
-export default SupervisorAdmin;
+export default LeadershipAdmin;
