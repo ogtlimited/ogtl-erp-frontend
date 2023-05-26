@@ -252,7 +252,7 @@ const Profile = () => {
                                 />
                               </div>
                             </div>
-                            <a href="profile.html">
+                            <a href={userData?.employee?.reports_to?._id}>
                               {userData?.employee?.reports_to?.last_name ||
                                 'Not Available'}
                             </a>

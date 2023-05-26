@@ -109,7 +109,7 @@ const AllEmployeesAdmin = () => {
 
       const formatted = resData.map((e) => ({
         department: e.department,
-      }));
+      })).sort((a, b) => a.department.localeCompare(b.department));
 
       setDepartments(formatted);
       setLoading(false);
@@ -126,7 +126,7 @@ const AllEmployeesAdmin = () => {
 
       const formatted = resData.map((e) => ({
         designation: e.designation,
-      }));
+      })).sort((a, b) => a.designation.localeCompare(b.designation));
 
       setDesignations(formatted);
       setLoading(false);
