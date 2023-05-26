@@ -6,8 +6,8 @@ import axiosInstance from '../../services/api';
 import Select from 'react-select';
 import Switch from '@mui/material/Switch';
 
-export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) => {
-  const { showAlert } = useAppContext();
+export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, ogid }) => {
+  const { showAlert, User } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});
   const [createTuesdayShift, setCreateTuesdayShift] = useState({});
@@ -163,9 +163,12 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
           off: e.off,
           start: e.start,
           end: e.end,
+          ogid,
           huddles: e.huddles,
           huddleTime: e.huddleTime,
         }));
+
+      console.log('resData dropdown:', formatted)
 
       let monday = {};
       const monday_shifts = formatted?.filter((shift) => shift?.day === 'mon');
@@ -174,6 +177,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         monday.off = monday_shifts[i].off
         monday.start = monday_shifts[i].start
         monday.end = monday_shifts[i].end
+        monday.ogid = monday_shifts[i].ogid
         monday.huddles = monday_shifts[i].huddles
         monday.huddleTime = monday_shifts[i].huddleTime
         monday._id = createMondayShift._id
@@ -187,6 +191,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         tuesday.off = tuesday_shifts[i].off
         tuesday.start = tuesday_shifts[i].start
         tuesday.end = tuesday_shifts[i].end
+        tuesday.ogid = tuesday_shifts[i].ogid
         tuesday.huddles = tuesday_shifts[i].huddles
         tuesday.huddleTime = tuesday_shifts[i].huddleTime
         tuesday._id = createTuesdayShift._id
@@ -200,6 +205,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         wednesday.off = wednesday_shifts[i].off
         wednesday.start = wednesday_shifts[i].start
         wednesday.end = wednesday_shifts[i].end
+        wednesday.ogid = wednesday_shifts[i].ogid
         wednesday.huddles = wednesday_shifts[i].huddles
         wednesday.huddleTime = wednesday_shifts[i].huddleTime
         wednesday._id = createWednesdayShift._id
@@ -213,6 +219,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         thursday.off = thursday_shifts[i].off
         thursday.start = thursday_shifts[i].start
         thursday.end = thursday_shifts[i].end
+        thursday.ogid = thursday_shifts[i].ogid
         thursday.huddles = thursday_shifts[i].huddles
         thursday.huddleTime = thursday_shifts[i].huddleTime
         thursday._id = createThursdayShift._id
@@ -226,6 +233,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         friday.off = friday_shifts[i].off
         friday.start = friday_shifts[i].start
         friday.end = friday_shifts[i].end
+        friday.ogid = friday_shifts[i].ogid
         friday.huddles = friday_shifts[i].huddles
         friday.huddleTime = friday_shifts[i].huddleTime
         friday._id = createFridayShift._id
@@ -239,6 +247,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         saturday.off = saturday_shifts[i].off
         saturday.start = saturday_shifts[i].start
         saturday.end = saturday_shifts[i].end
+        saturday.ogid = saturday_shifts[i].ogid
         saturday.huddles = saturday_shifts[i].huddles
         saturday.huddleTime = saturday_shifts[i].huddleTime
         saturday._id = createSaturdayShift._id
@@ -252,6 +261,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts }) =>
         sunday.off = sunday_shifts[i].off
         sunday.start = sunday_shifts[i].start
         sunday.end = sunday_shifts[i].end
+        sunday.ogid = sunday_shifts[i].ogid
         sunday.huddles = sunday_shifts[i].huddles
         sunday.huddleTime = sunday_shifts[i].huddleTime
         sunday._id = createSundayShift._id
