@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import avater from '../../assets/img/profile.png';
 import { ContactDetailJson } from '../../components/FormJSON/HR/Employee/ContactDetails';
 import { EmergencyDetailJson } from '../../components/FormJSON/HR/Employee/EmergencyContact';
@@ -22,7 +22,6 @@ import SocialHandleForm from '../../components/Profile/components/SocialHandleFo
 import tokenService from '../../services/token.service';
 
 const Profile = () => {
-  const navigate = useNavigate();
   const user = tokenService.getUser();
   const [formType, setformType] = useState('');
   const [template, settemplate] = useState(PersonalDetailJson);
