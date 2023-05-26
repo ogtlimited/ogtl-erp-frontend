@@ -126,13 +126,12 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
     axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
       let resData = e?.data?.data;
 
-      console.log("This schedule:", resData);
-
       const formatted = resData?.map((e) => ({
           day: e.day,
           off: e.off,
           start: e.start,
           end: e.end,
+          ogid,
           huddles: e.huddles,
           huddleTime: e.huddleTime,
         }));
