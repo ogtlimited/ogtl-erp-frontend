@@ -43,7 +43,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       const resData = response?.data?.data;
 
       const sorted = resData.sort((a, b) => a.leave_type.localeCompare(b.leave_type))
-      console.log(sorted)
 
       setLeaveType(sorted);
     } catch (error) {
