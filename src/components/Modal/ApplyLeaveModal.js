@@ -39,10 +39,13 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const fetchLeavesType = async () => {
     try {
-      const response = await axiosInstance.get(`leave-type`);
+      const response = await axiosInstance.get(`/leave-type`);
       const resData = response?.data?.data;
 
-      setLeaveType(resData);
+      const sorted = resData.sort((a, b) => a.leave_type.localeCompare(b.leave_type))
+      console.log(sorted)
+
+      setLeaveType(sorted);
     } catch (error) {
       console.log(error);
     }
@@ -170,7 +173,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="from_date">From Date</label>
-                      {leaveTypeTitle === 'Emergency Leave' ? (
+                      {leaveTypeTitle.includes("Emergency") ? (
                         <input
                           type="date"
                           name="from_date"
@@ -196,7 +199,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="to_date">To Date</label>
-                      {leaveTypeTitle === 'Emergency Leave' ? (
+                      {leaveTypeTitle.includes("Emergency") ? (
                         <input
                           type="date"
                           name="to_date"
