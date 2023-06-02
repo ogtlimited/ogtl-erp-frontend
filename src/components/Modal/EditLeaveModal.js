@@ -37,7 +37,6 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     try {
       const response = await axiosInstance.get(`/leave-type`);
       const resData = response?.data?.data;
-      console.log("leave type", resData)
 
       setLeaveTypeOption(resData);
     } catch (error) {

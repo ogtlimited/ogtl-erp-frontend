@@ -100,7 +100,6 @@ const LeavesUser = () => {
       setLoading(false);
     }
   };
-
   
   const fetchTotalActiveLeaves = async () => {
     try {
@@ -149,7 +148,7 @@ const LeavesUser = () => {
 
   const fetchReporteesLeaves = useCallback(() => {
     axiosInstance
-      .get(`leads-leave-applications`, {
+      .get(`/leads-leave-applications`, {
         params: {
           department: departmentFilter,
           leave_type: leaveTypeFilter,
@@ -181,10 +180,7 @@ const LeavesUser = () => {
           from_date: new Date(leave?.from_date).toDateString(),
           to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department_id?.department,
-          requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave?.from_date)) /
-              (1000 * 3600 * 24)
-          ),
+          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
         }));
 
         setAllReporteesLeaves(formatted);
@@ -232,10 +228,7 @@ const LeavesUser = () => {
           from_date: new Date(leave?.from_date).toDateString(),
           to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department_id?.department,
-          requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave?.from_date)) /
-              (1000 * 3600 * 24)
-          ),
+          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
         }));
 
         setLeaveHistory(formatted);
@@ -289,10 +282,7 @@ const LeavesUser = () => {
           from_date: new Date(leave?.from_date).toDateString(),
           to_date: new Date(leave?.to_date).toDateString(),
           department: leave?.department_id?.department,
-          requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave?.from_date)) /
-              (1000 * 3600 * 24)
-          ),
+          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
         }));
 
         setAllReporteesAppealedLeaves(formatted);
@@ -312,7 +302,7 @@ const LeavesUser = () => {
 
       const formatted = resData.map((e) => ({
         department: e.department,
-      }));
+      })).sort((a, b) => a.department.localeCompare(b.department));
 
       setDepartments(formatted);
       setLoading(false);
@@ -329,7 +319,7 @@ const LeavesUser = () => {
 
       const formatted = resData.map((e) => ({
         leave_type: e.leave_type,
-      }));
+      })).sort((a, b) => a.leave_type.localeCompare(b.leave_type));
 
       setLeaveTypes(formatted);
     } catch (error) {
