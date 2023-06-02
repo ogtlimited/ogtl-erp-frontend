@@ -85,8 +85,8 @@ const LeavesUser = () => {
         '/leave-application/leave-application-progress'
       );
       const resData = response?.data?.data;
-      console.log('Approver response:', response);
-      console.log('Approver:', resData);
+      // console.log('Approver response:', response);
+      // console.log('Approver:', resData);
 
       const approver = Object.keys(resData);
       const status = Object.values(resData);
