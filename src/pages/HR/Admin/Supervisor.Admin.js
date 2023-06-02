@@ -254,6 +254,7 @@ const SupervisorAdmin = () => {
         defaultSorted={defaultSorted}
         departments={departments}
         designations={designations}
+        fetchAllSubordinates={fetchAllEmployee}
 
         page={page}
         setPage={setPage}

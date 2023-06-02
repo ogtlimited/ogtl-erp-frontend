@@ -459,37 +459,6 @@ const LeavesUser = () => {
         </>
       ),
     },
-    // {
-    //   dataField: '',
-    //   text: 'Actions',
-    //   sort: true,
-    //   csvExport: false,
-    //   headerStyle: { minWidth: '70px', textAlign: 'center' },
-    //   formatter: (value, row) => (
-    //     <div className="text-center">
-    //       <div className="leave-user-action-btns">
-    //         <button
-    //           className="btn btn-sm btn-primary"
-    //           data-toggle="modal"
-    //           data-target="#FormModal"
-    //         >
-    //           Edit
-    //         </button>
-    //         <button
-    //           className="btn btn-sm btn-primary"
-    //           data-toggle="modal"
-    //           data-target="#generalModal"
-    //           onClick={() => {
-    //             setmodalType('view-details');
-    //             setViewRow(row);
-    //           }}
-    //         >
-    //           View
-    //         </button>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
     {
       dataField: 'status_action',
       text: 'Action',
@@ -851,7 +820,7 @@ const LeavesUser = () => {
           </div>
         </div>
       </div>
-      {user?.leaveApprover && (
+      {user?.leaveApprovalLevel > 0 && (
         <div className="page-menu">
           <div className="row">
             <div className="col-sm-12">

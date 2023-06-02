@@ -16,6 +16,7 @@ import male2 from '../../../assets/img/male_avater2.png';
 import male3 from '../../../assets/img/male_avater3.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../Context/AppContext';
+import { EditLeaveCountModal } from '../../Modal/EditLeaveCountModal';
 
 const SupervisorTable = ({
   data,
@@ -29,6 +30,7 @@ const SupervisorTable = ({
   loading,
   departments,
   designations,
+  fetchAllSubordinates,
 
   page,
   setPage,
@@ -77,6 +79,8 @@ const SupervisorTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const [leaveCountEdit, setLeaveCountEdit] = useState([]);
 
   useEffect(() => {}, [filters, loadForm]);
 
@@ -137,6 +141,10 @@ const SupervisorTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
   };
+
+  const handleUpdateLeaveCount = (row) => {
+    setLeaveCountEdit(row);
+  }
 
   const columns = [
     {
@@ -204,6 +212,24 @@ const SupervisorTable = ({
       text: 'Employee ID',
       sort: true,
       headerStyle: { minWidth: '150px' },
+    },
+    {
+      dataField: 'leaveCount',
+      text: 'Leave Count',
+      sort: true,
+      headerStyle: { minWidth: '50px' },
+      formatter: (val, row) => 
+        <span>
+          {val} 
+          <a
+            onClick={() => handleUpdateLeaveCount(row)}
+            className="edit-icon"
+            data-toggle="modal"
+            data-target="#leaveCountModal"
+          >
+            <i className="fa fa-pencil"></i>
+          </a>
+        </span>,
     },
     {
       dataField: 'department_name',
@@ -599,7 +625,8 @@ const SupervisorTable = ({
           )}
         </ToolkitProvider>
       )}
-      {/* <EditEmployeeModal employee={editEmployee} /> */}
+
+      <EditLeaveCountModal leaveCountEdit={leaveCountEdit} fetchAllSubordinates={fetchAllSubordinates} />
     </>
   );
 };
