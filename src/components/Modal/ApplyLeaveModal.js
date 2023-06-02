@@ -196,7 +196,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       )}
                     </div>
                   </div>
-                  <div className="col-md-6">
+                  {leave.from_date.length && <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="to_date">To Date</label>
                       {leaveTypeTitle.includes("Emergency") ? (
@@ -223,7 +223,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                         />
                       )}
                     </div>
-                  </div>
+                  </div>}
                 </div>
 
                 <div className="modal-footer">
