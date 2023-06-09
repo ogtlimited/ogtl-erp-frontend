@@ -27,3 +27,70 @@
 }
 
 
+/* ERP - Login */
+
+.account-logo {
+    margin-bottom: 30px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.account-logo {
+    margin-bottom: 50px;
+}
+
+.account-logo img {
+    width: 150px;
+}
+
+.container {
+    height: 90vh;
+}
+
+.account-box {
+    background-color: #fff;
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 45%;
+}
+
+.account-box label {
+    color: #1f1f1f;
+    font-size: 16px;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+  
+.account-box .form-control {
+    background-color: #fbfbfb;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    height: 46px;
+}
+
+.account-box .form-group {
+    margin-bottom: 25px;
+}
+.account-box .account-btn {
+    background: #00c5fb;
+    background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+    background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+    background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+    background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+    border: 0;
+    border-radius: 4px;
+    display: block;
+    font-size: 22px;
+    padding: 10px 26px;
+    width: 100%;
+}
+
+.account-box .account-btn:hover,
+.account-box .account-btn:focus {
+    border: 0;
+    opacity: 0.8;
+}
+

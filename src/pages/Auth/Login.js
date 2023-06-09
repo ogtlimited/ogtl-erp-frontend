@@ -7,12 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
-// import { useMsal } from '@azure/msal-react';
-// import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
-  // const { instance } = useMsal();
-  // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
@@ -21,7 +17,6 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     setLoading(true);
@@ -113,13 +108,13 @@ const Login = () => {
       <div className="account-content">
         <div className="container">
           <div className="account-logo">
-            <Link to="/">
+            <a href="https://www.outsourceglobal.com/">
               <img
                 className="logo"
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-            </Link>
+            </a>
           </div>
           <div className="account-box">
             <div className="account-wrapper">
