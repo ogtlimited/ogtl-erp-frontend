@@ -1,9 +1,6 @@
-/** @format */
-
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
@@ -119,7 +116,7 @@ const Login = () => {
           <div className="account-box">
             <div className="account-wrapper">
               <h3 className="account-title">Login</h3>
-              <p className="account-subtitle">Access to our dashboard</p>
+              <p className="account-subtitle">Access your dashboard</p>
               <h6 className="text-center">
                 <small className="account-subtitle text-center error">
                   {errorMsg}
@@ -132,36 +129,15 @@ const Login = () => {
                     type="text"
                     name="company_email"
                     id="company_email"
+                    placeholder='Enter your company email'
                     {...register('company_email', { required: true })}
-                    className="form-control"
+                    className="form-control login-input"
                   />
                   {errors.company_email &&
                     errors.company_email.type === 'required' && (
                       <span className="error">Email is required</span>
                     )}
                 </div>
-                {/* <div className="form-group mt-2">
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="password">Password</label>
-                    </div>
-                    <div className="col-auto">
-                      <a className="text-muted" href="/">
-                        Forgot password?
-                      </a>
-                    </div>
-                  </div>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    {...register("password", { required: true })}
-                    className="form-control"
-                  />
-                  {errors.password && errors.password.type === "required" && (
-                    <span className="error">Password is required</span>
-                  )}
-                </div> */}
                 <div className="form-group text-center">
                   <button
                     className="btn btn-primary account-btn"
@@ -182,17 +158,6 @@ const Login = () => {
               </form>
             </div>
           </div>
-          {/* <div className="go-to-client">
-            <p>
-              Not a staff of Outsource Global, login as a{' '}
-              <strong
-                className="go-to-client-link"
-                onClick={() => navigate('/auth/client-login')}
-              >
-                client
-              </strong>
-            </p>
-          </div> */}
         </div>
       </div>
     </div>

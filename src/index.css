@@ -94,3 +94,9 @@
     opacity: 0.8;
 }
 
+.login-input::placeholder {
+    color: #ccc !important;
+    font-weight: 400 !important;
+    opacity: 0.5 !important;
+}
+
