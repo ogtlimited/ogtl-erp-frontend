@@ -105,13 +105,18 @@ const HRDashboard = () => {
 
   const fetchEmployeeData = async () => {
     try {
-      const response = await axiosInstance.get('/departments/employees/count');
-      const resData = response.data.data.employeesByDepartment;
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employees_by_office.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const offices = response?.data?.data?.employees_by_office
 
-      const formatted = resData.map((e) => ({
-        id: e._id === null ? 'not_specified' : e._id['_id'],
-        labels: e._id === null ? 'Not Specified' : e._id['department'],
-        data: e.total,
+      const formatted = offices.map((e) => ({
+        labels: e.split(':')[0],
+        data: Number(e.split(':')[1].trim()),
       }));
 
       const label = [...formatted.map((e) => e.labels)];
