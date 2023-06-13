@@ -80,10 +80,12 @@ const HRDashboard = () => {
         },
       });
     const resData = response?.data?.data?.record;
-    console.log("Employee by gender:", resData)
 
     const genderDiversityRatio = resData?.gender_ratio
     setGenderRatio(genderDiversityRatio);
+
+    const employeeByGender = resData
+    console.log("Employee by gender:", resData)
 
       // const formatted = resData.map((e) => ({
       //   labels: e._id,
