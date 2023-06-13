@@ -116,7 +116,7 @@ const Header = () => {
                   style={{ bottom: 24, right: 3 }}
                 ></span>
               </span>
-              <span>{user?.first_name}</span>
+              <span>{user?.employee_info?.personal_details?.first_name}</span>
             </a>
             <div className="dropdown-menu">
               <Link

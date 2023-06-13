@@ -21,7 +21,7 @@ const EmployeeUser = () => {
 
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const ogid = user?.ogid
+  const ogid = user?.employee_info?.ogid
 
   const fetchShiftForToday = useCallback(async () => {
     try {
@@ -41,8 +41,9 @@ const EmployeeUser = () => {
   }, [day, ogid])
 
   useEffect(() => {
+    console.log("user", user)
     fetchShiftForToday()
-  }, [fetchShiftForToday])
+  }, [fetchShiftForToday, user])
 
 
   const getNextHoliday = () => {
@@ -113,40 +114,7 @@ const EmployeeUser = () => {
     };
     fetchQuotes();
   }, []);
-  // let arr = []
-  // let unique = []
-  // let allShifts = []
 
-  // raw.forEach(r =>{
-  //  let index = allShift.findIndex(e => (e.start_time == r.actual_shift_start) && (e.end_time == r.actual_shift_end))
-  //  unique.push({
-  //    ...r,
-  //    default_shift: allShift[index]?.shift_name
-  //  })
-  // })
-
-  // shifts.forEach(e =>{
-  //   axiosInstance.post("/api/shiftType", e)
-  // })
-  // let sort = shifts.sort((a,b) => parseInt(a.start_time) - parseInt(b.end_time))
-  // shifts.forEach(e =>{
-  //   if(parseInt(e.start_time) < 12){
-  //     let s = {
-  //       ...e,
-  //       shift_name: 'Morning ' + parseInt(e.start_time) + ' AM to ' + parseInt(e.end_time),
-  //       slug: slugify(e.shift_name)
-  //     }
-  //     allShifts.push(s)
-  //   }else{
-  //     let end = parseInt(e.end_time) < 12 ? parseInt(e.end_time) + ' AM' : parseInt(e.end_time) + ' PM'
-  //     let s = {
-  //       ...e,
-  //       shift_name: 'Afternoon ' + parseInt(e.start_time) + ' PM to ' + end,
-  //       slug: slugify(e.shift_name)
-  //     }
-  //     allShifts.push(s)
-  //   }
-  // })
   return (
     <>
       <div className="row">
@@ -156,7 +124,10 @@ const EmployeeUser = () => {
               <h4 className="welcome-text">
                 Welcome back,
                 <br />{" "}
-                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}{" "}
+                {`${user?.employee_info?.personal_details?.first_name} 
+                  ${user?.employee_info?.personal_details?.middle_name} 
+                  ${user?.employee_info?.personal_details?.last_name}
+                `}{" "}
                 !
               </h4>
               <p className="welcome-p">

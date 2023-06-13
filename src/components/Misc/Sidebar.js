@@ -15,6 +15,12 @@ const Sidebar = () => {
   const userRole = user?.employee_info?.roles[0]
   const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
 
+  
+  useEffect(() => {
+    console.log("this sidebar user:", user)
+    }, [user])
+  
+
   const canView = (dept) => {
     if (
       userDept === dept ||

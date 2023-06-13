@@ -52,12 +52,50 @@ const HRDashboard = () => {
 
   const fetchHeadCount = async () => {
     try {
-      const response = await axiosInstance.get('/employees/head-count');
-      const resData = response.data.data.headCount;
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_head_count.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.head_count.active;
 
-      const count = resData.filter((data) => data._id === 'active');
+      const activeEmployeesCount = resData
+      setheadCount(activeEmployeesCount);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  
+  const fetchEmployeeGender = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_by_gender.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+    const resData = response?.data?.data?.record;
+    console.log("Employee by gender:", resData)
 
-      setheadCount(count[0].total);
+    const genderDiversityRatio = resData?.gender_ratio
+    setGenderRatio(genderDiversityRatio);
+
+      // const formatted = resData.map((e) => ({
+      //   labels: e._id,
+      //   data: e.total,
+      // }));
+
+      // const label = [...formatted.map((e) => e.labels)];
+      // const data = [...formatted.map((e) => e.data)];
+
+      // setFormattedGender(formatted);
+      // setGenderLabel(label);
+      // setGenderData(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -83,42 +121,6 @@ const HRDashboard = () => {
       setEmployeeLabel(label);
       setEmployeeData(data);
 
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchEmployeeGender = async () => {
-    try {
-      const response = await axiosInstance.get('/employees/gender-count');
-      const resData = response.data.data.genderCount;
-
-      const formatted = resData.map((e) => ({
-        labels: e._id,
-        data: e.total,
-      }));
-
-      const label = [...formatted.map((e) => e.labels)];
-      const data = [...formatted.map((e) => e.data)];
-
-      setFormattedGender(formatted);
-      setGenderLabel(label);
-      setGenderData(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchGenderDiversityRatio = async () => {
-    try {
-      const response = await axiosInstance.get('/employees/gender-ratio');
-      const resData = response.data.data.genderRatio;
-
-      setGenderRatio(resData);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -240,7 +242,6 @@ const HRDashboard = () => {
     fetchHeadCount();
     fetchEmployeeData();
     fetchEmployeeGender();
-    fetchGenderDiversityRatio();
     fetchInvoice();
     fetchTickets();
     fetchProjects();
