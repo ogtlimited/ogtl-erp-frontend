@@ -79,25 +79,26 @@ const HRDashboard = () => {
           "ngrok-skip-browser-warning": "69420",
         },
       });
-    const resData = response?.data?.data?.record;
+      const resData = response?.data?.data?.record;
 
-    const genderDiversityRatio = resData?.gender_ratio
-    setGenderRatio(genderDiversityRatio);
+      const genderDiversityRatio = resData?.gender_ratio
+      setGenderRatio(genderDiversityRatio);
 
-    const employeeByGender = resData
-    console.log("Employee by gender:", resData)
+      const employeeByGender = {}
+      employeeByGender.male = resData?.male
+      employeeByGender.female = resData?.female
 
-      // const formatted = resData.map((e) => ({
-      //   labels: e._id,
-      //   data: e.total,
-      // }));
+      const formattedGender = Object.keys(employeeByGender).map((key) => ({
+        labels: key,
+        data: employeeByGender[key],
+      }));
 
-      // const label = [...formatted.map((e) => e.labels)];
-      // const data = [...formatted.map((e) => e.data)];
+      const labels = Object.keys(employeeByGender)
+      const data = Object.values(employeeByGender)
 
-      // setFormattedGender(formatted);
-      // setGenderLabel(label);
-      // setGenderData(data);
+      setFormattedGender(formattedGender);
+      setGenderLabel(labels);
+      setGenderData(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -127,6 +128,25 @@ const HRDashboard = () => {
       setFormattedData(formatted);
       setEmployeeLabel(label);
       setEmployeeData(data);
+
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const fetchLeaveReport = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/leave_report.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+     
+      console.log("leave report response:", response?.data?.data?.report)
 
       setLoading(false);
     } catch (error) {
@@ -247,8 +267,9 @@ const HRDashboard = () => {
 
   useEffect(() => {
     fetchHeadCount();
-    fetchEmployeeData();
     fetchEmployeeGender();
+    fetchEmployeeData();
+    fetchLeaveReport();
     fetchInvoice();
     fetchTickets();
     fetchProjects();
