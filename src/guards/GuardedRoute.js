@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 // routes
 import { PATH_DASHBOARD } from "../routes/paths";
 import tokenService from "../services/token.service";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +17,11 @@ GuardedRoute.propTypes = {
 export default function GuardedRoute({ title, dept, children }) {
   const [user, setuser] = useState(tokenService.getUser());
 
-  const AllAccess = ["Super", "CEO", "HR Manager"];
+  useEffect(() => {
+  console.log("this guarded route user:", user)
+  }, [user])
+
+  const AllAccess = ["Super", "CEO", "hr_manager"];
   const canView = (title, dept) => {
     if (
       user?.department?.department === dept ||

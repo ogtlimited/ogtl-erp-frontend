@@ -1,83 +1,83 @@
-/**
- * eslint-disable no-unused-vars
- *
- * @format
- */
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-import React, { useEffect, useState } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars';
-import { Link } from 'react-router-dom';
+import "./Sidebar.css";
+import $ from "jquery";
+import tokenService from "../../services/token.service";
 
-import './Sidebar.css';
-import $ from 'jquery';
-import tokenService from '../../services/token.service';
-
-import sidebarConfig from './sidebarConfig';
+import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
-  const AllAccess = ['Super', 'CEO', 'HR Manager', 'HR Associate'];
+  const AllAccess = ["Super", "CEO", "hr_manager", "HR Associate"];
+
+  const userRole = user?.employee_info?.roles[0]
+  const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
+
   const canView = (dept) => {
     if (
-      user?.department?.department === dept ||
-      AllAccess.includes(user?.role?.title)
+      userDept === dept ||
+      AllAccess.includes(userRole)
     ) {
       return true;
-    } else if (dept === 'All') {
+    } else if (dept === "All") {
       return true;
     } else {
       return false;
     }
   };
+
+  const [dropdownStates, setDropdownStates] = useState({});
+
   useEffect(() => {
-    var Sidemenu = function () {
-      this.$menuItem = $('#sidebar-menu a');
-    };
-    var $this = Sidemenu;
-    $('#sidebar-menu a').on('click', function (e) {
-      if ($(this).parent().hasClass('submenu')) {
+    $("#sidebar-menu a").on("click", function (e) {
+      if ($(this).parent().hasClass("submenu")) {
         e.preventDefault();
       }
-      if (!$(this).hasClass('subdrop')) {
-        $('ul', $(this).parents('ul:first')).slideUp(350);
-        $('a', $(this).parents('ul:first')).removeClass('subdrop');
-        $(this).next('ul').slideDown(350);
-        $(this).addClass('subdrop');
-      } else if ($(this).hasClass('subdrop')) {
-        $(this).removeClass('subdrop');
-        $(this).next('ul').slideUp(350);
+      const dropdownKey = $(this).attr("data-dropdown-key");
+      if (!$(this).hasClass("subdrop")) {
+        $("ul", $(this).parents("ul:first")).slideUp(350);
+        $("a", $(this).parents("ul:first")).removeClass("subdrop");
+        $(this).next("ul").slideDown(350);
+        $(this).addClass("subdrop");
+        setDropdownStates((prevState) => ({
+          ...prevState,
+          [dropdownKey]: true,
+        }));
+      } else if ($(this).hasClass("subdrop")) {
+        $(this).removeClass("subdrop");
+        $(this).next("ul").slideUp(350);
+        setDropdownStates((prevState) => ({
+          ...prevState,
+          [dropdownKey]: false,
+        }));
       }
     });
-    $('#sidebar-menu ul li.submenu a.active')
-      .parents('li:last')
-      .children('a:first')
-      .addClass('active')
-      .trigger('click');
+    $("#sidebar-menu ul li.submenu a.active")
+      .parents("li:last")
+      .children("a:first")
+      .addClass("active")
+      .trigger("click");
   }, []);
-  const dNone = {
-    display: 'none',
-  };
 
   return (
     <div className="sidebar" id="sidebar">
       <div
         className="slimScrollDiv slimScrollDiv-style"
         style={{
-          position: 'relative',
-          overflow: 'auto',
-          width: '100%',
-          height: '593px',
+          position: "relative",
+          overflow: "auto",
+          width: "100%",
+          height: "593px",
         }}
       >
         <div
           className="sidebar-inner slimscroll slimScroll-style"
-          style={{ overflow: 'auto', width: '100%', height: '593px' }}
+          style={{ overflow: "auto", width: "100%", height: "593px" }}
         >
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
-            
               {sidebarConfig.map((nav) => (
                 <>
                   {canView(nav?.canView) && (
@@ -90,23 +90,23 @@ const Sidebar = () => {
                       {item.children ? (
                         <>
                           {canView(item?.canView) && (
-                            <li className="submenu">
+                            <li
+                              className={`submenu ${
+                                dropdownStates[item.title] ? "active subdrop" : ""
+                              }`}
+                              key={item.title}
+                            >
                               <a
                                 href=""
                                 onClick={(e) => e.preventDefault()}
-                                className={
-                                  nav.subheader === 'Main'
-                                    ? 'active subdrop'
-                                    : 'subdrop'
-                                }
+                                data-dropdown-key={item.title}
                               >
-                                {item.icon} <span> {item.title}</span>{' '}
+                                {item.icon} <span> {item.title}</span>{" "}
                                 <span className="menu-arrow"></span>
                               </a>
                               <ul
                                 style={{
-                                  display:
-                                    nav.subheader === 'Main' ? 'block' : 'none',
+                                  display: dropdownStates[item.title] ? "block" : "none",
                                 }}
                               >
                                 {item.children.map((child) => (
@@ -127,7 +127,7 @@ const Sidebar = () => {
                       ) : (
                         <>
                           {canView(item?.canView) && (
-                            <li>
+                            <li key={item.path}>
                               <Link to={item.path}>
                                 {item.icon} <span>{item.title}</span>
                               </Link>
@@ -135,34 +135,12 @@ const Sidebar = () => {
                           )}
                         </>
                       )}
-
-                      {/* {user?.role?.title === 'HR Associate' && (
-                        <li className="submenu">
-                          <a
-                            href=""
-                            onClick={(e) => e.preventDefault()}
-                            className="subdrop"
-                          >
-                            <i className="la la-cube"></i>
-                            <span>Operations</span>
-                            <span className="menu-arrow"></span>
-                          </a>
-                          <ul style={{ display: 'none' }}>
-                            <Link
-                              to="/dashboard/operations/campaigns"
-                              className=""
-                            >
-                              All Campaigns
-                            </Link>
-                          </ul>
-                        </li>
-                      )} */}
                     </>
                   ))}
                 </>
               ))}
 
-              {user?.role?.title === 'HR In-House Agent' && (
+              {!AllAccess.includes(userRole) && (
                 <li className="submenu">
                   <a
                     href=""
@@ -173,7 +151,7 @@ const Sidebar = () => {
                     <span>Recruitment</span>
                     <span className="menu-arrow"></span>
                   </a>
-                  <ul style={{ display: 'none' }}>
+                  <ul style={{ display: "none" }}>
                     <Link to="/dashboard/recruitment/job-opening" className="">
                       Job Opening
                     </Link>

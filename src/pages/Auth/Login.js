@@ -23,7 +23,7 @@ const Login = () => {
         // const activeUser = e?.account?.username;
 
         const obj = {
-          company_email: data.company_email.trim(),
+          email: data.company_email.trim(),
         };
 
         // if (obj.company_email !== activeUser) {
@@ -35,10 +35,17 @@ const Login = () => {
         setErrorMsg("")
 
         axios
-          .post(config.ApiUrl + '/api/login', obj)
+          .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+            headers: {          
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            }, email: obj.email
+          })
           .then((res) => {
-            tokenService.setUser(res.data.employee);
-            tokenService.setToken(res.data.token.token);
+            console.log(res);
+            tokenService.setUser(res.data.data);
+            tokenService.setToken(res.data.data.token);
             window.location.href = '/dashboard/employee-dashboard';
           })
           .catch((err) => {
@@ -57,7 +64,7 @@ const Login = () => {
               // const activeUser = e?.account?.username;
 
               const obj = {
-                company_email: data.company_email.trim(),
+                email: data.company_email.trim(),
               };
 
               // if (obj.company_email !== activeUser) {
@@ -69,12 +76,13 @@ const Login = () => {
               setErrorMsg("")
 
               axios
-                .post(config.ApiUrl + '/api/login', obj)
-                .then((res) => {
-                  tokenService.setUser(res.data.employee);
-                  tokenService.setToken(res.data.token.token);
-                  window.location.href = '/dashboard/employee-dashboard';
-                })
+              .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+                headers: {          
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "ngrok-skip-browser-warning": "69420",
+                }, email: obj.email
+              })
                 .catch((err) => {
                   console.log(err);
                 })
