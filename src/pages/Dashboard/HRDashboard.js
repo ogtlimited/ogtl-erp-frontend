@@ -50,6 +50,7 @@ const HRDashboard = () => {
   const [fromDate2, setFromDate2] = useState(moment(firstDay).format('yyyy-MM-DD'));
   const [toDate2, setToDate2] = useState(moment(lastDay).format('yyyy-MM-DD'));
 
+  // Head Count: Active
   const fetchHeadCount = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_head_count.json', {
@@ -70,6 +71,7 @@ const HRDashboard = () => {
     }
   };
   
+  // Gender Diversity Ratio (Card) & Employee by Gender (Chart)
   const fetchEmployeeGender = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_by_gender.json', {
@@ -106,6 +108,7 @@ const HRDashboard = () => {
     }
   };
 
+  // Employee by Office (Chart)
   const fetchEmployeeData = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/hr_dashboard/employees_by_office.json', {
@@ -136,6 +139,7 @@ const HRDashboard = () => {
     }
   };
 
+  // Leaver Report - Leave types and Leave status (chart)
   const fetchLeaveReport = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/hr_dashboard/leave_report.json', {
@@ -145,8 +149,20 @@ const HRDashboard = () => {
           "ngrok-skip-browser-warning": "69420",
         },
       });
-     
-      console.log("leave report response:", response?.data?.data?.report)
+
+      const leaveTypes = response?.data?.data?.report?.leave_types
+      const leaveTypeLabel = Object.keys(leaveTypes);
+      const leaveTypesData = Object.values(leaveTypes);
+      setFormattedLeaveType(leaveTypeLabel);
+      setLeaveTypeLabel(leaveTypeLabel);
+      setLeaveTypeData(leaveTypesData);
+
+      const leaveStatus = response?.data?.data?.report?.status
+      const leaveStatusLabel = Object.keys(leaveStatus);
+      const leaveStatusData = Object.values(leaveStatus);
+      setFormattedLeaveStatus(leaveStatusLabel);
+      setLeaveStatusLabel(leaveStatusLabel);
+      setLeaveStatusData(leaveStatusData);
 
       setLoading(false);
     } catch (error) {
@@ -213,58 +229,6 @@ const HRDashboard = () => {
     }
   };
 
-  const fetchLeaveStatusData = useCallback(() => {
-    axiosInstance
-    .get('/hr-leave-applications/generate-report', {
-      params: {
-        from: fromDate,
-        to: toDate,
-      },
-    })
-    .then((res) => {
-      let resData = res?.data?.data?.leaveStatus;
-      // console.log("Generate Status Report Data", resData);
-
-      const label = Object.keys(resData);
-      const data = Object.values(resData);
-
-      setFormattedLeaveStatus(label);
-      setLeaveStatusLabel(label);
-      setLeaveStatusData(data);
-
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }, [fromDate, toDate]);
-
-  const fetchLeaveTypeData = useCallback(() => {
-    axiosInstance
-    .get('/hr-leave-applications/generate-report', {
-      params: {
-        from: fromDate2,
-        to: toDate2,
-      },
-    })
-    .then((res) => {
-      let resData = res?.data?.data?.typesOfLeaveTaken;
-      // console.log("Generate Type Report Data", resData);
-
-      const label = Object.keys(resData);
-      const data = Object.values(resData);;
-
-      setFormattedLeaveType(label);
-      setLeaveTypeLabel(label);
-      setLeaveTypeData(data);
-
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }, [fromDate2, toDate2]);
-
   useEffect(() => {
     fetchHeadCount();
     fetchEmployeeGender();
@@ -273,9 +237,7 @@ const HRDashboard = () => {
     fetchInvoice();
     fetchTickets();
     fetchProjects();
-    fetchLeaveStatusData();
-    fetchLeaveTypeData();
-  }, [fetchLeaveStatusData, fetchLeaveTypeData]);
+  }, []);
 
   useEffect(() => {
     combineRequest().then((res) => {
