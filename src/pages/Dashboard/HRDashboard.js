@@ -365,17 +365,6 @@ const HRDashboard = () => {
           </div>
           <span>Month Attrition Rate</span>
         </div>
-        {/* <div className="hr-dashboard-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
-              <i className="fa fa-diamond"></i>
-            </span>
-            <div className="card-info">
-              <h3>-</h3>
-            </div>
-          </div>
-          <span>Absenteeism Per Month</span>
-        </div> */}
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">

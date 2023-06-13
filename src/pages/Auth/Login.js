@@ -35,7 +35,7 @@ const Login = () => {
         setErrorMsg("")
 
         axios
-          .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+          .post(config.ApiUrl + '/api/v1/auth/login.json', {
             headers: {          
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
@@ -76,7 +76,7 @@ const Login = () => {
               setErrorMsg("")
 
               axios
-              .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+              .post(config.ApiUrl + '/api/v1/auth/login.json', {
                 headers: {          
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
