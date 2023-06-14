@@ -7595,8 +7595,6 @@ ul.comment-list li ul.children {
   box-shadow: unset;
 }
 .time-list {
-  display: flex;
-  flex-grow: 1;
   margin-bottom: 20px;
 }
 .request-btn {

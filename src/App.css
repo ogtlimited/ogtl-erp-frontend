@@ -349,8 +349,7 @@ a.nav-link {
   position: relative;
   border-radius: 16px;
   z-index: 0;
-  box-shadow: none;
-  
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
   background-color: rgb(209, 255, 252);
 }
 @media (min-width: 900px) {
