@@ -17,6 +17,9 @@ GuardedRoute.propTypes = {
 export default function GuardedRoute({ title, dept, children }) {
   const [user, setuser] = useState(tokenService.getUser());
 
+  const userRole = user?.employee_info?.roles[0]
+  const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
+
   useEffect(() => {
   console.log("this guarded route user:", user)
   }, [user])
@@ -24,8 +27,8 @@ export default function GuardedRoute({ title, dept, children }) {
   const AllAccess = ["Super", "CEO", "hr_manager"];
   const canView = (title, dept) => {
     if (
-      user?.department?.department === dept ||
-      AllAccess.includes(user?.role?.title)
+      userDept === dept ||
+      AllAccess.includes(userRole)
     ) {
       return true;
     } else if (dept === "All") {

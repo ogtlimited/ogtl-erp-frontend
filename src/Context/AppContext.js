@@ -27,7 +27,7 @@ const AppProvider = (props) => {
   });
 
   const [employeeAttendance, setemployeeAttendance] = useState([]);
-  const [user, setuser] = useState(tokenService.getUser());
+  const [user] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
   const [notifications, setNotifications] = useState([]);

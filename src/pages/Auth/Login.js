@@ -23,7 +23,7 @@ const Login = () => {
         // const activeUser = e?.account?.username;
 
         const obj = {
-          email: data.company_email.trim(),
+          company_email: data.company_email.trim(),
         };
 
         // if (obj.company_email !== activeUser) {
@@ -35,12 +35,12 @@ const Login = () => {
         setErrorMsg("")
 
         axios
-          .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+          .post(config.ApiUrl + '/api/v1/auth/login.json', {
             headers: {          
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
               "ngrok-skip-browser-warning": "69420",
-            }, email: obj.email
+            }, email: obj.company_email
           })
           .then((res) => {
             console.log(res);
@@ -64,7 +64,7 @@ const Login = () => {
               // const activeUser = e?.account?.username;
 
               const obj = {
-                email: data.company_email.trim(),
+                company_email: data.company_email.trim(),
               };
 
               // if (obj.company_email !== activeUser) {
@@ -76,12 +76,12 @@ const Login = () => {
               setErrorMsg("")
 
               axios
-              .post('https://9776-41-73-1-72.ngrok-free.app/api/v1/auth/login.json', {
+              .post(config.ApiUrl + '/api/v1/auth/login.json', {
                 headers: {          
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
                   "ngrok-skip-browser-warning": "69420",
-                }, email: obj.email
+                }, email: obj.company_email
               })
                 .catch((err) => {
                   console.log(err);
