@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import logo from "../../assets/img/OG-Logo.png";
 import Signature from "./signature";
 import "./signature.css";
 import tokenService from "../../services/token.service";
 const getIcon = (name) => <i className={"las " + name}></i>;
 
 const SignatureGenerator = () => {
-  const [user, setuser] = useState(tokenService.getUser());
+  const [user] = useState(tokenService.getUser());
+
+  console.log("user", user)
 
   const initialState = {
-    fullName: user.first_name + " " + user.last_name || "",
+    fullName: user?.employee_info?.personal_details?.first_name + " " + user?.employee_info?.personal_details?.last_name || "",
     position: user?.designation?.designation || "",
-    email: user.company_email || "",
+    email: user?.employee_info?.email || "",
     phone: "",
     copied: false,
   };
@@ -121,8 +122,6 @@ const SignatureGenerator = () => {
       windowSelection.addRange(range);
     }
     try {
-      let successful = document.execCommand("copy");
-
       setState((prevState) => ({
         ...prevState,
         copied: true,
