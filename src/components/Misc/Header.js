@@ -85,7 +85,7 @@ const Header = () => {
         <audio ref={audioPlayer} src={NotificationSound} allow="autoplay" />
 
         <ul className="nav user-menu">
-          <li className="nav-item">
+          <li className="nav-item mr-4">
             <div className="top-nav-search">
               <a className="responsive-search">
                 <i className="fa fa-search"></i>
