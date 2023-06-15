@@ -148,21 +148,27 @@ const AddEmployeesAdmin = () => {
 
       const service = empHelper.mapRecords();
       setServices([service]);
+      console.log("service", service);
 
       const reports_to = service.reportstoOpts;
       setReportsTo(reports_to);
+      console.log("reports_to", reports_to);
 
       const department = service.deptopts;
       setDepartment(department);
+      console.log("department", department);
 
       const projectId = service.campaingOpts;
       setProjectId(projectId);
+      console.log("projectId", projectId);
 
       const branch = service.branchOpts;
       setBranch(branch);
+      console.log("branch", branch);
 
       const emp_status = service.employeestatusOpts;
       setEmployeeStatus(emp_status);
+      console.log("emp_status", emp_status);
     });
   }, [createEmployee, officeId, status]);
 

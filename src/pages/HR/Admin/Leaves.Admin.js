@@ -29,13 +29,17 @@ const LeavesAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState('');
 
+  const [departments, setDepartments] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
+  const [leaveTypes, setLeaveTypes] = useState([]);
+  
+  const [officeFilter, setOfficeFilter] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
+  const [campaignFilter, setCampaignFilter] = useState('');
   const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [departments, setDepartments] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
 
   // Calculates Leave Days (Week Days Only)
   function calcBusinessDays(startDate, endDate) {
@@ -78,6 +82,13 @@ const LeavesAdmin = () => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+          search: searchTerm,
+          // operation_office_id: officeFilter,
+          // hr_designation_id: designationFilter,
         },
       });
 
@@ -152,32 +163,56 @@ const LeavesAdmin = () => {
       setLoading(false);
     }
   };
-
-  const fetchDepartment = async () => {
+  
+  // All Offices:
+  const fetchAllOffices = async () => {
     try {
-      const response = await axiosInstance.get('/department');
-      const resData = response?.data?.data;
+      const response = await axiosInstance.get('/api/v1/offices.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.offices;
 
-      const formatted = resData.map((e) => ({
-        department: e.department
-      }))
+      const allDepartments = resData.filter((e) => e?.office_type === "department");
+      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
 
-      setDepartments(formatted);
-      setLoading(false);
+      const formattedDepartments = allDepartments.map((e) => ({
+        label: e?.title.toUpperCase(),
+        value: e.id,
+      })).sort((a, b) => a.label.localeCompare(b.label));
+
+      const formattedCampaigns = allCampaigns.map((e) => ({
+        label: e?.title.toUpperCase(),
+        value: e.id,
+      })).sort((a, b) => a.label.localeCompare(b.label));
+
+      setDepartments(formattedDepartments);
+      setCampaigns(formattedCampaigns);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      console.log("Get All Offices error:", error);
     }
   };
 
+  // All Leave Types:
   const fetchLeavesType = async () => {
     try {
-      const response = await axiosInstance.get(`leave-type`);
-      const resData = response?.data?.data;
+      const response = await axiosInstance.get('/api/v1/leave_types.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.types;
+      console.log("All Leave types for select", resData)
       
       const formatted = resData.map((e) => ({
-        leave_type: e.leave_type
-      }))
+        label: e?.title.toUpperCase(),
+        value: e.id,
+      })).sort((a, b) => a.label.localeCompare(b.label));
 
       setLeaveTypes(formatted);
     } catch (error) {
@@ -186,11 +221,11 @@ const LeavesAdmin = () => {
   }
 
   useEffect(() => {
-    fetchAllEmpOnLeave();
+    fetchHeadCount();
     fetchHRLeaves();
     fetchHRLeaveHistory();
-    fetchHeadCount()
-    fetchDepartment()
+    fetchAllEmpOnLeave();
+    fetchAllOffices();
     fetchLeavesType();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -410,9 +445,9 @@ const LeavesAdmin = () => {
           <div className="Hr-cards">
             <div className="col-md-3">
               <div className="stats-info">
-                <h6>Today Presents</h6>
+                <h6>Employees On Leave</h6>
                 <h4>
-                  {onLeave} / {headCount}
+                  {onLeave}
                 </h4>
               </div>
             </div>
@@ -431,12 +466,15 @@ const LeavesAdmin = () => {
             setTotalPages={setTotalPages}
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
+            campaignFilter={campaignFilter}
+            setCampaignFilter={setCampaignFilter}
             leaveTypeFilter={leaveTypeFilter}
             setLeaveTypeFilter={setLeaveTypeFilter}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             setLoading={setLoading}
             departments={departments}
+            campaigns={campaigns}
             leaveTypes={leaveTypes}
           />
         </div>

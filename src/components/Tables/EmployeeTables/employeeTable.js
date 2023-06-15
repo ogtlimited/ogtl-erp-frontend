@@ -16,19 +16,15 @@ import male2 from '../../../assets/img/male_avater2.png';
 import male3 from '../../../assets/img/male_avater3.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../Context/AppContext';
-// import ToggleTable from '../toggleTable';
-// import EditEmployeeModal from '../modals/EditEmployeeModal';
+
 const EmployeesTable = ({
   data,
   setData,
-  defaultSorted,
-  selectedOption,
-  filters,
-  seteditData,
-  setmode,
-  loadForm,
   loading,
+  setLoading,
+
   departments,
+  campaigns,
   designations,
 
   page,
@@ -37,31 +33,32 @@ const EmployeesTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
+
   departmentFilter,
   setDepartmentFilter,
+  campaignFilter,
+  setCampaignFilter,
   designationFilter,
   setDesignationFilter,
   statusFilter,
   setStatusFilter,
-  ogidFilter,
-  setOgidFilter,
   searchTerm,
   setSearchTerm,
-  setLoading,
   context,
 }) => {
+
   const status = [
     {
       code: 'active',
-      label: 'Active',
+      label: 'ACTIVE',
     },
     {
       code: 'left',
-      label: 'Resigned',
+      label: 'RESIGNED',
     },
     {
       code: 'terminated',
-      label: 'Terminated',
+      label: 'TERMINATED',
     },
   ];
 
@@ -70,16 +67,13 @@ const EmployeesTable = ({
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState('');
-  const [unfiltered, setunfiltered] = useState([]);
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = 'https://erp.outsourceglobal.com';
   const { setIsFromBiometrics } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
-
-  useEffect(() => {}, [filters, loadForm]);
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -94,17 +88,14 @@ const EmployeesTable = ({
 
   useEffect(() => {
     resizeTable();
-    setunfiltered(data);
     window.addEventListener('resize', () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
     setDataToFilter(data);
-    // setTimeout(() => {
-    //   setLoading(true);
-    // }, 5000);
   }, [data]);
 
   // Pagination
@@ -114,11 +105,6 @@ const EmployeesTable = ({
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
-    // if (loading) {
-    //   setData([])
-    //   setDataToFilter([])
-    // }
-    // return;
   };
 
   const handleChangeSizePerPage = (e) => {
@@ -128,15 +114,9 @@ const EmployeesTable = ({
 
     setSizePerPage(e.target.value);
     setPage(1);
-
-    // if (loading) {
-    //   setData([])
-    //   setDataToFilter([])
-    // }
-    // return;
   };
 
-    const handleNavigate = () => {
+  const handleNavigate = () => {
     setIsFromBiometrics(false);
   }
 
@@ -208,21 +188,21 @@ const EmployeesTable = ({
       headerStyle: { minWidth: '150px' },
     },
     {
-      dataField: 'department_name',
-      text: 'Department',
+      dataField: 'office',
+      text: 'Office Type',
       sort: true,
       headerStyle: { minWidth: '150px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'project',
-      text: 'Campaign',
+      dataField: 'officeName',
+      text: 'Office',
       sort: true,
       headerStyle: { minWidth: '150px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'designation_name',
+      dataField: 'designation',
       text: 'Designation',
       sort: true,
       headerStyle: { minWidth: '150px' },
@@ -256,108 +236,117 @@ const EmployeesTable = ({
     },
   ];
 
-  const MySearch = useCallback(
-    (props) => {
-      let input;
-      const handleClick = () => {
-        setPage(1);
-        setLoading(true);
-        props.onSearch(input.value);
-        const searchTerm = input.value;
-        setSearchTerm(searchTerm);
+  // // Search START
+  // const MySearch = useCallback(
+  //   (props) => {
+  //     let input;
+  //     const handleClick = () => {
+  //       setPage(1);
+  //       setLoading(true);
+  //       props.onSearch(input.value);
+  //       const searchTerm = input.value;
+  //       setSearchTerm(searchTerm);
 
-        if (page === 1) {
-          axiosInstance
-            .get('/employees/paginated-employees', {
-              params: {
-                department: departmentFilter,
-                designation: designationFilter,
-                status: statusFilter,
-                ogid: ogidFilter,
-                search: searchTerm,
-                page: page,
-                limit: sizePerPage,
-              },
-            })
-            .then((e) => {
-              let resData = e?.data?.employees;
-              let resOptions = e?.data?.pagination;
+  //       if (page === 1) {
+  //         axiosInstance
+  //           .get('/employees/paginated-employees', {
+  //             params: {
+  //               department: departmentFilter,
+  //               designation: designationFilter,
+  //               status: statusFilter,
+  //               ogid: ogidFilter,
+  //               search: searchTerm,
+  //               page: page,
+  //               limit: sizePerPage,
+  //             },
+  //           })
+  //           .then((e) => {
+  //             let resData = e?.data?.employees;
+  //             let resOptions = e?.data?.pagination;
 
-              const thisPageLimit = sizePerPage;
-              const thisTotalPageSize = resOptions?.numberOfPages;
+  //             const thisPageLimit = sizePerPage;
+  //             const thisTotalPageSize = resOptions?.numberOfPages;
 
-              setSizePerPage(thisPageLimit);
-              setTotalPages(thisTotalPageSize);
+  //             setSizePerPage(thisPageLimit);
+  //             setTotalPages(thisTotalPageSize);
 
-              const mapp = resData.map((emp) => {
-                return {
-                  ...emp,
-                  fullName:
-                    emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-                  designation_name: emp?.designation?.designation,
-                  department_name: emp?.department?.department,
-                  project: emp?.projectId?.project_name,
-                };
-              });
-              setData(mapp);
-              setunfiltered(mapp);
-              // setDepartmentFilter('');
-              // setDesignationFilter('');
-              // setOgidFilter('');
-              // setStatusFilter('');
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-            });
-        }
-        setLoading(false);
-      };
+  //             const mapp = resData.map((emp) => {
+  //               return {
+  //                 ...emp,
+  //                 fullName:
+  //                   emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
+  //                 designation_name: emp?.designation?.designation,
+  //                 department_name: emp?.department?.department,
+  //                 project: emp?.projectId?.project_name,
+  //               };
+  //             });
+  //             setData(mapp);
+  //             setunfiltered(mapp);
+  //             // setDepartmentFilter('');
+  //             // setDesignationFilter('');
+  //             // setOgidFilter('');
+  //             // setStatusFilter('');
+  //           })
+  //           .catch((error) => {
+  //             console.log(error);
+  //             setLoading(false);
+  //           });
+  //       }
+  //       setLoading(false);
+  //     };
 
-      return (
-        <div className="job-app-search">
-          <input
-            className="form-control"
-            style={{
-              backgroundColor: '#fff',
-              width: '33.5%',
-              marginRight: '20px',
-            }}
-            ref={(n) => (input = n)}
-            type="text"
-          />
-          <button className="btn btn-primary" onClick={handleClick}>
-            Search
-          </button>
-        </div>
-      );
-    },
-    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
-  );
+  //     return (
+  //       <div className="job-app-search">
+  //         <input
+  //           className="form-control"
+  //           style={{
+  //             backgroundColor: '#fff',
+  //             width: '33.5%',
+  //             marginRight: '20px',
+  //           }}
+  //           ref={(n) => (input = n)}
+  //           type="text"
+  //         />
+  //         <button className="btn btn-primary" onClick={handleClick}>
+  //           Search
+  //         </button>
+  //       </div>
+  //     );
+  //   },
+  //   [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
+  // );
+  // // Search END
 
-  const handleDepartmentFilter = (e) => {
+  const handleDepartmentFilter = useCallback((e) => {
     setDepartmentFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("Dept. Filter:", departmentFilter);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get('/employees/paginated-employees', {
-        params: {
-          department: dataToFilter,
-          designation: designationFilter,
-          status: statusFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
+    .get('api/v1/employees.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        operation_office_id: e.target.value,
+        // hr_designation_id: designationFilter,
+      },
+    })
       .then((e) => {
-        let resData = e?.data?.employees;
-        let resOptions = e?.data?.pagination;
-
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisTotalPageSize = totalPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -365,50 +354,107 @@ const EmployeesTable = ({
         const mapp = resData.map((emp) => {
           return {
             ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
           };
         });
 
         setData(mapp);
-        setunfiltered(mapp);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
     setLoading(false);
-    // setDesignationFilter('');
-    // setOgidFilter('');
-    // setStatusFilter('');
-  };
+  },[dataToFilter, departmentFilter, page, searchTerm, setData, setDepartmentFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
 
-  const handleDesignationFilter = (e) => {
+  const handleCampaignFilter = useCallback((e) => {
+    setCampaignFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("camp.. Filter:", campaignFilter);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+    .get('api/v1/employees.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        operation_office_id: e.target.value,
+        // hr_designation_id: designationFilter,
+      },
+    })
+      .then((e) => {
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
+          };
+        });
+
+        setData(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+    setLoading(false);
+  },[campaignFilter, dataToFilter, page, searchTerm, setCampaignFilter, setData, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+
+  const handleDesignationFilter = useCallback((e) => {
     setDesignationFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("des. Filter:", designationFilter);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get('/employees/paginated-employees', {
-        params: {
-          department: departmentFilter,
-          designation: dataToFilter,
-          status: statusFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
+    .get('api/v1/employees.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        // operation_office_id: e.target.value,
+        hr_designation_id: e.target.value,
+      },
+    })
       .then((e) => {
-        let resData = e?.data?.employees;
-        let resOptions = e?.data?.pagination;
-
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisTotalPageSize = totalPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -416,50 +462,54 @@ const EmployeesTable = ({
         const mapp = resData.map((emp) => {
           return {
             ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
           };
         });
 
         setData(mapp);
-        setunfiltered(mapp);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
     setLoading(false);
-    // setDepartmentFilter('');
-    // setOgidFilter('');
-    // setStatusFilter('');
-  };
+  },[dataToFilter, designationFilter, page, searchTerm, setData, setDesignationFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
 
-  const handleStatusFilter = (e) => {
+  const handleStatusFilter = useCallback((e) => {
     setStatusFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("status. Filter:", statusFilter);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get('/employees/paginated-employees', {
-        params: {
-          department: departmentFilter,
-          designation: designationFilter,
-          status: dataToFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
+    .get('api/v1/employees.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        // operation_office_id: e.target.value,
+        // hr_designation_id: e.target.value,
+        status: e.target.value,
+      },
+    })
       .then((e) => {
-        let resData = e?.data?.employees;
-        let resOptions = e?.data?.pagination;
-
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisTotalPageSize = totalPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -467,31 +517,27 @@ const EmployeesTable = ({
         const mapp = resData.map((emp) => {
           return {
             ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
           };
         });
 
         setData(mapp);
-        setunfiltered(mapp);
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
       });
     setLoading(false);
-    // setDepartmentFilter('');
-    // setDesignationFilter('');
-    // setOgidFilter('');
-  };
+  },[dataToFilter, page, searchTerm, setData, setLoading, setPage, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage, statusFilter]);
 
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 5000);
+    }, 60000);
     return <>{show ? "No Data Available" : null}</>;
   };
 
@@ -507,21 +553,15 @@ const EmployeesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
+              {/* <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
-              />
-
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
+              /> */}
 
               <div className="hr-filter-select">
-                <div>
+                
+                <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}
@@ -532,7 +572,23 @@ const EmployeesTable = ({
                       Filter by Department
                     </option>
                     {departments.map((option, idx) => (
-                      <option key={idx}>{option.department}</option>
+                      <option key={idx} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-3">
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleCampaignFilter(e)}
+                    defaultValue={campaignFilter}
+                    value={campaignFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Filter by Campaign
+                    </option>
+                    {campaigns.map((option, idx) => (
+                      <option key={idx} value={option.value}>{option.label}</option>
                     ))}
                   </select>
                 </div>
@@ -548,7 +604,7 @@ const EmployeesTable = ({
                       Filter by Designation
                     </option>
                     {designations.map((option, idx) => (
-                      <option key={idx}>{option.designation}</option>
+                      <option key={idx} value={option.value}>{option.label}</option>
                     ))}
                   </select>
                 </div>
@@ -571,6 +627,14 @@ const EmployeesTable = ({
                   </select>
                 </div>
               </div>
+
+              
+              <ExportCSVButton
+                className="float-right btn export-csv"
+                {...props.csvProps}
+              >
+                Export CSV
+              </ExportCSVButton>
 
               <BootstrapTable
                 {...props.baseProps}

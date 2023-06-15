@@ -210,7 +210,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data;
-      console.log("All Employees:", resData)
+      // console.log("All Employees:", resData)
   
     // const mapp = resData.map(emp => {
     //   return {
@@ -223,7 +223,7 @@ const AppProvider = (props) => {
     // setAllEmployees(mapp);
     // console.log("All Employees:", mapp)
     } catch (error) {
-      console.log("All employees error:", error)
+      // console.log("All employees error:", error)
     }
   };
 
@@ -250,7 +250,7 @@ const AppProvider = (props) => {
     }
   };
 
-  // All Departments:
+  // All Designations:
   const fetchAllDesignations = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/designations', {
