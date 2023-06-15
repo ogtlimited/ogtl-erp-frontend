@@ -1,201 +1,49 @@
-/*eslint-disable jsx-a11y/anchor-is-valid*/
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-import LeadersTable from '../../../components/Tables/EmployeeTables/leadersTable';
-import { useAppContext } from '../../../Context/AppContext';
-
 import axiosInstance from '../../../services/api';
-import EmployeeHelperService from './employee.helper';
+import LeadersTable from '../../../components/Tables/EmployeeTables/leadersTable';
 
 const LeadershipAdmin = () => {
-  const { createEmployee, status } = useAppContext();
-  const [allEmployees, setallEmployees] = useState([]);
+  const [allLeaders, setAllLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filters, setfilters] = useState([]);
-  const [loadForm, setloadForm] = useState(false);
-  const { user } = useAppContext();
 
-  // const [page, setPage] = useState(1);
-  // const [sizePerPage, setSizePerPage] = useState(10);
-  // const [totalPages, setTotalPages] = useState('');
-
-  const [departmentFilter, setDepartmentFilter] = useState('');
-  const [projectFilter, setProjectFilter] = useState('');
-  const [designationFilter, setDesignationFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const [departments, setDepartments] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [designations, setDesignations] = useState([]);
-
-  const fetchAllEmployee = useCallback(() => {
-    axiosInstance
-      .get('/leads', {
-        params: {
-          department: departmentFilter,
-          designation: designationFilter,
-          status: statusFilter,
-          search: searchTerm,
-          // page: page,
-          // limit: sizePerPage,
+  // All Leaders:
+  const fetchAllLeaders = async () => {
+    try {
+      const response = await axiosInstance.get('api/v1/leaders.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
         },
-      })
-      .then((e) => {
-        console.log("All leaders:", e?.data?.data)
-        let resData = e?.data?.data?.employees;
-        // let resOptions = e?.data?.data?.pagination;
-
-        // const thisPageLimit = sizePerPage;
-        // const thisTotalPageSize = resOptions?.numberOfPages;
-
-        // setSizePerPage(thisPageLimit);
-        // setTotalPages(thisTotalPageSize);
-
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation ? emp?.designation?.designation : '',
-            department_name: emp?.department ? emp?.department?.department : '',
-            project: emp?.projectId ? emp?.projectId?.project_name : '',
-          };
-        });
-
-        setallEmployees(mapp);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
       });
-  }, [departmentFilter, designationFilter, searchTerm, statusFilter]);
 
-  const fetchDepartment = async () => {
-    try {
-      const response = await axiosInstance.get('/department');
-      const resData = response?.data?.data;
+      const resData = response?.data?.data?.leaders;
 
-      const formatted = resData.map((e) => ({
-        department: e.department,
-      })).sort((a, b) => a.department.localeCompare(b.department));
+      const mapp = resData.map((e) => {
+        return {
+          ...e,
+          fullName: e?.first_name + ' ' + e?.last_name,
+        };
+      });
 
-      setDepartments(formatted);
+      setAllLeaders(mapp);
       setLoading(false);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchProjects = async () => {
-    try {
-      const response = await axiosInstance.get('/api/project');
-      const resData = response?.data?.data;
-
-      const formatted = resData.map((e) => ({
-        project: e?.project_name        ,
-      })).sort((a, b) => a.project.localeCompare(b.project));
-      
-      setProjects(formatted);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchDesignation = async () => {
-    try {
-      const response = await axiosInstance.get('/designation');
-      const resData = response?.data?.data;
-
-      const formatted = resData.map((e) => ({
-        designation: e.designation,
-      })).sort((a, b) => a.designation.localeCompare(b.designation));
-
-      setDesignations(formatted);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
+      console.log("Get All Leaders error:", error);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAllEmployee();
-    fetchDepartment();
-    fetchProjects();
-    fetchDesignation();
-  }, [fetchAllEmployee, user]);
-
-  useEffect(() => {
-    createEmployee().then((res) => {
-      const {
-        shifts,
-        designations,
-        branches,
-        departments,
-        projects,
-        acceptedJobOffers,
-        employees,
-      } = res.data.createEmployeeForm;
-
-      const empHelper = new EmployeeHelperService(
-        shifts,
-        designations,
-        branches,
-        departments,
-        projects,
-        acceptedJobOffers,
-        employees,
-        status
-      );
-
-      const service = empHelper.mapRecords();
-
-      setfilters([
-        {
-          name: 'projectId',
-          placeholder: 'Filter by campaign',
-          options: service.campaingOpts,
-        },
-        {
-          name: 'department',
-          placeholder: 'Filter by department',
-          options: service.deptopts,
-        },
-        {
-          name: 'designation',
-          placeholder: 'Filter by designation',
-          options: service.designationOpts,
-        },
-        {
-          name: 'status',
-          placeholder: 'Filter by status',
-          options: service.employeestatusOpts,
-        },
-      ]);
-
-      if (!loadForm) setloadForm(true);
-    });
-  }, [createEmployee, loadForm, status]);
+    fetchAllLeaders()
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 10000);
   }, []);
-
-  const defaultSorted = [
-    {
-      dataField: 'designation',
-      order: 'desc',
-    },
-  ];
 
  
   return (
@@ -215,32 +63,9 @@ const LeadershipAdmin = () => {
       </div>
 
       <LeadersTable
+        data={allLeaders}
+        setData={setAllLeaders}
         loading={loading}
-        data={allEmployees}
-        setData={setallEmployees}
-        filters={filters}
-        loadForm={loadForm}
-        defaultSorted={defaultSorted}
-        departments={departments}
-        projects={projects}
-        designations={designations}
-
-        // page={page}
-        // setPage={setPage}
-        // sizePerPage={sizePerPage}
-        // setSizePerPage={setSizePerPage}
-        // totalPages={totalPages}
-        // setTotalPages={setTotalPages}
-        departmentFilter={departmentFilter}
-        setDepartmentFilter={setDepartmentFilter}
-        projectFilter={projectFilter}
-        setProjectFilter={setProjectFilter}
-        designationFilter={designationFilter}
-        setDesignationFilter={setDesignationFilter}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
         setLoading={setLoading}
       />
 
