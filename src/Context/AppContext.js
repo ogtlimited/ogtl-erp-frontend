@@ -10,28 +10,25 @@ const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
 const AppProvider = (props) => {
-  const [allEmployees, setallEmployees] = useState([]);
+  const [user] = useState(tokenService.getUser());
+  const [loggedIn, setloggedIn] = useState(false);
   const [showProgress, setshowProgress] = useState({
     count: 25,
     state: false
   });
-  const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
-  const [userToken, setuserToken] = useState(null);
-  const [count, setCount] = useState(0);
-  const [loggedIn, setloggedIn] = useState(false);
-  const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
     state: false,
     msg: "",
     class: "",
   });
+  const [notifications, setNotifications] = useState([]);
+  const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
+  const [userToken, setuserToken] = useState(null);
+  const [count, setCount] = useState(0);
+  const [formUpdate, setformUpdate] = useState(null);
 
-  const [employeeAttendance, setemployeeAttendance] = useState([]);
-  const [user] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [employeeStatus, setEmployeeStatus] = useState([]);
   let socket = useRef();
 
   const status = [
@@ -47,7 +44,14 @@ const AppProvider = (props) => {
         _id: "terminated",
         status: "TERMINATED"
     }
-]
+  ]
+
+  // Select API States:
+  const [allEmployees, setAllEmployees] = useState([]);
+  const [allOffices, setAllOffices] = useState([]);
+  const [allDesignations, setAllDesignations] = useState([]);
+  const [allBranches, setAllBranches] = useState([]);
+  const [allLeaveTypes, setAllLeaveTypes] = useState([]);
 
   // let socketRef;
   //Fetching notifications
@@ -77,26 +81,6 @@ const AppProvider = (props) => {
     }
   };
 
- 
-
-  const fetchEmployee = () => {
-    axiosInstance.get("/employees/paginated-employees").then((e) => {
-      // console.log("All Employees Context:", e?.data)
-      const mapp = e?.data?.employees.map(emp => {
-        return {
-          ...emp,
-          fullName: emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
-          designation_name: emp?.designation?.designation,
-          department_name: emp?.department?.department
-          // project: emp?.projectId?.project_name,
-        }
-      })
-      // console.log("All Employees:", mapp)
-      setallEmployees(mapp);
-      // setloggedIn(false);
-    });
-  };
-
    // For Leave Application Notification
    const fetchHRLeavesNotificationCount = () => {
     axiosInstance.get('/hr-leave-applications')
@@ -110,13 +94,6 @@ const AppProvider = (props) => {
       });;
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchEmployee();
-      fetchEmployeeAttendance();
-    }
-  }, [userToken]);
   const handleProgress = ({count, state}) => {
     console.log(count, state)
     setshowProgress({
@@ -124,6 +101,7 @@ const AppProvider = (props) => {
       state: state
     })
   }
+
   const uploadProgress = async () => {
     await pause(800);
     handleProgress({
@@ -143,6 +121,7 @@ const AppProvider = (props) => {
       count: 85
     });
   };
+
   const showAlert = (state, msg, className) => {
     let icon = className?.includes("alert-success")
       ? "#check-circle-fill"
@@ -165,6 +144,7 @@ const AppProvider = (props) => {
       });
     }, 5000);
   };
+
   const fetchTypesShift = () => {
     return axiosInstance.get("/api/shiftType");
   };
@@ -216,44 +196,170 @@ const AppProvider = (props) => {
     return axiosInstance.get("/admin-dashboard");
   };
 
-  const fetchEmployeeAttendance = () => {
-    const date = new Date();
-    const firstDay = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      1
-    ).toLocaleDateString();
-    const lastDay = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).toLocaleDateString();
+  // ! - EVERYTHING ABOVE IS FROM OLD API!!!
 
-    const params = `?startOfMonth=${firstDay}&endOfMonth=${lastDay}`;
-    return axiosInstance
-      .get("/api/attendance/employee/" + user?.ogid + params)
-      .then((e) => {
-        setemployeeAttendance(e?.data?.data);
+  // SELECT APIs
+  // All Employees:
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/employees.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
       });
+      const resData = response?.data?.data;
+      console.log("All Employees:", resData)
+  
+    // const mapp = resData.map(emp => {
+    //   return {
+    //     ...emp,
+    //     fullName: emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
+    //     designation_name: emp?.designation?.designation,
+    //     department_name: emp?.department?.department
+    //   }
+    // })
+    // setAllEmployees(mapp);
+    // console.log("All Employees:", mapp)
+    } catch (error) {
+      console.log("All employees error:", error)
+    }
   };
+
+  // All Offices:
+  const fetchAllOffices = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/offices.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data;
+      console.log("All Offices:", resData)
+
+      // const formatted = resData.map((e) => ({
+      //   department: e.department,
+      // })).sort((a, b) => a.department.localeCompare(b.department));
+
+      // setAllOffices(formatted);
+    } catch (error) {
+      console.log("All Offices error:", error);
+    }
+  };
+
+  // All Departments:
+  const fetchAllDesignations = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/designations', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data;
+      console.log("All Designations:", resData)
+
+      // const formatted = resData.map((e) => ({
+      //   designation: e.designation,
+      // })).sort((a, b) => a.designation.localeCompare(b.designation));
+
+      // setAllDesignations(formatted);
+    } catch (error) {
+      console.log("All Designation error:", error);
+    }
+  };
+
+  // All Branches:
+  const fetchAllBranches = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/branches', {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data;
+      console.log("All Branches:", resData)
+
+      // const formatted = resData.map((e) => ({
+      //   branch: e.branch,
+      // })).sort((a, b) => a.branch.localeCompare(b.branch));
+
+      // setAllBranches(formatted);
+    } catch (error) {
+      console.log("All Branches error:", error);
+    }
+  };
+
+  // All Leave Types:
+  const fetchAllLeaveTypes = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/leaveTypes', {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data;
+      console.log("All Leave Types:", resData)
+
+      // const formatted = resData.map((e) => ({
+      //   leaveType: e.leaveType,
+      // })).sort((a, b) => a.leaveType.localeCompare(b.leaveType));
+
+      // setAllLeaveTypes(formatted);
+    } catch (error) {
+      console.log("All Leave Types error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchAllEmployees();
+      fetchAllOffices();
+      fetchAllDesignations();
+      fetchAllBranches();
+      fetchAllLeaveTypes();
+    }
+  }, [userToken]);
+
   return (
     <AppContext.Provider
       value={{
+        allEmployees,
+        setAllEmployees,
+        fetchAllEmployees,
+        allOffices,
+        setAllOffices,
+        fetchAllOffices,
+        allDesignations,
+        setAllDesignations,
+        fetchAllDesignations,
+        allBranches,
+        setAllBranches,
+        fetchAllBranches,
+        allLeaveTypes,
+        setAllLeaveTypes,
+        fetchAllLeaveTypes,
+
+
         fetchTypesShift,
         showProgress,
         uploadProgress,
         handleProgress,
         combineRequest,
-        employeeAttendance,
         adminDashboardData,
-        setallEmployees,
-        allEmployees,
         count,
         setCount,
         showAlert,
         showAlertMsg,
-        fetchEmployeeAttendance,
-        fetchEmployee,
         setloggedIn,
         formUpdate,
         setformUpdate,

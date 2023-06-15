@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { employeeFormJson } from '../../../components/FormJSON/HR/Employee/employee';
-// import { AddEmployeeModal } from '../../../components/Modal/AddEmployeeModal';
-import { EditEmployeeModal } from '../../../components/Modal/EditEmployeeModal';
 
 import FormModal2 from '../../../components/Modal/FormModal2';
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
@@ -13,7 +11,6 @@ import { useAppContext } from '../../../Context/AppContext';
 
 import axiosInstance from '../../../services/api';
 import helper from '../../../services/helper';
-import UploadModal from '../../../components/Modal/uploadModal';
 import BulkEmployeeUploadModal from '../../../components/Modal/bulkEmployeeUploadModal';
 import EmployeeHelperService from './employee.helper';
 
@@ -21,7 +18,6 @@ const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
   const { fetchEmployee, createEmployee, showAlert, status } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
-  const [selectedOption, setSelectedOption] = useState(null);
   const [formValue, setformValue] = useState({});
   const [editData, seteditData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -29,7 +25,6 @@ const AllEmployeesAdmin = () => {
   const [submitted, setsubmitted] = useState(false);
   const [filters, setfilters] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
-  const [uploading, setuploading] = useState(false);
   const [combinedData, setcombinedData] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [loadForm, setloadForm] = useState(false);
@@ -268,41 +263,6 @@ const AllEmployeesAdmin = () => {
     template,
   ]);
 
-  // File upload
-  // const onFileUpload = (e) => {
-  //   const files = e.target.files;
-
-  //   if (files) {
-  //     Papa.parse(files[0], {
-  //       complete: function (results) {
-  //         const jsonData = helper.arrayToJSONObject(results.data);
-  //         console.log("csv Data", jsonData)
-          // axiosInstance
-          //   .post("/employees/bulk", jsonData)
-          //   .then((res) => {
-          //     showAlert(
-          //       true,
-          //       "Data uploaded successfully",
-          //       "alert alert-success"
-          //     );
-          //     fetchEmployee();
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //     showAlert(true, err?.message, "alert alert-danger");
-          //   });
-  //       },
-  //     });
-  //   }
-  // };
-
-  const defaultSorted = [
-    {
-      dataField: 'designation',
-      order: 'desc',
-    },
-  ];
-
  
   return (
     <>
@@ -355,8 +315,6 @@ const AllEmployeesAdmin = () => {
         setmode={setmode}
         filters={filters}
         loadForm={loadForm}
-        defaultSorted={defaultSorted}
-        selectedOption={selectedOption}
         departments={departments}
         designations={designations}
 
@@ -382,7 +340,6 @@ const AllEmployeesAdmin = () => {
       {toggleModal && (
         <BulkEmployeeUploadModal
           setUploadSuccess={setUploadSuccess}
-          setuploading={setuploading}
           settoggleModal={settoggleModal}
           fetchEmployee={fetchEmployee}
           setBulkEmployeeUploadData={setBulkEmployeeUploadData}
