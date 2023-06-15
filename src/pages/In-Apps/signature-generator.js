@@ -11,7 +11,7 @@ const SignatureGenerator = () => {
 
   const initialState = {
     fullName: user?.employee_info?.personal_details?.first_name + " " + user?.employee_info?.personal_details?.last_name || "",
-    position: user?.designation?.designation || "",
+    position: user?.employee_info?.designation || "",
     email: user?.employee_info?.email || "",
     phone: "",
     copied: false,
