@@ -20,14 +20,23 @@ const AllEmployeesAdmin = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [designations, setDesignations] = useState([]);
   
-  const [departmentFilter, setDepartmentFilter] = useState('');
-  const [campaignFilter, setCampaignFilter] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [campaignFilter, setCampaignFilter] = useState("");
+  const [officeFilter, setOfficeFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
+    console.log("Params:", {
+      page: page,
+      limit: sizePerPage,
+      search: searchTerm,
+      operation_office_id: officeFilter.length ? officeFilter : null,
+      hr_designation_id: designationFilter.length ? designationFilter : null,
+    });
+
     try {
       const response = await axiosInstance.get('api/v1/employees.json', {
         headers: {          
@@ -40,8 +49,9 @@ const AllEmployeesAdmin = () => {
           page: page,
           limit: sizePerPage,
           search: searchTerm,
-          // operation_office_id: 1,
-          // hr_designation_id: designationFilter,
+          operation_office_id: officeFilter.length ? officeFilter : null,
+          hr_designation_id: designationFilter.length ? designationFilter : null,
+          status: statusFilter.length ? statusFilter : null,
         },
       });
 
@@ -71,7 +81,7 @@ const AllEmployeesAdmin = () => {
       console.log("Get All Employees error:", error);
       setLoading(false);
     }
-  },[page, searchTerm, sizePerPage]);
+  },[designationFilter, officeFilter, page, searchTerm, sizePerPage]);
 
   // All Offices:
   const fetchAllOffices = async () => {
@@ -190,6 +200,8 @@ const AllEmployeesAdmin = () => {
         setDepartmentFilter={setDepartmentFilter}
         campaignFilter={campaignFilter}
         setCampaignFilter={setCampaignFilter}
+        officeFilter={officeFilter}
+        setOfficeFilter={setOfficeFilter}
         designationFilter={designationFilter}
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}

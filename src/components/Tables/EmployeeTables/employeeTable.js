@@ -38,6 +38,8 @@ const EmployeesTable = ({
   setDepartmentFilter,
   campaignFilter,
   setCampaignFilter,
+  officeFilter,
+  setOfficeFilter,
   designationFilter,
   setDesignationFilter,
   statusFilter,
@@ -254,7 +256,6 @@ const EmployeesTable = ({
   //               department: departmentFilter,
   //               designation: designationFilter,
   //               status: statusFilter,
-  //               ogid: ogidFilter,
   //               search: searchTerm,
   //               page: page,
   //               limit: sizePerPage,
@@ -281,11 +282,6 @@ const EmployeesTable = ({
   //               };
   //             });
   //             setData(mapp);
-  //             setunfiltered(mapp);
-  //             // setDepartmentFilter('');
-  //             // setDesignationFilter('');
-  //             // setOgidFilter('');
-  //             // setStatusFilter('');
   //           })
   //           .catch((error) => {
   //             console.log(error);
@@ -313,15 +309,16 @@ const EmployeesTable = ({
   //       </div>
   //     );
   //   },
-  //   [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
+  //   [departmentFilter, designationFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
   // );
   // // Search END
 
-  const handleDepartmentFilter = useCallback((e) => {
+  const handleDepartmentFilter = (e) => {
+    setCampaignFilter('');
+    setDesignationFilter('');
+    setStatusFilter('');
     setDepartmentFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("Dept. Filter:", departmentFilter);
+    setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
@@ -336,9 +333,7 @@ const EmployeesTable = ({
       params: {
         page: page,
         limit: sizePerPage,
-        search: searchTerm,
         operation_office_id: e.target.value,
-        // hr_designation_id: designationFilter,
       },
     })
       .then((e) => {
@@ -369,16 +364,17 @@ const EmployeesTable = ({
         setLoading(false);
       });
     setLoading(false);
-  },[dataToFilter, departmentFilter, page, searchTerm, setData, setDepartmentFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+  };
 
-  const handleCampaignFilter = useCallback((e) => {
+  const handleCampaignFilter = (e) => {
+    setDepartmentFilter('');
+    setDesignationFilter('');
+    setStatusFilter('');
     setCampaignFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("camp.. Filter:", campaignFilter);
+    setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
-
+    
     axiosInstance
     .get('api/v1/employees.json', {
       headers: {          
@@ -390,9 +386,7 @@ const EmployeesTable = ({
       params: {
         page: page,
         limit: sizePerPage,
-        search: searchTerm,
         operation_office_id: e.target.value,
-        // hr_designation_id: designationFilter,
       },
     })
       .then((e) => {
@@ -423,15 +417,13 @@ const EmployeesTable = ({
         setLoading(false);
       });
     setLoading(false);
-  },[campaignFilter, dataToFilter, page, searchTerm, setCampaignFilter, setData, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+  };
 
-  const handleDesignationFilter = useCallback((e) => {
+  const handleDesignationFilter = (e) => {
     setDesignationFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("des. Filter:", designationFilter);
     setPage(1);
     setLoading(true);
+
 
     axiosInstance
     .get('api/v1/employees.json', {
@@ -444,8 +436,6 @@ const EmployeesTable = ({
       params: {
         page: page,
         limit: sizePerPage,
-        search: searchTerm,
-        // operation_office_id: e.target.value,
         hr_designation_id: e.target.value,
       },
     })
@@ -477,13 +467,13 @@ const EmployeesTable = ({
         setLoading(false);
       });
     setLoading(false);
-  },[dataToFilter, designationFilter, page, searchTerm, setData, setDesignationFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+  };
 
-  const handleStatusFilter = useCallback((e) => {
+  const handleStatusFilter = (e) => {
+    setDepartmentFilter('');
+    setCampaignFilter('');
+    setDesignationFilter('');
     setStatusFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("status. Filter:", statusFilter);
     setPage(1);
     setLoading(true);
 
@@ -499,8 +489,6 @@ const EmployeesTable = ({
         page: page,
         limit: sizePerPage,
         search: searchTerm,
-        // operation_office_id: e.target.value,
-        // hr_designation_id: e.target.value,
         status: e.target.value,
       },
     })
@@ -532,7 +520,7 @@ const EmployeesTable = ({
         setLoading(false);
       });
     setLoading(false);
-  },[dataToFilter, page, searchTerm, setData, setLoading, setPage, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage, statusFilter]);
+  };
 
   const showNullMessage = () => {
     setTimeout(() => {
@@ -558,8 +546,15 @@ const EmployeesTable = ({
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
               /> */}
+              
+              <ExportCSVButton
+                className="float-right btn export-csv" style={{ marginBottom: 15}}
+                {...props.csvProps}
+              >
+                Export CSV
+              </ExportCSVButton>
 
-              <div className="hr-filter-select">
+              <div className="hr-filter-select col-12">
                 
                 <div className="col-md-3">
                   <select
@@ -627,14 +622,6 @@ const EmployeesTable = ({
                   </select>
                 </div>
               </div>
-
-              
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
 
               <BootstrapTable
                 {...props.baseProps}
