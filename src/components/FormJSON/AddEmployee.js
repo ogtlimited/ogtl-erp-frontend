@@ -22,6 +22,13 @@ export const PROFILE = {
       id_number: '',
       means_of_identification: '',
   },
+  misc : {
+    branchName: '',
+    officeName: '',
+    designationName: '',
+    staffGender: '',
+    maritalStatus: '',
+  },
 }
 
 export const officeOptions = [
@@ -158,5 +165,77 @@ export const employmentTypesOptions = [
   {
     label: "FullTime",
     value: "FullTime",
+  },
+];
+
+
+export const OFFICEOptions = [
+  {
+    label: "HR",
+    value: 1,
+  },
+  {
+    label: "Operations",
+    value: 2,
+  },
+  {
+    label: "Finance",
+    value: 3,
+  },
+  {
+    label: "IT",
+    value: 4,
+  },
+  {
+    label: "Admin",
+    value: 5,
+  },
+];
+
+
+export const BRANCHOptions = [
+  {
+    label: "Abuja",
+    value: 1,
+  },
+  {
+    label: "Kaduna",
+    value: 2,
+  },
+  {
+    label: "Kano",
+    value: 3,
+  },
+  {
+    label: "Lagos",
+    value: 4,
+  },
+  {
+    label: "South Africa",
+    value: 5,
+  },
+];
+
+
+export const DESIGNATIONOptions = [
+  {
+    label: "Software Engineer",
+    value: 1,
+  },
+  {
+    label: "Senior Software Engineer",
+    value: 2,
+  },
+  {
+    label: "Agent",
+    value: 3,
+  },
+  {
+    label: "HR Manager",
+    value: 4,
+  },
+  {
+    label: "HR Assistant",
+    value: 5,
   },
 ];

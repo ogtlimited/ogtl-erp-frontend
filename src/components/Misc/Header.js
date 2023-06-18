@@ -110,10 +110,10 @@ const Header = () => {
               data-toggle="dropdown"
             >
               <span className="user-img">
-                <img src="assets/img/profiles/avatar-21.jpg" alt="" />
+                <img src="" alt="" />
                 <span
                   className="status online"
-                  style={{ bottom: 24, right: 3 }}
+                  style={{ bottom: 25, right: 5}}
                 ></span>
               </span>
               <span>{user?.employee_info?.personal_details?.first_name}</span>
