@@ -122,6 +122,7 @@ const AppProvider = (props) => {
     });
   };
 
+  // Show Alert:
   const showAlert = (state, msg, className) => {
     let icon = className?.includes("alert-success")
       ? "#check-circle-fill"
@@ -238,7 +239,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data;
-      console.log("All Offices:", resData)
+      // console.log("All Offices:", resData)
 
       // const formatted = resData.map((e) => ({
       //   department: e.department,
@@ -261,7 +262,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data;
-      console.log("All Designations:", resData)
+      // console.log("All Designations:", resData)
 
       // const formatted = resData.map((e) => ({
       //   designation: e.designation,
@@ -284,7 +285,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data;
-      console.log("All Branches:", resData)
+      // console.log("All Branches:", resData)
 
       // const formatted = resData.map((e) => ({
       //   branch: e.branch,
@@ -307,7 +308,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data;
-      console.log("All Leave Types:", resData)
+      // console.log("All Leave Types:", resData)
 
       // const formatted = resData.map((e) => ({
       //   leaveType: e.leaveType,

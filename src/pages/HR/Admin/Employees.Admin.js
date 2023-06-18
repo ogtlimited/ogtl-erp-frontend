@@ -81,7 +81,7 @@ const AllEmployeesAdmin = () => {
       console.log("Get All Employees error:", error);
       setLoading(false);
     }
-  },[designationFilter, officeFilter, page, searchTerm, sizePerPage]);
+  },[designationFilter, officeFilter, page, searchTerm, sizePerPage, statusFilter]);
 
   // All Offices:
   const fetchAllOffices = async () => {
