@@ -19,42 +19,52 @@ const PersonalInfo = ({
   const { showAlert } = useAppContext();
   const user = tokenService.getUser();
 
-  useEffect(() => {
-    if (submitted === true) {
-      let obj = {};
-      console.log(formValue, "FORM VALUE");
-      for (const item in formValue) {
-        console.log(item);
-        if (item !== "Fields" && item !== "title") {
-          obj[item] = formValue[item];
-        }
-      }
-      console.log(obj, "OBJECT");
-      let newFormValue = {
-        _id: personalDetails?.personalDetails?._id,
-        employee_id: id,
-        ...obj,
-      };
-      axiosInstance
-        .post("/PersonalDetails", newFormValue)
-        .then((res) => {
-          fetchUserInfo();
-          setFormValue(null);
-          showAlert(true, res.data.message, "alert alert-success");
-        })
-        .catch((error) => {
-          console.log(error);
-          showAlert(true, error?.response?.data?.message, "alert alert-danger");
-        });
-    }
-  }, [submitted, formValue, id, personalDetails?.personalDetails?._id]);
+  // useEffect(() => {
+  //   if (submitted === true) {
+  //     let obj = {};
+  //     console.log(formValue, "FORM VALUE");
+  //     for (const item in formValue) {
+  //       console.log(item);
+  //       if (item !== "Fields" && item !== "title") {
+  //         obj[item] = formValue[item];
+  //       }
+  //     }
+  //     console.log(obj, "OBJECT");
+  //     let newFormValue = {
+  //       _id: personalDetails?.personalDetails?._id,
+  //       employee_id: id,
+  //       ...obj,
+  //     };
+
+
+  //     // axiosInstance
+  //     //   .post("/PersonalDetails", newFormValue)
+  //     //   .then((res) => {
+  //     //     fetchUserInfo();
+  //     //     setFormValue(null);
+  //     //     showAlert(true, res.data.message, "alert alert-success");
+  //     //   })
+  //     //   .catch((error) => {
+  //     //     console.log(error);
+  //     //     showAlert(true, error?.response?.data?.message, "alert alert-danger");
+  //     //   });
+  //   }
+  // }, []);
+
+  // const updatePersonalInfo = async () => {
+  //   try {
+  //     console.log("Edit this Personal Information:", newFormValue)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
         <h3 className="card-title">
           Personal Information{" "}
-          {canView(user, "hr") && (
+          {canView(user, "HR") && (
             <a
               onClick={() => handleChange("PersonalDetails")}
               className="edit-icon"

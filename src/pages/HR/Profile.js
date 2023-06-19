@@ -32,8 +32,33 @@ const Profile = () => {
   const [submitted, setSubmitted] = useState(false);
   const { combineRequest } = useAppContext();
   const [employeeShifts, setEmployeeShifts] = useState([]);
-  const [ogid, setOgid] = useState(null);
+  const [userID, setUserId] = useState("");
   const [mode, setMode] = useState("");
+
+  const fetchEmployeeShift = async () => {
+    try {
+      const response = await axiosInstance.get(`/api/v1/employee_shifts.json?ogid=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = response?.data?.data?.employee_shifts;
+      const employeeShifts = resData;
+      console.log("employee shift:", employeeShifts)
+
+      if (!employeeShifts.length) {
+        setMode('create');
+      } else if (employeeShifts.length) {
+        setMode('edit');
+        setEmployeeShifts(employeeShifts);
+      }
+    } catch (error) {
+        console.log(error);
+    }
+  };
 
   // Employee Profile Info:
   const fetchEmployeeProfile = async () => {
@@ -47,14 +72,17 @@ const Profile = () => {
       });
       const resData = response?.data?.data;
       setUserdata(resData);
+      
+      const userId = resData?.employee?.email
+      setUserId(userId);
 
-      console.log("Profile Info:", resData);
     } catch (error) {
       console.log("Get All Employee Profile error:", error);
     }
   };
 
   useEffect(() => {
+    fetchEmployeeShift();
     fetchEmployeeProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -226,16 +254,6 @@ const Profile = () => {
                           <div className="text">
                             {userData?.employee?.branch?.branch ||
                               "Not Available"}
-                            {canView(user, "hr") && (
-                              <a
-                                // onClick={() => handleChange("PersonalDetails")}
-                                className="edit-icon"
-                                data-toggle="modal"
-                                data-target="#FormModal"
-                              >
-                                <i className="fa fa-pencil"></i>
-                              </a>
-                            )}
                           </div>
                         </li>
                         <li>
@@ -267,7 +285,7 @@ const Profile = () => {
         setMode={setMode}
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
-        ogid={ogid}
+        userID={userID}
       />
       <FormModal2
         template={template}

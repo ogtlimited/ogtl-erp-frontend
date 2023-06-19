@@ -29,7 +29,7 @@ const ProfileCards = ({
   fetchUserInfo,
   employeeShifts,
   setEmployeeShifts,
-  ogid,
+  userID,
   mode,
   setMode,
 }) => {
@@ -152,8 +152,8 @@ const ProfileCards = ({
         <div id="emp_shifts" className={isFromBiometrics ? "pro-overview tab-pane active " : "pro-overview tab-pane fade"}>
           <div className="row">
             <div className="col-md-12 d-flex">   
-              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} setEmployeeShifts={setEmployeeShifts} ogid={ogid} />
-              : <CreateEmployeeShiftModal ogid={ogid} setMode={setMode} setEmployeeShifts={setEmployeeShifts} />}
+              {mode === 'edit' ? <EditEmployeeShiftModal employeeShifts={employeeShifts} setEmployeeShifts={setEmployeeShifts} userID={userID} />
+              : <CreateEmployeeShiftModal userID={userID} setMode={setMode} setEmployeeShifts={setEmployeeShifts} />}
             </div>
           </div>
         </div>
