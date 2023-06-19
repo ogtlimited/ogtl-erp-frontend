@@ -1,29 +1,30 @@
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import avater from '../../assets/img/profile.png';
-import { ContactDetailJson } from '../../components/FormJSON/HR/Employee/ContactDetails';
-import { EmergencyDetailJson } from '../../components/FormJSON/HR/Employee/EmergencyContact';
-import { EmployeeEducationJson } from '../../components/FormJSON/HR/Employee/EmployeeEducation';
-import { PersonalDetailJson } from '../../components/FormJSON/HR/Employee/PersonalDetails';
-import { WorkExperienceJson } from '../../components/FormJSON/HR/Employee/WorkExperience';
-import FormModal from '../../components/Modal/Modal';
-import ProfileCards from '../../components/Profile/ProfileCards';
-import axiosInstance from '../../services/api';
-import moment from 'moment';
-import { historyJson } from '../../components/FormJSON/HR/Employee/history';
-import { useAppContext } from '../../Context/AppContext';
-import { SalaryDetailJson } from '../../components/FormJSON/HR/Employee/SalaryDetails';
-import FormModal2 from '../../components/Modal/FormModal2';
-import helper from '../../services/helper';
-import ViewModal from '../../components/Modal/ViewModal';
-import SocialHandleForm from '../../components/Profile/components/SocialHandleForm';
-import tokenService from '../../services/token.service';
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import avater from "../../assets/img/profile.png";
+import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
+import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
+import { EmployeeEducationJson } from "../../components/FormJSON/HR/Employee/EmployeeEducation";
+import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
+import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
+import FormModal from "../../components/Modal/Modal";
+import ProfileCards from "../../components/Profile/ProfileCards";
+import axiosInstance from "../../services/api";
+import moment from "moment";
+import { historyJson } from "../../components/FormJSON/HR/Employee/history";
+import { useAppContext } from "../../Context/AppContext";
+import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
+import FormModal2 from "../../components/Modal/FormModal2";
+import helper from "../../services/helper";
+import ViewModal from "../../components/Modal/ViewModal";
+import SocialHandleForm from "../../components/Profile/components/SocialHandleForm";
+import tokenService from "../../services/token.service";
+import { canView } from "../../services/canView";
 
 const Profile = () => {
   const user = tokenService.getUser();
-  const [formType, setformType] = useState('');
+  const [formType, setformType] = useState("");
   const [template, settemplate] = useState(PersonalDetailJson);
   const { id } = useParams();
   const [userData, setUserdata] = useState(null);
@@ -32,54 +33,49 @@ const Profile = () => {
   const { combineRequest } = useAppContext();
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [ogid, setOgid] = useState(null);
-  const [mode, setMode] = useState('');
+  const [mode, setMode] = useState("");
 
-  const fetchUserInfo = async () => {
+  // Employee Profile Info:
+  const fetchEmployeeProfile = async () => {
     try {
-      const user = await axiosInstance.get(`/profile-dashboard/${id}`)
-      const employeeDashboard = user.data.getEmployeeFullData;
-      const employee = user.data.getEmployeeFullData.employee;
-      setUserdata(employeeDashboard);
+      const response = await axiosInstance.get(`/api/v1/employees/${id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data;
+      setUserdata(resData);
 
-      const ogid = employee?.ogid;
-      const shift = await axiosInstance.get(`/api/employee-shift/${ogid}`);
-      const employeeShifts = shift?.data?.data;
-
-      if (!employeeShifts.length) {
-        setMode('create');
-        setOgid(ogid);
-      } else if (employeeShifts.length) {
-        setMode('edit');
-        setOgid(ogid);
-        setEmployeeShifts(employeeShifts);
-      }
+      console.log("Profile Info:", resData);
     } catch (error) {
-        console.log(error);
+      console.log("Get All Employee Profile error:", error);
     }
   };
 
   useEffect(() => {
-    fetchUserInfo();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchEmployeeProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     switch (formType) {
-      case 'WorkExperience':
+      case "WorkExperience":
         return settemplate(helper.formArrayToObject(WorkExperienceJson.Fields));
-      case 'ContactDetails':
+      case "ContactDetails":
         return settemplate(helper.formArrayToObject(ContactDetailJson.Fields));
-      case 'EmergencyContact':
+      case "EmergencyContact":
         return settemplate(
           helper.formArrayToObject(EmergencyDetailJson.Fields)
         );
-      case 'EmployeeEducation':
+      case "EmployeeEducation":
         return settemplate(
           helper.formArrayToObject(EmployeeEducationJson.Fields)
         );
-      case 'History':
+      case "History":
         return settemplate(helper.formArrayToObject(historyJson.Fields));
-      case 'SalaryDetails':
+      case "SalaryDetails":
         return settemplate(helper.formArrayToObject(SalaryDetailJson.Fields));
       default:
         return settemplate(helper.formArrayToObject(PersonalDetailJson.Fields));
@@ -103,10 +99,10 @@ const Profile = () => {
         };
       });
       const finalForm = historyJson.Fields.map((field) => {
-        if (field.name === 'branch_id') {
+        if (field.name === "branch_id") {
           field.options = branchesOpts;
           return field;
-        } else if (field.name === 'designation_id') {
+        } else if (field.name === "designation_id") {
           field.options = designationsOpts;
           return field;
         }
@@ -117,7 +113,7 @@ const Profile = () => {
         Fields: finalForm,
       });
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -152,39 +148,25 @@ const Profile = () => {
                     <div className="col-md-5">
                       <div className="profile-info-left">
                         <h3 className="user-name m-t-0 mb-0">
-                          {userData?.employee?.first_name}{' '}
-                          {userData?.employee?.middle_name}{' '}
-                          {userData?.employee?.last_name}
+                          {userData?.employee?.full_name}{" "}
                         </h3>
                         <h6 className="text-muted">
-                          {userData?.employee?.isAdmin
-                            ? userData?.employee?.department?.department
-                            : userData?.employee?.projectId?.project_name}
+                          {userData?.employee?.designation || "Not Available"}
                         </h6>
                         <small className="text-muted">
-                          {userData?.employee?.designation?.designation ||
-                            'Not Available'}
+                          {userData?.office?.title || "Not Available"}
                         </small>
                         <div className="staff-id">
                           Employee ID : {userData?.employee?.ogid}
                         </div>
                         <div className="small doj text-muted">
-                          Date Joined :{' '}
+                          Date Joined :{" "}
                           {userData?.employee?.date_of_joining
                             ? moment(
                                 userData?.employee?.date_of_joining
-                              ).format('L')
-                            : 'Not Available'}
+                              ).format("Do MMMM, YYYY")
+                            : "Not Available"}
                         </div>
-                        {/* <div className="staff-msg">
-                          <Link
-                            className="btn btn-custom"
-                            to={`/dashboard/payroll/payslip/${user?._id}`}
-                          >
-                            <i className="las la-file-invoice-dollar mr-2"></i>
-                            Payslip
-                          </Link>
-                        </div> */}
                       </div>
                     </div>
                     <div className="col-md-7">
@@ -192,25 +174,25 @@ const Profile = () => {
                         <li>
                           <div className="title">Phone:</div>
                           <div className="text">
-                            {userData?.contactDetails?.mobile || "Not Available"}
+                            {userData?.contactDetails?.mobile ||
+                              "Not Available"}
                           </div>
                         </li>
 
                         <li>
                           <div className="title">Email:</div>
                           <div className="text">
-                            {userData?.employee?.company_email ||
-                              'Not Available'}
+                            {userData?.employee?.email || "Not Available"}
                           </div>
                         </li>
 
                         <li>
                           <div className="title">Birthday:</div>
                           <div className="text">
-                            {userData?.personalDetails?.date_of_birth
+                            {userData?.employee?.personal_detail?.DOB
                               ? moment(
-                                  userData?.personalDetails?.date_of_birth
-                                ).format("MMMM Do")
+                                  userData?.employee?.personal_detail?.DOB
+                                ).format("Do MMMM, YYYY")
                               : "Not Available"}
                           </div>
                         </li>
@@ -218,100 +200,71 @@ const Profile = () => {
                           <div className="title">Address:</div>
                           <div className="text">
                             {userData?.contactDetails?.permanent_address ||
-                              'Not Available'}
+                              "Not Available"}
                           </div>
                         </li>
 
                         <li>
                           <div className="title">Gender:</div>
                           <div className="text">
-                            {userData?.employee?.gender || 'Not Available'}
+                            {userData?.employee?.personal_detail?.gender
+                              .charAt(0)
+                              .toUpperCase() +
+                              userData?.employee?.personal_detail?.gender.slice(
+                                1
+                              ) || "Not Available"}
                           </div>
                         </li>
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {userData?.employee?.leaveCount || 'Not Available'}
+                            {userData?.employee?.leaveCount || "Not Available"}
                           </div>
                         </li>
                         <li>
                           <div className="title">Branch:</div>
                           <div className="text">
                             {userData?.employee?.branch?.branch ||
-                              'Not Available'}
+                              "Not Available"}
+                            {canView(user, "hr") && (
+                              <a
+                                // onClick={() => handleChange("PersonalDetails")}
+                                className="edit-icon"
+                                data-toggle="modal"
+                                data-target="#FormModal"
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </a>
+                            )}
                           </div>
                         </li>
                         <li>
                           <div className="title">Reports to:</div>
                           <div className="text">
-                            <div className="avatar-box">
-                              <div className="avatar avatar-xs">
-                                <img
-                                  src="assets/img/profiles/avatar-16.jpg"
-                                  alt=""
-                                />
-                              </div>
-                            </div>
-                            <a href={userData?.employee?.reports_to?._id}>
-                              {userData?.employee?.reports_to?.last_name ||
-                                'Not Available'}
+                            <a href={userData?.employee?.reports_to?.ogid}>
+                              {userData?.employee?.reports_to?.full_name ||
+                                "Not Available"}
                             </a>
                           </div>
                         </li>
-                        {/* <li>
-                          <div className="title">Social Handle</div>
-                          <div className="text">
-                            {userData?.employee?.socialHandle &&
-                              Object.keys(userData?.employee?.socialHandle).map(
-                                (e) => (
-                                  <>
-                                    <a
-                                      href={userData?.employee?.socialHandle[e]}
-                                    >
-                                      {helper.capitalize(e)}
-                                    </a>{' '}
-                                    &nbsp;
-                                  </>
-                                )
-                              )}
-
-                            <a
-                              className="edit-icon"
-                              data-toggle="modal"
-                              data-target="#generalModal"
-                            >
-                              <i className="fa fa-pencil"></i>
-                            </a>
-                          </div>
-                        </li> */}
                       </ul>
                     </div>
                   </div>
                 </div>
-                {/* <div className="pro-edit">
-                  <Link
-                    data-target="#profile_info"
-                    data-toggle="modal"
-                    className="edit-icon"
-                    role="button"
-                  >
-                    <i className="fa fa-pencil"></i>
-                  </Link>
-                </div> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <ProfileCards
         setformType={setformType}
         userData={userData}
         submitted={submitted}
         formValue={formValue}
         setFormValue={setFormValue}
-        fetchUserInfo={fetchUserInfo}
         mode={mode}
-        setMode={setMode}	
+        setMode={setMode}
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
         ogid={ogid}

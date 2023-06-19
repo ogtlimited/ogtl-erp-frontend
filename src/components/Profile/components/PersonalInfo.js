@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
@@ -47,12 +48,13 @@ const PersonalInfo = ({
         });
     }
   }, [submitted, formValue, id, personalDetails?.personalDetails?._id]);
+
   return (
     <div className="card profile-box flex-fill">
       <div className="card-body">
         <h3 className="card-title">
           Personal Information{" "}
-          {canView(user, "HR") && (
+          {canView(user, "hr") && (
             <a
               onClick={() => handleChange("PersonalDetails")}
               className="edit-icon"
@@ -63,68 +65,52 @@ const PersonalInfo = ({
             </a>
           )}
         </h3>
+
         <ul className="personal-info">
           <li>
             <div className="title">Date of birth</div>
             <div className="text">
-              {personalDetails?.personalDetails?.date_of_birth
+              {personalDetails?.employee?.personal_detail?.DOB
                 ? moment(
-                    personalDetails?.personalDetails?.date_of_birth
-                  ).format("L")
+                  personalDetails?.employee?.personal_detail?.DOB
+                  ).format("Do MMMM, YYYY")
                 : "Not Available"}
+            </div>
+          </li>
+          <li>
+            <div className="title">Blood Group</div>
+            <div className="text">
+              {personalDetails?.employee?.personal_detail?.blood_group || "Not Available"}
+            </div>
+          </li>
+          <li>
+            <div className="title">Marital status</div>
+            <div className="text">
+              {personalDetails?.employee?.personal_detail?.marital_status ||
+                "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">Means of Identification</div>
             <div className="text">
-              {personalDetails?.personalDetails?.means_of_identification ||
+              {personalDetails?.employee?.personal_detail?.means_of_identification ||
                 "Not Available"}
             </div>
           </li>
           <li>
             <div className="title">ID Number</div>
             <div className="text">
-              {personalDetails?.personalDetails?.id_number || "Not Available"}
+              {personalDetails?.employee?.personal_detail?.id_number || "Not Available"}
             </div>
           </li>
           <li>
-            <div className="title">Passport Exp Date.</div>
+            <div className="title">ID Issue Date</div>
             <div className="text">
-              {personalDetails?.personalDetails?.valid_upto
-                ? moment(personalDetails?.personalDetails?.valid_upto).format(
-                    "L"
-                  )
-                : "Not Available"}
-            </div>
-          </li>
-          <li>
-            <div className="title">Passport Issue Date</div>
-            <div className="text">
-              {personalDetails?.personalDetails?.date_of_issue
+              {personalDetails?.employee?.personal_detail?.id_issue_date
                 ? moment(
-                    personalDetails?.personalDetails?.date_of_issue
-                  ).format("L")
+                  personalDetails?.employee?.personal_detail?.id_issue_date
+                  ).format("Do MMMM, YYYY")
                 : "Not Available"}
-            </div>
-          </li>
-          <li>
-            <div className="title">Place of Issue</div>
-            <div className="text">
-              {personalDetails?.personalDetails?.place_of_issue ||
-                "Not Available"}
-            </div>
-          </li>
-          <li>
-            <div className="title">Blood Group</div>
-            <div className="text">
-              {personalDetails?.personalDetails?.blood_group || "Not Available"}
-            </div>
-          </li>
-          <li>
-            <div className="title">Marital status</div>
-            <div className="text">
-              {personalDetails?.personalDetails?.marital_status ||
-                "Not Available"}
             </div>
           </li>
         </ul>

@@ -14,9 +14,9 @@ const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
 
         <div className="front-card-image-container">
           <div className="front-card-image">
-            {data?.gender === "female" ? 
+            {data?.personal_detail?.gender === "female" ? 
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679518841/female-placeholder-image_vbmnxe.webp" alt="Female Employee" />
-            : data?.gender === "male" ?
+            : data?.personal_detail?.gender === "male" ?
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679527521/male-placeholder-image_oirebb.webp" alt="Male Employee" />
             : 
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679528249/unknown-user-images_k0jjaq.png" alt="No Employee" />
@@ -26,8 +26,8 @@ const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
 
         <div className="front-card-employee-info-container">
           <div className="front-card-employee-info">
-            {!data ? '' : <p>{data?.first_name + " " + data?.middle_name + " " + data?.last_name}</p>}
-            <p>{data?.designation?.designation}</p>
+            {!data ? '' : <p>{data?.full_name}</p>}
+            <p>{data?.designation}</p>
             <img src="https://res.cloudinary.com/dhantey/image/upload/v1679519740/signature-placeholder_xykxnx.png" alt="Employee Signature" />
             <p>Authorized Signature</p>
           </div>

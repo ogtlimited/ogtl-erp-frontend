@@ -1,5 +1,5 @@
 import "../../In-Apps/virtualID.css";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
@@ -12,9 +12,6 @@ import {
   maritalStatusOptions,
   bloodGroupOptions,
   meansOfIdentificationOptions,
-  OFFICEOptions,
-  BRANCHOptions,
-  DESIGNATIONOptions,
 } from "../../../components/FormJSON/AddEmployee";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
@@ -26,6 +23,7 @@ const AddEmployeesAdmin = () => {
   const [loadedSelect, setLoadedSelect] = useState(0);
   const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState("create");
 
   const [allBranches, setAllBranches] = useState([]);
   const [officeType, setOfficeType] = useState("");
@@ -63,6 +61,17 @@ const AddEmployeesAdmin = () => {
   };
 
   const handleOfficeTypeChange = (e) => {
+    setEmployee({
+      ...employee,
+      employee_info: {
+        ...employee.employee_info,
+        operation_office_id: "",
+      },
+      misc: {
+        ...employee.misc,
+        officeName: "",
+      },
+    });
     fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeSelected(true);
@@ -74,18 +83,32 @@ const AddEmployeesAdmin = () => {
     
     const employeeInfo = {
       user_info: employee.user_info,
-      Employee_info: employee.Employee_info,
+      employee_info: employee.employee_info,
       personal_details: employee.personal_details,
     };
 
     try {
+      const response = await axiosInstance.post("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        }, 
+        payload:  {
+          user_info: employee.user_info,
+          employee_info: employee.employee_info,
+          personal_details: employee.personal_details,
+        },
+      });
 
-      console.log("Added Employee:", employeeInfo);
+      console.log("Added Employee:", response);
       showAlert(true, "New Employee added successfully", "alert alert-success");
       clearEvent();
       setLoading(false);
     } catch (error) {
-      console.log("Add Employee Error:", error);
+      console.log("Add Employee Error:", error?.response);
+      // showAlert(true,  "alert alert-error");
+      setLoading(false);
     }
   };
 
@@ -101,8 +124,8 @@ const AddEmployeesAdmin = () => {
             employee.personal_details.last_name
           }
           gender={employee.personal_details.gender}
-          // designation={employee.designationName}
-          ogid={employee.Employee_info.ogid}
+          designation={employee.misc.designationName}
+          ogid={employee.employee_info.ogid}
           edit={false}
         />
       </>
@@ -110,7 +133,7 @@ const AddEmployeesAdmin = () => {
   };
 
   // All Branches:
-  const fetchAllBranches = useCallback(async () => {
+  const fetchAllBranches = async () => {
     try {
       const response = await axiosInstance.get("/api/v1/branches.json", {
         headers: {
@@ -131,7 +154,7 @@ const AddEmployeesAdmin = () => {
     } catch (error) {
       console.log("All Branches error:", error);
     }
-  }, [loadedSelect]);
+  };
 
   // All Offices:
   const fetchAllOffices = async (office) => {
@@ -172,7 +195,7 @@ const AddEmployeesAdmin = () => {
   };
 
   // All Designations:
-  const fetchDesignation = useCallback(async () => {
+  const fetchDesignation = async () => {
     try {
       const response = await axiosInstance.get("/api/v1/designations.json", {
         headers: {
@@ -195,20 +218,23 @@ const AddEmployeesAdmin = () => {
     } catch (error) {
       console.log("Get All Designations error:", error);
     }
-  }, [loadedSelect]);
+  };
 
   useEffect(() => {
     fetchAllBranches();
     fetchDesignation();
-  }, [fetchAllBranches, fetchDesignation]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
+    goToTop()
     console.log("Next Step:", employee);
   };
 
   const prevStep = () => {
     setStep((prevStep) => prevStep - 1);
+    goToTop()
     console.log("Prev Step:", employee);
   };
 
@@ -240,12 +266,12 @@ const AddEmployeesAdmin = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="Employee_info.ogid">OGID</label>
+                          <label htmlFor="employee_info.ogid">OGID</label>
                           <input
                             className="form-control"
-                            name="Employee_info.ogid"
+                            name="employee_info.ogid"
                             type="text"
-                            value={employee.Employee_info.ogid}
+                            value={employee.employee_info.ogid}
                             onChange={handleFormChange}
                             required
                           />
@@ -254,14 +280,14 @@ const AddEmployeesAdmin = () => {
 
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="Employee_info.date_of_joining">
+                          <label htmlFor="employee_info.date_of_joining">
                             Date of Joining
                           </label>
                           <input
                             className="form-control"
-                            name="Employee_info.date_of_joining"
+                            name="employee_info.date_of_joining"
                             type="date"
-                            value={employee.Employee_info.date_of_joining}
+                            value={employee.employee_info.date_of_joining}
                             onChange={handleFormChange}
                             required
                           />
@@ -271,24 +297,24 @@ const AddEmployeesAdmin = () => {
                       {/* Select Branch */}
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="Employee_info.operation_branch_id">
+                          <label htmlFor="employee_info.operation_branch_id">
                             Branch
                           </label>
                           <Select
-                            name="Employee_info.operation_branch_id"
-                            // options={allBranches}
-                            options={BRANCHOptions}
+                            name="employee_info.operation_branch_id"
+                            options={allBranches}
+                            // options={BRANCHOptions}
                             isSearchable={true}
                             isClearable={true}
                             value={{
                               label: employee?.misc?.branchName,
-                              value: employee?.Employee_info?.operation_branch_id,
+                              value: employee?.employee_info?.operation_branch_id,
                             }}
                             onChange={(e) =>
                               setEmployee({
                                 ...employee,
-                                Employee_info: {
-                                  ...employee.Employee_info,
+                                employee_info: {
+                                  ...employee.employee_info,
                                   operation_branch_id: e?.value,
                                 },
                                 misc: {
@@ -309,6 +335,10 @@ const AddEmployeesAdmin = () => {
                           <Select
                             options={officeTypeOptions}
                             isClearable={true}
+                            value={{
+                              label: officeType,
+                              value: officeType,
+                            }}
                             style={{ display: "inline-block" }}
                             onChange={(e) => handleOfficeTypeChange(e)}
                           />
@@ -319,23 +349,23 @@ const AddEmployeesAdmin = () => {
                       {isOfficeSelected && (
                         <div className="col-md-6">
                           <div className="form-group">
-                            <label htmlFor="Employee_info.operation_office_id">
+                            <label htmlFor="employee_info.operation_office_id">
                               Office
                             </label>
                             <Select
-                              // options={allOffices}
-                              options={OFFICEOptions}
+                              options={allOffices}
+                              // options={OFFICEOptions}
                               isSearchable={true}
                               isClearable={true}
                               value={{
                                 label: employee?.misc?.officeName,
-                                value: employee?.Employee_info?.operation_office_id,
+                                value: employee?.employee_info?.operation_office_id,
                               }}
                                onChange={(e) =>
                                 setEmployee({
                                   ...employee,
-                                  Employee_info: {
-                                    ...employee.Employee_info,
+                                  employee_info: {
+                                    ...employee.employee_info,
                                     operation_office_id: e?.value,
                                   },
                                   misc: {
@@ -353,23 +383,23 @@ const AddEmployeesAdmin = () => {
                       {/* Select Designation */}
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="Employee_info.hr_designation_id">
+                          <label htmlFor="employee_info.hr_designation_id">
                             Designations
                           </label>
                           <Select
-                            // options={allDesignations}
-                            options={DESIGNATIONOptions}
+                            options={allDesignations}
+                            // options={DESIGNATIONOptions}
                             isSearchable={true}
                             isClearable={true}
                             value={{
                               label: employee?.misc?.designationName,
-                              value: employee?.Employee_info?.hr_designation_id,
+                              value: employee?.employee_info?.hr_designation_id,
                             }}
                             onChange={(e) =>
                               setEmployee({
                                 ...employee,
-                                Employee_info: {
-                                  ...employee.Employee_info,
+                                employee_info: {
+                                  ...employee.employee_info,
                                   hr_designation_id: e?.value,
                                 },
                                 misc: {
@@ -395,13 +425,13 @@ const AddEmployeesAdmin = () => {
                             isClearable={true}
                             value={{
                               label: employee?.misc?.remoteCategoryName,
-                              value: employee?.Employee_info?.remote,
+                              value: employee?.employee_info?.remote,
                             }}
                             onChange={(e) =>
                               setEmployee({
                                 ...employee,
-                                Employee_info: {
-                                  ...employee.Employee_info,
+                                employee_info: {
+                                  ...employee.employee_info,
                                   remote: e?.value,
                                 },
                                 misc: {
@@ -737,16 +767,16 @@ const AddEmployeesAdmin = () => {
                           <li>
                             <div className="title">OGID:</div>
                             <div className="text">
-                              {employee.Employee_info.ogid || "-"}
+                              {employee.employee_info.ogid || "-"}
                             </div>
                           </li>
 
                           <li>
                             <div className="title">Date of Joining:</div>
                             <div className="text">
-                              {employee.Employee_info.date_of_joining
+                              {employee.employee_info.date_of_joining
                                 ? moment(
-                                    employee.Employee_info.date_of_joining
+                                    employee.employee_info.date_of_joining
                                   ).format(" Do MMMM, YYYY")
                                 : "-"}
                             </div>
@@ -783,7 +813,7 @@ const AddEmployeesAdmin = () => {
                           <li>
                             <div className="title">Remote Staff:</div>
                             <div className="text">
-                              {employee.Employee_info.remote
+                              {employee.employee_info.remote
                                 ? "Yes"
                                 : "No" || "-"}
                             </div>

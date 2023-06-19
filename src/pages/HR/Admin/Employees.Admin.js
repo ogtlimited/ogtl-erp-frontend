@@ -29,16 +29,9 @@ const AllEmployeesAdmin = () => {
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
-    console.log("Params:", {
-      page: page,
-      limit: sizePerPage,
-      search: searchTerm,
-      operation_office_id: officeFilter.length ? officeFilter : null,
-      hr_designation_id: designationFilter.length ? designationFilter : null,
-    });
 
     try {
-      const response = await axiosInstance.get('api/v1/employees.json', {
+      const response = await axiosInstance.get('/api/v1/employees.json', {
         headers: {          
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -164,7 +157,6 @@ const AllEmployeesAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.role?.hr?.create && (
               <>
                 <a
                   href="#"
@@ -175,7 +167,6 @@ const AllEmployeesAdmin = () => {
                   <i className="fa fa-plus"></i> Add Employee
                 </a>
               </>
-            )}
           </div>
         </div>
       </div>

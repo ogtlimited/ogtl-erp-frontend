@@ -142,7 +142,7 @@ const EmployeesTable = ({
               }
             />
           </a>
-          <Link to={`/dashboard/user/profile/${row._id}`}>
+          <Link to={`/dashboard/user/profile/${row.ogid}`}>
             {value} <span>{row?.designation_name}</span>
           </Link>
         </h2>
@@ -323,7 +323,7 @@ const EmployeesTable = ({
     setLoading(true);
 
     axiosInstance
-    .get('api/v1/employees.json', {
+    .get('/api/v1/employees.json', {
       headers: {          
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -376,7 +376,7 @@ const EmployeesTable = ({
     setLoading(true);
     
     axiosInstance
-    .get('api/v1/employees.json', {
+    .get('/api/v1/employees.json', {
       headers: {          
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -426,7 +426,7 @@ const EmployeesTable = ({
 
 
     axiosInstance
-    .get('api/v1/employees.json', {
+    .get('/api/v1/employees.json', {
       headers: {          
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -478,7 +478,7 @@ const EmployeesTable = ({
     setLoading(true);
 
     axiosInstance
-    .get('api/v1/employees.json', {
+    .get('/api/v1/employees.json', {
       headers: {          
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",

@@ -17,8 +17,6 @@ import avater2 from "../../assets/img/male_avater2.png";
 import avater3 from "../../assets/img/female_avatar3.png";
 import avater4 from "../../assets/img/female_avatar.png";
 import avater5 from "../../assets/img/female_avatar2.png";
-import EmployeePromotions from "./promotions";
-import EmployeeWarningLetters from "./warningLetters";
 import { useAppContext } from "../../Context/AppContext";
 import { BsFillPrinterFill } from 'react-icons/bs';
 
@@ -96,39 +94,12 @@ const ProfileCards = ({
                   Campaign
                 </a>
               </li>
-              {user?.role?.hr &&
-                <>
-                  <li className="nav-item">
-                  <a
-                    href="#bank_statutory"
-                    data-toggle="tab"
-                    className={`nav-link ${!user?.isAdmin && "disabled"}`}
-                  >
-                    Bank &amp; Statutory{" "}
-                    <small className="text-danger">(Admin Only)</small>
-                  </a>
-                  </li>
-                  <li className="nav-item">
-                    <a href="#promotions" data-toggle="tab" className="nav-link">
-                      Promotions
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      href="#warning_letters"
-                      data-toggle="tab"
-                      className="nav-link"
-                    >
-                      Warning Letters
-                    </a>
-                  </li>
-                </>
-              }
             </ul>
           </div>
         </div>
       </div>
       <div className="tab-content">
+
         <div id="emp_profile" className={isFromBiometrics ? "pro-overview tab-pane fade" : "pro-overview tab-pane active "}>
           <div className="row">
             <div className="col-md-6 d-flex">
@@ -148,58 +119,6 @@ const ProfileCards = ({
                 submitted={submitted}
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
-                setFormValue={setFormValue}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 d-flex">
-              <BankInformation
-                handleChange={handleChange}
-                salaryDetails={userData}
-                submitted={submitted}
-                formValue={formValue}
-                fetchUserInfo={fetchUserInfo}
-                setFormValue={setFormValue}
-              />
-            </div>
-            <div className="col-md-6 d-flex">
-              <EmergencyContact
-                handleChange={handleChange}
-                emergencyContact={userData?.emergencyContact}
-                submitted={submitted}
-                formValue={formValue}
-                setFormValue={setFormValue}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 d-flex">
-              <EducationInformation
-                handleChange={handleChange}
-                education={userData?.education}
-                submitted={submitted}
-                formValue={formValue}
-                setFormValue={setFormValue}
-              />
-            </div>
-            <div className="col-md-6 d-flex">
-              <Experience
-                handleChange={handleChange}
-                workExperience={userData?.workExperience}
-                submitted={submitted}
-                formValue={formValue}
-                setFormValue={setFormValue}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-12 d-flex">
-              <History
-                handleChange={handleChange}
-                history={userData?.history}
-                submitted={submitted}
-                formValue={formValue}
                 setFormValue={setFormValue}
               />
             </div>
@@ -327,107 +246,6 @@ const ProfileCards = ({
           </div>
         </div>
 
-        <div id="bank_statutory" className="pro-overview tab-pane fade">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title"> Basic Salary Information</h3>
-              <form>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Salary basis <span className="text-danger">*</span>
-                      </label>
-                      <select className="form-control">
-                        <option>Select salary basis type</option>
-                        <option>Hourly</option>
-                        <option>Daily</option>
-                        <option>Weekly</option>
-                        <option>Monthly</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Salary amount{" "}
-                        <small className="text-muted">per month</small>
-                      </label>
-                      <div className="input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">₦</span>
-                        </div>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Type your salary amount"
-                          value="0.00"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">Payment type</label>
-                      <select className="form-control">
-                        <option>Select payment type</option>
-                        <option>Bank transfer</option>
-                        <option>Check</option>
-                        <option>Cash</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <h3 className="card-title"> Bank Information</h3>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">Bank</label>
-                      <input className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">Account Number</label>
-                      <input className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">BVN</label>
-                      <input className="form-control" />
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <h3 className="card-title"> Tax & Pension Information</h3>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">Tax %</label>
-                      <input className="form-control" />
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="form-group">
-                      <label className="col-form-label">Pension %</label>
-                      <input className="form-control" />
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div id="promotions" className="pro-overview tab-pane fade">
-          <EmployeePromotions />
-        </div>
-
-        <div id="warning_letters" className="pro-overview tab-pane fade">
-          <EmployeeWarningLetters />
-        </div>
       </div>
     </>
   );

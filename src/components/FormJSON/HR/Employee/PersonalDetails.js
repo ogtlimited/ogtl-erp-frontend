@@ -2,53 +2,78 @@ export const PersonalDetailJson = {
   title: "Personal Details",
   Fields: [
     {
-      name: "means_of_identification",
+      name: "first_name",
+      type: "text",
+      title: "First Name",
+    },
+    {
+      name: "middle_name",
+      type: "text",
+      title: "Middle Name",
+    },
+    {
+      name: "last_name",
+      type: "text",
+      title: "Last Name",
+    },
+    {
+      name: "gender",
       type: "select",
-      title: "Means of Identification",
+      title: "Gender",
       options: [
         {
-          value: "NIN",
-          label: "NIN",
+          label: "Female",
+          value: "female",
         },
         {
-          value: "International Passport",
-          label: "International Passport",
-        },
-        {
-          value: "Drivers License",
-          label: "Drivers License",
-        },
-        {
-          value: "Voters Card",
-          label: "Voters Card",
+          label: "Male",
+          value: "male",
         },
       ],
     },
     {
-      name: "id_number",
-      type: "text",
-      title: "ID Number",
-    },
-    {
-      name: "date_of_issue",
-      type: "date",
-      title: "Date Of Issue",
-    },
-    {
-      name: "valid_upto",
-      type: "date",
-      title: "Valid Up To",
-    },
-    {
-      name: "date_of_birth",
+      name: "DOB",
       type: "date",
       title: "Date of birth",
     },
-
     {
-      name: "place_of_issue",
-      type: "text",
-      title: "Place Of Issue",
+      name: "blood_group",
+      type: "select",
+      title: "Blood Group",
+      options: [
+        {
+          label: "A+",
+          value: "A+",
+        },
+        {
+          label: "A-",
+          value: "A-",
+        },
+        {
+          label: "B+",
+          value: "B+",
+        },
+        {
+          label: "B-",
+          value: "B-",
+        },
+        {
+          label: "AB+",
+          value: "AB+",
+        },
+        {
+          label: "AB-",
+          value: "AB-",
+        },
+        {
+          label: "O+",
+          value: "O+",
+        },
+        {
+          label: "O-",
+          value: "O-",
+        },
+      ],
     },
     {
       name: "marital_status",
@@ -74,39 +99,37 @@ export const PersonalDetailJson = {
       ],
     },
     {
-      name: "blood_group",
+      name: "means_of_identification",
       type: "select",
-      title: "Blood Group",
+      title: "Means of Identification",
       options: [
         {
-          value: "A+",
-          label: "A+",
+          label: "National ID",
+          value: "National ID",
         },
         {
-          value: "A-",
-          label: "A-",
+          label: "Driver's License",
+          value: "Driver's License",
         },
         {
-          value: "B+",
-          label: "B+",
+          label: "International Passport",
+          value: "International Passport",
         },
         {
-          value: "AB+",
-          label: "AB+",
-        },
-        {
-          value: "AB-",
-          label: "AB-",
-        },
-        {
-          value: "O+",
-          label: "O+",
-        },
-        {
-          value: "O-",
-          label: "O-",
+          label: "Voters Card",
+          value: "Voters Card",
         },
       ],
+    },
+    {
+      name: "id_number",
+      type: "text",
+      title: "ID Number",
+    },
+    {
+      name: "id_issue_date",
+      type: "date",
+      title: "ID Issue date",
     },
   ],
 };

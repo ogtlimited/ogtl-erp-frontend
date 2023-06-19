@@ -14,7 +14,6 @@ const SocialHandleForm = ({ id, userData }) => {
   const [header, setheader] = useState("Add Your Details");
   useEffect(() => {
     setemployee(userData?.employee)
-   console.log(userData?.employee)
   }, [userData])
 
   const handleSubmit = (e, field) => {

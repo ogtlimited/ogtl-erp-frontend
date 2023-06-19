@@ -10,7 +10,7 @@ const LeadershipAdmin = () => {
   // All Leaders:
   const fetchAllLeaders = async () => {
     try {
-      const response = await axiosInstance.get('api/v1/leaders.json', {
+      const response = await axiosInstance.get('/api/v1/leaders.json', {
         headers: {          
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
