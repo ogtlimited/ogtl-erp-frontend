@@ -24,14 +24,16 @@ export const PROFILE = {
   },
   misc : {
     branchName: '',
+    officeTypeName: '',
     officeName: '',
     designationName: '',
     staffGender: '',
     maritalStatus: '',
+    remoteCategoryName: '',
   },
 }
 
-export const officeOptions = [
+export const officeTypeOptions = [
   {
     label: "Department",
     value: 'department',

@@ -1,12 +1,12 @@
 import "../../In-Apps/virtualID.css";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
 import { Link } from "react-router-dom";
 import {
   PROFILE,
-  officeOptions,
+  officeTypeOptions,
   genderOptions,
   categoryOptions,
   maritalStatusOptions,
@@ -21,14 +21,6 @@ import axiosInstance from "../../../services/api";
 import Select from "react-select";
 
 const AddEmployeesAdmin = () => {
-  const [selectedBranch, setSelectedBranch] = useState(null);
-  const [selectedOffice, setSelectedOffice] = useState(null);
-  const [selectedDesignation, setSelectedDesignation] = useState(null);
-  const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState(null);
-  const [selectedBloodGroup, setSelectedBloodGroup] = useState(null);
-  const [selectedMeansOfIdentification, setSelectedMeansOfIdentification] = useState(null);
-
   const { showAlert } = useAppContext();
   const [step, setStep] = useState(1);
   const [loadedSelect, setLoadedSelect] = useState(0);
@@ -50,16 +42,9 @@ const AddEmployeesAdmin = () => {
 
   const clearEvent = () => {
     goToTop();
-    // setSelectedBranch(null);
-    // setSelectedOffice(null);
-    // setSelectedDesignation(null);
-    // selectGenderRef.current.select.clearValue();
-    // selectMaritalStatusRef.current.select.clearValue();
-    // selectBloodGroupRef.current.select.clearValue();
-    // selectMeansOfIdentificationRef.current.select.clearValue();
-
-
     setEmployee(PROFILE);
+    setOfficeType("");
+    setStep(1);
   };
 
   const handleFormChange = (e) => {
@@ -77,7 +62,7 @@ const AddEmployeesAdmin = () => {
     }));
   };
 
-  const handleOfficeChange = (e) => {
+  const handleOfficeTypeChange = (e) => {
     fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeSelected(true);
@@ -86,18 +71,22 @@ const AddEmployeesAdmin = () => {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     const employeeInfo = {
       user_info: employee.user_info,
       Employee_info: employee.Employee_info,
       personal_details: employee.personal_details,
     };
 
+    try {
 
-    console.log("Added Employee:", employeeInfo);
-    showAlert(true, "New Employee added successfully", "alert alert-success");
-    clearEvent();
-    setLoading(false);
+      console.log("Added Employee:", employeeInfo);
+      showAlert(true, "New Employee added successfully", "alert alert-success");
+      clearEvent();
+      setLoading(false);
+    } catch (error) {
+      console.log("Add Employee Error:", error);
+    }
   };
 
   const VirtualIDCard = () => {
@@ -318,10 +307,10 @@ const AddEmployeesAdmin = () => {
                         <div className="form-group">
                           <label>Office Type</label>
                           <Select
-                            options={officeOptions}
+                            options={officeTypeOptions}
                             isClearable={true}
                             style={{ display: "inline-block" }}
-                            onChange={(e) => handleOfficeChange(e)}
+                            onChange={(e) => handleOfficeTypeChange(e)}
                           />
                         </div>
                       </div>
@@ -404,12 +393,20 @@ const AddEmployeesAdmin = () => {
                             options={categoryOptions}
                             isSearchable={true}
                             isClearable={true}
+                            value={{
+                              label: employee?.misc?.remoteCategoryName,
+                              value: employee?.Employee_info?.remote,
+                            }}
                             onChange={(e) =>
                               setEmployee({
                                 ...employee,
                                 Employee_info: {
                                   ...employee.Employee_info,
                                   remote: e?.value,
+                                },
+                                misc: {
+                                  ...employee.misc,
+                                  remoteCategoryName: e?.label,
                                 },
                               })
                             }
