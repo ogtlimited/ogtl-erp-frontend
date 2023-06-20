@@ -34,6 +34,7 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response.status === 401) {
       tokenService.removeToken();
+      console.log("Login error:", error)
 
       window.location = "/auth";
     } else {

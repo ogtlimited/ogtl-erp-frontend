@@ -7,23 +7,7 @@ html {
 .float-end {
   float: right!important;
 }
-.account-logo {
-  margin-bottom: 30px;
-  margin-top: 20px;
-  text-align: center;
-}
-.account-logo img {
-  width: 100px;
-}
-.account-box {
-  background-color: #fff;
-  border: 1px solid #ededed;
-  border-radius: 4px;
-  /* box-shadow: 0 1px 1px 0 rgb(0 0 0 / 20%); */
-  margin: 0 auto;
-  overflow: hidden;
-  width: 480px;
-}
+
 .account-wrapper {
   padding: 30px;
 }
@@ -46,34 +30,7 @@ html {
   margin-bottom: 30px;
   text-align: center;
 }
-.account-box label {
-  color: #1f1f1f;
-  font-size: 16px;
-  font-weight: normal;
-  margin-bottom: 5px;
-}
-.account-box .form-control {
-  background-color: #fbfbfb;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-  height: 46px;
-}
-.account-box .form-group {
-  margin-bottom: 25px;
-}
-.account-box .account-btn {
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
-  border: 0;
-  border-radius: 4px;
-  display: block;
-  font-size: 22px;
-  padding: 10px 26px;
-  width: 100%;
-}
+
 .error {
   color: crimson;
   font-size: small;
@@ -392,8 +349,7 @@ a.nav-link {
   position: relative;
   border-radius: 16px;
   z-index: 0;
-  box-shadow: none;
-  
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
   background-color: rgb(209, 255, 252);
 }
 @media (min-width: 900px) {

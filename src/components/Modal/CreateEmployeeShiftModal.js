@@ -15,8 +15,9 @@ import Select from 'react-select'
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
+import { createBrowserHistory } from 'history';
 
-export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) => {
+export const CreateEmployeeShiftModal = ({ userID, setMode, setEmployeeShifts }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState(
@@ -61,24 +62,34 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
     });
   };
 
-
   const handleCreateEmployeeShift = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
 
-      const shifts = [];
-  
-      shifts.push({ ...createMondayShift, ogid: ogid });
-      shifts.push({ ...createTuesdayShift, ogid: ogid });
-      shifts.push({ ...createWednesdayShift, ogid: ogid });
-      shifts.push({ ...createThursdayShift, ogid: ogid });
-      shifts.push({ ...createFridayShift, ogid: ogid });
-      shifts.push({ ...createSaturdayShift, ogid: ogid });
-      shifts.push({ ...createSundayShift, ogid: ogid });
+      const employeeShifts = {
+        "hr_user_id": userID,
+        "days": [
+          createSundayShift,
+          createMondayShift,
+          createTuesdayShift,
+          createWednesdayShift,
+          createThursdayShift,
+          createFridayShift,
+          createSaturdayShift,
+        ]
+      }
 
-      console.log("create this shifts:", shifts)
-      const response = await axiosInstance.post(`/api/employee-shift`, shifts);
+      const response = await axiosInstance.post(`/api/v1/shifts.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: employeeShifts,	
+      });
+
+      console.log("Created Shifts:", response)
   
       setLoading(false);
       goToTop();
@@ -88,7 +99,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
         `Shift created successfully!`,
         'alert alert-success'
       );
-      setEmployeeShifts(response?.data?.data);
+      // setEmployeeShifts(response?.data?.data);
     } catch (error) {
       goToTop();
       const errorMsg = error?.response?.data?.message;
@@ -129,11 +140,10 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
       const formatted = resData?.map((e) => ({
           day: e.day,
           off: e.off,
-          start: e.start,
-          end: e.end,
-          ogid,
-          huddles: e.huddles,
-          huddleTime: e.huddleTime,
+          start_time: e.start_time,
+          end_time: e.end_time,
+          huddle: e.huddle,
+          huddle_time: e.huddle_time,
         }));
 
       setCreateMondayShift(formatted[0]);
@@ -184,7 +194,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createMondayShift.day === 'mon' && 'Monday'}
+                      value={createMondayShift.day === 1 && 'Monday'}
                       readOnly
                     />
                   </div>
@@ -197,9 +207,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="mon_start"
                         type="time"
                         className="form-control"
-                        value={!createMondayShift.off && createMondayShift.start}
+                        value={!createMondayShift.off && createMondayShift.start_time}
                         onChange={(e) =>
-                          setCreateMondayShift({ ...createMondayShift, start: e.target.value })
+                          setCreateMondayShift({ ...createMondayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -214,9 +224,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="mon_end"
                         type="time"
                         className="form-control"
-                        value={!createMondayShift.off && createMondayShift.end}
+                        value={!createMondayShift.off && createMondayShift.end_time}
                         onChange={(e) =>
-                          setCreateMondayShift({ ...createMondayShift, end: e.target.value })
+                          setCreateMondayShift({ ...createMondayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -231,22 +241,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createMondayShift.off && createMondayShift.huddles} value={createMondayShift.huddles} onChange={() => setCreateMondayShift({ ...createMondayShift, huddles: !createMondayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createMondayShift.off && createMondayShift.huddle} value={createMondayShift.huddle} onChange={() => setCreateMondayShift({ ...createMondayShift, huddle: !createMondayShift.huddle })} />
                      </div>
                   </div>
-                  {!createMondayShift.off && createMondayShift.huddles && <div className="col-md-auto">
+                  {!createMondayShift.off && createMondayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createMondayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createMondayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateMondayShift({ ...createMondayShift, huddleTime: e?.value })
+                          setCreateMondayShift({ ...createMondayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -265,7 +275,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createTuesdayShift.day === 'tue' && 'Tuesday'}
+                      value={createTuesdayShift.day === 2 && 'Tuesday'}
                       readOnly
                     />
                   </div>
@@ -278,9 +288,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="tue_start"
                         type="time"
                         className="form-control"
-                        value={!createTuesdayShift.off && createTuesdayShift.start}
+                        value={!createTuesdayShift.off && createTuesdayShift.start_time}
                         onChange={(e) =>
-                          setCreateTuesdayShift({ ...createTuesdayShift, start: e.target.value })
+                          setCreateTuesdayShift({ ...createTuesdayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -295,9 +305,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="tue_end"
                         type="time"
                         className="form-control"
-                        value={!createTuesdayShift.off && createTuesdayShift.end}
+                        value={!createTuesdayShift.off && createTuesdayShift.end_time}
                         onChange={(e) =>
-                          setCreateTuesdayShift({ ...createTuesdayShift, end: e.target.value })
+                          setCreateTuesdayShift({ ...createTuesdayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -312,22 +322,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createTuesdayShift.off && createTuesdayShift.huddles} value={createTuesdayShift.huddles} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, huddles: !createTuesdayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createTuesdayShift.off && createTuesdayShift.huddle} value={createTuesdayShift.huddle} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, huddle: !createTuesdayShift.huddle })} />
                      </div>
                   </div>
-                  {!createTuesdayShift.off && createTuesdayShift.huddles && <div className="col-md-auto">
+                  {!createTuesdayShift.off && createTuesdayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createTuesdayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createTuesdayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateTuesdayShift({ ...createTuesdayShift, huddleTime: e?.value })
+                          setCreateTuesdayShift({ ...createTuesdayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -346,7 +356,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createWednesdayShift.day === 'wed' && 'Wednesday'}
+                      value={createWednesdayShift.day === 3 && 'Wednesday'}
                       readOnly
                     />
                   </div>
@@ -359,9 +369,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="wed_start"
                         type="time"
                         className="form-control"
-                        value={!createWednesdayShift.off && createWednesdayShift.start}
+                        value={!createWednesdayShift.off && createWednesdayShift.start_time}
                         onChange={(e) =>
-                          setCreateWednesdayShift({ ...createWednesdayShift, start: e.target.value })
+                          setCreateWednesdayShift({ ...createWednesdayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -376,9 +386,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="wed_end"
                         type="time"
                         className="form-control"
-                        value={!createWednesdayShift.off && createWednesdayShift.end}
+                        value={!createWednesdayShift.off && createWednesdayShift.end_time}
                         onChange={(e) =>
-                          setCreateWednesdayShift({ ...createWednesdayShift, end: e.target.value })
+                          setCreateWednesdayShift({ ...createWednesdayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -393,22 +403,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createWednesdayShift.off && createWednesdayShift.huddles} value={createWednesdayShift.huddles} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, huddles: !createWednesdayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createWednesdayShift.off && createWednesdayShift.huddle} value={createWednesdayShift.huddle} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, huddle: !createWednesdayShift.huddle })} />
                      </div>
                   </div>
-                  {!createWednesdayShift.off && createWednesdayShift.huddles && <div className="col-md-auto">
+                  {!createWednesdayShift.off && createWednesdayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createWednesdayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createWednesdayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateWednesdayShift({ ...createWednesdayShift, huddleTime: e?.value })
+                          setCreateWednesdayShift({ ...createWednesdayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -427,7 +437,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createThursdayShift.day === 'thu' && 'Thursday'}
+                      value={createThursdayShift.day === 4 && 'Thursday'}
                       readOnly
                     />
                   </div>
@@ -440,9 +450,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="thu_start"
                         type="time"
                         className="form-control"
-                        value={!createThursdayShift.off && createThursdayShift.start}
+                        value={!createThursdayShift.off && createThursdayShift.start_time}
                         onChange={(e) =>
-                          setCreateThursdayShift({ ...createThursdayShift, start: e.target.value })
+                          setCreateThursdayShift({ ...createThursdayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -457,9 +467,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="thu_end"
                         type="time"
                         className="form-control"
-                        value={!createThursdayShift.off && createThursdayShift.end}
+                        value={!createThursdayShift.off && createThursdayShift.end_time}
                         onChange={(e) =>
-                          setCreateThursdayShift({ ...createThursdayShift, end: e.target.value })
+                          setCreateThursdayShift({ ...createThursdayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -474,22 +484,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createThursdayShift.off && createThursdayShift.huddles} value={createThursdayShift.huddles} onChange={() => setCreateThursdayShift({ ...createThursdayShift, huddles: !createThursdayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createThursdayShift.off && createThursdayShift.huddle} value={createThursdayShift.huddle} onChange={() => setCreateThursdayShift({ ...createThursdayShift, huddle: !createThursdayShift.huddle })} />
                      </div>
                   </div>
-                  {!createThursdayShift.off && createThursdayShift.huddles && <div className="col-md-auto">
+                  {!createThursdayShift.off && createThursdayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createThursdayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createThursdayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateThursdayShift({ ...createThursdayShift, huddleTime: e?.value })
+                          setCreateThursdayShift({ ...createThursdayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -508,7 +518,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createFridayShift.day === 'fri' && 'Friday'}
+                      value={createFridayShift.day === 5 && 'Friday'}
                       readOnly
                     />
                   </div>
@@ -521,9 +531,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="fri_start"
                         type="time"
                         className="form-control"
-                        value={!createFridayShift.off && createFridayShift.start}
+                        value={!createFridayShift.off && createFridayShift.start_time}
                         onChange={(e) =>
-                          setCreateFridayShift({ ...createFridayShift, start: e.target.value })
+                          setCreateFridayShift({ ...createFridayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -538,9 +548,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="fri_end"
                         type="time"
                         className="form-control"
-                        value={!createFridayShift.off && createFridayShift.end}
+                        value={!createFridayShift.off && createFridayShift.end_time}
                         onChange={(e) =>
-                          setCreateFridayShift({ ...createFridayShift, end: e.target.value })
+                          setCreateFridayShift({ ...createFridayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -555,22 +565,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createFridayShift.off && createFridayShift.huddles} value={createFridayShift.huddles} onChange={() => setCreateFridayShift({ ...createFridayShift, huddles: !createFridayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createFridayShift.off && createFridayShift.huddle} value={createFridayShift.huddle} onChange={() => setCreateFridayShift({ ...createFridayShift, huddle: !createFridayShift.huddle })} />
                      </div>
                   </div>
-                  {!createFridayShift.off && createFridayShift.huddles && <div className="col-md-auto">
+                  {!createFridayShift.off && createFridayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createFridayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createFridayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateFridayShift({ ...createFridayShift, huddleTime: e?.value })
+                          setCreateFridayShift({ ...createFridayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -589,7 +599,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createSaturdayShift.day === 'sat' && 'Saturday'}
+                      value={createSaturdayShift.day === 6 && 'Saturday'}
                       readOnly
                     />
                   </div>
@@ -602,9 +612,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="sat_start"
                         type="time"
                         className="form-control"
-                        value={!createSaturdayShift.off && createSaturdayShift.start}
+                        value={!createSaturdayShift.off && createSaturdayShift.start_time}
                         onChange={(e) =>
-                          setCreateSaturdayShift({ ...createSaturdayShift, start: e.target.value })
+                          setCreateSaturdayShift({ ...createSaturdayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -619,9 +629,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="sat_end"
                         type="time"
                         className="form-control"
-                        value={!createSaturdayShift.off && createSaturdayShift.end}
+                        value={!createSaturdayShift.off && createSaturdayShift.end_time}
                         onChange={(e) =>
-                          setCreateSaturdayShift({ ...createSaturdayShift, end: e.target.value })
+                          setCreateSaturdayShift({ ...createSaturdayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -636,22 +646,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createSaturdayShift.off && createSaturdayShift.huddles} value={createSaturdayShift.huddles} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, huddles: !createSaturdayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createSaturdayShift.off && createSaturdayShift.huddle} value={createSaturdayShift.huddle} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, huddle: !createSaturdayShift.huddle })} />
                      </div>
                   </div>
-                  {!createSaturdayShift.off && createSaturdayShift.huddles && <div className="col-md-auto">
+                  {!createSaturdayShift.off && createSaturdayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createSaturdayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createSaturdayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateSaturdayShift({ ...createSaturdayShift, huddleTime: e?.value })
+                          setCreateSaturdayShift({ ...createSaturdayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />
@@ -670,7 +680,7 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                       className="form-control"
                       name="day"
                       type="text"
-                      value={createSundayShift.day === 'sun' && 'Sunday'}
+                      value={createSundayShift.day === 0 && 'Sunday'}
                       readOnly
                     />
                   </div>
@@ -683,9 +693,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="sun_start"
                         type="time"
                         className="form-control"
-                        value={!createSundayShift.off && createSundayShift.start}
+                        value={!createSundayShift.off && createSundayShift.start_time}
                         onChange={(e) =>
-                          setCreateSundayShift({ ...createSundayShift, start: e.target.value })
+                          setCreateSundayShift({ ...createSundayShift, start_time: e.target.value })
                         }
                         required
                       />
@@ -700,9 +710,9 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                         name="sun_end"
                         type="time"
                         className="form-control"
-                        value={!createSundayShift.off && createSundayShift.end}
+                        value={!createSundayShift.off && createSundayShift.end_time}
                         onChange={(e) =>
-                          setCreateSundayShift({ ...createSundayShift, end: e.target.value })
+                          setCreateSundayShift({ ...createSundayShift, end_time: e.target.value })
                         }
                         required
                       />
@@ -717,22 +727,22 @@ export const CreateEmployeeShiftModal = ({ ogid, setMode, setEmployeeShifts }) =
                 </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createSundayShift.off && createSundayShift.huddles} value={createSundayShift.huddles} onChange={() => setCreateSundayShift({ ...createSundayShift, huddles: !createSundayShift.huddles })} />
+                      <label htmlFor="huddle">Huddle</label>
+                       <Switch checked={!createSundayShift.off && createSundayShift.huddle} value={createSundayShift.huddle} onChange={() => setCreateSundayShift({ ...createSundayShift, huddle: !createSundayShift.huddle })} />
                      </div>
                   </div>
-                  {!createSundayShift.off && createSundayShift.huddles && <div className="col-md-auto">
+                  {!createSundayShift.off && createSundayShift.huddle && <div className="col-md-auto">
                     <div className="form-group">
-                      <label htmlFor="huddleTime">
+                      <label htmlFor="huddle_time">
                         Huddle Time
                       </label>
                       <Select
                         options={huddleOptions}
                         isSearchable={true}
                         isClearable={true}
-                        defaultValue={huddleOptions.find((option) => option.value === createSundayShift?.huddleTime)}
+                        defaultValue={huddleOptions.find((option) => option.value === createSundayShift?.huddle_time)}
                         onChange={(e) =>
-                          setCreateSundayShift({ ...createSundayShift, huddleTime: e?.value })
+                          setCreateSundayShift({ ...createSundayShift, huddle_time: e?.value })
                         }
                         style={{ display: "inline-block" }}
                       />

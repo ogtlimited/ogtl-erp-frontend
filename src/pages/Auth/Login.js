@@ -1,18 +1,11 @@
-/** @format */
-
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
 import tokenService from '../../services/token.service';
 import { msalInstance, loginRequest } from '../../authConfig';
 import config from '../../config.json';
-// import { useMsal } from '@azure/msal-react';
-// import { useAppContext } from '../../Context/AppContext';
 
 const Login = () => {
-  // const { instance } = useMsal();
-  // const { createEmployee } = useAppContext();
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
@@ -21,7 +14,6 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     setLoading(true);
@@ -43,10 +35,17 @@ const Login = () => {
         setErrorMsg("")
 
         axios
-          .post(config.ApiUrl + '/api/login', obj)
+          .post(config.ApiUrl + '/api/v1/auth/login.json', {
+            headers: {          
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            }, email: obj.company_email
+          })
           .then((res) => {
-            tokenService.setUser(res.data.employee);
-            tokenService.setToken(res.data.token.token);
+            console.log(res);
+            tokenService.setUser(res.data.data);
+            tokenService.setToken(res.data.data.token);
             window.location.href = '/dashboard/employee-dashboard';
           })
           .catch((err) => {
@@ -77,12 +76,19 @@ const Login = () => {
               setErrorMsg("")
 
               axios
-                .post(config.ApiUrl + '/api/login', obj)
-                .then((res) => {
-                  tokenService.setUser(res.data.employee);
-                  tokenService.setToken(res.data.token.token);
-                  window.location.href = '/dashboard/employee-dashboard';
-                })
+              .post(config.ApiUrl + '/api/v1/auth/login.json', {
+                headers: {          
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "ngrok-skip-browser-warning": "69420",
+                }, email: obj.company_email
+              })
+              .then((res) => {
+                console.log(res);
+                tokenService.setUser(res.data.data);
+                tokenService.setToken(res.data.data.token);
+                window.location.href = '/dashboard/employee-dashboard';
+              })
                 .catch((err) => {
                   console.log(err);
                 })
@@ -113,18 +119,18 @@ const Login = () => {
       <div className="account-content">
         <div className="container">
           <div className="account-logo">
-            <Link to="/">
+            <a href="https://www.outsourceglobal.com/">
               <img
                 className="logo"
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-            </Link>
+            </a>
           </div>
           <div className="account-box">
             <div className="account-wrapper">
               <h3 className="account-title">Login</h3>
-              <p className="account-subtitle">Access to our dashboard</p>
+              <p className="account-subtitle">Access your dashboard</p>
               <h6 className="text-center">
                 <small className="account-subtitle text-center error">
                   {errorMsg}
@@ -137,36 +143,15 @@ const Login = () => {
                     type="text"
                     name="company_email"
                     id="company_email"
+                    placeholder='Enter your company email'
                     {...register('company_email', { required: true })}
-                    className="form-control"
+                    className="form-control login-input"
                   />
                   {errors.company_email &&
                     errors.company_email.type === 'required' && (
                       <span className="error">Email is required</span>
                     )}
                 </div>
-                {/* <div className="form-group mt-2">
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="password">Password</label>
-                    </div>
-                    <div className="col-auto">
-                      <a className="text-muted" href="/">
-                        Forgot password?
-                      </a>
-                    </div>
-                  </div>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    {...register("password", { required: true })}
-                    className="form-control"
-                  />
-                  {errors.password && errors.password.type === "required" && (
-                    <span className="error">Password is required</span>
-                  )}
-                </div> */}
                 <div className="form-group text-center">
                   <button
                     className="btn btn-primary account-btn"
@@ -187,17 +172,6 @@ const Login = () => {
               </form>
             </div>
           </div>
-          {/* <div className="go-to-client">
-            <p>
-              Not a staff of Outsource Global, login as a{' '}
-              <strong
-                className="go-to-client-link"
-                onClick={() => navigate('/auth/client-login')}
-              >
-                client
-              </strong>
-            </p>
-          </div> */}
         </div>
       </div>
     </div>

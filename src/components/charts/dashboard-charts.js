@@ -4,6 +4,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import DoughnutChart from './dougnut';
 import VerticalBar from './verticalBar';
+import DashboardStatistics from './dashboard-statistics';
 
 const DashboardChart = ({
   title,
@@ -12,7 +13,27 @@ const DashboardChart = ({
   genderLabel,
   genderData,
   formattedData,
-  formattedGender
+  formattedGender,
+
+  
+  data,
+  chartTitle,
+  chartData,
+  leaveStatusLabel,
+  leaveStatusData,
+  leaveTypeLabel,
+  leaveTypeData,
+  formattedLeaveType,
+  formattedLeaveStatus,
+
+  fromDate,
+  toDate,
+  setFromDate,
+  setToDate,
+  fromDate2,
+  toDate2,
+  setFromDate2,
+  setToDate2,
 }) => {
   const navigate = useNavigate();
   
@@ -99,34 +120,64 @@ const DashboardChart = ({
   };
 
   return (
-    <div className="col-md-12">
-      <div className="row">
-        <div className="col-md-6 text-center">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">{title}</h3>
-              <VerticalBar
-                data={employee}
-                handleChartClick={(element) =>
-                  handleDepartmentChartClick(element, employeeLabel)
-                }
+    <>
+      <div className="col-md-12">
+        <div className="col">
+          <div className="col-md-12 text-center">
+            <div className="card">
+              <div className="card-body">
+                <h3 className="card-title">{title}</h3>
+                <VerticalBar
+                  data={employee}
+                  handleChartClick={(element) =>
+                    handleDepartmentChartClick(element, employeeLabel)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row"> 
+            <div className="col-md-4 text-center">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">Employee By Gender</h3>
+                  <DoughnutChart data={gender} 
+                    handleChartClick={(element) =>
+                      handleGenderChartClick(element, genderLabel)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+              <DashboardStatistics
+                title="Employee By Department"
+                data={data}
+                chartTitle="Employee By Gender"
+                chartData={gender}
+                leaveStatusLabel={leaveStatusLabel}
+                leaveStatusData={leaveStatusData}
+                leaveTypeLabel={leaveTypeLabel}
+                leaveTypeData={leaveTypeData}
+                formattedLeaveType={formattedLeaveType}
+                formattedLeaveStatus={formattedLeaveStatus}
+      
+                fromDate={fromDate}
+                toDate={toDate}
+                setFromDate={setFromDate}
+                setToDate={setToDate}
+                fromDate2={fromDate2}
+                toDate2={toDate2}
+                setFromDate2={setFromDate2}
+                setToDate2={setToDate2}
               />
-            </div>
           </div>
-        </div>
-        <div className="col-md-6 text-center">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Employee By Gender</h3>
-              <DoughnutChart data={gender} 
-                handleChartClick={(element) =>
-                  handleGenderChartClick(element, genderLabel)
-                }/>
-            </div>
-          </div>
+
+
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

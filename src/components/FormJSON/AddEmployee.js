@@ -1,29 +1,47 @@
 export const PROFILE = {
-  first_name: '',
-  middle_name: '',
-  last_name: '',
-  company_email: '',
-  gender: '',
-  date_of_joining: '',
-  reports_to: '',
-  designation: null,
-  department: null,
-  projectId: '',
-  shifts: [],
-  branch: null,
-  isAdmin: false,
-  isExpatriate: false,
-  remote: false,
-  employeeType: '',
-  status: 'active',
-  leaveCount: 0,
-  password: '',
-  image: '',
-
-  designationName: '',
-  signature: '',
+  user_info: {
+    email: '',
+  },
+  employee_info: {
+    ogid: '',
+    date_of_joining: '',
+    operation_branch_id: '',
+    operation_office_id: '',
+    hr_designation_id: '',
+    remote: false,
+  },
+  personal_details: {
+      first_name: '',
+      middle_name: '',
+      last_name: '',
+      gender: '',
+      DOB: '',
+      marital_status: '',
+      blood_group: '',
+      id_issue_date: '',
+      id_number: '',
+      means_of_identification: '',
+  },
+  misc : {
+    branchName: '',
+    officeName: '',
+    designationName: '',
+    staffGender: '',
+    maritalStatus: '',
+    remoteCategoryName: '',
+  },
 }
 
+export const officeTypeOptions = [
+  {
+    label: "Department",
+    value: 'department',
+  },
+  {
+    label: "Campaign",
+    value: 'campaign',
+  },
+];
 
 export const genderOptions = [
   {
@@ -36,6 +54,89 @@ export const genderOptions = [
   },
 ];
 
+export const categoryOptions = [
+  {
+    label: "Yes",
+    value: true,
+  },
+  {
+    label: "No",
+    value: false,
+  },
+];
+
+export const maritalStatusOptions = [
+  {
+    label: "Single",
+    value: "single",
+  },
+  {
+    label: "Married",
+    value: "married",
+  },
+  {
+    label: "Divorced",
+    value: "divorced",
+  },
+  {
+    label: "Widowed",
+    value: "widowed",
+  },
+];
+
+export const bloodGroupOptions = [
+  {
+    label: "A+",
+    value: "A+",
+  },
+  {
+    label: "A-",
+    value: "A-",
+  },
+  {
+    label: "B+",
+    value: "B+",
+  },
+  {
+    label: "B-",
+    value: "B-",
+  },
+  {
+    label: "AB+",
+    value: "AB+",
+  },
+  {
+    label: "AB-",
+    value: "AB-",
+  },
+  {
+    label: "O+",
+    value: "O+",
+  },
+  {
+    label: "O-",
+    value: "O-",
+  },
+];
+
+export const meansOfIdentificationOptions = [
+  {
+    label: "National ID",
+    value: "National ID",
+  },
+  {
+    label: "Driver's License",
+    value: "Driver's License",
+  },
+  {
+    label: "International Passport",
+    value: "International Passport",
+  },
+  {
+    label: "Voters Card",
+    value: "Voters Card",
+  },
+];
 
 export const employmentTypesOptions = [
   {
@@ -65,16 +166,5 @@ export const employmentTypesOptions = [
   {
     label: "FullTime",
     value: "FullTime",
-  },
-];
-
-export const categoryOptions = [
-  {
-    label: "Yes",
-    value: 'yes',
-  },
-  {
-    label: "No",
-    value: 'no',
   },
 ];
