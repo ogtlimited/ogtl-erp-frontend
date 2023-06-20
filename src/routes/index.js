@@ -15,6 +15,7 @@ import ActivateClient from '../pages/Auth/ActivateClient';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
+
 const Loadable = (Component) => (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
@@ -33,6 +34,7 @@ export default function Router() {
       path: '/',
       element: <Navigate to="/dashboard" />,
     },
+
     {
       path: 'auth',
       children: [
@@ -47,6 +49,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'auth',
       children: [
@@ -61,6 +64,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'auth',
       children: [
@@ -75,6 +79,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'recruitment',
       element: (
@@ -98,10 +103,12 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'recruitment/accept-joboffer/:id',
       element: <AcceptJoboffer />,
     },
+
     {
       path: 'dashboard',
       element: (
@@ -392,6 +399,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="HR">
                   <Offices />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'branch',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <BranchAdmin />
                 </GuardedRoute>
               ),
             },
@@ -1041,6 +1056,7 @@ const AttendanceRecord = Loadable(
 const Offices = Loadable(
   lazy(() => import('../pages/HR/Admin/Offices.Admin'))
 );
+const BranchAdmin = Loadable(lazy(() => import('../pages/HR/Admin/Branch.Admin')));
 const Designations = Loadable(
   lazy(() => import('../pages/HR/Admin/Designation.Admin'))
 );
@@ -1288,7 +1304,7 @@ const SingleEmail = Loadable(
 const FileManager = Loadable(
   lazy(() => import('../pages/In-Apps/FileManager'))
 );
-const Branch = Loadable(lazy(() => import('../pages/HR/Admin/Branch')));
+const Branch = Loadable(lazy(() => import('../pages/HR/Admin/Branch.Admin')));
 const HRDashboard = Loadable(
   lazy(() => import('../pages/Dashboard/HRDashboard'))
 );

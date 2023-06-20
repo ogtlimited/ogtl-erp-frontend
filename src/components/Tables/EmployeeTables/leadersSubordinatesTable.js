@@ -73,7 +73,7 @@ const LeadersSubordinatesTable = ({
               }
             />
           </a>
-          <Link to={`/dashboard/user/profile/${row._id}`}>
+          <Link to={`/dashboard/user/profile/${row?.ogid}`}>
             {value} <span>{row?.designation}</span>
           </Link>
         </h2>

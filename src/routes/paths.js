@@ -45,6 +45,7 @@ export const PATH_DASHBOARD = {
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
     offices: path(ROOTS_DASHBOARD, "/hr/offices"),
+    branch: path(ROOTS_DASHBOARD, "/hr/branch"),
     designations: path(ROOTS_DASHBOARD, "/hr/designations"),
     leaveApproval: path(ROOTS_DASHBOARD, "/hr/leave-approval"),
     leaveType: path(ROOTS_DASHBOARD, "/hr/leave-type"),

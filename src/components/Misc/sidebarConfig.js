@@ -172,6 +172,11 @@ const sidebarConfig = [
             title: 'Designations',
             path: PATH_DASHBOARD.hr.designations,
           },
+          {
+            canView: 'HR',
+            title: 'Branch',
+            path: PATH_DASHBOARD.hr.branch,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Leave Approval',
