@@ -83,6 +83,12 @@ const Login = () => {
                   "ngrok-skip-browser-warning": "69420",
                 }, email: obj.company_email
               })
+              .then((res) => {
+                console.log(res);
+                tokenService.setUser(res.data.data);
+                tokenService.setToken(res.data.data.token);
+                window.location.href = '/dashboard/employee-dashboard';
+              })
                 .catch((err) => {
                   console.log(err);
                 })

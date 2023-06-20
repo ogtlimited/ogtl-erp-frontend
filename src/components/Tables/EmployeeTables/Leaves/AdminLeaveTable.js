@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import axiosInstance from '../../../../services/api';
 import ToolkitProvider, {
@@ -31,12 +31,15 @@ const AdminLeavesTable = ({
   setTotalPages,
   departmentFilter,
   setDepartmentFilter,
+  campaignFilter,
+  setCampaignFilter,
   leaveTypeFilter,
   setLeaveTypeFilter,
   searchTerm,
   setSearchTerm,
   setLoading,
   departments,
+  campaigns,
   leaveTypes,
 }) => {
   // const { SearchBar } = Search;
@@ -66,58 +69,118 @@ const AdminLeavesTable = ({
     window.addEventListener('resize', () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
-  const imageUrl = 'https://erp.outsourceglobal.com';
-
-  const handleDepartmentFilter = (e) => {
+  const handleDepartmentFilter = useCallback((e) => {
     setDepartmentFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("Dept. Filter:", departmentFilter);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-      .get(`leads-leave-applications`, {
-        params: {
-          department: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
+    .get('/api/v1/hr_dashboard/leaves.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        operation_office_id: e.target.value,
+        // hr_designation_id: designationFilter,
+      },
+    })
+      .then((e) => {
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
+        const thisTotalPageSize = totalPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
+          };
+        });
 
-        setData(formatted);
-        setunfiltered(formatted);
+        setData(mapp);
+        setunfiltered(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
       });
     setLoading(false);
-    setLeaveTypeFilter("");
-  };
+  },[dataToFilter, departmentFilter, page, searchTerm, setData, setDepartmentFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+
+  const handleCampaignFilter = useCallback((e) => {
+    setCampaignFilter(e.target.value);
+    console.log("filter value:", e.target.value);
+    console.log("Data to Filter:", dataToFilter);
+    console.log("camp.. Filter:", campaignFilter);
+    setPage(1);
+    setLoading(true);
+
+    axiosInstance
+    .get('/api/v1/hr_dashboard/leaves.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      
+      params: {
+        page: page,
+        limit: sizePerPage,
+        search: searchTerm,
+        operation_office_id: e.target.value,
+        // hr_designation_id: designationFilter,
+      },
+    })
+      .then((e) => {
+        const resData = e?.data?.data?.employees;
+        const totalPages = e?.data?.data?.pages;
+        
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName: emp?.full_name,
+            office: emp?.office?.office_type,
+            officeName: emp?.office?.title,
+            designation: emp?.designation,
+            company_email: emp?.email
+          };
+        });
+
+        setData(mapp);
+        setunfiltered(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+    setLoading(false);
+  },[campaignFilter, dataToFilter, page, searchTerm, setCampaignFilter, setData, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
 
   const handleLeaveTypeFilter = (e) => {
     setLeaveTypeFilter(e.target.value);
@@ -299,7 +362,8 @@ const AdminLeavesTable = ({
               </ExportCSVButton>
 
               <div className="hr-filter-select">
-                <div>
+                
+              <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}
@@ -310,7 +374,23 @@ const AdminLeavesTable = ({
                       Filter by Department
                     </option>
                     {departments.map((option, idx) => (
-                      <option key={idx}>{option.department}</option>
+                      <option key={idx} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-3">
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleCampaignFilter(e)}
+                    defaultValue={campaignFilter}
+                    value={campaignFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Filter by Campaign
+                    </option>
+                    {campaigns.map((option, idx) => (
+                      <option key={idx} value={option.value}>{option.label}</option>
                     ))}
                   </select>
                 </div>
@@ -326,7 +406,7 @@ const AdminLeavesTable = ({
                       Filter by Leave Type
                     </option>
                     {leaveTypes.map((option, index) => (
-                      <option key={index}>{option.leave_type}</option>
+                      <option key={index} value={option.value}>{option.label}</option>
                     ))}
                   </select>
                 </div>

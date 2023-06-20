@@ -100,3 +100,17 @@
     opacity: 0.5 !important;
 }
 
+.emp-dashboard-leave-card {
+    height: 240px;
+    border-radius: 5px;
+    /* min-height: 35vh */
+}
+
+.emp-dashboard-leave-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    border-radius: 5px;
+}

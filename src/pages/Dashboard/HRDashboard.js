@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-/** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { chartColors } from '../../components/charts/chart-colors';
 import DashboardChart from '../../components/charts/dashboard-charts';
 import DashboardStatistics from '../../components/charts/dashboard-statistics';
@@ -33,14 +31,6 @@ const HRDashboard = () => {
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
-  const [totalInvoice, setTotalInvoice] = useState(0);
-  const [pendingInvoice, setPendingInvoice] = useState(0);
-  const [processingTickets, setProcessingTickets] = useState(0);
-  const [openTickets, setOpenTickets] = useState(0);
-  const [closedTickets, setClosedTickets] = useState(0);
-  const [totalTickets, setTotalTickets] = useState(0);
-  const [completedProjects, setCompletedProjects] = useState(0);
-  const [totalProjects, setTotalProjects] = useState(0);
 
   const firstDay = new Date(new Date().getFullYear(), 0, 1, 1);
   const lastDay = new Date(new Date().getFullYear(), 11, 31, 0);
@@ -119,6 +109,7 @@ const HRDashboard = () => {
         },
       });
       const offices = response?.data?.data?.employees_by_office
+      console.log("offices", offices)
 
       const formatted = offices.map((e) => ({
         labels: e.split(':')[0],
@@ -134,7 +125,7 @@ const HRDashboard = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log("offices error", error);
       setLoading(false);
     }
   };
@@ -171,72 +162,12 @@ const HRDashboard = () => {
     }
   };
 
-  const fetchInvoice = async () => {
-    try {
-      const response = await axiosInstance.get('/api/invoice/status');
-      const resData = response.data.data[0]['Invoice status'];
-
-      const publishedCount = resData.filter((data) => data._id === 'Published');
-      const pendingCount = resData.filter((data) => data._id === 'Draft');
-      setPendingInvoice(pendingCount[0].total);
-
-      const totalCount = publishedCount[0].total + pendingCount[0].total;
-      setTotalInvoice(totalCount);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchTickets = async () => {
-    try {
-      const response = await axiosInstance.get('/api/ticketing/status');
-      const resData = response.data.data[0]['Tickets status'];
-
-      const closedCount = resData.filter((data) => data._id === 'Resolved');
-      const openCount = resData.filter((data) => data._id === 'Open');
-      const processingCount = resData.filter(
-        (data) => data._id === 'Processing'
-      );
-
-      setOpenTickets(openCount[0].total);
-      setClosedTickets(closedCount[0].total);
-      setProcessingTickets(processingCount[0].total);
-
-      const total =
-        openCount[0].total + closedCount[0].total + processingCount[0].total;
-      setTotalTickets(total);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchProjects = async () => {
-    try {
-      const response = await axiosInstance.get('/api/project/status');
-      const resData = response.data.data[0]['Project status'];
-      setCompletedProjects(resData[0].total);
-      setTotalProjects(resData[0].total);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchHeadCount();
     fetchEmployeeGender();
     fetchEmployeeData();
     fetchLeaveReport();
-    fetchInvoice();
-    fetchTickets();
-    fetchProjects();
   }, []);
 
   useEffect(() => {
@@ -357,17 +288,6 @@ const HRDashboard = () => {
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
-              <i className="las la-door-open"></i>
-            </span>
-            <div className="card-info">
-              <h3>-</h3>
-            </div>
-          </div>
-          <span>Month Attrition Rate</span>
-        </div>
-        <div className="hr-dashboard-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
               <i
                 className="las la-restroom"
                 style={{ transform: 'scaleX(-1)' }}
@@ -390,23 +310,11 @@ const HRDashboard = () => {
           genderData={genderData}
           formattedData={formattedData}
           formattedGender={formattedGender}
-        />
-      </div>
 
-      <div className="row">
-        <DashboardStatistics
-          title="Employee By Department"
+          
           data={data}
           chartTitle="Employee By Gender"
           chartData={gender}
-          totalInvoice={totalInvoice}
-          pendingInvoice={pendingInvoice}
-          processingTickets={processingTickets}
-          openTickets={openTickets}
-          closedTickets={closedTickets}
-          totalTickets={totalTickets}
-          completedProjects={completedProjects}
-          totalProjects={totalProjects}
           leaveStatusLabel={leaveStatusLabel}
           leaveStatusData={leaveStatusData}
           leaveTypeLabel={leaveTypeLabel}
@@ -424,6 +332,30 @@ const HRDashboard = () => {
           setToDate2={setToDate2}
         />
       </div>
+
+      {/* <div className="row">
+        <DashboardStatistics
+          title="Employee By Department"
+          data={data}
+          chartTitle="Employee By Gender"
+          chartData={gender}
+          leaveStatusLabel={leaveStatusLabel}
+          leaveStatusData={leaveStatusData}
+          leaveTypeLabel={leaveTypeLabel}
+          leaveTypeData={leaveTypeData}
+          formattedLeaveType={formattedLeaveType}
+          formattedLeaveStatus={formattedLeaveStatus}
+
+          fromDate={fromDate}
+          toDate={toDate}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          fromDate2={fromDate2}
+          toDate2={toDate2}
+          setFromDate2={setFromDate2}
+          setToDate2={setToDate2}
+        />
+      </div> */}
     </div>
   );
 };
