@@ -2,7 +2,7 @@
 //Attendance Record
 
 import React, { useState, useEffect } from "react";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import UniversalTable from "../../../components/Tables/UniversalTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
@@ -166,11 +166,11 @@ const Offices = () => {
       <div>
         <div className="row tab-content">
           <div id="tab_campaigns" className="col-12 tab-pane show active">
-            <LeavesTable columns={columns} data={campaigns} loading={loading} />
+            <UniversalTable columns={columns} data={campaigns} loading={loading} />
           </div>
 
           <div id="tab_departments" className="col-12 tab-pane">
-            <LeavesTable
+            <UniversalTable
               columns={columns}
               data={departments}
               loading={loading}
