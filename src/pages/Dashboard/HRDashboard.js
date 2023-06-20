@@ -109,7 +109,6 @@ const HRDashboard = () => {
         },
       });
       const offices = response?.data?.data?.employees_by_office
-      console.log("offices", offices)
 
       const formatted = offices.map((e) => ({
         labels: e.split(':')[0],

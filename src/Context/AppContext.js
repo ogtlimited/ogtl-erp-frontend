@@ -29,6 +29,8 @@ const AppProvider = (props) => {
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
+  const [dropDownClicked, setDropDownClicked] = useState(false);
+  
   let socket = useRef();
 
   const status = [
@@ -349,6 +351,8 @@ const AppProvider = (props) => {
         allLeaveTypes,
         setAllLeaveTypes,
         fetchAllLeaveTypes,
+        dropDownClicked,
+        setDropDownClicked,
 
 
         fetchTypesShift,

@@ -32,10 +32,14 @@ const ProfileCards = ({
   userID,
   mode,
   setMode,
+  userOgid,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const [campaign, setcampaign] = useState({});
   const { user, isFromBiometrics } = useAppContext();
+
+  const ogid = user?.employee_info?.ogid;
+  console.log(ogid, "OGID")
 
   const FrontVirtualIDRef = useRef();
   const handlePrintFront = useReactToPrint({
@@ -80,11 +84,11 @@ const ProfileCards = ({
                   Virtual ID
                 </a>
               </li>
-              <li className="nav-item">
+              {userOgid !== ogid ? <li className="nav-item">
                 <a href="#emp_shifts" data-toggle="tab" className={isFromBiometrics ? "nav-link active" : "nav-link"}>
                   Shifts
                 </a>
-              </li>
+              </li> : null}
               <li className="nav-item">
                 <a
                   href="#emp_campaign"

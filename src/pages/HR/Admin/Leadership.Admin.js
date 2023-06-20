@@ -54,7 +54,7 @@ const LeadershipAdmin = () => {
             <h3 className="page-title">Leaders <span style={{fontSize: '25px', color: '#999'}}>(Supervisors & Team leads)</span></h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="#">HR</Link>
               </li>
               <li className="breadcrumb-item active">Leadership</li>
             </ul>

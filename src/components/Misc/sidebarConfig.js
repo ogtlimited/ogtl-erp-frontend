@@ -132,11 +132,6 @@ const sidebarConfig = [
             title: 'Leadership',
             path: PATH_DASHBOARD.hr.leadership,
           },
-          // {
-          //   canView: 'HR',
-          //   title: 'Attendance',
-          //   path: PATH_DASHBOARD.hr.attendanceAdmin,
-          // },
           {
             canView: 'HR',
             title: 'Captured Biometrics',
@@ -167,16 +162,16 @@ const sidebarConfig = [
           //   title: 'Resignation',
           //   path: PATH_DASHBOARD.hr.resignationEmployee,
           // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Departments',
-          //   path: PATH_DASHBOARD.hr.department,
-          // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Designations',
-          //   path: PATH_DASHBOARD.hr.designations,
-          // },
+          {
+            canView: 'HR',
+            title: 'Departments',
+            path: PATH_DASHBOARD.hr.department,
+          },
+          {
+            canView: 'HR',
+            title: 'Designations',
+            path: PATH_DASHBOARD.hr.designations,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Leave Approval',

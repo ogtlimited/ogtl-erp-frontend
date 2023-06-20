@@ -404,7 +404,7 @@ const LeavesAdmin = () => {
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
+                <a href="#">HR</a>
               </li>
               <li className="breadcrumb-item active">Leaves</li>
             </ul>
