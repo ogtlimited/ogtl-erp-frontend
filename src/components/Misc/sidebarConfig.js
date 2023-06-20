@@ -164,8 +164,8 @@ const sidebarConfig = [
           // },
           {
             canView: 'HR',
-            title: 'Departments',
-            path: PATH_DASHBOARD.hr.department,
+            title: 'Offices',
+            path: PATH_DASHBOARD.hr.offices,
           },
           {
             canView: 'HR',

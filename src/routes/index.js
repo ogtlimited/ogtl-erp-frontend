@@ -388,10 +388,10 @@ export default function Router() {
             },
             { path: 'resignation', element: <ResignationUser /> },
             {
-              path: 'departments',
+              path: 'offices',
               element: (
                 <GuardedRoute title="" dept="HR">
-                  <Departments />
+                  <Offices />
                 </GuardedRoute>
               ),
             },
@@ -1038,8 +1038,8 @@ const AttendanceAdmin = Loadable(
 const AttendanceRecord = Loadable(
   lazy(() => import('../pages/HR/Admin/AttendanceRecord.Admin'))
 );
-const Departments = Loadable(
-  lazy(() => import('../pages/HR/Admin/Department.Admin'))
+const Offices = Loadable(
+  lazy(() => import('../pages/HR/Admin/Offices.Admin'))
 );
 const Designations = Loadable(
   lazy(() => import('../pages/HR/Admin/Designation.Admin'))
