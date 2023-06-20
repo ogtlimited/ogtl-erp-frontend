@@ -17,6 +17,7 @@ import Deductions from "../../components/payroll-tabs/salary-deductions";
 import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import axios from "axios"
 
 const EmployeeSalary = () => {
     const [formType, setformType] = useState("");
@@ -28,6 +29,12 @@ const EmployeeSalary = () => {
     const [data, setData] = useState([]);
     const [loadSelect, setloadSelect] = useState(false);
     const { createPayroll } = useAppContext();
+
+    const [AllSalaries, setAllSalaries] = useState([])
+
+    const [page, setPage] = useState(1);
+    const [sizePerPage, setSizePerPage] = useState(25);
+    const [totalPages, setTotalPages] = useState('');
   
     useEffect(() => {
       if (formType === "components") {
@@ -94,9 +101,56 @@ const EmployeeSalary = () => {
           console.log(error?.response);
         });
     };
+    
+    const fetchAllSalaries = useCallback(() => {
+      axiosInstance.get("/api/v1/employee_salaries.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
+      })
+        .then((res) => {
+          const AllEmployeeSalaries = res?.data?.data?.salaries
+          console.log("All Salaries", AllEmployeeSalaries)
+
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = 20;
+
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const formattedData = AllEmployeeSalaries?.map((e) => ({
+            employee: e?.first_name + " " + e?.last_name,
+            housing: e?.salary?.housing,
+            medical: e?.salary?.medical,
+            netPay: e?.salary?.net_pay,
+            monthlySalary: e?.salary?.monthly_salary,
+            monthlyIncomeTax: e?.salary?.monthly_income_tax,
+            monthlyEmployeePension: e?.salary?.monthly_pension,
+            ogid: e?.ogid,
+            otherAllowances: e?.salary?.other_allowances,
+            transport: e?.salary?.transport,
+            basic: e?.salary?.basic,
+          }))
+
+          console.log("Formatted Salary Data", formattedData)
+          setAllSalaries(formattedData)
+
+        })
+        .catch((error) => {
+          console.log("All Salaries Error:", error?.response);
+        });
+    }, [page, sizePerPage]);
+
     useEffect(() => {
       fetchSalaryStructures();
-    }, []);
+      fetchAllSalaries();
+    }, [fetchAllSalaries]);
 
   
   return (
@@ -143,6 +197,14 @@ const EmployeeSalary = () => {
           submitted={submitted}
           formValue={formValue}
           loadSelect={loadSelect}
+          AllSalaries={AllSalaries}
+          
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
         />
 
         <SalarySettings

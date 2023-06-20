@@ -1,24 +1,35 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Select from 'react-select';
-import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
-import helper from '../../services/helper';
-import AddNewSalaryForm from '../Forms/AddNewSalaryForm';
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Select from "react-select";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import helper from "../../services/helper";
+import AddNewSalaryForm from "../Forms/AddNewSalaryForm";
 // import GeneralUpload from '../Modal/GeneralUpload';
 // import SalaryAssignmentModal from '../Modal/SalaryAssignmentModal';
-import LeavesTable from '../Tables/EmployeeTables/Leaves/LeaveTable';
+import LeavesTable from "../Tables/EmployeeTables/Leaves/LeaveTable";
+import SalaryDetailsTable from "../Tables/EmployeeTables/salaryDetailsTable";
 
-const SalaryDetails = ({ salaryStructure }) => {
+const SalaryDetails = ({
+  salaryStructure,
+  AllSalaries,
+  page,
+  setPage,
+  sizePerPage,
+  setSizePerPage,
+  totalPages,
+  setTotalPages,
+}) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   // const [viewingAddNewSalaryModal, setViewingAddNewSalaryModal] = useState(false);
   const [selected, setselected] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const { createPayroll, user, showAlert, handleProgress, uploadProgress } = useAppContext();
+  const { createPayroll, user, showAlert, handleProgress, uploadProgress } =
+    useAppContext();
   const [employeeOpts, setEmployeeOpts] = useState([]);
   const [filterObj, setfilterObj] = useState({});
 
@@ -83,7 +94,7 @@ const SalaryDetails = ({ salaryStructure }) => {
             state: false,
             count: 25,
           });
-          showAlert(true, 'uploaded successfully', 'alert alert-success');
+          showAlert(true, "uploaded successfully", "alert alert-success");
         }, 5000);
         // console.log(res);
         setUploadSuccess(false);
@@ -95,7 +106,7 @@ const SalaryDetails = ({ salaryStructure }) => {
           count: 25,
         });
         setTimeout(() => {
-          showAlert(true, 'failed to uploaded', 'alert alert-danger');
+          showAlert(true, "failed to uploaded", "alert alert-danger");
         }, 5000);
       });
   };
@@ -114,23 +125,23 @@ const SalaryDetails = ({ salaryStructure }) => {
   };
 
   const handleSubmitFilter = () => {
-    let dateString = filterObj.month + ' ' + filterObj.year;
+    let dateString = filterObj.month + " " + filterObj.year;
     const date = moment(new Date(new Date(dateString)))
-      .startOf('month')
-      .format('YYYY-MM-DD');
+      .startOf("month")
+      .format("YYYY-MM-DD");
     const enddate = moment(new Date(new Date(dateString)))
-      .endOf('month')
-      .format('YYYY-MM-DD');
+      .endOf("month")
+      .format("YYYY-MM-DD");
     const obj = {
       startOfMonth: date,
       endOfMonth: enddate,
     };
     if (filterObj.employee) {
-      obj['employee'] = filterObj.employee;
+      obj["employee"] = filterObj.employee;
     }
     const queryString = Object.keys(obj)
-      .map((key) => key + '=' + obj[key])
-      .join('&');
+      .map((key) => key + "=" + obj[key])
+      .join("&");
 
     axiosInstance
       .get(`/api/payroll-archive?${queryString}`)
@@ -150,7 +161,7 @@ const SalaryDetails = ({ salaryStructure }) => {
       ...e,
       ...e?.salarySlip?.employeeSalary,
       id: e?.employee.ogid,
-      employee: e.employee?.first_name + ' ' + e?.employee?.last_name,
+      employee: e.employee?.first_name + " " + e?.employee?.last_name,
       netPay: e.salarySlip?.netPay,
       ead: e.salarySlip?.salaryAfterDeductions,
       totalDeduction: e?.salarySlip?.totalDeductions,
@@ -167,7 +178,7 @@ const SalaryDetails = ({ salaryStructure }) => {
           ...e.employeeSalary,
           ogid: e.employeeId.ogid,
           id: e._id,
-          employee: e.employeeId?.first_name + ' ' + e.employeeId?.last_name,
+          employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
         }));
         setData(formatted);
         // console.log('Formatted Salary slip:', formatted);
@@ -186,10 +197,9 @@ const SalaryDetails = ({ salaryStructure }) => {
           employeeId: e.employeeId._id,
           ogid: e.employeeId.ogid,
           id: e._id,
-          employee: e.employeeId?.first_name + ' ' + e.employeeId?.last_name,
+          employee: e.employeeId?.first_name + " " + e.employeeId?.last_name,
         }));
-        setData2(formatted2);
-        console.log('employeeSalary:', formatted2 );
+        console.log("old employeeSalary:", formatted2);
       })
       .catch((error) => {
         console.log(error?.response);
@@ -198,11 +208,14 @@ const SalaryDetails = ({ salaryStructure }) => {
 
   //Debugging
   useEffect(() => {
+    // setData2(AllSalaries);
     fetchAllEmployeeSalaries();
 
     createPayroll().then((res) => {
       const { employees } = res.data.createPayrollForm;
-      const activeEmployees = employees.filter(employee => employee.status === 'active')
+      const activeEmployees = employees.filter(
+        (employee) => employee.status === "active"
+      );
       const employeeOpts = activeEmployees?.map((e) => {
         return {
           label: `${e.first_name} ${e.last_name}`,
@@ -211,7 +224,7 @@ const SalaryDetails = ({ salaryStructure }) => {
       });
       setEmployeeOpts(employeeOpts);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -222,98 +235,90 @@ const SalaryDetails = ({ salaryStructure }) => {
 
   const columns = [
     {
-      dataField: 'id',
-      text: 'Employee ID',
+      dataField: "id",
+      text: "Employee ID",
       hidden: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: 'employee',
-      text: 'Employee',
+      dataField: "employee",
+      text: "Employee",
       sort: true,
-      headerStyle: { minWidth: '300px' },
+      headerStyle: { minWidth: "300px" },
     },
     {
-      dataField: 'basic',
-      text: 'Basic',
+      dataField: "basic",
+      text: "Basic",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'medical',
-      text: 'Medical',
+      dataField: "medical",
+      text: "Medical",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'housing',
-      text: 'Housing',
+      dataField: "housing",
+      text: "Housing",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'transport',
-      text: 'Transport',
+      dataField: "transport",
+      text: "Transport",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'otherAllowances',
-      text: 'Other Allowance',
+      dataField: "otherAllowances",
+      text: "Other Allowance",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'monthlySalary',
-      text: 'Monthly Salary',
+      dataField: "monthlySalary",
+      text: "Monthly Salary",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: 'netPay',
-      text: 'Net Pay',
+      dataField: "netPay",
+      text: "Net Pay",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: '',
-      text: 'Annual Salary',
+      dataField: "",
+      text: "Annual Salary",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => (
         <p>{helper.handleMoneyFormat((row.monthlySalary * 12).toFixed(2))}</p>
       ),
     },
-    // {
-    //   dataField: 'totalRelief',
-    //   text: 'Total Relief',
-    //   sort: true,
-    //   headerStyle: { minWidth: '100px' },
-    //   formatter: (val, row) => <p>{val} </p>,
-    // },
     {
-      dataField: 'monthlyIncomeTax',
-      text: 'Monthly IncomeTax',
+      dataField: "monthlyIncomeTax",
+      text: "Monthly IncomeTax",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: '',
-      text: 'Action',
-      headerStyle: { minWidth: '150px' },
+      dataField: "",
+      text: "Action",
+      headerStyle: { minWidth: "150px" },
       csvExport: false,
       formatter: (value, row) => (
         <Link
           className="btn btn-sm btn-primary"
-          // to={`/admin/payslip/${row?._id}`}
           to={{
             pathname: `/dashboard/payroll/salary-breakdown/${row?.employeeId}`,
             state: { employee: row?.employeeId },
@@ -352,11 +357,11 @@ const SalaryDetails = ({ salaryStructure }) => {
           <div className="col-3 mb-4 ml-3">
             <Select
               defaultValue={[]}
-              onChange={(e) => handleFilter('employee', e?.value)}
+              onChange={(e) => handleFilter("employee", e?.value)}
               options={employeeOpts}
               placeholder="Filter Employees"
               isClearable={true}
-              style={{ display: 'inline-block' }}
+              style={{ display: "inline-block" }}
               // formatGroupLabel={formatGroupLabel}
             />
           </div>
@@ -365,22 +370,22 @@ const SalaryDetails = ({ salaryStructure }) => {
               <div className="col-6">
                 <Select
                   defaultValue={[]}
-                  onChange={(e) => handleFilter('month', e?.value)}
+                  onChange={(e) => handleFilter("month", e?.value)}
                   options={months}
                   placeholder="Filter Month"
                   isClearable={true}
-                  style={{ display: 'inline-block' }}
+                  style={{ display: "inline-block" }}
                   // formatGroupLabel={formatGroupLabel}
                 />
               </div>
               <div className="col-6">
                 <Select
                   defaultValue={[]}
-                  onChange={(e) => handleFilter('year', e?.value)}
+                  onChange={(e) => handleFilter("year", e?.value)}
                   options={helper.generateArrayOfYears()}
                   placeholder="Filter Year"
                   isClearable={true}
-                  style={{ display: 'inline-block' }}
+                  style={{ display: "inline-block" }}
                   // formatGroupLabel={formatGroupLabel}
                 />
               </div>
@@ -398,13 +403,19 @@ const SalaryDetails = ({ salaryStructure }) => {
           </div>
         </div>
 
-        <LeavesTable
-          data={data2}
+        <SalaryDetailsTable
+          data={AllSalaries}
           columns={columns}
           clickToSelect={true}
           selected={selected}
           handleOnSelect={handleOnSelect}
           handleOnSelectAll={handleOnSelectAll}
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
         />
       </div>
 

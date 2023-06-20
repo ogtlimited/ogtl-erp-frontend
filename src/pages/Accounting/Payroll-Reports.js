@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { update } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState, useRef, useCallback } from "react";
@@ -9,127 +10,97 @@ import AlertSvg from "../../layouts/AlertSvg";
 import axiosInstance from "../../services/api";
 import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
+import axios from "axios";
+import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
+import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 
 const PayrollReports = () => {
-  const { showAlert, user  } = useAppContext();
+  const { showAlert, user } = useAppContext();
   const handleClose = () => {};
   const [generating, setgenerating] = useState(false);
-  const ref = useRef(null);
-  const [val, setval] = useState("");
   const year = moment().format("YYYY");
   const currMonthName = moment().format("MMMM");
-  const [counter, setcounter] = useState(0);
-  const [displayState, setdisplayState] = useState("")
+  const [displayState, setdisplayState] = useState("");
   const [previewData, setpreviewData] = useState(null);
   const [totalSalary, settotalSalary] = useState(0);
   const [data, setData] = useState([]);
-  const [card, setcard] = useState([
-    {
-      title: "Total salary",
-      amount: "₦" + 0,
-      icon: "las la-money-bill-wave-alt",
-      id: 1,
-    },
-    {
-      title: "No. Campaign",
-      amount: 0,
-      icon: "las la-project-diagram",
-      id: 3,
-    },
-    {
-      title: "No. Active Employees",
-      amount: 0,
-      icon: "las la-project-diagram",
-      id: 3,
-    },
-  ]);
-  const click = () => {
-    setval(ref.current.value);
-    ref.current.value = val + ref.current.value;
-  };
 
-  const fetchEmployeeSalary = useCallback(() => {
-    const startOfMonth = moment().startOf("month").format("YYYY-MM-DD");
-    const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
-    console.log(startOfMonth, endOfMonth);
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(20);
+  const [totalPages, setTotalPages] = useState("");
+
+  const fetchEmployeeSalarySlip = useCallback(() => {
     axiosInstance
       .get(
-        `/api/salary-slip?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
+        "/api/v1/salary_slips.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+          },
+        }
       )
       .then((res) => {
-        settotalSalary(formatter.format(res.data.data[1].total[0].salaries));
-        const mapped = res.data.data[0].salarySlips.map((e) => {
-          return {
-            employee:
-              e.employeeId?.first_name +
-              " " +
-              e.employeeId?.last_name +
-              " " +
-              e.employeeId?.middle_name,
-            email: e.employeeId.company_email,
-            date_of_joining: e.employeeId.date_of_joining,
-            designation: e.employeeId?.designation.designation,
-            salary: e.employeeSalary.netPay,
-            employeeId: e.employeeId,
-            id: e.employeeId._id,
-          };
-        });
-        setData(mapped);
-        console.log("This payslips for CEO and HR:", mapped);
-      })
-      .catch((error) => {
-        console.log(error?.response);
-        console.log("All payslips error:", error.response);
-      });
-  }, []);
+        const AllEmployeeSlips = res?.data?.data?.slips;
+        const totalPages = res?.data?.data?.pages;
+        console.log("All Payslips", AllEmployeeSlips);
 
-  useEffect(() => {
-    axiosInstance.get("/collection-count").then((res) => {
-      const { projects, employees } = res.data.count;
-      let total = [totalSalary, projects, employees];
-      setpreviewData({
-        salary: totalSalary,
-        projects: projects,
-        employees: employees,
-      });
-      let updated = card.map((e, i) => {
-        return {
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const formattedData = AllEmployeeSlips?.map((e) => ({
           ...e,
-          amount: total[i],
-        };
-      });
-      setcard(updated);
-    });
-  }, [totalSalary]);
+          id: e?.slip?.id,
+          employee: e?.user?.first_name + " " + e?.user?.last_name,
+          ogid: e?.user?.ogid,
+          email: e?.user?.email,
+          salary: e?.slip?.salary,
+          disciplinary_deductions: e?.slip?.disciplinary_deductions,
 
-  const generatePayroll = () => {
-    setgenerating(true);
-    axiosInstance
-      .post("/api/salary-slip/generate", { action: "generate" })
-      .then((res) => {
-        fetchEmployeeSalary();
-        setgenerating(false);
-        // setData(res.data.data[0].salarySlips);
+          basic: e?.slip?.basic,
+          medical: e?.slip?.medical,
+          housing: e?.slip?.housing,
+          transport: e?.slip?.transport,
+          otherAllowances: e?.slip?.other_allowances,
+          tax: e?.slip?.monthly_income_tax,
+          pension: e?.slip?.monthly_pension,
+          netPay: e?.slip?.net_pay,
+        }));
+
+        console.log("Formatted Payslips", formattedData);
+        setData(formattedData);
       })
       .catch((error) => {
-        setgenerating(false);
-        console.log(error?.response);
+        console.log("Slip Error:", error?.response);
       });
-  };
+  }, [page, sizePerPage]);
 
   useEffect(() => {
-    console.log('salary')
-    fetchEmployeeSalary();
-    
-  }, []);
+    fetchEmployeeSalarySlip();
+  }, [fetchEmployeeSalarySlip]);
 
   const columns = [
     {
       dataField: "employee",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "250px" },
+      headerStyle: { minWidth: "200px" },
       formatter: (value, row) => <h2 className="table-avatar">{value}</h2>,
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "email",
@@ -138,24 +109,72 @@ const PayrollReports = () => {
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{val || "Not Available"}</p>,
     },
-
     {
-      dataField: "designation",
-      text: "Designation",
+      dataField: "basic",
+      text: "Basic",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{val || "Not Available"}</p>,
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
-      dataField: "joining_date",
-      text: "Joining Date",
+      dataField: "medical",
+      text: "Medical",
       sort: true,
       headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{moment(val).format("L")}</p>,
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "housing",
+      text: "Housing",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "transport",
+      text: "Transport",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "otherAllowances",
+      text: "Other Allowances",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "salary",
       text: "Salary",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "tax",
+      text: "Tax",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "pension",
+      text: "Pension",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "disciplinary_deductions",
+      text: "Disciplinary Deduction",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+    },
+    {
+      dataField: "netPay",
+      text: "Net Pay",
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
@@ -166,62 +185,66 @@ const PayrollReports = () => {
       sort: true,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
+        <>
         <Link
           className="btn btn-sm btn-primary"
-          // to={`/admin/payslip/${row?._id}`}
           to={{
             pathname: `/dashboard/payroll/payslip/${value}`,
-            state: { employee: value },
           }}
         >
-          View Pay Slip
+          View Pay Slip 
         </Link>
+        </>
       ),
     },
   ];
 
   return (
     <>
-      {user?.role?.title === "CEO" ? <div className="alert alert-primary sliding-text" role="alert">
-        <div>
-          <AlertSvg />
-          <svg
-            className="bi flex-shrink-0 me-2"
-            width="24"
-            height="24"
-            role="img"
-          >
-            <use xlinkHref="#info-fill" />
-          </svg>
-          <span className="pl-3">
-            Payroll is generated on the 25th of every month
-          </span>
-          <span className="pl-3">
-            {" "}
-            | &nbsp; You can preview and approve payroll once generated 
-          </span>
+      {user?.role?.title === "CEO" ? (
+        <div className="alert alert-primary sliding-text" role="alert">
+          <div>
+            <AlertSvg />
+            <svg
+              className="bi flex-shrink-0 me-2"
+              width="24"
+              height="24"
+              role="img"
+            >
+              <use xlinkHref="#info-fill" />
+            </svg>
+            <span className="pl-3">
+              Payroll is generated on the 25th of every month
+            </span>
+            <span className="pl-3">
+              {" "}
+              | &nbsp; You can preview and approve payroll once generated
+            </span>
+          </div>
         </div>
-      </div> : <div className="alert alert-primary sliding-text" role="alert">
-        <div>
-          <AlertSvg />
-          <svg
-            className="bi flex-shrink-0 me-2"
-            width="24"
-            height="24"
-            role="img"
-          >
-            <use xlinkHref="#info-fill" />
-          </svg>
-          <span className="pl-3">
-            Payroll is generated on the 25th of every month
-          </span>
-          <span className="pl-3">
-            {" "}
-            | &nbsp; You can click the generate button to generate payroll for
-            the current month
-          </span>
+      ) : (
+        <div className="alert alert-primary sliding-text" role="alert">
+          <div>
+            <AlertSvg />
+            <svg
+              className="bi flex-shrink-0 me-2"
+              width="24"
+              height="24"
+              role="img"
+            >
+              <use xlinkHref="#info-fill" />
+            </svg>
+            <span className="pl-3">
+              Payroll is generated on the 25th of every month
+            </span>
+            <span className="pl-3">
+              {" "}
+              | &nbsp; You can click the generate button to generate payroll for
+              the current month
+            </span>
+          </div>
         </div>
-      </div>}
+      )}
       <div className="page-header">
         <div className="row">
           <div className="col">
@@ -231,62 +254,64 @@ const PayrollReports = () => {
               <li className="breadcrumb-item active">Payroll Reports</li>
             </ul>
           </div>
-          <div className="col-auto float-end ms-auto">
-            {user?.role?.title !== "CEO" && <button className="btn add-btn" onClick={generatePayroll}>
-              {!generating ? (
-                <>
-                  <i className="fa fa-plus"></i> Generate Payroll
-                </>
-              ) : (
-                <div
-                  className="spinner-border text-light pl-2"
-                  role="status"
-                ></div>
-              )}
-            </button>}
+          <div className="col-auto float-right ml-auto">
+            {user?.role?.title !== "CEO" && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#GeneratePayrollModal"
+              >
+                <i className="fa fa-plus"></i> Generate Payroll
+              </a>
+            )}
 
-           {user?.role?.title === "CEO" &&  <button
-              data-toggle="modal"
-              data-target="#generalModal"
-              className="btn add-btn mx-5"
-              onClick={() => {
-                setdisplayState("raw")
-                console.log('state', displayState)
-              }}
-            >
-              Preview and approve payroll
-            </button>}
+            {user?.role?.title === "CEO" && (
+              <button
+                data-toggle="modal"
+                data-target="#generalModal"
+                className="btn add-btn mx-5"
+                onClick={() => {
+                  setdisplayState("raw");
+                  console.log("state", displayState);
+                }}
+              >
+                Preview and approve payroll
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <div className="row">
-        {card.map((card) => (
-          <div key={card.id} className="col-md-6 col-sm-6 col-lg-6 col-xl-4">
-            <div className="card dash-widget">
-              <div className="card-body">
-                <span className="dash-widget-icon">
-                  <i className={card.icon}></i>
-                </span>
-                <div className="dash-widget-info">
-                  <h4>{card.amount}</h4>
-                  <span>{card.title}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+
       <div className="row">
         <div className="col-md-12">
-          <LeavesTable data={data} columns={columns} />
+          <SalaryDetailsTable
+            data={data}
+            columns={columns}
+            page={page}
+            setPage={setPage}
+            sizePerPage={sizePerPage}
+            setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
+            setTotalPages={setTotalPages}
+          />
         </div>
       </div>
+      
+      <GeneratePayrollModal fetchEmployeeSalarySlip={fetchEmployeeSalarySlip} setgenerating={setgenerating}  />
 
       <ViewModal
         closeModal={handleClose}
         title={`Payroll Approval for ${currMonthName}  ${year}`}
-        content={<ApprovePayroll setdisplayState={setdisplayState} state={displayState} previewData={previewData} />}
+        content={
+          <ApprovePayroll
+            setdisplayState={setdisplayState}
+            state={displayState}
+            previewData={previewData}
+          />
+        }
       />
+
     </>
   );
 };

@@ -37,12 +37,10 @@ const RightSide = () => {
   );
 };
 const PaySlip = () => {
-  const breadcrumb = 'Payslip';
   const { id } = useParams();
-  const location = useLocation();
-  const [employee, setemployee] = useState({});
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
+  const [deductions, setDeductions] = useState({});
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   const [totalDeduction, settotalDeduction] = useState(0);
@@ -51,65 +49,50 @@ const PaySlip = () => {
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
-        const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-        const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
-        // console.log({
-        //   id: id,
-        //   startOfMonth: startOfMonth,
-        //   endOfMonth: endOfMonth,
-        // });
-
         const res = await axiosInstance.get(
-          `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
-        );
-        const resData = res.data.data.employeeSlip;
-        setPaySlip(resData);
-        console.log('1. Employee Slip', resData);
+          `/api/v1/salary_slips/${id}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        )
 
-        // //const res = await axiosInstance.get(`/api/salary-slip/${id}`);
+        const payslip = res?.data?.data?.slip
+        console.log("my payslip:", res?.data?.data?.slip)
+        
+        setPaySlip(payslip)
 
         const earnings = {};
-        const { employeeSalary, deductionsBreakDown } =
-          res.data.data.employeeSlip;
-
-        setdeductionsBreakDown(deductionsBreakDown);
-        if (resData?.additionalDeductions) {
-          let totalDeductions = Object.values(
-            resData?.additionalDeductions
-          ).reduce((a, b) => a + b, 0);
-
-          settotalDeduction(totalDeductions);
-        }
-
-        setemployee(employeeSalary.employeeId);
-        delete employeeSalary.createdAt;
-        delete employeeSalary.updatedAt;
-        delete employeeSalary.employeeId;
-        delete employeeSalary._id;
-        delete employeeSalary.__v;
-        Object.keys(employeeSalary).forEach((e) => {
+        const deductions ={};
+        
+        Object.keys(payslip).forEach((e) => {
           switch (e) {
-            case 'monthlyEmployeePension':
-              earnings['Pension'] = employeeSalary[e];
+            case 'monthly_pension':
+              earnings['Pension'] = payslip[e];
               break;
-            case 'monthlyIncomeTax':
-              earnings['Tax'] = employeeSalary[e];
+            case 'monthly_income_tax':
+              earnings['Tax'] = payslip[e];
               break;
-            case 'monthlySalary':
-              earnings['Salary'] = employeeSalary[e];
-              break;
-            case 'netPay':
-              earnings['Net Pay'] = employeeSalary[e];
+            case 'monthly_salary':
+              earnings['Salary'] = payslip[e];
               break;
             default:
               let key = e.charAt(0).toUpperCase() + e.slice(1);
               break;
           }
         });
-
+        
+        console.log("Earnings", earnings)
         setEarnings(earnings);
+
+        deductions['Disciplinary Deductions'] = payslip.disciplinary_deductions;
+        setDeductions(deductions);
+        console.log("deductions", deductions)
+
         setFetched(true);
-        console.log(earnings);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -132,7 +115,7 @@ const PaySlip = () => {
               <li className="breadcrumb-item active">Payslip</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
+          {/* <div className="col-auto float-right ml-auto">
             <div className="btn-group btn-group-sm">
               <button className="btn btn-white">CSV</button>
               <button className="btn btn-white">PDF</button>
@@ -140,13 +123,9 @@ const PaySlip = () => {
                 <i className="fa fa-print fa-lg"></i> Print
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
-
-      {/* <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div> */}
 
       <div ref={ref} className="row justify-content-center">
         {loading ? (
@@ -192,26 +171,20 @@ const PaySlip = () => {
                       <li>
                         <h5 className="mb-0">
                           <strong>
-                            {employee?.first_name} {employee?.middle_name}{' '}
-                            {employee?.last_name}
+                            {paySlip?.first_name} {paySlip?.middle_name}{' '}
+                            {paySlip?.last_name}
                           </strong>
                         </h5>
                       </li>
-                      <li>{/* <span>Web Designer</span> */}</li>
-                      <li>Employee ID: {employee?.ogid}</li>
-                      <li>
-                        Joining Date:{' '}
-                        {moment(
-                          location?.state?.employee?.date_of_joining
-                        ).format('L')}
-                      </li>
+                      <li>Employee ID: {paySlip?.ogid}</li>
                     </ul>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="col-sm-6">
                     <div>
-                      {paySlip.netPay ? (
+                      {paySlip.net_pay ? (
                         <h4 className="m-b-10">
                           <strong>Earnings</strong>
                         </h4>
@@ -223,7 +196,7 @@ const PaySlip = () => {
                               <tr key={index}>
                                 <td>
                                   <strong>{earning}</strong>{' '}
-                                  {earning != 'department' ? (
+                                  {earning !== 'department' ? (
                                     <span className="float-right">
                                       {formatter.format(earnings[earning])}
                                     </span>
@@ -237,9 +210,10 @@ const PaySlip = () => {
                       </table>
                     </div>
                   </div>
+
                   <div className="col-sm-6">
                     <div>
-                      {paySlip.netPay ? (
+                      {paySlip.net_pay ? (
                         <h4 className="m-b-10">
                           <strong>Deductions</strong>
                         </h4>
@@ -247,55 +221,28 @@ const PaySlip = () => {
                       <table className="table table-bordered">
                         <tbody>
                           {fetched &&
-                            Object.keys(paySlip?.additionalDeductions).map(
-                              (deduction) => (
-                                <tr>
-                                  <td>
-                                    <strong>
-                                      {deduction === 'incompleteHours'
-                                        ? 'Incomplete Hours'
-                                        : deduction.toUpperCase()}
-                                    </strong>{' '}
-                                    <span className="float-right">
-                                      {formatter.format(
-                                        paySlip?.additionalDeductions[deduction]
-                                      )}
-                                    </span>
-                                  </td>
-                                </tr>
-                              )
-                            )}
-                          {fetched && (
-                            <tr>
-                              <td>
-                                <strong>Total Deductions</strong>{' '}
-                                <span className="float-right">
-                                  {formatter.format(totalDeduction)}
-                                </span>
-                              </td>
-                            </tr>
-                          )}
+                            Object.keys(deductions).map((deduction, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <strong>{deduction}</strong>{' '}
+                                  <span className="float-right">
+                                      {formatter.format(deductions[deduction])}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
-                      {paySlip.netPay && totalDeduction !== 0 ? (
-                        <button
-                          type="button"
-                          data-toggle="modal"
-                          data-target="#generalModal"
-                          className="btn btn-outline-primary"
-                        >
-                          View Deductions
-                        </button>
-                      ) : null}
                     </div>
                   </div>
+
                   <div className="col-sm-12">
                     <p>
-                      {paySlip.netPay ? (
+                      {/* {paySlip.netPay ? (
                         <strong>
                           Net Salary: {formatter.format(paySlip?.netPay)}
                         </strong>
-                      ) : null}
+                      ) : null} */}
                     </p>
                   </div>
                 </div>
@@ -304,6 +251,7 @@ const PaySlip = () => {
           </div>
         )}
       </div>
+      
       {fetched && (
         <ViewModal
           title="Salary Deduction Breakdown"
