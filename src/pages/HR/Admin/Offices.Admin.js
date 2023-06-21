@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-//Attendance Record
-
 import React, { useState, useEffect } from "react";
 import UniversalTable from "../../../components/Tables/UniversalTable";
+import { OfficeFormModal } from "../../../components/Modal/OfficeFormModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
@@ -12,8 +11,11 @@ const Offices = () => {
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [mode, setMode] = useState("Create");
+  const [officeType, setOfficeType] = useState("Campaign");
+  const [editOffice, setEditOffice] = useState([]);
 
-  const actionUser = user?.employee_info?.roles
+  const actionUser = user?.employee_info?.roles;
 
   // All Offices:
   const fetchAllOffices = async () => {
@@ -34,12 +36,14 @@ const Offices = () => {
       const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
 
       const formattedDepartments = allDepartments.map((e, index) => ({
+        ...e,
         index: index + 1,
         title: e?.title.toUpperCase(),
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
       const formattedCampaigns = allCampaigns.map((e, index) => ({
+        ...e,
         index: index + 1,
         title: e?.title.toUpperCase(),
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
@@ -57,6 +61,21 @@ const Offices = () => {
   useEffect(() => {
     fetchAllOffices();
   }, []);
+
+  const toggleCampaignAction = () => {
+    setOfficeType("Campaign");
+    setMode("Create");
+  };
+
+  const toggleDepartmentAction = () => {
+    setOfficeType("Department");
+    setMode("Create");
+  };
+
+  const handleEdit = (row) => {
+    setEditOffice(row);
+    setMode("Edit");
+  };
 
   const columns = [
     {
@@ -97,7 +116,8 @@ const Offices = () => {
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#OfficeFormModal"
+                onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -144,6 +164,7 @@ const Offices = () => {
                   className="nav-link active"
                   data-toggle="tab"
                   href="#tab_campaigns"
+                  onClick={toggleCampaignAction}
                 >
                   Campaigns
                 </a>
@@ -154,6 +175,7 @@ const Offices = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_departments"
+                  onClick={toggleDepartmentAction}
                 >
                   Departments
                 </a>
@@ -166,7 +188,11 @@ const Offices = () => {
       <div>
         <div className="row tab-content">
           <div id="tab_campaigns" className="col-12 tab-pane show active">
-            <UniversalTable columns={columns} data={campaigns} loading={loading} />
+            <UniversalTable
+              columns={columns}
+              data={campaigns}
+              loading={loading}
+            />
           </div>
 
           <div id="tab_departments" className="col-12 tab-pane">
@@ -178,6 +204,13 @@ const Offices = () => {
           </div>
         </div>
       </div>
+
+      <OfficeFormModal
+        mode={mode}
+        officeType={officeType}
+        fetchAllOffices={fetchAllOffices}
+        data={editOffice}
+      />
     </>
   );
 };
