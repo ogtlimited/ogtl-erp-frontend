@@ -4,10 +4,13 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import UniversalTable from "../../../components/Tables/UniversalTable";
+import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal";
 
 const LeaveType = () => {
   const [AllLeaveType, setAllLeaveType] = useState([]);
   const { user } = useAppContext();
+  const [mode, setMode] = useState("Create");
+  const [editLeaveType, setEditLeaveType] = useState([]);
 
   const actionUser = user?.employee_info?.roles
 
@@ -37,7 +40,12 @@ const LeaveType = () => {
 
   useEffect(() => {
     fetchAllLeaveTypes();
-  }, []);
+  }, []);  
+
+  const handleEdit = (row) => {
+    setEditLeaveType(row);
+    setMode("Edit");
+  };
 
   const columns = [
     {
@@ -72,7 +80,8 @@ const LeaveType = () => {
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#LeaveTypeFormModal"
+                onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -125,13 +134,14 @@ const LeaveType = () => {
 
         <UniversalTable
           data={AllLeaveType}
-          // defaultSorted={defaultSorted}
           columns={columns}
         />
       </div>
 
-    {/* <AddLeaveTypeModal fetchLeaveType={fetchLeaveType} /> */}
-
+      <LeaveTypeFormModal
+        mode={mode}
+        data={editLeaveType}
+        fetchAllLeaveTypes={fetchAllLeaveTypes} />
     </>
   );
 };

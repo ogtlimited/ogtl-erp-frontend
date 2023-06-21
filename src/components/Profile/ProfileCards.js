@@ -43,7 +43,6 @@ const ProfileCards = ({
     content: () => BackVirtualIDRef.current,
   });
 
-
   const handleChange = (type) => {
     setFormValue(null);
     setformType(type);
@@ -52,7 +51,7 @@ const ProfileCards = ({
   useEffect(() => {
     setemployeeDetails(userData?.employee);
   }, [userData]);
-  
+
   return (
     <>
       <div className="card tab-box">

@@ -12,7 +12,7 @@ const Designations = () => {
   const { user } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [designations, setDesignations] = useState([]);
-  const [editDesignation, setEditDesignation] = useState([]);
+  const [designation, setDesignation] = useState([]);
   const [mode, setMode] = useState("Create");
 
   const [page, setPage] = useState(1);
@@ -62,8 +62,13 @@ const Designations = () => {
     fetchDesignations();
   }, [fetchDesignations]);
 
+  const handleCreate = () => {
+    setMode("Create");
+    setDesignation([]);
+  };
+
   const handleEdit = (row) => {
-    setEditDesignation(row);
+    setDesignation(row);
     setMode("Edit");
   };
 
@@ -142,18 +147,19 @@ const Designations = () => {
               <li className="breadcrumb-item active">Designations</li>
             </ul>
           </div>
-          {/* <div className="col-auto float-right ml-auto">
+          <div className="col-auto float-right ml-auto">
             {actionUser.includes("hr_manager") && (
               <a
                 href="/"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#DesignationFormModal"
+                onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Designation
+                <i className="fa fa-plus"></i> Create Designation
               </a>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
 
@@ -175,7 +181,7 @@ const Designations = () => {
 
       <DesignationFormModal
         mode={mode}
-        data={editDesignation}
+        data={designation}
         fetchDesignations={fetchDesignations}
       />
 

@@ -1,19 +1,22 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {  useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import UniversalTable from "../../../components/Tables/UniversalTable";
+import { BranchFormModal } from "../../../components/Modal/BranchFormModal";
 import moment from "moment";
 
 const BranchAdmin = () => {
   const [allBranch, setallBranch] = useState([]);
   const { user } = useAppContext();
-  
+  const [mode, setMode] = useState("Create");
+  const [editBranch, setEditBranch] = useState([]);
+
   const actionUser = user?.employee_info?.roles;
 
-   // All Branches:
-   const fetchAllBranches = async () => {
+  // All Branches:
+  const fetchAllBranches = async () => {
     try {
       const response = await axiosInstance.get("/api/v1/branches.json", {
         headers: {
@@ -25,6 +28,7 @@ const BranchAdmin = () => {
       const resData = response?.data?.data?.branches;
 
       const formatted = resData.map((branch, index) => ({
+        ...branch,
         index: index + 1,
         title: branch?.title.toUpperCase(),
         state: branch?.state,
@@ -33,7 +37,6 @@ const BranchAdmin = () => {
         value: branch.id,
       }));
 
-      
       setallBranch(formatted);
     } catch (error) {
       console.log("All Branches error:", error);
@@ -42,8 +45,13 @@ const BranchAdmin = () => {
 
   useEffect(() => {
     fetchAllBranches();
-  }, []);
- 
+  }, []);  
+  
+  const handleEdit = (row) => {
+    setEditBranch(row);
+    setMode("Edit");
+  };
+
   const columns = [
     {
       dataField: "index",
@@ -95,7 +103,8 @@ const BranchAdmin = () => {
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#BranchFormModal"
+                onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -116,7 +125,6 @@ const BranchAdmin = () => {
       ),
     },
   ];
-
 
   return (
     <>
@@ -144,12 +152,13 @@ const BranchAdmin = () => {
         </div>
       </div>
       <div className="row  ">
-        <UniversalTable
-          data={allBranch}
-          columns={columns}
-        />
+        <UniversalTable data={allBranch} columns={columns} />
       </div>
 
+      <BranchFormModal
+        mode={mode}
+        data={editBranch}
+        fetchAllBranches={fetchAllBranches} />
     </>
   );
 };

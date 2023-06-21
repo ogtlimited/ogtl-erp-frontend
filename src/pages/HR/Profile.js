@@ -25,7 +25,8 @@ import { canView } from "../../services/canView";
 const Profile = () => {
   const user = tokenService.getUser();
   const { id } = useParams();
-  const { combineRequest, dropDownClicked, setDropDownClicked, } = useAppContext();
+  const { combineRequest, dropDownClicked, setDropDownClicked } =
+    useAppContext();
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(PersonalDetailJson);
   const [userData, setUserdata] = useState(null);
@@ -37,26 +38,29 @@ const Profile = () => {
 
   const fetchEmployeeShift = async () => {
     try {
-      const response = await axiosInstance.get(`/api/v1/employee_shifts.json?ogid=${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/employee_shifts.json?ogid=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employee_shifts;
       const employeeShifts = resData;
-      console.log("employee shift:", employeeShifts)
+      console.log("employee shift:", employeeShifts);
 
       if (!employeeShifts.length) {
-        setMode('create');
+        setMode("create");
       } else if (employeeShifts.length) {
-        setMode('edit');
+        setMode("edit");
         setEmployeeShifts(employeeShifts);
       }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
@@ -72,10 +76,9 @@ const Profile = () => {
       });
       const resData = response?.data?.data;
       setUserdata(resData);
-      
-      const userId = resData?.employee?.email
-      setUserId(userId);
 
+      const userId = resData?.employee?.email;
+      setUserId(userId);
     } catch (error) {
       console.log("Get All Employee Profile error:", error);
     }
@@ -86,8 +89,8 @@ const Profile = () => {
     fetchEmployeeProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
-  if(dropDownClicked) {
+
+  if (dropDownClicked) {
     fetchEmployeeShift();
     fetchEmployeeProfile();
     setDropDownClicked(false);
