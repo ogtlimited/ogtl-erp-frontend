@@ -27,7 +27,6 @@ const Offices = () => {
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
-    setLoading(true);
     try {
       const response = await axiosInstance.get(
         "/api/v1/offices.json",
@@ -71,7 +70,6 @@ const Offices = () => {
  
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
-    setLoading(true);
     try {
       const response = await axiosInstance.get(
         "/api/v1/offices.json",
