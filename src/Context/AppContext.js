@@ -312,7 +312,7 @@ const AppProvider = (props) => {
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leaveTypes', {
+      const response = await axiosInstance.get('/api/v1/leave_types', {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",

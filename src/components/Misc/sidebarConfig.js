@@ -177,15 +177,15 @@ const sidebarConfig = [
             title: 'Branch',
             path: PATH_DASHBOARD.hr.branch,
           },
+          {
+            canView: 'HR',
+            title: 'Leave Types',
+            path: PATH_DASHBOARD.hr.leaveType,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Leave Approval',
           //   path: PATH_DASHBOARD.hr.leaveApproval,
-          // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Leave Types',
-          //   path: PATH_DASHBOARD.hr.leaveType,
           // },
           // { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
           // {
