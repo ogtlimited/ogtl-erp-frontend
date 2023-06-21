@@ -6,7 +6,7 @@ import axiosInstance from '../../services/api';
 import Select from 'react-select';
 import Switch from '@mui/material/Switch';
 
-export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, hr_user_id }) => {
+export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, userID }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState({});
@@ -21,6 +21,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, hr_u
   const [scheduleOpts, setScheduleOpts] = useState([]);
 
   useEffect(() => {
+    
+    console.log("EmployeeShifts:", {
+      employeeShifts,
+      userID,
+    })
 
     const formattedEmployeeShifts = employeeShifts?.map((shift) => ({
         day: shift.day,
@@ -29,10 +34,11 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, hr_u
         off: shift.off,
         huddle: shift.huddle,
         huddle_time: shift.huddle_time,
-        hr_user_id: shift.hr_user_id,
+        hr_user_id: userID,
         id: shift.id
       }) 
     )
+    console.log("formattedEmployeeShifts:", formattedEmployeeShifts)
 
     let monday = {};
     const monday_shifts = formattedEmployeeShifts?.filter((shift) => shift?.day === 'mon');
@@ -83,7 +89,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, hr_u
     }
     setCreateSundayShift(sunday);
 
-  }, [employeeShifts]);
+  }, [employeeShifts, userID]);
 
   const goToTop = () => {
     window.scrollTo({
@@ -163,7 +169,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, hr_u
           off: e.off,
           start_time: e.start_time,
           end_time: e.end_time,
-          hr_user_id,
+          userID,
           huddle: e.huddle,
           huddle_time: e.huddle_time,
         }));
