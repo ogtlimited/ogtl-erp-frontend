@@ -1,9 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { create_designation } from "../FormJSON/CreateLeaveApprovalLevel";
 import { useAppContext } from "../../Context/AppContext";
-import Select from "react-select";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
@@ -36,7 +34,7 @@ export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
     const id = designation.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/designations.json?${id}`, {
+      const response = await axiosInstance.patch(`/api/v1/designations/${id}.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -50,12 +48,7 @@ export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
         },
       });
 
-      console.log("Submit this:", {
-        title: designation.title,
-        leave_approval_level: Number(designation.leave_approval_level),
-        deleted: designation.deleted,
-        operation_office_id: designation.operation_office_id,
-      })
+      console.log("designation response:", response)
 
       showAlert(
         true,
