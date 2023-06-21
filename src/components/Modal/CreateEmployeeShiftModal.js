@@ -88,8 +88,6 @@ export const CreateEmployeeShiftModal = ({ userID, setMode, setEmployeeShifts })
         },
         payload: employeeShifts,	
       });
-
-      console.log("Created Shifts:", response)
   
       setLoading(false);
       goToTop();
