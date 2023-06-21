@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import UniversalTable from "../../../components/Tables/UniversalTable";
+import React, { useState, useEffect, useCallback } from "react";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import { OfficeFormModal } from "../../../components/Modal/OfficeFormModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -15,52 +15,108 @@ const Offices = () => {
   const [officeType, setOfficeType] = useState("Campaign");
   const [editOffice, setEditOffice] = useState([]);
 
+  const [CampaignPage, setCampaignPage] = useState(1);
+  const [CampaignSizePerPage, setCampaignSizePerPage] = useState(10);
+  const [totalCampaignPages, setTotalCampaignPages] = useState("");
+
+  const [DepartmentPage, setDepartmentPage] = useState(1);
+  const [DepartmentSizePerPage, setDepartmentSizePerPage] = useState(10);
+  const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
+
   const actionUser = user?.employee_info?.roles;
 
-  // All Offices:
-  const fetchAllOffices = async () => {
+  // All Campaigns:
+  const fetchAllCampaigns = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
+      const response = await axiosInstance.get(
+        "/api/v1/offices.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            office_type: "campaign",
+            pages: CampaignPage,
+            limit: CampaignSizePerPage,
+          },
+        }
       );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
+      const resData = response?.data?.data?.offices;
+      const totalPages = response?.data?.data?.pages;
 
-      const formattedDepartments = allDepartments.map((e, index) => ({
+      console.log("Get All Campaigns response:", response?.data?.data?.offices)
+
+      const thisPageLimit = CampaignSizePerPage;
+      const thisTotalPageSize = totalPages;
+
+      setCampaignSizePerPage(thisPageLimit);
+      setTotalCampaignPages(thisTotalPageSize);
+
+      const formattedCampaigns = resData.map((e, index) => ({
         ...e,
-        index: index + 1,
-        title: e?.title.toUpperCase(),
+        // index: index + 1,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      const formattedCampaigns = allCampaigns.map((e, index) => ({
+      setCampaigns(formattedCampaigns);
+      setLoading(false);
+    } catch (error) {
+      console.log("Get All Campaigns error:", error);
+      setLoading(false);
+    }
+  }, [CampaignPage, CampaignSizePerPage]);
+ 
+  // All Departments:
+  const fetchAllDepartments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/offices.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            office_type: "department",
+            pages: DepartmentPage,
+            limit: DepartmentSizePerPage,
+          },
+        }
+      );
+      const resData = response?.data?.data?.offices;
+      const totalPages = response?.data?.data?.pages;
+
+      console.log("Get All Departments response:", response?.data?.data?.offices)
+
+      const thisPageLimit = DepartmentSizePerPage;
+      const thisTotalPageSize = totalPages;
+
+      setDepartmentSizePerPage(thisPageLimit);
+      setTotalDepartmentPages(thisTotalPageSize);
+
+      const formattedDepartments = resData.map((e, index) => ({
         ...e,
-        index: index + 1,
-        title: e?.title.toUpperCase(),
+        // index: index + 1,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
       setDepartments(formattedDepartments);
-      setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Offices error:", error);
+      console.log("Get All Departments error:", error);
       setLoading(false);
     }
-  };
+  }, [DepartmentPage, DepartmentSizePerPage]);
 
   useEffect(() => {
-    fetchAllOffices();
-  }, []);
+    fetchAllCampaigns();
+    fetchAllDepartments();
+  }, [fetchAllCampaigns, fetchAllDepartments]);
 
   const toggleCampaignAction = () => {
     setOfficeType("Campaign");
@@ -72,18 +128,22 @@ const Offices = () => {
     setMode("Create");
   };
 
+  const handleCreate = () => {
+    setMode("Create");
+  };
+
   const handleEdit = (row) => {
     setEditOffice(row);
     setMode("Edit");
   };
 
   const columns = [
-    {
-      dataField: "index",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
+    // {
+    //   dataField: "index",
+    //   text: "S/N",
+    //   sort: true,
+    //   headerStyle: { width: "5%" },
+    // },
     {
       dataField: "title",
       text: "Office",
@@ -149,8 +209,21 @@ const Offices = () => {
               <li className="breadcrumb-item">
                 <a href="#">HR</a>
               </li>
-              <li className="breadcrumb-item active">Office</li>
+              <li className="breadcrumb-item active">{officeType}</li>
             </ul>
+          </div>
+          <div className="col-auto float-right ml-auto">
+            {actionUser.includes("hr_manager") && (
+              <a
+                href="/"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#OfficeFormModal"
+                onClick={handleCreate}
+              >
+                <i className="fa fa-plus"></i> Add Office
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -188,18 +261,34 @@ const Offices = () => {
       <div>
         <div className="row tab-content">
           <div id="tab_campaigns" className="col-12 tab-pane show active">
-            <UniversalTable
+            <UniversalPaginatedTable
               columns={columns}
               data={campaigns}
               loading={loading}
+              setLoading={setLoading}
+              
+              page={CampaignPage}
+              setPage={setCampaignPage}
+              sizePerPage={CampaignSizePerPage}
+              setSizePerPage={setCampaignSizePerPage}
+              totalPages={totalCampaignPages}
+              setTotalPages={setTotalCampaignPages}
             />
           </div>
 
           <div id="tab_departments" className="col-12 tab-pane">
-            <UniversalTable
+            <UniversalPaginatedTable
               columns={columns}
               data={departments}
               loading={loading}
+              setLoading={setLoading}
+              
+              page={DepartmentPage}
+              setPage={setDepartmentPage}
+              sizePerPage={DepartmentSizePerPage}
+              setSizePerPage={setDepartmentSizePerPage}
+              totalPages={totalDepartmentPages}
+              setTotalPages={setTotalDepartmentPages}
             />
           </div>
         </div>
@@ -208,7 +297,8 @@ const Offices = () => {
       <OfficeFormModal
         mode={mode}
         officeType={officeType}
-        fetchAllOffices={fetchAllOffices}
+        fetchAllCampaigns={fetchAllCampaigns}
+        fetchAllDepartments={fetchAllDepartments}
         data={editOffice}
       />
     </>

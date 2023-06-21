@@ -8,12 +8,19 @@ import $ from "jquery";
 export const OfficeFormModal = ({
   mode,
   officeType,
-  fetchAllOffices,
+  fetchAllCampaigns,
+  fetchAllDepartments,
   data,
 }) => {
   const { showAlert } = useAppContext();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // console.log("office modal data:", {
+  //   mode,
+  //   officeType,
+  //   data,
+  // })
   
   useEffect(() => {
     setOffice(data);
@@ -38,7 +45,7 @@ export const OfficeFormModal = ({
     const id = office.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/offices.json?${id}`, {
+      const response = await axiosInstance.patch(`/api/v1/offices/${id}.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -51,12 +58,18 @@ export const OfficeFormModal = ({
         },
       });
 
+      console.log("offices response:", response)
+
       showAlert(
         true,
         `${officeType} successfully updated`,
         "alert alert-success"
       );
-      fetchAllOffices();
+      if (officeType === "Campaign") {
+        fetchAllCampaigns();
+      } else if (officeType === "Department") {
+        fetchAllDepartments();
+      }
       $("#OfficeFormModal").modal("toggle");
       setLoading(false);
     } catch (error) {
