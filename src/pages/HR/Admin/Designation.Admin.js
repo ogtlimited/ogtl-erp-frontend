@@ -4,9 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
-import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
-import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
-import ConfirmModal from '../../../components/Modal/ConfirmModal';
+import { DesignationFormModal } from '../../../components/Modal/DesignationFormModal';
 import moment from 'moment';
 import UniversalTable from '../../../components/Tables/UniversalTable';
 
@@ -14,7 +12,7 @@ const Designations = () => {
   const [designations, setDesignations] = useState([]);
   const { user } = useAppContext();
   const [editDesignation, setEditDesignation] = useState([]);
-  const [deleteData, setdeleteData] = useState(null);
+  const [mode, setMode] = useState("Create");
   
   const actionUser = user?.employee_info?.roles
 
@@ -31,6 +29,7 @@ const Designations = () => {
     const resData = response?.data?.data?.designations;
 
     const formattedDesignation = resData.map((e, index) => ({
+      ...e,
       index: index + 1,
       title: e?.title.toUpperCase(),
       created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
@@ -45,6 +44,11 @@ const Designations = () => {
   useEffect(() => {
     fetchDesignations();
   }, []);
+
+  const handleEdit = (row) => {
+    setEditDesignation(row);
+    setMode("Edit");
+  };
 
   const columns = [
     {
@@ -85,7 +89,8 @@ const Designations = () => {
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#DesignationFormModal"
+                onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
@@ -120,7 +125,7 @@ const Designations = () => {
               <li className="breadcrumb-item active">Designations</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
+          {/* <div className="col-auto float-right ml-auto">
             {actionUser.includes("hr_manager") && (
               <a
                 href="/"
@@ -131,7 +136,7 @@ const Designations = () => {
                 <i className="fa fa-plus"></i> Add Designation
               </a>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -142,17 +147,12 @@ const Designations = () => {
         />
       </div>
 
-      <AddDesignationModal allDesignation={fetchDesignations} />
-
-      <EditDesignationModal
-        editDesignation={editDesignation}
-        fetchDesignation={fetchDesignations}
+      <DesignationFormModal
+        mode={mode}
+        data={editDesignation}
+        fetchDesignations={fetchDesignations}
       />
 
-      <ConfirmModal
-        title="Designation"
-        selectedRow={deleteData}
-      />
     </>
   );
 };
