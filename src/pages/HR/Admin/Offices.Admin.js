@@ -4,6 +4,7 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 import { OfficeFormModal } from "../../../components/Modal/OfficeFormModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import { OfficeForm } from "../../../components/FormJSON/CreateOffices.js";
 import moment from "moment";
 
 const Offices = () => {
@@ -13,7 +14,7 @@ const Offices = () => {
   const [departments, setDepartments] = useState([]);
   const [mode, setMode] = useState("Create");
   const [officeType, setOfficeType] = useState("Campaign");
-  const [editOffice, setEditOffice] = useState([]);
+  const [office, setOffice] = useState([]);
 
   const [CampaignPage, setCampaignPage] = useState(1);
   const [CampaignSizePerPage, setCampaignSizePerPage] = useState(10);
@@ -45,8 +46,6 @@ const Offices = () => {
       );
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
-
-      console.log("Get All Campaigns response:", response?.data?.data?.offices)
 
       const thisPageLimit = CampaignSizePerPage;
       const thisTotalPageSize = totalPages;
@@ -89,8 +88,6 @@ const Offices = () => {
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
 
-      console.log("Get All Departments response:", response?.data?.data?.offices)
-
       const thisPageLimit = DepartmentSizePerPage;
       const thisTotalPageSize = totalPages;
 
@@ -128,10 +125,11 @@ const Offices = () => {
 
   const handleCreate = () => {
     setMode("Create");
+    setOffice(OfficeForm)
   };
 
   const handleEdit = (row) => {
-    setEditOffice(row);
+    setOffice(row);
     setMode("Edit");
   };
 
@@ -207,7 +205,7 @@ const Offices = () => {
               <li className="breadcrumb-item">
                 <a href="#">HR</a>
               </li>
-              <li className="breadcrumb-item active">{officeType}</li>
+              <li className="breadcrumb-item active">Office</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -219,7 +217,7 @@ const Offices = () => {
                 data-target="#OfficeFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Office
+                <i className="fa fa-plus"></i> Create Office
               </a>
             )}
           </div>
@@ -295,9 +293,10 @@ const Offices = () => {
       <OfficeFormModal
         mode={mode}
         officeType={officeType}
+        setOfficeType={setOfficeType}
         fetchAllCampaigns={fetchAllCampaigns}
         fetchAllDepartments={fetchAllDepartments}
-        data={editOffice}
+        data={office}
       />
     </>
   );
