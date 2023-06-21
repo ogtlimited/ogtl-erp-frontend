@@ -253,7 +253,6 @@ const AppProvider = (props) => {
       console.log("All Offices error:", error);
     }
   };
-
   
   // All Designations:
   const fetchAllDesignations = async () => {
@@ -312,7 +311,7 @@ const AppProvider = (props) => {
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leave_types', {
+      const response = await axiosInstance.get('/api/v1/leave_types.json', {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
