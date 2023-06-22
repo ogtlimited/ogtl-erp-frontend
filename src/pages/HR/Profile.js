@@ -97,29 +97,6 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    switch (formType) {
-      case "WorkExperience":
-        return settemplate(helper.formArrayToObject(WorkExperienceJson.Fields));
-      case "ContactDetails":
-        return settemplate(helper.formArrayToObject(ContactDetailJson.Fields));
-      case "EmergencyContact":
-        return settemplate(
-          helper.formArrayToObject(EmergencyDetailJson.Fields)
-        );
-      case "EmployeeEducation":
-        return settemplate(
-          helper.formArrayToObject(EmployeeEducationJson.Fields)
-        );
-      case "History":
-        return settemplate(helper.formArrayToObject(historyJson.Fields));
-      case "SalaryDetails":
-        return settemplate(helper.formArrayToObject(SalaryDetailJson.Fields));
-      default:
-        return settemplate(helper.formArrayToObject(PersonalDetailJson.Fields));
-    }
-  }, [formType]);
-
-  useEffect(() => {
     combineRequest().then((res) => {
       const { designations, branches } = res.data.createEmployeeFormSelection;
 
@@ -224,24 +201,6 @@ const Profile = () => {
                         </li>
 
                         <li>
-                          <div className="title">Birthday:</div>
-                          <div className="text">
-                            {userData?.employee?.personal_detail?.DOB
-                              ? moment(
-                                  userData?.employee?.personal_detail?.DOB
-                                ).format("Do MMMM, YYYY")
-                              : "Not Available"}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="title">Address:</div>
-                          <div className="text">
-                            {userData?.contactDetails?.permanent_address ||
-                              "Not Available"}
-                          </div>
-                        </li>
-
-                        <li>
                           <div className="title">Gender:</div>
                           <div className="text">
                             {userData?.employee?.personal_detail?.gender
@@ -296,15 +255,7 @@ const Profile = () => {
         setEmployeeShifts={setEmployeeShifts}
         userID={userID}
         userOgid={id}
-      />
-      <FormModal2
-        template={template}
-        setformValue={setFormValue}
-        setsubmitted={setSubmitted}
-      />
-      <ViewModal
-        title="Social Media Handle"
-        content={<SocialHandleForm userData={userData} id={id} />}
+        fetchEmployeeProfile={fetchEmployeeProfile}
       />
     </>
   );

@@ -19,6 +19,7 @@ const ProfileCards = ({
   formValue,
   setFormValue,
   fetchUserInfo,
+  fetchEmployeeProfile,
   employeeShifts,
   setEmployeeShifts,
   userID,
@@ -104,8 +105,10 @@ const ProfileCards = ({
                 formValue={formValue}
                 fetchUserInfo={fetchUserInfo}
                 setFormValue={setFormValue}
+                fetchEmployeeProfile={fetchEmployeeProfile}
               />
             </div>
+
             <div className="col-md-6 d-flex">
               <ContactDetails
                 handleChange={handleChange}
