@@ -20,7 +20,8 @@ export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
   }, [data]);
 
   const cancelEvent = () => {
-    setDesignation(designation);
+    setDesignation(data);
+    setOfficeType("");
   };
 
   const handleFormChange = (e) => {
