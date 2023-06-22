@@ -13,7 +13,7 @@ const LeaveType = () => {
   const [mode, setMode] = useState("Create");
   const [leaveType, setLeaveType] = useState([]);
 
-  const actionUser = user?.employee_info?.roles
+  const CurrentUserRoles = user?.employee_info?.roles
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
@@ -81,7 +81,7 @@ const LeaveType = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -93,7 +93,7 @@ const LeaveType = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -123,7 +123,7 @@ const LeaveType = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="#"
                 className="btn add-btn"

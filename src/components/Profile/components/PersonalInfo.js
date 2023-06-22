@@ -10,7 +10,7 @@ const PersonalInfo = ({
 }) => {
   const { user } = useAppContext();
   
-  const actionUser = user?.employee_info?.roles;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   return (
     <>
@@ -18,7 +18,7 @@ const PersonalInfo = ({
         <div className="card-body">
           <h3 className="card-title">
             Personal Information{" "}
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="edit-icon"
                 data-toggle="modal"

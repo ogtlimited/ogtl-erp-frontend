@@ -11,21 +11,18 @@ import sidebarConfig from "./sidebarConfig";
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
   const AllAccess = ["Super", "CEO", "hr_manager", "HR Associate"];
-
-  const userRole = user?.employee_info?.roles[0]
-  const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
-
   
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const userRole = user?.employee_info?.roles[0];
+  const userDept =
+    user?.office?.office_type === "department" ? user?.office?.title : null;
+
   useEffect(() => {
-    console.log("this sidebar user:", user)
-    }, [user])
-  
+    console.log("this sidebar user:", user);
+  }, [user]);
 
   const canView = (dept) => {
-    if (
-      userDept === dept ||
-      AllAccess.includes(userRole)
-    ) {
+    if (userDept === dept || AllAccess.includes(userRole)) {
       return true;
     } else if (dept === "All") {
       return true;
@@ -98,7 +95,9 @@ const Sidebar = () => {
                           {canView(item?.canView) && (
                             <li
                               className={`submenu ${
-                                dropdownStates[item.title] ? "active subdrop" : ""
+                                dropdownStates[item.title]
+                                  ? "active subdrop"
+                                  : ""
                               }`}
                               key={item.title}
                             >
@@ -112,7 +111,9 @@ const Sidebar = () => {
                               </a>
                               <ul
                                 style={{
-                                  display: dropdownStates[item.title] ? "block" : "none",
+                                  display: dropdownStates[item.title]
+                                    ? "block"
+                                    : "none",
                                 }}
                               >
                                 {item.children.map((child) => (
@@ -146,7 +147,7 @@ const Sidebar = () => {
                 </>
               ))}
 
-              {!AllAccess.includes(userRole) && (
+              {!AllAccess.includes(userRole) && CurrentUserRoles.includes("junior_hr") ? (
                 <li className="submenu">
                   <a
                     href=""
@@ -196,7 +197,7 @@ const Sidebar = () => {
                     </Link>
                   </ul>
                 </li>
-              )}
+              ) : null}
             </ul>
           </div>
         </div>

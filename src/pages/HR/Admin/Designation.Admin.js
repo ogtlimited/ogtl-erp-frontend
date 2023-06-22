@@ -20,7 +20,7 @@ const Designations = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
   
-  const actionUser = user?.employee_info?.roles
+  const CurrentUserRoles = user?.employee_info?.roles
 
  // All Designations:
  const fetchDesignations = useCallback(async () => {
@@ -107,7 +107,7 @@ const Designations = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -119,7 +119,7 @@ const Designations = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -149,7 +149,7 @@ const Designations = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="/"
                 className="btn add-btn"

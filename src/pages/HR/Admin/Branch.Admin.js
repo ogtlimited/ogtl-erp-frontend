@@ -14,7 +14,7 @@ const BranchAdmin = () => {
   const [mode, setMode] = useState("Create");
   const [branch, setBranch] = useState([]);
 
-  const actionUser = user?.employee_info?.roles;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   // All Branches:
   const fetchAllBranches = async () => {
@@ -104,7 +104,7 @@ const BranchAdmin = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -116,7 +116,7 @@ const BranchAdmin = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -146,7 +146,7 @@ const BranchAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-           {actionUser.includes("hr_manager") && <a
+           {CurrentUserRoles.includes("hr_manager") && <a
               href="#"
               className="btn add-btn"
               data-toggle="modal"

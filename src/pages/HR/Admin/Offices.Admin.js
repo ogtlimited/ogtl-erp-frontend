@@ -24,7 +24,7 @@ const Offices = () => {
   const [DepartmentSizePerPage, setDepartmentSizePerPage] = useState(10);
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
 
-  const actionUser = user?.employee_info?.roles;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -167,7 +167,7 @@ const Offices = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -179,7 +179,7 @@ const Offices = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -209,7 +209,7 @@ const Offices = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="/"
                 className="btn add-btn"
