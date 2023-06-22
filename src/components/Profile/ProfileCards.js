@@ -99,12 +99,7 @@ const ProfileCards = ({
           <div className="row">
             <div className="col-md-6 d-flex">
               <PersonalInfo
-                handleChange={handleChange}
                 personalDetails={userData}
-                submitted={submitted}
-                formValue={formValue}
-                fetchUserInfo={fetchUserInfo}
-                setFormValue={setFormValue}
                 fetchEmployeeProfile={fetchEmployeeProfile}
               />
             </div>

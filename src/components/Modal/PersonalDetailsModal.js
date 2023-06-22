@@ -25,8 +25,8 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
 
     setLoading(true);
     try {
-      // eslint-disable-next-line no-unused-vars
       const id = personalDetails.id;
+      // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(`/api/v1/personal_details/${id}.json`, {
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +46,6 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
           id_issue_date: personalDetails.id_issue_date,
         },
       });
-      console.log("Edit Personal Details response:", response);
 
       fetchEmployeeProfile();
       $("#PersonalDetailsModal").modal("toggle");

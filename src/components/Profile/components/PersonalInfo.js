@@ -5,12 +5,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import { PersonalDetailsModal } from "../../Modal/PersonalDetailsModal";
 
 const PersonalInfo = ({
-  handleChange,
   personalDetails,
-  formValue,
-  submitted,
-  setFormValue,
-  fetchUserInfo,
   fetchEmployeeProfile,
 }) => {
   const { user } = useAppContext();
@@ -25,7 +20,6 @@ const PersonalInfo = ({
             Personal Information{" "}
             {actionUser.includes("hr_manager") && (
               <a
-                onClick={() => handleChange("PersonalDetails")}
                 className="edit-icon"
                 data-toggle="modal"
                 data-target="#PersonalDetailsModal"
