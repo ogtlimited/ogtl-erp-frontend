@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 import { DesignationFormModal } from '../../../components/Modal/DesignationFormModal';
+import { DesignationForm } from '../../../components/FormJSON/CreateDesignation';
 import moment from 'moment';
 import UniversalPaginatedTable from '../../../components/Tables/UniversalPaginatedTable';
 
@@ -64,7 +65,7 @@ const Designations = () => {
 
   const handleCreate = () => {
     setMode("Create");
-    setDesignation([]);
+    setDesignation(DesignationForm);
   };
 
   const handleEdit = (row) => {

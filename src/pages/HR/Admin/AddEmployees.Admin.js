@@ -132,6 +132,10 @@ const AddEmployeesAdmin = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
+        params: {
+          office_type: office,
+          limit: 1000,
+        },
       });
       const resData = response?.data?.data?.offices;
 
