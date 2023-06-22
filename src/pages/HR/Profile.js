@@ -24,39 +24,43 @@ import { canView } from "../../services/canView";
 
 const Profile = () => {
   const user = tokenService.getUser();
+  const { id } = useParams();
+  const { combineRequest, dropDownClicked, setDropDownClicked } =
+    useAppContext();
   const [formType, setformType] = useState("");
   const [template, settemplate] = useState(PersonalDetailJson);
-  const { id } = useParams();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const { combineRequest } = useAppContext();
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [userID, setUserId] = useState("");
   const [mode, setMode] = useState("");
 
   const fetchEmployeeShift = async () => {
     try {
-      const response = await axiosInstance.get(`/api/v1/employee_shifts.json?ogid=${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/employee_shifts.json?ogid=${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employee_shifts;
       const employeeShifts = resData;
-      console.log("employee shift:", employeeShifts)
+      console.log("employee shift:", employeeShifts);
 
       if (!employeeShifts.length) {
-        setMode('create');
+        setMode("create");
       } else if (employeeShifts.length) {
-        setMode('edit');
+        setMode("edit");
         setEmployeeShifts(employeeShifts);
       }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
@@ -72,10 +76,9 @@ const Profile = () => {
       });
       const resData = response?.data?.data;
       setUserdata(resData);
-      
-      const userId = resData?.employee?.email
-      setUserId(userId);
 
+      const userId = resData?.employee?.email;
+      setUserId(userId);
     } catch (error) {
       console.log("Get All Employee Profile error:", error);
     }
@@ -86,6 +89,12 @@ const Profile = () => {
     fetchEmployeeProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (dropDownClicked) {
+    fetchEmployeeShift();
+    fetchEmployeeProfile();
+    setDropDownClicked(false);
+  }
 
   useEffect(() => {
     switch (formType) {
@@ -152,7 +161,7 @@ const Profile = () => {
             <h3 className="page-title">Profile</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/admin/all-employees">Employees</Link>
+                <Link to="/dashboard/hr/all-employees">Employees</Link>
               </li>
               <li className="breadcrumb-item active">Profile</li>
             </ul>
@@ -286,6 +295,7 @@ const Profile = () => {
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
         userID={userID}
+        userOgid={id}
       />
       <FormModal2
         template={template}

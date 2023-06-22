@@ -132,11 +132,6 @@ const sidebarConfig = [
             title: 'Leadership',
             path: PATH_DASHBOARD.hr.leadership,
           },
-          // {
-          //   canView: 'HR',
-          //   title: 'Attendance',
-          //   path: PATH_DASHBOARD.hr.attendanceAdmin,
-          // },
           {
             canView: 'HR',
             title: 'Captured Biometrics',
@@ -152,11 +147,11 @@ const sidebarConfig = [
             title: 'Leaves (Admin)',
             path: PATH_DASHBOARD.hr.leavesAdmin,
           },
-          // {
-          //   canView: 'All',
-          //   title: 'Leaves',
-          //   path: PATH_DASHBOARD.hr.leavesEmployee,
-          // },
+          {
+            canView: 'All',
+            title: 'Leaves',
+            path: PATH_DASHBOARD.hr.leavesEmployee,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Resignation (Admin)',
@@ -167,25 +162,30 @@ const sidebarConfig = [
           //   title: 'Resignation',
           //   path: PATH_DASHBOARD.hr.resignationEmployee,
           // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Departments',
-          //   path: PATH_DASHBOARD.hr.department,
-          // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Designations',
-          //   path: PATH_DASHBOARD.hr.designations,
-          // },
+          {
+            canView: 'HR',
+            title: 'Offices',
+            path: PATH_DASHBOARD.hr.offices,
+          },
+          {
+            canView: 'HR',
+            title: 'Designations',
+            path: PATH_DASHBOARD.hr.designations,
+          },
+          {
+            canView: 'HR',
+            title: 'Branch',
+            path: PATH_DASHBOARD.hr.branch,
+          },
+          {
+            canView: 'HR',
+            title: 'Leave Types',
+            path: PATH_DASHBOARD.hr.leaveType,
+          },
           // {
           //   canView: 'HR',
           //   title: 'Leave Approval',
           //   path: PATH_DASHBOARD.hr.leaveApproval,
-          // },
-          // {
-          //   canView: 'HR',
-          //   title: 'Leave Types',
-          //   path: PATH_DASHBOARD.hr.leaveType,
           // },
           // { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
           // {

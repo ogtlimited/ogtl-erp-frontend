@@ -1,230 +1,101 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useMemo, useState, useEffect, useContext } from 'react';
-import departments from '../../../db/designationList.json';
-import { designation } from '../../../components/FormJSON/HR/Employee/designation';
-import list from '../../../designation.json';
-import LeaveTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import Select from 'react-select';
-import dates from './dates.json';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
-import FormModal2 from '../../../components/Modal/FormModal2';
-import helper from '../../../services/helper';
-import { AddDesignationModal } from '../../../components/Modal/AddDesignationModal';
-import { EditDesignationModal } from '../../../components/Modal/EditDesignationModal';
-import ConfirmModal from '../../../components/Modal/ConfirmModal';
-import ClipboardCopyNotification from './ClipboardCopyNotification';
-
-let qualityFilter;
+import { DesignationFormModal } from '../../../components/Modal/DesignationFormModal';
+import { DesignationForm } from '../../../components/FormJSON/CreateDesignation';
+import moment from 'moment';
+import UniversalPaginatedTable from '../../../components/Tables/UniversalPaginatedTable';
 
 const Designations = () => {
-  const [allDesignation, setallDesignation] = useState([]);
-  const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
-  const [submitted, setsubmitted] = useState(false);
-  const [formValue, setformValue] = useState(null);
-  const [editData, seteditData] = useState(null);
-  const [editDesignation, setEditDesignation] = useState([]);
-  const [clickedRow, setclickedRow] = useState(null);
-  const [deleteData, setdeleteData] = useState(null);
-  const [template, settemplate] = useState({});
-  const [designationOpts, setDesignationOts] = useState(null);
-  const [unfiltered, setunfiltered] = useState([]);
-  const [mode, setmode] = useState('add');
-  const [isCopied, setIsCopied] = useState(false);
+  const { user } = useAppContext();
+  const [loading, setLoading] = useState(true);
+  const [designations, setDesignations] = useState([]);
+  const [designation, setDesignation] = useState([]);
+  const [mode, setMode] = useState("Create");
 
-  // Clipboard Copy Async Function
-  async function copyTextToClipboard(text) {
-    if ('clipboard' in navigator) {
-      return await navigator.clipboard.writeText(text);
-    } else {
-      return document.execCommand('copy', true, text);
-    }
-  }
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
+  
+  const actionUser = user?.employee_info?.roles
 
-  // Clipboard copy onclick event
-  const handleCopyClick = (row) => {
-    copyTextToClipboard(row._id)
-      .then(() => {
-        setIsCopied(true);
-        setTimeout(() => {
-          setIsCopied(false);
-        }, 1500);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const create = () => {
-    let initialValues = {};
-    for (let i in template) {
-      initialValues[i] = '';
-    }
-    setmode('add');
-    setformValue(initialValues);
-    seteditData(initialValues);
-  };
-
-  const editRow = (row) => {
-    // setformUpdate(null)
-    let formatted = helper.handleEdit(row);
-    setmode('edit');
-    setformUpdate(formatted);
-    setclickedRow(formatted);
-  };
-
-  const handleEditApplication = (row) => {
-    setEditDesignation(row);
-  };
-
-  const fetchDesignation = () => {
-    settemplate(designation);
-    axiosInstance.get('/designation').then((res) => {
-      const response = res?.data?.data;
-
-      const formatted = response.map((e, idx) => ({
-        ...e,
-        index: idx + 1,
-      }))
-      setallDesignation(formatted);
-
-      setunfiltered(formatted);
-      const depsigOpts = res.data.data.map((e) => {
-        return {
-          label: e.designation,
-          value: e._id,
-        };
-      });
-      setDesignationOts(depsigOpts);
+ // All Designations:
+ const fetchDesignations = useCallback(async () => {
+  try {
+    const response = await axiosInstance.get('/api/v1/designations.json', {
+      headers: {          
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      params: {
+        pages: page,
+        limit: sizePerPage,
+      },
     });
-  };
+    const resData = response?.data?.data?.designations;
+    const totalPages = response?.data?.data?.pages;
+    
+    const thisPageLimit = sizePerPage;
+    const thisTotalPageSize = totalPages;
+
+    setSizePerPage(thisPageLimit);
+    setTotalPages(thisTotalPageSize);
+
+    const formattedDesignation = resData.map((e, index) => ({
+      ...e,
+      // index: index + 1,
+      created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+    }));
+
+    setDesignations(formattedDesignation);
+    setLoading(false);
+  } catch (error) {
+    console.log("Get All Designations error:", error);
+    setLoading(false);
+  }
+}, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchDesignation();
-  }, []);
+    fetchDesignations();
+  }, [fetchDesignations]);
 
-  const handleClick = (i) => {
-    if (i?.value === 'All' || i === null) {
-      setallDesignation(unfiltered);
-    } else {
-      const filt = unfiltered.filter((e) => {
-        return i.label.includes(e.designation);
-      });
-
-      setallDesignation(filt);
-    }
+  const handleCreate = () => {
+    setMode("Create");
+    setDesignation(DesignationForm);
   };
 
-  useEffect(() => {
-    fetchDesignation();
-
-    if (submitted) {
-      if (mode === 'add') {
-        axiosInstance
-          .post('/designation', formValue)
-          .then((e) => {
-            showAlert(
-              true,
-              'Designation successfully created',
-              'alert alert-success'
-            );
-            // setformValue(null);
-            fetchDesignation();
-          })
-          .catch((err) => {
-            // setformValue(null);
-            console.log(err);
-          });
-      } else {
-        // formValue._id = formUpdate._id;
-        axiosInstance
-          .put('/designation/' + formUpdate._id, formValue)
-          .then((e) => {
-            showAlert(
-              true,
-              'Designation successfully updated',
-              'alert alert-success'
-            );
-            setformValue(null);
-            fetchDesignation();
-          })
-          .catch((err) => {
-            setformValue(null);
-            console.log(err);
-          });
-      }
-    }
-    // setallDepartments(departments);
-  }, [formValue]);
-
-  const deleteDesignation = (row) => {
-    console.log('Id:', row._id);
-    axiosInstance
-      .patch(`/designation/${row._id}`)
-      .then((res) => {
-        console.log('this:', res);
-        // setallDesignation((prevData) =>
-        //   prevData.filter((pdata) => pdata._id !== row._id)
-        // );
-        showAlert(true, res?.data?.message, 'alert alert-info');
-        fetchDesignation();
-        window.location.reload();
-        // $('#exampleModal').modal('toggle');
-      })
-      .catch((error) => {
-        console.log('That:', error?.response?.data?.message);
-        showAlert(true, error?.response?.data?.message, 'alert alert-danger');
-      });
+  const handleEdit = (row) => {
+    setDesignation(row);
+    setMode("Edit");
   };
 
   const columns = [
+    // {
+    //   dataField: "index",
+    //   text: "S/N",
+    //   sort: true,
+    //   headerStyle: { width: "5%" },
+    // },
     {
-      dataField: "index",
-      text: "#",
-      headerStyle: { width: "5%" },
-    },
-    {
-      dataField: 'designation',
-      text: 'Designation',
+      dataField: "title",
+      text: "Designations",
       sort: true,
-      headerStyle: { width: '40%' },
+      headerStyle: { width: "35%" },
     },
     {
-      dataField: '_id',
-      text: 'Designation ID',
+      dataField: "created_at",
+      text: "Date Created",
       sort: true,
-      headerStyle: { width: '10%' },
+      headerStyle: { width: "20%" },
     },
     {
-      dataField: '',
-      text: '',
-      headerStyle: { width: '20%' },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              onClick={() => handleCopyClick(row)}
-            >
-              Copy to clipboard <i className="fa fa-copy"></i>
-            </button>
-          </div>
-        </div>
-      ),
-    },
-    {
-      dataField: 'createdAt',
-      text: 'Created',
-      sort: true,
-      headerStyle: { width: '20%' },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: '',
-      text: 'Action',
-      headerStyle: { width: '10%' },
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -236,22 +107,21 @@ const Designations = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {user?.role?.hr?.update && (
+            {actionUser.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#FormEditModal"
-                onClick={() => handleEditApplication(row)}
+                data-target="#DesignationFormModal"
+                onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </a>
             )}
 
-            {user?.role?.hr?.delete && (
+            {actionUser.includes("hr_manager") && (
               <a
                 className="dropdown-item"
-                onClick={() => setdeleteData(row)}
                 href="#"
                 data-toggle="modal"
                 data-target="#exampleModal"
@@ -267,68 +137,55 @@ const Designations = () => {
 
   return (
     <>
-      <AddDesignationModal allDesignation={fetchDesignation} />
-      <EditDesignationModal
-        editDesignation={editDesignation}
-        fetchDesignation={fetchDesignation}
-      />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
             <h3 className="page-title">Designations</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="#">HR</Link>
               </li>
               <li className="breadcrumb-item active">Designations</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.role?.hr?.create && (
+            {actionUser.includes("hr_manager") && (
               <a
-                href="#"
+                href="/"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#FormModal"
-                // onClick={() => create()}
+                data-target="#DesignationFormModal"
+                onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Designation
+                <i className="fa fa-plus"></i> Create Designation
               </a>
             )}
           </div>
         </div>
       </div>
+
       <div className="row  ">
-        <div className="col-3 mb-2">
-          <Select
-            defaultValue={[]}
-            onChange={handleClick}
-            options={designationOpts}
-            placeholder="Filter Designations"
-            isClearable={true}
-            style={{ display: 'inline-block' }}
-            // formatGroupLabel={formatGroupLabel}
-          />
-        </div>
-        <LeaveTable
-          data={allDesignation}
-          // defaultSorted={defaultSorted}
+        <UniversalPaginatedTable
+          data={designations}
           columns={columns}
+          loading={loading}
+          setLoading={setLoading}
+          
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
         />
       </div>
-      <FormModal2
-        title="Create Designation"
-        editData={editData}
-        setformValue={setformValue}
-        template={template}
-        setsubmitted={setsubmitted}
+
+      <DesignationFormModal
+        mode={mode}
+        data={designation}
+        fetchDesignations={fetchDesignations}
       />
-      <ConfirmModal
-        title="Designation"
-        selectedRow={deleteData}
-        deleteFunction={deleteDesignation}
-      />
-      {isCopied && <ClipboardCopyNotification />}
+
     </>
   );
 };

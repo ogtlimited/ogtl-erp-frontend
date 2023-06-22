@@ -18,18 +18,15 @@ import axiosInstance from "../../../services/api";
 import Select from "react-select";
 
 const AddEmployeesAdmin = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, selectBranches, selectDesignations, loadingSelect } =
+    useAppContext();
   const [step, setStep] = useState(1);
-  const [loadedSelect, setLoadedSelect] = useState(0);
   const [employee, setEmployee] = useState(PROFILE);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState("create");
 
-  const [allBranches, setAllBranches] = useState([]);
   const [officeType, setOfficeType] = useState("");
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
   const [allOffices, setAllOffices] = useState([]);
-  const [allDesignations, setAllDesignations] = useState([]);
 
   const goToTop = () => {
     window.scrollTo({
@@ -80,12 +77,6 @@ const AddEmployeesAdmin = () => {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    const employeeInfo = {
-      user_info: employee.user_info,
-      employee_info: employee.employee_info,
-      personal_details: employee.personal_details,
-    };
 
     try {
       const response = await axiosInstance.post("/api/v1/employees.json", {
@@ -93,8 +84,8 @@ const AddEmployeesAdmin = () => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
-        }, 
-        payload:  {
+        },
+        payload: {
           user_info: employee.user_info,
           employee_info: employee.employee_info,
           personal_details: employee.personal_details,
@@ -106,8 +97,8 @@ const AddEmployeesAdmin = () => {
       clearEvent();
       setLoading(false);
     } catch (error) {
-      console.log("Add Employee Error:", error?.response);
-      // showAlert(true,  "alert alert-error");
+      const errMsg = error?.response?.data?.errors
+      showAlert(true, errMsg,  "alert alert-warning");
       setLoading(false);
     }
   };
@@ -132,30 +123,6 @@ const AddEmployeesAdmin = () => {
     );
   };
 
-  // All Branches:
-  const fetchAllBranches = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/branches.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.branches;
-
-      const formatted = resData.map((branch) => ({
-        label: branch.title,
-        value: branch.id,
-      }));
-
-      setAllBranches(formatted);
-      setLoadedSelect(loadedSelect + 1);
-    } catch (error) {
-      console.log("All Branches error:", error);
-    }
-  };
-
   // All Offices:
   const fetchAllOffices = async (office) => {
     try {
@@ -164,6 +131,10 @@ const AddEmployeesAdmin = () => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: office,
+          limit: 1000,
         },
       });
       const resData = response?.data?.data?.offices;
@@ -194,48 +165,14 @@ const AddEmployeesAdmin = () => {
     }
   };
 
-  // All Designations:
-  const fetchDesignation = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/designations.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.designations;
-
-      const formattedDesignation = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setAllDesignations(formattedDesignation);
-      setLoadedSelect(loadedSelect + 1);
-    } catch (error) {
-      console.log("Get All Designations error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchAllBranches();
-    fetchDesignation();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
-    goToTop()
-    console.log("Next Step:", employee);
+    goToTop();
   };
 
   const prevStep = () => {
     setStep((prevStep) => prevStep - 1);
-    goToTop()
-    console.log("Prev Step:", employee);
+    goToTop();
   };
 
   const renderForm = () => {
@@ -302,13 +239,13 @@ const AddEmployeesAdmin = () => {
                           </label>
                           <Select
                             name="employee_info.operation_branch_id"
-                            options={allBranches}
-                            // options={BRANCHOptions}
+                            options={selectBranches}
                             isSearchable={true}
                             isClearable={true}
                             value={{
                               label: employee?.misc?.branchName,
-                              value: employee?.employee_info?.operation_branch_id,
+                              value:
+                                employee?.employee_info?.operation_branch_id,
                             }}
                             onChange={(e) =>
                               setEmployee({
@@ -354,14 +291,14 @@ const AddEmployeesAdmin = () => {
                             </label>
                             <Select
                               options={allOffices}
-                              // options={OFFICEOptions}
                               isSearchable={true}
                               isClearable={true}
                               value={{
                                 label: employee?.misc?.officeName,
-                                value: employee?.employee_info?.operation_office_id,
+                                value:
+                                  employee?.employee_info?.operation_office_id,
                               }}
-                               onChange={(e) =>
+                              onChange={(e) =>
                                 setEmployee({
                                   ...employee,
                                   employee_info: {
@@ -387,8 +324,7 @@ const AddEmployeesAdmin = () => {
                             Designations
                           </label>
                           <Select
-                            options={allDesignations}
-                            // options={DESIGNATIONOptions}
+                            options={selectDesignations}
                             isSearchable={true}
                             isClearable={true}
                             value={{
@@ -785,8 +721,7 @@ const AddEmployeesAdmin = () => {
                           <li>
                             <div className="title">Branch:</div>
                             <div className="text">
-                              {employee.misc.branchName ||
-                                "-"}
+                              {employee.misc.branchName || "-"}
                             </div>
                           </li>
 
@@ -798,8 +733,7 @@ const AddEmployeesAdmin = () => {
                           <li>
                             <div className="title">Office:</div>
                             <div className="text">
-                              {employee.misc.officeName ||
-                                "-"}
+                              {employee.misc.officeName || "-"}
                             </div>
                           </li>
 
@@ -969,16 +903,16 @@ const AddEmployeesAdmin = () => {
             <h3 className="page-title">Add Employee</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/dashboard/hr/all-employees">All Employees</Link>
               </li>
-              <li className="breadcrumb-item active">Employees</li>
+              <li className="breadcrumb-item active">Employee</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div className="row add-employee-form">
-        {loadedSelect >= 0 ? (
+        {!loadingSelect  ? (
           renderForm()
         ) : (
           <div className="add-employee-form-loader-div">

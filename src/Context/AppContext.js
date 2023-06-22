@@ -29,6 +29,8 @@ const AppProvider = (props) => {
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
+  const [dropDownClicked, setDropDownClicked] = useState(false);
+  
   let socket = useRef();
 
   const status = [
@@ -47,10 +49,11 @@ const AppProvider = (props) => {
   ]
 
   // Select API States:
+  const [loadingSelect, setLoadingSelect] = useState(false);
   const [allEmployees, setAllEmployees] = useState([]);
   const [allOffices, setAllOffices] = useState([]);
-  const [allDesignations, setAllDesignations] = useState([]);
-  const [allBranches, setAllBranches] = useState([]);
+  const [selectDesignations, setSelectDesignations] = useState([]);
+  const [selectBranches, setSelectBranches] = useState([]);
   const [allLeaveTypes, setAllLeaveTypes] = useState([]);
 
   // let socketRef;
@@ -81,7 +84,7 @@ const AppProvider = (props) => {
     }
   };
 
-   // For Leave Application Notification
+   //TODO For Leave Application Notification (Work on this)
    const fetchHRLeavesNotificationCount = () => {
     axiosInstance.get('/hr-leave-applications')
       .then((res) => {
@@ -250,57 +253,65 @@ const AppProvider = (props) => {
       console.log("All Offices error:", error);
     }
   };
-
+  
   // All Designations:
   const fetchAllDesignations = async () => {
+    setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get('/api/v1/designations', {
-        headers: {          
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data;
-      // console.log("All Designations:", resData)
-
-      // const formatted = resData.map((e) => ({
-      //   designation: e.designation,
-      // })).sort((a, b) => a.designation.localeCompare(b.designation));
-
-      // setAllDesignations(formatted);
-    } catch (error) {
-      console.log("All Designation error:", error);
-    }
-  };
-
-  // All Branches:
-  const fetchAllBranches = async () => {
-    try {
-      const response = await axiosInstance.get('/api/v1/branches', {
+      const response = await axiosInstance.get("/api/v1/designations.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
       });
-      const resData = response?.data?.data;
-      // console.log("All Branches:", resData)
+      const resData = response?.data?.data?.designations;
 
-      // const formatted = resData.map((e) => ({
-      //   branch: e.branch,
-      // })).sort((a, b) => a.branch.localeCompare(b.branch));
+      const formattedDesignation = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-      // setAllBranches(formatted);
+      setSelectDesignations(formattedDesignation);
+      setLoadingSelect(false);
+    } catch (error) {
+      console.log("Get All Designations error:", error);
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Branches:
+  const fetchAllBranches = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/branches.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.branches;
+
+      const formatted = resData.map((branch) => ({
+        label: branch.title,
+        value: branch.id,
+      }));
+
+      setSelectBranches(formatted);
+      setLoadingSelect(false);
     } catch (error) {
       console.log("All Branches error:", error);
+      setLoadingSelect(false);
     }
   };
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leaveTypes', {
+      const response = await axiosInstance.get('/api/v1/leave_types.json', {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -337,18 +348,28 @@ const AppProvider = (props) => {
         allEmployees,
         setAllEmployees,
         fetchAllEmployees,
+
         allOffices,
         setAllOffices,
         fetchAllOffices,
-        allDesignations,
-        setAllDesignations,
+
+        selectDesignations,
+        setSelectDesignations,
         fetchAllDesignations,
-        allBranches,
-        setAllBranches,
+
+        selectBranches,
+        setSelectBranches,
         fetchAllBranches,
+
         allLeaveTypes,
         setAllLeaveTypes,
         fetchAllLeaveTypes,
+
+        loadingSelect,
+        setLoadingSelect,
+
+        dropDownClicked,
+        setDropDownClicked,
 
 
         fetchTypesShift,

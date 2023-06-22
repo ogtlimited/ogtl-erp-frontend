@@ -4,46 +4,51 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import UniversalTable from "../../../components/Tables/UniversalTable";
-import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal";
+import { BranchFormModal } from "../../../components/Modal/BranchFormModal";
+import moment from "moment";
 
-const LeaveType = () => {
-  const [AllLeaveType, setAllLeaveType] = useState([]);
+const BranchAdmin = () => {
+  const [allBranch, setallBranch] = useState([]);
   const { user } = useAppContext();
   const [mode, setMode] = useState("Create");
-  const [editLeaveType, setEditLeaveType] = useState([]);
+  const [editBranch, setEditBranch] = useState([]);
 
-  const actionUser = user?.employee_info?.roles
+  const actionUser = user?.employee_info?.roles;
 
-  // All Leave Types:
-  const fetchAllLeaveTypes = async () => {
+  // All Branches:
+  const fetchAllBranches = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leave_types.json', {
+      const response = await axiosInstance.get("/api/v1/branches.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
       });
-      const resData = response?.data?.data?.types;
+      const resData = response?.data?.data?.branches;
 
-      const formatted = resData.map((e, idx) => ({
-        ...e,
-        index: idx + 1,
-        leave_type: e?.title,
+      const formatted = resData.map((branch, index) => ({
+        ...branch,
+        index: index + 1,
+        title: branch?.title.toUpperCase(),
+        state: branch?.state,
+        country: branch?.country,
+        created_at: moment(branch?.created_at).format("Do MMMM, YYYY"),
+        value: branch.id,
       }));
 
-      setAllLeaveType(formatted);
+      setallBranch(formatted);
     } catch (error) {
-      console.log("All Leave Types error:", error);
+      console.log("All Branches error:", error);
     }
   };
 
   useEffect(() => {
-    fetchAllLeaveTypes();
+    fetchAllBranches();
   }, []);  
-
+  
   const handleEdit = (row) => {
-    setEditLeaveType(row);
+    setEditBranch(row);
     setMode("Edit");
   };
 
@@ -55,10 +60,28 @@ const LeaveType = () => {
       headerStyle: { width: "5%" },
     },
     {
-      dataField: "leave_type",
-      text: "Leave Type",
+      dataField: "title",
+      text: "Branch",
       sort: true,
-      headerStyle: { width: "70%" },
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "state",
+      text: "State",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "country",
+      text: "Country",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "created_at",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "10%" },
     },
     {
       dataField: "",
@@ -80,7 +103,7 @@ const LeaveType = () => {
                 className="dropdown-item"
                 href="#"
                 data-toggle="modal"
-                data-target="#LeaveTypeFormModal"
+                data-target="#BranchFormModal"
                 onClick={() => handleEdit(row)}
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
@@ -108,42 +131,36 @@ const LeaveType = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaves Types</h3>
+            <h3 className="page-title">Branch</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="#">HR</Link>
               </li>
-              <li className="breadcrumb-item active">Leave Types</li>
+              <li className="breadcrumb-item active">Branch</li>
             </ul>
           </div>
           {/* <div className="col-auto float-right ml-auto">
-            {actionUser.includes("hr_manager") && (
-              <a
-                href="#"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#FormModal"
-              >
-                <i className="fa fa-plus"></i> Add Leave Type
-              </a>
-            )}
+           {actionUser.includes("hr_manager") && <a
+              href="#"
+              className="btn add-btn"
+              data-toggle="modal"
+              data-target="#FormModal"
+            >
+              <i className="fa fa-plus"></i> Add Branch
+            </a>}
           </div> */}
         </div>
       </div>
       <div className="row  ">
-
-        <UniversalTable
-          data={AllLeaveType}
-          columns={columns}
-        />
+        <UniversalTable data={allBranch} columns={columns} />
       </div>
 
-      <LeaveTypeFormModal
+      <BranchFormModal
         mode={mode}
-        data={editLeaveType}
-        fetchAllLeaveTypes={fetchAllLeaveTypes} />
+        data={editBranch}
+        fetchAllBranches={fetchAllBranches} />
     </>
   );
 };
 
-export default LeaveType;
+export default BranchAdmin;

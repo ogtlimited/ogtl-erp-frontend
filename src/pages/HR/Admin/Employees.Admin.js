@@ -148,12 +148,12 @@ const AllEmployeesAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Employee</h3>
+            <h3 className="page-title">Employees</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/dashboard/hr-dashboard">HR</Link>
               </li>
-              <li className="breadcrumb-item active">Employee</li>
+              <li className="breadcrumb-item active">Employees</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

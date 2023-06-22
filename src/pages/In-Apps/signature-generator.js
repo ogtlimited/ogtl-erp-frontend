@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import Signature from "./signature";
 import "./signature.css";
@@ -146,7 +147,7 @@ const SignatureGenerator = () => {
             <h3 className="page-title">Email Signature</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
+                <a href="#">Apps</a>
               </li>
               <li className="breadcrumb-item active">Email Signature</li>
             </ul>

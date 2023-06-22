@@ -12,10 +12,11 @@ import { msalInstance  } from '../../authConfig';
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
-  const { fetchHRLeavesNotificationCount, count } = useAppContext();
+  const { fetchHRLeavesNotificationCount, count, setDropDownClicked } = useAppContext();
   const audioPlayer = useRef(null);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   // const { instance } = useMsal();
+
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
@@ -32,6 +33,7 @@ const Header = () => {
   };
 
   const user = tokenService.getUser();
+  const userOgid = user?.employee_info?.ogid;
 
   function playAudio() {
     audioPlayer.current.play();
@@ -50,9 +52,6 @@ const Header = () => {
       playAudio();
     }
   }, [count, user?.role?.title]);
-
-  //   const { user } = useContext(AppContext);
-  //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
 
   return (
     <>
@@ -118,16 +117,16 @@ const Header = () => {
               </span>
               <span>{user?.employee_info?.personal_details?.first_name}</span>
             </a>
-            <div className="dropdown-menu">
+            <div className="dropdown-menu" onClick={() => setDropDownClicked(true)}>
               <Link
                 className="dropdown-item"
-                to={`/dashboard/user/profile/${user?._id}`}
+                to={`/dashboard/user/profile/${userOgid}`}
               >
                 My Profile
               </Link>
-              <Link className="dropdown-item" to="settings">
+              {/* <Link className="dropdown-item" to="settings">
                 Settings
-              </Link>
+              </Link> */}
               <a className="dropdown-item" onClick={(e) => logout(e)}>
                 Logout
               </a>
@@ -149,13 +148,13 @@ const Header = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <Link
               className="dropdown-item"
-              to={`/dashboard/user/profile/${user?._id}`}
+              to={`/dashboard/user/profile/${userOgid}`}
             >
               My Profile
             </Link>
-            <Link className="dropdown-item" to="settings">
+            {/* <Link className="dropdown-item" to="settings">
               Settings
-            </Link>
+            </Link> */}
             <a className="dropdown-item" onClick={(e) => logout(e)}>
               Logout
             </a>

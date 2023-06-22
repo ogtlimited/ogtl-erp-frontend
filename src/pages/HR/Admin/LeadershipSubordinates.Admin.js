@@ -59,7 +59,7 @@ const LeadershipSubordinateAdmin = () => {
             <h3 className="page-title">{employee}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Leadership</Link>
+                <Link to="/dashboard/hr/all-employees/employee/leader">Leadership</Link>
               </li>
               <li className="breadcrumb-item active">Subordinates</li>
             </ul>
