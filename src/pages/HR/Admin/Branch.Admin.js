@@ -87,7 +87,7 @@ const BranchAdmin = () => {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "",
@@ -153,7 +153,7 @@ const BranchAdmin = () => {
               data-target="#BranchFormModal"
               onClick={handleCreate}
             >
-              <i className="fa fa-plus"></i> Add Branch
+              <i className="fa fa-plus"></i> Create Branch
             </a>}
           </div>
         </div>
