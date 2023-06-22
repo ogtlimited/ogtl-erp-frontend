@@ -19,13 +19,14 @@ const ProfileCards = ({
   formValue,
   setFormValue,
   fetchUserInfo,
-  fetchEmployeeProfile,
   employeeShifts,
   setEmployeeShifts,
   userID,
   mode,
   setMode,
   userOgid,
+  fetchEmployeeShift,
+  fetchEmployeeProfile,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics } = useAppContext();
@@ -176,6 +177,7 @@ const ProfileCards = ({
                   <CreateEmployeeShiftModal
                     userID={userID}
                     setMode={setMode}
+                    fetchEmployeeShift={fetchEmployeeShift}
                     setEmployeeShifts={setEmployeeShifts}
                   />
                 )}
