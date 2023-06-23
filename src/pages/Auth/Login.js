@@ -50,7 +50,7 @@ const Login = () => {
           })
           .catch((err) => {
             console.log(err);
-            setErrorMsg(err.message + ', please try again');
+            setErrorMsg(err?.response?.data?.errors + ', please contact HR');
           })
           .finally(() => {
             setLoading(false);
