@@ -31,7 +31,7 @@ const ProfileCards = ({
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics } = useAppContext();
 
-  const actionUser = user?.employee_info?.roles;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const ogid = user?.employee_info?.ogid;
 
@@ -156,7 +156,7 @@ const ProfileCards = ({
           </div>
         </div>
 
-        {actionUser.includes("hr_manager") || userOgid !== ogid ? (
+        {CurrentUserRoles.includes("hr_manager") || userOgid !== ogid ? (
           <div
             id="emp_shifts"
             className={
