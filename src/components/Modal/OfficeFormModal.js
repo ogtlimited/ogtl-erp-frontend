@@ -24,7 +24,7 @@ export const OfficeFormModal = ({
   }, [data]);
 
   const cancelEvent = () => {
-    setOffice(office);
+    setOffice(data);
   };
 
   const handleFormChange = (e) => {

@@ -17,7 +17,7 @@ import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
 import { createBrowserHistory } from 'history';
 
-export const CreateEmployeeShiftModal = ({ userID, setMode, setEmployeeShifts }) => {
+export const CreateEmployeeShiftModal = ({ userID, setMode, fetchEmployeeShift, setEmployeeShifts }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState(
@@ -97,12 +97,11 @@ export const CreateEmployeeShiftModal = ({ userID, setMode, setEmployeeShifts })
         `Shift created successfully!`,
         'alert alert-success'
       );
-      // setEmployeeShifts(response?.data?.data);
+      fetchEmployeeShift();
     } catch (error) {
       goToTop();
-      const errorMsg = error?.response?.data?.message;
+      const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      console.error(error?.response);
       setLoading(false);
     }
 

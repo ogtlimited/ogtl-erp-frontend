@@ -121,20 +121,28 @@ export const bloodGroupOptions = [
 
 export const meansOfIdentificationOptions = [
   {
-    label: "National ID",
-    value: "National ID",
+    label: "NIN",
+    value: "NIN",
   },
   {
     label: "Driver's License",
-    value: "Driver's License",
+    value: "Drivers_License",
   },
   {
     label: "International Passport",
-    value: "International Passport",
+    value: "International_Passport",
   },
   {
     label: "Voters Card",
-    value: "Voters Card",
+    value: "Voters_Card"
+  },
+  {
+    label: "Student ID",
+    value: "Student_ID"
+  },
+  {
+    label: "National Youth Service",
+    value: "National_Youth_Service"
   },
 ];
 

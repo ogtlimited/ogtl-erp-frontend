@@ -22,7 +22,7 @@ export const EditEmployeeShiftModal = ({ employeeShifts, setEmployeeShifts, user
 
   useEffect(() => {
     
-    console.log("EmployeeShifts:", {
+    console.log("EmployeeShifts (Edit):", {
       employeeShifts,
       userID,
     })

@@ -3,35 +3,16 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
-import { ContactDetailJson } from "../../components/FormJSON/HR/Employee/ContactDetails";
-import { EmergencyDetailJson } from "../../components/FormJSON/HR/Employee/EmergencyContact";
-import { EmployeeEducationJson } from "../../components/FormJSON/HR/Employee/EmployeeEducation";
-import { PersonalDetailJson } from "../../components/FormJSON/HR/Employee/PersonalDetails";
-import { WorkExperienceJson } from "../../components/FormJSON/HR/Employee/WorkExperience";
-import FormModal from "../../components/Modal/Modal";
 import ProfileCards from "../../components/Profile/ProfileCards";
 import axiosInstance from "../../services/api";
 import moment from "moment";
-import { historyJson } from "../../components/FormJSON/HR/Employee/history";
 import { useAppContext } from "../../Context/AppContext";
-import { SalaryDetailJson } from "../../components/FormJSON/HR/Employee/SalaryDetails";
-import FormModal2 from "../../components/Modal/FormModal2";
-import helper from "../../services/helper";
-import ViewModal from "../../components/Modal/ViewModal";
-import SocialHandleForm from "../../components/Profile/components/SocialHandleForm";
-import tokenService from "../../services/token.service";
-import { canView } from "../../services/canView";
 
 const Profile = () => {
-  const user = tokenService.getUser();
   const { id } = useParams();
-  const { combineRequest, dropDownClicked, setDropDownClicked } =
-    useAppContext();
-  const [formType, setformType] = useState("");
-  const [template, settemplate] = useState(PersonalDetailJson);
+  const { dropDownClicked, setDropDownClicked } = useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [userID, setUserId] = useState("");
   const [mode, setMode] = useState("");
@@ -95,63 +76,6 @@ const Profile = () => {
     fetchEmployeeProfile();
     setDropDownClicked(false);
   }
-
-  useEffect(() => {
-    switch (formType) {
-      case "WorkExperience":
-        return settemplate(helper.formArrayToObject(WorkExperienceJson.Fields));
-      case "ContactDetails":
-        return settemplate(helper.formArrayToObject(ContactDetailJson.Fields));
-      case "EmergencyContact":
-        return settemplate(
-          helper.formArrayToObject(EmergencyDetailJson.Fields)
-        );
-      case "EmployeeEducation":
-        return settemplate(
-          helper.formArrayToObject(EmployeeEducationJson.Fields)
-        );
-      case "History":
-        return settemplate(helper.formArrayToObject(historyJson.Fields));
-      case "SalaryDetails":
-        return settemplate(helper.formArrayToObject(SalaryDetailJson.Fields));
-      default:
-        return settemplate(helper.formArrayToObject(PersonalDetailJson.Fields));
-    }
-  }, [formType]);
-
-  useEffect(() => {
-    combineRequest().then((res) => {
-      const { designations, branches } = res.data.createEmployeeFormSelection;
-
-      const designationsOpts = designations?.map((e) => {
-        return {
-          label: e.designation,
-          value: e._id,
-        };
-      });
-      const branchesOpts = branches?.map((e) => {
-        return {
-          label: e.branch,
-          value: e._id,
-        };
-      });
-      const finalForm = historyJson.Fields.map((field) => {
-        if (field.name === "branch_id") {
-          field.options = branchesOpts;
-          return field;
-        } else if (field.name === "designation_id") {
-          field.options = designationsOpts;
-          return field;
-        }
-        return field;
-      });
-      settemplate({
-        title: historyJson.title,
-        Fields: finalForm,
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
@@ -224,24 +148,6 @@ const Profile = () => {
                         </li>
 
                         <li>
-                          <div className="title">Birthday:</div>
-                          <div className="text">
-                            {userData?.employee?.personal_detail?.DOB
-                              ? moment(
-                                  userData?.employee?.personal_detail?.DOB
-                                ).format("Do MMMM, YYYY")
-                              : "Not Available"}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="title">Address:</div>
-                          <div className="text">
-                            {userData?.contactDetails?.permanent_address ||
-                              "Not Available"}
-                          </div>
-                        </li>
-
-                        <li>
                           <div className="title">Gender:</div>
                           <div className="text">
                             {userData?.employee?.personal_detail?.gender
@@ -285,9 +191,7 @@ const Profile = () => {
       </div>
 
       <ProfileCards
-        setformType={setformType}
         userData={userData}
-        submitted={submitted}
         formValue={formValue}
         setFormValue={setFormValue}
         mode={mode}
@@ -296,15 +200,8 @@ const Profile = () => {
         setEmployeeShifts={setEmployeeShifts}
         userID={userID}
         userOgid={id}
-      />
-      <FormModal2
-        template={template}
-        setformValue={setFormValue}
-        setsubmitted={setSubmitted}
-      />
-      <ViewModal
-        title="Social Media Handle"
-        content={<SocialHandleForm userData={userData} id={id} />}
+        fetchEmployeeShift={fetchEmployeeShift}
+        fetchEmployeeProfile={fetchEmployeeProfile}
       />
     </>
   );

@@ -9,14 +9,14 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
   const { showAlert } = useAppContext();
   const [branch, setBranch] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     setBranch(data);
   }, [data]);
 
 
   const cancelEvent = () => {
-    setBranch(branch);
+    setBranch(data);
   };
 
   const handleFormChange = (e) => {
@@ -28,22 +28,69 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
   };
 
   const handleBranchActions = async (e) => {
+    if (mode === "Create") {
+      return handleCreateBranch(e);
+    } else {
+      return handleEditBranch(e);
+    }
+  };
+
+  const handleCreateBranch = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    const id = branch.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      // const response = await axiosInstance.patch(`/api/v1/branches/${id}.json`, {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Access-Control-Allow-Origin": "*",
-      //     "ngrok-skip-browser-warning": "69420",
-      //   },
-      //   payload: {},
-      // });
+      const response = await axiosInstance.post(`/api/v1/branches.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: branch.title,
+          state: branch.state,
+          country: branch.country,
+        },
+      });
 
-      console.log("Edit this branch:", branch)
+      showAlert(
+        true,
+        "Branch successfully created",
+        "alert alert-success"
+      );
+      fetchAllBranches();
+      $("#BranchFormModal").modal("toggle");
+      setBranch(data);
+      setLoading(false);
+    } catch (error) {
+      showAlert(
+        true,
+        "Something went wrong, please try again",
+        "alert alert-danger"
+      );
+      setLoading(false);
+    }
+  }
+
+  const handleEditBranch = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(`/api/v1/branches/${branch.id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: branch.title,
+          state: branch.state,
+          country: branch.country,
+        },
+      });
 
       showAlert(
         true,
@@ -52,14 +99,17 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
       );
       fetchAllBranches();
       $("#BranchFormModal").modal("toggle");
+      setBranch(data);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      showAlert(
+        true,
+        "Something went wrong, please try again",
+        "alert alert-danger"
+      );
       setLoading(false);
     }
-    setLoading(false);
-  };
+  }
 
   return (
     <>
@@ -89,9 +139,9 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
             <div className="modal-body">
               <form onSubmit={handleBranchActions}>
                 <div className="row">
-                  {/* <div className="col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="title">branch</label>
+                      <label htmlFor="title">Branch</label>
                       <input
                         name="title"
                         type="text"
@@ -100,20 +150,33 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
                         onChange={handleFormChange}
                       />
                     </div>
-                  </div> */}
+                  </div>
 
-                  {/* <div className="col-md-6">
+                  <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="leave_approval_level">Approval Level</label>
+                      <label htmlFor="state">State</label>
                       <input
-                        name="leave_approval_level"
-                        type="number"
+                        name="state"
+                        type="text"
                         className="form-control"
-                        value={branch.leave_approval_level}
+                        value={branch.state}
                         onChange={handleFormChange}
                       />
                     </div>
-                  </div> */}
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="country">Country</label>
+                      <input
+                        name="country"
+                        type="text"
+                        className="form-control"
+                        value={branch.country}
+                        onChange={handleFormChange}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="modal-footer">

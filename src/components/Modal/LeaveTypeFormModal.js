@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -9,14 +7,13 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
   const { showAlert } = useAppContext();
   const [leaveType, setLeaveType] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   useEffect(() => {
     setLeaveType(data);
   }, [data]);
 
-
   const cancelEvent = () => {
-    setLeaveType(leaveType);
+    setLeaveType(data);
   };
 
   const handleFormChange = (e) => {
@@ -28,38 +25,76 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
   };
 
   const handleLeaveTypeActions = async (e) => {
+    if (mode === "Create") {
+      return handleCreateLeaveTypes(e);
+    } else {
+      return handleEditLeaveTypes(e);
+    }
+  };
+
+  const handleCreateLeaveTypes = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(`/api/v1/leave_types.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: leaveType.title,
+        },
+      });
+
+      showAlert(
+        true,
+        "Leave type successfully created",
+        "alert alert-success"
+      );
+      fetchAllLeaveTypes();
+      $("#LeaveTypeFormModal").modal("hide");
+      setLeaveType(data);
+    } catch (error) {
+      console.log("Error in creating leave type:", error);
+      showAlert(true, error.message, "alert alert-danger");
+    }
+    setLoading(false);
+  }
+
+  const handleEditLeaveTypes = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     const id = leaveType.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      // const response = await axiosInstance.patch(`/api/v1/leaveTypees/${id}.json`, {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Access-Control-Allow-Origin": "*",
-      //     "ngrok-skip-browser-warning": "69420",
-      //   },
-      //   payload: {},
-      // });
-
-      console.log("Edit this leaveType:", leaveType)
+      const response = await axiosInstance.patch(`/api/v1/leave_types/${id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: leaveType.title,
+        },
+      });
 
       showAlert(
         true,
-        "Leave Type successfully updated",
+        "Leave type successfully updated",
         "alert alert-success"
       );
       fetchAllLeaveTypes();
-      $("#LeaveTypeFormModal").modal("toggle");
-      setLoading(false);
+      $("#LeaveTypeFormModal").modal("hide");
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
+      console.log("Error in updating leave type:", error);
+      showAlert(true, error.message, "alert alert-danger");
     }
     setLoading(false);
-  };
+  }
 
   return (
     <>
@@ -74,7 +109,7 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {mode} leaveType
+                {mode} Leave Type
               </h4>
               <button
                 type="button"
@@ -89,9 +124,9 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
             <div className="modal-body">
               <form onSubmit={handleLeaveTypeActions}>
                 <div className="row">
-                  {/* <div className="col-md-6">
+                  <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="title">leaveType</label>
+                      <label htmlFor="title">Leave Type</label>
                       <input
                         name="title"
                         type="text"
@@ -100,20 +135,7 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
                         onChange={handleFormChange}
                       />
                     </div>
-                  </div> */}
-
-                  {/* <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_approval_level">Approval Level</label>
-                      <input
-                        name="leave_approval_level"
-                        type="number"
-                        className="form-control"
-                        value={leaveType.leave_approval_level}
-                        onChange={handleFormChange}
-                      />
-                    </div>
-                  </div> */}
+                  </div>
                 </div>
 
                 <div className="modal-footer">

@@ -294,6 +294,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.branches;
+      console.log("branches", resData);
 
       const formatted = resData.map((branch) => ({
         label: branch.title,

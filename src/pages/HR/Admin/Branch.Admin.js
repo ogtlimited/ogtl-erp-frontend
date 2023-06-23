@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import { BranchForm } from "../../../components/FormJSON/CreateBranch";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import { BranchFormModal } from "../../../components/Modal/BranchFormModal";
 import moment from "moment";
@@ -11,9 +12,9 @@ const BranchAdmin = () => {
   const [allBranch, setallBranch] = useState([]);
   const { user } = useAppContext();
   const [mode, setMode] = useState("Create");
-  const [editBranch, setEditBranch] = useState([]);
+  const [branch, setBranch] = useState([]);
 
-  const actionUser = user?.employee_info?.roles;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   // All Branches:
   const fetchAllBranches = async () => {
@@ -46,9 +47,14 @@ const BranchAdmin = () => {
   useEffect(() => {
     fetchAllBranches();
   }, []);  
+
+  const handleCreate = () => {
+    setMode("Create");
+    setBranch(BranchForm);
+  };
   
   const handleEdit = (row) => {
-    setEditBranch(row);
+    setBranch(row);
     setMode("Edit");
   };
 
@@ -81,7 +87,7 @@ const BranchAdmin = () => {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "",
@@ -98,7 +104,7 @@ const BranchAdmin = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -110,7 +116,7 @@ const BranchAdmin = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -139,16 +145,17 @@ const BranchAdmin = () => {
               <li className="breadcrumb-item active">Branch</li>
             </ul>
           </div>
-          {/* <div className="col-auto float-right ml-auto">
-           {actionUser.includes("hr_manager") && <a
+          <div className="col-auto float-right ml-auto">
+           {CurrentUserRoles.includes("hr_manager") && <a
               href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#FormModal"
+              data-target="#BranchFormModal"
+              onClick={handleCreate}
             >
-              <i className="fa fa-plus"></i> Add Branch
+              <i className="fa fa-plus"></i> Create Branch
             </a>}
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="row  ">
@@ -157,7 +164,7 @@ const BranchAdmin = () => {
 
       <BranchFormModal
         mode={mode}
-        data={editBranch}
+        data={branch}
         fetchAllBranches={fetchAllBranches} />
     </>
   );

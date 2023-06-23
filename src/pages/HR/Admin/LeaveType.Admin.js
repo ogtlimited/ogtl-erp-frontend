@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import { LeaveTypeForm } from "../../../components/FormJSON/CreateLeaveTypes";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal";
 
@@ -10,9 +11,9 @@ const LeaveType = () => {
   const [AllLeaveType, setAllLeaveType] = useState([]);
   const { user } = useAppContext();
   const [mode, setMode] = useState("Create");
-  const [editLeaveType, setEditLeaveType] = useState([]);
+  const [leaveType, setLeaveType] = useState([]);
 
-  const actionUser = user?.employee_info?.roles
+  const CurrentUserRoles = user?.employee_info?.roles
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
@@ -42,8 +43,13 @@ const LeaveType = () => {
     fetchAllLeaveTypes();
   }, []);  
 
+  const handleCreate = () => {
+    setMode("Create");
+    setLeaveType(LeaveTypeForm);
+  };
+
   const handleEdit = (row) => {
-    setEditLeaveType(row);
+    setLeaveType(row);
     setMode("Edit");
   };
 
@@ -75,7 +81,7 @@ const LeaveType = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -87,7 +93,7 @@ const LeaveType = () => {
               </a>
             )}
 
-            {actionUser.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 className="dropdown-item"
                 href="#"
@@ -113,21 +119,22 @@ const LeaveType = () => {
               <li className="breadcrumb-item">
                 <Link to="#">HR</Link>
               </li>
-              <li className="breadcrumb-item active">Leave Types</li>
+              <li className="breadcrumb-item active">Leave Type</li>
             </ul>
           </div>
-          {/* <div className="col-auto float-right ml-auto">
-            {actionUser.includes("hr_manager") && (
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#LeaveTypeFormModal"
+                onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Leave Type
+                <i className="fa fa-plus"></i> Create Leave Type
               </a>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="row  ">
@@ -140,7 +147,7 @@ const LeaveType = () => {
 
       <LeaveTypeFormModal
         mode={mode}
-        data={editLeaveType}
+        data={leaveType}
         fetchAllLeaveTypes={fetchAllLeaveTypes} />
     </>
   );
