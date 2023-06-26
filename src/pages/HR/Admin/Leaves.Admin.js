@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
 import React, { useState, useEffect } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
@@ -23,7 +22,6 @@ const LeavesAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
-  const [headCount, setheadCount] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -51,30 +49,6 @@ const LeavesAdmin = () => {
     }
     return businessDays;
   }
-
-  // Head Count: Active
-  const fetchHeadCount = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/employee_head_count.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-      const resData = response?.data?.data?.head_count.active;
-
-      const activeEmployeesCount = resData;
-      setheadCount(activeEmployeesCount);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
 
   // All Leaves at HR stage - Pending
   const fetchHRLeaves = async () => {
@@ -157,7 +131,7 @@ const LeavesAdmin = () => {
     }
   };
 
-  // All Active Leaves
+  // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
     try {
       const response = await axiosInstance.get(
@@ -245,7 +219,6 @@ const LeavesAdmin = () => {
   };
 
   useEffect(() => {
-    fetchHeadCount();
     fetchHRLeaves();
     fetchHRLeaveHistory();
     fetchAllEmpOnLeave();

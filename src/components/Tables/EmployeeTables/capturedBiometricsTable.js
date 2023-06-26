@@ -1,34 +1,27 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import axiosInstance from '../../../services/api';
-import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
-import filterFactory from 'react-bootstrap-table2-filter';
-import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import female from '../../../assets/img/female_avatar.png';
-import female2 from '../../../assets/img/female_avatar2.png';
-import female3 from '../../../assets/img/female_avatar3.png';
-import male from '../../../assets/img/male_avater.png';
-import male2 from '../../../assets/img/male_avater2.png';
-import male3 from '../../../assets/img/male_avater3.png';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../../Context/AppContext';
+import React, { useState, useEffect, useCallback } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import axiosInstance from "../../../services/api";
+import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
+import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import female from "../../../assets/img/female_avatar.png";
+import female2 from "../../../assets/img/female_avatar2.png";
+import female3 from "../../../assets/img/female_avatar3.png";
+import male from "../../../assets/img/male_avater.png";
+import male2 from "../../../assets/img/male_avater2.png";
+import male3 from "../../../assets/img/male_avater3.png";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
 
 const CapturedBiometricsTable = ({
   data,
   setData,
-  defaultSorted,
-  selectedOption,
-  filters,
-  seteditData,
-  setmode,
-  loadForm,
   loading,
-  departments,
-  designations,
+  setLoading,
 
   page,
   setPage,
@@ -36,49 +29,20 @@ const CapturedBiometricsTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
-  departmentFilter,
-  setDepartmentFilter,
-  designationFilter,
-  setDesignationFilter,
-  statusFilter,
-  setStatusFilter,
-  ogidFilter,
-  setOgidFilter,
-  searchTerm,
-  setSearchTerm,
-  setLoading,
   context,
 }) => {
-
-  const status = [
-    {
-      code: 'active',
-      label: 'Active',
-    },
-    {
-      code: 'left',
-      label: 'Resigned',
-    },
-    {
-      code: 'terminated',
-      label: 'Terminated',
-    },
-  ];
-
   const navigate = useNavigate();
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = 'https://erp.outsourceglobal.com';
+  const imageUrl = "https://erp.outsourceglobal.com";
   const { setIsFromBiometrics } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
-
-  useEffect(() => {}, [filters, loadForm]);
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -93,10 +57,10 @@ const CapturedBiometricsTable = ({
 
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
@@ -126,15 +90,15 @@ const CapturedBiometricsTable = ({
 
   const handleNavigate = (row) => {
     setIsFromBiometrics(true);
-    navigate(`/dashboard/user/profile/${row._id}`);
-  }
+    navigate(`/dashboard/user/profile/${row.StaffUniqueId}`);
+  };
 
   const columns = [
     {
-      dataField: 'fullName',
-      text: 'Employee Name',
+      dataField: "FullName",
+      text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: '250px' },
+      headerStyle: { minWidth: "250px" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -143,72 +107,65 @@ const CapturedBiometricsTable = ({
               src={
                 row.image
                   ? imageUrl + row.image
-                  : row.gender === 'male'
+                  : row.Gender === "Male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
             />
           </a>
-          <Link to={`/dashboard/user/profile/${row._id}`}>
-            {value} <span>{row?.designation_name}</span>
+          <Link to={`/dashboard/user/profile/${row.StaffUniqueId}`}>
+            {value} <span>{row?.Role}</span>
           </Link>
         </h2>
       ),
     },
+    // {
+    //   dataField: 'shiftStatus',
+    //   text: 'Shift Status',
+    //   sort: true,
+    //   headerStyle: { minWidth: '120px' },
+    //   formatter: (value, row) => (
+    //     <>
+    //       {value === true ? (
+    //         <a href="" className="pos-relative">
+    //           {' '}
+    //           <span className="status-online"></span>{' '}
+    //           <span className="ml-4 d-block">On Shift</span>
+    //         </a>
+    //       ) : (
+    //         <a href="" className="pos-relative">
+    //           {' '}
+    //           <span className="status-terminated"></span>{' '}
+    //           <span className="ml-4 d-block">No Shift</span>
+    //         </a>
+    //       )}
+    //     </>
+    //   ),
+    // },
     {
-      dataField: 'shiftStatus',
-      text: 'Shift Status',
+      dataField: "StaffUniqueId",
+      text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: '120px' },
-      formatter: (value, row) => (
-        <>
-          {value === true ? (
-            <a href="" className="pos-relative">
-              {' '}
-              <span className="status-online"></span>{' '}
-              <span className="ml-4 d-block">On Shift</span>
-            </a>
-          ) : (
-            <a href="" className="pos-relative">
-              {' '}
-              <span className="status-terminated"></span>{' '}
-              <span className="ml-4 d-block">No Shift</span>
-            </a>
-          )}
-        </>
-      ),
+      headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: 'ogid',
-      text: 'Employee ID',
+      dataField: "Role",
+      text: "Role",
       sort: true,
-      headerStyle: { minWidth: '150px' },
-    },
-    {
-      dataField: 'department_name',
-      text: 'Department',
-      sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'project',
-      text: 'Campaign',
+      dataField: "Email",
+      text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: '150px' },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: 'company_email',
-      text: 'Company Email',
+      dataField: "",
+      text: "Action",
       sort: true,
-      headerStyle: { minWidth: '100px' },
-    },
-    {
-      dataField: '',
-      text: 'Action',
-      sort: true,
-      headerStyle: { minWidth: '100px', textAlign: 'left' },
+      headerStyle: { minWidth: "100px", textAlign: "left" },
       formatter: (value, row) => (
         <>
           <div className="text-center">
@@ -218,7 +175,7 @@ const CapturedBiometricsTable = ({
                 data-toggle="modal"
                 onClick={() => handleNavigate(row)}
               >
-                {row.shiftStatus === true ? 'Edit Shift' : 'Add Shift'}
+                Edit Shift
               </button>
             </div>
           </div>
@@ -226,221 +183,6 @@ const CapturedBiometricsTable = ({
       ),
     },
   ];
-
-  const MySearch = useCallback(
-    (props) => {
-      let input;
-      const handleClick = () => {
-        setPage(1);
-        setLoading(true);
-        props.onSearch(input.value);
-        const searchTerm = input.value;
-        setSearchTerm(searchTerm);
-
-        if (page === 1) {
-          axiosInstance
-            .get('/api/attendance/captured-biometrics', {
-              params: {
-                department: departmentFilter,
-                designation: designationFilter,
-                status: statusFilter,
-                ogid: ogidFilter,
-                search: searchTerm,
-                page: page,
-                limit: sizePerPage,
-              },
-            })
-            .then((e) => {        
-              const resData = e?.data?.staff?.employees;
-              let resOptions = e?.data?.staff?.pagination;
-
-              const thisPageLimit = sizePerPage;
-              const thisTotalPageSize = resOptions?.numberOfPages;
-
-              setSizePerPage(thisPageLimit);
-              setTotalPages(thisTotalPageSize);
-
-              const mapp = resData.map((emp) => {
-                return {
-                  ...emp,
-                  fullName:
-                    emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-                  designation_name: emp?.designation?.designation,
-                  department_name: emp?.department?.department,
-                  project: emp?.projectId?.project_name,
-                };
-              });
-              setData(mapp);
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-            });
-        }
-        setLoading(false);
-      };
-
-      return (
-        <div className="job-app-search">
-          <input
-            className="form-control"
-            style={{
-              backgroundColor: '#fff',
-              width: '33.5%',
-              marginRight: '20px',
-            }}
-            ref={(n) => (input = n)}
-            type="text"
-          />
-          <button className="btn btn-primary" onClick={handleClick}>
-            Search
-          </button>
-        </div>
-      );
-    },
-    [departmentFilter, designationFilter, ogidFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
-  );
-
-  const handleDepartmentFilter = (e) => {
-    setDepartmentFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get('/api/attendance/captured-biometrics', {
-        params: {
-          department: departmentFilter,
-          designation: designationFilter,
-          status: statusFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((e) => {        
-        const resData = e?.data?.staff?.employees;
-        let resOptions = e?.data?.staff?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
-
-  const handleDesignationFilter = (e) => {
-    setDesignationFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get('/api/attendance/captured-biometrics', {
-        params: {
-          department: departmentFilter,
-          designation: designationFilter,
-          status: statusFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((e) => {        
-        const resData = e?.data?.staff?.employees;
-        let resOptions = e?.data?.staff?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
-
-  const handleStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get('/api/attendance/captured-biometrics', {
-        params: {
-          department: departmentFilter,
-          designation: designationFilter,
-          status: statusFilter,
-          ogid: ogidFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((e) => {        
-        const resData = e?.data?.staff?.employees;
-        let resOptions = e?.data?.staff?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName:
-              emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-            designation_name: emp?.designation?.designation,
-            department_name: emp?.department?.department,
-            project: emp?.projectId?.project_name,
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
 
   const showNullMessage = () => {
     setTimeout(() => {
@@ -461,70 +203,12 @@ const CapturedBiometricsTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              />
-
               <ExportCSVButton
-                className="float-right btn export-csv"
+                className="float-right btn export-csv" style={{ marginBottom: 15}}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
-
-              {/* <div className="hr-filter-select">
-                <div>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDepartmentFilter(e)}
-                    defaultValue={departmentFilter}
-                    value={departmentFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Department
-                    </option>
-                    {departments.map((option, idx) => (
-                      <option key={idx}>{option.department}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDesignationFilter(e)}
-                    defaultValue={designationFilter}
-                    value={designationFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Designation
-                    </option>
-                    {designations.map((option, idx) => (
-                      <option key={idx}>{option.designation}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleStatusFilter(e)}
-                    defaultValue={statusFilter}
-                    value={statusFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Status
-                    </option>
-                    {status.map((option, index) => (
-                      <option key={index} value={option.code}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
 
               <BootstrapTable
                 {...props.baseProps}
@@ -533,10 +217,10 @@ const CapturedBiometricsTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? 'table '
+                    ? "table "
                     : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
+                    ? "table table-responsive"
+                    : "table table-responsive"
                 }
                 noDataIndication={
                   loading ? (
@@ -580,7 +264,6 @@ const CapturedBiometricsTable = ({
           )}
         </ToolkitProvider>
       )}
-      {/* <EditEmployeeModal employee={editEmployee} /> */}
     </>
   );
 };

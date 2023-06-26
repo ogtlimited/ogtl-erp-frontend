@@ -34,6 +34,8 @@ const Header = () => {
 
   const user = tokenService.getUser();
   const userOgid = user?.employee_info?.ogid;
+  
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   function playAudio() {
     audioPlayer.current.play();
@@ -124,9 +126,6 @@ const Header = () => {
               >
                 My Profile
               </Link>
-              {/* <Link className="dropdown-item" to="settings">
-                Settings
-              </Link> */}
               <a className="dropdown-item" onClick={(e) => logout(e)}>
                 Logout
               </a>
@@ -152,9 +151,6 @@ const Header = () => {
             >
               My Profile
             </Link>
-            {/* <Link className="dropdown-item" to="settings">
-              Settings
-            </Link> */}
             <a className="dropdown-item" onClick={(e) => logout(e)}>
               Logout
             </a>
@@ -162,7 +158,7 @@ const Header = () => {
         </div>
         
           
-        {user?.role?.title === 'HR Manager' || user?.role?.title === 'HR Associate' ? (
+        {CurrentUserRoles.includes("hr_manager") ? (
           <div
             className="home-notification-div"
             onClick={handleNotificationRequest}

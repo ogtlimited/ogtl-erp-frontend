@@ -49,8 +49,12 @@ const Login = () => {
             window.location.href = '/dashboard/employee-dashboard';
           })
           .catch((err) => {
-            console.log(err);
-            setErrorMsg(err + ', please contact HR');
+            setCount(() => count + 1);
+            console.log(err)
+            if (count > 2) {
+              return setErrorMsg('Unable to login. Please contact HR');
+            }
+            setErrorMsg('Unable to login. Please try again');
           })
           .finally(() => {
             setLoading(false);
@@ -106,7 +110,6 @@ const Login = () => {
             return setErrorMsg('Unable to login. Please contact HR');
           }
           setErrorMsg('Unable to login. Please try again');
-          console.log('error count', count);
         }
       })
       .finally(() => {
