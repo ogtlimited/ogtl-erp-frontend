@@ -1,17 +1,13 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
-import config from "../config.json";
-import socketIOClient from "socket.io-client";
 
 export default createBrowserHistory();
-const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
 const AppProvider = (props) => {
   const [user] = useState(tokenService.getUser());
-  const [loggedIn, setloggedIn] = useState(false);
   const [showProgress, setshowProgress] = useState({
     count: 25,
     state: false
@@ -21,18 +17,14 @@ const AppProvider = (props) => {
     msg: "",
     class: "",
   });
-  const [notifications, setNotifications] = useState([]);
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
   const [count, setCount] = useState(0);
-  const [formUpdate, setformUpdate] = useState(null);
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
   const [dropDownClicked, setDropDownClicked] = useState(false);
   
-  let socket = useRef();
-
   const status = [
     {
         _id: "active",
@@ -56,45 +48,26 @@ const AppProvider = (props) => {
   const [selectBranches, setSelectBranches] = useState([]);
   const [allLeaveTypes, setAllLeaveTypes] = useState([]);
 
-  // let socketRef;
-  //Fetching notifications
-  useEffect(() => {
-    socket.current = socketIOClient("http://localhost:3000");
-    socket.current.on("error", (error) => {
-      console.log(error);
-      // ...
-    });
-
-    socket.current.emit("notification", user?.company_email);
-    socket.current.on("messages", (data) => {
-      const newArr = data && data.map((e) => JSON.parse(e));
-      if (newArr) {
-        setNotifications((prev) => [...newArr, ...prev]);
-      }
-    });
-    return () => socket.current.close();
-  }, [user?.company_email]);
-
-  useEffect(() => {}, [showAlertMsg]);
-  useEffect(() => {}, [showProgress]);
-
-  const clearNotifications = () => {
-    if (socket) {
-      socket.current.emit("clear_notification", user?.company_email);
-    }
-  };
-
-   //TODO For Leave Application Notification (Work on this)
-   const fetchHRLeavesNotificationCount = () => {
-    axiosInstance.get('/hr-leave-applications')
+  const fetchHRLeavesNotificationCount = () => {
+    axiosInstance.get("/api/v1/hr_dashboard/leaves.json", {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+      params: {
+        page: 1,
+        limit: 1000,
+      },
+    })
       .then((res) => {
-        let resData = res?.data?.data?.application;
+        let resData = res?.data?.data?.leaves;
         const dataCount = resData.length;
         setCount(dataCount);
       })
       .catch((error) => {
         console.log(error);
-      });;
+      });
   };
 
   const handleProgress = ({count, state}) => {
@@ -149,48 +122,7 @@ const AppProvider = (props) => {
     }, 5000);
   };
 
-  const fetchTypesShift = () => {
-    return axiosInstance.get("/api/shiftType");
-  };
 
-  const combineRequest = () => {
-    return axiosInstance.get("/combine-employee-form");
-  };
-
-  //for creating employees
-  const createEmployee = () => {
-    return axiosInstance.get("/create-employee-form");
-  };
-
-  //for Job Applications
-  const createJobApplications = () => {
-    return axiosInstance.get("/api/jobApplicant");
-  };
-
-  //for creating shifts
-  const createShifts = () => {
-    return axiosInstance.get("/create-shift-form");
-  };
-
-  //create payroll
-  const createPayroll = () => {
-    return axiosInstance.get("/create-payroll-form");
-  };
-
-  //creating recruitments
-  const createRecruitmens = () => {
-    return axiosInstance.get("/create-recruitment-form");
-  };
-
-  //for anything relating to performace
-  const createPerfomance = () => {
-    return axiosInstance.get("/create-performance-form");
-  };
-
-  //for anything relating to campaign
-  const createCampaign = () => {
-    return axiosInstance.get("/create-campaign-form");
-  };
   //for anything relating to role assignment
   const createRoleAssignment = () => {
     return axiosInstance.get("/create-role-form");
@@ -373,35 +305,21 @@ const AppProvider = (props) => {
         setDropDownClicked,
 
 
-        fetchTypesShift,
         showProgress,
         uploadProgress,
         handleProgress,
-        combineRequest,
         adminDashboardData,
         count,
         setCount,
         showAlert,
         showAlertMsg,
-        setloggedIn,
-        formUpdate,
-        setformUpdate,
         isChecked,
         setIsChecked,
         isFromBiometrics,
         setIsFromBiometrics,
-        notifications,
         user,
-        clearNotifications,
         setuserToken,
-        createEmployee,
-        createShifts,
-        createPayroll,
-        createRecruitmens,
-        createPerfomance,
-        createCampaign,
         createRoleAssignment,
-        createJobApplications,
         fetchHRLeavesNotificationCount,
         status
       }}

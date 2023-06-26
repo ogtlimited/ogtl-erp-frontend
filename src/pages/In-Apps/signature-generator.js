@@ -8,10 +8,13 @@ const getIcon = (name) => <i className={"las " + name}></i>;
 const SignatureGenerator = () => {
   const [user] = useState(tokenService.getUser());
 
-  console.log("user", user)
+  console.log("user", user);
 
   const initialState = {
-    fullName: user?.employee_info?.personal_details?.first_name + " " + user?.employee_info?.personal_details?.last_name || "",
+    fullName:
+      user?.employee_info?.personal_details?.first_name +
+        " " +
+        user?.employee_info?.personal_details?.last_name || "",
     position: user?.employee_info?.designation || "",
     email: user?.employee_info?.email || "",
     phone: "",
@@ -95,17 +98,18 @@ const SignatureGenerator = () => {
         <React.Fragment>
           <Signature
             fullName={state.fullName}
-            position= <p style={{color: 'red'}}><strong>Please enter your designation</strong></p>
+            position=<p style={{ color: "red" }}>
+              <strong>Please enter your designation</strong>
+            </p>
             email={state.email}
             phone={state.phone}
           />
           <br />
-          <button className="btn btn-primary" style={{cursor: 'not-allowed'}}>
+          <button className="btn btn-primary" style={{ cursor: "not-allowed" }}>
             {state.copied ? "Copied" : "Copy to clipboard"}{" "}
             {state.copied ? getIcon("la-check") : getIcon("la-copy")}
           </button>
         </React.Fragment>
-
       );
     } else {
       return <div>Please, input your data</div>;
@@ -146,9 +150,7 @@ const SignatureGenerator = () => {
           <div className="col">
             <h3 className="page-title">Email Signature</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="#">Apps</a>
-              </li>
+              <li className="breadcrumb-item">Apps</li>
               <li className="breadcrumb-item active">Email Signature</li>
             </ul>
           </div>

@@ -13,12 +13,12 @@ const LeaveType = () => {
   const [mode, setMode] = useState("Create");
   const [leaveType, setLeaveType] = useState([]);
 
-  const CurrentUserRoles = user?.employee_info?.roles
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leave_types.json', {
+      const response = await axiosInstance.get("/api/v1/leave_types.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -41,7 +41,7 @@ const LeaveType = () => {
 
   useEffect(() => {
     fetchAllLeaveTypes();
-  }, []);  
+  }, []);
 
   const handleCreate = () => {
     setMode("Create");
@@ -116,9 +116,7 @@ const LeaveType = () => {
           <div className="col">
             <h3 className="page-title">Leaves Types</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="#">HR</Link>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Leave Type</li>
             </ul>
           </div>
@@ -138,17 +136,14 @@ const LeaveType = () => {
         </div>
       </div>
       <div className="row  ">
-
-        <UniversalTable
-          data={AllLeaveType}
-          columns={columns}
-        />
+        <UniversalTable data={AllLeaveType} columns={columns} />
       </div>
 
       <LeaveTypeFormModal
         mode={mode}
         data={leaveType}
-        fetchAllLeaveTypes={fetchAllLeaveTypes} />
+        fetchAllLeaveTypes={fetchAllLeaveTypes}
+      />
     </>
   );
 };
