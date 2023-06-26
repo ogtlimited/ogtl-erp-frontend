@@ -1,8 +1,7 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import axiosInstance from "../../../services/api";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
