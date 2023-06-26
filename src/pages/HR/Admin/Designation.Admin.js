@@ -1,13 +1,13 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import axiosInstance from '../../../services/api';
-import { useAppContext } from '../../../Context/AppContext';
-import { DesignationFormModal } from '../../../components/Modal/DesignationFormModal';
-import { DesignationForm } from '../../../components/FormJSON/CreateDesignation';
-import moment from 'moment';
-import UniversalPaginatedTable from '../../../components/Tables/UniversalPaginatedTable';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import { DesignationFormModal } from "../../../components/Modal/DesignationFormModal";
+import { DesignationForm } from "../../../components/FormJSON/CreateDesignation";
+import moment from "moment";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
 const Designations = () => {
   const { user } = useAppContext();
@@ -19,45 +19,45 @@ const Designations = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
-  
-  const CurrentUserRoles = user?.employee_info?.roles
 
- // All Designations:
- const fetchDesignations = useCallback(async () => {
-  try {
-    const response = await axiosInstance.get('/api/v1/designations.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      params: {
-        pages: page,
-        limit: sizePerPage,
-      },
-    });
-    const resData = response?.data?.data?.designations;
-    const totalPages = response?.data?.data?.pages;
-    
-    const thisPageLimit = sizePerPage;
-    const thisTotalPageSize = totalPages;
+  const CurrentUserRoles = user?.employee_info?.roles;
 
-    setSizePerPage(thisPageLimit);
-    setTotalPages(thisTotalPageSize);
+  // All Designations:
+  const fetchDesignations = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/designations.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: page,
+          limit: sizePerPage,
+        },
+      });
+      const resData = response?.data?.data?.designations;
+      const totalPages = response?.data?.data?.pages;
 
-    const formattedDesignation = resData.map((e, index) => ({
-      ...e,
-      // index: index + 1,
-      created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
-    }));
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
 
-    setDesignations(formattedDesignation);
-    setLoading(false);
-  } catch (error) {
-    console.log("Get All Designations error:", error);
-    setLoading(false);
-  }
-}, [page, sizePerPage]);
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
+
+      const formattedDesignation = resData.map((e, index) => ({
+        ...e,
+        // index: index + 1,
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+      }));
+
+      setDesignations(formattedDesignation);
+      setLoading(false);
+    } catch (error) {
+      console.log("Get All Designations error:", error);
+      setLoading(false);
+    }
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchDesignations();
@@ -142,9 +142,7 @@ const Designations = () => {
           <div className="col">
             <h3 className="page-title">Designations</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="#">HR</Link>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Designations</li>
             </ul>
           </div>
@@ -170,7 +168,6 @@ const Designations = () => {
           columns={columns}
           loading={loading}
           setLoading={setLoading}
-          
           page={page}
           setPage={setPage}
           sizePerPage={sizePerPage}
@@ -185,7 +182,6 @@ const Designations = () => {
         data={designation}
         fetchDesignations={fetchDesignations}
       />
-
     </>
   );
 };

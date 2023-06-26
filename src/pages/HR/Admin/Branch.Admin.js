@@ -46,13 +46,13 @@ const BranchAdmin = () => {
 
   useEffect(() => {
     fetchAllBranches();
-  }, []);  
+  }, []);
 
   const handleCreate = () => {
     setMode("Create");
     setBranch(BranchForm);
   };
-  
+
   const handleEdit = (row) => {
     setBranch(row);
     setMode("Edit");
@@ -139,22 +139,22 @@ const BranchAdmin = () => {
           <div className="col">
             <h3 className="page-title">Branch</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="#">HR</Link>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Branch</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-           {CurrentUserRoles.includes("hr_manager") && <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#BranchFormModal"
-              onClick={handleCreate}
-            >
-              <i className="fa fa-plus"></i> Create Branch
-            </a>}
+            {CurrentUserRoles.includes("hr_manager") && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#BranchFormModal"
+                onClick={handleCreate}
+              >
+                <i className="fa fa-plus"></i> Create Branch
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -165,7 +165,8 @@ const BranchAdmin = () => {
       <BranchFormModal
         mode={mode}
         data={branch}
-        fetchAllBranches={fetchAllBranches} />
+        fetchAllBranches={fetchAllBranches}
+      />
     </>
   );
 };

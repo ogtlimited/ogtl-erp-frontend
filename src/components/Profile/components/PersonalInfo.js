@@ -31,7 +31,7 @@ const PersonalInfo = ({
 
           <ul className="personal-info">
             <li>
-              <div className="title">Date of birth</div>
+              <div className="title">Date of Birth</div>
               <div className="text">
                 {personalDetails?.employee?.personal_detail?.DOB
                   ? moment(

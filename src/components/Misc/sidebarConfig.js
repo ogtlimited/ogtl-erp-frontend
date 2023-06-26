@@ -182,22 +182,6 @@ const sidebarConfig = [
             title: 'Leave Types',
             path: PATH_DASHBOARD.hr.leaveType,
           },
-          // {
-          //   canView: 'HR',
-          //   title: 'Leave Approval',
-          //   path: PATH_DASHBOARD.hr.leaveApproval,
-          // },
-          // { canView: 'HR', title: 'Shifts', path: PATH_DASHBOARD.hr.shifts },
-          // {
-          //   canView: 'HR',
-          //   title: 'Shift Assignments',
-          //   path: PATH_DASHBOARD.hr.shiftAssignment,
-          // },
-          // {
-          //   canView: 'All',
-          //   title: 'Shift Request',
-          //   path: PATH_DASHBOARD.hr.shiftRequest,
-          // },
         ],
       },
       {
@@ -206,39 +190,13 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
         children: [
-          // {
-          //   canView: 'Super',
-          //   title: 'Public Holiday',
-          //   path: PATH_DASHBOARD.payroll.publicholiday,
-          // },
           {
             canView: 'Super',
             title: 'Employee Salary',
             path: PATH_DASHBOARD.payroll.salary,
           },
-          // {
-          //   canView: 'Super',
-          //   title: 'Payroll Batches',
-          //   path: PATH_DASHBOARD.payroll.payrollBatches,
-          // },
-          // {
-          //   canView: 'Super',
-          //   title: 'Deductions',
-          //   path: PATH_DASHBOARD.payroll.deductions,
-          // },
-          // {
-          //   canView: 'Super',
-          //   title: 'Archive',
-          //   path: PATH_DASHBOARD.payroll.archive,
-          // },
-          // {
-          //   canView: 'Super',
-          //   title: 'Payroll Notes',
-          //   path: PATH_DASHBOARD.payroll.payrollNotes,
-          // },
         ],
       },
-
       {
         canView: 'HR',
         title: 'Reports',
@@ -267,55 +225,35 @@ const sidebarConfig = [
           // },
         ],
       },
+      {
+        canView: 'HR',
+        title: 'Recruitment',
+        path: PATH_DASHBOARD.recruitment.root,
+        icon: ICONS.recruitment,
+        children: [
+          {
+            canView: 'HR',
+            title: 'Job Opening',
+            path: PATH_DASHBOARD.recruitment.jobOpening,
+          },
+          {
+            canView: 'HR',
+            title: 'Job Applicants',
+            path: PATH_DASHBOARD.recruitment.jobApplicants,
+          },
+          // {
+          //   canView: 'HR',
+          //   title: 'Academy Applicants',
+          //   path: PATH_DASHBOARD.recruitment.academyApplicants,
+          // },
+          // {
+          //   canView: 'HR',
+          //   title: 'Recruitment Result',
+          //   path: PATH_DASHBOARD.recruitment.aptitudeTests,
+          // },
+        ],
+      },
 
-      // {
-      //   canView: 'HR',
-      //   title: 'Recruitment',
-      //   path: PATH_DASHBOARD.recruitment.root,
-      //   icon: ICONS.recruitment,
-      //   children: [
-      //     {
-      //       canView: 'HR',
-      //       title: 'Job Opening',
-      //       path: PATH_DASHBOARD.recruitment.jobOpening,
-      //     },
-      //     {
-      //       canView: 'HR',
-      //       title: 'Job Applicants',
-      //       path: PATH_DASHBOARD.recruitment.jobApplicants,
-      //     },
-      //     {
-      //       canView: 'HR',
-      //       title: 'Academy Applicants',
-      //       path: PATH_DASHBOARD.recruitment.academyApplicants,
-      //     },
-      //     {
-      //       canView: 'HR',
-      //       title: 'Recruitment Result',
-      //       path: PATH_DASHBOARD.recruitment.aptitudeTests,
-      //     },
-      //     {
-      //       canView: 'HR',
-      //       title: 'Job Offer',
-      //       path: PATH_DASHBOARD.recruitment.jobOffer,
-      //     },
-      //     {
-      //       canView: 'Facility',
-      //       title: 'Interview Schedule List',
-      //       path: PATH_DASHBOARD.recruitment.interviewees,
-      //     },
-      //     // {
-      //     //   canView: 'HR',
-      //     //   title: 'Shadowing',
-      //     //   path: PATH_DASHBOARD.recruitment.shadowing,
-      //     // },
-      //     // {
-      //     //   canView: 'HR',
-      //     //   title: 'Orientation And Training',
-      //     //   path: PATH_DASHBOARD.recruitment.orientationAndTraining,
-      //     // },
-      //   ],
-      // },
       // {
       //   canView: 'HR',
       //   title: 'Performance',
@@ -373,30 +311,25 @@ const sidebarConfig = [
     ],
   },
 
-  // {
-  //   subheader: 'Leadership',
-  //   canView: 'All',
-  //   items: [
-  //     {
-  //       canView: 'All',
-  //       title: 'Subordinates',
-  //       path: PATH_DASHBOARD.leadership.supervisor,
-  //       icon: ICONS.leadership,
-  //     },
-  //     {
-  //       canView: 'All',
-  //       title: 'Campaign Schedule',
-  //       path: PATH_DASHBOARD.leadership.campaignSchedule,
-  //       icon: ICONS.schedule,
-  //     },
-  //     // {
-  //     //   canView: 'All',
-  //     //   title: 'Attendance',
-  //     //   path: PATH_DASHBOARD.leadership.attendanceBySupervisor,
-  //     //   icon: ICONS.attendance,
-  //     // },
-  //   ],
-  // },
+
+  {
+    subheader: 'Leadership',
+    canView: 'All',
+    items: [
+      {
+        canView: 'All',
+        title: 'Subordinates',
+        path: PATH_DASHBOARD.leadership.supervisor,
+        icon: ICONS.leadership,
+      },
+      {
+        canView: 'All',
+        title: 'Campaign Schedule',
+        path: PATH_DASHBOARD.leadership.campaignSchedule,
+        icon: ICONS.schedule,
+      },
+    ],
+  },
 
   // {
   //   subheader: 'Operations',

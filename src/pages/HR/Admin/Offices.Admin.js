@@ -29,21 +29,18 @@ const Offices = () => {
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/offices.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            office_type: "campaign",
-            pages: CampaignPage,
-            limit: CampaignSizePerPage,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "campaign",
+          pages: CampaignPage,
+          limit: CampaignSizePerPage,
+        },
+      });
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
 
@@ -66,25 +63,22 @@ const Offices = () => {
       setLoading(false);
     }
   }, [CampaignPage, CampaignSizePerPage]);
- 
+
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/offices.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            office_type: "department",
-            pages: DepartmentPage,
-            limit: DepartmentSizePerPage,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "department",
+          pages: DepartmentPage,
+          limit: DepartmentSizePerPage,
+        },
+      });
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
 
@@ -125,7 +119,7 @@ const Offices = () => {
 
   const handleCreate = () => {
     setMode("Create");
-    setOffice(OfficeForm)
+    setOffice(OfficeForm);
   };
 
   const handleEdit = (row) => {
@@ -202,9 +196,7 @@ const Offices = () => {
           <div className="col">
             <h3 className="page-title">Offices</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="#">HR</a>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Office</li>
             </ul>
           </div>
@@ -262,7 +254,6 @@ const Offices = () => {
               data={campaigns}
               loading={loading}
               setLoading={setLoading}
-              
               page={CampaignPage}
               setPage={setCampaignPage}
               sizePerPage={CampaignSizePerPage}
@@ -278,7 +269,6 @@ const Offices = () => {
               data={departments}
               loading={loading}
               setLoading={setLoading}
-              
               page={DepartmentPage}
               setPage={setDepartmentPage}
               sizePerPage={DepartmentSizePerPage}
