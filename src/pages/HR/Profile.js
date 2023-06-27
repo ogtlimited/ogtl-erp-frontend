@@ -10,7 +10,7 @@ import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const { dropDownClicked, setDropDownClicked } = useAppContext();
+  const { dropDownClicked, setDropDownClicked, user } = useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
@@ -112,7 +112,8 @@ const Profile = () => {
                           {userData?.employee?.full_name}{" "}
                         </h3>
                         <h6 className="text-muted">
-                          {userData?.employee?.designation || "Not Available"}
+                          {userData?.employee?.designation?.title ||
+                            "Not Available"}
                         </h6>
                         <small className="text-muted">
                           {userData?.office?.title || "Not Available"}
@@ -141,6 +142,17 @@ const Profile = () => {
                         </li>
 
                         <li>
+                          <div className="title">Birthday:</div>
+                          <div className="text">
+                            {userData?.employee?.personal_detail?.DOB
+                              ? moment(
+                                  userData?.employee?.personal_detail?.DOB
+                                ).format("Do MMMM, YYYY")
+                              : "Not Available"}
+                          </div>
+                        </li>
+
+                        <li>
                           <div className="title">Email:</div>
                           <div className="text">
                             {userData?.employee?.email || "Not Available"}
@@ -161,13 +173,7 @@ const Profile = () => {
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {userData?.employee?.leaveCount || "Not Available"}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="title">Branch:</div>
-                          <div className="text">
-                            {userData?.employee?.branch?.branch ||
+                            {user?.employee_info?.leave_count ||
                               "Not Available"}
                           </div>
                         </li>

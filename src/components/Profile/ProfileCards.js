@@ -2,8 +2,9 @@
 import "./profileCard.css";
 import React, { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import ContactDetails from "./components/ContactDetails";
 import PersonalInfo from "./components/PersonalInfo";
+import EmployeeInfo from "./components/EmployeeInfo";
+import ContactDetails from "./components/ContactDetails";
 import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
 import { EditEmployeeShiftModal } from "../Modal/EditEmployeeShiftModal";
@@ -106,6 +107,15 @@ const ProfileCards = ({
             </div>
 
             <div className="col-md-6 d-flex">
+              <EmployeeInfo
+                employeeInfo={userData}
+                fetchEmployeeProfile={fetchEmployeeProfile}
+              />
+            </div>
+          </div>
+
+          {/* <div className="row">
+            <div className="col-md-6 d-flex">
               <ContactDetails
                 handleChange={handleChange}
                 contactDetails={userData}
@@ -115,7 +125,7 @@ const ProfileCards = ({
                 setFormValue={setFormValue}
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div
