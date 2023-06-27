@@ -173,7 +173,7 @@ const Profile = () => {
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {user?.employee_info?.leave_count ||
+                            {userData?.employee?.leave_count ||
                               "Not Available"}
                           </div>
                         </li>

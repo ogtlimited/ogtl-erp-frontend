@@ -40,6 +40,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
       "operation_office_id": employeeInfo?.office?.id,
       "hr_designation_id": employeeInfo?.employee?.designation?.id,
       "remote": employeeInfo?.employee?.remote,
+      "leave_count": employeeInfo?.employee?.leave_count,
     }
 
     setLoading(true);
@@ -238,6 +239,27 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                           })
                         }
                         style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="leave_count">Leave Count</label>
+                      <input
+                        name="leave_count"
+                        type="number"
+                        className="form-control"
+                        value={employeeInfo?.employee?.leave_count}
+                        onChange={(e) =>
+                          setEmployeeInfo({
+                            ...employeeInfo,
+                            employee: {
+                              ...employeeInfo.employee,
+                              leave_count: e?.target?.value,
+                            },
+                          })
+                        }
                       />
                     </div>
                   </div>
