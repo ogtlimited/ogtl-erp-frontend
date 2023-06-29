@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
+import { ReportToModal } from "../../components/Modal/ReportToModal";
 import ProfileCards from "../../components/Profile/ProfileCards";
 import axiosInstance from "../../services/api";
 import moment from "moment";
@@ -16,6 +17,8 @@ const Profile = () => {
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [userID, setUserId] = useState("");
   const [mode, setMode] = useState("");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const fetchEmployeeShift = async () => {
     try {
@@ -173,8 +176,7 @@ const Profile = () => {
                         <li>
                           <div className="title">Leave Count:</div>
                           <div className="text">
-                            {userData?.employee?.leave_count ||
-                              "Not Available"}
+                            {userData?.employee?.leave_count || "Not Available"}
                           </div>
                         </li>
                         <li>
@@ -183,6 +185,15 @@ const Profile = () => {
                             <a href={userData?.employee?.reports_to?.ogid}>
                               {userData?.employee?.reports_to?.full_name ||
                                 "Not Available"}
+                              {CurrentUserRoles.includes("hr_manager") && (
+                                <a
+                                  className="edit-icon"
+                                  data-toggle="modal"
+                                  data-target="#ReportToModal"
+                                >
+                                  <i className="fa fa-pencil"></i>
+                                </a>
+                              )}
                             </a>
                           </div>
                         </li>
@@ -207,6 +218,11 @@ const Profile = () => {
         userID={userID}
         userOgid={id}
         fetchEmployeeShift={fetchEmployeeShift}
+        fetchEmployeeProfile={fetchEmployeeProfile}
+      />
+
+      <ReportToModal
+        data={userData}
         fetchEmployeeProfile={fetchEmployeeProfile}
       />
     </>

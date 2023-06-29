@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import PersonalInfo from "./components/PersonalInfo";
 import EmployeeInfo from "./components/EmployeeInfo";
-import ContactDetails from "./components/ContactDetails";
+// import ContactDetails from "./components/ContactDetails";
 import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
 import { EditEmployeeShiftModal } from "../Modal/EditEmployeeShiftModal";
@@ -46,10 +46,6 @@ const ProfileCards = ({
     content: () => BackVirtualIDRef.current,
   });
 
-  const handleChange = (type) => {
-    setFormValue(null);
-    setformType(type);
-  };
 
   useEffect(() => {
     setemployeeDetails(userData?.employee);

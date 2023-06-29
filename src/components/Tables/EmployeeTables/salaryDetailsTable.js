@@ -170,7 +170,6 @@ const SalaryDetailsTable = ({
           )}
         </ToolkitProvider>
       )}
-      {/* <EditEmployeeModal employee={editEmployee} /> */}
     </>
   );
 };

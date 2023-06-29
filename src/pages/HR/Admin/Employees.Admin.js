@@ -35,7 +35,6 @@ const AllEmployeesAdmin = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        
         params: {
           page: page,
           limit: sizePerPage,

@@ -1,109 +1,28 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { salaryAssignmentFormJson } from "../../components/FormJSON/payroll/salary-assignments";
-import { salaryComponentsFormJson } from "../../components/FormJSON/payroll/salary-component";
-import { salarySettingsFormJson } from "../../components/FormJSON/payroll/salary-settings";
-import { salaryStructureFormJson } from "../../components/FormJSON/payroll/salary-structure";
-import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
-import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
-import FormModal from "../../components/Modal/Modal";
-import SalaryDetails from "../../components/payroll-tabs/SalaryDetails";
-import SalaryHistory from "../../components/payroll-tabs/salary-history";
-import SalaryAssignment from "../../components/payroll-tabs/salary-assignment";
-import SalaryComponents from "../../components/payroll-tabs/salary-components";
-import SalarySettings from "../../components/payroll-tabs/salary-settings";
-import SalaryStructure from "../../components/payroll-tabs/salary-structure";
-import Deductions from "../../components/payroll-tabs/salary-deductions";
-import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
+import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import axios from "axios"
+import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
+import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
+import { BranchFormModal } from "../../components/Modal/BranchFormModal";
 
 const EmployeeSalary = () => {
-    const [formType, setformType] = useState("");
-    const [template, settemplate] = useState(salaryComponentsFormJson);
-    const [formValue, setformValue] = useState({});
-    const [submitted, setsubmitted] = useState(false);
-    const [path, setpath] = useState("/personal-details");
-    const [editData, seteditData] = useState({});
-    const [data, setData] = useState([]);
-    const [loadSelect, setloadSelect] = useState(false);
-    const { createPayroll } = useAppContext();
+  const { user } = useAppContext();
+  const [AllSalaries, setAllSalaries] = useState([]);
+  const [toggleModal, settoggleModal] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
-    const [AllSalaries, setAllSalaries] = useState([])
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(25);
+  const [totalPages, setTotalPages] = useState("");
 
-    const [page, setPage] = useState(1);
-    const [sizePerPage, setSizePerPage] = useState(25);
-    const [totalPages, setTotalPages] = useState('');
-  
-    useEffect(() => {
-      if (formType === "components") {
-        settemplate(salaryComponentsFormJson);
-      } else if (formType === "structure") {
-        settemplate(salaryStructureFormJson);
-      } else if (formType === "assignment") {
-        settemplate(salaryAssignmentFormJson);
-      } else if (formType === "settings") {
-        settemplate(salarySettingsFormJson);
-      } else if (formType === "deductions") {
-        settemplate(salaryDeductionsFormJson);
-      } else if (formType === "deductiontypes") {
-        settemplate(salaryDeductionTypesFormJson);
-      }
-    }, [formType, template]);
-  
-    const fetchedCombineRequest = useCallback(() => {
-      createPayroll().then((res) => {
-        const { departments, projects } = res.data.createPayrollForm;
-        const departmentsOpts = departments?.map((e) => {
-          return {
-            label: e.department,
-            value: e._id,
-          };
-        });
-        const projectsOpts = projects?.map((e) => {
-          return {
-            label: e.project_name,
-            value: e._id,
-          };
-        });
-        const finalForm = template.Fields.map((field) => {
-          if (field.name === "departmentId") {
-            field.options = departmentsOpts;
-            return field;
-          } else if (field.name === "projectId") {
-            field.options = projectsOpts;
-            return field;
-          }
-          return field;
-        });
-        settemplate({
-          title: template.title,
-          Fields: finalForm,
-        });
-        if (template !== null) {
-          setloadSelect(true);
-        }
-      });
-    }, [template, createPayroll, loadSelect]);
-  
-    useEffect(() => {
-      fetchedCombineRequest();
-    }, []);
-  
-    const fetchSalaryStructures = () => {
-      axiosInstance
-        .get("/api/salary-structure")
-        .then((res) => {
-          setData(res.data.data);
-        })
-        .catch((error) => {
-          console.log(error?.response);
-        });
-    };
-    
-    const fetchAllSalaries = useCallback(() => {
-      axiosInstance.get("/api/v1/employee_salaries.json", {
+  const CurrentUserRoles = user?.employee_info?.roles;
+
+  const fetchAllSalaries = useCallback(() => {
+    axiosInstance
+      .get("/api/v1/employee_salaries.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -114,45 +33,129 @@ const EmployeeSalary = () => {
           limit: sizePerPage,
         },
       })
-        .then((res) => {
-          const AllEmployeeSalaries = res?.data?.data?.salaries
-          console.log("All Salaries", AllEmployeeSalaries)
+      .then((res) => {
+        const AllEmployeeSalaries = res?.data?.data?.salaries;
 
-          const thisPageLimit = sizePerPage;
-          const thisTotalPageSize = 20;
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = 20;
 
-          setSizePerPage(thisPageLimit);
-          setTotalPages(thisTotalPageSize);
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
 
-          const formattedData = AllEmployeeSalaries?.map((e) => ({
-            employee: e?.first_name + " " + e?.last_name,
-            housing: e?.salary?.housing,
-            medical: e?.salary?.medical,
-            netPay: e?.salary?.net_pay,
-            monthlySalary: e?.salary?.monthly_salary,
-            monthlyIncomeTax: e?.salary?.monthly_income_tax,
-            monthlyEmployeePension: e?.salary?.monthly_pension,
-            ogid: e?.ogid,
-            otherAllowances: e?.salary?.other_allowances,
-            transport: e?.salary?.transport,
-            basic: e?.salary?.basic,
-          }))
+        const formattedData = AllEmployeeSalaries?.map((e) => ({
+          ...e,
+          employee: e?.first_name + " " + e?.last_name,
+          housing: e?.salary?.housing,
+          medical: e?.salary?.medical,
+          netPay: e?.salary?.net_pay,
+          monthlySalary: e?.salary?.monthly_salary,
+          monthlyIncomeTax: e?.salary?.monthly_income_tax,
+          monthlyEmployeePension: e?.salary?.monthly_pension,
+          otherAllowances: e?.salary?.other_allowances,
+          transport: e?.salary?.transport,
+          basic: e?.salary?.basic,
+        }));
 
-          console.log("Formatted Salary Data", formattedData)
-          setAllSalaries(formattedData)
+        setAllSalaries(formattedData);
+        console.log("All Salaries:", formattedData);
+      })
+      .catch((error) => {
+        console.log("All Salaries Error:", error?.response);
+      });
+  }, [page, sizePerPage]);
 
-        })
-        .catch((error) => {
-          console.log("All Salaries Error:", error?.response);
-        });
-    }, [page, sizePerPage]);
+  useEffect(() => {
+    fetchAllSalaries();
+  }, [fetchAllSalaries]);
 
-    useEffect(() => {
-      fetchSalaryStructures();
-      fetchAllSalaries();
-    }, [fetchAllSalaries]);
+  const columns = [
+    {
+      dataField: "employee",
+      text: "Employee",
+      sort: true,
+      headerStyle: { minWidth: "250px" },
+    },
+    {
+      dataField: "ogid",
+      text: "Employee ID",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "basic",
+      text: "Basic",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "medical",
+      text: "Medical",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "housing",
+      text: "Housing",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "transport",
+      text: "Transport",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "otherAllowances",
+      text: "Other Allowance",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "monthlySalary",
+      text: "Monthly Salary",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "netPay",
+      text: "Net Pay",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "monthlyIncomeTax",
+      text: "Monthly IncomeTax",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { minWidth: "150px" },
+    //   csvExport: false,
+    //   formatter: (value, row) => (
+    //     <Link
+    //       className="btn btn-sm btn-primary"
+    //       to={{
+    //         pathname: `/dashboard/payroll/salary-breakdown/${row?.employeeId}`,
+    //         state: { employee: row?.employeeId },
+    //       }}
+    //     >
+    //       View
+    //     </Link>
+    //   ),
+    // },
+  ];
 
-  
   return (
     <>
       <div className="page-header">
@@ -166,39 +169,26 @@ const EmployeeSalary = () => {
               <li className="breadcrumb-item active">Salary</li>
             </ul>
           </div>
-        </div>
-      </div>
-      <div className="page-menu">
-        <div className="row">
-          <div className="col-sm-12">
-            <ul className="nav nav-tabs nav-tabs-bottom">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  data-toggle="tab"
-                  href="#tab_salaries"
-                >
-                  Salary
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_settings">
-                  Salary Settings
-                </a>
-              </li>
-            </ul>
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserRoles.includes("hr_manager") && (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#EmployeeSalaryUploadModal"
+                onClick={() => settoggleModal(true)}
+              >
+                <i className="fa fa-plus"></i> Upload Salaries
+              </a>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="tab-content">
-        <SalaryDetails
-          setformType={setformType}
-          submitted={submitted}
-          formValue={formValue}
-          loadSelect={loadSelect}
-          AllSalaries={AllSalaries}
-          
+      <div className="row  ">
+        <SalaryDetailsTable
+          data={AllSalaries}
+          columns={columns}
           page={page}
           setPage={setPage}
           sizePerPage={sizePerPage}
@@ -206,15 +196,19 @@ const EmployeeSalary = () => {
           totalPages={totalPages}
           setTotalPages={setTotalPages}
         />
-
-        <SalarySettings
-          setformType={setformType}
-          submitted={submitted}
-          formValue={formValue}
-          loadSelect={loadSelect}
-          setsubmitted={setsubmitted}
-        />
       </div>
+
+      {toggleModal && (
+        <div>
+          <EmployeeSalaryUpload
+            settoggleModal={settoggleModal}
+            title="Upload Employee Salaries"
+            url="api/recruitment-result/bulk-upload"
+            setUploadSuccess={setUploadSuccess}
+            fetchAllSalaries={fetchAllSalaries}
+          />
+        </div>
+      )}
     </>
   );
 };
