@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axiosInstance from '../../../services/api';
-import LeadersTable from '../../../components/Tables/EmployeeTables/leadersTable';
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../../services/api";
+import LeadersTable from "../../../components/Tables/EmployeeTables/leadersTable";
 
 const LeadershipAdmin = () => {
   const [allLeaders, setAllLeaders] = useState([]);
@@ -10,8 +9,8 @@ const LeadershipAdmin = () => {
   // All Leaders:
   const fetchAllLeaders = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/leaders.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/leaders.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
@@ -23,7 +22,7 @@ const LeadershipAdmin = () => {
       const mapp = resData.map((e) => {
         return {
           ...e,
-          fullName: e?.first_name + ' ' + e?.last_name,
+          fullName: e?.first_name + " " + e?.last_name,
         };
       });
 
@@ -36,7 +35,7 @@ const LeadershipAdmin = () => {
   };
 
   useEffect(() => {
-    fetchAllLeaders()
+    fetchAllLeaders();
   }, []);
 
   useEffect(() => {
@@ -45,17 +44,19 @@ const LeadershipAdmin = () => {
     }, 10000);
   }, []);
 
- 
   return (
     <>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaders <span style={{fontSize: '25px', color: '#999'}}>(Supervisors & Team leads)</span></h3>
+            <h3 className="page-title">
+              Leaders{" "}
+              <span style={{ fontSize: "25px", color: "#999" }}>
+                (Supervisors & Team leads)
+              </span>
+            </h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="#">HR</Link>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Leadership</li>
             </ul>
           </div>
@@ -68,7 +69,6 @@ const LeadershipAdmin = () => {
         loading={loading}
         setLoading={setLoading}
       />
-
     </>
   );
 };
