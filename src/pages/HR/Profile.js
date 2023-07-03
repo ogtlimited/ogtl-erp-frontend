@@ -182,19 +182,22 @@ const Profile = () => {
                         <li>
                           <div className="title">Reports to:</div>
                           <div className="text">
-                            <a href={userData?.employee?.reports_to?.ogid}>
+                            <a
+                              href={userData?.employee?.reports_to?.ogid}
+                              className="report-to-link"
+                            >
                               {userData?.employee?.reports_to?.full_name ||
                                 "Not Available"}
-                              {CurrentUserRoles.includes("hr_manager") && (
-                                <a
-                                  className="edit-icon"
-                                  data-toggle="modal"
-                                  data-target="#ReportToModal"
-                                >
-                                  <i className="fa fa-pencil"></i>
-                                </a>
-                              )}
                             </a>
+                            {CurrentUserRoles.includes("hr_manager") && (
+                              <a
+                                className="edit-icon"
+                                data-toggle="modal"
+                                data-target="#ReportToModal"
+                              >
+                                <i className="fa fa-pencil"></i>
+                              </a>
+                            )}
                           </div>
                         </li>
                       </ul>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import welcome from "../../../assets/img/welcome.png";
 import { useAppContext } from "../../../Context/AppContext";
-import axiosInstance from "../../../services/api";
 import axios from "axios";
 import moment from "moment";
 
@@ -77,7 +76,7 @@ const EmployeeUser = () => {
                             <i className="fa fa-clock"></i>
                           </div>
                           <div className="dash-card-content">
-                            {user?.employee_info?.shifts ? <p>
+                            {user?.employee_info?.shifts.length ? <p>
                               Your shift starts at{" "}
                               <strong>{start} </strong>and
                               ends at <strong>{end}</strong>{" "}
