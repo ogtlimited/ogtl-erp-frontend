@@ -56,7 +56,7 @@ const LeadersTable = ({
       dataField: 'fullName',
       text: 'Employee Name',
       sort: true,
-      headerStyle: { minWidth: '250px' },
+      headerStyle: { minWidth: '300px' },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -90,12 +90,12 @@ const LeadersTable = ({
       headerStyle: { minWidth: '150px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
-    {
-      dataField: 'designation',
-      text: 'Designation',
-      sort: true,
-      headerStyle: { minWidth: '150px' },
-    },
+    // {
+    //   dataField: 'designation',
+    //   text: 'Designation',
+    //   sort: true,
+    //   headerStyle: { minWidth: '250px' },
+    // },
     {
       dataField: 'email',
       text: 'Company Email',
