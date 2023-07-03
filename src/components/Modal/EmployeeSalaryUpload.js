@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axiosInstance from "../../services/api";
 import Papa from "papaparse";
 import helper from "../../services/helper";
@@ -8,6 +8,7 @@ const EmployeeSalaryUpload = ({
   settoggleModal,
   title,
   url,
+  uploadSuccess,
   setUploadSuccess,
   fetchAllSalaries,
 }) => {
@@ -20,6 +21,7 @@ const EmployeeSalaryUpload = ({
   const [data, setData] = useState([]);
   const [path, setPath] = useState(url);
 
+  // eslint-disable-next-line no-unused-vars
   const updateState = (path, msg) => {
     setPath(path);
     setUploadState(msg);
@@ -64,7 +66,7 @@ const EmployeeSalaryUpload = ({
   const uploadData = () => {
     setLoading(true);
     let obj = {};
-    if (path === "api/recruitment-result/bulk-upload") {
+    if (path === "api/v1/employee_salaries.json") {
       const formatted = data.map((e) => {
         return {
           ogid: e["OGID"],
@@ -72,32 +74,37 @@ const EmployeeSalaryUpload = ({
         };
       });
 
-      console.log("This is the formatted data:", formatted);
-
       obj = {
-        data: formatted,
+        payload: formatted,
       };
     }
 
     console.log("This is the data obj:", obj);
 
-    // axiosInstance
-    //   .post(path, obj.data)
-    //   .then((res) => {
-    //     showAlert(true, 'Data successfully uploaded', 'alert alert-success');
-    //     settoggleModal(false);
-    //     setLoading(false);
-    //     fetchAllSalaries();
-    //     buttonRef.click();
-    //     setUploadSuccess(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     showAlert(true, err?.response?.data?.message, 'alert alert-danger');
-    //     setLoading(false);
-    //     buttonRef.click();
-    //     settoggleModal(false);
-    //   });
+    axiosInstance
+      .post(path, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: obj.payload
+      })
+      .then((res) => {
+        showAlert(true, 'Salaries successfully uploaded', 'alert alert-success');
+        settoggleModal(false);
+        setLoading(false);
+        fetchAllSalaries();
+        buttonRef.click();
+        setUploadSuccess(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        showAlert(true, err?.response?.data?.errors, 'alert alert-danger');
+        setLoading(false);
+        buttonRef.click();
+        settoggleModal(false);
+      });
   };
 
   return (
@@ -141,11 +148,13 @@ const EmployeeSalaryUpload = ({
                       accept=".csv"
                       onChange={(e) => onFileUpload(e)}
                     />
-                    <i
-                      style={{ fontSize: "20px" }}
-                      className="fa fa-cloud-upload pr-4"
-                    ></i>
-                    Click to {uploadState}
+                    {!fileName && <div>
+                      <i
+                        style={{ fontSize: "20px" }}
+                        className="fa fa-cloud-upload pr-4"
+                      ></i>
+                      Click to {uploadState}
+                    </div>}
                     <p className="pt-3">{fileName}</p>
                     {invalid ? (
                       <small className="pt-3 text-danger">

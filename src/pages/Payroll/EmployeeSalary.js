@@ -6,7 +6,6 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
-import { BranchFormModal } from "../../components/Modal/BranchFormModal";
 
 const EmployeeSalary = () => {
   const { user } = useAppContext();
@@ -35,9 +34,10 @@ const EmployeeSalary = () => {
       })
       .then((res) => {
         const AllEmployeeSalaries = res?.data?.data?.salaries;
+        const totalPages = res?.data?.data?.pages;
 
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = 20;
+        const thisTotalPageSize = totalPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -57,7 +57,6 @@ const EmployeeSalary = () => {
         }));
 
         setAllSalaries(formattedData);
-        console.log("All Salaries:", formattedData);
       })
       .catch((error) => {
         console.log("All Salaries Error:", error?.response);
@@ -124,15 +123,22 @@ const EmployeeSalary = () => {
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: "netPay",
-      text: "Net Pay",
+      dataField: "monthlyIncomeTax",
+      text: "Monthly Income Tax",
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
-      dataField: "monthlyIncomeTax",
-      text: "Monthly IncomeTax",
+      dataField: "monthlyEmployeePension",
+      text: "Monthly Pension",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+    },
+    {
+      dataField: "netPay",
+      text: "Net Pay",
       sort: true,
       headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
@@ -203,7 +209,8 @@ const EmployeeSalary = () => {
           <EmployeeSalaryUpload
             settoggleModal={settoggleModal}
             title="Upload Employee Salaries"
-            url="api/recruitment-result/bulk-upload"
+            url="api/v1/employee_salaries.json"
+            uploadSuccess={uploadSuccess}
             setUploadSuccess={setUploadSuccess}
             fetchAllSalaries={fetchAllSalaries}
           />

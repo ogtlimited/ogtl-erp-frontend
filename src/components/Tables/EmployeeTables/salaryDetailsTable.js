@@ -1,21 +1,12 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import axiosInstance from "../../../services/api";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../Context/AppContext";
 
 const SalaryDetailsTable = ({
   data,
@@ -32,16 +23,10 @@ const SalaryDetailsTable = ({
 }) => {
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState("");
-  const [unfiltered, setunfiltered] = useState([]);
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = "https://erp.outsourceglobal.com";
-  const { user } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -59,10 +44,10 @@ const SalaryDetailsTable = ({
 
   useEffect(() => {
     resizeTable();
-    setunfiltered(data);
     window.addEventListener("resize", () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
