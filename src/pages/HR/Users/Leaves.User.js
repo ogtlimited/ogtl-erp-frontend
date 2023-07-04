@@ -79,27 +79,27 @@ const LeavesUser = () => {
     return businessDays;
   }
 
-  const fetchLeaveApplicationProgress = async () => {
-    try {
-      const response = await axiosInstance.get(
-        '/leave-application/leave-application-progress'
-      );
-      const resData = response?.data?.data;
-      // console.log('Approver response:', response);
-      // console.log('Approver:', resData);
+  // const fetchLeaveApplicationProgress = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       '/leave-application/leave-application-progress'
+  //     );
+  //     const resData = response?.data?.data;
+  //     // console.log('Approver response:', response);
+  //     // console.log('Approver:', resData);
 
-      const approver = Object.keys(resData);
-      const status = Object.values(resData);
+  //     const approver = Object.keys(resData);
+  //     const status = Object.values(resData);
 
-      setLeaveApprover(approver);
-      setLeaveStatus(status);
+  //     setLeaveApprover(approver);
+  //     setLeaveStatus(status);
 
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setLoading(false);
+  //   }
+  // };
   
   const fetchTotalActiveLeaves = async () => {
     try {
@@ -107,7 +107,7 @@ const LeavesUser = () => {
       const totalActiveLeave = response?.data?.data;
 
       setAllActiveLeaves(totalActiveLeave);
-      fetchLeaveApplicationProgress();
+      // fetchLeaveApplicationProgress();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -125,20 +125,21 @@ const LeavesUser = () => {
       });
       const leaves = response?.data?.data;
 
-      const formatter = leaves.map((leave) => ({
-        ...leave,
-        status_action: leave?.status,
-        leave_type: leave?.leave_type_id?.leave_type,
-        from_date: new Date(leave?.from_date).toDateString(),
-        to_date: new Date(leave?.to_date).toDateString(),
-        requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
-      }));
+      // const formatter = leaves.map((leave) => ({
+      //   ...leave,
+      //   status_action: leave?.status,
+      //   leave_type: leave?.leave_type_id?.leave_type,
+      //   from_date: new Date(leave?.from_date).toDateString(),
+      //   to_date: new Date(leave?.to_date).toDateString(),
+      //   requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
+      // }));
 
       const status = leaves[0].status;
       setUserStatus(status);
 
-      setallLeaves(formatter);
-      fetchLeaveApplicationProgress();
+      // setallLeaves(formatter);
+      console.log(leaves)
+      // fetchLeaveApplicationProgress();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -332,7 +333,7 @@ const LeavesUser = () => {
     fetchReporteesLeaves();
     fetchReporteesAppealedLeaves();
     fetchLeaveHistory();
-    fetchLeaveApplicationProgress();
+    // fetchLeaveApplicationProgress();
     fetchDepartment();
     fetchLeavesType();
 
@@ -797,7 +798,7 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.leaveCount > 0 && (
+            {user?.employee_info?.leave_count > 0 && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"

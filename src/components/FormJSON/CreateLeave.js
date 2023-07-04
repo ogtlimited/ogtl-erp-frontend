@@ -1,15 +1,17 @@
 export const CREATE_LEAVE = {
-  leave_type_id: '',
-  from_date: new Date(),
-  to_date: new Date(),
-  reason_for_application: '',
+  hr_leave_type_id: '',
+  start_date: "",
+  end_date: "",
+  reason: '',
+
+  leaveTypeTitle: ''
 }
 
 export const EDIT_LEAVE = {
-  leave_type_id: '',
-  from_date: new Date(),
-  to_date: new Date(),
-  reason_for_application: '',
+  hr_leave_type_id: '',
+  start_date: "",
+  end_date: "",
+  reason: '',
 }
 
 export const REJECT_LEAVE = {

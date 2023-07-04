@@ -152,7 +152,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
                         name="DOB"
                         type="date"
                         className="form-control"
-                        value={personalDetails?.DOB}
+                        value={personalDetails?.DOB?.split("T")[0]}
                         onChange={handleFormChange}
                       />
                     </div>
@@ -238,7 +238,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
                         name="id_issue_date"
                         type="date"
                         className="form-control"
-                        value={personalDetails?.id_issue_date}
+                        value={personalDetails?.id_issue_date?.split("T")[0]}
                         onChange={handleFormChange}
                       />
                     </div>

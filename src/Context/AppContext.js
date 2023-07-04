@@ -10,7 +10,7 @@ const AppProvider = (props) => {
   const [user] = useState(tokenService.getUser());
   const [showProgress, setshowProgress] = useState({
     count: 25,
-    state: false
+    state: false,
   });
   const [showAlertMsg, setshowAlertMsg] = useState({
     state: false,
@@ -24,42 +24,44 @@ const AppProvider = (props) => {
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
   const [dropDownClicked, setDropDownClicked] = useState(false);
-  
+
   const status = [
     {
-        _id: "active",
-        status: "ACTIVE"
+      _id: "active",
+      status: "ACTIVE",
     },
     {
-        _id: "left",
-        status: "RESIGNED"
+      _id: "left",
+      status: "RESIGNED",
     },
     {
-        _id: "terminated",
-        status: "TERMINATED"
-    }
-  ]
+      _id: "terminated",
+      status: "TERMINATED",
+    },
+  ];
 
   // Select API States:
   const [loadingSelect, setLoadingSelect] = useState(false);
-  const [allEmployees, setAllEmployees] = useState([]);
-  const [allOffices, setAllOffices] = useState([]);
+  const [selectEmployees, setSelectEmployees] = useState([]);
+  const [selectCampaigns, setSelectCampaigns] = useState([]);
+  const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
-  const [allLeaveTypes, setAllLeaveTypes] = useState([]);
+  const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
 
   const fetchHRLeavesNotificationCount = () => {
-    axiosInstance.get("/api/v1/hr_dashboard/leaves.json", {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      params: {
-        page: 1,
-        limit: 1000,
-      },
-    })
+    axiosInstance
+      .get("/api/v1/hr_dashboard/leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      })
       .then((res) => {
         let resData = res?.data?.data?.leaves;
         const dataCount = resData.length;
@@ -70,31 +72,31 @@ const AppProvider = (props) => {
       });
   };
 
-  const handleProgress = ({count, state}) => {
-    console.log(count, state)
+  const handleProgress = ({ count, state }) => {
+    console.log(count, state);
     setshowProgress({
       count: count,
-      state: state
-    })
-  }
+      state: state,
+    });
+  };
 
   const uploadProgress = async () => {
     await pause(800);
     handleProgress({
       state: true,
-      count: 35
+      count: 35,
     });
 
     await pause(900);
     handleProgress({
       state: true,
-      count: 65
+      count: 65,
     });
 
     await pause(1000);
     handleProgress({
       state: true,
-      count: 85
+      count: 85,
     });
   };
 
@@ -122,7 +124,6 @@ const AppProvider = (props) => {
     }, 5000);
   };
 
-
   //for anything relating to role assignment
   const createRoleAssignment = () => {
     return axiosInstance.get("/create-role-form");
@@ -138,54 +139,98 @@ const AppProvider = (props) => {
   // All Employees:
   const fetchAllEmployees = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/employees.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/employees.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
       });
-      const resData = response?.data?.data;
-      // console.log("All Employees:", resData)
-  
-    // const mapp = resData.map(emp => {
-    //   return {
-    //     ...emp,
-    //     fullName: emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
-    //     designation_name: emp?.designation?.designation,
-    //     department_name: emp?.department?.department
-    //   }
-    // })
-    // setAllEmployees(mapp);
-    // console.log("All Employees:", mapp)
+      const resData = response?.data?.data?.employees;
+
+      const formattedEmployees = resData
+        .map((e) => ({
+          label: e?.full_name.toUpperCase(),
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectEmployees(formattedEmployees);
     } catch (error) {
-      // console.log("All employees error:", error)
+      console.log("All employees error:", error);
     }
   };
 
-  // All Offices:
-  const fetchAllOffices = async () => {
+  // All Campaigns:
+  const fetchAllCampaigns = async () => {
+    setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get('/api/v1/offices.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
+        params: {
+          office_type: "campaign",
+          pages: 1,
+          limit: 1000,
+        },
       });
-      const resData = response?.data?.data;
-      // console.log("All Offices:", resData)
+      const resData = response?.data?.data?.offices;
 
-      // const formatted = resData.map((e) => ({
-      //   department: e.department,
-      // })).sort((a, b) => a.department.localeCompare(b.department));
+      const formattedCampaigns = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-      // setAllOffices(formatted);
+      setSelectCampaigns(formattedCampaigns);
+      setLoadingSelect(false);
     } catch (error) {
-      console.log("All Offices error:", error);
+      console.log("Get All Campaigns error:", error);
+      setLoadingSelect(false);
     }
   };
-  
+
+  // All Departments:
+  const fetchAllDepartments = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "department",
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.offices;
+
+      const formattedDepartments = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectDepartments(formattedDepartments);
+      setLoadingSelect(false);
+    } catch (error) {
+      console.log("Get All Departments error:", error);
+      setLoadingSelect(false);
+    }
+  };
+
   // All Designations:
   const fetchAllDesignations = async () => {
     setLoadingSelect(true);
@@ -195,6 +240,10 @@ const AppProvider = (props) => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: 1,
+          limit: 1000,
         },
       });
       const resData = response?.data?.data?.designations;
@@ -226,7 +275,6 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.branches;
-      console.log("branches", resData);
 
       const formatted = resData.map((branch) => ({
         label: branch.title,
@@ -243,22 +291,26 @@ const AppProvider = (props) => {
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
+    setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get('/api/v1/leave_types.json', {
+      const response = await axiosInstance.get("/api/v1/leave_types.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
       });
-      const resData = response?.data?.data;
-      // console.log("All Leave Types:", resData)
+      const resData = response?.data?.data?.types;
 
-      // const formatted = resData.map((e) => ({
-      //   leaveType: e.leaveType,
-      // })).sort((a, b) => a.leaveType.localeCompare(b.leaveType));
+      const formattedLeaveTypes = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-      // setAllLeaveTypes(formatted);
+      setSelectLeaveTypes(formattedLeaveTypes);  
+      setLoadingSelect(false);
     } catch (error) {
       console.log("All Leave Types error:", error);
     }
@@ -268,7 +320,8 @@ const AppProvider = (props) => {
     const token = localStorage.getItem("token");
     if (token) {
       fetchAllEmployees();
-      fetchAllOffices();
+      fetchAllCampaigns();
+      fetchAllDepartments();
       fetchAllDesignations();
       fetchAllBranches();
       fetchAllLeaveTypes();
@@ -278,13 +331,17 @@ const AppProvider = (props) => {
   return (
     <AppContext.Provider
       value={{
-        allEmployees,
-        setAllEmployees,
+        selectEmployees,
+        setSelectEmployees,
         fetchAllEmployees,
 
-        allOffices,
-        setAllOffices,
-        fetchAllOffices,
+        selectCampaigns,
+        setSelectCampaigns,
+        fetchAllCampaigns,
+
+        selectDepartments,
+        setSelectDepartments,
+        fetchAllDepartments,
 
         selectDesignations,
         setSelectDesignations,
@@ -294,8 +351,8 @@ const AppProvider = (props) => {
         setSelectBranches,
         fetchAllBranches,
 
-        allLeaveTypes,
-        setAllLeaveTypes,
+        selectLeaveTypes,
+        setSelectLeaveTypes,
         fetchAllLeaveTypes,
 
         loadingSelect,
@@ -303,7 +360,6 @@ const AppProvider = (props) => {
 
         dropDownClicked,
         setDropDownClicked,
-
 
         showProgress,
         uploadProgress,
@@ -321,7 +377,7 @@ const AppProvider = (props) => {
         setuserToken,
         createRoleAssignment,
         fetchHRLeavesNotificationCount,
-        status
+        status,
       }}
     >
       {props.children}

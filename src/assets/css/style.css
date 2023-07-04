@@ -4268,7 +4268,7 @@ table.dataTable thead > tr > td.sorting {
 }
 .personal-info li .text {
   color: #8e8e8e;
-  display: block;
+  display: flex;
   overflow: hidden;
 }
 .personal-info li {
@@ -4305,6 +4305,9 @@ table.dataTable thead > tr > td.sorting {
   position: absolute;
   right: 0;
   top: 0;
+}
+.report-to-link {
+  margin-right: 20px;
 }
 .edit-icon {
   background-color: #eee;

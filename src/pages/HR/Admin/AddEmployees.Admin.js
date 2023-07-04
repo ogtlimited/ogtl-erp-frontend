@@ -1,5 +1,5 @@
 import "../../In-Apps/virtualID.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
@@ -97,8 +97,8 @@ const AddEmployeesAdmin = () => {
       clearEvent();
       setLoading(false);
     } catch (error) {
-      const errMsg = error?.response?.data?.errors
-      showAlert(true, errMsg,  "alert alert-warning");
+      const errMsg = error?.response?.data?.errors;
+      showAlert(true, errMsg, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -201,6 +201,7 @@ const AddEmployeesAdmin = () => {
                         </div>
                       </div>
 
+                      {/* REMOVE THIS! */}
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="employee_info.ogid">OGID</label>
@@ -700,6 +701,7 @@ const AddEmployeesAdmin = () => {
                             </div>
                           </li>
 
+                          {/* REMOVE THIS! */}
                           <li>
                             <div className="title">OGID:</div>
                             <div className="text">
@@ -912,7 +914,7 @@ const AddEmployeesAdmin = () => {
       </div>
 
       <div className="row add-employee-form">
-        {!loadingSelect  ? (
+        {!loadingSelect ? (
           renderForm()
         ) : (
           <div className="add-employee-form-loader-div">

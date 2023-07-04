@@ -1,115 +1,121 @@
 
-export const monday_shifts = {
-  day: 'mon',
-  start: '',
-  end: '',
+export const sunday_shifts = {
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 0,
+  huddle: false,
+  huddle_time: null,
+};
+
+export const monday_shifts = {
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
+  off: false,
+  day: 1,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const tuesday_shifts = {
-  day: 'tue',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 2,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const wednesday_shifts = {
-  day: 'wed',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 3,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const thursday_shifts = {
-  day: 'thu',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 4,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const friday_shifts = {
-  day: 'fri',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 5,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const saturday_shifts = {
-  day: 'sat',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
+  expected_work_time: 8,
   off: false,
-  huddles: false,
-  huddleTime: null,
+  day: 6,
+  huddle: false,
+  huddle_time: null,
 };
-
-export const sunday_shifts = {
-  day: 'sun',
-  start: '',
-  end: '',
-  off: false,
-  huddles: false,
-  huddleTime: null,
-};
-
 
 export const huddleOptions = [
   {
     label: "5 Minutes",
-    value: "5 mins",
+    value: 5,
   },
   {
     label: "10 Minutes",
-    value: "10 mins",
+    value: 10,
   },
   {
     label: "15 Minutes",
-    value: "15 mins",
+    value: 15,
   },
   {
     label: "20 Minutes",
-    value: "20 mins",
+    value: 20,
   },
   {
     label: "25 Minutes",
-    value: "25 mins",
+    value: 25,
   },
   {
     label: "30 Minutes",
-    value: "30 mins",
+    value: 30,
   },
   {
     label: "35 Minutes",
-    value: "35 mins",
+    value: 35,
   },
   {
     label: "40 Minutes",
-    value: "40 mins",
+    value: 40,
   },
   {
     label: "45 Minutes",
-    value: "45 mins",
+    value: 45,
   },
   {
     label: "50 Minutes",
-    value: "50 mins",
+    value: 50,
   },
   {
     label: "55 Minutes",
-    value: "55 mins",
+    value: 55,
   },
   {
     label: "60 Minutes",	
-    value: "60 mins",
+    value: 60,
   },
 ];
