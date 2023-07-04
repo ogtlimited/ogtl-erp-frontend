@@ -1,124 +1,197 @@
-
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import axiosInstance from '../../../services/api';
-import moment from 'moment';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import axiosInstance from "../../../services/api";
+import moment from "moment";
 
 const AttendanceRecord = () => {
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
 
-  const fetchCampaigns = async () => {
-    try {
-      const response = await axiosInstance.get('/api/project');
-      const resData = response?.data?.data;
-      console.log(resData);
+  const [CampaignPage, setCampaignPage] = useState(1);
+  const [CampaignSizePerPage, setCampaignSizePerPage] = useState(10);
+  const [totalCampaignPages, setTotalCampaignPages] = useState("");
 
-      const formattedData = resData?.map((item, index) => ({
-        ...item,
-        sn: index + 1,
-        createdAt: moment(item.createdAt).format('llll'),
-        client: item.client_id?.client_name,
+  const [DepartmentPage, setDepartmentPage] = useState(1);
+  const [DepartmentSizePerPage, setDepartmentSizePerPage] = useState(10);
+  const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
+
+  // All Campaigns:
+  const fetchAllCampaigns = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "campaign",
+          pages: CampaignPage,
+          limit: CampaignSizePerPage,
+        },
+      });
+      const resData = response?.data?.data?.offices;
+      const totalPages = response?.data?.data?.pages;
+
+      const thisPageLimit = CampaignSizePerPage;
+      const thisTotalPageSize = totalPages;
+
+      setCampaignSizePerPage(thisPageLimit);
+      setTotalCampaignPages(thisTotalPageSize);
+
+      const formattedCampaigns = resData.map((e, index) => ({
+        ...e,
+        // index: index + 1,
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setCampaigns(formattedData);
+      setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log("Get All Campaigns error:", error);
       setLoading(false);
     }
-  };
+  }, [CampaignPage, CampaignSizePerPage]);
 
-  const fetchDepartment = async () => {
+  // All Departments:
+  const fetchAllDepartments = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/department');
-      const resData = response?.data?.data;
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "department",
+          pages: DepartmentPage,
+          limit: DepartmentSizePerPage,
+        },
+      });
+      const resData = response?.data?.data?.offices;
+      const totalPages = response?.data?.data?.pages;
 
-      const formattedData = resData?.map((item, index) => ({
-        ...item,
-        sn: index + 1,
-        createdAt: moment(item.createdAt).format('llll'),
+      const thisPageLimit = DepartmentSizePerPage;
+      const thisTotalPageSize = totalPages;
 
+      setDepartmentSizePerPage(thisPageLimit);
+      setTotalDepartmentPages(thisTotalPageSize);
+
+      const formattedDepartments = resData.map((e, index) => ({
+        ...e,
+        // index: index + 1,
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setDepartments(formattedData);
+      setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log("Get All Departments error:", error);
       setLoading(false);
     }
-  };
+  }, [DepartmentPage, DepartmentSizePerPage]);
 
   useEffect(() => {
-    fetchDepartment();
-    fetchCampaigns();
-  }, []);
+    fetchAllCampaigns();
+    fetchAllDepartments();
+  }, [fetchAllCampaigns, fetchAllDepartments]);
 
-  const campaignColumns = [
+  // const campaignColumns = [
+  //   {
+  //     dataField: 'sn',
+  //     text: 'S/N',
+  //     sort: true,
+  //     headerStyle: { width: '5px' },
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  //   {
+  //     dataField: 'project_name',
+  //     text: 'Campaign',
+  //     sort: true,
+  //     formatter: (val, row) =>
+  //       <p>
+  //         <Link to={`/dashboard/hr/campaign/employees/${row?.project_name}/${row._id}`} className='attendance-record-for-office'>
+  //           {val}
+  //         </Link>
+  //       </p>
+  //   },
+  //   {
+  //     dataField: 'client',
+  //     text: 'Client',
+  //     sort: true,
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  //   {
+  //     dataField: 'type',
+  //     text: 'Type',
+  //     sort: true,
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  //   {
+  //     dataField: 'createdAt',
+  //     text: 'Created',
+  //     sort: true,
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  // ];
+
+  // const departmentColumns = [
+  //   {
+  //     dataField: 'sn',
+  //     text: 'S/N',
+  //     sort: true,
+  //     headerStyle: { width: '5px' },
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  //   {
+  //     dataField: 'department',
+  //     text: 'Department',
+  //     sort: true,
+  //     formatter: (val, row) =>
+  //     <p>
+  //       <Link to={`/dashboard/hr/department/employees/${row?.department}/${row._id}`} className='attendance-record-for-office'>
+  //         {val}
+  //       </Link>
+  //     </p>,
+  //   },
+  //   {
+  //     dataField: 'createdAt',
+  //     text: 'Created',
+  //     sort: true,
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  // ];
+
+  const columns = [
+    // {
+    //   dataField: "index",
+    //   text: "S/N",
+    //   sort: true,
+    //   headerStyle: { width: "5%" },
+    // },
     {
-      dataField: 'sn',
-      text: 'S/N',
+      dataField: "title",
+      text: "Office",
       sort: true,
-      headerStyle: { width: '5px' },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: 'project_name',
-      text: 'Campaign',
-      sort: true,
-      formatter: (val, row) => 
+      headerStyle: { width: "35%" },
+      formatter: (val, row) => (
         <p>
-          <Link to={`/dashboard/hr/campaign/employees/${row?.project_name}/${row._id}`} className='attendance-record-for-office'>
+          <Link
+            to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
             {val}
           </Link>
         </p>
+      ),
     },
     {
-      dataField: 'client',
-      text: 'Client',
+      dataField: "created_at",
+      text: "Date Created",
       sort: true,
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: 'type',
-      text: 'Type',
-      sort: true,
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: 'createdAt',
-      text: 'Created',
-      sort: true,
-      formatter: (val, row) => <p>{val}</p>,
-    },
-  ];
-
-  const departmentColumns = [
-    {
-      dataField: 'sn',
-      text: 'S/N',
-      sort: true,
-      headerStyle: { width: '5px' },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: 'department',
-      text: 'Department',
-      sort: true,
-      formatter: (val, row) => 
-      <p>
-        <Link to={`/dashboard/hr/department/employees/${row?.department}/${row._id}`} className='attendance-record-for-office'>
-          {val}
-        </Link>
-      </p>,
-    },
-    {
-      dataField: 'createdAt',
-      text: 'Created',
-      sort: true,
-      formatter: (val, row) => <p>{val}</p>,
+      headerStyle: { width: "20%" },
     },
   ];
 
@@ -142,7 +215,6 @@ const AttendanceRecord = () => {
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
-
               <li className="nav-item">
                 <a
                   className="nav-link active"
@@ -162,7 +234,6 @@ const AttendanceRecord = () => {
                   Departments
                 </a>
               </li>
-              
             </ul>
           </div>
         </div>
@@ -170,15 +241,35 @@ const AttendanceRecord = () => {
 
       <div>
         <div className="row tab-content">
-
           <div id="tab_campaigns" className="col-12 tab-pane show active">
-            <LeavesTable columns={campaignColumns} data={campaigns} loading={loading} />
+            <UniversalPaginatedTable
+              columns={columns}
+              data={campaigns}
+              loading={loading}
+              setLoading={setLoading}
+              page={CampaignPage}
+              setPage={setCampaignPage}
+              sizePerPage={CampaignSizePerPage}
+              setSizePerPage={setCampaignSizePerPage}
+              totalPages={totalCampaignPages}
+              setTotalPages={setTotalCampaignPages}
+            />
           </div>
 
           <div id="tab_departments" className="col-12 tab-pane">
-            <LeavesTable columns={departmentColumns} data={departments} loading={loading} />
+            <UniversalPaginatedTable
+              columns={columns}
+              data={departments}
+              loading={loading}
+              setLoading={setLoading}
+              page={CampaignPage}
+              setPage={setDepartmentPage}
+              sizePerPage={CampaignSizePerPage}
+              setSizePerPage={setCampaignSizePerPage}
+              totalPages={totalDepartmentPages}
+              setTotalPages={setTotalCampaignPages}
+            />
           </div>
-
         </div>
       </div>
     </>

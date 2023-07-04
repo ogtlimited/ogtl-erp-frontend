@@ -144,7 +144,7 @@ const sidebarConfig = [
           },
           {
             canView: 'HR',
-            title: 'Leaves (Admin)',
+            title: 'Leave Applications',
             path: PATH_DASHBOARD.hr.leavesAdmin,
           },
           {

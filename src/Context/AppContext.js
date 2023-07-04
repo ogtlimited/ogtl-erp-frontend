@@ -47,7 +47,7 @@ const AppProvider = (props) => {
   const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
-  const [allLeaveTypes, setAllLeaveTypes] = useState([]);
+  const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
 
   const fetchHRLeavesNotificationCount = () => {
     axiosInstance
@@ -151,7 +151,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.employees;
-      
+
       const formattedEmployees = resData
         .map((e) => ({
           label: e?.full_name.toUpperCase(),
@@ -161,7 +161,7 @@ const AppProvider = (props) => {
 
       setSelectEmployees(formattedEmployees);
     } catch (error) {
-      console.log("All employees error:", error)
+      console.log("All employees error:", error);
     }
   };
 
@@ -275,7 +275,6 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.branches;
-      console.log("branches", resData);
 
       const formatted = resData.map((branch) => ({
         label: branch.title,
@@ -292,6 +291,7 @@ const AppProvider = (props) => {
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
+    setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/leave_types.json", {
         headers: {
@@ -300,14 +300,17 @@ const AppProvider = (props) => {
           "ngrok-skip-browser-warning": "69420",
         },
       });
-      const resData = response?.data?.data;
-      // console.log("All Leave Types:", resData)
+      const resData = response?.data?.data?.types;
 
-      // const formatted = resData.map((e) => ({
-      //   leaveType: e.leaveType,
-      // })).sort((a, b) => a.leaveType.localeCompare(b.leaveType));
+      const formattedLeaveTypes = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-      // setAllLeaveTypes(formatted);
+      setSelectLeaveTypes(formattedLeaveTypes);  
+      setLoadingSelect(false);
     } catch (error) {
       console.log("All Leave Types error:", error);
     }
@@ -348,8 +351,8 @@ const AppProvider = (props) => {
         setSelectBranches,
         fetchAllBranches,
 
-        allLeaveTypes,
-        setAllLeaveTypes,
+        selectLeaveTypes,
+        setSelectLeaveTypes,
         fetchAllLeaveTypes,
 
         loadingSelect,

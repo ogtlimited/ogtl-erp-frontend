@@ -446,6 +446,7 @@ const LeavesAdmin = () => {
               </div>
             </div>
           </div>
+          
           <AdminLeavesTable
             columns={columns}
             data={allLeaves}
