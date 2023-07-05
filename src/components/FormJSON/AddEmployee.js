@@ -3,7 +3,6 @@ export const PROFILE = {
     email: '',
   },
   employee_info: {
-    ogid: '', //!Remove this
     date_of_joining: '',
     operation_branch_id: '',
     operation_office_id: '',

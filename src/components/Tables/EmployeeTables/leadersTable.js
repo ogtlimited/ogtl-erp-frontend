@@ -290,11 +290,6 @@ const LeadersTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <SearchBar
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%', width: '300px' }}
-                className="inputSearch"
-              />
 
               <ExportCSVButton
                 className="float-right btn export-csv" style={{ marginBottom: 15}}

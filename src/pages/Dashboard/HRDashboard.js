@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import DashboardChart from '../../components/charts/dashboard-charts';
+import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import moment from 'moment';
 
 const HRDashboard = () => {
+  const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [employeeLabel, setEmployeeLabel] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
@@ -30,6 +32,8 @@ const HRDashboard = () => {
   const [fromDate2, setFromDate2] = useState(moment(firstDay).format('yyyy-MM-DD'));
   const [toDate2, setToDate2] = useState(moment(lastDay).format('yyyy-MM-DD'));
 
+  const errors = [];
+
   // Head Count: Active
   const fetchHeadCount = async () => {
     try {
@@ -46,7 +50,13 @@ const HRDashboard = () => {
       setheadCount(activeEmployeesCount);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      const headCountError = error?.response?.data?.errors + " to view Head Counts"
+      errors.push(headCountError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
@@ -83,7 +93,13 @@ const HRDashboard = () => {
       setGenderData(data);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      const genderError = error?.response?.data?.errors + " to view Gender Diversity Ratio (Females to Males)"
+      errors.push(genderError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
@@ -114,12 +130,18 @@ const HRDashboard = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log("offices error", error);
+      const employeeError =  error?.response?.data?.errors + " to view Employee by Office"
+      errors.push(employeeError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
 
-  // Leaver Report - Leave types and Leave status (chart)
+  // Leave Report - Leave types and Leave status (chart)
   const fetchLeaveReport = async () => {
     try {
       const response = await axiosInstance.get('/api/v1/hr_dashboard/leave_report.json', {
@@ -146,16 +168,51 @@ const HRDashboard = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      const leaveError = error?.response?.data?.errors + " to view Leave Report (Leave types and Leave status)"
+      errors.push(leaveError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
+
       setLoading(false);
+
+      console.log("All Errors:", errors);
+
+      // console.log("Random Errors:", randomErrors);
+
+      // setInterval(() => {
+      //   showAlert(
+      //     true,
+      //     errors,
+      //     "alert alert-danger"
+      //   );
+      // }, 6000)
+
+      // return clearInterval(interval)
+      
     }
   };
+
+  // useEffect(() => {
+
+  //   fetchLeaveReport();
+  //   const interval = setInterval(() => {
+  //     fetchLeaveReport();
+  //   }, 3000);
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   useEffect(() => {
     fetchHeadCount();
     fetchEmployeeGender();
     fetchEmployeeData();
     fetchLeaveReport();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -200,7 +257,7 @@ const HRDashboard = () => {
 
       <div className="row">
         <DashboardChart
-          title="Employee By Department"
+          title="Employee By Office"
           employeeData={employeeData}
           employeeLabel={employeeLabel}
           formattedData={formattedData}

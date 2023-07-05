@@ -72,10 +72,17 @@ const LeavesAdmin = () => {
       );
 
       const resData = response?.data?.data?.leaves;
-      console.log("HR pending leaves:", resData);
+      const totalPages = response?.data?.data?.total_pages;
+
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
+
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
 
       const formatted = resData.map((leave) => ({
         ...leave,
+        ...leave?.leave,
         full_name: leave?.first_name + " " + leave?.last_name,
         from_date: new Date(leave?.leave?.start_date).toDateString(),
         to_date: new Date(leave?.leave?.end_date).toDateString(),
@@ -84,6 +91,7 @@ const LeavesAdmin = () => {
           leave?.leave?.end_date
         ),
       }));
+      console.log("HR formatted pending leaves:", formatted);
 
       setallLeaves(formatted);
 
@@ -228,18 +236,24 @@ const LeavesAdmin = () => {
   }, []);
 
   const handleApproveLeave = async (row) => {
-    const id = row._id;
+    const id = row.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(
-        `hr-leave-applications/approve/${id}`
+      const response = await axiosInstance.put(
+        `/api/v1/hr_approve_leave/${id}.json`
       );
       showAlert(true, "Leave Approved", "alert alert-success");
       fetchHRLeaves();
+      fetchAllEmpOnLeave();
       fetchHRLeaveHistory();
       fetchHRLeavesNotificationCount();
     } catch (error) {
-      console.log("HR Leave approval error:", error.response.message);
+      showAlert(
+        true,
+        error?.response?.data?.errors,
+        "alert alert-warning"
+      );
+
     }
   };
 
@@ -253,13 +267,13 @@ const LeavesAdmin = () => {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "80px" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
-          <a href="#">{row?.full_name}</a>
+          <a href="#">{row?.full_name} <span>{row?.ogid}</span></a>
         </h2>
       ),
     },
@@ -267,13 +281,13 @@ const LeavesAdmin = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "11%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -300,20 +314,17 @@ const LeavesAdmin = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
-      headerStyle: { minWidth: "100px" },
     },
     {
       dataField: "from_date",
-      text: "From Date",
+      text: "From",
       sort: true,
-      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
-      text: "To Date",
+      text: "To",
       sort: true,
-      headerStyle: { minWidth: "100px" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
@@ -333,7 +344,6 @@ const LeavesAdmin = () => {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
-      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -358,7 +368,7 @@ const LeavesAdmin = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {value === "pending" ? (
+            {row.status === "pending" ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -368,7 +378,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {value === "pending" ? (
+            {row.status === "pending" ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -452,12 +462,15 @@ const LeavesAdmin = () => {
             data={allLeaves}
             setData={setallLeaves}
             loading={loading}
+            setLoading={setLoading}
+
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             campaignFilter={campaignFilter}
@@ -466,7 +479,6 @@ const LeavesAdmin = () => {
             setLeaveTypeFilter={setLeaveTypeFilter}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            setLoading={setLoading}
             departments={departments}
             campaigns={campaigns}
             leaveTypes={leaveTypes}
@@ -503,7 +515,8 @@ const LeavesAdmin = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Leave Application Details"
-          content={<LeaveApplicationContent leaveContent={viewRow} />}
+          content={<LeaveApplicationContent leaveContent={viewRow}/>}
+          handleRefresh={fetchHRLeaves} 
         />
       ) : (
         ""

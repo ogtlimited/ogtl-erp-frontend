@@ -348,20 +348,20 @@ const AdminLeavesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
+              {/* <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
-              />
+              /> */}
 
               <ExportCSVButton
-                className="float-right btn export-csv"
+                className="float-right btn export-csv" style={{ marginBottom: 15}}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select">
+              {/* <div className="hr-filter-select">
                 
               <div className="col-md-3">
                   <select
@@ -410,7 +410,7 @@ const AdminLeavesTable = ({
                     ))}
                   </select>
                 </div>
-              </div>
+              </div> */}
 
               <BootstrapTable
                 {...props.baseProps}

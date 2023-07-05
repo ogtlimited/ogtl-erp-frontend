@@ -84,7 +84,7 @@ class HelperService {
       randomIndex;
 
     // While there remain elements to shuffle...
-    while (currentIndex != 0) {
+    while (currentIndex !== 0) {
       // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
@@ -98,51 +98,7 @@ class HelperService {
 
     return array;
   }
-  cleanDates(dates) {
-    return dates.map((e) => {
-      if (e.date_of_joining.includes("/")) {
-        return e;
-      } else {
-        let obj = { date_of_joining: "" };
-        if (e.date_of_joining.includes("TH")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("TH", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-        if (e.date_of_joining.includes("Th")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("Th", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-        if (e.date_of_joining.includes("St")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("St", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-        if (e.date_of_joining.includes("ST")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("ST", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-        if (e.date_of_joining.includes("Rd")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("Rd", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-        if (e.date_of_joining.includes("Nd")) {
-          obj.date_of_joining = new Date(
-            e.date_of_joining.replace("Nd", "")
-          ).toLocaleDateString();
-          return obj;
-        }
-      }
-    });
-  }
+
   uniqueArray(array) {
     return array.filter((thing, index) => {
       const _thing = JSON.stringify(thing);

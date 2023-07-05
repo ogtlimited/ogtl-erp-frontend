@@ -18,7 +18,7 @@ const PersonalInfo = ({
         <div className="card-body">
           <h3 className="card-title">
             Personal Details{" "}
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -26,7 +26,7 @@ const PersonalInfo = ({
               >
                 <i className="fa fa-pencil"></i>
               </a>
-            )}
+            ) : null}
           </h3>
 
           <ul className="personal-info">

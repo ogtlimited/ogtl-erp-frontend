@@ -68,176 +68,11 @@ const ReporteeLeavesTable = ({
 
   const imageUrl = 'https://erp.outsourceglobal.com';
 
- const handleDepartmentFilter = (e) => {
-    setDepartmentFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get(`leads-leave-applications`, {
-        params: {
-          department: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          reportee_department: leave?.department?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setLeaveTypeFilter("");
-  };
-  
-  const handleLeaveTypeFilter = (e) => {
-    setLeaveTypeFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get(`leads-leave-applications`, {
-        params: {
-          leave_type: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          reportee_department: leave?.department?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          requested_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setDepartmentFilter("");
-  };
-
   useEffect(() => {
     setDataToFilter(data);
     setTimeout(() => {
     }, 7000);
   }, [data]);
-
-  const MySearch = (props) => {
-    let input;
-    const handleClick = () => {
-      setPage(1);
-      setLoading(true);
-      props.onSearch(input.value);
-      const searchTerm = input.value;
-      setSearchTerm(searchTerm);
-
-      if (page === 1) {
-        axiosInstance
-          .get(`leads-leave-applications`, {
-            params: {
-              search: searchTerm,
-              page: page,
-              limit: sizePerPage,
-            },
-          })
-          .then((res) => {
-            let resData = res?.data?.data?.application;
-            let resOptions = res?.data?.data?.pagination;
-
-            const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions?.numberOfPages;
-
-            setSizePerPage(thisPageLimit);
-            setTotalPages(thisTotalPageSize);
-
-            let formatted = resData.map((leave) => ({
-              ...leave,
-              full_name:
-                leave?.employee.first_name +
-                ' ' +
-                leave?.employee.middle_name +
-                ' ' +
-                leave?.employee.last_name,
-              reportee_department: leave?.department?.department,
-              from_date: new Date(leave.from_date).toDateString(),
-              to_date: new Date(leave.to_date).toDateString(),
-              requested_leave_days: Math.ceil(
-                (new Date(leave.to_date) - new Date(leave.from_date)) /
-                  (1000 * 3600 * 24)
-              ),
-            }));
-
-            setData(formatted);
-            setDepartmentFilter('');
-          });
-      }
-      setLoading(false);
-    };
-
-    return (
-      <div className="job-app-search">
-        <input
-          className="form-control"
-          style={{
-            backgroundColor: '#fff',
-            width: '33.5%',
-            marginRight: '20px',
-          }}
-          ref={(n) => (input = n)}
-          type="text"
-        />
-        <button className="btn btn-primary" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    );
-  };
 
     // Pagination
     const count = totalPages;
@@ -269,11 +104,6 @@ const ReporteeLeavesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              />
 
               <ExportCSVButton
                 className="float-right btn export-csv"
@@ -281,40 +111,6 @@ const ReporteeLeavesTable = ({
               >
                 Export CSV
               </ExportCSVButton>
-
-              <div className="d-flex row mb-3">
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDepartmentFilter(e)}
-                    defaultValue={departmentFilter}
-                    value={departmentFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Department
-                    </option>
-                    {departments.map((option, idx) => (
-                      <option key={idx}>{option.department}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleLeaveTypeFilter(e)}
-                    defaultValue={leaveTypeFilter}
-                    value={leaveTypeFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Leave Type
-                    </option>
-                    {leaveTypes.map((option, index) => (
-                      <option key={index}>{option.leave_type}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
 
               <BootstrapTable
                 {...props.baseProps}

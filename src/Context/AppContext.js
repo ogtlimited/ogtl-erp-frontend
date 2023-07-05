@@ -68,7 +68,6 @@ const AppProvider = (props) => {
         setCount(dataCount);
       })
       .catch((error) => {
-        console.log(error);
       });
   };
 
@@ -124,14 +123,6 @@ const AppProvider = (props) => {
     }, 5000);
   };
 
-  //for anything relating to role assignment
-  const createRoleAssignment = () => {
-    return axiosInstance.get("/create-role-form");
-  };
-
-  const adminDashboardData = () => {
-    return axiosInstance.get("/admin-dashboard");
-  };
 
   // ! - EVERYTHING ABOVE IS FROM OLD API!!!
 
@@ -161,7 +152,6 @@ const AppProvider = (props) => {
 
       setSelectEmployees(formattedEmployees);
     } catch (error) {
-      console.log("All employees error:", error);
     }
   };
 
@@ -193,7 +183,6 @@ const AppProvider = (props) => {
       setSelectCampaigns(formattedCampaigns);
       setLoadingSelect(false);
     } catch (error) {
-      console.log("Get All Campaigns error:", error);
       setLoadingSelect(false);
     }
   };
@@ -226,7 +215,6 @@ const AppProvider = (props) => {
       setSelectDepartments(formattedDepartments);
       setLoadingSelect(false);
     } catch (error) {
-      console.log("Get All Departments error:", error);
       setLoadingSelect(false);
     }
   };
@@ -258,7 +246,6 @@ const AppProvider = (props) => {
       setSelectDesignations(formattedDesignation);
       setLoadingSelect(false);
     } catch (error) {
-      console.log("Get All Designations error:", error);
       setLoadingSelect(false);
     }
   };
@@ -284,7 +271,6 @@ const AppProvider = (props) => {
       setSelectBranches(formatted);
       setLoadingSelect(false);
     } catch (error) {
-      console.log("All Branches error:", error);
       setLoadingSelect(false);
     }
   };
@@ -312,7 +298,6 @@ const AppProvider = (props) => {
       setSelectLeaveTypes(formattedLeaveTypes);  
       setLoadingSelect(false);
     } catch (error) {
-      console.log("All Leave Types error:", error);
     }
   };
 
@@ -364,7 +349,6 @@ const AppProvider = (props) => {
         showProgress,
         uploadProgress,
         handleProgress,
-        adminDashboardData,
         count,
         setCount,
         showAlert,
@@ -375,7 +359,6 @@ const AppProvider = (props) => {
         setIsFromBiometrics,
         user,
         setuserToken,
-        createRoleAssignment,
         fetchHRLeavesNotificationCount,
         status,
       }}

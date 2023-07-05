@@ -108,7 +108,7 @@ const DashboardStatistics = ({
           <div className="leave-card-body">
             <h3 className="card-title">Leave Status</h3>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="from_date">From</label>
@@ -135,7 +135,7 @@ const DashboardStatistics = ({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <LeaveVerticalBar
               data={leaveStatus}
@@ -152,7 +152,7 @@ const DashboardStatistics = ({
           <div className="leave-card-body">
             <h3 className="card-title">Leave Type</h3>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="from_date">From</label>
@@ -179,7 +179,7 @@ const DashboardStatistics = ({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <LeaveVerticalBar
               data={leaveType}

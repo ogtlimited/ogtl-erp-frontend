@@ -3,8 +3,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
 import LeadersTable from "../../../components/Tables/EmployeeTables/leadersTable";
 import { AddLeaderModal } from "../../../components/Modal/AddLeaderModal";
+import { useAppContext } from "../../../Context/AppContext";
 
 const LeadershipAdmin = () => {
+  const { showAlert } = useAppContext();
   const [allLeaders, setAllLeaders] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
@@ -53,10 +55,14 @@ const LeadershipAdmin = () => {
       setAllLeaders(mapp);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders error:", error);
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-danger"
+    );
       setLoading(false);
     }
-  }, [officeFilter, page, sizePerPage]);
+  }, [officeFilter, page, showAlert, sizePerPage]);
 
   // All Campaigns:
   const fetchAllCampaigns = async () => {

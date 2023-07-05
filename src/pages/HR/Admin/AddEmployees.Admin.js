@@ -116,9 +116,17 @@ const AddEmployeesAdmin = () => {
           }
           gender={employee.personal_details.gender}
           designation={employee.misc.designationName}
-          ogid={employee.employee_info.ogid}
+          ogid={employee.employee_info.date_of_joining}
           edit={false}
         />
+
+        {employee.employee_info.date_of_joining ? (
+          <span className="virtual-id-note">
+            Note: OG{moment(employee.employee_info.date_of_joining).format("YYMMDD")} is just
+            a sample. After adding employee, OGID is generated
+            automatically.
+          </span>
+        ) : null}
       </>
     );
   };
@@ -195,21 +203,6 @@ const AddEmployeesAdmin = () => {
                             name="user_info.email"
                             type="email"
                             value={employee.user_info.email}
-                            onChange={handleFormChange}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      {/* REMOVE THIS! */}
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label htmlFor="employee_info.ogid">OGID</label>
-                          <input
-                            className="form-control"
-                            name="employee_info.ogid"
-                            type="text"
-                            value={employee.employee_info.ogid}
                             onChange={handleFormChange}
                             required
                           />
@@ -698,14 +691,6 @@ const AddEmployeesAdmin = () => {
                             <div className="title">Email:</div>
                             <div className="text">
                               {employee.user_info.email || "-"}
-                            </div>
-                          </li>
-
-                          {/* REMOVE THIS! */}
-                          <li>
-                            <div className="title">OGID:</div>
-                            <div className="text">
-                              {employee.employee_info.ogid || "-"}
                             </div>
                           </li>
 

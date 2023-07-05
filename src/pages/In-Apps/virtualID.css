@@ -116,6 +116,7 @@
   font-size: 12px;
   font-weight: 600;
   color: red;
+  width: 250px;
 }
 
 @media screen and (max-width: 768px) {

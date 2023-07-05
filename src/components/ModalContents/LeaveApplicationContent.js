@@ -3,24 +3,25 @@
 import React from 'react';
 
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
-  delete leaveContent.__v;
-  delete leaveContent.updatedAt;
-  delete leaveContent.createdAt;
+  delete leaveContent.id;
+  delete leaveContent.manager_id;
+  delete leaveContent.start_date;
+  delete leaveContent.end_date;
+  !leaveContent.rejection_reason && delete leaveContent.rejection_reason
+  delete leaveContent.updated_at;
+  delete leaveContent.created_at;
   delete leaveContent.acted_on;
   delete leaveContent.hr_stage;
-  delete leaveContent.approval_level;
-  delete leaveContent.leave_approver;
-  delete leaveContent.first_approver;
-  delete leaveContent.list_of_approvers;
-  delete leaveContent.status_action;
-  delete leaveContent.department_id;
-  delete leaveContent.employee_id;
-  delete leaveContent.project_id;
-  delete leaveContent.employee;
-  delete leaveContent.isAppealled;
-  delete leaveContent.emp_department;
-  delete leaveContent._id;
-  delete leaveContent.leave_type_id;
+  delete leaveContent.manager_id;
+  // delete leaveContent.list_of_approvers;
+  // delete leaveContent.status_action;
+  // delete leaveContent.department_id;
+  // delete leaveContent.employee_id;
+  // delete leaveContent.project_id;
+  // delete leaveContent.employee;
+  // delete leaveContent.isAppealled;
+  // delete leaveContent.emp_department;
+  delete leaveContent.leave;
 
   return (
     <div className="row d-flex justify-content-center">
