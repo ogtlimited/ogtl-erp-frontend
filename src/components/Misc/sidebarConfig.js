@@ -232,11 +232,11 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.recruitment.root,
         icon: ICONS.recruitment,
         children: [
-          {
-            canView: 'HR',
-            title: 'Job Opening',
-            path: PATH_DASHBOARD.recruitment.jobOpening,
-          },
+          // {
+          //   canView: 'HR',
+          //   title: 'Job Opening',
+          //   path: PATH_DASHBOARD.recruitment.jobOpening,
+          // },
           {
             canView: 'HR',
             title: 'Job Applicants',
@@ -581,12 +581,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.settings.rolesPermission,
         icon: ICONS.rolesPermission,
       },
-      {
-        canView: 'HR',
-        title: 'Roles Assignment',
-        path: PATH_DASHBOARD.settings.rolesAssignment,
-        icon: ICONS.rolesAssignment,
-      },
+      // {
+      //   canView: 'HR',
+      //   title: 'Roles Assignment',
+      //   path: PATH_DASHBOARD.settings.rolesAssignment,
+      //   icon: ICONS.rolesAssignment,
+      // },
     ],
   },
 
