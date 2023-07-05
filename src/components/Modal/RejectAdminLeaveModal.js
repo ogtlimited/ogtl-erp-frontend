@@ -23,11 +23,14 @@ function RejectAdminLeaveModal({
 
   const handleRejectLeave = async (e) => {
       e.preventDefault();
-      const id = hrReject._id;
+      const id = hrReject.id;
       setLoading(true);
       try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axiosInstance.patch(`hr-leave-applications/reject/${id}`, leave)
+        const response = await axiosInstance.put(`/api/v1/hr_reject_leave/${id}.json`, {
+          payload: leave
+        })
+
         showAlert(true, 'Leave Rejected', 'alert alert-info');
   
         closeModal(false);

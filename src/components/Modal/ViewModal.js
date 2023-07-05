@@ -1,6 +1,6 @@
 import React from "react";
 
-const ViewModal = ({title, content,}) => {
+const ViewModal = ({title, content, handleRefresh }) => {
   return (
     <div
       id="generalModal"
@@ -17,6 +17,7 @@ const ViewModal = ({title, content,}) => {
               className="close"
               data-dismiss="modal"
               aria-label="Close"
+              onClick={() => handleRefresh()}
             >
               <span aria-hidden="true">×</span>
             </button>

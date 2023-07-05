@@ -10,7 +10,7 @@ import moment from "moment";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
 const Designations = () => {
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [designations, setDesignations] = useState([]);
   const [designation, setDesignation] = useState([]);
@@ -21,6 +21,7 @@ const Designations = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
+  console.log("CurrentUserRoles", CurrentUserRoles)
 
   // All Designations:
   const fetchDesignations = useCallback(async () => {
@@ -54,10 +55,14 @@ const Designations = () => {
       setDesignations(formattedDesignation);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Designations error:", error);
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-danger"
+    );
       setLoading(false);
     }
-  }, [page, sizePerPage]);
+  }, [page, showAlert, sizePerPage]);
 
   useEffect(() => {
     fetchDesignations();
@@ -147,7 +152,7 @@ const Designations = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
               <a
                 href="/"
                 className="btn add-btn"
@@ -157,7 +162,7 @@ const Designations = () => {
               >
                 <i className="fa fa-plus"></i> Create Designation
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

@@ -12,25 +12,34 @@ const EmployeeUser = () => {
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
 
-  const todayShift = user?.employee_info?.shifts?.filter((e) => (e?.day.match(day)))
-  const start = todayShift[0]?.start_time ? moment((todayShift[0].start_time), ["HH"]).format("hh A") : null
-  const end = todayShift[0]?.end_time ? moment((todayShift[0].end_time), ["HH"]).format("hh A") : null
+  const todayShift = user?.employee_info?.shifts?.filter((e) =>
+    e?.day.match(day)
+  );
+  const start = todayShift[0]?.start_time
+    ? moment(todayShift[0].start_time, ["HH"]).format("hh A")
+    : null;
+  const end = todayShift[0]?.end_time
+    ? moment(todayShift[0].end_time, ["HH"]).format("hh A")
+    : null;
 
   const fetchQuote = async () => {
     try {
-      const result = await axios.get("https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json");
+      const result = await axios.get(
+        "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
+      );
       const quotes = result?.data?.quotes;
       const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
       setQuotes(randomQuote);
     } catch (error) {
-      console.error('Error fetching quote:', error);
+      console.error("Error fetching quote:", error);
     }
   };
 
   useEffect(() => {
-    console.log("user", user)
+    console.log("user", user);
 
-    fetchQuote(); const interval = setInterval(() => {
+    fetchQuote();
+    const interval = setInterval(() => {
       fetchQuote();
     }, 24 * 60 * 60 * 1000);
 
@@ -49,7 +58,7 @@ const EmployeeUser = () => {
                 Welcome back,
                 <br />{" "}
                 {`${user?.employee_info?.personal_details?.first_name} 
-                  ${user?.employee_info?.personal_details?.middle_name} 
+                  ${user?.employee_info?.personal_details?.middle_name || ""} 
                   ${user?.employee_info?.personal_details?.last_name}
                 `}{" "}
                 !
@@ -64,7 +73,6 @@ const EmployeeUser = () => {
           </div>
           <div className="row mt-4">
             <div className="col-lg-8 col-md-12">
-              
               <section className="dash-section">
                 <h1 className="dash-sec-title">Today</h1>
                 <div className="dash-sec-content">
@@ -76,11 +84,14 @@ const EmployeeUser = () => {
                             <i className="fa fa-clock"></i>
                           </div>
                           <div className="dash-card-content">
-                            {user?.employee_info?.shifts.length ? <p>
-                              Your shift starts at{" "}
-                              <strong>{start} </strong>and
-                              ends at <strong>{end}</strong>{" "}
-                            </p> : <p>You do not have a shift today</p>}
+                            {user?.employee_info?.shifts.length ? (
+                              <p>
+                                Your shift starts at <strong>{start} </strong>
+                                and ends at <strong>{end}</strong>{" "}
+                              </p>
+                            ) : (
+                              <p>You do not have a shift today</p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -90,21 +101,21 @@ const EmployeeUser = () => {
               </section>
 
               <section className="dash-section">
-              <h5 className="dash-title"><strong>Quote of the day</strong></h5>
-              <div className="card">
-                <div className="card-body text-center">
-                  <figure>
-                    <blockquote>
-                      <h4 className="holiday-title">{quotes?.quote}</h4>
-                    </blockquote>
-                    <figcaption>—{quotes?.author}</figcaption>
-                  </figure>
+                <h5 className="dash-title">
+                  <strong>Quote of the day</strong>
+                </h5>
+                <div className="card">
+                  <div className="card-body text-center">
+                    <figure>
+                      <blockquote>
+                        <h4 className="holiday-title">{quotes?.quote}</h4>
+                      </blockquote>
+                      <figcaption>—{quotes?.author}</figcaption>
+                    </figure>
+                  </div>
                 </div>
-              </div>
               </section>
-
             </div>
-
 
             <div className="col-lg-4 col-md-4">
               <div className="dash-sidebar">
@@ -119,7 +130,10 @@ const EmployeeUser = () => {
                         </div>
                       </div>
                       <div className="request-btn">
-                        <Link to="/dashboard/hr/leaves" className="btn btn-primary">
+                        <Link
+                          to="/dashboard/hr/leaves"
+                          className="btn btn-primary"
+                        >
                           Apply Leave
                         </Link>
                       </div>
@@ -130,7 +144,6 @@ const EmployeeUser = () => {
             </div>
           </div>
         </div>
-
       </div>
     </>
   );

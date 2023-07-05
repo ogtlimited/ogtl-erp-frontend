@@ -189,7 +189,7 @@ const Profile = () => {
                               {userData?.employee?.reports_to?.full_name ||
                                 "Not Available"}
                             </a>
-                            {CurrentUserRoles.includes("hr_manager") && (
+                            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
                               <a
                                 className="edit-icon"
                                 data-toggle="modal"
@@ -197,7 +197,7 @@ const Profile = () => {
                               >
                                 <i className="fa fa-pencil"></i>
                               </a>
-                            )}
+                            ) : null}
                           </div>
                         </li>
                       </ul>

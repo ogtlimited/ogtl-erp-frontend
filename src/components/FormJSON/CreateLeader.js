@@ -7,6 +7,14 @@ export const LeaderForm = {
   leaderName: "",
   leadershipType: "",
 };
+export const RoleUserForm = {
+  operation_office_id: "",
+  hr_user_id : "",
+  admin_role_id: "",
+
+  officeName: "",
+  roleUserName: "",
+};
 
 export const officeTypeOptions = [
   {

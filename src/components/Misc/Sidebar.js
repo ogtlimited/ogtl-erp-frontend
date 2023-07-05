@@ -10,9 +10,10 @@ import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
-  const AllAccess = ["Super", "CEO", "hr_manager", "HR Associate"];
+  const AllAccess = ["Super", "CEO", "hr_manager", "hr_associate"];
   
   const CurrentUserRoles = user?.employee_info?.roles;
+  const CurrentUserIsLead = user?.employee_info?.is_lead;
   const userRole = user?.employee_info?.roles[0];
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
@@ -21,11 +22,13 @@ const Sidebar = () => {
     console.log("this sidebar user:", user);
   }, [user]);
 
-  const canView = (dept) => {
-    if (userDept === dept || AllAccess.includes(userRole)) {
+  const canView = (viewedBy) => {
+    if (userDept === viewedBy || AllAccess.includes(userRole)) {
       return true;
-    } else if (dept === "All") {
+    } else if (viewedBy === "All" ) {
       return true;
+    } else if (viewedBy === "lead") {
+      return CurrentUserIsLead;
     } else {
       return false;
     }
@@ -198,6 +201,7 @@ const Sidebar = () => {
                   </ul>
                 </li>
               ) : null}
+
             </ul>
           </div>
         </div>

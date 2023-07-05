@@ -201,7 +201,7 @@ const Offices = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
               <a
                 href="/"
                 className="btn add-btn"
@@ -211,7 +211,7 @@ const Offices = () => {
               >
                 <i className="fa fa-plus"></i> Create Office
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

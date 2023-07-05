@@ -121,7 +121,7 @@ const LeaveType = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
               <a
                 href="#"
                 className="btn add-btn"
@@ -131,7 +131,7 @@ const LeaveType = () => {
               >
                 <i className="fa fa-plus"></i> Create Leave Type
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

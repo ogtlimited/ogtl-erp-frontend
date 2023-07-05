@@ -92,8 +92,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       setLeave(CREATE_LEAVE);
       $("#FormModal").modal("toggle");
     } catch (error) {
-      const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
     setLoading(false);
   };

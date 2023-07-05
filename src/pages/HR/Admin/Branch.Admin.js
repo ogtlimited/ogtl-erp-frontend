@@ -144,7 +144,7 @@ const BranchAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
               <a
                 href="#"
                 className="btn add-btn"
@@ -154,7 +154,7 @@ const BranchAdmin = () => {
               >
                 <i className="fa fa-plus"></i> Create Branch
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

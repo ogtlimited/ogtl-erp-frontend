@@ -4,8 +4,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import CapturedBiometricsTable from "../../../components/Tables/EmployeeTables/capturedBiometricsTable";
 import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
 
 const CapturedBiometricsAdmin = () => {
+  const { showAlert } = useAppContext();
   const [allEmployees, setAllEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,10 +46,14 @@ const CapturedBiometricsAdmin = () => {
       setAllEmployees(resData);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-danger"
+    );
       setLoading(false);
     }
-  },[page, sizePerPage]);
+  },[page, showAlert, sizePerPage]);
 
   useEffect(() => {
     fetchAllCapturedEmployees();

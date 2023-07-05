@@ -20,11 +20,7 @@ export default function GuardedRoute({ title, dept, children }) {
   const userRole = user?.employee_info?.roles[0]
   const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
 
-  useEffect(() => {
-  console.log("this guarded route user:", user)
-  }, [user])
-
-  const AllAccess = ["Super", "CEO", "hr_manager"];
+  const AllAccess = ["super", "ceo", "hr_manager"];
   const canView = (title, dept) => {
     if (
       userDept === dept ||
@@ -35,11 +31,13 @@ export default function GuardedRoute({ title, dept, children }) {
       return true;
     } else if (
       title === "" &&
-      user?.role?.title === "HR In-House Agent"
+      user?.employee_info
+      ?.roles === "HR In-House Agent"
     ) {
       return true;
     } else if (
-      user?.role?.title === "HR Associate"
+      user?.employee_info
+      ?.roles.includes(userRole)
     ) {
       return true;
     } else {

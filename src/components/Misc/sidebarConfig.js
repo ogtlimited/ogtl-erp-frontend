@@ -4,6 +4,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 
 const getIcon = (name) => <i className={'la ' + name}></i>;
 
+
 const ICONS = {
   user: getIcon('la-user'),
   reports: getIcon('la-pie-chart'),
@@ -311,19 +312,18 @@ const sidebarConfig = [
     ],
   },
 
-
   {
     subheader: 'Leadership',
-    canView: 'All',
+    canView: 'lead',
     items: [
       {
-        canView: 'All',
+        canView: 'lead',
         title: 'Subordinates',
         path: PATH_DASHBOARD.leadership.supervisor,
         icon: ICONS.leadership,
       },
       {
-        canView: 'All',
+        canView: 'lead',
         title: 'Campaign Schedule',
         path: PATH_DASHBOARD.leadership.campaignSchedule,
         icon: ICONS.schedule,
@@ -591,4 +591,5 @@ const sidebarConfig = [
   },
 
 ];
+
 export default sidebarConfig;

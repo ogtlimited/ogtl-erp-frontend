@@ -9,11 +9,11 @@ const Unauthorized = () => {
 
             <div className="main-wrapper">
             <div className="error-box">
-                <h1>404</h1>
+                <h1>403</h1>
                 <h3>
                 <i className="fa fa-warning"></i> Oops! Unauthorized Access!
                 </h3>
-                <p>You dont have access to visit this page</p>
+                <p>You don't have access to visit this page</p>
                 <Link to="/dashboard/employee-dashboard" className="btn btn-custom">
                     Back to Home
                 </Link>
