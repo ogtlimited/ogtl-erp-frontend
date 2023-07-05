@@ -1,11 +1,12 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../../components/Tables/UniversalTable";
 import { RoleForm } from "../../components/FormJSON/CreateRole";
 import { AddRoleUserModal } from "../../components/Modal/AddRoleUserModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 const EmployeeRoles = () => {
   const { user } = useAppContext();
@@ -13,6 +14,7 @@ const EmployeeRoles = () => {
   const { title } = useParams();
   const [loading, setLoading] = useState(true);
   const [allRoleUsers, setAllRoleUsers] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
   const [roleUsers, setRoleUsers] = useState([]);
   const [mode, setMode] = useState("Create");
 
@@ -23,25 +25,44 @@ const EmployeeRoles = () => {
     setRoleUsers(RoleForm);
   };
 
+  //Revoke user role
+  const revokeUserRole = (row) => {
+    console.log("Revoking user role", row);
+    // axiosInstance
+    //   .delete(`/api/jobOpening/${row._id}`)
+    //   .then((res) => {
+    //     setData((prevData) =>
+    //       prevData.filter((pdata) => pdata._id !== row._id)
+    //     );
+    //     showAlert(true, res.data.message, 'alert alert-info');
+    //   })
+    //   .catch((error) => {
+    //     showAlert(true, error.response.data.message, 'alert alert-danger');
+    //   });
+  };
+
   const fetchAllRoleUsers = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(`/api/v1/role_users/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/role_users/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
       const resData = response?.data?.data?.users;
       console.log("Users under role:", resData);
 
       const formattedRoleUsers = resData.map((e) => ({
         ...e,
-          fullName: e.first_name + ' ' + e.last_name
+        fullName: e.first_name + " " + e.last_name,
       }));
 
-      setAllRoleUsers(formattedRoleUsers)
+      setAllRoleUsers(formattedRoleUsers);
     } catch (error) {}
   }, [id]);
 
@@ -89,6 +110,9 @@ const EmployeeRoles = () => {
                 href="#"
                 data-toggle="modal"
                 data-target="#exampleModal"
+                onClick={() => {
+                  setSelectedRow(row);
+                }}
               >
                 <i className="fa fa-trash m-r-5"></i> Revoke
               </a>
@@ -107,7 +131,9 @@ const EmployeeRoles = () => {
             <h3 className="page-title">{title}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/dashboard/settings/roles-permissions">Roles &amp; Permissions</Link>
+                <Link to="/dashboard/settings/roles-permissions">
+                  Roles &amp; Permissions
+                </Link>
               </li>
               <li className="breadcrumb-item active">Users</li>
             </ul>
@@ -137,9 +163,12 @@ const EmployeeRoles = () => {
         />
       </div>
 
-      <AddRoleUserModal 
-        roleId={id}
-        fetchRoleUsers={fetchAllRoleUsers}
+      <AddRoleUserModal roleId={id} fetchRoleUsers={fetchAllRoleUsers} />
+
+      <ConfirmModal
+        title="Role Assignment"
+        selectedRow={selectedRow}
+        deleteFunction={revokeUserRole}
       />
     </>
   );
