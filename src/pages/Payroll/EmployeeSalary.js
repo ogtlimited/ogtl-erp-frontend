@@ -19,6 +19,18 @@ const EmployeeSalary = () => {
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
+  const downloadTemplate = () => {
+    const csvContent = "OGID,Annual Gross Salary\n"; // CSV header row
+
+    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "Employee-Salary-Template.csv");
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const fetchAllSalaries = useCallback(() => {
     axiosInstance
       .get("/api/v1/employee_salaries.json", {
@@ -175,7 +187,15 @@ const EmployeeSalary = () => {
               <li className="breadcrumb-item active">Salary</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
+          <div
+            className="col-auto float-right ml-auto"
+            style={{
+              width: "400px",
+              display: "flex",
+              flexDirection: "row-reverse",
+              justifyContent: "space-between",
+            }}
+          >
             {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="#"
@@ -187,6 +207,15 @@ const EmployeeSalary = () => {
                 <i className="fa fa-plus"></i> Upload Salaries
               </a>
             )}
+            <a
+              href="#"
+              className="btn add-btn"
+              data-toggle="modal"
+              data-target="#EmployeeSalaryUploadModal"
+              onClick={downloadTemplate}
+            >
+              <i className="fa fa-download"></i> Download Template
+            </a>
           </div>
         </div>
       </div>
