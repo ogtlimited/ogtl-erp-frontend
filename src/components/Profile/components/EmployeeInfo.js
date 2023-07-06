@@ -7,9 +7,8 @@ import { EmployeeInfoModal } from "../../Modal/EmployeeInfoModal";
 const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile }) => {
   const { user } = useAppContext();
 
-  console.log("employeeInfo:", employeeInfo);
-
   const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "hr_associate"]
 
   return (
     <>
@@ -17,7 +16,7 @@ const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile }) => {
         <div className="card-body">
           <h3 className="card-title">
             Employee Information{" "}
-            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
+            {canCreate.includes(...CurrentUserRoles) ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"

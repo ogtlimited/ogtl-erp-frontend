@@ -220,6 +220,16 @@ a {
   color: #333;
 }
 
+/* Active Sidebar Style */
+#sidebar-menu a.active {
+  background-color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  font-weight: 500;
+  border-right: 5px solid #00c5fb;
+  text-transform: var(--prm-color);
+  transition: 0.3s;
+}
+
 .select-employee {
   width: 100%;
   margin-left: 0;

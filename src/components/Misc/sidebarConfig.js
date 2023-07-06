@@ -49,7 +49,7 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.main.employeeDashboard,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'HR Dashboard',
             path: PATH_DASHBOARD.main.hrDashboard,
           },
@@ -119,32 +119,32 @@ const sidebarConfig = [
         icon: ICONS.user,
         children: [
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'All Employees',
             path: PATH_DASHBOARD.hr.allEmployees,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Add Employee',
             path: PATH_DASHBOARD.hr.addEmployees,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Leadership',
             path: PATH_DASHBOARD.hr.leadership,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Captured Biometrics',
             path: PATH_DASHBOARD.hr.capturedBiometrics,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Attendance Record',
             path: PATH_DASHBOARD.hr.attendanceRecord,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Leave Applications',
             path: PATH_DASHBOARD.hr.leavesAdmin,
           },
@@ -164,42 +164,42 @@ const sidebarConfig = [
           //   path: PATH_DASHBOARD.hr.resignationEmployee,
           // },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Offices',
             path: PATH_DASHBOARD.hr.offices,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Designations',
             path: PATH_DASHBOARD.hr.designations,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Branch',
             path: PATH_DASHBOARD.hr.branch,
           },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Leave Types',
             path: PATH_DASHBOARD.hr.leaveType,
           },
         ],
       },
       {
-        canView: 'Super',
+        canView: 'super',
         title: 'Payroll',
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
         children: [
           {
-            canView: 'Super',
+            canView: 'super',
             title: 'Employee Salary',
             path: PATH_DASHBOARD.payroll.salary,
           },
         ],
       },
       {
-        canView: 'HR',
+        canView: 'hr',
         title: 'Reports',
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.reports,
@@ -210,7 +210,7 @@ const sidebarConfig = [
           //   path: PATH_DASHBOARD.reports.employeeReport,
           // },
           {
-            canView: 'Super',
+            canView: 'super',
             title: 'Payslip Reports',
             path: PATH_DASHBOARD.reports.payslipReport,
           },
@@ -227,7 +227,7 @@ const sidebarConfig = [
         ],
       },
       {
-        canView: 'HR',
+        canView: 'hr',
         title: 'Recruitment',
         path: PATH_DASHBOARD.recruitment.root,
         icon: ICONS.recruitment,
@@ -238,7 +238,7 @@ const sidebarConfig = [
           //   path: PATH_DASHBOARD.recruitment.jobOpening,
           // },
           {
-            canView: 'HR',
+            canView: 'hr',
             title: 'Job Applicants',
             path: PATH_DASHBOARD.recruitment.jobApplicants,
           },
@@ -272,12 +272,6 @@ const sidebarConfig = [
       //       path: PATH_DASHBOARD.performance.scoreCards,
       //     },
       //   ],
-      // },
-      // {
-      //   canView: '',
-      //   title: 'Clients',
-      //   path: PATH_DASHBOARD.hrclients,
-      //   icon: ICONS.user,
       // },
       // {
       //   canView: '',
@@ -576,7 +570,7 @@ const sidebarConfig = [
     canView: 'HR',
     items: [
       {
-        canView: 'HR',
+        canView: 'super',
         title: 'Roles & Permission',
         path: PATH_DASHBOARD.settings.rolesPermission,
         icon: ICONS.rolesPermission,

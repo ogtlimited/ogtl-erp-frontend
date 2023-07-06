@@ -21,7 +21,7 @@ const Designations = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  console.log("CurrentUserRoles", CurrentUserRoles)
+  const canCreate = ["hr_manager", "hr_associate"]
 
   // All Designations:
   const fetchDesignations = useCallback(async () => {
@@ -152,7 +152,7 @@ const Designations = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
+            {canCreate.includes(...CurrentUserRoles) ? (
               <a
                 href="/"
                 className="btn add-btn"

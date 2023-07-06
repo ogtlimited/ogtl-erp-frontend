@@ -152,7 +152,7 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
       );
 
       $("#LeaderFormModal").modal("toggle");
-      setLeader(LeaderForm);
+      cancelEvent();
       fetchLeaders();
       setLoading(false);
     } catch (error) {
