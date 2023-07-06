@@ -204,7 +204,7 @@ const EmployeeSalary = () => {
                 data-target="#EmployeeSalaryUploadModal"
                 onClick={() => settoggleModal(true)}
               >
-                <i className="fa fa-plus"></i> Upload Salaries
+                <i className="fa fa-upload"></i> Upload Salaries
               </a>
             )}
             <a
