@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -5,12 +6,20 @@ import welcome from "../../../assets/img/welcome.png";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
+
+//   const showToastMessage = () => {
+//     toast.success('Success Notification !', {
+//         position: toast.POSITION.TOP_RIGHT
+//     });
+// };
 
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
     e?.day.match(day)
@@ -38,6 +47,7 @@ const EmployeeUser = () => {
   useEffect(() => {
     console.log("user", user);
 
+    // showToastMessage()
     fetchQuote();
     const interval = setInterval(() => {
       fetchQuote();
@@ -55,7 +65,15 @@ const EmployeeUser = () => {
           <div className="row welcome-card p-5">
             <div className="col-md-9 left-card">
               <h4 className="welcome-text">
-                Welcome back,
+                Welcome back,{" "}
+                <a href="#">
+                  <img
+                    align="center"
+                    src="https://camo.githubusercontent.com/e8e7b06ecf583bc040eb60e44eb5b8e0ecc5421320a92929ce21522dbc34c891/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f6876524a434c467a6361737252346961377a2f67697068792e676966"
+                    height="25"
+                    style={{marginTop: "-10px"}}
+                  />
+                </a>
                 <br />{" "}
                 {`${user?.employee_info?.personal_details?.first_name} 
                   ${user?.employee_info?.personal_details?.middle_name || ""} 
@@ -145,6 +163,8 @@ const EmployeeUser = () => {
           </div>
         </div>
       </div>
+
+      {/* <ToastContainer /> */}
     </>
   );
 };
