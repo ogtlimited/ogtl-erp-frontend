@@ -25,6 +25,7 @@ const Offices = () => {
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "hr_associate"]
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -201,7 +202,7 @@ const Offices = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
+            {canCreate.includes(...CurrentUserRoles) ? (
               <a
                 href="/"
                 className="btn add-btn"

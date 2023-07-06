@@ -11,6 +11,7 @@ const PersonalInfo = ({
   const { user } = useAppContext();
   
   const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "hr_associate"]
 
   return (
     <>
@@ -18,7 +19,7 @@ const PersonalInfo = ({
         <div className="card-body">
           <h3 className="card-title">
             Personal Details{" "}
-            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
+            {canCreate.includes(...CurrentUserRoles) ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"

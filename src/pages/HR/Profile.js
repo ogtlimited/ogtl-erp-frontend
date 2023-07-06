@@ -19,6 +19,7 @@ const Profile = () => {
   const [mode, setMode] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "hr_associate"]
 
   const fetchEmployeeShift = async () => {
     try {
@@ -189,7 +190,7 @@ const Profile = () => {
                               {userData?.employee?.reports_to?.full_name ||
                                 "Not Available"}
                             </a>
-                            {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("hr_associate") ? (
+                            {canCreate.includes(...CurrentUserRoles) ? (
                               <a
                                 className="edit-icon"
                                 data-toggle="modal"
