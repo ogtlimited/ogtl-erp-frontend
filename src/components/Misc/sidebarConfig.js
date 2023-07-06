@@ -275,12 +275,6 @@ const sidebarConfig = [
       // },
       // {
       //   canView: '',
-      //   title: 'Clients',
-      //   path: PATH_DASHBOARD.hrclients,
-      //   icon: ICONS.user,
-      // },
-      // {
-      //   canView: '',
       //   title: 'Coaching Form List',
       //   path: PATH_DASHBOARD.coaching,
       //   icon: ICONS.coaching,
