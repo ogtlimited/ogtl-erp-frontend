@@ -6,12 +6,16 @@ import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
 export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
-  const { selectCampaigns, selectDepartments } =
-    useAppContext();
+  const { selectCampaigns, selectDepartments } = useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
+
+  useEffect(() => {
+    setReportTo(data);
+    setOfficeType(data?.office?.office_type);
+  }, [data]);
 
   // All Leaders:
   const fetchAllLeaders = useCallback(async () => {
@@ -23,18 +27,14 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office: reportTo?.misc?.id,
+          office: reportTo?.office?.id,
           pages: 1,
           limit: 1000,
         },
       });
-      
+
       const resData = response?.data?.data?.leaders;
-      console.log("na this one:", {
-        office: reportTo?.misc?.id,
-        resData,
-      })
-            
+
       const formattedLeaders = resData
         .map((e) => ({
           label: e?.first_name + " " + e?.last_name,
@@ -48,13 +48,11 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
       console.log("Get All Leaders error:", error);
       setLoading(false);
     }
-  }, [reportTo?.misc?.id]);
+  }, [reportTo?.office?.id]);
 
   useEffect(() => {
     fetchAllLeaders();
-    setReportTo(data);
-    setOfficeType(data?.office?.office_type);
-  }, [data, fetchAllLeaders]);
+  }, [fetchAllLeaders]);
 
   const handleOfficeTypeChange = (e) => {
     setReportTo({
@@ -62,6 +60,15 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
       office: {
         ...reportTo.office,
         office_type: e?.value,
+        id: "",
+        title: "",
+      },
+      employee: {
+        ...reportTo.employee,
+        reports_to: {
+          ogid: "",
+          full_name: "",
+        },
       },
     });
     setOfficeType(e?.value);
@@ -72,7 +79,6 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
 
     const employeeId = data?.employee?.ogid;
     const reportToId = reportTo?.employee?.reports_to?.ogid;
-
 
     setLoading(true);
     try {
@@ -85,9 +91,6 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          // params: {
-          //   ogid: employeeId,
-          // }
         }
       );
 
@@ -167,11 +170,13 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
                               id: e?.value,
                               title: e?.label,
                             },
-                            misc: {
-                              ...reportTo.misc,
-                              office_id: e?.value,
-                              office_title: e?.label,
-                            }
+                            employee: {
+                              ...reportTo.employee,
+                              reports_to: {
+                                ogid: "",
+                                full_name: "",
+                              },
+                            },
                           })
                         }
                         style={{ display: "inline-block" }}
@@ -179,6 +184,7 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
                     </div>
                   </div>
 
+                  {/* Supervisor/Team Lead */}
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="report_to">Supervisor/Team Lead</label>
