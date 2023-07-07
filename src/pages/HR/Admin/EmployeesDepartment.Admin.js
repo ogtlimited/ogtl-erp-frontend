@@ -15,6 +15,7 @@ import Papa from 'papaparse';
 import helper from '../../../services/helper';
 import UploadModal from '../../../components/Modal/uploadModal';
 import EmployeeHelperService from './employee.helper';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const AllEmployeesDepartmentAdmin = () => {
   const breadcrumb = 'All Employees';
@@ -54,7 +55,7 @@ const AllEmployeesDepartmentAdmin = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchGenderByDepartment = async () => {
-    const department = localStorage.getItem('department');
+    const department = secureLocalStorage.getItem('department');
     setDepartment(department);
 
     try {

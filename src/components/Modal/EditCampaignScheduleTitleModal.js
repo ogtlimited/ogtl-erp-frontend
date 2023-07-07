@@ -5,13 +5,14 @@ import { useAppContext } from '../../Context/AppContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const EditCampaignScheduleTitleModal = ({ fetchAllSchedule, editSchedule }) => {
   const { showAlert } = useAppContext();
   const [editCampaignSchedule, setEditCampaignSchedule] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
 
   useEffect(() => {

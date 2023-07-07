@@ -7,6 +7,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 import EmployeeHelperService from "../../pages/HR/Admin/employee.helper";
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddEmployeeModal = () => {
   const selectInputRef = useRef();
@@ -34,7 +35,7 @@ export const AddEmployeeModal = () => {
   const [deptError, setDeptError] = useState("");
   const [desError, setDesError] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   useEffect(() => {
     setIsGenderValid(employee.gender ? true : false);

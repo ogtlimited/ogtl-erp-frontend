@@ -20,6 +20,7 @@ import Papa from 'papaparse';
 import helper from '../../../services/helper';
 import UploadModal from '../../../components/Modal/uploadModal';
 import EmployeeHelperService from './employee.helper';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const AllEmployeesGenderAdmin = () => {
   const breadcrumb = 'All Employees';
@@ -57,7 +58,7 @@ const AllEmployeesGenderAdmin = () => {
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const genderData = JSON.parse(localStorage.getItem('gender'));
+  const genderData = JSON.parse(secureLocalStorage.getItem('gender'));
   const genderTitle = genderData.labels;
   const genderCount = genderData.data;
 

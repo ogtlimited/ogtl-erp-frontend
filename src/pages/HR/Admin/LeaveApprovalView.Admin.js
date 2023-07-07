@@ -16,6 +16,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApprovalContent from "../../../components/ModalContents/LeaveApprovalContent";
 import { department } from "../../../constants";
+import  secureLocalStorage  from  "react-secure-storage";
 
 const LeaveApprovalView = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const LeaveApprovalView = () => {
   const [allDepartments, setallDepartments] = useState([]);
 
   const fetchDept = () => {
-    const department = localStorage.getItem('department');
+    const department = secureLocalStorage.getItem('department');
     setDepartment(department);
     axiosInstance.get("/leave-approval-level").then((e) => {
       const resData = e?.data?.data;

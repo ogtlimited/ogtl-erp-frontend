@@ -5,6 +5,7 @@ import { create_approval_level } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddLeaveApprovalLevelModal = () => {
   const { showAlert } = useAppContext();
@@ -15,7 +16,7 @@ export const AddLeaveApprovalLevelModal = () => {
   const [designationInfo, setDesignationInfo] = useState(
     'Select designation ...'
   );
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setApprovalLevel(create_approval_level);

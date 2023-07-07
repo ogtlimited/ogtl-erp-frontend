@@ -8,13 +8,14 @@ import $ from "jquery";
 import ms from "ms";
 import moment from "moment";
 import Select from "react-select";
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);

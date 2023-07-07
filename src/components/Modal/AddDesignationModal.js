@@ -6,6 +6,7 @@ import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Select from 'react-select';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddDesignationModal = ({ allDesignation }) => {
   const { showAlert } = useAppContext();
@@ -17,7 +18,7 @@ export const AddDesignationModal = ({ allDesignation }) => {
   const [designationInfo, setDesignationInfo] = useState(
     'Select designation ...'
   );
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setCreateDesignation(create_designation);

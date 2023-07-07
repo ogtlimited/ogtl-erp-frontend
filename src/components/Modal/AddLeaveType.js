@@ -5,12 +5,13 @@ import { CREATE_LEAVE_TYPE } from '../FormJSON/CreateLeave';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddLeaveTypeModal = ({ fetchLeaveType }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState(CREATE_LEAVE_TYPE);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setLeaveType(CREATE_LEAVE_TYPE);

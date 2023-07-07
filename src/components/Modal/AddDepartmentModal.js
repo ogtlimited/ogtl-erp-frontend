@@ -6,13 +6,14 @@ import { create_department } from '../FormJSON/CreateLeaveApprovalLevel';
 import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddDepartmentModal = ({ getAllDepartments }) => {
   const { showAlert } = useAppContext();
   const [createDepartment, setCreateDepartment] =
     useState(create_department);
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setCreateDepartment(create_department);
