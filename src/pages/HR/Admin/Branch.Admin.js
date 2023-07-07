@@ -10,7 +10,7 @@ import moment from "moment";
 
 const BranchAdmin = () => {
   const [allBranch, setallBranch] = useState([]);
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [mode, setMode] = useState("Create");
   const [branch, setBranch] = useState([]);
 
@@ -41,12 +41,13 @@ const BranchAdmin = () => {
 
       setallBranch(formatted);
     } catch (error) {
-      console.log("All Branches error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
   useEffect(() => {
     fetchAllBranches();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreate = () => {
