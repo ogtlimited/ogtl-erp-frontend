@@ -8,7 +8,7 @@ import { OfficeForm } from "../../../components/FormJSON/CreateOffices.js";
 import moment from "moment";
 
 const Offices = () => {
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -60,10 +60,10 @@ const Offices = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Campaigns error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [CampaignPage, CampaignSizePerPage]);
+  }, [CampaignPage, CampaignSizePerPage, showAlert]);
 
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
@@ -98,10 +98,10 @@ const Offices = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Departments error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [DepartmentPage, DepartmentSizePerPage]);
+  }, [DepartmentPage, DepartmentSizePerPage, showAlert]);
 
   useEffect(() => {
     fetchAllCampaigns();

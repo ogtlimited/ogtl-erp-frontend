@@ -9,7 +9,7 @@ import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal
 
 const LeaveType = () => {
   const [AllLeaveType, setAllLeaveType] = useState([]);
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [mode, setMode] = useState("Create");
   const [leaveType, setLeaveType] = useState([]);
 
@@ -36,12 +36,13 @@ const LeaveType = () => {
 
       setAllLeaveType(formatted);
     } catch (error) {
-      console.log("All Leave Types error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
   useEffect(() => {
     fetchAllLeaveTypes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreate = () => {

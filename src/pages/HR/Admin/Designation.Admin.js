@@ -21,7 +21,7 @@ const Designations = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"]
+  const canCreate = ["hr_manager", "hr_associate"];
 
   // All Designations:
   const fetchDesignations = useCallback(async () => {
@@ -55,11 +55,7 @@ const Designations = () => {
       setDesignations(formattedDesignation);
       setLoading(false);
     } catch (error) {
-      showAlert(
-      true,
-      error?.response?.data?.errors ,
-      "alert alert-danger"
-    );
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   }, [page, showAlert, sizePerPage]);

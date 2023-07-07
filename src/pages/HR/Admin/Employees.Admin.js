@@ -4,9 +4,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../services/api';
 import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
+import { useAppContext } from '../../../Context/AppContext';
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
+  const { showAlert } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -68,42 +70,14 @@ const AllEmployeesAdmin = () => {
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Employees error:", error);
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-warning",
+    );
       setLoading(false);
     }
-  },[designationFilter, officeFilter, page, searchTerm, sizePerPage, statusFilter]);
-
-  // // All Offices:
-  // const fetchAllOffices = async () => {
-  //   try {
-  //     const response = await axiosInstance.get('/api/v1/offices.json', {
-  //       headers: {          
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //     });
-  //     const resData = response?.data?.data?.offices;
-
-  //     const allDepartments = resData.filter((e) => e?.office_type === "department");
-  //     const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-  //     const formattedDepartments = allDepartments.map((e) => ({
-  //       label: e?.title.toUpperCase(),
-  //       value: e.id,
-  //     })).sort((a, b) => a.label.localeCompare(b.label));
-
-  //     const formattedCampaigns = allCampaigns.map((e) => ({
-  //       label: e?.title.toUpperCase(),
-  //       value: e.id,
-  //     })).sort((a, b) => a.label.localeCompare(b.label));
-
-  //     setDepartments(formattedDepartments);
-  //     setCampaigns(formattedCampaigns);
-  //   } catch (error) {
-  //     console.log("Get All Offices error:", error);
-  //   }
-  // };
+  },[designationFilter, officeFilter, page, searchTerm, showAlert, sizePerPage, statusFilter]);
 
   // All Campaigns:
   const fetchAllCampaigns = async () => {

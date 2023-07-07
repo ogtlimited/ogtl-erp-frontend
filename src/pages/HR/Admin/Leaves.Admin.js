@@ -91,13 +91,12 @@ const LeavesAdmin = () => {
           leave?.leave?.end_date
         ),
       }));
-      console.log("HR formatted pending leaves:", formatted);
 
       setallLeaves(formatted);
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -134,7 +133,7 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -158,7 +157,7 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -248,12 +247,7 @@ const LeavesAdmin = () => {
       fetchHRLeaveHistory();
       fetchHRLeavesNotificationCount();
     } catch (error) {
-      showAlert(
-        true,
-        error?.response?.data?.errors,
-        "alert alert-warning"
-      );
-
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
@@ -273,7 +267,9 @@ const LeavesAdmin = () => {
           <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
-          <a href="#">{row?.full_name} <span>{row?.ogid}</span></a>
+          <a href="#">
+            {row?.full_name} <span>{row?.ogid}</span>
+          </a>
         </h2>
       ),
     },
@@ -456,21 +452,19 @@ const LeavesAdmin = () => {
               </div>
             </div>
           </div>
-          
+
           <AdminLeavesTable
             columns={columns}
             data={allLeaves}
             setData={setallLeaves}
             loading={loading}
             setLoading={setLoading}
-
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             campaignFilter={campaignFilter}
@@ -515,8 +509,8 @@ const LeavesAdmin = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Leave Application Details"
-          content={<LeaveApplicationContent leaveContent={viewRow}/>}
-          handleRefresh={fetchHRLeaves} 
+          content={<LeaveApplicationContent leaveContent={viewRow} />}
+          handleRefresh={fetchHRLeaves}
         />
       ) : (
         ""

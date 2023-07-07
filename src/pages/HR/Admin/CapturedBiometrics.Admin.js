@@ -35,7 +35,6 @@ const CapturedBiometricsAdmin = () => {
 
       const resData = response?.data?.data?.staff;
       const totalPages = response?.data?.data?.total_pages;
-      console.log("Captured Biometrics:", resData);
       
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
