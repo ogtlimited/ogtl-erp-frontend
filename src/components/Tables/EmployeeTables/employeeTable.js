@@ -215,27 +215,6 @@ const EmployeesTable = ({
       sort: true,
       headerStyle: { minWidth: '100px' },
     },
-    {
-      dataField: '',
-      text: 'Action',
-      sort: true,
-      headerStyle: { minWidth: '70px', textAlign: 'left' },
-      formatter: (value, row) => (
-        <>
-          <div className="text-center">
-            <div className="leave-user-action-btns">
-              <button
-                className="btn btn-sm btn-primary"
-                data-toggle="modal"
-                onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
-              >
-                Edit
-              </button>
-            </div>
-          </div>
-        </>
-      ),
-    },
   ];
 
   // // Search START

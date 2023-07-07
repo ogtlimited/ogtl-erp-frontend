@@ -199,7 +199,7 @@ const sidebarConfig = [
         ],
       },
       {
-        canView: 'hr',
+        canView: 'super',
         title: 'Reports',
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.reports,
