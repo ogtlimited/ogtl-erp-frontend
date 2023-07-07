@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
+import  secureLocalStorage  from  "react-secure-storage";
 
 export default createBrowserHistory();
 const AppContext = createContext();
@@ -302,7 +303,7 @@ const AppProvider = (props) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = secureLocalStorage.getItem("token");
     if (token) {
       fetchAllEmployees();
       fetchAllCampaigns();

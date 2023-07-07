@@ -15,6 +15,7 @@ import { create } from "yup/lib/Reference";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApprovalContent from "../../../components/ModalContents/LeaveApprovalContent";
+import  secureLocalStorage  from  "react-secure-storage";
 
 const LeaveApproval = () => {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ const LeaveApproval = () => {
   };
 
   const handleDepartmentSwitch = (row) => {
-    localStorage.setItem("department", row.department);
+    secureLocalStorage.setItem("department", row.department);
     navigate(`/dashboard/hr/leave-approvals/department/${row._id}`)
   }
 

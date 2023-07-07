@@ -6,6 +6,7 @@ import { useAppContext } from '../../Context/AppContext';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const EditDepartmentShiftModal = ({ fetchDeptShift, department, editShift }) => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ export const EditDepartmentShiftModal = ({ fetchDeptShift, department, editShift
     edit_department_shifts
   );
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   useEffect(() => {
     setCreateDepartmentShift(editShift);

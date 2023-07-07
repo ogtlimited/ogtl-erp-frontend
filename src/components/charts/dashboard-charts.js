@@ -1,10 +1,10 @@
 /** @format */
-
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import DoughnutChart from './dougnut';
 import VerticalBar from './verticalBar';
 import DashboardStatistics from './dashboard-statistics';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const DashboardChart = ({
   title,
@@ -44,8 +44,8 @@ const DashboardChart = ({
         const departmentId = formattedData.filter((data) => data.labels === employeeLabel[dataIndex])
         const id = departmentId[0].id;
         const department = departmentId[0].labels;
-        localStorage.setItem("department", department);
-        localStorage.removeItem("gender");
+        secureLocalStorage.setItem("department", department);
+        secureLocalStorage.removeItem("gender");
         navigate(`/dashboard/hr/all-employees/department/${id}`);
       }
     } catch (error) {
@@ -60,8 +60,8 @@ const DashboardChart = ({
         const genderId = formattedGender.filter((data) => data.labels === genderLabel[dataIndex])
         const id = genderId[0].labels;
         const gender = genderId[0];
-        localStorage.setItem("gender", JSON.stringify(gender));
-        localStorage.removeItem("department");
+        secureLocalStorage.setItem("gender", JSON.stringify(gender));
+        secureLocalStorage.removeItem("department");
         navigate(`/dashboard/hr/all-employees/gender/${id}`);
       }
     } catch (error) {

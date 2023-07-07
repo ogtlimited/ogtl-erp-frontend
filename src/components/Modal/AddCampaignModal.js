@@ -7,6 +7,7 @@ import axiosInstance from '../../services/api';
 import $ from 'jquery';
 import Select from 'react-select';
 import CampaignHelperService from '../../pages/Campaigns/campaign.helper';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddCampaignModal = ({fetchCampaign}) => {
   const { createCampaign, showAlert, status } =
@@ -23,7 +24,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
   const [supervisor, setSupervisor] = useState('');
   const [qualityAnalyst, setQualityAnalyst] = useState('');
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   useEffect(() => {
     setIsClientValid(campaign.client_id ? true : false);

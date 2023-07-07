@@ -7,6 +7,7 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddCampaignShiftModal } from "../../components/Modal/AddCampaignShiftModal";
 import { EditCampaignShiftModal } from "../../components/Modal/EditCampaignShiftModal";
+import  secureLocalStorage  from  "react-secure-storage";
 
 const CampaignShiftView = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const CampaignShiftView = () => {
   const [allCampaignsShifts, setallCampaignShifts] = useState([]);
 
   const fetchCampaignShift = () => {
-    const campaign = localStorage.getItem('campaign');
+    const campaign = secureLocalStorage.getItem('campaign');
     setCampaign(campaign);
 
     axiosInstance.get(`/api/shiftType/office?campaignId=${id}`).then((e) => {

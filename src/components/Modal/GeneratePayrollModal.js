@@ -6,6 +6,7 @@ import { create_department } from "../FormJSON/CreateLeaveApprovalLevel";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const GeneratePayrollModal = ({
   fetchEmployeeSalarySlip,
@@ -17,7 +18,7 @@ export const GeneratePayrollModal = ({
     end_time: "",
   });
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   const cancelEvent = () => {
     setCreatePayslips(create_department);
