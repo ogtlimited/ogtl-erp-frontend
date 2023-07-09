@@ -1,10 +1,10 @@
 /** @format */
 
-import React, { useState } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
-import axiosInstance from '../../services/api';
-import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
-import { useAppContext } from '../../Context/AppContext';
+import React, { useState } from "react";
+import { RiCloseCircleFill } from "react-icons/ri";
+import axiosInstance from "../../services/api";
+import { REJECT_LEAVE } from "../FormJSON/CreateLeave";
+import { useAppContext } from "../../Context/AppContext";
 
 function RejectLeaveModal({
   closeModal,
@@ -12,7 +12,7 @@ function RejectLeaveModal({
   loading,
   setLoading,
   fetchReporteesLeaves,
-  fetchLeaveHistory
+  fetchLeaveHistory,
 }) {
   const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
@@ -24,21 +24,23 @@ function RejectLeaveModal({
 
   const handleRejectLeave = async (e) => {
     e.preventDefault();
-    const id = rejectLeave._id;
+    const id = rejectLeave.id;
     setLoading(true);
     try {
-      const response = await axiosInstance.patch(
-        `leads-leave-rejection/${id}`,
-        leave
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(
+        `/api/v1/reject_subordinate_leave/${id}.json`,
+        {
+          payload: leave,
+        }
       );
-      console.log('Leave rejection response:', response);
-      showAlert(true, 'Leave Rejected', 'alert alert-info');
+      
+      showAlert(true, "Leave Rejected", "alert alert-info");
 
       closeModal(false);
-      setLoading(<i class="fas fa-bullseye    "></i>);
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      console.log('Leave rejection error:', error.response);
       setLoading(false);
     }
     fetchReporteesLeaves();
@@ -84,7 +86,7 @@ function RejectLeaveModal({
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    'Submit'
+                    "Submit"
                   )}
                 </button>
               </div>
