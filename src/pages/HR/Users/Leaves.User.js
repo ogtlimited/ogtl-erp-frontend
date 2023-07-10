@@ -116,7 +116,16 @@ const LeavesUser = () => {
       setAllReporteesLeaves(formatted);
       setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      console.log(error?.response);
+      if (error?.response?.status === 403) {
+        showAlert(
+          true,
+          "You are not authorized to view your team leaves",
+          "alert alert-warning"
+        );
+      } else {
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      }
     }
     setLoading(false);
   };

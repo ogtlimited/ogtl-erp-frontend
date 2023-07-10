@@ -27,6 +27,10 @@ const LeavesAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [historyPage, setHistoryPage] = useState(1);
+  const [historySizePerPage, setHistorySizePerPage] = useState(10);
+  const [totalHistoryPages, setTotalHistoryPages] = useState("");
+
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
@@ -112,11 +116,22 @@ const LeavesAdmin = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
+          params: {
+            page: historyPage,
+            limit: historySizePerPage,
+            status: "approved" || "rejected",
+          }
         }
       );
 
       const resData = response?.data?.data?.leaves;
-      console.log("HR leave history:", resData);
+      const totalHistoryPages = response?.data?.data?.total_pages;
+
+      const thisPageLimit = historySizePerPage;
+      const thisTotalPageSize = totalHistoryPages;
+
+      setHistorySizePerPage(thisPageLimit);
+      setTotalHistoryPages(thisTotalPageSize);
 
       const formatted = resData.map((leave) => ({
         ...leave,
@@ -283,7 +298,7 @@ const LeavesAdmin = () => {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "11%" },
+      headerStyle: { width: "12%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -459,12 +474,14 @@ const LeavesAdmin = () => {
             setData={setallLeaves}
             loading={loading}
             setLoading={setLoading}
+
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             campaignFilter={campaignFilter}
@@ -485,12 +502,15 @@ const LeavesAdmin = () => {
             data={leaveHistory}
             setData={setLeaveHistory}
             loading={loading}
-            page={page}
-            setPage={setPage}
-            sizePerPage={sizePerPage}
-            setSizePerPage={setSizePerPage}
-            totalPages={totalPages}
-            setTotalPages={setTotalPages}
+            setLoading={setLoading}
+
+            page={historyPage}
+            setPage={setHistoryPage}
+            sizePerPage={historySizePerPage}
+            setSizePerPage={setHistorySizePerPage}
+            totalPages={totalHistoryPages}
+            setTotalPages={setTotalHistoryPages}
+
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             leaveTypeFilter={leaveTypeFilter}
@@ -499,7 +519,6 @@ const LeavesAdmin = () => {
             setStatusFilter={setStatusFilter}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            setLoading={setLoading}
             departments={departments}
             leaveTypes={leaveTypes}
           />
