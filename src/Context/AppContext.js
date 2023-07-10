@@ -24,7 +24,10 @@ const AppProvider = (props) => {
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
-  const [dropDownClicked, setDropDownClicked] = useState(false);
+  const [dropDownClicked, setDropDownClicked] = useState(false)
+
+  const isTeamLead = user?.employee_info?.is_lead;
+  const isHr = user?.office?.title === 'hr';
 
   const status = [
     {
@@ -305,14 +308,19 @@ const AppProvider = (props) => {
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     if (token) {
-      fetchAllEmployees();
-      fetchAllCampaigns();
-      fetchAllDepartments();
-      fetchAllDesignations();
-      fetchAllBranches();
-      fetchAllLeaveTypes();
+      if (isTeamLead || isHr) {
+        fetchAllEmployees();
+        fetchAllCampaigns();
+        fetchAllDepartments();
+        fetchAllDesignations();
+        fetchAllBranches();
+        fetchAllLeaveTypes();
+        fetchHRLeavesNotificationCount();
+      } else {
+        fetchAllLeaveTypes();
+      }
     }
-  }, [userToken]);
+  }, [isHr, isTeamLead, userToken]);
 
   return (
     <AppContext.Provider

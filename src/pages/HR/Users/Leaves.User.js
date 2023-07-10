@@ -78,6 +78,7 @@ const LeavesUser = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -183,6 +184,13 @@ const LeavesUser = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
       sort: true,
       headerStyle: { width: "10%" },
       formatter: (val, row) => <p>{val}</p>,
@@ -528,8 +536,10 @@ const LeavesUser = () => {
   ];
 
   const SilentRefresh = () => {
-      fetchReporteesLeaves()
-  }
+    if (currentUserIsLead) {
+      fetchReporteesLeaves();
+    }
+  };
 
   return (
     <>

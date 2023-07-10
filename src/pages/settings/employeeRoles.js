@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
@@ -55,7 +56,7 @@ const EmployeeRoles = () => {
       );
 
       const resData = response?.data?.data?.users;
-      console.log("Users under role:", resData);
+      console.log("Users under role:", response);
 
       const formattedRoleUsers = resData.map((e) => ({
         ...e,

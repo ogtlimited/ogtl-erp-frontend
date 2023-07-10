@@ -210,8 +210,6 @@ const EmployeeSalary = () => {
             <a
               href="#"
               className="btn add-btn"
-              data-toggle="modal"
-              data-target="#EmployeeSalaryUploadModal"
               onClick={downloadTemplate}
             >
               <i className="fa fa-download"></i> Download Template

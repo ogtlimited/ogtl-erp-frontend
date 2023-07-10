@@ -17,6 +17,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
 
   useEffect(() => {
     setEmployeeInfo(data);
+    console.log("employee data:", data)
     setOfficeType(data?.office?.office_type);
   }, [data]);
 
@@ -39,9 +40,12 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
       "office_type": employeeInfo?.office?.office_type,
       "operation_office_id": employeeInfo?.office?.id,
       "hr_designation_id": employeeInfo?.employee?.designation?.id,
+      "leave_approval_level": Number(employeeInfo?.employee?.leave_approval_level),
       "remote": employeeInfo?.employee?.remote,
       "leave_count": employeeInfo?.employee?.leave_count,
     }
+
+    console.log("submit this:", editedEmployeeInfo)
 
     setLoading(true);
     try {
@@ -263,6 +267,29 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                       />
                     </div>
                   </div>
+                  
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="leave_approval_level">Leave Approval Level</label>
+                      <input
+                        name="leave_approval_level"
+                        type="number"
+                        className="form-control"
+                        value={employeeInfo?.employee?.leave_approval_level}
+                        onChange={(e) =>
+                          setEmployeeInfo({
+                            ...employeeInfo,
+                            employee: {
+                              ...employeeInfo.employee,
+                              leave_approval_level: e?.target?.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+
                 </div>
 
                 <div className="modal-footer">

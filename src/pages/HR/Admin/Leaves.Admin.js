@@ -15,7 +15,7 @@ const LeavesAdmin = () => {
   // const user = tokenService.getUser();
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount, user } = useAppContext();
   const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -41,6 +41,8 @@ const LeavesAdmin = () => {
   const [leaveTypeFilter, setLeaveTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const isHr = user?.office?.title === "hr";
 
   // Calculates Leave Days (Week Days Only)
   function calcBusinessDays(startDate, endDate) {
@@ -120,7 +122,7 @@ const LeavesAdmin = () => {
             page: historyPage,
             limit: historySizePerPage,
             status: "approved" || "rejected",
-          }
+          },
         }
       );
 
@@ -241,11 +243,13 @@ const LeavesAdmin = () => {
   };
 
   useEffect(() => {
-    fetchHRLeaves();
-    fetchHRLeaveHistory();
-    fetchAllEmpOnLeave();
-    fetchAllOffices();
-    fetchLeavesType();
+    if (isHr) {
+      fetchHRLeaves();
+      fetchHRLeaveHistory();
+      fetchAllEmpOnLeave();
+      fetchAllOffices();
+      fetchLeavesType();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -474,14 +478,12 @@ const LeavesAdmin = () => {
             setData={setallLeaves}
             loading={loading}
             setLoading={setLoading}
-
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             campaignFilter={campaignFilter}
@@ -503,14 +505,12 @@ const LeavesAdmin = () => {
             setData={setLeaveHistory}
             loading={loading}
             setLoading={setLoading}
-
             page={historyPage}
             setPage={setHistoryPage}
             sizePerPage={historySizePerPage}
             setSizePerPage={setHistorySizePerPage}
             totalPages={totalHistoryPages}
             setTotalPages={setTotalHistoryPages}
-
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
             leaveTypeFilter={leaveTypeFilter}

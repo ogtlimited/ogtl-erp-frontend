@@ -13,7 +13,7 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   delete leaveContent.acted_on;
   delete leaveContent.hr_stage;
   delete leaveContent.manager_id;
-  // delete leaveContent.list_of_approvers;
+  delete leaveContent?.status_action ;
   // delete leaveContent.status_action;
   // delete leaveContent.department_id;
   // delete leaveContent.employee_id;
