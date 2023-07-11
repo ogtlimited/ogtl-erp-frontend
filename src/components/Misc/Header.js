@@ -45,9 +45,9 @@ const Header = () => {
     navigate('/dashboard/hr/leaves-admin');
   };
   
-  useEffect(() => {
-    fetchHRLeavesNotificationCount()
-  }, [fetchHRLeavesNotificationCount]);
+  // useEffect(() => {
+  //   fetchHRLeavesNotificationCount()
+  // }, [fetchHRLeavesNotificationCount]);
 
   useEffect(() => {
     if (user?.role?.title === 'HR Manager' && count > 0) {

@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
+import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
+  const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
+  const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
+  const [dailyAttendance, setDailyAttendance] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
 
@@ -16,6 +21,74 @@ const AttendanceRecord = () => {
   const [DepartmentPage, setDepartmentPage] = useState(1);
   const [DepartmentSizePerPage, setDepartmentSizePerPage] = useState(10);
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
+  const [date, setDate] = useState(today_date);
+
+  // Daily Attendance - Cards:
+  const fetchDailyAttendanceSummary = useCallback(async () => {
+    console.log("Summary date:", date);
+    try {
+      const response = await axiosInstance.get(
+        "api/v1/daily_attendance_summary.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            date: date,
+          },
+        }
+      );
+      const resData = response?.data?.data?.result;
+
+      setDailyAttendanceSummary(resData);
+      setLoading(false);
+    } catch (error) {
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-warning",
+    );
+      setLoading(false);
+    }
+  }, [date, showAlert]);
+
+  // Daily Attendance - Table:
+  const fetchDailyAttendance = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get("api/v1/daily_attendance.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          date: date,
+          limit: 400,
+        },
+      });
+      const resData =
+        response?.data?.data?.info === "no record for date"
+          ? []
+          : response?.data?.data?.info;
+
+      console.log("Daily Attendance:", response?.data?.data);
+
+      setDailyAttendance(resData);
+      setLoading(false);
+    } catch (error) {
+      showAlert(
+      true,
+      error?.response?.data?.errors ,
+      "alert alert-warning",
+    );
+      setLoading(false);
+    }
+  }, [date, showAlert]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -94,9 +167,16 @@ const AttendanceRecord = () => {
   }, [DepartmentPage, DepartmentSizePerPage]);
 
   useEffect(() => {
+    fetchDailyAttendanceSummary();
+    fetchDailyAttendance();
     fetchAllCampaigns();
     fetchAllDepartments();
-  }, [fetchAllCampaigns, fetchAllDepartments]);
+  }, [
+    fetchDailyAttendanceSummary,
+    fetchDailyAttendance,
+    fetchAllCampaigns,
+    fetchAllDepartments,
+  ]);
 
   // const campaignColumns = [
   //   {
@@ -164,32 +244,47 @@ const AttendanceRecord = () => {
   //   },
   // ];
 
+  // const columns = [
+  //   {
+  //     dataField: "title",
+  //     text: "Office",
+  //     sort: true,
+  //     headerStyle: { width: "35%" },
+  //     formatter: (val, row) => (
+  //       <p>
+  //         <Link
+  //           to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
+  //           className="attendance-record-for-office"
+  //         >
+  //           {val}
+  //         </Link>
+  //       </p>
+  //     ),
+  //   },
+  //   {
+  //     dataField: "created_at",
+  //     text: "Date Created",
+  //     sort: true,
+  //     headerStyle: { width: "20%" },
+  //   },
+  // ];
+
   const columns = [
-    // {
-    //   dataField: "index",
-    //   text: "S/N",
-    //   sort: true,
-    //   headerStyle: { width: "5%" },
-    // },
     {
-      dataField: "title",
-      text: "Office",
+      dataField: "full_name",
+      text: "Employee Name",
       sort: true,
       headerStyle: { width: "35%" },
-      formatter: (val, row) => (
-        <p>
-          <Link
-            to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
-            className="attendance-record-for-office"
-          >
-            {val}
-          </Link>
-        </p>
-      ),
     },
     {
-      dataField: "created_at",
-      text: "Date Created",
+      dataField: "clock_in",
+      text: "Clock In",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "clock_out",
+      text: "Clock Out",
       sort: true,
       headerStyle: { width: "20%" },
     },
@@ -203,7 +298,7 @@ const AttendanceRecord = () => {
             <h3 className="page-title">Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
+                HR
               </li>
               <li className="breadcrumb-item active">Employee</li>
             </ul>
@@ -211,13 +306,85 @@ const AttendanceRecord = () => {
         </div>
       </div>
 
-      <div className="page-menu">
+      <div className="daily-attendance-card-group">
+        <div className="daily-attendance-card">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i className="las la-clock"></i>
+            </span>
+            <div className="daily-attendance-card-info">
+              {loading ? (
+                <h3>-</h3>
+              ) : (
+                <h3>{dailyAttendanceSummary?.clock_in || "-"}</h3>
+              )}
+            </div>
+          </div>
+          <span>Total Clock In</span>
+        </div>
+
+        <div className="daily-attendance-card">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i
+                className="las la-clock"
+                style={{ transform: "scaleX(-1)" }}
+              ></i>
+            </span>
+            <div className="daily-attendance-card-info">
+              {loading ? (
+                <h3>-</h3>
+              ) : (
+                <h3> {dailyAttendanceSummary?.clock_out || "-"} </h3>
+              )}
+            </div>
+          </div>
+          <span>Total Clock Out</span>
+        </div>
+
+        <div className="daily-attendance-card">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i
+                className="las la-calendar"
+                style={{ transform: "scaleX(-1)" }}
+              ></i>
+            </span>
+            <div className="daily-attendance-card-info">
+              {loading ? (
+                <h3>-</h3>
+              ) : (
+                <h3>
+                  {" "}
+                  {moment(dailyAttendanceSummary?.day).format(
+                    "Do MMMM, YYYY"
+                  )}{" "}
+                </h3>
+              )}
+            </div>
+          </div>
+          <span>Day</span>
+        </div>
+      </div>
+
+      {/* <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
+
               <li className="nav-item">
                 <a
                   className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_dailyAttendance"
+                >
+                  Daily Attendance
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
                   data-toggle="tab"
                   href="#tab_campaigns"
                 >
@@ -234,14 +401,26 @@ const AttendanceRecord = () => {
                   Departments
                 </a>
               </li>
+
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div>
         <div className="row tab-content">
-          <div id="tab_campaigns" className="col-12 tab-pane show active">
+          <div id="tab_dailyAttendance" className="col-12 tab-pane show active">
+            <DailyAttendanceTable
+              columns={columns}
+              data={dailyAttendance}
+              loading={loading}
+              setLoading={setLoading}
+              date={date}
+              setDate={setDate}
+            />
+          </div>
+
+          <div id="tab_campaigns" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={columns}
               data={campaigns}

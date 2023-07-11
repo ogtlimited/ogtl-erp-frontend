@@ -40,7 +40,7 @@ const AllEmployeesAdmin = () => {
         params: {
           page: page,
           limit: sizePerPage,
-          search: searchTerm,
+          name: searchTerm.length ? searchTerm : null,
           operation_office_id: officeFilter.length ? officeFilter : null,
           hr_designation_id: designationFilter.length ? designationFilter : null,
           status: statusFilter.length ? statusFilter : null,

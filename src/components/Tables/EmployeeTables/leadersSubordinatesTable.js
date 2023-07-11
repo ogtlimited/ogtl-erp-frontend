@@ -81,15 +81,15 @@ const LeadersSubordinatesTable = ({
     },
     {
       dataField: 'ogid',
-      text: 'Employee ID',
+      text: 'OGID',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
     },
     {
       dataField: 'office',
       text: 'Office',
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: '100px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {

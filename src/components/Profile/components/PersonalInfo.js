@@ -31,7 +31,7 @@ const PersonalInfo = ({
           </h3>
 
           <ul className="personal-info">
-            {/* <li>
+            <li>
               <div className="title">Date of Birth</div>
               <div className="text">
                 {personalDetails?.employee?.personal_detail?.DOB
@@ -40,7 +40,7 @@ const PersonalInfo = ({
                     ).format("Do MMMM, YYYY")
                   : "Not Available"}
               </div>
-            </li> */}
+            </li>
             <li>
               <div className="title">Blood Group</div>
               <div className="text">

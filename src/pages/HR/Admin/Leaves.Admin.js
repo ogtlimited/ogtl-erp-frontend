@@ -42,7 +42,7 @@ const LeavesAdmin = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const isHr = user?.office?.title === "hr";
+  const isHr = user?.office?.title === "hr" ? true : false;
 
   // Calculates Leave Days (Week Days Only)
   function calcBusinessDays(startDate, endDate) {
@@ -249,7 +249,10 @@ const LeavesAdmin = () => {
       fetchAllEmpOnLeave();
       fetchAllOffices();
       fetchLeavesType();
+    } else {
+      fetchLeavesType();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

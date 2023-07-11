@@ -45,6 +45,8 @@ const Offices = () => {
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
 
+      console.log("All Camps.", resData);
+
       const thisPageLimit = CampaignSizePerPage;
       const thisTotalPageSize = totalPages;
 

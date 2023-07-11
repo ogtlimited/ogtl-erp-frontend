@@ -45,7 +45,7 @@ function RejectLeaveModal({
     }
     fetchReporteesLeaves();
     fetchLeaveHistory();
-    fetchHRLeavesNotificationCount();
+    // fetchHRLeavesNotificationCount();
   };
 
   return (

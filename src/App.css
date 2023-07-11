@@ -145,7 +145,7 @@ a {
 .page-item.active .page-link,
 #pageDropDown,
 .btn-primary {
-  z-index: 1;
+  z-index: 0;
   color: #fff;
   background-color: #00c5fb;
   border: 1px solid #00c5fb;

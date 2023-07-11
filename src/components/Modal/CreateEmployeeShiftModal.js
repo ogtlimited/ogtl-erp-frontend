@@ -107,25 +107,25 @@ export const CreateEmployeeShiftModal = ({ userID, setMode, fetchEmployeeShift, 
 
   };
 
-  const fetchOwnersSchedule = async () => {
-    try {
-      const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
-      const schedule = schedules?.data?.data;
+  // const fetchOwnersSchedule = async () => {
+  //   try {
+  //     const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
+  //     const schedule = schedules?.data?.data;
 
-      const scheduleOpts = schedule?.map((e) => {
-        return {
-          label: e.title,
-          value: e._id,
-        };
-      });
-      setScheduleOpts(scheduleOpts);
-    } catch (error) {
-      console.error(error?.response);
-    }
-  }
+  //     const scheduleOpts = schedule?.map((e) => {
+  //       return {
+  //         label: e.title,
+  //         value: e._id,
+  //       };
+  //     });
+  //     setScheduleOpts(scheduleOpts);
+  //   } catch (error) {
+  //     console.error(error?.response);
+  //   }
+  // }
 
   useEffect(() => {
-    fetchOwnersSchedule();
+    // fetchOwnersSchedule();
   }, []);
 
   const handleScheduleClick = (e) => {

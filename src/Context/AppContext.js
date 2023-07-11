@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
-import  secureLocalStorage  from  "react-secure-storage";
+import secureLocalStorage from "react-secure-storage";
 
 export default createBrowserHistory();
 const AppContext = createContext();
@@ -24,10 +24,10 @@ const AppProvider = (props) => {
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
-  const [dropDownClicked, setDropDownClicked] = useState(false)
+  const [dropDownClicked, setDropDownClicked] = useState(false);
 
   const isTeamLead = user?.employee_info?.is_lead;
-  const isHr = user?.office?.title === 'hr';
+  const isHr = user?.office?.title === "hr" ? true : false;
 
   const status = [
     {
@@ -71,8 +71,7 @@ const AppProvider = (props) => {
         const dataCount = resData.length;
         setCount(dataCount);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   };
 
   const handleProgress = ({ count, state }) => {
@@ -127,7 +126,6 @@ const AppProvider = (props) => {
     }, 5000);
   };
 
-
   // ! - EVERYTHING ABOVE IS FROM OLD API!!!
 
   // SELECT APIs
@@ -155,8 +153,7 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectEmployees(formattedEmployees);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   // All Campaigns:
@@ -299,16 +296,15 @@ const AppProvider = (props) => {
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setSelectLeaveTypes(formattedLeaveTypes);  
+      setSelectLeaveTypes(formattedLeaveTypes);
       setLoadingSelect(false);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     if (token) {
-      if (isTeamLead || isHr) {
+      if (isHr) {
         fetchAllEmployees();
         fetchAllCampaigns();
         fetchAllDepartments();
@@ -316,9 +312,9 @@ const AppProvider = (props) => {
         fetchAllBranches();
         fetchAllLeaveTypes();
         fetchHRLeavesNotificationCount();
-      } else {
-        fetchAllLeaveTypes();
       }
+
+      fetchAllLeaveTypes();
     }
   }, [isHr, isTeamLead, userToken]);
 
