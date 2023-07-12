@@ -112,7 +112,7 @@ const CampaignAttendanceAdmin = () => {
             <h3 className="page-title">{campaign}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/dashboard/hr/attendance-record">Attendance Records</Link>
               </li>
               <li className="breadcrumb-item active">Campaign</li>
             </ul>

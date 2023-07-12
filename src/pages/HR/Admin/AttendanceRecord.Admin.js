@@ -48,11 +48,7 @@ const AttendanceRecord = () => {
       setDailyAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-      true,
-      error?.response?.data?.errors ,
-      "alert alert-warning",
-    );
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   }, [date, showAlert]);
@@ -74,18 +70,17 @@ const AttendanceRecord = () => {
       const resData =
         response?.data?.data?.info === "no record for date"
           ? []
-          : response?.data?.data?.info;
+          : response?.data?.data?.info.map((e, index) => ({
+              ...e,
+              idx: index + 1,
+            }));
 
-      console.log("Daily Attendance:", response?.data?.data);
+      console.log("FORMATTED!!!:", resData);
 
       setDailyAttendance(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-      true,
-      error?.response?.data?.errors ,
-      "alert alert-warning",
-    );
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   }, [date, showAlert]);
@@ -178,98 +173,13 @@ const AttendanceRecord = () => {
     fetchAllDepartments,
   ]);
 
-  // const campaignColumns = [
-  //   {
-  //     dataField: 'sn',
-  //     text: 'S/N',
-  //     sort: true,
-  //     headerStyle: { width: '5px' },
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: 'project_name',
-  //     text: 'Campaign',
-  //     sort: true,
-  //     formatter: (val, row) =>
-  //       <p>
-  //         <Link to={`/dashboard/hr/campaign/employees/${row?.project_name}/${row._id}`} className='attendance-record-for-office'>
-  //           {val}
-  //         </Link>
-  //       </p>
-  //   },
-  //   {
-  //     dataField: 'client',
-  //     text: 'Client',
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: 'type',
-  //     text: 'Type',
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: 'createdAt',
-  //     text: 'Created',
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  // ];
-
-  // const departmentColumns = [
-  //   {
-  //     dataField: 'sn',
-  //     text: 'S/N',
-  //     sort: true,
-  //     headerStyle: { width: '5px' },
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: 'department',
-  //     text: 'Department',
-  //     sort: true,
-  //     formatter: (val, row) =>
-  //     <p>
-  //       <Link to={`/dashboard/hr/department/employees/${row?.department}/${row._id}`} className='attendance-record-for-office'>
-  //         {val}
-  //       </Link>
-  //     </p>,
-  //   },
-  //   {
-  //     dataField: 'createdAt',
-  //     text: 'Created',
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  // ];
-
-  // const columns = [
-  //   {
-  //     dataField: "title",
-  //     text: "Office",
-  //     sort: true,
-  //     headerStyle: { width: "35%" },
-  //     formatter: (val, row) => (
-  //       <p>
-  //         <Link
-  //           to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
-  //           className="attendance-record-for-office"
-  //         >
-  //           {val}
-  //         </Link>
-  //       </p>
-  //     ),
-  //   },
-  //   {
-  //     dataField: "created_at",
-  //     text: "Date Created",
-  //     sort: true,
-  //     headerStyle: { width: "20%" },
-  //   },
-  // ];
-
   const columns = [
+    {
+      dataField: "idx",
+      text: "S/N",
+      sort: true,
+      headerStyle: { width: "5%" },
+    },
     {
       dataField: "full_name",
       text: "Employee Name",
@@ -290,6 +200,31 @@ const AttendanceRecord = () => {
     },
   ];
 
+  const officeColumns = [
+    {
+      dataField: "title",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "35%" },
+      formatter: (val, row) => (
+        <p>
+          <Link
+            to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
+            {val}
+          </Link>
+        </p>
+      ),
+    },
+    {
+      dataField: "created_at",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+  ];
+
   return (
     <>
       <div className="page-header">
@@ -297,9 +232,7 @@ const AttendanceRecord = () => {
           <div className="col">
             <h3 className="page-title">Attendance Records</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                HR
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Employee</li>
             </ul>
           </div>
@@ -378,7 +311,7 @@ const AttendanceRecord = () => {
                   data-toggle="tab"
                   href="#tab_dailyAttendance"
                 >
-                  Daily Attendance
+                  Daily Attendance Summary
                 </a>
               </li>
 
@@ -422,7 +355,7 @@ const AttendanceRecord = () => {
 
           <div id="tab_campaigns" className="col-12 tab-pane">
             <UniversalPaginatedTable
-              columns={columns}
+              columns={officeColumns}
               data={campaigns}
               loading={loading}
               setLoading={setLoading}
@@ -437,7 +370,7 @@ const AttendanceRecord = () => {
 
           <div id="tab_departments" className="col-12 tab-pane">
             <UniversalPaginatedTable
-              columns={columns}
+              columns={officeColumns}
               data={departments}
               loading={loading}
               setLoading={setLoading}
