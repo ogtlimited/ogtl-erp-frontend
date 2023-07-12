@@ -25,8 +25,6 @@ const DailyAttendanceTable = ({
   const [mobileView, setmobileView] = useState(false);
   const [allAttendance, setAllAttendance] = useState([]);
 
-  console.log("All Attendance - table:", data)
-
   useEffect(() => {
     setAllAttendance(data);
   }, [data]);
