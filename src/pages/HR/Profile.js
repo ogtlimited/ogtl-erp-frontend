@@ -11,7 +11,7 @@ import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const { dropDownClicked, setDropDownClicked, user } = useAppContext();
+  const { dropDownClicked, setDropDownClicked, user, showAlert } = useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
@@ -21,6 +21,7 @@ const Profile = () => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreate = ["hr_manager", "hr_associate"]
 
+  // Employee Shifts:
   const fetchEmployeeShift = async () => {
     try {
       const response = await axiosInstance.get(
@@ -36,7 +37,7 @@ const Profile = () => {
 
       const resData = response?.data?.data?.employee_shifts;
       const employeeShifts = resData;
-      console.log("employee shift:", employeeShifts);
+      console.log("this employee shift:", employeeShifts);
 
       if (!employeeShifts.length) {
         setMode("create");
@@ -45,7 +46,7 @@ const Profile = () => {
         setEmployeeShifts(employeeShifts);
       }
     } catch (error) {
-      console.log(error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
@@ -65,7 +66,11 @@ const Profile = () => {
       const userId = resData?.employee?.email;
       setUserId(userId);
     } catch (error) {
-      console.log("Get All Employee Profile error:", error);
+      console.log("This error:", error?.response?.status );
+      if (error?.response?.status === 500) {
+        showAlert(true, "Error fetching Employee Profile", "alert alert-warning");
+      }
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
@@ -188,7 +193,7 @@ const Profile = () => {
                               className="report-to-link"
                             >
                               {userData?.employee?.reports_to?.full_name ||
-                                "Not Available"}
+                                "No Lead"}
                             </a>
                             {canCreate.includes(...CurrentUserRoles) ? (
                               <a

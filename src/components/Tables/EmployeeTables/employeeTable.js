@@ -1,21 +1,21 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import axiosInstance from '../../../services/api';
-import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
-import filterFactory from 'react-bootstrap-table2-filter';
-import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import female from '../../../assets/img/female_avatar.png';
-import female2 from '../../../assets/img/female_avatar2.png';
-import female3 from '../../../assets/img/female_avatar3.png';
-import male from '../../../assets/img/male_avater.png';
-import male2 from '../../../assets/img/male_avater2.png';
-import male3 from '../../../assets/img/male_avater3.png';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../../Context/AppContext';
+import React, { useState, useEffect, useCallback } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import axiosInstance from "../../../services/api";
+import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
+import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import female from "../../../assets/img/female_avatar.png";
+import female2 from "../../../assets/img/female_avatar2.png";
+import female3 from "../../../assets/img/female_avatar3.png";
+import male from "../../../assets/img/male_avater.png";
+import male2 from "../../../assets/img/male_avater2.png";
+import male3 from "../../../assets/img/male_avater3.png";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
 
 const EmployeesTable = ({
   data,
@@ -48,19 +48,18 @@ const EmployeesTable = ({
   setSearchTerm,
   context,
 }) => {
-
   const status = [
     {
-      code: 'active',
-      label: 'ACTIVE',
+      code: "active",
+      label: "ACTIVE",
     },
     {
-      code: 'left',
-      label: 'RESIGNED',
+      code: "left",
+      label: "RESIGNED",
     },
     {
-      code: 'terminated',
-      label: 'TERMINATED',
+      code: "terminated",
+      label: "TERMINATED",
     },
   ];
 
@@ -68,10 +67,10 @@ const EmployeesTable = ({
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = 'https://erp.outsourceglobal.com';
+  const imageUrl = "https://erp.outsourceglobal.com";
   const { setIsFromBiometrics } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
@@ -90,10 +89,10 @@ const EmployeesTable = ({
 
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
@@ -120,14 +119,14 @@ const EmployeesTable = ({
 
   const handleNavigate = () => {
     setIsFromBiometrics(false);
-  }
+  };
 
   const columns = [
     {
-      dataField: 'fullName',
-      text: 'Employee Name',
+      dataField: "fullName",
+      text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: '250px' },
+      headerStyle: { minWidth: "250px" },
       formatter: (value, row) => (
         <h2 className="table-avatar" onClick={handleNavigate}>
           <a href="" className="avatar">
@@ -136,7 +135,7 @@ const EmployeesTable = ({
               src={
                 row.image
                   ? imageUrl + row.image
-                  : row.gender === 'male'
+                  : row.gender === "male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
@@ -149,34 +148,34 @@ const EmployeesTable = ({
       ),
     },
     {
-      dataField: 'status',
-      text: 'Status',
+      dataField: "status",
+      text: "Status",
       sort: true,
-      headerStyle: { minWidth: '120px' },
+      headerStyle: { minWidth: "120px" },
       formatter: (value, row) => (
         <>
-          {value === 'active' ? (
+          {value === "active" ? (
             <a href="" className="pos-relative">
-              {' '}
-              <span className="status-online"></span>{' '}
+              {" "}
+              <span className="status-online"></span>{" "}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
-          ) : value === 'left' ? (
+          ) : value === "left" ? (
             <a href="" className="pos-relative">
-              {' '}
-              <span className="status-pending"></span>{' '}
-              <span className="ml-4 d-block">{'RESIGNED'}</span>
+              {" "}
+              <span className="status-pending"></span>{" "}
+              <span className="ml-4 d-block">{"RESIGNED"}</span>
             </a>
-          ) : value === 'terminated' ? (
+          ) : value === "terminated" ? (
             <a href="" className="pos-relative">
-              {' '}
-              <span className="status-terminated"></span>{' '}
+              {" "}
+              <span className="status-terminated"></span>{" "}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           ) : (
             <a href="" className="pos-relative">
-              {' '}
-              <span className="status-terminated"></span>{' '}
+              {" "}
+              <span className="status-terminated"></span>{" "}
               <span className="ml-4 d-block">{value.toUpperCase()}</span>
             </a>
           )}
@@ -184,141 +183,223 @@ const EmployeesTable = ({
       ),
     },
     {
-      dataField: 'ogid',
-      text: 'Employee ID',
+      dataField: "ogid",
+      text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: 'office',
-      text: 'Office Type',
+      dataField: "office",
+      text: "Office Type",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'officeName',
-      text: 'Office',
+      dataField: "officeName",
+      text: "Office",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'designation',
-      text: 'Designation',
+      dataField: "designation",
+      text: "Designation",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: 'company_email',
-      text: 'Company Email',
+      dataField: "company_email",
+      text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
     },
   ];
 
-  // // Search START
-  // const MySearch = useCallback(
-  //   (props) => {
-  //     let input;
-  //     const handleClick = () => {
-  //       setPage(1);
-  //       setLoading(true);
-  //       props.onSearch(input.value);
-  //       const searchTerm = input.value;
-  //       setSearchTerm(searchTerm);
+  // Search Name:
+  const MySearch = useCallback(
+    (props) => {
+      let input;
+      const handleClick = () => {
+        setPage(1);
+        setLoading(true);
+        props.onSearch(input.value);
+        const searchTerm = input.value;
+        setOfficeFilter("");
+        setCampaignFilter("");
+        setDepartmentFilter("");
+        setDesignationFilter("");
+        setStatusFilter("");
+        setSearchTerm(searchTerm);
 
-  //       if (page === 1) {
-  //         axiosInstance
-  //           .get('/employees/paginated-employees', {
-  //             params: {
-  //               department: departmentFilter,
-  //               designation: designationFilter,
-  //               status: statusFilter,
-  //               search: searchTerm,
-  //               page: page,
-  //               limit: sizePerPage,
-  //             },
-  //           })
-  //           .then((e) => {
-  //             let resData = e?.data?.employees;
-  //             let resOptions = e?.data?.pagination;
+        console.log("Search this name: ", searchTerm);
 
-  //             const thisPageLimit = sizePerPage;
-  //             const thisTotalPageSize = resOptions?.numberOfPages;
+        if (page === 1) {
+          axiosInstance
+            .get("/api/v1/employees.json", {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+              params: {
+                page: page,
+                limit: sizePerPage,
+                name: searchTerm,
+              },
+            })
+            .then((e) => {
+              let resData = e?.data?.employees;
+              let resOptions = e?.data?.pagination;
 
-  //             setSizePerPage(thisPageLimit);
-  //             setTotalPages(thisTotalPageSize);
+              console.log("Searched name:", resData)
 
-  //             const mapp = resData.map((emp) => {
-  //               return {
-  //                 ...emp,
-  //                 fullName:
-  //                   emp.first_name + ' ' + emp.middle_name+ ' ' + emp?.last_name,
-  //                 designation_name: emp?.designation?.designation,
-  //                 department_name: emp?.department?.department,
-  //                 project: emp?.projectId?.project_name,
-  //               };
-  //             });
-  //             setData(mapp);
-  //           })
-  //           .catch((error) => {
-  //             console.log(error);
-  //             setLoading(false);
-  //           });
-  //       }
-  //       setLoading(false);
-  //     };
+              const thisPageLimit = sizePerPage;
+              const thisTotalPageSize = resOptions?.numberOfPages;
 
-  //     return (
-  //       <div className="job-app-search">
-  //         <input
-  //           className="form-control"
-  //           style={{
-  //             backgroundColor: '#fff',
-  //             width: '33.5%',
-  //             marginRight: '20px',
-  //           }}
-  //           ref={(n) => (input = n)}
-  //           type="text"
-  //         />
-  //         <button className="btn btn-primary" onClick={handleClick}>
-  //           Search
-  //         </button>
-  //       </div>
-  //     );
-  //   },
-  //   [departmentFilter, designationFilter, page, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage, statusFilter]
-  // );
-  // // Search END
+              setSizePerPage(thisPageLimit);
+              setTotalPages(thisTotalPageSize);
 
+              const mapp = resData.map((emp) => {
+                return {
+                  ...emp,
+                  fullName:
+                    emp.first_name +
+                    " " +
+                    emp.middle_name +
+                    " " +
+                    emp?.last_name,
+                  designation_name: emp?.designation?.designation,
+                  department_name: emp?.department?.department,
+                  project: emp?.projectId?.project_name,
+                };
+              });
+              setData(mapp);
+            })
+            .catch((error) => {
+              console.log(error);
+              setLoading(false);
+            });
+        }
+        setLoading(false);
+      };
+
+      const handleKeydown = (e) => {
+        if (e.key === "Enter") {
+          setPage(1);
+          setLoading(true);
+          props.onSearch(input.value);
+          const searchTerm = input.value;
+          setOfficeFilter("");
+          setCampaignFilter("");
+          setDepartmentFilter("");
+          setDesignationFilter("");
+          setStatusFilter("");
+          setSearchTerm(searchTerm);
+  
+          console.log("Search this name on enter: ", searchTerm);
+  
+          if (page === 1) {
+            axiosInstance
+              .get("/api/v1/employees.json", {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "ngrok-skip-browser-warning": "69420",
+                },
+                params: {
+                  page: page,
+                  limit: sizePerPage,
+                  name: searchTerm,
+                },
+              })
+              .then((e) => {
+                let resData = e?.data?.employees;
+                let resOptions = e?.data?.pagination;
+  
+                console.log("Searched name:", resData)
+  
+                const thisPageLimit = sizePerPage;
+                const thisTotalPageSize = resOptions?.numberOfPages;
+  
+                setSizePerPage(thisPageLimit);
+                setTotalPages(thisTotalPageSize);
+  
+                const mapp = resData.map((emp) => {
+                  return {
+                    ...emp,
+                    fullName:
+                      emp.first_name +
+                      " " +
+                      emp.middle_name +
+                      " " +
+                      emp?.last_name,
+                    designation_name: emp?.designation?.designation,
+                    department_name: emp?.department?.department,
+                    project: emp?.projectId?.project_name,
+                  };
+                });
+                setData(mapp);
+              })
+              .catch((error) => {
+                console.log(error);
+                setLoading(false);
+              });
+          }
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="job-app-search">
+          <input
+            className="form-control"
+            style={{
+              backgroundColor: "#fff",
+              width: "33.5%",
+              marginRight: "20px",
+            }}
+            ref={(n) => (input = n)}
+            type="text"
+            onKeyDown={handleKeydown}
+          />
+          <button className="btn btn-primary" onClick={handleClick}>
+            Search
+          </button>
+        </div>
+      );
+    },
+    [page, setCampaignFilter, setData, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage]
+  );
+
+  // Filter by Departments:
   const handleDepartmentFilter = (e) => {
-    setCampaignFilter('');
-    setDesignationFilter('');
-    setStatusFilter('');
+    setCampaignFilter("");
+    setDesignationFilter("");
+    setStatusFilter("");
     setDepartmentFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-    .get('/api/v1/employees.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        operation_office_id: e.target.value,
-      },
-    })
+      .get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          operation_office_id: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -332,7 +413,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -345,33 +426,34 @@ const EmployeesTable = ({
     setLoading(false);
   };
 
+  // Filter by Campaigns:
   const handleCampaignFilter = (e) => {
-    setDepartmentFilter('');
-    setDesignationFilter('');
-    setStatusFilter('');
+    setDepartmentFilter("");
+    setDesignationFilter("");
+    setStatusFilter("");
     setCampaignFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
-    
+
     axiosInstance
-    .get('/api/v1/employees.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        operation_office_id: e.target.value,
-      },
-    })
+      .get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          operation_office_id: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -385,7 +467,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -398,30 +480,30 @@ const EmployeesTable = ({
     setLoading(false);
   };
 
+  // Filter by Designation:
   const handleDesignationFilter = (e) => {
     setDesignationFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
-
     axiosInstance
-    .get('/api/v1/employees.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        hr_designation_id: e.target.value,
-      },
-    })
+      .get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          hr_designation_id: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -435,7 +517,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -448,33 +530,34 @@ const EmployeesTable = ({
     setLoading(false);
   };
 
+  // Filter by Status:
   const handleStatusFilter = (e) => {
-    setDepartmentFilter('');
-    setCampaignFilter('');
-    setDesignationFilter('');
+    setDepartmentFilter("");
+    setCampaignFilter("");
+    setDesignationFilter("");
     setStatusFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-    .get('/api/v1/employees.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        search: searchTerm,
-        status: e.target.value,
-      },
-    })
+      .get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          name: searchTerm,
+          status: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -488,7 +571,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -520,21 +603,21 @@ const EmployeesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              {/* <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              /> */}
-              
-              <ExportCSVButton
-                className="float-right btn export-csv" style={{ marginBottom: 15}}
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
+              <div className="col-12">
+                <ExportCSVButton
+                  className="float-right btn export-csv"
+                  {...props.csvProps}
+                >
+                  Export CSV
+                </ExportCSVButton>
+                <MySearch
+                  {...props.searchProps}
+                  style={{ paddingLeft: "12%" }}
+                  className="inputSearch"
+                />
+              </div>
 
               <div className="hr-filter-select col-12">
-                
                 <div className="col-md-3">
                   <select
                     className="leave-filter-control"
@@ -546,10 +629,11 @@ const EmployeesTable = ({
                       Filter by Department
                     </option>
                     {departments.map((option, idx) => (
-                      <option key={idx} value={option.value}>{option.label}</option>
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
-                  
                 </div>
 
                 <div className="col-md-3">
@@ -563,7 +647,9 @@ const EmployeesTable = ({
                       Filter by Campaign
                     </option>
                     {campaigns.map((option, idx) => (
-                      <option key={idx} value={option.value}>{option.label}</option>
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -579,7 +665,9 @@ const EmployeesTable = ({
                       Filter by Designation
                     </option>
                     {designations.map((option, idx) => (
-                      <option key={idx} value={option.value}>{option.label}</option>
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -610,10 +698,10 @@ const EmployeesTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? 'table '
+                    ? "table "
                     : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
+                    ? "table table-responsive"
+                    : "table table-responsive"
                 }
                 noDataIndication={
                   loading ? (

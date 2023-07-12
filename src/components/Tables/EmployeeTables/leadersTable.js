@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
@@ -13,6 +14,7 @@ import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import axiosInstance from '../../../services/api';
+import { useAppContext } from '../../../Context/AppContext';
 
 const LeadersTable = ({
   data,
@@ -40,6 +42,7 @@ const LeadersTable = ({
   context,
 }) => {
 
+  const { user } = useAppContext();
   const { SearchBar } = Search;
   const males = [male, male2, male3];
   const females = [female, female2, female3];
@@ -51,6 +54,8 @@ const LeadersTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -133,12 +138,6 @@ const LeadersTable = ({
       headerStyle: { minWidth: '150px' },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
-    // {
-    //   dataField: 'designation',
-    //   text: 'Designation',
-    //   sort: true,
-    //   headerStyle: { minWidth: '250px' },
-    // },
     {
       dataField: 'email',
       text: 'Company Email',
@@ -146,24 +145,35 @@ const LeadersTable = ({
       headerStyle: { minWidth: '100px' },
     },
     // {
-    //   dataField: '',
-    //   text: 'Action',
-    //   sort: true,
-    //   headerStyle: { minWidth: '100px', textAlign: 'left' },
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { width: "10%" },
     //   formatter: (value, row) => (
-    //     <>
-    //       <div className="text-center">
-    //         <div className="leave-user-action-btns">
-    //           <button
-    //             className="btn btn-sm btn-primary"
+    //     <div className="dropdown dropdown-action text-right">
+    //       <a
+    //         href="#"
+    //         className="action-icon dropdown-toggle"
+    //         data-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //       </a>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         {CurrentUserRoles.includes("hr_manager") && (
+    //           <a
+    //             className="dropdown-item"
+    //             href="#"
     //             data-toggle="modal"
-    //             onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
+    //             data-target="#exampleModal"
+    //             onClick={() => {
+    //               setSelectedRow(row);
+    //             }}
     //           >
-    //             Edit
-    //           </button>
-    //         </div>
+    //             <i className="fa fa-trash m-r-5"></i> Revoke
+    //           </a>
+    //         )}
     //       </div>
-    //     </>
+    //     </div>
     //   ),
     // },
   ];

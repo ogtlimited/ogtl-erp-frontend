@@ -52,6 +52,7 @@ const DepartmentAttendanceAdmin = () => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   }, [designationFilter, id, page, searchTerm, sizePerPage]);
 

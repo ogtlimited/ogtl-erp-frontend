@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
@@ -9,7 +10,7 @@ import { AddRoleUserModal } from "../../components/Modal/AddRoleUserModal";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 const EmployeeRoles = () => {
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [loading, setLoading] = useState(true);
@@ -23,22 +24,6 @@ const EmployeeRoles = () => {
   const handleCreate = () => {
     setMode("Create");
     setRoleUsers(RoleForm);
-  };
-
-  //Revoke user role
-  const revokeUserRole = (row) => {
-    console.log("Revoking user role", row);
-    // axiosInstance
-    //   .delete(`/api/jobOpening/${row._id}`)
-    //   .then((res) => {
-    //     setData((prevData) =>
-    //       prevData.filter((pdata) => pdata._id !== row._id)
-    //     );
-    //     showAlert(true, res.data.message, 'alert alert-info');
-    //   })
-    //   .catch((error) => {
-    //     showAlert(true, error.response.data.message, 'alert alert-danger');
-    //   });
   };
 
   const fetchAllRoleUsers = useCallback(async () => {
@@ -55,7 +40,7 @@ const EmployeeRoles = () => {
       );
 
       const resData = response?.data?.data?.users;
-      console.log("Users under role:", resData);
+      console.log("Users under role:", response);
 
       const formattedRoleUsers = resData.map((e) => ({
         ...e,
@@ -65,6 +50,40 @@ const EmployeeRoles = () => {
       setAllRoleUsers(formattedRoleUsers);
     } catch (error) {}
   }, [id]);
+
+  //Revoke user role
+  const revokeUserRole = async (row) => {
+    const fullName = row.first_name + " " + row.last_name;
+    const userId = row?.ogid;
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.delete(
+        `/api/v1/remove_user_role/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            role: id
+          }
+        }
+      );
+
+      console.log("revoke response:", response)
+
+      showAlert(true, fullName + " removed from role", "alert alert-success");
+
+      fetchAllRoleUsers();
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchAllRoleUsers();

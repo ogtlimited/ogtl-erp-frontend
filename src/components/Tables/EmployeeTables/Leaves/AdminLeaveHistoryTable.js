@@ -1,21 +1,12 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import axiosInstance from '../../../../services/api';
-import ToolkitProvider, {
-  Search,
-  CSVExport,
-} from 'react-bootstrap-table2-toolkit';
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from 'react-bootstrap-table2-filter';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import axiosInstance from "../../../../services/api";
+import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
+import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const AdminLeavesHistoryTable = ({
   data,
@@ -43,18 +34,18 @@ const AdminLeavesHistoryTable = ({
 }) => {
   const status = [
     {
-      code: 'approved',
-      label: 'Approved',
+      code: "approved",
+      label: "Approved",
     },
     {
-      code:'rejected',
-      label: 'Rejected',
+      code: "rejected",
+      label: "Rejected",
     },
-  ]
+  ];
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [mobileView, setmobileView] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
   const [info, setInfo] = useState({
@@ -75,12 +66,87 @@ const AdminLeavesHistoryTable = ({
   useEffect(() => {
     resizeTable();
     setunfiltered(data);
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
   }, [mobileView]);
 
-  const imageUrl = 'https://erp.outsourceglobal.com';
+  const imageUrl = "https://erp.outsourceglobal.com";
+
+  const MySearch = (props) => {
+    let input;
+    const handleClick = () => {
+      setPage(1);
+      setLoading(true);
+      props.onSearch(input.value);
+      const searchTerm = input.value;
+      setSearchTerm(searchTerm);
+
+      if (page === 1) {
+        axiosInstance
+          .get(`leads-leave-applications`, {
+            params: {
+              search: searchTerm,
+              page: page,
+              limit: sizePerPage,
+            },
+          })
+          .then((res) => {
+            let resData = res?.data?.data?.application;
+            let resOptions = res?.data?.data?.pagination;
+
+            const thisPageLimit = sizePerPage;
+            const thisTotalPageSize = resOptions?.numberOfPages;
+
+            setSizePerPage(thisPageLimit);
+            setTotalPages(thisTotalPageSize);
+
+            const formatted = resData.map((leave) => ({
+              ...leave,
+              full_name:
+                leave?.employee.first_name +
+                " " +
+                leave?.employee.middle_name +
+                " " +
+                leave?.employee.last_name,
+              status_action: leave?.status,
+              leave_type: leave?.leave_type_id?.leave_type,
+              department: leave?.department_id?.department,
+              from_date: new Date(leave.from_date).toDateString(),
+              to_date: new Date(leave.to_date).toDateString(),
+              total_leave_days: Math.ceil(
+                (new Date(leave.to_date) - new Date(leave.from_date)) /
+                  (1000 * 3600 * 24)
+              ),
+            }));
+
+            setData(formatted);
+            setDepartmentFilter("");
+            setStatusFilter("");
+            setLeaveTypeFilter("");
+          });
+      }
+      setLoading(false);
+    };
+
+    return (
+      <div className="job-app-search">
+        <input
+          className="form-control"
+          style={{
+            backgroundColor: "#fff",
+            width: "33.5%",
+            marginRight: "20px",
+          }}
+          ref={(n) => (input = n)}
+          type="text"
+        />
+        <button className="btn btn-primary" onClick={handleClick}>
+          Search
+        </button>
+      </div>
+    );
+  };
 
   const handleDepartmentFilter = (e) => {
     setDepartmentFilter(e.target.value);
@@ -109,9 +175,9 @@ const AdminLeavesHistoryTable = ({
           ...leave,
           full_name:
             leave?.employee.first_name +
-            ' ' +
+            " " +
             leave?.employee.middle_name +
-            ' ' +
+            " " +
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
@@ -159,9 +225,9 @@ const AdminLeavesHistoryTable = ({
           ...leave,
           full_name:
             leave?.employee.first_name +
-            ' ' +
+            " " +
             leave?.employee.middle_name +
-            ' ' +
+            " " +
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
@@ -209,9 +275,9 @@ const AdminLeavesHistoryTable = ({
           ...leave,
           full_name:
             leave?.employee.first_name +
-            ' ' +
+            " " +
             leave?.employee.middle_name +
-            ' ' +
+            " " +
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
@@ -234,109 +300,33 @@ const AdminLeavesHistoryTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-    }, 7000);
+    setTimeout(() => {}, 7000);
   }, [data]);
 
-  const MySearch = (props) => {
-    let input;
-    const handleClick = () => {
-      setPage(1);
-      setLoading(true);
-      props.onSearch(input.value);
-      const searchTerm = input.value;
-      setSearchTerm(searchTerm);
+  // Pagination
+  const count = totalPages;
+  const _DATA = usePagination(data, sizePerPage, totalPages);
 
-      if (page === 1) {
-        axiosInstance
-          .get(`leads-leave-applications`, {
-            params: {
-              search: searchTerm,
-              page: page,
-              limit: sizePerPage,
-            },
-          })
-          .then((res) => {
-            let resData = res?.data?.data?.application;
-            let resOptions = res?.data?.data?.pagination;
-
-            const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions?.numberOfPages;
-
-            setSizePerPage(thisPageLimit);
-            setTotalPages(thisTotalPageSize);
-
-            const formatted = resData.map((leave) => ({
-              ...leave,
-              full_name:
-                leave?.employee.first_name +
-                ' ' +
-                leave?.employee.middle_name +
-                ' ' +
-                leave?.employee.last_name,
-              status_action: leave?.status,
-              leave_type: leave?.leave_type_id?.leave_type,
-              department: leave?.department_id?.department,
-              from_date: new Date(leave.from_date).toDateString(),
-              to_date: new Date(leave.to_date).toDateString(),
-              total_leave_days: Math.ceil(
-                (new Date(leave.to_date) - new Date(leave.from_date)) /
-                  (1000 * 3600 * 24)
-              ),
-            }));
-
-            setData(formatted);
-            setDepartmentFilter('');
-            setStatusFilter('');
-            setLeaveTypeFilter('');
-          });
-      }
-      setLoading(false);
-    };
-
-    return (
-      <div className="job-app-search">
-        <input
-          className="form-control"
-          style={{
-            backgroundColor: '#fff',
-            width: '33.5%',
-            marginRight: '20px',
-          }}
-          ref={(n) => (input = n)}
-          type="text"
-        />
-        <button className="btn btn-primary" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    );
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
   };
 
-    // Pagination
-    const count = totalPages;
-    const _DATA = usePagination(data, sizePerPage, totalPages);
-  
-    const handleChange = (e, p) => {
-      setPage(p);
-      _DATA.jump(p);
-    };
-  
-    const handleChangeSizePerPage = (e) => {
-      e.preventDefault();
-      const { name, value } = e.target;
-      setInfo((prevState) => ({ ...prevState, [name]: value }));
-  
-      setSizePerPage(e.target.value);
-      setPage(1);
-    };
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
 
-    const showNullMessage = () => {
-      setTimeout(() => {
-        setShow(true);
-      }, 5000);
-      return <>{show ? "No Data Available" : null}</>;
-    };
+    setSizePerPage(e.target.value);
+    setPage(1);
+  };
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
+  };
 
   return (
     <>
@@ -350,20 +340,21 @@ const AdminLeavesHistoryTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
+              {/* <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
-              />
+              /> */}
 
               <ExportCSVButton
                 className="float-right btn export-csv"
+                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select">
+              {/* <div className="hr-filter-select">
                 <div>
                   <select
                     className="leave-filter-control"
@@ -411,22 +402,19 @@ const AdminLeavesHistoryTable = ({
                     ))}
                   </select>
                 </div>
-              </div>
-
-              
+              </div> */}
 
               <BootstrapTable
                 {...props.baseProps}
                 bordered={false}
                 // selectRow={selectRow}
-                filter={filterFactory()}
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? 'table '
+                    ? "table "
                     : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
+                    ? "table table-responsive"
+                    : "table table-responsive"
                 }
                 noDataIndication={
                   loading ? (
@@ -466,7 +454,6 @@ const AdminLeavesHistoryTable = ({
                   />
                 </Stack>
               </div>
-
             </div>
           )}
         </ToolkitProvider>

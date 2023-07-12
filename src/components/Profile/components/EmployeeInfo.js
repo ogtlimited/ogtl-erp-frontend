@@ -69,6 +69,12 @@ const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile }) => {
                 {employeeInfo?.employee?.remote ? "Yes" : "No"}
               </div>
             </li>
+            <li>
+              <div className="title">Leave Approval Level</div>
+              <div className="text">
+                <strong>{employeeInfo?.employee?.leave_approval_level || "Not Available"}</strong>
+              </div>
+            </li>
           </ul>
         </div>
       </div>

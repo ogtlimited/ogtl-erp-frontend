@@ -39,7 +39,7 @@ function RejectAdminLeaveModal({
       }
       fetchAllLeaves();
       fetchHRLeaveHistory();
-      fetchHRLeavesNotificationCount();
+      // fetchHRLeavesNotificationCount();
   }
 
   return (

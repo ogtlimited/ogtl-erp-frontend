@@ -34,16 +34,16 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     setMaxDate(moment(max_date).format('yyyy-MM-DD'));
   }, [today, user.leaveCount]);
 
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get(`/leave-type`);
-      const resData = response?.data?.data;
+  // const fetchLeavesType = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(`/leave-type`);
+  //     const resData = response?.data?.data;
 
-      setLeaveTypeOption(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     setLeaveTypeOption(resData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const fetchLeavesTypeById = async (leaveId) => {
     const id = leaveId;
@@ -98,7 +98,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   };
 
   useEffect(() => {
-    fetchLeavesType();
+    // fetchLeavesType();
     setLeave(editLeave);
   }, [editLeave]);
 
