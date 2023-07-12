@@ -20,17 +20,17 @@ const Login = () => {
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        // const activeUser = e?.account?.username;
+        const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        // if (obj.company_email !== activeUser) {
-        //   return setErrorMsg(
-        //     'There is an active user on this device'
-        //   );
-        // }
+        if (obj.company_email !== activeUser) {
+          return setErrorMsg(
+            'There is an active user on this device'
+          );
+        }
 
         setErrorMsg("")
 
@@ -65,17 +65,17 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              // const activeUser = e?.account?.username;
+              const activeUser = e?.account?.username;
 
               const obj = {
                 company_email: data.company_email.trim(),
               };
 
-              // if (obj.company_email !== activeUser) {
-              //   return setErrorMsg(
-              //     'Please login with your credentials'
-              //   );
-              // }
+              if (obj.company_email !== activeUser) {
+                return setErrorMsg(
+                  'Please login with your credentials'
+                );
+              }
 
               setErrorMsg("")
 
