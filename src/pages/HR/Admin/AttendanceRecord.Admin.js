@@ -300,7 +300,7 @@ const AttendanceRecord = () => {
         </div>
       </div>
 
-      <div className="page-menu">
+      {/* <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
@@ -338,7 +338,7 @@ const AttendanceRecord = () => {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div>
         <div className="row tab-content">
