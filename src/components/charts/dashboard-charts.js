@@ -1,9 +1,10 @@
 /** @format */
-
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import DoughnutChart from './dougnut';
 import VerticalBar from './verticalBar';
+import DashboardStatistics from './dashboard-statistics';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const DashboardChart = ({
   title,
@@ -12,7 +13,27 @@ const DashboardChart = ({
   genderLabel,
   genderData,
   formattedData,
-  formattedGender
+  formattedGender,
+
+  
+  data,
+  chartTitle,
+  chartData,
+  leaveStatusLabel,
+  leaveStatusData,
+  leaveTypeLabel,
+  leaveTypeData,
+  formattedLeaveType,
+  formattedLeaveStatus,
+
+  fromDate,
+  toDate,
+  setFromDate,
+  setToDate,
+  fromDate2,
+  toDate2,
+  setFromDate2,
+  setToDate2,
 }) => {
   const navigate = useNavigate();
   
@@ -23,8 +44,8 @@ const DashboardChart = ({
         const departmentId = formattedData.filter((data) => data.labels === employeeLabel[dataIndex])
         const id = departmentId[0].id;
         const department = departmentId[0].labels;
-        localStorage.setItem("department", department);
-        localStorage.removeItem("gender");
+        secureLocalStorage.setItem("department", department);
+        secureLocalStorage.removeItem("gender");
         navigate(`/dashboard/hr/all-employees/department/${id}`);
       }
     } catch (error) {
@@ -39,8 +60,8 @@ const DashboardChart = ({
         const genderId = formattedGender.filter((data) => data.labels === genderLabel[dataIndex])
         const id = genderId[0].labels;
         const gender = genderId[0];
-        localStorage.setItem("gender", JSON.stringify(gender));
-        localStorage.removeItem("department");
+        secureLocalStorage.setItem("gender", JSON.stringify(gender));
+        secureLocalStorage.removeItem("department");
         navigate(`/dashboard/hr/all-employees/gender/${id}`);
       }
     } catch (error) {
@@ -84,13 +105,13 @@ const DashboardChart = ({
       {
         data: genderData,
         backgroundColor: [
-          'rgba(255, 99, 132)',
           'rgba(54, 162, 235)',
+          'rgba(255, 99, 132)',
           'rgba(255, 206, 86)',
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
+          'rgba(255, 99, 132, 1)',
           'rgba(255, 206, 86, 1)',
         ],
         borderWidth: 1,
@@ -99,34 +120,64 @@ const DashboardChart = ({
   };
 
   return (
-    <div className="col-md-12">
-      <div className="row">
-        <div className="col-md-6 text-center">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">{title}</h3>
-              <VerticalBar
-                data={employee}
-                handleChartClick={(element) =>
-                  handleDepartmentChartClick(element, employeeLabel)
-                }
+    <>
+      <div className="col-md-12">
+        <div className="col">
+          <div className="col-md-12 text-center">
+            <div className="card">
+              <div className="card-body">
+                <h3 className="card-title">{title}</h3>
+                <VerticalBar
+                  data={employee}
+                  handleChartClick={(element) =>
+                    handleDepartmentChartClick(element, employeeLabel)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row"> 
+            <div className="col-md-4 text-center">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">Employee By Gender</h3>
+                  <DoughnutChart data={gender} 
+                    handleChartClick={(element) =>
+                      handleGenderChartClick(element, genderLabel)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+              <DashboardStatistics
+                title="Employee By Department"
+                data={data}
+                chartTitle="Employee By Gender"
+                chartData={gender}
+                leaveStatusLabel={leaveStatusLabel}
+                leaveStatusData={leaveStatusData}
+                leaveTypeLabel={leaveTypeLabel}
+                leaveTypeData={leaveTypeData}
+                formattedLeaveType={formattedLeaveType}
+                formattedLeaveStatus={formattedLeaveStatus}
+      
+                fromDate={fromDate}
+                toDate={toDate}
+                setFromDate={setFromDate}
+                setToDate={setToDate}
+                fromDate2={fromDate2}
+                toDate2={toDate2}
+                setFromDate2={setFromDate2}
+                setToDate2={setToDate2}
               />
-            </div>
           </div>
-        </div>
-        <div className="col-md-6 text-center">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Employee By Gender</h3>
-              <DoughnutChart data={gender} 
-                handleChartClick={(element) =>
-                  handleGenderChartClick(element, genderLabel)
-                }/>
-            </div>
-          </div>
+
+
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

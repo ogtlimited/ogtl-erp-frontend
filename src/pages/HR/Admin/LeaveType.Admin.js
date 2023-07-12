@@ -1,104 +1,66 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState, useEffect, useContext } from "react";
-
-import departments from "../../../db/designationList.json";
-import { leaveType } from "../../../components/FormJSON/HR/Employee/leaveType";
-import list from "../../../designation.json";
-import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import Select from "react-select";
-import dates from "./dates.json";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import FormModal2 from "../../../components/Modal/FormModal2";
-import helper from "../../../services/helper";
-import ConfirmDeleteLeaveTypeModal from "../../../components/Modal/ConfirmDeleteLeaveTypeModal";
-import { AddLeaveTypeModal } from '../../../components/Modal/AddLeaveType';
-let qualityFilter;
+import { LeaveTypeForm } from "../../../components/FormJSON/CreateLeaveTypes";
+import UniversalTable from "../../../components/Tables/UniversalTable";
+import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal";
 
 const LeaveType = () => {
-  const [leaveType, setAllLeaveType] = useState([]);
-  const { formUpdate, setformUpdate, showAlert, user } = useAppContext();
-  const [submitted, setsubmitted] = useState(false);
-  const [formValue, setformValue] = useState(null);
-  const [editData, seteditData] = useState(null);
-  const [clickedRow, setclickedRow] = useState(null);
-  const [deleteData, setdeleteData] = useState(null);
-  const [template, settemplate] = useState({});
-  const [designationOpts, setDesignationOts] = useState(null);
-  const [unfiltered, setunfiltered] = useState([]);
-  const [typeToDelete, setTypeToDelete] = useState([]);
-  const [mode, setmode] = useState("add");
+  const [AllLeaveType, setAllLeaveType] = useState([]);
+  const { user, showAlert } = useAppContext();
+  const [mode, setMode] = useState("Create");
+  const [leaveType, setLeaveType] = useState([]);
 
-  const create = () => {
-    let initialValues = {};
-    for (let i in template) {
-      initialValues[i] = "";
-    }
-    setmode("add");
-    setformValue(initialValues);
-    seteditData(initialValues);
-  };
-  const editRow = (row) => {
-    // setformUpdate(null)
-    let formatted = helper.handleEdit(row);
-    setmode("edit");
-    setformUpdate(formatted);
-    setclickedRow(formatted);
-  };
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "hr_associate"]
 
-  const fetchLeaveType = () => {
-    axiosInstance.get("/leave-type", {
-      params: {
-        delete: false,
-      },
-    }).then((res) => {
-      const resData = res?.data?.data
-      console.log("All Leave types", resData)
-      setAllLeaveType(resData);
-      setunfiltered(resData);
-      const depsigOpts = resData.map((e) => {
-        return {
-          label: e.leave_type,
-          value: e._id,
-        };
+  // All Leave Types:
+  const fetchAllLeaveTypes = async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/leave_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
       });
-      setDesignationOts(depsigOpts);
-    });
+      const resData = response?.data?.data?.types;
+
+      const formatted = resData.map((e, idx) => ({
+        ...e,
+        index: idx + 1,
+        leave_type: e?.title,
+      }));
+
+      setAllLeaveType(formatted);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
   };
 
   useEffect(() => {
-    fetchLeaveType();
+    fetchAllLeaveTypes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleClick = (i) => {
-    if (i?.value === "All" || i === null) {
-      setAllLeaveType(unfiltered);
-    } else {
-      const filt = unfiltered.filter((e) => {
-        return i.label.includes(e.leave_type);
-      });
-
-      setAllLeaveType(filt);
-    }
+  const handleCreate = () => {
+    setMode("Create");
+    setLeaveType(LeaveTypeForm);
   };
 
-  useEffect(() => {
-    fetchLeaveType();
-
-    // setallDepartments(departments);
-  }, [formValue]);
-
-  const deleteLeaveType = (row) => {
-    setTypeToDelete(row)
+  const handleEdit = (row) => {
+    setLeaveType(row);
+    setMode("Edit");
   };
 
   const columns = [
     {
-      dataField: "",
-      text: "#",
+      dataField: "index",
+      text: "S/N",
+      sort: true,
       headerStyle: { width: "5%" },
-      formatter: (cell, row, rowIndex) => <span>{rowIndex + 1}</span>,
     },
     {
       dataField: "leave_type",
@@ -107,90 +69,82 @@ const LeaveType = () => {
       headerStyle: { width: "70%" },
     },
     {
-      dataField: "createdAt",
-      text: "Created",
-      sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },    {
-      dataField: '',
-      text: 'Actions',
-      sort: true,
-      csvExport: false,
-      headerStyle: { minWidth: '70px', textAlign: 'center' },
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => deleteLeaveType(row)}
-            >
-              Delete
-            </button>
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            {CurrentUserRoles.includes("hr_manager") && (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#LeaveTypeFormModal"
+                onClick={() => handleEdit(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
+
+            {CurrentUserRoles.includes("hr_manager") && (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            )}
           </div>
         </div>
       ),
     },
   ];
+
   return (
     <>
-    <AddLeaveTypeModal fetchLeaveType={fetchLeaveType} />
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaves</h3>
+            <h3 className="page-title">Leaves Types</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
-              <li className="breadcrumb-item active">Leave Types</li>
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item active">Leave Type</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.role?.hr?.create && (
+            {canCreate.includes(...CurrentUserRoles) ? (
               <a
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#FormModal"
+                data-target="#LeaveTypeFormModal"
+                onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Leave Type
+                <i className="fa fa-plus"></i> Create Leave Type
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
       <div className="row  ">
-        <div className="col-3 mb-2">
-          <Select
-            defaultValue={[]}
-            onChange={handleClick}
-            options={designationOpts}
-            placeholder="Filter Leave Type"
-            isClearable={true}
-            style={{ display: "inline-block" }}
-            // formatGroupLabel={formatGroupLabel}
-          />
-        </div>
-        <LeaveTable
-          data={leaveType}
-          // defaultSorted={defaultSorted}
-          columns={columns}
-        />
+        <UniversalTable data={AllLeaveType} columns={columns} />
       </div>
-      <FormModal2
-        title="Create Leave Type"
-        editData={editData}
-        setformValue={setformValue}
-        template={template}
-        setsubmitted={setsubmitted}
-      />
-      <ConfirmDeleteLeaveTypeModal
-        title="Leave Type"
-        typeToDelete={typeToDelete}
-        fetchLeaveType={fetchLeaveType}
+
+      <LeaveTypeFormModal
+        mode={mode}
+        data={leaveType}
+        fetchAllLeaveTypes={fetchAllLeaveTypes}
       />
     </>
   );

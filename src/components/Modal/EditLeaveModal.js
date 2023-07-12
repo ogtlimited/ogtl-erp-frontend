@@ -7,6 +7,7 @@ import axiosInstance from '../../services/api';
 import $ from 'jquery';
 import ms from 'ms';
 import moment from 'moment';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   const { showAlert } = useAppContext();
@@ -14,7 +15,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   const [loading, setLoading] = useState(false);
   const [leaveTypeOption, setLeaveTypeOption] = useState([]);
   const [leaveTypeTitle, setLeaveTypeTitle] = useState('');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
@@ -33,16 +34,16 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
     setMaxDate(moment(max_date).format('yyyy-MM-DD'));
   }, [today, user.leaveCount]);
 
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get(`/leave-type`);
-      const resData = response?.data?.data;
+  // const fetchLeavesType = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(`/leave-type`);
+  //     const resData = response?.data?.data;
 
-      setLeaveTypeOption(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     setLeaveTypeOption(resData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const fetchLeavesTypeById = async (leaveId) => {
     const id = leaveId;
@@ -97,7 +98,7 @@ export const EditLeaveModal = ({ editLeave, fetchYourLeaves }) => {
   };
 
   useEffect(() => {
-    fetchLeavesType();
+    // fetchLeavesType();
     setLeave(editLeave);
   }, [editLeave]);
 

@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect } from 'react';
-import { 
+import React, { useState, useEffect } from "react";
+import {
   monday_shifts,
   tuesday_shifts,
   wednesday_shifts,
@@ -9,41 +8,30 @@ import {
   saturday_shifts,
   sunday_shifts,
   huddleOptions,
-} from '../FormJSON/CreateShiftSchedule';
-import Select from 'react-select'
-import { useAppContext } from '../../Context/AppContext';
-import Switch from '@mui/material/Switch';
-import $ from 'jquery';
+} from "../FormJSON/CreateShiftSchedule";
+import Select from "react-select";
+import { useAppContext } from "../../Context/AppContext";
+import Switch from "@mui/material/Switch";
+import $ from "jquery";
 
-export const AddShiftScheduleModal = ({ 
-  createCampaignSchedule, 
-  setCreateCampaignSchedule, 
+export const AddShiftScheduleModal = ({
+  createCampaignSchedule,
+  setCreateCampaignSchedule,
   isSubmitted,
-  setIsSubmitted, 
+  setIsSubmitted,
 }) => {
   const { showAlert } = useAppContext();
 
-  const [createMondayShift, setCreateMondayShift] = useState(
-    monday_shifts
-  );
-  const [createTuesdayShift, setCreateTuesdayShift] = useState(
-    tuesday_shifts
-  );
-  const [createWednesdayShift, setCreateWednesdayShift] = useState(
-    wednesday_shifts
-  );
-  const [createThursdayShift, setCreateThursdayShift] = useState(
-    thursday_shifts
-  );
-  const [createFridayShift, setCreateFridayShift] = useState(
-    friday_shifts
-  );
-  const [createSaturdayShift, setCreateSaturdayShift] = useState(
-    saturday_shifts
-  );
-  const [createSundayShift, setCreateSundayShift] = useState(
-    sunday_shifts
-  );
+  const [createMondayShift, setCreateMondayShift] = useState(monday_shifts);
+  const [createTuesdayShift, setCreateTuesdayShift] = useState(tuesday_shifts);
+  const [createWednesdayShift, setCreateWednesdayShift] =
+    useState(wednesday_shifts);
+  const [createThursdayShift, setCreateThursdayShift] =
+    useState(thursday_shifts);
+  const [createFridayShift, setCreateFridayShift] = useState(friday_shifts);
+  const [createSaturdayShift, setCreateSaturdayShift] =
+    useState(saturday_shifts);
+  const [createSundayShift, setCreateSundayShift] = useState(sunday_shifts);
 
   const cancelEvent = () => {
     setCreateMondayShift(monday_shifts);
@@ -60,7 +48,7 @@ export const AddShiftScheduleModal = ({
       cancelEvent();
       setIsSubmitted(false);
     }
-  },[isSubmitted, setIsSubmitted])
+  }, [isSubmitted, setIsSubmitted]);
 
   const handleAddSiftSchedule = (e) => {
     e.preventDefault();
@@ -75,14 +63,17 @@ export const AddShiftScheduleModal = ({
     shifts.push(createSaturdayShift);
     shifts.push(createSundayShift);
 
-    setCreateCampaignSchedule({ ...createCampaignSchedule, campaign_schedule_items: shifts });
+    setCreateCampaignSchedule({
+      ...createCampaignSchedule,
+      campaign_schedule_items: shifts,
+    });
 
     showAlert(
-          true,
-          `Campaign schedule items confirmed!`,
-          'alert alert-success'
-        );
-          $('#ShiftScheduleFormModal').modal('toggle');
+      true,
+      `Campaign schedule items confirmed!`,
+      "alert alert-success"
+    );
+    $("#ShiftScheduleFormModal").modal("toggle");
   };
 
   return (
@@ -112,22 +103,21 @@ export const AddShiftScheduleModal = ({
 
             <div className="modal-body">
               <form onSubmit={handleAddSiftSchedule}>
-
                 {/* Monday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createMondayShift.day === 'mon' && 'Monday'}
+                        value={createMondayShift.day === 1 && "Monday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createMondayShift.off && 
+                  {!createMondayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="mon_start">Start</label>
@@ -135,16 +125,22 @@ export const AddShiftScheduleModal = ({
                           name="mon_start"
                           type="time"
                           className="form-control"
-                          value={!createMondayShift.off && createMondayShift.start}
+                          value={
+                            !createMondayShift.off &&
+                            createMondayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateMondayShift({ ...createMondayShift, start: e.target.value })
+                            setCreateMondayShift({
+                              ...createMondayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createMondayShift.off &&
+                  )}
+                  {!createMondayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="mon_end">End</label>
@@ -152,62 +148,98 @@ export const AddShiftScheduleModal = ({
                           name="mon_end"
                           type="time"
                           className="form-control"
-                          value={!createMondayShift.off && createMondayShift.end}
+                          value={
+                            !createMondayShift.off && createMondayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateMondayShift({ ...createMondayShift, end: e.target.value })
+                            setCreateMondayShift({
+                              ...createMondayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createMondayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createMondayShift.off} onChange={() => setCreateMondayShift({ ...createMondayShift, off: !createMondayShift.off })} />
-                     </div>
+                      {createMondayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createMondayShift.off}
+                        onChange={() =>
+                          setCreateMondayShift({
+                            ...createMondayShift,
+                            off: !createMondayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createMondayShift.off && createMondayShift.huddles} value={createMondayShift.huddles} onChange={() => setCreateMondayShift({ ...createMondayShift, huddles: !createMondayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createMondayShift.off && createMondayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateMondayShift({ ...createMondayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createMondayShift.off && createMondayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createMondayShift.huddle}
+                        onChange={() =>
+                          setCreateMondayShift({
+                            ...createMondayShift,
+                            huddle: !createMondayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createMondayShift.off && createMondayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createMondayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateMondayShift({
+                              ...createMondayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Tuesday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createTuesdayShift.day === 'tue' && 'Tuesday'}
+                        value={createTuesdayShift.day === 2 && "Tuesday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createTuesdayShift.off && 
+                  {!createTuesdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="tue_start">Start</label>
@@ -215,16 +247,22 @@ export const AddShiftScheduleModal = ({
                           name="tue_start"
                           type="time"
                           className="form-control"
-                          value={!createTuesdayShift.off && createTuesdayShift.start}
+                          value={
+                            !createTuesdayShift.off &&
+                            createTuesdayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateTuesdayShift({ ...createTuesdayShift, start: e.target.value })
+                            setCreateTuesdayShift({
+                              ...createTuesdayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createTuesdayShift.off &&
+                  )}
+                  {!createTuesdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="tue_end">End</label>
@@ -232,62 +270,99 @@ export const AddShiftScheduleModal = ({
                           name="tue_end"
                           type="time"
                           className="form-control"
-                          value={!createTuesdayShift.off && createTuesdayShift.end}
+                          value={
+                            !createTuesdayShift.off &&
+                            createTuesdayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateTuesdayShift({ ...createTuesdayShift, end: e.target.value })
+                            setCreateTuesdayShift({
+                              ...createTuesdayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createTuesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createTuesdayShift.off} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, off: !createTuesdayShift.off })} />
-                     </div>
+                      {createTuesdayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createTuesdayShift.off}
+                        onChange={() =>
+                          setCreateTuesdayShift({
+                            ...createTuesdayShift,
+                            off: !createTuesdayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createTuesdayShift.off && createTuesdayShift.huddles} value={createTuesdayShift.huddles} onChange={() => setCreateTuesdayShift({ ...createTuesdayShift, huddles: !createTuesdayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createTuesdayShift.off && createTuesdayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateTuesdayShift({ ...createTuesdayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createTuesdayShift.off && createTuesdayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createTuesdayShift.huddle}
+                        onChange={() =>
+                          setCreateTuesdayShift({
+                            ...createTuesdayShift,
+                            huddle: !createTuesdayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createTuesdayShift.off && createTuesdayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createTuesdayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateTuesdayShift({
+                              ...createTuesdayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Wednesday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createWednesdayShift.day === 'wed' && 'Wednesday'}
+                        value={createWednesdayShift.day === 3 && "Wednesday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createWednesdayShift.off && 
+                  {!createWednesdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="wed_start">Start</label>
@@ -295,16 +370,22 @@ export const AddShiftScheduleModal = ({
                           name="wed_start"
                           type="time"
                           className="form-control"
-                          value={!createWednesdayShift.off && createWednesdayShift.start}
+                          value={
+                            !createWednesdayShift.off &&
+                            createWednesdayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateWednesdayShift({ ...createWednesdayShift, start: e.target.value })
+                            setCreateWednesdayShift({
+                              ...createWednesdayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createWednesdayShift.off &&
+                  )}
+                  {!createWednesdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="wed_end">End</label>
@@ -312,62 +393,100 @@ export const AddShiftScheduleModal = ({
                           name="wed_end"
                           type="time"
                           className="form-control"
-                          value={!createWednesdayShift.off && createWednesdayShift.end}
+                          value={
+                            !createWednesdayShift.off &&
+                            createWednesdayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateWednesdayShift({ ...createWednesdayShift, end: e.target.value })
+                            setCreateWednesdayShift({
+                              ...createWednesdayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createWednesdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createWednesdayShift.off} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, off: !createWednesdayShift.off })} />
-                     </div>
+                      {createWednesdayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createWednesdayShift.off}
+                        onChange={() =>
+                          setCreateWednesdayShift({
+                            ...createWednesdayShift,
+                            off: !createWednesdayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createWednesdayShift.off && createWednesdayShift.huddles} value={createWednesdayShift.huddles} onChange={() => setCreateWednesdayShift({ ...createWednesdayShift, huddles: !createWednesdayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createWednesdayShift.off && createWednesdayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateWednesdayShift({ ...createWednesdayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createWednesdayShift.off &&
+                          createWednesdayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createWednesdayShift.huddle}
+                        onChange={() =>
+                          setCreateWednesdayShift({
+                            ...createWednesdayShift,
+                            huddle: !createWednesdayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createWednesdayShift.off && createWednesdayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createWednesdayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateWednesdayShift({
+                              ...createWednesdayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Thursday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createThursdayShift.day === 'thu' && 'Thursday'}
+                        value={createThursdayShift.day === 4 && "Thursday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createThursdayShift.off && 
+                  {!createThursdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="thu_start">Start</label>
@@ -375,16 +494,22 @@ export const AddShiftScheduleModal = ({
                           name="thu_start"
                           type="time"
                           className="form-control"
-                          value={!createThursdayShift.off && createThursdayShift.start}
+                          value={
+                            !createThursdayShift.off &&
+                            createThursdayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateThursdayShift({ ...createThursdayShift, start: e.target.value })
+                            setCreateThursdayShift({
+                              ...createThursdayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createThursdayShift.off &&
+                  )}
+                  {!createThursdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="thu_end">End</label>
@@ -392,62 +517,99 @@ export const AddShiftScheduleModal = ({
                           name="thu_end"
                           type="time"
                           className="form-control"
-                          value={!createThursdayShift.off && createThursdayShift.end}
+                          value={
+                            !createThursdayShift.off &&
+                            createThursdayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateThursdayShift({ ...createThursdayShift, end: e.target.value })
+                            setCreateThursdayShift({
+                              ...createThursdayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createThursdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createThursdayShift.off} onChange={() => setCreateThursdayShift({ ...createThursdayShift, off: !createThursdayShift.off })} />
-                     </div>
+                      {createThursdayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createThursdayShift.off}
+                        onChange={() =>
+                          setCreateThursdayShift({
+                            ...createThursdayShift,
+                            off: !createThursdayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createThursdayShift.off && createThursdayShift.huddles} value={createThursdayShift.huddles} onChange={() => setCreateThursdayShift({ ...createThursdayShift, huddles: !createThursdayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createThursdayShift.off && createThursdayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateThursdayShift({ ...createThursdayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createThursdayShift.off && createThursdayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createThursdayShift.huddle}
+                        onChange={() =>
+                          setCreateThursdayShift({
+                            ...createThursdayShift,
+                            huddle: !createThursdayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createThursdayShift.off && createThursdayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createThursdayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateThursdayShift({
+                              ...createThursdayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Friday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createFridayShift.day === 'fri' && 'Friday'}
+                        value={createFridayShift.day === 5 && "Friday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createFridayShift.off && 
+                  {!createFridayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="fri_start">Start</label>
@@ -455,16 +617,22 @@ export const AddShiftScheduleModal = ({
                           name="fri_start"
                           type="time"
                           className="form-control"
-                          value={!createFridayShift.off && createFridayShift.start}
+                          value={
+                            !createFridayShift.off &&
+                            createFridayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateFridayShift({ ...createFridayShift, start: e.target.value })
+                            setCreateFridayShift({
+                              ...createFridayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createFridayShift.off &&
+                  )}
+                  {!createFridayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="fri_end">End</label>
@@ -472,62 +640,98 @@ export const AddShiftScheduleModal = ({
                           name="fri_end"
                           type="time"
                           className="form-control"
-                          value={!createFridayShift.off && createFridayShift.end}
+                          value={
+                            !createFridayShift.off && createFridayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateFridayShift({ ...createFridayShift, end: e.target.value })
+                            setCreateFridayShift({
+                              ...createFridayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createFridayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createFridayShift.off} onChange={() => setCreateFridayShift({ ...createFridayShift, off: !createFridayShift.off })} />
-                     </div>
+                      {createFridayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createFridayShift.off}
+                        onChange={() =>
+                          setCreateFridayShift({
+                            ...createFridayShift,
+                            off: !createFridayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createFridayShift.off && createFridayShift.huddles} value={createFridayShift.huddles} onChange={() => setCreateFridayShift({ ...createFridayShift, huddles: !createFridayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createFridayShift.off && createFridayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateFridayShift({ ...createFridayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createFridayShift.off && createFridayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createFridayShift.huddle}
+                        onChange={() =>
+                          setCreateFridayShift({
+                            ...createFridayShift,
+                            huddle: !createFridayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createFridayShift.off && createFridayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createFridayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateFridayShift({
+                              ...createFridayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Saturday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSaturdayShift.day === 'sat' && 'Saturday'}
+                        value={createSaturdayShift.day === 6 && "Saturday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createSaturdayShift.off && 
+                  {!createSaturdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="sat_start">Start</label>
@@ -535,16 +739,22 @@ export const AddShiftScheduleModal = ({
                           name="sat_start"
                           type="time"
                           className="form-control"
-                          value={!createSaturdayShift.off && createSaturdayShift.start}
+                          value={
+                            !createSaturdayShift.off &&
+                            createSaturdayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateSaturdayShift({ ...createSaturdayShift, start: e.target.value })
+                            setCreateSaturdayShift({
+                              ...createSaturdayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createSaturdayShift.off &&
+                  )}
+                  {!createSaturdayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="sat_end">End</label>
@@ -552,62 +762,99 @@ export const AddShiftScheduleModal = ({
                           name="sat_end"
                           type="time"
                           className="form-control"
-                          value={!createSaturdayShift.off && createSaturdayShift.end}
+                          value={
+                            !createSaturdayShift.off &&
+                            createSaturdayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateSaturdayShift({ ...createSaturdayShift, end: e.target.value })
+                            setCreateSaturdayShift({
+                              ...createSaturdayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createSaturdayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createSaturdayShift.off} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, off: !createSaturdayShift.off })} />
-                     </div>
+                      {createSaturdayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createSaturdayShift.off}
+                        onChange={() =>
+                          setCreateSaturdayShift({
+                            ...createSaturdayShift,
+                            off: !createSaturdayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createSaturdayShift.off && createSaturdayShift.huddles} value={createSaturdayShift.huddles} onChange={() => setCreateSaturdayShift({ ...createSaturdayShift, huddles: !createSaturdayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createSaturdayShift.off && createSaturdayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateSaturdayShift({ ...createSaturdayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createSaturdayShift.off && createSaturdayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createSaturdayShift.huddle}
+                        onChange={() =>
+                          setCreateSaturdayShift({
+                            ...createSaturdayShift,
+                            huddle: !createSaturdayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createSaturdayShift.off && createSaturdayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createSaturdayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateSaturdayShift({
+                              ...createSaturdayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <hr/>
+                <hr />
 
                 {/* Sunday */}
                 <div className="row">
-                  <div className="col-md-3">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="day">Day</label>
                       <input
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSundayShift.day === 'sun' && 'Sunday'}
+                        value={createSundayShift.day === 0 && "Sunday"}
                         readOnly
                       />
                     </div>
                   </div>
-                  {!createSundayShift.off && 
+                  {!createSundayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="sun_start">Start</label>
@@ -615,16 +862,22 @@ export const AddShiftScheduleModal = ({
                           name="sun_start"
                           type="time"
                           className="form-control"
-                          value={!createSundayShift.off && createSundayShift.start}
+                          value={
+                            !createSundayShift.off &&
+                            createSundayShift.start_time
+                          }
                           onChange={(e) =>
-                            setCreateSundayShift({ ...createSundayShift, start: e.target.value })
+                            setCreateSundayShift({
+                              ...createSundayShift,
+                              start_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
-                  {!createSundayShift.off &&
+                  )}
+                  {!createSundayShift.off && (
                     <div className="col-md-2">
                       <div className="form-group">
                         <label htmlFor="sun_end">End</label>
@@ -632,46 +885,82 @@ export const AddShiftScheduleModal = ({
                           name="sun_end"
                           type="time"
                           className="form-control"
-                          value={!createSundayShift.off && createSundayShift.end}
+                          value={
+                            !createSundayShift.off && createSundayShift.end_time
+                          }
                           onChange={(e) =>
-                            setCreateSundayShift({ ...createSundayShift, end: e.target.value })
+                            setCreateSundayShift({
+                              ...createSundayShift,
+                              end_time: e.target.value,
+                            })
                           }
                           required
                         />
                       </div>
                     </div>
-                  }
+                  )}
                   <div className="col-md-auto shift-off-toggle">
                     <div className="btn-group">
-                      {createSundayShift.off ? <label htmlFor="off"> Day Off</label> : <label htmlFor="off">Work Day</label>}
-                       <Switch defaultChecked value={createSundayShift.off} onChange={() => setCreateSundayShift({ ...createSundayShift, off: !createSundayShift.off })} />
-                     </div>
+                      {createSundayShift.off ? (
+                        <label htmlFor="off"> Day Off</label>
+                      ) : (
+                        <label htmlFor="off">Work Day</label>
+                      )}
+                      <Switch
+                        defaultChecked
+                        value={createSundayShift.off}
+                        onChange={() =>
+                          setCreateSundayShift({
+                            ...createSundayShift,
+                            off: !createSundayShift.off,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="col-md-auto shift-item-toggle">
                     <div className="btn-group">
-                      <label htmlFor="huddles">Huddle</label>
-                       <Switch checked={!createSundayShift.off && createSundayShift.huddles} value={createSundayShift.huddles} onChange={() => setCreateSundayShift({ ...createSundayShift, huddles: !createSundayShift.huddles })} />
-                     </div>
-                  </div>
-                  {!createSundayShift.off && createSundayShift.huddles && <div className="col-md-auto">
-                    <div className="form-group">
-                      <label htmlFor="huddleTime">
-                        Huddle Time
-                      </label>
-                      <Select
-                        options={huddleOptions}
-                        isSearchable={true}
-                        isClearable={true}
-                        onChange={(e) =>
-                          setCreateSundayShift({ ...createSundayShift, huddleTime: e?.value })
+                      <label htmlFor="huddle">Huddle</label>
+                      <Switch
+                        checked={
+                          !createSundayShift.off && createSundayShift.huddle
                         }
-                        style={{ display: "inline-block" }}
+                        value={createSundayShift.huddle}
+                        onChange={() =>
+                          setCreateSundayShift({
+                            ...createSundayShift,
+                            huddle: !createSundayShift.huddle,
+                          })
+                        }
                       />
                     </div>
-                  </div>}
+                  </div>
+                  {!createSundayShift.off && createSundayShift.huddle && (
+                    <div className="col-md-auto">
+                      <div className="form-group">
+                        <label htmlFor="huddle_time">Huddle Time</label>
+                        <Select
+                          options={huddleOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          defaultValue={huddleOptions.find(
+                            (option) =>
+                              option.value === createSundayShift?.huddle_time
+                          )}
+                          onChange={(e) =>
+                            setCreateSundayShift({
+                              ...createSundayShift,
+                              huddle_time: e?.value,
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <br/>
+                <br />
 
                 <div className="modal-footer">
                   <button
@@ -682,7 +971,9 @@ export const AddShiftScheduleModal = ({
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">Confirm</button>
+                  <button type="submit" className="btn btn-primary">
+                    Confirm
+                  </button>
                 </div>
               </form>
             </div>

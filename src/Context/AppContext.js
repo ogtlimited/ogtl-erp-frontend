@@ -1,148 +1,108 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
-import config from "../config.json";
-import socketIOClient from "socket.io-client";
+import secureLocalStorage from "react-secure-storage";
 
 export default createBrowserHistory();
-const baseURL = config.ApiUrl;
 const AppContext = createContext();
 
 const AppProvider = (props) => {
-  const [allEmployees, setallEmployees] = useState([]);
+  const [user] = useState(tokenService.getUser());
   const [showProgress, setshowProgress] = useState({
     count: 25,
-    state: false
+    state: false,
   });
-  const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
-  const [userToken, setuserToken] = useState(null);
-  const [count, setCount] = useState(0);
-  const [loggedIn, setloggedIn] = useState(false);
-  const [formUpdate, setformUpdate] = useState(null);
   const [showAlertMsg, setshowAlertMsg] = useState({
     state: false,
     msg: "",
     class: "",
   });
+  const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
+  const [userToken, setuserToken] = useState(null);
+  const [count, setCount] = useState(0);
 
-  const [employeeAttendance, setemployeeAttendance] = useState([]);
-  const [user, setuser] = useState(tokenService.getUser());
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [employeeStatus, setEmployeeStatus] = useState([]);
-  let socket = useRef();
+  const [dropDownClicked, setDropDownClicked] = useState(false);
+
+  const isTeamLead = user?.employee_info?.is_lead;
+  const isHr = user?.office?.title === "hr" ? true : false;
 
   const status = [
     {
-        _id: "active",
-        status: "ACTIVE"
+      _id: "active",
+      status: "ACTIVE",
     },
     {
-        _id: "left",
-        status: "RESIGNED"
+      _id: "left",
+      status: "RESIGNED",
     },
     {
-        _id: "terminated",
-        status: "TERMINATED"
-    }
-]
+      _id: "terminated",
+      status: "TERMINATED",
+    },
+  ];
 
-  // let socketRef;
-  //Fetching notifications
-  useEffect(() => {
-    socket.current = socketIOClient("http://localhost:3000");
-    socket.current.on("error", (error) => {
-      console.log(error);
-      // ...
-    });
+  // Select API States:
+  const [loadingSelect, setLoadingSelect] = useState(false);
+  const [selectEmployees, setSelectEmployees] = useState([]);
+  const [selectCampaigns, setSelectCampaigns] = useState([]);
+  const [selectDepartments, setSelectDepartments] = useState([]);
+  const [selectDesignations, setSelectDesignations] = useState([]);
+  const [selectBranches, setSelectBranches] = useState([]);
+  const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
 
-    socket.current.emit("notification", user?.company_email);
-    socket.current.on("messages", (data) => {
-      const newArr = data && data.map((e) => JSON.parse(e));
-      if (newArr) {
-        setNotifications((prev) => [...newArr, ...prev]);
-      }
-    });
-    return () => socket.current.close();
-  }, [user?.company_email]);
-
-  useEffect(() => {}, [showAlertMsg]);
-  useEffect(() => {}, [showProgress]);
-
-  const clearNotifications = () => {
-    if (socket) {
-      socket.current.emit("clear_notification", user?.company_email);
-    }
-  };
-
- 
-
-  const fetchEmployee = () => {
-    axiosInstance.get("/employees/paginated-employees").then((e) => {
-      // console.log("All Employees Context:", e?.data)
-      const mapp = e?.data?.employees.map(emp => {
-        return {
-          ...emp,
-          fullName: emp.first_name + ' ' + emp.last_name + ' ' + emp?.middle_name,
-          designation_name: emp?.designation?.designation,
-          department_name: emp?.department?.department
-          // project: emp?.projectId?.project_name,
-        }
+  const fetchHRLeavesNotificationCount = () => {
+    axiosInstance
+      .get("/api/v1/hr_dashboard/leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
       })
-      // console.log("All Employees:", mapp)
-      setallEmployees(mapp);
-      // setloggedIn(false);
-    });
-  };
-
-   // For Leave Application Notification
-   const fetchHRLeavesNotificationCount = () => {
-    axiosInstance.get('/hr-leave-applications')
       .then((res) => {
-        let resData = res?.data?.data?.application;
+        let resData = res?.data?.data?.leaves;
         const dataCount = resData.length;
         setCount(dataCount);
       })
-      .catch((error) => {
-        console.log(error);
-      });;
+      .catch((error) => {});
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchEmployee();
-      fetchEmployeeAttendance();
-    }
-  }, [userToken]);
-  const handleProgress = ({count, state}) => {
-    console.log(count, state)
+  const handleProgress = ({ count, state }) => {
+    console.log(count, state);
     setshowProgress({
       count: count,
-      state: state
-    })
-  }
+      state: state,
+    });
+  };
+
   const uploadProgress = async () => {
     await pause(800);
     handleProgress({
       state: true,
-      count: 35
+      count: 35,
     });
 
     await pause(900);
     handleProgress({
       state: true,
-      count: 65
+      count: 65,
     });
 
     await pause(1000);
     handleProgress({
       state: true,
-      count: 85
+      count: 85,
     });
   };
+
+  // Show Alert:
   const showAlert = (state, msg, className) => {
     let icon = className?.includes("alert-success")
       ? "#check-circle-fill"
@@ -165,116 +125,247 @@ const AppProvider = (props) => {
       });
     }, 5000);
   };
-  const fetchTypesShift = () => {
-    return axiosInstance.get("/api/shiftType");
-  };
 
-  const combineRequest = () => {
-    return axiosInstance.get("/combine-employee-form");
-  };
+  // ! - EVERYTHING ABOVE IS FROM OLD API!!!
 
-  //for creating employees
-  const createEmployee = () => {
-    return axiosInstance.get("/create-employee-form");
-  };
-
-  //for Job Applications
-  const createJobApplications = () => {
-    return axiosInstance.get("/api/jobApplicant");
-  };
-
-  //for creating shifts
-  const createShifts = () => {
-    return axiosInstance.get("/create-shift-form");
-  };
-
-  //create payroll
-  const createPayroll = () => {
-    return axiosInstance.get("/create-payroll-form");
-  };
-
-  //creating recruitments
-  const createRecruitmens = () => {
-    return axiosInstance.get("/create-recruitment-form");
-  };
-
-  //for anything relating to performace
-  const createPerfomance = () => {
-    return axiosInstance.get("/create-performance-form");
-  };
-
-  //for anything relating to campaign
-  const createCampaign = () => {
-    return axiosInstance.get("/create-campaign-form");
-  };
-  //for anything relating to role assignment
-  const createRoleAssignment = () => {
-    return axiosInstance.get("/create-role-form");
-  };
-
-  const adminDashboardData = () => {
-    return axiosInstance.get("/admin-dashboard");
-  };
-
-  const fetchEmployeeAttendance = () => {
-    const date = new Date();
-    const firstDay = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      1
-    ).toLocaleDateString();
-    const lastDay = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).toLocaleDateString();
-
-    const params = `?startOfMonth=${firstDay}&endOfMonth=${lastDay}`;
-    return axiosInstance
-      .get("/api/attendance/employee/" + user?.ogid + params)
-      .then((e) => {
-        setemployeeAttendance(e?.data?.data);
+  // SELECT APIs
+  // All Employees:
+  const fetchAllEmployees = async () => {
+    try {
+      const response = await axiosInstance.get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
       });
+      const resData = response?.data?.data?.employees;
+
+      const formattedEmployees = resData
+        .map((e) => ({
+          label: e?.full_name.toUpperCase(),
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectEmployees(formattedEmployees);
+    } catch (error) {}
   };
+
+  // All Campaigns:
+  const fetchAllCampaigns = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "campaign",
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.offices;
+
+      const formattedCampaigns = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectCampaigns(formattedCampaigns);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Departments:
+  const fetchAllDepartments = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "department",
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.offices;
+
+      const formattedDepartments = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectDepartments(formattedDepartments);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Designations:
+  const fetchAllDesignations = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/designations.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.designations;
+
+      const formattedDesignation = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectDesignations(formattedDesignation);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Branches:
+  const fetchAllBranches = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/branches.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.branches;
+
+      const formatted = resData.map((branch) => ({
+        label: branch.title,
+        value: branch.id,
+      }));
+
+      setSelectBranches(formatted);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Leave Types:
+  const fetchAllLeaveTypes = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/leave_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.types;
+
+      const formattedLeaveTypes = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectLeaveTypes(formattedLeaveTypes);
+      setLoadingSelect(false);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    const token = secureLocalStorage.getItem("token");
+    if (token) {
+      if (isHr) {
+        fetchAllEmployees();
+        fetchAllCampaigns();
+        fetchAllDepartments();
+        fetchAllDesignations();
+        fetchAllBranches();
+        fetchAllLeaveTypes();
+        fetchHRLeavesNotificationCount();
+      }
+
+      fetchAllLeaveTypes();
+    }
+  }, [isHr, isTeamLead, userToken]);
+
   return (
     <AppContext.Provider
       value={{
-        fetchTypesShift,
+        selectEmployees,
+        setSelectEmployees,
+        fetchAllEmployees,
+
+        selectCampaigns,
+        setSelectCampaigns,
+        fetchAllCampaigns,
+
+        selectDepartments,
+        setSelectDepartments,
+        fetchAllDepartments,
+
+        selectDesignations,
+        setSelectDesignations,
+        fetchAllDesignations,
+
+        selectBranches,
+        setSelectBranches,
+        fetchAllBranches,
+
+        selectLeaveTypes,
+        setSelectLeaveTypes,
+        fetchAllLeaveTypes,
+
+        loadingSelect,
+        setLoadingSelect,
+
+        dropDownClicked,
+        setDropDownClicked,
+
         showProgress,
         uploadProgress,
         handleProgress,
-        combineRequest,
-        employeeAttendance,
-        adminDashboardData,
-        setallEmployees,
-        allEmployees,
         count,
         setCount,
         showAlert,
         showAlertMsg,
-        fetchEmployeeAttendance,
-        fetchEmployee,
-        setloggedIn,
-        formUpdate,
-        setformUpdate,
         isChecked,
         setIsChecked,
         isFromBiometrics,
         setIsFromBiometrics,
-        notifications,
         user,
-        clearNotifications,
         setuserToken,
-        createEmployee,
-        createShifts,
-        createPayroll,
-        createRecruitmens,
-        createPerfomance,
-        createCampaign,
-        createRoleAssignment,
-        createJobApplications,
         fetchHRLeavesNotificationCount,
-        status
+        status,
       }}
     >
       {props.children}

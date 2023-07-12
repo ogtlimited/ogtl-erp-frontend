@@ -1,17 +1,22 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import logo from "../../assets/img/OG-Logo.png";
 import Signature from "./signature";
 import "./signature.css";
 import tokenService from "../../services/token.service";
 const getIcon = (name) => <i className={"las " + name}></i>;
 
 const SignatureGenerator = () => {
-  const [user, setuser] = useState(tokenService.getUser());
+  const [user] = useState(tokenService.getUser());
+
+  console.log("user", user);
 
   const initialState = {
-    fullName: user.first_name + " " + user.last_name || "",
-    position: user?.designation?.designation || "",
-    email: user.company_email || "",
+    fullName:
+      user?.employee_info?.personal_details?.first_name +
+        " " +
+        user?.employee_info?.personal_details?.last_name || "",
+    position: user?.employee_info?.designation || "",
+    email: user?.employee_info?.email || "",
     phone: "",
     copied: false,
   };
@@ -93,17 +98,18 @@ const SignatureGenerator = () => {
         <React.Fragment>
           <Signature
             fullName={state.fullName}
-            position= <p style={{color: 'red'}}><strong>Please enter your designation</strong></p>
+            position=<p style={{ color: "red" }}>
+              <strong>Please enter your designation</strong>
+            </p>
             email={state.email}
             phone={state.phone}
           />
           <br />
-          <button className="btn btn-primary" style={{cursor: 'not-allowed'}}>
+          <button className="btn btn-primary" style={{ cursor: "not-allowed" }}>
             {state.copied ? "Copied" : "Copy to clipboard"}{" "}
             {state.copied ? getIcon("la-check") : getIcon("la-copy")}
           </button>
         </React.Fragment>
-
       );
     } else {
       return <div>Please, input your data</div>;
@@ -121,8 +127,6 @@ const SignatureGenerator = () => {
       windowSelection.addRange(range);
     }
     try {
-      let successful = document.execCommand("copy");
-
       setState((prevState) => ({
         ...prevState,
         copied: true,
@@ -146,9 +150,7 @@ const SignatureGenerator = () => {
           <div className="col">
             <h3 className="page-title">Email Signature</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
-              </li>
+              <li className="breadcrumb-item">Apps</li>
               <li className="breadcrumb-item active">Email Signature</li>
             </ul>
           </div>

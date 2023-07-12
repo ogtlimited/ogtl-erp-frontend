@@ -3,20 +3,22 @@
 }
 
 .add-employee-form-loader-div {
+  margin-left: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  width: 65%;
 }
 
 .add-employee-form-loader-div > p {
-  margin-right: 10px;
-  margin-bottom: 0;
+  margin-top: 10px;
   font-size: 20px;
   font-weight: 400;
 }
 
 .add-employee-container-card {
   position: relative;
-  top: 5%;
 }
 
 .add-employee-card {
@@ -114,6 +116,7 @@
   font-size: 12px;
   font-weight: 600;
   color: red;
+  width: 250px;
 }
 
 @media screen and (max-width: 768px) {

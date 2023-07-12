@@ -1,40 +1,43 @@
+
+import  secureLocalStorage  from  "react-secure-storage";
+
 class TokenService {
   getToken() {
-    const token = localStorage.getItem("token");
+    const token = secureLocalStorage.getItem("token");
 
     return token;
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(secureLocalStorage.getItem("user"));
   }
   getOgid() {
     return this.getUser().ogid;
   }
 
   setUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
+    secureLocalStorage.setItem("user", JSON.stringify(user));
   }
   setToken(token) {
-    localStorage.setItem("token", token);
+    secureLocalStorage.setItem("token", token);
   }
   removeToken() {
-    localStorage.removeItem("token");
+    secureLocalStorage.removeItem("token");
   }
   removeUser() {
-    localStorage.removeItem("user");
+    secureLocalStorage.removeItem("user");
   }
   clearStorage() {
-    localStorage.clear();
+    secureLocalStorage.clear();
   }
   setAttendance(data) {
-    localStorage.setItem("attendance", JSON.stringify(data));
+    secureLocalStorage.setItem("attendance", JSON.stringify(data));
   }
   getAttendance() {
-    return JSON.parse(localStorage.getItem("attendance"));
+    return JSON.parse(secureLocalStorage.getItem("attendance"));
   }
   removeAttendance() {
-    localStorage.removeItem("attendance");
+    secureLocalStorage.removeItem("attendance");
   }
 }
 

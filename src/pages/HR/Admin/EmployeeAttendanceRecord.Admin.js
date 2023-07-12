@@ -76,6 +76,7 @@ const EmployeeAttendanceRecordAdmin = () => {
         setData={setEmployeeAttendance}
         loading={loading}
         setLoading={setLoading}
+        
         fromDate={fromDate}
         toDate={toDate}
         today={today}

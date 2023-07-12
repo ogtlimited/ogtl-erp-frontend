@@ -1,44 +1,33 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from 'react';
-import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import ReporteeLeavesTable from '../../../components/Tables/EmployeeTables/Leaves/ReporteeLeaveTable';
-import LeadLeaveHistoryTable from '../../../components/Tables/EmployeeTables/Leaves/LeadLeaveHistoryTable';
-import tokenService from '../../../services/token.service';
-import axiosInstance from '../../../services/api';
-import ViewModal from '../../../components/Modal/ViewModal';
-import { ApplyLeaveModal } from '../../../components/Modal/ApplyLeaveModal';
-import { EditLeaveModal } from '../../../components/Modal/EditLeaveModal';
-import { useAppContext } from '../../../Context/AppContext';
-import LeaveApplicationContent from '../../../components/ModalContents/LeaveApplicationContent';
-import RejectLeaveModal from '../../../components/Modal/RejectLeaveModal';
-import RequestEditModal from '../../../components/Modal/RequestEditModal';
-import AppealRejectionModal from '../../../components/Modal/AppealRejectionModal';
-import {
-  FcApproval,
-  FcRight,
-  FcClock,
-  FcBusinessman,
-  FcBusinesswoman,
-  FcCancel,
-} from 'react-icons/fc';
-import moment from 'moment';
+import React, { useState, useEffect, useCallback } from "react";
+import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
+import ReporteeLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/ReporteeLeaveTable";
+import LeadLeaveHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/LeadLeaveHistoryTable";
+import axiosInstance from "../../../services/api";
+import ViewModal from "../../../components/Modal/ViewModal";
+import { ApplyLeaveModal } from "../../../components/Modal/ApplyLeaveModal";
+import { EditLeaveModal } from "../../../components/Modal/EditLeaveModal";
+import { useAppContext } from "../../../Context/AppContext";
+import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
+import RejectLeaveModal from "../../../components/Modal/RejectLeaveModal";
+import RequestEditModal from "../../../components/Modal/RequestEditModal";
+import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal";
+import moment from "moment";
 
 const LeavesUser = () => {
-  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
-  const [userId, setuserId] = useState('');
+  const { showAlert, fetchHRLeavesNotificationCount, user } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
     useState(0);
-  const [modalType, setmodalType] = useState('');
+  const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
-  const [user, setuser] = useState([]);
+
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
   const [allReporteesAppealedLeaves, setAllReporteesAppealedLeaves] = useState(
     []
   );
-  const [allActiveLeaves, setAllActiveLeaves] = useState(0);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const [rejectModal, setRejectModal] = useState(false);
   const [requestEditModal, setRequestEditModal] = useState(false);
@@ -51,317 +40,117 @@ const LeavesUser = () => {
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  const [totalPages, setTotalPages] = useState("");
 
-  const [departmentFilter, setDepartmentFilter] = useState('');
-  const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [userStatus, setUserStatus] = useState('');
-
-  const [departments, setDepartments] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
-
-  const [leaveApprover, setLeaveApprover] = useState([]);
-  const [leaveStatus, setLeaveStatus] = useState([]);
-
-  const currentUser = tokenService.getUser();
+  const currentUserIsLead = user?.employee_info?.is_lead;
 
   // Calculates Leave Days for Business Days
   function calcBusinessDays(startDate, endDate) {
     var day = moment(startDate);
     var businessDays = 0;
 
-    while (day.isSameOrBefore(endDate, 'day')) {
+    while (day.isSameOrBefore(endDate, "day")) {
       if (day.day() !== 0 && day.day() !== 5) businessDays++;
-      day.add(1, 'd');
+      day.add(1, "d");
     }
     return businessDays;
   }
 
-  const fetchLeaveApplicationProgress = async () => {
-    try {
-      const response = await axiosInstance.get(
-        '/leave-application/leave-application-progress'
-      );
-      const resData = response?.data?.data;
-      // console.log('Approver response:', response);
-      // console.log('Approver:', resData);
-
-      const approver = Object.keys(resData);
-      const status = Object.values(resData);
-
-      setLeaveApprover(approver);
-      setLeaveStatus(status);
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-  
-  const fetchTotalActiveLeaves = async () => {
-    try {
-      const response = await axiosInstance.get(`/leads-leave-applications/total-active-leaves`);
-      const totalActiveLeave = response?.data?.data;
-
-      setAllActiveLeaves(totalActiveLeave);
-      fetchLeaveApplicationProgress();
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
   const fetchYourLeaves = async () => {
-    const id = currentUser._id;
     try {
-      const response = await axiosInstance.get(`/leave-application`, {
-        params: {
-          employee_id: id,
+      const response = await axiosInstance.get("/api/v1/leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
         },
       });
-      const leaves = response?.data?.data;
 
-      const formatter = leaves.map((leave) => ({
-        ...leave,
-        status_action: leave?.status,
-        leave_type: leave?.leave_type_id?.leave_type,
-        from_date: new Date(leave?.from_date).toDateString(),
-        to_date: new Date(leave?.to_date).toDateString(),
-        requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
+      const resData = response?.data?.data?.leaves;
+
+      const formatted = resData.map((leave) => ({
+        ...leave?.leave,
+        status_action: leave?.leave?.status,
+        leave_type: leave?.leave_type,
+        from_date: new Date(leave?.leave?.start_date).toDateString(),
+        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        requested_leave_days: calcBusinessDays(
+          leave?.leave?.start_date,
+          leave?.leave?.end_date
+        ),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      const status = leaves[0].status;
-      setUserStatus(status);
-
-      setallLeaves(formatter);
-      fetchLeaveApplicationProgress();
-      setLoading(false);
+      setallLeaves(formatted);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
+    setLoading(false);
   };
 
-  const fetchReporteesLeaves = useCallback(() => {
-    axiosInstance
-      .get(`/leads-leave-applications`, {
-        params: {
-          department: departmentFilter,
-          leave_type: leaveTypeFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          from_date: new Date(leave?.from_date).toDateString(),
-          to_date: new Date(leave?.to_date).toDateString(),
-          department: leave?.department_id?.department,
-          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
-        }));
-
-        setAllReporteesLeaves(formatted);
-        setLeaveApplicationCount(formatted.length);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('reportee error:', error);
-        setLoading(false);
-      });
-  }, [departmentFilter, leaveTypeFilter, page, searchTerm, sizePerPage]);
-
-  const fetchLeaveHistory = useCallback(() => {
-    axiosInstance
-      .get(`/leads-leave-applications/history`, {
-        params: {
-          department: departmentFilter,
-          leave_type: leaveTypeFilter,
-          status: statusFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          from_date: new Date(leave?.from_date).toDateString(),
-          to_date: new Date(leave?.to_date).toDateString(),
-          department: leave?.department_id?.department,
-          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
-        }));
-
-        setLeaveHistory(formatted);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('reportee error:', error);
-        setLoading(false);
-      });
-  }, [
-    departmentFilter,
-    leaveTypeFilter,
-    page,
-    searchTerm,
-    sizePerPage,
-    statusFilter,
-  ]);
-
-  const fetchReporteesAppealedLeaves = useCallback(() => {
-    axiosInstance
-      .get(`/leads-leave-applications/appealed-leaves`, {
-        params: {
-          department: departmentFilter,
-          leave_type: leaveTypeFilter,
-          search: searchTerm,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        // console.log('Leave Appealed Leaves - isAppealed:', resData);
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            ' ' +
-            leave?.employee.middle_name +
-            ' ' +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          from_date: new Date(leave?.from_date).toDateString(),
-          to_date: new Date(leave?.to_date).toDateString(),
-          department: leave?.department_id?.department,
-          requested_leave_days: calcBusinessDays(leave.from_date, leave.to_date),
-        }));
-
-        setAllReporteesAppealedLeaves(formatted);
-        setAppealedLeaveApplicationCount(formatted.length);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('reportee error:', error);
-        setLoading(false);
-      });
-  }, [departmentFilter, leaveTypeFilter, page, searchTerm, sizePerPage]);
-
-  const fetchDepartment = async () => {
+  const fetchReporteesLeaves = async () => {
     try {
-      const response = await axiosInstance.get('/department');
-      const resData = response?.data?.data;
+      const response = await axiosInstance.get("/api/v1/team_leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
 
-      const formatted = resData.map((e) => ({
-        department: e.department,
-      })).sort((a, b) => a.department.localeCompare(b.department));
+      const resData = response?.data?.data?.leaves;
 
-      setDepartments(formatted);
-      setLoading(false);
+      const formatted = resData.map((leave) => ({
+        ...leave,
+        full_name: leave.first_name + " " + leave.last_name,
+        status_action: leave?.status,
+        leave_type: leave?.leave_type,
+        from_date: new Date(leave?.start_date).toDateString(),
+        to_date: new Date(leave?.end_date).toDateString(),
+        requested_leave_days: calcBusinessDays(
+          leave?.start_date,
+          leave?.end_date
+        ),
+      }));
+
+      const reporteeLeaves = resData.length;
+      setAllReporteesLeaves(formatted);
+      setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      console.log(error?.response);
+      if (error?.response?.status === 403) {
+        showAlert(
+          true,
+          "You are not authorized to view your team leaves",
+          "alert alert-warning"
+        );
+      } else {
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      }
     }
-  };
-
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get(`/leave-type`);
-      const resData = response?.data?.data;
-
-      const formatted = resData.map((e) => ({
-        leave_type: e.leave_type,
-      })).sort((a, b) => a.leave_type.localeCompare(b.leave_type));
-
-      setLeaveTypes(formatted);
-    } catch (error) {
-      console.log(error);
-    }
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchTotalActiveLeaves();
-    fetchReporteesLeaves();
-    fetchReporteesAppealedLeaves();
-    fetchLeaveHistory();
-    fetchLeaveApplicationProgress();
-    fetchDepartment();
-    fetchLeavesType();
-
-    let user = tokenService.getUser();
-    setuser(user);
-    setuserId(user._id);
-    if (userId) {
-      fetchYourLeaves();
+    fetchYourLeaves();
+    if (currentUserIsLead) {
+      fetchReporteesLeaves();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    fetchLeaveHistory,
-    fetchReporteesAppealedLeaves,
-    fetchReporteesLeaves,
-    userId,
-  ]);
+  }, []);
 
   const handleApproveLeave = async (row) => {
-    const id = row._id;
+    const id = row.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`leads-leave-approval/${id}`);
-      showAlert(true, 'Leave Approved', 'alert alert-success');
+      const response = await axiosInstance.put(
+        `/api/v1/approve_subordinate_leave/${id}.json`
+      );
+      showAlert(true, "Leave Approved", "alert alert-success");
       fetchReporteesLeaves();
-      fetchReporteesAppealedLeaves();
-      fetchLeaveHistory();
-      fetchHRLeavesNotificationCount();
+      // fetchHRLeavesNotificationCount();
     } catch (error) {
-      console.log('Leave approval error:', error.response);
+      console.log("Leave approval error:", error.response);
     }
   };
 
@@ -393,42 +182,53 @@ const LeavesUser = () => {
 
   const userColumns = [
     {
-      dataField: 'leave_type',
-      text: 'Leave Type',
+      dataField: "leave_type",
+      text: "Leave Type",
       sort: true,
+      headerStyle: { width: "10%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
-      dataField: 'from_date',
-      text: 'From Date',
+      dataField: "date_applied",
+      text: "Date Applied",
       sort: true,
+      headerStyle: { width: "10%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
-      dataField: 'to_date',
-      text: 'To Date',
+      dataField: "from_date",
+      text: "From",
       sort: true,
+      headerStyle: { width: "10%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
-      dataField: 'status',
-      text: 'Status',
+      dataField: "to_date",
+      text: "To",
       sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <>
-          {value === 'approved' ? (
+          {value === "approved" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-success"></i> {value}
             </span>
-          ) : value === 'cancelled' ? (
+          ) : value === "cancelled" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-primary"></i> {value}
             </span>
-          ) : value === 'rejected' ? (
+          ) : value === "rejected" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-danger"></i> {value}
             </span>
-          ) : value === 'pending' ? (
+          ) : value === "pending" ? (
             <span className="btn btn-gray btn-sm btn-rounded ">
               <i className="fa fa-dot-circle-o text-warning"></i> {value}
             </span>
@@ -437,23 +237,23 @@ const LeavesUser = () => {
       ),
     },
     {
-      dataField: 'requested_leave_days',
-      text: 'Requested Leave Days',
+      dataField: "requested_leave_days",
+      text: "Requested Leave Days",
       sort: true,
-      headerStyle: { width: '100px' },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           {row.requested_leave_days > 1
-            ? row.requested_leave_days + ' days'
-            : row.requested_leave_days + ' day'}
+            ? row.requested_leave_days + " days"
+            : row.requested_leave_days + " day"}
         </>
       ),
     },
     {
-      dataField: 'status_action',
-      text: 'Action',
+      dataField: "status_action",
+      text: "Action",
       csvExport: false,
-      headerStyle: { width: '10%' },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -471,14 +271,14 @@ const LeavesUser = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                setmodalType('view-details');
+                setmodalType("view-details");
                 setViewRow(row);
               }}
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === 'pending' && row.acted_on === false ? (
+            {/* {row.status === "pending" && row.acted_on === false ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -488,9 +288,9 @@ const LeavesUser = () => {
               >
                 <i className="fa fa-edit m-r-5"></i> Edit
               </a>
-            ) : null}
+            ) : null} */}
 
-            {row.status === 'rejected' && row.hr_stage === false ? (
+            {/* {row.status === "rejected" && row.hr_stage === false ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -500,7 +300,7 @@ const LeavesUser = () => {
               >
                 <i className="fa fa-edit m-r-5"></i> Appeal Rejection
               </a>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       ),
@@ -509,53 +309,53 @@ const LeavesUser = () => {
 
   const reporteeColumns = [
     {
-      dataField: 'full_name',
-      text: 'Full Name',
+      dataField: "full_name",
+      text: "Full Name",
       sort: true,
-      headerStyle: { width: '150px' },
+      headerStyle: { width: "150px" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
-      dataField: 'department',
-      text: 'Department',
+      dataField: "office",
+      text: "Office",
       sort: true,
-      headerStyle: { width: '100px' },
+      headerStyle: { width: "100px" },
     },
     {
-      dataField: 'leave_type',
-      text: 'Leave Type',
+      dataField: "leave_type",
+      text: "Leave Type",
       sort: true,
       formatter: (val, row) => <p>{val}</p>,
     },
     {
-      dataField: 'from_date',
-      text: 'From Date',
+      dataField: "from_date",
+      text: "From Date",
       sort: true,
     },
     {
-      dataField: 'to_date',
-      text: 'To Date',
+      dataField: "to_date",
+      text: "To Date",
       sort: true,
     },
     {
-      dataField: 'status',
-      text: 'Status',
+      dataField: "status",
+      text: "Status",
       sort: true,
       formatter: (value, row) => (
         <>
-          {value === 'approved' ? (
+          {value === "approved" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-success"></i> {value}
             </span>
-          ) : value === 'cancelled' ? (
+          ) : value === "cancelled" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-primary"></i> {value}
             </span>
-          ) : value === 'rejected' ? (
+          ) : value === "rejected" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-danger"></i> {value}
             </span>
-          ) : value === 'pending' ? (
+          ) : value === "pending" ? (
             <span className="btn btn-gray btn-sm btn-rounded ">
               <i className="fa fa-dot-circle-o text-warning"></i> {value}
             </span>
@@ -564,71 +364,23 @@ const LeavesUser = () => {
       ),
     },
     {
-      dataField: 'requested_leave_days',
-      text: 'Requested Leave Days',
+      dataField: "requested_leave_days",
+      text: "Requested Leave Days",
       sort: true,
-      headerStyle: { width: '100px' },
+      headerStyle: { width: "100px" },
       formatter: (value, row) => (
         <>
           {row.requested_leave_days > 1
-            ? row.requested_leave_days + ' days'
-            : row.requested_leave_days + ' day'}
+            ? row.requested_leave_days + " days"
+            : row.requested_leave_days + " day"}
         </>
       ),
     },
-    // {
-    //   dataField: 'status',
-    //   text: 'Actions',
-    //   sort: true,
-    //   csvExport: false,
-    //   headerStyle: { minWidth: '100px', textAlign: 'center' },
-    //   formatter: (value, row) => (
-    //     <div className="text-center">
-    //       <div className="leave-reportee-action-btns">
-    //         {value === 'pending' ? (
-    //           <button
-    //             className="btn btn-sm btn-success leave-btn"
-    //             onClick={() => handleApproveLeave()}
-    //           >
-    //             Approve
-    //           </button>
-    //         ) : (
-    //           <button className="btn btn-sm btn-secondary leave-btn" disabled>
-    //             Approve
-    //           </button>
-    //         )}
-    //         {value === 'pending' ? (
-    //           <button
-    //             className="btn btn-sm btn-danger leave-btn"
-    //             onClick={() => handleRejectLeave()}
-    //           >
-    //             Reject
-    //           </button>
-    //         ) : (
-    //           <button className="btn btn-sm btn-secondary leave-btn" disabled>
-    //             Reject
-    //           </button>
-    //         )}
-    //         <button
-    //           className="btn btn-sm btn-primary leave-btn"
-    //           data-toggle="modal"
-    //           data-target="#generalModal"
-    //           onClick={() => {
-    //             setmodalType('view-details');
-    //             setViewRow(row);
-    //           }}
-    //         >
-    //           View
-    //         </button>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
     {
-      dataField: 'status_action',
-      text: 'Action',
+      dataField: "status_action",
+      text: "Action",
       csvExport: false,
-      headerStyle: { width: '10%' },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -646,14 +398,14 @@ const LeavesUser = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                setmodalType('view-details');
+                setmodalType("view-details");
                 setViewRow(row);
               }}
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {value === 'pending' ? (
+            {value === "pending" ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -663,7 +415,7 @@ const LeavesUser = () => {
               </a>
             ) : null}
 
-            {value === 'pending' ? (
+            {value === "pending" ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -673,7 +425,7 @@ const LeavesUser = () => {
               </a>
             ) : null}
 
-            {value === 'pending' ? (
+            {/* {value === "pending" ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -681,107 +433,113 @@ const LeavesUser = () => {
               >
                 <i className="fa fa-edit m-r-5"></i> Request modification
               </a>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       ),
     },
   ];
 
-  const reporteeHistoryColumns = [
-    {
-      dataField: 'full_name',
-      text: 'Full Name',
-      sort: true,
-      headerStyle: { width: '150px' },
-      formatter: (value, row) => <h2>{row?.full_name}</h2>,
-    },
-    {
-      dataField: 'department',
-      text: 'Department',
-      sort: true,
-      headerStyle: { width: '100px' },
-    },
-    {
-      dataField: 'leave_type',
-      text: 'Leave Type',
-      sort: true,
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: 'from_date',
-      text: 'From Date',
-      sort: true,
-    },
-    {
-      dataField: 'to_date',
-      text: 'To Date',
-      sort: true,
-    },
-    {
-      dataField: 'status',
-      text: 'Status',
-      sort: true,
-      formatter: (value, row) => (
-        <>
-          {value === 'approved' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
-            </span>
-          ) : value === 'cancelled' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-primary"></i> {value}
-            </span>
-          ) : value === 'rejected' ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-danger"></i> {value}
-            </span>
-          ) : value === 'pending' ? (
-            <span className="btn btn-gray btn-sm btn-rounded ">
-              <i className="fa fa-dot-circle-o text-warning"></i> {value}
-            </span>
-          ) : null}
-        </>
-      ),
-    },
-    {
-      dataField: 'requested_leave_days',
-      text: 'Requested Leave Days',
-      sort: true,
-      headerStyle: { width: '100px' },
-      formatter: (value, row) => (
-        <>
-          {row.requested_leave_days > 1
-            ? row.requested_leave_days + ' days'
-            : row.requested_leave_days + ' day'}
-        </>
-      ),
-    },
-    {
-      dataField: 'status_action',
-      text: 'Actions',
-      sort: true,
-      csvExport: false,
-      headerStyle: { minWidth: '100px', textAlign: 'center' },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-reportee-action-btns">
-            <button
-              className="btn btn-sm btn-primary leave-btn"
-              data-toggle="modal"
-              data-target="#generalModal"
-              onClick={() => {
-                setmodalType('view-details');
-                setViewRow(row);
-              }}
-            >
-              View
-            </button>
-          </div>
-        </div>
-      ),
-    },
-  ];
+  // const reporteeHistoryColumns = [
+  //   {
+  //     dataField: "full_name",
+  //     text: "Full Name",
+  //     sort: true,
+  //     headerStyle: { width: "150px" },
+  //     formatter: (value, row) => <h2>{row?.full_name}</h2>,
+  //   },
+  //   {
+  //     dataField: "department",
+  //     text: "Department",
+  //     sort: true,
+  //     headerStyle: { width: "100px" },
+  //   },
+  //   {
+  //     dataField: "leave_type",
+  //     text: "Leave Type",
+  //     sort: true,
+  //     formatter: (val, row) => <p>{val}</p>,
+  //   },
+  //   {
+  //     dataField: "from_date",
+  //     text: "From Date",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "to_date",
+  //     text: "To Date",
+  //     sort: true,
+  //   },
+  //   {
+  //     dataField: "status",
+  //     text: "Status",
+  //     sort: true,
+  //     formatter: (value, row) => (
+  //       <>
+  //         {value === "approved" ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-success"></i> {value}
+  //           </span>
+  //         ) : value === "cancelled" ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-primary"></i> {value}
+  //           </span>
+  //         ) : value === "rejected" ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded">
+  //             <i className="fa fa-dot-circle-o text-danger"></i> {value}
+  //           </span>
+  //         ) : value === "pending" ? (
+  //           <span className="btn btn-gray btn-sm btn-rounded ">
+  //             <i className="fa fa-dot-circle-o text-warning"></i> {value}
+  //           </span>
+  //         ) : null}
+  //       </>
+  //     ),
+  //   },
+  //   {
+  //     dataField: "requested_leave_days",
+  //     text: "Requested Leave Days",
+  //     sort: true,
+  //     headerStyle: { width: "100px" },
+  //     formatter: (value, row) => (
+  //       <>
+  //         {row.requested_leave_days > 1
+  //           ? row.requested_leave_days + " days"
+  //           : row.requested_leave_days + " day"}
+  //       </>
+  //     ),
+  //   },
+  //   {
+  //     dataField: "status_action",
+  //     text: "Actions",
+  //     sort: true,
+  //     csvExport: false,
+  //     headerStyle: { minWidth: "100px", textAlign: "center" },
+  //     formatter: (value, row) => (
+  //       <div className="text-center">
+  //         <div className="leave-reportee-action-btns">
+  //           <button
+  //             className="btn btn-sm btn-primary leave-btn"
+  //             data-toggle="modal"
+  //             data-target="#generalModal"
+  //             onClick={() => {
+  //               setmodalType("view-details");
+  //               setViewRow(row);
+  //             }}
+  //           >
+  //             View
+  //           </button>
+  //         </div>
+  //       </div>
+  //     ),
+  //   },
+  // ];
+
+  const SilentRefresh = () => {
+    if (currentUserIsLead) {
+      fetchReporteesLeaves();
+    }
+  };
 
   return (
     <>
@@ -797,24 +555,26 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.leaveCount > 0 && (
+            {user?.employee_info?.leave_count > 0 && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
               >
-                Apply Leave
+                Apply For Leave
               </a>
             )}
           </div>
         </div>
       </div>
-      {user?.leaveApprovalLevel > 0 && (
+
+      {currentUserIsLead && (
         <div className="page-menu">
           <div className="row">
             <div className="col-sm-12">
               <ul className="nav nav-tabs nav-tabs-bottom">
+                
                 <li className="nav-item">
                   <a
                     className="nav-link active"
@@ -824,13 +584,14 @@ const LeavesUser = () => {
                     Your Leaves
                   </a>
                 </li>
+
                 <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
                     href="#tab_subordinates-leaves"
                   >
-                    Leave Applications{' '}
+                    Leave Applications{" "}
                     {leaveApplicationCount > 0 && (
                       <span id="leave-application-count">
                         {leaveApplicationCount}
@@ -838,7 +599,8 @@ const LeavesUser = () => {
                     )}
                   </a>
                 </li>
-                <li className="nav-item">
+
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
@@ -846,73 +608,33 @@ const LeavesUser = () => {
                   >
                     Leave History
                   </a>
-                </li>
-                <li className="nav-item">
+                </li> */}
+
+                {/* <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
                     href="#tab_leave-appeals"
                   >
-                    Appealed Leaves{' '}
+                    Appealed Leaves{" "}
                     {appealedLeaveApplicationCount > 0 && (
                       <span id="leave-application-count">
                         {appealedLeaveApplicationCount}
                       </span>
                     )}
                   </a>
-                </li>
+                </li> */}
+
               </ul>
             </div>
           </div>
         </div>
       )}
+
       <div>
         <div className="row tab-content">
+
           <div id="tab_leaves" className="col-12 tab-pane show active">
-            <div className="remaining-leave-row">
-              <div className="remaining-leave-row-card">
-                <div className="stats-info">
-                  <h6>Remaining Leave</h6>
-                  <h4>{user.leaveCount}</h4>
-                </div>
-              </div>
-              {user?.leaveApprover && 
-              <div className="active-leave-row-card">
-                <div className="stats-info">
-                  <h6>Total Active Leave</h6>
-                  <h4>{allActiveLeaves}</h4>
-                </div>
-              </div>}
-              <div className="leave-application-progress">
-                {/* {leaveApprover.length ? <p>Leave Application Progress</p> : null} */}
-                <div>
-                  {leaveApprover.length && user?.gender === 'male' ? (
-                    <FcBusinessman className="approver-progress-user-icon" />
-                  ) : leaveApprover.length && user?.gender === 'female' ? (
-                    <FcBusinesswoman className="approver-progress-user-icon" />
-                  ) : null}
-
-                  {leaveApprover.map((item, index) => (
-                    <div className="approver-progress-container" key={index}>
-                      <FcRight className="approver-progress-icon" />
-                      <div className="approver-progress">
-                        <p className="approver-progress-name">
-                          {leaveApprover[index]}
-                        </p>
-                        <p className="approver-progress-status">
-                          {leaveStatus[index] === 'done' ? (
-                            <FcApproval className="approver-status-icon" />
-                          ) : leaveStatus[index] === 'rejected' ? (
-                            <FcCancel className="approver-status-icon" /> 
-                          ) : <FcClock className="approver-status-icon" /> }
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-
-                </div>
-              </div>
-            </div>
             <LeavesTable columns={userColumns} data={allLeaves} />
           </div>
 
@@ -922,83 +644,59 @@ const LeavesUser = () => {
               data={allReporteesLeaves}
               setData={setAllReporteesLeaves}
               loading={loading}
+              setLoading={setLoading}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
-              departmentFilter={departmentFilter}
-              setDepartmentFilter={setDepartmentFilter}
-              leaveTypeFilter={leaveTypeFilter}
-              setLeaveTypeFilter={setLeaveTypeFilter}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              setLoading={setLoading}
-              departments={departments}
-              leaveTypes={leaveTypes}
             />
           </div>
 
-          <div id="tab_leave-history" className="col-12 tab-pane">
+          {/* <div id="tab_leave-history" className="col-12 tab-pane">
             <LeadLeaveHistoryTable
               columns={reporteeHistoryColumns}
               data={leaveHistory}
               setData={setLeaveHistory}
               loading={loading}
+              setLoading={setLoading}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
-              departmentFilter={departmentFilter}
-              setDepartmentFilter={setDepartmentFilter}
-              leaveTypeFilter={leaveTypeFilter}
-              setLeaveTypeFilter={setLeaveTypeFilter}
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              setLoading={setLoading}
-              departments={departments}
-              leaveTypes={leaveTypes}
             />
-          </div>
+          </div> */}
 
-          <div id="tab_leave-appeals" className="col-12 tab-pane">
+          {/* <div id="tab_leave-appeals" className="col-12 tab-pane">
             <ReporteeLeavesTable
               columns={reporteeColumns}
               data={allReporteesAppealedLeaves}
               setData={setAllReporteesLeaves}
               loading={loading}
+              setLoading={setLoading}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
-              departmentFilter={departmentFilter}
-              setDepartmentFilter={setDepartmentFilter}
-              leaveTypeFilter={leaveTypeFilter}
-              setLeaveTypeFilter={setLeaveTypeFilter}
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              setLoading={setLoading}
-              departments={departments}
-              leaveTypes={leaveTypes}
             />
-          </div>
+          </div> */}
+
         </div>
       </div>
 
-      {modalType === 'view-details' ? (
+      {modalType === "view-details" ? (
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
+          handleRefresh={SilentRefresh}
         />
       ) : (
-        ''
+        ""
       )}
 
       {rejectModal && (
@@ -1008,7 +706,6 @@ const LeavesUser = () => {
           loading={loading}
           setLoading={setLoading}
           fetchReporteesLeaves={fetchReporteesLeaves}
-          fetchLeaveHistory={fetchLeaveHistory}
         />
       )}
 

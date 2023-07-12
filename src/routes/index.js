@@ -1,7 +1,7 @@
 /** @format */
 
 import { Suspense, lazy } from 'react';
-import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import { AppProvider } from '../Context/AppContext';
 import { NoAuthContextProvider } from '../Context/NoAuthContext';
 import AuthGuard from '../guards/AuthGuard';
@@ -15,10 +15,8 @@ import ActivateClient from '../pages/Auth/ActivateClient';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
+
 const Loadable = (Component) => (props) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { pathname } = useLocation();
-  const isDashboard = pathname.includes('/dashboard');
 
   return (
     <Suspense fallback={<h1>Loading...</h1>}>
@@ -33,6 +31,7 @@ export default function Router() {
       path: '/',
       element: <Navigate to="/dashboard" />,
     },
+
     {
       path: 'auth',
       children: [
@@ -47,6 +46,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'auth',
       children: [
@@ -61,6 +61,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'auth',
       children: [
@@ -75,6 +76,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'recruitment',
       element: (
@@ -98,10 +100,12 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: 'recruitment/accept-joboffer/:id',
       element: <AcceptJoboffer />,
     },
+
     {
       path: 'dashboard',
       element: (
@@ -388,10 +392,18 @@ export default function Router() {
             },
             { path: 'resignation', element: <ResignationUser /> },
             {
-              path: 'departments',
+              path: 'offices',
               element: (
                 <GuardedRoute title="" dept="HR">
-                  <Departments />
+                  <Offices />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'branch',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <BranchAdmin />
                 </GuardedRoute>
               ),
             },
@@ -921,6 +933,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'roles-permissions/users/:title/:id',
+              element: (
+                <GuardedRoute title="" dept="Super">
+                  <EmployeeRoles />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'roles-assignment',
               element: (
                 <GuardedRoute title="" dept="Super">
@@ -1038,9 +1058,10 @@ const AttendanceAdmin = Loadable(
 const AttendanceRecord = Loadable(
   lazy(() => import('../pages/HR/Admin/AttendanceRecord.Admin'))
 );
-const Departments = Loadable(
-  lazy(() => import('../pages/HR/Admin/Department.Admin'))
+const Offices = Loadable(
+  lazy(() => import('../pages/HR/Admin/Offices.Admin'))
 );
+const BranchAdmin = Loadable(lazy(() => import('../pages/HR/Admin/Branch.Admin')));
 const Designations = Loadable(
   lazy(() => import('../pages/HR/Admin/Designation.Admin'))
 );
@@ -1113,9 +1134,9 @@ const ShiftAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/Shift.Admin'))
 );
 const Profile = Loadable(lazy(() => import('../pages/HR/Profile')));
-const EmployeeAttendance = Loadable(
-  lazy(() => import('../pages/HR/Users/Attendance.Users'))
-);
+// const EmployeeAttendance = Loadable(
+//   lazy(() => import('../pages/HR/Users/Attendance.Users'))
+// );
 const ClientUser = Loadable(
   lazy(() => import('../pages/HR/Users/Client.User'))
 );
@@ -1144,9 +1165,9 @@ const AcademyReport = Loadable(
 const EmployeeReport = Loadable(
   lazy(() => import('../pages/Reports/EmployeeReport'))
 );
-const PayslipReport = Loadable(
-  lazy(() => import('../pages/Reports/PayslipReport'))
-);
+// const PayslipReport = Loadable(
+//   lazy(() => import('../pages/Reports/PayslipReport'))
+// );
 const JobOpening = Loadable(
   lazy(() => import('../pages/HR/Admin/JobOpeningContainer'))
 );
@@ -1181,9 +1202,9 @@ const ShiftRequest = Loadable(
 const WarningLetter = Loadable(
   lazy(() => import('../pages/HR/Admin/WarningLetter.Admin'))
 );
-const JobsDashboard = Loadable(
-  lazy(() => import('../pages/Dashboard/JobsDashboard'))
-);
+// const JobsDashboard = Loadable(
+//   lazy(() => import('../pages/Dashboard/JobsDashboard'))
+// );
 const PublicHoliday = Loadable(
   lazy(() => import('../pages/Payroll/PublicHoliday'))
 );
@@ -1262,13 +1283,13 @@ const GeneralLedger = Loadable(
 );
 const Budget = Loadable(lazy(() => import('../pages/Accounting/Budget')));
 const Journals = Loadable(lazy(() => import('../pages/Accounting/Journal')));
-const InvoiceTemplate = Loadable(
-  lazy(() => import('../pages/Accounting/InvoiceTemplate'))
-);
+// const InvoiceTemplate = Loadable(
+//   lazy(() => import('../pages/Accounting/InvoiceTemplate'))
+// );
 const ProductItems = Loadable(
   lazy(() => import('../pages/ProductItems/ProductItems'))
 );
-const Bill = Loadable(lazy(() => import('../pages/Vendors/bill')));
+// const Bill = Loadable(lazy(() => import('../pages/Vendors/bill')));
 const PayrollReports = Loadable(
   lazy(() => import('../pages/Accounting/Payroll-Reports'))
 );
@@ -1282,13 +1303,13 @@ const ViewEmail = Loadable(lazy(() => import('../pages/In-Apps/SingleEmail')));
 const BalanceSheet = Loadable(
   lazy(() => import('../pages/Reports/BalanceSheet'))
 );
-const SingleEmail = Loadable(
-  lazy(() => import('../pages/In-Apps/SingleEmail'))
-);
+// const SingleEmail = Loadable(
+//   lazy(() => import('../pages/In-Apps/SingleEmail'))
+// );
 const FileManager = Loadable(
   lazy(() => import('../pages/In-Apps/FileManager'))
 );
-const Branch = Loadable(lazy(() => import('../pages/HR/Admin/Branch')));
+const Branch = Loadable(lazy(() => import('../pages/HR/Admin/Branch.Admin')));
 const HRDashboard = Loadable(
   lazy(() => import('../pages/Dashboard/HRDashboard'))
 );
@@ -1297,6 +1318,9 @@ const SignatureGenerator = Loadable(
 );
 const RolePermission = Loadable(
   lazy(() => import('../pages/settings/roles-permission'))
+);
+const EmployeeRoles = Loadable(
+  lazy(() => import('../pages/settings/employeeRoles'))
 );
 
 const RoleAssignment = Loadable(

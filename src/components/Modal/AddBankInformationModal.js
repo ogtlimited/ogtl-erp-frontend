@@ -8,13 +8,15 @@ import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import Select from 'react-select';
 import $ from 'jquery';
+import  secureLocalStorage  from  "react-secure-storage";
+
 
 export const AddBankInformationModal = ({ salaryDetails, fetchUserInfo }) => {
   const { id } = useParams();
   const { showAlert } = useAppContext();
   const [bankDetails, setBankDetails] = useState(bank_details);
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const salaryMode = [
     {

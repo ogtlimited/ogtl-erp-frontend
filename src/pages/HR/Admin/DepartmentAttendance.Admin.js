@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import DepartmentAttendanceTable from '../../../components/Tables/EmployeeTables/DepartmentAttendanceTable';
 import axiosInstance from '../../../services/api';
+import moment from 'moment';
 
 const DepartmentAttendanceAdmin = () => {
   const [allEmployees, setallEmployees] = useState([]);
@@ -17,6 +18,19 @@ const DepartmentAttendanceAdmin = () => {
 
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const firstDay = moment().startOf('month').format('YYYY-MM-DD');
+  const lastDay = moment().endOf('month').format('YYYY-MM-DD');
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+	const [today, setToday] = useState(null);
+  
+  useEffect(() => {
+		const time = new Date().toDateString();
+		const today_date = moment(time).format("yyyy-MM-DD");
+		setToday(today_date);
+	}, []);
+  
 
   const fetchEmployeeByDepartment = useCallback(() => {
     setLoading(true);
@@ -52,9 +66,9 @@ const DepartmentAttendanceAdmin = () => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   }, [designationFilter, id, page, searchTerm, sizePerPage]);
-
 
   const fetchDesignationByDepartment = useCallback(() => {  
   axiosInstance
@@ -91,7 +105,7 @@ const DepartmentAttendanceAdmin = () => {
             <h3 className="page-title">{department}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/dashboard/hr/attendance-record">Attendance Records</Link>
               </li>
               <li className="breadcrumb-item active">Department</li>
             </ul>
@@ -117,6 +131,13 @@ const DepartmentAttendanceAdmin = () => {
         setDesignationFilter={setDesignationFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+
+        
+        fromDate={fromDate}
+        toDate={toDate}
+        today={today}
+        setFromDate={setFromDate}
+        setToDate={setToDate}
       />
          
     </>

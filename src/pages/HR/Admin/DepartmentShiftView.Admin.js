@@ -7,6 +7,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { AddDepartmentShiftModal } from "../../../components/Modal/AddDepartmentShiftModal";
 import { EditDepartmentShiftModal } from "../../../components/Modal/EditDepartmentShiftModal";
+import  secureLocalStorage  from  "react-secure-storage";
 
 const DepartmentShiftView = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const DepartmentShiftView = () => {
   const [allDepartmentsShifts, setallDepartmentsShifts] = useState([]);
 
   const fetchDeptShift = () => {
-    const department = localStorage.getItem('department');
+    const department = secureLocalStorage.getItem('department');
     setDepartment(department);
 
     axiosInstance.get(`/api/shiftType/office?departmentId=${id}`).then((e) => {

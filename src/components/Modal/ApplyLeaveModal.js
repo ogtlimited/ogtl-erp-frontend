@@ -1,20 +1,21 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import { CREATE_LEAVE } from '../FormJSON/CreateLeave';
-import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
-import $ from 'jquery';
-import ms from 'ms';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import { CREATE_LEAVE } from "../FormJSON/CreateLeave";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
+import ms from "ms";
+import moment from "moment";
+import Select from "react-select";
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
-  const [leaveTypeTitle, setLeaveTypeTitle] = useState('');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
@@ -22,82 +23,80 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   useEffect(() => {
     const time = new Date().toDateString();
-    const today_date = moment(time).format('yyyy-MM-DD');
+    const today_date = moment(time).format("yyyy-MM-DD");
     setToday(today_date);
-    const minSec = ms('15d');
-    const leaveDays = user.leaveCount + 15;
+    const minSec = ms("15d");
+    // const leaveDays = user?.employee_info?.leave_count + 15;
+    const leaveDays = user?.employee_info?.leave_count;
     const maxSec = ms(`${leaveDays}d`);
     const min_date = new Date(+new Date(today) + minSec);
-    const max_date = new Date(+new Date(leave.from_date) + maxSec);
-    setMinDate(moment(min_date).format('yyyy-MM-DD'));
-    setMaxDate(moment(max_date).format('yyyy-MM-DD'));
-  }, [leave.from_date, today, user.leaveCount]);
+    const max_date = new Date(+new Date(leave.start_date) + maxSec);
+    setMinDate(moment(min_date).format("yyyy-MM-DD"));
+    setMaxDate(moment(max_date).format("yyyy-MM-DD"));
+  }, [leave.start_date, today, user?.employee_info?.leave_count]);
+
+  useEffect(() => {
+    const selectedLeave = leave?.leaveTypeTitle.toLowerCase();
+    setLeaveType(selectedLeave);
+  }, [leave.leaveTypeTitle, leaveType]);
 
   const cancelEvent = () => {
     setLeave(CREATE_LEAVE);
   };
 
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get(`/leave-type`);
-      const resData = response?.data?.data;
-
-      const sorted = resData.sort((a, b) => a.leave_type.localeCompare(b.leave_type))
-
-      setLeaveType(sorted);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchLeavesTypeById = async (leaveId) => {
-    const id = leaveId;
-    try {
-      const response = await axiosInstance.get(`/leave-type/${id}`);
-      const resData = response?.data?.data.leave_type;
-
-      setLeaveTypeTitle(resData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleFormChange = (e) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
+  };
 
-    if (e.target.name === 'leave_type_id') {
-      fetchLeavesTypeById(e.target.value);
-    }
+  const handleSelectLeave = (e) => {
+    setLeave({
+      ...leave,
+      start_date: "",
+      end_date: "",
+      hr_leave_type_id: e?.value,
+      leaveTypeTitle: e?.label,
+    });
   };
 
   const handleApplyLeave = async (e) => {
     e.preventDefault();
 
+    const dataPayload = {
+      hr_leave_type_id: leave.hr_leave_type_id,
+      start_date: leave.start_date,
+      end_date: leave.end_date,
+      reason: leave.reason,
+    };
+
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/leave-application', leave);
       // eslint-disable-next-line no-unused-vars
-      const resData = res.data.data;
+      const response = await axiosInstance.post(
+        "/api/v1/leaves.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: dataPayload
+        }
+      );
 
       showAlert(
         true,
-        'Your leave application is successful, please await an approval',
-        'alert alert-success'
+        "Your leave application is successful, please await an approval",
+        "alert alert-success"
       );
       fetchYourLeaves();
       setLeave(CREATE_LEAVE);
-      $('#FormModal').modal('toggle');
+      $("#FormModal").modal("toggle");
     } catch (error) {
-      const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchLeavesType();
-  }, []);
 
   return (
     <>
@@ -125,128 +124,132 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleApplyLeave}>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_type_id">Leave Type</label>
-                      <select
-                        onChange={handleFormChange}
-                        className="form-control "
-                        name="leave_type_id"
-                        required
-                      >
-                        <option value="" disabled selected hidden>
-                          Select leave type...
-                        </option>
-                        {leaveType.map((leave, idx) => (
-                          <option
-                            key={idx}
-                            value={leave._id}
-                            placeholder="Leave Type"
+              {!loadingSelect ? (
+                <form onSubmit={handleApplyLeave}>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_leave_type_id">Leave Type</label>
+                        <Select
+                          name="hr_leave_type_id"
+                          options={selectLeaveTypes}
+                          isSearchable={true}
+                          value={{
+                            label: leave.leaveTypeTitle,
+                            value: leave.hr_leave_type_id,
+                          }}
+                          onChange={(e) => handleSelectLeave(e)}
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="reason">Reason for Application</label>
+                        <textarea
+                          name="reason"
+                          className="form-control "
+                          value={leave.reason}
+                          onChange={handleFormChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="start_date">Start Date</label>
+                        {leaveType.includes("emergency") ? (
+                          <input
+                            type="date"
+                            name="start_date"
+                            value={leave.start_date}
+                            onChange={handleFormChange}
+                            className="form-control "
+                            min={today}
                             required
-                          >
-                            {leave.leave_type}
-                          </option>
-                        ))}
-                      </select>
+                          />
+                        ) : (
+                          <input
+                            type="date"
+                            name="start_date"
+                            value={leave.start_date}
+                            onChange={handleFormChange}
+                            className="form-control "
+                            min={minDate}
+                            required
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="reason_for_application">
-                        Reason for Application
-                      </label>
-                      <textarea
-                        name="reason_for_application"
-                        className="form-control "
-                        value={leave.reason_for_application}
-                        onChange={handleFormChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="from_date">From Date</label>
-                      {leaveTypeTitle.includes("Emergency") ? (
-                        <input
-                          type="date"
-                          name="from_date"
-                          value={leave.from_date}
-                          onChange={handleFormChange}
-                          className="form-control "
-                          min={today}
-                          required
-                        />
-                      ) : (
-                        <input
-                          type="date"
-                          name="from_date"
-                          value={leave.from_date}
-                          onChange={handleFormChange}
-                          className="form-control "
-                          min={minDate}
-                          required
-                        />
-                      )}
-                    </div>
+                    {leave.start_date.length ? (
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label htmlFor="end_date">End Date</label>
+                          {leaveType.includes("emergency") ? (
+                            <input
+                              type="date"
+                              name="end_date"
+                              value={leave.end_date}
+                              onChange={handleFormChange}
+                              className="form-control "
+                              min={leave.start_date}
+                              max={maxDate}
+                              required
+                            />
+                          ) : (
+                            <input
+                              type="date"
+                              name="end_date"
+                              value={leave.end_date}
+                              onChange={handleFormChange}
+                              className="form-control "
+                              min={leave.start_date}
+                              max={maxDate}
+                              required
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ) : null}
                   </div>
-                  {leave.from_date.length && <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="to_date">To Date</label>
-                      {leaveTypeTitle.includes("Emergency") ? (
-                        <input
-                          type="date"
-                          name="to_date"
-                          value={leave.to_date}
-                          onChange={handleFormChange}
-                          className="form-control "
-                          min={leave.from_date}
-                          max={maxDate}
-                          required
-                        />
-                      ) : (
-                        <input
-                          type="date"
-                          name="to_date"
-                          value={leave.to_date}
-                          onChange={handleFormChange}
-                          className="form-control "
-                          min={leave.from_date}
-                          max={maxDate}
-                          required
-                        />
-                      )}
-                    </div>
-                  </div>}
-                </div>
 
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                    onClick={cancelEvent}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    {loading ? (
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                    ) : (
-                      'Submit'
-                    )}
-                  </button>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                      onClick={cancelEvent}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      {loading ? (
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        "Submit"
+                      )}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div
+                  className="add-employee-form-loader-div"
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
                 </div>
-              </form>
+              )}
             </div>
           </div>
         </div>

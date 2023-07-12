@@ -5,17 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import LeaveVerticalBar from './leaveVerticalBar';
 
 const DashboardStatistics = ({
-  stats,
-  chartData,
-  chartTitle,
-  totalInvoice,
-  pendingInvoice,
-  processingTickets,
-  openTickets,
-  closedTickets,
-  totalTickets,
-  completedProjects,
-  totalProjects,
   leaveStatusLabel,
   leaveStatusData,
   leaveTypeLabel,
@@ -114,118 +103,12 @@ const DashboardStatistics = ({
 
   return (
     <>
-      <div className="col-md-12 col-lg-12 col-xl-12 d-flex">
-        <div className="card flex-fill dash-statistics">
-          <div className="card-body">
-            <h5 className="card-title">Statistics</h5>
-            <div className="stats-list">
-              <div className="stats-info">
-                <p>
-                  Pending Invoice{' '}
-                  <strong>
-                    {pendingInvoice} <small>/ {totalInvoice}</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-warning"
-                    role="progressbar"
-                    style={{
-                      width: `${pendingInvoice * (100 / totalInvoice)}%`,
-                    }}
-                    aria-valuenow="31"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div className="stats-info">
-                <p>
-                  Completed Projects{' '}
-                  <strong>
-                    {completedProjects} <small>/ {totalProjects}</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-success"
-                    role="progressbar"
-                    style={{
-                      width: `${completedProjects * (100 / totalProjects)}%`,
-                    }}
-                    aria-valuenow="62"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div className="stats-info">
-                <p>
-                  Open Tickets{' '}
-                  <strong>
-                    {openTickets} <small>/ {totalTickets}</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-info"
-                    role="progressbar"
-                    style={{ width: `${openTickets * (100 / totalTickets)}%` }}
-                    aria-valuenow="62"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div className="stats-info">
-                <p>
-                  Pending Tickets{' '}
-                  <strong>
-                    {processingTickets} <small>/ {totalTickets}</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-warning"
-                    role="progressbar"
-                    style={{ width: `${openTickets * (100 / totalTickets)}%` }}
-                    aria-valuenow="62"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-              <div className="stats-info">
-                <p>
-                  Closed Tickets{' '}
-                  <strong>
-                    {closedTickets} <small>/ {totalTickets}</small>
-                  </strong>
-                </p>
-                <div className="progress">
-                  <div
-                    className="progress-bar bg-danger"
-                    role="progressbar"
-                    style={{
-                      width: `${closedTickets * (100 / totalTickets)}%`,
-                    }}
-                    aria-valuenow="22"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-md-12 col-lg-8 col-xl-4 d-flex">
+      <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="leave-card-body">
             <h3 className="card-title">Leave Status</h3>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="from_date">From</label>
@@ -252,7 +135,7 @@ const DashboardStatistics = ({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <LeaveVerticalBar
               data={leaveStatus}
@@ -264,12 +147,12 @@ const DashboardStatistics = ({
         </div>
       </div>
 
-      <div className="col-md-6 col-lg-6 col-xl-5 d-flex">
+      <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
         <div className="card flex-fill">
           <div className="leave-card-body">
             <h3 className="card-title">Leave Type</h3>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
                   <label htmlFor="from_date">From</label>
@@ -296,7 +179,7 @@ const DashboardStatistics = ({
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <LeaveVerticalBar
               data={leaveType}

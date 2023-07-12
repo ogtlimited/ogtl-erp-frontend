@@ -12,10 +12,11 @@ import { msalInstance  } from '../../authConfig';
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
-  const { fetchHRLeavesNotificationCount, count } = useAppContext();
+  const { fetchHRLeavesNotificationCount, count, setDropDownClicked } = useAppContext();
   const audioPlayer = useRef(null);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   // const { instance } = useMsal();
+
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
@@ -32,6 +33,9 @@ const Header = () => {
   };
 
   const user = tokenService.getUser();
+  const userOgid = user?.employee_info?.ogid;
+  
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   function playAudio() {
     audioPlayer.current.play();
@@ -41,18 +45,15 @@ const Header = () => {
     navigate('/dashboard/hr/leaves-admin');
   };
   
-  useEffect(() => {
-    fetchHRLeavesNotificationCount()
-  }, [fetchHRLeavesNotificationCount]);
+  // useEffect(() => {
+  //   fetchHRLeavesNotificationCount()
+  // }, [fetchHRLeavesNotificationCount]);
 
   useEffect(() => {
     if (user?.role?.title === 'HR Manager' && count > 0) {
       playAudio();
     }
   }, [count, user?.role?.title]);
-
-  //   const { user } = useContext(AppContext);
-  //   const imageUrl = "https://erp.outsourceglobal.com" + user?.profile_image;
 
   return (
     <>
@@ -85,7 +86,7 @@ const Header = () => {
         <audio ref={audioPlayer} src={NotificationSound} allow="autoplay" />
 
         <ul className="nav user-menu">
-          <li className="nav-item">
+          <li className="nav-item mr-4">
             <div className="top-nav-search">
               <a className="responsive-search">
                 <i className="fa fa-search"></i>
@@ -110,23 +111,20 @@ const Header = () => {
               data-toggle="dropdown"
             >
               <span className="user-img">
-                <img src="assets/img/profiles/avatar-21.jpg" alt="" />
+                <img src="" alt="" />
                 <span
                   className="status online"
-                  style={{ bottom: 24, right: 3 }}
+                  style={{ bottom: 25, right: 5}}
                 ></span>
               </span>
-              <span>{user?.first_name}</span>
+              <span>{user?.employee_info?.personal_details?.first_name}</span>
             </a>
-            <div className="dropdown-menu">
+            <div className="dropdown-menu" onClick={() => setDropDownClicked(true)}>
               <Link
                 className="dropdown-item"
-                to={`/dashboard/user/profile/${user?._id}`}
+                to={`/dashboard/user/profile/${userOgid}`}
               >
                 My Profile
-              </Link>
-              <Link className="dropdown-item" to="settings">
-                Settings
               </Link>
               <a className="dropdown-item" onClick={(e) => logout(e)}>
                 Logout
@@ -149,12 +147,9 @@ const Header = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <Link
               className="dropdown-item"
-              to={`/dashboard/user/profile/${user?._id}`}
+              to={`/dashboard/user/profile/${userOgid}`}
             >
               My Profile
-            </Link>
-            <Link className="dropdown-item" to="settings">
-              Settings
             </Link>
             <a className="dropdown-item" onClick={(e) => logout(e)}>
               Logout
@@ -163,7 +158,7 @@ const Header = () => {
         </div>
         
           
-        {user?.role?.title === 'HR Manager' || user?.role?.title === 'HR Associate' ? (
+        {CurrentUserRoles.includes("hr_manager") ? (
           <div
             className="home-notification-div"
             onClick={handleNotificationRequest}

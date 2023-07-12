@@ -1,22 +1,12 @@
-/* eslint-disable no-unused-vars */
-/** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { chartColors } from '../../components/charts/chart-colors';
+import React, { useState, useEffect } from 'react';
 import DashboardChart from '../../components/charts/dashboard-charts';
-import DashboardStatistics from '../../components/charts/dashboard-statistics';
 import { useAppContext } from '../../Context/AppContext';
-import helper from '../../services/helper';
 import axiosInstance from '../../services/api';
 import moment from 'moment';
 
 const HRDashboard = () => {
-  const { combineRequest, showAlert } = useAppContext();
-  const initialChartState = { labels: [], datasets: [] };
-  const [data, setdata] = useState(initialChartState);
-  const [dougnutData, setdougnutData] = useState(initialChartState);
-  const [headACount, setheadACount] = useState(0);
-  const [gender, setgender] = useState(initialChartState);
+  const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [employeeLabel, setEmployeeLabel] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
@@ -33,14 +23,6 @@ const HRDashboard = () => {
 
   const [headCount, setheadCount] = useState(0);
   const [genderRatio, setGenderRatio] = useState(0);
-  const [totalInvoice, setTotalInvoice] = useState(0);
-  const [pendingInvoice, setPendingInvoice] = useState(0);
-  const [processingTickets, setProcessingTickets] = useState(0);
-  const [openTickets, setOpenTickets] = useState(0);
-  const [closedTickets, setClosedTickets] = useState(0);
-  const [totalTickets, setTotalTickets] = useState(0);
-  const [completedProjects, setCompletedProjects] = useState(0);
-  const [totalProjects, setTotalProjects] = useState(0);
 
   const firstDay = new Date(new Date().getFullYear(), 0, 1, 1);
   const lastDay = new Date(new Date().getFullYear(), 11, 31, 0);
@@ -50,30 +32,93 @@ const HRDashboard = () => {
   const [fromDate2, setFromDate2] = useState(moment(firstDay).format('yyyy-MM-DD'));
   const [toDate2, setToDate2] = useState(moment(lastDay).format('yyyy-MM-DD'));
 
+  const errors = [];
+
+  // Head Count: Active
   const fetchHeadCount = async () => {
     try {
-      const response = await axiosInstance.get('/employees/head-count');
-      const resData = response.data.data.headCount;
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_head_count.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.head_count.active;
 
-      const count = resData.filter((data) => data._id === 'active');
-
-      setheadCount(count[0].total);
+      const activeEmployeesCount = resData
+      setheadCount(activeEmployeesCount);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      const headCountError = error?.response?.data?.errors + " to view Head Counts"
+      errors.push(headCountError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
+      setLoading(false);
+    }
+  };
+  
+  // Gender Diversity Ratio (Card) & Employee by Gender (Chart)
+  const fetchEmployeeGender = async () => {
+    try {
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employee_by_gender.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.record;
+
+      const genderDiversityRatio = resData?.gender_ratio
+      setGenderRatio(genderDiversityRatio);
+
+      const employeeByGender = {}
+      employeeByGender.male = resData?.male
+      employeeByGender.female = resData?.female
+
+      const formattedGender = Object.keys(employeeByGender).map((key) => ({
+        labels: key,
+        data: employeeByGender[key],
+      }));
+
+      const labels = Object.keys(employeeByGender)
+      const data = Object.values(employeeByGender)
+
+      setFormattedGender(formattedGender);
+      setGenderLabel(labels);
+      setGenderData(data);
+      setLoading(false);
+    } catch (error) {
+      const genderError = error?.response?.data?.errors + " to view Gender Diversity Ratio (Females to Males)"
+      errors.push(genderError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
 
+  // Employee by Office (Chart)
   const fetchEmployeeData = async () => {
     try {
-      const response = await axiosInstance.get('/departments/employees/count');
-      const resData = response.data.data.employeesByDepartment;
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/employees_by_office.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const offices = response?.data?.data?.employees_by_office
 
-      const formatted = resData.map((e) => ({
-        id: e._id === null ? 'not_specified' : e._id['_id'],
-        labels: e._id === null ? 'Not Specified' : e._id['department'],
-        data: e.total,
+      const formatted = offices.map((e) => ({
+        labels: e.split(':')[0],
+        data: Number(e.split(':')[1].trim()),
       }));
 
       const label = [...formatted.map((e) => e.labels)];
@@ -85,258 +130,89 @@ const HRDashboard = () => {
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      const employeeError =  error?.response?.data?.errors + " to view Employee by Office"
+      errors.push(employeeError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
 
-  const fetchEmployeeGender = async () => {
+  // Leave Report - Leave types and Leave status (chart)
+  const fetchLeaveReport = async () => {
     try {
-      const response = await axiosInstance.get('/employees/gender-count');
-      const resData = response.data.data.genderCount;
+      const response = await axiosInstance.get('/api/v1/hr_dashboard/leave_report.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
 
-      const formatted = resData.map((e) => ({
-        labels: e._id,
-        data: e.total,
-      }));
+      const leaveTypes = response?.data?.data?.report?.leave_types
+      const leaveTypeLabel = Object.keys(leaveTypes);
+      const leaveTypesData = Object.values(leaveTypes);
+      setFormattedLeaveType(leaveTypeLabel);
+      setLeaveTypeLabel(leaveTypeLabel);
+      setLeaveTypeData(leaveTypesData);
 
-      const label = [...formatted.map((e) => e.labels)];
-      const data = [...formatted.map((e) => e.data)];
-
-      setFormattedGender(formatted);
-      setGenderLabel(label);
-      setGenderData(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchGenderDiversityRatio = async () => {
-    try {
-      const response = await axiosInstance.get('/employees/gender-ratio');
-      const resData = response.data.data.genderRatio;
-
-      setGenderRatio(resData);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchInvoice = async () => {
-    try {
-      const response = await axiosInstance.get('/api/invoice/status');
-      const resData = response.data.data[0]['Invoice status'];
-
-      const publishedCount = resData.filter((data) => data._id === 'Published');
-      const pendingCount = resData.filter((data) => data._id === 'Draft');
-      setPendingInvoice(pendingCount[0].total);
-
-      const totalCount = publishedCount[0].total + pendingCount[0].total;
-      setTotalInvoice(totalCount);
+      const leaveStatus = response?.data?.data?.report?.status
+      const leaveStatusLabel = Object.keys(leaveStatus);
+      const leaveStatusData = Object.values(leaveStatus);
+      setFormattedLeaveStatus(leaveStatusLabel);
+      setLeaveStatusLabel(leaveStatusLabel);
+      setLeaveStatusData(leaveStatusData);
 
       setLoading(false);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
-  const fetchTickets = async () => {
-    try {
-      const response = await axiosInstance.get('/api/ticketing/status');
-      const resData = response.data.data[0]['Tickets status'];
-
-      const closedCount = resData.filter((data) => data._id === 'Resolved');
-      const openCount = resData.filter((data) => data._id === 'Open');
-      const processingCount = resData.filter(
-        (data) => data._id === 'Processing'
+      const leaveError = error?.response?.data?.errors + " to view Leave Report (Leave types and Leave status)"
+      errors.push(leaveError);
+      showAlert(
+        true,
+        error?.response?.data?.errors ,
+        "alert alert-danger"
       );
 
-      setOpenTickets(openCount[0].total);
-      setClosedTickets(closedCount[0].total);
-      setProcessingTickets(processingCount[0].total);
-
-      const total =
-        openCount[0].total + closedCount[0].total + processingCount[0].total;
-      setTotalTickets(total);
-
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+
+      console.log("All Errors:", errors);
+
+      // console.log("Random Errors:", randomErrors);
+
+      // setInterval(() => {
+      //   showAlert(
+      //     true,
+      //     errors,
+      //     "alert alert-danger"
+      //   );
+      // }, 6000)
+
+      // return clearInterval(interval)
+      
     }
   };
 
-  const fetchProjects = async () => {
-    try {
-      const response = await axiosInstance.get('/api/project/status');
-      const resData = response.data.data[0]['Project status'];
-      setCompletedProjects(resData[0].total);
-      setTotalProjects(resData[0].total);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
+  // useEffect(() => {
 
-  const fetchLeaveStatusData = useCallback(() => {
-    axiosInstance
-    .get('/hr-leave-applications/generate-report', {
-      params: {
-        from: fromDate,
-        to: toDate,
-      },
-    })
-    .then((res) => {
-      let resData = res?.data?.data?.leaveStatus;
-      // console.log("Generate Status Report Data", resData);
+  //   fetchLeaveReport();
+  //   const interval = setInterval(() => {
+  //     fetchLeaveReport();
+  //   }, 3000);
 
-      const label = Object.keys(resData);
-      const data = Object.values(resData);
-
-      setFormattedLeaveStatus(label);
-      setLeaveStatusLabel(label);
-      setLeaveStatusData(data);
-
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }, [fromDate, toDate]);
-
-  const fetchLeaveTypeData = useCallback(() => {
-    axiosInstance
-    .get('/hr-leave-applications/generate-report', {
-      params: {
-        from: fromDate2,
-        to: toDate2,
-      },
-    })
-    .then((res) => {
-      let resData = res?.data?.data?.typesOfLeaveTaken;
-      // console.log("Generate Type Report Data", resData);
-
-      const label = Object.keys(resData);
-      const data = Object.values(resData);;
-
-      setFormattedLeaveType(label);
-      setLeaveTypeLabel(label);
-      setLeaveTypeData(data);
-
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }, [fromDate2, toDate2]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   useEffect(() => {
     fetchHeadCount();
-    fetchEmployeeData();
     fetchEmployeeGender();
-    fetchGenderDiversityRatio();
-    fetchInvoice();
-    fetchTickets();
-    fetchProjects();
-    fetchLeaveStatusData();
-    fetchLeaveTypeData();
-  }, [fetchLeaveStatusData, fetchLeaveTypeData]);
-
-  useEffect(() => {
-    combineRequest().then((res) => {
-      const { employees, projects, departments } =
-        res.data.createEmployeeFormSelection;
-      const deptHash = {};
-      const campHash = {};
-      const genderHash = { male: 0, female: 0 };
-
-      projects.forEach((proj) => {
-        campHash[proj.project_name] = 0;
-      });
-
-      departments.forEach((proj) => {
-        deptHash[proj.department] = 0;
-      });
-
-      setheadACount(employees.length);
-
-      employees?.forEach((e) => {
-        if (e.department) {
-          if (!deptHash[e.department.department]) {
-            deptHash[e.department.department] = 1;
-          } else {
-            deptHash[e.department.department] =
-              deptHash[e.department.department] + 1;
-          }
-        }
-        if (e.projectId) {
-          console.log(e);
-          if (!campHash[e.projectId.project_name]) {
-            campHash[e.projectId.project_name] = 1;
-          } else {
-            campHash[e.projectId.project_name] =
-              campHash[e.projectId.project_name] + 1;
-          }
-        }
-        if (e.gender === 'male') {
-          genderHash.male += 1;
-        } else if (e.gender === 'female') {
-          genderHash.female += 1;
-        }
-      });
-
-      const deptBg = helper.shuffle(chartColors.backgroundColor);
-      setdata({
-        ...data,
-        labels: Object.keys(deptHash),
-        datasets: [
-          {
-            backgroundColor: deptBg,
-            borderColor: deptBg,
-            borderWidth: 1,
-            label: '# of Department',
-            data: Object.values(deptHash),
-          },
-        ],
-      });
-
-      const campBg = helper.shuffle(chartColors.backgroundColor);
-      setdougnutData({
-        ...data,
-        labels: Object.keys(campHash),
-        datasets: [
-          {
-            backgroundColor: campBg,
-            borderColor: campBg,
-            borderWidth: 1,
-            label: '# of Campaign',
-            data: Object.values(campHash),
-          },
-        ],
-      });
-
-      const shuffleBg = helper.shuffle(chartColors.backgroundColor);
-      setgender({
-        ...data,
-        labels: Object.keys(genderHash),
-        datasets: [
-          {
-            backgroundColor: shuffleBg,
-            borderColor: shuffleBg,
-            borderWidth: 1,
-            label: '# of Gender',
-            data: Object.values(genderHash),
-          },
-        ],
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchEmployeeData();
+    fetchLeaveReport();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -366,28 +242,6 @@ const HRDashboard = () => {
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
-              <i className="las la-door-open"></i>
-            </span>
-            <div className="card-info">
-              <h3>-</h3>
-            </div>
-          </div>
-          <span>Month Attrition Rate</span>
-        </div>
-        {/* <div className="hr-dashboard-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
-              <i className="fa fa-diamond"></i>
-            </span>
-            <div className="card-info">
-              <h3>-</h3>
-            </div>
-          </div>
-          <span>Absenteeism Per Month</span>
-        </div> */}
-        <div className="hr-dashboard-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
               <i
                 className="las la-restroom"
                 style={{ transform: 'scaleX(-1)' }}
@@ -403,30 +257,41 @@ const HRDashboard = () => {
 
       <div className="row">
         <DashboardChart
-          title="Employee By Department"
+          title="Employee By Office"
           employeeData={employeeData}
           employeeLabel={employeeLabel}
-          genderLabel={genderLabel}
-          genderData={genderData}
           formattedData={formattedData}
+
+          chartTitle="Employee By Gender"
+          genderData={genderData}
+          genderLabel={genderLabel}
           formattedGender={formattedGender}
+
+          
+          leaveStatusLabel={leaveStatusLabel}
+          leaveStatusData={leaveStatusData}
+          formattedLeaveStatus={formattedLeaveStatus}
+          leaveTypeLabel={leaveTypeLabel}
+          leaveTypeData={leaveTypeData}
+          formattedLeaveType={formattedLeaveType}
+
+          fromDate={fromDate}
+          toDate={toDate}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          fromDate2={fromDate2}
+          toDate2={toDate2}
+          setFromDate2={setFromDate2}
+          setToDate2={setToDate2}
         />
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         <DashboardStatistics
           title="Employee By Department"
           data={data}
           chartTitle="Employee By Gender"
           chartData={gender}
-          totalInvoice={totalInvoice}
-          pendingInvoice={pendingInvoice}
-          processingTickets={processingTickets}
-          openTickets={openTickets}
-          closedTickets={closedTickets}
-          totalTickets={totalTickets}
-          completedProjects={completedProjects}
-          totalProjects={totalProjects}
           leaveStatusLabel={leaveStatusLabel}
           leaveStatusData={leaveStatusData}
           leaveTypeLabel={leaveTypeLabel}
@@ -443,7 +308,7 @@ const HRDashboard = () => {
           setFromDate2={setFromDate2}
           setToDate2={setToDate2}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

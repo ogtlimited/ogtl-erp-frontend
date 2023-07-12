@@ -1,212 +1,83 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /** @format */
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import JobApplicantsTable from './JobApplicantsTable';
-import axiosInstance from '../../../services/api';
-import { useAppContext } from '../../../Context/AppContext';
-import ConfirmModal from '../../../components/Modal/ConfirmModal';
-import helper from '../../../services/helper';
-import GeneralApproverBtn from '../../../components/Misc/GeneralApproverBtn';
+import React, { useCallback, useEffect, useState } from "react";
+import JobApplicantsTable from "./JobApplicantsTable";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import helper from "../../../services/helper";
+import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import {
   InterviewProcessStageOptions,
   InterviewStatusOptions,
-} from '../../../constants';
-import ViewModal from '../../../components/Modal/ViewModal';
-import JobApplicationContent from '../../../components/ModalContents/JobApplicationContent';
-import ScheduleInterview from '../../../components/ModalContents/ScheduleInterview';
+} from "../../../constants";
+import ViewModal from "../../../components/Modal/ViewModal";
+import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
+import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
   const { showAlert, user } = useAppContext();
   const [statusRow, setstatusRow] = useState(null);
   const [processingStageRow, setprocessingStageRow] = useState(null);
-  const [interview_status, setInterviewStatus] = useState('');
-  const [process_stage, setprocessingStage] = useState('');
+  const [interview_status, setInterviewStatus] = useState("");
+  const [process_stage, setprocessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [unfiltered, setunfiltered] = useState([]);
-  const [modalType, setmodalType] = useState('schedule-interview');
+  const [modalType, setmodalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  const [totalPages, setTotalPages] = useState("");
 
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
-  const [processingStageFilter, setprocessingStageFilter] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [intervieStatusFilter, setIntervieStatusFilter] = useState("");
+  const [processingStageFilter, setprocessingStageFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  // Job Applicants
+  const fetchAllJobApplicants = useCallback(async () => {
 
-  const fetchJobApplicants = useCallback(() => {
-    setLoading(true);
-    if (user?.isRepSiever) {
-      axiosInstance
-        .get('/api/job-sievers/job-applicants', {
-          params: {
-            search: searchTerm,
-            interview_status: intervieStatusFilter,
-            process_stage: processingStageFilter,
-            page: page,
-            limit: sizePerPage,
-          },
-        })
-        .then((res) => {
-          let resData = res?.data?.data?.jobApplicants;
-          let resOptions = res?.data?.data?.pagination;
-
-          const thisPageLimit = sizePerPage;
-          const thisTotalPageSize = resOptions.numberOfPages;
-
-          setSizePerPage(thisPageLimit);
-          setTotalPages(thisTotalPageSize);
-
-          let formatted = resData.map((e) => ({
-            ...e,
-            full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-            interview_date: e.interview_date
-              ? new Date(e.interview_date).toUTCString()
-              : 'Not Set',
-            job_opening_id: e.job_opening_id?.job_title
-              ? e.job_opening_id?.job_title
-              : e.default_job_opening_id?.job_title || '-',
-            application_date: new Date(e.createdAt).toUTCString(),
-          }));
-
-          // console.log("this user", user);
-          setData(formatted);
-          setunfiltered(formatted);
-          setLoading(false);
-        });
-      return;
-    }
-    setLoading(true);
-    axiosInstance
-      .get('/api/jobApplicant', {
-        params: {
-          search: searchTerm,
-          interview_status: intervieStatusFilter,
-          process_stage: processingStageFilter,
-          page: page,
-          limit: sizePerPage,
+    try {
+      const response = await axiosInstance.get('/api/v1/job_applicants.json', {
+        headers: {          
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
         },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.jobApplicants;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        let formatted = resData.map((e) => ({
-          ...e,
-          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-          interview_date: e.interview_date
-            ? new Date(e.interview_date).toUTCString()
-            : 'Not Set',
-          job_opening_id: e.job_opening_id?.job_title
-            ? e.job_opening_id?.job_title
-            : e.default_job_opening_id?.job_title || '-',
-          application_date: new Date(e.createdAt).toUTCString(),
-        }));
-
-        // console.log("this user", user);
-        // console.log('this job data', formatted);
-        setData(formatted);
-        setunfiltered(formatted);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
       });
-  }, [
-    intervieStatusFilter,
-    page,
-    processingStageFilter,
-    searchTerm,
-    sizePerPage,
-    user?.isRepSiever,
-  ]);
+
+      const resData = response?.data?.data?.job_applicants;
+      console.log("Job applicants:", resData);
+ 
+      setData(resData);
+      setLoading(false);
+    } catch (error) {
+      console.log("Get All Applicants error:", error);
+      setLoading(false);
+    }
+  },[]);
 
   useEffect(() => {
-    fetchJobApplicants();
+    fetchAllJobApplicants();
     setTimeout(() => {
       setLoading(false);
     }, 5000);
-  }, [fetchJobApplicants]);
-
-  //delete job opening
-  const deleteJobApplicant = (row) => {
-    axiosInstance
-      .delete(`/api/jobApplicant/${row._id}`)
-      .then((res) => {
-        setData((prevData) =>
-          prevData.filter((pdata) => pdata._id !== row._id)
-        );
-        showAlert(true, res.data.message, 'alert alert-success');
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, 'alert alert-danger');
-      });
-  };
-
-  //update jobOpening
-  const handleUpdate = useCallback((id, update) => {
-    if (user?.isRepSiever === false) {
-      return showAlert(
-        true,
-        'You are not authorized to perform this action',
-        'alert alert-danger'
-      );
-    }
-    axiosInstance
-      .patch('/api/jobApplicant/' + id, update)
-      .then((res) => {
-        fetchJobApplicants();
-        showAlert(true, res.data.message, 'alert alert-success');
-      })
-      .catch((error) => {
-        console.log(error);
-        showAlert(true, error.response.data.message, 'alert alert-danger');
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (interview_status.length) {
-      const update = {
-        interview_status,
-        _id: statusRow?._id,
-      };
-      handleUpdate(statusRow._id, update);
-    }
-  }, [interview_status, statusRow, handleUpdate]);
-
-  useEffect(() => {
-    if (process_stage.length) {
-      const update = {
-        process_stage,
-        _id: processingStageRow?._id,
-      };
-      handleUpdate(processingStageRow._id, update);
-    }
-  }, [process_stage, processingStageRow, handleUpdate]);
+  }, [fetchAllJobApplicants]);
+  
 
   const columns = [
     {
-      dataField: 'full_name',
-      text: 'Job Applicant',
+      dataField: "full_name",
+      text: "Job Applicant",
       sort: true,
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
-      dataField: 'job_opening_id',
-      text: 'Job Opening',
+      dataField: "job_opening_id",
+      text: "Job Opening",
       sort: true,
       formatter: (value, row) => (
         <>
@@ -215,20 +86,20 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: 'application_date',
-      text: 'Application Date',
+      dataField: "application_date",
+      text: "Application Date",
       sort: true,
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
-      dataField: 'interview_date',
-      text: 'Interview Date',
+      dataField: "interview_date",
+      text: "Interview Date",
       sort: true,
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
     {
-      dataField: 'interview_status',
-      text: 'Interview Status',
+      dataField: "interview_status",
+      text: "Interview Status",
       sort: true,
       formatter: (value, row) => (
         <>
@@ -243,8 +114,8 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: 'process_stage',
-      text: 'Processing Stage',
+      dataField: "process_stage",
+      text: "Processing Stage",
       sort: true,
 
       formatter: (value, row) => (
@@ -260,8 +131,8 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: 'resume_attachment',
-      text: 'Resume Attachment',
+      dataField: "resume_attachment",
+      text: "Resume Attachment",
       sort: true,
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
@@ -270,11 +141,11 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: '',
-      text: 'Action',
+      dataField: "",
+      text: "Action",
       sort: true,
       csvExport: false,
-      headerStyle: { minWidth: '70px', textAlign: 'left' },
+      headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <>
@@ -305,7 +176,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType('view-details');
+                  setmodalType("view-details");
                   setViewRow(row);
                 }}
               >
@@ -316,7 +187,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType('schedule-interview');
+                  setmodalType("schedule-interview");
                   setSelectedRow(helper.handleEdit(row));
                 }}
               >
@@ -336,35 +207,31 @@ const JobApplicants = () => {
           <div className="col">
             <h3 className="page-title">Job Applicants List</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
-              <li className="breadcrumb-item">
-                <Link to="/">Employees</Link>
-              </li>
-              <li className="breadcrumb-item active">Job Applicants List</li>
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item">Recruitment</li>
+              <li className="breadcrumb-item active">Job Applicants</li>
             </ul>
           </div>
         </div>
       </div>
       <div className="row">
         <div className="col-12">
+
           <JobApplicantsTable
             data={data}
+            setData={setData}
             loading={loading}
             setLoading={setLoading}
-            setData={setData}
             columns={columns}
+
             statusInterview={InterviewStatusOptions}
             processingStage={InterviewProcessStageOptions}
-
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-            fetchJobApplicants={fetchJobApplicants}
             intervieStatusFilter={intervieStatusFilter}
             setIntervieStatusFilter={setIntervieStatusFilter}
             processingStageFilter={processingStageFilter}
@@ -374,12 +241,8 @@ const JobApplicants = () => {
           />
         </div>
       </div>
-      <ConfirmModal
-        title="Job Applicant"
-        selectedRow={selectedRow}
-        deleteFunction={deleteJobApplicant}
-      />
-      {modalType === 'view-details' ? (
+
+      {modalType === "view-details" ? (
         <ViewModal
           title="Applicant Details"
           content={<JobApplicationContent jobApplication={viewRow} />}
@@ -389,7 +252,6 @@ const JobApplicants = () => {
           title="Schedule Interview"
           content={
             <ScheduleInterview
-              handleUpdate={handleUpdate}
               jobApplication={selectedRow}
             />
           }

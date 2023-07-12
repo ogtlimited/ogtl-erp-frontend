@@ -11,6 +11,7 @@ import { useAppContext } from '../../Context/AppContext';
 import axiosInstance from '../../services/api';
 import GeneralApproverBtn from '../../components/Misc/GeneralApproverBtn';
 import { AddCampaignModal } from '../../components/Modal/AddCampaignModal';
+import  secureLocalStorage  from  "react-secure-storage";
 
 const approval = [
   {
@@ -201,7 +202,7 @@ const AllCampaigns = () => {
 
   const viewShifts = (row) => {
     console.log(row)
-    localStorage.setItem("campaign", row.project_name);
+    secureLocalStorage.setItem("campaign", row.project_name);
     navigate(`/dashboard/operations/campaigns/shifts/${row._id}`)
   }
 

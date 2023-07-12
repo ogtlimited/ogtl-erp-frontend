@@ -290,6 +290,40 @@
   padding: 5px 10px;
 }
 
+.daily-attendance-card-group {
+  display: flex;
+  justify-content: left;
+  margin-bottom: 30px;
+}
+
+.daily-attendance-card {
+  background-color: #fff;
+  min-width: 20%;
+  margin-left: 20px;
+  border: 1px solid #ededed;
+  padding-bottom: 10px;
+}
+.daily-attendance-card:last-child {
+  background-color: #fff;
+  min-width: 30%;
+  margin-left: 20px;
+  border: 1px solid #ededed;
+}
+
+.daily-attendance-card > span {
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+}
+
+.daily-attendance-card-info > h3 {
+  color: #000;
+  font-size: 25px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
 .card-info > h3 {
   color: #000;
   font-size: 30px;
@@ -334,6 +368,42 @@
     min-width: 20%;
     border: 1px solid #ededed;
     margin-bottom: 10px;
+  }
+
+  
+  .daily-attendance-card-group {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 30px;
+  }
+
+  .daily-attendance-card {
+    background-color: #fff;
+    min-width: 20%;
+    margin-left: 20px;
+    border: 1px solid #ededed;
+    padding-bottom: 10px;
+  }
+  .daily-attendance-card:last-child {
+    background-color: #fff;
+    min-width: 30%;
+    margin-left: 20px;
+    border: 1px solid #ededed;
+  }
+
+  .daily-attendance-card > span {
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    padding: 5px 10px;
+  }
+
+  .daily-attendance-card-info > h3 {
+    color: #000;
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 10px;
+    text-align: center;
   }
 }
 
@@ -2670,63 +2740,15 @@ table.dataTable thead > tr > td.sorting {
   margin-bottom: 30px;
   text-align: center;
 }
-.account-box {
-  background-color: #fff;
-  border: 1px solid #ededed;
-  border-radius: 4px;
-  /* box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2); */
-  margin: 0 auto;
-  overflow: hidden;
-  width: 480px;
-}
+
 .account-wrapper {
   padding: 30px;
-}
-.account-logo {
-  margin-bottom: 30px;
-  text-align: center;
-}
-.account-box .form-group {
-  margin-bottom: 25px;
 }
 
 .form-group > label > span {
   color: red;
 }
 
-.account-box .account-btn {
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
-  border: 0;
-  border-radius: 4px;
-  display: block;
-  font-size: 22px;
-  padding: 10px 26px;
-  width: 100%;
-}
-.account-box .account-btn:hover,
-.account-box .account-btn:focus {
-  border: 0;
-  opacity: 0.8;
-}
-.account-box .form-control {
-  background-color: #fbfbfb;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
-  height: 46px;
-}
-.account-box label {
-  color: #1f1f1f;
-  font-size: 16px;
-  font-weight: normal;
-  margin-bottom: 5px;
-}
-.account-logo img {
-  width: 100px;
-}
 .account-footer {
   text-align: center;
 }
@@ -4311,12 +4333,12 @@ table.dataTable thead > tr > td.sorting {
   color: #4f4f4f;
   float: left;
   font-weight: 500;
-  margin-right: 30px;
-  width: 25%;
+  margin-right: 20px;
+  width: 30%;
 }
 .personal-info li .text {
   color: #8e8e8e;
-  display: block;
+  display: flex;
   overflow: hidden;
 }
 .personal-info li {
@@ -4353,6 +4375,9 @@ table.dataTable thead > tr > td.sorting {
   position: absolute;
   right: 0;
   top: 0;
+}
+.report-to-link {
+  margin-right: 20px;
 }
 .edit-icon {
   background-color: #eee;
@@ -7643,8 +7668,6 @@ ul.comment-list li ul.children {
   box-shadow: unset;
 }
 .time-list {
-  display: flex;
-  flex-grow: 1;
   margin-bottom: 20px;
 }
 .request-btn {

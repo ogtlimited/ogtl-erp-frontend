@@ -7,13 +7,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../services/api';
 import $ from 'jquery';
 import { AddShiftScheduleModal } from './AddShiftScheduleModal';
+import  secureLocalStorage  from  "react-secure-storage";
 
 export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
   const { showAlert } = useAppContext();
   const [createCampaignSchedule, setCreateCampaignSchedule] = useState(CampaignSchedule);
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setCreateCampaignSchedule(CampaignSchedule);

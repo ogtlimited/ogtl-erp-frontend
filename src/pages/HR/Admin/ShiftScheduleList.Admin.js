@@ -36,7 +36,7 @@ const ShiftScheduleList = () => {
   }, []);
 
   useEffect(() => {
-    fetchAllSchedule();
+    // fetchAllSchedule();
   }, [fetchAllSchedule, user]);
 
   const handleEditTitle = (row) => {
