@@ -20,17 +20,17 @@ const Login = () => {
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        const activeUser = e?.account?.username;
+        // const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        if (obj.company_email !== activeUser) {
-          return setErrorMsg(
-            'There is an active user on this device'
-          );
-        }
+        // if (obj.company_email !== activeUser) {
+        //   return setErrorMsg(
+        //     'There is an active user on this device'
+        //   );
+        // }
 
         setErrorMsg("")
 
@@ -50,11 +50,10 @@ const Login = () => {
           })
           .catch((err) => {
             setCount(() => count + 1);
-            console.log(err)
-            if (count > 2) {
-              return setErrorMsg('Unable to login. Please contact HR');
+            if(err?.response?.status === 404 && count < 2) {
+              return setErrorMsg('Invalid email. Please double-check and try again');
             }
-            setErrorMsg('Unable to login. Please try again');
+            setErrorMsg('User not found. Please contact HR');
           })
           .finally(() => {
             setLoading(false);
@@ -65,17 +64,17 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              const activeUser = e?.account?.username;
+              // const activeUser = e?.account?.username;
 
               const obj = {
                 company_email: data.company_email.trim(),
               };
 
-              if (obj.company_email !== activeUser) {
-                return setErrorMsg(
-                  'Please login with your credentials'
-                );
-              }
+              // if (obj.company_email !== activeUser) {
+              //   return setErrorMsg(
+              //     'Please login with your credentials'
+              //   );
+              // }
 
               setErrorMsg("")
 

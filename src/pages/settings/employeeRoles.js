@@ -72,8 +72,6 @@ const EmployeeRoles = () => {
         }
       );
 
-      console.log("revoke response:", response)
-
       showAlert(true, fullName + " removed from role", "alert alert-success");
 
       fetchAllRoleUsers();
