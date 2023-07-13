@@ -173,7 +173,7 @@ const LeadershipAdmin = () => {
       showAlert(
         true,
         fullName + " has been removed and is no longer a leader",
-        "alert alert-info"
+        "alert alert-success"
       );
 
       fetchAllLeaders();
