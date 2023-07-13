@@ -50,11 +50,10 @@ const Login = () => {
           })
           .catch((err) => {
             setCount(() => count + 1);
-            console.log(err)
-            if (count > 2) {
-              return setErrorMsg('Unable to login. Please contact HR');
+            if(err?.response?.status === 404 && count < 2) {
+              return setErrorMsg('Invalid email. Please double-check and try again');
             }
-            setErrorMsg('Unable to login. Please try again');
+            setErrorMsg('User not found. Please contact HR');
           })
           .finally(() => {
             setLoading(false);
