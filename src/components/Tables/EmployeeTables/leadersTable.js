@@ -4,13 +4,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
 import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
 import filterFactory from 'react-bootstrap-table2-filter';
-import female from '../../../assets/img/female_avatar.png';
-import female2 from '../../../assets/img/female_avatar2.png';
-import female3 from '../../../assets/img/female_avatar3.png';
-import male from '../../../assets/img/male_avater.png';
-import male2 from '../../../assets/img/male_avater2.png';
-import male3 from '../../../assets/img/male_avater3.png';
-import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import axiosInstance from '../../../services/api';
@@ -39,23 +32,19 @@ const LeadersTable = ({
   officeFilter,
   setOfficeFilter,
 
+  columns,
   context,
 }) => {
 
   const { user } = useAppContext();
   const { SearchBar } = Search;
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState('');
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = 'https://erp.outsourceglobal.com';
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
-
-  const CurrentUserRoles = user?.employee_info?.roles;
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -98,86 +87,6 @@ const LeadersTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
   };
-
-  const columns = [
-    {
-      dataField: 'fullName',
-      text: 'Employee Name',
-      sort: true,
-      headerStyle: { minWidth: '300px' },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row?.gender === 'male'
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
-          <Link to={`/dashboard/hr/all-employees/employee/leader/${row.fullName}/${row.ogid}`}>
-            {value} <span>{row?.designation}</span>
-          </Link>
-        </h2>
-      ),
-    },
-    {
-      dataField: 'ogid',
-      text: 'Employee ID',
-      sort: true,
-      headerStyle: { minWidth: '150px' },
-    },
-    {
-      dataField: 'office',
-      text: 'Office',
-      sort: true,
-      headerStyle: { minWidth: '150px' },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
-    },
-    {
-      dataField: 'email',
-      text: 'Company Email',
-      sort: true,
-      headerStyle: { minWidth: '100px' },
-    },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { width: "10%" },
-    //   formatter: (value, row) => (
-    //     <div className="dropdown dropdown-action text-right">
-    //       <a
-    //         href="#"
-    //         className="action-icon dropdown-toggle"
-    //         data-toggle="dropdown"
-    //         aria-expanded="false"
-    //       >
-    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //       </a>
-    //       <div className="dropdown-menu dropdown-menu-right">
-    //         {CurrentUserRoles.includes("hr_manager") && (
-    //           <a
-    //             className="dropdown-item"
-    //             href="#"
-    //             data-toggle="modal"
-    //             data-target="#exampleModal"
-    //             onClick={() => {
-    //               setSelectedRow(row);
-    //             }}
-    //           >
-    //             <i className="fa fa-trash m-r-5"></i> Revoke
-    //           </a>
-    //         )}
-    //       </div>
-    //     </div>
-    //   ),
-    // },
-  ];
-
   
   const handleDepartmentFilter = (e) => {
     setCampaignFilter('');
