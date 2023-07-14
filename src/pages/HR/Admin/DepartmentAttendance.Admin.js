@@ -19,18 +19,9 @@ const DepartmentAttendanceAdmin = () => {
   const [designationFilter, setDesignationFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   
-  const firstDay = moment().startOf('month').format('YYYY-MM-DD');
-  const lastDay = moment().endOf('month').format('YYYY-MM-DD');
-  const [fromDate, setFromDate] = useState(firstDay);
-  const [toDate, setToDate] = useState(lastDay);
-	const [today, setToday] = useState(null);
-  
-  useEffect(() => {
-		const time = new Date().toDateString();
-		const today_date = moment(time).format("yyyy-MM-DD");
-		setToday(today_date);
-	}, []);
-  
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
+  const [date, setDate] = useState(today_date)
 
   const fetchEmployeeByDepartment = useCallback(() => {
     setLoading(true);
@@ -133,11 +124,6 @@ const DepartmentAttendanceAdmin = () => {
         setSearchTerm={setSearchTerm}
 
         
-        fromDate={fromDate}
-        toDate={toDate}
-        today={today}
-        setFromDate={setFromDate}
-        setToDate={setToDate}
       />
          
     </>

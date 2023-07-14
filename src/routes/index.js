@@ -351,31 +351,23 @@ export default function Router() {
               ),
             },
             {
-              path: 'campaign/employees/:campaign/:id',
+              path: 'campaign/employees/:office/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
-                  <CampaignAttendanceAdmin />
+                  <OfficeAttendanceAdmin />
                 </GuardedRoute>
               ),
             },
             {
-              path: 'department/employees/:department/:id',
+              path: 'department/employees/:office/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
-                  <DepartmentAttendanceAdmin />
+                  <OfficeAttendanceAdmin />
                 </GuardedRoute>
               ),
             },
             {
-              path: 'campaign/employee-attendance/:employee/:id',
-              element: (
-                <GuardedRoute title="" dept="HR">
-                  <EmployeeAttendanceRecordAdmin />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: 'department/employee-attendance/:employee/:id',
+              path: 'office/employee-attendance/:employee/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <EmployeeAttendanceRecordAdmin />
@@ -1095,8 +1087,8 @@ const EditEmployeesAdmin = Loadable(
 const AllEmployeesDepartmentAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/EmployeesDepartment.Admin'))
 );
-const CampaignAttendanceAdmin = Loadable(
-  lazy(() => import('../pages/HR/Admin/CampaignAttendance.Admin'))
+const OfficeAttendanceAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/OfficeAttendance.Admin'))
 );
 const DepartmentAttendanceAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/DepartmentAttendance.Admin'))

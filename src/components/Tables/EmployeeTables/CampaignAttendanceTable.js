@@ -21,28 +21,21 @@ import Stack from "@mui/material/Stack";
 // import ToggleTable from '../toggleTable';
 // import EditEmployeeModal from '../modals/EditEmployeeModal';
 const CampaignAttendanceTable = ({
-  designation,
   data,
   setData,
   loading,
   setLoading,
+
   page,
   sizePerPage,
   totalPages,
   setPage,
   setSizePerPage,
   setTotalPages,
-  fetchEmployeeByCampaign,
-  designationFilter,
-  setDesignationFilter,
-  searchTerm,
-  setSearchTerm,
 
-  fromDate,
-  toDate,
-  today,
-  setFromDate,
-  setToDate,
+  date,
+  setDate,
+  columns,
   context,
 }) => {
   const males = [male, male2, male3];
@@ -55,7 +48,6 @@ const CampaignAttendanceTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
-  const { id } = useParams();
 
   useEffect(() => {
     setAllEmployee(data);
@@ -69,217 +61,6 @@ const CampaignAttendanceTable = ({
       }
     });
   }, [mobileView]);
-
-  const columns = [
-    {
-      dataField: "fullName",
-      text: "Employee Name",
-      sort: true,
-      headerStyle: { minWidth: "250px" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
-          <Link
-            to={`/dashboard/hr/campaign/employee-attendance/${row.fullName}/${row.ogid}`}
-          >
-            {value} <span>{row?.designation_name}</span>
-          </Link>
-        </h2>
-      ),
-    },
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-      headerStyle: { minWidth: "120px" },
-      formatter: (value, row) => (
-        <>
-          {value === "active" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-online"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          ) : value === "left" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{"RESIGNED"}</span>
-            </a>
-          ) : value === "terminated" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          ) : (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          )}
-        </>
-      ),
-    },
-    {
-      dataField: "ogid",
-      text: "Employee ID",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
-      dataField: "designation_name",
-      text: "Designation",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
-      dataField: "company_email",
-      text: "Company Email",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-  ];
-
-  const handleChangeDesignation = useCallback(
-    (e) => {
-      setDesignationFilter(e?.value);
-      setPage(1);
-      setLoading(true);
-
-      axiosInstance
-        .get(`/office/employees?campaign=${id}`, {
-          params: {
-            designation: e.label,
-            page: page,
-            limit: sizePerPage,
-          },
-        })
-        .then((res) => {
-          let resData = res?.data?.data?.employees;
-          let resOptions = res?.data?.data?.pagination;
-
-          const thisPageLimit = sizePerPage;
-          const thisTotalPageSize = resOptions?.numberOfPages;
-
-          setSizePerPage(thisPageLimit);
-          setTotalPages(thisTotalPageSize);
-
-          let formatted = resData.map((e) => ({
-            ...e,
-            fullName: e.first_name + " " + e.last_name + " " + e?.middle_name,
-            designation_name: e?.designation?.designation,
-            department_name: e?.department?.department,
-          }));
-
-          setData(formatted);
-        });
-      setLoading(false);
-    },
-    [
-      id,
-      page,
-      setData,
-      setDesignationFilter,
-      setLoading,
-      setPage,
-      setSizePerPage,
-      setTotalPages,
-      sizePerPage,
-    ]
-  );
-
-  const MySearch = useCallback(
-    (props) => {
-      let input;
-      const handleClick = () => {
-        setPage(1);
-        setLoading(true);
-        props.onSearch(input.value);
-        const searchTerm = input.value;
-        setSearchTerm(searchTerm);
-
-        if (page === 1) {
-          axiosInstance
-            .get(`/office/employees?campaign=${id}`, {
-              params: {
-                search: searchTerm,
-                page: page,
-                limit: sizePerPage,
-              },
-            })
-            .then((res) => {
-              let resData = res?.data?.data?.employees;
-              let resOptions = res?.data?.data?.pagination;
-
-              const thisPageLimit = sizePerPage;
-              const thisTotalPageSize = resOptions?.numberOfPages;
-
-              setSizePerPage(thisPageLimit);
-              setTotalPages(thisTotalPageSize);
-
-              let formatted = resData.map((e) => ({
-                ...e,
-                fullName:
-                  e.first_name + " " + e.last_name + " " + e?.middle_name,
-                designation_name: e?.designation?.designation,
-              }));
-
-              setData(formatted);
-              setDesignationFilter("");
-            });
-        }
-        setLoading(false);
-      };
-
-      return (
-        <div
-          className="job-app-search"
-          style={{
-            width: "100%",
-          }}
-        >
-          <input
-            className="form-control"
-            style={{
-              backgroundColor: "#fff",
-              width: "33.5%",
-              marginRight: "10px",
-            }}
-            ref={(n) => (input = n)}
-            type="text"
-          />
-          <button className="btn btn-primary" onClick={handleClick}>
-            Search
-          </button>
-        </div>
-      );
-    },
-    [
-      id,
-      page,
-      setData,
-      setDesignationFilter,
-      setLoading,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setTotalPages,
-      sizePerPage,
-    ]
-  );
 
   // Pagination
   const count = totalPages;
@@ -303,7 +84,7 @@ const CampaignAttendanceTable = ({
     setTimeout(() => {
       setShow(true);
     }, 5000);
-    return <>{show ? "No Data Available" : null}</>;
+    return <>{show ? <strong>No record for date</strong> : null}</>;
   };
 
   return (
@@ -318,63 +99,29 @@ const CampaignAttendanceTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {/* <MySearch
-                  {...props.searchProps}
-                  style={{ paddingLeft: "12%" }}
-                  className="inputSearch"
-                /> */}
+              {allEmployee.length ? (
+                <ExportCSVButton
+                  className="float-right btn export-csv"
+                  {...props.csvProps}
+                >
+                  Export Attendance Record (CSV)
+                </ExportCSVButton>
+              ) : null}
 
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="from_date">From</label>
-                      <input
-                        type="date"
-                        name="from_date"
-                        value={fromDate}
-                        onChange={(e) => setFromDate(e.target.value)}
-                        className="form-control "
-                        max={today}
-                      />
-                    </div>
+              <div className="row">
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label htmlFor="date">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={date}
+                      onChange={(e) => setDate(e?.target?.value)}
+                      className="form-control "
+                    />
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="to_date">To</label>
-                      <input
-                        type="date"
-                        name="to_date"
-                        value={toDate}
-                        onChange={(e) => setToDate(e.target.value)}
-                        className="form-control "
-                        max={today}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="float-right">
-                  <ExportCSVButton
-                    style={{ width: "120%" }}
-                    className="float-right btn export-csv"
-                    {...props.csvProps}
-                  >
-                    Export CSV
-                  </ExportCSVButton>
                 </div>
               </div>
-
-              {/* <div className="d-flex row mb-3">
-                <div className="col-md-5">
-                  <Select
-                    options={designation}
-                    isSearchable={true}
-                    onChange={(e) => handleChangeDesignation(e)}
-                    placeholder="Filter by designation..."
-                  />
-                </div>
-              </div> */}
 
               <BootstrapTable
                 {...props.baseProps}
