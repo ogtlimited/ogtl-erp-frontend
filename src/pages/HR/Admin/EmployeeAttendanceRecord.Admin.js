@@ -3,9 +3,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import EmployeeAttendanceRecordTable from '../../../components/Tables/EmployeeTables/EmployeeAttendanceRecordTable';
 import axiosInstance from '../../../services/api';
+import { useAppContext } from '../../../Context/AppContext';
 import moment from 'moment';
 
 const EmployeeAttendanceRecordAdmin = () => {
+  const { showAlert } = useAppContext();
   const [employeeAttendance, setEmployeeAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
   const { employee } = useParams();
@@ -23,33 +25,41 @@ const EmployeeAttendanceRecordAdmin = () => {
 		setToday(today_date);
 	}, []);
   
-  const fetchEmployeeAttendanceRecords = useCallback(() => {
-    setLoading(true);
-    axiosInstance
-    .get('/api/attendance/from-postgres/for-hr', {
-      params: {
-        ogid: id,
-        from: fromDate,
-        to: toDate,
-      },
-    })
-      .then((res) => {
-        let resData = res?.data?.data
+  const fetchEmployeeAttendanceRecords = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `/api/v1/employee_attendances/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            start_date: fromDate,
+            end_date: toDate,
+            limit: 400,
+          },
+        }
+      );
 
-        let formatted = resData.map((e) => ({
-          ClockIn: e?.ClockIn ? moment(e?.ClockIn, "HH:mm:ss").format("LT") : 'No Clock In',
-          ClockOut: e?.ClockOut ? moment(e?.ClockOut, "HH:mm:ss").format("LT") : 'No Clock Out',
-          Date: e?.Date ? moment(e?.Date).format("ddd, MMMM D, YYYY") : 'No Date',
-        }));
+      const resData =
+        response?.data?.data?.result === "no record for date range"
+          ? []
+          : response?.data?.data?.result.map((e, index) => ({
+              ...e,
+              idx: index + 1,
+              date: moment(e?.date).format("Do MMMM, YYYY"),
+            }));
 
-        setEmployeeAttendance(formatted);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }, [fromDate, id, toDate]);
+      setEmployeeAttendance(resData);
+      setLoading(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
+    }
+  }, [fromDate, id, showAlert, toDate]);
 
   useEffect(() => {
     fetchEmployeeAttendanceRecords();
@@ -63,7 +73,7 @@ const EmployeeAttendanceRecordAdmin = () => {
             <h3 className="page-title">{employee}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Employee</Link>
+                <Link to={`/dashboard/user/profile/${id}`}>Employee</Link>
               </li>
               <li className="breadcrumb-item active">Attendance Record</li>
             </ul>

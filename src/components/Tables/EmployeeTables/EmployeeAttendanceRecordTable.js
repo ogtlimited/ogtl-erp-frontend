@@ -1,11 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, {Search, CSVExport} from 'react-bootstrap-table2-toolkit';
-import filterFactory from 'react-bootstrap-table2-filter';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 const EmployeeAttendanceRecordTable = ({
   designation,
@@ -14,6 +17,7 @@ const EmployeeAttendanceRecordTable = ({
   loading,
   setLoading,
   context,
+  
   fromDate,
   toDate,
   today,
@@ -30,7 +34,7 @@ const EmployeeAttendanceRecordTable = ({
     setAllEmployee(data);
   }, [data]);
   useEffect(() => {
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       if (window.innerWidth >= 768) {
         setmobileView(false);
       } else {
@@ -41,22 +45,28 @@ const EmployeeAttendanceRecordTable = ({
 
   const columns = [
     {
-      dataField: 'Date',
-      text: 'Date',
+      dataField: "idx",
+      text: "S/N",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { width: "5%" },
     },
     {
-      dataField: 'ClockIn',
-      text: 'Clock In',
+      dataField: "date",
+      text: "Date",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: 'ClockOut',
-      text: 'Clock Out',
+      dataField: "clock_in",
+      text: "Clock In",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "clock_out",
+      text: "Clock Out",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
     },
   ];
 
@@ -64,9 +74,8 @@ const EmployeeAttendanceRecordTable = ({
     setTimeout(() => {
       setShow(true);
     }, 5000);
-    return <>{show ? "No Data Available" : null}</>;
+    return <>{show ? <strong>No record for date</strong> : null}</>;
   };
-
 
   return (
     <>
@@ -80,22 +89,20 @@ const EmployeeAttendanceRecordTable = ({
         >
           {(props) => (
             <div className="col-12">
-
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '5%', width: '310px' }}
+                style={{ marginBottom: 15, paddingLeft: "5%", width: "310px" }}
                 className="inputSearch"
               />
 
-              <div style={{display: 'flex', justifyContent: "space-between"}}>
-                
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="from_date">From</label>
+                      <label htmlFor="fromDate">From</label>
                       <input
                         type="date"
-                        name="from_date"
+                        name="fromDate"
                         value={fromDate}
                         onChange={(e) => setFromDate(e.target.value)}
                         className="form-control "
@@ -105,10 +112,10 @@ const EmployeeAttendanceRecordTable = ({
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="to_date">To</label>
+                      <label htmlFor="toDate">To</label>
                       <input
                         type="date"
-                        name="to_date"
+                        name="toDate"
                         value={toDate}
                         onChange={(e) => setToDate(e.target.value)}
                         className="form-control "
@@ -119,15 +126,15 @@ const EmployeeAttendanceRecordTable = ({
                 </div>
 
                 <div className="float-right">
-                    <ExportCSVButton
-                      style={{ width: '120%' }}
-                      className="float-right btn export-csv"
-                      {...props.csvProps}
-                    >
-                      Export CSV
-                    </ExportCSVButton>
+                  <ExportCSVButton
+                    style={{ width: "120%" }}
+                    className="float-right btn export-csv"
+                    {...props.csvProps}
+                  >
+                    Export CSV
+                  </ExportCSVButton>
                 </div>
-              </div> 
+              </div>
 
               <BootstrapTable
                 {...props.baseProps}
@@ -136,10 +143,10 @@ const EmployeeAttendanceRecordTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? 'table '
+                    ? "table "
                     : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
+                    ? "table table-responsive"
+                    : "table table-responsive"
                 }
                 noDataIndication={
                   loading ? (
