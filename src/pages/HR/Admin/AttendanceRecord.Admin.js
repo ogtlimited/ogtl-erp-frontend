@@ -8,7 +8,7 @@ import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
   const { showAlert } = useAppContext();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
@@ -56,34 +56,39 @@ const AttendanceRecord = () => {
   // Daily Attendance - Table:
   const fetchDailyAttendance = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("api/v1/daily_attendance.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          date: date,
-          limit: 400,
-        },
-      });
+      setLoading(true);
+      const response = await axiosInstance.get(
+        "/api/v1/daily_attendance.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            date: date,
+            limit: 400,
+          },
+        }
+      );
       const resData =
         response?.data?.data?.info === "no record for date"
           ? []
           : response?.data?.data?.info.map((e, index) => ({
               ...e,
               idx: index + 1,
+              date: moment(e?.date).format("Do MMMM, YYYY"),
             }));
 
-      console.log("FORMATTED!!!:", resData);
-
       setDailyAttendance(resData);
+      console.log("Attendance summary:", resData);
       setLoading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [date, showAlert]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -184,19 +189,31 @@ const AttendanceRecord = () => {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "35%" },
+      headerStyle: { width: "30%" },
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "date",
+      text: "Date",
+      sort: true,
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "clock_in",
       text: "Clock In",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "clock_out",
       text: "Clock Out",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
   ];
 
@@ -296,15 +313,14 @@ const AttendanceRecord = () => {
               )}
             </div>
           </div>
-          <span>Day</span>
+          <span>Date</span>
         </div>
       </div>
 
-      {/* <div className="page-menu">
+      <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
-
               <li className="nav-item">
                 <a
                   className="nav-link active"
@@ -316,11 +332,7 @@ const AttendanceRecord = () => {
               </li>
 
               <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-toggle="tab"
-                  href="#tab_campaigns"
-                >
+                <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
                   Campaigns
                 </a>
               </li>
@@ -334,11 +346,10 @@ const AttendanceRecord = () => {
                   Departments
                 </a>
               </li>
-
             </ul>
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div>
         <div className="row tab-content">
