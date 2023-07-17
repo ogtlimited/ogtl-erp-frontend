@@ -1,7 +1,7 @@
 import React from "react";
 import $ from "jquery";
 
-const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
+const ConfirmModal = ({ title, selectedRow, deleteFunction, message }) => {
   return (
     <>
       <div
@@ -18,7 +18,11 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
                 {title}
               </h5>
             </div>
-            <div className="modal-body">Are you sure you want to delete?</div>
+            {message ? (
+              <div className="modal-body">{message}</div>
+            ) : (
+              <div className="modal-body">Are you sure you want to delete?</div>
+            )}
             <div className="modal-footer">
               <button
                 type="button"
@@ -35,7 +39,7 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction }) => {
                   $("#exampleModal").modal("toggle");
                 }}
               >
-                Delete
+                {message ? "Deactivate" : "Delete"}
               </button>
             </div>
           </div>

@@ -122,9 +122,9 @@ const DashboardChart = ({
   return (
     <>
       <div className="col-md-12">
-        <div className="col">
-          <div className="col-md-12 text-center">
-            <div className="card">
+        <div className="col" >
+          <div className="col-md-12 text-center" >
+            <div className="card hr-dashboard-charts" >
               <div className="card-body">
                 <h3 className="card-title">{title}</h3>
                 <VerticalBar
@@ -139,7 +139,7 @@ const DashboardChart = ({
 
           <div className="row"> 
             <div className="col-md-4 text-center">
-              <div className="card">
+              <div className="card hr-dashboard-charts">
                 <div className="card-body">
                   <h3 className="card-title">Employee By Gender</h3>
                   <DoughnutChart data={gender} 

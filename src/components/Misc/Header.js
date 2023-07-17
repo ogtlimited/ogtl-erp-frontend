@@ -9,6 +9,7 @@ import tokenService from '../../services/token.service';
 import { BsBell } from 'react-icons/bs';
 import { msalInstance  } from '../../authConfig';
 // import { useMsal } from '@azure/msal-react';
+import { BiLogOut, BiUser } from "react-icons/bi"
 import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
 
 const Header = () => {
@@ -91,7 +92,7 @@ const Header = () => {
               <a className="responsive-search">
                 <i className="fa fa-search"></i>
               </a>
-              <form>
+              {/* <form>
                 <input
                   className="form-control"
                   type="text"
@@ -100,7 +101,7 @@ const Header = () => {
                 <button className="btn" type="submit">
                   <i className="fa fa-search"></i>
                 </button>
-              </form>
+              </form> */}
             </div>
           </li>
 
@@ -117,17 +118,18 @@ const Header = () => {
                   style={{ bottom: 25, right: 5}}
                 ></span>
               </span>
-              <span>{user?.employee_info?.personal_details?.first_name}</span>
+              <span
+                  style={{ paddingRight: 10}}>{user?.employee_info?.personal_details?.first_name}</span>
             </a>
             <div className="dropdown-menu" onClick={() => setDropDownClicked(true)}>
               <Link
                 className="dropdown-item"
                 to={`/dashboard/user/profile/${userOgid}`}
               >
-                My Profile
+                <BiUser style={{fontSize: "14px", margin: "-2px 5px 0 0"}} />My Profile
               </Link>
               <a className="dropdown-item" onClick={(e) => logout(e)}>
-                Logout
+               <BiLogOut style={{fontSize: "14px", margin: "-2px 3px 0 0"}} /> Logout
               </a>
             </div>
           </li>

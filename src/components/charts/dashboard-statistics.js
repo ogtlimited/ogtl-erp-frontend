@@ -104,7 +104,7 @@ const DashboardStatistics = ({
   return (
     <>
       <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
-        <div className="card flex-fill">
+        <div className="card flex-fill hr-dashboard-charts">
           <div className="leave-card-body">
             <h3 className="card-title">Leave Status</h3>
 
@@ -148,7 +148,7 @@ const DashboardStatistics = ({
       </div>
 
       <div className="col-md-6 col-lg-6 col-xl-4 d-flex">
-        <div className="card flex-fill">
+        <div className="card flex-fill hr-dashboard-charts">
           <div className="leave-card-body">
             <h3 className="card-title">Leave Type</h3>
 
