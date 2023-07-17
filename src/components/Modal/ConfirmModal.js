@@ -1,7 +1,13 @@
 import React from "react";
 import $ from "jquery";
 
-const ConfirmModal = ({ title, selectedRow, deleteFunction, message }) => {
+const ConfirmModal = ({
+  title,
+  selectedRow,
+  deleteFunction,
+  modalType,
+  message,
+}) => {
   return (
     <>
       <div
@@ -18,11 +24,13 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction, message }) => {
                 {title}
               </h5>
             </div>
-            {message ? (
+            {modalType === "deactivate" ? (
               <div className="modal-body">{message}</div>
-            ) : (
-              <div className="modal-body">Are you sure you want to delete?</div>
-            )}
+            ) : modalType === "left" ? (
+              <div className="modal-body">Are you sure this employee has resigned?</div>
+            ) : modalType === "terminated" ? (
+              <div className="modal-body">Are you sure you want to terminate this employee?</div>
+            ) : <div className="modal-body">Are you sure you want to delete?</div>}
             <div className="modal-footer">
               <button
                 type="button"
@@ -31,16 +39,29 @@ const ConfirmModal = ({ title, selectedRow, deleteFunction, message }) => {
               >
                 Close
               </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => {
-                  deleteFunction(selectedRow);
-                  $("#exampleModal").modal("toggle");
-                }}
-              >
-                {message ? "Deactivate" : "Delete"}
-              </button>
+              {modalType === "deactivate" ? (
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={() => {
+                    deleteFunction(selectedRow);
+                    $("#exampleModal").modal("toggle");
+                  }}
+                >
+                  Deactivate
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    deleteFunction(selectedRow);
+                    $("#exampleModal").modal("toggle");
+                  }}
+                >
+                  Confirm
+                </button>
+              )}
             </div>
           </div>
         </div>
