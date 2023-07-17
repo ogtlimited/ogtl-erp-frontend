@@ -2,7 +2,6 @@ import axios from "axios";
 import tokenService from "./token.service";
 import config from "../config.json";
 import  secureLocalStorage  from  "react-secure-storage";
-// import { useAppContext } from "../Context/AppContext";
 let headers = {};
 const token = secureLocalStorage.getItem("token");
 
@@ -34,10 +33,10 @@ axiosInstance.interceptors.response.use(
       });
     }
     if (error.response.status === 401) {
-      tokenService.removeToken();
-      console.log("Login error:", error)
-
+      tokenService.clearStorage();
       window.location = "/auth";
+      
+      console.log("Login error:", error)
     } else {
       return new Promise((resolve, reject) => {
         reject(error);

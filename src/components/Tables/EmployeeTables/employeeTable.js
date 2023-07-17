@@ -46,6 +46,8 @@ const EmployeesTable = ({
   setStatusFilter,
   searchTerm,
   setSearchTerm,
+
+  setSelectedRow,
   context,
 }) => {
   const status = [
@@ -60,6 +62,10 @@ const EmployeesTable = ({
     {
       code: "terminated",
       label: "TERMINATED",
+    },
+    {
+      code: "deactivated",
+      label: "DEACTIVATED",
     },
   ];
 
@@ -142,7 +148,7 @@ const EmployeesTable = ({
             />
           </a>
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.designation_name}</span>
+            {value} <span>{row?.designation}</span>
           </Link>
         </h2>
       ),
@@ -203,16 +209,29 @@ const EmployeesTable = ({
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: "designation",
-      text: "Designation",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
       dataField: "company_email",
       text: "Company Email",
       sort: true,
       headerStyle: { minWidth: "100px" },
+    },
+    {
+      dataField: "",
+      text: "Action",
+      headerStyle: { minWidth: "100px" },
+      formatter: (value, row) => (
+        <>
+          {row?.status !== "deactivated" && <button
+            className="btn btn-sm btn-primary"
+            data-toggle="modal"
+            data-target="#exampleModal"
+            onClick={() => {
+              setSelectedRow(row);
+            }}
+          >
+            Deactivate
+          </button>}
+        </>
+      ),
     },
   ];
 
@@ -232,8 +251,6 @@ const EmployeesTable = ({
         setStatusFilter("");
         setSearchTerm(searchTerm);
 
-        console.log("Search this name: ", searchTerm);
-
         if (page === 1) {
           axiosInstance
             .get("/api/v1/employees.json", {
@@ -252,7 +269,7 @@ const EmployeesTable = ({
               let resData = e?.data?.employees;
               let resOptions = e?.data?.pagination;
 
-              console.log("Searched name:", resData)
+              console.log("Searched name:", resData);
 
               const thisPageLimit = sizePerPage;
               const thisTotalPageSize = resOptions?.numberOfPages;
@@ -296,9 +313,7 @@ const EmployeesTable = ({
           setDesignationFilter("");
           setStatusFilter("");
           setSearchTerm(searchTerm);
-  
-          console.log("Search this name on enter: ", searchTerm);
-  
+
           if (page === 1) {
             axiosInstance
               .get("/api/v1/employees.json", {
@@ -316,15 +331,13 @@ const EmployeesTable = ({
               .then((e) => {
                 let resData = e?.data?.employees;
                 let resOptions = e?.data?.pagination;
-  
-                console.log("Searched name:", resData)
-  
+
                 const thisPageLimit = sizePerPage;
                 const thisTotalPageSize = resOptions?.numberOfPages;
-  
+
                 setSizePerPage(thisPageLimit);
                 setTotalPages(thisTotalPageSize);
-  
+
                 const mapp = resData.map((emp) => {
                   return {
                     ...emp,
@@ -351,9 +364,9 @@ const EmployeesTable = ({
       };
 
       return (
-        <div className="job-app-search">
+        <div className="custom-search">
           <input
-            className="form-control"
+            className="custom-search-input"
             style={{
               backgroundColor: "#fff",
               width: "33.5%",
@@ -363,13 +376,30 @@ const EmployeesTable = ({
             type="text"
             onKeyDown={handleKeydown}
           />
-          <button className="btn btn-primary" onClick={handleClick}>
+          <button
+            className="btn btn-primary custom-search-btn"
+            onClick={handleClick}
+          >
             Search
           </button>
         </div>
       );
     },
-    [page, setCampaignFilter, setData, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage]
+    [
+      page,
+      setCampaignFilter,
+      setData,
+      setDepartmentFilter,
+      setDesignationFilter,
+      setLoading,
+      setOfficeFilter,
+      setPage,
+      setSearchTerm,
+      setSizePerPage,
+      setStatusFilter,
+      setTotalPages,
+      sizePerPage,
+    ]
   );
 
   // Filter by Departments:
@@ -691,28 +721,33 @@ const EmployeesTable = ({
                 </div>
               </div>
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? "table "
-                    : context
-                    ? "table table-responsive"
-                    : "table table-responsive"
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-              />
+              <div className="app-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"

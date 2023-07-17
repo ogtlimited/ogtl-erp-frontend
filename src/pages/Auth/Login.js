@@ -53,7 +53,7 @@ const Login = () => {
             if(err?.response?.status === 404 && count < 2) {
               return setErrorMsg('Invalid email. Please double-check and try again');
             }
-            setErrorMsg('User not found. Please contact HR');
+            setErrorMsg('Unable to login. Please contact HR');
           })
           .finally(() => {
             setLoading(false);

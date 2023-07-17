@@ -6,6 +6,7 @@ import welcome from "../../../assets/img/welcome.png";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
+import HeroImage from "../../../assets/img/HR-nextImg.png"
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -66,14 +67,14 @@ const EmployeeUser = () => {
             <div className="col-md-9 left-card">
               <h4 className="welcome-text">
                 Welcome back,{" "}
-                <a href="#">
+                {/* <a href="#">
                   <img
                     align="center"
                     src="https://camo.githubusercontent.com/e8e7b06ecf583bc040eb60e44eb5b8e0ecc5421320a92929ce21522dbc34c891/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f6876524a434c467a6361737252346961377a2f67697068792e676966"
                     height="25"
                     style={{marginTop: "-10px"}}
                   />
-                </a>
+                </a> */}
                 <br />{" "}
                 {`${user?.employee_info?.personal_details?.first_name} 
                   ${user?.employee_info?.personal_details?.middle_name || ""} 
@@ -86,7 +87,7 @@ const EmployeeUser = () => {
               </p>
             </div>
             <div className="col-md-3">
-              <img style={{ width: "100%" }} className="mt-4" src={welcome} />
+              <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />
             </div>
           </div>
           <div className="row mt-4">
