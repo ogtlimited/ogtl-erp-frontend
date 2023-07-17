@@ -463,6 +463,7 @@ const EmployeesTable = ({
 
   // Filter by Departments:
   const handleDepartmentFilter = (e) => {
+    setSearchTerm("");
     setCampaignFilter("");
     setDesignationFilter("");
     setStatusFilter("");
@@ -517,6 +518,7 @@ const EmployeesTable = ({
 
   // Filter by Campaigns:
   const handleCampaignFilter = (e) => {
+    setSearchTerm("");
     setDepartmentFilter("");
     setDesignationFilter("");
     setStatusFilter("");
@@ -571,6 +573,7 @@ const EmployeesTable = ({
 
   // Filter by Designation:
   const handleDesignationFilter = (e) => {
+    setSearchTerm("");
     setDesignationFilter(e.target.value);
     setPage(1);
     setLoading(true);
@@ -621,6 +624,7 @@ const EmployeesTable = ({
 
   // Filter by Status:
   const handleStatusFilter = (e) => {
+    setSearchTerm("");
     setDepartmentFilter("");
     setCampaignFilter("");
     setDesignationFilter("");
@@ -639,7 +643,6 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
-          name: searchTerm,
           status: e.target.value,
         },
       })
