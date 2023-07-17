@@ -276,6 +276,11 @@
   margin-bottom: 30px;
 }
 
+.hr-employee-card-group {
+  display: flex;
+  justify-content: left;
+}
+
 .hr-dashboard-card {
   background-color: #fff;
   min-width: 20%;

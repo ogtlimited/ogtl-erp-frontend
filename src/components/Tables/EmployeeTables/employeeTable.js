@@ -47,6 +47,7 @@ const EmployeesTable = ({
   searchTerm,
   setSearchTerm,
 
+  setModalType,
   setSelectedRow,
   context,
 }) => {
@@ -217,22 +218,80 @@ const EmployeesTable = ({
     {
       dataField: "",
       text: "Action",
-      headerStyle: { minWidth: "100px" },
+      csvExport: false,
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <>
-          {row?.status !== "deactivated" && <button
-            className="btn btn-sm btn-primary"
-            data-toggle="modal"
-            data-target="#exampleModal"
-            onClick={() => {
-              setSelectedRow(row);
-            }}
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
           >
-            Deactivate
-          </button>}
-        </>
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setModalType("deactivate");
+                setSelectedRow(row);
+              }}
+            >
+              <i className="fa fa-ban m-r-5"></i>Deactivate
+            </a>
+
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setModalType("left");
+                setSelectedRow(row);
+              }}
+            >
+              <i className="fa fa-ban m-r-5"></i> Resigned
+            </a>
+
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setModalType("terminated");
+                setSelectedRow(row);
+              }}
+            >
+              <i className="fa fa-ban m-r-5"></i> Terminated
+            </a>
+          </div>
+        </div>
       ),
     },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { minWidth: "100px" },
+    //   formatter: (value, row) => (
+    //     <>
+    //       {row?.status !== "deactivated" && <button
+    //         className="btn btn-sm btn-primary"
+    //         data-toggle="modal"
+    //         data-target="#exampleModal"
+    //         onClick={() => {
+    //           setSelectedRow(row);
+    //         }}
+    //       >
+    //         Deactivate
+    //       </button>}
+    //     </>
+    //   ),
+    // },
   ];
 
   // Search Name:
