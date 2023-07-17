@@ -1,10 +1,11 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../services/api';
-import EmployeesTable from '../../../components/Tables/EmployeeTables/employeeTable';
-import { useAppContext } from '../../../Context/AppContext';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../../services/api";
+import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
+import { useAppContext } from "../../../Context/AppContext";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
@@ -14,25 +15,26 @@ const AllEmployeesAdmin = () => {
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
-  
+  const [totalPages, setTotalPages] = useState("");
+
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [designations, setDesignations] = useState([]);
-  
+
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [campaignFilter, setCampaignFilter] = useState("");
   const [officeFilter, setOfficeFilter] = useState("");
   const [designationFilter, setDesignationFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  
+  const [selectedRow, setSelectedRow] = useState(null);
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
-
     try {
-      const response = await axiosInstance.get('/api/v1/employees.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/employees.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
@@ -42,14 +44,16 @@ const AllEmployeesAdmin = () => {
           limit: sizePerPage,
           name: searchTerm.length ? searchTerm : null,
           operation_office_id: officeFilter.length ? officeFilter : null,
-          hr_designation_id: designationFilter.length ? designationFilter : null,
+          hr_designation_id: designationFilter.length
+            ? designationFilter
+            : null,
           status: statusFilter.length ? statusFilter : null,
         },
       });
 
       const resData = response?.data?.data?.employees;
       const totalPages = response?.data?.data?.pages;
-      
+
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
 
@@ -63,46 +67,49 @@ const AllEmployeesAdmin = () => {
           office: emp?.office?.office_type,
           officeName: emp?.office?.title,
           designation: emp?.designation,
-          company_email: emp?.email
+          company_email: emp?.email,
         };
       });
 
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(
-      true,
-      error?.response?.data?.errors ,
-      "alert alert-warning",
-    );
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  },[designationFilter, officeFilter, page, searchTerm, showAlert, sizePerPage, statusFilter]);
+  }, [
+    designationFilter,
+    officeFilter,
+    page,
+    searchTerm,
+    showAlert,
+    sizePerPage,
+    statusFilter,
+  ]);
 
   // All Campaigns:
   const fetchAllCampaigns = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/offices.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            office_type: "campaign",
-            pages: 1,
-            limit: 1000,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "campaign",
+          pages: 1,
+          limit: 1000,
+        },
+      });
       const resData = response?.data?.data?.offices;
 
-      const formattedCampaigns = resData.map((e) => ({
-        label: e?.title.toUpperCase(),
-        value: e.id,
-      })).sort((a, b) => a.label.localeCompare(b.label));
+      const formattedCampaigns = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setCampaigns(formattedCampaigns);
       setLoading(false);
@@ -115,27 +122,26 @@ const AllEmployeesAdmin = () => {
   // All Departments:
   const fetchAllDepartments = async () => {
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/offices.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            office_type: "department",
-            pages: 1,
-            limit: 1000,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/offices.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          office_type: "department",
+          pages: 1,
+          limit: 1000,
+        },
+      });
       const resData = response?.data?.data?.offices;
 
-      const formattedDepartments = resData.map((e) => ({
-        label: e?.title.toUpperCase(),
-        value: e.id,
-      })).sort((a, b) => a.label.localeCompare(b.label));
+      const formattedDepartments = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setDepartments(formattedDepartments);
       setLoading(false);
@@ -148,8 +154,8 @@ const AllEmployeesAdmin = () => {
   // All Designations:
   const fetchDesignation = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/designations.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/designations.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
@@ -157,10 +163,12 @@ const AllEmployeesAdmin = () => {
       });
       const resData = response?.data?.data?.designations;
 
-      const formattedDesignation = resData.map((e) => ({
-        label: e?.title.toUpperCase(),
-        value: e.id,
-      })).sort((a, b) => a.label.localeCompare(b.label));
+      const formattedDesignation = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setDesignations(formattedDesignation);
     } catch (error) {
@@ -181,6 +189,40 @@ const AllEmployeesAdmin = () => {
     }, 10000);
   }, []);
 
+  //Deactivate Employee
+  const handleDeactivateEmployee = async (row) => {
+    const fullName = row.fullName;
+    const userId = row?.ogid;
+
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.delete(
+        `/api/v1/deactivate_employees/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        fullName + " has been deactivated",
+        "alert alert-success"
+      );
+
+      fetchAllEmployees();
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="page-header">
@@ -195,16 +237,18 @@ const AllEmployeesAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-              <>
-                <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  onClick={() => navigate('/dashboard/hr/all-employees/employee/add')}
-                >
-                  <i className="fa fa-plus"></i> Add Employee
-                </a>
-              </>
+            <>
+              <a
+                href="#"
+                className="btn add-btn "
+                data-toggle="modal"
+                onClick={() =>
+                  navigate("/dashboard/hr/all-employees/employee/add")
+                }
+              >
+                <i className="fa fa-plus"></i> Add Employee
+              </a>
+            </>
           </div>
         </div>
       </div>
@@ -214,18 +258,15 @@ const AllEmployeesAdmin = () => {
         setData={setallEmployees}
         loading={loading}
         setLoading={setLoading}
-
         departments={departments}
         campaigns={campaigns}
         designations={designations}
-
         page={page}
         setPage={setPage}
         sizePerPage={sizePerPage}
         setSizePerPage={setSizePerPage}
         totalPages={totalPages}
         setTotalPages={setTotalPages}
-
         departmentFilter={departmentFilter}
         setDepartmentFilter={setDepartmentFilter}
         campaignFilter={campaignFilter}
@@ -238,6 +279,14 @@ const AllEmployeesAdmin = () => {
         setStatusFilter={setStatusFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        setSelectedRow={setSelectedRow}
+      />
+
+      <ConfirmModal
+        title="Employee"
+        selectedRow={selectedRow}
+        deleteFunction={handleDeactivateEmployee}
+        message="Are you sure you want to deactivate this employee?"
       />
     </>
   );

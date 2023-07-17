@@ -280,7 +280,10 @@
   background-color: #fff;
   min-width: 20%;
   margin-left: 20px;
+  border-radius: 15px;
   border: 1px solid #ededed;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
 .hr-dashboard-card > span {
@@ -351,6 +354,11 @@
   padding: 5px 10px;
 }
 
+.hr-dashboard-charts {
+  border-radius: 15px !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px !important;
+}
+
 .employee-gender-pie {
   min-height: 35vh;
 }
@@ -410,6 +418,35 @@
 /*--------------------------
 	Job applicant pagination
 ----------------------------*/
+
+.custom-search {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.custom-search-input {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #66708080;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: #C2C2C2;
+  font-weight: 400;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.custom-search-btn {
+  height: 45px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
 .job-app-search {
   display: flex;
@@ -499,12 +536,24 @@
 }
 
 .leave-filter-control {
-  border-color: #e3e3e3;
-  box-shadow: none;
-  font-size: 15px;
-  height: 44px;
+  /* border-color: #e3e3e3; */
+
+  
   width: 100%;
-  padding: 0 0 0 10px;
+  height: 45px;
+  border: 1px solid #66708080;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: #C2C2C2;
+  font-weight: 400;
+  margin-bottom: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='darkblue' height='25' viewBox='0 0 24 24' width='50' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: top 9px right 0;
 }
 
 .signature-card-body {
@@ -2325,8 +2374,7 @@ table.dataTable thead > tr > td.sorting {
   background-color: #faa937;
 }
 .main-drop .dropdown-menu {
-  min-width: 130px;
-  padding: 0;
+  min-width: 100px;
 }
 
 /*-----------------
@@ -7664,8 +7712,7 @@ ul.comment-list li ul.children {
   text-transform: uppercase;
 }
 .dash-sidebar .card {
-  border-radius: 8px;
-  box-shadow: unset;
+  border-radius: 15px;
 }
 .time-list {
   margin-bottom: 20px;
