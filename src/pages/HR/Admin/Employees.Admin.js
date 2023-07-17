@@ -28,6 +28,7 @@ const AllEmployeesAdmin = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   
+  const [modalType, setModalType] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
 
   // All Employees:
@@ -190,7 +191,7 @@ const AllEmployeesAdmin = () => {
   }, []);
 
   //Deactivate Employee
-  const handleDeactivateEmployee = async (row) => {
+  const handleEmployeeAction = async (row) => {
     const fullName = row.fullName;
     const userId = row?.ogid;
 
@@ -205,12 +206,15 @@ const AllEmployeesAdmin = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
+          params: {
+            status: modalType,
+          }
         }
       );
 
       showAlert(
         true,
-        fullName + " has been deactivated",
+        fullName + `status has been updated to ${modalType}`,
         "alert alert-success"
       );
 
@@ -279,13 +283,16 @@ const AllEmployeesAdmin = () => {
         setStatusFilter={setStatusFilter}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+
+        setModalType={setModalType}
         setSelectedRow={setSelectedRow}
       />
 
       <ConfirmModal
         title="Employee"
         selectedRow={selectedRow}
-        deleteFunction={handleDeactivateEmployee}
+        deleteFunction={handleEmployeeAction}
+        modalType={modalType}
         message="Are you sure you want to deactivate this employee?"
       />
     </>
