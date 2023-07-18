@@ -96,6 +96,7 @@ const LeavesAdmin = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -144,6 +145,7 @@ const LeavesAdmin = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
       }));
 
       setLeaveHistory(formatted);
@@ -331,6 +333,11 @@ const LeavesAdmin = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
+      sort: true,
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
       sort: true,
     },
     {

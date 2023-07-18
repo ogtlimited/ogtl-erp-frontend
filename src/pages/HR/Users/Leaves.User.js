@@ -112,6 +112,7 @@ const LeavesUser = () => {
           leave?.start_date,
           leave?.end_date
         ),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
       }));
 
       const reporteeLeaves = resData.length;
@@ -326,6 +327,13 @@ const LeavesUser = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "10%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
