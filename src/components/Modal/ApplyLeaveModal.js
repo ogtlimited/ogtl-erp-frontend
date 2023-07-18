@@ -13,6 +13,7 @@ import  secureLocalStorage  from  "react-secure-storage";
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
+  const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
   const user = JSON.parse(secureLocalStorage.getItem("user"));
@@ -20,6 +21,14 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
   const [maxDate, setMaxDate] = useState(null);
+
+  useEffect(() => {
+    if (leave.hr_leave_type_id) {
+      setIsLeaveTypeValid(true);
+    } else {
+      setIsLeaveTypeValid(false);
+    }
+  }, [leave.hr_leave_type_id]);
 
   useEffect(() => {
     const time = new Date().toDateString();
@@ -161,7 +170,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="start_date">Start Date</label>
+                        <label htmlFor="start_date">Start</label>
                         {leaveType.includes("emergency") ? (
                           <input
                             type="date"
@@ -189,7 +198,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     {leave.start_date.length ? (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="end_date">End Date</label>
+                          <label htmlFor="end_date">Last Day of Leave</label>
                           {leaveType.includes("emergency") ? (
                             <input
                               type="date"
@@ -227,7 +236,8 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-primary" 
+                      disabled={!isLeaveTypeValid}>
                       {loading ? (
                         <span
                           className="spinner-border spinner-border-sm"

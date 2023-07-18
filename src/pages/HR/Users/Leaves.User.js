@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -159,26 +160,26 @@ const LeavesUser = () => {
     setRejectModal(true);
   };
 
-  const handleRequestModification = (row) => {
-    setRequestEdit(row);
-    setRequestEditModal(true);
-  };
+  // const handleRequestModification = (row) => {
+  //   setRequestEdit(row);
+  //   setRequestEditModal(true);
+  // };
 
-  const handleAppealRejection = (e, row) => {
-    e.preventDefault();
-    setAppealRejection(row);
-    setAppealRejectionModal(true);
-  };
+  // const handleAppealRejection = (e, row) => {
+  //   e.preventDefault();
+  //   setAppealRejection(row);
+  //   setAppealRejectionModal(true);
+  // };
 
-  const handleEditApplication = (row) => {
-    const formatted = {};
-    formatted._id = row._id;
-    formatted.from_date = row.from_date;
-    formatted.to_date = row.to_date;
-    formatted.leave_type_id = row.leave_type_id._id;
-    formatted.reason_for_application = row.reason_for_application;
-    setEditLeave(formatted);
-  };
+  // const handleEditApplication = (row) => {
+  //   const formatted = {};
+  //   formatted._id = row._id;
+  //   formatted.from_date = row.from_date;
+  //   formatted.to_date = row.to_date;
+  //   formatted.leave_type_id = row.leave_type_id._id;
+  //   formatted.reason_for_application = row.reason_for_application;
+  //   setEditLeave(formatted);
+  // };
 
   const userColumns = [
     {
@@ -329,12 +330,12 @@ const LeavesUser = () => {
     },
     {
       dataField: "from_date",
-      text: "From Date",
+      text: "From",
       sort: true,
     },
     {
       dataField: "to_date",
-      text: "To Date",
+      text: "To",
       sort: true,
     },
     {

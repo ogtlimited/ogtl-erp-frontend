@@ -153,7 +153,7 @@ const EmployeeUser = () => {
                           to="/dashboard/hr/leaves"
                           className="btn btn-primary"
                         >
-                          Apply Leave
+                          Apply For Leave
                         </Link>
                       </div>
                     </div>
