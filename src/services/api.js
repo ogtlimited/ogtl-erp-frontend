@@ -32,7 +32,8 @@ axiosInstance.interceptors.response.use(
         reject(error);
       });
     }
-    if (error.response.status === 401  && error?.response?.data === "Session has expired. Please log in") {
+    // if (error.response.status === 401  && error?.response?.data === "Session has expired. Please log in") {
+    if (error.response.status === 401) {
       tokenService.clearStorage();
       window.location = "/auth";
 
