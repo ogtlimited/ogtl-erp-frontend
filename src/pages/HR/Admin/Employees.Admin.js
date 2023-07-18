@@ -281,11 +281,14 @@ const AllEmployeesAdmin = () => {
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
+        
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
 
         setModalType={setModalType}
         setSelectedRow={setSelectedRow}
+
+        fetchAllEmployees={fetchAllEmployees}
       />
 
       <ConfirmModal
