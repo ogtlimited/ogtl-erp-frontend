@@ -242,7 +242,7 @@ const EmployeesTable = ({
                 setSelectedRow(row);
               }}
             >
-              <i className="fa fa-ban m-r-5"></i>Deactivate
+              <i className="fa fa-remove m-r-5"></i>Deactivate
             </a>
 
             <a
@@ -274,25 +274,6 @@ const EmployeesTable = ({
         </div>
       ),
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { minWidth: "100px" },
-    //   formatter: (value, row) => (
-    //     <>
-    //       {row?.status !== "deactivated" && <button
-    //         className="btn btn-sm btn-primary"
-    //         data-toggle="modal"
-    //         data-target="#exampleModal"
-    //         onClick={() => {
-    //           setSelectedRow(row);
-    //         }}
-    //       >
-    //         Deactivate
-    //       </button>}
-    //     </>
-    //   ),
-    // },
   ];
 
   // Search Name:
