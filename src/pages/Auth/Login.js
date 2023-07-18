@@ -50,8 +50,10 @@ const Login = () => {
           })
           .catch((err) => {
             setCount(() => count + 1);
-            if(err?.response?.status === 404 && count < 2) {
+            if(err?.response?.status === 404 ) {
               return setErrorMsg('Invalid email. Please double-check and try again');
+            } else if (err?.response?.status === 502 ) {
+              return setErrorMsg('Unable to login. Please try again');
             }
             setErrorMsg('Unable to login. Please contact HR');
           })
