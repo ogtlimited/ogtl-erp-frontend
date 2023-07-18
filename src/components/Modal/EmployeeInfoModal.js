@@ -6,18 +6,15 @@ import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
 export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
-  const {
-    selectCampaigns,
-    selectDepartments,
-    selectDesignations,
-  } = useAppContext();
+  const { selectCampaigns, selectDepartments, selectDesignations } =
+    useAppContext();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
 
   useEffect(() => {
     setEmployeeInfo(data);
-    console.log("employee data:", data)
+    console.log("employee data:", data);
     setOfficeType(data?.office?.office_type);
   }, [data]);
 
@@ -36,34 +33,34 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
     e.preventDefault();
 
     const editedEmployeeInfo = {
-      "date_of_joining": employeeInfo?.employee?.date_of_joining,
-      "office_type": employeeInfo?.office?.office_type,
-      "operation_office_id": employeeInfo?.office?.id,
-      "hr_designation_id": employeeInfo?.employee?.designation?.id,
-      "leave_approval_level": Number(employeeInfo?.employee?.leave_approval_level),
-      "remote": employeeInfo?.employee?.remote,
-      "leave_count": employeeInfo?.employee?.leave_count,
-    }
+      date_of_joining: employeeInfo?.employee?.date_of_joining,
+      office_type: employeeInfo?.office?.office_type,
+      operation_office_id: employeeInfo?.office?.id,
+      hr_designation_id: employeeInfo?.employee?.designation?.id,
+      leave_approval_level: Number(
+        employeeInfo?.employee?.leave_approval_level
+      ),
+      remote: employeeInfo?.employee?.remote,
+      leave_count: employeeInfo?.employee?.leave_count,
+      // ogid: employeeInfo?.employee?.ogid,
+    };
 
-    console.log("submit this:", editedEmployeeInfo)
+    console.log("submit this:", editedEmployeeInfo);
 
     setLoading(true);
     try {
       const id = employeeInfo?.employee?.ogid;
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.put(
-        `/api/v1/employees/${id}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            "employee_info": editedEmployeeInfo,
-          }
-        }
-      );
+      const response = await axiosInstance.put(`/api/v1/employees/${id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          employee_info: editedEmployeeInfo,
+        },
+      });
 
       fetchEmployeeProfile();
       $("#EmployeeInfoModal").modal("toggle");
@@ -103,6 +100,26 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
             <div className="modal-body">
               <form onSubmit={handleEditEmployeeInfo}>
                 <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="ogid">OGID</label>
+                      <input
+                        name="ogid"
+                        type="text"
+                        className="form-control"
+                        value={employeeInfo?.employee?.ogid}
+                        onChange={(e) =>
+                          setEmployeeInfo({
+                            ...employeeInfo,
+                            employee: {
+                              ...employeeInfo.employee,
+                              ogid: e?.target?.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
 
                   <div className="col-md-6">
                     <div className="form-group">
@@ -111,7 +128,9 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                         name="date_of_joining"
                         type="date"
                         className="form-control"
-                        value={employeeInfo?.employee?.date_of_joining?.split("T")[0]}
+                        value={
+                          employeeInfo?.employee?.date_of_joining?.split("T")[0]
+                        }
                         onChange={(e) =>
                           setEmployeeInfo({
                             ...employeeInfo,
@@ -172,7 +191,11 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                       <label htmlFor="operation_office_id">Office</label>
                       <Select
                         name="operation_office_id"
-                        options={officeType === "department" ? selectDepartments : selectCampaigns}
+                        options={
+                          officeType === "department"
+                            ? selectDepartments
+                            : selectCampaigns
+                        }
                         value={{
                           label: employeeInfo?.office?.title,
                           value: employeeInfo?.office?.id,
@@ -246,7 +269,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leave_count">Leave Count</label>
@@ -267,10 +290,12 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="leave_approval_level">Leave Approval Level</label>
+                      <label htmlFor="leave_approval_level">
+                        Leave Approval Level
+                      </label>
                       <input
                         name="leave_approval_level"
                         type="number"
@@ -288,8 +313,6 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
                       />
                     </div>
                   </div>
-
-
                 </div>
 
                 <div className="modal-footer">

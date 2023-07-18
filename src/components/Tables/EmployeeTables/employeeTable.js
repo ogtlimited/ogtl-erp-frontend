@@ -49,6 +49,8 @@ const EmployeesTable = ({
 
   setModalType,
   setSelectedRow,
+
+  fetchAllEmployees,
   context,
 }) => {
   const status = [
@@ -70,7 +72,6 @@ const EmployeesTable = ({
     },
   ];
 
-  const navigate = useNavigate();
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
@@ -241,7 +242,7 @@ const EmployeesTable = ({
                 setSelectedRow(row);
               }}
             >
-              <i className="fa fa-ban m-r-5"></i>Deactivate
+              <i className="fa fa-remove m-r-5"></i>Deactivate
             </a>
 
             <a
@@ -273,25 +274,6 @@ const EmployeesTable = ({
         </div>
       ),
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { minWidth: "100px" },
-    //   formatter: (value, row) => (
-    //     <>
-    //       {row?.status !== "deactivated" && <button
-    //         className="btn btn-sm btn-primary"
-    //         data-toggle="modal"
-    //         data-target="#exampleModal"
-    //         onClick={() => {
-    //           setSelectedRow(row);
-    //         }}
-    //       >
-    //         Deactivate
-    //       </button>}
-    //     </>
-    //   ),
-    // },
   ];
 
   // Search Name:
@@ -328,8 +310,6 @@ const EmployeesTable = ({
               let resData = e?.data?.employees;
               let resOptions = e?.data?.pagination;
 
-              console.log("Searched name:", resData);
-
               const thisPageLimit = sizePerPage;
               const thisTotalPageSize = resOptions?.numberOfPages;
 
@@ -361,6 +341,7 @@ const EmployeesTable = ({
       };
 
       const handleKeydown = (e) => {
+
         if (e.key === "Enter") {
           setPage(1);
           setLoading(true);
@@ -432,38 +413,43 @@ const EmployeesTable = ({
               marginRight: "20px",
             }}
             ref={(n) => (input = n)}
-            type="text"
+            type="search"
             onKeyDown={handleKeydown}
           />
           <button
+            style={{
+              marginRight: "10px",
+            }}
             className="btn btn-primary custom-search-btn"
             onClick={handleClick}
           >
             Search
+          </button> 
+          <button
+            className="btn btn-secondary custom-search-btn"
+            onClick={() => {
+              input.value = "";
+              props.onSearch("");
+              setSearchTerm("");
+              setOfficeFilter("");
+              setCampaignFilter("");
+              setDepartmentFilter("");
+              setDesignationFilter("");
+              setStatusFilter("");
+              setPage(1);
+              setLoading(true);
+            }}
+          >
+            Reset
           </button>
         </div>
       );
     },
-    [
-      page,
-      setCampaignFilter,
-      setData,
-      setDepartmentFilter,
-      setDesignationFilter,
-      setLoading,
-      setOfficeFilter,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setStatusFilter,
-      setTotalPages,
-      sizePerPage,
-    ]
+    [page, setCampaignFilter, setData, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage]
   );
 
   // Filter by Departments:
   const handleDepartmentFilter = (e) => {
-    setSearchTerm("");
     setCampaignFilter("");
     setDesignationFilter("");
     setStatusFilter("");
@@ -483,6 +469,7 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
+          name: searchTerm,
           operation_office_id: e.target.value,
         },
       })
@@ -518,7 +505,6 @@ const EmployeesTable = ({
 
   // Filter by Campaigns:
   const handleCampaignFilter = (e) => {
-    setSearchTerm("");
     setDepartmentFilter("");
     setDesignationFilter("");
     setStatusFilter("");
@@ -538,6 +524,7 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
+          name: searchTerm,
           operation_office_id: e.target.value,
         },
       })
@@ -573,7 +560,6 @@ const EmployeesTable = ({
 
   // Filter by Designation:
   const handleDesignationFilter = (e) => {
-    setSearchTerm("");
     setDesignationFilter(e.target.value);
     setPage(1);
     setLoading(true);
@@ -589,6 +575,7 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
+          name: searchTerm,
           hr_designation_id: e.target.value,
         },
       })
@@ -624,10 +611,6 @@ const EmployeesTable = ({
 
   // Filter by Status:
   const handleStatusFilter = (e) => {
-    setSearchTerm("");
-    setDepartmentFilter("");
-    setCampaignFilter("");
-    setDesignationFilter("");
     setStatusFilter(e.target.value);
     setPage(1);
     setLoading(true);
@@ -643,6 +626,7 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
+          name: searchTerm,
           status: e.target.value,
         },
       })
