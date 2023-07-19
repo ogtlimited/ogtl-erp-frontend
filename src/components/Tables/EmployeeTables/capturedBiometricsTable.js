@@ -203,7 +203,8 @@ const CapturedBiometricsTable = ({
           {(props) => (
             <div className="col-12">
               <ExportCSVButton
-                className="float-right btn export-csv" style={{ marginBottom: 15}}
+                className="float-right btn export-csv"
+                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV

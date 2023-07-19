@@ -14,6 +14,7 @@ import ClientLogin from '../pages/Auth/ClientLogin';
 import ActivateClient from '../pages/Auth/ActivateClient';
 import NotFound from '../pages/Error/NotFound';
 import Unauthorized from '../pages/Error/unauthorized';
+import BadGateway from '../pages/Error/BadGateway';
 import PayrollNotes from '../pages/Payroll/PayrollNotes';
 
 const Loadable = (Component) => (props) => {
@@ -122,11 +123,7 @@ export default function Router() {
             { path: '', element: <Navigate to="/dashboard/main" replace /> },
             {
               path: 'main',
-              element: (
-                <GuardedRoute title="" dept="Super">
-                  <AdminDashboard />{' '}
-                </GuardedRoute>
-              ),
+              element: <EmployeeUser />
             },
             {
               path: 'client-dashboard',
@@ -1025,6 +1022,7 @@ export default function Router() {
     { path: '*', element: <Navigate to="/404" replace /> },
     { path: '/404', element: <NotFound /> },
     { path: '/403', element: <Unauthorized /> },
+    { path: '/502', element: <BadGateway /> },
   ]);
 }
 const AllCampaigns = Loadable(

@@ -28,6 +28,7 @@ const ProfileCards = ({
   userOgid,
   fetchEmployeeShift,
   fetchEmployeeProfile,
+  setEmployeeOgid,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics } = useAppContext();
@@ -106,6 +107,7 @@ const ProfileCards = ({
               <EmployeeInfo
                 employeeInfo={userData}
                 fetchEmployeeProfile={fetchEmployeeProfile}
+                setEmployeeOgid={setEmployeeOgid}
               />
             </div>
           </div>

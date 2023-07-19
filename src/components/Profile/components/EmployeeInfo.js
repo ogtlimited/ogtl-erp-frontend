@@ -4,7 +4,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import { EmployeeInfoModal } from "../../Modal/EmployeeInfoModal";
 
-const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile }) => {
+const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile, setEmployeeOgid }) => {
   const { user } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -82,6 +82,7 @@ const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile }) => {
       <EmployeeInfoModal
         data={employeeInfo}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        setEmployeeOgid={setEmployeeOgid}
       />
     </>
   );
