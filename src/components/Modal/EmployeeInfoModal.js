@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { officeTypeOptions, categoryOptions } from "../FormJSON/AddEmployee";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
-  const { selectCampaigns, selectDepartments, selectDesignations } =
+export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid }) => {
+  const navigate = useNavigate();
+  const { selectCampaigns, selectDepartments, selectDesignations, user, showAlert } =
     useAppContext();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
 
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "senior_hr_associate"];
+
   useEffect(() => {
     setEmployeeInfo(data);
-    console.log("employee data:", data);
     setOfficeType(data?.office?.office_type);
   }, [data]);
 
@@ -42,15 +46,13 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
       ),
       remote: employeeInfo?.employee?.remote,
       leave_count: employeeInfo?.employee?.leave_count,
-      // ogid: employeeInfo?.employee?.ogid,
+      ogid: employeeInfo?.employee?.ogid,
     };
-
-    console.log("submit this:", editedEmployeeInfo);
 
     setLoading(true);
     try {
-      const id = employeeInfo?.employee?.ogid;
-      // eslint-disable-next-line no-unused-vars
+      const id = data?.employee?.ogid;
+      console.log(id);
       const response = await axiosInstance.put(`/api/v1/employees/${id}.json`, {
         headers: {
           "Content-Type": "application/json",
@@ -59,10 +61,20 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
         },
         payload: {
           employee_info: editedEmployeeInfo,
+          user_info: {
+            email: employeeInfo?.employee?.email,
+          }
         },
       });
 
-      fetchEmployeeProfile();
+      const newOgid = employeeInfo?.employee?.ogid
+      setEmployeeOgid(newOgid);
+      const successMessage = response?.data?.data?.message;
+
+      showAlert(true, successMessage, "alert alert-success");
+      navigate(`/dashboard/user/profile/${newOgid}`)
+      // window.location.reload();
+      fetchEmployeeProfile(newOgid);
       $("#EmployeeInfoModal").modal("toggle");
       setEmployeeInfo(data);
       setLoading(false);
@@ -100,26 +112,51 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile }) => {
             <div className="modal-body">
               <form onSubmit={handleEditEmployeeInfo}>
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="ogid">OGID</label>
-                      <input
-                        name="ogid"
-                        type="text"
-                        className="form-control"
-                        value={employeeInfo?.employee?.ogid}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              ogid: e?.target?.value,
-                            },
-                          })
-                        }
-                      />
+                  {canCreate.includes(...CurrentUserRoles) && (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="ogid">OGID</label>
+                        <input
+                          name="ogid"
+                          type="text"
+                          className="form-control"
+                          value={employeeInfo?.employee?.ogid}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                ogid: e?.target?.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {canCreate.includes(...CurrentUserRoles) && (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                          name="email"
+                          type="text"
+                          className="form-control"
+                          value={employeeInfo?.employee?.email}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                email: e?.target?.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="col-md-6">
                     <div className="form-group">

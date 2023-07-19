@@ -1,5 +1,7 @@
 .add-employee-form {
   background-color: #fff;
+  border-radius: 10px !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .add-employee-form-loader-div {

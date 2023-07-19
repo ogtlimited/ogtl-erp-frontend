@@ -1,6 +1,7 @@
-/* eslint-disable jsx-a11y/anchor-is-valid*/
+// *IN USE!
 
-import React, { useState, useEffect } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid*/
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
 import { ReportToModal } from "../../components/Modal/ReportToModal";
@@ -11,15 +12,18 @@ import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const { dropDownClicked, setDropDownClicked, user, showAlert } = useAppContext();
+  const { dropDownClicked, setDropDownClicked, user, showAlert } =
+    useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [userID, setUserId] = useState("");
   const [mode, setMode] = useState("");
 
+  const [employeeOgid, setEmployeeOgid] = useState(id);
+
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"]
+  const canEdit = ["hr_manager", "hr_associate"];
 
   // Employee Shifts:
   const fetchEmployeeShift = async () => {
@@ -51,26 +55,57 @@ const Profile = () => {
   };
 
   // Employee Profile Info:
-  const fetchEmployeeProfile = async () => {
-    try {
-      const response = await axiosInstance.get(`/api/v1/employees/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data;
-      setUserdata(resData);
-
-      const userId = resData?.employee?.email;
-      setUserId(userId);
-    } catch (error) {
-      console.log("This error:", error?.response?.status );
-      if (error?.response?.status === 500) {
-        showAlert(true, "Error fetching Employee Profile", "alert alert-warning");
+  const fetchEmployeeProfile = async (newOgid) => {
+    if (newOgid) {
+      try {
+        const response = await axiosInstance.get(`/api/v1/employees/${newOgid}.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        });
+        const resData = response?.data?.data;
+        setUserdata(resData);
+  
+        const userId = resData?.employee?.email;
+        setUserId(userId);
+      } catch (error) {
+        console.log("This error:", error?.response?.status);
+        if (error?.response?.status === 500) {
+          showAlert(
+            true,
+            "Error fetching Employee Profile",
+            "alert alert-warning"
+          );
+        }
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       }
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    } else {
+      try {
+        const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        });
+        const resData = response?.data?.data;
+        setUserdata(resData);
+  
+        const userId = resData?.employee?.email;
+        setUserId(userId);
+      } catch (error) {
+        console.log("This error:", error?.response?.status);
+        if (error?.response?.status === 500) {
+          showAlert(
+            true,
+            "Error fetching Employee Profile",
+            "alert alert-warning"
+          );
+        }
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      }
     }
   };
 
@@ -195,7 +230,7 @@ const Profile = () => {
                               {userData?.employee?.reports_to?.full_name ||
                                 "No Lead"}
                             </a>
-                            {canCreate.includes(...CurrentUserRoles) ? (
+                            {canEdit.includes(...CurrentUserRoles) ? (
                               <a
                                 className="edit-icon"
                                 data-toggle="modal"
@@ -228,6 +263,7 @@ const Profile = () => {
         userOgid={id}
         fetchEmployeeShift={fetchEmployeeShift}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        setEmployeeOgid={setEmployeeOgid}
       />
 
       <ReportToModal

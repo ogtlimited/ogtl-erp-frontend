@@ -1,12 +1,12 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import tokenService from '../../services/token.service';
-import { msalInstance, loginRequest } from '../../authConfig';
-import config from '../../config.json';
+import axios from "axios";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import tokenService from "../../services/token.service";
+import { msalInstance, loginRequest } from "../../authConfig";
+import config from "../../config.json";
 
 const Login = () => {
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const {
@@ -32,37 +32,42 @@ const Login = () => {
         //   );
         // }
 
-        setErrorMsg("")
+        setErrorMsg("");
 
         axios
-          .post(config.ApiUrl + '/api/v1/auth/login.json', {
-            headers: {          
+          .post(config.ApiUrl + "/api/v1/auth/login.json", {
+            headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
               "ngrok-skip-browser-warning": "69420",
-            }, email: obj.company_email
+            },
+            email: obj.company_email,
           })
           .then((res) => {
             console.log(res);
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
-            window.location.href = '/dashboard/employee-dashboard';
+            window.location.href = "/dashboard/employee-dashboard";
           })
           .catch((err) => {
             setCount(() => count + 1);
-            if(err?.response?.status === 404 ) {
-              return setErrorMsg('Invalid email. Please double-check and try again');
-            } else if (err?.response?.status === 502 ) {
-              return setErrorMsg('Unable to login. Please try again');
+            if (err?.response?.status === 404) {
+              return setErrorMsg(
+                "Invalid email. Please double-check and try again"
+              );
+            } else if (err?.response?.status === 502) {
+              return setErrorMsg(
+                "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
+              );
             }
-            setErrorMsg('Unable to login. Please contact HR');
+            setErrorMsg("Unable to login. Please contact HR");
           })
           .finally(() => {
             setLoading(false);
           });
       })
       .catch((e) => {
-        if (e.name === 'InteractionRequiredAuthError') {
+        if (e.name === "InteractionRequiredAuthError") {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
@@ -78,22 +83,23 @@ const Login = () => {
               //   );
               // }
 
-              setErrorMsg("")
+              setErrorMsg("");
 
               axios
-              .post(config.ApiUrl + '/api/v1/auth/login.json', {
-                headers: {          
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                  "ngrok-skip-browser-warning": "69420",
-                }, email: obj.company_email
-              })
-              .then((res) => {
-                console.log(res);
-                tokenService.setUser(res.data.data);
-                tokenService.setToken(res.data.data.token);
-                window.location.href = '/dashboard/employee-dashboard';
-              })
+                .post(config.ApiUrl + "/api/v1/auth/login.json", {
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "ngrok-skip-browser-warning": "69420",
+                  },
+                  email: obj.company_email,
+                })
+                .then((res) => {
+                  console.log(res);
+                  tokenService.setUser(res.data.data);
+                  tokenService.setToken(res.data.data.token);
+                  window.location.href = "/dashboard/employee-dashboard";
+                })
                 .catch((err) => {
                   console.log(err);
                 })
@@ -107,10 +113,16 @@ const Login = () => {
         } else {
           console.log(e);
           setCount(() => count + 1);
-          if (count > 2) {
-            return setErrorMsg('Unable to login. Please contact HR');
+          if (e?.response?.status === 404) {
+            return setErrorMsg(
+              "Invalid email. Please double-check and try again"
+            );
+          } else if (e?.response?.status === 502) {
+            return setErrorMsg(
+              "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
+            );
           }
-          setErrorMsg('Unable to login. Please try again');
+          setErrorMsg("Unable to login. Please try again");
         }
       })
       .finally(() => {
@@ -147,12 +159,12 @@ const Login = () => {
                     type="text"
                     name="company_email"
                     id="company_email"
-                    placeholder='Enter your company email'
-                    {...register('company_email', { required: true })}
+                    placeholder="Enter your company email"
+                    {...register("company_email", { required: true })}
                     className="form-control login-input"
                   />
                   {errors.company_email &&
-                    errors.company_email.type === 'required' && (
+                    errors.company_email.type === "required" && (
                       <span className="error">Email is required</span>
                     )}
                 </div>
@@ -169,7 +181,7 @@ const Login = () => {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      'Login'
+                      "Login"
                     )}
                   </button>
                 </div>

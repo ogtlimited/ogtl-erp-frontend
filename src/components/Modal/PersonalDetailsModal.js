@@ -3,8 +3,10 @@ import { genderOptions, bloodGroupOptions, maritalStatusOptions, meansOfIdentifi
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
+import { useAppContext } from "../../Context/AppContext";
 
 export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
+  const { showAlert } = useAppContext();
   const [personalDetails, setPersonalDetails] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,6 +49,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
         },
       });
 
+      showAlert(true, "employee personal details updated successfully!", "alert alert-success");
       fetchEmployeeProfile();
       $("#PersonalDetailsModal").modal("toggle");
       setPersonalDetails(data);

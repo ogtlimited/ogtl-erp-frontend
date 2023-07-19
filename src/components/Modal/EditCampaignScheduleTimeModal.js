@@ -22,14 +22,16 @@ export const EditCampaignScheduleTimeModal = ({ fetchAllSchedule, editSchedule }
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log("Edit this schedule time:", editSchedule)
+
     const formattedShiftSchedule = editSchedule?.map((shift) => ({
       day: shift.day,
-      start: shift.start,
-      end: shift.end,
+      start_time: shift.start_time,
+      end_time: shift.end_time,
       off: shift.off,
-      huddles: shift.huddles,
-      huddleTime: shift.huddleTime,
-      _id: shift._id
+      huddle: shift.huddle,
+      huddle_time: shift.huddle_time,
+      id: shift.id
     }) 
   )
 

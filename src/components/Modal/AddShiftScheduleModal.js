@@ -19,6 +19,9 @@ export const AddShiftScheduleModal = ({
   setCreateCampaignSchedule,
   isSubmitted,
   setIsSubmitted,
+  mode,
+  setMode,
+  scheduleId,
 }) => {
   const { showAlert } = useAppContext();
 
@@ -32,6 +35,7 @@ export const AddShiftScheduleModal = ({
   const [createSaturdayShift, setCreateSaturdayShift] =
     useState(saturday_shifts);
   const [createSundayShift, setCreateSundayShift] = useState(sunday_shifts);
+  const [viewingAdd, setViewingAdd] = useState(false);
 
   const cancelEvent = () => {
     setCreateMondayShift(monday_shifts);
@@ -44,13 +48,46 @@ export const AddShiftScheduleModal = ({
   };
 
   useEffect(() => {
+    if (mode === "add") {
+      setViewingAdd(true);
+    }
     if (isSubmitted) {
       cancelEvent();
       setIsSubmitted(false);
     }
-  }, [isSubmitted, setIsSubmitted]);
+  }, [isSubmitted, mode, setIsSubmitted]);
 
+  // Add:
   const handleAddSiftSchedule = (e) => {
+    e.preventDefault();
+
+    console.log("Submit this add")
+
+    // const shifts = [];
+
+    // shifts.push(createMondayShift);
+    // shifts.push(createTuesdayShift);
+    // shifts.push(createWednesdayShift);
+    // shifts.push(createThursdayShift);
+    // shifts.push(createFridayShift);
+    // shifts.push(createSaturdayShift);
+    // shifts.push(createSundayShift);
+
+    // setCreateCampaignSchedule({
+    //   ...createCampaignSchedule,
+    //   campaign_schedule_items: shifts,
+    // });
+
+    // showAlert(
+    //   true,
+    //   `Campaign schedule items confirmed!`,
+    //   "alert alert-success"
+    // );
+    $("#ShiftScheduleFormModal").modal("toggle");
+  };
+
+  // Create:
+  const handleCreateSiftSchedule = (e) => {
     e.preventDefault();
 
     const shifts = [];
@@ -102,7 +139,7 @@ export const AddShiftScheduleModal = ({
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleAddSiftSchedule}>
+              <form>
                 {/* Monday */}
                 <div className="row">
                   <div className="col-md-2">
@@ -112,7 +149,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createMondayShift.day === 1 && "Monday"}
+                        value={createMondayShift.day === "mon" && "Monday"}
                         readOnly
                       />
                     </div>
@@ -234,7 +271,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createTuesdayShift.day === 2 && "Tuesday"}
+                        value={createTuesdayShift.day === "tue" && "Tuesday"}
                         readOnly
                       />
                     </div>
@@ -357,7 +394,9 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createWednesdayShift.day === 3 && "Wednesday"}
+                        value={
+                          createWednesdayShift.day === "wed" && "Wednesday"
+                        }
                         readOnly
                       />
                     </div>
@@ -481,7 +520,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createThursdayShift.day === 4 && "Thursday"}
+                        value={createThursdayShift.day === "thu" && "Thursday"}
                         readOnly
                       />
                     </div>
@@ -604,7 +643,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createFridayShift.day === 5 && "Friday"}
+                        value={createFridayShift.day === "fri" && "Friday"}
                         readOnly
                       />
                     </div>
@@ -726,7 +765,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSaturdayShift.day === 6 && "Saturday"}
+                        value={createSaturdayShift.day === "sat" && "Saturday"}
                         readOnly
                       />
                     </div>
@@ -849,7 +888,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSundayShift.day === 0 && "Sunday"}
+                        value={createSundayShift.day === "sun" && "Sunday"}
                         readOnly
                       />
                     </div>
@@ -971,9 +1010,15 @@ export const AddShiftScheduleModal = ({
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">
-                    Confirm
-                  </button>
+                  {viewingAdd ? (
+                    <button type="submit" className="btn btn-primary" onSubmit={handleAddSiftSchedule}>
+                      Submit
+                    </button>
+                  ) : (
+                    <button type="submit" className="btn btn-primary" onClick={handleCreateSiftSchedule}>
+                      Confirm
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

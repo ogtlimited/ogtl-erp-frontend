@@ -1,80 +1,120 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from "react";
+import { AddCampaignScheduleModal } from "../../../components/Modal/AddCampaignScheduleModal";
+import { EditCampaignScheduleTitleModal } from "../../../components/Modal/EditCampaignScheduleTitleModal";
+import { EditCampaignScheduleTimeModal } from "../../../components/Modal/EditCampaignScheduleTimeModal";
+import ShiftScheduleListTable from "../../../components/Tables/EmployeeTables/shiftScheduleListTable";
+import { AddShiftScheduleModal } from "../../../components/Modal/AddShiftScheduleModal";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import { useAppContext } from "../../../Context/AppContext";
+import $ from "jquery";
 
-import { AddCampaignScheduleModal } from '../../../components/Modal/AddCampaignScheduleModal';
-import { EditCampaignScheduleTitleModal } from '../../../components/Modal/EditCampaignScheduleTitleModal';
-import { EditCampaignScheduleTimeModal } from '../../../components/Modal/EditCampaignScheduleTimeModal';
-import ShiftScheduleListTable from '../../../components/Tables/EmployeeTables/shiftScheduleListTable';
-import ConfirmModal from '../../../components/Modal/ConfirmModal';
-import { useAppContext } from '../../../Context/AppContext';
-
-import axiosInstance from '../../../services/api';
+import axiosInstance from "../../../services/api";
 
 const ShiftScheduleList = () => {
+  const { user, showAlert } = useAppContext();
   const [allSchedule, setAllSchedules] = useState([]);
   const [editScheduleTitle, setEditScheduleTitle] = useState([]);
   const [editScheduleTime, setEditScheduleTime] = useState([]);
   const [deleteData, setDeleteData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { user, showAlert } = useAppContext();
+  const [loading, setLoading] = useState(false);
 
-  const fetchAllSchedule = useCallback(() => {
-    axiosInstance
-      .get('/campaign-schedules/owner')
-      .then((e) => {
-        let resData = e?.data?.data;
+  const [mode, setMode] = useState("create");
+  const [scheduleId, setScheduleId] = useState("");
 
-        setAllSchedules(resData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
+  const fetchAllSchedule = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/employee_shifts_schedules.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      console.log("all owners schedules:", response);
+      const resData = response?.data?.data?.employee_shifts_schedules;
+      setAllSchedules(resData);
+
+      setLoading(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // fetchAllSchedule();
+    fetchAllSchedule();
   }, [fetchAllSchedule, user]);
 
   const handleEditTitle = (row) => {
     setEditScheduleTitle(row);
   };
 
-  const handleEditTime = (row) => {
-    axiosInstance.get(`/campaign-schedule-items/${row._id}`).then((e) => {
-      let resData = e?.data?.data;
-      setEditScheduleTime(resData);
-    });
+  const handleEditTime = async (row) => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/employee_shifts_items.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+      const resData = response?.data?.data?.employee_shifts_items;
+      if (!resData.length) {
+        $("#ShiftScheduleFormModal").modal("show");
+        setMode("add");
+        setScheduleId(row.id);
+      } else {
+        $("#EditCampaignScheduleTimeFormModal").modal("show");
+        //   console.log("Edit this schedule please:", resData);
+        //   setEditScheduleTime(resData);
+      }
+
+      console.log(
+        "Edit this schedule please:",
+        response?.data?.data?.employee_shifts_items,
+        row
+      );
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
   };
-  
+
   const deleteCampaignSchedule = (row) => {
     axiosInstance
       .delete(`/campaign-schedules/${row._id}`)
       .then((res) => {
         fetchAllSchedule();
-        showAlert(true, 'Campaign schedule deleted', 'alert alert-info');
+        showAlert(true, "Campaign schedule deleted", "alert alert-info");
       })
       .catch((error) => {
         console.log(error);
-        showAlert(true, error.response.data.message, 'alert alert-danger');
+        showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
 
   const columns = [
     {
-      dataField: 'title',
-      text: 'Title',
+      dataField: "title",
+      text: "Title",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { minWidth: "150px" },
     },
     {
-      dataField: 'status_action',
-      text: 'Action',
+      dataField: "status_action",
+      text: "Action",
       csvExport: false,
-      headerStyle: { width: '10%' },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -86,7 +126,6 @@ const ShiftScheduleList = () => {
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-
             <a
               href="#"
               className="dropdown-item"
@@ -101,13 +140,13 @@ const ShiftScheduleList = () => {
               href="#"
               className="dropdown-item"
               data-toggle="modal"
-              data-target="#EditCampaignScheduleTimeFormModal"
+              // data-target="#EditCampaignScheduleTimeFormModal"
               onClick={() => handleEditTime(row)}
             >
               <i className="fa fa-clock m-r-5"></i> Edit schedule
             </a>
 
-            <a
+            {/* <a
               href="#"
               className="dropdown-item"
               onClick={() => setDeleteData(row)}
@@ -115,14 +154,13 @@ const ShiftScheduleList = () => {
               data-target="#exampleModal"
             >
               <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
-
+            </a> */}
           </div>
         </div>
       ),
     },
   ];
- 
+
   return (
     <>
       <div className="page-header">
@@ -130,23 +168,21 @@ const ShiftScheduleList = () => {
           <div className="col">
             <h3 className="page-title">Campaign Schedule List</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
-              <li className="breadcrumb-item active">Leadership</li>
+              <li className="breadcrumb-item">Leadership</li>
+              <li className="breadcrumb-item active">Campaign Schedule</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-              <>
-                <a
-                  href="#"
-                  className="btn add-btn "
-                  data-toggle="modal"
-                  data-target="#CampaignScheduleFormModal"
-                >
-                  <i className="fa fa-clock"></i> Add Schedule
-                </a>
-              </>
+            <>
+              <a
+                href="#"
+                className="btn add-btn "
+                data-toggle="modal"
+                data-target="#CampaignScheduleFormModal"
+              >
+                <i className="fa fa-clock"></i> Add Schedule
+              </a>
+            </>
           </div>
         </div>
       </div>
@@ -158,11 +194,25 @@ const ShiftScheduleList = () => {
         columns={columns}
         setLoading={setLoading}
       />
-      
+
       <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} />
-      <EditCampaignScheduleTitleModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTitle} />
-      <EditCampaignScheduleTimeModal fetchAllSchedule={fetchAllSchedule}  editSchedule={editScheduleTime} />
-      
+      <AddShiftScheduleModal
+        fetchAllSchedule={fetchAllSchedule}
+        mode={mode}
+        setMode={setMode}
+        scheduleId={scheduleId}
+      />
+
+      <EditCampaignScheduleTitleModal
+        fetchAllSchedule={fetchAllSchedule}
+        editSchedule={editScheduleTitle}
+      />
+
+      <EditCampaignScheduleTimeModal
+        fetchAllSchedule={fetchAllSchedule}
+        editSchedule={editScheduleTime}
+      />
+
       <ConfirmModal
         title="Campaign Schedule"
         selectedRow={deleteData}
