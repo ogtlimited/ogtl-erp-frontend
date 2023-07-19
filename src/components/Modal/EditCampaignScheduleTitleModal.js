@@ -36,8 +36,15 @@ export const EditCampaignScheduleTitleModal = ({ fetchAllSchedule, editSchedule 
 
     setLoading(true);
     try {
-      const res = await axiosInstance.patch(`/campaign-schedules/${editSchedule._id}`, {
-        title: editCampaignSchedule.title,
+      const res = await axiosInstance.patch(`/api/v1/employee_shifts_schedules/${editSchedule.id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: editCampaignSchedule.title,
+        }
       });
 
       showAlert(

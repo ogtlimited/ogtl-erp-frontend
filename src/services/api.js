@@ -32,13 +32,17 @@ axiosInstance.interceptors.response.use(
         reject(error);
       });
     }
-    // if (error.response.status === 401  && error?.response?.data === "Session has expired. Please log in") {
-    if (error.response.status === 401) {
+    console.log("App error 😪:", error?.response)
+    if (error?.response?.status === 400  && error?.response?.data?.errors === "invalid token, login again") {
       tokenService.clearStorage();
       window.location = "/auth";
-
-      console.log("Login error:", error)
-    } else {
+    } else if (error?.response?.status === 401) {
+      tokenService.clearStorage();
+      window.location = "/auth";
+    } else if (error?.response?.status === 502) {
+      window.location = "/502";
+    }
+    else {
       return new Promise((resolve, reject) => {
         reject(error);
       });

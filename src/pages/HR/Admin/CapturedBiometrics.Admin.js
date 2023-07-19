@@ -14,6 +14,7 @@ const CapturedBiometricsAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+  
 
   // Captured Employees:
   const fetchAllCapturedEmployees = useCallback(async () => {
@@ -76,19 +77,19 @@ const CapturedBiometricsAdmin = () => {
         </div>
       </div>
       
-      <div className="hr-employee-card-group">
+      {/* <div className="hr-employee-card-group">
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i className="las la-fingerprint"></i>
             </span>
             <div className="card-info">
-              {loading ? <h3>-</h3> : <h3>{allEmployees?.length}</h3>}
+              {loading ? <h3>-</h3> : <h3>{"-"}</h3>}
             </div>
           </div>
           <span>Total Biometrics Captured</span>
         </div>
-      </div>
+      </div> */}
 
       <CapturedBiometricsTable
         data={allEmployees}

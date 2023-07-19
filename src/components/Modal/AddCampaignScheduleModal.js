@@ -1,20 +1,20 @@
 /*eslint-disable no-unused-vars*/
 
-import React, { useState, useEffect } from 'react';
-import { CampaignSchedule } from '../FormJSON/AddCampaignSchedule';
-import { useAppContext } from '../../Context/AppContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import axiosInstance from '../../services/api';
-import $ from 'jquery';
-import { AddShiftScheduleModal } from './AddShiftScheduleModal';
-import  secureLocalStorage  from  "react-secure-storage";
+import React, { useState, useEffect } from "react";
+import { CampaignSchedule } from "../FormJSON/AddCampaignSchedule";
+import { useAppContext } from "../../Context/AppContext";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
+import { AddShiftScheduleModal } from "./AddShiftScheduleModal";
+import secureLocalStorage from "react-secure-storage";
 
-export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
-  const { showAlert } = useAppContext();
-  const [createCampaignSchedule, setCreateCampaignSchedule] = useState(CampaignSchedule);
+export const AddCampaignScheduleModal = ({ fetchAllSchedule }) => {
+  const { showAlert, user } = useAppContext();
+  const [createCampaignSchedule, setCreateCampaignSchedule] =
+    useState(CampaignSchedule);
   const [loading, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setCreateCampaignSchedule(CampaignSchedule);
@@ -33,21 +33,39 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/campaign-schedules', createCampaignSchedule);
-      // console.log("Campaign Schedule created:", res?.data?.data)
+      const response = await axiosInstance.post(`/api/v1/employee_shifts_schedules.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          title: createCampaignSchedule?.title,
+          operation_office_id: user?.office?.id,
+          hr_employee_id: user?.employee_info?.personal_details?.id,
+        },
+      });
+
+      console.log("created shift schedule:", response)
+
+      const hr_employee_shifts_schedule_id = response?.id
+
+      if (response.status === 201) {
+        console.log("Yes this should run", hr_employee_shifts_schedule_id)
+			}
 
       showAlert(
         true,
         `Campaign schedule created successfully!`,
-        'alert alert-success'
+        "alert alert-success"
       );
       setCreateCampaignSchedule(CampaignSchedule);
-      $('#CampaignScheduleFormModal').modal('toggle');
+      $("#CampaignScheduleFormModal").modal("toggle");
       setLoading(false);
       fetchAllSchedule();
     } catch (error) {
       const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -80,7 +98,6 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
             <div className="modal-body">
               <form onSubmit={handleCreateCampaignSchedule}>
                 <div className="row">
-
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="title">Title</label>
@@ -97,22 +114,32 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                        <label htmlFor="campaign_schedule_items">Campaign Schedule</label>
-                        <input
-                          className="form-control"
-                          name="campaign_schedule_items"
-                          type="text"
-                          placeholder="Click to add campaign schedule..."
-                          value={createCampaignSchedule.campaign_schedule_items.length ? createCampaignSchedule.campaign_schedule_items.map((shift) => shift.day).join(' | ').toUpperCase() : ''}
-                          data-toggle="modal"
-                          data-target="#ShiftScheduleFormModal"
-                          readOnly
-                          autocomplete="off"
-                          style={{ cursor: 'pointer' }}
-                        />
+                      <label htmlFor="campaign_schedule_items">
+                        Campaign Schedule
+                      </label>
+                      <input
+                        className="form-control"
+                        name="campaign_schedule_items"
+                        type="text"
+                        placeholder="Click to add campaign schedule..."
+                        value={
+                          createCampaignSchedule.campaign_schedule_items.length
+                            ? createCampaignSchedule.campaign_schedule_items
+                                .map((shift) =>
+                                  shift.day || ""
+                                )
+                                .join(" | ")
+                                .toUpperCase()
+                            : ""
+                        }
+                        data-toggle="modal"
+                        data-target="#ShiftScheduleFormModal"
+                        readOnly
+                        autocomplete="off"
+                        style={{ cursor: "pointer" }}
+                      />
                     </div>
                   </div>
-
                 </div>
 
                 <div className="modal-footer">
@@ -132,7 +159,7 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      'Submit'
+                      "Submit"
                     )}
                   </button>
                 </div>
@@ -142,10 +169,10 @@ export const AddCampaignScheduleModal = ({fetchAllSchedule}) => {
         </div>
       </div>
 
-      <AddShiftScheduleModal 
+      <AddShiftScheduleModal
         createCampaignSchedule={createCampaignSchedule}
         setCreateCampaignSchedule={setCreateCampaignSchedule}
-        isSubmitted={isSubmitted} 
+        isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
       />
     </>

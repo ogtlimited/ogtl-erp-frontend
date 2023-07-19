@@ -316,12 +316,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.leadership.supervisor,
         icon: ICONS.leadership,
       },
-      // {
-      //   canView: 'lead',
-      //   title: 'Campaign Schedule',
-      //   path: PATH_DASHBOARD.leadership.campaignSchedule,
-      //   icon: ICONS.schedule,
-      // },
+      {
+        canView: 'lead',
+        title: 'Campaign Schedule',
+        path: PATH_DASHBOARD.leadership.campaignSchedule,
+        icon: ICONS.schedule,
+      },
     ],
   },
 

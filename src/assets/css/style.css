@@ -309,7 +309,9 @@
   min-width: 20%;
   margin-left: 20px;
   border: 1px solid #ededed;
-  padding-bottom: 10px;
+  padding-bottom: 10px;  
+  border-radius: 15px !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px !important;
 }
 .daily-attendance-card:last-child {
   background-color: #fff;
@@ -5665,8 +5667,8 @@ html.menu-opened body {
 .stats-info {
   background-color: #fff;
   border-radius: 0;
-  -webkit-box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
-  box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   border: none;
   margin-bottom: 30px;
   -webkit-transition: all 0.5s ease-in-out;
@@ -5674,6 +5676,7 @@ html.menu-opened body {
   margin-bottom: 20px;
   padding: 15px;
   text-align: center;
+  border-radius: 15px;
 }
 .stats-info h6 {
   color: #1f1f1f;
@@ -7044,7 +7047,6 @@ table.table-inbox tbody tr.checked {
 }
 .error-box {
   margin: 0 auto;
-  max-width: 480px;
   padding: 40px 0;
   text-align: center;
   width: 100%;

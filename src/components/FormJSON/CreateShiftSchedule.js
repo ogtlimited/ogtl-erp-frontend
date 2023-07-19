@@ -2,9 +2,8 @@
 export const sunday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 0,
+  day: "sun",
   huddle: false,
   huddle_time: null,
 };
@@ -12,9 +11,8 @@ export const sunday_shifts = {
 export const monday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 1,
+  day: "mon",	
   huddle: false,
   huddle_time: null,
 };
@@ -22,9 +20,8 @@ export const monday_shifts = {
 export const tuesday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 2,
+  day: "tue",
   huddle: false,
   huddle_time: null,
 };
@@ -32,9 +29,8 @@ export const tuesday_shifts = {
 export const wednesday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 3,
+  day: "wed",
   huddle: false,
   huddle_time: null,
 };
@@ -42,9 +38,8 @@ export const wednesday_shifts = {
 export const thursday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 4,
+  day: "thu",
   huddle: false,
   huddle_time: null,
 };
@@ -52,9 +47,8 @@ export const thursday_shifts = {
 export const friday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 5,
+  day: "fri",
   huddle: false,
   huddle_time: null,
 };
@@ -62,9 +56,8 @@ export const friday_shifts = {
 export const saturday_shifts = {
   start_time: '',
   end_time: '',
-  expected_work_time: 8,
   off: false,
-  day: 6,
+  day: "sat",
   huddle: false,
   huddle_time: null,
 };
