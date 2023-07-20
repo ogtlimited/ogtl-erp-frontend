@@ -15,6 +15,8 @@ import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
+import csvDownload from "json-to-csv-export";
+import axiosInstance from "../../../services/api";
 
 const CapturedBiometricsTable = ({
   data,
@@ -38,7 +40,7 @@ const CapturedBiometricsTable = ({
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
-  const { setIsFromBiometrics } = useAppContext();
+  const { setIsFromBiometrics, showAlert } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -190,6 +192,48 @@ const CapturedBiometricsTable = ({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  const handleDownloadCSV = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/biometric_enrolled_staff.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: 1000,
+        },
+      });
+
+      const responseData = response?.data?.data?.staff;
+
+      const formatted = responseData.map((data, index) => ({
+        "S/N": index + 1,
+        "Employee Name": data?.FullName,
+        "OGID": data?.StaffUniqueId,
+        "Role": data?.Role,
+        "Email": data?.Email,
+      }));
+
+      const dataToConvert = {
+        data: formatted,
+        filename: "OGTL - All Captured Biometrics",
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+
+      setLoading(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {dataToFilter && (
@@ -203,35 +247,42 @@ const CapturedBiometricsTable = ({
           {(props) => (
             <div className="col-12">
               <ExportCSVButton
+                  onClick={handleDownloadCSV}
                 className="float-right btn export-csv"
                 style={{ marginBottom: 15 }}
-                {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? "table "
-                    : context
-                    ? "table table-responsive"
-                    : "table table-responsive"
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-              />
+              <div className="hr-filter-select col-12"></div>
+
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"

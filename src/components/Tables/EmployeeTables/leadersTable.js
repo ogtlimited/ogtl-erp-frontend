@@ -1,20 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
-import usePagination from '../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import filterFactory from 'react-bootstrap-table2-filter';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import axiosInstance from '../../../services/api';
-import { useAppContext } from '../../../Context/AppContext';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import filterFactory from "react-bootstrap-table2-filter";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
 
 const LeadersTable = ({
   data,
   setData,
   loading,
   setLoading,
-  
+
   departments,
   campaigns,
 
@@ -24,7 +27,7 @@ const LeadersTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
-  
+
   departmentFilter,
   setDepartmentFilter,
   campaignFilter,
@@ -35,11 +38,10 @@ const LeadersTable = ({
   columns,
   context,
 }) => {
-
   const { user } = useAppContext();
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [info, setInfo] = useState({
@@ -59,17 +61,16 @@ const LeadersTable = ({
 
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
     setDataToFilter(data);
   }, [data]);
 
-  
   // Pagination
   const count = totalPages;
   const _DATA = usePagination(data, sizePerPage, totalPages);
@@ -87,32 +88,32 @@ const LeadersTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
   };
-  
+
   const handleDepartmentFilter = (e) => {
-    setCampaignFilter('');
+    setCampaignFilter("");
     setDepartmentFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
 
     axiosInstance
-    .get('/api/v1/leaders.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        operation_office_id: e.target.value,
-      },
-    })
+      .get("/api/v1/leaders.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          operation_office_id: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -126,7 +127,7 @@ const LeadersTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -140,30 +141,30 @@ const LeadersTable = ({
   };
 
   const handleCampaignFilter = (e) => {
-    setDepartmentFilter('');
+    setDepartmentFilter("");
     setCampaignFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
     setLoading(true);
-    
+
     axiosInstance
-    .get('/api/v1/leaders.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        operation_office_id: e.target.value,
-      },
-    })
+      .get("/api/v1/leaders.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: page,
+          limit: sizePerPage,
+          operation_office_id: e.target.value,
+        },
+      })
       .then((e) => {
         const resData = e?.data?.data?.employees;
         const totalPages = e?.data?.data?.pages;
-        
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -177,7 +178,7 @@ const LeadersTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email
+            company_email: emp?.email,
           };
         });
 
@@ -209,17 +210,15 @@ const LeadersTable = ({
         >
           {(props) => (
             <div className="col-12">
-
               <ExportCSVButton
-                className="float-right btn export-csv" style={{ marginBottom: 15}}
+                className="float-right btn export-csv"
+                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              
               <div className="hr-filter-select col-12">
-                
                 <div className="col-md-3">
                   <select
                     className="leave-filter-control"
@@ -231,10 +230,11 @@ const LeadersTable = ({
                       Filter by Department
                     </option>
                     {departments.map((option, idx) => (
-                      <option key={idx} value={option.value}>{option.label}</option>
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
-                  
                 </div>
 
                 <div className="col-md-3">
@@ -248,38 +248,41 @@ const LeadersTable = ({
                       Filter by Campaign
                     </option>
                     {campaigns.map((option, idx) => (
-                      <option key={idx} value={option.value}>{option.label}</option>
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
                     ))}
                   </select>
                 </div>
-
               </div>
 
-
-
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-                
-              />
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"

@@ -53,10 +53,35 @@ const CapturedBiometricsAdmin = () => {
     );
       setLoading(false);
     }
-  },[page, showAlert, sizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[page, sizePerPage]);
+
+  // Total Captured Employees:
+  const fetchTotalBiometrics = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/total_biometrics.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      console.log("Total captured bio:", response)
+      // setAllEmployees(resData);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchAllCapturedEmployees();
+    fetchTotalBiometrics();
 
     setTimeout(() => {
       setLoading(false);
