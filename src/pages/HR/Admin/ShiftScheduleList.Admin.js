@@ -58,9 +58,10 @@ const ShiftScheduleList = () => {
   };
 
   const handleEditTime = async (row) => {
+    console.log("row:", row)
     try {
       const response = await axiosInstance.get(
-        "/api/v1/employee_shifts_items.json",
+        `/api/v1/employee_shifts_schedules/${row.id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,21 +71,17 @@ const ShiftScheduleList = () => {
         }
       );
       const resData = response?.data?.data?.employee_shifts_items;
+      console.log("owners schedule items:", resData);
+
       if (!resData.length) {
-        $("#ShiftScheduleFormModal").modal("show");
         setMode("add");
         setScheduleId(row.id);
+        $("#ShiftScheduleFormModal").modal("show");
       } else {
         $("#EditCampaignScheduleTimeFormModal").modal("show");
         //   console.log("Edit this schedule please:", resData);
         //   setEditScheduleTime(resData);
       }
-
-      console.log(
-        "Edit this schedule please:",
-        response?.data?.data?.employee_shifts_items,
-        row
-      );
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
@@ -195,7 +192,7 @@ const ShiftScheduleList = () => {
         setLoading={setLoading}
       />
 
-      <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} />
+      <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} mode={mode} />
       <AddShiftScheduleModal
         fetchAllSchedule={fetchAllSchedule}
         mode={mode}

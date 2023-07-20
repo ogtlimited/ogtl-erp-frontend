@@ -9,7 +9,7 @@ import $ from "jquery";
 import { AddShiftScheduleModal } from "./AddShiftScheduleModal";
 import secureLocalStorage from "react-secure-storage";
 
-export const AddCampaignScheduleModal = ({ fetchAllSchedule }) => {
+export const AddCampaignScheduleModal = ({ fetchAllSchedule, mode }) => {
   const { showAlert, user } = useAppContext();
   const [createCampaignSchedule, setCreateCampaignSchedule] =
     useState(CampaignSchedule);
@@ -33,26 +33,55 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule }) => {
 
     setLoading(true);
     try {
-      const response = await axiosInstance.post(`/api/v1/employee_shifts_schedules.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: createCampaignSchedule?.title,
-          operation_office_id: user?.office?.id,
-          hr_employee_id: user?.employee_info?.personal_details?.id,
-        },
+      const response = await axiosInstance.post(
+        `/api/v1/employee_shifts_schedules.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: createCampaignSchedule?.title,
+            operation_office_id: user?.office?.id,
+            hr_employee_id: user?.employee_info?.personal_details?.id,
+          },
+        }
+      );
+
+      console.log("created shift item:", {
+        hr_employee_shifts_schedule_id:
+          response?.data?.data?.employee_shifts_schedule?.id,
+        days: createCampaignSchedule.campaign_schedule_items,
       });
 
-      console.log("created shift schedule:", response)
-
-      const hr_employee_shifts_schedule_id = response?.id
+      const shifts_schedule_id =
+        response?.data?.data?.employee_shifts_schedule?.id;
 
       if (response.status === 201) {
-        console.log("Yes this should run", hr_employee_shifts_schedule_id)
-			}
+        try {
+          const response = await axiosInstance.post(
+            `/api/v1/employee_shifts_items.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+              payload: {
+                hr_employee_shifts_schedule_id: shifts_schedule_id,
+                days: createCampaignSchedule.campaign_schedule_items,
+              },
+            }
+          );
+
+          console.log("created shift item:", response);
+        } catch (error) {
+          const errorMsg = error.response?.data?.message;
+          showAlert(true, `${errorMsg}`, "alert alert-warning");
+          setLoading(false);
+        }
+      }
 
       showAlert(
         true,
@@ -126,7 +155,21 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule }) => {
                           createCampaignSchedule.campaign_schedule_items.length
                             ? createCampaignSchedule.campaign_schedule_items
                                 .map((shift) =>
-                                  shift.day || ""
+                                  shift.day === 0
+                                    ? "SUN"
+                                    : shift.day === 1
+                                    ? "MON"
+                                    : shift.day === 2
+                                    ? "TUE"
+                                    : shift.day === 3
+                                    ? "WED"
+                                    : shift.day === 4
+                                    ? "THU"
+                                    : shift.day === 5
+                                    ? "FRI"
+                                    : shift.day === 6
+                                    ? "SAT"
+                                    : ""
                                 )
                                 .join(" | ")
                                 .toUpperCase()
@@ -174,6 +217,7 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule }) => {
         setCreateCampaignSchedule={setCreateCampaignSchedule}
         isSubmitted={isSubmitted}
         setIsSubmitted={setIsSubmitted}
+        mode={mode}
       />
     </>
   );
