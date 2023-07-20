@@ -15,7 +15,8 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
   const [officeType, setOfficeType] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "senior_hr_associate"];
+  // const canCreate = ["hr_manager", "senior_hr_associate"];
+
 
   useEffect(() => {
     setEmployeeInfo(data);
@@ -112,7 +113,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
             <div className="modal-body">
               <form onSubmit={handleEditEmployeeInfo}>
                 <div className="row">
-                  {canCreate.includes(...CurrentUserRoles) && (
+                  {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("senior_hr_associate") ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="ogid">OGID</label>
@@ -133,9 +134,9 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                         />
                       </div>
                     </div>
-                  )}
+                  ) : null}
 
-                  {canCreate.includes(...CurrentUserRoles) && (
+                  {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("senior_hr_associate") ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="email">Email</label>
@@ -156,7 +157,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                         />
                       </div>
                     </div>
-                  )}
+                  ) : null}
 
                   <div className="col-md-6">
                     <div className="form-group">
