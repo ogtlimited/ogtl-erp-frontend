@@ -35,7 +35,6 @@ export const AddShiftScheduleModal = ({
   const [createSaturdayShift, setCreateSaturdayShift] =
     useState(saturday_shifts);
   const [createSundayShift, setCreateSundayShift] = useState(sunday_shifts);
-  const [viewingAdd, setViewingAdd] = useState(false);
 
   const cancelEvent = () => {
     setCreateMondayShift(monday_shifts);
@@ -47,10 +46,12 @@ export const AddShiftScheduleModal = ({
     setCreateSundayShift(sunday_shifts);
   };
 
+  console.log("Edit this schedule please:", {
+    mode,
+    scheduleId,
+  });
+
   useEffect(() => {
-    if (mode === "add") {
-      setViewingAdd(true);
-    }
     if (isSubmitted) {
       cancelEvent();
       setIsSubmitted(false);
@@ -61,7 +62,7 @@ export const AddShiftScheduleModal = ({
   const handleAddSiftSchedule = (e) => {
     e.preventDefault();
 
-    console.log("Submit this add")
+    console.log("Submit this add");
 
     // const shifts = [];
 
@@ -149,7 +150,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createMondayShift.day === "mon" && "Monday"}
+                        value={createMondayShift.day === 1 && "Monday"}
                         readOnly
                       />
                     </div>
@@ -271,7 +272,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createTuesdayShift.day === "tue" && "Tuesday"}
+                        value={createTuesdayShift.day === 2 && "Tuesday"}
                         readOnly
                       />
                     </div>
@@ -395,7 +396,7 @@ export const AddShiftScheduleModal = ({
                         name="day"
                         type="text"
                         value={
-                          createWednesdayShift.day === "wed" && "Wednesday"
+                          createWednesdayShift.day === 3 && "Wednesday"
                         }
                         readOnly
                       />
@@ -520,7 +521,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createThursdayShift.day === "thu" && "Thursday"}
+                        value={createThursdayShift.day === 4 && "Thursday"}
                         readOnly
                       />
                     </div>
@@ -643,7 +644,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createFridayShift.day === "fri" && "Friday"}
+                        value={createFridayShift.day === 5 && "Friday"}
                         readOnly
                       />
                     </div>
@@ -765,7 +766,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSaturdayShift.day === "sat" && "Saturday"}
+                        value={createSaturdayShift.day === 6 && "Saturday"}
                         readOnly
                       />
                     </div>
@@ -888,7 +889,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={createSundayShift.day === "sun" && "Sunday"}
+                        value={createSundayShift.day === 0 && "Sunday"}
                         readOnly
                       />
                     </div>
@@ -1010,15 +1011,20 @@ export const AddShiftScheduleModal = ({
                   >
                     Cancel
                   </button>
-                  {viewingAdd ? (
-                    <button type="submit" className="btn btn-primary" onSubmit={handleAddSiftSchedule}>
-                      Submit
-                    </button>
-                  ) : (
-                    <button type="submit" className="btn btn-primary" onClick={handleCreateSiftSchedule}>
-                      Confirm
-                    </button>
-                  )}
+                  {mode === "add" && <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onSubmit={handleAddSiftSchedule}
+                  >
+                    Submit
+                  </button>}
+                  {mode === "create" && <button
+                    type="submit"
+                    className="btn btn-primary"
+                    onClick={handleCreateSiftSchedule}
+                  >
+                    Confirm
+                  </button>}
                 </div>
               </form>
             </div>

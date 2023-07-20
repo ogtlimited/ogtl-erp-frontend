@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import axiosInstance from "../../../services/api";
-import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
@@ -14,8 +14,9 @@ import female3 from "../../../assets/img/female_avatar3.png";
 import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
+import csvDownload from "json-to-csv-export";
 
 const EmployeesTable = ({
   data,
@@ -74,12 +75,11 @@ const EmployeesTable = ({
 
   const males = [male, male2, male3];
   const females = [female, female2, female3];
-  const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
-  const { setIsFromBiometrics } = useAppContext();
+  const { setIsFromBiometrics, showAlert } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -341,7 +341,6 @@ const EmployeesTable = ({
       };
 
       const handleKeydown = (e) => {
-
         if (e.key === "Enter") {
           setPage(1);
           setLoading(true);
@@ -424,7 +423,7 @@ const EmployeesTable = ({
             onClick={handleClick}
           >
             Search
-          </button> 
+          </button>
           <button
             className="btn btn-secondary custom-search-btn"
             onClick={() => {
@@ -445,7 +444,21 @@ const EmployeesTable = ({
         </div>
       );
     },
-    [page, setCampaignFilter, setData, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage]
+    [
+      page,
+      setCampaignFilter,
+      setData,
+      setDepartmentFilter,
+      setDesignationFilter,
+      setLoading,
+      setOfficeFilter,
+      setPage,
+      setSearchTerm,
+      setSizePerPage,
+      setStatusFilter,
+      setTotalPages,
+      sizePerPage,
+    ]
   );
 
   // Filter by Departments:
@@ -667,6 +680,50 @@ const EmployeesTable = ({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  const handleDownloadCSV = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: 1000,
+        },
+      });
+
+      const responseData = response?.data?.data?.employees;
+
+      const formatted = responseData.map((data, index) => ({
+        "S/N": index + 1,
+        "Employee Name": data?.full_name,
+        "OGID": data?.ogid,
+        "Office Type": data?.office?.office_type,
+        "Office": data?.office?.title,
+        "Designation": data?.designation,	
+        "Email": data?.email,
+      }));
+
+      const dataToConvert = {
+        data: formatted,
+        filename: "OGTL - All Employees Record",
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+
+      setLoading(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {dataToFilter && (
@@ -680,12 +737,13 @@ const EmployeesTable = ({
           {(props) => (
             <div className="col-12">
               <div className="col-12">
-                <ExportCSVButton
+                <button
+                  onClick={handleDownloadCSV}
                   className="float-right btn export-csv"
-                  {...props.csvProps}
                 >
                   Export CSV
-                </ExportCSVButton>
+                </button>
+
                 <MySearch
                   {...props.searchProps}
                   style={{ paddingLeft: "12%" }}
