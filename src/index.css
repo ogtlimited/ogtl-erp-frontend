@@ -1,131 +1,137 @@
-
-
-.filter{
-    /* display: inline-block; */
-    display: flex;
-    flex-direction: row;
-    /* justify-content: ; */
-    margin-bottom: 30px;
-    font-family: 'Roboto', sans-serif;
-    color:#1f1f1f;
+.filter {
+  /* display: inline-block; */
+  display: flex;
+  flex-direction: row;
+  /* justify-content: ; */
+  margin-bottom: 30px;
+  font-family: "Roboto", sans-serif;
+  color: #1f1f1f;
 }
 
-.interview_status_filter{
-   margin-right: 20px;
-    
+.interview_status_filter {
+  margin-right: 20px;
 }
 
-
-.monthly_filter select, .interview_status_filter select, .processing_stage_filter select{
-    
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px ;
-        border-color: #00C5FB;
-        border-radius: 5px;
-    
+.monthly_filter select,
+.interview_status_filter select,
+.processing_stage_filter select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px;
+  border-color: #00c5fb;
+  border-radius: 5px;
 }
-
 
 /* ERP - Login */
 
 .account-logo {
-    margin-bottom: 30px;
-    margin-top: 20px;
-    text-align: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .account-logo {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .account-logo img {
-    width: 150px;
+  width: 150px;
 }
 
 .container {
-    height: 90vh;
+  height: 90vh;
 }
 
 .account-box {
-    background-color: #fff;
-    border: 1px solid #ededed;
-    border-radius: 5px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-    margin: 0 auto;
-    overflow: hidden;
-    width: 45%;
+  background-color: #fff;
+  border: 1px solid #ededed;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  margin: 0 auto;
+  overflow: hidden;
+  width: 45%;
 }
 
 .account-box label {
-    color: #1f1f1f;
-    font-size: 16px;
-    font-weight: normal;
-    margin-bottom: 5px;
+  color: #1f1f1f;
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 5px;
 }
-  
+
 .account-box .form-control {
-    background-color: #fbfbfb;
-    border: 1px solid #e3e3e3;
-    border-radius: 4px;
-    height: 46px;
+  background-color: #fbfbfb;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  height: 46px;
 }
 
 .account-box .form-group {
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 .account-box .account-btn {
-    background: #00c5fb;
-    background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-    background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-    background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-    background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
-    border: 0;
-    border-radius: 4px;
-    display: block;
-    font-size: 22px;
-    padding: 10px 26px;
-    width: 100%;
+  background: #00c5fb;
+  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+  border: 0;
+  border-radius: 4px;
+  display: block;
+  font-size: 22px;
+  padding: 10px 26px;
+  width: 100%;
 }
 
 .account-box .account-btn:hover,
 .account-box .account-btn:focus {
-    border: 0;
-    opacity: 0.8;
+  border: 0;
+  opacity: 0.8;
 }
 
 .login-input::placeholder {
-    color: #ccc !important;
-    font-weight: 400 !important;
-    opacity: 0.5 !important;
+  color: #ccc !important;
+  font-weight: 400 !important;
+  opacity: 0.5 !important;
 }
 
 .emp-dashboard-leave-card {
-    height: 240px;
-    border-radius: 5px;
-    /* min-height: 35vh */
+  height: 240px;
+  border-radius: 5px;
+  /* min-height: 35vh */
 }
 
 .emp-dashboard-leave-card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-    border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  border-radius: 15px;
 }
 
 .app-table-div {
-    border-top-left-radius: 10px !important;
-    border-top-right-radius: 10px !important;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-    margin-bottom: 15px !important;
-    padding: 15px !important;
-    background-color: #fff !important;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  margin-bottom: 15px !important;
+  padding: 15px !important;
+  background-color: #fff !important;
 }
 
 .table {
-    border-top-left-radius: 5px !important;
-    border-top-right-radius: 5px !important;
-    border: 1px solid #ccc!important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  border: 1px solid #ccc !important;
+}
+
+.custom-table-div {
+    background-color: #fff;
+    padding: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
