@@ -17,7 +17,7 @@ import axiosInstance from '../../services/api';
 import Switch from '@mui/material/Switch';
 import { createBrowserHistory } from 'history';
 
-export const CreateEmployeeShiftModal = ({ userID, setMode, fetchEmployeeShift, setEmployeeShifts }) => {
+export const CreateEmployeeShiftModal = ({ userID, setMode, fetchEmployeeShift, setEmployeeShifts, officeID }) => {
   const { showAlert } = useAppContext();
 
   const [createMondayShift, setCreateMondayShift] = useState(
@@ -69,6 +69,7 @@ export const CreateEmployeeShiftModal = ({ userID, setMode, fetchEmployeeShift, 
 
       const employeeShifts = {
         "hr_user_id": userID,
+        "operation_office_id": officeID,
         "days": [
           createSundayShift,
           createMondayShift,
