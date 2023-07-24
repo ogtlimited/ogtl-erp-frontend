@@ -1,21 +1,21 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import axiosInstance from '../../../../services/api';
+import React, { useState, useEffect, useCallback } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import axiosInstance from "../../../../services/api";
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from 'react-bootstrap-table2-toolkit';
+} from "react-bootstrap-table2-toolkit";
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from 'react-bootstrap-table2-filter';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+} from "react-bootstrap-table2-filter";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const AdminLeavesTable = ({
   data,
@@ -45,7 +45,7 @@ const AdminLeavesTable = ({
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [mobileView, setmobileView] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
   const [info, setInfo] = useState({
@@ -66,121 +66,151 @@ const AdminLeavesTable = ({
   useEffect(() => {
     resizeTable();
     setunfiltered(data);
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
-  const handleDepartmentFilter = useCallback((e) => {
-    setDepartmentFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("Dept. Filter:", departmentFilter);
-    setPage(1);
-    setLoading(true);
+  const handleDepartmentFilter = useCallback(
+    (e) => {
+      setDepartmentFilter(e.target.value);
+      console.log("filter value:", e.target.value);
+      console.log("Data to Filter:", dataToFilter);
+      console.log("Dept. Filter:", departmentFilter);
+      setPage(1);
+      setLoading(true);
 
-    axiosInstance
-    .get('/api/v1/hr_dashboard/leaves.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        search: searchTerm,
-        operation_office_id: e.target.value,
-        // hr_designation_id: designationFilter,
-      },
-    })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-        
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+      axiosInstance
+        .get("/api/v1/hr_dashboard/leaves.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+          params: {
+            page: page,
+            limit: sizePerPage,
+            search: searchTerm,
+            operation_office_id: e.target.value,
+            // hr_designation_id: designationFilter,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.employees;
+          const totalPages = e?.data?.data?.pages;
 
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
+
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const mapp = resData.map((emp) => {
+            return {
+              ...emp,
+              fullName: emp?.full_name,
+              office: emp?.office?.office_type,
+              officeName: emp?.office?.title,
+              designation: emp?.designation,
+              company_email: emp?.email,
+            };
+          });
+
+          setData(mapp);
+          setunfiltered(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
         });
+      setLoading(false);
+    },
+    [
+      dataToFilter,
+      departmentFilter,
+      page,
+      searchTerm,
+      setData,
+      setDepartmentFilter,
+      setLoading,
+      setPage,
+      setSizePerPage,
+      setTotalPages,
+      sizePerPage,
+    ]
+  );
 
-        setData(mapp);
-        setunfiltered(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  },[dataToFilter, departmentFilter, page, searchTerm, setData, setDepartmentFilter, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+  const handleCampaignFilter = useCallback(
+    (e) => {
+      setCampaignFilter(e.target.value);
+      console.log("filter value:", e.target.value);
+      console.log("Data to Filter:", dataToFilter);
+      console.log("camp.. Filter:", campaignFilter);
+      setPage(1);
+      setLoading(true);
 
-  const handleCampaignFilter = useCallback((e) => {
-    setCampaignFilter(e.target.value);
-    console.log("filter value:", e.target.value);
-    console.log("Data to Filter:", dataToFilter);
-    console.log("camp.. Filter:", campaignFilter);
-    setPage(1);
-    setLoading(true);
+      axiosInstance
+        .get("/api/v1/hr_dashboard/leaves.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
 
-    axiosInstance
-    .get('/api/v1/hr_dashboard/leaves.json', {
-      headers: {          
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "ngrok-skip-browser-warning": "69420",
-      },
-      
-      params: {
-        page: page,
-        limit: sizePerPage,
-        search: searchTerm,
-        operation_office_id: e.target.value,
-        // hr_designation_id: designationFilter,
-      },
-    })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-        
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+          params: {
+            page: page,
+            limit: sizePerPage,
+            search: searchTerm,
+            operation_office_id: e.target.value,
+            // hr_designation_id: designationFilter,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.employees;
+          const totalPages = e?.data?.data?.pages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
 
-        const mapp = resData.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const mapp = resData.map((emp) => {
+            return {
+              ...emp,
+              fullName: emp?.full_name,
+              office: emp?.office?.office_type,
+              officeName: emp?.office?.title,
+              designation: emp?.designation,
+              company_email: emp?.email,
+            };
+          });
+
+          setData(mapp);
+          setunfiltered(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
         });
-
-        setData(mapp);
-        setunfiltered(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  },[campaignFilter, dataToFilter, page, searchTerm, setCampaignFilter, setData, setLoading, setPage, setSizePerPage, setTotalPages, sizePerPage]);
+      setLoading(false);
+    },
+    [
+      campaignFilter,
+      dataToFilter,
+      page,
+      searchTerm,
+      setCampaignFilter,
+      setData,
+      setLoading,
+      setPage,
+      setSizePerPage,
+      setTotalPages,
+      sizePerPage,
+    ]
+  );
 
   const handleLeaveTypeFilter = (e) => {
     setLeaveTypeFilter(e.target.value);
@@ -209,9 +239,9 @@ const AdminLeavesTable = ({
           ...leave,
           full_name:
             leave?.employee.first_name +
-            ' ' +
+            " " +
             leave?.employee.middle_name +
-            ' ' +
+            " " +
             leave?.employee.last_name,
           status_action: leave?.status,
           leave_type: leave?.leave_type_id?.leave_type,
@@ -233,8 +263,7 @@ const AdminLeavesTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-    }, 7000);
+    setTimeout(() => {}, 5000);
   }, [data]);
 
   const MySearch = (props) => {
@@ -269,9 +298,9 @@ const AdminLeavesTable = ({
               ...leave,
               full_name:
                 leave?.employee.first_name +
-                ' ' +
+                " " +
                 leave?.employee.middle_name +
-                ' ' +
+                " " +
                 leave?.employee.last_name,
               status_action: leave?.status,
               leave_type: leave?.leave_type_id?.leave_type,
@@ -285,7 +314,7 @@ const AdminLeavesTable = ({
             }));
 
             setData(formatted);
-            setDepartmentFilter('');
+            setDepartmentFilter("");
           });
       }
       setLoading(false);
@@ -296,9 +325,9 @@ const AdminLeavesTable = ({
         <input
           className="form-control"
           style={{
-            backgroundColor: '#fff',
-            width: '33.5%',
-            marginRight: '20px',
+            backgroundColor: "#fff",
+            width: "33.5%",
+            marginRight: "20px",
           }}
           ref={(n) => (input = n)}
           type="text"
@@ -310,31 +339,30 @@ const AdminLeavesTable = ({
     );
   };
 
-    // Pagination
-    const count = totalPages;
-    const _DATA = usePagination(data, sizePerPage, totalPages);
-  
-    const handleChange = (e, p) => {
-      setPage(p);
-      _DATA.jump(p);
-    };
-  
-    const handleChangeSizePerPage = (e) => {
-      e.preventDefault();
-      const { name, value } = e.target;
-      setInfo((prevState) => ({ ...prevState, [name]: value }));
-  
-      setSizePerPage(e.target.value);
-      setPage(1);
-    };
+  // Pagination
+  const count = totalPages;
+  const _DATA = usePagination(data, sizePerPage, totalPages);
 
-    const showNullMessage = () => {
-      setTimeout(() => {
-        setShow(true);
-      }, 5000);
-      return <>{show ? "No Data Available" : null}</>;
-    };
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
+  };
 
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
+
+    setSizePerPage(e.target.value);
+    setPage(1);
+  };
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
+  };
 
   return (
     <>
@@ -355,7 +383,8 @@ const AdminLeavesTable = ({
               /> */}
 
               <ExportCSVButton
-                className="float-right btn export-csv" style={{ marginBottom: 15}}
+                className="float-right btn export-csv"
+                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
@@ -412,29 +441,36 @@ const AdminLeavesTable = ({
                 </div>
               </div> */}
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                // selectRow={selectRow}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-              />
+              <div className="hr-filter-select col-12"></div>
+
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  // selectRow={selectRow}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"
@@ -463,7 +499,6 @@ const AdminLeavesTable = ({
                   />
                 </Stack>
               </div>
-
             </div>
           )}
         </ToolkitProvider>
