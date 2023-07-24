@@ -18,6 +18,8 @@ const Profile = () => {
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
   const [userID, setUserId] = useState("");
+  const [employeeID, setEmployeeId] = useState("");
+  const [officeID, setOfficeId] = useState("");
   const [mode, setMode] = useState("");
 
   const [employeeOgid, setEmployeeOgid] = useState(id);
@@ -69,7 +71,12 @@ const Profile = () => {
         setUserdata(resData);
   
         const userId = resData?.employee?.email;
+        const employeeId = resData?.employee?.personal_detail?.id;
+        const officeId = resData?.office?.id;
+
         setUserId(userId);
+        setEmployeeId(employeeId);
+        setOfficeId(officeId);
       } catch (error) {
         console.log("This error:", error?.response?.status);
         if (error?.response?.status === 500) {
@@ -94,7 +101,12 @@ const Profile = () => {
         setUserdata(resData);
   
         const userId = resData?.employee?.email;
+        const employeeId = resData?.employee?.personal_detail?.id;
+        const officeId = resData?.office?.id;
+
         setUserId(userId);
+        setEmployeeId(employeeId);
+        setOfficeId(officeId);
       } catch (error) {
         console.log("This error:", error?.response?.status);
         if (error?.response?.status === 500) {
@@ -260,7 +272,9 @@ const Profile = () => {
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
         userID={userID}
+        employeeID={employeeID}
         userOgid={id}
+        officeID={officeID}
         fetchEmployeeShift={fetchEmployeeShift}
         fetchEmployeeProfile={fetchEmployeeProfile}
         setEmployeeOgid={setEmployeeOgid}

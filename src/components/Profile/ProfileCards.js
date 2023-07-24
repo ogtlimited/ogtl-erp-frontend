@@ -23,9 +23,11 @@ const ProfileCards = ({
   employeeShifts,
   setEmployeeShifts,
   userID,
+  userOgid,
+  employeeID,
+  officeID,
   mode,
   setMode,
-  userOgid,
   fetchEmployeeShift,
   fetchEmployeeProfile,
   setEmployeeOgid,
@@ -177,12 +179,15 @@ const ProfileCards = ({
                 {mode === "edit" ? (
                   <EditEmployeeShiftModal
                     userID={userID}
+                    officeID={officeID}
+                    employeeID={userOgid}
                     employeeShifts={employeeShifts}
                     setEmployeeShifts={setEmployeeShifts}
                   />
                 ) : (
                   <CreateEmployeeShiftModal
                     userID={userID}
+                    officeID={officeID}
                     setMode={setMode}
                     fetchEmployeeShift={fetchEmployeeShift}
                     setEmployeeShifts={setEmployeeShifts}

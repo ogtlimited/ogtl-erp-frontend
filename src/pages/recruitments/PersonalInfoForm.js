@@ -22,7 +22,7 @@ const PersonalInfoForm = () => {
   const [header, setheader] = useState("Add Your Details");
 
   const fetchDefaultJob = () => {
-    axios.get(config.ApiUrl + "/api/jobOpening/defaultJobs").then((res) => {
+    axios.get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs").then((res) => {
       console.log(res);
       const data = res.data.data.map((e) => {
         return {
@@ -53,7 +53,7 @@ const PersonalInfoForm = () => {
     setfileName(file.name);
     formdata.append("job_id", jobId.id);
     formdata.append("document", file);
-    axios.post(config.ApiUrl + "/api/job-document", formdata).then((res) => {
+    axios.post("https://ogtl-erp.outsourceglobal.com/api/job-document", formdata).then((res) => {
       console.log(res);
       let path = res.data.data.file_path;
       setFieldValue("resume_attachment", path);
