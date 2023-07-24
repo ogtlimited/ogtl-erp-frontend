@@ -70,11 +70,9 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule, mode }) => {
               },
             }
           );
-
         } catch (error) {
           const errorMsg = error.response?.data?.message;
           showAlert(true, `${errorMsg}`, "alert alert-warning");
-          setLoading(false);
         }
       }
 

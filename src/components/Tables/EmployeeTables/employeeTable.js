@@ -129,6 +129,43 @@ const EmployeesTable = ({
     setIsFromBiometrics(false);
   };
 
+  //Activate Employee
+  const handleActivateEmployee = async (row) => {
+    const fullName = row.fullName;
+    const userId = row?.ogid;
+
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.delete(
+        `/api/v1/deactivate_employees/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            // status: modalType,
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        fullName + `Employee is now Active`,
+        "alert alert-success"
+      );
+
+      fetchAllEmployees();
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
+  };
+
   const columns = [
     {
       dataField: "fullName",
@@ -232,6 +269,15 @@ const EmployeesTable = ({
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
+            
+            <a
+              className="dropdown-item"
+              href="#"
+              onClick={() => handleActivateEmployee(row)}
+            >
+              <i className="fa fa-check m-r-5"></i>Activate
+            </a>
+
             <a
               className="dropdown-item"
               href="#"
@@ -701,11 +747,11 @@ const EmployeesTable = ({
       const formatted = responseData.map((data, index) => ({
         "S/N": index + 1,
         "Employee Name": data?.full_name,
-        "OGID": data?.ogid,
+        OGID: data?.ogid,
         "Office Type": data?.office?.office_type,
-        "Office": data?.office?.title,
-        "Designation": data?.designation,	
-        "Email": data?.email,
+        Office: data?.office?.title,
+        Designation: data?.designation,
+        Email: data?.email,
       }));
 
       const dataToConvert = {

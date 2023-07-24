@@ -5,7 +5,7 @@ export const sundayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 0,
+  day: "sun",
   huddle: false,
   huddle_time: null,
 };
@@ -15,7 +15,7 @@ export const mondayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 1,
+  day: "mon",
   huddle: false,
   huddle_time: null,
 };
@@ -25,7 +25,7 @@ export const tuesdayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 2,
+  day: "tue",
   huddle: false,
   huddle_time: null,
 };
@@ -35,7 +35,7 @@ export const wednesdayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 3,
+  day: "wed",
   huddle: false,
   huddle_time: null,
 };
@@ -45,7 +45,7 @@ export const thursdayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 4,
+  day: "thu",
   huddle: false,
   huddle_time: null,
 };
@@ -55,7 +55,7 @@ export const fridayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 5,
+  day: "fri",
   huddle: false,
   huddle_time: null,
 };
@@ -65,7 +65,7 @@ export const saturdayShifts = {
   end_time: '',
   expected_work_time: 8,
   off: false,
-  day: 6,
+  day: "sat",
   huddle: false,
   huddle_time: null,
 };
@@ -74,65 +74,65 @@ export const saturdayShifts = {
 // Add Employee Shift:
 export const monday_shifts = {
   day: 'mon',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const tuesday_shifts = {
   day: 'tue',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const wednesday_shifts = {
   day: 'wed',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const thursday_shifts = {
   day: 'thu',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const friday_shifts = {
   day: 'fri',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const saturday_shifts = {
   day: 'sat',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const sunday_shifts = {
   day: 'sun',
-  start: '',
-  end: '',
+  start_time: '',
+  end_time: '',
   off: false,
-  huddles: false,
-  huddleTime: null,
+  huddle: false,
+  huddle_time: null,
 };
 
 export const huddleOptions = [

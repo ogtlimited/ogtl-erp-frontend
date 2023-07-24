@@ -60,7 +60,7 @@ const ShiftScheduleList = () => {
     setEditScheduleTitle(row);
   };
 
-  const handleEditTime = async (row, action) => {
+  const handleTimeAction = async (row, action) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
@@ -75,19 +75,22 @@ const ShiftScheduleList = () => {
       );
 
       const resData = response?.data?.data?.employee_shifts_schedule;
+      console.log("Schedule time init:", resData);
 
       if (!resData.length) {
         setMode("add");
         setScheduleId(row.id);
         $("#ShiftScheduleFormModal").modal("show");
       } else {
-        if (action === "view") {
-          $("#ViewCampaignScheduleTimeFormModal").modal("show");
-          setEditScheduleTime(resData);
-        } else if (action === "edit") {
-          $("#EditCampaignScheduleTimeFormModal").modal("show");
-          setEditScheduleTime(resData);
-          setScheduleId(row.id);
+        if (resData.length > 1) {
+          if (action === "view") {
+            $("#ViewCampaignScheduleTimeFormModal").modal("show");
+            setEditScheduleTime(resData);
+          } else if (action === "edit") {
+            $("#EditCampaignScheduleTimeFormModal").modal("show");
+            setEditScheduleTime(resData);
+            setScheduleId(row.id);
+          }
         }
       }
     } catch (error) {
@@ -136,8 +139,8 @@ const ShiftScheduleList = () => {
               href="#"
               className="dropdown-item"
               data-toggle="modal"
-              data-target="#ViewCampaignScheduleTimeFormModal"
-              onClick={() => handleEditTime(row, "view")}
+              // data-target="#ViewCampaignScheduleTimeFormModal"
+              onClick={() => handleTimeAction(row, "view")}
             >
               <i className="fa fa-eye m-r-5"></i> View Schedule
             </a>
@@ -156,8 +159,8 @@ const ShiftScheduleList = () => {
               href="#"
               className="dropdown-item"
               data-toggle="modal"
-              data-target="#EditCampaignScheduleTimeFormModal"
-              onClick={() => handleEditTime(row, "edit")}
+              // data-target="#EditCampaignScheduleTimeFormModal"
+              onClick={() => handleTimeAction(row, "edit")}
             >
               <i className="fa fa-clock m-r-5"></i> Edit schedule
             </a>

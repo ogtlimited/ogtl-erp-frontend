@@ -103,7 +103,6 @@ export const ViewCampaignScheduleTimeModal = ({
     setCreateSundayShift(sunday);
   }, [editSchedule]);
 
-
   return (
     <>
       <div
@@ -203,31 +202,26 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
-                            !createMondayShift?.off &&
-                            createMondayShift?.huddles
+                            !createMondayShift?.off && createMondayShift?.huddle
                           }
-                          value={createMondayShift?.huddles}
+                          value={createMondayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
-                    {!createMondayShift?.off && createMondayShift?.huddles && (
+                    {!createMondayShift?.off && createMondayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
-                          <Select
-                            options={huddleOptions}
-                            isSearchable={true}
-                            isClearable={true}
-                            defaultValue={huddleOptions.find(
-                              (option) =>
-                                option.value === createMondayShift?.huddleTime
-                            )}
-                            disabled={true}
-                            style={{ display: "inline-block" }}
+                          <label htmlFor="huddle_time">Huddle Time</label>
+                          <input
+                            name="huddle_time"
+                            type="text"
+                            className="form-control"
+                            value={createMondayShift.huddle_time + " Minutes"}
+                            readOnly
                           />
                         </div>
                       </div>
@@ -300,37 +294,31 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createTuesdayShift?.off &&
-                            createTuesdayShift?.huddles
+                            createTuesdayShift?.huddle
                           }
-                          value={createTuesdayShift?.huddles}
+                          value={createTuesdayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
-                    {!createTuesdayShift?.off &&
-                      createTuesdayShift?.huddles && (
-                        <div className="col-md-auto">
-                          <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
-                            <Select
-                              options={huddleOptions}
-                              isSearchable={true}
-                              isClearable={true}
-                              defaultValue={huddleOptions.find(
-                                (option) =>
-                                  option.value ===
-                                  createTuesdayShift?.huddleTime
-                              )}
-                              disabled={true}
-                              style={{ display: "inline-block" }}
-                            />
-                          </div>
+                    {!createTuesdayShift?.off && createTuesdayShift?.huddle && (
+                      <div className="col-md-auto">
+                        <div className="form-group">
+                          <label htmlFor="huddle_time">Huddle Time</label>
+                          <input
+                            name="huddle_time"
+                            type="text"
+                            className="form-control"
+                            value={createTuesdayShift.huddle_time + " Minutes"}
+                            readOnly
+                          />
                         </div>
-                      )}
+                      </div>
+                    )}
                   </div>
 
                   <hr />
@@ -401,33 +389,30 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createWednesdayShift?.off &&
-                            createWednesdayShift?.huddles
+                            createWednesdayShift?.huddle
                           }
-                          value={createWednesdayShift?.huddles}
+                          value={createWednesdayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
                     {!createWednesdayShift?.off &&
-                      createWednesdayShift?.huddles && (
+                      createWednesdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
-                            <Select
-                              options={huddleOptions}
-                              isSearchable={true}
-                              isClearable={true}
-                              defaultValue={huddleOptions.find(
-                                (option) =>
-                                  option.value ===
-                                  createWednesdayShift?.huddleTime
-                              )}
-                              disabled={true}
-                              style={{ display: "inline-block" }}
+                            <label htmlFor="huddle_time">Huddle Time</label>
+                            <input
+                              name="huddle_time"
+                              type="text"
+                              className="form-control"
+                              value={
+                                createWednesdayShift.huddle_time + " Minutes"
+                              }
+                              readOnly
                             />
                           </div>
                         </div>
@@ -502,33 +487,30 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createThursdayShift?.off &&
-                            createThursdayShift?.huddles
+                            createThursdayShift?.huddle
                           }
-                          value={createThursdayShift?.huddles}
+                          value={createThursdayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
                     {!createThursdayShift?.off &&
-                      createThursdayShift?.huddles && (
+                      createThursdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
-                            <Select
-                              options={huddleOptions}
-                              isSearchable={true}
-                              isClearable={true}
-                              defaultValue={huddleOptions.find(
-                                (option) =>
-                                  option.value ===
-                                  createThursdayShift?.huddleTime
-                              )}
-                              disabled={true}
-                              style={{ display: "inline-block" }}
+                            <label htmlFor="huddle_time">Huddle Time</label>
+                            <input
+                              name="huddle_time"
+                              type="text"
+                              className="form-control"
+                              value={
+                                createThursdayShift.huddle_time + " Minutes"
+                              }
+                              readOnly
                             />
                           </div>
                         </div>
@@ -601,31 +583,26 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
-                            !createFridayShift?.off &&
-                            createFridayShift?.huddles
+                            !createFridayShift?.off && createFridayShift?.huddle
                           }
-                          value={createFridayShift?.huddles}
+                          value={createFridayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
-                    {!createFridayShift?.off && createFridayShift?.huddles && (
+                    {!createFridayShift?.off && createFridayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
-                          <Select
-                            options={huddleOptions}
-                            isSearchable={true}
-                            isClearable={true}
-                            defaultValue={huddleOptions.find(
-                              (option) =>
-                                option.value === createFridayShift?.huddleTime
-                            )}
-                            disabled={true}
-                            style={{ display: "inline-block" }}
+                          <label htmlFor="huddle_time">Huddle Time</label>
+                          <input
+                            name="huddle_time"
+                            type="text"
+                            className="form-control"
+                            value={createFridayShift.huddle_time + " Minutes"}
+                            readOnly
                           />
                         </div>
                       </div>
@@ -699,33 +676,30 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createSaturdayShift?.off &&
-                            createSaturdayShift?.huddles
+                            createSaturdayShift?.huddle
                           }
-                          value={createSaturdayShift?.huddles}
+                          value={createSaturdayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
                     {!createSaturdayShift?.off &&
-                      createSaturdayShift?.huddles && (
+                      createSaturdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
-                            <Select
-                              options={huddleOptions}
-                              isSearchable={true}
-                              isClearable={true}
-                              defaultValue={huddleOptions.find(
-                                (option) =>
-                                  option.value ===
-                                  createSaturdayShift?.huddleTime
-                              )}
-                              disabled={true}
-                              style={{ display: "inline-block" }}
+                            <label htmlFor="huddle_time">Huddle Time</label>
+                            <input
+                              name="huddle_time"
+                              type="text"
+                              className="form-control"
+                              value={
+                                createSaturdayShift.huddle_time + " Minutes"
+                              }
+                              readOnly
                             />
                           </div>
                         </div>
@@ -798,31 +772,26 @@ export const ViewCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
-                            !createSundayShift?.off &&
-                            createSundayShift?.huddles
+                            !createSundayShift?.off && createSundayShift?.huddle
                           }
-                          value={createSundayShift?.huddles}
+                          value={createSundayShift?.huddle}
                           disabled={true}
                         />
                       </div>
                     </div>
-                    {!createSundayShift?.off && createSundayShift?.huddles && (
+                    {!createSundayShift?.off && createSundayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
-                          <Select
-                            options={huddleOptions}
-                            isSearchable={true}
-                            isClearable={true}
-                            defaultValue={huddleOptions.find(
-                              (option) =>
-                                option.value === createSundayShift?.huddleTime
-                            )}
-                            disabled={true}
-                            style={{ display: "inline-block" }}
+                          <label htmlFor="huddle_time">Huddle Time</label>
+                          <input
+                            name="huddle_time"
+                            type="text"
+                            className="form-control"
+                            value={createSundayShift.huddle_time + " Minutes"}
+                            readOnly
                           />
                         </div>
                       </div>

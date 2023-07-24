@@ -29,7 +29,8 @@ export const EditCampaignScheduleTimeModal = ({
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
-    console.log("Edit this schedule time:", editSchedule);
+
+    console.log("Edit thuis", editSchedule)
 
     const formattedShiftSchedule = editSchedule?.map((shift) => ({
       day: shift.day,
@@ -40,7 +41,6 @@ export const EditCampaignScheduleTimeModal = ({
       huddle_time: shift.huddle_time,
       id: shift.id,
     }));
-    console.log("Edit formatted schedule time:", formattedShiftSchedule);
 
     let monday = {};
     const monday_shifts = formattedShiftSchedule?.filter(
@@ -128,7 +128,7 @@ export const EditCampaignScheduleTimeModal = ({
       console.log("update this:", shifts);
 
       const response = await axiosInstance.put(
-        `/api/v1/employee_shifts_items.json/${scheduleId}`,
+        `/api/v1/employee_shifts_items/${scheduleId}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -271,38 +271,38 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createMondayShift?.off &&
-                            createMondayShift?.huddles
+                            createMondayShift?.huddle
                           }
-                          value={createMondayShift?.huddles}
+                          value={createMondayShift?.huddle}
                           onChange={() =>
                             setCreateMondayShift({
                               ...createMondayShift,
-                              huddles: !createMondayShift?.huddles,
+                              huddle: !createMondayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
-                    {!createMondayShift?.off && createMondayShift?.huddles && (
+                    {!createMondayShift?.off && createMondayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
+                          <label htmlFor="huddle_time">Huddle Time</label>
                           <Select
                             options={huddleOptions}
                             isSearchable={true}
                             isClearable={true}
                             defaultValue={huddleOptions.find(
                               (option) =>
-                                option.value === createMondayShift?.huddleTime
+                                option.value === createMondayShift?.huddle_time
                             )}
                             onChange={(e) =>
                               setCreateMondayShift({
                                 ...createMondayShift,
-                                huddleTime: e?.value,
+                                huddle_time: e?.value,
                               })
                             }
                             style={{ display: "inline-block" }}
@@ -393,27 +393,27 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createTuesdayShift?.off &&
-                            createTuesdayShift?.huddles
+                            createTuesdayShift?.huddle
                           }
-                          value={createTuesdayShift?.huddles}
+                          value={createTuesdayShift?.huddle}
                           onChange={() =>
                             setCreateTuesdayShift({
                               ...createTuesdayShift,
-                              huddles: !createTuesdayShift?.huddles,
+                              huddle: !createTuesdayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
                     {!createTuesdayShift?.off &&
-                      createTuesdayShift?.huddles && (
+                      createTuesdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
+                            <label htmlFor="huddle_time">Huddle Time</label>
                             <Select
                               options={huddleOptions}
                               isSearchable={true}
@@ -421,12 +421,12 @@ export const EditCampaignScheduleTimeModal = ({
                               defaultValue={huddleOptions.find(
                                 (option) =>
                                   option.value ===
-                                  createTuesdayShift?.huddleTime
+                                  createTuesdayShift?.huddle_time
                               )}
                               onChange={(e) =>
                                 setCreateTuesdayShift({
                                   ...createTuesdayShift,
-                                  huddleTime: e?.value,
+                                  huddle_time: e?.value,
                                 })
                               }
                               style={{ display: "inline-block" }}
@@ -519,27 +519,27 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createWednesdayShift?.off &&
-                            createWednesdayShift?.huddles
+                            createWednesdayShift?.huddle
                           }
-                          value={createWednesdayShift?.huddles}
+                          value={createWednesdayShift?.huddle}
                           onChange={() =>
                             setCreateWednesdayShift({
                               ...createWednesdayShift,
-                              huddles: !createWednesdayShift?.huddles,
+                              huddle: !createWednesdayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
                     {!createWednesdayShift?.off &&
-                      createWednesdayShift?.huddles && (
+                      createWednesdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
+                            <label htmlFor="huddle_time">Huddle Time</label>
                             <Select
                               options={huddleOptions}
                               isSearchable={true}
@@ -547,12 +547,12 @@ export const EditCampaignScheduleTimeModal = ({
                               defaultValue={huddleOptions.find(
                                 (option) =>
                                   option.value ===
-                                  createWednesdayShift?.huddleTime
+                                  createWednesdayShift?.huddle_time
                               )}
                               onChange={(e) =>
                                 setCreateWednesdayShift({
                                   ...createWednesdayShift,
-                                  huddleTime: e?.value,
+                                  huddle_time: e?.value,
                                 })
                               }
                               style={{ display: "inline-block" }}
@@ -645,27 +645,27 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createThursdayShift?.off &&
-                            createThursdayShift?.huddles
+                            createThursdayShift?.huddle
                           }
-                          value={createThursdayShift?.huddles}
+                          value={createThursdayShift?.huddle}
                           onChange={() =>
                             setCreateThursdayShift({
                               ...createThursdayShift,
-                              huddles: !createThursdayShift?.huddles,
+                              huddle: !createThursdayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
                     {!createThursdayShift?.off &&
-                      createThursdayShift?.huddles && (
+                      createThursdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
+                            <label htmlFor="huddle_time">Huddle Time</label>
                             <Select
                               options={huddleOptions}
                               isSearchable={true}
@@ -673,12 +673,12 @@ export const EditCampaignScheduleTimeModal = ({
                               defaultValue={huddleOptions.find(
                                 (option) =>
                                   option.value ===
-                                  createThursdayShift?.huddleTime
+                                  createThursdayShift?.huddle_time
                               )}
                               onChange={(e) =>
                                 setCreateThursdayShift({
                                   ...createThursdayShift,
-                                  huddleTime: e?.value,
+                                  huddle_time: e?.value,
                                 })
                               }
                               style={{ display: "inline-block" }}
@@ -769,38 +769,38 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createFridayShift?.off &&
-                            createFridayShift?.huddles
+                            createFridayShift?.huddle
                           }
-                          value={createFridayShift?.huddles}
+                          value={createFridayShift?.huddle}
                           onChange={() =>
                             setCreateFridayShift({
                               ...createFridayShift,
-                              huddles: !createFridayShift?.huddles,
+                              huddle: !createFridayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
-                    {!createFridayShift?.off && createFridayShift?.huddles && (
+                    {!createFridayShift?.off && createFridayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
+                          <label htmlFor="huddle_time">Huddle Time</label>
                           <Select
                             options={huddleOptions}
                             isSearchable={true}
                             isClearable={true}
                             defaultValue={huddleOptions.find(
                               (option) =>
-                                option.value === createFridayShift?.huddleTime
+                                option.value === createFridayShift?.huddle_time
                             )}
                             onChange={(e) =>
                               setCreateFridayShift({
                                 ...createFridayShift,
-                                huddleTime: e?.value,
+                                huddle_time: e?.value,
                               })
                             }
                             style={{ display: "inline-block" }}
@@ -892,27 +892,27 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createSaturdayShift?.off &&
-                            createSaturdayShift?.huddles
+                            createSaturdayShift?.huddle
                           }
-                          value={createSaturdayShift?.huddles}
+                          value={createSaturdayShift?.huddle}
                           onChange={() =>
                             setCreateSaturdayShift({
                               ...createSaturdayShift,
-                              huddles: !createSaturdayShift?.huddles,
+                              huddle: !createSaturdayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
                     {!createSaturdayShift?.off &&
-                      createSaturdayShift?.huddles && (
+                      createSaturdayShift?.huddle && (
                         <div className="col-md-auto">
                           <div className="form-group">
-                            <label htmlFor="huddleTime">Huddle Time</label>
+                            <label htmlFor="huddle_time">Huddle Time</label>
                             <Select
                               options={huddleOptions}
                               isSearchable={true}
@@ -920,12 +920,12 @@ export const EditCampaignScheduleTimeModal = ({
                               defaultValue={huddleOptions.find(
                                 (option) =>
                                   option.value ===
-                                  createSaturdayShift?.huddleTime
+                                  createSaturdayShift?.huddle_time
                               )}
                               onChange={(e) =>
                                 setCreateSaturdayShift({
                                   ...createSaturdayShift,
-                                  huddleTime: e?.value,
+                                  huddle_time: e?.value,
                                 })
                               }
                               style={{ display: "inline-block" }}
@@ -1016,38 +1016,38 @@ export const EditCampaignScheduleTimeModal = ({
                     </div>
                     <div className="col-md-auto shift-item-toggle">
                       <div className="btn-group">
-                        <label htmlFor="huddles">Huddle</label>
+                        <label htmlFor="huddle">Huddle</label>
                         <Switch
                           checked={
                             !createSundayShift?.off &&
-                            createSundayShift?.huddles
+                            createSundayShift?.huddle
                           }
-                          value={createSundayShift?.huddles}
+                          value={createSundayShift?.huddle}
                           onChange={() =>
                             setCreateSundayShift({
                               ...createSundayShift,
-                              huddles: !createSundayShift?.huddles,
+                              huddle: !createSundayShift?.huddle,
                             })
                           }
                         />
                       </div>
                     </div>
-                    {!createSundayShift?.off && createSundayShift?.huddles && (
+                    {!createSundayShift?.off && createSundayShift?.huddle && (
                       <div className="col-md-auto">
                         <div className="form-group">
-                          <label htmlFor="huddleTime">Huddle Time</label>
+                          <label htmlFor="huddle_time">Huddle Time</label>
                           <Select
                             options={huddleOptions}
                             isSearchable={true}
                             isClearable={true}
                             defaultValue={huddleOptions.find(
                               (option) =>
-                                option.value === createSundayShift?.huddleTime
+                                option.value === createSundayShift?.huddle_time
                             )}
                             onChange={(e) =>
                               setCreateSundayShift({
                                 ...createSundayShift,
-                                huddleTime: e?.value,
+                                huddle_time: e?.value,
                               })
                             }
                             style={{ display: "inline-block" }}
@@ -1069,7 +1069,7 @@ export const EditCampaignScheduleTimeModal = ({
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      {loading ? (
+                      {dataLoading ? (
                         <span
                           className="spinner-border spinner-border-sm"
                           role="status"
