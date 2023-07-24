@@ -66,16 +66,18 @@ const DailyAttendanceTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
+                style={{ marginBottom: 15, paddingLeft: "12%" }}
                 className="inputSearch"
               />
-              
-              {allAttendance.length ? <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export Attendance Record (CSV)
-              </ExportCSVButton> : null}
+
+              {allAttendance.length ? (
+                <ExportCSVButton
+                  className="float-right btn export-csv"
+                  {...props.csvProps}
+                >
+                  Export Attendance Record (CSV)
+                </ExportCSVButton>
+              ) : null}
 
               <div className="row">
                 <div className="col-md-3">
@@ -90,35 +92,39 @@ const DailyAttendanceTable = ({
                     />
                   </div>
                 </div>
-
               </div>
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                // selectRow={selectRow}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? "table "
-                    : context
-                    ? "table table-responsive"
-                    : "table table-responsive"
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    <strong>No record for date</strong>
-                  )
-                }
-                pagination={paginationFactory()}
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  // selectRow={selectRow}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      <strong>No record for date</strong>
+                    )
+                  }
+                  pagination={paginationFactory()}
 
-                // defaultSorted={defaultSorted}
-              />
+                  // defaultSorted={defaultSorted}
+                />
+              </div>
             </div>
           )}
         </ToolkitProvider>

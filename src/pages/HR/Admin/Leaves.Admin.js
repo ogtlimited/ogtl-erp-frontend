@@ -19,7 +19,7 @@ const LeavesAdmin = () => {
   const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
 
@@ -58,6 +58,7 @@ const LeavesAdmin = () => {
 
   // All Leaves at HR stage - Pending
   const fetchHRLeaves = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",

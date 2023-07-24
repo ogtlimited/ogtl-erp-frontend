@@ -11,7 +11,7 @@ const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
   const { showAlert } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -27,12 +27,13 @@ const AllEmployeesAdmin = () => {
   const [designationFilter, setDesignationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const [modalType, setModalType] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/employees.json", {
         headers: {
@@ -73,17 +74,18 @@ const AllEmployeesAdmin = () => {
       });
 
       setallEmployees(mapp);
+      console.log("All Employees:", mapp)
       setLoading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     designationFilter,
     officeFilter,
     page,
     searchTerm,
-    showAlert,
     sizePerPage,
     statusFilter,
   ]);
@@ -91,6 +93,7 @@ const AllEmployeesAdmin = () => {
   // All Campaigns:
   const fetchAllCampaigns = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get("/api/v1/offices.json", {
         headers: {
           "Content-Type": "application/json",
@@ -123,6 +126,7 @@ const AllEmployeesAdmin = () => {
   // All Departments:
   const fetchAllDepartments = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get("/api/v1/offices.json", {
         headers: {
           "Content-Type": "application/json",
@@ -155,6 +159,7 @@ const AllEmployeesAdmin = () => {
   // All Designations:
   const fetchDesignation = async () => {
     try {
+      setLoading(true);
       const response = await axiosInstance.get("/api/v1/designations.json", {
         headers: {
           "Content-Type": "application/json",
@@ -172,8 +177,10 @@ const AllEmployeesAdmin = () => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setDesignations(formattedDesignation);
+      setLoading(false);
     } catch (error) {
       console.log("Get All Designations error:", error);
+      setLoading(false);
     }
   };
 
@@ -208,13 +215,13 @@ const AllEmployeesAdmin = () => {
           },
           params: {
             status: modalType,
-          }
+          },
         }
       );
 
       showAlert(
         true,
-        fullName + `status has been updated to ${modalType}`,
+        fullName + ` status has been updated to ${modalType}`,
         "alert alert-success"
       );
 
@@ -281,13 +288,10 @@ const AllEmployeesAdmin = () => {
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}
         setStatusFilter={setStatusFilter}
-        
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-
         setModalType={setModalType}
         setSelectedRow={setSelectedRow}
-
         fetchAllEmployees={fetchAllEmployees}
       />
 
