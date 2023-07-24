@@ -1,9 +1,12 @@
+// *IN USE
+
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
 import { AddCampaignScheduleModal } from "../../../components/Modal/AddCampaignScheduleModal";
 import { EditCampaignScheduleTitleModal } from "../../../components/Modal/EditCampaignScheduleTitleModal";
 import { EditCampaignScheduleTimeModal } from "../../../components/Modal/EditCampaignScheduleTimeModal";
+import { ViewCampaignScheduleTimeModal } from "../../../components/Modal/ViewCampaignScheduleTimeModal";
 import ShiftScheduleListTable from "../../../components/Tables/EmployeeTables/shiftScheduleListTable";
 import { AddShiftScheduleModal } from "../../../components/Modal/AddShiftScheduleModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
@@ -57,8 +60,8 @@ const ShiftScheduleList = () => {
     setEditScheduleTitle(row);
   };
 
-  const handleEditTime = async (row) => {
-    console.log("row:", row)
+  const handleTimeAction = async (row, action) => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get(
         `/api/v1/employee_shifts_schedules/${row.id}.json`,
@@ -70,21 +73,30 @@ const ShiftScheduleList = () => {
           },
         }
       );
-      const resData = response?.data?.data?.employee_shifts_items;
-      console.log("owners schedule items:", resData);
+
+      const resData = response?.data?.data?.employee_shifts_schedule;
+      console.log("Schedule time init:", resData);
 
       if (!resData.length) {
         setMode("add");
         setScheduleId(row.id);
         $("#ShiftScheduleFormModal").modal("show");
       } else {
-        $("#EditCampaignScheduleTimeFormModal").modal("show");
-        //   console.log("Edit this schedule please:", resData);
-        //   setEditScheduleTime(resData);
+        if (resData.length > 1) {
+          if (action === "view") {
+            $("#ViewCampaignScheduleTimeFormModal").modal("show");
+            setEditScheduleTime(resData);
+          } else if (action === "edit") {
+            $("#EditCampaignScheduleTimeFormModal").modal("show");
+            setEditScheduleTime(resData);
+            setScheduleId(row.id);
+          }
+        }
       }
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
+    setLoading(false);
   };
 
   const deleteCampaignSchedule = (row) => {
@@ -127,10 +139,20 @@ const ShiftScheduleList = () => {
               href="#"
               className="dropdown-item"
               data-toggle="modal"
+              // data-target="#ViewCampaignScheduleTimeFormModal"
+              onClick={() => handleTimeAction(row, "view")}
+            >
+              <i className="fa fa-eye m-r-5"></i> View Schedule
+            </a>
+
+            <a
+              href="#"
+              className="dropdown-item"
+              data-toggle="modal"
               data-target="#EditCampaignScheduleTitleFormModal"
               onClick={() => handleEditTitle(row)}
             >
-              <i className="fa fa-edit m-r-5"></i> Edit title
+              <i className="fa fa-edit m-r-5"></i> Edit Title
             </a>
 
             <a
@@ -138,7 +160,7 @@ const ShiftScheduleList = () => {
               className="dropdown-item"
               data-toggle="modal"
               // data-target="#EditCampaignScheduleTimeFormModal"
-              onClick={() => handleEditTime(row)}
+              onClick={() => handleTimeAction(row, "edit")}
             >
               <i className="fa fa-clock m-r-5"></i> Edit schedule
             </a>
@@ -192,7 +214,10 @@ const ShiftScheduleList = () => {
         setLoading={setLoading}
       />
 
-      <AddCampaignScheduleModal fetchAllSchedule={fetchAllSchedule} mode={mode} />
+      <AddCampaignScheduleModal
+        fetchAllSchedule={fetchAllSchedule}
+        mode={mode}
+      />
       <AddShiftScheduleModal
         fetchAllSchedule={fetchAllSchedule}
         mode={mode}
@@ -208,6 +233,14 @@ const ShiftScheduleList = () => {
       <EditCampaignScheduleTimeModal
         fetchAllSchedule={fetchAllSchedule}
         editSchedule={editScheduleTime}
+        loading={loading}
+        scheduleId={scheduleId}
+      />
+
+      <ViewCampaignScheduleTimeModal
+        fetchAllSchedule={fetchAllSchedule}
+        editSchedule={editScheduleTime}
+        loading={loading}
       />
 
       <ConfirmModal

@@ -13,6 +13,7 @@ import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 import Switch from "@mui/material/Switch";
 import $ from "jquery";
+import axiosInstance from "../../services/api";
 
 export const AddShiftScheduleModal = ({
   createCampaignSchedule,
@@ -35,6 +36,7 @@ export const AddShiftScheduleModal = ({
   const [createSaturdayShift, setCreateSaturdayShift] =
     useState(saturday_shifts);
   const [createSundayShift, setCreateSundayShift] = useState(sunday_shifts);
+  const [loading, setLoading] = useState(false);
 
   const cancelEvent = () => {
     setCreateMondayShift(monday_shifts);
@@ -59,36 +61,54 @@ export const AddShiftScheduleModal = ({
   }, [isSubmitted, mode, setIsSubmitted]);
 
   // Add:
-  const handleAddSiftSchedule = (e) => {
+  const handleAddShiftSchedule = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    console.log("Submit this add");
+    const shifts = [];
 
-    // const shifts = [];
+    shifts.push(createMondayShift);
+    shifts.push(createTuesdayShift);
+    shifts.push(createWednesdayShift);
+    shifts.push(createThursdayShift);
+    shifts.push(createFridayShift);
+    shifts.push(createSaturdayShift);
+    shifts.push(createSundayShift);
 
-    // shifts.push(createMondayShift);
-    // shifts.push(createTuesdayShift);
-    // shifts.push(createWednesdayShift);
-    // shifts.push(createThursdayShift);
-    // shifts.push(createFridayShift);
-    // shifts.push(createSaturdayShift);
-    // shifts.push(createSundayShift);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        `/api/v1/employee_shifts_items.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            hr_employee_shifts_schedule_id: scheduleId,
+            days: shifts,
+          },
+        }
+      );
 
-    // setCreateCampaignSchedule({
-    //   ...createCampaignSchedule,
-    //   campaign_schedule_items: shifts,
-    // });
+      showAlert(
+        true,
+        `Shift schedule added successfully!`,
+        "alert alert-success"
+      );
+      $("#ShiftScheduleFormModal").modal("toggle");
 
-    // showAlert(
-    //   true,
-    //   `Campaign schedule items confirmed!`,
-    //   "alert alert-success"
-    // );
-    $("#ShiftScheduleFormModal").modal("toggle");
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.message;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
   };
 
   // Create:
-  const handleCreateSiftSchedule = (e) => {
+  const handleCreateShiftSchedule = (e) => {
     e.preventDefault();
 
     const shifts = [];
@@ -395,9 +415,7 @@ export const AddShiftScheduleModal = ({
                         className="form-control"
                         name="day"
                         type="text"
-                        value={
-                          createWednesdayShift.day === 3 && "Wednesday"
-                        }
+                        value={createWednesdayShift.day === 3 && "Wednesday"}
                         readOnly
                       />
                     </div>
@@ -1011,20 +1029,24 @@ export const AddShiftScheduleModal = ({
                   >
                     Cancel
                   </button>
-                  {mode === "add" && <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onSubmit={handleAddSiftSchedule}
-                  >
-                    Submit
-                  </button>}
-                  {mode === "create" && <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={handleCreateSiftSchedule}
-                  >
-                    Confirm
-                  </button>}
+                  {mode === "add" && (
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onSubmit={handleAddShiftSchedule}
+                    >
+                      Submit
+                    </button>
+                  )}
+                  {mode === "create" && (
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={handleCreateShiftSchedule}
+                    >
+                      Confirm
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

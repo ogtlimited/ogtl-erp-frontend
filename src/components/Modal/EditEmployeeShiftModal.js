@@ -152,41 +152,59 @@ export const EditEmployeeShiftModal = ({
     }
   };
 
-  // const fetchOwnersSchedule = async () => {
-  //   try {
-  //     const schedules = await axiosInstance.get(`/campaign-schedules/owner`);
-  //     const schedule = schedules?.data?.data;
+  const fetchOwnersSchedule = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/employee_shifts_schedules.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-  //     const scheduleOpts = schedule?.map((e) => {
-  //       return {
-  //         label: e.title,
-  //         value: e.id,
-  //       };
-  //     });
-  //     setScheduleOpts(scheduleOpts);
-  //   } catch (error) {
-  //     console.error(error?.response);
-  //   }
-  // }
+      const schedule = response?.data?.data?.employee_shifts_schedules;
+
+      const scheduleOpts = schedule?.map((e) => {
+        return {
+          label: e.title,
+          value: e.id,
+        };
+      });
+      setScheduleOpts(scheduleOpts);
+    } catch (error) {
+      console.error(error?.response);
+    }
+  }
 
   useEffect(() => {
-    // fetchOwnersSchedule();
+    fetchOwnersSchedule();
   }, []);
 
   const handleScheduleClick = (e) => {
     const scheduleId = e?.value;
 
-    axiosInstance.get(`/campaign-schedule-items/${scheduleId}`).then((e) => {
-      let resData = e?.data?.data;
+    axiosInstance.get( `/api/v1/employee_shifts_schedules/${scheduleId}.json`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "ngrok-skip-browser-warning": "69420",
+      },
+    }).then((e) => {
+      let resData = e?.data?.data?.employee_shifts_schedule;
 
       const formatted = resData?.map((e) => ({
         day: e.day,
-        off: e.off,
         start_time: e.start_time,
         end_time: e.end_time,
-        userID,
+        off: e.off,
         huddle: e.huddle,
         huddle_time: e.huddle_time,
+        id: e.id,
+        // userID,
       }));
 
       let monday = {};

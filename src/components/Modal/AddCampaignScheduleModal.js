@@ -1,3 +1,5 @@
+// *IN USE
+
 /*eslint-disable no-unused-vars*/
 
 import React, { useState, useEffect } from "react";
@@ -49,12 +51,6 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule, mode }) => {
         }
       );
 
-      console.log("created shift item:", {
-        hr_employee_shifts_schedule_id:
-          response?.data?.data?.employee_shifts_schedule?.id,
-        days: createCampaignSchedule.campaign_schedule_items,
-      });
-
       const shifts_schedule_id =
         response?.data?.data?.employee_shifts_schedule?.id;
 
@@ -74,12 +70,9 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule, mode }) => {
               },
             }
           );
-
-          console.log("created shift item:", response);
         } catch (error) {
           const errorMsg = error.response?.data?.message;
           showAlert(true, `${errorMsg}`, "alert alert-warning");
-          setLoading(false);
         }
       }
 
@@ -194,7 +187,13 @@ export const AddCampaignScheduleModal = ({ fetchAllSchedule, mode }) => {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={
+                      !createCampaignSchedule.campaign_schedule_items.length
+                    }
+                  >
                     {loading ? (
                       <span
                         className="spinner-border spinner-border-sm"

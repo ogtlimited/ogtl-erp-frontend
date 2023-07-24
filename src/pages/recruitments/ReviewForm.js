@@ -14,7 +14,7 @@ const ReviewForm = () => {
   const handleSubmit = () => {
     delete jobApplication.referred;
     axios
-      .post(config.ApiUrl + "/api/jobApplicant", jobApplication)
+      .post("https://ogtl-erp.outsourceglobal.com/api/jobApplicant", jobApplication)
       .then((res) => {
         document.getElementById("applyBtn").click();
         setmessage("Application submitted successfully");
@@ -90,7 +90,7 @@ const ReviewForm = () => {
         id="apply_job"
         role="dialog"
         aria-modal="true"
-        id="exampleModal"
+        // id="exampleModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
