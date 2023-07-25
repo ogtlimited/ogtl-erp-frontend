@@ -54,7 +54,6 @@ const EmployeesTable = ({
   fetchAllEmployees,
   context,
 }) => {
-
   const status = [
     {
       code: "active",
@@ -130,7 +129,7 @@ const EmployeesTable = ({
     setIsFromBiometrics(false);
   };
 
-  //Activate Employee
+  //Reactivate Employee
   const handleActivateEmployee = async (row) => {
     const fullName = row.fullName;
     const userId = row?.ogid;
@@ -149,11 +148,7 @@ const EmployeesTable = ({
         }
       );
 
-      showAlert(
-        true,
-        fullName + ` is now Active`,
-        "alert alert-success"
-      );
+      showAlert(true, fullName + ` is now Active`, "alert alert-success");
 
       fetchAllEmployees();
       setLoading(false);
@@ -267,16 +262,18 @@ const EmployeesTable = ({
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => handleActivateEmployee(row)}
-            >
-              <i className="fa fa-check m-r-5"></i>Activate
-            </a>
 
-            <a
+            {row?.status !== "active" && (
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => handleActivateEmployee(row)}
+              >
+                <i className="fa fa-check m-r-5"></i>Reactivate
+              </a>
+            )}
+
+            {row?.status === "active" && <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -287,9 +284,9 @@ const EmployeesTable = ({
               }}
             >
               <i className="fa fa-remove m-r-5"></i>Deactivate
-            </a>
+            </a>}
 
-            <a
+            {row?.status === "active" && <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -300,9 +297,9 @@ const EmployeesTable = ({
               }}
             >
               <i className="fa fa-ban m-r-5"></i> Resigned
-            </a>
+            </a>}
 
-            <a
+            {row?.status === "active" && <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -313,7 +310,7 @@ const EmployeesTable = ({
               }}
             >
               <i className="fa fa-ban m-r-5"></i> Terminated
-            </a>
+            </a>}
           </div>
         </div>
       ),
@@ -688,8 +685,8 @@ const EmployeesTable = ({
           name: searchTerm.length ? searchTerm : null,
           operation_office_id: officeFilter.length ? officeFilter : null,
           hr_designation_id: designationFilter.length
-          ? designationFilter
-          : null,
+            ? designationFilter
+            : null,
           status: e.target.value,
         },
       })

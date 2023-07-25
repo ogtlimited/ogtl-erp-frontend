@@ -74,7 +74,6 @@ const AllEmployeesAdmin = () => {
       });
 
       setallEmployees(mapp);
-      console.log("All Employees:", mapp)
       setLoading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
