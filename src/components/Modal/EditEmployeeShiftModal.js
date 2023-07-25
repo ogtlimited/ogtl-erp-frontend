@@ -1143,7 +1143,7 @@ export const EditEmployeeShiftModal = ({
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    "Submit"
+                    "Update"
                   )}
                 </button>
               </div>

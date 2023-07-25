@@ -59,10 +59,10 @@ const SupervisorAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Subordinates</h3>
+            <h3 className="page-title">Team Members</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Leadership</li>
-              <li className="breadcrumb-item active">Subordinates</li>
+              <li className="breadcrumb-item active">Team Members</li>
             </ul>
           </div>
         </div>

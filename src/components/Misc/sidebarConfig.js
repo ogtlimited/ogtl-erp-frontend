@@ -312,7 +312,7 @@ const sidebarConfig = [
     items: [
       {
         canView: 'lead',
-        title: 'Subordinates',
+        title: 'Team Members',
         path: PATH_DASHBOARD.leadership.supervisor,
         icon: ICONS.leadership,
       },

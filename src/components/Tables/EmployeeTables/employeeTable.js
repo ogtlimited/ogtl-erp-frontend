@@ -138,23 +138,20 @@ const EmployeesTable = ({
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.delete(
-        `/api/v1/deactivate_employees/${userId}.json`,
+      const response = await axiosInstance.put(
+        `/api/v1/reactivate_employees/${userId}.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          params: {
-            // status: modalType,
-          },
         }
       );
 
       showAlert(
         true,
-        fullName + `Employee is now Active`,
+        fullName + ` is now Active`,
         "alert alert-success"
       );
 

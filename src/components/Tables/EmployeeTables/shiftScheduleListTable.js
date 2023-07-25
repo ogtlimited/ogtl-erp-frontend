@@ -68,13 +68,6 @@ const ShiftScheduleListTable = ({ loading, data, columns, context }) => {
                 className="inputSearch"
               />
 
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
-
               <div className="hr-filter-select col-12"></div>
 
               <div className="custom-table-div">
