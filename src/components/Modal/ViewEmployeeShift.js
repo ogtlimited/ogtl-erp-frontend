@@ -12,6 +12,7 @@ export const ViewEmployeeShift = ({ employeeShifts, userID }) => {
   const [createSundayShift, setCreateSundayShift] = useState({});
 
   useEffect(() => {
+
     const formattedEmployeeShifts = employeeShifts?.map((shift) => ({
       day: shift.day,
       start_time: shift.start_time,

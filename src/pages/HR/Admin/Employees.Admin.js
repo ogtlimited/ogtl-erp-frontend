@@ -219,11 +219,31 @@ const AllEmployeesAdmin = () => {
         }
       );
 
-      showAlert(
-        true,
-        fullName + ` status has been updated to ${modalType}`,
-        "alert alert-success"
-      );
+      if (modalType === "deactivate" ) {
+        showAlert(
+          true,
+          fullName + ` has been deactivated`,
+          "alert alert-info"
+        );
+      } else if (modalType === "left") {
+        showAlert(
+          true,
+          fullName + ` status has been updated to resigned`,
+          "alert alert-info"
+        );
+      } else if (modalType === "terminated") {
+        showAlert(
+          true,
+          fullName + ` status has been updated to terminated`,
+          "alert alert-info"
+        );
+      }
+
+      // showAlert(
+      //   true,
+      //   fullName + ` status has been updated to ${modalType}`,
+      //   "alert alert-success"
+      // );
 
       fetchAllEmployees();
       setLoading(false);
