@@ -130,7 +130,7 @@ const EmployeesTable = ({
     setIsFromBiometrics(false);
   };
 
-  //Activate Employee
+  //Reactivate Employee
   const handleActivateEmployee = async (row) => {
     const fullName = row.fullName;
     const userId = row?.ogid;
@@ -273,7 +273,7 @@ const EmployeesTable = ({
               href="#"
               onClick={() => handleActivateEmployee(row)}
             >
-              <i className="fa fa-check m-r-5"></i>Activate
+              <i className="fa fa-check m-r-5"></i>Reactivate
             </a>
 
             <a
