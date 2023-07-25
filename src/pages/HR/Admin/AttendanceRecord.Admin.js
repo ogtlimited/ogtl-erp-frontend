@@ -51,7 +51,7 @@ const AttendanceRecord = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [date, showAlert]);
+  }, [date]);
 
   // Daily Attendance - Table:
   const fetchDailyAttendance = useCallback(async () => {

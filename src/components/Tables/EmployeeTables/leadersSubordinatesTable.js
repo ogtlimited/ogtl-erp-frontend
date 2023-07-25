@@ -1,17 +1,20 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
-import filterFactory from 'react-bootstrap-table2-filter';
-import female from '../../../assets/img/female_avatar.png';
-import female2 from '../../../assets/img/female_avatar2.png';
-import female3 from '../../../assets/img/female_avatar3.png';
-import male from '../../../assets/img/male_avater.png';
-import male2 from '../../../assets/img/male_avater2.png';
-import male3 from '../../../assets/img/male_avater3.png';
-import { Link } from 'react-router-dom';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, {
+  Search,
+  CSVExport,
+} from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
+import female from "../../../assets/img/female_avatar.png";
+import female2 from "../../../assets/img/female_avatar2.png";
+import female3 from "../../../assets/img/female_avatar3.png";
+import male from "../../../assets/img/male_avater.png";
+import male2 from "../../../assets/img/male_avater2.png";
+import male3 from "../../../assets/img/male_avater3.png";
+import { Link } from "react-router-dom";
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 const LeadersSubordinatesTable = ({
   data,
@@ -20,21 +23,20 @@ const LeadersSubordinatesTable = ({
   setLoading,
   context,
 }) => {
-
   const { SearchBar } = Search;
   const males = [male, male2, male3];
   const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
-  const [dataToFilter, setDataToFilter] = useState('');;
+  const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = 'https://erp.outsourceglobal.com';
+  const imageUrl = "https://erp.outsourceglobal.com";
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length >= 7) {
+    if (columns.length >= 5) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -43,10 +45,10 @@ const LeadersSubordinatesTable = ({
 
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
@@ -55,10 +57,10 @@ const LeadersSubordinatesTable = ({
 
   const columns = [
     {
-      dataField: 'fullName',
-      text: 'Employee Name',
+      dataField: "fullName",
+      text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: '250px' },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -67,7 +69,7 @@ const LeadersSubordinatesTable = ({
               src={
                 row.image
                   ? imageUrl + row.image
-                  : row.gender === 'male'
+                  : row.gender === "male"
                   ? males[Math.floor(Math.random() * males.length)]
                   : females[Math.floor(Math.random() * females.length)]
               }
@@ -80,29 +82,29 @@ const LeadersSubordinatesTable = ({
       ),
     },
     {
-      dataField: 'ogid',
-      text: 'OGID',
+      dataField: "ogid",
+      text: "OGID",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: 'office',
-      text: 'Office',
+      dataField: "office",
+      text: "Office",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: 'designation',
-      text: 'Designation',
+      dataField: "designation",
+      text: "Designation",
       sort: true,
-      headerStyle: { minWidth: '150px' },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: 'email',
-      text: 'Company Email',
+      dataField: "email",
+      text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { width: "100%" },
     },
     // {
     //   dataField: '',
@@ -146,11 +148,11 @@ const LeadersSubordinatesTable = ({
         >
           {(props) => (
             <div className="col-12">
-            <SearchBar
-              {...props.searchProps}
-              style={{ marginBottom: 15, paddingLeft: '12%', width: '300px' }}
-              className="inputSearch"
-            />
+              <SearchBar
+                {...props.searchProps}
+                style={{ marginBottom: 15, paddingLeft: "12%", width: "300px" }}
+                className="inputSearch"
+              />
 
               <ExportCSVButton
                 className="float-right btn export-csv"
@@ -159,31 +161,34 @@ const LeadersSubordinatesTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-                
-                pagination={paginationFactory()}
-              />
-
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                  pagination={paginationFactory()}
+                />
+              </div>
             </div>
           )}
         </ToolkitProvider>

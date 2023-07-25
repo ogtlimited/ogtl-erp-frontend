@@ -54,6 +54,7 @@ const EmployeesTable = ({
   fetchAllEmployees,
   context,
 }) => {
+
   const status = [
     {
       code: "active",
@@ -171,7 +172,7 @@ const EmployeesTable = ({
       dataField: "fullName",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "250px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar" onClick={handleNavigate}>
           <a href="" className="avatar">
@@ -196,7 +197,7 @@ const EmployeesTable = ({
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "120px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {value === "active" ? (
@@ -231,33 +232,33 @@ const EmployeesTable = ({
       dataField: "ogid",
       text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "office",
       text: "Office Type",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "officeName",
       text: "Office",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "company_email",
       text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "",
       text: "Action",
       csvExport: false,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -511,7 +512,6 @@ const EmployeesTable = ({
   const handleDepartmentFilter = (e) => {
     setCampaignFilter("");
     setDesignationFilter("");
-    setStatusFilter("");
     setDepartmentFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
@@ -530,6 +530,7 @@ const EmployeesTable = ({
           limit: sizePerPage,
           name: searchTerm,
           operation_office_id: e.target.value,
+          status: statusFilter.length ? statusFilter : null,
         },
       })
       .then((e) => {
@@ -566,7 +567,6 @@ const EmployeesTable = ({
   const handleCampaignFilter = (e) => {
     setDepartmentFilter("");
     setDesignationFilter("");
-    setStatusFilter("");
     setCampaignFilter(e.target.value);
     setOfficeFilter(e.target.value);
     setPage(1);
@@ -585,6 +585,7 @@ const EmployeesTable = ({
           limit: sizePerPage,
           name: searchTerm,
           operation_office_id: e.target.value,
+          status: statusFilter.length ? statusFilter : null,
         },
       })
       .then((e) => {
@@ -635,7 +636,9 @@ const EmployeesTable = ({
           page: page,
           limit: sizePerPage,
           name: searchTerm,
+          operation_office_id: officeFilter.length ? officeFilter : null,
           hr_designation_id: e.target.value,
+          status: statusFilter.length ? statusFilter : null,
         },
       })
       .then((e) => {
@@ -685,7 +688,11 @@ const EmployeesTable = ({
         params: {
           page: page,
           limit: sizePerPage,
-          name: searchTerm,
+          name: searchTerm.length ? searchTerm : null,
+          operation_office_id: officeFilter.length ? officeFilter : null,
+          hr_designation_id: designationFilter.length
+          ? designationFilter
+          : null,
           status: e.target.value,
         },
       })
@@ -722,7 +729,7 @@ const EmployeesTable = ({
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 60000);
+    }, 100000);
     return <>{show ? "No Data Available" : null}</>;
   };
 
@@ -775,7 +782,7 @@ const EmployeesTable = ({
       {dataToFilter && (
         <ToolkitProvider
           keyField="id"
-          data={dataToFilter}
+          data={loading ? [] : dataToFilter}
           columns={columns}
           search
           exportCSV
