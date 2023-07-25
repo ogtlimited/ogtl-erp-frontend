@@ -43,7 +43,6 @@ const Profile = () => {
 
       const resData = response?.data?.data?.employee_shifts;
       const employeeShifts = resData;
-      console.log("this employee shift:", employeeShifts);
 
       if (!employeeShifts.length) {
         setMode("create");

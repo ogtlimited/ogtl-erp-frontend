@@ -180,7 +180,8 @@ const ProfileCards = ({
                   <EditEmployeeShiftModal
                     userID={userID}
                     officeID={officeID}
-                    employeeID={userOgid}
+                    employeeID={employeeID}
+                    // employeeID={userOgid}
                     employeeShifts={employeeShifts}
                     setEmployeeShifts={setEmployeeShifts}
                   />
