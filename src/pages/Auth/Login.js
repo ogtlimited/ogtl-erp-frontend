@@ -47,7 +47,11 @@ const Login = () => {
             console.log(res);
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
-            window.location.href = "/dashboard/employee-dashboard";
+            if (res.data.data.token) {
+              window.location.href = "/dashboard/employee-dashboard";
+            } else {
+              return setErrorMsg("Network Error. Please try again");
+            }
           })
           .catch((err) => {
             setCount(() => count + 1);
@@ -99,7 +103,11 @@ const Login = () => {
                   console.log(res);
                   tokenService.setUser(res.data.data);
                   tokenService.setToken(res.data.data.token);
-                  window.location.href = "/dashboard/employee-dashboard";
+                  if (res.data.data.token) {
+                    window.location.href = "/dashboard/employee-dashboard";
+                  } else {
+                    return setErrorMsg("Network Error. Please try again");
+                  }
                 })
                 .catch((err) => {
                   console.log(err);
