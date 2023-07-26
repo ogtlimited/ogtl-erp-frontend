@@ -49,7 +49,7 @@ const CapturedBiometricsTable = ({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length >= 7) {
+    if (columns.length >= 5) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -99,7 +99,7 @@ const CapturedBiometricsTable = ({
       dataField: "FullName",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "250px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -147,26 +147,26 @@ const CapturedBiometricsTable = ({
       dataField: "StaffUniqueId",
       text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "Role",
       text: "Role",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "Email",
       text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "",
       text: "Action",
       sort: true,
-      headerStyle: { minWidth: "100px", textAlign: "left" },
+      headerStyle: { width: "100%", textAlign: "left" },
       formatter: (value, row) => (
         <>
           <div className="text-center">

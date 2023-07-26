@@ -357,7 +357,7 @@ const EmployeesTable = ({
               setSizePerPage(thisPageLimit);
               setTotalPages(thisTotalPageSize);
 
-              const mapp = resData.map((emp) => {
+              const mapp = resData?.map((emp) => {
                 return {
                   ...emp,
                   fullName:
@@ -537,7 +537,7 @@ const EmployeesTable = ({
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const mapp = resData.map((emp) => {
+        const mapp = resData?.map((emp) => {
           return {
             ...emp,
             fullName: emp?.full_name,
@@ -592,7 +592,7 @@ const EmployeesTable = ({
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const mapp = resData.map((emp) => {
+        const mapp = resData?.map((emp) => {
           return {
             ...emp,
             fullName: emp?.full_name,
@@ -645,7 +645,7 @@ const EmployeesTable = ({
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const mapp = resData.map((emp) => {
+        const mapp = resData?.map((emp) => {
           return {
             ...emp,
             fullName: emp?.full_name,
@@ -700,7 +700,7 @@ const EmployeesTable = ({
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const mapp = resData.map((emp) => {
+        const mapp = resData?.map((emp) => {
           return {
             ...emp,
             fullName: emp?.full_name,

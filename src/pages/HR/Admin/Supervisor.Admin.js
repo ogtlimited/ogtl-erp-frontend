@@ -37,8 +37,11 @@ const SupervisorAdmin = () => {
       setAllLeadersSubordinates(mapp);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, errorMsg, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

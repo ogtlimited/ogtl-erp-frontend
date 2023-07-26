@@ -8,7 +8,7 @@ import moment from "moment"
 import { RoleForm } from "../../components/FormJSON/CreateRole";
 
 const RolePermission = () => {
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [allRoles, setAllRoles] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -39,11 +39,19 @@ const RolePermission = () => {
       }));
 
       setAllRoles(formattedRoles);
-    } catch (error) {}
+    } catch (error) {
+      
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
+    }
   };
 
   useEffect(() => {
     fetchAllRoles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [

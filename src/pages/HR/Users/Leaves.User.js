@@ -84,7 +84,11 @@ const LeavesUser = () => {
 
       setallLeaves(formatted);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
     }
     setLoading(false);
   };
@@ -127,7 +131,11 @@ const LeavesUser = () => {
           "alert alert-warning"
         );
       } else {
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        showAlert(
+          true,
+          "Error retrieving information from server",
+          "alert alert-warning"
+        );
       }
     }
     setLoading(false);

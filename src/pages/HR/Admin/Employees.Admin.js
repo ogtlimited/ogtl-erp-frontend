@@ -76,10 +76,14 @@ const AllEmployeesAdmin = () => {
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     designationFilter,
     officeFilter,
@@ -218,12 +222,8 @@ const AllEmployeesAdmin = () => {
         }
       );
 
-      if (modalType === "deactivate" ) {
-        showAlert(
-          true,
-          fullName + ` has been deactivated`,
-          "alert alert-info"
-        );
+      if (modalType === "deactivate") {
+        showAlert(true, fullName + ` has been deactivated`, "alert alert-info");
       } else if (modalType === "left") {
         showAlert(
           true,
@@ -237,12 +237,6 @@ const AllEmployeesAdmin = () => {
           "alert alert-info"
         );
       }
-
-      // showAlert(
-      //   true,
-      //   fullName + ` status has been updated to ${modalType}`,
-      //   "alert alert-success"
-      // );
 
       fetchAllEmployees();
       setLoading(false);

@@ -40,13 +40,16 @@ const ShiftScheduleList = () => {
         }
       );
 
-      console.log("all owners schedules:", response);
       const resData = response?.data?.data?.employee_shifts_schedules;
       setAllSchedules(resData);
 
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,7 +8,7 @@ import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDet
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
 
 const EmployeeSalary = () => {
-  const { user } = useAppContext();
+  const { user, showAlert } = useAppContext();
   const [AllSalaries, setAllSalaries] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -71,8 +71,13 @@ const EmployeeSalary = () => {
         setAllSalaries(formattedData);
       })
       .catch((error) => {
-        console.log("All Salaries Error:", error?.response);
+        showAlert(
+          true,
+          "Error retrieving information from server",
+          "alert alert-warning"
+        );
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
   useEffect(() => {

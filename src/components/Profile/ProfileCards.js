@@ -9,6 +9,7 @@ import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
 import { EditEmployeeShiftModal } from "../Modal/EditEmployeeShiftModal";
 import { CreateEmployeeShiftModal } from "../Modal/CreateEmployeeShiftModal";
+import { ManualAttendanceModal } from "../Modal/ManualAttendanceModal";
 import { ViewEmployeeShift } from "../Modal/ViewEmployeeShift";
 import { useAppContext } from "../../Context/AppContext";
 import { BsFillPrinterFill } from "react-icons/bs";
@@ -20,6 +21,8 @@ const ProfileCards = ({
   formValue,
   setFormValue,
   fetchUserInfo,
+  today,
+  employeeAttendance,
   employeeShifts,
   setEmployeeShifts,
   userID,
@@ -30,10 +33,11 @@ const ProfileCards = ({
   setMode,
   fetchEmployeeShift,
   fetchEmployeeProfile,
+  fetchEmployeeAttendance,
   setEmployeeOgid,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
-  const { user, isFromBiometrics } = useAppContext();
+  const { user, isFromBiometrics, isFromBiometricsClockIn } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -48,7 +52,6 @@ const ProfileCards = ({
   const handlePrintBack = useReactToPrint({
     content: () => BackVirtualIDRef.current,
   });
-
 
   useEffect(() => {
     setemployeeDetails(userData?.employee);
@@ -81,6 +84,17 @@ const ProfileCards = ({
                   className={isFromBiometrics ? "nav-link active" : "nav-link"}
                 >
                   Shifts
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#emp_clockInOut"
+                  data-toggle="tab"
+                  className={
+                    isFromBiometricsClockIn ? "nav-link active" : "nav-link"
+                  }
+                >
+                  Manual Clock In/Out
                 </a>
               </li>
             </ul>
@@ -216,6 +230,30 @@ const ProfileCards = ({
             </div>
           </div>
         )}
+
+        {CurrentUserRoles.includes("hr_manager") ||
+        CurrentUserRoles.includes("senior_hr_associate") ? (
+          <div
+            id="emp_clockInOut"
+            className={
+              isFromBiometricsClockIn
+                ? "pro-overview tab-pane active "
+                : "pro-overview tab-pane fade"
+            }
+          >
+            <div className="row">
+              <div className="col-md-12 d-flex">
+                <ManualAttendanceModal
+                  employeeOgid={userOgid}
+                  today={today}
+                  employeeAttendance={employeeAttendance}
+                  userData={userData}
+                  fetchEmployeeAttendance={fetchEmployeeAttendance}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </>
   );
