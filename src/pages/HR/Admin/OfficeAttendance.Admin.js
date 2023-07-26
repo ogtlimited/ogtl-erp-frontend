@@ -51,7 +51,8 @@ const OfficeAttendanceAdmin = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [date, id, showAlert]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, id]);
 
   useEffect(() => {
     fetchEmployeeByOffice();

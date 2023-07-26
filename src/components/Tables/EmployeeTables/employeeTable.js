@@ -724,7 +724,7 @@ const EmployeesTable = ({
     setTimeout(() => {
       setShow(true);
     }, 100000);
-    return <>{show ? "No Data Available" : null}</>;
+    return <>{show ? "No Data Available" : "No Record Found"}</>;
   };
 
   const handleDownloadCSV = async (e) => {

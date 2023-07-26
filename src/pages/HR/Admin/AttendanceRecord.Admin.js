@@ -51,6 +51,7 @@ const AttendanceRecord = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   // Daily Attendance - Table:

@@ -73,7 +73,8 @@ const LeadershipAdmin = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-danger");
       setLoading(false);
     }
-  }, [officeFilter, page, showAlert, sizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [officeFilter, page, sizePerPage]);
 
   // All Campaigns:
   const fetchAllCampaigns = async () => {

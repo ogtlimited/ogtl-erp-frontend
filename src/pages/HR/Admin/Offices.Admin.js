@@ -65,7 +65,8 @@ const Offices = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [CampaignPage, CampaignSizePerPage, showAlert]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [CampaignPage, CampaignSizePerPage]);
 
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
@@ -103,7 +104,8 @@ const Offices = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [DepartmentPage, DepartmentSizePerPage, showAlert]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DepartmentPage, DepartmentSizePerPage]);
 
   useEffect(() => {
     fetchAllCampaigns();

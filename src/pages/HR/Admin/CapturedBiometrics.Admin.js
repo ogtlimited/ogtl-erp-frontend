@@ -14,6 +14,7 @@ const CapturedBiometricsAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+  const [totalCapturedBiometrics, setTotalCapturedBiometrics] = useState(0);
   
 
   // Captured Employees:
@@ -60,7 +61,7 @@ const CapturedBiometricsAdmin = () => {
   const fetchTotalBiometrics = async () => {
     try {
       const response = await axiosInstance.get(
-        "/api/v1/total_biometrics.json",
+        "/api/v1/hr_dashboard/total_biometrics.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,8 +71,8 @@ const CapturedBiometricsAdmin = () => {
         }
       );
 
-      console.log("Total captured bio:", response)
-      // setAllEmployees(resData);
+      const resData = response?.data?.data?.message;
+      setTotalCapturedBiometrics(resData);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -102,19 +103,19 @@ const CapturedBiometricsAdmin = () => {
         </div>
       </div>
       
-      {/* <div className="hr-employee-card-group">
+      <div className="hr-employee-card-group">
         <div className="hr-dashboard-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i className="las la-fingerprint"></i>
             </span>
             <div className="card-info">
-              {loading ? <h3>-</h3> : <h3>{"-"}</h3>}
+              <h3>{totalCapturedBiometrics}</h3>
             </div>
           </div>
           <span>Total Biometrics Captured</span>
         </div>
-      </div> */}
+      </div>
 
       <CapturedBiometricsTable
         data={allEmployees}
