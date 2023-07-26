@@ -45,8 +45,6 @@ const Offices = () => {
       const resData = response?.data?.data?.offices;
       const totalPages = response?.data?.data?.pages;
 
-      console.log("All Camps.", resData);
-
       const thisPageLimit = CampaignSizePerPage;
       const thisTotalPageSize = totalPages;
 
@@ -62,7 +60,11 @@ const Offices = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +103,11 @@ const Offices = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -70,10 +70,14 @@ const LeadershipAdmin = () => {
       setAllLeaders(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-danger");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [officeFilter, page, sizePerPage]);
 
   // All Campaigns:

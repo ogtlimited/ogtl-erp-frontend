@@ -36,7 +36,11 @@ const LeaveType = () => {
 
       setAllLeaveType(formatted);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
     }
   };
 

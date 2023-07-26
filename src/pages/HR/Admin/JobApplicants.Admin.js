@@ -55,9 +55,14 @@ const JobApplicants = () => {
       setData(resData);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Applicants error:", error);
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   useEffect(() => {

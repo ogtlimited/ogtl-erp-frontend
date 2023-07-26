@@ -15,7 +15,6 @@ const CapturedBiometricsAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
   const [totalCapturedBiometrics, setTotalCapturedBiometrics] = useState(0);
-  
 
   // Captured Employees:
   const fetchAllCapturedEmployees = useCallback(async () => {
@@ -37,25 +36,25 @@ const CapturedBiometricsAdmin = () => {
 
       const resData = response?.data?.data?.staff;
       const totalPages = response?.data?.data?.total_pages;
-      
+
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
 
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
-    
+
       setAllEmployees(resData);
       setLoading(false);
     } catch (error) {
       showAlert(
-      true,
-      error?.response?.data?.errors ,
-      "alert alert-danger"
-    );
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[page, sizePerPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   // Total Captured Employees:
   const fetchTotalBiometrics = async () => {
@@ -75,7 +74,13 @@ const CapturedBiometricsAdmin = () => {
       setTotalCapturedBiometrics(resData);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(
+        true,
+        error?.response?.data?.errors
+          ? error.response.data.errors
+          : "Error retrieving information from server",
+        "alert alert-danger"
+      );
       setLoading(false);
     }
   };
@@ -87,6 +92,7 @@ const CapturedBiometricsAdmin = () => {
     setTimeout(() => {
       setLoading(false);
     }, 10000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchAllCapturedEmployees]);
 
   return (
@@ -102,7 +108,7 @@ const CapturedBiometricsAdmin = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="hr-employee-card-group">
         <div className="hr-dashboard-card">
           <div className="card-body">
