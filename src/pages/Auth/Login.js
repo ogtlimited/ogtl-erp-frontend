@@ -64,8 +64,7 @@ const Login = () => {
                 "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
               );
             }
-            console.log("this err?:", err?.response)
-            setErrorMsg("Something went wrong. Please try again later.");
+            setErrorMsg(`${err?.message}. Please try again later.`);
           })
           .finally(() => {
             setLoading(false);
