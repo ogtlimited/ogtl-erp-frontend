@@ -59,7 +59,8 @@ const EmployeeAttendanceRecordAdmin = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [fromDate, id, showAlert, toDate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, id, toDate]);
 
   useEffect(() => {
     fetchEmployeeAttendanceRecords();

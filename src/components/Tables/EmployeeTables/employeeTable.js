@@ -723,7 +723,7 @@ const EmployeesTable = ({
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 100000);
+    }, 5000);
     return <>{show ? "No Data Available" : null}</>;
   };
 

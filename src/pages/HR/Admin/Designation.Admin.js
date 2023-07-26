@@ -58,7 +58,8 @@ const Designations = () => {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
-  }, [page, showAlert, sizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchDesignations();
