@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
       // tokenService.clearStorage();
       // window.location = "/auth";
     console.log("401 error 😪:", error?.response)
-    } else if (error?.response?.status === 502) {
+    } else if (error?.response?.status === 502 || error?.message === "Network Error") {
       window.location = "/502";
       console.log("502 error 😪:", error?.response)
     }
