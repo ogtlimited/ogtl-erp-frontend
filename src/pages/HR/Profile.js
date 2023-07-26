@@ -118,15 +118,11 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        console.log("This error:", error?.response?.status);
-        if (error?.response?.status === 500) {
-          showAlert(
-            true,
-            "Error fetching Employee Profile",
-            "alert alert-warning"
-          );
-        }
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        showAlert(
+          true,
+          "Error retrieving information from server",
+          "alert alert-warning"
+        );
       }
     }
   };
@@ -152,10 +148,14 @@ const Profile = () => {
           : response?.data?.data?.result;
 
       setEmployeeAttendance(resData);
-      console.log("EmployeeAttendance", resData);
     } catch (error) {
-      console.log(error);
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, time]);
 
   useEffect(() => {
