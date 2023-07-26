@@ -24,6 +24,7 @@ const AppProvider = (props) => {
 
   const [isChecked, setIsChecked] = useState(true);
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
+  const [isFromBiometricsClockIn, setIsFromBiometricsClockIn] = useState(false);
   const [dropDownClicked, setDropDownClicked] = useState(false);
 
   const isTeamLead = user?.employee_info?.is_lead;
@@ -362,6 +363,8 @@ const AppProvider = (props) => {
         setIsChecked,
         isFromBiometrics,
         setIsFromBiometrics,
+        isFromBiometricsClockIn,
+        setIsFromBiometricsClockIn,
         user,
         setuserToken,
         fetchHRLeavesNotificationCount,

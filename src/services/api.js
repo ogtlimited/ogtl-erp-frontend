@@ -34,12 +34,12 @@ axiosInstance.interceptors.response.use(
     }
     console.log("App error 😪:", error?.response)
     if (error?.response?.status === 400  && error?.response?.data?.errors === "invalid token, login again") {
-      tokenService.clearStorage();
+      tokenService.removeToken();
       window.location = "/auth";
     console.log("400 error 😪:", error?.response)
     } else if (error?.response?.status === 401) {
-      tokenService.clearStorage();
-      window.location = "/auth";
+      // tokenService.clearStorage();
+      // window.location = "/auth";
     console.log("401 error 😪:", error?.response)
     } else if (error?.response?.status === 502) {
       window.location = "/502";
