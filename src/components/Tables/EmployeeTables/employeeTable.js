@@ -321,6 +321,7 @@ const EmployeesTable = ({
   const MySearch = useCallback(
     (props) => {
       let input;
+
       const handleClick = () => {
         setPage(1);
         setLoading(true);
@@ -456,7 +457,7 @@ const EmployeesTable = ({
             type="search"
             onKeyDown={handleKeydown}
           />
-          <button
+          {/* <button
             style={{
               marginRight: "10px",
             }}
@@ -464,7 +465,7 @@ const EmployeesTable = ({
             onClick={handleClick}
           >
             Search
-          </button>
+          </button> */}
           <button
             className="btn btn-secondary custom-search-btn"
             onClick={() => {
