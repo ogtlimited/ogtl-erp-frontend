@@ -79,10 +79,12 @@ const EmployeesTable = ({
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
-  const { setIsFromBiometrics, showAlert } = useAppContext();
+  const { setIsFromBiometrics, showAlert, user } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -248,71 +250,85 @@ const EmployeesTable = ({
     },
     {
       dataField: "",
-      text: "Action",
+      text:
+        CurrentUserRoles.includes("hr_manager") ||
+        CurrentUserRoles.includes("senior_hr_associate")
+          ? "Action"
+          : "",
       csvExport: false,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-
-            {row?.status !== "active" && (
+        <>
+          {CurrentUserRoles.includes("hr_manager") ||
+          CurrentUserRoles.includes("senior_hr_associate") ? (
+            <div className="dropdown dropdown-action text-right">
               <a
-                className="dropdown-item"
                 href="#"
-                onClick={() => handleActivateEmployee(row)}
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
               >
-                <i className="fa fa-check m-r-5"></i>Reactivate
+                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
               </a>
-            )}
+              <div className="dropdown-menu dropdown-menu-right">
+                {row?.status !== "active" && (
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => handleActivateEmployee(row)}
+                  >
+                    <i className="fa fa-check m-r-5"></i>Reactivate
+                  </a>
+                )}
 
-            {row?.status === "active" && <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setModalType("deactivate");
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-remove m-r-5"></i>Deactivate
-            </a>}
+                {row?.status === "active" && (
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    onClick={() => {
+                      setModalType("deactivate");
+                      setSelectedRow(row);
+                    }}
+                  >
+                    <i className="fa fa-remove m-r-5"></i>Deactivate
+                  </a>
+                )}
 
-            {row?.status === "active" && <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setModalType("left");
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-ban m-r-5"></i> Resigned
-            </a>}
+                {row?.status === "active" && (
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    onClick={() => {
+                      setModalType("left");
+                      setSelectedRow(row);
+                    }}
+                  >
+                    <i className="fa fa-ban m-r-5"></i> Resigned
+                  </a>
+                )}
 
-            {row?.status === "active" && <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setModalType("terminated");
-                setSelectedRow(row);
-              }}
-            >
-              <i className="fa fa-ban m-r-5"></i> Terminated
-            </a>}
-          </div>
-        </div>
+                {row?.status === "active" && (
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#exampleModal"
+                    onClick={() => {
+                      setModalType("terminated");
+                      setSelectedRow(row);
+                    }}
+                  >
+                    <i className="fa fa-ban m-r-5"></i> Terminated
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : null}
+        </>
       ),
     },
   ];
