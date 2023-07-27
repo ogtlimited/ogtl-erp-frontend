@@ -55,10 +55,15 @@ const Designations = () => {
       setDesignations(formattedDesignation);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
-  }, [page, showAlert, sizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchDesignations();

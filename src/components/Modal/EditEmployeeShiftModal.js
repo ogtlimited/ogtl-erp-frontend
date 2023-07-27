@@ -133,8 +133,8 @@ export const EditEmployeeShiftModal = ({
             "ngrok-skip-browser-warning": "69420",
           },
           payload: {
+            // operation_office_id: officeID,
             hr_user_id: userID,
-            operation_office_id: officeID,
             days: shifts,
           },
         }
@@ -1143,7 +1143,7 @@ export const EditEmployeeShiftModal = ({
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    "Submit"
+                    "Update"
                   )}
                 </button>
               </div>

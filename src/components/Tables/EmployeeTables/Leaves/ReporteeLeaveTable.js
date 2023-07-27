@@ -1,20 +1,20 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import axiosInstance from '../../../../services/api';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import axiosInstance from "../../../../services/api";
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from 'react-bootstrap-table2-toolkit';
+} from "react-bootstrap-table2-toolkit";
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from 'react-bootstrap-table2-filter';
-import usePagination from '../../../../pages/HR/Admin/JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+} from "react-bootstrap-table2-filter";
+import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const ReporteeLeavesTable = ({
   data,
@@ -40,7 +40,7 @@ const ReporteeLeavesTable = ({
 }) => {
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [mobileView, setmobileView] = useState(false);
   const [unfiltered, setunfiltered] = useState([]);
   const [info, setInfo] = useState({
@@ -61,36 +61,35 @@ const ReporteeLeavesTable = ({
   useEffect(() => {
     resizeTable();
     setunfiltered(data);
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
   }, [mobileView]);
 
-  const imageUrl = 'https://erp.outsourceglobal.com';
+  const imageUrl = "https://erp.outsourceglobal.com";
 
   useEffect(() => {
     setDataToFilter(data);
-    setTimeout(() => {
-    }, 7000);
+    setTimeout(() => {}, 7000);
   }, [data]);
 
-    // Pagination
-    const count = totalPages;
-    const _DATA = usePagination(data, sizePerPage, totalPages);
-  
-    const handleChange = (e, p) => {
-      setPage(p);
-      _DATA.jump(p);
-    };
-  
-    const handleChangeSizePerPage = (e) => {
-      e.preventDefault();
-      const { name, value } = e.target;
-      setInfo((prevState) => ({ ...prevState, [name]: value }));
-  
-      setSizePerPage(e.target.value);
-      setPage(1);
-    };
+  // Pagination
+  const count = totalPages;
+  const _DATA = usePagination(data, sizePerPage, totalPages);
+
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
+  };
+
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
+
+    setSizePerPage(e.target.value);
+    setPage(1);
+  };
 
   return (
     <>
@@ -104,37 +103,44 @@ const ReporteeLeavesTable = ({
         >
           {(props) => (
             <div className="col-12">
-
               <ExportCSVButton
-                className="float-right btn export-csv" style={{ marginBottom: 15}}
+                className="float-right btn export-csv"
+                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
+              
+              <div className="hr-filter-select col-12"></div>
 
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                // selectRow={selectRow}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    'No Record Found'
-                  )
-                }
-              />
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  // selectRow={selectRow}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      "No Record Found"
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"
@@ -163,7 +169,6 @@ const ReporteeLeavesTable = ({
                   />
                 </Stack>
               </div>
-
             </div>
           )}
         </ToolkitProvider>

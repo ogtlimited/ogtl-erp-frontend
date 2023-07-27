@@ -47,7 +47,11 @@ const Login = () => {
             console.log(res);
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
-            window.location.href = "/dashboard/employee-dashboard";
+            if (res.data.data.token) {
+              window.location.href = "/dashboard/employee-dashboard";
+            } else {
+              return setErrorMsg("Network Error. Please try again");
+            }
           })
           .catch((err) => {
             setCount(() => count + 1);
@@ -60,8 +64,7 @@ const Login = () => {
                 "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
               );
             }
-            console.log("this err?:", err?.response)
-            setErrorMsg("Something went wrong. Please try again later.");
+            setErrorMsg(`${err?.message}. Please try again later.`);
           })
           .finally(() => {
             setLoading(false);
@@ -99,7 +102,11 @@ const Login = () => {
                   console.log(res);
                   tokenService.setUser(res.data.data);
                   tokenService.setToken(res.data.data.token);
-                  window.location.href = "/dashboard/employee-dashboard";
+                  if (res.data.data.token) {
+                    window.location.href = "/dashboard/employee-dashboard";
+                  } else {
+                    return setErrorMsg("Network Error. Please try again");
+                  }
                 })
                 .catch((err) => {
                   console.log(err);

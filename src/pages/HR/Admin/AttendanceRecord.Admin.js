@@ -28,7 +28,6 @@ const AttendanceRecord = () => {
 
   // Daily Attendance - Cards:
   const fetchDailyAttendanceSummary = useCallback(async () => {
-    console.log("Summary date:", date);
     try {
       const response = await axiosInstance.get(
         "api/v1/daily_attendance_summary.json",
@@ -48,9 +47,14 @@ const AttendanceRecord = () => {
       setDailyAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   // Daily Attendance - Table:
@@ -81,10 +85,13 @@ const AttendanceRecord = () => {
             }));
 
       setDailyAttendance(resData);
-      console.log("Attendance summary:", resData);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

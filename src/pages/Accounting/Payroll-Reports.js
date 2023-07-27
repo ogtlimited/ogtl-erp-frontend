@@ -48,7 +48,6 @@ const PayrollReports = () => {
       .then((res) => {
         const AllEmployeeSlips = res?.data?.data?.slips;
         const totalPages = res?.data?.data?.pages;
-        console.log("All Payslips", AllEmployeeSlips);
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
@@ -75,12 +74,16 @@ const PayrollReports = () => {
           netPay: e?.slip?.net_pay,
         }));
 
-        console.log("Formatted Payslips", formattedData);
         setData(formattedData);
       })
       .catch((error) => {
-        console.log("Slip Error:", error?.response);
+        showAlert(
+          true,
+          "Error retrieving information from server",
+          "alert alert-warning"
+        );
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
   useEffect(() => {

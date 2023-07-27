@@ -104,7 +104,11 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   };
@@ -153,7 +157,11 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   };
@@ -177,7 +185,11 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
       setLoading(false);
     }
   };

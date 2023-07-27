@@ -17,10 +17,15 @@ const Profile = () => {
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
+  const [employeeAttendance, setEmployeeAttendance] = useState([]);
   const [userID, setUserId] = useState("");
   const [employeeID, setEmployeeId] = useState("");
   const [officeID, setOfficeId] = useState("");
   const [mode, setMode] = useState("");
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
+  const [today, setToday] = useState(today_date);
 
   const [employeeOgid, setEmployeeOgid] = useState(id);
 
@@ -43,7 +48,6 @@ const Profile = () => {
 
       const resData = response?.data?.data?.employee_shifts;
       const employeeShifts = resData;
-      console.log("this employee shift:", employeeShifts);
 
       if (!employeeShifts.length) {
         setMode("create");
@@ -60,16 +64,19 @@ const Profile = () => {
   const fetchEmployeeProfile = async (newOgid) => {
     if (newOgid) {
       try {
-        const response = await axiosInstance.get(`/api/v1/employees/${newOgid}.json`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        });
+        const response = await axiosInstance.get(
+          `/api/v1/employees/${newOgid}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
         const resData = response?.data?.data;
         setUserdata(resData);
-  
+
         const userId = resData?.employee?.email;
         const employeeId = resData?.employee?.personal_detail?.id;
         const officeId = resData?.office?.id;
@@ -90,16 +97,19 @@ const Profile = () => {
       }
     } else {
       try {
-        const response = await axiosInstance.get(`/api/v1/employees/${employeeOgid}.json`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        });
+        const response = await axiosInstance.get(
+          `/api/v1/employees/${employeeOgid}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
         const resData = response?.data?.data;
         setUserdata(resData);
-  
+
         const userId = resData?.employee?.email;
         const employeeId = resData?.employee?.personal_detail?.id;
         const officeId = resData?.office?.id;
@@ -108,22 +118,50 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        console.log("This error:", error?.response?.status);
-        if (error?.response?.status === 500) {
-          showAlert(
-            true,
-            "Error fetching Employee Profile",
-            "alert alert-warning"
-          );
-        }
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        showAlert(
+          true,
+          "Error retrieving information from server",
+          "alert alert-warning"
+        );
       }
     }
   };
 
+  // Employee Attendance - Today:
+  const fetchEmployeeAttendance = useCallback(async () => {
+    const today_date = moment(time).format("yyyy-MM-DD");
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/employee_attendances/${id}.json?start_date=${today_date}&end_date=${today_date}&limit=400`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData =
+        response?.data?.data?.result === "no record for date range"
+          ? []
+          : response?.data?.data?.result;
+
+      setEmployeeAttendance(resData);
+    } catch (error) {
+      showAlert(
+        true,
+        "Error retrieving information from server",
+        "alert alert-warning"
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, time]);
+
   useEffect(() => {
     fetchEmployeeShift();
     fetchEmployeeProfile();
+    fetchEmployeeAttendance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -269,6 +307,8 @@ const Profile = () => {
         setFormValue={setFormValue}
         mode={mode}
         setMode={setMode}
+        today={today}
+        employeeAttendance={employeeAttendance}
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
         userID={userID}
@@ -277,6 +317,7 @@ const Profile = () => {
         officeID={officeID}
         fetchEmployeeShift={fetchEmployeeShift}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        fetchEmployeeAttendance={fetchEmployeeAttendance}
         setEmployeeOgid={setEmployeeOgid}
       />
 

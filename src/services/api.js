@@ -34,14 +34,14 @@ axiosInstance.interceptors.response.use(
     }
     console.log("App error 😪:", error?.response)
     if (error?.response?.status === 400  && error?.response?.data?.errors === "invalid token, login again") {
-      // tokenService.clearStorage();
-      // window.location = "/auth";
+      tokenService.removeToken();
+      window.location = "/auth";
     console.log("400 error 😪:", error?.response)
     } else if (error?.response?.status === 401) {
       // tokenService.clearStorage();
       // window.location = "/auth";
     console.log("401 error 😪:", error?.response)
-    } else if (error?.response?.status === 502) {
+    } else if (error?.response?.status === 502 || error?.message === "Network Error") {
       window.location = "/502";
       console.log("502 error 😪:", error?.response)
     }
