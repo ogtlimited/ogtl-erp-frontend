@@ -145,6 +145,11 @@ const sidebarConfig = [
           },
           {
             canView: 'hr',
+            title: 'Remote Attendance',
+            path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
+          },
+          {
+            canView: 'hr',
             title: 'Leave Applications',
             path: PATH_DASHBOARD.hr.leavesAdmin,
           },
@@ -321,6 +326,12 @@ const sidebarConfig = [
         title: 'Campaign Schedule',
         path: PATH_DASHBOARD.leadership.campaignSchedule,
         icon: ICONS.schedule,
+      },
+      {
+        canView: 'lead',
+        title: 'Attendance Record',
+        path: PATH_DASHBOARD.leadership.remoteAttendance,
+        icon: ICONS.attendance,
       },
     ],
   },
