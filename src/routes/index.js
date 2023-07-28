@@ -348,6 +348,14 @@ export default function Router() {
               ),
             },
             {
+              path: 'remote-attendance',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <RemoteAttendanceAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: 'campaign/employees/:office/:id',
               element: (
                 <GuardedRoute title="" dept="HR">
@@ -942,6 +950,7 @@ export default function Router() {
         { path: 'employee-coaching', element: <CoachingEmployee /> },
         { path: 'leadership/supervisor', element: <SupervisorAdmin /> },
         { path: 'leadership/campaign-schedule', element: <ShiftScheduleList /> },
+        { path: 'leadership/attendance-record', element: <RemoteAttendance /> },
         { path: 'leadership/subordinate-attendance', element: <SupervisorAttendanceAdmin /> },
         {
           path: 'product-items',
@@ -1047,6 +1056,9 @@ const AttendanceAdmin = Loadable(
 );
 const AttendanceRecord = Loadable(
   lazy(() => import('../pages/HR/Admin/AttendanceRecord.Admin'))
+);
+const RemoteAttendanceAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/RemoteAttendance.Admin'))
 );
 const Offices = Loadable(
   lazy(() => import('../pages/HR/Admin/Offices.Admin'))
@@ -1222,6 +1234,9 @@ const SupervisorAdmin = Loadable(
 );
 const ShiftScheduleList = Loadable(
   lazy(() => import('../pages/HR/Admin/ShiftScheduleList.Admin'))
+);
+const RemoteAttendance = Loadable(
+  lazy(() => import('../pages/HR/Users/RemoteAttendance'))
 );
 const SupervisorAttendanceAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/SupervisorAttendance.Admin'))
