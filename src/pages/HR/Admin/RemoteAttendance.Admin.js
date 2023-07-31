@@ -214,7 +214,7 @@ const RemoteAttendanceAdmin = () => {
     },
     {
       dataField: "formattedDate",
-      text: "Date",
+      text: "Date generated",
       sort: true,
       headerStyle: { width: "20%" },
     },

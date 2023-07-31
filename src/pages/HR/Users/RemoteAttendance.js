@@ -174,7 +174,7 @@ const RemoteAttendance = () => {
     },
     {
       dataField: "formattedDate",
-      text: "Date",
+      text: "Date generated",
       sort: true,
       headerStyle: { width: "20%" },
     },
@@ -185,7 +185,7 @@ const RemoteAttendance = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.post(
-        "/api/v1/generate_attendance_daily_sheets.json",
+        `/api/v1/generate_attendance_daily_sheets.json?day=${date}`,
         {
           headers: {
             "Content-Type": "application/json",
