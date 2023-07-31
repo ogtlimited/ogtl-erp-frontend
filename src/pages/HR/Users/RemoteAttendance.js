@@ -76,7 +76,6 @@ const RemoteAttendance = () => {
 
       const formatted = resData.map((e, index) => ({
         ...e,
-        s_n: index + 1,
         full_name: e.first_name + " " + e.last_name,
         formattedDate: moment(e?.createdAt).format("Do MMMM, YYYY"),
       }));
@@ -141,12 +140,6 @@ const RemoteAttendance = () => {
 
   const columns = [
     {
-      dataField: "s_n",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
@@ -162,7 +155,7 @@ const RemoteAttendance = () => {
       dataField: "present",
       text: "Present",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           <Switch
@@ -247,10 +240,10 @@ const RemoteAttendance = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Attendance Records</h3>
+            <h3 className="page-title">Remote Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Leadership</li>
-              <li className="breadcrumb-item active">Team Members</li>
+              <li className="breadcrumb-item active">Attendance Records</li>
             </ul>
           </div>
           {!dailyRemoteAttendance.length && <div className="col-auto float-right ml-auto">
@@ -338,11 +331,11 @@ const RemoteAttendance = () => {
                   data-toggle="tab"
                   href="#tab_dailyAttendanceSummary"
                 >
-                  Daily Attendance Summary
+                  Daily Attendance
                 </a>
               </li>
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
@@ -350,7 +343,7 @@ const RemoteAttendance = () => {
                 >
                   Team Attendance
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

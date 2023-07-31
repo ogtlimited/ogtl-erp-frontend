@@ -82,12 +82,9 @@ const RemoteAttendanceAdmin = () => {
 
       const formatted = resData.map((e, index) => ({
         ...e,
-        s_n: index + 1,
         full_name: e.first_name + " " + e.last_name,
         formattedDate: moment(e?.createdAt).format("Do MMMM, YYYY"),
       }));
-
-      console.log("Admin Daily Remote Attendance:", formatted);
 
       setDailyRemoteAttendance(formatted);
       setLoading(false);
@@ -187,12 +184,6 @@ const RemoteAttendanceAdmin = () => {
 
   const columns = [
     {
-      dataField: "s_n",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
@@ -208,7 +199,7 @@ const RemoteAttendanceAdmin = () => {
       dataField: "present",
       text: "Present",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           <Switch checked={row?.present} />
@@ -268,8 +259,8 @@ const RemoteAttendanceAdmin = () => {
         </div>
       </div>
 
-      {/* <div className="daily-attendance-card-group">
-        <div className="daily-attendance-card">
+      <div className="daily-attendance-card-group">
+        {/* <div className="daily-attendance-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i className="las la-users"></i>
@@ -283,9 +274,9 @@ const RemoteAttendanceAdmin = () => {
             </div>
           </div>
           <span>Total Present</span>
-        </div>
+        </div> */}
 
-        <div className="daily-attendance-card">
+        {/* <div className="daily-attendance-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i
@@ -302,7 +293,7 @@ const RemoteAttendanceAdmin = () => {
             </div>
           </div>
           <span>Total Absent</span>
-        </div>
+        </div> */}
 
         <div className="daily-attendance-card">
           <div className="card-body">
@@ -318,7 +309,7 @@ const RemoteAttendanceAdmin = () => {
               ) : (
                 <h3>
                   {" "}
-                  {moment(dailyRemoteAttendanceSummary?.day).format(
+                  {moment(date).format(
                     "Do MMMM, YYYY"
                   )}{" "}
                 </h3>
@@ -327,9 +318,9 @@ const RemoteAttendanceAdmin = () => {
           </div>
           <span>Date</span>
         </div>
-      </div> */}
+      </div>
 
-      {/* <div className="page-menu">
+      <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
@@ -339,17 +330,17 @@ const RemoteAttendanceAdmin = () => {
                   data-toggle="tab"
                   href="#tab_dailyAttendance"
                 >
-                  Daily Attendance Summary
+                  Daily Attendance
                 </a>
               </li>
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
                   Campaigns
                 </a>
-              </li>
+              </li> */}
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
@@ -357,12 +348,12 @@ const RemoteAttendanceAdmin = () => {
                 >
                   Departments
                 </a>
-              </li>
+              </li> */}
 
             </ul>
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div>
         <div className="row tab-content">

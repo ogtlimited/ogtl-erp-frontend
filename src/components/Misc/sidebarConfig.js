@@ -333,7 +333,7 @@ const sidebarConfig = [
       },
       {
         canView: 'remote-lead',
-        title: 'Attendance Record',
+        title: 'Remote Attendance',
         path: PATH_DASHBOARD.leadership.remoteAttendance,
         icon: ICONS.attendance,
       },
