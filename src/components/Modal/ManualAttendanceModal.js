@@ -8,6 +8,7 @@ import $ from "jquery";
 export const ManualAttendanceModal = ({
   employeeOgid,
   today,
+  setToday,
   employeeAttendance,
   userData,
   fetchEmployeeAttendance,
@@ -50,6 +51,11 @@ export const ManualAttendanceModal = ({
     e.preventDefault();
     setEmployee({ ...employee, [e.target.name]: e.target.value });
   };
+
+  const handleDateChange = (e) => {
+    e.preventDefault();
+    setToday(e.target.value);
+  }
 
   const handleSubmitAttendance = async (e) => {
     e.preventDefault();
@@ -109,7 +115,7 @@ export const ManualAttendanceModal = ({
                       name="date"
                       type="date"
                       value={employee.date}
-                      onChange={handleFormChange}
+                      onChange={handleDateChange}
                     />
                   </div>
                 </div>
