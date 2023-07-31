@@ -1,6 +1,10 @@
 /** @format */
 
 import { PATH_DASHBOARD } from '../../routes/paths';
+import tokenService from '../../services/token.service';
+
+const user = tokenService.getUser();
+const remoteUser = user?.employee_info?.remote
 
 const getIcon = (name) => <i className={'la ' + name}></i>;
 
@@ -314,7 +318,7 @@ const sidebarConfig = [
   {
     subheader: 'Leadership',
     canView: 'lead',
-    items: [
+    items: remoteUser ? [
       {
         canView: 'lead',
         title: 'Team Members',
@@ -328,12 +332,25 @@ const sidebarConfig = [
         icon: ICONS.schedule,
       },
       {
-        canView: 'lead',
+        canView: 'remote-lead',
         title: 'Attendance Record',
         path: PATH_DASHBOARD.leadership.remoteAttendance,
         icon: ICONS.attendance,
       },
-    ],
+    ] : [
+      {
+        canView: 'lead',
+        title: 'Team Members',
+        path: PATH_DASHBOARD.leadership.supervisor,
+        icon: ICONS.leadership,
+      },
+      {
+        canView: 'lead',
+        title: 'Campaign Schedule',
+        path: PATH_DASHBOARD.leadership.campaignSchedule,
+        icon: ICONS.schedule,
+      },
+    ]
   },
 
   // {
