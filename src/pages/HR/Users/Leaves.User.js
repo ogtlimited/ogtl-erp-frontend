@@ -202,28 +202,28 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "from_date",
       text: "From",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (

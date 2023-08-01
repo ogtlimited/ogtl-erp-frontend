@@ -6,17 +6,25 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid }) => {
+export const EmployeeInfoModal = ({
+  data,
+  fetchEmployeeProfile,
+  setEmployeeOgid,
+}) => {
   const navigate = useNavigate();
-  const { selectCampaigns, selectDepartments, selectDesignations, user, showAlert } =
-    useAppContext();
+  const {
+    selectCampaigns,
+    selectDepartments,
+    selectDesignations,
+    user,
+    showAlert,
+  } = useAppContext();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  // const canCreate = ["hr_manager", "senior_hr_associate"];
-
+  const canView = ["hr_manager", "senior_hr_associate"];
 
   useEffect(() => {
     setEmployeeInfo(data);
@@ -64,16 +72,16 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
           employee_info: editedEmployeeInfo,
           user_info: {
             email: employeeInfo?.employee?.email,
-          }
+          },
         },
       });
 
-      const newOgid = employeeInfo?.employee?.ogid
+      const newOgid = employeeInfo?.employee?.ogid;
       setEmployeeOgid(newOgid);
       const successMessage = response?.data?.data?.message;
 
       showAlert(true, successMessage, "alert alert-success");
-      navigate(`/dashboard/user/profile/${newOgid}`)
+      navigate(`/dashboard/user/profile/${newOgid}`);
       fetchEmployeeProfile(newOgid);
       $("#EmployeeInfoModal").modal("toggle");
       setEmployeeInfo(data);
@@ -112,7 +120,8 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
             <div className="modal-body">
               <form onSubmit={handleEditEmployeeInfo}>
                 <div className="row">
-                  {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="ogid">OGID</label>
@@ -135,7 +144,8 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") || CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="email">Email</label>
@@ -158,28 +168,33 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                     </div>
                   ) : null}
 
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="date_of_joining">Date of Joining</label>
-                      <input
-                        name="date_of_joining"
-                        type="date"
-                        className="form-control"
-                        value={
-                          employeeInfo?.employee?.date_of_joining?.split("T")[0]
-                        }
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              date_of_joining: e?.target?.value,
-                            },
-                          })
-                        }
-                      />
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="date_of_joining">Date of Joining</label>
+                        <input
+                          name="date_of_joining"
+                          type="date"
+                          className="form-control"
+                          value={
+                            employeeInfo?.employee?.date_of_joining?.split(
+                              "T"
+                            )[0]
+                          }
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                date_of_joining: e?.target?.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
                   {/* <div className="col-md-6">
                     <div className="form-group">
@@ -207,128 +222,144 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                   </div> */}
 
                   {/* Office Type */}
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="office_type">Office Type</label>
-                      <Select
-                        options={officeTypeOptions}
-                        value={{
-                          label: employeeInfo?.office?.office_type,
-                          value: officeType,
-                        }}
-                        style={{ display: "inline-block" }}
-                        onChange={(e) => handleOfficeTypeChange(e)}
-                      />
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="office_type">Office Type</label>
+                        <Select
+                          options={officeTypeOptions}
+                          value={{
+                            label: employeeInfo?.office?.office_type,
+                            value: officeType,
+                          }}
+                          style={{ display: "inline-block" }}
+                          onChange={(e) => handleOfficeTypeChange(e)}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
                   {/* Office */}
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="operation_office_id">Office</label>
-                      <Select
-                        name="operation_office_id"
-                        options={
-                          officeType === "department"
-                            ? selectDepartments
-                            : selectCampaigns
-                        }
-                        value={{
-                          label: employeeInfo?.office?.title,
-                          value: employeeInfo?.office?.id,
-                        }}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            office: {
-                              ...employeeInfo.office,
-                              id: e?.value,
-                              title: e?.label,
-                            },
-                          })
-                        }
-                        style={{ display: "inline-block" }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="hr_designation_id">Designation</label>
-                      <Select
-                        name="hr_designation_id"
-                        options={selectDesignations}
-                        value={{
-                          label: employeeInfo?.employee?.designation?.title,
-                          value: employeeInfo?.employee?.designation.id,
-                        }}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              designation: {
-                                ...employeeInfo.employee.designation,
+                  {selectCampaigns.length || selectDepartments.length ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="operation_office_id">Office</label>
+                        <Select
+                          name="operation_office_id"
+                          options={
+                            officeType === "department"
+                              ? selectDepartments
+                              : selectCampaigns
+                          }
+                          value={{
+                            label: employeeInfo?.office?.title,
+                            value: employeeInfo?.office?.id,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              office: {
+                                ...employeeInfo.office,
                                 id: e?.value,
                                 title: e?.label,
                               },
-                            },
-                          })
-                        }
-                        style={{ display: "inline-block" }}
-                      />
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="remote">
-                        Is this Employee a Remote Staff?
-                      </label>
-                      <Select
-                        name="remote"
-                        options={categoryOptions}
-                        value={{
-                          label: employeeInfo?.employee?.remote ? "Yes" : "No",
-                          value: employeeInfo?.employee?.remote,
-                        }}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              remote: e?.value,
-                              remoteName: e?.label,
-                            },
-                          })
-                        }
-                        style={{ display: "inline-block" }}
-                      />
+                  {selectDesignations.length ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_designation_id">Designation</label>
+                        <Select
+                          name="hr_designation_id"
+                          options={selectDesignations}
+                          value={{
+                            label: employeeInfo?.employee?.designation?.title,
+                            value: employeeInfo?.employee?.designation.id,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                designation: {
+                                  ...employeeInfo.employee.designation,
+                                  id: e?.value,
+                                  title: e?.label,
+                                },
+                              },
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_count">Leave Count</label>
-                      <input
-                        name="leave_count"
-                        type="number"
-                        className="form-control"
-                        value={employeeInfo?.employee?.leave_count}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              leave_count: e?.target?.value,
-                            },
-                          })
-                        }
-                      />
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="remote">
+                          Is this Employee a Remote Staff?
+                        </label>
+                        <Select
+                          name="remote"
+                          options={categoryOptions}
+                          value={{
+                            label: employeeInfo?.employee?.remote
+                              ? "Yes"
+                              : "No",
+                            value: employeeInfo?.employee?.remote,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                remote: e?.value,
+                                remoteName: e?.label,
+                              },
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
 
-                  <div className="col-md-6">
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="leave_count">Leave Count</label>
+                        <input
+                          name="leave_count"
+                          type="number"
+                          className="form-control"
+                          value={employeeInfo?.employee?.leave_count}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                leave_count: e?.target?.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {CurrentUserRoles.includes("hr_manager") ||
+                  CurrentUserRoles.includes("senior_hr_associate") ? <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leave_approval_level">
                         Leave Approval Level
@@ -349,7 +380,7 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
                         }
                       />
                     </div>
-                  </div>
+                  </div> : null}
                 </div>
 
                 <div className="modal-footer">

@@ -5,7 +5,11 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
+export const ReportToModal = ({
+  data,
+  fetchEmployeeProfile,
+  setHideReportToModal,
+}) => {
   const { selectCampaigns, selectDepartments } = useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
@@ -45,10 +49,12 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
       setAllLeaders(formattedLeaders);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders error:", error);
+      if (error?.response?.status === 403) {
+        return setHideReportToModal(true);
+      }
       setLoading(false);
     }
-  }, [reportTo?.office?.id]);
+  }, [reportTo?.office?.id, setHideReportToModal]);
 
   useEffect(() => {
     fetchAllLeaders();
