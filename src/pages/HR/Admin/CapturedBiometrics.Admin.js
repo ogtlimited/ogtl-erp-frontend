@@ -103,7 +103,7 @@ const CapturedBiometricsAdmin = () => {
             <h3 className="page-title">Captured Biometrics</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Employees</li>
+              <li className="breadcrumb-item active">Captured Biometrics</li>
             </ul>
           </div>
         </div>

@@ -255,7 +255,7 @@ const AllEmployeesAdmin = () => {
             <h3 className="page-title">Employees</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Employees</li>
+              <li className="breadcrumb-item active">All Employees</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

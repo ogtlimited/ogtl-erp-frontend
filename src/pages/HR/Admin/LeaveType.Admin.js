@@ -123,7 +123,7 @@ const LeaveType = () => {
             <h3 className="page-title">Leaves Types</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Leave Type</li>
+              <li className="breadcrumb-item active">Leave Types</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
