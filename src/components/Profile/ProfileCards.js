@@ -4,13 +4,16 @@ import React, { useEffect, useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import PersonalInfo from "./components/PersonalInfo";
 import EmployeeInfo from "./components/EmployeeInfo";
-import ContactDetails from "./components/ContactDetails";
+// import ContactDetails from "./components/ContactDetails";
 import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
 import { EditEmployeeShiftModal } from "../Modal/EditEmployeeShiftModal";
+import { EditRemoteEmployeeShiftModal } from "../Modal/EditRemoteEmployeeShiftModal";
 import { CreateEmployeeShiftModal } from "../Modal/CreateEmployeeShiftModal";
+import { CreateRemoteEmployeeShiftModal } from "../Modal/CreateRemoteEmployeeShiftModal";
 import { ManualAttendanceModal } from "../Modal/ManualAttendanceModal";
 import { ViewEmployeeShift } from "../Modal/ViewEmployeeShift";
+import { ViewRemoteEmployeeShift } from "../Modal/ViewRemoteEmployeeShift";
 import { useAppContext } from "../../Context/AppContext";
 import { BsFillPrinterFill } from "react-icons/bs";
 
@@ -22,16 +25,22 @@ const ProfileCards = ({
   setFormValue,
   fetchUserInfo,
   today,
+  setToday,
   employeeAttendance,
   employeeShifts,
   setEmployeeShifts,
+  employeeRemoteShifts,
+  setEmployeeRemoteShifts,
   userID,
   userOgid,
   employeeID,
   officeID,
   mode,
   setMode,
+  remoteMode,
+  setRemoteMode,
   fetchEmployeeShift,
+  fetchEmployeeRemoteShift,
   fetchEmployeeProfile,
   fetchEmployeeAttendance,
   setEmployeeOgid,
@@ -86,17 +95,34 @@ const ProfileCards = ({
                   Shifts
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  href="#emp_clockInOut"
-                  data-toggle="tab"
-                  className={
-                    isFromBiometricsClockIn ? "nav-link active" : "nav-link"
-                  }
-                >
-                  Manual Clock In/Out
-                </a>
-              </li>
+              {CurrentUserRoles.includes("hr_manager") ||
+              CurrentUserRoles.includes("senior_hr_associate") ? (
+                <li className="nav-item">
+                  <a
+                    href="#emp_clockInOut"
+                    data-toggle="tab"
+                    className={
+                      isFromBiometricsClockIn ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    Manual Clock In/Out
+                  </a>
+                </li>
+              ) : null}
+
+              {userData?.employee?.remote ? (
+                <li className="nav-item">
+                  <a
+                    href="#emp_remoteShifts"
+                    data-toggle="tab"
+                    className={
+                      isFromBiometrics ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    Remote Shift
+                  </a>
+                </li>
+              ) : null}
             </ul>
           </div>
         </div>
@@ -141,6 +167,7 @@ const ProfileCards = ({
           </div> */}
         </div>
 
+        {/* Virtual ID */}
         <div
           id="emp_virtualID"
           className="pro-overview tab-pane fade"
@@ -179,6 +206,7 @@ const ProfileCards = ({
           </div>
         </div>
 
+        {/* Shift */}
         {CurrentUserRoles.includes("hr_manager") || userOgid !== ogid ? (
           <div
             id="emp_shifts"
@@ -231,6 +259,7 @@ const ProfileCards = ({
           </div>
         )}
 
+        {/* Manual Clock In/Out */}
         {CurrentUserRoles.includes("hr_manager") ||
         CurrentUserRoles.includes("senior_hr_associate") ? (
           <div
@@ -246,6 +275,7 @@ const ProfileCards = ({
                 <ManualAttendanceModal
                   employeeOgid={userOgid}
                   today={today}
+                  setToday={setToday}
                   employeeAttendance={employeeAttendance}
                   userData={userData}
                   fetchEmployeeAttendance={fetchEmployeeAttendance}
@@ -254,6 +284,56 @@ const ProfileCards = ({
             </div>
           </div>
         ) : null}
+
+        {/* Remote shift */}
+        {CurrentUserRoles.includes("hr_manager") || userOgid !== ogid ? (
+          <div
+            id="emp_remoteShifts"
+            className={
+              isFromBiometrics
+                ? "pro-overview tab-pane active "
+                : "pro-overview tab-pane fade"
+            }
+          >
+            <div className="row">
+              <div className="col-md-12 d-flex">
+                {remoteMode === "edit" ? (
+                  <EditRemoteEmployeeShiftModal
+                    userID={userID}
+                    officeID={officeID}
+                    employeeID={employeeID}
+                    employeeRemoteShifts={employeeRemoteShifts}
+                    setEmployeeRemoteShifts={setEmployeeRemoteShifts}
+                  />
+                ) : (
+                  <CreateRemoteEmployeeShiftModal
+                    userID={userID}
+                    setMode={setMode}
+                    fetchEmployeeRemoteShift={fetchEmployeeRemoteShift}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div
+            id="emp_remoteShifts"
+            className={
+              isFromBiometrics
+                ? "pro-overview tab-pane active "
+                : "pro-overview tab-pane fade"
+            }
+          >
+            <div className="row">
+              <div className="col-md-12 d-flex">
+                <ViewRemoteEmployeeShift
+                  employeeShifts={employeeShifts}
+                  userID={userID}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

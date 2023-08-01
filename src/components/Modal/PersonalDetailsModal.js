@@ -55,7 +55,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
       setPersonalDetails(data);
       setLoading(false);
     } catch (error) {
-      console.log("Edit Personal Details error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };

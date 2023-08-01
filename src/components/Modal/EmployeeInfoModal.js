@@ -74,13 +74,12 @@ export const EmployeeInfoModal = ({ data, fetchEmployeeProfile, setEmployeeOgid 
 
       showAlert(true, successMessage, "alert alert-success");
       navigate(`/dashboard/user/profile/${newOgid}`)
-      // window.location.reload();
       fetchEmployeeProfile(newOgid);
       $("#EmployeeInfoModal").modal("toggle");
       setEmployeeInfo(data);
       setLoading(false);
     } catch (error) {
-      console.log("Edit Employee Info error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };
