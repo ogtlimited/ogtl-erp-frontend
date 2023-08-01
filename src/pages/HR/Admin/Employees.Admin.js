@@ -254,9 +254,7 @@ const AllEmployeesAdmin = () => {
           <div className="col">
             <h3 className="page-title">Employees</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/dashboard/hr-dashboard">HR</Link>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Employees</li>
             </ul>
           </div>
