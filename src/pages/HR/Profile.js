@@ -114,7 +114,7 @@ const Profile = () => {
         const resData = response?.data?.data;
         setUserdata(resData);
 
-        console.log("Employee Details:", resData)
+        console.log("Employee Details:", resData);
 
         const userId = resData?.employee?.email;
         const employeeId = resData?.employee?.personal_detail?.id;
@@ -134,66 +134,69 @@ const Profile = () => {
   };
 
   // Employee Attendance - Today:
-  const fetchEmployeeAttendance = useCallback(async (date) => { 
-    if (date) {
-      try {
-        const response = await axiosInstance.get(
-          `/api/v1/employee_attendances/${id}.json?start_date=${date}&end_date=${date}&limit=400`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        );
-  
-        const resData =
-          response?.data?.data?.result === "no record for date range"
-            ? []
-            : response?.data?.data?.result;
-  
-        setEmployeeAttendance(resData);
-      } catch (error) {
-        showAlert(
-          true,
-          "Error retrieving employee attendance",
-          "alert alert-warning"
-        );
-      }
-    } else {
-      try {
-        const response = await axiosInstance.get(
-          `/api/v1/employee_attendances/${id}.json?start_date=${today}&end_date=${today}&limit=400`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        );
-  
-        const resData =
-          response?.data?.data?.result === "no record for date range"
-            ? []
-            : response?.data?.data?.result;
-  
-        setEmployeeAttendance(resData);
-      } catch (error) {
-        showAlert(
-          true,
-          "Error retrieving employee attendance",
-          "alert alert-warning"
-        );
-      }
-    }
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, today]);
+  const fetchEmployeeAttendance = useCallback(
+    async (date) => {
+      if (date) {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employee_attendances/${id}.json?start_date=${date}&end_date=${date}&limit=400`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
 
-   // Employee Remote Shifts:
-   const fetchEmployeeRemoteShift = async () => {
+          const resData =
+            response?.data?.data?.result === "no record for date range"
+              ? []
+              : response?.data?.data?.result;
+
+          setEmployeeAttendance(resData);
+        } catch (error) {
+          showAlert(
+            true,
+            "Error retrieving employee attendance",
+            "alert alert-warning"
+          );
+        }
+      } else {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employee_attendances/${id}.json?start_date=${today}&end_date=${today}&limit=400`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+
+          const resData =
+            response?.data?.data?.result === "no record for date range"
+              ? []
+              : response?.data?.data?.result;
+
+          setEmployeeAttendance(resData);
+        } catch (error) {
+          showAlert(
+            true,
+            "Error retrieving employee attendance",
+            "alert alert-warning"
+          );
+        }
+      }
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [id, today]
+  );
+
+  // Employee Remote Shifts:
+  const fetchEmployeeRemoteShift = async () => {
     try {
       const response = await axiosInstance.get(
         `/api/v1/employee_remote_shifts.json?ogid=${id}`,
@@ -241,9 +244,7 @@ const Profile = () => {
           <div className="col-sm-12">
             <h3 className="page-title">Profile</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/dashboard/hr/all-employees">Employees</Link>
-              </li>
+              <li className="breadcrumb-item">Employee</li>
               <li className="breadcrumb-item active">Profile</li>
             </ul>
           </div>
