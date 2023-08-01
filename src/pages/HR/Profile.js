@@ -29,6 +29,8 @@ const Profile = () => {
   const today_date = moment(time).format("yyyy-MM-DD");
   const [today, setToday] = useState(today_date);
 
+  console.log("today:", today);
+
   const [employeeOgid, setEmployeeOgid] = useState(id);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -132,32 +134,61 @@ const Profile = () => {
   };
 
   // Employee Attendance - Today:
-  const fetchEmployeeAttendance = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/v1/employee_attendances/${id}.json?start_date=${today}&end_date=${today}&limit=400`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      const resData =
-        response?.data?.data?.result === "no record for date range"
-          ? []
-          : response?.data?.data?.result;
-
-      setEmployeeAttendance(resData);
-    } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving employee attendance",
-        "alert alert-warning"
-      );
+  const fetchEmployeeAttendance = useCallback(async (date) => { 
+    if (date) {
+      try {
+        const response = await axiosInstance.get(
+          `/api/v1/employee_attendances/${id}.json?start_date=${date}&end_date=${date}&limit=400`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
+  
+        const resData =
+          response?.data?.data?.result === "no record for date range"
+            ? []
+            : response?.data?.data?.result;
+  
+        setEmployeeAttendance(resData);
+      } catch (error) {
+        showAlert(
+          true,
+          "Error retrieving employee attendance",
+          "alert alert-warning"
+        );
+      }
+    } else {
+      try {
+        const response = await axiosInstance.get(
+          `/api/v1/employee_attendances/${id}.json?start_date=${today}&end_date=${today}&limit=400`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+          }
+        );
+  
+        const resData =
+          response?.data?.data?.result === "no record for date range"
+            ? []
+            : response?.data?.data?.result;
+  
+        setEmployeeAttendance(resData);
+      } catch (error) {
+        showAlert(
+          true,
+          "Error retrieving employee attendance",
+          "alert alert-warning"
+        );
+      }
     }
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, today]);
 
@@ -177,8 +208,6 @@ const Profile = () => {
 
       const resData = response?.data?.data?.employee_remote_shifts;
       const employeeRemoteShifts = resData;
-
-      console.log("Employee Remote Shifts: ", employeeRemoteShifts)
 
       if (!employeeRemoteShifts.length) {
         setRemoteMode("create");
