@@ -252,10 +252,11 @@ const RemoteAttendance = () => {
               <>
                 {generating ? (
                   <a href="#" className="btn add-btn ">
-                    <div
-                      className="spinner-border text-light"
+                    <span
+                      className="spinner-border"
                       role="status"
-                    ></div>
+                      aria-hidden="true"
+                    ></span>
                   </a>
                 ) : (
                   <a

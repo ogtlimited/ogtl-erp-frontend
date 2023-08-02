@@ -5,6 +5,7 @@ import tokenService from '../../services/token.service';
 
 const user = tokenService.getUser();
 const remoteUser = user?.employee_info?.remote
+const CurrentUserIsLead = user?.employee_info?.is_lead;
 
 const getIcon = (name) => <i className={'la ' + name}></i>;
 
@@ -318,7 +319,7 @@ const sidebarConfig = [
   {
     subheader: 'Leadership',
     canView: 'lead',
-    items: remoteUser ? [
+    items: remoteUser && CurrentUserIsLead ? [
       {
         canView: 'lead',
         title: 'Team Members',

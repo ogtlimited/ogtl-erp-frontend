@@ -302,6 +302,32 @@ const AppProvider = (props) => {
     } catch (error) {}
   };
 
+  // Universal Error Handler:
+  const ErrorHandler = (error, component) => {
+    const errorMessage = error.response?.data?.errors;
+    const errorStatus = error.response?.status;
+
+    if (errorStatus >= 500) {
+      return showAlert(
+        true,
+        `Unable to communicate with server`,
+        "alert alert-warning"
+      );
+    } else if (errorStatus < 500 && !errorMessage) {
+      return showAlert(
+        true,
+        `Unable to process request`,
+        "alert alert-warning"
+      );
+    } else {
+      return showAlert(
+        true,
+        `${component} ${errorMessage}`,
+        "alert alert-warning"
+      );
+    }
+  };
+
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     if (token) {
@@ -368,6 +394,7 @@ const AppProvider = (props) => {
         user,
         setuserToken,
         fetchHRLeavesNotificationCount,
+        ErrorHandler,
         status,
       }}
     >
