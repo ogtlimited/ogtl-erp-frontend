@@ -1,4 +1,4 @@
-// *IN USE!
+// *IN USE - FIXED!
 
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 import React, { useState, useEffect, useCallback } from "react";
@@ -12,7 +12,7 @@ import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const { dropDownClicked, setDropDownClicked, user, showAlert } =
+  const { dropDownClicked, setDropDownClicked, user, ErrorHandler } =
     useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
@@ -69,7 +69,8 @@ const Profile = () => {
         setEmployeeShifts(employeeShifts);
       }
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      const component = "Employee Shifts Error:";
+      ErrorHandler(error, component);
     }
   };
 
@@ -98,14 +99,8 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        if (error?.response?.status === 500) {
-          showAlert(
-            true,
-            "Error fetching Employee Profile",
-            "alert alert-warning"
-          );
-        }
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        const component = "Employee Profile Error:";
+        ErrorHandler(error, component);
       }
     } else {
       try {
@@ -132,11 +127,8 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        showAlert(
-          true,
-          "Error retrieving information from server",
-          "alert alert-warning"
-        );
+        const component = "Employee Profile Error:";
+        ErrorHandler(error, component);
       }
     }
   };
@@ -164,23 +156,11 @@ const Profile = () => {
 
           setEmployeeAttendance(resData);
         } catch (error) {
-          const errorMsg = error.response?.data?.errors;
+          const component = "Employee Attendance Error:";
+          ErrorHandler(error, component);
+
           if (error?.response?.status === 403) {
             return setHideAttendanceComponent(true);
-          } else if (error?.response?.status === 500) {
-            showAlert(
-              true,
-              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
-              "alert alert-warning"
-            );
-          } else if (error?.response?.status === 502) {
-            showAlert(
-              true,
-              "Error retrieving employee attendance, please try again later!",
-              "alert alert-warning"
-            );
-          } else {
-            showAlert(true, `${errorMsg}`, "alert alert-warning");
           }
         }
       } else {
@@ -203,23 +183,11 @@ const Profile = () => {
 
           setEmployeeAttendance(resData);
         } catch (error) {
-          const errorMsg = error.response?.data?.errors;
+          const component = "Employee Attendance Error:";
+          ErrorHandler(error, component);
+
           if (error?.response?.status === 403) {
             return setHideAttendanceComponent(true);
-          } else if (error?.response?.status === 500) {
-            showAlert(
-              true,
-              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
-              "alert alert-warning"
-            );
-          } else if (error?.response?.status === 502) {
-            showAlert(
-              true,
-              "Error retrieving employee attendance, please try again later!",
-              "alert alert-warning"
-            );
-          } else {
-            showAlert(true, `${errorMsg}`, "alert alert-warning");
           }
         }
       }
@@ -252,24 +220,11 @@ const Profile = () => {
         setEmployeeRemoteShifts(employeeRemoteShifts);
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
+      const component = "Remote Employee Shift Error:";
+      ErrorHandler(error, component);
 
       if (error?.response?.status === 403) {
         return setHideRemoteShiftComponent(true);
-      } else if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving employee remote shift. Please try again later.",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving employee remote shift from server, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
       }
     }
   };
