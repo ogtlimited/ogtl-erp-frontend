@@ -98,7 +98,6 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        console.log("This error:", error?.response?.status);
         if (error?.response?.status === 500) {
           showAlert(
             true,
@@ -166,9 +165,20 @@ const Profile = () => {
           setEmployeeAttendance(resData);
         } catch (error) {
           const errorMsg = error.response?.data?.errors;
-
           if (error?.response?.status === 403) {
             return setHideAttendanceComponent(true);
+          } else if (error?.response?.status === 500) {
+            showAlert(
+              true,
+              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
+              "alert alert-warning"
+            );
+          } else if (error?.response?.status === 502) {
+            showAlert(
+              true,
+              "Error retrieving employee attendance, please try again later!",
+              "alert alert-warning"
+            );
           } else {
             showAlert(true, `${errorMsg}`, "alert alert-warning");
           }
@@ -196,6 +206,18 @@ const Profile = () => {
           const errorMsg = error.response?.data?.errors;
           if (error?.response?.status === 403) {
             return setHideAttendanceComponent(true);
+          } else if (error?.response?.status === 500) {
+            showAlert(
+              true,
+              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
+              "alert alert-warning"
+            );
+          } else if (error?.response?.status === 502) {
+            showAlert(
+              true,
+              "Error retrieving employee attendance, please try again later!",
+              "alert alert-warning"
+            );
           } else {
             showAlert(true, `${errorMsg}`, "alert alert-warning");
           }

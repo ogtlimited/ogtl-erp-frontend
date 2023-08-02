@@ -10,7 +10,7 @@ export const ReportToModal = ({
   fetchEmployeeProfile,
   setHideReportToModal,
 }) => {
-  const { selectCampaigns, selectDepartments } = useAppContext();
+  const { selectCampaigns, selectDepartments, showAlert } = useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -100,11 +100,12 @@ export const ReportToModal = ({
         }
       );
 
+      showAlert(true, `Report To updated successfully!`, "alert alert-success");
       fetchEmployeeProfile();
       $("#ReportToModal").modal("toggle");
       setLoading(false);
     } catch (error) {
-      console.log("Edit Report To Info error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };

@@ -24,7 +24,9 @@ export const EmployeeInfoModal = ({
   const [officeType, setOfficeType] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canView = ["hr_manager", "senior_hr_associate"];
+  const isHr = user?.office?.title === "hr" ? true : false;
+
+  // const canView = ["hr_manager", "senior_hr_associate"];
 
   useEffect(() => {
     setEmployeeInfo(data);
@@ -43,52 +45,96 @@ export const EmployeeInfoModal = ({
   };
 
   const handleEditEmployeeInfo = async (e) => {
-    e.preventDefault();
+    if (isHr) {
+      e.preventDefault();
 
-    const editedEmployeeInfo = {
-      date_of_joining: employeeInfo?.employee?.date_of_joining,
-      office_type: employeeInfo?.office?.office_type,
-      operation_office_id: employeeInfo?.office?.id,
-      hr_designation_id: employeeInfo?.employee?.designation?.id,
-      leave_approval_level: Number(
-        employeeInfo?.employee?.leave_approval_level
-      ),
-      remote: employeeInfo?.employee?.remote,
-      leave_count: employeeInfo?.employee?.leave_count,
-      ogid: employeeInfo?.employee?.ogid,
-    };
+      const editedEmployeeInfo = {
+        date_of_joining: employeeInfo?.employee?.date_of_joining,
+        office_type: employeeInfo?.office?.office_type,
+        operation_office_id: employeeInfo?.office?.id,
+        hr_designation_id: employeeInfo?.employee?.designation?.id,
+        leave_approval_level: Number(
+          employeeInfo?.employee?.leave_approval_level
+        ),
+        remote: employeeInfo?.employee?.remote,
+        leave_count: employeeInfo?.employee?.leave_count,
+        ogid: employeeInfo?.employee?.ogid,
+      };
 
-    setLoading(true);
-    try {
-      const id = data?.employee?.ogid;
-      console.log(id);
-      const response = await axiosInstance.put(`/api/v1/employees/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          employee_info: editedEmployeeInfo,
-          user_info: {
-            email: employeeInfo?.employee?.email,
-          },
-        },
-      });
+      setLoading(true);
+      try {
+        const id = data?.employee?.ogid;
+        const response = await axiosInstance.put(
+          `/api/v1/employees/${id}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: {
+              employee_info: editedEmployeeInfo,
+              user_info: {
+                email: employeeInfo?.employee?.email,
+              },
+            },
+          }
+        );
 
-      const newOgid = employeeInfo?.employee?.ogid;
-      setEmployeeOgid(newOgid);
-      const successMessage = response?.data?.data?.message;
+        const newOgid = employeeInfo?.employee?.ogid;
+        setEmployeeOgid(newOgid);
+        const successMessage = response?.data?.data?.message;
 
-      showAlert(true, successMessage, "alert alert-success");
-      navigate(`/dashboard/user/profile/${newOgid}`);
-      fetchEmployeeProfile(newOgid);
-      $("#EmployeeInfoModal").modal("toggle");
-      setEmployeeInfo(data);
-      setLoading(false);
-    } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
-      setLoading(false);
+        showAlert(true, successMessage, "alert alert-success");
+        navigate(`/dashboard/user/profile/${newOgid}`);
+        fetchEmployeeProfile(newOgid);
+        $("#EmployeeInfoModal").modal("toggle");
+        setEmployeeInfo(data);
+        setLoading(false);
+      } catch (error) {
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        setLoading(false);
+      }
+    } else {
+      e.preventDefault();
+
+      const editedEmployeeInfo = {
+        office_type: employeeInfo?.office?.office_type,
+        operation_office_id: employeeInfo?.office?.id,
+        hr_designation_id: employeeInfo?.employee?.designation?.id,
+      };
+
+      setLoading(true);
+      try {
+        const id = data?.employee?.ogid;
+        const response = await axiosInstance.put(
+          `/api/v1/employees/${id}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: {
+              employee_info: editedEmployeeInfo,
+            },
+          }
+        );
+
+        const newOgid = employeeInfo?.employee?.ogid;
+        setEmployeeOgid(newOgid);
+        const successMessage = response?.data?.data?.message;
+
+        showAlert(true, successMessage, "alert alert-success");
+        navigate(`/dashboard/user/profile/${newOgid}`);
+        fetchEmployeeProfile(newOgid);
+        $("#EmployeeInfoModal").modal("toggle");
+        setEmployeeInfo(data);
+        setLoading(false);
+      } catch (error) {
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        setLoading(false);
+      }
     }
   };
 
@@ -222,23 +268,20 @@ export const EmployeeInfoModal = ({
                   </div> */}
 
                   {/* Office Type */}
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label htmlFor="office_type">Office Type</label>
-                        <Select
-                          options={officeTypeOptions}
-                          value={{
-                            label: employeeInfo?.office?.office_type,
-                            value: officeType,
-                          }}
-                          style={{ display: "inline-block" }}
-                          onChange={(e) => handleOfficeTypeChange(e)}
-                        />
-                      </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="office_type">Office Type</label>
+                      <Select
+                        options={officeTypeOptions}
+                        value={{
+                          label: employeeInfo?.office?.office_type,
+                          value: officeType,
+                        }}
+                        style={{ display: "inline-block" }}
+                        onChange={(e) => handleOfficeTypeChange(e)}
+                      />
                     </div>
-                  ) : null}
+                  </div>
 
                   {/* Office */}
                   {selectCampaigns.length || selectDepartments.length ? (
@@ -359,28 +402,30 @@ export const EmployeeInfoModal = ({
                   ) : null}
 
                   {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="leave_approval_level">
-                        Leave Approval Level
-                      </label>
-                      <input
-                        name="leave_approval_level"
-                        type="number"
-                        className="form-control"
-                        value={employeeInfo?.employee?.leave_approval_level}
-                        onChange={(e) =>
-                          setEmployeeInfo({
-                            ...employeeInfo,
-                            employee: {
-                              ...employeeInfo.employee,
-                              leave_approval_level: e?.target?.value,
-                            },
-                          })
-                        }
-                      />
+                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="leave_approval_level">
+                          Leave Approval Level
+                        </label>
+                        <input
+                          name="leave_approval_level"
+                          type="number"
+                          className="form-control"
+                          value={employeeInfo?.employee?.leave_approval_level}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                leave_approval_level: e?.target?.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
                     </div>
-                  </div> : null}
+                  ) : null}
                 </div>
 
                 <div className="modal-footer">

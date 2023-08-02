@@ -189,8 +189,15 @@ const OfficeStaffTable = ({
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "designation",
-      text: "Designation",
+      dataField: "office",
+      text: "Office Type",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+    },
+    {
+      dataField: "officeName",
+      text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,

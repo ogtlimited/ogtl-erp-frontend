@@ -1,7 +1,7 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
 import { useAppContext } from "../../../Context/AppContext";
@@ -76,11 +76,17 @@ const AllEmployeesAdmin = () => {
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const errorMsg = error.response?.data?.errors;
+      if (error?.response?.status === 500 || error?.response?.status === 502) {
+        showAlert(
+          true,
+          "Oops! Something went wrong, while retrieving employees. Please try again later.",
+          "alert alert-warning"
+        );
+      } else {
+        showAlert(true, `${errorMsg}`, "alert alert-warning");
+      }
+
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

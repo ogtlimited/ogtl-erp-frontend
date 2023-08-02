@@ -9,7 +9,7 @@ const EmployeeInfo = ({
   fetchEmployeeProfile,
   setEmployeeOgid,
 }) => {
-  const { selectCampaigns, selectDepartments, selectDesignations, user } =
+  const { user } =
     useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -27,10 +27,7 @@ const EmployeeInfo = ({
         <div className="card-body">
           <h3 className="card-title">
             Employee Information{" "}
-            {canEditOffice.includes(...CurrentUserRoles) &&
-            selectCampaigns.length &&
-            selectDepartments.length &&
-            selectDesignations.length ? (
+            {canEditOffice.includes(...CurrentUserRoles) ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
