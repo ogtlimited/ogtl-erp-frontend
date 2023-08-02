@@ -305,7 +305,7 @@ const AppProvider = (props) => {
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     if (token) {
-      if (isHr) {
+      if (isHr || isTeamLead) {
         fetchAllEmployees();
         fetchAllCampaigns();
         fetchAllDepartments();

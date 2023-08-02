@@ -125,10 +125,10 @@ const RolePermission = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Roles &amp; Permissions</h3>
+            <h3 className="page-title">Roles</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Settings</li>
-              <li className="breadcrumb-item active">Roles</li>
+              <li className="breadcrumb-item active">Roles & Permissions</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

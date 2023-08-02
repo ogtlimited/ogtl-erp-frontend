@@ -4,11 +4,22 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import { EmployeeInfoModal } from "../../Modal/EmployeeInfoModal";
 
-const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile, setEmployeeOgid }) => {
-  const { user } = useAppContext();
+const EmployeeInfo = ({
+  employeeInfo,
+  fetchEmployeeProfile,
+  setEmployeeOgid,
+}) => {
+  const { user } =
+    useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"]
+  // const canCreate = ["hr_manager", "hr_associate"];
+  const canEditOffice = [
+    "hr_manager",
+    "hr_associate",
+    "team_lead",
+    "supervisor",
+  ];
 
   return (
     <>
@@ -16,7 +27,7 @@ const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile, setEmployeeOgid }) =
         <div className="card-body">
           <h3 className="card-title">
             Employee Information{" "}
-            {canCreate.includes(...CurrentUserRoles) ? (
+            {canEditOffice.includes(...CurrentUserRoles) ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -72,7 +83,10 @@ const EmployeeInfo = ({ employeeInfo, fetchEmployeeProfile, setEmployeeOgid }) =
             <li>
               <div className="title">Leave Approval Level</div>
               <div className="text">
-                <strong>{employeeInfo?.employee?.leave_approval_level || "Not Available"}</strong>
+                <strong>
+                  {employeeInfo?.employee?.leave_approval_level ||
+                    "Not Available"}
+                </strong>
               </div>
             </li>
           </ul>

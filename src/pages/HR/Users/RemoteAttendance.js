@@ -13,6 +13,7 @@ import Switch from "@mui/material/Switch";
 const RemoteAttendance = () => {
   const { showAlert, user } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [dailyRemoteAttendanceSummary, setDailyRemoteAttendanceSummary] =
     useState([]);
   const [dailyRemoteAttendance, setDailyRemoteAttendance] = useState([]);
@@ -182,7 +183,7 @@ const RemoteAttendance = () => {
 
   // Generate Attendance:
   const handleGenerateAttendance = async () => {
-    setLoading(true);
+    setGenerating(true);
     try {
       const response = await axiosInstance.post(
         `/api/v1/generate_attendance_daily_sheets.json?day=${date}`,
@@ -203,11 +204,11 @@ const RemoteAttendance = () => {
         "alert alert-success"
       );
       fetchDailyRemoteAttendance();
-      setLoading(false);
+      setGenerating(false);
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-info");
-      setLoading(false);
+      setGenerating(false);
     }
   };
 
@@ -246,17 +247,28 @@ const RemoteAttendance = () => {
               <li className="breadcrumb-item active">Attendance Records</li>
             </ul>
           </div>
-          {!dailyRemoteAttendance.length && <div className="col-auto float-right ml-auto">
-            <>
-              <a
-                href="#"
-                className="btn add-btn "
-                onClick={handleGenerateAttendance}
-              >
-                <i className="fa fa-refresh"></i> Generate Attendance
-              </a>
-            </>
-          </div>}
+          {!dailyRemoteAttendance.length && (
+            <div className="col-auto float-right ml-auto">
+              <>
+                {generating ? (
+                  <a href="#" className="btn add-btn ">
+                    <div
+                      className="spinner-border text-light"
+                      role="status"
+                    ></div>
+                  </a>
+                ) : (
+                  <a
+                    href="#"
+                    className="btn add-btn "
+                    onClick={handleGenerateAttendance}
+                  >
+                    <i className="fa fa-refresh"></i> Generate Attendance
+                  </a>
+                )}
+              </>
+            </div>
+          )}
         </div>
       </div>
 
@@ -308,12 +320,7 @@ const RemoteAttendance = () => {
               {loading ? (
                 <h3>-</h3>
               ) : (
-                <h3>
-                  {" "}
-                  {moment(date).format(
-                    "Do MMMM, YYYY"
-                  )}{" "}
-                </h3>
+                <h3> {moment(date).format("Do MMMM, YYYY")} </h3>
               )}
             </div>
           </div>

@@ -208,7 +208,7 @@ const Offices = () => {
             <h3 className="page-title">Offices</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Office</li>
+              <li className="breadcrumb-item active">Offices</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

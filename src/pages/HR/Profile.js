@@ -2,7 +2,7 @@
 
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
 import { ReportToModal } from "../../components/Modal/ReportToModal";
 import ProfileCards from "../../components/Profile/ProfileCards";
@@ -25,16 +25,25 @@ const Profile = () => {
   const [mode, setMode] = useState("");
   const [remoteMode, setRemoteMode] = useState("");
 
+  const [hideReportToModal, setHideReportToModal] = useState(false);
+  const [hideAttendanceComponent, setHideAttendanceComponent] = useState(false);
+  const [hideRemoteShiftComponent, setHideRemoteShiftComponent] =
+    useState(false);
+
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [today, setToday] = useState(today_date);
 
-  console.log("today:", today);
-
   const [employeeOgid, setEmployeeOgid] = useState(id);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canEdit = ["hr_manager", "hr_associate"];
+
+  const canEditReportTo = [
+    "hr_manager",
+    "hr_associate",
+    "team_lead",
+    "supervisor",
+  ];
 
   // Employee Shifts:
   const fetchEmployeeShift = async () => {
@@ -89,7 +98,6 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        console.log("This error:", error?.response?.status);
         if (error?.response?.status === 500) {
           showAlert(
             true,
@@ -156,11 +164,24 @@ const Profile = () => {
 
           setEmployeeAttendance(resData);
         } catch (error) {
-          showAlert(
-            true,
-            "Error retrieving employee attendance",
-            "alert alert-warning"
-          );
+          const errorMsg = error.response?.data?.errors;
+          if (error?.response?.status === 403) {
+            return setHideAttendanceComponent(true);
+          } else if (error?.response?.status === 500) {
+            showAlert(
+              true,
+              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
+              "alert alert-warning"
+            );
+          } else if (error?.response?.status === 502) {
+            showAlert(
+              true,
+              "Error retrieving employee attendance, please try again later!",
+              "alert alert-warning"
+            );
+          } else {
+            showAlert(true, `${errorMsg}`, "alert alert-warning");
+          }
         }
       } else {
         try {
@@ -182,16 +203,28 @@ const Profile = () => {
 
           setEmployeeAttendance(resData);
         } catch (error) {
-          showAlert(
-            true,
-            "Error retrieving employee attendance",
-            "alert alert-warning"
-          );
+          const errorMsg = error.response?.data?.errors;
+          if (error?.response?.status === 403) {
+            return setHideAttendanceComponent(true);
+          } else if (error?.response?.status === 500) {
+            showAlert(
+              true,
+              "Oops! Something went wrong, while retrieving employee attendance. Please try again later.",
+              "alert alert-warning"
+            );
+          } else if (error?.response?.status === 502) {
+            showAlert(
+              true,
+              "Error retrieving employee attendance, please try again later!",
+              "alert alert-warning"
+            );
+          } else {
+            showAlert(true, `${errorMsg}`, "alert alert-warning");
+          }
         }
       }
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [id, today]
   );
 
@@ -219,7 +252,25 @@ const Profile = () => {
         setEmployeeRemoteShifts(employeeRemoteShifts);
       }
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      const errorMsg = error.response?.data?.errors;
+
+      if (error?.response?.status === 403) {
+        return setHideRemoteShiftComponent(true);
+      } else if (error?.response?.status === 500) {
+        showAlert(
+          true,
+          "Oops! Something went wrong, while retrieving employee remote shift. Please try again later.",
+          "alert alert-warning"
+        );
+      } else if (error?.response?.status === 502) {
+        showAlert(
+          true,
+          "Error retrieving employee remote shift from server, please try again later!",
+          "alert alert-warning"
+        );
+      } else {
+        showAlert(true, `${errorMsg}`, "alert alert-warning");
+      }
     }
   };
 
@@ -344,7 +395,8 @@ const Profile = () => {
                               {userData?.employee?.reports_to?.full_name ||
                                 "No Lead"}
                             </a>
-                            {canEdit.includes(...CurrentUserRoles) ? (
+                            {canEditReportTo.includes(...CurrentUserRoles) &&
+                            !hideReportToModal ? (
                               <a
                                 className="edit-icon"
                                 data-toggle="modal"
@@ -389,11 +441,14 @@ const Profile = () => {
         fetchEmployeeProfile={fetchEmployeeProfile}
         fetchEmployeeAttendance={fetchEmployeeAttendance}
         setEmployeeOgid={setEmployeeOgid}
+        hideAttendanceComponent={hideAttendanceComponent}
+        hideRemoteShiftComponent={hideRemoteShiftComponent}
       />
 
       <ReportToModal
         data={userData}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        setHideReportToModal={setHideReportToModal}
       />
     </>
   );

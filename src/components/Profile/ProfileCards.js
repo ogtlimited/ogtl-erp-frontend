@@ -44,11 +44,15 @@ const ProfileCards = ({
   fetchEmployeeProfile,
   fetchEmployeeAttendance,
   setEmployeeOgid,
+  hideAttendanceComponent,
+  hideRemoteShiftComponent
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics, isFromBiometricsClockIn } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
+
+  const canView = ["hr_manager", "senior_hr_associate"];
 
   const ogid = user?.employee_info?.ogid;
 
@@ -95,8 +99,8 @@ const ProfileCards = ({
                   Shifts
                 </a>
               </li>
-              {CurrentUserRoles.includes("hr_manager") ||
-              CurrentUserRoles.includes("senior_hr_associate") ? (
+              {canView.includes(...CurrentUserRoles) &&
+              !hideAttendanceComponent ? (
                 <li className="nav-item">
                   <a
                     href="#emp_clockInOut"
@@ -110,7 +114,7 @@ const ProfileCards = ({
                 </li>
               ) : null}
 
-              {userData?.employee?.remote ? (
+              {userData?.employee?.remote && !hideRemoteShiftComponent ? (
                 <li className="nav-item">
                   <a
                     href="#emp_remoteShifts"

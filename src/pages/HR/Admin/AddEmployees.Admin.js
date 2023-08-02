@@ -122,8 +122,9 @@ const AddEmployeesAdmin = () => {
 
         {employee.employee_info.date_of_joining ? (
           <span className="virtual-id-note">
-            Note: OG{moment(employee.employee_info.date_of_joining).format("YYMMDD")} is just
-            a sample. After adding employee, OGID is generated
+            Note: OG
+            {moment(employee.employee_info.date_of_joining).format("YYMMDD")} is
+            just a sample. After adding employee, OGID is generated
             automatically.
           </span>
         ) : null}
@@ -889,10 +890,8 @@ const AddEmployeesAdmin = () => {
           <div className="col">
             <h3 className="page-title">Add Employee</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/dashboard/hr/all-employees">All Employees</Link>
-              </li>
-              <li className="breadcrumb-item active">Employee</li>
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item active">Add Employee</li>
             </ul>
           </div>
         </div>

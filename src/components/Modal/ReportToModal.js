@@ -5,8 +5,12 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
-  const { selectCampaigns, selectDepartments } = useAppContext();
+export const ReportToModal = ({
+  data,
+  fetchEmployeeProfile,
+  setHideReportToModal,
+}) => {
+  const { selectCampaigns, selectDepartments, showAlert } = useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -45,10 +49,12 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
       setAllLeaders(formattedLeaders);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders error:", error);
+      if (error?.response?.status === 403) {
+        return setHideReportToModal(true);
+      }
       setLoading(false);
     }
-  }, [reportTo?.office?.id]);
+  }, [reportTo?.office?.id, setHideReportToModal]);
 
   useEffect(() => {
     fetchAllLeaders();
@@ -94,11 +100,12 @@ export const ReportToModal = ({ data, fetchEmployeeProfile }) => {
         }
       );
 
+      showAlert(true, `Report To updated successfully!`, "alert alert-success");
       fetchEmployeeProfile();
       $("#ReportToModal").modal("toggle");
       setLoading(false);
     } catch (error) {
-      console.log("Edit Report To Info error:", error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
   };
