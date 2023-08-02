@@ -90,6 +90,13 @@
   opacity: 0.8;
 }
 
+.close-account-btn {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  font-size: 12px !important;
+}
+
 .login-input::placeholder {
   color: #ccc !important;
   font-weight: 400 !important;

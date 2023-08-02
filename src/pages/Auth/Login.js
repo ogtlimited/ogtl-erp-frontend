@@ -3,11 +3,13 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { msalInstance, loginRequest } from "../../authConfig";
 import config from "../../config.json";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
@@ -140,6 +142,22 @@ const Login = () => {
       });
   };
 
+  const handleEndSession = (e) => {
+    e.preventDefault();
+    tokenService.clearStorage();
+    navigate("/auth/login");
+    msalInstance
+      .logoutPopup()
+      .then((e) => {
+        console.log(e);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+    setErrorMsg("");
+  };
+
   return (
     <div className="main-wrapper">
       <div className="account-content">
@@ -199,6 +217,15 @@ const Login = () => {
             </div>
           </div>
         </div>
+
+        {errorMsg === "There is an active user on this device" && (
+          <button
+            className="btn btn-secondary close-account-btn"
+            onClick={(e) => handleEndSession(e)}
+          >
+            End Current Session
+          </button>
+        )}
       </div>
     </div>
   );
