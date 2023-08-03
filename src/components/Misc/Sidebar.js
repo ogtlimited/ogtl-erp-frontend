@@ -160,53 +160,22 @@ const Sidebar = () => {
                 </>
               ))}
 
-              {!AllAccess.includes(userRole) && CurrentUserRoles.includes("junior_hr") ? (
+              {!AllAccess.includes(userRole) && CurrentUserRoles.includes("rep_siever") ? (
                 <li className="submenu">
                   <a
                     href=""
                     onClick={(e) => e.preventDefault()}
-                    className="subdrop"
                   >
-                    <i className="la la-cube"></i>
+                    <i className="la la-briefcase"></i>
                     <span>Recruitment</span>
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={{ display: "none" }}>
-                    <Link to="/dashboard/recruitment/job-opening" className="">
-                      Job Opening
-                    </Link>
                     <Link
-                      to="/dashboard/recruitment/job-applicants"
+                      to="/dashboard/recruitment/rep-siever/job-applicants"
                       className=""
                     >
                       Job Applicants
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/academy-applicants"
-                      className=""
-                    >
-                      Academy Applicants
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/aptitude-test"
-                      className=""
-                    >
-                      Recruitment Result
-                    </Link>
-                    <Link to="/dashboard/recruitment/job-offer" className="">
-                      Job Offer
-                    </Link>
-                    <Link to="/dashboard/recruitment/interviewees" className="">
-                      Interview Schedule List
-                    </Link>
-                    <Link to="/dashboard/recruitment/shadowing" className="">
-                      Shadowing
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/orientation-and-training"
-                      className=""
-                    >
-                      Orientation and Training
                     </Link>
                   </ul>
                 </li>

@@ -304,6 +304,8 @@ const AppProvider = (props) => {
 
   // Universal Error Handler:
   const ErrorHandler = (error, component) => {
+
+    console.log("Route error:", error?.response)
     const errorMessage = error.response?.data?.errors;
     const errorStatus = error.response?.status;
 
@@ -320,11 +322,19 @@ const AppProvider = (props) => {
         "alert alert-warning"
       );
     } else {
-      return showAlert(
-        true,
-        `${component} ${errorMessage}`,
-        "alert alert-warning"
-      );
+      if (errorMessage === undefined) {
+        return showAlert(
+          true,
+          `Unable to process request`,
+          "alert alert-warning"
+        );
+      } else {
+        return showAlert(
+          true,
+          `${component} ${errorMessage}`,
+          "alert alert-warning"
+        );
+      }
     }
   };
 

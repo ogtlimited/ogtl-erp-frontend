@@ -600,6 +600,14 @@ export default function Router() {
               path: 'job-applicants',
               element: (
                 <GuardedRoute title="" dept="HR">
+                  <JobApplicantsAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'rep-siever/job-applicants',
+              element: (
+                <GuardedRoute title="" dept="HR">
                   <JobApplicants />
                 </GuardedRoute>
               ),
@@ -1176,8 +1184,11 @@ const JobOpening = Loadable(
 const JobOffer = Loadable(
   lazy(() => import('../pages/HR/Admin/JobOffer.Admin'))
 );
-const JobApplicants = Loadable(
+const JobApplicantsAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/JobApplicants.Admin'))
+);
+const JobApplicants = Loadable(
+  lazy(() => import('../pages/HR/Users/JobApplicants'))
 );
 const AcademyApplicants = Loadable(
   lazy(() => import('../pages/HR/Admin/AcademyApplicants.Admin'))
