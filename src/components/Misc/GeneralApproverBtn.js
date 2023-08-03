@@ -4,22 +4,14 @@ import React, { useEffect } from "react";
 const GeneralApproverBtn = ({
   options,
   setStatus,
-  setstatusRow,
+  setStatusRow,
   row,
   value,
 }) => {
   const handleStatus = (status) => {
     setStatus(status);
-    setstatusRow(row);
+    setStatusRow(row);
   };
-
-  // console.log({
-  //   options,
-  //   setStatus,
-  //   setstatusRow,
-  //   row,
-  //   value,
-  // });
 
   return (
     <div>
@@ -30,7 +22,7 @@ const GeneralApproverBtn = ({
           data-toggle="dropdown"
           aria-expanded="false"
         >
-          <i className={`fa fa-dot-circle-o  text-success`}></i> {value}
+          <i className={`fa fa-dot-circle-o   ${options.find(opt => opt.title === value)?.color}`}></i> {value}
         </a>
         <div className="dropdown-menu dropdown-menu-right">
           {options.map((opt, index) => (

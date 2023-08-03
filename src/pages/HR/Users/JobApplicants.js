@@ -21,15 +21,16 @@ import moment from "moment";
 const JobApplicants = () => {
   const [data, setData] = useState([]);
   const { showAlert, user, ErrorHandler } = useAppContext();
-  const [statusRow, setstatusRow] = useState(null);
-  const [processingStageRow, setprocessingStageRow] = useState(null);
+  const [statusRow, setStatusRow] = useState(null);
+  const [processingStageRow, setProcessingStageRow] = useState(null);
   const [interview_status, setInterviewStatus] = useState("");
-  const [process_stage, setprocessingStage] = useState("");
+  const [process_stage, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [unfiltered, setunfiltered] = useState([]);
-  const [modalType, setmodalType] = useState("schedule-interview");
+  const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(true);
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -95,6 +96,68 @@ const JobApplicants = () => {
     fetchAllJobApplicants();
   }, [fetchAllJobApplicants]);
 
+  //update jobOpening
+  const handleUpdate = useCallback(
+    (id, update) => {
+      if (!CurrentUserRoles.includes("rep_siever")) {
+        return showAlert(
+          true,
+          "You are not a rep siever",
+          "alert alert-warning"
+        );
+      }
+      console.log("update this", update, id);
+
+      axiosInstance
+        .patch(` /api/v1/job_applicants/${id}.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: update
+        })
+        .then((res) => {
+          fetchAllJobApplicants();
+          showAlert(true, res?.data?.message, "alert alert-success");
+        })
+        .catch((error) => {
+          const errorMsg = error?.response?.data?.errors;
+          if (errorMsg) {
+            return showAlert(true, errorMsg, "alert alert-danger");
+          } else {
+            return showAlert(
+              true,
+              "Error updating job applicant information",
+              "alert alert-danger"
+            );
+          }
+        });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [CurrentUserRoles]
+  );
+
+  useEffect(() => {
+    if (interview_status.length) {
+      const update = {
+        interview_status,
+        // id: statusRow?.id,
+      };
+      handleUpdate(statusRow.id, update);
+    }
+  }, [interview_status, statusRow, handleUpdate]);
+
+  useEffect(() => {
+    if (process_stage.length) {
+      const update = {
+        process_stage,
+        // id: processingStageRow?.id,
+      };
+      handleUpdate(processingStageRow.id, update);
+    }
+  }, [process_stage, processingStageRow, handleUpdate]);
+
   const columns = [
     {
       dataField: "full_name",
@@ -135,7 +198,7 @@ const JobApplicants = () => {
             setStatus={setInterviewStatus}
             value={value}
             row={row}
-            setstatusRow={setstatusRow}
+            setStatusRow={setStatusRow}
           />
         </>
       ),
@@ -149,10 +212,10 @@ const JobApplicants = () => {
         <>
           <GeneralApproverBtn
             options={InterviewProcessStageOptions}
-            setStatus={setprocessingStage}
+            setStatus={setProcessingStage}
             value={value}
             row={row}
-            setstatusRow={setprocessingStageRow}
+            setStatusRow={setProcessingStageRow}
           />
         </>
       ),
@@ -191,7 +254,7 @@ const JobApplicants = () => {
                   data-toggle="modal"
                   data-target="#exampleModal"
                   onClick={() => {
-                    setmodalType();
+                    setModalType();
                     setSelectedRow(helper.handleEdit(row));
                   }}
                 >
@@ -204,7 +267,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType("view-details");
+                  setModalType("view-details");
                   setViewRow(row);
                 }}
               >
@@ -216,7 +279,7 @@ const JobApplicants = () => {
                 data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType("schedule-interview");
+                  setModalType("schedule-interview");
                   setSelectedRow(helper.handleEdit(row));
                 }}
               >
