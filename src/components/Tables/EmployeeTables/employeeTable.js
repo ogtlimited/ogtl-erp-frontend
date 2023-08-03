@@ -338,66 +338,6 @@ const EmployeesTable = ({
     (props) => {
       let input;
 
-      const handleClick = () => {
-        setPage(1);
-        setLoading(true);
-        props.onSearch(input.value);
-        const searchTerm = input.value;
-        setOfficeFilter("");
-        setCampaignFilter("");
-        setDepartmentFilter("");
-        setDesignationFilter("");
-        setStatusFilter("");
-        setSearchTerm(searchTerm);
-
-        if (page === 1) {
-          axiosInstance
-            .get("/api/v1/employees.json", {
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
-              params: {
-                page: page,
-                limit: sizePerPage,
-                name: searchTerm,
-              },
-            })
-            .then((e) => {
-              let resData = e?.data?.employees;
-              let resOptions = e?.data?.pagination;
-
-              const thisPageLimit = sizePerPage;
-              const thisTotalPageSize = resOptions?.numberOfPages;
-
-              setSizePerPage(thisPageLimit);
-              setTotalPages(thisTotalPageSize);
-
-              const mapp = resData?.map((emp) => {
-                return {
-                  ...emp,
-                  fullName:
-                    emp.first_name +
-                    " " +
-                    emp.middle_name +
-                    " " +
-                    emp?.last_name,
-                  designation_name: emp?.designation?.designation,
-                  department_name: emp?.department?.department,
-                  project: emp?.projectId?.project_name,
-                };
-              });
-              setData(mapp);
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-            });
-        }
-        setLoading(false);
-      };
-
       const handleKeydown = (e) => {
         if (e.key === "Enter") {
           setPage(1);

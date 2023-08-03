@@ -1,34 +1,36 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '../../../services/api';
-// import { useAppContext } from '../../../Context/AppContext';
-import BootstrapTable from 'react-bootstrap-table-next';
-import ToolkitProvider, { CSVExport } from 'react-bootstrap-table2-toolkit';
+import React, { useState, useEffect, useCallback } from "react";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import BootstrapTable from "react-bootstrap-table-next";
+import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 // import Select from 'react-select';
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from 'react-bootstrap-table2-filter';
+} from "react-bootstrap-table2-filter";
+import moment from "moment";
 
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import usePagination from './JobApplicantsPagination.Admin';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import paginationFactory from "react-bootstrap-table2-paginator";
+import usePagination from "./JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const JobApplicantsTable = ({
   data,
   setData,
   loading,
   setLoading,
+
   columns,
   context,
   clickToSelect = false,
   selected,
   handleOnSelect,
   handleOnSelectAll,
-  statusInterview,
+  interviewStatus,
   processingStage,
   page,
   setPage,
@@ -36,195 +38,44 @@ const JobApplicantsTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
-  fetchJobApplicants,
-  intervieStatusFilter,
-  setIntervieStatusFilter,
+  fromDate,
+  toDate,
+  setFromDate,
+  setToDate,
+  fetchAllJobApplicants,
+  interviewStatusFilter,
+  setInterviewStatusFilter,
   processingStageFilter,
-  setprocessingStageFilter,
-  searchTerm,
-  setSearchTerm,
+  setProcessingStageFilter,
 }) => {
-
   const { ExportCSVButton } = CSVExport;
+  const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
 
-  const showNullMessage = () => {
-    setTimeout(() => {
-      setShow(true);
-    }, 5000);
-    return <>{show ? "No Data Available" : null}</>;
-  };
+  const CurrentUserRoles = user?.employee_info?.roles;
 
-  const handleIntervieStatusFilter = (e) => {
-    setIntervieStatusFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get('/api/jobApplicant', {
-        params: {
-          interview_status: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.jobApplicants;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        let formatted = resData.map((e) => ({
-          ...e,
-          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-          interview_date: e.interview_date
-            ? new Date(e.interview_date).toUTCString()
-            : 'Not Set',
-          job_opening_id: e.job_opening_id?.job_title
-            ? e.job_opening_id?.job_title
-            : e.default_job_opening_id?.job_title || '-',
-          application_date: new Date(e.createdAt).toUTCString(),
-        }));
-
-        setData(formatted);
-        setDataToFilter(formatted);
-        setprocessingStageFilter('');
-      });
-    setLoading(false);
-  };
-
-  const handleProcessingStageFilter = (e) => {
-    setprocessingStageFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get('/api/jobApplicant', {
-        params: {
-          process_stage: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.jobApplicants;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        let formatted = resData.map((e) => ({
-          ...e,
-          full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-          interview_date: e.interview_date
-            ? new Date(e.interview_date).toUTCString()
-            : 'Not Set',
-          job_opening_id: e.job_opening_id?.job_title
-            ? e.job_opening_id?.job_title
-            : e.default_job_opening_id?.job_title || '-',
-          application_date: new Date(e.createdAt).toUTCString(),
-        }));
-
-        setData(formatted);
-        setDataToFilter(formatted);
-        setIntervieStatusFilter('');
-      });
-    setLoading(false);
-  };
-
-  const MySearch = useCallback((props) => {
-    let input;
-    const handleClick = () => {
-      // if (loading) {
-      //   setData([])
-      //   setDataToFilter([])
-      // }
-      setPage(1);
-      setLoading(true);
-      props.onSearch(input.value);
-      const searchTerm = input.value;
-      setSearchTerm(searchTerm);
-
-      if (page === 1) {
-        axiosInstance
-          .get('/api/jobApplicant', {
-            params: {
-              search: searchTerm,
-              page: page,
-              limit: sizePerPage,
-            },
-          })
-          .then((res) => {
-            let resData = res?.data?.data?.jobApplicants;
-            let resOptions = res?.data?.data?.pagination;
-
-            const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions.numberOfPages;
-
-            setSizePerPage(thisPageLimit);
-            setTotalPages(thisTotalPageSize);
-
-            let formatted = resData.map((e) => ({
-              ...e,
-              full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-              interview_date: e.interview_date
-                ? new Date(e.interview_date).toUTCString()
-                : 'Not Set',
-              job_opening_id: e.job_opening_id?.job_title
-                ? e.job_opening_id?.job_title
-                : e.default_job_opening_id?.job_title || '-',
-              application_date: new Date(e.createdAt).toUTCString(),
-            }));
-
-            setData(formatted);
-            setDataToFilter(formatted);
-            setIntervieStatusFilter('');
-            setprocessingStageFilter('');
-          })
-          .catch((error) => {
-            console.log(error);
-            setLoading(false);
-          });
-      }
-      setLoading(false);
-    };
-
-    return (
-      <div className="job-app-search">
-        <input
-          className="form-control"
-          style={{
-            backgroundColor: '#fff',
-            width: '33.5%',
-            marginRight: '20px',
-          }}
-          ref={(n) => (input = n)}
-          type="text"
-        />
-        <button className="btn btn-primary" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    );
-  }, [page, setData, setIntervieStatusFilter, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, setprocessingStageFilter, sizePerPage]);
+  const StatusOptions = [
+    { title: "Open" },
+    { title: "Scheduled for interview" },
+    { title: "Not interested" },
+    { title: "Not a graduate" },
+    { title: "Not in job location" },
+    { title: "Failed screening" },
+    { title: "Missed call" },
+    { title: "call back" },
+    { title: "Interviews Scheduled" },
+  ];
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length > 8) {
+    if (columns.length >= 8) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -233,7 +84,7 @@ const JobApplicantsTable = ({
 
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,20 +92,10 @@ const JobApplicantsTable = ({
 
   useEffect(() => {
     setDataToFilter(data);
-    // setTimeout(() => {
-    //   setLoading(true);
-    // }, 5000);
   }, [data, setLoading]);
 
   // eslint-disable-next-line no-unused-vars
-  const imageUrl = 'https://erp.outsourceglobal.com';
-
-  console.log(
-    'Pagination:',
-    page,
-    sizePerPage,
-    totalPages
-  );
+  const imageUrl = "https://erp.outsourceglobal.com";
 
   // Pagination
   const count = totalPages;
@@ -263,11 +104,6 @@ const JobApplicantsTable = ({
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
-    if (loading) {
-      setData([])
-      setDataToFilter([])
-    }
-    return;
   };
 
   const handleChangeSizePerPage = (e) => {
@@ -277,12 +113,110 @@ const JobApplicantsTable = ({
 
     setSizePerPage(e.target.value);
     setPage(1);
-    
-    if (loading) {
-      setData([])
-      setDataToFilter([])
+  };
+
+  // Filter by Process Stage:
+  const handleProcessStageFilter = (e) => {
+    setProcessingStageFilter(e.target.value);
+    setPage(1);
+    setLoading(true);
+
+    if (CurrentUserRoles.includes("rep_siever")) {
+      axiosInstance
+        .get("/api/v1/rep_siever_job_applications.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_stage: e.target.value,
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.job_applicants;
+          const totalPages = e?.data?.data?.total_pages;
+
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
+
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const mapp = resData.map((emp) => ({
+            ...emp,
+            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            job_title: emp?.job_opening?.job_title,
+            application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+            interview_date: emp?.interview_date
+              ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+              : "Not Scheduled",
+          }));
+
+          setData(mapp);
+          setDataToFilter(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+      setLoading(false);
+    } else {
+      axiosInstance
+        .get("/api/v1/job_applicants.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_stage: e.target.value,
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.job_applicants;
+          const totalPages = e?.data?.data?.total_pages;
+
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
+
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const mapp = resData.map((emp) => ({
+            ...emp,
+            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            job_title: emp?.job_opening?.job_title,
+            application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+            interview_date: emp?.interview_date
+              ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+              : "Not Scheduled",
+          }));
+
+          setData(mapp);
+          setDataToFilter(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+      setLoading(false);
     }
-    return;
+  };
+
+  const showNullMessage = () => {
+    setTimeout(() => {
+      setShow(true);
+    }, 5000);
+    return <>{show ? "No Data Available" : null}</>;
   };
 
   return (
@@ -290,27 +224,20 @@ const JobApplicantsTable = ({
       {dataToFilter && (
         <ToolkitProvider
           keyField="id"
-          data={dataToFilter}
+          data={loading ? [] : dataToFilter}
           columns={columns}
           search
           exportCSV
         >
           {(props) => (
             <div className="col-12">
-              <MySearch
+              {/* <MySearch
                 {...props.searchProps}
                 style={{ marginBottom: 15, paddingLeft: '12%' }}
                 className="inputSearch"
-              />
+              /> */}
 
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
-
-              <div className="filter">
+              {/* <div className="filter">
                 <div className="interview_status_filter">
                   <select
                     onChange={(e) => handleIntervieStatusFilter(e)}
@@ -335,36 +262,90 @@ const JobApplicantsTable = ({
                     <option value="" disabled selected hidden>
                       Filter By Processing Stage
                     </option>
-                    {/* <option>All</option> */}
                     {processingStage.map((option, idx) => (
                       <option key={idx}>{option.title}</option>
                     ))}
                   </select>
                 </div>
+              </div> */}
+
+              <div className="hr-filter-select col-12">
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label htmlFor="fromDate">From</label>
+                    <input
+                      type="date"
+                      name="fromDate"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className="form-control "
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label htmlFor="toDate">To</label>
+                    <input
+                      type="date"
+                      name="toDate"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="form-control "
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-3">
+                  {processingStageFilter.length ? (
+                    <label htmlFor="toDate">Process Stage</label>
+                  ) : (
+                    <label htmlFor="toDate">Filter By </label>
+                  )}
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleProcessStageFilter(e)}
+                    defaultValue={processingStageFilter}
+                    value={processingStageFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Process Stage
+                    </option>
+                    {StatusOptions.map((option, index) => (
+                      <option key={index} value={option.title}>
+                        {option.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-             <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    showNullMessage()
-                  )
-                }
-              />
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      showNullMessage()
+                    )
+                  }
+                />
+              </div>
 
               <select
                 className="application-table-sizePerPage"

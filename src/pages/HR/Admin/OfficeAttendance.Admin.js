@@ -1,3 +1,5 @@
+// *IN USE 
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 // import CampaignAttendanceTable from '../../../components/Tables/EmployeeTables/CampaignAttendanceTable';
@@ -7,7 +9,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 
 const OfficeAttendanceAdmin = () => {
-  const { showAlert } = useAppContext();
+  const { ErrorHandler } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
   const { office } = useParams();
@@ -48,7 +50,8 @@ const OfficeAttendanceAdmin = () => {
       setallEmployees(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      const component = "Office Attendance:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

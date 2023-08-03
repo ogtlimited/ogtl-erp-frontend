@@ -11,7 +11,7 @@ import sidebarConfig from "./sidebarConfig";
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
   const AllAccess = ["super", "ceo", "hr_manager"];
-  
+
   const CurrentUserRoles = user?.employee_info?.roles;
   const CurrentUserIsRemoteLead = user?.employee_info?.remote;
   const CurrentUserIsLead = user?.employee_info?.is_lead;
@@ -19,7 +19,7 @@ const Sidebar = () => {
   const userRole = user?.employee_info?.roles[0];
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
-    console.log("User dept.", userDept)
+  console.log("User dept.", userDept);
 
   useEffect(() => {
     console.log("this sidebar user:", user);
@@ -64,7 +64,7 @@ const Sidebar = () => {
           [dropdownKey]: false,
         }));
       }
-      
+
       $("#sidebar-menu a").removeClass("active");
       $(this).addClass("active");
     });
@@ -96,8 +96,8 @@ const Sidebar = () => {
               {sidebarConfig.map((nav) => (
                 <>
                   {canView(nav?.canView) && (
-                    <li key={nav?.subheader} className="menu-title" >
-                      <span >{nav?.subheader}</span>
+                    <li key={nav?.subheader} className="menu-title">
+                      <span>{nav?.subheader}</span>
                     </li>
                   )}
                   {nav.items.map((item) => (
@@ -114,13 +114,12 @@ const Sidebar = () => {
                               key={item.title}
                             >
                               <a
-                              
                                 href=""
                                 onClick={(e) => e.preventDefault()}
                                 data-dropdown-key={item.title}
                               >
                                 {item.icon} <span> {item.title}</span>{" "}
-                                <span className="menu-arrow" ></span>
+                                <span className="menu-arrow"></span>
                               </a>
                               <ul
                                 style={{
@@ -132,8 +131,8 @@ const Sidebar = () => {
                                 {item.children.map((child) => (
                                   <>
                                     {canView(child?.canView) && (
-                                      <li key={child.path} className="" >
-                                        <Link to={`${child.path}`} className="" >
+                                      <li key={child.path} className="">
+                                        <Link to={`${child.path}`} className="">
                                           {child.title}
                                         </Link>
                                       </li>
@@ -160,58 +159,25 @@ const Sidebar = () => {
                 </>
               ))}
 
-              {!AllAccess.includes(userRole) && CurrentUserRoles.includes("junior_hr") ? (
+              {!AllAccess.includes(userRole) &&
+              userDept !== "hr" &&
+              CurrentUserRoles.includes("rep_siever") ? (
                 <li className="submenu">
-                  <a
-                    href=""
-                    onClick={(e) => e.preventDefault()}
-                    className="subdrop"
-                  >
-                    <i className="la la-cube"></i>
+                  <a href="" onClick={(e) => e.preventDefault()}>
+                    <i className="la la-briefcase"></i>
                     <span>Recruitment</span>
                     <span className="menu-arrow"></span>
                   </a>
                   <ul style={{ display: "none" }}>
-                    <Link to="/dashboard/recruitment/job-opening" className="">
-                      Job Opening
-                    </Link>
                     <Link
-                      to="/dashboard/recruitment/job-applicants"
+                      to="/dashboard/recruitment/rep-siever/job-applicants"
                       className=""
                     >
                       Job Applicants
                     </Link>
-                    <Link
-                      to="/dashboard/recruitment/academy-applicants"
-                      className=""
-                    >
-                      Academy Applicants
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/aptitude-test"
-                      className=""
-                    >
-                      Recruitment Result
-                    </Link>
-                    <Link to="/dashboard/recruitment/job-offer" className="">
-                      Job Offer
-                    </Link>
-                    <Link to="/dashboard/recruitment/interviewees" className="">
-                      Interview Schedule List
-                    </Link>
-                    <Link to="/dashboard/recruitment/shadowing" className="">
-                      Shadowing
-                    </Link>
-                    <Link
-                      to="/dashboard/recruitment/orientation-and-training"
-                      className=""
-                    >
-                      Orientation and Training
-                    </Link>
                   </ul>
                 </li>
               ) : null}
-
             </ul>
           </div>
         </div>

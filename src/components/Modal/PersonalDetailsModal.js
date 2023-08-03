@@ -56,6 +56,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
       setLoading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      $("#PersonalDetailsModal").modal("toggle");
       setLoading(false);
     }
   };
