@@ -17,6 +17,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
+import $ from "jquery";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
@@ -24,11 +25,11 @@ const JobApplicants = () => {
   const [statusRow, setStatusRow] = useState(null);
   const [processingStageRow, setProcessingStageRow] = useState(null);
   const [interview_status, setInterviewStatus] = useState("");
-  const [process_stage, setProcessingStage] = useState("");
+  const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -46,21 +47,25 @@ const JobApplicants = () => {
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/rep_siever_job_applications.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-          process_status: processingStageFilter,
-          start_date: fromDate,
-          end_date: toDate,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/rep_siever_job_applications.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_status: processingStageFilter,
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
@@ -89,7 +94,7 @@ const JobApplicants = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [fromDate, page, processingStageFilter, sizePerPage, toDate]);
 
   useEffect(() => {
     fetchAllJobApplicants();
@@ -105,7 +110,10 @@ const JobApplicants = () => {
           "alert alert-warning"
         );
       }
-      console.log("update this", update, id);
+
+      console.log({
+        payload: update,
+      });
 
       axiosInstance
         .patch(`/api/v1/job_applicants/${id}.json`, {
@@ -117,8 +125,9 @@ const JobApplicants = () => {
           payload: update
         })
         .then((res) => {
-          fetchAllJobApplicants();
           showAlert(true, "Job application updated successfully", "alert alert-success");
+          setProcessingStageFilter("Open");
+          fetchAllJobApplicants();
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
@@ -137,25 +146,30 @@ const JobApplicants = () => {
     [CurrentUserRoles]
   );
 
-  useEffect(() => {
-    if (interview_status.length) {
-      const update = {
-        interview_status,
-        // id: statusRow?.id,
-      };
-      handleUpdate(statusRow.id, update);
-    }
-  }, [interview_status, statusRow, handleUpdate]);
+  // useEffect(() => {
+  //   if (interview_status.length) {
+  //     const update = {
+  //       interview_status,
+  //       // id: statusRow?.id,
+  //     };
+  //     handleUpdate(statusRow.id, update);
+  //   }
+  // }, [interview_status, statusRow, handleUpdate]);
 
   useEffect(() => {
-    if (process_stage.length) {
+    if (process_status.length) {
+      // if (process_status === "Interview scheduled") {
+      //   return setModalType("schedule-interview");
+      //   // setSelectedRow(processingStageRow);
+      // }
       const update = {
-        process_stage,
+        process_status,
+        interview_date: null,
         // id: processingStageRow?.id,
       };
       handleUpdate(processingStageRow.id, update);
     }
-  }, [process_stage, processingStageRow, handleUpdate]);
+  }, [process_status, processingStageRow, handleUpdate]);
 
   const columns = [
     {
@@ -186,25 +200,25 @@ const JobApplicants = () => {
       sort: true,
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
+    // {
+    //   dataField: "interview_status",
+    //   text: "Interview Status",
+    //   sort: true,
+    //   formatter: (value, row) => (
+    //     <>
+    //       <GeneralApproverBtn
+    //         options={InterviewStatusOptions}
+    //         setStatus={setInterviewStatus}
+    //         value={value}
+    //         row={row}
+    //         setStatusRow={setStatusRow}
+    //       />
+    //     </>
+    //   ),
+    // },
     {
-      dataField: "interview_status",
-      text: "Interview Status",
-      sort: true,
-      formatter: (value, row) => (
-        <>
-          <GeneralApproverBtn
-            options={InterviewStatusOptions}
-            setStatus={setInterviewStatus}
-            value={value}
-            row={row}
-            setStatusRow={setStatusRow}
-          />
-        </>
-      ),
-    },
-    {
-      dataField: "process_stage",
-      text: "Processing Stage",
+      dataField: "process_status",
+      text: "Process Stage",
       sort: true,
 
       formatter: (value, row) => (
@@ -273,7 +287,7 @@ const JobApplicants = () => {
                 <i className="fa fa-eye m-r-5"></i> View
               </a>
 
-              {/* <a
+              <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#generalModal"
@@ -283,7 +297,7 @@ const JobApplicants = () => {
                 }}
               >
                 <i className="fa fa-clock m-r-5"></i> Schedule Interview
-              </a> */}
+              </a>
             </div>
           </>
         </div>
@@ -350,7 +364,9 @@ const JobApplicants = () => {
           content={
             <ScheduleInterview
               jobApplication={selectedRow}
+              handleUpdate={handleUpdate}
               handleRefresh={fetchAllJobApplicants}
+              setModalType={setModalType}
             />
           }
         />

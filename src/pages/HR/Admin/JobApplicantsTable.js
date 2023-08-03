@@ -59,16 +59,11 @@ const JobApplicantsTable = ({
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
-  const StatusOptions = [
+  const ProcessStatusOptions = [
     { title: "Open" },
-    { title: "Scheduled for interview" },
-    { title: "Not interested" },
-    { title: "Not a graduate" },
-    { title: "Not in job location" },
-    { title: "Failed screening" },
-    { title: "Missed call" },
-    { title: "call back" },
-    { title: "Interviews Scheduled" },
+    { title: "Sieving" },
+    { title: "Phone screening" },
+    { title: "Interview scheduled" },
   ];
 
   const resizeTable = () => {
@@ -117,11 +112,10 @@ const JobApplicantsTable = ({
 
   // Filter by Process Stage:
   const handleProcessStageFilter = (e) => {
-    setProcessingStageFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
     if (CurrentUserRoles.includes("rep_siever")) {
+      setProcessingStageFilter(e.target.value);
+      setPage(1);
+      setLoading(true);
       axiosInstance
         .get("/api/v1/rep_siever_job_applications.json", {
           headers: {
@@ -132,7 +126,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
-            process_stage: e.target.value,
+            process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,
           },
@@ -166,6 +160,9 @@ const JobApplicantsTable = ({
         });
       setLoading(false);
     } else {
+      setProcessingStageFilter(e.target.value);
+      setPage(1);
+      setLoading(true);
       axiosInstance
         .get("/api/v1/job_applicants.json", {
           headers: {
@@ -176,7 +173,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
-            process_stage: e.target.value,
+            process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,
           },
@@ -231,43 +228,7 @@ const JobApplicantsTable = ({
         >
           {(props) => (
             <div className="col-12">
-              {/* <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              /> */}
-
-              {/* <div className="filter">
-                <div className="interview_status_filter">
-                  <select
-                    onChange={(e) => handleIntervieStatusFilter(e)}
-                    defaultValue={intervieStatusFilter}
-                    value={intervieStatusFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter By Interview Status
-                    </option>
-                    {statusInterview.map((option, idx) => (
-                      <option key={idx}>{option.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="processing_stage_filter">
-                  <select
-                    onChange={(e) => handleProcessingStageFilter(e)}
-                    defaultValue={processingStageFilter}
-                    value={processingStageFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter By Processing Stage
-                    </option>
-                    {processingStage.map((option, idx) => (
-                      <option key={idx}>{option.title}</option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
+              
 
               <div className="hr-filter-select col-12">
                 <div className="col-md-3">
@@ -310,7 +271,7 @@ const JobApplicantsTable = ({
                     <option value="" disabled selected hidden>
                       Process Stage
                     </option>
-                    {StatusOptions.map((option, index) => (
+                    {ProcessStatusOptions.map((option, index) => (
                       <option key={index} value={option.title}>
                         {option.title}
                       </option>

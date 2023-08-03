@@ -16,7 +16,7 @@ const Sidebar = () => {
   const CurrentUserIsRemoteLead = user?.employee_info?.remote;
   const CurrentUserIsLead = user?.employee_info?.is_lead;
 
-  const userRole = user?.employee_info?.roles[0];
+  const userRole = user?.employee_info?.roles;
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
   console.log("User dept.", userDept);
@@ -26,7 +26,12 @@ const Sidebar = () => {
   }, [user]);
 
   const canView = (viewedBy) => {
-    if (userDept === viewedBy || AllAccess.includes(userRole)) {
+    if (
+      userDept === viewedBy ||
+      CurrentUserRoles.includes("ceo") ||
+      CurrentUserRoles.includes("super") ||
+      CurrentUserRoles.includes("hr_manager")
+    ) {
       return true;
     } else if (viewedBy === "All") {
       return true;
@@ -159,8 +164,10 @@ const Sidebar = () => {
                 </>
               ))}
 
-              {!AllAccess.includes(userRole) &&
-              userDept !== "hr" &&
+              {userDept !== "hr" &&
+              !CurrentUserRoles.includes("ceo") &&
+              !CurrentUserRoles.includes("super") &&
+              !CurrentUserRoles.includes("hr_manager") &&
               CurrentUserRoles.includes("rep_siever") ? (
                 <li className="submenu">
                   <a href="" onClick={(e) => e.preventDefault()}>

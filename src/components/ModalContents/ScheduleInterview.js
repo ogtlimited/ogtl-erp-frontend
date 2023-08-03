@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useState } from "react";
 
-const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
+const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
   const [form, setform] = useState("");
 
   const handleChange = (event) => {
@@ -14,10 +14,11 @@ const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
 
     const update = {
       interview_date: moment(form).format("llll"),
-      _id: jobApplication._id,
-      interview_status: "Scheduled for interview",
+      id: jobApplication.id,
+      process_status: "Interview scheduled",
     };
-    handleUpdate(jobApplication._id, update);
+    handleUpdate(jobApplication.id, update);
+    setModalType("");
   };
 
   return (
@@ -37,7 +38,7 @@ const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
         </div>
       </div>
       <div className="submit-section">
-        <button className="btn btn-primary submit-btn">Save</button>
+        <button className="btn btn-primary submit-btn">Schedule</button>
       </div>
     </form>
   );

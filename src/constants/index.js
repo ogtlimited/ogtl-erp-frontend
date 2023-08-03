@@ -14,7 +14,7 @@ export const InterviewProcessStageOptions = [
   { title: "Open", color: "text-primary" },
   { title: "Sieving", color: "text-warning" },
   { title: "Phone screening", color: "text-info" },
-  { title: "Interviews scheduled", color: "text-success" }
+  { title: "Interview scheduled", color: "text-success" }
 ];
 
 
