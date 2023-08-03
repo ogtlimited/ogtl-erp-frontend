@@ -9,7 +9,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
-  const { showAlert } = useAppContext();
+  const { showAlert, ErrorHandler } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -76,17 +76,8 @@ const AllEmployeesAdmin = () => {
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-      if (error?.response?.status === 500 || error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving employees. Please try again later.",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
-
+      const component = "All Employees:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
