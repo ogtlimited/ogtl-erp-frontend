@@ -4,6 +4,8 @@ import { PATH_DASHBOARD } from "../../routes/paths";
 import tokenService from "../../services/token.service";
 
 const user = tokenService.getUser();
+const userDept =
+  user?.office?.office_type === "department" ? user?.office?.title : null;
 const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
 const CurrentUserRoles = user?.employee_info?.roles;
@@ -133,68 +135,81 @@ const sidebarConfig = [
         title: "Employees",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.user,
-        children: [
-          {
-            canView: "hr",
-            title: "All Employees",
-            path: PATH_DASHBOARD.hr.allEmployees,
-          },
-          {
-            canView: "hr",
-            title: "Add Employee",
-            path: PATH_DASHBOARD.hr.addEmployees,
-          },
-          {
-            canView: "hr",
-            title: "Leadership",
-            path: PATH_DASHBOARD.hr.leadership,
-          },
-          {
-            canView: "hr",
-            title: "Captured Biometrics",
-            path: PATH_DASHBOARD.hr.capturedBiometrics,
-          },
-          {
-            canView: "hr",
-            title: "Attendance Record",
-            path: PATH_DASHBOARD.hr.attendanceRecord,
-          },
-          {
-            canView: "hr",
-            title: "Remote Attendance",
-            path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
-          },
-          {
-            canView: "hr",
-            title: "Leave Applications",
-            path: PATH_DASHBOARD.hr.leavesAdmin,
-          },
-          {
-            canView: "All",
-            title: "Leaves",
-            path: PATH_DASHBOARD.hr.leavesEmployee,
-          },
-          {
-            canView: "hr",
-            title: "Offices",
-            path: PATH_DASHBOARD.hr.offices,
-          },
-          {
-            canView: "hr",
-            title: "Designations",
-            path: PATH_DASHBOARD.hr.designations,
-          },
-          {
-            canView: "hr",
-            title: "Branch",
-            path: PATH_DASHBOARD.hr.branch,
-          },
-          {
-            canView: "hr",
-            title: "Leave Types",
-            path: PATH_DASHBOARD.hr.leaveType,
-          },
-        ],
+        children: CurrentUserIsLead && userDept !== "hr"
+          ? [
+              {
+                canView: "All",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees,
+              },
+              {
+                canView: "All",
+                title: "Leaves",
+                path: PATH_DASHBOARD.hr.leavesEmployee,
+              },
+            ]
+          : [
+              {
+                canView: "hr",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees,
+              },
+              {
+                canView: "hr",
+                title: "Add Employee",
+                path: PATH_DASHBOARD.hr.addEmployees,
+              },
+              {
+                canView: "hr",
+                title: "Leadership",
+                path: PATH_DASHBOARD.hr.leadership,
+              },
+              {
+                canView: "hr",
+                title: "Captured Biometrics",
+                path: PATH_DASHBOARD.hr.capturedBiometrics,
+              },
+              {
+                canView: "hr",
+                title: "Attendance Record",
+                path: PATH_DASHBOARD.hr.attendanceRecord,
+              },
+              {
+                canView: "hr",
+                title: "Remote Attendance",
+                path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
+              },
+              {
+                canView: "hr",
+                title: "Leave Applications",
+                path: PATH_DASHBOARD.hr.leavesAdmin,
+              },
+              {
+                canView: "All",
+                title: "Leaves",
+                path: PATH_DASHBOARD.hr.leavesEmployee,
+              },
+              {
+                canView: "hr",
+                title: "Offices",
+                path: PATH_DASHBOARD.hr.offices,
+              },
+              {
+                canView: "hr",
+                title: "Designations",
+                path: PATH_DASHBOARD.hr.designations,
+              },
+              {
+                canView: "hr",
+                title: "Branch",
+                path: PATH_DASHBOARD.hr.branch,
+              },
+              {
+                canView: "hr",
+                title: "Leave Types",
+                path: PATH_DASHBOARD.hr.leaveType,
+              },
+            ],
       },
       {
         canView: "super",

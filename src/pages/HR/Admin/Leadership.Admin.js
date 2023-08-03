@@ -14,7 +14,7 @@ import male3 from "../../../assets/img/male_avater3.png";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const LeadershipAdmin = () => {
-  const { showAlert, user } = useAppContext();
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [allLeaders, setAllLeaders] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
@@ -70,11 +70,8 @@ const LeadershipAdmin = () => {
       setAllLeaders(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "All Leaders:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
