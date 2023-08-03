@@ -7,7 +7,7 @@ import { useAppContext } from '../../../Context/AppContext';
 import moment from 'moment';
 
 const EmployeeAttendanceRecordAdmin = () => {
-  const { showAlert } = useAppContext();
+  const { ErrorHandler } = useAppContext();
   const [employeeAttendance, setEmployeeAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
   const { employee } = useParams();
@@ -56,7 +56,8 @@ const EmployeeAttendanceRecordAdmin = () => {
       setEmployeeAttendance(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      const component = "Employee Attendance:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

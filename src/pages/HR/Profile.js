@@ -232,8 +232,11 @@ const Profile = () => {
   useEffect(() => {
     fetchEmployeeShift();
     fetchEmployeeProfile();
-    fetchEmployeeAttendance();
     fetchEmployeeRemoteShift();
+
+    if (CurrentUserRoles.includes("hr_manager") ||CurrentUserRoles.includes("senior_hr_associate")) {
+      fetchEmployeeAttendance();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

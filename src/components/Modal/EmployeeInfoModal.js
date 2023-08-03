@@ -93,6 +93,7 @@ export const EmployeeInfoModal = ({
         setLoading(false);
       } catch (error) {
         showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        $("#EmployeeInfoModal").modal("toggle");
         setLoading(false);
       }
     } else {

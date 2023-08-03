@@ -17,7 +17,7 @@ const ViewModal = ({title, content, handleRefresh }) => {
               className="close"
               data-dismiss="modal"
               aria-label="Close"
-              onClick={() => handleRefresh()}
+              onClick={handleRefresh}
             >
               <span aria-hidden="true">×</span>
             </button>

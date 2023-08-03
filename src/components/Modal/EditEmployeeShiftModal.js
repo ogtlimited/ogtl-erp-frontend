@@ -145,7 +145,7 @@ export const EditEmployeeShiftModal = ({
       showAlert(true, `Shift updated successfully!`, "alert alert-success");
     } catch (error) {
       goToTop();
-      const errorMsg = error?.response?.data?.message;
+      const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       console.error(error?.response);
       setLoading(false);

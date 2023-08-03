@@ -7,7 +7,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
@@ -47,14 +47,11 @@ const AttendanceRecord = () => {
       setDailyAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Attendance - Cards:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   // Daily Attendance - Table:
@@ -87,14 +84,11 @@ const AttendanceRecord = () => {
       setDailyAttendance(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Attendance - Summary:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   // All Campaigns:
@@ -130,7 +124,7 @@ const AttendanceRecord = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Campaigns error:", error);
+      console.log("All Campaigns error:", error);
       setLoading(false);
     }
   }, [CampaignPage, CampaignSizePerPage]);
@@ -168,7 +162,7 @@ const AttendanceRecord = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Departments error:", error);
+      console.log("All Departments error:", error);
       setLoading(false);
     }
   }, [DepartmentPage, DepartmentSizePerPage]);
