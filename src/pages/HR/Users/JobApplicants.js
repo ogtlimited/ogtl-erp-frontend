@@ -1,7 +1,7 @@
 // *IN USE
 
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/** @format */
 
 import React, { useCallback, useEffect, useState } from "react";
 import JobApplicantsTable from "../Admin/JobApplicantsTable";
@@ -109,7 +109,7 @@ const JobApplicants = () => {
       console.log("update this", update, id);
 
       axiosInstance
-        .patch(` /api/v1/job_applicants/${id}.json`, {
+        .patch(`/api/v1/job_applicants/${id}.json`, {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -119,7 +119,7 @@ const JobApplicants = () => {
         })
         .then((res) => {
           fetchAllJobApplicants();
-          showAlert(true, res?.data?.message, "alert alert-success");
+          showAlert(true, "Job application updated successfully", "alert alert-success");
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
