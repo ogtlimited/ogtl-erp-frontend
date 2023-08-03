@@ -1,92 +1,108 @@
+// *IN USE
+
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/** @format */
 
 import React, { useCallback, useEffect, useState } from "react";
 import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import helper from "../../../services/helper";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import {
-  InterviewProcessStageOptions,
   InterviewStatusOptions,
+  InterviewProcessStageOptions,
 } from "../../../constants";
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
+import moment from "moment";
 
-const JobApplicants = () => {
+const JobApplicantsAdmin = () => {
   const [data, setData] = useState([]);
-  const { showAlert, user } = useAppContext();
-  const [statusRow, setstatusRow] = useState(null);
-  const [processingStageRow, setprocessingStageRow] = useState(null);
-  const [interview_status, setInterviewStatus] = useState("");
-  const [process_stage, setprocessingStage] = useState("");
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  // eslint-disable-next-line no-unused-vars
-  const [unfiltered, setunfiltered] = useState([]);
   const [modalType, setmodalType] = useState("schedule-interview");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState("");
-  const [processingStageFilter, setprocessingStageFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  
+  const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
+  const [processingStageFilter, setProcessingStageFilter] = useState("");
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
+  const [fromDate, setFromDate] = useState(today_date);
+  const [toDate, setToDate] = useState(today_date);
+
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
-
+    setLoading(true);
     try {
-      const response = await axiosInstance.get('/api/v1/job_applicants.json', {
-        headers: {          
+      const response = await axiosInstance.get("/api/v1/job_applicants.json", {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
+        params: {
+          page: page,
+          limit: sizePerPage,
+          from: fromDate,
+          to: toDate,
+        },
       });
 
       const resData = response?.data?.data?.job_applicants;
-      console.log("Job applicants:", resData);
- 
-      setData(resData);
+      const totalPages = response?.data?.data?.total_pages;
+
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
+
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
+
+      const formatted = resData.map((emp) => ({
+        ...emp,
+        full_name: `${emp?.first_name} ${emp?.last_name}`,
+        job_title: emp?.job_opening?.job_title,
+        application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+        interview_date: emp?.interview_date
+          ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+          : "Not Scheduled",
+      }));
+
+      setData(formatted);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Job Applicants Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, page, sizePerPage, toDate]);
 
   useEffect(() => {
     fetchAllJobApplicants();
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
   }, [fetchAllJobApplicants]);
-  
 
   const columns = [
     {
       dataField: "full_name",
       text: "Job Applicant",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
-      dataField: "job_opening_id",
+      dataField: "job_title",
       text: "Job Opening",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          <h2>{row?.job_opening_id}</h2>
+          <h2>{row?.job_title}</h2>
         </>
       ),
     },
@@ -94,44 +110,88 @@ const JobApplicants = () => {
       dataField: "application_date",
       text: "Application Date",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
       dataField: "interview_date",
       text: "Interview Date",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
     {
       dataField: "interview_status",
       text: "Interview Status",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewStatusOptions}
-            setStatus={setInterviewStatus}
-            value={value}
-            row={row}
-            setstatusRow={setstatusRow}
-          />
+          {value === "Open" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Scheduled for interview" ||
+            value === "Interviews Scheduled" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : value === "Not interested" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          ) : value === "Not a graduate" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
+            </a>
+          ) : value === "Not in job location" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
+            </a>
+          ) : value === "Failed screening" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
+            </a>
+          ) : value === "Missed call" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          )}
         </>
       ),
     },
     {
       dataField: "process_stage",
-      text: "Processing Stage",
+      text: "Process Stage",
       sort: true,
-
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewProcessStageOptions}
-            setStatus={setprocessingStage}
-            value={value}
-            row={row}
-            setstatusRow={setprocessingStageRow}
-          />
+          {value === "Open" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Sieving" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          ) : value === "Phone screening" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : value === "Interviews scheduled" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          )}
         </>
       ),
     },
@@ -139,6 +199,7 @@ const JobApplicants = () => {
       dataField: "resume_attachment",
       text: "Resume Attachment",
       sort: true,
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
           <i className="fa fa-download"></i> Download
@@ -150,7 +211,7 @@ const JobApplicants = () => {
       text: "Action",
       sort: true,
       csvExport: false,
-      headerStyle: { minWidth: "70px", textAlign: "left" },
+      headerStyle: { width: "10%", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <>
@@ -163,7 +224,7 @@ const JobApplicants = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {user?.role?.hr?.delete && (
+              {/* {user?.role?.hr?.delete && (
                 <a
                   className="dropdown-item"
                   data-toggle="modal"
@@ -175,7 +236,8 @@ const JobApplicants = () => {
                 >
                   <i className="fa fa-trash m-r-5"></i> Delete
                 </a>
-              )}
+              )} */}
+
               <a
                 className="dropdown-item"
                 data-toggle="modal"
@@ -187,7 +249,8 @@ const JobApplicants = () => {
               >
                 <i className="fa fa-eye m-r-5"></i> View
               </a>
-              <a
+
+              {/* <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#generalModal"
@@ -197,7 +260,7 @@ const JobApplicants = () => {
                 }}
               >
                 <i className="fa fa-clock m-r-5"></i> Schedule Interview
-              </a>
+              </a> */}
             </div>
           </>
         </div>
@@ -221,15 +284,13 @@ const JobApplicants = () => {
       </div>
       <div className="row">
         <div className="col-12">
-
           <JobApplicantsTable
+            columns={columns}
             data={data}
             setData={setData}
             loading={loading}
             setLoading={setLoading}
-            columns={columns}
-
-            statusInterview={InterviewStatusOptions}
+            interviewStatus={InterviewStatusOptions}
             processingStage={InterviewProcessStageOptions}
             page={page}
             setPage={setPage}
@@ -237,12 +298,15 @@ const JobApplicants = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-            intervieStatusFilter={intervieStatusFilter}
-            setIntervieStatusFilter={setIntervieStatusFilter}
+            fromDate={fromDate}
+            toDate={toDate}
+            setFromDate={setFromDate}
+            setToDate={setToDate}
+            fetchAllJobApplicants={fetchAllJobApplicants}
+            interviewStatusFilter={interviewStatusFilter}
+            setInterviewStatusFilter={setInterviewStatusFilter}
             processingStageFilter={processingStageFilter}
-            setprocessingStageFilter={setprocessingStageFilter}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
+            setProcessingStageFilter={setProcessingStageFilter}
           />
         </div>
       </div>
@@ -250,7 +314,12 @@ const JobApplicants = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Applicant Details"
-          content={<JobApplicationContent jobApplication={viewRow} />}
+          content={
+            <JobApplicationContent
+              jobApplication={viewRow}
+              handleRefresh={fetchAllJobApplicants}
+            />
+          }
         />
       ) : (
         <ViewModal
@@ -258,6 +327,7 @@ const JobApplicants = () => {
           content={
             <ScheduleInterview
               jobApplication={selectedRow}
+              handleRefresh={fetchAllJobApplicants}
             />
           }
         />
@@ -266,4 +336,4 @@ const JobApplicants = () => {
   );
 };
 
-export default JobApplicants;
+export default JobApplicantsAdmin;
