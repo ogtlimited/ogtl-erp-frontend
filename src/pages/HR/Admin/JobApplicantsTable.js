@@ -1,19 +1,12 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
-// import Select from 'react-select';
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from "react-bootstrap-table2-filter";
+import filterFactory from "react-bootstrap-table2-filter";
 import moment from "moment";
-
-import paginationFactory from "react-bootstrap-table2-paginator";
 import usePagination from "./JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";

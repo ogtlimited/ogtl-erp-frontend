@@ -28,7 +28,7 @@ const JobApplicants = () => {
   const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [modalType, setModalType] = useState("schedule-interview");
+  const [modalType, setModalType] = useState("");
   const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -39,15 +39,21 @@ const JobApplicants = () => {
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("Open");
-
-  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  
+  let firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  let lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
     setLoading(true);
+
+    console.log("Job fetch:", {
+      fromDate,
+      toDate,
+    });
+
     try {
       const response = await axiosInstance.get(
         "/api/v1/rep_siever_job_applications.json",
@@ -111,10 +117,6 @@ const JobApplicants = () => {
         );
       }
 
-      console.log({
-        payload: update,
-      });
-
       axiosInstance
         .patch(`/api/v1/job_applicants/${id}.json`, {
           headers: {
@@ -122,12 +124,21 @@ const JobApplicants = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          payload: update
+          payload: update,
         })
         .then((res) => {
-          showAlert(true, "Job application updated successfully", "alert alert-success");
+          showAlert(
+            true,
+            "Job application updated successfully",
+            "alert alert-success"
+          );
           setProcessingStageFilter("Open");
           fetchAllJobApplicants();
+
+          console.log("Updated for:", {
+            fromDate,
+            toDate,
+          });
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
@@ -146,22 +157,22 @@ const JobApplicants = () => {
     [CurrentUserRoles]
   );
 
-  // useEffect(() => {
-  //   if (interview_status.length) {
-  //     const update = {
-  //       interview_status,
-  //       // id: statusRow?.id,
-  //     };
-  //     handleUpdate(statusRow.id, update);
-  //   }
-  // }, [interview_status, statusRow, handleUpdate]);
+  useEffect(() => {
+    if (interview_status.length) {
+      const update = {
+        interview_status,
+        // id: statusRow?.id,
+      };
+      handleUpdate(statusRow.id, update);
+    }
+  }, [interview_status, statusRow, handleUpdate]);
 
   useEffect(() => {
     if (process_status.length) {
-      // if (process_status === "Interview scheduled") {
-      //   return setModalType("schedule-interview");
-      //   // setSelectedRow(processingStageRow);
-      // }
+      if (process_status === "Interview scheduled") {
+        setModalType("schedule-interview");
+        setSelectedRow(processingStageRow);
+      }
       const update = {
         process_status,
         interview_date: null,
@@ -200,22 +211,22 @@ const JobApplicants = () => {
       sort: true,
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
-    // {
-    //   dataField: "interview_status",
-    //   text: "Interview Status",
-    //   sort: true,
-    //   formatter: (value, row) => (
-    //     <>
-    //       <GeneralApproverBtn
-    //         options={InterviewStatusOptions}
-    //         setStatus={setInterviewStatus}
-    //         value={value}
-    //         row={row}
-    //         setStatusRow={setStatusRow}
-    //       />
-    //     </>
-    //   ),
-    // },
+    {
+      dataField: "interview_status",
+      text: "Interview Status",
+      sort: true,
+      formatter: (value, row) => (
+        <>
+          <GeneralApproverBtn
+            options={InterviewStatusOptions}
+            setStatus={setInterviewStatus}
+            value={value}
+            row={row}
+            setStatusRow={setStatusRow}
+          />
+        </>
+      ),
+    },
     {
       dataField: "process_status",
       text: "Process Stage",
@@ -358,7 +369,7 @@ const JobApplicants = () => {
             />
           }
         />
-      ) : (
+      ) : modalType === "schedule-interview" ? (
         <ViewModal
           title="Schedule Interview"
           content={
@@ -370,7 +381,7 @@ const JobApplicants = () => {
             />
           }
         />
-      )}
+      ) : null}
     </>
   );
 };

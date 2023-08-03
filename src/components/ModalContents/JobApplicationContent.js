@@ -3,7 +3,6 @@ import React from "react";
 const JobApplicationContent = ({ jobApplication = {} }) => {
   const filteredApplication = {
     ...jobApplication,
-    interview_status: undefined,
     rep_sieving_call_id: undefined,
     updated_at: undefined,
     referrer_id: undefined,

@@ -26,7 +26,7 @@ const JobApplicantsAdmin = () => {
   const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [modalType, setmodalType] = useState("schedule-interview");
+  const [modalType, setmodalType] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -251,68 +251,68 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
-    // CurrentUserRoles?.includes("rep_siever") && userDept === "hr"
-    //   ? {
-    //       dataField: "interview_status",
-    //       text: "Interview Status",
-    //       sort: true,
-    //       formatter: (value, row) => (
-    //         <>
-    //           <GeneralApproverBtn
-    //             options={InterviewStatusOptions}
-    //             setStatus={setInterviewStatus}
-    //             value={value}
-    //             row={row}
-    //             setStatusRow={setStatusRow}
-    //           />
-    //         </>
-    //       ),
-    //     }
-    //   : {
-    //       dataField: "interview_status",
-    //       text: "Interview Status",
-    //       sort: true,
-    //       headerStyle: { width: "20%" },
-    //       formatter: (value, row) => (
-    //         <>
-    //           {value === "Open" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
-    //             </a>
-    //           ) : value === "Scheduled for interview" ||
-    //             value === "Interviews Scheduled" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-success"}></i> {value}
-    //             </a>
-    //           ) : value === "Not interested" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-secondary"}></i>{" "}
-    //               {value}
-    //             </a>
-    //           ) : value === "Not a graduate" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
-    //             </a>
-    //           ) : value === "Not in job location" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
-    //             </a>
-    //           ) : value === "Failed screening" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
-    //             </a>
-    //           ) : value === "Missed call" ? (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-info"}></i> {value}
-    //             </a>
-    //           ) : (
-    //             <a className="btn btn-gray btn-sm btn-rounded">
-    //               <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
-    //             </a>
-    //           )}
-    //         </>
-    //       ),
-    //     },
+    CurrentUserRoles?.includes("rep_siever") && userDept === "hr"
+      ? {
+          dataField: "interview_status",
+          text: "Interview Status",
+          sort: true,
+          formatter: (value, row) => (
+            <>
+              <GeneralApproverBtn
+                options={InterviewStatusOptions}
+                setStatus={setInterviewStatus}
+                value={value}
+                row={row}
+                setStatusRow={setStatusRow}
+              />
+            </>
+          ),
+        }
+      : {
+          dataField: "interview_status",
+          text: "Interview Status",
+          sort: true,
+          headerStyle: { width: "20%" },
+          formatter: (value, row) => (
+            <>
+              {value === "Open" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+                </a>
+              ) : value === "Scheduled for interview" ||
+                value === "Interviews Scheduled" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+                </a>
+              ) : value === "Not interested" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-secondary"}></i>{" "}
+                  {value}
+                </a>
+              ) : value === "Not a graduate" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
+                </a>
+              ) : value === "Not in job location" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
+                </a>
+              ) : value === "Failed screening" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
+                </a>
+              ) : value === "Missed call" ? (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+                </a>
+              ) : (
+                <a className="btn btn-gray btn-sm btn-rounded">
+                  <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+                </a>
+              )}
+            </>
+          ),
+        },
     CurrentUserRoles?.includes("rep_siever") && userDept === "hr"
       ? {
           dataField: "process_status",
@@ -489,7 +489,7 @@ const JobApplicantsAdmin = () => {
             />
           }
         />
-      ) : (
+      ) : modalType === "schedule-interview" ? (
         <ViewModal
           title="Schedule Interview"
           content={
@@ -501,7 +501,7 @@ const JobApplicantsAdmin = () => {
             />
           }
         />
-      )}
+      ) : null}
     </>
   );
 };
