@@ -447,7 +447,7 @@ const LeavesAdmin = () => {
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto"></div>

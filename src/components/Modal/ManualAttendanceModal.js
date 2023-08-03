@@ -1,13 +1,13 @@
-/** @format */
+// *IN USE
 
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import $ from "jquery";
 
 export const ManualAttendanceModal = ({
   employeeOgid,
   today,
+  setToday,
   employeeAttendance,
   userData,
   fetchEmployeeAttendance,
@@ -51,6 +51,13 @@ export const ManualAttendanceModal = ({
     setEmployee({ ...employee, [e.target.name]: e.target.value });
   };
 
+  const handleDateChange = (e) => {
+    e.preventDefault();
+    const date = e?.target?.value;
+    setToday(date);
+    fetchEmployeeAttendance(date);
+  };
+
   const handleSubmitAttendance = async (e) => {
     e.preventDefault();
 
@@ -83,8 +90,16 @@ export const ManualAttendanceModal = ({
       fetchEmployeeAttendance();
       setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, "alert alert-danger");
+      const errorMsg = error.response?.data?.errors;
+      if (error?.response?.status === 500) {
+        showAlert(
+          true,
+          "Server Error, Please try again!",
+          "alert alert-warning"
+        );
+      } else {
+        showAlert(true, `${errorMsg}`, "alert alert-warning");
+      }
       setLoading(false);
       goToTop();
     }
@@ -109,7 +124,7 @@ export const ManualAttendanceModal = ({
                       name="date"
                       type="date"
                       value={employee.date}
-                      onChange={handleFormChange}
+                      onChange={handleDateChange}
                     />
                   </div>
                 </div>

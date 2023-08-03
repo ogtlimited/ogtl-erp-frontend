@@ -1,11 +1,15 @@
+// *IN-USE FIXED!
+
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { msalInstance, loginRequest } from "../../authConfig";
 import config from "../../config.json";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
@@ -59,12 +63,12 @@ const Login = () => {
               return setErrorMsg(
                 "Invalid email. Please double-check and try again"
               );
-            } else if (err?.response?.status === 502) {
+            } else if (err?.response?.status >= 500) {
               return setErrorMsg(
-                "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
+                "The server is server is currently experiencing a temporary issue. Please try again later."
               );
             }
-            setErrorMsg(`${err?.message}. Please try again later.`);
+            setErrorMsg(`${err?.message}. Please try again.`);
           })
           .finally(() => {
             setLoading(false);
@@ -125,9 +129,9 @@ const Login = () => {
             return setErrorMsg(
               "Invalid email. Please double-check and try again"
             );
-          } else if (e?.response?.status === 502) {
+          } else if (e?.response?.status >= 500) {
             return setErrorMsg(
-              "Oops! The server is server is currently experiencing a temporary issue. Please try again later."
+              "The server is server is currently experiencing a temporary issue. Please try again later."
             );
           }
           setErrorMsg("Unable to login. Please try again");
@@ -136,6 +140,22 @@ const Login = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleEndSession = (e) => {
+    e.preventDefault();
+    tokenService.clearStorage();
+    navigate("/auth/login");
+    msalInstance
+      .logoutPopup()
+      .then((e) => {
+        console.log(e);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+    setErrorMsg("");
   };
 
   return (
@@ -197,6 +217,15 @@ const Login = () => {
             </div>
           </div>
         </div>
+
+        {errorMsg === "There is an active user on this device" && (
+          <button
+            className="btn btn-secondary close-account-btn"
+            onClick={(e) => handleEndSession(e)}
+          >
+            End Current Session
+          </button>
+        )}
       </div>
     </div>
   );

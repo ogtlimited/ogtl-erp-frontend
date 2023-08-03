@@ -5,12 +5,14 @@ import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/Dail
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
+import Switch from "@mui/material/Switch";
 
-const AttendanceRecord = () => {
+const RemoteAttendanceAdmin = () => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
-  const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
-  const [dailyAttendance, setDailyAttendance] = useState([]);
+  const [dailyRemoteAttendanceSummary, setDailyRemoteAttendanceSummary] =
+    useState([]);
+  const [dailyRemoteAttendance, setDailyRemoteAttendance] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
 
@@ -26,8 +28,8 @@ const AttendanceRecord = () => {
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
 
-  // Daily Attendance - Cards:
-  const fetchDailyAttendanceSummary = useCallback(async () => {
+  // Daily Remote Attendance Summary - Cards:
+  const fetchDailyRemoteAttendanceSummary = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
         "api/v1/daily_attendance_summary.json",
@@ -44,7 +46,7 @@ const AttendanceRecord = () => {
       );
       const resData = response?.data?.data?.result;
 
-      setDailyAttendanceSummary(resData);
+      setDailyRemoteAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
       showAlert(
@@ -54,15 +56,15 @@ const AttendanceRecord = () => {
       );
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  // Daily Attendance - Table:
-  const fetchDailyAttendance = useCallback(async () => {
+  // Daily Remote Attendance - Table:
+  const fetchDailyRemoteAttendance = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        "/api/v1/daily_attendance.json",
+        "api/v1/hr_dashboard/remote_attendance_records.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,21 +72,21 @@ const AttendanceRecord = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            date: date,
+            day: date,
             limit: 400,
           },
         }
       );
-      const resData =
-        response?.data?.data?.info === "no record for date"
-          ? []
-          : response?.data?.data?.info.map((e, index) => ({
-              ...e,
-              idx: index + 1,
-              date: moment(e?.date).format("Do MMMM, YYYY"),
-            }));
 
-      setDailyAttendance(resData);
+      const resData = response?.data?.data?.records;
+
+      const formatted = resData.map((e, index) => ({
+        ...e,
+        full_name: e.first_name + " " + e.last_name,
+        formattedDate: moment(e?.createdAt).format("Do MMMM, YYYY"),
+      }));
+
+      setDailyRemoteAttendance(formatted);
       setLoading(false);
     } catch (error) {
       showAlert(
@@ -94,7 +96,7 @@ const AttendanceRecord = () => {
       );
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
   // All Campaigns:
@@ -174,24 +176,13 @@ const AttendanceRecord = () => {
   }, [DepartmentPage, DepartmentSizePerPage]);
 
   useEffect(() => {
-    fetchDailyAttendanceSummary();
-    fetchDailyAttendance();
+    // fetchDailyRemoteAttendanceSummary();
+    fetchDailyRemoteAttendance();
     fetchAllCampaigns();
     fetchAllDepartments();
-  }, [
-    fetchDailyAttendanceSummary,
-    fetchDailyAttendance,
-    fetchAllCampaigns,
-    fetchAllDepartments,
-  ]);
+  }, [fetchAllCampaigns, fetchAllDepartments, fetchDailyRemoteAttendance]);
 
   const columns = [
-    {
-      dataField: "idx",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
     {
       dataField: "full_name",
       text: "Employee Name",
@@ -205,86 +196,91 @@ const AttendanceRecord = () => {
       headerStyle: { width: "15%" },
     },
     {
-      dataField: "date",
-      text: "Date",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "clock_in",
-      text: "Clock In",
+      dataField: "present",
+      text: "Present",
       sort: true,
       headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "clock_out",
-      text: "Clock Out",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-  ];
-
-  const officeColumns = [
-    {
-      dataField: "title",
-      text: "Office",
-      sort: true,
-      headerStyle: { width: "35%" },
-      formatter: (val, row) => (
-        <p>
-          <Link
-            to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
-            className="attendance-record-for-office"
-          >
-            {val}
-          </Link>
-        </p>
+      formatter: (value, row) => (
+        <>
+          <Switch checked={row?.present} />
+        </>
       ),
     },
     {
-      dataField: "created_at",
-      text: "Date Created",
+      dataField: "acted_on_by",
+      text: "Acted on by",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "formattedDate",
+      text: "Date generated",
       sort: true,
       headerStyle: { width: "20%" },
     },
   ];
+
+  // const officeColumns = [
+  //   {
+  //     dataField: "title",
+  //     text: "Office",
+  //     sort: true,
+  //     headerStyle: { width: "35%" },
+  //     formatter: (val, row) => (
+  //       <p>
+  //         <Link
+  //           to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
+  //           className="attendance-record-for-office"
+  //         >
+  //           {val}
+  //         </Link>
+  //       </p>
+  //     ),
+  //   },
+  //   {
+  //     dataField: "created_at",
+  //     text: "Date Created",
+  //     sort: true,
+  //     headerStyle: { width: "20%" },
+  //   },
+  // ];
 
   return (
     <>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Employees Attendance Records</h3>
+            <h3 className="page-title">Remote Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Attendance Record</li>
+              <li className="breadcrumb-item active">Remote Attendance</li>
             </ul>
           </div>
         </div>
       </div>
 
       <div className="daily-attendance-card-group">
-        <div className="daily-attendance-card">
+        {/* <div className="daily-attendance-card">
           <div className="card-body">
             <span className="dash-widget-icon">
-              <i className="las la-clock"></i>
+              <i className="las la-users"></i>
             </span>
             <div className="daily-attendance-card-info">
               {loading ? (
                 <h3>-</h3>
               ) : (
-                <h3>{dailyAttendanceSummary?.clock_in || "-"}</h3>
+                <h3>{dailyRemoteAttendanceSummary?.clock_in || "-"}</h3>
               )}
             </div>
           </div>
-          <span>Total Clock In</span>
-        </div>
+          <span>Total Present</span>
+        </div> */}
 
-        <div className="daily-attendance-card">
+        {/* <div className="daily-attendance-card">
           <div className="card-body">
             <span className="dash-widget-icon">
               <i
-                className="las la-clock"
+                className="las la-users"
                 style={{ transform: "scaleX(-1)" }}
               ></i>
             </span>
@@ -292,12 +288,12 @@ const AttendanceRecord = () => {
               {loading ? (
                 <h3>-</h3>
               ) : (
-                <h3> {dailyAttendanceSummary?.clock_out || "-"} </h3>
+                <h3> {dailyRemoteAttendanceSummary?.clock_out || "-"} </h3>
               )}
             </div>
           </div>
-          <span>Total Clock Out</span>
-        </div>
+          <span>Total Absent</span>
+        </div> */}
 
         <div className="daily-attendance-card">
           <div className="card-body">
@@ -313,7 +309,7 @@ const AttendanceRecord = () => {
               ) : (
                 <h3>
                   {" "}
-                  {moment(dailyAttendanceSummary?.day).format(
+                  {moment(date).format(
                     "Do MMMM, YYYY"
                   )}{" "}
                 </h3>
@@ -334,17 +330,17 @@ const AttendanceRecord = () => {
                   data-toggle="tab"
                   href="#tab_dailyAttendance"
                 >
-                  Daily Attendance Summary
+                  Daily Attendance
                 </a>
               </li>
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
                   Campaigns
                 </a>
-              </li>
+              </li> */}
 
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
@@ -352,7 +348,8 @@ const AttendanceRecord = () => {
                 >
                   Departments
                 </a>
-              </li>
+              </li> */}
+
             </ul>
           </div>
         </div>
@@ -363,7 +360,7 @@ const AttendanceRecord = () => {
           <div id="tab_dailyAttendance" className="col-12 tab-pane show active">
             <DailyAttendanceTable
               columns={columns}
-              data={dailyAttendance}
+              data={dailyRemoteAttendance}
               loading={loading}
               setLoading={setLoading}
               date={date}
@@ -371,7 +368,7 @@ const AttendanceRecord = () => {
             />
           </div>
 
-          <div id="tab_campaigns" className="col-12 tab-pane">
+          {/* <div id="tab_campaigns" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={officeColumns}
               data={campaigns}
@@ -384,9 +381,9 @@ const AttendanceRecord = () => {
               totalPages={totalCampaignPages}
               setTotalPages={setTotalCampaignPages}
             />
-          </div>
+          </div> */}
 
-          <div id="tab_departments" className="col-12 tab-pane">
+          {/* <div id="tab_departments" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={officeColumns}
               data={departments}
@@ -399,11 +396,11 @@ const AttendanceRecord = () => {
               totalPages={totalDepartmentPages}
               setTotalPages={setTotalCampaignPages}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
   );
 };
 
-export default AttendanceRecord;
+export default RemoteAttendanceAdmin;

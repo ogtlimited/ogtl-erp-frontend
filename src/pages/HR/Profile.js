@@ -1,8 +1,8 @@
-// *IN USE!
+// *IN USE - FIXED!
 
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
 import { ReportToModal } from "../../components/Modal/ReportToModal";
 import ProfileCards from "../../components/Profile/ProfileCards";
@@ -12,16 +12,23 @@ import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
-  const { dropDownClicked, setDropDownClicked, user, showAlert } =
+  const { dropDownClicked, setDropDownClicked, user, ErrorHandler } =
     useAppContext();
   const [userData, setUserdata] = useState(null);
   const [formValue, setFormValue] = useState(null);
   const [employeeShifts, setEmployeeShifts] = useState([]);
+  const [employeeRemoteShifts, setEmployeeRemoteShifts] = useState([]);
   const [employeeAttendance, setEmployeeAttendance] = useState([]);
   const [userID, setUserId] = useState("");
   const [employeeID, setEmployeeId] = useState("");
   const [officeID, setOfficeId] = useState("");
   const [mode, setMode] = useState("");
+  const [remoteMode, setRemoteMode] = useState("");
+
+  const [hideReportToModal, setHideReportToModal] = useState(false);
+  const [hideAttendanceComponent, setHideAttendanceComponent] = useState(false);
+  const [hideRemoteShiftComponent, setHideRemoteShiftComponent] =
+    useState(false);
 
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
@@ -30,7 +37,13 @@ const Profile = () => {
   const [employeeOgid, setEmployeeOgid] = useState(id);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canEdit = ["hr_manager", "hr_associate"];
+
+  const canEditReportTo = [
+    "hr_manager",
+    "hr_associate",
+    "team_lead",
+    "supervisor",
+  ];
 
   // Employee Shifts:
   const fetchEmployeeShift = async () => {
@@ -56,7 +69,8 @@ const Profile = () => {
         setEmployeeShifts(employeeShifts);
       }
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      const component = "Employee Shifts Error:";
+      ErrorHandler(error, component);
     }
   };
 
@@ -85,15 +99,8 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        console.log("This error:", error?.response?.status);
-        if (error?.response?.status === 500) {
-          showAlert(
-            true,
-            "Error fetching Employee Profile",
-            "alert alert-warning"
-          );
-        }
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        const component = "Employee Profile Error:";
+        ErrorHandler(error, component);
       }
     } else {
       try {
@@ -110,6 +117,8 @@ const Profile = () => {
         const resData = response?.data?.data;
         setUserdata(resData);
 
+        console.log("Employee Details:", resData);
+
         const userId = resData?.employee?.email;
         const employeeId = resData?.employee?.personal_detail?.id;
         const officeId = resData?.office?.id;
@@ -118,21 +127,80 @@ const Profile = () => {
         setEmployeeId(employeeId);
         setOfficeId(officeId);
       } catch (error) {
-        showAlert(
-          true,
-          "Error retrieving information from server",
-          "alert alert-warning"
-        );
+        const component = "Employee Profile Error:";
+        ErrorHandler(error, component);
       }
     }
   };
 
   // Employee Attendance - Today:
-  const fetchEmployeeAttendance = useCallback(async () => {
-    const today_date = moment(time).format("yyyy-MM-DD");
+  const fetchEmployeeAttendance = useCallback(
+    async (date) => {
+      if (date) {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employee_attendances/${id}.json?start_date=${date}&end_date=${date}&limit=400`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+
+          const resData =
+            response?.data?.data?.result === "no record for date range"
+              ? []
+              : response?.data?.data?.result;
+
+          setEmployeeAttendance(resData);
+        } catch (error) {
+          const component = "Employee Attendance Error:";
+          ErrorHandler(error, component);
+
+          if (error?.response?.status === 403) {
+            return setHideAttendanceComponent(true);
+          }
+        }
+      } else {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employee_attendances/${id}.json?start_date=${today}&end_date=${today}&limit=400`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+
+          const resData =
+            response?.data?.data?.result === "no record for date range"
+              ? []
+              : response?.data?.data?.result;
+
+          setEmployeeAttendance(resData);
+        } catch (error) {
+          const component = "Employee Attendance Error:";
+          ErrorHandler(error, component);
+
+          if (error?.response?.status === 403) {
+            return setHideAttendanceComponent(true);
+          }
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [id, today]
+  );
+
+  // Employee Remote Shifts:
+  const fetchEmployeeRemoteShift = async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/employee_attendances/${id}.json?start_date=${today_date}&end_date=${today_date}&limit=400`,
+        `/api/v1/employee_remote_shifts.json?ogid=${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -142,26 +210,30 @@ const Profile = () => {
         }
       );
 
-      const resData =
-        response?.data?.data?.result === "no record for date range"
-          ? []
-          : response?.data?.data?.result;
+      const resData = response?.data?.data?.employee_remote_shifts;
+      const employeeRemoteShifts = resData;
 
-      setEmployeeAttendance(resData);
+      if (!employeeRemoteShifts.length) {
+        setRemoteMode("create");
+      } else if (employeeRemoteShifts.length) {
+        setRemoteMode("edit");
+        setEmployeeRemoteShifts(employeeRemoteShifts);
+      }
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Remote Employee Shift Error:";
+      ErrorHandler(error, component);
+
+      if (error?.response?.status === 403) {
+        return setHideRemoteShiftComponent(true);
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, time]);
+  };
 
   useEffect(() => {
     fetchEmployeeShift();
     fetchEmployeeProfile();
     fetchEmployeeAttendance();
+    fetchEmployeeRemoteShift();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -178,9 +250,7 @@ const Profile = () => {
           <div className="col-sm-12">
             <h3 className="page-title">Profile</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/dashboard/hr/all-employees">Employees</Link>
-              </li>
+              <li className="breadcrumb-item">Employee</li>
               <li className="breadcrumb-item active">Profile</li>
             </ul>
           </div>
@@ -280,7 +350,8 @@ const Profile = () => {
                               {userData?.employee?.reports_to?.full_name ||
                                 "No Lead"}
                             </a>
-                            {canEdit.includes(...CurrentUserRoles) ? (
+                            {canEditReportTo.includes(...CurrentUserRoles) &&
+                            !hideReportToModal ? (
                               <a
                                 className="edit-icon"
                                 data-toggle="modal"
@@ -307,23 +378,32 @@ const Profile = () => {
         setFormValue={setFormValue}
         mode={mode}
         setMode={setMode}
+        remoteMode={remoteMode}
+        setRemoteMode={setRemoteMode}
         today={today}
+        setToday={setToday}
         employeeAttendance={employeeAttendance}
         employeeShifts={employeeShifts}
         setEmployeeShifts={setEmployeeShifts}
+        employeeRemoteShifts={employeeRemoteShifts}
+        setEmployeeRemoteShifts={setEmployeeRemoteShifts}
         userID={userID}
         employeeID={employeeID}
         userOgid={id}
         officeID={officeID}
         fetchEmployeeShift={fetchEmployeeShift}
+        fetchEmployeeRemoteShift={fetchEmployeeRemoteShift}
         fetchEmployeeProfile={fetchEmployeeProfile}
         fetchEmployeeAttendance={fetchEmployeeAttendance}
         setEmployeeOgid={setEmployeeOgid}
+        hideAttendanceComponent={hideAttendanceComponent}
+        hideRemoteShiftComponent={hideRemoteShiftComponent}
       />
 
       <ReportToModal
         data={userData}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        setHideReportToModal={setHideReportToModal}
       />
     </>
   );

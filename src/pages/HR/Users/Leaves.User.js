@@ -202,28 +202,28 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "from_date",
       text: "From",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -565,9 +565,7 @@ const LeavesUser = () => {
           <div className="col">
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="/dashboard/employee-dashboard">Dashboard</a>
-              </li>
+              <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Leaves</li>
             </ul>
           </div>
@@ -591,7 +589,6 @@ const LeavesUser = () => {
           <div className="row">
             <div className="col-sm-12">
               <ul className="nav nav-tabs nav-tabs-bottom">
-                
                 <li className="nav-item">
                   <a
                     className="nav-link active"
@@ -641,7 +638,6 @@ const LeavesUser = () => {
                     )}
                   </a>
                 </li> */}
-
               </ul>
             </div>
           </div>
@@ -650,7 +646,6 @@ const LeavesUser = () => {
 
       <div>
         <div className="row tab-content">
-
           <div id="tab_leaves" className="col-12 tab-pane show active">
             <LeavesTable columns={userColumns} data={allLeaves} />
           </div>
@@ -702,7 +697,6 @@ const LeavesUser = () => {
               setTotalPages={setTotalPages}
             />
           </div> */}
-
         </div>
       </div>
 

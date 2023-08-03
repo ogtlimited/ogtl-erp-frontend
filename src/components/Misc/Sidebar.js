@@ -13,7 +13,9 @@ const Sidebar = () => {
   const AllAccess = ["super", "ceo", "hr_manager"];
   
   const CurrentUserRoles = user?.employee_info?.roles;
+  const CurrentUserIsRemoteLead = user?.employee_info?.remote;
   const CurrentUserIsLead = user?.employee_info?.is_lead;
+
   const userRole = user?.employee_info?.roles[0];
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
@@ -26,10 +28,12 @@ const Sidebar = () => {
   const canView = (viewedBy) => {
     if (userDept === viewedBy || AllAccess.includes(userRole)) {
       return true;
-    } else if (viewedBy === "All" ) {
+    } else if (viewedBy === "All") {
       return true;
     } else if (viewedBy === "lead") {
       return CurrentUserIsLead;
+    } else if (viewedBy === "remote-lead") {
+      return CurrentUserIsRemoteLead;
     } else {
       return false;
     }

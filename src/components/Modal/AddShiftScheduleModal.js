@@ -48,11 +48,6 @@ export const AddShiftScheduleModal = ({
     setCreateSundayShift(sunday_shifts);
   };
 
-  console.log("Edit this schedule please:", {
-    mode,
-    scheduleId,
-  });
-
   useEffect(() => {
     if (isSubmitted) {
       cancelEvent();
