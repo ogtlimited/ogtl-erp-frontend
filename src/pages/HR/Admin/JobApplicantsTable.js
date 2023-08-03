@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-// import { useAppContext } from '../../../Context/AppContext';
+import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 // import Select from 'react-select';
@@ -49,12 +49,15 @@ const JobApplicantsTable = ({
   setProcessingStageFilter,
 }) => {
   const { ExportCSVButton } = CSVExport;
+  const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
   const [dataToFilter, setDataToFilter] = useState("");
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   const StatusOptions = [
     { title: "Open" },
@@ -67,124 +70,6 @@ const JobApplicantsTable = ({
     { title: "call back" },
     { title: "Interviews Scheduled" },
   ];
-
-  // const handleIntervieStatusFilter = (e) => {
-  //   setIntervieStatusFilter(e.target.value);
-  //   setPage(1);
-  //   setLoading(true);
-
-  //   axiosInstance
-  //     .get('/api/jobApplicant', {
-  //       params: {
-  //         interview_status: e.target.value,
-  //         page: page,
-  //         limit: sizePerPage,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       let resData = res?.data?.data?.jobApplicants;
-  //       let resOptions = res?.data?.data?.pagination;
-
-  //       const thisPageLimit = sizePerPage;
-  //       const thisTotalPageSize = resOptions.numberOfPages;
-
-  //       setSizePerPage(thisPageLimit);
-  //       setTotalPages(thisTotalPageSize);
-
-  //       let formatted = resData.map((e) => ({
-  //         ...e,
-  //         full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-  //         interview_date: e.interview_date
-  //           ? new Date(e.interview_date).toUTCString()
-  //           : 'Not Set',
-  //         job_opening_id: e.job_opening_id?.job_title
-  //           ? e.job_opening_id?.job_title
-  //           : e.default_job_opening_id?.job_title || '-',
-  //         application_date: new Date(e.createdAt).toUTCString(),
-  //       }));
-
-  //       setData(formatted);
-  //       setDataToFilter(formatted);
-  //       setprocessingStageFilter('');
-  //     });
-  //   setLoading(false);
-  // };
-
-  // const MySearch = useCallback((props) => {
-  //   let input;
-  //   const handleClick = () => {
-  //     // if (loading) {
-  //     //   setData([])
-  //     //   setDataToFilter([])
-  //     // }
-  //     setPage(1);
-  //     setLoading(true);
-  //     props.onSearch(input.value);
-  //     const searchTerm = input.value;
-  //     setSearchTerm(searchTerm);
-
-  //     if (page === 1) {
-  //       axiosInstance
-  //         .get('/api/jobApplicant', {
-  //           params: {
-  //             search: searchTerm,
-  //             page: page,
-  //             limit: sizePerPage,
-  //           },
-  //         })
-  //         .then((res) => {
-  //           let resData = res?.data?.data?.jobApplicants;
-  //           let resOptions = res?.data?.data?.pagination;
-
-  //           const thisPageLimit = sizePerPage;
-  //           const thisTotalPageSize = resOptions.numberOfPages;
-
-  //           setSizePerPage(thisPageLimit);
-  //           setTotalPages(thisTotalPageSize);
-
-  //           let formatted = resData.map((e) => ({
-  //             ...e,
-  //             full_name: e.first_name + ' ' + e.middle_name + ' ' + e.last_name,
-  //             interview_date: e.interview_date
-  //               ? new Date(e.interview_date).toUTCString()
-  //               : 'Not Set',
-  //             job_opening_id: e.job_opening_id?.job_title
-  //               ? e.job_opening_id?.job_title
-  //               : e.default_job_opening_id?.job_title || '-',
-  //             application_date: new Date(e.createdAt).toUTCString(),
-  //           }));
-
-  //           setData(formatted);
-  //           setDataToFilter(formatted);
-  //           setIntervieStatusFilter('');
-  //           setprocessingStageFilter('');
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //           setLoading(false);
-  //         });
-  //     }
-  //     setLoading(false);
-  //   };
-
-  //   return (
-  //     <div className="job-app-search">
-  //       <input
-  //         className="form-control"
-  //         style={{
-  //           backgroundColor: '#fff',
-  //           width: '33.5%',
-  //           marginRight: '20px',
-  //         }}
-  //         ref={(n) => (input = n)}
-  //         type="text"
-  //       />
-  //       <button className="btn btn-primary" onClick={handleClick}>
-  //         Search
-  //       </button>
-  //     </div>
-  //   );
-  // }, [page, setData, setIntervieStatusFilter, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, setprocessingStageFilter, sizePerPage]);
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -236,49 +121,95 @@ const JobApplicantsTable = ({
     setPage(1);
     setLoading(true);
 
-    axiosInstance
-      .get("/api/v1/job_applicants.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-          from: fromDate,
-          to: toDate,
-          process_stage: e.target.value,
-        },
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.job_applicants;
-        const totalPages = e?.data?.data?.total_pages;
+    if (CurrentUserRoles.includes("rep_siever")) {
+      axiosInstance
+        .get("/api/v1/rep_siever_job_applications.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_stage: e.target.value,
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.job_applicants;
+          const totalPages = e?.data?.data?.total_pages;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
 
-        const mapp = resData.map((emp) => ({
-          ...emp,
-          full_name: `${emp?.first_name} ${emp?.last_name}`,
-          job_title: emp?.job_opening?.job_title,
-          application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
-          interview_date: emp?.interview_date
-            ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-            : "Not Scheduled",
-        }));
+          const mapp = resData.map((emp) => ({
+            ...emp,
+            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            job_title: emp?.job_opening?.job_title,
+            application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+            interview_date: emp?.interview_date
+              ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+              : "Not Scheduled",
+          }));
 
-        setData(mapp);
-        setDataToFilter(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
+          setData(mapp);
+          setDataToFilter(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+      setLoading(false);
+    } else {
+      axiosInstance
+        .get("/api/v1/job_applicants.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_stage: e.target.value,
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        })
+        .then((e) => {
+          const resData = e?.data?.data?.job_applicants;
+          const totalPages = e?.data?.data?.total_pages;
+
+          const thisPageLimit = sizePerPage;
+          const thisTotalPageSize = totalPages;
+
+          setSizePerPage(thisPageLimit);
+          setTotalPages(thisTotalPageSize);
+
+          const mapp = resData.map((emp) => ({
+            ...emp,
+            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            job_title: emp?.job_opening?.job_title,
+            application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+            interview_date: emp?.interview_date
+              ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+              : "Not Scheduled",
+          }));
+
+          setData(mapp);
+          setDataToFilter(mapp);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+      setLoading(false);
+    }
   };
 
   const showNullMessage = () => {

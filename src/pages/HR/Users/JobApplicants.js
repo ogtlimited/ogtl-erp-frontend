@@ -37,17 +37,17 @@ const JobApplicants = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
-  const [processingStageFilter, setProcessingStageFilter] = useState("");
+  const [processingStageFilter, setProcessingStageFilter] = useState("Open");
 
-  const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
-  const [fromDate, setFromDate] = useState(today_date);
-  const [toDate, setToDate] = useState(today_date);
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/job_applicants.json", {
+      const response = await axiosInstance.get("/api/v1/rep_siever_job_applications.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -56,8 +56,9 @@ const JobApplicants = () => {
         params: {
           page: page,
           limit: sizePerPage,
-          from: fromDate,
-          to: toDate,
+          process_status: processingStageFilter,
+          start_date: fromDate,
+          end_date: toDate,
         },
       });
 
@@ -79,8 +80,6 @@ const JobApplicants = () => {
           ? moment(emp?.interview_date).format("Do MMMM, YYYY")
           : "Not Scheduled",
       }));
-
-      console.log("Job applicants:", resData);
 
       setData(formatted);
       setLoading(false);
