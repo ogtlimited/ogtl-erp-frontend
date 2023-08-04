@@ -10,7 +10,7 @@ import moment from "moment";
 
 const BranchAdmin = () => {
   const [allBranch, setallBranch] = useState([]);
-  const { user, showAlert } = useAppContext();
+  const { user, showAlert, ErrorHandler } = useAppContext();
   const [mode, setMode] = useState("Create");
   const [branch, setBranch] = useState([]);
 
@@ -41,11 +41,8 @@ const BranchAdmin = () => {
 
       setallBranch(formatted);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Branch Error:";
+      ErrorHandler(error, component);
     }
   };
 

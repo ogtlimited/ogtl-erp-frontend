@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import { RoleFormModal } from "../../components/Modal/RoleFormModal";
 import UniversalTable from "../../components/Tables/UniversalTable";
-import moment from "moment"
+import moment from "moment";
 import { RoleForm } from "../../components/FormJSON/CreateRole";
 
 const RolePermission = () => {
@@ -40,15 +40,14 @@ const RolePermission = () => {
 
       setAllRoles(formattedRoles);
     } catch (error) {
-      
-      const component = "Roles:";
+      const component = "Roles Error:";
       ErrorHandler(error, component);
     }
   };
 
   useEffect(() => {
     fetchAllRoles();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [

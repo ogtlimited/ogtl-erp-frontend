@@ -8,7 +8,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import Switch from "@mui/material/Switch";
 
 const RemoteAttendanceAdmin = () => {
-  const { showAlert } = useAppContext();
+  const { showAlert, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [dailyRemoteAttendanceSummary, setDailyRemoteAttendanceSummary] =
     useState([]);
@@ -89,11 +89,8 @@ const RemoteAttendanceAdmin = () => {
       setDailyRemoteAttendance(formatted);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Remote Attendance:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,7 +129,7 @@ const RemoteAttendanceAdmin = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Campaigns error:", error);
+      console.log("All Campaigns error:", error);
       setLoading(false);
     }
   }, [CampaignPage, CampaignSizePerPage]);
@@ -170,7 +167,7 @@ const RemoteAttendanceAdmin = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Departments error:", error);
+      console.log("All Departments error:", error);
       setLoading(false);
     }
   }, [DepartmentPage, DepartmentSizePerPage]);
@@ -307,12 +304,7 @@ const RemoteAttendanceAdmin = () => {
               {loading ? (
                 <h3>-</h3>
               ) : (
-                <h3>
-                  {" "}
-                  {moment(date).format(
-                    "Do MMMM, YYYY"
-                  )}{" "}
-                </h3>
+                <h3> {moment(date).format("Do MMMM, YYYY")} </h3>
               )}
             </div>
           </div>
@@ -349,7 +341,6 @@ const RemoteAttendanceAdmin = () => {
                   Departments
                 </a>
               </li> */}
-
             </ul>
           </div>
         </div>

@@ -76,7 +76,7 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
       if (office === "department") setAllOffices(formattedDepartments);
       if (office === "campaign") setAllOffices(formattedCampaigns);
     } catch (error) {
-      console.log("Get All Offices error:", error);
+      console.log("All Offices error:", error);
     }
   };
 
