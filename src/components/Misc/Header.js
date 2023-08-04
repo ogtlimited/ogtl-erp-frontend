@@ -23,8 +23,8 @@ const Header = () => {
     tokenService.clearStorage();
     navigate('/auth/login');
     msalInstance
-      .ssoSilent() //<-- This will silently logout the user without having to select an account
-      // .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
+      // .ssoSilent() //<-- This will silently logout the user without having to select an account
+      .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
       .then((e) => {
         console.log(e);
       })
