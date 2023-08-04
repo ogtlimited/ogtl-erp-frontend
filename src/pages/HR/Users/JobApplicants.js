@@ -17,6 +17,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
+import secureLocalStorage from "react-secure-storage";
 import $ from "jquery";
 
 const JobApplicants = () => {
@@ -28,7 +29,7 @@ const JobApplicants = () => {
   const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [modalType, setModalType] = useState("");
+  const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -39,7 +40,7 @@ const JobApplicants = () => {
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("Open");
-  
+
   let firstDay = moment().startOf("month").format("YYYY-MM-DD");
   let lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
@@ -47,13 +48,10 @@ const JobApplicants = () => {
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
+    const persistedFromDate = secureLocalStorage.getItem("fromDate");
+    const persistedToDate = secureLocalStorage.getItem("toDate");
+
     setLoading(true);
-
-    console.log("Job fetch:", {
-      fromDate,
-      toDate,
-    });
-
     try {
       const response = await axiosInstance.get(
         "/api/v1/rep_siever_job_applications.json",
@@ -67,8 +65,8 @@ const JobApplicants = () => {
             page: page,
             limit: sizePerPage,
             process_status: processingStageFilter,
-            start_date: fromDate,
-            end_date: toDate,
+            start_date: persistedFromDate,
+            end_date: persistedToDate,
           },
         }
       );
@@ -134,11 +132,6 @@ const JobApplicants = () => {
           );
           setProcessingStageFilter("Open");
           fetchAllJobApplicants();
-
-          console.log("Updated for:", {
-            fromDate,
-            toDate,
-          });
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
@@ -172,6 +165,8 @@ const JobApplicants = () => {
       if (process_status === "Interview scheduled") {
         setModalType("schedule-interview");
         setSelectedRow(processingStageRow);
+        $("#generalModal").modal("show");
+        return;
       }
       const update = {
         process_status,
@@ -359,7 +354,7 @@ const JobApplicants = () => {
         </div>
       </div>
 
-      {modalType === "view-details" ? (
+      {modalType === "view-details" && (
         <ViewModal
           title="Applicant Details"
           content={
@@ -369,7 +364,8 @@ const JobApplicants = () => {
             />
           }
         />
-      ) : modalType === "schedule-interview" ? (
+      )}
+      {modalType === "schedule-interview" && (
         <ViewModal
           title="Schedule Interview"
           content={
@@ -381,7 +377,7 @@ const JobApplicants = () => {
             />
           }
         />
-      ) : null}
+      )}
     </>
   );
 };

@@ -1,14 +1,17 @@
 import moment from "moment";
 import React, { useState } from "react";
+import $ from "jquery";
 
 const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
   const [form, setform] = useState("");
+
 
   const handleChange = (event) => {
     const target = event.target;
     const value = target.value;
     setform(value);
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -17,8 +20,10 @@ const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
       id: jobApplication.id,
       process_status: "Interview scheduled",
     };
+
     handleUpdate(jobApplication.id, update);
-    setModalType("");
+
+    $("#generalModal").modal("hide");
   };
 
   return (
@@ -33,6 +38,7 @@ const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
               onChange={handleChange}
               name="interview_date"
               defaultValue={form.interview_date}
+              required
             />
           </div>
         </div>

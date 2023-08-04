@@ -10,6 +10,7 @@ import moment from "moment";
 import usePagination from "./JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import secureLocalStorage from "react-secure-storage";
 
 const JobApplicantsTable = ({
   data,
@@ -49,6 +50,9 @@ const JobApplicantsTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+  
+  secureLocalStorage.setItem("fromDate", fromDate);
+  secureLocalStorage.setItem("toDate", toDate);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -221,8 +225,6 @@ const JobApplicantsTable = ({
         >
           {(props) => (
             <div className="col-12">
-              
-
               <div className="hr-filter-select col-12">
                 <div className="col-md-3">
                   <div className="form-group">
@@ -231,7 +233,10 @@ const JobApplicantsTable = ({
                       type="date"
                       name="fromDate"
                       value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
+                      onChange={(e) => {
+                        setFromDate(e.target.value);
+                        secureLocalStorage.setItem("fromDate", e.target.value);
+                      }}
                       className="form-control "
                     />
                   </div>
@@ -243,7 +248,10 @@ const JobApplicantsTable = ({
                       type="date"
                       name="toDate"
                       value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
+                      onChange={(e) => {
+                        setToDate(e.target.value);
+                        secureLocalStorage.setItem("toDate", e.target.value);
+                      }}
                       className="form-control "
                     />
                   </div>

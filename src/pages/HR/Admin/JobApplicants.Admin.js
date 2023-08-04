@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import helper from "../../../services/helper";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import {
   InterviewStatusOptions,
@@ -16,6 +17,8 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
+import secureLocalStorage from "react-secure-storage";
+import $ from "jquery";
 
 const JobApplicantsAdmin = () => {
   const [data, setData] = useState([]);
@@ -26,7 +29,7 @@ const JobApplicantsAdmin = () => {
   const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [modalType, setmodalType] = useState("");
+  const [modalType, setmodalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -48,6 +51,9 @@ const JobApplicantsAdmin = () => {
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
     if (CurrentUserRoles.includes("rep_siever")) {
+      const persistedFromDate = secureLocalStorage.getItem("fromDate");
+      const persistedToDate = secureLocalStorage.getItem("toDate");
+
       setLoading(true);
       try {
         const response = await axiosInstance.get(
@@ -62,8 +68,8 @@ const JobApplicantsAdmin = () => {
               page: page,
               limit: sizePerPage,
               process_status: processingStageFilter,
-              start_date: fromDate,
-              end_date: toDate,
+              start_date: persistedFromDate,
+              end_date: persistedToDate,
             },
           }
         );
@@ -145,8 +151,15 @@ const JobApplicantsAdmin = () => {
       return;
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [CurrentUserRoles, fromDate, page, processingStageFilter, sizePerPage, toDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    CurrentUserRoles,
+    fromDate,
+    page,
+    processingStageFilter,
+    sizePerPage,
+    toDate,
+  ]);
 
   useEffect(() => {
     fetchAllJobApplicants();
@@ -173,13 +186,13 @@ const JobApplicantsAdmin = () => {
           payload: update,
         })
         .then((res) => {
-          setProcessingStageFilter("Open");
-          fetchAllJobApplicants();
           showAlert(
             true,
             "Job application updated successfully",
             "alert alert-success"
           );
+          setProcessingStageFilter("Open");
+          fetchAllJobApplicants();
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
@@ -210,8 +223,16 @@ const JobApplicantsAdmin = () => {
 
   useEffect(() => {
     if (process_status.length) {
+      if (process_status === "Interview scheduled") {
+        setmodalType("schedule-interview");
+        setSelectedRow(processingStageRow);
+        $("#generalModal").modal("show");
+        return;
+      }
+
       const update = {
         process_status,
+        interview_date: null,
         // id: processingStageRow?.id,
       };
       handleUpdate(processingStageRow.id, update);
@@ -279,8 +300,7 @@ const JobApplicantsAdmin = () => {
                 <a className="btn btn-gray btn-sm btn-rounded">
                   <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
                 </a>
-              ) : value === "Scheduled for interview" ||
-                value === "Interviews Scheduled" ? (
+              ) : value === "Scheduled for interview" ? (
                 <a className="btn btn-gray btn-sm btn-rounded">
                   <i className={"fa fa-dot-circle-o text-success"}></i> {value}
                 </a>
@@ -418,17 +438,19 @@ const JobApplicantsAdmin = () => {
                 <i className="fa fa-eye m-r-5"></i> View
               </a>
 
-              {/* <a
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#generalModal"
-                onClick={() => {
-                  setmodalType("schedule-interview");
-                  setSelectedRow(helper.handleEdit(row));
-                }}
-              >
-                <i className="fa fa-clock m-r-5"></i> Schedule Interview
-              </a> */}
+              {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
+                <a
+                  className="dropdown-item"
+                  data-toggle="modal"
+                  data-target="#generalModal"
+                  onClick={() => {
+                    setmodalType("schedule-interview");
+                    setSelectedRow(helper.handleEdit(row));
+                  }}
+                >
+                  <i className="fa fa-clock m-r-5"></i> Schedule Interview
+                </a>
+              ) : null}
             </div>
           </>
         </div>
@@ -479,7 +501,7 @@ const JobApplicantsAdmin = () => {
         </div>
       </div>
 
-      {modalType === "view-details" ? (
+      {modalType === "view-details" && (
         <ViewModal
           title="Applicant Details"
           content={
@@ -489,7 +511,8 @@ const JobApplicantsAdmin = () => {
             />
           }
         />
-      ) : modalType === "schedule-interview" ? (
+      )}
+      {modalType === "schedule-interview" && (
         <ViewModal
           title="Schedule Interview"
           content={
@@ -501,7 +524,7 @@ const JobApplicantsAdmin = () => {
             />
           }
         />
-      ) : null}
+      )}
     </>
   );
 };
