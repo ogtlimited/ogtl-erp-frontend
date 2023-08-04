@@ -8,7 +8,7 @@ import { OfficeForm } from "../../../components/FormJSON/CreateOffices.js";
 import moment from "moment";
 
 const Offices = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -60,11 +60,8 @@ const Offices = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Campaigns Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,11 +100,8 @@ const Offices = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Department Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

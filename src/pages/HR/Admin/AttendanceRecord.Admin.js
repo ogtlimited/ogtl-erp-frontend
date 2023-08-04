@@ -7,7 +7,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
-  const { showAlert, ErrorHandler } = useAppContext();
+  const { ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);

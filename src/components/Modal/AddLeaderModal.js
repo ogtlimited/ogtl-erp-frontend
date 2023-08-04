@@ -87,7 +87,7 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
       if (office === "department") setAllOffices(formattedDepartments);
       if (office === "campaign") setAllOffices(formattedCampaigns);
     } catch (error) {
-      console.log("Get All Offices error:", error);
+      console.log("All Offices error:", error);
     }
   };
   
@@ -107,7 +107,6 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
       });
       
       const resData = response?.data?.data?.employees;
-      console.log("All emp to ne Leaders:", response?.data?.data)
             
       const formattedLeaders = resData
         .map((e) => ({
@@ -119,7 +118,7 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
       setAllLeaders(formattedLeaders);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders error:", error);
+      console.log("All Leaders error:", error);
       setLoading(false);
     }
   };

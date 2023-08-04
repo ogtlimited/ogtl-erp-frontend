@@ -40,7 +40,7 @@ function RejectLeaveModal({
       closeModal(false);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
     }
     fetchReporteesLeaves();

@@ -11,7 +11,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import Switch from "@mui/material/Switch";
 
 const RemoteAttendance = () => {
-  const { showAlert, user } = useAppContext();
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [dailyRemoteAttendanceSummary, setDailyRemoteAttendanceSummary] =
@@ -81,16 +81,11 @@ const RemoteAttendance = () => {
         formattedDate: moment(e?.createdAt).format("Do MMMM, YYYY"),
       }));
 
-      console.log("Formatted Daily Remote Attendance:", formatted);
-
       setDailyRemoteAttendance(formatted);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Remote Attendance:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,11 +118,8 @@ const RemoteAttendance = () => {
       setAllLeadersSubordinates(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving team information from server",
-        "alert alert-warning"
-      );
+      const component = "Team Attendance:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

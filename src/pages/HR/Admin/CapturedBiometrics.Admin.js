@@ -7,7 +7,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 
 const CapturedBiometricsAdmin = () => {
-  const { showAlert } = useAppContext();
+  const { ErrorHandler } = useAppContext();
   const [allEmployees, setAllEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,11 +46,8 @@ const CapturedBiometricsAdmin = () => {
       setAllEmployees(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Captured Biometrics:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,13 +71,8 @@ const CapturedBiometricsAdmin = () => {
       setTotalCapturedBiometrics(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        error?.response?.data?.errors
-          ? error.response.data.errors
-          : "Error retrieving information from server",
-        "alert alert-danger"
-      );
+      const component = "Total Captured Biometrics:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   };
