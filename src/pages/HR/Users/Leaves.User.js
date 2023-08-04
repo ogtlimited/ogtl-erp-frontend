@@ -17,7 +17,7 @@ import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal
 import moment from "moment";
 
 const LeavesUser = () => {
-  const { showAlert, fetchHRLeavesNotificationCount, user } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
     useState(0);
@@ -84,11 +84,8 @@ const LeavesUser = () => {
 
       setallLeaves(formatted);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Leaves Error:";
+      ErrorHandler(error, component);
     }
     setLoading(false);
   };
@@ -124,19 +121,8 @@ const LeavesUser = () => {
       setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
       console.log(error?.response);
-      if (error?.response?.status === 403) {
-        showAlert(
-          true,
-          "You are not authorized to view your team leaves",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(
-          true,
-          "Error retrieving information from server",
-          "alert alert-warning"
-        );
-      }
+      const component = "Leave History Error:";
+      ErrorHandler(error, component);
     }
     setLoading(false);
   };
@@ -160,7 +146,7 @@ const LeavesUser = () => {
       fetchReporteesLeaves();
       // fetchHRLeavesNotificationCount();
     } catch (error) {
-      console.log("Leave approval error:", error.response);
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 

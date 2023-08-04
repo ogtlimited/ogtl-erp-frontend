@@ -1,3 +1,6 @@
+// *IN USE
+
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -10,7 +13,7 @@ import { AddRoleUserModal } from "../../components/Modal/AddRoleUserModal";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 const EmployeeRoles = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, showAlert, ErrorHandler } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [loading, setLoading] = useState(true);
@@ -40,7 +43,6 @@ const EmployeeRoles = () => {
       );
 
       const resData = response?.data?.data?.users;
-      console.log("Users under role:", response);
 
       const formattedRoleUsers = resData.map((e) => ({
         ...e,
@@ -48,7 +50,10 @@ const EmployeeRoles = () => {
       }));
 
       setAllRoleUsers(formattedRoleUsers);
-    } catch (error) {}
+    } catch (error) {
+      const component = "Role Users:";
+      ErrorHandler(error, component);}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   //Revoke user role

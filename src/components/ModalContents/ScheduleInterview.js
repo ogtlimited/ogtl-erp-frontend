@@ -1,23 +1,29 @@
 import moment from "moment";
 import React, { useState } from "react";
+import $ from "jquery";
 
-const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
+const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
   const [form, setform] = useState("");
+
 
   const handleChange = (event) => {
     const target = event.target;
     const value = target.value;
     setform(value);
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const update = {
       interview_date: moment(form).format("llll"),
-      _id: jobApplication._id,
-      interview_status: "Scheduled for interview",
+      id: jobApplication.id,
+      process_status: "Interview scheduled",
     };
-    handleUpdate(jobApplication._id, update);
+
+    handleUpdate(jobApplication.id, update);
+
+    $("#generalModal").modal("hide");
   };
 
   return (
@@ -32,12 +38,13 @@ const ScheduleInterview = ({ jobApplication, handleUpdate }) => {
               onChange={handleChange}
               name="interview_date"
               defaultValue={form.interview_date}
+              required
             />
           </div>
         </div>
       </div>
       <div className="submit-section">
-        <button className="btn btn-primary submit-btn">Save</button>
+        <button className="btn btn-primary submit-btn">Schedule</button>
       </div>
     </form>
   );

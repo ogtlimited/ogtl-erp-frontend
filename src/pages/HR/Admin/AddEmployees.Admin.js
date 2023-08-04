@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import VirtualID from "../../In-Apps/VirtualID";
 import moment from "moment";
 
-import { Link } from "react-router-dom";
 import {
   PROFILE,
   officeTypeOptions,
@@ -79,6 +78,7 @@ const AddEmployeesAdmin = () => {
     setLoading(true);
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post("/api/v1/employees.json", {
         headers: {
           "Content-Type": "application/json",
@@ -92,8 +92,7 @@ const AddEmployeesAdmin = () => {
         },
       });
 
-      console.log("Added Employee:", response);
-      showAlert(true, "New Employee added successfully", "alert alert-success");
+      showAlert(true, "Employee added successfully", "alert alert-success");
       clearEvent();
       setLoading(false);
     } catch (error) {

@@ -15,7 +15,8 @@ const LeavesAdmin = () => {
   // const user = tokenService.getUser();
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert, fetchHRLeavesNotificationCount, user } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
+    useAppContext();
   const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -104,11 +105,8 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Pending Leaves Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   };
@@ -157,11 +155,8 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Leave History Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   };
@@ -185,11 +180,8 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Leave Count Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
   };
@@ -228,7 +220,7 @@ const LeavesAdmin = () => {
       setDepartments(formattedDepartments);
       setCampaigns(formattedCampaigns);
     } catch (error) {
-      console.log("Get All Offices error:", error);
+      console.log("All Offices error:", error);
     }
   };
 

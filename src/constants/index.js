@@ -6,15 +6,14 @@ export const InterviewStatusOptions = [
   { title: "Not in job location", color: "text-muted" },
   { title: "Failed screening", color: "text-danger" },
   { title: "Missed call", color: "text-info" },
-  { title: "call back", color: "text-warning" },
-  { title: "Interviews Scheduled", color: "text-success" },
+  { title: "Call back", color: "text-warning" },
 ];
 
 export const InterviewProcessStageOptions = [
   { title: "Open", color: "text-primary" },
   { title: "Sieving", color: "text-warning" },
   { title: "Phone screening", color: "text-info" },
-  { title: "Interviews scheduled", color: "text-success" }
+  { title: "Interview scheduled", color: "text-success" }
 ];
 
 

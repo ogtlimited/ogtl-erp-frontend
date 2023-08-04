@@ -17,6 +17,8 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
+import secureLocalStorage from "react-secure-storage";
+import $ from "jquery";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
@@ -24,11 +26,11 @@ const JobApplicants = () => {
   const [statusRow, setStatusRow] = useState(null);
   const [processingStageRow, setProcessingStageRow] = useState(null);
   const [interview_status, setInterviewStatus] = useState("");
-  const [process_stage, setProcessingStage] = useState("");
+  const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -39,28 +41,35 @@ const JobApplicants = () => {
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("Open");
 
-  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  let firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  let lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
+    const persistedFromDate = secureLocalStorage.getItem("fromDate");
+    const persistedToDate = secureLocalStorage.getItem("toDate");
+
+    setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/rep_siever_job_applications.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-          process_status: processingStageFilter,
-          start_date: fromDate,
-          end_date: toDate,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/rep_siever_job_applications.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            process_status: processingStageFilter,
+            start_date: persistedFromDate,
+            end_date: persistedToDate,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
@@ -89,7 +98,7 @@ const JobApplicants = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [fromDate, page, processingStageFilter, sizePerPage, toDate]);
 
   useEffect(() => {
     fetchAllJobApplicants();
@@ -105,7 +114,6 @@ const JobApplicants = () => {
           "alert alert-warning"
         );
       }
-      console.log("update this", update, id);
 
       axiosInstance
         .patch(`/api/v1/job_applicants/${id}.json`, {
@@ -114,11 +122,16 @@ const JobApplicants = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          payload: update
+          payload: update,
         })
         .then((res) => {
+          showAlert(
+            true,
+            "Job application updated successfully",
+            "alert alert-success"
+          );
+          setProcessingStageFilter("Open");
           fetchAllJobApplicants();
-          showAlert(true, "Job application updated successfully", "alert alert-success");
         })
         .catch((error) => {
           const errorMsg = error?.response?.data?.errors;
@@ -148,14 +161,21 @@ const JobApplicants = () => {
   }, [interview_status, statusRow, handleUpdate]);
 
   useEffect(() => {
-    if (process_stage.length) {
+    if (process_status.length) {
+      if (process_status === "Interview scheduled") {
+        setModalType("schedule-interview");
+        setSelectedRow(processingStageRow);
+        $("#generalModal").modal("show");
+        return;
+      }
       const update = {
-        process_stage,
+        process_status,
+        interview_date: null,
         // id: processingStageRow?.id,
       };
       handleUpdate(processingStageRow.id, update);
     }
-  }, [process_stage, processingStageRow, handleUpdate]);
+  }, [process_status, processingStageRow, handleUpdate]);
 
   const columns = [
     {
@@ -203,8 +223,8 @@ const JobApplicants = () => {
       ),
     },
     {
-      dataField: "process_stage",
-      text: "Processing Stage",
+      dataField: "process_status",
+      text: "Process Stage",
       sort: true,
 
       formatter: (value, row) => (
@@ -273,7 +293,7 @@ const JobApplicants = () => {
                 <i className="fa fa-eye m-r-5"></i> View
               </a>
 
-              {/* <a
+              <a
                 className="dropdown-item"
                 data-toggle="modal"
                 data-target="#generalModal"
@@ -283,7 +303,7 @@ const JobApplicants = () => {
                 }}
               >
                 <i className="fa fa-clock m-r-5"></i> Schedule Interview
-              </a> */}
+              </a>
             </div>
           </>
         </div>
@@ -334,7 +354,7 @@ const JobApplicants = () => {
         </div>
       </div>
 
-      {modalType === "view-details" ? (
+      {modalType === "view-details" && (
         <ViewModal
           title="Applicant Details"
           content={
@@ -344,13 +364,16 @@ const JobApplicants = () => {
             />
           }
         />
-      ) : (
+      )}
+      {modalType === "schedule-interview" && (
         <ViewModal
           title="Schedule Interview"
           content={
             <ScheduleInterview
               jobApplication={selectedRow}
+              handleUpdate={handleUpdate}
               handleRefresh={fetchAllJobApplicants}
+              setModalType={setModalType}
             />
           }
         />

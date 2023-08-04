@@ -104,7 +104,7 @@ const LeadershipAdmin = () => {
       setCampaigns(formattedCampaigns);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Campaigns error:", error);
+      console.log("All Campaigns error:", error);
       setLoading(false);
     }
   };
@@ -136,7 +136,7 @@ const LeadershipAdmin = () => {
       setDepartments(formattedDepartments);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Departments error:", error);
+      console.log("All Departments error:", error);
       setLoading(false);
     }
   };

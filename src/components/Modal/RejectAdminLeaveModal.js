@@ -35,7 +35,7 @@ function RejectAdminLeaveModal({
   
         closeModal(false);
       } catch (error) {
-        console.log(error);
+        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       }
       fetchAllLeaves();
       fetchHRLeaveHistory();

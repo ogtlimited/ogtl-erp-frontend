@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import { RoleFormModal } from "../../components/Modal/RoleFormModal";
 import UniversalTable from "../../components/Tables/UniversalTable";
-import moment from "moment"
+import moment from "moment";
 import { RoleForm } from "../../components/FormJSON/CreateRole";
 
 const RolePermission = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [allRoles, setAllRoles] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -40,18 +40,14 @@ const RolePermission = () => {
 
       setAllRoles(formattedRoles);
     } catch (error) {
-      
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Roles Error:";
+      ErrorHandler(error, component);
     }
   };
 
   useEffect(() => {
     fetchAllRoles();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [
@@ -77,47 +73,6 @@ const RolePermission = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { width: "10%" },
-    //   formatter: (value, row) => (
-    //     <div className="dropdown dropdown-action text-right">
-    //       <a
-    //         href="#"
-    //         className="action-icon dropdown-toggle"
-    //         data-toggle="dropdown"
-    //         aria-expanded="false"
-    //       >
-    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //       </a>
-    //       <div className="dropdown-menu dropdown-menu-right">
-    //         {CurrentUserRoles.includes("hr_manager") && (
-    //           <a
-    //             className="dropdown-item"
-    //             href="#"
-    //             data-toggle="modal"
-    //             data-target="#DesignationFormModal"
-    //             onClick={() => handleEdit(row)}
-    //           >
-    //             <i className="fa fa-pencil m-r-5"></i> Edit
-    //           </a>
-    //         )}
-
-    //         {CurrentUserRoles.includes("hr_manager") && (
-    //           <a
-    //             className="dropdown-item"
-    //             href="#"
-    //             data-toggle="modal"
-    //             data-target="#exampleModal"
-    //           >
-    //             <i className="fa fa-trash m-r-5"></i> Delete
-    //           </a>
-    //         )}
-    //       </div>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (

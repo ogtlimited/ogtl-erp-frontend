@@ -17,14 +17,15 @@ const GeneralApproverBtn = ({
     <div>
       <div className="dropdown action-label text-center">
         <a
-          className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+          className="btn btn-gray btn-sm btn-rounded dropdown-toggle" 
           style={{ padding: "5px 10px" }}
           data-toggle="dropdown"
           aria-expanded="false"
         >
           <i className={`fa fa-dot-circle-o   ${options.find(opt => opt.title === value)?.color}`}></i> {value}
         </a>
-        <div className="dropdown-menu dropdown-menu-right">
+        {/* <div className="dropdown-menu dropdown-menu-right"  style={{backgroundColor: "pink", border: "2px solid red"}}> */}
+        <div className="dropdown-menu dropdown-menu-right status-dropdown-menu">
           {options.map((opt, index) => (
             <a
               key={index}

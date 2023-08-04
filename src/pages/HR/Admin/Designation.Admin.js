@@ -1,7 +1,6 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { DesignationFormModal } from "../../../components/Modal/DesignationFormModal";
@@ -10,7 +9,7 @@ import moment from "moment";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
 const Designations = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [designations, setDesignations] = useState([]);
   const [designation, setDesignation] = useState([]);
@@ -55,14 +54,11 @@ const Designations = () => {
       setDesignations(formattedDesignation);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Designation Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
   useEffect(() => {

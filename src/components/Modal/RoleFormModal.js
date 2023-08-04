@@ -76,7 +76,7 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
       if (office === "department") setAllOffices(formattedDepartments);
       if (office === "campaign") setAllOffices(formattedCampaigns);
     } catch (error) {
-      console.log("Get All Offices error:", error);
+      console.log("All Offices error:", error);
     }
   };
 
@@ -90,14 +90,11 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
 
   const handleCreateRole = async (e) => {
     e.preventDefault();
-    
-    
+
     const payloadData = {
       title: role.title,
       operation_office_id: role.operation_office_id,
-    }
-
-    console.log("but this works:", payloadData)
+    };
 
     setLoading(true);
     try {
@@ -108,17 +105,13 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        payload: payloadData
+        payload: payloadData,
       });
 
-      showAlert(
-        true,
-        "Role successfully created",
-        "alert alert-success"
-      );
+      showAlert(true, "Role successfully created", "alert alert-success");
       fetchAllRoles();
       $("#RolesFormModal").modal("toggle");
-      setRole(data)
+      setRole(data);
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
@@ -127,43 +120,7 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
     }
   };
 
-  const handleEditRole = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-    const id = role.id;
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(
-        `/api/v1/designations/${id}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            title: role.title,
-            deleted: role.deleted,
-            operation_office_id: role.operation_office_id,
-          },
-        }
-      );
-
-      showAlert(
-        true,
-        "Designation successfully updated",
-        "alert alert-success"
-      );
-      // fetchDesignations();
-      $("#DesignationFormModal").modal("toggle");
-      setLoading(false);
-    } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
-    }
-  };
+  const handleEditRole = async (e) => {};
 
   return (
     <>
@@ -192,7 +149,6 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
 
             <div className="modal-body">
               <form onSubmit={handleRoleActions}>
-
                 <div className="row">
                   {mode === "Create" && (
                     <div className="col-md-6">
@@ -241,9 +197,7 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="title">
-                        Title
-                      </label>
+                      <label htmlFor="title">Title</label>
                       <input
                         name="title"
                         type="text"

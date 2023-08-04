@@ -64,11 +64,8 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
       setBranch(data);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Something went wrong, please try again",
-        "alert alert-danger"
-      );
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
     }
   }
@@ -102,11 +99,8 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
       setBranch(data);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Something went wrong, please try again",
-        "alert alert-danger"
-      );
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
     }
   }
