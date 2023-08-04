@@ -1,22 +1,16 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
-// import Select from 'react-select';
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from "react-bootstrap-table2-filter";
+import filterFactory from "react-bootstrap-table2-filter";
 import moment from "moment";
-
-import paginationFactory from "react-bootstrap-table2-paginator";
 import usePagination from "./JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import secureLocalStorage from "react-secure-storage";
 
 const JobApplicantsTable = ({
   data,
@@ -56,19 +50,17 @@ const JobApplicantsTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+  
+  secureLocalStorage.setItem("fromDate", fromDate);
+  secureLocalStorage.setItem("toDate", toDate);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
-  const StatusOptions = [
+  const ProcessStatusOptions = [
     { title: "Open" },
-    { title: "Scheduled for interview" },
-    { title: "Not interested" },
-    { title: "Not a graduate" },
-    { title: "Not in job location" },
-    { title: "Failed screening" },
-    { title: "Missed call" },
-    { title: "call back" },
-    { title: "Interviews Scheduled" },
+    { title: "Sieving" },
+    { title: "Phone screening" },
+    { title: "Interview scheduled" },
   ];
 
   const resizeTable = () => {
@@ -117,11 +109,10 @@ const JobApplicantsTable = ({
 
   // Filter by Process Stage:
   const handleProcessStageFilter = (e) => {
-    setProcessingStageFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
     if (CurrentUserRoles.includes("rep_siever")) {
+      setProcessingStageFilter(e.target.value);
+      setPage(1);
+      setLoading(true);
       axiosInstance
         .get("/api/v1/rep_siever_job_applications.json", {
           headers: {
@@ -132,7 +123,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
-            process_stage: e.target.value,
+            process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,
           },
@@ -166,6 +157,9 @@ const JobApplicantsTable = ({
         });
       setLoading(false);
     } else {
+      setProcessingStageFilter(e.target.value);
+      setPage(1);
+      setLoading(true);
       axiosInstance
         .get("/api/v1/job_applicants.json", {
           headers: {
@@ -176,7 +170,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
-            process_stage: e.target.value,
+            process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,
           },
@@ -231,44 +225,6 @@ const JobApplicantsTable = ({
         >
           {(props) => (
             <div className="col-12">
-              {/* <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              /> */}
-
-              {/* <div className="filter">
-                <div className="interview_status_filter">
-                  <select
-                    onChange={(e) => handleIntervieStatusFilter(e)}
-                    defaultValue={intervieStatusFilter}
-                    value={intervieStatusFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter By Interview Status
-                    </option>
-                    {statusInterview.map((option, idx) => (
-                      <option key={idx}>{option.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="processing_stage_filter">
-                  <select
-                    onChange={(e) => handleProcessingStageFilter(e)}
-                    defaultValue={processingStageFilter}
-                    value={processingStageFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter By Processing Stage
-                    </option>
-                    {processingStage.map((option, idx) => (
-                      <option key={idx}>{option.title}</option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
-
               <div className="hr-filter-select col-12">
                 <div className="col-md-3">
                   <div className="form-group">
@@ -277,7 +233,10 @@ const JobApplicantsTable = ({
                       type="date"
                       name="fromDate"
                       value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
+                      onChange={(e) => {
+                        setFromDate(e.target.value);
+                        secureLocalStorage.setItem("fromDate", e.target.value);
+                      }}
                       className="form-control "
                     />
                   </div>
@@ -289,7 +248,10 @@ const JobApplicantsTable = ({
                       type="date"
                       name="toDate"
                       value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
+                      onChange={(e) => {
+                        setToDate(e.target.value);
+                        secureLocalStorage.setItem("toDate", e.target.value);
+                      }}
                       className="form-control "
                     />
                   </div>
@@ -310,7 +272,7 @@ const JobApplicantsTable = ({
                     <option value="" disabled selected hidden>
                       Process Stage
                     </option>
-                    {StatusOptions.map((option, index) => (
+                    {ProcessStatusOptions.map((option, index) => (
                       <option key={index} value={option.title}>
                         {option.title}
                       </option>

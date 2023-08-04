@@ -1,4 +1,4 @@
-/** @format */
+// *IN USE
 
 import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
@@ -6,7 +6,6 @@ import axiosInstance from "../../services/api";
 import {
   RoleUserForm,
   officeTypeOptions,
-  leaderTypeOptions,
 } from "../FormJSON/CreateLeader.js";
 import $ from "jquery";
 import Select from "react-select";
@@ -107,7 +106,6 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
       });
 
       const resData = response?.data?.data?.employees;
-      console.log("All emp to ne Leaders:", response?.data?.data);
 
       const formattedLeaders = resData
         .map((e) => ({
