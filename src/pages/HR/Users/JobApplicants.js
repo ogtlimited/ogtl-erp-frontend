@@ -41,6 +41,7 @@ const JobApplicants = () => {
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("Open");
+  const [searchTerm, setSearchTerm] = useState("");
 
   let firstDay = moment().startOf("month").format("YYYY-MM-DD");
   let lastDay = moment().endOf("month").format("YYYY-MM-DD");
@@ -65,6 +66,7 @@ const JobApplicants = () => {
           params: {
             page: page,
             limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
             process_status: processingStageFilter,
             start_date: persistedFromDate,
             end_date: persistedToDate,
@@ -454,6 +456,8 @@ const JobApplicants = () => {
             toDate={toDate}
             setFromDate={setFromDate}
             setToDate={setToDate}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
             fetchAllJobApplicants={fetchAllJobApplicants}
             interviewStatusFilter={interviewStatusFilter}
             setInterviewStatusFilter={setInterviewStatusFilter}

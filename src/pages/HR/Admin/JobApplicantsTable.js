@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -36,6 +36,8 @@ const JobApplicantsTable = ({
   toDate,
   setFromDate,
   setToDate,
+  searchTerm,
+  setSearchTerm,
   fetchAllJobApplicants,
   interviewStatusFilter,
   setInterviewStatusFilter,
@@ -50,7 +52,7 @@ const JobApplicantsTable = ({
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
-  
+
   secureLocalStorage.setItem("fromDate", fromDate);
   secureLocalStorage.setItem("toDate", toDate);
 
@@ -106,6 +108,102 @@ const JobApplicantsTable = ({
     setSizePerPage(e.target.value);
     setPage(1);
   };
+
+  // Search Name:
+  const MySearch = useCallback(
+    (props) => {
+      let input;
+
+      const handleKeydown = (e) => {
+        if (e.key === "Enter") {
+          setPage(1);
+          setLoading(true);
+          props.onSearch(input.value);
+          const nameTerm = input.value;
+          setSearchTerm(nameTerm);
+
+          if (page === 1) {
+            const persistedFromDate = secureLocalStorage.getItem("fromDate");
+            const persistedToDate = secureLocalStorage.getItem("toDate");
+            
+            axiosInstance
+              .get("/api/v1/rep_siever_job_applications.json", {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "ngrok-skip-browser-warning": "69420",
+                },
+                params: {
+                  page: page,
+                  limit: sizePerPage,
+                  name: searchTerm,
+                  process_status: processingStageFilter,
+                  start_date: persistedFromDate,
+                  end_date: persistedToDate,
+                },
+              })
+              .then((e) => {
+                const resData = e?.data?.data?.job_applicants;
+                const totalPages = e?.data?.data?.total_pages;
+
+                const thisPageLimit = sizePerPage;
+                const thisTotalPageSize = totalPages;
+
+                setSizePerPage(thisPageLimit);
+                setTotalPages(thisTotalPageSize);
+
+                const formatted = resData.map((emp) => ({
+                  ...emp,
+                  full_name: `${emp?.first_name} ${emp?.last_name}`,
+                  job_title: emp?.job_opening?.job_title,
+                  application_date: moment(emp?.created_at).format(
+                    "Do MMMM, YYYY"
+                  ),
+                  interview_date: emp?.interview_date
+                    ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+                    : "Not Scheduled",
+                }));
+
+                setData(formatted);
+              })
+              .catch((error) => {
+                console.log(error);
+                setLoading(false);
+              });
+          }
+          setLoading(false);
+        }
+      };
+
+      return (
+        <div className="custom-search">
+          <input
+            className="custom-search-input"
+            style={{
+              backgroundColor: "#fff",
+              width: "33.5%",
+              marginRight: "20px",
+            }}
+            ref={(n) => (input = n)}
+            type="search"
+            onKeyDown={handleKeydown}
+          />
+          <button
+            className="btn btn-secondary custom-search-btn"
+            onClick={() => {
+              input.value = "";
+              props.onSearch("");
+              setSearchTerm("");
+              setPage(1);
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      );
+    },
+    [page, processingStageFilter, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage]
+  );
 
   // Filter by Process Stage:
   const handleProcessStageFilter = (e) => {
@@ -225,6 +323,14 @@ const JobApplicantsTable = ({
         >
           {(props) => (
             <div className="col-12">
+              <div className="col-12">
+                <MySearch
+                  {...props.searchProps}
+                  style={{ paddingLeft: "12%" }}
+                  className="inputSearch"
+                />
+              </div>
+
               <div className="hr-filter-select col-12">
                 <div className="col-md-3">
                   <div className="form-group">
