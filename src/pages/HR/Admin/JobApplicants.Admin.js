@@ -211,6 +211,7 @@ const JobApplicantsAdmin = () => {
     [CurrentUserRoles]
   );
 
+  // update interview status
   useEffect(() => {
     if (interview_status.length) {
       const update = {
@@ -221,6 +222,7 @@ const JobApplicantsAdmin = () => {
     }
   }, [interview_status, statusRow, handleUpdate]);
 
+  // update process status
   useEffect(() => {
     if (process_status.length) {
       if (process_status === "Interview scheduled") {
@@ -272,117 +274,80 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
-    CurrentUserRoles?.includes("rep_siever") && userDept === "hr"
-      ? {
-          dataField: "interview_status",
-          text: "Interview Status",
-          sort: true,
-          formatter: (value, row) => (
-            <>
-              <GeneralApproverBtn
-                options={InterviewStatusOptions}
-                setStatus={setInterviewStatus}
-                value={value}
-                row={row}
-                setStatusRow={setStatusRow}
-              />
-            </>
-          ),
-        }
-      : {
-          dataField: "interview_status",
-          text: "Interview Status",
-          sort: true,
-          headerStyle: { width: "20%" },
-          formatter: (value, row) => (
-            <>
-              {value === "Open" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
-                </a>
-              ) : value === "Scheduled for interview" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-success"}></i> {value}
-                </a>
-              ) : value === "Not interested" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-secondary"}></i>{" "}
-                  {value}
-                </a>
-              ) : value === "Not a graduate" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
-                </a>
-              ) : value === "Not in job location" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
-                </a>
-              ) : value === "Failed screening" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
-                </a>
-              ) : value === "Missed call" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-info"}></i> {value}
-                </a>
-              ) : (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
-                </a>
-              )}
-            </>
-          ),
-        },
-    CurrentUserRoles?.includes("rep_siever") && userDept === "hr"
-      ? {
-          dataField: "process_status",
-          text: "Processing Stage",
-          sort: true,
-
-          formatter: (value, row) => (
-            <>
-              <GeneralApproverBtn
-                options={InterviewProcessStageOptions}
-                setStatus={setProcessingStage}
-                value={value}
-                row={row}
-                setStatusRow={setProcessingStageRow}
-              />
-            </>
-          ),
-        }
-      : {
-          dataField: "process_status",
-          text: "Process Stage",
-          sort: true,
-          headerStyle: { width: "20%" },
-          formatter: (value, row) => (
-            <>
-              {value === "Open" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
-                </a>
-              ) : value === "Sieving" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
-                </a>
-              ) : value === "Phone screening" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-info"}></i> {value}
-                </a>
-              ) : value === "Interview scheduled" ? (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-success"}></i> {value}
-                </a>
-              ) : (
-                <a className="btn btn-gray btn-sm btn-rounded">
-                  <i className={"fa fa-dot-circle-o text-secondary"}></i>{" "}
-                  {value}
-                </a>
-              )}
-            </>
-          ),
-        },
+    {
+      dataField: "interview_status",
+      text: "Interview Status",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <>
+          {value === "Open" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Scheduled for interview" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : value === "Not interested" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          ) : value === "Not a graduate" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
+            </a>
+          ) : value === "Not in job location" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
+            </a>
+          ) : value === "Failed screening" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
+            </a>
+          ) : value === "Missed call" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "process_status",
+      text: "Process Stage",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <>
+          {value === "Open" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Sieving" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          ) : value === "Phone screening" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : value === "Interview scheduled" ? (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : (
+            <a className="btn btn-gray btn-sm btn-rounded">
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          )}
+        </>
+      ),
+    },
     {
       dataField: "resume_attachment",
       text: "Resume Attachment",
@@ -463,7 +428,7 @@ const JobApplicantsAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Applicants List</h3>
+            <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>

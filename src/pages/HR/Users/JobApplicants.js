@@ -9,6 +9,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import helper from "../../../services/helper";
 import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import { JobApplicationSieveModal } from "../../../components/Modal/JobApplicationSieveModal";
 import {
   InterviewStatusOptions,
   InterviewProcessStageOptions,
@@ -150,6 +151,7 @@ const JobApplicants = () => {
     [CurrentUserRoles]
   );
 
+  // Interview Status
   useEffect(() => {
     if (interview_status.length) {
       const update = {
@@ -160,6 +162,7 @@ const JobApplicants = () => {
     }
   }, [interview_status, statusRow, handleUpdate]);
 
+  // Process Status
   useEffect(() => {
     if (process_status.length) {
       if (process_status === "Interview scheduled") {
@@ -182,12 +185,14 @@ const JobApplicants = () => {
       dataField: "full_name",
       text: "Job Applicant",
       sort: true,
+      headerStyle: { width: "30%" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
       dataField: "job_title",
       text: "Job Opening",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           <h2>{row?.job_title}</h2>
@@ -198,27 +203,96 @@ const JobApplicants = () => {
       dataField: "application_date",
       text: "Application Date",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
       dataField: "interview_date",
       text: "Interview Date",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => <h2>{row.interview_date}</h2>,
     },
     {
       dataField: "interview_status",
       text: "Interview Status",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewStatusOptions}
-            setStatus={setInterviewStatus}
-            value={value}
-            row={row}
-            setStatusRow={setStatusRow}
-          />
+          {value === "Open" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Scheduled for interview" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : value === "Not interested" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          ) : value === "Not a graduate" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
+            </a>
+          ) : value === "Not in job location" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
+            </a>
+          ) : value === "Failed screening" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
+            </a>
+          ) : value === "Missed call" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          )}
         </>
       ),
     },
@@ -226,16 +300,55 @@ const JobApplicants = () => {
       dataField: "process_status",
       text: "Process Stage",
       sort: true,
-
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewProcessStageOptions}
-            setStatus={setProcessingStage}
-            value={value}
-            row={row}
-            setStatusRow={setProcessingStageRow}
-          />
+          {value === "Open" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
+            </a>
+          ) : value === "Sieving" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
+            </a>
+          ) : value === "Phone screening" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
+            </a>
+          ) : value === "Interview scheduled" ? (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
+            </a>
+          ) : (
+            <a
+              className="btn btn-gray btn-sm btn-rounded"
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => setViewRow(row)}
+            >
+              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
+            </a>
+          )}
         </>
       ),
     },
@@ -243,6 +356,7 @@ const JobApplicants = () => {
       dataField: "resume_attachment",
       text: "Resume Attachment",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
           <i className="fa fa-download"></i> Download
@@ -267,19 +381,14 @@ const JobApplicants = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {/* {user?.role?.hr?.delete && (
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => {
-                    setModalType();
-                    setSelectedRow(helper.handleEdit(row));
-                  }}
-                >
-                  <i className="fa fa-trash m-r-5"></i> Delete
-                </a>
-              )} */}
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#JobApplicationSieveModal"
+                onClick={() => setViewRow(row)}
+              >
+                <i className="fa fa-pencil-square-o m-r-5"></i> Update Status
+              </a>
 
               <a
                 className="dropdown-item"
@@ -316,7 +425,7 @@ const JobApplicants = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Applicants List</h3>
+            <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
@@ -378,6 +487,11 @@ const JobApplicants = () => {
           }
         />
       )}
+
+      <JobApplicationSieveModal
+        row={viewRow}
+        fetchAllJobApplicants={fetchAllJobApplicants}
+      />
     </>
   );
 };

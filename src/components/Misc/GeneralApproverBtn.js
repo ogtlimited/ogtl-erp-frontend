@@ -3,19 +3,23 @@ import React, { useEffect } from "react";
 
 const GeneralApproverBtn = ({
   options,
+  options2,
   setStatus,
-  setStatusRow,
-  row,
+  setStatus2,
   value,
+  row,
+  setStatusRow,
+  setStatusRow2,
+  fetchAllJobApplicants,
 }) => {
-  const handleStatus = (status) => {
-    setStatus(status);
-    setStatusRow(row);
-  };
+  // const handleStatus = (status) => {
+  //   setStatus(status);
+  //   setStatusRow(row);
+  // };
 
   return (
     <div>
-      <div className="dropdown action-label text-center">
+      {/* <div className="dropdown action-label text-center">
         <a
           className="btn btn-gray btn-sm btn-rounded dropdown-toggle" 
           style={{ padding: "5px 10px" }}
@@ -24,7 +28,6 @@ const GeneralApproverBtn = ({
         >
           <i className={`fa fa-dot-circle-o   ${options.find(opt => opt.title === value)?.color}`}></i> {value}
         </a>
-        {/* <div className="dropdown-menu dropdown-menu-right"  style={{backgroundColor: "pink", border: "2px solid red"}}> */}
         <div className="dropdown-menu dropdown-menu-right status-dropdown-menu">
           {options.map((opt, index) => (
             <a
@@ -37,7 +40,24 @@ const GeneralApproverBtn = ({
             </a>
           ))}
         </div>
+      </div> */}
+
+      <div className="dropdown action-label text-center">
+        <a
+          className="btn btn-gray btn-sm btn-rounded dropdown-toggle"
+          style={{ padding: "5px 10px" }}
+          data-toggle="modal"
+          data-target="#JobApplicationSieveModal"
+        >
+          <i
+            className={`fa fa-dot-circle-o   ${
+              options.find((opt) => opt.title === value)?.color
+            }`}
+          ></i>{" "}
+          {value}
+        </a>
       </div>
+
     </div>
   );
 };
