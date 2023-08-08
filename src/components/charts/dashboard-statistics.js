@@ -139,9 +139,9 @@ const DashboardStatistics = ({
 
             <LeaveVerticalBar
               data={leaveStatus}
-              handleChartClick={(element) =>
-                handleLeaveStatusChartClick(element, leaveStatusLabel)
-              }
+              // handleChartClick={(element) =>
+              //   handleLeaveStatusChartClick(element, leaveStatusLabel)
+              // }
             />
           </div>
         </div>
@@ -183,9 +183,9 @@ const DashboardStatistics = ({
 
             <LeaveVerticalBar
               data={leaveType}
-              handleChartClick={(element) =>
-                handleLeaveTypeChartClick(element, leaveTypeLabel)
-              }
+              // handleChartClick={(element) =>
+              //   handleLeaveTypeChartClick(element, leaveTypeLabel)
+              // }
             />
           </div>
         </div>
