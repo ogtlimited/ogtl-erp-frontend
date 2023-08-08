@@ -10,7 +10,7 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 
 const Designations = () => {
   const { user, ErrorHandler } = useAppContext();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [designations, setDesignations] = useState([]);
   const [designation, setDesignation] = useState([]);
   const [mode, setMode] = useState("Create");
@@ -24,6 +24,7 @@ const Designations = () => {
 
   // All Designations:
   const fetchDesignations = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/designations.json", {
         headers: {

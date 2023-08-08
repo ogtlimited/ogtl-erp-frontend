@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import axiosInstance from "../../../../services/api";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
@@ -26,9 +25,7 @@ const AdminLeavesHistoryTable = ({
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
-  const [dataToFilter, setDataToFilter] = useState("");
   const [mobileView, setmobileView] = useState(false);
-  const [unfiltered, setunfiltered] = useState([]);
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -46,18 +43,14 @@ const AdminLeavesHistoryTable = ({
 
   useEffect(() => {
     resizeTable();
-    setunfiltered(data);
     window.addEventListener("resize", () => {
       resizeTable();
     });
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
-
-  useEffect(() => {
-    setDataToFilter(data);
-    setTimeout(() => {}, 7000);
-  }, [data]);
-
 
   // Pagination
   const count = totalPages;
@@ -86,22 +79,16 @@ const AdminLeavesHistoryTable = ({
 
   return (
     <>
-      {dataToFilter && (
+      {data && (
         <ToolkitProvider
           keyField="id"
-          data={loading ? [] : dataToFilter}
+          data={loading ? [] : data}
           columns={columns}
           search
           exportCSV
         >
           {(props) => (
             <div className="col-12">
-              {/* <MySearch
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
-                className="inputSearch"
-              /> */}
-
               <ExportCSVButton
                 className="float-right btn export-csv"
                 style={{ marginBottom: 15 }}
@@ -110,63 +97,12 @@ const AdminLeavesHistoryTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              {/* <div className="hr-filter-select">
-                <div>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDepartmentFilter(e)}
-                    defaultValue={departmentFilter}
-                    value={departmentFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Department
-                    </option>
-                    {departments.map((option, idx) => (
-                      <option key={idx}>{option.department}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleLeaveTypeFilter(e)}
-                    defaultValue={leaveTypeFilter}
-                    value={leaveTypeFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Leave Type
-                    </option>
-                    {leaveTypes.map((option, index) => (
-                      <option key={index}>{option.leave_type}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleLeaveStatusFilter(e)}
-                    defaultValue={statusFilter}
-                    value={statusFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Status
-                    </option>
-                    {status.map((option, index) => (
-                      <option key={index} value={option.code}>{option.label}</option>
-                    ))}
-                  </select>
-                </div>
-              </div> */}
-
               <div className="hr-filter-select col-12"></div>
 
               <div className="custom-table-div">
                 <BootstrapTable
                   {...props.baseProps}
                   bordered={false}
-                  // selectRow={selectRow}
                   headerClasses="header-class"
                   classes={
                     !mobileView

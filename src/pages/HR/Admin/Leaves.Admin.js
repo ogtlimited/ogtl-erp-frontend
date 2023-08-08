@@ -1,18 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect, useCallback } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
 import male from "../../../assets/img/male_avater.png";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-// import tokenService from '../../../services/token.service';
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
 import moment from "moment";
 
 const LeavesAdmin = () => {
-  // const user = tokenService.getUser();
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
@@ -24,6 +24,7 @@ const LeavesAdmin = () => {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
+  const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -55,7 +56,7 @@ const LeavesAdmin = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/leaves.json",
+        `/api/v1/hr_dashboard/leaves.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -63,20 +64,16 @@ const LeavesAdmin = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            page: page,
+            pages: page,
             limit: sizePerPage,
           },
         }
       );
-
       const resData = response?.data?.data?.leaves;
       const totalPages = response?.data?.data?.total_pages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
-
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
 
       const formatted = resData.map((leave) => ({
         ...leave,
@@ -92,7 +89,6 @@ const LeavesAdmin = () => {
       }));
 
       setallLeaves(formatted);
-
       setLoading(false);
     } catch (error) {
       const component = "Pending Leaves Error:";
@@ -115,9 +111,9 @@ const LeavesAdmin = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            page: historyPage,
+            pages: historyPage,
             limit: historySizePerPage,
-            status: "approved",
+            status: historyStatus,
           },
         }
       );
@@ -146,7 +142,7 @@ const LeavesAdmin = () => {
             ? "Leave Ended"
             : today_date < leave?.leave?.start_date &&
               today_date < leave?.leave?.end_date
-            ? "Upcoming"
+            ? "Scheduled Leave"
             : "On Leave",
       }));
 
@@ -157,8 +153,7 @@ const LeavesAdmin = () => {
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyPage, historySizePerPage, today_date]);
+  }, [historyPage, historySizePerPage, historyStatus, today_date]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -190,9 +185,9 @@ const LeavesAdmin = () => {
       fetchHRLeaves();
       fetchHRLeaveHistory();
       fetchAllEmpOnLeave();
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
 
   const handleApproveLeave = async (row) => {
     const id = row.id;
@@ -455,19 +450,29 @@ const LeavesAdmin = () => {
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
-          {value === "Upcoming" ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-warning"></i> {value}
-            </span>
-          ) : value === "On Leave" ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
-            </span>
-          ) : value === "Leave Ended" ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
-            </span>
-          ) : null}
+          {historyStatus === "approved" ? (
+            <>
+              {value === "Scheduled Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-warning"></i> {value}
+                </span>
+              ) : value === "On Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-success"></i> {value}
+                </span>
+              ) : value === "Leave Ended" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-danger"></i> Not Approved
+              </span>
+            </>
+          )}
         </>
       ),
     },
@@ -535,6 +540,7 @@ const LeavesAdmin = () => {
           fetchHRLeaveHistory={fetchHRLeaveHistory}
         />
       )}
+
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -566,8 +572,19 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
+                  onClick={() => setHistoryStatus("approved")}
                 >
-                  Leave History
+                  Approved Leave History
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_hr-leave-history"
+                  onClick={() => setHistoryStatus("rejected")}
+                >
+                  Rejected Leave History
                 </a>
               </li>
             </ul>
@@ -590,8 +607,8 @@ const LeavesAdmin = () => {
           </div>
 
           <AdminLeavesTable
-            columns={pendingColumns}
             data={allLeaves}
+            columns={pendingColumns}
             setData={setallLeaves}
             loading={loading}
             setLoading={setLoading}
@@ -611,7 +628,6 @@ const LeavesAdmin = () => {
             setData={setLeaveHistory}
             loading={loadingHistory}
             setLoading={setLoadingHistory}
-
             page={historyPage}
             setPage={setHistoryPage}
             sizePerPage={historySizePerPage}
