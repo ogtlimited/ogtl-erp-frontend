@@ -260,7 +260,7 @@ const sidebarConfig = [
         children: [
           {
             canView: "hr",
-            title: "Job Applicants",
+            title: "Job Applications",
             path: PATH_DASHBOARD.recruitment.jobApplicants,
           },
         ],

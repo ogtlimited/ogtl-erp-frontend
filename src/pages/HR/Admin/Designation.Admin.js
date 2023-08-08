@@ -86,51 +86,29 @@ const Designations = () => {
       dataField: "title",
       text: "Designations",
       sort: true,
-      headerStyle: { width: "35%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "40%" },
     },
     {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            {CurrentUserRoles.includes("hr_manager") && (
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#DesignationFormModal"
-                onClick={() => handleEdit(row)}
-              >
-                <i className="fa fa-pencil m-r-5"></i> Edit
-              </a>
-            )}
-
-            {CurrentUserRoles.includes("hr_manager") && (
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-trash m-r-5"></i> Delete
-              </a>
-            )}
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#DesignationFormModal"
+              onClick={() => handleEdit(row)}
+            >
+              Edit
+            </button>
           </div>
         </div>
       ),
