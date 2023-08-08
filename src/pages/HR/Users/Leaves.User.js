@@ -14,6 +14,7 @@ import LeaveApplicationContent from "../../../components/ModalContents/LeaveAppl
 import RejectLeaveModal from "../../../components/Modal/RejectLeaveModal";
 import RequestEditModal from "../../../components/Modal/RequestEditModal";
 import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal";
+import UniversalTable from "../../../components/Tables/UniversalTable";
 import moment from "moment";
 
 const LeavesUser = () => {
@@ -308,42 +309,46 @@ const LeavesUser = () => {
       dataField: "full_name",
       text: "Full Name",
       sort: true,
-      headerStyle: { width: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "from_date",
       text: "From",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -370,7 +375,7 @@ const LeavesUser = () => {
       dataField: "requested_leave_days",
       text: "Requested Leave Days",
       sort: true,
-      headerStyle: { width: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {row.requested_leave_days > 1
@@ -383,7 +388,7 @@ const LeavesUser = () => {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -637,7 +642,7 @@ const LeavesUser = () => {
           </div>
 
           <div id="tab_subordinates-leaves" className="col-12 tab-pane">
-            <ReporteeLeavesTable
+            <UniversalTable
               columns={reporteeColumns}
               data={allReporteesLeaves}
               setData={setAllReporteesLeaves}

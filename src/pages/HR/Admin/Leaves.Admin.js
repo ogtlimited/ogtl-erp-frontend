@@ -1,18 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useCallback } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
 import male from "../../../assets/img/male_avater.png";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-// import tokenService from '../../../services/token.service';
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
 import moment from "moment";
 
 const LeavesAdmin = () => {
-  // const user = tokenService.getUser();
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
@@ -21,8 +21,10 @@ const LeavesAdmin = () => {
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
+  const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -30,18 +32,10 @@ const LeavesAdmin = () => {
 
   const [historyPage, setHistoryPage] = useState(1);
   const [historySizePerPage, setHistorySizePerPage] = useState(10);
-  const [totalHistoryPages, setTotalHistoryPages] = useState("");
+  const [historyTotalPages, setHistoryTotalPages] = useState("");
 
-  const [departments, setDepartments] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
-
-  const [officeFilter, setOfficeFilter] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [campaignFilter, setCampaignFilter] = useState("");
-  const [leaveTypeFilter, setLeaveTypeFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
 
   const isHr = user?.office?.title === "hr" ? true : false;
 
@@ -58,11 +52,11 @@ const LeavesAdmin = () => {
   }
 
   // All Leaves at HR stage - Pending
-  const fetchHRLeaves = async () => {
+  const fetchHRLeaves = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/leaves.json",
+        `/api/v1/hr_dashboard/leaves.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,23 +64,16 @@ const LeavesAdmin = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            page: page,
+            pages: page,
             limit: sizePerPage,
-            search: searchTerm,
-            // operation_office_id: officeFilter,
-            // hr_designation_id: designationFilter,
           },
         }
       );
-
       const resData = response?.data?.data?.leaves;
       const totalPages = response?.data?.data?.total_pages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
-
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
 
       const formatted = resData.map((leave) => ({
         ...leave,
@@ -102,18 +89,19 @@ const LeavesAdmin = () => {
       }));
 
       setallLeaves(formatted);
-
       setLoading(false);
     } catch (error) {
       const component = "Pending Leaves Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   // All Leaves at HR stage - History
-  const fetchHRLeaveHistory = async () => {
+  const fetchHRLeaveHistory = useCallback(async () => {
     try {
+      setLoadingHistory(true);
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",
         {
@@ -123,9 +111,9 @@ const LeavesAdmin = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            page: historyPage,
+            pages: historyPage,
             limit: historySizePerPage,
-            status: "approved" || "rejected",
+            status: historyStatus,
           },
         }
       );
@@ -137,7 +125,7 @@ const LeavesAdmin = () => {
       const thisTotalPageSize = totalHistoryPages;
 
       setHistorySizePerPage(thisPageLimit);
-      setTotalHistoryPages(thisTotalPageSize);
+      setHistoryTotalPages(thisTotalPageSize);
 
       const formatted = resData.map((leave) => ({
         ...leave,
@@ -149,17 +137,23 @@ const LeavesAdmin = () => {
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        leave_marker:
+          leave?.leave?.end_date < today_date
+            ? "Leave Ended"
+            : today_date < leave?.leave?.start_date &&
+              today_date < leave?.leave?.end_date
+            ? "Scheduled Leave"
+            : "On Leave",
       }));
 
       setLeaveHistory(formatted);
-
-      setLoading(false);
+      setLoadingHistory(false);
     } catch (error) {
       const component = "Leave History Error:";
       ErrorHandler(error, component);
-      setLoading(false);
+      setLoadingHistory(false);
     }
-  };
+  }, [historyPage, historySizePerPage, historyStatus, today_date]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -186,82 +180,14 @@ const LeavesAdmin = () => {
     }
   };
 
-  // All Offices:
-  const fetchAllOffices = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setDepartments(formattedDepartments);
-      setCampaigns(formattedCampaigns);
-    } catch (error) {
-      console.log("All Offices error:", error);
-    }
-  };
-
-  // All Leave Types:
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/leave_types.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.types;
-
-      const formatted = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setLeaveTypes(formatted);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (isHr) {
       fetchHRLeaves();
       fetchHRLeaveHistory();
       fetchAllEmpOnLeave();
-      fetchAllOffices();
-      fetchLeavesType();
-    } else {
-      fetchLeavesType();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
 
   const handleApproveLeave = async (row) => {
     const id = row.id;
@@ -285,12 +211,12 @@ const LeavesAdmin = () => {
     setRejectModal(true);
   };
 
-  const columns = [
+  const pendingColumns = [
     {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="#" className="avatar">
@@ -306,13 +232,13 @@ const LeavesAdmin = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "12%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -339,29 +265,33 @@ const LeavesAdmin = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "from_date",
       text: "From",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "total_leave_days",
       text: "Total Leave Days",
       sort: true,
-      headerStyle: { minWidth: "80px", textAlign: "center" },
+      headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
           {row.total_leave_days > 1
@@ -374,6 +304,183 @@ const LeavesAdmin = () => {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType("view-details");
+                setViewRow(row);
+              }}
+            >
+              <i className="fa fa-eye m-r-5"></i> View
+            </a>
+
+            {row.status === "pending" ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleApproveLeave(row)}
+              >
+                <i className="fa fa-check m-r-5"></i> Approve
+              </a>
+            ) : null}
+
+            {row.status === "pending" ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleRejectLeave(row)}
+              >
+                <i className="fa fa-ban m-r-5"></i> Reject
+              </a>
+            ) : null}
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  const historyColumns = [
+    {
+      dataField: "full_name",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <a href="#" className="avatar">
+            <img alt="" src={male} />
+          </a>
+          <a href="#">
+            {row?.full_name} <span>{row?.ogid}</span>
+          </a>
+        </h2>
+      ),
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {value === "approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "cancelled" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+            </span>
+          ) : value === "rejected" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+            </span>
+          ) : value === "pending" ? (
+            <span className="btn btn-gray btn-sm btn-rounded ">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      dataField: "leave_type",
+      text: "Leave Type",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "leave_marker",
+      text: "Leave",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {historyStatus === "approved" ? (
+            <>
+              {value === "Scheduled Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-warning"></i> {value}
+                </span>
+              ) : value === "On Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-success"></i> {value}
+                </span>
+              ) : value === "Leave Ended" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-danger"></i> Not Approved
+              </span>
+            </>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "from_date",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "to_date",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "total_leave_days",
+      text: "Total Leave Days",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {row.total_leave_days > 1
+            ? row.total_leave_days + " days"
+            : row.total_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "status_action",
+      text: "Action",
+      csvExport: false,
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -433,6 +540,7 @@ const LeavesAdmin = () => {
           fetchHRLeaveHistory={fetchHRLeaveHistory}
         />
       )}
+
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -464,8 +572,19 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
+                  onClick={() => setHistoryStatus("approved")}
                 >
-                  Leave History
+                  Approved Leave History
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_hr-leave-history"
+                  onClick={() => setHistoryStatus("rejected")}
+                >
+                  Rejected Leave History
                 </a>
               </li>
             </ul>
@@ -488,8 +607,8 @@ const LeavesAdmin = () => {
           </div>
 
           <AdminLeavesTable
-            columns={columns}
             data={allLeaves}
+            columns={pendingColumns}
             setData={setallLeaves}
             loading={loading}
             setLoading={setLoading}
@@ -499,43 +618,22 @@ const LeavesAdmin = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            campaignFilter={campaignFilter}
-            setCampaignFilter={setCampaignFilter}
-            leaveTypeFilter={leaveTypeFilter}
-            setLeaveTypeFilter={setLeaveTypeFilter}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            departments={departments}
-            campaigns={campaigns}
-            leaveTypes={leaveTypes}
           />
         </div>
 
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
           <AdminLeavesHistoryTable
-            columns={columns}
+            columns={historyColumns}
             data={leaveHistory}
             setData={setLeaveHistory}
-            loading={loading}
-            setLoading={setLoading}
+            loading={loadingHistory}
+            setLoading={setLoadingHistory}
             page={historyPage}
             setPage={setHistoryPage}
             sizePerPage={historySizePerPage}
             setSizePerPage={setHistorySizePerPage}
-            totalPages={totalHistoryPages}
-            setTotalPages={setTotalHistoryPages}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            leaveTypeFilter={leaveTypeFilter}
-            setLeaveTypeFilter={setLeaveTypeFilter}
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            departments={departments}
-            leaveTypes={leaveTypes}
+            totalPages={historyTotalPages}
+            setTotalPages={setHistoryTotalPages}
           />
         </div>
       </div>

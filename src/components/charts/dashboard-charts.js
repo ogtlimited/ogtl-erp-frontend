@@ -129,9 +129,9 @@ const DashboardChart = ({
                 <h3 className="card-title">{title}</h3>
                 <VerticalBar
                   data={employee}
-                  handleChartClick={(element) =>
-                    handleDepartmentChartClick(element, employeeLabel)
-                  }
+                  // handleChartClick={(element) =>
+                  //   handleDepartmentChartClick(element, employeeLabel)
+                  // }
                 />
               </div>
             </div>
@@ -143,9 +143,9 @@ const DashboardChart = ({
                 <div className="card-body">
                   <h3 className="card-title">Employee By Gender</h3>
                   <DoughnutChart data={gender} 
-                    handleChartClick={(element) =>
-                      handleGenderChartClick(element, genderLabel)
-                    }
+                    // handleChartClick={(element) =>
+                    //   handleGenderChartClick(element, genderLabel)
+                    // }
                   />
                 </div>
               </div>

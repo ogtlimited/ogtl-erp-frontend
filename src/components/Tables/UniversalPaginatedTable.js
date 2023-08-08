@@ -83,7 +83,7 @@ const UniversalPaginatedTable = ({
       {data && (
         <ToolkitProvider
           keyField="id"
-          data={data}
+          data={loading ? [] : data}
           columns={columns}
           search
           exportCSV
@@ -104,7 +104,6 @@ const UniversalPaginatedTable = ({
                 <BootstrapTable
                   {...props.baseProps}
                   bordered={false}
-                  // selectRow={selectRow}
                   filter={filterFactory()}
                   headerClasses="header-class"
                   classes={
