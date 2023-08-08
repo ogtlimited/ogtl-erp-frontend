@@ -1,14 +1,12 @@
-// *IN USE
-
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+// *IN USE
 
 import React, { useCallback, useEffect, useState } from "react";
 import JobApplicantsTable from "../Admin/JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import helper from "../../../services/helper";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
+import { JobApplicationSieveModal } from "../../../components/Modal/JobApplicationSieveModal";
 import {
   InterviewStatusOptions,
   InterviewProcessStageOptions,
@@ -18,15 +16,10 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
-import $ from "jquery";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
   const { showAlert, user, ErrorHandler } = useAppContext();
-  const [statusRow, setStatusRow] = useState(null);
-  const [processingStageRow, setProcessingStageRow] = useState(null);
-  const [interview_status, setInterviewStatus] = useState("");
-  const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
@@ -40,6 +33,7 @@ const JobApplicants = () => {
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("Open");
+  const [searchTerm, setSearchTerm] = useState("");
 
   let firstDay = moment().startOf("month").format("YYYY-MM-DD");
   let lastDay = moment().endOf("month").format("YYYY-MM-DD");
@@ -53,6 +47,10 @@ const JobApplicants = () => {
 
     setLoading(true);
     try {
+      console.log({
+        fromDate: persistedFromDate,
+        toDate: persistedToDate,
+      })
       const response = await axiosInstance.get(
         "/api/v1/rep_siever_job_applications.json",
         {
@@ -64,6 +62,7 @@ const JobApplicants = () => {
           params: {
             page: page,
             limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
             process_status: processingStageFilter,
             start_date: persistedFromDate,
             end_date: persistedToDate,
@@ -85,9 +84,9 @@ const JobApplicants = () => {
         full_name: `${emp?.first_name} ${emp?.last_name}`,
         job_title: emp?.job_opening?.job_title,
         application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
-        interview_date: emp?.interview_date
+        interview_scheduled_date: emp?.interview_date
           ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-          : "Not Scheduled",
+          : null,
       }));
 
       setData(formatted);
@@ -97,8 +96,8 @@ const JobApplicants = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, page, processingStageFilter, sizePerPage, toDate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
 
   useEffect(() => {
     fetchAllJobApplicants();
@@ -130,7 +129,6 @@ const JobApplicants = () => {
             "Job application updated successfully",
             "alert alert-success"
           );
-          setProcessingStageFilter("Open");
           fetchAllJobApplicants();
         })
         .catch((error) => {
@@ -150,44 +148,73 @@ const JobApplicants = () => {
     [CurrentUserRoles]
   );
 
-  useEffect(() => {
-    if (interview_status.length) {
-      const update = {
-        interview_status,
-        // id: statusRow?.id,
-      };
-      handleUpdate(statusRow.id, update);
-    }
-  }, [interview_status, statusRow, handleUpdate]);
+  // // Interview Status
+  // useEffect(() => {
+  //   if (interview_status.length) {
+  //     const update = {
+  //       interview_status,
+  //       // id: statusRow?.id,
+  //     };
+  //     handleUpdate(statusRow.id, update);
+  //   }
+  // }, [interview_status, statusRow, handleUpdate]);
 
-  useEffect(() => {
-    if (process_status.length) {
-      if (process_status === "Interview scheduled") {
-        setModalType("schedule-interview");
-        setSelectedRow(processingStageRow);
-        $("#generalModal").modal("show");
-        return;
-      }
-      const update = {
-        process_status,
-        interview_date: null,
-        // id: processingStageRow?.id,
-      };
-      handleUpdate(processingStageRow.id, update);
-    }
-  }, [process_status, processingStageRow, handleUpdate]);
+  // // Process Status
+  // useEffect(() => {
+  //   if (process_status.length) {
+  //     if (process_status === "Interview scheduled") {
+  //       setModalType("schedule-interview");
+  //       setSelectedRow(processingStageRow);
+  //       $("#generalModal").modal("show");
+  //       return;
+  //     }
+  //     const update = {
+  //       process_status,
+  //       interview_date: null,
+  //       // id: processingStageRow?.id,
+  //     };
+  //     handleUpdate(processingStageRow.id, update);
+  //   }
+  // }, [process_status, processingStageRow, handleUpdate]);
+
+  const getInterviewStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      "Scheduled for interview": "text-success",
+      "Not interested": "text-secondary",
+      "Not a graduate": "text-dark",
+      "Not in job location": "text-muted",
+      "Failed screening": "text-danger",
+      "Missed call": "text-info",
+    };
+
+    return colorMap[value] || "text-warning";
+  };
+
+  const getProcessStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      Sieving: "text-warning",
+      "Phone screening": "text-info",
+      "Interview scheduled": "text-success",
+    };
+
+    return colorMap[value] || "text-secondary";
+  };
 
   const columns = [
     {
       dataField: "full_name",
       text: "Job Applicant",
       sort: true,
+      headerStyle: { width: "30%" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
       dataField: "job_title",
       text: "Job Opening",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           <h2>{row?.job_title}</h2>
@@ -198,27 +225,39 @@ const JobApplicants = () => {
       dataField: "application_date",
       text: "Application Date",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
-      dataField: "interview_date",
+      dataField: "interview_scheduled_date",
       text: "Interview Date",
       sort: true,
-      formatter: (value, row) => <h2>{row.interview_date}</h2>,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => <h2>{row.interview_scheduled_date || "Not Scheduled"}</h2>,
     },
     {
       dataField: "interview_status",
       text: "Interview Status",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewStatusOptions}
-            setStatus={setInterviewStatus}
-            value={value}
-            row={row}
-            setStatusRow={setStatusRow}
-          />
+          <a
+            className={`btn btn-gray btn-sm btn-rounded`}
+            data-toggle="modal"
+            data-target="#JobApplicationSieveModal"
+            onClick={() => {
+              setModalType("update-status");
+              setViewRow(row);
+            }}
+          >
+            <i
+              className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
@@ -226,16 +265,25 @@ const JobApplicants = () => {
       dataField: "process_status",
       text: "Process Stage",
       sort: true,
-
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          <GeneralApproverBtn
-            options={InterviewProcessStageOptions}
-            setStatus={setProcessingStage}
-            value={value}
-            row={row}
-            setStatusRow={setProcessingStageRow}
-          />
+          <a
+            className={`btn btn-gray btn-sm btn-rounded`}
+            data-toggle="modal"
+            data-target="#JobApplicationSieveModal"
+            onClick={() => {
+              setModalType("update-status");
+              setViewRow(row);
+            }}
+          >
+            <i
+              className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
@@ -243,6 +291,7 @@ const JobApplicants = () => {
       dataField: "resume_attachment",
       text: "Resume Attachment",
       sort: true,
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
           <i className="fa fa-download"></i> Download
@@ -267,19 +316,17 @@ const JobApplicants = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {/* {user?.role?.hr?.delete && (
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => {
-                    setModalType();
-                    setSelectedRow(helper.handleEdit(row));
-                  }}
-                >
-                  <i className="fa fa-trash m-r-5"></i> Delete
-                </a>
-              )} */}
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#JobApplicationSieveModal"
+                onClick={() => {
+                  setModalType("update-status");
+                  setViewRow(row);
+                }}
+              >
+                <i className="fa fa-pencil-square-o m-r-5"></i> Update Status
+              </a>
 
               <a
                 className="dropdown-item"
@@ -316,7 +363,7 @@ const JobApplicants = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Applicants List</h3>
+            <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
@@ -345,6 +392,8 @@ const JobApplicants = () => {
             toDate={toDate}
             setFromDate={setFromDate}
             setToDate={setToDate}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
             fetchAllJobApplicants={fetchAllJobApplicants}
             interviewStatusFilter={interviewStatusFilter}
             setInterviewStatusFilter={setInterviewStatusFilter}
@@ -365,6 +414,7 @@ const JobApplicants = () => {
           }
         />
       )}
+
       {modalType === "schedule-interview" && (
         <ViewModal
           title="Schedule Interview"
@@ -376,6 +426,13 @@ const JobApplicants = () => {
               setModalType={setModalType}
             />
           }
+        />
+      )}
+
+      {modalType === "update-status" && (
+        <JobApplicationSieveModal
+          row={viewRow}
+          fetchAllJobApplicants={fetchAllJobApplicants}
         />
       )}
     </>

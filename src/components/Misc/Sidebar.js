@@ -180,7 +180,7 @@ const Sidebar = () => {
                       to="/dashboard/recruitment/rep-siever/job-applicants"
                       className=""
                     >
-                      Job Applicants
+                      Job Applications
                     </Link>
                   </ul>
                 </li>
