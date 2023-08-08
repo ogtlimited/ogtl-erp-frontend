@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
 import male from "../../../assets/img/male_avater.png";
@@ -36,12 +36,14 @@ const LeavesAdmin = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
 
-  const [officeFilter, setOfficeFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [campaignFilter, setCampaignFilter] = useState("");
   const [leaveTypeFilter, setLeaveTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
 
   const isHr = user?.office?.title === "hr" ? true : false;
 
@@ -58,7 +60,7 @@ const LeavesAdmin = () => {
   }
 
   // All Leaves at HR stage - Pending
-  const fetchHRLeaves = async () => {
+  const fetchHRLeaves = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
@@ -72,9 +74,6 @@ const LeavesAdmin = () => {
           params: {
             page: page,
             limit: sizePerPage,
-            search: searchTerm,
-            // operation_office_id: officeFilter,
-            // hr_designation_id: designationFilter,
           },
         }
       );
@@ -109,10 +108,11 @@ const LeavesAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   // All Leaves at HR stage - History
-  const fetchHRLeaveHistory = async () => {
+  const fetchHRLeaveHistory = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",
@@ -133,6 +133,11 @@ const LeavesAdmin = () => {
       const resData = response?.data?.data?.leaves;
       const totalHistoryPages = response?.data?.data?.total_pages;
 
+      console.log({
+        resData,
+        totalHistoryPages,
+      });
+
       const thisPageLimit = historySizePerPage;
       const thisTotalPageSize = totalHistoryPages;
 
@@ -149,6 +154,13 @@ const LeavesAdmin = () => {
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        leave_marker:
+          leave?.leave?.end_date < today_date
+            ? "Leave Ended"
+            : today_date < leave?.leave?.start_date &&
+              today_date < leave?.leave?.end_date
+            ? "Upcoming"
+            : "On Leave",
       }));
 
       setLeaveHistory(formatted);
@@ -159,7 +171,8 @@ const LeavesAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyPage, historySizePerPage]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -285,12 +298,12 @@ const LeavesAdmin = () => {
     setRejectModal(true);
   };
 
-  const columns = [
+  const pendingColumns = [
     {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="#" className="avatar">
@@ -306,13 +319,13 @@ const LeavesAdmin = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "12%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -339,29 +352,33 @@ const LeavesAdmin = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "from_date",
       text: "From",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "total_leave_days",
       text: "Total Leave Days",
       sort: true,
-      headerStyle: { minWidth: "80px", textAlign: "center" },
+      headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
           {row.total_leave_days > 1
@@ -374,6 +391,173 @@ const LeavesAdmin = () => {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType("view-details");
+                setViewRow(row);
+              }}
+            >
+              <i className="fa fa-eye m-r-5"></i> View
+            </a>
+
+            {row.status === "pending" ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleApproveLeave(row)}
+              >
+                <i className="fa fa-check m-r-5"></i> Approve
+              </a>
+            ) : null}
+
+            {row.status === "pending" ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleRejectLeave(row)}
+              >
+                <i className="fa fa-ban m-r-5"></i> Reject
+              </a>
+            ) : null}
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  const historyColumns = [
+    {
+      dataField: "full_name",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <a href="#" className="avatar">
+            <img alt="" src={male} />
+          </a>
+          <a href="#">
+            {row?.full_name} <span>{row?.ogid}</span>
+          </a>
+        </h2>
+      ),
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {value === "approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "cancelled" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+            </span>
+          ) : value === "rejected" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+            </span>
+          ) : value === "pending" ? (
+            <span className="btn btn-gray btn-sm btn-rounded ">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      dataField: "leave_type",
+      text: "Leave Type",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "from_date",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "to_date",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "total_leave_days",
+      text: "Total Leave Days",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {row.total_leave_days > 1
+            ? row.total_leave_days + " days"
+            : row.total_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "leave_marker",
+      text: "Leave",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {value === "Upcoming" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          ) : value === "On Leave" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "Leave Ended" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      dataField: "status_action",
+      text: "Action",
+      csvExport: false,
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -488,7 +672,7 @@ const LeavesAdmin = () => {
           </div>
 
           <AdminLeavesTable
-            columns={columns}
+            columns={pendingColumns}
             data={allLeaves}
             setData={setallLeaves}
             loading={loading}
@@ -515,7 +699,7 @@ const LeavesAdmin = () => {
 
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
           <AdminLeavesHistoryTable
-            columns={columns}
+            columns={historyColumns}
             data={leaveHistory}
             setData={setLeaveHistory}
             loading={loading}
