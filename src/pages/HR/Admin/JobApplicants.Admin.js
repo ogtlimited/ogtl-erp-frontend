@@ -1,12 +1,11 @@
-// *IN USE
-
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+// *IN USE
 
 import React, { useCallback, useEffect, useState } from "react";
 import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import { JobApplicationSieveModal } from "../../../components/Modal/JobApplicationSieveModal";
 import helper from "../../../services/helper";
 import {
   InterviewStatusOptions,
@@ -17,15 +16,10 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
-import $ from "jquery";
 
 const JobApplicantsAdmin = () => {
   const [data, setData] = useState([]);
   const { showAlert, user, ErrorHandler } = useAppContext();
-  const [statusRow, setStatusRow] = useState(null);
-  const [processingStageRow, setProcessingStageRow] = useState(null);
-  const [interview_status, setInterviewStatus] = useState("");
-  const [process_status, setProcessingStage] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setmodalType] = useState("schedule-interview");
@@ -117,6 +111,7 @@ const JobApplicantsAdmin = () => {
               page: page,
               limit: sizePerPage,
               process_status: processingStageFilter,
+              name: searchTerm.length ? searchTerm : null,
               start_date: fromDate,
               end_date: toDate,
             },
@@ -160,6 +155,7 @@ const JobApplicantsAdmin = () => {
     processingStageFilter,
     sizePerPage,
     toDate,
+    searchTerm,
   ]);
 
   useEffect(() => {
@@ -212,35 +208,35 @@ const JobApplicantsAdmin = () => {
     [CurrentUserRoles]
   );
 
-  // update interview status
-  useEffect(() => {
-    if (interview_status.length) {
-      const update = {
-        interview_status,
-        // id: statusRow?.id,
-      };
-      handleUpdate(statusRow.id, update);
-    }
-  }, [interview_status, statusRow, handleUpdate]);
+  // // update interview status
+  // useEffect(() => {
+  //   if (interview_status.length) {
+  //     const update = {
+  //       interview_status,
+  //       // id: statusRow?.id,
+  //     };
+  //     handleUpdate(statusRow.id, update);
+  //   }
+  // }, [interview_status, statusRow, handleUpdate]);
 
-  // update process status
-  useEffect(() => {
-    if (process_status.length) {
-      if (process_status === "Interview scheduled") {
-        setmodalType("schedule-interview");
-        setSelectedRow(processingStageRow);
-        $("#generalModal").modal("show");
-        return;
-      }
+  // // update process status
+  // useEffect(() => {
+  //   if (process_status.length) {
+  //     if (process_status === "Interview scheduled") {
+  //       setmodalType("schedule-interview");
+  //       setSelectedRow(processingStageRow);
+  //       $("#generalModal").modal("show");
+  //       return;
+  //     }
 
-      const update = {
-        process_status,
-        interview_date: null,
-        // id: processingStageRow?.id,
-      };
-      handleUpdate(processingStageRow.id, update);
-    }
-  }, [process_status, processingStageRow, handleUpdate]);
+  //     const update = {
+  //       process_status,
+  //       interview_date: null,
+  //       // id: processingStageRow?.id,
+  //     };
+  //     handleUpdate(processingStageRow.id, update);
+  //   }
+  // }, [process_status, processingStageRow, handleUpdate]);
 
   const getInterviewStatusColorClass = (value) => {
     const colorMap = {
@@ -309,14 +305,33 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          <a className={`btn btn-gray btn-sm btn-rounded`}>
-            <i
-              className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
-                value
-              )}`}
-            ></i>{" "}
-            {value}
-          </a>
+          {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
+            <a
+              className={`btn btn-gray btn-sm btn-rounded`}
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => {
+                setmodalType("update-status");
+                setViewRow(row);
+              }}
+            >
+              <i
+                className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
+                  value
+                )}`}
+              ></i>{" "}
+              {value}
+            </a>
+          ) : (
+            <a className={`btn btn-gray btn-sm btn-rounded`}>
+              <i
+                className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
+                  value
+                )}`}
+              ></i>{" "}
+              {value}
+            </a>
+          )}
         </>
       ),
     },
@@ -327,14 +342,33 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          <a className={`btn btn-gray btn-sm btn-rounded`}>
-            <i
-              className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
-                value
-              )}`}
-            ></i>{" "}
-            {value}
-          </a>
+          {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
+            <a
+              className={`btn btn-gray btn-sm btn-rounded`}
+              data-toggle="modal"
+              data-target="#JobApplicationSieveModal"
+              onClick={() => {
+                setmodalType("update-status");
+                setViewRow(row);
+              }}
+            >
+              <i
+                className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
+                  value
+                )}`}
+              ></i>{" "}
+              {value}
+            </a>
+          ) : (
+            <a className={`btn btn-gray btn-sm btn-rounded`}>
+              <i
+                className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
+                  value
+                )}`}
+              ></i>{" "}
+              {value}
+            </a>
+          )}
         </>
       ),
     },
@@ -469,6 +503,7 @@ const JobApplicantsAdmin = () => {
           }
         />
       )}
+
       {modalType === "schedule-interview" && (
         <ViewModal
           title="Schedule Interview"
@@ -480,6 +515,13 @@ const JobApplicantsAdmin = () => {
               setModalType={setmodalType}
             />
           }
+        />
+      )}
+
+      {modalType === "update-status" && (
+        <JobApplicationSieveModal
+          row={viewRow}
+          fetchAllJobApplicants={fetchAllJobApplicants}
         />
       )}
     </>

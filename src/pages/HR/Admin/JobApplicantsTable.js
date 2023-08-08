@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import moment from "moment";
 import usePagination from "./JobApplicantsPagination.Admin";
@@ -20,12 +20,6 @@ const JobApplicantsTable = ({
 
   columns,
   context,
-  clickToSelect = false,
-  selected,
-  handleOnSelect,
-  handleOnSelectAll,
-  interviewStatus,
-  processingStage,
   page,
   setPage,
   sizePerPage,
@@ -38,13 +32,9 @@ const JobApplicantsTable = ({
   setToDate,
   searchTerm,
   setSearchTerm,
-  fetchAllJobApplicants,
-  interviewStatusFilter,
-  setInterviewStatusFilter,
   processingStageFilter,
   setProcessingStageFilter,
 }) => {
-  const { ExportCSVButton } = CSVExport;
   const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
@@ -115,12 +105,13 @@ const JobApplicantsTable = ({
       let input;
 
       const handleKeydown = (e) => {
+
         if (e.key === "Enter") {
           setPage(1);
           setLoading(true);
           props.onSearch(input.value);
-          const nameTerm = input.value;
-          setSearchTerm(nameTerm);
+          const searchTerm = input.value;
+          setSearchTerm(searchTerm);
 
           if (page === 1) {
             const persistedFromDate = secureLocalStorage.getItem("fromDate");
@@ -221,6 +212,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
+            name: searchTerm,
             process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,

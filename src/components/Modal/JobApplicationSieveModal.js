@@ -10,9 +10,6 @@ import Select from "react-select";
 export const JobApplicationSieveModal = ({
   row,
   fetchAllJobApplicants,
-  setModalType,
-  setIsInterviewSelected,
-  setSelectedRow,
 }) => {
   const { showAlert, user } = useAppContext();
   const [status, setStatus] = useState({
