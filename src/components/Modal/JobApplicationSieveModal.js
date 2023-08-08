@@ -7,7 +7,13 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
+export const JobApplicationSieveModal = ({
+  row,
+  fetchAllJobApplicants,
+  setModalType,
+  setIsInterviewSelected,
+  setSelectedRow,
+}) => {
   const { showAlert, user } = useAppContext();
   const [status, setStatus] = useState({
     interview_status: "",
@@ -15,6 +21,7 @@ export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
     interview_date: null,
   });
   const [loading, setLoading] = useState(false);
+  const [showDate, setShowDate] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -35,6 +42,14 @@ export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
     { label: "Phone screening", value: "Phone screening" },
     { label: "Interview scheduled", value: "Interview scheduled" },
   ];
+
+  useEffect(() => {
+    if (status?.process_status === "Interview scheduled") {
+      setShowDate(true);
+    } else {
+      setShowDate(false);
+    }
+  }, [status?.process_status]);
 
   useEffect(() => {
     setStatus({
@@ -58,7 +73,7 @@ export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
     if (!CurrentUserRoles.includes("rep_siever")) {
       return showAlert(true, "You are not a rep siever", "alert alert-warning");
     }
-    
+
     setLoading(true);
     axiosInstance
       .patch(`/api/v1/job_applicants/${row?.id}.json`, {
@@ -67,7 +82,14 @@ export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        payload: status,
+        payload: {
+          interview_status: status?.interview_status,
+          process_status: status?.process_status,
+          interview_date:
+            status?.process_status === "Interview scheduled"
+              ? status?.interview_date
+              : null,
+        },
       })
       .then((res) => {
         showAlert(
@@ -167,6 +189,37 @@ export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
                       />
                     </div>
                   </div>
+
+                  {showDate && (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="employee_info.operation_office_id">
+                          Interview Date
+                        </label>
+                        <input
+                          type="datetime-local"
+                          className="form-control"
+                          onChange={(e) => {
+                            setStatus({
+                              ...status,
+                              interview_date: e?.target?.value,
+                            });
+                          }}
+                          name="interview_date"
+                          value={
+                            status?.interview_date
+                              ? status?.interview_date.split("T")[0] +
+                                "T" +
+                                status?.interview_date
+                                  .split("T")[1]
+                                  .split(".")[0]
+                              : status?.interview_date
+                          }
+                          required
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="modal-footer">

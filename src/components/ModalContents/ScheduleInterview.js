@@ -5,7 +5,6 @@ import $ from "jquery";
 const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
   const [form, setform] = useState("");
 
-
   const handleChange = (event) => {
     const target = event.target;
     const value = target.value;
@@ -17,8 +16,8 @@ const ScheduleInterview = ({ jobApplication, handleUpdate, setModalType }) => {
 
     const update = {
       interview_date: moment(form).format("llll"),
-      id: jobApplication.id,
       process_status: "Interview scheduled",
+      interview_status: "Scheduled for interview"
     };
 
     handleUpdate(jobApplication.id, update);

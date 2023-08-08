@@ -8,7 +8,6 @@ import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import helper from "../../../services/helper";
-import GeneralApproverBtn from "../../../components/Misc/GeneralApproverBtn";
 import {
   InterviewStatusOptions,
   InterviewProcessStageOptions,
@@ -90,9 +89,9 @@ const JobApplicantsAdmin = () => {
           full_name: `${emp?.first_name} ${emp?.last_name}`,
           job_title: emp?.job_opening?.job_title,
           application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
-          interview_date: emp?.interview_date
+          interview_scheduled_date: emp?.interview_date
             ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-            : "Not Scheduled",
+            : null,
         }));
 
         setData(formatted);
@@ -243,6 +242,31 @@ const JobApplicantsAdmin = () => {
     }
   }, [process_status, processingStageRow, handleUpdate]);
 
+  const getInterviewStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      "Scheduled for interview": "text-success",
+      "Not interested": "text-secondary",
+      "Not a graduate": "text-dark",
+      "Not in job location": "text-muted",
+      "Failed screening": "text-danger",
+      "Missed call": "text-info",
+    };
+
+    return colorMap[value] || "text-warning";
+  };
+
+  const getProcessStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      Sieving: "text-warning",
+      "Phone screening": "text-info",
+      "Interview scheduled": "text-success",
+    };
+
+    return colorMap[value] || "text-secondary";
+  };
+
   const columns = [
     {
       dataField: "full_name",
@@ -270,11 +294,13 @@ const JobApplicantsAdmin = () => {
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
-      dataField: "interview_date",
+      dataField: "interview_scheduled_date",
       text: "Interview Date",
       sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (value, row) => <h2>{row.interview_date}</h2>,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <h2>{row.interview_scheduled_date || "Not Scheduled"}</h2>
+      ),
     },
     {
       dataField: "interview_status",
@@ -283,39 +309,14 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          {value === "Open" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
-            </a>
-          ) : value === "Scheduled for interview" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
-            </a>
-          ) : value === "Not interested" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
-            </a>
-          ) : value === "Not a graduate" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-dark"}></i> {value}
-            </a>
-          ) : value === "Not in job location" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-muted"}></i> {value}
-            </a>
-          ) : value === "Failed screening" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-danger"}></i> {value}
-            </a>
-          ) : value === "Missed call" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
-            </a>
-          ) : (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
-            </a>
-          )}
+          <a className={`btn btn-gray btn-sm btn-rounded`}>
+            <i
+              className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
@@ -326,27 +327,14 @@ const JobApplicantsAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
-          {value === "Open" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-primary"}></i> {value}
-            </a>
-          ) : value === "Sieving" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-warning"}></i> {value}
-            </a>
-          ) : value === "Phone screening" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-info"}></i> {value}
-            </a>
-          ) : value === "Interview scheduled" ? (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-success"}></i> {value}
-            </a>
-          ) : (
-            <a className="btn btn-gray btn-sm btn-rounded">
-              <i className={"fa fa-dot-circle-o text-secondary"}></i> {value}
-            </a>
-          )}
+          <a className={`btn btn-gray btn-sm btn-rounded`}>
+            <i
+              className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
