@@ -417,33 +417,6 @@ const LeavesAdmin = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "from_date",
-      text: "From",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: "to_date",
-      text: "To",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: "total_leave_days",
-      text: "Total Leave Days",
-      sort: true,
-      headerStyle: { width: "100%", textAlign: "center" },
-      formatter: (value, row) => (
-        <>
-          {row.total_leave_days > 1
-            ? row.total_leave_days + " days"
-            : row.total_leave_days + " day"}
-        </>
-      ),
-    },
-    {
       dataField: "leave_marker",
       text: "Leave",
       sort: true,
@@ -473,6 +446,33 @@ const LeavesAdmin = () => {
               </span>
             </>
           )}
+        </>
+      ),
+    },
+    {
+      dataField: "from_date",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "to_date",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "total_leave_days",
+      text: "Total Leave Days",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {row.total_leave_days > 1
+            ? row.total_leave_days + " days"
+            : row.total_leave_days + " day"}
         </>
       ),
     },

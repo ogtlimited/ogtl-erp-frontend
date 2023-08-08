@@ -73,7 +73,7 @@ const AdminLeavesHistoryTable = ({
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 5000);
+    }, 6000);
     return <>{show ? "No Data Available" : null}</>;
   };
 
