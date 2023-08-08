@@ -21,6 +21,7 @@ const LeavesAdmin = () => {
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
 
@@ -30,17 +31,7 @@ const LeavesAdmin = () => {
 
   const [historyPage, setHistoryPage] = useState(1);
   const [historySizePerPage, setHistorySizePerPage] = useState(10);
-  const [totalHistoryPages, setTotalHistoryPages] = useState("");
-
-  const [departments, setDepartments] = useState([]);
-  const [campaigns, setCampaigns] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
-
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [campaignFilter, setCampaignFilter] = useState("");
-  const [leaveTypeFilter, setLeaveTypeFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [historyTotalPages, setHistoryTotalPages] = useState("");
 
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
@@ -114,6 +105,7 @@ const LeavesAdmin = () => {
   // All Leaves at HR stage - History
   const fetchHRLeaveHistory = useCallback(async () => {
     try {
+      setLoadingHistory(true);
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",
         {
@@ -125,7 +117,7 @@ const LeavesAdmin = () => {
           params: {
             page: historyPage,
             limit: historySizePerPage,
-            status: "approved" || "rejected",
+            status: "approved",
           },
         }
       );
@@ -133,16 +125,11 @@ const LeavesAdmin = () => {
       const resData = response?.data?.data?.leaves;
       const totalHistoryPages = response?.data?.data?.total_pages;
 
-      console.log({
-        resData,
-        totalHistoryPages,
-      });
-
       const thisPageLimit = historySizePerPage;
       const thisTotalPageSize = totalHistoryPages;
 
       setHistorySizePerPage(thisPageLimit);
-      setTotalHistoryPages(thisTotalPageSize);
+      setHistoryTotalPages(thisTotalPageSize);
 
       const formatted = resData.map((leave) => ({
         ...leave,
@@ -164,15 +151,14 @@ const LeavesAdmin = () => {
       }));
 
       setLeaveHistory(formatted);
-
-      setLoading(false);
+      setLoadingHistory(false);
     } catch (error) {
       const component = "Leave History Error:";
       ErrorHandler(error, component);
-      setLoading(false);
+      setLoadingHistory(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyPage, historySizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyPage, historySizePerPage, today_date]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -199,80 +185,12 @@ const LeavesAdmin = () => {
     }
   };
 
-  // All Offices:
-  const fetchAllOffices = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setDepartments(formattedDepartments);
-      setCampaigns(formattedCampaigns);
-    } catch (error) {
-      console.log("All Offices error:", error);
-    }
-  };
-
-  // All Leave Types:
-  const fetchLeavesType = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/leave_types.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.types;
-
-      const formatted = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setLeaveTypes(formatted);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (isHr) {
       fetchHRLeaves();
       fetchHRLeaveHistory();
       fetchAllEmpOnLeave();
-      fetchAllOffices();
-      fetchLeavesType();
-    } else {
-      fetchLeavesType();
-    }
-
+    } 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -683,17 +601,6 @@ const LeavesAdmin = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            campaignFilter={campaignFilter}
-            setCampaignFilter={setCampaignFilter}
-            leaveTypeFilter={leaveTypeFilter}
-            setLeaveTypeFilter={setLeaveTypeFilter}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            departments={departments}
-            campaigns={campaigns}
-            leaveTypes={leaveTypes}
           />
         </div>
 
@@ -702,24 +609,15 @@ const LeavesAdmin = () => {
             columns={historyColumns}
             data={leaveHistory}
             setData={setLeaveHistory}
-            loading={loading}
-            setLoading={setLoading}
+            loading={loadingHistory}
+            setLoading={setLoadingHistory}
+
             page={historyPage}
             setPage={setHistoryPage}
             sizePerPage={historySizePerPage}
             setSizePerPage={setHistorySizePerPage}
-            totalPages={totalHistoryPages}
-            setTotalPages={setTotalHistoryPages}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            leaveTypeFilter={leaveTypeFilter}
-            setLeaveTypeFilter={setLeaveTypeFilter}
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            departments={departments}
-            leaveTypes={leaveTypes}
+            totalPages={historyTotalPages}
+            setTotalPages={setHistoryTotalPages}
           />
         </div>
       </div>

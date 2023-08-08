@@ -14,34 +14,15 @@ const AdminLeavesHistoryTable = ({
   columns,
   context,
   loading,
+  setLoading,
+
   page,
   setPage,
   sizePerPage,
   setSizePerPage,
   totalPages,
   setTotalPages,
-  departmentFilter,
-  setDepartmentFilter,
-  leaveTypeFilter,
-  setLeaveTypeFilter,
-  statusFilter,
-  setStatusFilter,
-  searchTerm,
-  setSearchTerm,
-  setLoading,
-  departments,
-  leaveTypes,
 }) => {
-  const status = [
-    {
-      code: "approved",
-      label: "Approved",
-    },
-    {
-      code: "rejected",
-      label: "Rejected",
-    },
-  ];
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
@@ -69,239 +50,14 @@ const AdminLeavesHistoryTable = ({
     window.addEventListener("resize", () => {
       resizeTable();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
-
-  const imageUrl = "https://erp.outsourceglobal.com";
-
-  const MySearch = (props) => {
-    let input;
-    const handleClick = () => {
-      setPage(1);
-      setLoading(true);
-      props.onSearch(input.value);
-      const searchTerm = input.value;
-      setSearchTerm(searchTerm);
-
-      if (page === 1) {
-        axiosInstance
-          .get(`leads-leave-applications`, {
-            params: {
-              search: searchTerm,
-              page: page,
-              limit: sizePerPage,
-            },
-          })
-          .then((res) => {
-            let resData = res?.data?.data?.application;
-            let resOptions = res?.data?.data?.pagination;
-
-            const thisPageLimit = sizePerPage;
-            const thisTotalPageSize = resOptions?.numberOfPages;
-
-            setSizePerPage(thisPageLimit);
-            setTotalPages(thisTotalPageSize);
-
-            const formatted = resData.map((leave) => ({
-              ...leave,
-              full_name:
-                leave?.employee.first_name +
-                " " +
-                leave?.employee.middle_name +
-                " " +
-                leave?.employee.last_name,
-              status_action: leave?.status,
-              leave_type: leave?.leave_type_id?.leave_type,
-              department: leave?.department_id?.department,
-              from_date: new Date(leave.from_date).toDateString(),
-              to_date: new Date(leave.to_date).toDateString(),
-              total_leave_days: Math.ceil(
-                (new Date(leave.to_date) - new Date(leave.from_date)) /
-                  (1000 * 3600 * 24)
-              ),
-            }));
-
-            setData(formatted);
-            setDepartmentFilter("");
-            setStatusFilter("");
-            setLeaveTypeFilter("");
-          });
-      }
-      setLoading(false);
-    };
-
-    return (
-      <div className="job-app-search">
-        <input
-          className="form-control"
-          style={{
-            backgroundColor: "#fff",
-            width: "33.5%",
-            marginRight: "20px",
-          }}
-          ref={(n) => (input = n)}
-          type="text"
-        />
-        <button className="btn btn-primary" onClick={handleClick}>
-          Search
-        </button>
-      </div>
-    );
-  };
-
-  const handleDepartmentFilter = (e) => {
-    setDepartmentFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get(`hr-leave-applications/history`, {
-        params: {
-          department: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            " " +
-            leave?.employee.middle_name +
-            " " +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setLeaveTypeFilter("");
-    setStatusFilter("");
-  };
-
-  const handleLeaveTypeFilter = (e) => {
-    setLeaveTypeFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get(`hr-leave-applications/history`, {
-        params: {
-          leave_type: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            " " +
-            leave?.employee.middle_name +
-            " " +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setDepartmentFilter("");
-    setStatusFilter("");
-  };
-
-  const handleLeaveStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get(`hr-leave-applications/history`, {
-        params: {
-          status: e.target.value,
-          page: page,
-          limit: sizePerPage,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.application;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((leave) => ({
-          ...leave,
-          full_name:
-            leave?.employee.first_name +
-            " " +
-            leave?.employee.middle_name +
-            " " +
-            leave?.employee.last_name,
-          status_action: leave?.status,
-          leave_type: leave?.leave_type_id?.leave_type,
-          department: leave?.department_id?.department,
-          from_date: new Date(leave.from_date).toDateString(),
-          to_date: new Date(leave.to_date).toDateString(),
-          total_leave_days: Math.ceil(
-            (new Date(leave.to_date) - new Date(leave.from_date)) /
-              (1000 * 3600 * 24)
-          ),
-        }));
-
-        setData(formatted);
-        setunfiltered(formatted);
-      });
-    setLoading(false);
-    setDepartmentFilter("");
-    setLeaveTypeFilter("");
-  };
 
   useEffect(() => {
     setDataToFilter(data);
     setTimeout(() => {}, 7000);
   }, [data]);
+
 
   // Pagination
   const count = totalPages;
@@ -333,7 +89,7 @@ const AdminLeavesHistoryTable = ({
       {dataToFilter && (
         <ToolkitProvider
           keyField="id"
-          data={dataToFilter}
+          data={loading ? [] : dataToFilter}
           columns={columns}
           search
           exportCSV
