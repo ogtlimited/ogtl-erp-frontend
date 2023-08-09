@@ -597,7 +597,7 @@ export default function Router() {
               ),
             },
             {
-              path: 'job-applicants',
+              path: 'job-applications',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <JobApplicantsAdmin />
@@ -605,10 +605,18 @@ export default function Router() {
               ),
             },
             {
-              path: 'rep-siever/job-applicants',
+              path: 'rep-siever/job-applications',
               element: (
                 <GuardedRoute title="" dept="HR">
                   <JobApplicants />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: 'rep-siever/:employee/:id',
+              element: (
+                <GuardedRoute title="" dept="HR">
+                  <RepSieverAdmin />
                 </GuardedRoute>
               ),
             },
@@ -1134,6 +1142,9 @@ const LeadershipAdmin = Loadable(
 );
 const LeadershipSubordinateAdmin = Loadable(
   lazy(() => import('../pages/HR/Admin/LeadershipSubordinates.Admin'))
+);
+const RepSieverAdmin = Loadable(
+  lazy(() => import('../pages/HR/Admin/RepSiever.Admin'))
 );
 const HrClients = Loadable(lazy(() => import('../pages/HR/Admin/HrClients')));
 const HrClientView = Loadable(

@@ -1,5 +1,6 @@
 // *IN USE
 
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -25,6 +26,7 @@ import female3 from "../../../assets/img/female_avatar3.png";
 import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
+import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
 
 const JobApplicantsAdmin = () => {
   const [allRepSievers, setAllRepSievers] = useState([]);
@@ -274,7 +276,7 @@ const JobApplicantsAdmin = () => {
       dataField: "fullName",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "40%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -290,7 +292,7 @@ const JobApplicantsAdmin = () => {
             />
           </a>
           <Link
-            to={`/dashboard/hr/all-employees/employee/leader/${row.fullName}/${row.ogid}`}
+            to={`/dashboard/recruitment/rep-siever/${row.fullName}/${row.ogid}`}
           >
             {value} <span>{row?.designation}</span>
           </Link>
@@ -307,22 +309,22 @@ const JobApplicantsAdmin = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     CurrentUserCanEdit && {
       dataField: "",
       text: "Action",
       csvExport: false,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              // data-target="#OfficeFormModal"
-              // onClick={() => handleEdit(row)}
+              data-target="#ReassignRepSieverFormModal"
+              onClick={() => setSelectedRow(row)}
             >
               Reassign
             </button>
@@ -330,28 +332,9 @@ const JobApplicantsAdmin = () => {
         </div>
       ),
     },
-    CurrentUserCanEdit && {
-      dataField: "",
-      text: "",
-      csvExport: false,
-      headerStyle: { width: "15%" },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-danger"
-              data-toggle="modal"
-              // data-target="#OfficeFormModal"
-              // onClick={() => handleEdit(row)}
-            >
-              Deactivate
-            </button>
-          </div>
-        </div>
-      ),
-    },
   ];
-
+  
+  // Interview Status Column:
   const getInterviewStatusColorClass = (value) => {
     const colorMap = {
       Open: "text-primary",
@@ -366,6 +349,7 @@ const JobApplicantsAdmin = () => {
     return colorMap[value] || "text-warning";
   };
 
+  // Process Status Function:
   const getProcessStatusColorClass = (value) => {
     const colorMap = {
       Open: "text-primary",
@@ -377,6 +361,7 @@ const JobApplicantsAdmin = () => {
     return colorMap[value] || "text-secondary";
   };
 
+  // Job Application Column:
   const columns = [
     {
       dataField: "full_name",
@@ -552,7 +537,8 @@ const JobApplicantsAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Applications</h3>
+            {/* <h3 className="page-title">Job Applications</h3> */}
+            <h3 className="page-title">Rep Sievers</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
@@ -562,7 +548,7 @@ const JobApplicantsAdmin = () => {
         </div>
       </div>
 
-      <div className="page-menu">
+      {/* <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
@@ -587,9 +573,9 @@ const JobApplicantsAdmin = () => {
             </ul>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="row tab-content">
+      {/* <div className="row tab-content">
         <div id="tab_rep-sievers" className="col-12 tab-pane show active">
           <UniversalPaginatedTable
             columns={repColumns}
@@ -634,6 +620,22 @@ const JobApplicantsAdmin = () => {
             setProcessingStageFilter={setProcessingStageFilter}
           />
         </div>
+      </div> */}
+
+      <div className="row ">
+        <UniversalPaginatedTable
+          columns={repColumns}
+          data={allRepSievers}
+          setData={setAllRepSievers}
+          loading={loadingRep}
+          setLoading={setLoadingRep}
+          page={repPage}
+          setPage={setRepPage}
+          sizePerPage={repSizePerPage}
+          setSizePerPage={setRepSizePerPage}
+          totalPages={repTotalPages}
+          setTotalPages={setRepTotalPages}
+        />
       </div>
 
       {modalType === "view-details" && (
@@ -668,6 +670,11 @@ const JobApplicantsAdmin = () => {
           fetchAllJobApplicants={fetchAllJobApplicants}
         />
       )}
+
+      <ReassignRepSieverModal
+        fetchRepSievers={fetchAllRepSievers}
+        selectedRow={selectedRow}
+      />
     </>
   );
 };
