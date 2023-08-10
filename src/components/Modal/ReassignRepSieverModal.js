@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import moment from "moment";
 
 export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
   const { showAlert } = useAppContext();
@@ -13,9 +12,6 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
     end_date: "",
   });
   const [loading, setLoading] = useState(false);
-
-  const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
 
   const cancelEvent = () => {
     setData({
@@ -106,7 +102,6 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
                         value={data.start_date}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={today_date}
                         required
                       />
                     </div>
@@ -121,7 +116,6 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
                         value={data.end_date}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={today_date}
                         required
                       />
                     </div>

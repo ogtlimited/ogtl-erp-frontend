@@ -27,6 +27,7 @@ import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
 import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
+import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 
 const JobApplicantsAdmin = () => {
   const [allRepSievers, setAllRepSievers] = useState([]);
@@ -45,7 +46,6 @@ const JobApplicantsAdmin = () => {
   const [repPage, setRepPage] = useState(1);
   const [repSizePerPage, setRepSizePerPage] = useState(10);
   const [repTotalPages, setRepTotalPages] = useState("");
-  const [repSearchTerm, setRepSearchTerm] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -75,7 +75,6 @@ const JobApplicantsAdmin = () => {
     try {
       const response = await axiosInstance.get(
         "/api/v1/job_applications_sievers.json",
-        // "/api/v1/employees.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -85,15 +84,12 @@ const JobApplicantsAdmin = () => {
           params: {
             page: repPage,
             limit: repSizePerPage,
-            name: repSearchTerm.length ? repSearchTerm : null,
           },
         }
       );
 
       const resData = response?.data?.data?.job_application_sievers;
-      // const resData = response?.data?.data?.employees;
       const totalPages = response?.data?.data?.total_pages;
-      // const totalPages = response?.data?.data?.pages;
 
       setRepSizePerPage(repSizePerPage);
       setRepTotalPages(totalPages);
@@ -105,8 +101,8 @@ const JobApplicantsAdmin = () => {
       ErrorHandler(error, component);
       setLoadingRep(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repPage, repSizePerPage, repSearchTerm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repPage, repSizePerPage]);
 
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
@@ -223,7 +219,7 @@ const JobApplicantsAdmin = () => {
 
   useEffect(() => {
     fetchAllRepSievers();
-    fetchAllJobApplicants();
+    // fetchAllJobApplicants();
   }, [fetchAllRepSievers, fetchAllJobApplicants]);
 
   //update jobOpening
@@ -301,7 +297,7 @@ const JobApplicantsAdmin = () => {
       ),
     },
     {
-      dataField: "assigned_reords",
+      dataField: "assigned_records",
       text: "Assigned Records",
       sort: true,
       headerStyle: { width: "30%" },
@@ -618,7 +614,7 @@ const JobApplicantsAdmin = () => {
       </div> */}
 
       <div className="row ">
-        <JobSieversTable
+        <UniversalPaginatedTable
           columns={repColumns}
           data={allRepSievers}
           setData={setAllRepSievers}
@@ -630,8 +626,6 @@ const JobApplicantsAdmin = () => {
           setSizePerPage={setRepSizePerPage}
           totalPages={repTotalPages}
           setTotalPages={setRepTotalPages}
-          searchTerm={repSearchTerm}
-          setSearchTerm={setRepSearchTerm}
         />
       </div>
 
