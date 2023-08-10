@@ -52,8 +52,9 @@ const EmployeeRoles = () => {
       setAllRoleUsers(formattedRoleUsers);
     } catch (error) {
       const component = "Role Users:";
-      ErrorHandler(error, component);}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      ErrorHandler(error, component);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   //Revoke user role
@@ -72,8 +73,8 @@ const EmployeeRoles = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            role: id
-          }
+            role: id,
+          },
         }
       );
 
@@ -111,34 +112,23 @@ const EmployeeRoles = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    {
+    CurrentUserRoles.includes("hr_manager") && {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            {CurrentUserRoles.includes("hr_manager") && (
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => {
-                  setSelectedRow(row);
-                }}
-              >
-                <i className="fa fa-trash m-r-5"></i> Revoke
-              </a>
-            )}
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-danger"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setSelectedRow(row);
+              }}
+            >
+              Revoke
+            </button>
           </div>
         </div>
       ),

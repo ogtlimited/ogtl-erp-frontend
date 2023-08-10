@@ -10,13 +10,12 @@ import sidebarConfig from "./sidebarConfig";
 
 const Sidebar = () => {
   const [user] = useState(tokenService.getUser());
-  const AllAccess = ["super", "ceo", "hr_manager"];
+  // const AllAccess = ["super", "ceo", "hr_manager"];
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const CurrentUserIsRemoteLead = user?.employee_info?.remote;
   const CurrentUserIsLead = user?.employee_info?.is_lead;
 
-  const userRole = user?.employee_info?.roles;
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
   console.log("User dept.", userDept);
@@ -177,7 +176,7 @@ const Sidebar = () => {
                   </a>
                   <ul style={{ display: "none" }}>
                     <Link
-                      to="/dashboard/recruitment/rep-siever/job-applicants"
+                      to="/dashboard/recruitment/rep-siever/job-applications"
                       className=""
                     >
                       Job Applications

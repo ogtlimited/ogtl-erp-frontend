@@ -435,14 +435,14 @@ const LeavesAdmin = () => {
                 </span>
               ) : value === "Leave Ended" ? (
                 <span className="btn btn-gray btn-sm btn-rounded">
-                  <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+                  <i className="fa fa-dot-circle-o text-danger"></i> {value}
                 </span>
               ) : null}
             </>
           ) : (
             <>
               <span className="btn btn-gray btn-sm btn-rounded">
-                <i className="fa fa-dot-circle-o text-danger"></i> Not Approved
+                <i className="fa fa-dot-circle-o text-secondary"></i> Not Approved
               </span>
             </>
           )}
