@@ -72,32 +72,30 @@ const JobApplicantsAdmin = () => {
   const fetchAllRepSievers = useCallback(async () => {
     setLoadingRep(true);
     try {
-      const response = await axiosInstance.get("/api/v1/leaders.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: repPage,
-          limit: repSizePerPage,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/job_applications_sievers.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: repPage,
+            limit: repSizePerPage,
+          },
+        }
+      );
 
-      const resData = response?.data?.data?.leaders;
+      console.log("Rep sievers:", response);
+
+      const resData = response?.data?.data?.job_application_sievers;
       const totalPages = response?.data?.data?.total_pages;
 
       setRepSizePerPage(repSizePerPage);
       setRepTotalPages(totalPages);
 
-      const mapp = resData.map((e) => {
-        return {
-          ...e,
-          fullName: e?.first_name + " " + e?.last_name,
-        };
-      });
-
-      setAllRepSievers(mapp);
+      setAllRepSievers(resData);
       setLoadingRep(false);
     } catch (error) {
       const component = "All Rep Sievers:";
@@ -273,7 +271,7 @@ const JobApplicantsAdmin = () => {
 
   const repColumns = [
     {
-      dataField: "fullName",
+      dataField: "full_name",
       text: "Employee Name",
       sort: true,
       headerStyle: { width: "40%" },
@@ -292,25 +290,12 @@ const JobApplicantsAdmin = () => {
             />
           </a>
           <Link
-            to={`/dashboard/recruitment/rep-siever/${row.fullName}/${row.ogid}`}
+            to={`/dashboard/recruitment/rep-siever/${row.full_name}/${row.ogid}`}
           >
-            {value} <span>{row?.designation}</span>
+            {value} <span>{row?.ogid}</span>
           </Link>
         </h2>
       ),
-    },
-    {
-      dataField: "ogid",
-      text: "Employee ID",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "office",
-      text: "Office",
-      sort: true,
-      headerStyle: { width: "30%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     CurrentUserCanEdit && {
       dataField: "",
@@ -333,7 +318,7 @@ const JobApplicantsAdmin = () => {
       ),
     },
   ];
-  
+
   // Interview Status Column:
   const getInterviewStatusColorClass = (value) => {
     const colorMap = {
@@ -538,11 +523,11 @@ const JobApplicantsAdmin = () => {
         <div className="row">
           <div className="col">
             {/* <h3 className="page-title">Job Applications</h3> */}
-            <h3 className="page-title">Rep Sievers</h3>
+            <h3 className="page-title">Job Application Sievers</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
-              <li className="breadcrumb-item active">Job Applications</li>
+              <li className="breadcrumb-item active">Job Sievers</li>
             </ul>
           </div>
         </div>

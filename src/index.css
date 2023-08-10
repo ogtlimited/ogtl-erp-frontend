@@ -142,3 +142,65 @@
     margin-bottom: 15px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
+
+.rep-siever-status-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background-color: #fff;
+  border-radius: 10px;
+  gap: 20px 10px;
+  padding: 20px 30px 20px 10px;
+  margin-bottom: 30px;
+}
+
+.rep-siever-status-card {
+  background-color: #fff;
+  min-width: 20%;
+  margin-left: 20px;
+  border-radius: 15px;
+  border: 1px solid #ededed;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+.rep-siever-status-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.rep-siever-status-card > span {
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px;
+}
+
+.rep-widget-icon {
+  border-radius: 100%;
+  display: inline-block;
+  float: left;
+  font-size: 20px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 10px;
+  text-align: center;
+  width: 30px;
+}
+
+@media only screen and (max-width: 768px) {
+  .hr-filter-select {
+    flex-direction: column;
+  }
+
+  .rep-siever-status-group {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    background-color: #fff;
+    border-radius: 10px;
+    gap: 20px 10px;
+    padding: 20px 30px 20px 10px;
+    margin-bottom: 30px;
+  }
+}
