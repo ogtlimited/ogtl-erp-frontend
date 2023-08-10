@@ -135,12 +135,12 @@
 }
 
 .custom-table-div {
-    background-color: #fff;
-    padding: 15px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin-bottom: 15px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  background-color: #fff;
+  padding: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .rep-siever-status-group {
@@ -162,10 +162,12 @@
   padding: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 .rep-siever-status-card:hover {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   transform: scale(1.05);
   transition: all 0.3s ease-in-out;
 }
@@ -187,6 +189,14 @@
   margin-right: 10px;
   text-align: center;
   width: 30px;
+}
+
+.rep-card-info > h3 {
+  color: #000;
+  font-size: 35px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
 }
 
 @media only screen and (max-width: 768px) {

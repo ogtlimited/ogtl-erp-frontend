@@ -4,61 +4,78 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
 
-const RepSieverAdmin = () => {
-  const { id } = useParams();
-  const { employee } = useParams();
-  const { user } = useAppContext();
-  const [loading, setLoading] = useState(false);
-  const [allRepSieverRecords, setAllRepSieversRecords] = useState([]);
+const StatusCard = ({ color, backgroundColor, count, label, loading }) => (
+  <div className="rep-siever-status-card">
+    <div className="card-body">
+      <span className="rep-widget-icon" style={{ color, backgroundColor }}>
+        <i className="las la-bullseye"></i>
+      </span>
+      <div className="rep-card-info">
+        {loading ? (
+          <h3>
+            <lord-icon
+              src="https://cdn.lordicon.com/xjovhxra.json"
+              trigger="loop"
+              colors="primary:#121331,secondary:#08a88a"
+            ></lord-icon>
+          </h3>
+        ) : (
+          <h3>{count || 0}</h3>
+        )}
+      </div>
+    </div>
+    <span>{label}</span>
+  </div>
+);
 
-  let firstDay = moment().startOf("month").format("YYYY-MM-DD");
-  let lastDay = moment().endOf("month").format("YYYY-MM-DD");
-  const [fromDate, setFromDate] = useState(firstDay);
-  const [toDate, setToDate] = useState(lastDay);
+const RepSieverAdmin = () => {
+  const { id, employee } = useParams();
+  const { user, ErrorHandler } = useAppContext();
+  const [loading, setLoading] = useState(false);
+  const [interviewRecords, setInterviewRecords] = useState({});
+  const [processRecords, setProcessRecords] = useState({});
+
+  const [fromDate, setFromDate] = useState(
+    moment().startOf("month").format("YYYY-MM-DD")
+  );
+  const [toDate, setToDate] = useState(
+    moment().endOf("month").format("YYYY-MM-DD")
+  );
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
-  // All Rep Sievers Records:
-  const fetchAllLeadersSubordinates = useCallback(async () => {
+  const fetchAllRepSieversTaskOverview = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/subordinates.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          ogid: id,
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/hr_dashboard/rep_sievers_tasks_overview/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            start_date: fromDate,
+            end_date: toDate,
+          },
+        }
+      );
 
-      const resData = response?.data?.data?.subordinates;
-
-      const mapp = resData.map((e) => {
-        return {
-          ...e,
-          fullName: e?.first_name + " " + e?.last_name,
-        };
-      });
-
-      setAllRepSieversRecords(mapp);
+      const records = response?.data?.data?.records;
+      setInterviewRecords(records?.interview_status || {});
+      setProcessRecords(records?.process_status || {});
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders subordinates error:", error);
+      ErrorHandler(error, "Rep Sievers Task Overview:");
       setLoading(false);
     }
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, id, toDate]);
 
   useEffect(() => {
-    fetchAllLeadersSubordinates();
-  }, [fetchAllLeadersSubordinates]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 10000);
-  }, []);
+    fetchAllRepSieversTaskOverview();
+  }, [fetchAllRepSieversTaskOverview]);
 
   return (
     <>
@@ -76,7 +93,7 @@ const RepSieverAdmin = () => {
               ) : (
                 <li>Job Applications</li>
               )}
-              <li className="breadcrumb-item active">Rep Siever</li>
+              <li className="breadcrumb-item active">Job Siever</li>
             </ul>
           </div>
         </div>
@@ -90,9 +107,7 @@ const RepSieverAdmin = () => {
               type="date"
               name="fromDate"
               value={fromDate}
-              onChange={(e) => {
-                setFromDate(e.target.value);
-              }}
+              onChange={(e) => setFromDate(e.target.value)}
               className="form-control "
             />
           </div>
@@ -104,9 +119,7 @@ const RepSieverAdmin = () => {
               type="date"
               name="toDate"
               value={toDate}
-              onChange={(e) => {
-                setToDate(e.target.value);
-              }}
+              onChange={(e) => setToDate(e.target.value)}
               className="form-control "
             />
           </div>
@@ -115,188 +128,94 @@ const RepSieverAdmin = () => {
 
       <h4>Process Status</h4>
       <div className="rep-siever-status-group">
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#009efb", backgroundColor: "#009efb4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>12</h3>
-            </div>
-          </div>
-          <span>Open</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#ffbc34", backgroundColor: "#ffbc344d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>5</h3>
-            </div>
-          </div>
-          <span>Sieving</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#007bff", backgroundColor: "#007bff4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>2</h3>
-            </div>
-          </div>
-          <span>Phone screening</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#289745", backgroundColor: "#2897454d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>0</h3>
-            </div>
-          </div>
-          <span>Interview scheduled</span>
-        </div>
+        <StatusCard
+          color="#009efb"
+          backgroundColor="#009efb4d"
+          count={processRecords["Open"]}
+          label="Open"
+          loading={loading}
+        />
+        <StatusCard
+          color="#ffbc34"
+          backgroundColor="#ffbc344d"
+          count={processRecords["Sieving"]}
+          label="Sieving"
+          loading={loading}
+        />
+        <StatusCard
+          color="#007bff"
+          backgroundColor="#007bff4d"
+          count={processRecords["Phone screening"]}
+          label="Phone screening"
+          loading={loading}
+        />
+        <StatusCard
+          color="#289745"
+          backgroundColor="#2897454d"
+          count={processRecords["Interview scheduled"]}
+          label="Interview scheduled"
+          loading={loading}
+        />
       </div>
 
       <h4>Interview Status</h4>
       <div className="rep-siever-status-group">
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#009efb", backgroundColor: "#009efb4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>12</h3>
-            </div>
-          </div>
-          <span>Open</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#289745", backgroundColor: "#2897454d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>5</h3>
-            </div>
-          </div>
-          <span>Scheduled for interview</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#6c757d", backgroundColor: "#6c757d4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>2</h3>
-            </div>
-          </div>
-          <span>Not interested</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#343240", backgroundColor: "#3432404d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>0</h3>
-            </div>
-          </div>
-          <span>Not a graduate</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#8e8e8e", backgroundColor: "#8e8e8e4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>1</h3>
-            </div>
-          </div>
-          <span>Not in job location</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#f62d51", backgroundColor: "#f62d514d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>4</h3>
-            </div>
-          </div>
-          <span>Failed screening</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#0093fb", backgroundColor: "#0093fb4d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>3</h3>
-            </div>
-          </div>
-          <span>Missed call</span>
-        </div>
-
-        <div className="rep-siever-status-card">
-          <div className="card-body">
-            <span
-              className="rep-widget-icon"
-              style={{ color: "#ffc107", backgroundColor: "#ffc1074d" }}
-            >
-              <i className="las la-bullseye"></i>
-            </span>
-            <div className="card-info">
-              <h3>7</h3>
-            </div>
-          </div>
-          <span>Call back</span>
-        </div>
+        <StatusCard
+          color="#009efb"
+          backgroundColor="#009efb4d"
+          count={interviewRecords["Open"]}
+          label="Open"
+          loading={loading}
+        />
+        <StatusCard
+          color="#289745"
+          backgroundColor="#2897454d"
+          count={interviewRecords["Scheduled for interview"]}
+          label="Scheduled for interview"
+          loading={loading}
+        />
+        <StatusCard
+          color="#6c757d"
+          backgroundColor="#6c757d4d"
+          count={interviewRecords["Not interested"]}
+          label="Not interested"
+          loading={loading}
+        />
+        <StatusCard
+          color="#343240"
+          backgroundColor="#3432404d"
+          count={interviewRecords["Not a graduate"]}
+          label="Not a graduate"
+          loading={loading}
+        />
+        <StatusCard
+          color="#8e8e8e"
+          backgroundColor="#8e8e8e4d"
+          count={interviewRecords["Not in job location"]}
+          label="Not in job location"
+          loading={loading}
+        />
+        <StatusCard
+          color="#f62d51"
+          backgroundColor="#f62d514d"
+          count={interviewRecords["Failed screening"]}
+          label="Failed screening"
+          loading={loading}
+        />
+        <StatusCard
+          color="#0093fb"
+          backgroundColor="#0093fb4d"
+          count={interviewRecords["Missed call"]}
+          label="Missed call"
+          loading={loading}
+        />
+        <StatusCard
+          color="#ffc107"
+          backgroundColor="#ffc1074d"
+          count={interviewRecords["Call back"]}
+          label="Call back"
+          loading={loading}
+        />
       </div>
     </>
   );

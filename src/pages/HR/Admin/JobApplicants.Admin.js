@@ -19,7 +19,7 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
-import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import JobSieversTable from "../../../components/Tables/JobSieversTable";
 import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
@@ -45,6 +45,7 @@ const JobApplicantsAdmin = () => {
   const [repPage, setRepPage] = useState(1);
   const [repSizePerPage, setRepSizePerPage] = useState(10);
   const [repTotalPages, setRepTotalPages] = useState("");
+  const [repSearchTerm, setRepSearchTerm] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -74,6 +75,7 @@ const JobApplicantsAdmin = () => {
     try {
       const response = await axiosInstance.get(
         "/api/v1/job_applications_sievers.json",
+        // "/api/v1/employees.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -83,14 +85,15 @@ const JobApplicantsAdmin = () => {
           params: {
             page: repPage,
             limit: repSizePerPage,
+            name: repSearchTerm.length ? repSearchTerm : null,
           },
         }
       );
 
-      console.log("Rep sievers:", response);
-
       const resData = response?.data?.data?.job_application_sievers;
+      // const resData = response?.data?.data?.employees;
       const totalPages = response?.data?.data?.total_pages;
+      // const totalPages = response?.data?.data?.pages;
 
       setRepSizePerPage(repSizePerPage);
       setRepTotalPages(totalPages);
@@ -102,8 +105,8 @@ const JobApplicantsAdmin = () => {
       ErrorHandler(error, component);
       setLoadingRep(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repPage, repSizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repPage, repSizePerPage, repSearchTerm]);
 
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
@@ -296,6 +299,13 @@ const JobApplicantsAdmin = () => {
           </Link>
         </h2>
       ),
+    },
+    {
+      dataField: "assigned_reords",
+      text: "Assigned Records",
+      sort: true,
+      headerStyle: { width: "30%" },
+      formatter: (val, row) => <span>{val || "-"}</span>,
     },
     CurrentUserCanEdit && {
       dataField: "",
@@ -608,7 +618,7 @@ const JobApplicantsAdmin = () => {
       </div> */}
 
       <div className="row ">
-        <UniversalPaginatedTable
+        <JobSieversTable
           columns={repColumns}
           data={allRepSievers}
           setData={setAllRepSievers}
@@ -620,6 +630,8 @@ const JobApplicantsAdmin = () => {
           setSizePerPage={setRepSizePerPage}
           totalPages={repTotalPages}
           setTotalPages={setRepTotalPages}
+          searchTerm={repSearchTerm}
+          setSearchTerm={setRepSearchTerm}
         />
       </div>
 
