@@ -21,7 +21,7 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
     setData({
       start_date: "",
       end_date: "",
-    })
+    });
   };
 
   const handleFormChange = (e) => {
@@ -32,35 +32,36 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
   const handleReassignRepSiever = async (e) => {
     e.preventDefault();
 
-    // const dataPayload = {
-    //   hr_leave_type_id: leave.hr_leave_type_id,
-    //   start_date: leave.start_date,
-    //   end_date: leave.end_date,
-    //   reason: leave.reason,
-    // };
+    const dataPayload = {
+      start_date: data.start_date,
+      end_date: data.end_date,
+    };
 
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/leaves.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        // payload: dataPayload,
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/hr_dashboard/reassign_rep_sievers/${selectedRow?.ogid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: dataPayload,
+        }
+      );
 
       showAlert(
         true,
-        `You have successfully reassigned ${selectedRow?.fullName}`,
+        `You have successfully reassigned ${selectedRow?.full_name}`,
         "alert alert-success"
       );
       fetchRepSievers();
       setData({
         start_date: "",
         end_date: "",
-      })
+      });
       $("#ReassignRepSieverFormModal").modal("toggle");
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
@@ -81,7 +82,7 @@ export const ReassignRepSieverModal = ({ fetchRepSievers, selectedRow }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {selectedRow?.fullName}
+                {selectedRow?.full_name}
               </h4>
               <button
                 type="button"
