@@ -8,7 +8,7 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [designation, setDesignation] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
@@ -116,9 +116,12 @@ export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
       $("#DesignationFormModal").modal("toggle");
       setDesignation(data)
       setLoading(false);
+      goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#DesignationFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     }
   };
@@ -155,9 +158,12 @@ export const DesignationFormModal = ({ mode, data, fetchDesignations }) => {
       fetchDesignations();
       $("#DesignationFormModal").modal("toggle");
       setLoading(false);
+      goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#DesignationFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     }
   };
