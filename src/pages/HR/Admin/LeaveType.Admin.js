@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { LeaveTypeForm } from "../../../components/FormJSON/CreateLeaveTypes";
@@ -14,7 +13,15 @@ const LeaveType = () => {
   const [leaveType, setLeaveType] = useState([]);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"]
+  const canCreateAndEdit = [
+    "hr_manager",
+    "senior_hr_associate",
+    "hr_associate",
+  ];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
@@ -46,7 +53,7 @@ const LeaveType = () => {
 
   useEffect(() => {
     fetchAllLeaveTypes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreate = () => {
@@ -72,43 +79,21 @@ const LeaveType = () => {
       sort: true,
       headerStyle: { width: "70%" },
     },
-    {
+    CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            {CurrentUserRoles.includes("hr_manager") && (
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#LeaveTypeFormModal"
-                onClick={() => handleEdit(row)}
-              >
-                <i className="fa fa-pencil m-r-5"></i> Edit
-              </a>
-            )}
-
-            {CurrentUserRoles.includes("hr_manager") && (
-              <a
-                className="dropdown-item"
-                href="#"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-trash m-r-5"></i> Delete
-              </a>
-            )}
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#LeaveTypeFormModal"
+              onClick={() => handleEdit(row)}
+            >
+              Edit
+            </button>
           </div>
         </div>
       ),
@@ -127,7 +112,7 @@ const LeaveType = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {canCreate.includes(...CurrentUserRoles) ? (
+            {CurrentUserCanCreateAndEdit ? (
               <a
                 href="#"
                 className="btn add-btn"

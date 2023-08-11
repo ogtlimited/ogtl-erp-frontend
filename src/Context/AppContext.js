@@ -29,6 +29,13 @@ const AppProvider = (props) => {
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title === "hr" ? true : false;
+  
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const status = [
     {
@@ -406,6 +413,7 @@ const AppProvider = (props) => {
         fetchHRLeavesNotificationCount,
         ErrorHandler,
         status,
+        goToTop,
       }}
     >
       {props.children}

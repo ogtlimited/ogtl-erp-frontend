@@ -25,7 +25,11 @@ const Offices = () => {
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"];
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+  canCreateAndEdit.includes(role)
+  );
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -151,7 +155,7 @@ const Offices = () => {
       sort: true,
       headerStyle: { width: "40%" },
     },
-    {
+    CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
@@ -184,7 +188,7 @@ const Offices = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {canCreate.includes(...CurrentUserRoles) ? (
+            {CurrentUserCanCreateAndEdit ? (
               <a
                 href="/"
                 className="btn add-btn"

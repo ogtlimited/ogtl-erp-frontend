@@ -4,7 +4,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 
 export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [leaveType, setLeaveType] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -49,20 +49,19 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
         },
       });
 
-      showAlert(
-        true,
-        "Leave type successfully created",
-        "alert alert-success"
-      );
+      showAlert(true, "Leave type successfully created", "alert alert-success");
       fetchAllLeaveTypes();
       $("#LeaveTypeFormModal").modal("hide");
       setLeaveType(data);
+      goToTop();
     } catch (error) {
-      console.log("Error in creating leave type:", error);
-      showAlert(true, error.message, "alert alert-danger");
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#LeaveTypeFormModal").modal("toggle");
+      goToTop();
     }
     setLoading(false);
-  }
+  };
 
   const handleEditLeaveTypes = async (e) => {
     e.preventDefault();
@@ -71,30 +70,33 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
     const id = leaveType.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/leave_types/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: leaveType.title,
-        },
-      });
-
-      showAlert(
-        true,
-        "Leave type successfully updated",
-        "alert alert-success"
+      const response = await axiosInstance.patch(
+        `/api/v1/leave_types/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: leaveType.title,
+          },
+        }
       );
+
+      showAlert(true, "Leave type successfully updated", "alert alert-success");
       fetchAllLeaveTypes();
       $("#LeaveTypeFormModal").modal("hide");
+      setLeaveType(data);
+      goToTop();
     } catch (error) {
-      console.log("Error in updating leave type:", error);
-      showAlert(true, error.message, "alert alert-danger");
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#LeaveTypeFormModal").modal("toggle");
+      goToTop();
     }
     setLoading(false);
-  }
+  };
 
   return (
     <>
@@ -139,14 +141,16 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
                 </div>
 
                 <div className="modal-footer">
-                  {mode === "Create" && <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-dismiss="modal"
-                    onClick={cancelEvent}
-                  >
-                    Cancel
-                  </button>}
+                  {mode === "Create" && (
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                      onClick={cancelEvent}
+                    >
+                      Cancel
+                    </button>
+                  )}
                   <button type="submit" className="btn btn-primary">
                     {loading ? (
                       <span
