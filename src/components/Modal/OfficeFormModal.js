@@ -15,7 +15,7 @@ export const OfficeFormModal = ({
   fetchAllDepartments,
   data,
 }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -83,12 +83,15 @@ export const OfficeFormModal = ({
       }
 
       $("#OfficeFormModal").modal("toggle");
+      goToTop();
       setOffice(data);
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#OfficeFormModal").modal("toggle");
       setLoading(false);
+      goToTop();
     }
   };
 
@@ -123,10 +126,13 @@ export const OfficeFormModal = ({
         fetchAllDepartments();
       }
       $("#OfficeFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#OfficeFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     }
   };

@@ -1,7 +1,10 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 // *IN USE
 
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
@@ -16,14 +19,33 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
+import JobSieversTable from "../../../components/Tables/JobSieversTable";
+import female from "../../../assets/img/female_avatar.png";
+import female2 from "../../../assets/img/female_avatar2.png";
+import female3 from "../../../assets/img/female_avatar3.png";
+import male from "../../../assets/img/male_avater.png";
+import male2 from "../../../assets/img/male_avater2.png";
+import male3 from "../../../assets/img/male_avater3.png";
+import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
+import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 
 const JobApplicantsAdmin = () => {
+  const [allRepSievers, setAllRepSievers] = useState([]);
   const [data, setData] = useState([]);
   const { showAlert, user, ErrorHandler } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setmodalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
+  const [loadingRep, setLoadingRep] = useState(false);
+
+  const imageUrl = "https://erp.outsourceglobal.com";
+  const males = [male, male2, male3];
+  const females = [female, female2, female3];
+
+  const [repPage, setRepPage] = useState(1);
+  const [repSizePerPage, setRepSizePerPage] = useState(10);
+  const [repTotalPages, setRepTotalPages] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -38,11 +60,51 @@ const JobApplicantsAdmin = () => {
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
 
+  const canEdit = ["hr_manager", "senior_hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
 
-  // Job Applicants
+  const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
+    canEdit.includes(role)
+  );
+
+  // Rep Sievers:
+  const fetchAllRepSievers = useCallback(async () => {
+    setLoadingRep(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/job_applications_sievers.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: repPage,
+            limit: repSizePerPage,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.job_application_sievers;
+      const totalPages = response?.data?.data?.total_pages;
+
+      setRepSizePerPage(repSizePerPage);
+      setRepTotalPages(totalPages);
+
+      setAllRepSievers(resData);
+      setLoadingRep(false);
+    } catch (error) {
+      const component = "All Rep Sievers:";
+      ErrorHandler(error, component);
+      setLoadingRep(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [repPage, repSizePerPage]);
+
+  // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
     if (CurrentUserRoles.includes("rep_siever")) {
       const persistedFromDate = secureLocalStorage.getItem("fromDate");
@@ -72,11 +134,8 @@ const JobApplicantsAdmin = () => {
         const resData = response?.data?.data?.job_applicants;
         const totalPages = response?.data?.data?.total_pages;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        setSizePerPage(sizePerPage);
+        setTotalPages(totalPages);
 
         const formatted = resData.map((emp) => ({
           ...emp,
@@ -159,8 +218,9 @@ const JobApplicantsAdmin = () => {
   ]);
 
   useEffect(() => {
-    fetchAllJobApplicants();
-  }, [fetchAllJobApplicants]);
+    fetchAllRepSievers();
+    // fetchAllJobApplicants();
+  }, [fetchAllRepSievers, fetchAllJobApplicants]);
 
   //update jobOpening
   const handleUpdate = useCallback(
@@ -208,36 +268,64 @@ const JobApplicantsAdmin = () => {
     [CurrentUserRoles]
   );
 
-  // // update interview status
-  // useEffect(() => {
-  //   if (interview_status.length) {
-  //     const update = {
-  //       interview_status,
-  //       // id: statusRow?.id,
-  //     };
-  //     handleUpdate(statusRow.id, update);
-  //   }
-  // }, [interview_status, statusRow, handleUpdate]);
+  const repColumns = [
+    {
+      dataField: "full_name",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { width: "40%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <a href="" className="avatar">
+            <img
+              alt=""
+              src={
+                row.image
+                  ? imageUrl + row.image
+                  : row?.gender === "male"
+                  ? males[Math.floor(Math.random() * males.length)]
+                  : females[Math.floor(Math.random() * females.length)]
+              }
+            />
+          </a>
+          <Link
+            to={`/dashboard/recruitment/rep-siever/${row.full_name}/${row.ogid}`}
+          >
+            {value} <span>{row?.ogid}</span>
+          </Link>
+        </h2>
+      ),
+    },
+    {
+      dataField: "assigned_records",
+      text: "Assigned Records",
+      sort: true,
+      headerStyle: { width: "30%" },
+      formatter: (val, row) => <span>{val || "-"}</span>,
+    },
+    CurrentUserCanEdit && {
+      dataField: "",
+      text: "Action",
+      csvExport: false,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#ReassignRepSieverFormModal"
+              onClick={() => setSelectedRow(row)}
+            >
+              Reassign
+            </button>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
-  // // update process status
-  // useEffect(() => {
-  //   if (process_status.length) {
-  //     if (process_status === "Interview scheduled") {
-  //       setmodalType("schedule-interview");
-  //       setSelectedRow(processingStageRow);
-  //       $("#generalModal").modal("show");
-  //       return;
-  //     }
-
-  //     const update = {
-  //       process_status,
-  //       interview_date: null,
-  //       // id: processingStageRow?.id,
-  //     };
-  //     handleUpdate(processingStageRow.id, update);
-  //   }
-  // }, [process_status, processingStageRow, handleUpdate]);
-
+  // Interview Status Column:
   const getInterviewStatusColorClass = (value) => {
     const colorMap = {
       Open: "text-primary",
@@ -252,6 +340,7 @@ const JobApplicantsAdmin = () => {
     return colorMap[value] || "text-warning";
   };
 
+  // Process Status Function:
   const getProcessStatusColorClass = (value) => {
     const colorMap = {
       Open: "text-primary",
@@ -263,6 +352,7 @@ const JobApplicantsAdmin = () => {
     return colorMap[value] || "text-secondary";
   };
 
+  // Job Application Column:
   const columns = [
     {
       dataField: "full_name",
@@ -401,20 +491,6 @@ const JobApplicantsAdmin = () => {
               <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
             </a>
             <div className="dropdown-menu dropdown-menu-right">
-              {/* {user?.role?.hr?.delete && (
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => {
-                    setmodalType();
-                    setSelectedRow(helper.handleEdit(row));
-                  }}
-                >
-                  <i className="fa fa-trash m-r-5"></i> Delete
-                </a>
-              )} */}
-
               <a
                 className="dropdown-item"
                 data-toggle="modal"
@@ -452,17 +528,62 @@ const JobApplicantsAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Job Applications</h3>
+            {/* <h3 className="page-title">Job Applications</h3> */}
+            <h3 className="page-title">Job Application Sievers</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
-              <li className="breadcrumb-item active">Job Applicants</li>
+              <li className="breadcrumb-item active">Job Sievers</li>
             </ul>
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12">
+
+      {/* <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_rep-sievers"
+                >
+                  Rep Sievers
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_job-applications"
+                >
+                  Job Applications
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div> */}
+
+      {/* <div className="row tab-content">
+        <div id="tab_rep-sievers" className="col-12 tab-pane show active">
+          <UniversalPaginatedTable
+            columns={repColumns}
+            data={allRepSievers}
+            setData={setAllRepSievers}
+            loading={loadingRep}
+            setLoading={setLoadingRep}
+            page={repPage}
+            setPage={setRepPage}
+            sizePerPage={repSizePerPage}
+            setSizePerPage={setRepSizePerPage}
+            totalPages={repTotalPages}
+            setTotalPages={setRepTotalPages}
+          />
+        </div>
+
+        <div id="tab_job-applications" className="col-12 tab-pane">
           <JobApplicantsTable
             columns={columns}
             data={data}
@@ -490,6 +611,22 @@ const JobApplicantsAdmin = () => {
             setProcessingStageFilter={setProcessingStageFilter}
           />
         </div>
+      </div> */}
+
+      <div className="row ">
+        <UniversalPaginatedTable
+          columns={repColumns}
+          data={allRepSievers}
+          setData={setAllRepSievers}
+          loading={loadingRep}
+          setLoading={setLoadingRep}
+          page={repPage}
+          setPage={setRepPage}
+          sizePerPage={repSizePerPage}
+          setSizePerPage={setRepSizePerPage}
+          totalPages={repTotalPages}
+          setTotalPages={setRepTotalPages}
+        />
       </div>
 
       {modalType === "view-details" && (
@@ -524,6 +661,11 @@ const JobApplicantsAdmin = () => {
           fetchAllJobApplicants={fetchAllJobApplicants}
         />
       )}
+
+      <ReassignRepSieverModal
+        fetchRepSievers={fetchAllRepSievers}
+        selectedRow={selectedRow}
+      />
     </>
   );
 };

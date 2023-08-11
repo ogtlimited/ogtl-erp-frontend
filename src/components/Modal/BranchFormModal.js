@@ -6,7 +6,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 
 export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [branch, setBranch] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -63,9 +63,12 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
       $("#BranchFormModal").modal("toggle");
       setBranch(data);
       setLoading(false);
+      goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#BranchFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     }
   }
@@ -98,9 +101,12 @@ export const BranchFormModal = ({ mode, data, fetchAllBranches }) => {
       $("#BranchFormModal").modal("toggle");
       setBranch(data);
       setLoading(false);
+      goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#BranchFormModal").modal("toggle");
+      goToTop();
       setLoading(false);
     }
   }

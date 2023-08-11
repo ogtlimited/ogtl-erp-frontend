@@ -8,18 +8,7 @@ const userDept =
   user?.office?.office_type === "department" ? user?.office?.title : null;
 const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
-const CurrentUserRoles = user?.employee_info?.roles;
-const canViewJobApplicants = [
-  "hr_manager",
-  "senior_hr_associate",
-  "hr_associate",
-  "rep_siever",
-];
 
-console.log({
-  CurrentUserRoles,
-  canViewJobApplicants,
-});
 
 const getIcon = (name) => <i className={"la " + name}></i>;
 
