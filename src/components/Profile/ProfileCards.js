@@ -50,9 +50,12 @@ const ProfileCards = ({
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics, isFromBiometricsClockIn } = useAppContext();
 
+  const canView = ["hr_manager", "senior_hr_associate", "hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
 
-  const canView = ["hr_manager", "senior_hr_associate"];
+  const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
+  canView.includes(role)
+);
 
   const ogid = user?.employee_info?.ogid;
 
@@ -99,7 +102,7 @@ const ProfileCards = ({
                   Shifts
                 </a>
               </li>
-              {canView.includes(...CurrentUserRoles) &&
+              {CurrentUserCanEdit &&
               !hideAttendanceComponent ? (
                 <li className="nav-item">
                   <a
