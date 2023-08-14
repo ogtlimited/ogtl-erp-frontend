@@ -11,7 +11,7 @@ export const JobApplicationSieveModal = ({
   row,
   fetchAllJobApplicants,
 }) => {
-  const { showAlert, user } = useAppContext();
+  const { showAlert, user, goToTop } = useAppContext();
   const [status, setStatus] = useState({
     interview_status: "",
     process_status: "",
@@ -98,10 +98,12 @@ export const JobApplicationSieveModal = ({
         $("#JobApplicationSieveModal").modal("hide");
         handleCancel();
         setLoading(false);
+        goToTop();
       })
       .catch((error) => {
         setLoading(false);
         $("#JobApplicationSieveModal").modal("toggle");
+        goToTop();
         const errorMsg = error?.response?.data?.errors;
         if (errorMsg) {
           return showAlert(true, errorMsg, "alert alert-danger");
