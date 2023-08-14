@@ -32,7 +32,7 @@ const JobApplicants = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
-  const [processingStageFilter, setProcessingStageFilter] = useState("Open");
+  const [processingStageFilter, setProcessingStageFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   let firstDay = moment().startOf("month").format("YYYY-MM-DD");
@@ -63,7 +63,7 @@ const JobApplicants = () => {
             page: page,
             limit: sizePerPage,
             name: searchTerm.length ? searchTerm : null,
-            process_status: processingStageFilter,
+            process_status: processingStageFilter ? processingStageFilter : null,
             start_date: persistedFromDate,
             end_date: persistedToDate,
           },
