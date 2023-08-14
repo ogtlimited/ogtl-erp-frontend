@@ -329,7 +329,7 @@ const AppProvider = (props) => {
         "alert alert-warning"
       );
     } else {
-      if (errorMessage === undefined) {
+      if (errorMessage === undefined || !errorMessage) {
         return showAlert(
           true,
           `Unable to process request`,

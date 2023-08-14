@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
-import LeaveStatusTable from "../../../components/Tables/EmployeeTables/leaveStatusTable";
 import axiosInstance from "../../../services/api";
 import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
@@ -15,6 +14,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import LeaveStatusContent from "../../../components/ModalContents/LeaveStatusContent";
+import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 
 const AllLeaveStatusAdmin = () => {
   const males = [male, male2, male3];
@@ -26,12 +26,16 @@ const AllLeaveStatusAdmin = () => {
   const [allApplications, setallApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [header, setHeader] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const { id, from_date, to_date } = useParams();
 
-  const [departments, setDepartments] = useState([]);
-  const [leaveTypes, setLeaveTypes] = useState([]);
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
+
+  // const [departments, setDepartments] = useState([]);
+  // const [leaveTypes, setLeaveTypes] = useState([]);
+  // const [from, setFrom] = useState("");
+  // const [to, setTo] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -54,15 +58,15 @@ const AllLeaveStatusAdmin = () => {
     const header = id;
     const Header = header[0].toUpperCase() + header.substring(1);
     setHeader(Header);
-    setFrom(from_date);
-    setTo(to_date);
-  }, [from_date, id, to_date]);
+    // setFrom(from_date);
+    // setTo(to_date);
+  }, [id]);
 
   // Fetch Leave Status:
   const fetchLeaveStatus = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get("/api/v1/hr_dashboard/leaves.json", {
+      .get("/api/v1/hr_dashboard/leave_status.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -71,14 +75,12 @@ const AllLeaveStatusAdmin = () => {
         params: {
           page: page,
           limit: sizePerPage,
-          status: id === "pending" ? null : id,
+          status: id,
         },
       })
       .then((res) => {
-        const resData = res?.data?.data?.leaves;
+        const resData = res?.data?.data?.leave_status;
         const totalPages = res?.data?.data?.total_pages;
-
-        console.log("This enterred data:", res?.data?.data);
 
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
@@ -99,10 +101,21 @@ const AllLeaveStatusAdmin = () => {
           date_applied: moment(leave?.leave?.created_at).format(
             "Do MMMM, YYYY"
           ),
+          leave_marker:
+            leave?.leave?.end_date < today_date
+              ? "Leave Ended"
+              : today_date < leave?.leave?.start_date &&
+                today_date < leave?.leave?.end_date
+              ? "Scheduled Leave"
+              : "On Leave",
+          leave_manager_name:
+            leave?.manager?.manager_first_name +
+            " " +
+            leave?.manager?.manager_last_name,
+          leave_manager_email: leave?.manager?.manager_email,
         }));
 
         setallApplications(formatted);
-        console.log("Status Response Formatted Data:", formatted);
         setLoading(false);
       })
       .catch((error) => {
@@ -161,7 +174,7 @@ const AllLeaveStatusAdmin = () => {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -176,23 +189,23 @@ const AllLeaveStatusAdmin = () => {
               }
             />
           </a>
-          <Link to="">
-            {value} <span>{row?.email}</span>
-          </Link>
+          <div>
+            {value} <span>{row?.ogid}</span>
+          </div>
         </h2>
       ),
     },
     {
-      dataField: "department",
-      text: "Department",
+      dataField: "office",
+      text: "Office",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { minWidth: "120px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
           {value === "approved" ? (
@@ -219,58 +232,87 @@ const AllLeaveStatusAdmin = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "from_date",
-      text: "From Date",
+      dataField: "date_applied",
+      text: "Date Applied",
       sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "to_date",
-      text: "To Date",
+      dataField: "leave_marker",
+      text: "Leave",
       sort: true,
-      headerStyle: { minWidth: "100px" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
-    },
-    {
-      dataField: "total_leave_days",
-      text: "Total Leave Days",
-      sort: true,
-      headerStyle: { minWidth: "80px", textAlign: "center" },
+      headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
-          {row.total_leave_days > 1
-            ? row.total_leave_days + " days"
-            : row.total_leave_days + " day"}
+          {id === "approved" ? (
+            <>
+              {value === "Scheduled Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-warning"></i> {value}
+                </span>
+              ) : value === "On Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-success"></i> {value}
+                </span>
+              ) : value === "Leave Ended" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-danger"></i> {value}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-secondary"></i> Not
+                Approved
+              </span>
+            </>
+          )}
         </>
       ),
     },
     {
-      dataField: "status_action",
-      text: "Action",
-      csvExport: false,
-      headerStyle: { minWidth: "100px" },
-
-      formatter: (value, row) => (
-        <>
-          <button
-            className="btn btn-sm btn-primary"
-            onClick={() => {
-              setmodalType("view-details");
-              setViewRow(row);
-            }}
-            href="#"
-            data-toggle="modal"
-            data-target="#generalModal"
-          >
-            <i className="fa fa-eye m-r-5"></i> View
-          </button>
-        </>
-      ),
+      dataField: "leave_manager_name",
+      text: "Manager",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
+    {
+      dataField: "leave_manager_email",
+      text: "Manager's Email",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    // {
+    //   dataField: "from_date",
+    //   text: "From Date",
+    //   sort: true,
+    //   headerStyle: { width: "100%" },
+    //   formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    // },
+    // {
+    //   dataField: "to_date",
+    //   text: "To Date",
+    //   sort: true,
+    //   headerStyle: { width: "100%" },
+    //   formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    // },
+    // {
+    //   dataField: "total_leave_days",
+    //   text: "Total Leave Days",
+    //   sort: true,
+    //   headerStyle: { width: "100%", textAlign: "center" },
+    //   formatter: (value, row) => (
+    //     <>
+    //       {row.total_leave_days > 1
+    //         ? row.total_leave_days + " days"
+    //         : row.total_leave_days + " day"}
+    //     </>
+    //   ),
+    // },
   ];
 
   return (
@@ -281,7 +323,7 @@ const AllLeaveStatusAdmin = () => {
             <h3 className="page-title">{header}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
+                <Link to="/dashboard/hr-dashboard">Dashboard</Link>
               </li>
               <li className="breadcrumb-item active">Leave Status</li>
             </ul>
@@ -289,24 +331,22 @@ const AllLeaveStatusAdmin = () => {
         </div>
       </div>
 
-      <LeaveStatusTable
-        columns={columns}
-        departments={departments}
-        leaveTypes={leaveTypes}
+      <AdminLeavesTable
         data={allApplications}
         setData={setallApplications}
+        columns={columns}
         loading={loading}
         setLoading={setLoading}
+        page={page}
+        setPage={setPage}
+        sizePerPage={sizePerPage}
+        setSizePerPage={setSizePerPage}
+        totalPages={totalPages}
+        setTotalPages={setTotalPages}
+        // departments={departments}
+        // leaveTypes={leaveTypes}
       />
 
-      {modalType === "view-details" ? (
-        <ViewModal
-          title="Leave Application Details"
-          content={<LeaveStatusContent leaveContent={viewRow} />}
-        />
-      ) : (
-        ""
-      )}
     </>
   );
 };
