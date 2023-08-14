@@ -55,15 +55,15 @@ const DashboardStatistics = ({
       {
         data: leaveStatusData,
         backgroundColor: [
+          'rgba(255, 159, 64)',
           'rgba(205, 19, 84)',
           'rgba(55, 159, 64)',
-          'rgba(255, 159, 64)',
           'rgba(153, 102, 255)',
         ],
         borderColor: [
+          'rgba(255, 159, 64, 1)',
           'rgba(205, 19, 84, 1)',
           'rgba(55, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)',
           'rgba(153, 102, 255, 1)',
         ],
         borderWidth: 1,
@@ -139,9 +139,9 @@ const DashboardStatistics = ({
 
             <LeaveVerticalBar
               data={leaveStatus}
-              // handleChartClick={(element) =>
-              //   handleLeaveStatusChartClick(element, leaveStatusLabel)
-              // }
+              handleChartClick={(element) =>
+                handleLeaveStatusChartClick(element, leaveStatusLabel)
+              }
             />
           </div>
         </div>

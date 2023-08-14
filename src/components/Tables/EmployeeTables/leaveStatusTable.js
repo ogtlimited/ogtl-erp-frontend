@@ -2,24 +2,24 @@
 /* eslint-disable no-unused-vars */
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from 'react-bootstrap-table2-toolkit';
+} from "react-bootstrap-table2-toolkit";
 import filterFactory, {
   textFilter,
   selectFilter,
   dateFilter,
-} from 'react-bootstrap-table2-filter';
+} from "react-bootstrap-table2-filter";
 
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 const LeaveStatusTable = ({
   columns,
-  departments,
-  leaveTypes,
+  // departments,
+  // leaveTypes,
   data,
   loading,
   setLoading,
@@ -28,10 +28,10 @@ const LeaveStatusTable = ({
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
 
-  const [departmentFilter, setDepartmentFilter] = useState('');
-  const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
+  // const [departmentFilter, setDepartmentFilter] = useState('');
+  // const [leaveTypeFilter, setLeaveTypeFilter] = useState('');
   const [mobileView, setmobileView] = useState(false);
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [dataToFilter, setDataToFilter] = useState("");
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -45,7 +45,7 @@ const LeaveStatusTable = ({
   };
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
   }, [mobileView]);
@@ -57,31 +57,31 @@ const LeaveStatusTable = ({
     }, 7000);
   }, [data, setLoading]);
 
-  const handleDepartmentFilter = (e) => {
-    setDepartmentFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.department === e.target.value
-    );
-    if (filteredItems === null) {
-      setDataToFilter(data);
-    }
-    setDataToFilter(filteredItems);
-    setLoading(false);
-    setLeaveTypeFilter('');
-  };
+  // const handleDepartmentFilter = (e) => {
+  //   setDepartmentFilter(e.target.value);
+  //   const filteredItems = data.filter(
+  //     (item) => item.department === e.target.value
+  //   );
+  //   if (filteredItems === null) {
+  //     setDataToFilter(data);
+  //   }
+  //   setDataToFilter(filteredItems);
+  //   setLoading(false);
+  //   setLeaveTypeFilter('');
+  // };
 
-  const handleLeaveTypeFilter = (e) => {
-    setLeaveTypeFilter(e.target.value);
-    const filteredItems = data.filter(
-      (item) => item.leave_type === e.target.value
-    );
-    if (filteredItems === null) {
-      setDataToFilter(data);
-    }
-    setDataToFilter(filteredItems);
-    setLoading(false);
-    setDepartmentFilter('');
-  };
+  // const handleLeaveTypeFilter = (e) => {
+  //   setLeaveTypeFilter(e.target.value);
+  //   const filteredItems = data.filter(
+  //     (item) => item.leave_type === e.target.value
+  //   );
+  //   if (filteredItems === null) {
+  //     setDataToFilter(data);
+  //   }
+  //   setDataToFilter(filteredItems);
+  //   setLoading(false);
+  //   setDepartmentFilter('');
+  // };
 
   return (
     <>
@@ -97,7 +97,7 @@ const LeaveStatusTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
+                style={{ marginBottom: 15, paddingLeft: "12%" }}
                 className="inputSearch"
               />
 
@@ -108,7 +108,7 @@ const LeaveStatusTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="d-flex row mb-3">
+              {/* <div className="d-flex row mb-3">
                 <div className="col-md-3">
                   <select
                     className="leave-filter-control"
@@ -141,7 +141,7 @@ const LeaveStatusTable = ({
                   </select>
                 </div>
 
-                {/* <div className="col-md-3">
+                <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleStatusFilter(e)}
@@ -155,35 +155,38 @@ const LeaveStatusTable = ({
                       <option key={index} value={option.code}>{option.label}</option>
                     ))}
                   </select>
-                </div> */}
+                </div>
+              </div> */}
+
+              <div className="custom-table-div">
+                <BootstrapTable
+                  {...props.baseProps}
+                  bordered={false}
+                  // selectRow={selectRow}
+                  filter={filterFactory()}
+                  headerClasses="header-class"
+                  classes={
+                    !mobileView
+                      ? "table "
+                      : context
+                      ? "table table-responsive"
+                      : "table table-responsive"
+                  }
+                  noDataIndication={
+                    loading ? (
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : null
+                  }
+                  pagination={paginationFactory()}
+
+                  // defaultSorted={defaultSorted}
+                />
               </div>
-
-              <BootstrapTable
-                {...props.baseProps}
-                bordered={false}
-                // selectRow={selectRow}
-                filter={filterFactory()}
-                headerClasses="header-class"
-                classes={
-                  !mobileView
-                    ? 'table '
-                    : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
-                }
-                noDataIndication={
-                  loading ? (
-                    <div className="spinner-border text-primary" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </div>
-                  ) : (
-                    null
-                  )
-                }
-                pagination={paginationFactory()}
-
-                // defaultSorted={defaultSorted}
-              />
             </div>
           )}
         </ToolkitProvider>
