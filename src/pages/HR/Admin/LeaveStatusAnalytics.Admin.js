@@ -78,8 +78,6 @@ const AllLeaveStatusAdmin = () => {
         const resData = res?.data?.data?.leave_status;
         const totalPages = res?.data?.data?.total_pages;
 
-        console.log("Leave Status: ", resData);
-
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
