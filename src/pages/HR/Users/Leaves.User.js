@@ -14,15 +14,17 @@ import LeaveApplicationContent from "../../../components/ModalContents/LeaveAppl
 import RejectLeaveModal from "../../../components/Modal/RejectLeaveModal";
 import RequestEditModal from "../../../components/Modal/RequestEditModal";
 import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import moment from "moment";
 
 const LeavesUser = () => {
-  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } = useAppContext();
+  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler, goToTop } =
+    useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
     useState(0);
-  const [modalType, setmodalType] = useState("");
+  const [modalType, setModalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
 
   const [allLeaves, setallLeaves] = useState([]);
@@ -39,6 +41,7 @@ const LeavesUser = () => {
   const [rejectLeave, setRejectLeave] = useState([]);
   const [requestEdit, setRequestEdit] = useState([]);
   const [appealRejection, setAppealRejection] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -156,6 +159,27 @@ const LeavesUser = () => {
     setRejectModal(true);
   };
 
+  const handleCancelLeaveApplication = async (row) => {
+    try {
+      const response = await axiosInstance.patch(`/api/v1/leaves/${selectedRow.id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          status: "cancelled",
+        },
+      });
+      showAlert(true, "Leave Cancelled", "alert alert-info");
+      fetchYourLeaves();
+      goToTop();
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      goToTop();
+    }
+  };
+
   // const handleRequestModification = (row) => {
   //   setRequestEdit(row);
   //   setRequestEditModal(true);
@@ -182,7 +206,7 @@ const LeavesUser = () => {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
@@ -268,12 +292,27 @@ const LeavesUser = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                setmodalType("view-details");
+                setModalType("view-details");
                 setViewRow(row);
               }}
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
+
+            {row.status === "pending" && row.acted_on === false ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setModalType("cancel");
+                  setSelectedRow(row);
+                }}
+              >
+                <i className="fa fa-remove m-r-5"></i> Cancel Application
+              </a>
+            ) : null}
 
             {/* {row.status === "pending" && row.acted_on === false ? (
               <a
@@ -406,7 +445,7 @@ const LeavesUser = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                setmodalType("view-details");
+                setModalType("view-details");
                 setViewRow(row);
               }}
             >
@@ -531,7 +570,7 @@ const LeavesUser = () => {
   //             data-toggle="modal"
   //             data-target="#generalModal"
   //             onClick={() => {
-  //               setmodalType("view-details");
+  //               setModalType("view-details");
   //               setViewRow(row);
   //             }}
   //           >
@@ -734,6 +773,16 @@ const LeavesUser = () => {
 
       <ApplyLeaveModal fetchYourLeaves={fetchYourLeaves} />
       <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} />
+
+      {modalType === "cancel" ? (
+        <ConfirmModal
+          title="Leave"
+          selectedRow={selectedRow}
+          deleteFunction={handleCancelLeaveApplication}
+          modalType={modalType}
+          message="Are you sure you want to cancel this application?"
+        />
+      ) : null}
     </>
   );
 };
