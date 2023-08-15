@@ -1,4 +1,3 @@
-/*slint-disable eqeqeq*/
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -10,10 +9,8 @@ import female3 from "../../../assets/img/female_avatar3.png";
 import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
-import ViewModal from "../../../components/Modal/ViewModal";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
-import LeaveStatusContent from "../../../components/ModalContents/LeaveStatusContent";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 
 const AllLeaveStatusAdmin = () => {
@@ -21,8 +18,7 @@ const AllLeaveStatusAdmin = () => {
   const { ErrorHandler } = useAppContext();
   const females = [female, female2, female3];
   const imageUrl = "https://erp.outsourceglobal.com";
-  const [modalType, setmodalType] = useState("");
-  const [viewRow, setViewRow] = useState(null);
+
   const [allApplications, setallApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [header, setHeader] = useState("");
@@ -98,7 +94,7 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.start_date,
             leave?.leave?.end_date
           ),
-          date_applied: moment(leave?.leave?.created_at).format(
+          date_applied: moment(leave?.created_at).format(
             "Do MMMM, YYYY"
           ),
           leave_marker:
@@ -108,10 +104,10 @@ const AllLeaveStatusAdmin = () => {
                 today_date < leave?.leave?.end_date
               ? "Scheduled Leave"
               : "On Leave",
-          leave_manager_name:
-            leave?.manager?.manager_first_name +
-            " " +
-            leave?.manager?.manager_last_name,
+              leave_manager_name: leave?.manager ?
+                leave?.manager?.manager_first_name +
+                " " +
+                leave?.manager?.manager_last_name : null,
           leave_manager_email: leave?.manager?.manager_email,
         }));
 
@@ -346,7 +342,6 @@ const AllLeaveStatusAdmin = () => {
         // departments={departments}
         // leaveTypes={leaveTypes}
       />
-
     </>
   );
 };
