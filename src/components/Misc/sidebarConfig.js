@@ -42,16 +42,16 @@ const sidebarConfig = [
 
   {
     subheader: "Main",
-    canView: "All",
+    canView: "all",
     items: [
       {
-        canView: "All",
+        canView: "all",
         title: "Dashboard",
         path: PATH_DASHBOARD.main.root,
         icon: ICONS.dashboard,
         children: [
           {
-            canView: "All",
+            canView: "all",
             title: "Employee Dashboard",
             path: PATH_DASHBOARD.main.employeeDashboard,
           },
@@ -79,29 +79,29 @@ const sidebarConfig = [
         ],
       },
       {
-        canView: "All",
+        canView: "all",
         title: "Apps",
         path: PATH_DASHBOARD.apps.root,
         icon: ICONS.apps,
         children: [
-          // { canView: 'All', title: 'Email', path: PATH_DASHBOARD.apps.email },
+          // { canView: 'all', title: 'Email', path: PATH_DASHBOARD.apps.email },
           {
-            canView: "All",
+            canView: "all",
             title: "Email Signature",
             path: PATH_DASHBOARD.apps.signature,
           },
           // {
-          //   canView: 'All',
+          //   canView: 'all',
           //   title: 'File Manager',
           //   path: PATH_DASHBOARD.apps.fileManager,
           // },
           // {
-          //   canView: 'All',
+          //   canView: 'all',
           //   title: 'Notifications',
           //   path: PATH_DASHBOARD.apps.notification,
           // },
           // {
-          //   canView: 'All',
+          //   canView: 'all',
           //   title: 'Tickets',
           //   path: PATH_DASHBOARD.apps.tickets,
           // },
@@ -117,22 +117,22 @@ const sidebarConfig = [
 
   {
     subheader: "HR",
-    canView: "All",
+    canView: "all",
     items: [
       {
-        canView: "All",
+        canView: "all",
         title: "Employees",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.user,
         children: CurrentUserIsLead && userDept !== "hr"
           ? [
               {
-                canView: "All",
+                canView: "all",
                 title: "All Employees",
                 path: PATH_DASHBOARD.hr.allEmployees,
               },
               {
-                canView: "All",
+                canView: "all",
                 title: "Leaves",
                 path: PATH_DASHBOARD.hr.leavesEmployee,
               },
@@ -174,7 +174,7 @@ const sidebarConfig = [
                 path: PATH_DASHBOARD.hr.leavesAdmin,
               },
               {
-                canView: "All",
+                canView: "all",
                 title: "Leaves",
                 path: PATH_DASHBOARD.hr.leavesEmployee,
               },
@@ -210,6 +210,11 @@ const sidebarConfig = [
             canView: "super",
             title: "Employee Salary",
             path: PATH_DASHBOARD.payroll.salary,
+          },
+          {
+            canView: 'super',
+            title: 'Deductions',
+            path: PATH_DASHBOARD.payroll.deductions,
           },
         ],
       },
@@ -301,7 +306,7 @@ const sidebarConfig = [
       //   icon: ICONS.coaching,
       // },
       // {
-      //   canView: 'All',
+      //   canView: 'all',
       //   title: 'Coaching Form',
       //   path: PATH_DASHBOARD.employeeCoaching,
       //   icon: ICONS.coaching,

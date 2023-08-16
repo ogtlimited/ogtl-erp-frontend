@@ -12,7 +12,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(0);
   const {
     register,
     handleSubmit,
@@ -48,7 +47,6 @@ const Login = () => {
             email: obj.company_email,
           })
           .then((res) => {
-            console.log(res);
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
             if (res.data.data.token) {
@@ -58,17 +56,18 @@ const Login = () => {
             }
           })
           .catch((err) => {
-            setCount(() => count + 1);
-            if (err?.response?.status === 404) {
+            if (err?.response?.status <= 400) {
+              return setErrorMsg("Unable to login. Please try again");
+            } else if (err?.response?.status === 404) {
               return setErrorMsg(
                 "Invalid email. Please double-check and try again"
               );
-            } else if (err?.response?.status >= 500) {
+            } else if (err?.response?.status >= 500 || !err?.response) {
               return setErrorMsg(
-                "The server is server is currently experiencing a temporary issue. Please try again later."
+                "Unable to communicate with server. Please try again later."
               );
             }
-            setErrorMsg(`${err?.message}. Please try again.`);
+            setErrorMsg(`${err?.response?.data?.errors}`);
           })
           .finally(() => {
             setLoading(false);
@@ -103,7 +102,6 @@ const Login = () => {
                   email: obj.company_email,
                 })
                 .then((res) => {
-                  console.log(res);
                   tokenService.setUser(res.data.data);
                   tokenService.setToken(res.data.data.token);
                   if (res.data.data.token) {
@@ -123,18 +121,18 @@ const Login = () => {
               console.log(error);
             });
         } else {
-          console.log(e);
-          setCount(() => count + 1);
-          if (e?.response?.status === 404) {
+          if (e?.response?.status <= 400) {
+            return setErrorMsg("Unable to login. Please try again");
+          } else if (e?.response?.status === 404) {
             return setErrorMsg(
               "Invalid email. Please double-check and try again"
             );
-          } else if (e?.response?.status >= 500) {
+          } else if (e?.response?.status >= 500 || !e?.response) {
             return setErrorMsg(
-              "The server is server is currently experiencing a temporary issue. Please try again later."
+              "Unable to communicate with server. Please try again later."
             );
           }
-          setErrorMsg("Unable to login. Please try again");
+          setErrorMsg(`${e?.response?.data?.errors}`);
         }
       })
       .finally(() => {

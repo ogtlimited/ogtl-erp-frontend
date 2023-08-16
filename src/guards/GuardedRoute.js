@@ -15,30 +15,26 @@ GuardedRoute.propTypes = {
 };
 
 export default function GuardedRoute({ title, dept, children }) {
-  const [user, setuser] = useState(tokenService.getUser());
+  const [user] = useState(tokenService.getUser());
+  // const AllAccess = ["super", "ceo", "hr_manager"];
 
-  const userRole = user?.employee_info?.roles[0]
-  const userDept = user?.office?.office_type === "department" ? user?.office?.title : null;
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const userDept =
+    user?.office?.office_type === "department" ? user?.office?.title : null;
 
-  const AllAccess = ["super", "ceo", "hr_manager"];
   const canView = (title, dept) => {
     if (
       userDept === dept ||
-      AllAccess.includes(userRole)
+      CurrentUserRoles.includes("ceo") ||
+      CurrentUserRoles.includes("super") ||
+      CurrentUserRoles.includes("hr_manager")
     ) {
       return true;
-    } else if (dept === "All") {
+    } else if (dept === "all") {
       return true;
-    } else if (
-      title === "" &&
-      user?.employee_info
-      ?.roles === "HR In-House Agent"
-    ) {
+    } else if (CurrentUserRoles.includes("team_lead")) {
       return true;
-    } else if (
-      user?.employee_info
-      ?.roles.includes(userRole)
-    ) {
+    } else if (CurrentUserRoles.includes("rep_siever")) {
       return true;
     } else {
       return false;

@@ -37,6 +37,8 @@ const Profile = () => {
   const [employeeOgid, setEmployeeOgid] = useState(id);
 
   const CurrentUserRoles = user?.employee_info?.roles;
+  const CurrentUserIsRemoteLead = user?.employee_info?.remote;
+  const CurrentUserIsLead = user?.employee_info?.is_lead;
 
   const canEditReportTo = [
     "hr_manager",
@@ -44,6 +46,10 @@ const Profile = () => {
     "team_lead",
     "supervisor",
   ];
+
+  const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
+    canEditReportTo.includes(role)
+  );
 
   // Employee Shifts:
   const fetchEmployeeShift = async () => {
@@ -232,9 +238,16 @@ const Profile = () => {
   useEffect(() => {
     fetchEmployeeShift();
     fetchEmployeeProfile();
-    fetchEmployeeRemoteShift();
 
-    if (CurrentUserRoles.includes("hr_manager") ||CurrentUserRoles.includes("senior_hr_associate")) {
+    if (CurrentUserIsLead && CurrentUserIsRemoteLead) {
+      fetchEmployeeRemoteShift();
+    }
+
+    if (
+      CurrentUserRoles.includes("hr_manager") ||
+      CurrentUserRoles.includes("senior_hr_associate")
+    ) {
+      fetchEmployeeRemoteShift();
       fetchEmployeeAttendance();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,8 +255,9 @@ const Profile = () => {
 
   if (dropDownClicked) {
     fetchEmployeeShift();
-    fetchEmployeeProfile();
-    setDropDownClicked(false);
+    fetchEmployeeProfile(id);
+    fetchEmployeeAttendance();
+    fetchEmployeeRemoteShift();
   }
 
   return (
@@ -343,28 +357,40 @@ const Profile = () => {
                             {userData?.employee?.leave_count || "Not Available"}
                           </div>
                         </li>
-                        <li>
-                          <div className="title">Reports to:</div>
-                          <div className="text">
-                            <a
-                              href={userData?.employee?.reports_to?.ogid}
-                              className="report-to-link"
-                            >
+                        {CurrentUserIsLead ||
+                        CurrentUserRoles.includes("hr_manager") ||
+                        CurrentUserRoles.includes("senior_hr_associate") ? (
+                          <li>
+                            <div className="title">Reports to:</div>
+                            <div className="text">
+                              <a
+                                href={userData?.employee?.reports_to?.ogid}
+                                className="report-to-link"
+                              >
+                                {userData?.employee?.reports_to?.full_name ||
+                                  "No Lead"}
+                              </a>
+                              {CurrentUserCanEditReportTo &&
+                              !hideReportToModal ? (
+                                <a
+                                  className="edit-icon"
+                                  data-toggle="modal"
+                                  data-target="#ReportToModal"
+                                >
+                                  <i className="fa fa-pencil"></i>
+                                </a>
+                              ) : null}
+                            </div>
+                          </li>
+                        ) : (
+                          <li>
+                            <div className="title">Reports to:</div>
+                            <div className="text">
                               {userData?.employee?.reports_to?.full_name ||
                                 "No Lead"}
-                            </a>
-                            {canEditReportTo.includes(...CurrentUserRoles) &&
-                            !hideReportToModal ? (
-                              <a
-                                className="edit-icon"
-                                data-toggle="modal"
-                                data-target="#ReportToModal"
-                              >
-                                <i className="fa fa-pencil"></i>
-                              </a>
-                            ) : null}
-                          </div>
-                        </li>
+                            </div>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </div>
