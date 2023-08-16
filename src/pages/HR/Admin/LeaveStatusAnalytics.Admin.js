@@ -94,9 +94,7 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.start_date,
             leave?.leave?.end_date
           ),
-          date_applied: moment(leave?.created_at).format(
-            "Do MMMM, YYYY"
-          ),
+          date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
           leave_marker:
             leave?.leave?.end_date < today_date
               ? "Leave Ended"
@@ -104,10 +102,11 @@ const AllLeaveStatusAdmin = () => {
                 today_date < leave?.leave?.end_date
               ? "Scheduled Leave"
               : "On Leave",
-              leave_manager_name: leave?.manager ?
-                leave?.manager?.manager_first_name +
-                " " +
-                leave?.manager?.manager_last_name : null,
+          leave_manager_name: leave?.manager
+            ? leave?.manager?.manager_first_name +
+              " " +
+              leave?.manager?.manager_last_name
+            : null,
           leave_manager_email: leave?.manager?.manager_email,
         }));
 

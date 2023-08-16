@@ -30,7 +30,7 @@ const ConfirmModal = ({
               <div className="modal-body">Are you sure this employee has resigned?</div>
             ) : modalType === "terminated" ? (
               <div className="modal-body">Are you sure you want to terminate this employee?</div>
-            ) : <div className="modal-body">Are you sure you want to delete?</div>}
+            ) : <div className="modal-body">{message}</div>}
             <div className="modal-footer">
               <button
                 type="button"
