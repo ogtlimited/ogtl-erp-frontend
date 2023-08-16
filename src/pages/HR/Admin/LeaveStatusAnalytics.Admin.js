@@ -96,10 +96,12 @@ const AllLeaveStatusAdmin = () => {
           ),
           date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
           leave_marker:
-            leave?.leave?.end_date < today_date
+            moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
               ? "Leave Ended"
-              : today_date < leave?.leave?.start_date &&
-                today_date < leave?.leave?.end_date
+              : today_date <
+                  moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+                moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                  today_date
               ? "Scheduled Leave"
               : "On Leave",
           leave_manager_name: leave?.manager

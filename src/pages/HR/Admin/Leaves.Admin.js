@@ -11,6 +11,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
 import moment from "moment";
+import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
 const LeavesAdmin = () => {
   const [allLeaves, setallLeaves] = useState([]);
@@ -38,6 +39,13 @@ const LeavesAdmin = () => {
   const today_date = moment(time).format("yyyy-MM-DD");
 
   const isHr = user?.office?.title === "hr" ? true : false;
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateLeave = CurrentUserRoles.some((role) =>
+    canCreate.includes(role)
+  );
 
   // Calculates Leave Days (Week Days Only)
   function calcBusinessDays(startDate, endDate) {
@@ -138,10 +146,12 @@ const LeavesAdmin = () => {
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
         leave_marker:
-          leave?.leave?.end_date < today_date
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
-            : today_date < leave?.leave?.start_date &&
-              today_date < leave?.leave?.end_date
+            : today_date <
+                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                today_date
             ? "Scheduled Leave"
             : "On Leave",
       }));
@@ -442,7 +452,8 @@ const LeavesAdmin = () => {
           ) : (
             <>
               <span className="btn btn-gray btn-sm btn-rounded">
-                <i className="fa fa-dot-circle-o text-secondary"></i> Not Approved
+                <i className="fa fa-dot-circle-o text-secondary"></i> Not
+                Approved
               </span>
             </>
           )}
@@ -550,7 +561,18 @@ const LeavesAdmin = () => {
               <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto"></div>
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserCanCreateLeave && (
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#CreateLeaveModal"
+              >
+                Create Leave
+              </a>
+            )}
+          </div>
         </div>
       </div>
 
@@ -647,6 +669,12 @@ const LeavesAdmin = () => {
       ) : (
         ""
       )}
+
+      <CreateLeaveModal
+        fetchHRLeaves={fetchHRLeaves}
+        fetchHRLeaveHistory={fetchHRLeaveHistory}
+        fetchAllEmpOnLeave={fetchAllEmpOnLeave}
+      />
     </>
   );
 };
