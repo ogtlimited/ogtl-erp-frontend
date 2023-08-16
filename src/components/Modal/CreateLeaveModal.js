@@ -10,7 +10,11 @@ import moment from "moment";
 import Select from "react-select";
 import secureLocalStorage from "react-secure-storage";
 
-export const CreateLeaveModal = ({ fetchHRLeaves }) => {
+export const CreateLeaveModal = ({
+  fetchHRLeaves,
+  fetchHRLeaveHistory,
+  fetchAllEmpOnLeave,
+}) => {
   const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
   const [leave, setLeave] = useState(HR_CREATE_LEAVE);
   const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
@@ -80,7 +84,7 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
       officeName: e?.label,
     });
     setIsOfficeSelected(true);
-    fetchAllUsers(e?.value);
+    fetchAllEmployees(e?.value);
   };
 
   // All Offices:
@@ -125,7 +129,7 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
     }
   };
 
-  const fetchAllUsers = async (officeId) => {
+  const fetchAllEmployees = async (officeId) => {
     try {
       const response = await axiosInstance.get("/api/v1/employees.json", {
         headers: {
@@ -152,7 +156,7 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
       setAllEmployees(formattedLeaders);
       setLoading(false);
     } catch (error) {
-      console.log("Get All Leaders error:", error);
+      console.log("Get All employees error:", error);
       setLoading(false);
     }
   };
@@ -183,35 +187,45 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
       reason: leave.reason,
     };
 
-    console.log("Submit this leave App.:", dataPayload);
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        "/api/v1/hr_manual_leaves.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            ogid: dataPayload?.hr_user_id,
+            leave: {
+              hr_leave_type_id: dataPayload?.hr_leave_type_id,
+              start_date: dataPayload?.start_date,
+              end_date: dataPayload?.end_date,
+              reason: dataPayload?.reason,
+            },
+          },
+        }
+      );
 
-    // setLoading(true);
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.post(
-    //     "/api/v1/leaves.json",
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Access-Control-Allow-Origin": "*",
-    //         "ngrok-skip-browser-warning": "69420",
-    //       },
-    //       payload: dataPayload
-    //     }
-    //   );
-
-    //   showAlert(
-    //     true,
-    //     "Your leave application is successful, please await an approval",
-    //     "alert alert-success"
-    //   );
-    //   fetchHRLeaves();
-    //   setLeave(HR_CREATE_LEAVE);
-    //   $("#FormModal").modal("toggle");
-    // } catch (error) {
-    //   showAlert(true, error?.response?.data?.errors, "alert alert-warning");
-    // }
-    // setLoading(false);
+      showAlert(
+        true,
+        `Leave Application for ${leave?.employeeName} is successful`,
+        "alert alert-success"
+      );
+      fetchHRLeaves();
+      fetchHRLeaveHistory();
+      fetchAllEmpOnLeave();
+      $("#CreateLeaveModal").modal("toggle");
+      cancelEvent();
+    } catch (error) {
+      $("#CreateLeaveModal").modal("toggle");
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      // cancelEvent();
+    }
+    setLoading(false);
   };
 
   return (
@@ -267,7 +281,6 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
                           <Select
                             options={allOffices}
                             isSearchable={true}
-                            isClearable={true}
                             value={{
                               label: leave?.officeName,
                               value: leave?.operation_office_id,
@@ -288,7 +301,6 @@ export const CreateLeaveModal = ({ fetchHRLeaves }) => {
                           <Select
                             options={allEmployees}
                             isSearchable={true}
-                            isClearable={true}
                             value={{
                               value: leave?.hr_user_id,
                               label: leave?.employeeName,
