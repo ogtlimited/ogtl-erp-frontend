@@ -17,7 +17,7 @@ export const CreateLeaveModal = ({
 }) => {
   const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
   const [leave, setLeave] = useState(HR_CREATE_LEAVE);
-  const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
   const user = JSON.parse(secureLocalStorage.getItem("user"));
@@ -33,26 +33,25 @@ export const CreateLeaveModal = ({
   const [maxDate, setMaxDate] = useState(null);
 
   useEffect(() => {
-    if (leave.hr_leave_type_id) {
-      setIsLeaveTypeValid(true);
+    if (leave.hr_leave_type_id && leave?.hr_user_id) {
+      setIsFormValid(true);
     } else {
-      setIsLeaveTypeValid(false);
+      setIsFormValid(false);
     }
-  }, [leave.hr_leave_type_id]);
+  }, [leave.hr_leave_type_id, leave.hr_user_id]);
 
   useEffect(() => {
     const time = new Date().toDateString();
     const today_date = moment(time).format("yyyy-MM-DD");
     setToday(today_date);
     const minSec = ms("15d");
-    // const leaveDays = user?.employee_info?.leave_count + 15;
-    const leaveDays = user?.employee_info?.leave_count;
-    const maxSec = ms(`${leaveDays}d`);
+    const allowableDays = 21;
+    const maxSec = ms(`${allowableDays}d`);
     const min_date = new Date(+new Date(today) + minSec);
     const max_date = new Date(+new Date(leave.start_date) + maxSec);
     setMinDate(moment(min_date).format("yyyy-MM-DD"));
     setMaxDate(moment(max_date).format("yyyy-MM-DD"));
-  }, [leave.start_date, today, user?.employee_info?.leave_count]);
+  }, [leave.start_date, today]);
 
   useEffect(() => {
     const selectedLeave = leave?.leaveTypeTitle.toLowerCase();
@@ -70,6 +69,9 @@ export const CreateLeaveModal = ({
     setLeave({
       ...leave,
       operation_office_id: "",
+      officeName: "",
+      hr_user_id: "",
+      employeeName: "",
     });
 
     fetchAllOffices(e?.value);
@@ -82,6 +84,8 @@ export const CreateLeaveModal = ({
       ...leave,
       operation_office_id: e?.value,
       officeName: e?.label,
+      hr_user_id: "",
+      employeeName: "",
     });
     setIsOfficeSelected(true);
     fetchAllEmployees(e?.value);
@@ -420,7 +424,7 @@ export const CreateLeaveModal = ({
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={!isLeaveTypeValid}
+                      disabled={!isFormValid}
                     >
                       {loading ? (
                         <span
