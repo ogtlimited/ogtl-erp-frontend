@@ -780,7 +780,7 @@ const LeavesUser = () => {
           selectedRow={selectedRow}
           deleteFunction={handleCancelLeaveApplication}
           modalType={modalType}
-          message="Are you sure you want to cancel this application?"
+          message="Are you sure you want to cancel this leave application?"
         />
       ) : null}
     </>
