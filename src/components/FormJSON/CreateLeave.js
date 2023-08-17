@@ -1,55 +1,55 @@
 export const CREATE_LEAVE = {
-  hr_leave_type_id: '',
+  hr_leave_type_id: "",
   start_date: "",
   end_date: "",
-  reason: '',
+  reason: "",
 
-  leaveTypeTitle: ''
-}
+  leaveTypeTitle: "",
+};
 
 export const EDIT_LEAVE = {
-  hr_leave_type_id: '',
+  hr_leave_type_id: "",
   start_date: "",
   end_date: "",
-  reason: '',
-}
+  reason: "",
+};
 
 export const HR_CREATE_LEAVE = {
-  hr_user_id: '',
-  hr_leave_type_id: '',
+  hr_user_id: "",
+  hr_leave_type_id: "",
   start_date: "",
   end_date: "",
-  reason: '',
+  reason: "",
 
-  leaveTypeTitle: '',
+  leaveTypeTitle: "",
   officeName: "",
   employeeName: "",
   operation_office_id: "",
-}
+};
 
 export const officeTypeOptions = [
   {
     label: "Department",
-    value: 'department',
+    value: "department",
   },
   {
     label: "Campaign",
-    value: 'campaign',
+    value: "campaign",
   },
 ];
 
 export const REJECT_LEAVE = {
-  rejection_reason: '',
-}
+  rejection_reason: "",
+};
 
 export const REQUEST_EDIT = {
-  reasons: '',
-}
+  reasons: "",
+};
 
 export const APPEAL_REJECTION = {
-  reasons: '',
-}
+  reasons: "",
+};
 
 export const CREATE_LEAVE_TYPE = {
-  leave_type: '',
-}
+  leave_type: "",
+};

@@ -8,9 +8,10 @@ import { LeaveTypeFormModal } from "../../../components/Modal/LeaveTypeFormModal
 
 const LeaveType = () => {
   const [AllLeaveType, setAllLeaveType] = useState([]);
-  const { user, showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [mode, setMode] = useState("Create");
   const [leaveType, setLeaveType] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = [
@@ -25,6 +26,7 @@ const LeaveType = () => {
 
   // All Leave Types:
   const fetchAllLeaveTypes = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/leave_types.json", {
         headers: {
@@ -42,12 +44,11 @@ const LeaveType = () => {
       }));
 
       setAllLeaveType(formatted);
+      setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Leave Type Error:";
+      ErrorHandler(error, component);
+      setLoading(false);
     }
   };
 
@@ -127,7 +128,12 @@ const LeaveType = () => {
         </div>
       </div>
       <div className="row  ">
-        <UniversalTable data={AllLeaveType} columns={columns} />
+        <UniversalTable
+          data={AllLeaveType}
+          columns={columns}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </div>
 
       <LeaveTypeFormModal

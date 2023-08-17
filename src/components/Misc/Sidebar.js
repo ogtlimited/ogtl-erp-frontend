@@ -18,11 +18,14 @@ const Sidebar = () => {
 
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
-  console.log("User dept.", userDept);
 
   useEffect(() => {
-    console.log("this sidebar user:", user);
-  }, [user]);
+    console.log({
+      CurrentUserRoles,
+      userDept,
+      user,
+    });
+  }, [CurrentUserRoles, user, userDept]);
 
   const canView = (viewedBy) => {
     if (
@@ -32,7 +35,7 @@ const Sidebar = () => {
       CurrentUserRoles.includes("hr_manager")
     ) {
       return true;
-    } else if (viewedBy === "All") {
+    } else if (viewedBy === "all") {
       return true;
     } else if (viewedBy === "lead") {
       return CurrentUserIsLead;

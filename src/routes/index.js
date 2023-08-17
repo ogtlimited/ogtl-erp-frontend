@@ -128,7 +128,7 @@ export default function Router() {
             {
               path: 'client-dashboard',
               // element: (
-              //   <GuardedRoute title="" dept="Super">
+              //   <GuardedRoute title="" dept="super">
               //     <ClientUser />{' '}
               //   </GuardedRoute>
               // ),
@@ -137,7 +137,7 @@ export default function Router() {
             {
               path: 'hr-dashboard',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="hr">
                   <HRDashboard />{' '}
                 </GuardedRoute>
               ),
@@ -145,7 +145,7 @@ export default function Router() {
             {
               path: 'account-dashboard',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <AccountingDashboard />{' '}
                 </GuardedRoute>
               ),
@@ -154,7 +154,7 @@ export default function Router() {
             {
               path: 'job-dashboard',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <JobDashboard />
                 </GuardedRoute>
               ),
@@ -175,7 +175,7 @@ export default function Router() {
             {
               path: 'notifications',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Notifications />
                 </GuardedRoute>
               ),
@@ -184,7 +184,7 @@ export default function Router() {
             {
               path: 'ticket-manager',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <TicketManager />
                 </GuardedRoute>
               ),
@@ -203,7 +203,7 @@ export default function Router() {
             {
               path: 'campaigns',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <AllCampaigns />
                 </GuardedRoute>
               ),
@@ -211,7 +211,7 @@ export default function Router() {
             {
               path: 'campaigns/shifts/:id',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <CampaignShiftView />
                 </GuardedRoute>
               ),
@@ -219,7 +219,7 @@ export default function Router() {
             {
               path: 'campaign-info/:id',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <CampaignInfo />
                 </GuardedRoute>
               ),
@@ -228,7 +228,7 @@ export default function Router() {
             {
               path: 'branch',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <Branch />
                 </GuardedRoute>
               ),
@@ -245,7 +245,7 @@ export default function Router() {
             {
               path: 'all-employees',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AllEmployeesAdmin />
                 </GuardedRoute>
               ),
@@ -253,7 +253,7 @@ export default function Router() {
             {
               path: 'all-employees/employee/add',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AddEmployeesAdmin />
                 </GuardedRoute>
               ),
@@ -261,7 +261,7 @@ export default function Router() {
             {
               path: 'all-employees/employee/update/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <EditEmployeesAdmin />
                 </GuardedRoute>
               ),
@@ -269,7 +269,7 @@ export default function Router() {
             {
               path: 'all-employees/department/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AllEmployeesDepartmentAdmin />
                 </GuardedRoute>
               ),
@@ -277,7 +277,7 @@ export default function Router() {
             {
               path: 'all-employees/gender/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AllEmployeesGenderAdmin />
                 </GuardedRoute>
               ),
@@ -285,7 +285,7 @@ export default function Router() {
             {
               path: 'leaves-admin',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeavesAdmin />
                 </GuardedRoute>
               ),
@@ -293,7 +293,7 @@ export default function Router() {
             {
               path: 'leaves-admin/application/leave-status/:id/:from_date/:to_date',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AllLeaveStatusAdmin/>
                 </GuardedRoute>
               ),
@@ -301,7 +301,7 @@ export default function Router() {
             {
               path: 'leaves-admin/application/leave-type/:id/:from_date/:to_date',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AllLeaveTypeAdmin/>
                 </GuardedRoute>
               ),
@@ -310,7 +310,7 @@ export default function Router() {
             {
               path: 'all-employees/employee/leader',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeadershipAdmin />
                 </GuardedRoute>
               ),
@@ -318,7 +318,7 @@ export default function Router() {
             {
               path: 'all-employees/employee/leader/:employee/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeadershipSubordinateAdmin />
                 </GuardedRoute>
               ),
@@ -326,7 +326,7 @@ export default function Router() {
             {
               path: 'attendance-admin',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AttendanceAdmin />
                 </GuardedRoute>
               ),
@@ -334,7 +334,7 @@ export default function Router() {
             {
               path: 'captured-biometrics',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <CapturedBiometricsAdmin />
                 </GuardedRoute>
               ),
@@ -342,7 +342,7 @@ export default function Router() {
             {
               path: 'attendance-record',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AttendanceRecord />
                 </GuardedRoute>
               ),
@@ -350,7 +350,7 @@ export default function Router() {
             {
               path: 'remote-attendance',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <RemoteAttendanceAdmin />
                 </GuardedRoute>
               ),
@@ -358,7 +358,7 @@ export default function Router() {
             {
               path: 'campaign/employees/:office/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />
                 </GuardedRoute>
               ),
@@ -366,7 +366,7 @@ export default function Router() {
             {
               path: 'department/employees/:office/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />
                 </GuardedRoute>
               ),
@@ -374,7 +374,7 @@ export default function Router() {
             {
               path: 'office/employee-attendance/:employee/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <EmployeeAttendanceRecordAdmin />
                 </GuardedRoute>
               ),
@@ -382,7 +382,7 @@ export default function Router() {
             {
               path: 'resignation-admin',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <ResignationAdmin />
                 </GuardedRoute>
               ),
@@ -391,7 +391,7 @@ export default function Router() {
             {
               path: 'offices',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Offices />
                 </GuardedRoute>
               ),
@@ -399,7 +399,7 @@ export default function Router() {
             {
               path: 'branch',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <BranchAdmin />
                 </GuardedRoute>
               ),
@@ -407,7 +407,7 @@ export default function Router() {
             {
               path: 'departments/shifts/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <DepartmentShiftView />
                 </GuardedRoute>
               ),
@@ -415,7 +415,7 @@ export default function Router() {
             {
               path: 'designations',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Designations />
                 </GuardedRoute>
               ),
@@ -423,7 +423,7 @@ export default function Router() {
             {
               path: 'leave-approval',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeaveApproval />
                 </GuardedRoute>
               ),
@@ -431,7 +431,7 @@ export default function Router() {
             {
               path: 'leave-approvals/department/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeaveApprovalView />
                 </GuardedRoute>
               ),
@@ -439,7 +439,7 @@ export default function Router() {
             {
               path: 'leave-type',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <LeaveType />
                 </GuardedRoute>
               ),
@@ -447,7 +447,7 @@ export default function Router() {
             {
               path: 'shifts',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <ShiftAdmin />
                 </GuardedRoute>
               ),
@@ -455,7 +455,7 @@ export default function Router() {
             {
               path: 'shift-assignment',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <ShiftAssignment />
                 </GuardedRoute>
               ),
@@ -473,7 +473,7 @@ export default function Router() {
             {
               path: 'public-holiday',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PublicHoliday />
                 </GuardedRoute>
               ),
@@ -481,7 +481,7 @@ export default function Router() {
             {
               path: 'salaries',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <EmployeeSalary />
                 </GuardedRoute>
               ),
@@ -489,7 +489,7 @@ export default function Router() {
             {
               path: 'payroll-batches',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PayrollBatches />
                 </GuardedRoute>
               ),
@@ -497,7 +497,7 @@ export default function Router() {
             {
               path: 'deductions',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PayrollDeductions />
                 </GuardedRoute>
               ),
@@ -505,7 +505,7 @@ export default function Router() {
             {
               path: 'archive',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Archive />
                 </GuardedRoute>
               ),
@@ -513,7 +513,7 @@ export default function Router() {
             {
               path: 'payroll-notes',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PayrollNotes />
                 </GuardedRoute>
               ),
@@ -521,7 +521,7 @@ export default function Router() {
             {
               path: 'payslip/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PaySlip />
                 </GuardedRoute>
               ),
@@ -529,7 +529,7 @@ export default function Router() {
             {
               path: 'salary-breakdown/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <SalaryBreakdown />
                 </GuardedRoute>
               ),
@@ -548,7 +548,7 @@ export default function Router() {
             {
               path: 'employee-reports',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <EmployeeReport />
                 </GuardedRoute>
               ),
@@ -556,7 +556,7 @@ export default function Router() {
             {
               path: 'attendance-reports',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AttendanceReport />
                 </GuardedRoute>
               ),
@@ -564,7 +564,7 @@ export default function Router() {
             {
               path: 'academy-reports',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AcademyReport />
                 </GuardedRoute>
               ),
@@ -572,7 +572,7 @@ export default function Router() {
             {
               path: 'payslip-reports',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <PayrollReports />
                 </GuardedRoute>
               ),
@@ -591,7 +591,7 @@ export default function Router() {
             {
               path: 'job-opening',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <JobOpening />
                 </GuardedRoute>
               ),
@@ -599,7 +599,7 @@ export default function Router() {
             {
               path: 'job-applications',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <JobApplicantsAdmin />
                 </GuardedRoute>
               ),
@@ -607,7 +607,7 @@ export default function Router() {
             {
               path: 'rep-siever/job-applications',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <JobApplicants />
                 </GuardedRoute>
               ),
@@ -615,7 +615,7 @@ export default function Router() {
             {
               path: 'rep-siever/:employee/:id',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <RepSieverAdmin />
                 </GuardedRoute>
               ),
@@ -623,7 +623,7 @@ export default function Router() {
             {
               path: 'academy-applicants',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AcademyApplicants />
                 </GuardedRoute>
               ),
@@ -631,7 +631,7 @@ export default function Router() {
             {
               path: 'interviewees',
               element: (
-                <GuardedRoute title="" dept="Facility">
+                <GuardedRoute title="" dept="facility">
                   <Interviewees />
                 </GuardedRoute>
               ),
@@ -639,7 +639,7 @@ export default function Router() {
             {
               path: 'aptitude-test',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AptitudeTest />
                 </GuardedRoute>
               ),
@@ -647,7 +647,7 @@ export default function Router() {
             {
               path: 'job-offer',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <JobOffer />
                 </GuardedRoute>
               ),
@@ -655,7 +655,7 @@ export default function Router() {
             {
               path: 'shadowing',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Shadowing />
                 </GuardedRoute>
               ),
@@ -663,7 +663,7 @@ export default function Router() {
             {
               path: 'orientation-and-training',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <OrientationAndTraining />
                 </GuardedRoute>
               ),
@@ -682,7 +682,7 @@ export default function Router() {
             {
               path: 'warning-letter',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <WarningLetter />
                 </GuardedRoute>
               ),
@@ -690,7 +690,7 @@ export default function Router() {
             {
               path: 'score-cards',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <ScoreCards />
                 </GuardedRoute>
               ),
@@ -709,7 +709,7 @@ export default function Router() {
             {
               path: 'chart-of-account',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <ChartOfAccounts />
                 </GuardedRoute>
               ),
@@ -717,7 +717,7 @@ export default function Router() {
             {
               path: 'budgets',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <Budget />
                 </GuardedRoute>
               ),
@@ -725,7 +725,7 @@ export default function Router() {
             {
               path: 'journals',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <Journals />
                 </GuardedRoute>
               ),
@@ -733,7 +733,7 @@ export default function Router() {
             {
               path: 'expense-heads',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <ExpenseHeads />
                 </GuardedRoute>
               ),
@@ -741,7 +741,7 @@ export default function Router() {
             {
               path: 'ledger',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <GeneralLedger />
                 </GuardedRoute>
               ),
@@ -763,7 +763,7 @@ export default function Router() {
             {
               path: 'payroll-reports',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <PayrollReports />
                 </GuardedRoute>
               ),
@@ -771,7 +771,7 @@ export default function Router() {
             {
               path: 'balance-sheet',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <BalanceSheet />
                 </GuardedRoute>
               ),
@@ -788,7 +788,7 @@ export default function Router() {
             {
               path: 'all',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <Clients />
                 </GuardedRoute>
               ),
@@ -796,7 +796,7 @@ export default function Router() {
             {
               path: 'invoices',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <Invoices />
                 </GuardedRoute>
               ),
@@ -804,7 +804,7 @@ export default function Router() {
             {
               path: 'payments',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <ClientPayments />
                 </GuardedRoute>
               ),
@@ -812,7 +812,7 @@ export default function Router() {
             {
               path: 'leave-approval',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <ClientApprovals />
                 </GuardedRoute>
               ),
@@ -829,7 +829,7 @@ export default function Router() {
             {
               path: 'all',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <Vendors />
                 </GuardedRoute>
               ),
@@ -837,7 +837,7 @@ export default function Router() {
             {
               path: 'bills',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <VendorBills />
                 </GuardedRoute>
               ),
@@ -845,7 +845,7 @@ export default function Router() {
             {
               path: 'payments',
               element: (
-                <GuardedRoute title="" dept="Accounting">
+                <GuardedRoute title="" dept="accounting">
                   <VendorPayments />
                 </GuardedRoute>
               ),
@@ -862,7 +862,7 @@ export default function Router() {
             {
               path: 'all',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <Asset />
                 </GuardedRoute>
               ),
@@ -870,7 +870,7 @@ export default function Router() {
             {
               path: 'assignment',
               element: (
-                <GuardedRoute title="" dept="HR">
+                <GuardedRoute title="" dept="hr">
                   <AssetAssignmentForm />
                 </GuardedRoute>
               ),
@@ -897,7 +897,7 @@ export default function Router() {
             {
               path: 'reports',
               element: (
-                <GuardedRoute title="" dept="FACILITY">
+                <GuardedRoute title="" dept="facility">
                   <MaintenanceReport />
                 </GuardedRoute>
               ),
@@ -905,7 +905,7 @@ export default function Router() {
             {
               path: 'maintenance-and-repair',
               element: (
-                <GuardedRoute title="" dept="FACILITY">
+                <GuardedRoute title="" dept="facility">
                   <MaintenanceAndRepairs />
                 </GuardedRoute>
               ),
@@ -913,7 +913,7 @@ export default function Router() {
             {
               path: 'shadowing',
               element: (
-                <GuardedRoute title="" dept="FACILITY">
+                <GuardedRoute title="" dept="facility">
                   <Shadowing />
                 </GuardedRoute>
               ),
@@ -921,7 +921,7 @@ export default function Router() {
             {
               path: 'interviewees',
               element: (
-                <GuardedRoute title="Interview Schedule List" dept="Facility">
+                <GuardedRoute title="Interview Schedule List" dept="facility">
                   <Interviewees />
                 </GuardedRoute>
               ),
@@ -940,7 +940,7 @@ export default function Router() {
             {
               path: 'roles-permissions',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <RolePermission />
                 </GuardedRoute>
               ),
@@ -948,7 +948,7 @@ export default function Router() {
             {
               path: 'roles-permissions/users/:title/:id',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <EmployeeRoles />
                 </GuardedRoute>
               ),
@@ -956,7 +956,7 @@ export default function Router() {
             {
               path: 'roles-assignment',
               element: (
-                <GuardedRoute title="" dept="Super">
+                <GuardedRoute title="" dept="super">
                   <RoleAssignment />
                 </GuardedRoute>
               ),
@@ -971,7 +971,7 @@ export default function Router() {
         {
           path: 'product-items',
           element: (
-            <GuardedRoute title="" dept="Procurements">
+            <GuardedRoute title="" dept="procurements">
               <ProductItems />
             </GuardedRoute>
           ),
@@ -979,7 +979,7 @@ export default function Router() {
         {
           path: 'hr-clients',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <HrClients />
             </GuardedRoute>
           ),
@@ -987,7 +987,7 @@ export default function Router() {
         {
           path: 'hr-client/:id',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <HrClientView />
             </GuardedRoute>
           ),
@@ -995,7 +995,7 @@ export default function Router() {
         {
           path: 'coaching',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <CoachingAdmin />
             </GuardedRoute>
           ),
@@ -1003,7 +1003,7 @@ export default function Router() {
         {
           path: 'purchase-order',
           element: (
-            <GuardedRoute title="" dept="Procurements">
+            <GuardedRoute title="" dept="procurements">
               <PurchaseOrder />
             </GuardedRoute>
           ),
@@ -1011,7 +1011,7 @@ export default function Router() {
         {
           path: 'id-request',
           element: (
-            <GuardedRoute title="" dept="Procurements">
+            <GuardedRoute title="" dept="procurements">
               <IdRequest />
             </GuardedRoute>
           ),
@@ -1019,7 +1019,7 @@ export default function Router() {
         {
           path: 'promotion',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <Promotion />
             </GuardedRoute>
           ),
@@ -1027,7 +1027,7 @@ export default function Router() {
         {
           path: 'resignation',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <Resignation />
             </GuardedRoute>
           ),
@@ -1035,7 +1035,7 @@ export default function Router() {
         {
           path: 'termination',
           element: (
-            <GuardedRoute title="" dept="HR">
+            <GuardedRoute title="" dept="hr">
               <Termination />
             </GuardedRoute>
           ),

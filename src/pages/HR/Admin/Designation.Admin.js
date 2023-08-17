@@ -20,10 +20,14 @@ const Designations = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate", "hr_associate"];
+  const canCreateAndEdit = [
+    "hr_manager",
+    "senior_hr_associate",
+    "hr_associate",
+  ];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-  canCreateAndEdit.includes(role)
+    canCreateAndEdit.includes(role)
   );
 
   // All Designations:
