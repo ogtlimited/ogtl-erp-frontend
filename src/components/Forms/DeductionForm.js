@@ -25,30 +25,30 @@ export const DeductionForm = ({ fetchDeductions }) => {
     defaultValues,
   });
 
-  useEffect(() => {
-    createEmployee().then((res) => {
-      const { employees, deductionTypes } = res.data.createEmployeeForm;
-      setDeductionData(deductionTypes);
+  // useEffect(() => {
+  //   createEmployee().then((res) => {
+  //     const { employees, deductionTypes } = res.data.createEmployeeForm;
+  //     setDeductionData(deductionTypes);
 
-      const empOpts = employees?.map((e) => {
-        return {
-          label: `${e.first_name}  ${e.last_name}`,
-          value: e._id,
-        };
-      });
+  //     const empOpts = employees?.map((e) => {
+  //       return {
+  //         label: `${e.first_name}  ${e.last_name}`,
+  //         value: e._id,
+  //       };
+  //     });
 
-      setEmployeeOpts(empOpts);
-      console.log('emp Opts', empOpts);
-      const dedTypeOpts = deductionTypes?.map((e) => {
-        return {
-          label: `${e.title}`,
-          value: e._id,
-        };
-      });
-      setDeductionOpts(dedTypeOpts);
-      console.log('ded Opts', dedTypeOpts);
-    });
-  }, [createEmployee]);
+  //     setEmployeeOpts(empOpts);
+  //     console.log('emp Opts', empOpts);
+  //     const dedTypeOpts = deductionTypes?.map((e) => {
+  //       return {
+  //         label: `${e.title}`,
+  //         value: e._id,
+  //       };
+  //     });
+  //     setDeductionOpts(dedTypeOpts);
+  //     console.log('ded Opts', dedTypeOpts);
+  //   });
+  // }, [createEmployee]);
 
   const onEditorStateChange = (editorState, name) => {
     setValue(name, editorState);
@@ -109,7 +109,7 @@ export const DeductionForm = ({ fetchDeductions }) => {
               </button>
             </div>
             <div className="modal-body">
-              {!deductionData.length && !deductionOpts.length ? (
+              {deductionData.length && deductionOpts.length ? (
                 <div>
                   <p className="text-center">Loading...</p>
                   <span

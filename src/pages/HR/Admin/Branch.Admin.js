@@ -12,6 +12,7 @@ const BranchAdmin = () => {
   const { user, ErrorHandler } = useAppContext();
   const [mode, setMode] = useState("Create");
   const [branch, setBranch] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -22,6 +23,7 @@ const BranchAdmin = () => {
 
   // All Branches:
   const fetchAllBranches = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/branches.json", {
         headers: {
@@ -43,9 +45,11 @@ const BranchAdmin = () => {
       }));
 
       setallBranch(formatted);
+      setLoading(false);
     } catch (error) {
       const component = "Branch Error:";
       ErrorHandler(error, component);
+      setLoading(false);
     }
   };
 
@@ -143,7 +147,12 @@ const BranchAdmin = () => {
         </div>
       </div>
       <div className="row  ">
-        <UniversalTable data={allBranch} columns={columns} />
+        <UniversalTable
+          data={allBranch}
+          columns={columns}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </div>
 
       <BranchFormModal
