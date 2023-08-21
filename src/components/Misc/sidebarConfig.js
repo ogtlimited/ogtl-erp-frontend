@@ -6,9 +6,10 @@ import tokenService from "../../services/token.service";
 const user = tokenService.getUser();
 const userDept =
   user?.office?.office_type === "department" ? user?.office?.title : null;
+
 const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
-
+const CurrentUserRoles = user?.employee_info?.roles || [];
 
 const getIcon = (name) => <i className={"la " + name}></i>;
 
@@ -124,81 +125,82 @@ const sidebarConfig = [
         title: "Employees",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.user,
-        children: CurrentUserIsLead && userDept !== "hr"
-          ? [
-              {
-                canView: "all",
-                title: "All Employees",
-                path: PATH_DASHBOARD.hr.allEmployees,
-              },
-              {
-                canView: "all",
-                title: "Leaves",
-                path: PATH_DASHBOARD.hr.leavesEmployee,
-              },
-            ]
-          : [
-              {
-                canView: "hr",
-                title: "All Employees",
-                path: PATH_DASHBOARD.hr.allEmployees,
-              },
-              {
-                canView: "hr",
-                title: "Add Employee",
-                path: PATH_DASHBOARD.hr.addEmployees,
-              },
-              {
-                canView: "hr",
-                title: "Leadership",
-                path: PATH_DASHBOARD.hr.leadership,
-              },
-              {
-                canView: "hr",
-                title: "Captured Biometrics",
-                path: PATH_DASHBOARD.hr.capturedBiometrics,
-              },
-              {
-                canView: "hr",
-                title: "Attendance Record",
-                path: PATH_DASHBOARD.hr.attendanceRecord,
-              },
-              {
-                canView: "hr",
-                title: "Remote Attendance",
-                path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
-              },
-              {
-                canView: "hr",
-                title: "Leave Applications",
-                path: PATH_DASHBOARD.hr.leavesAdmin,
-              },
-              {
-                canView: "all",
-                title: "Leaves",
-                path: PATH_DASHBOARD.hr.leavesEmployee,
-              },
-              {
-                canView: "hr",
-                title: "Offices",
-                path: PATH_DASHBOARD.hr.offices,
-              },
-              {
-                canView: "hr",
-                title: "Designations",
-                path: PATH_DASHBOARD.hr.designations,
-              },
-              {
-                canView: "hr",
-                title: "Branch",
-                path: PATH_DASHBOARD.hr.branch,
-              },
-              {
-                canView: "hr",
-                title: "Leave Types",
-                path: PATH_DASHBOARD.hr.leaveType,
-              },
-            ],
+        children:
+          CurrentUserIsLead && userDept !== "hr"
+            ? [
+                {
+                  canView: "all",
+                  title: "All Employees",
+                  path: PATH_DASHBOARD.hr.allEmployees,
+                },
+                {
+                  canView: "all",
+                  title: "Leaves",
+                  path: PATH_DASHBOARD.hr.leavesEmployee,
+                },
+              ]
+            : [
+                {
+                  canView: "hr",
+                  title: "All Employees",
+                  path: PATH_DASHBOARD.hr.allEmployees,
+                },
+                {
+                  canView: "hr",
+                  title: "Add Employee",
+                  path: PATH_DASHBOARD.hr.addEmployees,
+                },
+                {
+                  canView: "hr",
+                  title: "Leadership",
+                  path: PATH_DASHBOARD.hr.leadership,
+                },
+                {
+                  canView: "hr",
+                  title: "Captured Biometrics",
+                  path: PATH_DASHBOARD.hr.capturedBiometrics,
+                },
+                {
+                  canView: "hr",
+                  title: "Attendance Record",
+                  path: PATH_DASHBOARD.hr.attendanceRecord,
+                },
+                {
+                  canView: "hr",
+                  title: "Remote Attendance",
+                  path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
+                },
+                {
+                  canView: "hr",
+                  title: "Leave Applications",
+                  path: PATH_DASHBOARD.hr.leavesAdmin,
+                },
+                {
+                  canView: "all",
+                  title: "Leaves",
+                  path: PATH_DASHBOARD.hr.leavesEmployee,
+                },
+                {
+                  canView: "hr",
+                  title: "Offices",
+                  path: PATH_DASHBOARD.hr.offices,
+                },
+                {
+                  canView: "hr",
+                  title: "Designations",
+                  path: PATH_DASHBOARD.hr.designations,
+                },
+                {
+                  canView: "hr",
+                  title: "Branch",
+                  path: PATH_DASHBOARD.hr.branch,
+                },
+                {
+                  canView: "hr",
+                  title: "Leave Types",
+                  path: PATH_DASHBOARD.hr.leaveType,
+                },
+              ],
       },
       {
         canView: "super",
@@ -212,8 +214,8 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
-            canView: 'super',
-            title: 'Deductions',
+            canView: "super",
+            title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions,
           },
         ],
@@ -336,7 +338,7 @@ const sidebarConfig = [
     subheader: "Leadership",
     canView: "lead",
     items:
-      remoteUser && CurrentUserIsLead
+      (remoteUser && CurrentUserIsLead) || CurrentUserRoles.includes("wfh_lead")
         ? [
             {
               canView: "lead",
@@ -351,7 +353,7 @@ const sidebarConfig = [
               icon: ICONS.schedule,
             },
             {
-              canView: "remote-lead",
+              canView: CurrentUserRoles,
               title: "Remote Attendance",
               path: PATH_DASHBOARD.leadership.remoteAttendance,
               icon: ICONS.attendance,

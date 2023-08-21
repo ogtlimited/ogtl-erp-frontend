@@ -49,11 +49,8 @@ const RemoteAttendanceAdmin = () => {
       setDailyRemoteAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Remote Attendance Summary:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

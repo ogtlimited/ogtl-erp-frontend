@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import SuccessError from "./successError";
 
-const ApprovePayroll = ({ previewData,setdisplayState, state }) => {
+const ApprovePayroll = ({ previewData,setDisplayState, state }) => {
   const [generating, setgenerating] = useState(false);
   const [message, setmessage] = useState(state);
   const [response, setresponse] = useState("");
@@ -21,7 +21,7 @@ const ApprovePayroll = ({ previewData,setdisplayState, state }) => {
       .then((res) => {
         setgenerating(false);
         setmessage("success");
-        setdisplayState("success")
+        setDisplayState("success")
         setresponse("Payroll approval submitted successfully")
         // setData(res.data.data[0].salarySlips);
       })
@@ -29,7 +29,7 @@ const ApprovePayroll = ({ previewData,setdisplayState, state }) => {
         console.log(error?.response.data.message);
         setresponse(error?.response.data.message)
         setmessage("error");
-        setdisplayState("error")
+        setDisplayState("error")
         setgenerating(false);
       });
   };

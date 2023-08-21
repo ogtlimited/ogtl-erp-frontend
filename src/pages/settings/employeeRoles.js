@@ -181,6 +181,7 @@ const EmployeeRoles = () => {
         title="Role Assignment"
         selectedRow={selectedRow}
         deleteFunction={revokeUserRole}
+        message="Are you sure you want to revoke this user's role?"
       />
     </>
   );

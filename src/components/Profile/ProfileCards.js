@@ -117,7 +117,9 @@ const ProfileCards = ({
                 </li>
               ) : null}
 
-              {userData?.employee?.remote && !hideRemoteShiftComponent ? (
+              {(userData?.employee?.remote ||
+                CurrentUserRoles.includes("wfh_lead")) &&
+              !hideRemoteShiftComponent ? (
                 <li className="nav-item">
                   <a
                     href="#emp_remoteShifts"
