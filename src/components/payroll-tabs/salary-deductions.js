@@ -15,11 +15,7 @@ const Deductions = () => {
   const [selectedRow, setSelectedRow] = useState(null);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = [
-    "hr_manager",
-    "senior_hr_associate",
-    "hr_associate",
-  ];
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -129,16 +125,18 @@ const Deductions = () => {
     <div className="tab-pane" id="tab_deductions">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
-          <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#AddDeductionModal"
-            >
-              Add Deduction
-            </a>
-          </div>
+          {CurrentUserCanCreateAndEdit && (
+            <div className="col-auto float-right ml-auto">
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#AddDeductionModal"
+              >
+                Add Deduction
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
@@ -152,6 +150,7 @@ const Deductions = () => {
       </div>
 
       <AddDeductionModal fetchDeductions={fetchDeductions} />
+
       <DeductionReversalModal
         selectedRow={selectedRow}
         fetchDeductions={fetchDeductions}

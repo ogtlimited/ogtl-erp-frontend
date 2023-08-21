@@ -1,6 +1,8 @@
 // *IN-USE
 
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
@@ -44,11 +46,8 @@ const RemoteAttendance = () => {
       setDailyRemoteAttendanceSummary(resData);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Daily Remote Attendance Summary:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -8,7 +7,7 @@ import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDet
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
 
 const EmployeeSalary = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [AllSalaries, setAllSalaries] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -71,11 +70,8 @@ const EmployeeSalary = () => {
         setAllSalaries(formattedData);
       })
       .catch((error) => {
-        showAlert(
-          true,
-          "Error retrieving information from server",
-          "alert alert-warning"
-        );
+        const component = "All Salaries Error:";
+        ErrorHandler(error, component);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);

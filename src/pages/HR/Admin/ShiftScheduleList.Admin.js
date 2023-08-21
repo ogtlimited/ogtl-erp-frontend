@@ -16,7 +16,7 @@ import $ from "jquery";
 import axiosInstance from "../../../services/api";
 
 const ShiftScheduleList = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, showAlert, ErrorHandler } = useAppContext();
   const [allSchedule, setAllSchedules] = useState([]);
   const [editScheduleTitle, setEditScheduleTitle] = useState([]);
   const [editScheduleTime, setEditScheduleTime] = useState([]);
@@ -45,11 +45,8 @@ const ShiftScheduleList = () => {
 
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "All Schedules:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
