@@ -203,7 +203,7 @@ const sidebarConfig = [
               ],
       },
       {
-        canView: "super",
+        canView: "hr",
         title: "Payroll",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
@@ -214,7 +214,7 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
-            canView: "super",
+            canView: "hr",
             title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions,
           },
@@ -617,7 +617,7 @@ const sidebarConfig = [
 
   {
     subheader: "Settings",
-    canView: "HR",
+    canView: "super",
     items: [
       {
         canView: "super",
