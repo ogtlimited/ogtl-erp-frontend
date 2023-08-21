@@ -5,11 +5,19 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../Tables/UniversalTable";
+import { AddDeductionTypeModal } from "../Modal/AddDeductionTypeModal";
 
 const DeductionType = () => {
-  const { ErrorHandler } = useAppContext();
+  const { ErrorHandler, user } = useAppContext();
   const [deductionTypes, setDeductionTypes] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const fetchDeductionTypes = async () => {
     setLoading(true);
@@ -82,23 +90,24 @@ const DeductionType = () => {
       sort: true,
       headerStyle: { width: "10%" },
     },
-    
   ];
 
   return (
     <div className="tab-pane" id="tab_deduction_types">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
-          {/* <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#test1"
-            >
-              Add Deduction Type
-            </a>
-          </div> */}
+          {CurrentUserCanCreateAndEdit && (
+            <div className="col-auto float-right ml-auto">
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#AddDeductionTypesModal"
+              >
+                Add Deduction Type
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
@@ -110,6 +119,8 @@ const DeductionType = () => {
           setLoading={setLoading}
         />
       </div>
+
+      <AddDeductionTypeModal fetchDeductionTypes={fetchDeductionTypes} />
     </div>
   );
 };

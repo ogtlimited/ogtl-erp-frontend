@@ -40,7 +40,6 @@ const Sidebar = () => {
   ]);
 
   const canView = (viewedBy) => {
-    console.log("viewedBy", viewedBy);
     if (
       userDept === viewedBy ||
       CurrentUserRoles.includes("ceo") ||
