@@ -1,28 +1,26 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { update } from "lodash";
+
 import moment from "moment";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ViewModal from "../../components/Modal/ViewModal";
-import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { useAppContext } from "../../Context/AppContext";
 import AlertSvg from "../../layouts/AlertSvg";
 import axiosInstance from "../../services/api";
 import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
-import axios from "axios";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 
 const PayrollReports = () => {
-  const { showAlert, user } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const handleClose = () => {};
-  const [generating, setgenerating] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const year = moment().format("YYYY");
   const currMonthName = moment().format("MMMM");
-  const [displayState, setdisplayState] = useState("");
-  const [previewData, setpreviewData] = useState(null);
-  const [totalSalary, settotalSalary] = useState(0);
+  const [displayState, setDisplayState] = useState("");
+  const [previewData, setPreviewData] = useState(null);
   const [data, setData] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -31,20 +29,17 @@ const PayrollReports = () => {
 
   const fetchEmployeeSalarySlip = useCallback(() => {
     axiosInstance
-      .get(
-        "/api/v1/salary_slips.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: page,
-            limit: sizePerPage,
-          },
-        }
-      )
+      .get("/api/v1/salary_slips.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
+      })
       .then((res) => {
         const AllEmployeeSlips = res?.data?.data?.slips;
         const totalPages = res?.data?.data?.pages;
@@ -77,13 +72,10 @@ const PayrollReports = () => {
         setData(formattedData);
       })
       .catch((error) => {
-        showAlert(
-          true,
-          "Error retrieving information from server",
-          "alert alert-warning"
-        );
+        const component = "Employee Salary Slip Error:";
+        ErrorHandler(error, component);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
   useEffect(() => {
@@ -189,14 +181,14 @@ const PayrollReports = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <>
-        <Link
-          className="btn btn-sm btn-primary"
-          to={{
-            pathname: `/dashboard/payroll/payslip/${value}`,
-          }}
-        >
-          View Pay Slip 
-        </Link>
+          <Link
+            className="btn btn-sm btn-primary"
+            to={{
+              pathname: `/dashboard/payroll/payslip/${value}`,
+            }}
+          >
+            View Pay Slip
+          </Link>
         </>
       ),
     },
@@ -275,7 +267,7 @@ const PayrollReports = () => {
                 data-target="#generalModal"
                 className="btn add-btn mx-5"
                 onClick={() => {
-                  setdisplayState("raw");
+                  setGenerating("raw");
                   console.log("state", displayState);
                 }}
               >
@@ -300,21 +292,23 @@ const PayrollReports = () => {
           />
         </div>
       </div>
-      
-      <GeneratePayrollModal fetchEmployeeSalarySlip={fetchEmployeeSalarySlip} setgenerating={setgenerating}  />
+
+      <GeneratePayrollModal
+        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        setGenerating={setGenerating}
+      />
 
       <ViewModal
         closeModal={handleClose}
         title={`Payroll Approval for ${currMonthName}  ${year}`}
         content={
           <ApprovePayroll
-            setdisplayState={setdisplayState}
+            setDisplayState={setDisplayState}
             state={displayState}
             previewData={previewData}
           />
         }
       />
-
     </>
   );
 };

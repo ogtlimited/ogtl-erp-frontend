@@ -401,7 +401,7 @@
   }
   .daily-attendance-card:last-child {
     background-color: #fff;
-    min-width: 30%;
+    width: 100%;
     margin-left: 20px;
     border: 1px solid #ededed;
   }
@@ -5674,7 +5674,6 @@ html.menu-opened body {
 }
 .stats-info {
   background-color: #fff;
-  border-radius: 0;
   -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   border: none;
@@ -5682,9 +5681,9 @@ html.menu-opened body {
   -webkit-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
   margin-bottom: 20px;
-  padding: 15px;
+  padding: 30px 15px;
   text-align: center;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 .stats-info h6 {
   color: #1f1f1f;

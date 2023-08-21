@@ -9,7 +9,7 @@ import LeadersSubordinatesTable from "../../../components/Tables/EmployeeTables/
 import OfficeStaffTable from "../../../components/Tables/EmployeeTables/officeStaffTable";
 
 const SupervisorAdmin = () => {
-  const { user, showAlert } = useAppContext();
+  const { user, showAlert, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [allLeadersSubordinates, setAllLeadersSubordinates] = useState([]);
   const [allOfficeStaff, setAllOfficeStaff] = useState([]);
@@ -55,23 +55,8 @@ const SupervisorAdmin = () => {
       setAllLeadersSubordinates(mapp);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-
-      if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Server Error, Please try again!",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving information from server, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
+      const component = "Team Members Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,11 +107,8 @@ const SupervisorAdmin = () => {
       setAllOfficeStaff(mapp);
       setLoading(false);
     } catch (error) {
-      showAlert(
-        true,
-        "Error retrieving information from server",
-        "alert alert-warning"
-      );
+      const component = "Office Staff Error:";
+      ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

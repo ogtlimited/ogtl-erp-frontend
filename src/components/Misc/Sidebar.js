@@ -13,18 +13,34 @@ const Sidebar = () => {
   // const AllAccess = ["super", "ceo", "hr_manager"];
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const CurrentUserIsRemoteLead = user?.employee_info?.remote;
   const CurrentUserIsLead = user?.employee_info?.is_lead;
+  const CurrentUserIsRemoteLead =
+    (user?.employee_info?.is_lead && user?.employee_info?.remote) ||
+    CurrentUserRoles.includes("wfh_lead")
+      ? true
+      : false;
 
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
-  console.log("User dept.", userDept);
 
   useEffect(() => {
-    console.log("this sidebar user:", user);
-  }, [user]);
+    console.log({
+      CurrentUserRoles,
+      userDept,
+      user,
+      CurrentUserIsRemoteLead,
+      CurrentUserIsLead,
+    });
+  }, [
+    CurrentUserIsLead,
+    CurrentUserIsRemoteLead,
+    CurrentUserRoles,
+    user,
+    userDept,
+  ]);
 
   const canView = (viewedBy) => {
+    console.log("viewedBy", viewedBy);
     if (
       userDept === viewedBy ||
       CurrentUserRoles.includes("ceo") ||
@@ -32,11 +48,13 @@ const Sidebar = () => {
       CurrentUserRoles.includes("hr_manager")
     ) {
       return true;
-    } else if (viewedBy === "All") {
+    } else if (viewedBy === "all") {
       return true;
     } else if (viewedBy === "lead") {
       return CurrentUserIsLead;
-    } else if (viewedBy === "remote-lead") {
+    } else if (viewedBy.includes("team_lead")) {
+      return CurrentUserIsRemoteLead;
+    } else if (viewedBy.includes("wfh_lead")) {
       return CurrentUserIsRemoteLead;
     } else {
       return false;

@@ -10,7 +10,7 @@ import  secureLocalStorage  from  "react-secure-storage";
 
 export const GeneratePayrollModal = ({
   fetchEmployeeSalarySlip,
-  setgenerating,
+  setGenerating,
 }) => {
   const { showAlert } = useAppContext();
   const [createPayslips, setCreatePayslips] = useState({
@@ -51,13 +51,13 @@ export const GeneratePayrollModal = ({
       setCreatePayslips(create_department);
       $("#GeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
-      setgenerating(false);
+      setGenerating(false);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error;
-      // showAlert(true, `${errorMsg}`, "alert alert-warning");
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
-      setgenerating(false);
+      setGenerating(false);
     }
   };
 

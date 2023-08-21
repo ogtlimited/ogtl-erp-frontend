@@ -12,6 +12,7 @@ import { EditRemoteEmployeeShiftModal } from "../Modal/EditRemoteEmployeeShiftMo
 import { CreateEmployeeShiftModal } from "../Modal/CreateEmployeeShiftModal";
 import { CreateRemoteEmployeeShiftModal } from "../Modal/CreateRemoteEmployeeShiftModal";
 import { ManualAttendanceModal } from "../Modal/ManualAttendanceModal";
+import { ViewManualAttendanceModal } from "../Modal/ViewManualAttendanceModal";
 import { ViewEmployeeShift } from "../Modal/ViewEmployeeShift";
 import { ViewRemoteEmployeeShift } from "../Modal/ViewRemoteEmployeeShift";
 import { useAppContext } from "../../Context/AppContext";
@@ -45,7 +46,7 @@ const ProfileCards = ({
   fetchEmployeeAttendance,
   setEmployeeOgid,
   hideAttendanceComponent,
-  hideRemoteShiftComponent
+  hideRemoteShiftComponent,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
   const { user, isFromBiometrics, isFromBiometricsClockIn } = useAppContext();
@@ -54,8 +55,8 @@ const ProfileCards = ({
   const CurrentUserRoles = user?.employee_info?.roles;
 
   const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
-  canView.includes(role)
-);
+    canView.includes(role)
+  );
 
   const ogid = user?.employee_info?.ogid;
 
@@ -102,8 +103,7 @@ const ProfileCards = ({
                   Shifts
                 </a>
               </li>
-              {CurrentUserCanEdit &&
-              !hideAttendanceComponent ? (
+              {CurrentUserCanEdit && !hideAttendanceComponent ? (
                 <li className="nav-item">
                   <a
                     href="#emp_clockInOut"
@@ -117,7 +117,9 @@ const ProfileCards = ({
                 </li>
               ) : null}
 
-              {userData?.employee?.remote && !hideRemoteShiftComponent ? (
+              {(userData?.employee?.remote ||
+                CurrentUserRoles.includes("wfh_lead")) &&
+              !hideRemoteShiftComponent ? (
                 <li className="nav-item">
                   <a
                     href="#emp_remoteShifts"
@@ -278,16 +280,29 @@ const ProfileCards = ({
             }
           >
             <div className="row">
-              <div className="col-md-12 d-flex">
-                <ManualAttendanceModal
-                  employeeOgid={userOgid}
-                  today={today}
-                  setToday={setToday}
-                  employeeAttendance={employeeAttendance}
-                  userData={userData}
-                  fetchEmployeeAttendance={fetchEmployeeAttendance}
-                />
-              </div>
+              {CurrentUserRoles.includes("hr_manager") || userOgid !== ogid ? (
+                <div className="col-md-12 d-flex">
+                  <ManualAttendanceModal
+                    employeeOgid={userOgid}
+                    today={today}
+                    setToday={setToday}
+                    employeeAttendance={employeeAttendance}
+                    userData={userData}
+                    fetchEmployeeAttendance={fetchEmployeeAttendance}
+                  />
+                </div>
+              ) : (
+                <div className="col-md-12 d-flex">
+                  <ViewManualAttendanceModal
+                    employeeOgid={userOgid}
+                    today={today}
+                    setToday={setToday}
+                    employeeAttendance={employeeAttendance}
+                    userData={userData}
+                    fetchEmployeeAttendance={fetchEmployeeAttendance}
+                  />
+                </div>
+              )}
             </div>
           </div>
         ) : null}

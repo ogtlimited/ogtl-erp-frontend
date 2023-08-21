@@ -1,24 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { salaryDeductionsFormJson } from "../../components/FormJSON/payroll/salary-deductions";
-import { salaryDeductionTypesFormJson } from "../../components/FormJSON/payroll/salary-deductiontypes";
-import FormModal from "../../components/Modal/Modal";
-import Salary from "../../components/payroll-tabs/Salary";
+// *IN USE
+
+import React from "react";
 import Deductions from "../../components/payroll-tabs/salary-deductions";
 import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
-import { useAppContext } from "../../Context/AppContext";
-import axiosInstance from "../../services/api";
 
 const PayrollItems = () => {
-  const [formType, setformType] = useState("");
-  const [template, settemplate] = useState(salaryDeductionsFormJson);
-  const [formValue, setformValue] = useState({});
-  const [submitted, setsubmitted] = useState(false);
-  const [path, setpath] = useState("/personal-details");
-  const [editData, seteditData] = useState({});
-  const [data, setData] = useState([]);
-  const [loadSelect, setloadSelect] = useState(false);
-  const [defaultView, setDefaultView] = useState(true);
-
   return (
     <>
       <div className="page-header">
@@ -26,14 +12,13 @@ const PayrollItems = () => {
           <div className="col">
             <h3 className="page-title">Deductions</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
-              </li>
+              <li className="breadcrumb-item">Payroll</li>
               <li className="breadcrumb-item active">Deductions</li>
             </ul>
           </div>
         </div>
       </div>
+
       <div className="page-menu">
         <div className="row">
           <div className="col-sm-12">
@@ -43,7 +28,6 @@ const PayrollItems = () => {
                   className="nav-link active"
                   data-toggle="tab"
                   href="#tab_deductions"
-                  onClick={() => setDefaultView(false)}
                 >
                   Deductions
                 </a>
@@ -53,7 +37,6 @@ const PayrollItems = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_deduction_types"
-                  onClick={() => setDefaultView(false)}
                 >
                   Deduction Types
                 </a>
@@ -62,21 +45,15 @@ const PayrollItems = () => {
           </div>
         </div>
       </div>
-        {defaultView ? <Deductions/> : null}
-      <div className="tab-content">
-        <Deductions
-          setformType={setformType}
-          submitted={submitted}
-          formValue={formValue}
-          loadSelect={loadSelect}
-        />
-        <DeductionType
-          setformType={setformType}
-          submitted={submitted}
-          formValue={formValue}
-          loadSelect={loadSelect}
-          setsubmitted={setsubmitted}
-        />
+
+      <div className="row tab-content">
+        <div id="tab_deductions" className="col-12 tab-pane show active">
+          <Deductions />
+        </div>
+
+        <div id="tab_deduction_types" className="col-12 tab-pane">
+          <DeductionType />
+        </div>
       </div>
     </>
   );

@@ -9,7 +9,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
-  const { showAlert, ErrorHandler } = useAppContext();
+  const { showAlert, ErrorHandler, user } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +30,8 @@ const AllEmployeesAdmin = () => {
 
   const [modalType, setModalType] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
+
+  const CurrentUserRoles = user?.employee_info?.roles;
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
@@ -255,20 +257,23 @@ const AllEmployeesAdmin = () => {
               <li className="breadcrumb-item active">All Employees</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            <>
-              <a
-                href="#"
-                className="btn add-btn "
-                data-toggle="modal"
-                onClick={() =>
-                  navigate("/dashboard/hr/all-employees/employee/add")
-                }
-              >
-                <i className="fa fa-plus"></i> Add Employee
-              </a>
-            </>
-          </div>
+          {CurrentUserRoles.includes("hr_manager") ||
+          CurrentUserRoles.includes("senior_hr_associate") ? (
+            <div className="col-auto float-right ml-auto">
+              <>
+                <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
+                  onClick={() =>
+                    navigate("/dashboard/hr/all-employees/employee/add")
+                  }
+                >
+                  <i className="fa fa-plus"></i> Add Employee
+                </a>
+              </>
+            </div>
+          ) : null}
         </div>
       </div>
 
