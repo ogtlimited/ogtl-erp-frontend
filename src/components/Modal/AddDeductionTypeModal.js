@@ -124,42 +124,40 @@ export const AddDeductionTypeModal = ({ fetchDeductionTypes }) => {
     e.preventDefault();
 
     const dataPayload = {
-      operation_office_id: data?.operation_office_id,
+      office_id: data?.operation_office_id,
       title: data?.title,
       description: data?.description,
       percentage: data?.percentage?.length ? +data?.percentage : null,
       amount: data?.amount?.length ? +data?.amount : null,
     };
 
-    console.log("Create this deduction type:", dataPayload);
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post("/api/v1/deduction_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          ...dataPayload,
+        },
+      });
 
-    // setLoading(true);
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.post("/api/v1/deductions.json", {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "ngrok-skip-browser-warning": "69420",
-    //     },
-    //     payload: {
-    //       ...dataPayload,
-    //     },
-    //   });
-
-    //   showAlert(
-    //     true,
-    //     `${data?.employeeName} has been added to deductions.`,
-    //     "alert alert-success"
-    //   );
-    //   fetchDeductionTypes();
-    //   $("#AddDeductionModal").modal("toggle");
-    //   cancelEvent();
-    // } catch (error) {
-    //   $("#AddDeductionModal").modal("toggle");
-    //   showAlert(true, error?.response?.data?.errors, "alert alert-warning");
-    // }
-    // setLoading(false);
+      showAlert(
+        true,
+        `Deduction type (${data?.title}) has been created successfully.`,
+        "alert alert-success"
+      );
+      fetchDeductionTypes();
+      $("#AddDeductionTypesModal").modal("toggle");
+      cancelEvent();
+    } catch (error) {
+      $("#AddDeductionTypesModal").modal("toggle");
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
+    setLoading(false);
   };
 
   return (
