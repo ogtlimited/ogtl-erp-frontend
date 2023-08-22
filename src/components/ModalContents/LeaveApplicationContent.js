@@ -5,8 +5,6 @@ import React from "react";
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
   !leaveContent.rejection_reason && delete leaveContent.rejection_reason;
 
-  console.log(leaveContent);
-
   const filteredApplication = {
     ...leaveContent,
     id: undefined,
