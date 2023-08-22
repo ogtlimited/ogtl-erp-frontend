@@ -376,9 +376,9 @@ const LeavesAdmin = () => {
           <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
-          <a href="#">
+          <div>
             {row?.full_name} <span>{row?.ogid}</span>
-          </a>
+          </div>
         </h2>
       ),
     },

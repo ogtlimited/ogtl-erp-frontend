@@ -1,4 +1,4 @@
-/** @format */
+//* IN USE
 
 import React, { useState, useEffect } from "react";
 import { HR_CREATE_LEAVE, officeTypeOptions } from "../FormJSON/CreateLeave";
@@ -8,7 +8,6 @@ import $ from "jquery";
 import ms from "ms";
 import moment from "moment";
 import Select from "react-select";
-import secureLocalStorage from "react-secure-storage";
 
 export const CreateLeaveModal = ({
   fetchHRLeaves,
@@ -20,17 +19,26 @@ export const CreateLeaveModal = ({
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
-  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
   const [allOffices, setAllOffices] = useState([]);
+  const [allEmergencyLeaveTypes, setAllEmergencyLeaveType] = useState([]);
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
   const [maxDate, setMaxDate] = useState(null);
+
+  useEffect(() => {
+    const filteredLeaveTypes = selectLeaveTypes?.filter(
+      (e) =>
+        e?.label?.toLowerCase()?.includes("emergency") ||
+        e?.label?.toLowerCase()?.includes("sick")
+    );
+    setAllEmergencyLeaveType(filteredLeaveTypes);
+  }, [selectLeaveTypes]);
 
   useEffect(() => {
     if (leave.hr_leave_type_id && leave?.hr_user_id) {
@@ -327,7 +335,7 @@ export const CreateLeaveModal = ({
                         <label htmlFor="hr_leave_type_id">Leave Type</label>
                         <Select
                           name="hr_leave_type_id"
-                          options={selectLeaveTypes}
+                          options={allEmergencyLeaveTypes}
                           isSearchable={true}
                           value={{
                             label: leave.leaveTypeTitle,
