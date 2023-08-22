@@ -204,6 +204,7 @@ export const RoleFormModal = ({ mode, data, fetchAllRoles }) => {
                         className="form-control"
                         value={role.title}
                         onChange={handleFormChange}
+                        required
                       />
                     </div>
                   </div>

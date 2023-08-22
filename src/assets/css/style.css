@@ -309,13 +309,13 @@
   min-width: 20%;
   margin-left: 20px;
   border: 1px solid #ededed;
-  padding-bottom: 10px;  
+  padding: 10px;  
   border-radius: 15px !important;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px !important;
 }
 .daily-attendance-card:last-child {
   background-color: #fff;
-  min-width: 30%;
+  min-width: 35%;
   margin-left: 20px;
   border: 1px solid #ededed;
 }

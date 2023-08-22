@@ -99,7 +99,7 @@ const CapturedBiometricsTable = ({
       dataField: "FullName",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -120,53 +120,30 @@ const CapturedBiometricsTable = ({
         </h2>
       ),
     },
-    // {
-    //   dataField: 'shiftStatus',
-    //   text: 'Shift Status',
-    //   sort: true,
-    //   headerStyle: { minWidth: '120px' },
-    //   formatter: (value, row) => (
-    //     <>
-    //       {value === true ? (
-    //         <a href="" className="pos-relative">
-    //           {' '}
-    //           <span className="status-online"></span>{' '}
-    //           <span className="ml-4 d-block">On Shift</span>
-    //         </a>
-    //       ) : (
-    //         <a href="" className="pos-relative">
-    //           {' '}
-    //           <span className="status-terminated"></span>{' '}
-    //           <span className="ml-4 d-block">No Shift</span>
-    //         </a>
-    //       )}
-    //     </>
-    //   ),
-    // },
     {
       dataField: "StaffUniqueId",
       text: "Employee ID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "Role",
       text: "Role",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "Email",
       text: "Company Email",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "",
       text: "Action",
       sort: true,
-      headerStyle: { width: "100%", textAlign: "left" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <>
           <div className="text-center">
