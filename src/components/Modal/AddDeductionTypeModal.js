@@ -11,7 +11,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const AddDeductionTypeModal = ({ fetchDeductionTypes }) => {
+export const AddDeductionTypeModal = ({ fetchDeductionTypes, goToTop }) => {
   const { showAlert, loadingSelect } = useAppContext();
   const [data, setData] = useState(HR_ADD_DEDUCTION_TYPE);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -151,10 +151,12 @@ export const AddDeductionTypeModal = ({ fetchDeductionTypes }) => {
         "alert alert-success"
       );
       fetchDeductionTypes();
+      goToTop();
       $("#AddDeductionTypesModal").modal("toggle");
       cancelEvent();
     } catch (error) {
       $("#AddDeductionTypesModal").modal("toggle");
+      goToTop();
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
     setLoading(false);

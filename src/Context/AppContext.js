@@ -9,11 +9,11 @@ const AppContext = createContext();
 
 const AppProvider = (props) => {
   const [user] = useState(tokenService.getUser());
-  const [showProgress, setshowProgress] = useState({
+  const [showProgress, setShowProgress] = useState({
     count: 25,
     state: false,
   });
-  const [showAlertMsg, setshowAlertMsg] = useState({
+  const [showAlertMsg, setShowAlertMsg] = useState({
     state: false,
     msg: "",
     class: "",
@@ -27,9 +27,18 @@ const AppProvider = (props) => {
   const [isFromBiometricsClockIn, setIsFromBiometricsClockIn] = useState(false);
   const [dropDownClicked, setDropDownClicked] = useState(false);
 
+  // Select API States:
+  const [loadingSelect, setLoadingSelect] = useState(false);
+  const [selectEmployees, setSelectEmployees] = useState([]);
+  const [selectCampaigns, setSelectCampaigns] = useState([]);
+  const [selectDepartments, setSelectDepartments] = useState([]);
+  const [selectDesignations, setSelectDesignations] = useState([]);
+  const [selectBranches, setSelectBranches] = useState([]);
+  const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
+
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title === "hr" ? true : false;
-  
+
   const goToTop = () => {
     window.scrollTo({
       top: 0,
@@ -52,39 +61,9 @@ const AppProvider = (props) => {
     },
   ];
 
-  // Select API States:
-  const [loadingSelect, setLoadingSelect] = useState(false);
-  const [selectEmployees, setSelectEmployees] = useState([]);
-  const [selectCampaigns, setSelectCampaigns] = useState([]);
-  const [selectDepartments, setSelectDepartments] = useState([]);
-  const [selectDesignations, setSelectDesignations] = useState([]);
-  const [selectBranches, setSelectBranches] = useState([]);
-  const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
-
-  const fetchHRLeavesNotificationCount = () => {
-    axiosInstance
-      .get("/api/v1/hr_dashboard/leaves.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: 1,
-          limit: 1000,
-        },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.leaves;
-        const dataCount = resData.length;
-        setCount(dataCount);
-      })
-      .catch((error) => {});
-  };
-
   const handleProgress = ({ count, state }) => {
     console.log(count, state);
-    setshowProgress({
+    setShowProgress({
       count: count,
       state: state,
     });
@@ -116,7 +95,7 @@ const AppProvider = (props) => {
       ? "#check-circle-fill"
       : "#exclamation-triangle-fill";
     let label = className?.includes("alert-success") ? "Success:" : "Warning:";
-    setshowAlertMsg({
+    setShowAlertMsg({
       state: state,
       msg: msg,
       class: className,
@@ -124,7 +103,7 @@ const AppProvider = (props) => {
       label,
     });
     setTimeout(() => {
-      setshowAlertMsg({
+      setShowAlertMsg({
         state: "",
         msg: "",
         class: "",
@@ -134,7 +113,26 @@ const AppProvider = (props) => {
     }, 5000);
   };
 
-  // ! - EVERYTHING ABOVE IS FROM OLD API!!!
+  const fetchHRLeavesNotificationCount = () => {
+    axiosInstance
+      .get("/api/v1/hr_dashboard/leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 1000,
+        },
+      })
+      .then((res) => {
+        let resData = res?.data?.data?.leaves;
+        const dataCount = resData.length;
+        setCount(dataCount);
+      })
+      .catch((error) => {});
+  };
 
   // SELECT APIs
   // All Employees:
@@ -311,8 +309,7 @@ const AppProvider = (props) => {
 
   // Universal Error Handler:
   const ErrorHandler = (error, component) => {
-
-    console.log("Route error:", error?.response)
+    console.log("Route error:", error?.response);
     const errorMessage = error.response?.data?.errors;
     const errorStatus = error.response?.status;
 

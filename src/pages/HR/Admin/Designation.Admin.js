@@ -96,6 +96,7 @@ const Designations = () => {
       text: "Designations",
       sort: true,
       headerStyle: { width: "50%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "created_at",

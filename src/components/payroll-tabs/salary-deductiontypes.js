@@ -8,7 +8,7 @@ import UniversalTable from "../Tables/UniversalTable";
 import { AddDeductionTypeModal } from "../Modal/AddDeductionTypeModal";
 
 const DeductionType = () => {
-  const { ErrorHandler, user } = useAppContext();
+  const { ErrorHandler, user, goToTop } = useAppContext();
   const [deductionTypes, setDeductionTypes] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,11 +37,16 @@ const DeductionType = () => {
           ...item,
           officeType:
             item.office?.office_type.charAt(0).toUpperCase() +
-            item.office?.office_type.slice(1),
-          officeName: item.office?.title,
+              item.office?.office_type.slice(1) || "N/A",
+          officeName: item.office?.title || "-",
           deductionTitle: item?.deduction?.title,
           deductionDesc: item?.deduction?.description,
-          deductionPercentage: item?.deduction?.percentage + "%",
+          deductionPercentage: item?.deduction?.percentage
+            ? item?.deduction?.percentage + "%"
+            : "-",
+          deductionAmount: item?.deduction?.amount
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
+            : "-",
         };
       });
 
@@ -65,28 +70,36 @@ const DeductionType = () => {
       text: "Office Type",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "officeName",
       text: "Office",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "deductionTitle",
       text: "Title",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "deductionDesc",
       text: "Description",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "25%" },
+    },
+    {
+      dataField: "deductionAmount",
+      text: "Amount",
+      sort: true,
+      headerStyle: { width: "10%" },
     },
     {
       dataField: "deductionPercentage",
-      text: "Deduction Percentage",
+      text: "Percentage",
       sort: true,
       headerStyle: { width: "10%" },
     },
@@ -120,7 +133,10 @@ const DeductionType = () => {
         />
       </div>
 
-      <AddDeductionTypeModal fetchDeductionTypes={fetchDeductionTypes} />
+      <AddDeductionTypeModal
+        fetchDeductionTypes={fetchDeductionTypes}
+        goToTop={goToTop}
+      />
     </div>
   );
 };

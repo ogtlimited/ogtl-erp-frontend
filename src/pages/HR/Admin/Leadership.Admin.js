@@ -192,7 +192,7 @@ const LeadershipAdmin = () => {
       dataField: "fullName",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "300px" },
+      headerStyle: { width: "30%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -219,20 +219,20 @@ const LeadershipAdmin = () => {
       dataField: "ogid",
       text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "email",
       text: "Company Email",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "20%" },
     },
     CurrentUserRoles.includes("hr_manager") && {
       dataField: "",
