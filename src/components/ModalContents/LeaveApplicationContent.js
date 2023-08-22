@@ -5,6 +5,8 @@ import React from "react";
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
   !leaveContent.rejection_reason && delete leaveContent.rejection_reason;
 
+  console.log(leaveContent);
+
   const filteredApplication = {
     ...leaveContent,
     id: undefined,
@@ -37,7 +39,11 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
                     ? value
                     : value === null
                     ? "Not Provided"
-                    : value}
+                    : typeof value === "number"
+                    ? value
+                    : typeof value === "boolean" && value === true
+                    ? "Yes"
+                    : "No"}
                 </p>
               </div>
             </React.Fragment>

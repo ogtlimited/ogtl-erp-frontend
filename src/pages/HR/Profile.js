@@ -52,7 +52,7 @@ const Profile = () => {
   );
 
   // Employee Shifts:
-  const fetchEmployeeShift = async () => {
+  const fetchEmployeeShift = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
         `/api/v1/employee_shifts.json?ogid=${id}`,
@@ -78,66 +78,70 @@ const Profile = () => {
       const component = "Employee Shifts Error:";
       ErrorHandler(error, component);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   // Employee Profile Info:
-  const fetchEmployeeProfile = async (newOgid) => {
-    if (newOgid) {
-      try {
-        const response = await axiosInstance.get(
-          `/api/v1/employees/${newOgid}.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        );
-        const resData = response?.data?.data;
-        setUserdata(resData);
+  const fetchEmployeeProfile = useCallback(
+    async (newOgid) => {
+      if (newOgid) {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employees/${newOgid}.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+          const resData = response?.data?.data;
+          setUserdata(resData);
 
-        const userId = resData?.employee?.email;
-        const employeeId = resData?.employee?.personal_detail?.id;
-        const officeId = resData?.office?.id;
+          const userId = resData?.employee?.email;
+          const employeeId = resData?.employee?.personal_detail?.id;
+          const officeId = resData?.office?.id;
 
-        setUserId(userId);
-        setEmployeeId(employeeId);
-        setOfficeId(officeId);
-      } catch (error) {
-        const component = "Employee Profile Error:";
-        ErrorHandler(error, component);
+          setUserId(userId);
+          setEmployeeId(employeeId);
+          setOfficeId(officeId);
+        } catch (error) {
+          const component = "Employee Profile Error:";
+          ErrorHandler(error, component);
+        }
+      } else {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employees/${employeeOgid}.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+          const resData = response?.data?.data;
+          setUserdata(resData);
+
+          const userId = resData?.employee?.email;
+          const employeeId = resData?.employee?.personal_detail?.id;
+          const officeId = resData?.office?.id;
+
+          setUserId(userId);
+          setEmployeeId(employeeId);
+          setOfficeId(officeId);
+        } catch (error) {
+          const component = "Employee Profile Error:";
+          ErrorHandler(error, component);
+        }
       }
-    } else {
-      try {
-        const response = await axiosInstance.get(
-          `/api/v1/employees/${employeeOgid}.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        );
-        const resData = response?.data?.data;
-        setUserdata(resData);
-
-        console.log("Employee Details:", resData);
-
-        const userId = resData?.employee?.email;
-        const employeeId = resData?.employee?.personal_detail?.id;
-        const officeId = resData?.office?.id;
-
-        setUserId(userId);
-        setEmployeeId(employeeId);
-        setOfficeId(officeId);
-      } catch (error) {
-        const component = "Employee Profile Error:";
-        ErrorHandler(error, component);
-      }
-    }
-  };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [employeeOgid]
+  );
 
   // Employee Attendance - Today:
   const fetchEmployeeAttendance = useCallback(
@@ -203,7 +207,7 @@ const Profile = () => {
   );
 
   // Employee Remote Shifts:
-  const fetchEmployeeRemoteShift = async () => {
+  const fetchEmployeeRemoteShift = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
         `/api/v1/employee_remote_shifts.json?ogid=${id}`,
@@ -233,13 +237,17 @@ const Profile = () => {
         return setHideRemoteShiftComponent(true);
       }
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     fetchEmployeeShift();
     fetchEmployeeProfile();
 
-    if (CurrentUserIsLead && CurrentUserIsRemoteLead) {
+    if (
+      (CurrentUserIsLead && CurrentUserIsRemoteLead) ||
+      CurrentUserRoles.includes("wfh_lead")
+    ) {
       fetchEmployeeRemoteShift();
     }
 
@@ -253,12 +261,39 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (dropDownClicked) {
-    fetchEmployeeShift();
-    fetchEmployeeProfile(id);
-    fetchEmployeeAttendance();
-    fetchEmployeeRemoteShift();
-  }
+  useEffect(() => {
+    if (dropDownClicked) {
+      fetchEmployeeShift();
+      fetchEmployeeProfile();
+
+      if (
+        (CurrentUserIsLead && CurrentUserIsRemoteLead) ||
+        CurrentUserRoles.includes("wfh_lead")
+      ) {
+        fetchEmployeeRemoteShift();
+      }
+
+      if (
+        CurrentUserRoles.includes("hr_manager") ||
+        CurrentUserRoles.includes("senior_hr_associate")
+      ) {
+        fetchEmployeeRemoteShift();
+        fetchEmployeeAttendance();
+      }
+
+      return setDropDownClicked(false);
+    }
+  }, [
+    CurrentUserIsLead,
+    CurrentUserIsRemoteLead,
+    CurrentUserRoles,
+    dropDownClicked,
+    fetchEmployeeAttendance,
+    fetchEmployeeProfile,
+    fetchEmployeeRemoteShift,
+    fetchEmployeeShift,
+    setDropDownClicked,
+  ]);
 
   return (
     <>
