@@ -529,29 +529,20 @@ const JobApplicantsAdmin = () => {
         <div className="row">
           <div className="col">
             {/* <h3 className="page-title">Job Applications</h3> */}
-            <h3 className="page-title">Job Application Sievers</h3>
+            <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
-              <li className="breadcrumb-item active">Job Sievers</li>
+              <li className="breadcrumb-item active">Job Applications</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* <div className="page-menu">
+      <div className="page-menu" style={{ marginBottom: "20px" }}>
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  data-toggle="tab"
-                  href="#tab_rep-sievers"
-                >
-                  Rep Sievers
-                </a>
-              </li>
               <li className="nav-item">
                 <a
                   className="nav-link"
@@ -561,10 +552,19 @@ const JobApplicantsAdmin = () => {
                   Job Applications
                 </a>
               </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_rep-sievers"
+                >
+                  Job Sievers
+                </a>
+              </li>
             </ul>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {/* <div className="row tab-content">
         <div id="tab_rep-sievers" className="col-12 tab-pane show active">
