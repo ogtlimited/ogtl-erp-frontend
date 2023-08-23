@@ -46,6 +46,26 @@ const EmployeeAttendance = () => {
               };
             });
 
+      resData.forEach((attendance) => {
+        const clockIn = new Date(`2000-01-01 ${attendance.clock_in}`);
+        if (attendance.clock_out !== "No Clock out") {
+          const clockOut = new Date(`2000-01-01 ${attendance.clock_out}`);
+          const workHours = (clockOut - clockIn) / 1000 / 3600;
+
+          const hours = Math.floor(workHours);
+          const minutes = Math.round((workHours - hours) * 60);
+
+          attendance.work_hours = `${hours}h ${minutes}m`;
+
+          if (workHours < 0) {
+            attendance.work_hours = `-`;
+          }
+
+        } else {
+          attendance.work_hours = "No Clock out";
+        }
+      });
+
       setAttendance(resData);
       setLoading(false);
     } catch (error) {
@@ -76,13 +96,19 @@ const EmployeeAttendance = () => {
       dataField: "clock_in",
       text: "Clock In",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "clock_out",
       text: "Clock Out",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "work_hours",
+      text: "Work Hours",
+      sort: true,
+      headerStyle: { width: "20%" },
     },
   ];
 
