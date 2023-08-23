@@ -53,7 +53,7 @@ export const CreateLeaveModal = ({
     const today_date = moment(time).format("yyyy-MM-DD");
     setToday(today_date);
     const minSec = ms("15d");
-    const allowableDays = 21;
+    const allowableDays = 20;
     const maxSec = ms(`${allowableDays}d`);
     const min_date = new Date(+new Date(today) + minSec);
     const max_date = new Date(+new Date(leave.start_date) + maxSec);
@@ -379,7 +379,8 @@ export const CreateLeaveModal = ({
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="end_date">Last Day of Leave</label>
-                          {leaveType.includes("emergency") ? (
+                          {leaveType.includes("emergency") ||
+                          leaveType.includes("sick") ? (
                             <input
                               type="date"
                               name="end_date"
@@ -387,7 +388,6 @@ export const CreateLeaveModal = ({
                               onChange={handleFormChange}
                               className="form-control "
                               min={leave.start_date}
-                              max={maxDate}
                               required
                             />
                           ) : (
