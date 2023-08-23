@@ -60,7 +60,6 @@ const EmployeeAttendance = () => {
           if (workHours < 0) {
             attendance.work_hours = `-`;
           }
-
         } else {
           attendance.work_hours = "No Clock out";
         }
