@@ -571,7 +571,7 @@ const LeavesUser = () => {
           <div className="col">
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item">Employee</li>
               <li className="breadcrumb-item active">Leaves</li>
             </ul>
           </div>

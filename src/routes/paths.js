@@ -40,6 +40,7 @@ export const PATH_DASHBOARD = {
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
     resignationAdmin: path(ROOTS_DASHBOARD, "/hr/resignation-admin"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
+    employeeAttendance: path(ROOTS_DASHBOARD, "/hr/attendance"),
     leavesEmployee: path(ROOTS_DASHBOARD, "/hr/leaves"),
     resignationEmployee: path(ROOTS_DASHBOARD, "/hr/resignation"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
@@ -57,7 +58,10 @@ export const PATH_DASHBOARD = {
   leadership: {
     root: path(ROOTS_DASHBOARD, "/leadership"),
     supervisor: path(ROOTS_DASHBOARD, "/leadership/supervisor"),
-    attendanceBySupervisor: path(ROOTS_DASHBOARD, "/leadership/subordinate-attendance"),
+    attendanceBySupervisor: path(
+      ROOTS_DASHBOARD,
+      "/leadership/subordinate-attendance"
+    ),
     campaignSchedule: path(ROOTS_DASHBOARD, "/leadership/campaign-schedule"),
     remoteAttendance: path(ROOTS_DASHBOARD, "/leadership/attendance-record"),
   },
