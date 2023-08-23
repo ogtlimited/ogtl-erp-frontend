@@ -83,7 +83,7 @@ const LeavesUser = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -313,30 +313,6 @@ const LeavesUser = () => {
                 <i className="fa fa-remove m-r-5"></i> Cancel Application
               </a>
             ) : null}
-
-            {/* {row.status === "pending" && row.acted_on === false ? (
-              <a
-                href="#"
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#EditModal"
-                onClick={() => handleEditApplication(row)}
-              >
-                <i className="fa fa-edit m-r-5"></i> Edit
-              </a>
-            ) : null} */}
-
-            {/* {row.status === "rejected" && row.hr_stage === false ? (
-              <a
-                href="#"
-                className="dropdown-item"
-                data-toggle="modal"
-                data-target="#AppealModal"
-                onClick={(e) => handleAppealRejection(e, row)}
-              >
-                <i className="fa fa-edit m-r-5"></i> Appeal Rejection
-              </a>
-            ) : null} */}
           </div>
         </div>
       ),

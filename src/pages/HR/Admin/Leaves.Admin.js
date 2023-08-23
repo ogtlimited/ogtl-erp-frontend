@@ -232,9 +232,9 @@ const LeavesAdmin = () => {
           <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
-          <a href="#">
+          <div>
             {row?.full_name} <span>{row?.ogid}</span>
-          </a>
+          </div>
         </h2>
       ),
     },
@@ -243,6 +243,7 @@ const LeavesAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "status",
@@ -375,9 +376,9 @@ const LeavesAdmin = () => {
           <a href="#" className="avatar">
             <img alt="" src={male} />
           </a>
-          <a href="#">
+          <div>
             {row?.full_name} <span>{row?.ogid}</span>
-          </a>
+          </div>
         </h2>
       ),
     },
@@ -386,6 +387,7 @@ const LeavesAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "status",

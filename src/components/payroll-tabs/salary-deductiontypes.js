@@ -5,11 +5,19 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../Tables/UniversalTable";
+import { AddDeductionTypeModal } from "../Modal/AddDeductionTypeModal";
 
 const DeductionType = () => {
-  const { ErrorHandler } = useAppContext();
+  const { ErrorHandler, user, goToTop } = useAppContext();
   const [deductionTypes, setDeductionTypes] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const fetchDeductionTypes = async () => {
     setLoading(true);
@@ -29,11 +37,16 @@ const DeductionType = () => {
           ...item,
           officeType:
             item.office?.office_type.charAt(0).toUpperCase() +
-            item.office?.office_type.slice(1),
-          officeName: item.office?.title,
+              item.office?.office_type.slice(1) || "N/A",
+          officeName: item.office?.title || "-",
           deductionTitle: item?.deduction?.title,
           deductionDesc: item?.deduction?.description,
-          deductionPercentage: item?.deduction?.percentage + "%",
+          deductionPercentage: item?.deduction?.percentage
+            ? item?.deduction?.percentage + "%"
+            : "-",
+          deductionAmount: item?.deduction?.amount
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
+            : "-",
         };
       });
 
@@ -57,48 +70,57 @@ const DeductionType = () => {
       text: "Office Type",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "officeName",
       text: "Office",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "deductionTitle",
       text: "Title",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "deductionDesc",
       text: "Description",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "25%" },
     },
     {
-      dataField: "deductionPercentage",
-      text: "Deduction Percentage",
+      dataField: "deductionAmount",
+      text: "Amount",
       sort: true,
       headerStyle: { width: "10%" },
     },
-    
+    {
+      dataField: "deductionPercentage",
+      text: "Percentage",
+      sort: true,
+      headerStyle: { width: "10%" },
+    },
   ];
 
   return (
     <div className="tab-pane" id="tab_deduction_types">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
-          {/* <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#test1"
-            >
-              Add Deduction Type
-            </a>
-          </div> */}
+          {CurrentUserCanCreateAndEdit && (
+            <div className="col-auto float-right ml-auto">
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#AddDeductionTypesModal"
+              >
+                Add Deduction Type
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
@@ -110,6 +132,11 @@ const DeductionType = () => {
           setLoading={setLoading}
         />
       </div>
+
+      <AddDeductionTypeModal
+        fetchDeductionTypes={fetchDeductionTypes}
+        goToTop={goToTop}
+      />
     </div>
   );
 };

@@ -67,7 +67,12 @@ const Login = () => {
                 "Unable to communicate with server. Please try again later."
               );
             }
-            setErrorMsg(`${err?.response?.data?.errors}`);
+            setErrorMsg(
+              `${
+                err?.response?.data?.errors ||
+                "Error accessing server, please try again later."
+              }`
+            );
           })
           .finally(() => {
             setLoading(false);
@@ -132,7 +137,12 @@ const Login = () => {
               "Unable to communicate with server. Please try again later."
             );
           }
-          setErrorMsg(`${e?.response?.data?.errors}`);
+          setErrorMsg(
+            `${
+              e?.response?.data?.errors ||
+              "Error accessing server, please try again later."
+            }`
+          );
         }
       })
       .finally(() => {

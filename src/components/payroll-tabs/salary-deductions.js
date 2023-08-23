@@ -40,9 +40,13 @@ const Deductions = () => {
           employeeName: item?.user
             ? item?.user?.first_name + " " + item?.user?.last_name
             : "N/A",
+          employeeId: item?.user?.ogid,
+          office: item?.user?.office,
           deductionType: item?.deduction_type?.title,
           deductionStatus: item?.deduction?.status ? "Active" : "Inactive",
-          deductionPercentage: item?.deduction_type?.percentage + "%",
+          deductionAmount: item?.deduction?.amount
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
+            : "-",
         };
       });
 
@@ -65,13 +69,27 @@ const Deductions = () => {
       dataField: "employeeName",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "25%" },
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <div>
+            {row?.employeeName} <span>{row?.employeeId}</span>
+          </div>
+        </h2>
+      ),
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "deductionType",
       text: "Deduction Type",
       sort: true,
-      headerStyle: { width: "25%" },
+      headerStyle: { width: "18%" },
     },
     {
       dataField: "deductionStatus",
@@ -93,15 +111,15 @@ const Deductions = () => {
       ),
     },
     {
-      dataField: "deductionPercentage",
-      text: "Deduction Percentage",
+      dataField: "deductionAmount",
+      text: "Deduction",
       sort: true,
       headerStyle: { width: "15%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "17%" },
       formatter: (value, row) => (
         <div className="text-center">
           {row?.deductionStatus === "Active" ? (

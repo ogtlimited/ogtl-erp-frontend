@@ -37,7 +37,11 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
                     ? value
                     : value === null
                     ? "Not Provided"
-                    : value}
+                    : typeof value === "number"
+                    ? value
+                    : typeof value === "boolean" && value === true
+                    ? "Yes"
+                    : "No"}
                 </p>
               </div>
             </React.Fragment>
