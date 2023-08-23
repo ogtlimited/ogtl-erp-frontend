@@ -8,7 +8,7 @@ import $ from "jquery";
 import ms from "ms";
 import moment from "moment";
 import Select from "react-select";
-import  secureLocalStorage  from  "react-secure-storage";
+import secureLocalStorage from "react-secure-storage";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
@@ -35,9 +35,8 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     const today_date = moment(time).format("yyyy-MM-DD");
     setToday(today_date);
     const minSec = ms("15d");
-    // const leaveDays = user?.employee_info?.leave_count + 15;
-    const leaveDays = user?.employee_info?.leave_count;
-    const maxSec = ms(`${leaveDays}d`);
+    const allowableDays = 20;
+    const maxSec = ms(`${allowableDays}d`);
     const min_date = new Date(+new Date(today) + minSec);
     const max_date = new Date(+new Date(leave.start_date) + maxSec);
     setMinDate(moment(min_date).format("yyyy-MM-DD"));
@@ -81,17 +80,14 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        "/api/v1/leaves.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: dataPayload
-        }
-      );
+      const response = await axiosInstance.post("/api/v1/leaves.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: dataPayload,
+      });
 
       showAlert(
         true,
@@ -171,7 +167,8 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="start_date">Start</label>
-                        {leaveType.includes("emergency") ? (
+                        {leaveType.includes("emergency") ||
+                        leaveType.includes("sick") ? (
                           <input
                             type="date"
                             name="start_date"
@@ -199,7 +196,8 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="end_date">Last Day of Leave</label>
-                          {leaveType.includes("emergency") ? (
+                          {leaveType.includes("emergency") ||
+                          leaveType.includes("sick") ? (
                             <input
                               type="date"
                               name="end_date"
@@ -207,7 +205,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                               onChange={handleFormChange}
                               className="form-control "
                               min={leave.start_date}
-                              max={maxDate}
                               required
                             />
                           ) : (
@@ -236,8 +233,11 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-primary" 
-                      disabled={!isLeaveTypeValid}>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={!isLeaveTypeValid}
+                    >
                       {loading ? (
                         <span
                           className="spinner-border spinner-border-sm"
