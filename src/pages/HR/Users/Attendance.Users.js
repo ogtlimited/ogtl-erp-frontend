@@ -91,7 +91,7 @@ const EmployeeAttendance = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Attendance Records</h3>
+            <h3 className="page-title">Attendance Record</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Employee</li>
               <li className="breadcrumb-item active">Attendance</li>
