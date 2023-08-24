@@ -340,7 +340,7 @@ const LeavesAdmin = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === "pending" ? (
+            {row.status === "pending" && CurrentUserCanCreateLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -350,7 +350,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" ? (
+            {row.status === "pending" && CurrentUserCanCreateLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
