@@ -135,6 +135,11 @@ const sidebarConfig = [
                 },
                 {
                   canView: "all",
+                  title: "Attendance",
+                  path: PATH_DASHBOARD.hr.employeeAttendance,
+                },
+                {
+                  canView: "all",
                   title: "Leaves",
                   path: PATH_DASHBOARD.hr.leavesEmployee,
                 },
@@ -174,6 +179,11 @@ const sidebarConfig = [
                   canView: "hr",
                   title: "Leave Applications",
                   path: PATH_DASHBOARD.hr.leavesAdmin,
+                },
+                {
+                  canView: "all",
+                  title: "Attendance",
+                  path: PATH_DASHBOARD.hr.employeeAttendance,
                 },
                 {
                   canView: "all",

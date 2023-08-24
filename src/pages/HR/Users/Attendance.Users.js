@@ -1,111 +1,166 @@
-import React, { useEffect } from "react";
-import Activity from "../../../components/attendance/activity";
-import AttendanceTable from "../../../components/attendance/attendance-table";
-import Stats from "../../../components/attendance/stats";
-import Timesheet from "../../../components/attendance/timesheet";
-import PageHeader from "../../../components/Misc/PageHeader";
-import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import GeneralTable from "../../../components/Tables/Table";
+//* IN USE
+
+import React, { useState, useEffect, useCallback } from "react";
+import UniversalTable from "./../../../components/Tables/UniversalTable";
 import { useAppContext } from "../../../Context/AppContext";
-import attendance from "../../../db/attendance.json";
+import moment from "moment";
+import axiosInstance from "../../../services/api";
 
 const EmployeeAttendance = () => {
-  const { employeeAttendance, fetchEmployeeAttendance } = useAppContext();
+  const { ErrorHandler } = useAppContext();
+  const [attendance, setAttendance] = useState([]);
+  const [loading, setLoading] = useState([]);
+
+  const [fromDate, setFromDate] = useState(
+    moment().startOf("month").format("YYYY-MM-DD")
+  );
+  const [toDate, setToDate] = useState(
+    moment().endOf("month").format("YYYY-MM-DD")
+  );
+
+  // Get Employee Attendance:
+  const fetchEmployeeAttendance = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `api/v1/staff_attendances.json?start_date=${fromDate}&end_date=${toDate}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const records = response?.data?.data?.attendances;
+
+      const resData =
+        typeof records === "string"
+          ? []
+          : records.map((e, index) => {
+              return {
+                ...e,
+                idx: index + 1,
+                date: moment(e?.date).format("ddd. MMMM Do, YYYY"),
+              };
+            });
+
+      resData.forEach((attendance) => {
+        const clockIn = new Date(`2000-01-01 ${attendance.clock_in}`);
+        if (attendance.clock_out !== "No Clock out") {
+          const clockOut = new Date(`2000-01-01 ${attendance.clock_out}`);
+          const workHours = (clockOut - clockIn) / 1000 / 3600;
+
+          const hours = Math.floor(workHours);
+          const minutes = Math.round((workHours - hours) * 60);
+
+          attendance.work_hours = `${hours}h ${minutes}m`;
+
+          if (workHours < 0) {
+            attendance.work_hours = `-`;
+          }
+        } else {
+          attendance.work_hours = "No Clock out";
+        }
+      });
+
+      setAttendance(resData);
+      setLoading(false);
+    } catch (error) {
+      ErrorHandler(error, "Attendance Error:");
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate]);
+
   useEffect(() => {
     fetchEmployeeAttendance();
-  }, []);
+  }, [fetchEmployeeAttendance]);
 
   const columns = [
     {
-      dataField: "createdAt",
+      dataField: "idx",
+      text: "S/N",
+      sort: true,
+      headerStyle: { width: "5%" },
+    },
+    {
+      dataField: "date",
       text: "Date",
       sort: true,
-      headerStyle: { minWidth: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "18px",
-      },
-      formatter: (val, row) => <p>{new Date(val).toLocaleDateString()}</p>,
+      headerStyle: { width: "40%" },
     },
     {
-      dataField: "clockInTime",
-      text: "Punch In",
+      dataField: "clock_in",
+      text: "Clock In",
       sort: true,
-      headerStyle: { minWidth: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "18px",
-      },
-      formatter: (val, row) => <p>{new Date(val).toLocaleTimeString()}</p>,
+      headerStyle: { width: "15%" },
     },
     {
-      dataField: "clockOutTime",
-      text: "Punch Out",
+      dataField: "clock_out",
+      text: "Clock Out",
       sort: true,
-      headerStyle: { width: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "18px",
-      },
-      formatter: (val, row) => (
-        <p>{val && new Date(val).toLocaleTimeString()}</p>
-      ),
+      headerStyle: { width: "15%" },
     },
     {
-      dataField: "hoursWorked",
-      text: "Total Hours",
+      dataField: "work_hours",
+      text: "Work Hours",
       sort: true,
-      headerStyle: { width: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "18px",
-      },
+      headerStyle: { width: "20%" },
     },
-    {
-      dataField: "break",
-      text: "Break",
-      sort: true,
-      headerStyle: { minWidth: "200px" },
-      style: {
-        fontSize: "12px",
-        lineHeight: "16px",
-      },
-    },
-    // {
-    //   dataField: "over_time",
-    //   text: "Overtime",
-    //   headerStyle: { minWidth: "100px" },
-    //   sort: true,
-    //   style: {
-    //     fontSize: "12px",
-    //     lineHeight: "16px",
-    //   },
-    //},
   ];
-  const breadcrumb = "Attendance";
+
   return (
     <>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Employee</h3>
+            <h3 className="page-title">Attendance Record</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
-              </li>
-              <li className="breadcrumb-item active">Employees</li>
+              <li className="breadcrumb-item">Employee</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
         </div>
       </div>
-      <div className="row">
-        <Timesheet />
-        <Stats />
-        <Activity />
+
+      <div className="hr-filter-select col-12" style={{ marginLeft: "-30px" }}>
+        <div className="col-md-3">
+          <div className="form-group">
+            <label htmlFor="fromDate">From</label>
+            <input
+              type="date"
+              name="fromDate"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="form-control "
+            />
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="form-group">
+            <label htmlFor="toDate">To</label>
+            <input
+              type="date"
+              name="toDate"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="form-control "
+            />
+          </div>
+        </div>
       </div>
+
       <div className="row">
         <div className="col-lg-12" />
-        <LeavesTable data={employeeAttendance} columns={columns} />
+        <UniversalTable
+          data={attendance}
+          columns={columns}
+          loading={loading}
+          setLoading={setLoading}
+          emptyDataMessage="No Attendance Record Found"
+        />
       </div>
     </>
   );

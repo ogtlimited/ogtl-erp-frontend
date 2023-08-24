@@ -10,7 +10,14 @@ import filterFactory from "react-bootstrap-table2-filter";
 
 import paginationFactory from "react-bootstrap-table2-paginator";
 
-const UniversalTable = ({ data, columns, loading, setLoading, context }) => {
+const UniversalTable = ({
+  data,
+  columns,
+  loading,
+  setLoading,
+  emptyDataMessage,
+  context,
+}) => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
@@ -43,7 +50,13 @@ const UniversalTable = ({ data, columns, loading, setLoading, context }) => {
     setTimeout(() => {
       setShow(true);
     }, 10000);
-    return <>{show ? "No Data Available" : null}</>;
+    return (
+      <>
+        {show ? (
+          <>{emptyDataMessage ? emptyDataMessage : "No Data Available"}</>
+        ) : null}
+      </>
+    );
   };
 
   return (
