@@ -9,35 +9,38 @@ import { languages, qualifications, referredOpts } from "./options";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
 
 const PersonalInfoForm = () => {
-  const [jobId, setjobId] = useState(useParams());
+  const [jobId, setJobId] = useState(useParams());
   const [initialId, setinitialId] = useState(useParams());
-  const { setjobApplication, jobApplication } = useNoAuthContext();
-  const [defaultJob, setdefaultJob] = useState([]);
+  const { setJobApplication, jobApplication } = useNoAuthContext();
+  const [defaultJob, setDefaultJob] = useState([]);
   const FILE_SIZE = 160 * 10240;
-  const [showProgress, setshowProgress] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const [submitted, setsubmitted] = useState(false);
-  const [progress, setprogress] = useState(10);
-  const [fileName, setfileName] = useState("");
+  const [progress, setProgress] = useState(10);
+  const [fileName, setFileName] = useState("");
   const [afterSuccess, setafterSuccess] = useState(false);
   const [header, setheader] = useState("Add Your Details");
 
   const fetchDefaultJob = () => {
-    axios.get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs").then((res) => {
-      console.log(res);
-      const data = res.data.data.map((e) => {
-        return {
-          label: e.job_title,
-          value: e._id,
-        };
+    axios
+      .get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs")
+      .then((res) => {
+        console.log(res);
+        const data = res.data.data.map((e) => {
+          return {
+            label: e.job_title,
+            value: e._id,
+          };
+        });
+
+        setDefaultJob([
+          {
+            label: "Select Job",
+            value: "",
+          },
+          ...data,
+        ]);
       });
-      setdefaultJob([
-        {
-          label: "Select Job",
-          value: "",
-        },
-        ...data,
-      ]);
-    });
   };
   useEffect(() => {
     console.log(jobId);
@@ -45,24 +48,26 @@ const PersonalInfoForm = () => {
 
   const handleUpload = (e, setFieldValue) => {
     console.log(jobId);
-    setprogress(65);
-    setshowProgress(true);
-    let formdata = new FormData();
+    setProgress(65);
+    setShowProgress(true);
+    let formData = new FormData();
     let file = e.target.files[0];
     console.log(file);
-    setfileName(file.name);
-    formdata.append("job_id", jobId.id);
-    formdata.append("document", file);
-    axios.post("https://ogtl-erp.outsourceglobal.com/api/job-document", formdata).then((res) => {
-      console.log(res);
-      let path = res.data.data.file_path;
-      setFieldValue("resume_attachment", path);
-      setprogress(100);
-    });
+    setFileName(file.name);
+    formData.append("job_id", jobId.id);
+    formData.append("document", file);
+    axios
+      .post("https://ogtl-erp.outsourceglobal.com/api/job-document", formData)
+      .then((res) => {
+        console.log(res);
+        let path = res.data.data.file_path;
+        setFieldValue("resume_attachment", path);
+        setProgress(100);
+      });
   };
   const handleSubmit = (e, field) => {
     console.log(field);
-    // setprogress(65)
+    // setProgress(65)
     setsubmitted(true);
     let obj = {
       ...field,
@@ -70,13 +75,13 @@ const PersonalInfoForm = () => {
       default_job_opening_id: jobId.id,
     };
     console.log(obj);
-    console.log(setjobApplication);
-    setjobApplication(obj);
+    console.log(setJobApplication);
+    setJobApplication(obj);
     // axios.post(config.ApiUrl +'/api/jobApplicant',obj ).then(res =>{
     //     console.log(res)
     //     setsubmitted(false)
     //     setafterSuccess(true)
-    //     setheader('Your Application has been submitted sucessfully')
+    //     setheader('Your Application has been submitted successfully')
     //     setTimeout(() => {
     //         setafterSuccess(false)
     //         document.getElementById("closeBtn").click()
@@ -277,7 +282,7 @@ const PersonalInfoForm = () => {
                             "job_opening_id",
                             e.currentTarget.value
                           );
-                          setjobId({ id: e.currentTarget.value });
+                          setJobId({ id: e.currentTarget.value });
                           console.log(jobId);
                         }}
                         className={
