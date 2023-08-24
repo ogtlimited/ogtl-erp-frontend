@@ -11,7 +11,7 @@ export const JobApplicationSieveModalAdmin = ({
   row,
   fetchAllJobApplicants,
 }) => {
-  const { showAlert, user, goToTop } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [status, setStatus] = useState({
     interview_status: "",
     process_status: "",
@@ -19,8 +19,6 @@ export const JobApplicationSieveModalAdmin = ({
   });
   const [loading, setLoading] = useState(false);
   const [showDate, setShowDate] = useState(false);
-
-  const CurrentUserRoles = user?.employee_info?.roles;
 
   const InterviewStatusOptions = [
     { label: "Open", value: "Open" },
@@ -67,16 +65,12 @@ export const JobApplicationSieveModalAdmin = ({
   const handleSieveActions = async (e) => {
     e.preventDefault();
 
-    if (!CurrentUserRoles.includes("rep_siever")) {
-      return showAlert(true, "You are not a rep siever", "alert alert-warning");
-    }
-
     setLoading(true);
     axiosInstance
       .patch(`/api/v1/hr_dashboard/admin_role_job_applications/${row?.id}.json`, {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "*", 
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
