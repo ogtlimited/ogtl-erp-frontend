@@ -47,10 +47,6 @@ const JobApplicants = () => {
 
     setLoading(true);
     try {
-      console.log({
-        fromDate: persistedFromDate,
-        toDate: persistedToDate,
-      })
       const response = await axiosInstance.get(
         "/api/v1/rep_siever_job_applications.json",
         {
@@ -147,35 +143,6 @@ const JobApplicants = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [CurrentUserRoles]
   );
-
-  // // Interview Status
-  // useEffect(() => {
-  //   if (interview_status.length) {
-  //     const update = {
-  //       interview_status,
-  //       // id: statusRow?.id,
-  //     };
-  //     handleUpdate(statusRow.id, update);
-  //   }
-  // }, [interview_status, statusRow, handleUpdate]);
-
-  // // Process Status
-  // useEffect(() => {
-  //   if (process_status.length) {
-  //     if (process_status === "Interview scheduled") {
-  //       setModalType("schedule-interview");
-  //       setSelectedRow(processingStageRow);
-  //       $("#generalModal").modal("show");
-  //       return;
-  //     }
-  //     const update = {
-  //       process_status,
-  //       interview_date: null,
-  //       // id: processingStageRow?.id,
-  //     };
-  //     handleUpdate(processingStageRow.id, update);
-  //   }
-  // }, [process_status, processingStageRow, handleUpdate]);
 
   const getInterviewStatusColorClass = (value) => {
     const colorMap = {

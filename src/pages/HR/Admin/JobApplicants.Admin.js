@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import JobApplicantsTable from "./JobApplicantsTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import { JobApplicationSieveModal } from "../../../components/Modal/JobApplicationSieveModal";
+import { JobApplicationSieveModalAdmin } from "../../../components/Modal/JobApplicationSieveModalAdmin";
 import helper from "../../../services/helper";
 import {
   InterviewStatusOptions,
@@ -35,7 +35,7 @@ const JobApplicantsAdmin = () => {
   const { showAlert, user, ErrorHandler } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
-  const [modalType, setmodalType] = useState("schedule-interview");
+  const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
   const [loadingRep, setLoadingRep] = useState(false);
 
@@ -52,7 +52,7 @@ const JobApplicantsAdmin = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
-  const [processingStageFilter, setProcessingStageFilter] = useState("Open");
+  const [processingStageFilter, setProcessingStageFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
   const firstDay = moment().startOf("month").format("YYYY-MM-DD");
@@ -106,120 +106,61 @@ const JobApplicantsAdmin = () => {
 
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
-    if (CurrentUserRoles.includes("rep_siever")) {
-      const persistedFromDate = secureLocalStorage.getItem("fromDate");
-      const persistedToDate = secureLocalStorage.getItem("toDate");
+    const persistedFromDate = secureLocalStorage.getItem("fromDate");
+    const persistedToDate = secureLocalStorage.getItem("toDate");
 
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get(
-          "/api/v1/rep_siever_job_applications.json",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            params: {
-              page: page,
-              limit: sizePerPage,
-              name: searchTerm.length ? searchTerm : null,
-              process_status: processingStageFilter,
-              start_date: persistedFromDate,
-              end_date: persistedToDate,
-            },
-          }
-        );
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/hr_dashboard/admin_role_job_applications.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
+            process_status: processingStageFilter
+              ? processingStageFilter
+              : null,
+            start_date: persistedFromDate,
+            end_date: persistedToDate,
+          },
+        }
+      );
 
-        const resData = response?.data?.data?.job_applicants;
-        const totalPages = response?.data?.data?.total_pages;
+      const resData = response?.data?.data?.job_applicants;
+      const totalPages = response?.data?.data?.total_pages;
 
-        setSizePerPage(sizePerPage);
-        setTotalPages(totalPages);
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
 
-        const formatted = resData.map((emp) => ({
-          ...emp,
-          full_name: `${emp?.first_name} ${emp?.last_name}`,
-          job_title: emp?.job_opening?.job_title,
-          application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
-          interview_scheduled_date: emp?.interview_date
-            ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-            : null,
-        }));
+      const formatted = resData.map((emp) => ({
+        ...emp,
+        full_name: `${emp?.first_name} ${emp?.last_name}`,
+        job_title: emp?.job_opening?.job_title,
+        application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+        interview_scheduled_date: emp?.interview_date
+          ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+          : null,
+      }));
 
-        setData(formatted);
-        setLoading(false);
-      } catch (error) {
-        const component = "Job Applicants Error:";
-        ErrorHandler(error, component);
-        setLoading(false);
-      }
-      return;
-    } else {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get(
-          "/api/v1/job_applicants.json",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            params: {
-              page: page,
-              limit: sizePerPage,
-              process_status: processingStageFilter,
-              name: searchTerm.length ? searchTerm : null,
-              start_date: fromDate,
-              end_date: toDate,
-            },
-          }
-        );
-
-        const resData = response?.data?.data?.job_applicants;
-        const totalPages = response?.data?.data?.total_pages;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const formatted = resData.map((emp) => ({
-          ...emp,
-          full_name: `${emp?.first_name} ${emp?.last_name}`,
-          job_title: emp?.job_opening?.job_title,
-          application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
-          interview_date: emp?.interview_date
-            ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-            : "Not Scheduled",
-        }));
-
-        setData(formatted);
-        setLoading(false);
-      } catch (error) {
-        const component = "Job Applicants Error:";
-        ErrorHandler(error, component);
-        setLoading(false);
-      }
-      return;
+      setData(formatted);
+      setLoading(false);
+    } catch (error) {
+      const component = "Job Applicants Error:";
+      ErrorHandler(error, component);
+      setLoading(false);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    CurrentUserRoles,
-    fromDate,
-    page,
-    processingStageFilter,
-    sizePerPage,
-    toDate,
-    searchTerm,
-  ]);
+  }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
 
   useEffect(() => {
     fetchAllRepSievers();
-    // fetchAllJobApplicants();
+    fetchAllJobApplicants();
   }, [fetchAllRepSievers, fetchAllJobApplicants]);
 
   //update jobOpening
@@ -358,14 +299,14 @@ const JobApplicantsAdmin = () => {
       dataField: "full_name",
       text: "Job Applicant",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
       formatter: (value, row) => <h2>{row?.full_name}</h2>,
     },
     {
       dataField: "job_title",
       text: "Job Opening",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
           <h2>{row?.job_title}</h2>
@@ -376,7 +317,7 @@ const JobApplicantsAdmin = () => {
       dataField: "application_date",
       text: "Application Date",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => <h2>{row.application_date}</h2>,
     },
     {
@@ -392,36 +333,25 @@ const JobApplicantsAdmin = () => {
       dataField: "interview_status",
       text: "Interview Status",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
-            <a
-              className={`btn btn-gray btn-sm btn-rounded`}
-              data-toggle="modal"
-              data-target="#JobApplicationSieveModal"
-              onClick={() => {
-                setmodalType("update-status");
-                setViewRow(row);
-              }}
-            >
-              <i
-                className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
-                  value
-                )}`}
-              ></i>{" "}
-              {value}
-            </a>
-          ) : (
-            <a className={`btn btn-gray btn-sm btn-rounded`}>
-              <i
-                className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
-                  value
-                )}`}
-              ></i>{" "}
-              {value}
-            </a>
-          )}
+          <a
+            className={`btn btn-gray btn-sm btn-rounded`}
+            data-toggle="modal"
+            data-target="#JobApplicationSieveModal"
+            onClick={() => {
+              setModalType("update-status");
+              setViewRow(row);
+            }}
+          >
+            <i
+              className={`fa fa-dot-circle-o ${getInterviewStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
@@ -429,36 +359,25 @@ const JobApplicantsAdmin = () => {
       dataField: "process_status",
       text: "Process Stage",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
-            <a
-              className={`btn btn-gray btn-sm btn-rounded`}
-              data-toggle="modal"
-              data-target="#JobApplicationSieveModal"
-              onClick={() => {
-                setmodalType("update-status");
-                setViewRow(row);
-              }}
-            >
-              <i
-                className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
-                  value
-                )}`}
-              ></i>{" "}
-              {value}
-            </a>
-          ) : (
-            <a className={`btn btn-gray btn-sm btn-rounded`}>
-              <i
-                className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
-                  value
-                )}`}
-              ></i>{" "}
-              {value}
-            </a>
-          )}
+          <a
+            className={`btn btn-gray btn-sm btn-rounded`}
+            data-toggle="modal"
+            data-target="#JobApplicationSieveModal"
+            onClick={() => {
+              setModalType("update-status");
+              setViewRow(row);
+            }}
+          >
+            <i
+              className={`fa fa-dot-circle-o ${getProcessStatusColorClass(
+                value
+              )}`}
+            ></i>{" "}
+            {value}
+          </a>
         </>
       ),
     },
@@ -466,7 +385,7 @@ const JobApplicantsAdmin = () => {
       dataField: "resume_attachment",
       text: "Resume Attachment",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <a href={value} className="btn btn-sm btn-primary" download>
           <i className="fa fa-download"></i> Download
@@ -478,7 +397,7 @@ const JobApplicantsAdmin = () => {
       text: "Action",
       sort: true,
       csvExport: false,
-      headerStyle: { width: "10%", textAlign: "left" },
+      headerStyle: { minWidth: "70px", textAlign: "left" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <>
@@ -494,28 +413,38 @@ const JobApplicantsAdmin = () => {
               <a
                 className="dropdown-item"
                 data-toggle="modal"
+                data-target="#JobApplicationSieveModal"
+                onClick={() => {
+                  setModalType("update-status");
+                  setViewRow(row);
+                }}
+              >
+                <i className="fa fa-pencil-square-o m-r-5"></i> Update Status
+              </a>
+
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
                 data-target="#generalModal"
                 onClick={() => {
-                  setmodalType("view-details");
+                  setModalType("view-details");
                   setViewRow(row);
                 }}
               >
                 <i className="fa fa-eye m-r-5"></i> View
               </a>
 
-              {CurrentUserRoles?.includes("rep_siever") && userDept === "hr" ? (
-                <a
-                  className="dropdown-item"
-                  data-toggle="modal"
-                  data-target="#generalModal"
-                  onClick={() => {
-                    setmodalType("schedule-interview");
-                    setSelectedRow(helper.handleEdit(row));
-                  }}
-                >
-                  <i className="fa fa-clock m-r-5"></i> Schedule Interview
-                </a>
-              ) : null}
+              <a
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#generalModal"
+                onClick={() => {
+                  setModalType("schedule-interview");
+                  setSelectedRow(helper.handleEdit(row));
+                }}
+              >
+                <i className="fa fa-clock m-r-5"></i> Schedule Interview
+              </a>
             </div>
           </>
         </div>
@@ -529,17 +458,17 @@ const JobApplicantsAdmin = () => {
         <div className="row">
           <div className="col">
             {/* <h3 className="page-title">Job Applications</h3> */}
-            <h3 className="page-title">Job Application Sievers</h3>
+            <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Recruitment</li>
-              <li className="breadcrumb-item active">Job Sievers</li>
+              <li className="breadcrumb-item active">Job Applications</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* <div className="page-menu">
+      <div className="page-menu" style={{ marginBottom: "20px" }}>
         <div className="row">
           <div className="col-sm-12">
             <ul className="nav nav-tabs nav-tabs-bottom">
@@ -547,43 +476,27 @@ const JobApplicantsAdmin = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
-                  href="#tab_rep-sievers"
+                  href="#tab_job-applications"
                 >
-                  Rep Sievers
+                  Job Applications
                 </a>
               </li>
               <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_job-applications"
+                  href="#tab_rep-sievers"
                 >
-                  Job Applications
+                  Job Sievers
                 </a>
               </li>
             </ul>
           </div>
         </div>
-      </div> */}
+      </div>
 
-      {/* <div className="row tab-content">
-        <div id="tab_rep-sievers" className="col-12 tab-pane show active">
-          <UniversalPaginatedTable
-            columns={repColumns}
-            data={allRepSievers}
-            setData={setAllRepSievers}
-            loading={loadingRep}
-            setLoading={setLoadingRep}
-            page={repPage}
-            setPage={setRepPage}
-            sizePerPage={repSizePerPage}
-            setSizePerPage={setRepSizePerPage}
-            totalPages={repTotalPages}
-            setTotalPages={setRepTotalPages}
-          />
-        </div>
-
-        <div id="tab_job-applications" className="col-12 tab-pane">
+      <div className="row tab-content">
+        <div id="tab_job-applications" className="col-12 tab-pane show active">
           <JobApplicantsTable
             columns={columns}
             data={data}
@@ -611,22 +524,22 @@ const JobApplicantsAdmin = () => {
             setProcessingStageFilter={setProcessingStageFilter}
           />
         </div>
-      </div> */}
 
-      <div className="row ">
-        <UniversalPaginatedTable
-          columns={repColumns}
-          data={allRepSievers}
-          setData={setAllRepSievers}
-          loading={loadingRep}
-          setLoading={setLoadingRep}
-          page={repPage}
-          setPage={setRepPage}
-          sizePerPage={repSizePerPage}
-          setSizePerPage={setRepSizePerPage}
-          totalPages={repTotalPages}
-          setTotalPages={setRepTotalPages}
-        />
+        <div id="tab_rep-sievers" className="col-12 tab-pane">
+          <UniversalPaginatedTable
+            columns={repColumns}
+            data={allRepSievers}
+            setData={setAllRepSievers}
+            loading={loadingRep}
+            setLoading={setLoadingRep}
+            page={repPage}
+            setPage={setRepPage}
+            sizePerPage={repSizePerPage}
+            setSizePerPage={setRepSizePerPage}
+            totalPages={repTotalPages}
+            setTotalPages={setRepTotalPages}
+          />
+        </div>
       </div>
 
       {modalType === "view-details" && (
@@ -649,14 +562,14 @@ const JobApplicantsAdmin = () => {
               jobApplication={selectedRow}
               handleUpdate={handleUpdate}
               handleRefresh={fetchAllJobApplicants}
-              setModalType={setmodalType}
+              setModalType={setModalType}
             />
           }
         />
       )}
 
       {modalType === "update-status" && (
-        <JobApplicationSieveModal
+        <JobApplicationSieveModalAdmin
           row={viewRow}
           fetchAllJobApplicants={fetchAllJobApplicants}
         />
