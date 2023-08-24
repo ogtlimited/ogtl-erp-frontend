@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import config from "../../config.json";
 import { useParams } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import { languages, qualifications, referredOpts } from "./options";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
+import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening";
 
 const PersonalInfoForm = () => {
   const [jobId, setJobId] = useState(useParams());
   const [initialId, setinitialId] = useState(useParams());
-  const { setJobApplication, jobApplication } = useNoAuthContext();
+  const { jobApplication, setJobApplication,  } = useNoAuthContext();
   const [defaultJob, setDefaultJob] = useState([]);
   const FILE_SIZE = 160 * 10240;
   const [showProgress, setShowProgress] = useState(false);
@@ -25,7 +25,7 @@ const PersonalInfoForm = () => {
     axios
       .get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs")
       .then((res) => {
-        console.log(res);
+        console.log("Default job openings:", res);
         const data = res.data.data.map((e) => {
           return {
             label: e.job_title,
@@ -33,15 +33,16 @@ const PersonalInfoForm = () => {
           };
         });
 
-        setDefaultJob([
-          {
-            label: "Select Job",
-            value: "",
-          },
-          ...data,
-        ]);
+        // setDefaultJob([
+        //   {
+        //     label: "Select Job",
+        //     value: "",
+        //   },
+        //   ...data,
+        // ]);
       });
   };
+
   useEffect(() => {
     console.log(jobId);
   }, [jobId]);
@@ -56,44 +57,37 @@ const PersonalInfoForm = () => {
     setFileName(file.name);
     formData.append("job_id", jobId.id);
     formData.append("document", file);
-    axios
-      .post("https://ogtl-erp.outsourceglobal.com/api/job-document", formData)
-      .then((res) => {
-        console.log(res);
-        let path = res.data.data.file_path;
-        setFieldValue("resume_attachment", path);
-        setProgress(100);
-      });
+    setFieldValue("resume_attachment", file);
+    setProgress(100);
+
+    // axios
+    //   .post("https://ogtl-erp.outsourceglobal.com/api/job-document", formData)
+    //   .then((res) => {
+    //     console.log(res);
+    //     let path = res.data.data.file_path;
+    //     setFieldValue("resume_attachment", path);
+    //     setProgress(100);
+    //   });
   };
+
   const handleSubmit = (e, field) => {
-    console.log(field);
-    // setProgress(65)
+    console.log("Submit this fields:", field);
     setsubmitted(true);
     let obj = {
       ...field,
       job_opening_id: jobId.id,
       default_job_opening_id: jobId.id,
     };
-    console.log(obj);
-    console.log(setJobApplication);
-    setJobApplication(obj);
-    // axios.post(config.ApiUrl +'/api/jobApplicant',obj ).then(res =>{
-    //     console.log(res)
-    //     setsubmitted(false)
-    //     setafterSuccess(true)
-    //     setheader('Your Application has been submitted successfully')
-    //     setTimeout(() => {
-    //         setafterSuccess(false)
-    //         document.getElementById("closeBtn").click()
-    //     }, 4000);
 
-    // })
+    console.log("Submit this obj:", obj);
+    setJobApplication(obj);
   };
+
   useEffect(() => {
+    setDefaultJob(DefaultJobOpening);
     fetchDefaultJob();
   }, []);
 
-  const SUPPORTED_FORMATS = ["application/pdf", "application/msword"];
   return (
     <Formik
       enableReinitialize={false}
@@ -101,24 +95,24 @@ const PersonalInfoForm = () => {
         first_name: "",
         last_name: "",
         middle_name: "",
-        email_address: "",
-        mobile: "",
-        alternate_mobile: "",
-        resume_attachment: "",
+        mobile_number: "",
+        email: "",
         highest_qualification: "",
         certifications: "",
         languages_spoken: [],
-        referred: false,
-        referal_name: "",
-        job_opening_id: jobId.id,
+        hr_job_opening_id: jobId.id,
+        resume_attachment: "",
+        // alternate_mobile: "",
+        // referred: false,
+        // referal_name: "",
       }}
       validationSchema={Yup.object().shape({
         first_name: Yup.string().required("First Name is required"),
         last_name: Yup.string().required("Last Name is required"),
-        email_address: Yup.string()
+        email: Yup.string()
           .email("Invalid Email")
           .required("Email is required"),
-        mobile: Yup.string()
+        mobile_number: Yup.string()
           .min(8, "Must be exactly 8 digits")
           .required("Mobile is required"),
         highest_qualification: Yup.string().required(
@@ -126,16 +120,6 @@ const PersonalInfoForm = () => {
         ),
         certifications: Yup.string().required("This is a required question"),
         resume_attachment: Yup.mixed().required("A file is required"),
-        // .test(
-        //   "fileSize",
-        //   "File too large",
-        //   value => value && value.size <= FILE_SIZE
-        // )
-        // .test(
-        //   "fileFormat",
-        //   "Unsupported Format",
-        //   value => value && SUPPORTED_FORMATS.includes(value.type)
-        // )
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
@@ -217,21 +201,21 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label htmlFor="email_address">
+                    <label htmlFor="email">
                       Email <span className="text-danger">*</span>
                     </label>
                     <Field
-                      name="email_address"
+                      name="email"
                       type="text"
                       className={
                         "form-control" +
-                        (errors.email_address && touched.email_address
+                        (errors.email && touched.email
                           ? " is-invalid"
                           : "")
                       }
                     />
                     <ErrorMessage
-                      name="email_address"
+                      name="email"
                       component="div"
                       className="invalid-feedback"
                     />
@@ -239,19 +223,19 @@ const PersonalInfoForm = () => {
                 </div>
                 <div className="form-group row">
                   <div className="col-md-6">
-                    <label htmlFor="mobile">
+                    <label htmlFor="mobile_number">
                       Mobile <span className="text-danger">*</span>
                     </label>
                     <Field
-                      name="mobile"
+                      name="mobile_number"
                       type="text"
                       className={
                         "form-control" +
-                        (errors.mobile && touched.mobile ? " is-invalid" : "")
+                        (errors.mobile_number && touched.mobile_number ? " is-invalid" : "")
                       }
                     />
                     <ErrorMessage
-                      name="mobile"
+                      name="mobile_number"
                       component="div"
                       className="invalid-feedback"
                     />
@@ -376,7 +360,7 @@ const PersonalInfoForm = () => {
                       ))}
                     </div>
                   </div>
-                  <div className="col-md-6 mt-3">
+                  {/* <div className="col-md-6 mt-3">
                     <label htmlFor="referred">
                       Were you referred by an OGTL employee?{" "}
                       <span className="text-danger">*</span>
@@ -396,10 +380,10 @@ const PersonalInfoForm = () => {
                         <option value={e.value}>{e.label}</option>
                       ))}
                     </Field>
-                  </div>
+                  </div> */}
 
-                  <div className="col-md-6 mt-3">
-                    {values.referred == "true" ? (
+                  {/* <div className="col-md-6 mt-3">
+                    {values.referred === "true" ? (
                       <>
                         <label htmlFor="referal_name">
                           {" "}
@@ -417,7 +401,7 @@ const PersonalInfoForm = () => {
                         />
                       </>
                     ) : null}
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="form-group">
@@ -494,6 +478,7 @@ const PersonalInfoForm = () => {
                 <img
                   style={{ width: "100px", alignSelf: "center" }}
                   src={success}
+                  alt="success"
                 />
               </div>
             )}

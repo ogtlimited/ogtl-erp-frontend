@@ -5,38 +5,46 @@ import config from "../../config.json";
 import { useParams, useNavigate } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import info from "../../assets/img/info-danger.svg";
+
 const ReviewForm = () => {
   let navigate = useNavigate();
   const { jobApplication } = useNoAuthContext();
-  const [message, setmessage] = useState("Application submitted successfully")
-  const [resIcon, setresIcon] = useState(success)
-  useEffect(() => {}, [jobApplication]);
-  const handleSubmit = () => {
-    delete jobApplication.referred;
-    axios
-      .post("https://ogtl-erp.outsourceglobal.com/api/jobApplicant", jobApplication)
-      .then((res) => {
-        document.getElementById("applyBtn").click();
-        setmessage("Application submitted successfully");
-        setresIcon(success)
-        setTimeout(() => {
-          // setafterSuccess(false)
-          document.getElementById("closeBtn").click();
-          navigate("/recruitment");
-        }, 5000);
-      }).catch(err =>{
-        console.log(err.response)
-        setmessage(err?.response?.data?.message)
-        setresIcon(info)
-        document.getElementById("applyBtn").click();
+  const [message, setMessage] = useState("Application submitted successfully");
+  const [resIcon, setResIcon] = useState(success);
 
-        setTimeout(() => {
-          // setafterSuccess(false)
-          document.getElementById("closeBtn").click();
-          // navigate("/recruitment");
-        }, 5000);
-      });
+  useEffect(() => {
+    console.log("Reviewed Job Application:", jobApplication);
+  }, [jobApplication]);
+
+  const handleSubmit = () => {
+    console.log("Submitted Job Application:", jobApplication);
+    // axios
+    //   .post(
+    //     "https://ogtl-erp.outsourceglobal.com/api/jobApplicant",
+    //     jobApplication
+    //   )
+    //   .then((res) => {
+    //     document.getElementById("applyBtn").click();
+    //     setMessage("Application submitted successfully");
+    //     setResIcon(success);
+    //     setTimeout(() => {
+    //       document.getElementById("closeBtn").click();
+    //       navigate("/recruitment");
+    //     }, 5000);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //     setMessage(err?.response?.data?.message);
+    //     setResIcon(info);
+    //     document.getElementById("applyBtn").click();
+
+    //     setTimeout(() => {
+    //       document.getElementById("closeBtn").click();
+    //       // navigate("/recruitment");
+    //     }, 5000);
+    //   });
   };
+
   return (
     <div className="card">
       <div className="card-header application-form-header">
@@ -116,9 +124,9 @@ const ReviewForm = () => {
               <div className="d-flex row justify-content-center p-5 mx-5 mb-5">
                 {" "}
                 <img
-                  
-                  style={{ width: "100px", alignSelf: "center",color:"red" }}
+                  style={{ width: "100px", alignSelf: "center", color: "red" }}
                   src={resIcon}
+                  alt="success"
                 />
               </div>
             </div>
