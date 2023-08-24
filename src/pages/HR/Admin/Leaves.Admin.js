@@ -621,14 +621,14 @@ const LeavesAdmin = () => {
           id="tab_hr-leave-application"
           className="col-12 tab-pane show active"
         >
-          <div className="Hr-cards">
+          {/* <div className="Hr-cards">
             <div className="col-md-3">
               <div className="stats-info">
                 <h6>Employees On Leave</h6>
                 <h4>{onLeave}</h4>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <AdminLeavesTable
             data={allLeaves}
