@@ -63,7 +63,7 @@ const ReviewForm = () => {
         </div>
       </div>
 
-      <div className="row flex justify-content-between px-5 pb-5">
+      <div className="row flex justify-content-between px-5">
         <button
           type="button"
           className="nav-button btn btn-primary submit-btn"

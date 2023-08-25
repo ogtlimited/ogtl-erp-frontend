@@ -11,7 +11,7 @@ import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening
 const PersonalInfoForm = () => {
   const [jobId, setJobId] = useState(useParams());
   const [initialId, setinitialId] = useState(useParams());
-  const { jobApplication, setJobApplication,  } = useNoAuthContext();
+  const { jobApplication, setJobApplication } = useNoAuthContext();
   const [defaultJob, setDefaultJob] = useState([]);
   const FILE_SIZE = 160 * 10240;
   const [showProgress, setShowProgress] = useState(false);
@@ -20,6 +20,7 @@ const PersonalInfoForm = () => {
   const [fileName, setFileName] = useState("");
   const [afterSuccess, setafterSuccess] = useState(false);
   const [header, setheader] = useState("Add Your Details");
+  const [jobTitle, setJobTitle] = useState("");
 
   const fetchDefaultJob = () => {
     axios
@@ -70,16 +71,18 @@ const PersonalInfoForm = () => {
     //   });
   };
 
-  const handleSubmit = (e, field) => {
-    console.log("Submit this fields:", field);
+  const handleSubmit = (e, fields) => {
+    console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
+    console.log("Submit this fields:", fields);
     setsubmitted(true);
+
     let obj = {
-      ...field,
-      job_opening_id: jobId.id,
-      default_job_opening_id: jobId.id,
+      ...fields,
+      resume_attachment: fileName,
+      job_title: jobTitle,
     };
 
-    console.log("Submit this obj:", obj);
+    console.log("Review this job Application:", obj);
     setJobApplication(obj);
   };
 
@@ -102,6 +105,8 @@ const PersonalInfoForm = () => {
         languages_spoken: [],
         hr_job_opening_id: jobId.id,
         resume_attachment: "",
+
+        job_title: "",
         // alternate_mobile: "",
         // referred: false,
         // referal_name: "",
@@ -123,7 +128,6 @@ const PersonalInfoForm = () => {
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
-        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
         errors,
@@ -209,9 +213,7 @@ const PersonalInfoForm = () => {
                       type="text"
                       className={
                         "form-control" +
-                        (errors.email && touched.email
-                          ? " is-invalid"
-                          : "")
+                        (errors.email && touched.email ? " is-invalid" : "")
                       }
                     />
                     <ErrorMessage
@@ -231,7 +233,9 @@ const PersonalInfoForm = () => {
                       type="text"
                       className={
                         "form-control" +
-                        (errors.mobile_number && touched.mobile_number ? " is-invalid" : "")
+                        (errors.mobile_number && touched.mobile_number
+                          ? " is-invalid"
+                          : "")
                       }
                     />
                     <ErrorMessage
@@ -266,12 +270,12 @@ const PersonalInfoForm = () => {
                             "job_opening_id",
                             e.currentTarget.value
                           );
+                          setJobTitle(e.currentTarget.label);
                           setJobId({ id: e.currentTarget.value });
-                          console.log(jobId);
                         }}
                         className={
                           "form-control" +
-                          (errors.job_opening_id && touched.job_opening_id
+                          (errors.hr_job_opening_id && touched.hr_job_opening_id
                             ? " is-invalid"
                             : "")
                         }
@@ -317,7 +321,7 @@ const PersonalInfoForm = () => {
 
                   <div
                     className={
-                      jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6"
+                      jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6 mt-3"
                     }
                   >
                     <label htmlFor="certifications">
@@ -404,7 +408,7 @@ const PersonalInfoForm = () => {
                   </div> */}
                 </div>
 
-                <div className="form-group">
+                <div className="form-group" style={{ marginBottom: "30px" }}>
                   <label>
                     Upload your CV <span className="text-danger">*</span>
                   </label>
@@ -447,6 +451,7 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="row flex justify-content-between px-3">
                   <button
                     type="button"

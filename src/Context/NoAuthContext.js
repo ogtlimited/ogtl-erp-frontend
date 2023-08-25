@@ -12,8 +12,9 @@ const NoAuthContextProvider = ({ children }) => {
     certifications: "",
     languages_spoken: [],
     hr_job_opening_id: "",
-    resume_attachment: {},
+    resume_attachment: "",
 
+    job_title: "",
     // alternate_mobile: "",
     // referred: false,
     // referal_name: "",

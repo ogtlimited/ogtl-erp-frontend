@@ -5,7 +5,7 @@ html {
   min-height: 643px;
 }
 .float-end {
-  float: right!important;
+  float: right !important;
 }
 
 .account-wrapper {
@@ -359,17 +359,17 @@ a.nav-link {
   position: relative;
   border-radius: 16px;
   z-index: 0;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.05) 0px 8px 32px;
   background-color: rgb(209, 255, 252);
 }
 @media (min-width: 900px) {
   .left-card {
     padding: 0px 0px 0px 40px;
-}
+  }
 }
 
-
-.left-card{
+.left-card {
   padding: 24px;
   color: rgb(33, 43, 54) !important;
 }
@@ -382,46 +382,48 @@ a.nav-link {
   color: rgb(33, 43, 54) !important;
 }
 
-.welcome-p{
+.welcome-p {
   /* margin: 0px auto; */
-    line-height: 1.57143;
-    font-size: 0.875rem;
-    font-family: "Public Sans", sans-serif;
-    font-weight: 400;
-    max-width: 480px;
-    padding-bottom: 24px;
+  line-height: 1.57143;
+  font-size: 0.875rem;
+  font-family: "Public Sans", sans-serif;
+  font-weight: 400;
+  max-width: 480px;
+  padding-bottom: 24px;
 }
-.go{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    outline: 0px;
-    border: 0px;
-    margin: 0px;
-    cursor: pointer;
-    user-select: none;
-    vertical-align: middle;
-    appearance: none;
-    text-decoration: none;
-    font-weight: 700;
-    line-height: 1.71429;
-    font-size: 0.875rem;
-    text-transform: capitalize;
-    font-family: "Public Sans", sans-serif;
-    min-width: 64px;
-    padding: 6px 16px;
-    border-radius: 8px;
-    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    color: #fff;
-    background-color: rgb(28, 202, 255);
-    box-shadow: rgb(28 202 255 / 24%) 0px 8px 16px 0px;
-
+.go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  font-weight: 700;
+  line-height: 1.71429;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  font-family: "Public Sans", sans-serif;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: rgb(28, 202, 255);
+  box-shadow: rgb(28 202 255 / 24%) 0px 8px 16px 0px;
 }
 
-.rec-p{
+.rec-p {
   color: #2b2929;
   font-size: 1rem;
   line-height: 24px;
@@ -483,7 +485,7 @@ a.nav-link {
   --prm-color: #00c5fb;
   --prm-gray: #b1b1b1;
 }
-.application-form-header{
+.application-form-header {
   background: #00c5fb;
   text-align: center;
 }
@@ -492,19 +494,18 @@ a.nav-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   position: relative;
+  margin-bottom: 20px;
 }
 
-
 .step-button {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: none;
   margin-top: 3px;
   background-color: var(--prm-gray);
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .step-button[aria-expanded="true"] {
@@ -513,13 +514,15 @@ a.nav-link {
   background-color: var(--prm-color);
   color: #fff;
 }
-.full-btn{
+.full-btn {
   width: 100px !important;
-  border-radius: 8px !important
+  border-radius: 8px !important;
 }
 .done {
   background-color: var(--prm-color);
   color: #fff;
+  width: 30px;
+  height: 30px;
 }
 
 .step-item {
@@ -528,7 +531,7 @@ a.nav-link {
 }
 
 #progress {
--webkit-appearance:none;
+  -webkit-appearance: none;
   position: absolute;
   width: 95%;
   z-index: 5;
@@ -537,37 +540,50 @@ a.nav-link {
   margin-bottom: 18px;
 }
 
+@media screen and (max-width: 768px) {
+  #progress {
+    -webkit-appearance: none;
+    position: absolute;
+    width: 90%;
+    z-index: 5;
+    height: 4px;
+    margin-left: 18px;
+    margin-bottom: 18px;
+  }
+}
 
 /* to customize progress bar */
 #progress::-webkit-progress-value {
   background-color: var(--prm-color);
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
 #progress::-webkit-progress-bar {
   background-color: var(--prm-gray);
-
 }
-.job-field{
+.job-field {
   font-weight: 500;
 }
-.job-field::first-letter{
-  text-transform: uppercase
+.job-field::first-letter {
+  text-transform: uppercase;
 }
-.sliding-text{
+.sliding-text {
   transition: all 1s ease;
   overflow: hidden;
-
 }
-.sliding-text div{
-    overflow: hidden;
-    display: flex;
-    animation: scrollText 33s infinite linear;
+.sliding-text div {
+  overflow: hidden;
+  display: flex;
+  animation: scrollText 33s infinite linear;
 }
 
 @keyframes scrollText {
-  from   { transform: translateX(100%); }
-  to { transform: translateX(0%); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
 }
 
 .letter-box {
@@ -593,7 +609,7 @@ a.nav-link {
 }
 
 .applicant-signature {
-  font-family: 'Babylonica', cursive;
+  font-family: "Babylonica", cursive;
 }
 
 .signature-line {
