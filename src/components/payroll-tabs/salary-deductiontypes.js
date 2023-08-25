@@ -134,7 +134,7 @@ const DeductionType = () => {
       </div>
 
       <AddDeductionTypeModal
-        fetchDeductionTypes={fetchDeductionTypes}
+        fetchAllDeductionTypes={fetchDeductionTypes}
         goToTop={goToTop}
       />
     </div>

@@ -8,8 +8,6 @@ const getIcon = (name) => <i className={"las " + name}></i>;
 const SignatureGenerator = () => {
   const [user] = useState(tokenService.getUser());
 
-  console.log("user", user);
-
   const initialState = {
     fullName:
       user?.employee_info?.personal_details?.first_name +
@@ -115,6 +113,7 @@ const SignatureGenerator = () => {
       return <div>Please, input your data</div>;
     }
   };
+
   const copyToClipboard = () => {
     let copyText = document.querySelector(".signature");
     const range = document.createRange();
@@ -135,6 +134,7 @@ const SignatureGenerator = () => {
       console.log("Fail");
     }
   };
+
   const isStateChanged = () => {
     return JSON.stringify(state) === JSON.stringify(initialState);
   };
