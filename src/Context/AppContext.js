@@ -389,7 +389,7 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
     }
-  }, [isHr, isTeamLead, userToken]);
+  }, [fetchDeductionTypes, isHr, isTeamLead, userToken]);
 
   return (
     <AppContext.Provider
