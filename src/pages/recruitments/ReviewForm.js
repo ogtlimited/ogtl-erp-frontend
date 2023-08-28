@@ -5,19 +5,66 @@ import config from "../../config.json";
 import { useParams, useNavigate } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import info from "../../assets/img/info-danger.svg";
+import axiosInstance from "../../services/api";
 
 const ReviewForm = () => {
   let navigate = useNavigate();
-  const { jobApplication } = useNoAuthContext();
+  const { jobApplication, jobReview } = useNoAuthContext();
   const [message, setMessage] = useState("Application submitted successfully");
   const [resIcon, setResIcon] = useState(success);
 
-  useEffect(() => {
-    console.log("Reviewed Job Application:", jobApplication);
-  }, [jobApplication]);
+  const handleSubmit = async () => {
 
-  const handleSubmit = () => {
-    console.log("Submitted Job Application:", jobApplication);
+    let formData = new FormData();
+    formData.append("first_name", jobApplication.first_name);
+    formData.append("last_name", jobApplication.last_name);
+    formData.append("middle_name", jobApplication.middle_name);
+    formData.append("mobile_number", jobApplication.mobile_number);
+    formData.append("email", jobApplication.email);
+    formData.append(
+      "highest_qualification",
+      jobApplication.highest_qualification
+    );
+    formData.append("certifications", jobApplication.certifications);
+    formData.append("languages_spoken", jobApplication.languages_spoken);
+    formData.append("hr_job_opening_id", jobApplication.hr_job_opening_id);
+    formData.append("resume_attachment", jobApplication.resume_attachment);
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(`/api/v1/job_applicants.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: jobApplication,
+      });
+
+      console.log("submitted job application:", response?.data);
+
+      // showAlert(
+      //   true,
+      //   `${officeType} successfully created`,
+      //   "alert alert-success"
+      // );
+
+      // if (officeType === "Campaign") {
+      //   fetchAllCampaigns();
+      // } else if (officeType === "Department") {
+      //   fetchAllDepartments();
+      // }
+
+      // $("#OfficeFormModal").modal("toggle");
+      // goToTop();
+      // setOffice(data);
+      // setLoading(false);
+    } catch (error) {
+      console.log("error", error);
+      // setLoading(false);
+      // showAlert(true, error?.response?.data?.error, "alert alert-danger");
+    }
+
     // axios
     //   .post(
     //     "https://ogtl-erp.outsourceglobal.com/api/jobApplicant",
@@ -52,12 +99,24 @@ const ReviewForm = () => {
       </div>
       <div className="card-body">
         <div className="row d-flex justify-content-center">
-          {Object.keys(jobApplication).map((e) => (
+          {Object.keys(jobReview).map((e) => (
             <>
               <div className="col-md-6 mt-3">
                 <p className="job-field">{e.split("_").join(" ")}</p>
               </div>
-              <div className="col-md-6 mt-3">{jobApplication[e]}</div>
+              <div className="col-md-6 mt-3">
+                {e === "languages_spoken" ? (
+                  <div className="row">
+                    {jobReview[e].map((lang) => (
+                      <ul>
+                        <li>{lang}</li>
+                      </ul>
+                    ))}
+                  </div>
+                ) : (
+                  jobReview[e]
+                )}
+              </div>
             </>
           ))}
         </div>
@@ -79,9 +138,10 @@ const ReviewForm = () => {
           onClick={handleSubmit}
           className="btn btn-primary submit-btn"
         >
-          Submit
+          Submit Application
         </button>
       </div>
+      
       <button
         style={{ opacity: 0 }}
         type="submit"

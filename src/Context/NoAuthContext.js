@@ -13,16 +13,27 @@ const NoAuthContextProvider = ({ children }) => {
     languages_spoken: [],
     hr_job_opening_id: "",
     resume_attachment: "",
-
-    job_title: "",
-    // alternate_mobile: "",
-    // referred: false,
-    // referal_name: "",
   });
-  useEffect(() => {}, [jobApplication]);
+
+  const [jobReview, setJobReview] = useState({
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    mobile_number: "",
+    email: "",
+    highest_qualification: "",
+    certifications: "",
+    languages_spoken: [],
+    job_title: "",
+    resume_attachment: "",
+  });
+
+  useEffect(() => {}, [jobApplication, jobReview]);
 
   return (
-    <NoAuthContext.Provider value={{ setJobApplication, jobApplication }}>
+    <NoAuthContext.Provider
+      value={{ setJobApplication, jobApplication, setJobReview, jobReview }}
+    >
       {children}
     </NoAuthContext.Provider>
   );

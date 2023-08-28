@@ -11,7 +11,8 @@ import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening
 const PersonalInfoForm = () => {
   const [jobId, setJobId] = useState(useParams());
   const [initialId, setinitialId] = useState(useParams());
-  const { jobApplication, setJobApplication } = useNoAuthContext();
+  const { jobApplication, setJobApplication, jobReview, setJobReview } =
+    useNoAuthContext();
   const [defaultJob, setDefaultJob] = useState([]);
   const FILE_SIZE = 160 * 10240;
   const [showProgress, setShowProgress] = useState(false);
@@ -26,13 +27,14 @@ const PersonalInfoForm = () => {
     axios
       .get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs")
       .then((res) => {
-        console.log("Default job openings:", res);
         const data = res.data.data.map((e) => {
           return {
             label: e.job_title,
             value: e._id,
           };
         });
+
+        console.log("Default job openings:", data);
 
         // setDefaultJob([
         //   {
@@ -45,11 +47,11 @@ const PersonalInfoForm = () => {
   };
 
   useEffect(() => {
-    console.log(jobId);
-  }, [jobId]);
+    setDefaultJob(DefaultJobOpening);
+    fetchDefaultJob();
+  }, []);
 
   const handleUpload = (e, setFieldValue) => {
-    console.log(jobId);
     setProgress(65);
     setShowProgress(true);
     let formData = new FormData();
@@ -74,22 +76,28 @@ const PersonalInfoForm = () => {
   const handleSubmit = (e, fields) => {
     console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
     console.log("Submit this fields:", fields);
+    console.log("Submit this job title:", jobTitle);
     setsubmitted(true);
 
-    let obj = {
+    let reviewObj = {
       ...fields,
-      resume_attachment: fileName,
       job_title: jobTitle,
+      resume_attachment: fileName,
     };
 
-    console.log("Review this job Application:", obj);
-    setJobApplication(obj);
-  };
+    delete reviewObj.hr_job_opening_id;
 
-  useEffect(() => {
-    setDefaultJob(DefaultJobOpening);
-    fetchDefaultJob();
-  }, []);
+    let submitObj = {
+      ...fields,
+      resume_attachment: fileName,
+    };
+
+    console.log("Review this job Application:", reviewObj);
+    console.log("Submit this job Application:", submitObj);
+
+    setJobReview(reviewObj);
+    setJobApplication(submitObj);
+  };
 
   return (
     <Formik
@@ -103,13 +111,8 @@ const PersonalInfoForm = () => {
         highest_qualification: "",
         certifications: "",
         languages_spoken: [],
-        hr_job_opening_id: jobId.id,
+        hr_job_opening_id: "",
         resume_attachment: "",
-
-        job_title: "",
-        // alternate_mobile: "",
-        // referred: false,
-        // referal_name: "",
       }}
       validationSchema={Yup.object().shape({
         first_name: Yup.string().required("First Name is required"),
@@ -153,6 +156,7 @@ const PersonalInfoForm = () => {
                     </label>
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
                     <label htmlFor="first_name">
@@ -174,6 +178,7 @@ const PersonalInfoForm = () => {
                       className="invalid-feedback"
                     />
                   </div>
+
                   <div className="col-md-6">
                     <label htmlFor="last_name">
                       Last Name <span className="text-danger">*</span>
@@ -195,6 +200,7 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
                     <label>Middle Name</label>
@@ -204,6 +210,7 @@ const PersonalInfoForm = () => {
                       className="form-control"
                     />
                   </div>
+
                   <div className="col-md-6">
                     <label htmlFor="email">
                       Email <span className="text-danger">*</span>
@@ -223,6 +230,7 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
                     <label htmlFor="mobile_number">
@@ -244,6 +252,7 @@ const PersonalInfoForm = () => {
                       className="invalid-feedback"
                     />
                   </div>
+
                   <div className="col-md-6">
                     <label htmlFor="alternate_mobile">
                       Alternate Phone Number
@@ -255,23 +264,28 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   {initialId.id === "general" && (
                     <div className="col-md-6">
-                      <label htmlFor="job_opening_id">
+                      <label htmlFor="hr_job_opening_id">
                         Which Job application are you applying for{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <Field
                         as="select"
-                        name="job_opening_id"
+                        name="hr_job_opening_id"
                         onChange={(e) => {
                           setFieldValue(
-                            "job_opening_id",
+                            "hr_job_opening_id",
                             e.currentTarget.value
                           );
-                          setJobTitle(e.currentTarget.label);
                           setJobId({ id: e.currentTarget.value });
+                          setJobTitle(
+                            e.currentTarget.options[
+                              e.currentTarget.selectedIndex
+                            ].text
+                          );
                         }}
                         className={
                           "form-control" +
@@ -285,12 +299,13 @@ const PersonalInfoForm = () => {
                         ))}
                       </Field>
                       <ErrorMessage
-                        name="job_opening_id"
+                        name="hr_job_opening_id"
                         component="div"
                         className="invalid-feedback"
                       />
                     </div>
                   )}
+
                   <div className="col-md-6">
                     <label htmlFor="highest_qualification">
                       Highest Qualification Attained{" "}
@@ -345,6 +360,7 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-8">
                     <div id="checkbox-group" className="mb-2">
@@ -364,6 +380,7 @@ const PersonalInfoForm = () => {
                       ))}
                     </div>
                   </div>
+
                   {/* <div className="col-md-6 mt-3">
                     <label htmlFor="referred">
                       Were you referred by an OGTL employee?{" "}
