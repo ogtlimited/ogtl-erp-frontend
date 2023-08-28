@@ -30,58 +30,54 @@ const ReviewForm = () => {
     formData.append("hr_job_opening_id", jobApplication.hr_job_opening_id);
     formData.append("resume", jobApplication.resume);
 
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post(
-        `${config.ApiUrl}/api/v1/job_applicants.json`,
-        formData
-      );
+    // try {
+    //   // eslint-disable-next-line no-unused-vars
+    //   const response = await axios.post(
+    //     `${config.ApiUrl}/api/v1/job_applicants.json`,
+    //     formData
+    //   );
 
-      document.getElementById("applyBtn").click();
-      setMessage("Application submitted successfully");
-      setResIcon(success);
+    //   document.getElementById("applyBtn").click();
+    //   setMessage("Application submitted successfully");
+    //   setResIcon(success);
 
-      setTimeout(() => {
-        document.getElementById("closeBtn").click();
-        navigate("/recruitment");
-      }, 5000);
-    } catch (error) {
-      console.log("error", error);
-      setMessage(error?.response?.data?.error);
-      setResIcon(info);
-      document.getElementById("applyBtn").click();
+    //   setTimeout(() => {
+    //     document.getElementById("closeBtn").click();
+    //     navigate("/recruitment");
+    //   }, 5000);
+    // } catch (error) {
+    //   console.log("error", error);
+    //   setMessage(error?.response?.data?.error);
+    //   setResIcon(info);
+    //   document.getElementById("applyBtn").click();
 
-      setTimeout(() => {
-        document.getElementById("closeBtn").click();
-        // navigate("/recruitment");
-      }, 5000);
-    }
+    //   setTimeout(() => {
+    //     document.getElementById("closeBtn").click();
+    //     // navigate("/recruitment");
+    //   }, 5000);
+    // }
 
-    // axios
-    //   .post(
-    //     "https://ogtl-erp.outsourceglobal.com/api/jobApplicant",
-    //     jobApplication
-    //   )
-    //   .then((res) => {
-    //     document.getElementById("applyBtn").click();
-    //     setMessage("Application submitted successfully");
-    //     setResIcon(success);
-    //     setTimeout(() => {
-    //       document.getElementById("closeBtn").click();
-    //       navigate("/recruitment");
-    //     }, 5000);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err.response);
-    //     setMessage(err?.response?.data?.message);
-    //     setResIcon(info);
-    //     document.getElementById("applyBtn").click();
+    axios
+      .post(`${config.ApiUrl}/api/v1/job_applicants.json`, formData)
+      .then((res) => {
+        document.getElementById("applyBtn").click();
+        setMessage("Application submitted successfully");
+        setResIcon(success);
+        setTimeout(() => {
+          document.getElementById("closeBtn").click();
+          navigate("/recruitment");
+        }, 5000);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setMessage(err?.response?.data?.message);
+        setResIcon(info);
+        document.getElementById("applyBtn").click();
 
-    //     setTimeout(() => {
-    //       document.getElementById("closeBtn").click();
-    //       // navigate("/recruitment");
-    //     }, 5000);
-    //   });
+        setTimeout(() => {
+          document.getElementById("closeBtn").click();
+        }, 5000);
+      });
   };
 
   return (

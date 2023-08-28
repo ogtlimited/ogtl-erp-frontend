@@ -7,7 +7,7 @@ import axios from "axios";
 import moment from "moment";
 const Joblist = () => {
   const [jobListings, setJobListings] = useState([]);
-  
+
   const fetchJobOpening = () => {
     axios.get(config.ApiUrl + "/api/jobOpening").then((res) => {
       if (res.data.data.length) {
@@ -23,7 +23,7 @@ const Joblist = () => {
       <RecruitmentPageHeader />
 
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-6">
           <h1 className="ju-h1">Join Us</h1>
           <p className="rec-p">
             If you are passionate about delivering great customer experience,
@@ -49,7 +49,7 @@ const Joblist = () => {
         <div className="col-md-4">
           <div className="ju-percent-group">
             <div className="d-flex ju-percent">
-              <h1>50%</h1>
+              <h1>60%</h1>
               <p>Female Employees</p>
             </div>
             <div className="d-flex ju-percent">
@@ -61,7 +61,7 @@ const Joblist = () => {
               <p>Technical Professionals</p>
             </div>
             <div className="d-flex ju-percent-down">
-              <h1>1000+</h1>
+              <h1>500+</h1>
               <p>Employees</p>
             </div>
           </div>

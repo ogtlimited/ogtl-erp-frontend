@@ -1,9 +1,5 @@
 export const DefaultJobOpening = [
   {
-    label: "Select Job",
-    value: "",
-  },
-  {
     value: "62042f8d61c884a134277ecf",
     label: "Compliance Officer",
   },

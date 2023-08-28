@@ -12,6 +12,7 @@ import { useNoAuthContext } from "../../Context/NoAuthContext";
 import axios from "axios";
 import config from "../../config.json";
 import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening";
+import Select from "react-select";
 
 const PersonalInfoForm = () => {
   const [jobId, setJobId] = useState(useParams());
@@ -45,49 +46,29 @@ const PersonalInfoForm = () => {
           })
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        // setDefaultJob([
-        //   {
-        //     label: "Select Job",
-        //     value: "",
-        //   },
-        //   ...data,
-        // ]);
+        setDefaultJob(data);
       });
   };
 
   useEffect(() => {
     fetchJobOpening();
-    setDefaultJob(DefaultJobOpening);
+    // setDefaultJob(DefaultJobOpening);
   }, []);
 
   const handleUpload = (e, setFieldValue) => {
     setProgress(65);
     setShowProgress(true);
-    let formData = new FormData();
     let file = e.target.files[0];
-    console.log(file);
     setFileName(file.name);
-    formData.append("job_id", jobId.id);
-    formData.append("document", file);
     setFieldValue("resume", file);
     setJobApplication({
       ...jobApplication,
       resume: file,
     });
     setProgress(100);
-
-    // axios
-    //   .post("https://ogtl-erp.outsourceglobal.com/api/job-document", formData)
-    //   .then((res) => {
-    //     console.log(res);
-    //     let path = res.data.data.file_path;
-    //     setFieldValue("resume", path);
-    //     setProgress(100);
-    //   });
   };
 
   const handleSubmit = (e, fields) => {
-    console.log("Submit this fields:", fields);
     setsubmitted(true);
 
     let reviewObj = {
@@ -102,9 +83,6 @@ const PersonalInfoForm = () => {
       ...fields,
       resume: jobApplication.resume,
     };
-
-    console.log("Review this job Application:", reviewObj);
-    console.log("Submit this job Application:", submitObj);
 
     setJobReview(reviewObj);
     setJobApplication(submitObj);
@@ -134,10 +112,10 @@ const PersonalInfoForm = () => {
         mobile_number: Yup.string()
           .min(8, "Must be exactly 8 digits")
           .required("Mobile is required"),
+        hr_job_opening_id: Yup.string().required("This is a required question"),
         highest_qualification: Yup.string().required(
           "This is a required question"
         ),
-        certifications: Yup.string().required("This is a required question"),
         resume: Yup.mixed().required("A file is required"),
       })}
       onSubmit={(fields) => {
@@ -280,35 +258,21 @@ const PersonalInfoForm = () => {
                   {initialId.id === "general" && (
                     <div className="col-md-6">
                       <label htmlFor="hr_job_opening_id">
-                        Which Job application are you applying for{" "}
+                        Which Job application are you applying for?{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <Field
                         as="select"
+                        component={Select}
+                        options={defaultJob}
+                        placeholder="Select Job"
                         name="hr_job_opening_id"
                         onChange={(e) => {
-                          setFieldValue(
-                            "hr_job_opening_id",
-                            e.currentTarget.value
-                          );
-                          setJobId({ id: e.currentTarget.value });
-                          setJobTitle(
-                            e.currentTarget.options[
-                              e.currentTarget.selectedIndex
-                            ].text
-                          );
+                          setFieldValue("hr_job_opening_id", e.value);
+                          setJobId(e);
+                          setJobTitle(e.label);
                         }}
-                        className={
-                          "form-control" +
-                          (errors.hr_job_opening_id && touched.hr_job_opening_id
-                            ? " is-invalid"
-                            : "")
-                        }
-                      >
-                        {defaultJob.map((e, i) => (
-                          <option value={e.value}>{e.label}</option>
-                        ))}
-                      </Field>
+                      />
                       <ErrorMessage
                         name="hr_job_opening_id"
                         component="div"
@@ -324,20 +288,14 @@ const PersonalInfoForm = () => {
                     </label>
                     <Field
                       as="select"
+                      component={Select}
+                      options={qualifications}
+                      placeholder="Select Qualification"
                       name="highest_qualification"
-                      className={
-                        "form-control" +
-                        (errors.highest_qualification &&
-                        touched.highest_qualification
-                          ? " is-invalid"
-                          : "")
-                      }
-                    >
-                      <option disabled>Select field</option>
-                      {qualifications.map((e) => (
-                        <option value={e.label}>{e.label}</option>
-                      ))}
-                    </Field>
+                      onChange={(e) => {
+                        setFieldValue("highest_qualification", e.label);
+                      }}
+                    />
                     <ErrorMessage
                       name="highest_qualification"
                       component="div"
@@ -351,23 +309,12 @@ const PersonalInfoForm = () => {
                     }
                   >
                     <label htmlFor="certifications">
-                      Certifications (if any){" "}
-                      <span className="text-danger">*</span>
+                      Certifications (if any)
                     </label>
                     <Field
                       name="certifications"
                       component="textarea"
-                      className={
-                        "form-control" +
-                        (errors.certifications && touched.certifications
-                          ? " is-invalid"
-                          : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="certifications"
-                      component="div"
-                      className="invalid-feedback"
+                      className="form-control"
                     />
                   </div>
                 </div>
@@ -448,16 +395,11 @@ const PersonalInfoForm = () => {
                       onChange={(e) => handleUpload(e, setFieldValue)}
                       className={
                         "custom-file-input" +
-                        (errors.resume && touched.resume
-                          ? " is-invalid"
-                          : "")
+                        (errors.resume && touched.resume ? " is-invalid" : "")
                       }
                       id="resume"
                     />
-                    <label
-                      className="custom-file-label"
-                      for="resume"
-                    >
+                    <label className="custom-file-label" for="resume">
                       {fileName.length ? fileName : "Choose file"}
                     </label>
                     {showProgress && (
