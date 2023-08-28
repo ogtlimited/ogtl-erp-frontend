@@ -1,40 +1,49 @@
+//* IN USE
+
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import { languages, qualifications, referredOpts } from "./options";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
+import axios from "axios";
+import config from "../../config.json";
 import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening";
 
 const PersonalInfoForm = () => {
   const [jobId, setJobId] = useState(useParams());
-  const [initialId, setinitialId] = useState(useParams());
-  const { jobApplication, setJobApplication, jobReview, setJobReview } =
+  const [initialId, setInitialId] = useState(useParams());
+  const { jobApplication, setJobApplication, setJobReview } =
     useNoAuthContext();
   const [defaultJob, setDefaultJob] = useState([]);
-  const FILE_SIZE = 160 * 10240;
   const [showProgress, setShowProgress] = useState(false);
   const [submitted, setsubmitted] = useState(false);
   const [progress, setProgress] = useState(10);
   const [fileName, setFileName] = useState("");
-  const [afterSuccess, setafterSuccess] = useState(false);
-  const [header, setheader] = useState("Add Your Details");
+  const [afterSuccess, setAfterSuccess] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
 
-  const fetchDefaultJob = () => {
+  const fetchJobOpening = () => {
     axios
-      .get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs")
+      .get(`${config.ApiUrl}/api/v1/job_openings.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
       .then((res) => {
-        const data = res.data.data.map((e) => {
-          return {
-            label: e.job_title,
-            value: e._id,
-          };
-        });
-
-        console.log("Default job openings:", data);
+        const data = res?.data?.data?.job_openings
+          .map((e) => {
+            return {
+              label: e?.title,
+              value: e?.id,
+            };
+          })
+          .sort((a, b) => a.label.localeCompare(b.label));
 
         // setDefaultJob([
         //   {
@@ -47,8 +56,8 @@ const PersonalInfoForm = () => {
   };
 
   useEffect(() => {
+    fetchJobOpening();
     setDefaultJob(DefaultJobOpening);
-    fetchDefaultJob();
   }, []);
 
   const handleUpload = (e, setFieldValue) => {
@@ -60,11 +69,11 @@ const PersonalInfoForm = () => {
     setFileName(file.name);
     formData.append("job_id", jobId.id);
     formData.append("document", file);
-    setFieldValue("resume_attachment", file);
+    setFieldValue("resume", file);
     setJobApplication({
       ...jobApplication,
-      resume_attachment: file,
-    })
+      resume: file,
+    });
     setProgress(100);
 
     // axios
@@ -72,28 +81,26 @@ const PersonalInfoForm = () => {
     //   .then((res) => {
     //     console.log(res);
     //     let path = res.data.data.file_path;
-    //     setFieldValue("resume_attachment", path);
+    //     setFieldValue("resume", path);
     //     setProgress(100);
     //   });
   };
 
   const handleSubmit = (e, fields) => {
-    console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
     console.log("Submit this fields:", fields);
-    console.log("Submit this job title:", jobTitle);
     setsubmitted(true);
 
     let reviewObj = {
       ...fields,
       job_title: jobTitle,
-      resume_attachment: fileName,
+      resume: fileName,
     };
 
     delete reviewObj.hr_job_opening_id;
 
     let submitObj = {
       ...fields,
-      resume_attachment: jobApplication.resume_attachment,
+      resume: jobApplication.resume,
     };
 
     console.log("Review this job Application:", reviewObj);
@@ -116,7 +123,7 @@ const PersonalInfoForm = () => {
         certifications: "",
         languages_spoken: [],
         hr_job_opening_id: "",
-        resume_attachment: null,
+        resume: null,
       }}
       validationSchema={Yup.object().shape({
         first_name: Yup.string().required("First Name is required"),
@@ -131,7 +138,7 @@ const PersonalInfoForm = () => {
           "This is a required question"
         ),
         certifications: Yup.string().required("This is a required question"),
-        resume_attachment: Yup.mixed().required("A file is required"),
+        resume: Yup.mixed().required("A file is required"),
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
@@ -436,20 +443,20 @@ const PersonalInfoForm = () => {
                   <div className="custom-file">
                     <Field
                       type="file"
-                      name="resume_attachment"
+                      name="resume"
                       value={undefined}
                       onChange={(e) => handleUpload(e, setFieldValue)}
                       className={
                         "custom-file-input" +
-                        (errors.resume_attachment && touched.resume_attachment
+                        (errors.resume && touched.resume
                           ? " is-invalid"
                           : "")
                       }
-                      id="resume_attachment"
+                      id="resume"
                     />
                     <label
                       className="custom-file-label"
-                      for="resume_attachment"
+                      for="resume"
                     >
                       {fileName.length ? fileName : "Choose file"}
                     </label>
@@ -466,7 +473,7 @@ const PersonalInfoForm = () => {
                       </div>
                     )}
                     <ErrorMessage
-                      name="resume_attachment"
+                      name="resume"
                       component="div"
                       className="invalid-feedback"
                     />

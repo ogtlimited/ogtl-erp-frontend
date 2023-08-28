@@ -6,11 +6,12 @@ import RecruitmentPageHeader from "./PageHeader";
 import axios from "axios";
 import moment from "moment";
 const Joblist = () => {
-  const [jobListings, setjobListings] = useState([]);
+  const [jobListings, setJobListings] = useState([]);
+  
   const fetchJobOpening = () => {
     axios.get(config.ApiUrl + "/api/jobOpening").then((res) => {
       if (res.data.data.length) {
-        setjobListings(res.data.data);
+        setJobListings(res.data.data);
       }
     });
   };

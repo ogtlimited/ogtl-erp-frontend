@@ -12,7 +12,7 @@ const NoAuthContextProvider = ({ children }) => {
     certifications: "",
     languages_spoken: [],
     hr_job_opening_id: "",
-    resume_attachment: null,
+    resume: null,
   });
 
   const [jobReview, setJobReview] = useState({
@@ -25,7 +25,7 @@ const NoAuthContextProvider = ({ children }) => {
     certifications: "",
     languages_spoken: [],
     job_title: "",
-    resume_attachment: "",
+    resume: "",
   });
 
   useEffect(() => {}, [jobApplication, jobReview]);

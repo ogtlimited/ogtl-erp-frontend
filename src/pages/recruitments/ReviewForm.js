@@ -5,7 +5,6 @@ import config from "../../config.json";
 import { useParams, useNavigate } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import info from "../../assets/img/info-danger.svg";
-import axiosInstance from "../../services/api";
 
 const ReviewForm = () => {
   let navigate = useNavigate();
@@ -14,7 +13,6 @@ const ReviewForm = () => {
   const [resIcon, setResIcon] = useState(success);
 
   const handleSubmit = async () => {
-
     console.log("jobApplication to be submitted:", jobApplication);
 
     let formData = new FormData();
@@ -30,37 +28,33 @@ const ReviewForm = () => {
     formData.append("certifications", jobApplication.certifications);
     formData.append("languages_spoken", jobApplication.languages_spoken);
     formData.append("hr_job_opening_id", jobApplication.hr_job_opening_id);
-    formData.append("resume_attachment", jobApplication.resume_attachment);
+    formData.append("resume", jobApplication.resume);
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.post(`https://erp-development.ogtlprojects.com/api/v1/job_applicants.json`, formData);
+      const response = await axios.post(
+        `${config.ApiUrl}/api/v1/job_applicants.json`,
+        formData
+      );
 
-      // // eslint-disable-next-line no-unused-vars
-      // const response = await axios.post(`https://ogtl-erp.outsourceglobal.com/api/jobApplicant`, formData);
+      document.getElementById("applyBtn").click();
+      setMessage("Application submitted successfully");
+      setResIcon(success);
 
-      console.log("submitted job application:", response?.data);
-
-      // showAlert(
-      //   true,
-      //   `${officeType} successfully created`,
-      //   "alert alert-success"
-      // );
-
-      // if (officeType === "Campaign") {
-      //   fetchAllCampaigns();
-      // } else if (officeType === "Department") {
-      //   fetchAllDepartments();
-      // }
-
-      // $("#OfficeFormModal").modal("toggle");
-      // goToTop();
-      // setOffice(data);
-      // setLoading(false);
+      setTimeout(() => {
+        document.getElementById("closeBtn").click();
+        navigate("/recruitment");
+      }, 5000);
     } catch (error) {
       console.log("error", error);
-      // setLoading(false);
-      // showAlert(true, error?.response?.data?.error, "alert alert-danger");
+      setMessage(error?.response?.data?.error);
+      setResIcon(info);
+      document.getElementById("applyBtn").click();
+
+      setTimeout(() => {
+        document.getElementById("closeBtn").click();
+        // navigate("/recruitment");
+      }, 5000);
     }
 
     // axios
@@ -139,7 +133,7 @@ const ReviewForm = () => {
           Submit Application
         </button>
       </div>
-      
+
       <button
         style={{ opacity: 0 }}
         type="submit"
