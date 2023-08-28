@@ -46,7 +46,13 @@ const PersonalInfoForm = () => {
           })
           .sort((a, b) => a.label.localeCompare(b.label));
 
+          // console.log({
+          //   JobData: res?.data?.data?.job_openings
+          // })
+
         setDefaultJob(data);
+      }).catch((err) => {
+        console.log(err);
       });
   };
 
@@ -86,6 +92,11 @@ const PersonalInfoForm = () => {
 
     setJobReview(reviewObj);
     setJobApplication(submitObj);
+
+    // console.log({
+    //   submitObj,
+    //   reviewObj,
+    // })
   };
 
   return (

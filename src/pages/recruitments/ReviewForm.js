@@ -11,10 +11,9 @@ const ReviewForm = () => {
   const { jobApplication, jobReview } = useNoAuthContext();
   const [message, setMessage] = useState("Application submitted successfully");
   const [resIcon, setResIcon] = useState(success);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    console.log("jobApplication to be submitted:", jobApplication);
-
     let formData = new FormData();
     formData.append("first_name", jobApplication.first_name);
     formData.append("last_name", jobApplication.last_name);
@@ -26,13 +25,18 @@ const ReviewForm = () => {
       jobApplication.highest_qualification
     );
     formData.append("certifications", jobApplication.certifications);
-    formData.append("languages_spoken", jobApplication.languages_spoken);
+    jobApplication.languages_spoken.forEach((language) =>
+      formData.append("languages_spoken[]", language)
+    );
     formData.append("hr_job_opening_id", jobApplication.hr_job_opening_id);
     formData.append("resume", jobApplication.resume);
+
+    setLoading(true);
 
     axios
       .post(`${config.ApiUrl}/api/v1/job_applicants.json`, formData)
       .then((res) => {
+        setLoading(false);
         document.getElementById("applyBtn").click();
         setMessage("Application submitted successfully");
         setResIcon(success);
@@ -43,7 +47,8 @@ const ReviewForm = () => {
       })
       .catch((err) => {
         console.log(err.response);
-        setMessage(err?.response?.data?.message);
+        setMessage(err?.response?.data?.errors);
+        setLoading(false);
         setResIcon(info);
         document.getElementById("applyBtn").click();
 
@@ -99,7 +104,15 @@ const ReviewForm = () => {
           onClick={handleSubmit}
           className="btn btn-primary submit-btn"
         >
-          Submit Application
+          {loading ? (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Submit Application"
+          )}
         </button>
       </div>
 
@@ -116,10 +129,10 @@ const ReviewForm = () => {
 
       <div
         className="modal custom-modal fade show"
-        id="apply_job"
+        // id="apply_job"
         role="dialog"
         aria-modal="true"
-        // id="exampleModal"
+        id="exampleModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -141,6 +154,7 @@ const ReviewForm = () => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+
             <div className="modal-body">
               <div className="d-flex row justify-content-center p-5 mx-5 mb-5">
                 {" "}

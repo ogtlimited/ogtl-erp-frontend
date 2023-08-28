@@ -1,23 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import config from "../../config.json";
-
 import RecruitmentPageHeader from "./PageHeader";
 import axios from "axios";
 import moment from "moment";
+
 const Joblist = () => {
   const [jobListings, setJobListings] = useState([]);
 
   const fetchJobOpening = () => {
-    axios.get(config.ApiUrl + "/api/jobOpening").then((res) => {
-      if (res.data.data.length) {
-        setJobListings(res.data.data);
-      }
-    });
+    axios
+      .get(`${config.ApiUrl}/api/v1/job_openings.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.job_openings;
+
+        if (data.length) {
+          // console.log({
+          //   jobListing: data,
+          // });
+          setJobListings(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
   useEffect(() => {
     fetchJobOpening();
   }, []);
+
   return (
     <>
       <RecruitmentPageHeader />
@@ -66,12 +84,12 @@ const Joblist = () => {
             </div>
           </div>
         </div>
-        <div className="col-md-12">
+        {/* <div className="col-md-12">
           <h1 className="availableOpening">Available Opening</h1>
-        </div>
+        </div> */}
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         {jobListings &&
           jobListings.map((job) => (
             <div className="col-md-6">
@@ -107,7 +125,7 @@ const Joblist = () => {
               </Link>
             </div>
           ))}
-      </div>
+      </div> */}
     </>
   );
 };
