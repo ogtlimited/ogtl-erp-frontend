@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
@@ -35,6 +35,7 @@ const AppProvider = (props) => {
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
+  const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title === "hr" ? true : false;
@@ -304,8 +305,38 @@ const AppProvider = (props) => {
 
       setSelectLeaveTypes(formattedLeaveTypes);
       setLoadingSelect(false);
-    } catch (error) {}
+    } catch (error) {
+      setLoadingSelect(false);
+    }
   };
+
+  // All Deduction Types:
+  const fetchDeductionTypes = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/deduction_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = response?.data?.data?.deduction_types;
+
+      const formattedData = resData.map((item) => {
+        return {
+          label: item?.deduction?.title,
+          value: item?.deduction?.id,
+        };
+      });
+
+      setSelectDeductionTypes(formattedData);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
 
   // Universal Error Handler:
   const ErrorHandler = (error, component) => {
@@ -352,12 +383,13 @@ const AppProvider = (props) => {
         fetchAllDesignations();
         fetchAllBranches();
         fetchAllLeaveTypes();
+        fetchDeductionTypes();
         fetchHRLeavesNotificationCount();
       }
 
       fetchAllLeaveTypes();
     }
-  }, [isHr, isTeamLead, userToken]);
+  }, [fetchDeductionTypes, isHr, isTeamLead, userToken]);
 
   return (
     <AppContext.Provider
@@ -385,6 +417,10 @@ const AppProvider = (props) => {
         selectLeaveTypes,
         setSelectLeaveTypes,
         fetchAllLeaveTypes,
+
+        selectDeductionTypes,
+        setSelectDeductionTypes,
+        fetchDeductionTypes,
 
         loadingSelect,
         setLoadingSelect,
