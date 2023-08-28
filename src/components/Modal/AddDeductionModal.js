@@ -8,7 +8,12 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const AddDeductionModal = ({ fetchDeductions }) => {
-  const { showAlert, loadingSelect } = useAppContext();
+  const {
+    showAlert,
+    loadingSelect,
+    selectDeductionTypes,
+    fetchDeductionTypes,
+  } = useAppContext();
   const [data, setData] = useState(HR_ADD_DEDUCTION);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,7 +23,10 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
   const [officeType, setOfficeType] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
   const [allOffices, setAllOffices] = useState([]);
-  const [allDeductionTypes, setAllDeductionTypes] = useState([]);
+
+  useEffect(() => {
+    fetchDeductionTypes();
+  }, [fetchDeductionTypes]);
 
   useEffect(() => {
     if (data?.hr_user_id && data?.hr_deduction_type_id) {
@@ -135,38 +143,6 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
       setLoading(false);
     }
   };
-
-  // All Deduction Types:
-  const fetchDeductionTypes = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/api/v1/deduction_types.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-
-      const resData = response?.data?.data?.deduction_types;
-
-      const formattedData = resData.map((item) => {
-        return {
-          label: item?.deduction?.title,
-          value: item?.deduction?.id,
-        };
-      });
-
-      setAllDeductionTypes(formattedData);
-      setLoading(false);
-    } catch (error) {
-      console.log("Get All Deduction Types error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchDeductionTypes();
-  }, []);
 
   const handleAddDeduction = async (e) => {
     e.preventDefault();
@@ -301,7 +277,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                           Deduction Type
                         </label>
                         <Select
-                          options={allDeductionTypes}
+                          options={selectDeductionTypes}
                           isSearchable={true}
                           value={{
                             value: data?.hr_deduction_type_id,
