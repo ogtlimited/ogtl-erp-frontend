@@ -59,7 +59,9 @@ const JobApplicants = () => {
             page: page,
             limit: sizePerPage,
             name: searchTerm.length ? searchTerm : null,
-            process_status: processingStageFilter ? processingStageFilter : null,
+            process_status: processingStageFilter
+              ? processingStageFilter
+              : null,
             start_date: persistedFromDate,
             end_date: persistedToDate,
           },
@@ -83,6 +85,8 @@ const JobApplicants = () => {
         interview_scheduled_date: emp?.interview_date
           ? moment(emp?.interview_date).format("Do MMMM, YYYY")
           : null,
+        // resume_attachment: emp?.old_cv_url ? emp?.old_cv_url : emp?.new_cv_url,
+        resume_attachment: emp?.old_cv_url,
       }));
 
       setData(formatted);
@@ -92,7 +96,7 @@ const JobApplicants = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
 
   useEffect(() => {
@@ -200,7 +204,9 @@ const JobApplicants = () => {
       text: "Interview Date",
       sort: true,
       headerStyle: { width: "15%" },
-      formatter: (value, row) => <h2>{row.interview_scheduled_date || "Not Scheduled"}</h2>,
+      formatter: (value, row) => (
+        <h2>{row.interview_scheduled_date || "Not Scheduled"}</h2>
+      ),
     },
     {
       dataField: "interview_status",
@@ -256,7 +262,7 @@ const JobApplicants = () => {
     },
     {
       dataField: "resume_attachment",
-      text: "Resume Attachment",
+      text: "Resume",
       sort: true,
       headerStyle: { width: "15%" },
       formatter: (value, row) => (
