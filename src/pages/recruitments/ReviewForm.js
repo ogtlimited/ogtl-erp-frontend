@@ -15,6 +15,8 @@ const ReviewForm = () => {
 
   const handleSubmit = async () => {
 
+    console.log("jobApplication to be submitted:", jobApplication);
+
     let formData = new FormData();
     formData.append("first_name", jobApplication.first_name);
     formData.append("last_name", jobApplication.last_name);
@@ -32,14 +34,10 @@ const ReviewForm = () => {
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/job_applicants.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: jobApplication,
-      });
+      const response = await axios.post(`https://erp-development.ogtlprojects.com/api/v1/job_applicants.json`, formData);
+
+      // // eslint-disable-next-line no-unused-vars
+      // const response = await axios.post(`https://ogtl-erp.outsourceglobal.com/api/jobApplicant`, formData);
 
       console.log("submitted job application:", response?.data);
 

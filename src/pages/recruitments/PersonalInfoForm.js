@@ -61,6 +61,10 @@ const PersonalInfoForm = () => {
     formData.append("job_id", jobId.id);
     formData.append("document", file);
     setFieldValue("resume_attachment", file);
+    setJobApplication({
+      ...jobApplication,
+      resume_attachment: file,
+    })
     setProgress(100);
 
     // axios
@@ -89,7 +93,7 @@ const PersonalInfoForm = () => {
 
     let submitObj = {
       ...fields,
-      resume_attachment: fileName,
+      resume_attachment: jobApplication.resume_attachment,
     };
 
     console.log("Review this job Application:", reviewObj);
@@ -112,7 +116,7 @@ const PersonalInfoForm = () => {
         certifications: "",
         languages_spoken: [],
         hr_job_opening_id: "",
-        resume_attachment: "",
+        resume_attachment: null,
       }}
       validationSchema={Yup.object().shape({
         first_name: Yup.string().required("First Name is required"),

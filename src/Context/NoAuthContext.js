@@ -12,7 +12,7 @@ const NoAuthContextProvider = ({ children }) => {
     certifications: "",
     languages_spoken: [],
     hr_job_opening_id: "",
-    resume_attachment: "",
+    resume_attachment: null,
   });
 
   const [jobReview, setJobReview] = useState({
