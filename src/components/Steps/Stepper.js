@@ -1,22 +1,25 @@
-import React from 'react'
+import React from "react";
 
-const Stepper = ({controls}) => {
-    return (
-        <div className="steps">
-    <progress id="progress" value="0" max="100" ></progress>
-    {controls && controls.map(control =>(
-        <div className="step-item">
-            <button className="step-button text-center" type="button" data-toggle="collapse"
-                 aria-expanded={control.default} aria-controls={"collapse" + control.id}>
-                {control.id}
+const Stepper = ({ controls }) => {
+  return (
+    <div className="steps">
+      <progress id="progress" value="0" max="100"></progress>
+      {controls &&
+        controls.map((control) => (
+          <div className="step-item">
+            <button
+              className="step-button text-center"
+              type="button"
+              data-toggle="collapse"
+              aria-expanded={control.default}
+              aria-controls={"collapse" + control.id}
+            >
+              {control.id}
             </button>
-            <div className="step-title">
-                {control.title}
-            </div>
-        </div>
-
-    ))}
-    {/* <div className="step-item">
+            <div className="step-title">{control.title}</div>
+          </div>
+        ))}
+      {/* <div className="step-item">
         <button className="step-button text-center collapsed" type="button" data-toggle="collapse"
             data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
             2
@@ -34,8 +37,8 @@ const Stepper = ({controls}) => {
             Third Step
         </div>
     </div> */}
-</div>
-    )
-}
+    </div>
+  );
+};
 
-export default Stepper
+export default Stepper;

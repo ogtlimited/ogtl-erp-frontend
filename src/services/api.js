@@ -12,6 +12,7 @@ if (token) {
 const axiosInstance = axios.create({
   baseURL: config.ApiUrl,
 });
+
 axiosInstance.interceptors.request.use((config) => {
   const token = secureLocalStorage.getItem("token");
   if (!token) {

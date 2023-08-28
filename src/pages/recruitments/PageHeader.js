@@ -12,9 +12,7 @@ const RecruitmentPageHeader = () => {
           <div className="col-sm-10">
             <h3 className="page-title">Jobs</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a>Recruitment</a>
-              </li>
+              <li className="breadcrumb-item">Recruitment</li>
               <li className="breadcrumb-item active">Jobs</li>
             </ul>
           </div>

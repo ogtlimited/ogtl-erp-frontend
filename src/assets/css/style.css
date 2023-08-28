@@ -3293,11 +3293,13 @@ table.dataTable thead > tr > td.sorting {
   margin-top: 40px;
 }
 .submit-btn {
-  border-radius: 50px;
-  font-size: 18px;
-  font-weight: 600;
-  min-width: 200px;
-  padding: 10px 20px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.submit-btn:hover {
+  transition: 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  transform: scale(1.05)
 }
 .form-scroll {
   max-height: 400px;

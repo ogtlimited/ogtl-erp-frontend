@@ -2,26 +2,38 @@ import React, { createContext, useState, useEffect } from "react";
 const NoAuthContext = createContext();
 
 const NoAuthContextProvider = ({ children }) => {
-  const [jobApplication, setjobApplication] = useState({
+  const [jobApplication, setJobApplication] = useState({
     first_name: "",
     last_name: "",
     middle_name: "",
-    email_address: "",
-    mobile: "",
-    alternate_mobile: "",
-    resume_attachment: "",
+    mobile_number: "",
+    email: "",
     highest_qualification: "",
     certifications: "",
     languages_spoken: [],
-    referred: "",
-    referal_name: "",
-    job_opening_id: "",
+    hr_job_opening_id: "",
+    resume: null,
   });
-  useEffect(() => {}, [jobApplication]);
-  const [isChecked, setIsChecked] = useState(false);
+
+  const [jobReview, setJobReview] = useState({
+    first_name: "",
+    last_name: "",
+    middle_name: "",
+    mobile_number: "",
+    email: "",
+    highest_qualification: "",
+    certifications: "",
+    languages_spoken: [],
+    job_title: "",
+    resume: "",
+  });
+
+  useEffect(() => {}, [jobApplication, jobReview]);
 
   return (
-    <NoAuthContext.Provider value={{ setjobApplication, jobApplication }}>
+    <NoAuthContext.Provider
+      value={{ setJobApplication, jobApplication, setJobReview, jobReview }}
+    >
       {children}
     </NoAuthContext.Provider>
   );
@@ -30,9 +42,7 @@ const NoAuthContextProvider = ({ children }) => {
 function useNoAuthContext() {
   const context = React.useContext(NoAuthContext);
   if (context === undefined) {
-    throw new Error(
-      "useNoAauthContext must be within an NoAuthContextProvider"
-    );
+    throw new Error("useNoAuthContext must be within an NoAuthContextProvider");
   }
   return context;
 }

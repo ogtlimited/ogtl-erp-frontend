@@ -3,6 +3,7 @@ import React from "react";
 const JobApplicationContent = ({ jobApplication = {} }) => {
   const filteredApplication = {
     ...jobApplication,
+    resume: undefined,
     rep_sieving_call_id: undefined,
     updated_at: undefined,
     referrer_id: undefined,
@@ -28,7 +29,7 @@ const JobApplicationContent = ({ jobApplication = {} }) => {
               </div>
               <div className="col-md-6 mt-3">
                 <p className="">
-                  {typeof value === "string" ? value : "Not Provided"}
+                  {typeof value === "string" ? value : "-"}
                 </p>
               </div>
             </React.Fragment>

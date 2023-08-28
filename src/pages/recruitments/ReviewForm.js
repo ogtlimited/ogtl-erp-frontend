@@ -5,38 +5,59 @@ import config from "../../config.json";
 import { useParams, useNavigate } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import info from "../../assets/img/info-danger.svg";
+
 const ReviewForm = () => {
   let navigate = useNavigate();
-  const { jobApplication } = useNoAuthContext();
-  const [message, setmessage] = useState("Application submitted successfully")
-  const [resIcon, setresIcon] = useState(success)
-  useEffect(() => {}, [jobApplication]);
-  const handleSubmit = () => {
-    delete jobApplication.referred;
+  const { jobApplication, jobReview } = useNoAuthContext();
+  const [message, setMessage] = useState("Application submitted successfully");
+  const [resIcon, setResIcon] = useState(success);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    let formData = new FormData();
+    formData.append("first_name", jobApplication.first_name);
+    formData.append("last_name", jobApplication.last_name);
+    formData.append("middle_name", jobApplication.middle_name);
+    formData.append("mobile_number", jobApplication.mobile_number);
+    formData.append("email", jobApplication.email);
+    formData.append(
+      "highest_qualification",
+      jobApplication.highest_qualification
+    );
+    formData.append("certifications", jobApplication.certifications);
+    jobApplication.languages_spoken.forEach((language) =>
+      formData.append("languages_spoken[]", language)
+    );
+    formData.append("hr_job_opening_id", jobApplication.hr_job_opening_id);
+    formData.append("resume", jobApplication.resume);
+
+    setLoading(true);
+
     axios
-      .post("https://ogtl-erp.outsourceglobal.com/api/jobApplicant", jobApplication)
+      .post(`${config.ApiUrl}/api/v1/job_applicants.json`, formData)
       .then((res) => {
+        setLoading(false);
         document.getElementById("applyBtn").click();
-        setmessage("Application submitted successfully");
-        setresIcon(success)
+        setMessage("Application submitted successfully");
+        setResIcon(success);
         setTimeout(() => {
-          // setafterSuccess(false)
           document.getElementById("closeBtn").click();
           navigate("/recruitment");
         }, 5000);
-      }).catch(err =>{
-        console.log(err.response)
-        setmessage(err?.response?.data?.message)
-        setresIcon(info)
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setMessage(err?.response?.data?.errors);
+        setLoading(false);
+        setResIcon(info);
         document.getElementById("applyBtn").click();
 
         setTimeout(() => {
-          // setafterSuccess(false)
           document.getElementById("closeBtn").click();
-          // navigate("/recruitment");
         }, 5000);
       });
   };
+
   return (
     <div className="card">
       <div className="card-header application-form-header">
@@ -44,18 +65,30 @@ const ReviewForm = () => {
       </div>
       <div className="card-body">
         <div className="row d-flex justify-content-center">
-          {Object.keys(jobApplication).map((e) => (
+          {Object.keys(jobReview).map((e) => (
             <>
               <div className="col-md-6 mt-3">
                 <p className="job-field">{e.split("_").join(" ")}</p>
               </div>
-              <div className="col-md-6 mt-3">{jobApplication[e]}</div>
+              <div className="col-md-6 mt-3">
+                {e === "languages_spoken" ? (
+                  <div className="row">
+                    {jobReview[e].map((lang) => (
+                      <ul>
+                        <li>{lang}</li>
+                      </ul>
+                    ))}
+                  </div>
+                ) : (
+                  jobReview[e]
+                )}
+              </div>
             </>
           ))}
         </div>
       </div>
 
-      <div className="row flex justify-content-between px-5 pb-5">
+      <div className="row flex justify-content-between px-5">
         <button
           type="button"
           className="nav-button btn btn-primary submit-btn"
@@ -71,9 +104,18 @@ const ReviewForm = () => {
           onClick={handleSubmit}
           className="btn btn-primary submit-btn"
         >
-          Submit
+          {loading ? (
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Submit Application"
+          )}
         </button>
       </div>
+
       <button
         style={{ opacity: 0 }}
         type="submit"
@@ -87,10 +129,10 @@ const ReviewForm = () => {
 
       <div
         className="modal custom-modal fade show"
-        id="apply_job"
+        // id="apply_job"
         role="dialog"
         aria-modal="true"
-        // id="exampleModal"
+        id="exampleModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -112,13 +154,14 @@ const ReviewForm = () => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+
             <div className="modal-body">
               <div className="d-flex row justify-content-center p-5 mx-5 mb-5">
                 {" "}
                 <img
-                  
-                  style={{ width: "100px", alignSelf: "center",color:"red" }}
+                  style={{ width: "100px", alignSelf: "center", color: "red" }}
                   src={resIcon}
+                  alt="success"
                 />
               </div>
             </div>
