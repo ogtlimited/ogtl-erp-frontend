@@ -34,6 +34,8 @@ export default function GuardedRoute({ title, dept, children }) {
       return true;
     } else if (CurrentUserRoles.includes("team_lead")) {
       return true;
+    } else if (CurrentUserRoles.includes("supervisor")) {
+      return true;
     } else if (CurrentUserRoles.includes("rep_siever")) {
       return true;
     } else {
