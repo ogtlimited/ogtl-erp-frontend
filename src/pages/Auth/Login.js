@@ -38,10 +38,7 @@ const Login = () => {
     }
 
     const data = await response.json();
-    const groups = data.value.map((group) => group.id);
-
-    console.log("group data:", data?.value);
-    console.log("groups", groups);
+    const groups = data.value.map((group) => group?.displayName || group?.id);
 
     userData.userGroup = groups;
   };
@@ -52,24 +49,23 @@ const Login = () => {
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        console.log("Data from Azure:", e);
 
         userData.name = e.account.name;
         userData.email = e.account.username;
 
         fetchMsGraph(e.accessToken);
 
-        console.log("User Data:", userData);
+        tokenService.setKpiUser(userData);
 
-        const activeUser = e?.account?.username;
+        // const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        if (obj.company_email !== activeUser) {
-          return setErrorMsg("There is an active user on this device");
-        }
+        // if (obj.company_email !== activeUser) {
+        //   return setErrorMsg("There is an active user on this device");
+        // }
 
         setErrorMsg("");
 
@@ -87,7 +83,7 @@ const Login = () => {
             tokenService.setToken(res.data.data.token);
 
             if (res.data.data.token) {
-              // window.location.href = "/dashboard/employee-dashboard";
+              window.location.href = "/dashboard/employee-dashboard";
             } else {
               return setErrorMsg("Network Error. Please try again");
             }
@@ -120,15 +116,23 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              const activeUser = e?.account?.username;
+
+              userData.name = e.account.name;
+              userData.email = e.account.username;
+
+              fetchMsGraph(e.accessToken);
+
+              tokenService.setKpiUser(userData);
+
+              // const activeUser = e?.account?.username;
 
               const obj = {
                 company_email: data.company_email.trim(),
               };
 
-              if (obj.company_email !== activeUser) {
-                return setErrorMsg("Please login with your credentials");
-              }
+              // if (obj.company_email !== activeUser) {
+              //   return setErrorMsg("Please login with your credentials");
+              // }
 
               setErrorMsg("");
 
@@ -146,7 +150,7 @@ const Login = () => {
                   tokenService.setToken(res.data.data.token);
 
                   if (res.data.data.token) {
-                    // window.location.href = "/dashboard/employee-dashboard";
+                    window.location.href = "/dashboard/employee-dashboard";
                   } else {
                     return setErrorMsg("Network Error. Please try again");
                   }

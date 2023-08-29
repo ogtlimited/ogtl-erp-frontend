@@ -1,32 +1,53 @@
+//* IN USE
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
 import HeroImage from "../../../assets/img/HR-nextImg.png";
-import CryptoJS from "crypto-js";
-import { encrypt, decrypt } from "../../../services/encryption.service";
+import tokenService from "../../../services/token.service";
+import sign from "jwt-encode";
+// import config from "../../../config.json";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
+  const [externalURL, setExternalURL] = useState(null);
 
   const userDept =
     user?.office?.office_type === "department" ? user?.office?.title : null;
 
-  const params = new URLSearchParams();
-  // params.append("data", encryptedData);
+  const buildExternalURL = () => {
+    try {
+      const kpiData = tokenService.getKpiUser();
+      const secret = process.env.REACT_APP_SECRET;
 
-  const apiUrl = "https://external-api.com/endpoint?" + params.toString();
+      const generatedJWT = sign(kpiData, secret);
 
+      const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+      const queryParams = `auth_param=${generatedJWT}`;
+
+      const externalAppUrl = `${kpiUrl}?${queryParams}`;
+      setExternalURL(externalAppUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    buildExternalURL();
+  }, []);
+
+  // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
     e?.day.match(day)
   );
-
   const start = todayShift[0]?.start_time
     ? moment(todayShift[0].start_time, ["HH"]).format("hh A")
     : null;
@@ -34,6 +55,7 @@ const EmployeeUser = () => {
     ? moment(todayShift[0].end_time, ["HH"]).format("hh A")
     : null;
 
+  // Quotes:
   const fetchQuote = async () => {
     try {
       const result = await axios.get(
@@ -76,9 +98,12 @@ const EmployeeUser = () => {
                 If you haven't clocked in today, you need to do it right away
               </p>
               {userDept === "hr" && (
-                <a className="btn btn-primary" href={apiUrl}>
-                  View KPI
-                </a>
+                <div
+                  className="btn btn-primary"
+                  onClick={() => window.open(externalURL, "_blank")}
+                >
+                  Go to KPI
+                </div>
               )}
             </div>
             <div className="col-md-3">
