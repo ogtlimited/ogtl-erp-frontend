@@ -28,7 +28,7 @@ const Offices = () => {
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-  canCreateAndEdit.includes(role)
+    canCreateAndEdit.includes(role)
   );
 
   // All Campaigns:
@@ -147,14 +147,20 @@ const Offices = () => {
       dataField: "title",
       text: "Office",
       sort: true,
-      headerStyle: { width: "50%" },
+      headerStyle: { width: "40%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "40%" },
+      headerStyle: { width: "30%" },
+    },
+    {
+      dataField: "leave_approval_level",
+      text: "Leave Approval Level",
+      sort: true,
+      headerStyle: { width: "20%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
