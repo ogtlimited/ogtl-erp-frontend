@@ -1,8 +1,5 @@
 export const qualifications = [
     {
-        label: 'Select Qualification',
-    },
-    {
         label: 'Secondary School Certificate',
     },
     {

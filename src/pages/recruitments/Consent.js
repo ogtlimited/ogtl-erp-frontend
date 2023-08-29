@@ -27,6 +27,7 @@ const Consent = () => {
       default: false,
     },
   ]);
+
   useEffect(() => {
     const navButtons = document.querySelectorAll(".nav-button");
     const stepButtons = document.querySelectorAll(".step-button");
@@ -54,10 +55,11 @@ const Consent = () => {
       });
     });
   }, []);
+
   return (
     <>
       <RecruitmentPageHeader />
-      <div className="row justify-content-center">
+      <div className="row justify-content-left">
         <div className="accordion col-md-11" id="accordionExample">
           <Stepper controls={items} />
           <Steps items={items} />

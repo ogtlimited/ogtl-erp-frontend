@@ -1,94 +1,104 @@
+//* IN USE
+
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import config from "../../config.json";
 import { useParams } from "react-router-dom";
 import success from "../../assets/img/success.svg";
 import { languages, qualifications, referredOpts } from "./options";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
+import axios from "axios";
+import config from "../../config.json";
+import { DefaultJobOpening } from ".././../components/FormJSON/DefaultJobOpening";
+import Select from "react-select";
 
 const PersonalInfoForm = () => {
-  const [jobId, setjobId] = useState(useParams());
-  const [initialId, setinitialId] = useState(useParams());
-  const { setjobApplication, jobApplication } = useNoAuthContext();
-  const [defaultJob, setdefaultJob] = useState([]);
-  const FILE_SIZE = 160 * 10240;
-  const [showProgress, setshowProgress] = useState(false);
+  const [jobId, setJobId] = useState(useParams());
+  const [initialId, setInitialId] = useState(useParams());
+  const { jobApplication, setJobApplication, setJobReview } =
+    useNoAuthContext();
+  const [defaultJob, setDefaultJob] = useState([]);
+  const [showProgress, setShowProgress] = useState(false);
   const [submitted, setsubmitted] = useState(false);
-  const [progress, setprogress] = useState(10);
-  const [fileName, setfileName] = useState("");
-  const [afterSuccess, setafterSuccess] = useState(false);
-  const [header, setheader] = useState("Add Your Details");
+  const [progress, setProgress] = useState(10);
+  const [fileName, setFileName] = useState("");
+  const [afterSuccess, setAfterSuccess] = useState(false);
+  const [jobTitle, setJobTitle] = useState("");
 
-  const fetchDefaultJob = () => {
-    axios.get("https://ogtl-erp.outsourceglobal.com/api/jobOpening/defaultJobs").then((res) => {
-      console.log(res);
-      const data = res.data.data.map((e) => {
-        return {
-          label: e.job_title,
-          value: e._id,
-        };
-      });
-      setdefaultJob([
-        {
-          label: "Select Job",
-          value: "",
+  const fetchJobOpening = () => {
+    axios
+      .get(`${config.ApiUrl}/api/v1/job_openings.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
         },
-        ...data,
-      ]);
-    });
-  };
-  useEffect(() => {
-    console.log(jobId);
-  }, [jobId]);
+      })
+      .then((res) => {
+        const data = res?.data?.data?.job_openings
+          .map((e) => {
+            return {
+              label: e?.title,
+              value: e?.id,
+            };
+          })
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-  const handleUpload = (e, setFieldValue) => {
-    console.log(jobId);
-    setprogress(65);
-    setshowProgress(true);
-    let formdata = new FormData();
-    let file = e.target.files[0];
-    console.log(file);
-    setfileName(file.name);
-    formdata.append("job_id", jobId.id);
-    formdata.append("document", file);
-    axios.post("https://ogtl-erp.outsourceglobal.com/api/job-document", formdata).then((res) => {
-      console.log(res);
-      let path = res.data.data.file_path;
-      setFieldValue("resume_attachment", path);
-      setprogress(100);
-    });
-  };
-  const handleSubmit = (e, field) => {
-    console.log(field);
-    // setprogress(65)
-    setsubmitted(true);
-    let obj = {
-      ...field,
-      job_opening_id: jobId.id,
-      default_job_opening_id: jobId.id,
-    };
-    console.log(obj);
-    console.log(setjobApplication);
-    setjobApplication(obj);
-    // axios.post(config.ApiUrl +'/api/jobApplicant',obj ).then(res =>{
-    //     console.log(res)
-    //     setsubmitted(false)
-    //     setafterSuccess(true)
-    //     setheader('Your Application has been submitted sucessfully')
-    //     setTimeout(() => {
-    //         setafterSuccess(false)
-    //         document.getElementById("closeBtn").click()
-    //     }, 4000);
+          // console.log({
+          //   JobData: res?.data?.data?.job_openings
+          // })
 
-    // })
+        setDefaultJob(data);
+      }).catch((err) => {
+        console.log(err);
+      });
   };
+
   useEffect(() => {
-    fetchDefaultJob();
+    fetchJobOpening();
+    // setDefaultJob(DefaultJobOpening);
   }, []);
 
-  const SUPPORTED_FORMATS = ["application/pdf", "application/msword"];
+  const handleUpload = (e, setFieldValue) => {
+    setProgress(65);
+    setShowProgress(true);
+    let file = e.target.files[0];
+    setFileName(file.name);
+    setFieldValue("resume", file);
+    setJobApplication({
+      ...jobApplication,
+      resume: file,
+    });
+    setProgress(100);
+  };
+
+  const handleSubmit = (e, fields) => {
+    setsubmitted(true);
+
+    let reviewObj = {
+      ...fields,
+      job_title: jobTitle,
+      resume: fileName,
+    };
+
+    delete reviewObj.hr_job_opening_id;
+
+    let submitObj = {
+      ...fields,
+      resume: jobApplication.resume,
+    };
+
+    setJobReview(reviewObj);
+    setJobApplication(submitObj);
+
+    // console.log({
+    //   submitObj,
+    //   reviewObj,
+    // })
+  };
+
   return (
     <Formik
       enableReinitialize={false}
@@ -96,45 +106,31 @@ const PersonalInfoForm = () => {
         first_name: "",
         last_name: "",
         middle_name: "",
-        email_address: "",
-        mobile: "",
-        alternate_mobile: "",
-        resume_attachment: "",
+        mobile_number: "",
+        email: "",
         highest_qualification: "",
         certifications: "",
         languages_spoken: [],
-        referred: false,
-        referal_name: "",
-        job_opening_id: jobId.id,
+        hr_job_opening_id: "",
+        resume: null,
       }}
       validationSchema={Yup.object().shape({
         first_name: Yup.string().required("First Name is required"),
         last_name: Yup.string().required("Last Name is required"),
-        email_address: Yup.string()
+        email: Yup.string()
           .email("Invalid Email")
           .required("Email is required"),
-        mobile: Yup.string()
+        mobile_number: Yup.string()
           .min(8, "Must be exactly 8 digits")
           .required("Mobile is required"),
+        hr_job_opening_id: Yup.string().required("This is a required question"),
         highest_qualification: Yup.string().required(
           "This is a required question"
         ),
-        certifications: Yup.string().required("This is a required question"),
-        resume_attachment: Yup.mixed().required("A file is required"),
-        // .test(
-        //   "fileSize",
-        //   "File too large",
-        //   value => value && value.size <= FILE_SIZE
-        // )
-        // .test(
-        //   "fileFormat",
-        //   "Unsupported Format",
-        //   value => value && SUPPORTED_FORMATS.includes(value.type)
-        // )
+        resume: Yup.mixed().required("A file is required"),
       })}
       onSubmit={(fields) => {
         handleSubmit(null, fields);
-        console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
       }}
       render={({
         errors,
@@ -160,6 +156,7 @@ const PersonalInfoForm = () => {
                     </label>
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
                     <label htmlFor="first_name">
@@ -181,6 +178,7 @@ const PersonalInfoForm = () => {
                       className="invalid-feedback"
                     />
                   </div>
+
                   <div className="col-md-6">
                     <label htmlFor="last_name">
                       Last Name <span className="text-danger">*</span>
@@ -202,6 +200,7 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
                     <label>Middle Name</label>
@@ -211,46 +210,49 @@ const PersonalInfoForm = () => {
                       className="form-control"
                     />
                   </div>
+
                   <div className="col-md-6">
-                    <label htmlFor="email_address">
+                    <label htmlFor="email">
                       Email <span className="text-danger">*</span>
                     </label>
                     <Field
-                      name="email_address"
+                      name="email"
                       type="text"
                       className={
                         "form-control" +
-                        (errors.email_address && touched.email_address
-                          ? " is-invalid"
-                          : "")
+                        (errors.email && touched.email ? " is-invalid" : "")
                       }
                     />
                     <ErrorMessage
-                      name="email_address"
+                      name="email"
                       component="div"
                       className="invalid-feedback"
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-6">
-                    <label htmlFor="mobile">
+                    <label htmlFor="mobile_number">
                       Mobile <span className="text-danger">*</span>
                     </label>
                     <Field
-                      name="mobile"
+                      name="mobile_number"
                       type="text"
                       className={
                         "form-control" +
-                        (errors.mobile && touched.mobile ? " is-invalid" : "")
+                        (errors.mobile_number && touched.mobile_number
+                          ? " is-invalid"
+                          : "")
                       }
                     />
                     <ErrorMessage
-                      name="mobile"
+                      name="mobile_number"
                       component="div"
                       className="invalid-feedback"
                     />
                   </div>
+
                   <div className="col-md-6">
                     <label htmlFor="alternate_mobile">
                       Alternate Phone Number
@@ -262,42 +264,34 @@ const PersonalInfoForm = () => {
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   {initialId.id === "general" && (
                     <div className="col-md-6">
-                      <label htmlFor="job_opening_id">
-                        Which Job application are you applying for{" "}
+                      <label htmlFor="hr_job_opening_id">
+                        Which Job application are you applying for?{" "}
                         <span className="text-danger">*</span>
                       </label>
                       <Field
                         as="select"
-                        name="job_opening_id"
+                        component={Select}
+                        options={defaultJob}
+                        placeholder="Select Job"
+                        name="hr_job_opening_id"
                         onChange={(e) => {
-                          setFieldValue(
-                            "job_opening_id",
-                            e.currentTarget.value
-                          );
-                          setjobId({ id: e.currentTarget.value });
-                          console.log(jobId);
+                          setFieldValue("hr_job_opening_id", e.value);
+                          setJobId(e);
+                          setJobTitle(e.label);
                         }}
-                        className={
-                          "form-control" +
-                          (errors.job_opening_id && touched.job_opening_id
-                            ? " is-invalid"
-                            : "")
-                        }
-                      >
-                        {defaultJob.map((e, i) => (
-                          <option value={e.value}>{e.label}</option>
-                        ))}
-                      </Field>
+                      />
                       <ErrorMessage
-                        name="job_opening_id"
+                        name="hr_job_opening_id"
                         component="div"
                         className="invalid-feedback"
                       />
                     </div>
                   )}
+
                   <div className="col-md-6">
                     <label htmlFor="highest_qualification">
                       Highest Qualification Attained{" "}
@@ -305,20 +299,14 @@ const PersonalInfoForm = () => {
                     </label>
                     <Field
                       as="select"
+                      component={Select}
+                      options={qualifications}
+                      placeholder="Select Qualification"
                       name="highest_qualification"
-                      className={
-                        "form-control" +
-                        (errors.highest_qualification &&
-                        touched.highest_qualification
-                          ? " is-invalid"
-                          : "")
-                      }
-                    >
-                      <option disabled>Select field</option>
-                      {qualifications.map((e) => (
-                        <option value={e.label}>{e.label}</option>
-                      ))}
-                    </Field>
+                      onChange={(e) => {
+                        setFieldValue("highest_qualification", e.label);
+                      }}
+                    />
                     <ErrorMessage
                       name="highest_qualification"
                       component="div"
@@ -328,30 +316,20 @@ const PersonalInfoForm = () => {
 
                   <div
                     className={
-                      jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6"
+                      jobId.id === "general" ? "col-md-6 mt-3" : "col-md-6 mt-3"
                     }
                   >
                     <label htmlFor="certifications">
-                      Certifications (if any){" "}
-                      <span className="text-danger">*</span>
+                      Certifications (if any)
                     </label>
                     <Field
                       name="certifications"
                       component="textarea"
-                      className={
-                        "form-control" +
-                        (errors.certifications && touched.certifications
-                          ? " is-invalid"
-                          : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="certifications"
-                      component="div"
-                      className="invalid-feedback"
+                      className="form-control"
                     />
                   </div>
                 </div>
+
                 <div className="form-group row">
                   <div className="col-md-8">
                     <div id="checkbox-group" className="mb-2">
@@ -371,7 +349,8 @@ const PersonalInfoForm = () => {
                       ))}
                     </div>
                   </div>
-                  <div className="col-md-6 mt-3">
+
+                  {/* <div className="col-md-6 mt-3">
                     <label htmlFor="referred">
                       Were you referred by an OGTL employee?{" "}
                       <span className="text-danger">*</span>
@@ -391,10 +370,10 @@ const PersonalInfoForm = () => {
                         <option value={e.value}>{e.label}</option>
                       ))}
                     </Field>
-                  </div>
+                  </div> */}
 
-                  <div className="col-md-6 mt-3">
-                    {values.referred == "true" ? (
+                  {/* <div className="col-md-6 mt-3">
+                    {values.referred === "true" ? (
                       <>
                         <label htmlFor="referal_name">
                           {" "}
@@ -412,31 +391,26 @@ const PersonalInfoForm = () => {
                         />
                       </>
                     ) : null}
-                  </div>
+                  </div> */}
                 </div>
 
-                <div className="form-group">
+                <div className="form-group" style={{ marginBottom: "30px" }}>
                   <label>
                     Upload your CV <span className="text-danger">*</span>
                   </label>
                   <div className="custom-file">
                     <Field
                       type="file"
-                      name="resume_attachment"
+                      name="resume"
                       value={undefined}
                       onChange={(e) => handleUpload(e, setFieldValue)}
                       className={
                         "custom-file-input" +
-                        (errors.resume_attachment && touched.resume_attachment
-                          ? " is-invalid"
-                          : "")
+                        (errors.resume && touched.resume ? " is-invalid" : "")
                       }
-                      id="resume_attachment"
+                      id="resume"
                     />
-                    <label
-                      className="custom-file-label"
-                      for="resume_attachment"
-                    >
+                    <label className="custom-file-label" for="resume">
                       {fileName.length ? fileName : "Choose file"}
                     </label>
                     {showProgress && (
@@ -452,12 +426,13 @@ const PersonalInfoForm = () => {
                       </div>
                     )}
                     <ErrorMessage
-                      name="resume_attachment"
+                      name="resume"
                       component="div"
                       className="invalid-feedback"
                     />
                   </div>
                 </div>
+
                 <div className="row flex justify-content-between px-3">
                   <button
                     type="button"
@@ -489,6 +464,7 @@ const PersonalInfoForm = () => {
                 <img
                   style={{ width: "100px", alignSelf: "center" }}
                   src={success}
+                  alt="success"
                 />
               </div>
             )}
