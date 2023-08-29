@@ -62,6 +62,7 @@ function RejectAdminLeaveModal({
                     className="form-control rejection-textarea"
                     value={leave.rejection_reason}
                     onChange={handleFormChange}
+                    required
                   />
                 </div>
               </div>
