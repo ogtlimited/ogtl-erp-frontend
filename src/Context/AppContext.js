@@ -376,7 +376,7 @@ const AppProvider = (props) => {
   useEffect(() => {
     const token = secureLocalStorage.getItem("token");
     if (token) {
-      if (isHr || isTeamLead) {
+      if (isHr) {
         fetchAllEmployees();
         fetchAllCampaigns();
         fetchAllDepartments();
@@ -384,6 +384,14 @@ const AppProvider = (props) => {
         fetchAllBranches();
         fetchAllLeaveTypes();
         fetchDeductionTypes();
+        fetchHRLeavesNotificationCount();
+      }
+      if (isTeamLead && !isHr) {
+        fetchAllEmployees();
+        fetchAllCampaigns();
+        fetchAllDepartments();
+        fetchAllDesignations();
+        fetchAllLeaveTypes();
         fetchHRLeavesNotificationCount();
       }
 
