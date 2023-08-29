@@ -5,35 +5,71 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
-import { msalInstance, loginRequest } from "../../authConfig";
+import { msalInstance, loginRequest, graphConfig } from "../../authConfig";
+// import { fetchMsGraph } from "../../authUtils";
 import config from "../../config.json";
 
 const Login = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const userData = {
+    name: "",
+    email: "",
+    userGroup: [],
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const fetchMsGraph = async (accessToken) => {
+    const response = await fetch(graphConfig.graphMeEndpoint + "/memberOf", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user groups from Microsoft Graph");
+    }
+
+    const data = await response.json();
+    const groups = data.value.map((group) => group.id);
+
+    console.log("group data:", data?.value);
+    console.log("groups", groups);
+
+    userData.userGroup = groups;
+  };
+
   const onSubmit = (data) => {
     setLoading(true);
+
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        // const activeUser = e?.account?.username;
+        console.log("Data from Azure:", e);
+
+        userData.name = e.account.name;
+        userData.email = e.account.username;
+
+        fetchMsGraph(e.accessToken);
+
+        console.log("User Data:", userData);
+
+        const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        // if (obj.company_email !== activeUser) {
-        //   return setErrorMsg(
-        //     'There is an active user on this device'
-        //   );
-        // }
+        if (obj.company_email !== activeUser) {
+          return setErrorMsg("There is an active user on this device");
+        }
 
         setErrorMsg("");
 
@@ -49,8 +85,9 @@ const Login = () => {
           .then((res) => {
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
+
             if (res.data.data.token) {
-              window.location.href = "/dashboard/employee-dashboard";
+              // window.location.href = "/dashboard/employee-dashboard";
             } else {
               return setErrorMsg("Network Error. Please try again");
             }
@@ -83,17 +120,15 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              // const activeUser = e?.account?.username;
+              const activeUser = e?.account?.username;
 
               const obj = {
                 company_email: data.company_email.trim(),
               };
 
-              // if (obj.company_email !== activeUser) {
-              //   return setErrorMsg(
-              //     'Please login with your credentials'
-              //   );
-              // }
+              if (obj.company_email !== activeUser) {
+                return setErrorMsg("Please login with your credentials");
+              }
 
               setErrorMsg("");
 
@@ -109,8 +144,9 @@ const Login = () => {
                 .then((res) => {
                   tokenService.setUser(res.data.data);
                   tokenService.setToken(res.data.data.token);
+
                   if (res.data.data.token) {
-                    window.location.href = "/dashboard/employee-dashboard";
+                    // window.location.href = "/dashboard/employee-dashboard";
                   } else {
                     return setErrorMsg("Network Error. Please try again");
                   }
