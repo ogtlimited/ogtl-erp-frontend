@@ -28,6 +28,7 @@ import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
 import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
+import JobSieversViewAdmin from "./JobSieversView.Admin";
 
 const JobApplicantsAdmin = () => {
   const [allRepSievers, setAllRepSievers] = useState([]);
@@ -526,19 +527,7 @@ const JobApplicantsAdmin = () => {
         </div>
 
         <div id="tab_rep-sievers" className="col-12 tab-pane">
-          <UniversalPaginatedTable
-            columns={repColumns}
-            data={allRepSievers}
-            setData={setAllRepSievers}
-            loading={loadingRep}
-            setLoading={setLoadingRep}
-            page={repPage}
-            setPage={setRepPage}
-            sizePerPage={repSizePerPage}
-            setSizePerPage={setRepSizePerPage}
-            totalPages={repTotalPages}
-            setTotalPages={setRepTotalPages}
-          />
+          <JobSieversViewAdmin />
         </div>
       </div>
 
