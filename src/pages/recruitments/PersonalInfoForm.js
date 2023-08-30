@@ -40,15 +40,11 @@ const PersonalInfoForm = () => {
         const data = res?.data?.data?.job_openings
           .map((e) => {
             return {
-              label: e?.title,
+              label: e?.job_title,
               value: e?.id,
             };
           })
           .sort((a, b) => a.label.localeCompare(b.label));
-
-          // console.log({
-          //   JobData: res?.data?.data?.job_openings
-          // })
 
         setDefaultJob(data);
       }).catch((err) => {
