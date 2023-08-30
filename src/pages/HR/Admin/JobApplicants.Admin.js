@@ -29,7 +29,6 @@ import UniversalPaginatedTable from "./../../../components/Tables/UniversalPagin
 import JobSieversViewAdmin from "./JobSieversView.Admin";
 
 const JobApplicantsAdmin = () => {
-  const [allActiveRepSievers, setAllActiveRepSievers] = useState([]);
   const [allInactiveRepSievers, setAllInactiveRepSievers] = useState([]);
   const [data, setData] = useState([]);
   const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
@@ -38,6 +37,9 @@ const JobApplicantsAdmin = () => {
   const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
   const [loadingRep, setLoadingRep] = useState(false);
+
+  const [isJobSieverActivated, setIsJobSieverActivated] = useState(false);
+  const [isJobSieverDeactivated, setIsJobSieverDeactivated] = useState(false);
 
   const imageUrl = "https://erp.outsourceglobal.com";
   const males = [male, male2, male3];
@@ -68,41 +70,6 @@ const JobApplicantsAdmin = () => {
   const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
     canEdit.includes(role)
   );
-
-  // Active Job Sievers:
-  const fetchAllActiveRepSievers = useCallback(async () => {
-    setLoadingRep(true);
-    try {
-      const response = await axiosInstance.get(
-        "/api/v1/job_applications_sievers.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: repPage,
-            limit: repSizePerPage,
-          },
-        }
-      );
-
-      const resData = response?.data?.data?.job_application_sievers;
-      const totalPages = response?.data?.data?.total_pages;
-
-      setRepSizePerPage(repSizePerPage);
-      setRepTotalPages(totalPages);
-
-      setAllActiveRepSievers(resData);
-      setLoadingRep(false);
-    } catch (error) {
-      const component = "All Active Rep Sievers:";
-      ErrorHandler(error, component);
-      setLoadingRep(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repPage, repSizePerPage]);
 
   // Inactive Rep Sievers:
   const fetchAllInactiveRepSievers = useCallback(async () => {
@@ -138,6 +105,14 @@ const JobApplicantsAdmin = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repPage, repSizePerPage]);
+
+  useEffect(() => {
+    if (isJobSieverDeactivated) {
+      fetchAllInactiveRepSievers();
+    }
+
+    setIsJobSieverDeactivated(false);
+  }, [fetchAllInactiveRepSievers, isJobSieverDeactivated]);
 
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
@@ -194,14 +169,9 @@ const JobApplicantsAdmin = () => {
   }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
 
   useEffect(() => {
-    fetchAllActiveRepSievers();
     fetchAllInactiveRepSievers();
     fetchAllJobApplicants();
-  }, [
-    fetchAllActiveRepSievers,
-    fetchAllInactiveRepSievers,
-    fetchAllJobApplicants,
-  ]);
+  }, [fetchAllInactiveRepSievers, fetchAllJobApplicants]);
 
   //update jobOpening
   const handleUpdate = useCallback(
@@ -329,10 +299,11 @@ const JobApplicantsAdmin = () => {
       showAlert(
         true,
         fullName + ` has been reactivated as a job siever`,
-        "alert alert-info"
+        "alert alert-success"
       );
 
       fetchAllInactiveRepSievers();
+      setIsJobSieverActivated(true);
       goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
@@ -560,7 +531,6 @@ const JobApplicantsAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_rep-sievers"
-                  onClick={fetchAllActiveRepSievers}
                 >
                   Active Job Sievers
                 </a>
@@ -570,7 +540,6 @@ const JobApplicantsAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_inactive-rep-sievers"
-                  onClick={fetchAllInactiveRepSievers}
                 >
                   Deactivated Job Sievers
                 </a>
@@ -612,8 +581,10 @@ const JobApplicantsAdmin = () => {
 
         <div id="tab_rep-sievers" className="col-12 tab-pane">
           <JobSieversViewAdmin
-            allActiveJobSievers={allActiveRepSievers}
-            setAllActiveJobSievers={setAllActiveRepSievers}
+            isJobSieverDeactivated={isJobSieverDeactivated}
+            setIsJobSieverDeactivated={setIsJobSieverDeactivated}
+            isJobSieverActivated={isJobSieverActivated}
+            setIsJobSieverActivated={setIsJobSieverActivated}
           />
         </div>
 

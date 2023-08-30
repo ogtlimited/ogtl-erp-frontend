@@ -17,7 +17,12 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-const JobSieversViewAdmin = () => {
+const JobSieversViewAdmin = ({
+  isJobSieverDeactivated,
+  setIsJobSieverDeactivated,
+  isJobSieverActivated,
+  setIsJobSieverActivated,
+}) => {
   const [allRepSievers, setAllRepSievers] = useState([]);
   const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
@@ -74,6 +79,13 @@ const JobSieversViewAdmin = () => {
   }, [repPage, repSizePerPage]);
 
   useEffect(() => {
+    if (isJobSieverActivated) {
+      fetchAllRepSievers();
+    }
+    setIsJobSieverActivated(false);
+  }, [fetchAllRepSievers, isJobSieverActivated, setIsJobSieverActivated]);
+
+  useEffect(() => {
     fetchAllRepSievers();
   }, [fetchAllRepSievers]);
 
@@ -102,6 +114,7 @@ const JobSieversViewAdmin = () => {
       );
 
       fetchAllRepSievers();
+      setIsJobSieverDeactivated(true);
       goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
