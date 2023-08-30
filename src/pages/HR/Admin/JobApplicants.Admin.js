@@ -538,6 +538,7 @@ const JobApplicantsAdmin = () => {
                   Job Applications
                 </a>
               </li>
+              
               <li className="nav-item">
                 <a
                   className="nav-link"
@@ -547,7 +548,8 @@ const JobApplicantsAdmin = () => {
                   Active Job Sievers
                 </a>
               </li>
-              <li className="nav-item">
+
+              {/* <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
@@ -555,7 +557,7 @@ const JobApplicantsAdmin = () => {
                 >
                   Deactivated Job Sievers
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
