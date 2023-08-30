@@ -17,7 +17,7 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-const JobSieversViewAdmin = ({ allActiveJobSievers, setAllActiveJobSievers }) => {
+const JobSieversViewAdmin = () => {
   const [allRepSievers, setAllRepSievers] = useState([]);
   const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);

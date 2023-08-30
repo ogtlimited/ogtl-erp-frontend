@@ -560,6 +560,7 @@ const JobApplicantsAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_rep-sievers"
+                  onClick={fetchAllActiveRepSievers}
                 >
                   Active Job Sievers
                 </a>
