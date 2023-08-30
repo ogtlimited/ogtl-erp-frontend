@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { msalInstance, loginRequest, graphConfig } from "../../authConfig";
-// import { fetchMsGraph } from "../../authUtils";
 import config from "../../config.json";
 
 const Login = () => {
