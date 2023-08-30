@@ -15,10 +15,11 @@ import male3 from "../../../assets/img/male_avater3.png";
 import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-const JobSieversViewAdmin = () => {
+const JobSieversViewAdmin = ({ allActiveJobSievers, setAllActiveJobSievers }) => {
   const [allRepSievers, setAllRepSievers] = useState([]);
-  const { user, ErrorHandler } = useAppContext();
+  const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingRep, setLoadingRep] = useState(false);
 
@@ -37,7 +38,7 @@ const JobSieversViewAdmin = () => {
     canEdit.includes(role)
   );
 
-  // Rep Sievers:
+  // Job Sievers:
   const fetchAllRepSievers = useCallback(async () => {
     setLoadingRep(true);
     try {
@@ -76,12 +77,45 @@ const JobSieversViewAdmin = () => {
     fetchAllRepSievers();
   }, [fetchAllRepSievers]);
 
+  //Remove Job Siever
+  const handleRemoveJobSiever = async (selectedRow) => {
+    const fullName = selectedRow?.full_name;
+    const userId = selectedRow?.ogid;
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/api/v1/remove_rep_sievers/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        fullName + ` has been removed from job sievers`,
+        "alert alert-info"
+      );
+
+      fetchAllRepSievers();
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      goToTop();
+    }
+  };
+
   const repColumns = [
     {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "40%" },
+      headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -109,13 +143,13 @@ const JobSieversViewAdmin = () => {
       text: "Assigned Records",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (val, row) => <span>{val || "-"}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     CurrentUserCanEdit && {
       dataField: "",
       text: "Action",
       csvExport: false,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
@@ -127,6 +161,17 @@ const JobSieversViewAdmin = () => {
             >
               Reassign
             </button>
+
+            <div className="leave-user-action-btns">
+              <button
+                className="btn btn-sm btn-danger"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => setSelectedRow(row)}
+              >
+                Remove
+              </button>
+            </div>
           </div>
         </div>
       ),
@@ -174,6 +219,13 @@ const JobSieversViewAdmin = () => {
       />
 
       <AddJobSieverModal fetchJobSievers={fetchAllRepSievers} />
+
+      <ConfirmModal
+        title="Job Siever"
+        selectedRow={selectedRow}
+        deleteFunction={handleRemoveJobSiever}
+        message={`Are you sure you want to remove ${selectedRow?.full_name} from job sievers?`}
+      />
     </div>
   );
 };

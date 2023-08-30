@@ -8,7 +8,7 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const AddJobSieverModal = ({ fetchJobSievers }) => {
-  const { showAlert, loadingSelect } = useAppContext();
+  const { showAlert, loadingSelect, goToTop } = useAppContext();
   const [data, setData] = useState(HR_ADD_JOB_SIEVER);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -139,7 +139,7 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
     e.preventDefault();
 
     const dataPayload = {
-      hr_employee_id: data?.hr_employee_id,
+      ogid: data?.hr_employee_id,
     };
 
     setLoading(true);
@@ -163,10 +163,12 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
       );
       fetchJobSievers();
       $("#AddJobSieverModal").modal("toggle");
+      goToTop();
       cancelEvent();
     } catch (error) {
       $("#AddJobSieverModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      goToTop();
     }
     setLoading(false);
   };
@@ -245,13 +247,13 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
                             options={allEmployees}
                             isSearchable={true}
                             value={{
-                              value: data?.hr_user_id,
+                              value: data?.hr_employee_id,
                               label: data?.employeeName,
                             }}
                             onChange={(e) =>
                               setData({
                                 ...data,
-                                hr_user_id: e?.value,
+                                hr_employee_id: e?.value,
                                 employeeName: e?.label,
                               })
                             }
