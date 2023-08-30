@@ -16,11 +16,17 @@ import RequestEditModal from "../../../components/Modal/RequestEditModal";
 import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import UniversalTable from "../../../components/Tables/UniversalTable";
+import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 
 const LeavesUser = () => {
-  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler, goToTop } =
-    useAppContext();
+  const {
+    showAlert,
+    fetchHRLeavesNotificationCount,
+    user,
+    ErrorHandler,
+    goToTop,
+  } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
     useState(0);
@@ -29,16 +35,15 @@ const LeavesUser = () => {
 
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
-  const [allReporteesAppealedLeaves, setAllReporteesAppealedLeaves] = useState(
-    []
-  );
   const [leaveHistory, setLeaveHistory] = useState([]);
+  const [historyStatus, setHistoryStatus] = useState("approved");
+
   const [rejectModal, setRejectModal] = useState(false);
   const [requestEditModal, setRequestEditModal] = useState(false);
   const [appealRejectionModal, setAppealRejectionModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [editLeave, setEditLeave] = useState([]);
   const [rejectLeave, setRejectLeave] = useState([]);
+  const [editLeave, setEditLeave] = useState([]);
   const [requestEdit, setRequestEdit] = useState([]);
   const [appealRejection, setAppealRejection] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -46,6 +51,9 @@ const LeavesUser = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
 
   const currentUserIsLead = user?.employee_info?.is_lead;
 
@@ -61,7 +69,8 @@ const LeavesUser = () => {
     return businessDays;
   }
 
-  const fetchYourLeaves = async () => {
+  // Leaves:
+  const fetchYourLeaves = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/api/v1/leaves.json", {
         headers: {
@@ -92,9 +101,11 @@ const LeavesUser = () => {
       ErrorHandler(error, component);
     }
     setLoading(false);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const fetchReporteesLeaves = async () => {
+  // Team Leaves:
+  const fetchReporteesLeaves = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/api/v1/team_leaves.json", {
         headers: {
@@ -124,20 +135,81 @@ const LeavesUser = () => {
       setAllReporteesLeaves(formatted);
       setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
-      console.log(error?.response);
       const component = "Leave History Error:";
       ErrorHandler(error, component);
     }
     setLoading(false);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Team Leave History:
+  const fetchTeamLeaveHistory = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/team_leads_leave_histories.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.leave_histories;
+      const totalPages = response?.data?.data?.total_pages;
+
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
+
+      const formatted = resData.map((leave) => ({
+        ...leave,
+        full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
+        from_date: new Date(leave?.leave?.start_date).toDateString(),
+        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        status: leave?.leave?.status,
+        total_leave_days: calcBusinessDays(
+          leave?.leave?.start_date,
+          leave?.leave?.end_date
+        ),
+        reason: leave?.leave?.reason,
+        rejection_reason: leave?.leave?.rejection_reason,
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        leave_marker:
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+            ? "Leave Ended"
+            : today_date <
+                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                today_date
+            ? "Scheduled Leave"
+            : "On Leave",
+      }));
+      setLeaveHistory(formatted);
+    } catch (error) {
+      const component = "Leave History Error:";
+      ErrorHandler(error, component);
+    }
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchYourLeaves();
     if (currentUserIsLead) {
       fetchReporteesLeaves();
+      fetchTeamLeaveHistory();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [
+    currentUserIsLead,
+    fetchYourLeaves,
+    fetchReporteesLeaves,
+    fetchTeamLeaveHistory,
+  ]);
 
   const handleApproveLeave = async (row) => {
     const id = row.id;
@@ -161,16 +233,19 @@ const LeavesUser = () => {
 
   const handleCancelLeaveApplication = async (row) => {
     try {
-      const response = await axiosInstance.patch(`/api/v1/leaves/${selectedRow.id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          status: "cancelled",
-        },
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/leaves/${selectedRow.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            status: "cancelled",
+          },
+        }
+      );
       showAlert(true, "Leave Cancelled", "alert alert-info");
       fetchYourLeaves();
       goToTop();
@@ -179,27 +254,6 @@ const LeavesUser = () => {
       goToTop();
     }
   };
-
-  // const handleRequestModification = (row) => {
-  //   setRequestEdit(row);
-  //   setRequestEditModal(true);
-  // };
-
-  // const handleAppealRejection = (e, row) => {
-  //   e.preventDefault();
-  //   setAppealRejection(row);
-  //   setAppealRejectionModal(true);
-  // };
-
-  // const handleEditApplication = (row) => {
-  //   const formatted = {};
-  //   formatted._id = row._id;
-  //   formatted.from_date = row.from_date;
-  //   formatted.to_date = row.to_date;
-  //   formatted.leave_type_id = row.leave_type_id._id;
-  //   formatted.reason_for_application = row.reason_for_application;
-  //   setEditLeave(formatted);
-  // };
 
   const userColumns = [
     {
@@ -463,100 +517,154 @@ const LeavesUser = () => {
     },
   ];
 
-  // const reporteeHistoryColumns = [
-  //   {
-  //     dataField: "full_name",
-  //     text: "Full Name",
-  //     sort: true,
-  //     headerStyle: { width: "150px" },
-  //     formatter: (value, row) => <h2>{row?.full_name}</h2>,
-  //   },
-  //   {
-  //     dataField: "department",
-  //     text: "Department",
-  //     sort: true,
-  //     headerStyle: { width: "100px" },
-  //   },
-  //   {
-  //     dataField: "leave_type",
-  //     text: "Leave Type",
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: "from_date",
-  //     text: "From Date",
-  //     sort: true,
-  //   },
-  //   {
-  //     dataField: "to_date",
-  //     text: "To Date",
-  //     sort: true,
-  //   },
-  //   {
-  //     dataField: "status",
-  //     text: "Status",
-  //     sort: true,
-  //     formatter: (value, row) => (
-  //       <>
-  //         {value === "approved" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-success"></i> {value}
-  //           </span>
-  //         ) : value === "cancelled" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-primary"></i> {value}
-  //           </span>
-  //         ) : value === "rejected" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-danger"></i> {value}
-  //           </span>
-  //         ) : value === "pending" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded ">
-  //             <i className="fa fa-dot-circle-o text-warning"></i> {value}
-  //           </span>
-  //         ) : null}
-  //       </>
-  //     ),
-  //   },
-  //   {
-  //     dataField: "requested_leave_days",
-  //     text: "Requested Leave Days",
-  //     sort: true,
-  //     headerStyle: { width: "100px" },
-  //     formatter: (value, row) => (
-  //       <>
-  //         {row.requested_leave_days > 1
-  //           ? row.requested_leave_days + " days"
-  //           : row.requested_leave_days + " day"}
-  //       </>
-  //     ),
-  //   },
-  //   {
-  //     dataField: "status_action",
-  //     text: "Actions",
-  //     sort: true,
-  //     csvExport: false,
-  //     headerStyle: { minWidth: "100px", textAlign: "center" },
-  //     formatter: (value, row) => (
-  //       <div className="text-center">
-  //         <div className="leave-reportee-action-btns">
-  //           <button
-  //             className="btn btn-sm btn-primary leave-btn"
-  //             data-toggle="modal"
-  //             data-target="#generalModal"
-  //             onClick={() => {
-  //               setModalType("view-details");
-  //               setViewRow(row);
-  //             }}
-  //           >
-  //             View
-  //           </button>
-  //         </div>
-  //       </div>
-  //     ),
-  //   },
-  // ];
+  const historyColumns = [
+    {
+      dataField: "full_name",
+      text: "Full Name",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {value === "approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "cancelled" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+            </span>
+          ) : value === "rejected" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+            </span>
+          ) : value === "pending" ? (
+            <span className="btn btn-gray btn-sm btn-rounded ">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      dataField: "leave_type",
+      text: "Leave Type",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "leave_marker",
+      text: "Leave",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {historyStatus === "approved" ? (
+            <>
+              {value === "Scheduled Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-warning"></i> {value}
+                </span>
+              ) : value === "On Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-success"></i> {value}
+                </span>
+              ) : value === "Leave Ended" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-danger"></i> {value}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-secondary"></i> Not
+                Approved
+              </span>
+            </>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "from_date",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "to_date",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
+    },
+    {
+      dataField: "total_leave_days",
+      text: "Total Leave Days",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {row.total_leave_days > 1
+            ? row.total_leave_days + " days"
+            : row.total_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "status_action",
+      text: "Action",
+      csvExport: false,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <div className="dropdown dropdown-action text-right">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              href="#"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setModalType("view-details");
+                setViewRow(row);
+              }}
+            >
+              <i className="fa fa-eye m-r-5"></i> View
+            </a>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   const SilentRefresh = () => {
     if (currentUserIsLead) {
@@ -611,39 +719,26 @@ const LeavesUser = () => {
                     data-toggle="tab"
                     href="#tab_subordinates-leaves"
                   >
-                    Leave Applications{" "}
+                    Team Leave Applications{" "}
                     {leaveApplicationCount > 0 && (
-                      <span id="leave-application-count">
-                        {leaveApplicationCount}
-                      </span>
+                      <div id="leave-application-count-div">
+                        <span id="leave-application-count">
+                          {leaveApplicationCount} 
+                        </span>
+                      </div>
                     )}
                   </a>
                 </li>
 
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
                     href="#tab_leave-history"
                   >
-                    Leave History
+                    Team Leave History
                   </a>
-                </li> */}
-
-                {/* <li className="nav-item">
-                  <a
-                    className="nav-link"
-                    data-toggle="tab"
-                    href="#tab_leave-appeals"
-                  >
-                    Appealed Leaves{" "}
-                    {appealedLeaveApplicationCount > 0 && (
-                      <span id="leave-application-count">
-                        {appealedLeaveApplicationCount}
-                      </span>
-                    )}
-                  </a>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>
@@ -672,9 +767,9 @@ const LeavesUser = () => {
             />
           </div>
 
-          {/* <div id="tab_leave-history" className="col-12 tab-pane">
-            <LeadLeaveHistoryTable
-              columns={reporteeHistoryColumns}
+          <div id="tab_leave-history" className="col-12 tab-pane">
+            <UniversalPaginatedTable
+              columns={historyColumns}
               data={leaveHistory}
               setData={setLeaveHistory}
               loading={loading}
@@ -686,23 +781,7 @@ const LeavesUser = () => {
               totalPages={totalPages}
               setTotalPages={setTotalPages}
             />
-          </div> */}
-
-          {/* <div id="tab_leave-appeals" className="col-12 tab-pane">
-            <ReporteeLeavesTable
-              columns={reporteeColumns}
-              data={allReporteesAppealedLeaves}
-              setData={setAllReporteesLeaves}
-              loading={loading}
-              setLoading={setLoading}
-              page={page}
-              setPage={setPage}
-              sizePerPage={sizePerPage}
-              setSizePerPage={setSizePerPage}
-              totalPages={totalPages}
-              setTotalPages={setTotalPages}
-            />
-          </div> */}
+          </div>
         </div>
       </div>
 
