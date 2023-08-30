@@ -4,6 +4,7 @@ const JobApplicationContent = ({ jobApplication = {} }) => {
   const filteredApplication = {
     ...jobApplication,
     resume: undefined,
+    old_cv_url: undefined,
     rep_sieving_call_id: undefined,
     updated_at: undefined,
     referrer_id: undefined,

@@ -82,7 +82,7 @@ const JobApplicants = () => {
         full_name: `${emp?.first_name} ${
           emp?.middle_name ? emp?.middle_name : ""
         } ${emp?.last_name}`,
-        job_title: emp?.job_opening?.title,
+        job_title: emp?.job_opening?.job_title,
         application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
         interview_scheduled_date: emp?.interview_date
           ? moment(emp?.interview_date).format("Do MMMM, YYYY")
