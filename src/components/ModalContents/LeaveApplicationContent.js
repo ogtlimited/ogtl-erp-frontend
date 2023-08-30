@@ -3,8 +3,6 @@
 import React from "react";
 
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
-  !leaveContent.rejection_reason && delete leaveContent.rejection_reason;
-
   const filteredApplication = {
     ...leaveContent,
     id: undefined,
@@ -17,6 +15,11 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     hr_stage: undefined,
     status_action: undefined,
     leave: undefined,
+    user: undefined,
+    rejection_reason:
+      leaveContent?.leave?.rejection_reason === null
+        ? undefined
+        : leaveContent?.leave?.rejection_reason,
   };
 
   const filteredKeys = Object.keys(filteredApplication).reverse();

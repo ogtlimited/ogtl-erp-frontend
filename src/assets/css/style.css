@@ -651,12 +651,20 @@
   display: flex;
 }
 
-#leave-application-count {
+#leave-application-count-div {
+  width: 35px;
+  height: 35px;
   color: #fff;
   background-color: #999;
-  padding: 4px 10px;
-  border-radius: 50%;
+  padding: 5px;
   margin-left: 5px;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+}
+
+#leave-application-count {
+  color: #fff;
 }
 
 .office-count {
