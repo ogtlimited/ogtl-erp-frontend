@@ -19,8 +19,13 @@ import UniversalTable from "../../../components/Tables/UniversalTable";
 import moment from "moment";
 
 const LeavesUser = () => {
-  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler, goToTop } =
-    useAppContext();
+  const {
+    showAlert,
+    fetchHRLeavesNotificationCount,
+    user,
+    ErrorHandler,
+    goToTop,
+  } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
     useState(0);
@@ -161,16 +166,19 @@ const LeavesUser = () => {
 
   const handleCancelLeaveApplication = async (row) => {
     try {
-      const response = await axiosInstance.patch(`/api/v1/leaves/${selectedRow.id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          status: "cancelled",
-        },
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/leaves/${selectedRow.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            status: "cancelled",
+          },
+        }
+      );
       showAlert(true, "Leave Cancelled", "alert alert-info");
       fetchYourLeaves();
       goToTop();
@@ -463,100 +471,100 @@ const LeavesUser = () => {
     },
   ];
 
-  // const reporteeHistoryColumns = [
-  //   {
-  //     dataField: "full_name",
-  //     text: "Full Name",
-  //     sort: true,
-  //     headerStyle: { width: "150px" },
-  //     formatter: (value, row) => <h2>{row?.full_name}</h2>,
-  //   },
-  //   {
-  //     dataField: "department",
-  //     text: "Department",
-  //     sort: true,
-  //     headerStyle: { width: "100px" },
-  //   },
-  //   {
-  //     dataField: "leave_type",
-  //     text: "Leave Type",
-  //     sort: true,
-  //     formatter: (val, row) => <p>{val}</p>,
-  //   },
-  //   {
-  //     dataField: "from_date",
-  //     text: "From Date",
-  //     sort: true,
-  //   },
-  //   {
-  //     dataField: "to_date",
-  //     text: "To Date",
-  //     sort: true,
-  //   },
-  //   {
-  //     dataField: "status",
-  //     text: "Status",
-  //     sort: true,
-  //     formatter: (value, row) => (
-  //       <>
-  //         {value === "approved" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-success"></i> {value}
-  //           </span>
-  //         ) : value === "cancelled" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-primary"></i> {value}
-  //           </span>
-  //         ) : value === "rejected" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded">
-  //             <i className="fa fa-dot-circle-o text-danger"></i> {value}
-  //           </span>
-  //         ) : value === "pending" ? (
-  //           <span className="btn btn-gray btn-sm btn-rounded ">
-  //             <i className="fa fa-dot-circle-o text-warning"></i> {value}
-  //           </span>
-  //         ) : null}
-  //       </>
-  //     ),
-  //   },
-  //   {
-  //     dataField: "requested_leave_days",
-  //     text: "Requested Leave Days",
-  //     sort: true,
-  //     headerStyle: { width: "100px" },
-  //     formatter: (value, row) => (
-  //       <>
-  //         {row.requested_leave_days > 1
-  //           ? row.requested_leave_days + " days"
-  //           : row.requested_leave_days + " day"}
-  //       </>
-  //     ),
-  //   },
-  //   {
-  //     dataField: "status_action",
-  //     text: "Actions",
-  //     sort: true,
-  //     csvExport: false,
-  //     headerStyle: { minWidth: "100px", textAlign: "center" },
-  //     formatter: (value, row) => (
-  //       <div className="text-center">
-  //         <div className="leave-reportee-action-btns">
-  //           <button
-  //             className="btn btn-sm btn-primary leave-btn"
-  //             data-toggle="modal"
-  //             data-target="#generalModal"
-  //             onClick={() => {
-  //               setModalType("view-details");
-  //               setViewRow(row);
-  //             }}
-  //           >
-  //             View
-  //           </button>
-  //         </div>
-  //       </div>
-  //     ),
-  //   },
-  // ];
+  const reporteeHistoryColumns = [
+    {
+      dataField: "full_name",
+      text: "Full Name",
+      sort: true,
+      headerStyle: { width: "150px" },
+      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+    },
+    {
+      dataField: "department",
+      text: "Department",
+      sort: true,
+      headerStyle: { width: "100px" },
+    },
+    {
+      dataField: "leave_type",
+      text: "Leave Type",
+      sort: true,
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "from_date",
+      text: "From Date",
+      sort: true,
+    },
+    {
+      dataField: "to_date",
+      text: "To Date",
+      sort: true,
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      formatter: (value, row) => (
+        <>
+          {value === "approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : value === "cancelled" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+            </span>
+          ) : value === "rejected" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+            </span>
+          ) : value === "pending" ? (
+            <span className="btn btn-gray btn-sm btn-rounded ">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          ) : null}
+        </>
+      ),
+    },
+    {
+      dataField: "requested_leave_days",
+      text: "Requested Leave Days",
+      sort: true,
+      headerStyle: { width: "100px" },
+      formatter: (value, row) => (
+        <>
+          {row.requested_leave_days > 1
+            ? row.requested_leave_days + " days"
+            : row.requested_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "status_action",
+      text: "Actions",
+      sort: true,
+      csvExport: false,
+      headerStyle: { minWidth: "100px", textAlign: "center" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-reportee-action-btns">
+            <button
+              className="btn btn-sm btn-primary leave-btn"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setModalType("view-details");
+                setViewRow(row);
+              }}
+            >
+              View
+            </button>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   const SilentRefresh = () => {
     if (currentUserIsLead) {
@@ -620,15 +628,15 @@ const LeavesUser = () => {
                   </a>
                 </li>
 
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
                     href="#tab_leave-history"
                   >
-                    Leave History
+                    Team Leave History
                   </a>
-                </li> */}
+                </li>
 
                 {/* <li className="nav-item">
                   <a
@@ -672,7 +680,7 @@ const LeavesUser = () => {
             />
           </div>
 
-          {/* <div id="tab_leave-history" className="col-12 tab-pane">
+          <div id="tab_leave-history" className="col-12 tab-pane">
             <LeadLeaveHistoryTable
               columns={reporteeHistoryColumns}
               data={leaveHistory}
@@ -686,7 +694,7 @@ const LeavesUser = () => {
               totalPages={totalPages}
               setTotalPages={setTotalPages}
             />
-          </div> */}
+          </div>
 
           {/* <div id="tab_leave-appeals" className="col-12 tab-pane">
             <ReporteeLeavesTable
