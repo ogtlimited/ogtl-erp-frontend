@@ -26,7 +26,7 @@ const EmployeeUser = () => {
   const buildExternalURL = () => {
     try {
       const kpiData = tokenService.getKpiUser();
-      const secret = process.env.REACT_APP_SECRET;
+      const secret = process.env.REACT_APP_HMAC_SECRET;
 
       const generatedJWT = sign(kpiData, secret);
 
