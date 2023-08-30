@@ -19,25 +19,28 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
-import JobSieversTable from "../../../components/Tables/JobSieversTable";
 import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
 import female3 from "../../../assets/img/female_avatar3.png";
 import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
-import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
+import JobSieversViewAdmin from "./JobSieversView.Admin";
 
 const JobApplicantsAdmin = () => {
-  const [allRepSievers, setAllRepSievers] = useState([]);
+  const [allInactiveRepSievers, setAllInactiveRepSievers] = useState([]);
   const [data, setData] = useState([]);
-  const { showAlert, user, ErrorHandler } = useAppContext();
+  const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
   const [loadingRep, setLoadingRep] = useState(false);
+  const [loadingActivate, setLoadingActivate] = useState(false);
+
+  const [isJobSieverActivated, setIsJobSieverActivated] = useState(false);
+  const [isJobSieverDeactivated, setIsJobSieverDeactivated] = useState(false);
 
   const imageUrl = "https://erp.outsourceglobal.com";
   const males = [male, male2, male3];
@@ -69,12 +72,12 @@ const JobApplicantsAdmin = () => {
     canEdit.includes(role)
   );
 
-  // Rep Sievers:
-  const fetchAllRepSievers = useCallback(async () => {
+  // Inactive Rep Sievers:
+  const fetchAllInactiveRepSievers = useCallback(async () => {
     setLoadingRep(true);
     try {
       const response = await axiosInstance.get(
-        "/api/v1/job_applications_sievers.json",
+        "/api/v1/job_applications_sievers.json?active=false",
         {
           headers: {
             "Content-Type": "application/json",
@@ -94,15 +97,23 @@ const JobApplicantsAdmin = () => {
       setRepSizePerPage(repSizePerPage);
       setRepTotalPages(totalPages);
 
-      setAllRepSievers(resData);
+      setAllInactiveRepSievers(resData);
       setLoadingRep(false);
     } catch (error) {
-      const component = "All Rep Sievers:";
+      const component = "All Inactive Rep Sievers:";
       ErrorHandler(error, component);
       setLoadingRep(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repPage, repSizePerPage]);
+
+  useEffect(() => {
+    if (isJobSieverDeactivated) {
+      fetchAllInactiveRepSievers();
+    }
+
+    setIsJobSieverDeactivated(false);
+  }, [fetchAllInactiveRepSievers, isJobSieverDeactivated]);
 
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
@@ -159,9 +170,9 @@ const JobApplicantsAdmin = () => {
   }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
 
   useEffect(() => {
-    fetchAllRepSievers();
+    fetchAllInactiveRepSievers();
     fetchAllJobApplicants();
-  }, [fetchAllRepSievers, fetchAllJobApplicants]);
+  }, [fetchAllInactiveRepSievers, fetchAllJobApplicants]);
 
   //update jobOpening
   const handleUpdate = useCallback(
@@ -209,12 +220,76 @@ const JobApplicantsAdmin = () => {
     [CurrentUserRoles]
   );
 
+  //Reactivate Job Siever
+  const handleReactivateJobSiever = async (row) => {
+    const fullName = row?.full_name;
+    const userId = row?.ogid;
+
+    setLoadingActivate(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/api/v1/reactivate_rep_sievers/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        fullName + ` has been reactivated as a job siever`,
+        "alert alert-success"
+      );
+
+      fetchAllInactiveRepSievers();
+      setIsJobSieverActivated(true);
+      setLoadingActivate(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoadingActivate(false);
+      goToTop();
+    }
+  };
+
+  // Interview Status Function:
+  const getInterviewStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      "Scheduled for interview": "text-success",
+      "Not interested": "text-secondary",
+      "Not a graduate": "text-dark",
+      "Not in job location": "text-muted",
+      "Failed screening": "text-danger",
+      "Missed call": "text-info",
+    };
+
+    return colorMap[value] || "text-warning";
+  };
+
+  // Process Status Function:
+  const getProcessStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      Sieving: "text-warning",
+      "Phone screening": "text-info",
+      "Interview scheduled": "text-success",
+    };
+
+    return colorMap[value] || "text-secondary";
+  };
+
   const repColumns = [
     {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
-      headerStyle: { width: "40%" },
+      headerStyle: { width: "60%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <a href="" className="avatar">
@@ -242,7 +317,7 @@ const JobApplicantsAdmin = () => {
       text: "Assigned Records",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (val, row) => <span>{val || "-"}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     CurrentUserCanEdit && {
       dataField: "",
@@ -252,46 +327,29 @@ const JobApplicantsAdmin = () => {
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#ReassignRepSieverFormModal"
-              onClick={() => setSelectedRow(row)}
-            >
-              Reassign
-            </button>
+            <div className="leave-user-action-btns">
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={() => {
+                  handleReactivateJobSiever(row);
+                }}
+              >
+                {loadingActivate ? (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  "Reactivate"
+                )}
+              </button>
+            </div>
           </div>
         </div>
       ),
     },
   ];
-
-  // Interview Status Column:
-  const getInterviewStatusColorClass = (value) => {
-    const colorMap = {
-      Open: "text-primary",
-      "Scheduled for interview": "text-success",
-      "Not interested": "text-secondary",
-      "Not a graduate": "text-dark",
-      "Not in job location": "text-muted",
-      "Failed screening": "text-danger",
-      "Missed call": "text-info",
-    };
-
-    return colorMap[value] || "text-warning";
-  };
-
-  // Process Status Function:
-  const getProcessStatusColorClass = (value) => {
-    const colorMap = {
-      Open: "text-primary",
-      Sieving: "text-warning",
-      "Phone screening": "text-info",
-      "Interview scheduled": "text-success",
-    };
-
-    return colorMap[value] || "text-secondary";
-  };
 
   // Job Application Column:
   const columns = [
@@ -457,7 +515,6 @@ const JobApplicantsAdmin = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            {/* <h3 className="page-title">Job Applications</h3> */}
             <h3 className="page-title">Job Applications</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
@@ -487,7 +544,16 @@ const JobApplicantsAdmin = () => {
                   data-toggle="tab"
                   href="#tab_rep-sievers"
                 >
-                  Job Sievers
+                  Active Job Sievers
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_inactive-rep-sievers"
+                >
+                  Deactivated Job Sievers
                 </a>
               </li>
             </ul>
@@ -526,10 +592,19 @@ const JobApplicantsAdmin = () => {
         </div>
 
         <div id="tab_rep-sievers" className="col-12 tab-pane">
+          <JobSieversViewAdmin
+            isJobSieverDeactivated={isJobSieverDeactivated}
+            setIsJobSieverDeactivated={setIsJobSieverDeactivated}
+            isJobSieverActivated={isJobSieverActivated}
+            setIsJobSieverActivated={setIsJobSieverActivated}
+          />
+        </div>
+
+        <div id="tab_inactive-rep-sievers" className="col-12 tab-pane">
           <UniversalPaginatedTable
             columns={repColumns}
-            data={allRepSievers}
-            setData={setAllRepSievers}
+            data={allInactiveRepSievers}
+            setData={setAllInactiveRepSievers}
             loading={loadingRep}
             setLoading={setLoadingRep}
             page={repPage}
@@ -574,11 +649,6 @@ const JobApplicantsAdmin = () => {
           fetchAllJobApplicants={fetchAllJobApplicants}
         />
       )}
-
-      <ReassignRepSieverModal
-        fetchRepSievers={fetchAllRepSievers}
-        selectedRow={selectedRow}
-      />
     </>
   );
 };
