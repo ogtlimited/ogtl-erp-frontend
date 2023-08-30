@@ -37,6 +37,7 @@ const JobApplicantsAdmin = () => {
   const [modalType, setModalType] = useState("schedule-interview");
   const [loading, setLoading] = useState(false);
   const [loadingRep, setLoadingRep] = useState(false);
+  const [loadingActivate, setLoadingActivate] = useState(false);
 
   const [isJobSieverActivated, setIsJobSieverActivated] = useState(false);
   const [isJobSieverDeactivated, setIsJobSieverDeactivated] = useState(false);
@@ -219,6 +220,70 @@ const JobApplicantsAdmin = () => {
     [CurrentUserRoles]
   );
 
+  //Reactivate Job Siever
+  const handleReactivateJobSiever = async (row) => {
+    const fullName = row?.full_name;
+    const userId = row?.ogid;
+
+    setLoadingActivate(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/api/v1/reactivate_rep_sievers/${userId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        fullName + ` has been reactivated as a job siever`,
+        "alert alert-success"
+      );
+
+      fetchAllInactiveRepSievers();
+      setIsJobSieverActivated(true);
+      setLoadingActivate(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoadingActivate(false);
+      goToTop();
+    }
+  };
+
+  // Interview Status Function:
+  const getInterviewStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      "Scheduled for interview": "text-success",
+      "Not interested": "text-secondary",
+      "Not a graduate": "text-dark",
+      "Not in job location": "text-muted",
+      "Failed screening": "text-danger",
+      "Missed call": "text-info",
+    };
+
+    return colorMap[value] || "text-warning";
+  };
+
+  // Process Status Function:
+  const getProcessStatusColorClass = (value) => {
+    const colorMap = {
+      Open: "text-primary",
+      Sieving: "text-warning",
+      "Phone screening": "text-info",
+      "Interview scheduled": "text-success",
+    };
+
+    return colorMap[value] || "text-secondary";
+  };
+
   const repColumns = [
     {
       dataField: "full_name",
@@ -269,7 +334,15 @@ const JobApplicantsAdmin = () => {
                   handleReactivateJobSiever(row);
                 }}
               >
-                Reactivate
+                {loadingActivate ? (
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                ) : (
+                  "Reactivate"
+                )}
               </button>
             </div>
           </div>
@@ -277,67 +350,6 @@ const JobApplicantsAdmin = () => {
       ),
     },
   ];
-
-  //Reactivate Job Siever
-  const handleReactivateJobSiever = async (row) => {
-    const fullName = row?.full_name;
-    const userId = row?.ogid;
-
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(
-        `/api/v1/reactivate_rep_sievers/${userId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      showAlert(
-        true,
-        fullName + ` has been reactivated as a job siever`,
-        "alert alert-success"
-      );
-
-      fetchAllInactiveRepSievers();
-      setIsJobSieverActivated(true);
-      goToTop();
-    } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      goToTop();
-    }
-  };
-
-  // Interview Status Function:
-  const getInterviewStatusColorClass = (value) => {
-    const colorMap = {
-      Open: "text-primary",
-      "Scheduled for interview": "text-success",
-      "Not interested": "text-secondary",
-      "Not a graduate": "text-dark",
-      "Not in job location": "text-muted",
-      "Failed screening": "text-danger",
-      "Missed call": "text-info",
-    };
-
-    return colorMap[value] || "text-warning";
-  };
-
-  // Process Status Function:
-  const getProcessStatusColorClass = (value) => {
-    const colorMap = {
-      Open: "text-primary",
-      Sieving: "text-warning",
-      "Phone screening": "text-info",
-      "Interview scheduled": "text-success",
-    };
-
-    return colorMap[value] || "text-secondary";
-  };
 
   // Job Application Column:
   const columns = [

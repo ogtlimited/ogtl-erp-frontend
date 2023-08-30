@@ -18,7 +18,6 @@ import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const JobSieversViewAdmin = ({
-  isJobSieverDeactivated,
   setIsJobSieverDeactivated,
   isJobSieverActivated,
   setIsJobSieverActivated,
