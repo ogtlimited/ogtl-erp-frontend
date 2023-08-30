@@ -5,35 +5,66 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
-import { msalInstance, loginRequest } from "../../authConfig";
+import { msalInstance, loginRequest, graphConfig } from "../../authConfig";
 import config from "../../config.json";
 
 const Login = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const userData = {
+    name: "",
+    email: "",
+    userGroup: [],
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const fetchMsGraph = async (accessToken) => {
+    const response = await fetch(graphConfig.graphMeEndpoint + "/memberOf", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user groups from Microsoft Graph");
+    }
+
+    const data = await response.json();
+    const groups = data.value.map((group) => group?.displayName || group?.id);
+
+    userData.userGroup = groups;
+  };
+
   const onSubmit = (data) => {
     setLoading(true);
+
     msalInstance
       .ssoSilent(loginRequest)
       .then((e) => {
-        const activeUser = e?.account?.username;
+
+        userData.name = e.account.name;
+        userData.email = e.account.username;
+
+        fetchMsGraph(e.accessToken);
+
+        tokenService.setKpiUser(userData);
+
+        // const activeUser = e?.account?.username;
 
         const obj = {
           company_email: data.company_email.trim(),
         };
 
-        if (obj.company_email !== activeUser) {
-          return setErrorMsg(
-            'There is an active user on this device'
-          );
-        }
+        // if (obj.company_email !== activeUser) {
+        //   return setErrorMsg("There is an active user on this device");
+        // }
 
         setErrorMsg("");
 
@@ -49,6 +80,7 @@ const Login = () => {
           .then((res) => {
             tokenService.setUser(res.data.data);
             tokenService.setToken(res.data.data.token);
+
             if (res.data.data.token) {
               window.location.href = "/dashboard/employee-dashboard";
             } else {
@@ -83,17 +115,23 @@ const Login = () => {
           msalInstance
             .loginPopup(loginRequest)
             .then((e) => {
-              const activeUser = e?.account?.username;
 
+              userData.name = e.account.name;
+              userData.email = e.account.username;
+
+              fetchMsGraph(e.accessToken);
+
+              tokenService.setKpiUser(userData);
+
+              // const activeUser = e?.account?.username;
+            
               const obj = {
                 company_email: data.company_email.trim(),
               };
 
-              if (obj.company_email !== activeUser) {
-                return setErrorMsg(
-                  'Please login with your credentials'
-                );
-              }
+              // if (obj.company_email !== activeUser) {
+              //   return setErrorMsg("Please login with your credentials");
+              // }
 
               setErrorMsg("");
 
@@ -109,6 +147,7 @@ const Login = () => {
                 .then((res) => {
                   tokenService.setUser(res.data.data);
                   tokenService.setToken(res.data.data.token);
+
                   if (res.data.data.token) {
                     window.location.href = "/dashboard/employee-dashboard";
                   } else {

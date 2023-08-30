@@ -11,6 +11,11 @@ class TokenService {
   getUser() {
     return JSON.parse(secureLocalStorage.getItem("user"));
   }
+
+  getKpiUser() {
+    return JSON.parse(secureLocalStorage.getItem("kpiUser"));
+  }
+
   getOgid() {
     return this.getUser().ogid;
   }
@@ -18,6 +23,11 @@ class TokenService {
   setUser(user) {
     secureLocalStorage.setItem("user", JSON.stringify(user));
   }
+
+  setKpiUser(kpiUser) {
+    secureLocalStorage.setItem("kpiUser", JSON.stringify(kpiUser));
+  }
+
   setToken(token) {
     secureLocalStorage.setItem("token", token);
   }

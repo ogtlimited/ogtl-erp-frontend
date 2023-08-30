@@ -1,27 +1,50 @@
+//* IN USE
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import welcome from "../../../assets/img/welcome.png";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
-import HeroImage from "../../../assets/img/HR-nextImg.png"
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import HeroImage from "../../../assets/img/HR-nextImg.png";
+import tokenService from "../../../services/token.service";
+import sign from "jwt-encode";
+// import config from "../../../config.json";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
+  const [externalURL, setExternalURL] = useState(null);
 
-//   const showToastMessage = () => {
-//     toast.success('Success Notification !', {
-//         position: toast.POSITION.TOP_RIGHT
-//     });
-// };
+  const userDept =
+    user?.office?.office_type === "department" ? user?.office?.title : null;
 
+  const buildExternalURL = () => {
+    try {
+      const kpiData = tokenService.getKpiUser();
+      const secret = process.env.REACT_APP_HMAC_SECRET;
+
+      const generatedJWT = sign(kpiData, secret);
+
+      const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+      const queryParams = `auth_param=${generatedJWT}`;
+
+      const externalAppUrl = `${kpiUrl}?${queryParams}`;
+      setExternalURL(externalAppUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    buildExternalURL();
+  }, []);
+
+  // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
     e?.day.match(day)
   );
@@ -32,6 +55,7 @@ const EmployeeUser = () => {
     ? moment(todayShift[0].end_time, ["HH"]).format("hh A")
     : null;
 
+  // Quotes:
   const fetchQuote = async () => {
     try {
       const result = await axios.get(
@@ -46,9 +70,6 @@ const EmployeeUser = () => {
   };
 
   useEffect(() => {
-    console.log("user", user);
-
-    // showToastMessage()
     fetchQuote();
     const interval = setInterval(() => {
       fetchQuote();
@@ -66,16 +87,7 @@ const EmployeeUser = () => {
           <div className="row welcome-card p-5">
             <div className="col-md-9 left-card">
               <h4 className="welcome-text">
-                Welcome back,{" "}
-                {/* <a href="#">
-                  <img
-                    align="center"
-                    src="https://camo.githubusercontent.com/e8e7b06ecf583bc040eb60e44eb5b8e0ecc5421320a92929ce21522dbc34c891/68747470733a2f2f6d656469612e67697068792e636f6d2f6d656469612f6876524a434c467a6361737252346961377a2f67697068792e676966"
-                    height="25"
-                    style={{marginTop: "-10px"}}
-                  />
-                </a> */}
-                <br />{" "}
+                Welcome back, <br />{" "}
                 {`${user?.employee_info?.personal_details?.first_name} 
                   ${user?.employee_info?.personal_details?.middle_name || ""} 
                   ${user?.employee_info?.personal_details?.last_name}
@@ -85,6 +97,14 @@ const EmployeeUser = () => {
               <p className="welcome-p">
                 If you haven't clocked in today, you need to do it right away
               </p>
+              {userDept === "hr" && (
+                <div
+                  className="btn btn-primary"
+                  onClick={() => window.open(externalURL, "_blank")}
+                >
+                  Go to KPI
+                </div>
+              )}
             </div>
             <div className="col-md-3">
               <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />
