@@ -124,7 +124,7 @@ const Login = () => {
               tokenService.setKpiUser(userData);
 
               // const activeUser = e?.account?.username;
-
+            
               const obj = {
                 company_email: data.company_email.trim(),
               };
