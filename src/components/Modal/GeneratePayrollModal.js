@@ -6,7 +6,7 @@ import { create_department } from "../FormJSON/CreateLeaveApprovalLevel";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import  secureLocalStorage  from  "react-secure-storage";
+import secureLocalStorage from "react-secure-storage";
 
 export const GeneratePayrollModal = ({
   fetchEmployeeSalarySlip,
@@ -48,6 +48,11 @@ export const GeneratePayrollModal = ({
         }
       );
 
+      showAlert(
+        true,
+        `Salary slips are being generated`,
+        "alert alert-success"
+      );
       setCreatePayslips(create_department);
       $("#GeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
