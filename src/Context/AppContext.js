@@ -62,6 +62,17 @@ const AppProvider = (props) => {
     },
   ];
 
+  const officeTypeOptions = [
+    {
+      label: "Department",
+      value: "department",
+    },
+    {
+      label: "Campaign",
+      value: "campaign",
+    },
+  ];
+
   const handleProgress = ({ count, state }) => {
     console.log(count, state);
     setShowProgress({
@@ -454,6 +465,7 @@ const AppProvider = (props) => {
         fetchHRLeavesNotificationCount,
         ErrorHandler,
         status,
+        officeTypeOptions,
         goToTop,
       }}
     >

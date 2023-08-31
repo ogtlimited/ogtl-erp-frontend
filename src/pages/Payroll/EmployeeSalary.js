@@ -5,6 +5,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
+import AddNewSalaryForm from "./../../components/Forms/AddNewSalaryForm";
 
 const EmployeeSalary = () => {
   const { user, ErrorHandler } = useAppContext();
@@ -85,75 +86,75 @@ const EmployeeSalary = () => {
       dataField: "employee",
       text: "Employee",
       sort: true,
-      headerStyle: { minWidth: "250px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "ogid",
       text: "Employee ID",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "basic",
       text: "Basic",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowance",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlySalary",
       text: "Monthly Salary",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlyIncomeTax",
       text: "Monthly Income Tax",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlyEmployeePension",
       text: "Monthly Pension",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "netPay",
       text: "Net Pay",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     // {
@@ -189,16 +190,18 @@ const EmployeeSalary = () => {
           <div
             className="col-auto float-right ml-auto"
             style={{
-              width: "400px",
+              width: "auto",
               display: "flex",
-              flexDirection: "row-reverse",
               justifyContent: "space-between",
             }}
           >
+            <a href="#" className="btn add-btn" onClick={downloadTemplate}>
+              <i className="fa fa-download"></i> Download Template
+            </a>
             {CurrentUserRoles.includes("hr_manager") && (
               <a
                 href="#"
-                className="btn add-btn"
+                className="btn add-btn m-l-15"
                 data-toggle="modal"
                 data-target="#EmployeeSalaryUploadModal"
                 onClick={() => settoggleModal(true)}
@@ -206,9 +209,16 @@ const EmployeeSalary = () => {
                 <i className="fa fa-upload"></i> Upload Salaries
               </a>
             )}
-            <a href="#" className="btn add-btn" onClick={downloadTemplate}>
-              <i className="fa fa-download"></i> Download Template
-            </a>
+            {CurrentUserRoles.includes("hr_manager") && (
+              <a
+                href="#"
+                className="btn add-btn m-l-15"
+                data-toggle="modal"
+                data-target="#AddNewSalary"
+              >
+                <i className="fa fa-plus"></i> Add Salary
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -231,13 +241,15 @@ const EmployeeSalary = () => {
           <EmployeeSalaryUpload
             settoggleModal={settoggleModal}
             title="Upload Employee Salaries"
-            url="api/v1/employee_salaries.json"
+            url="/api/v1/employee_salaries.json"
             uploadSuccess={uploadSuccess}
             setUploadSuccess={setUploadSuccess}
             fetchAllSalaries={fetchAllSalaries}
           />
         </div>
       )}
+
+      <AddNewSalaryForm fetchAllSalaries={fetchAllSalaries} />
     </>
   );
 };
