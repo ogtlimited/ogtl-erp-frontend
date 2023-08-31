@@ -41,7 +41,7 @@ const EmployeeUser = () => {
   };
 
   useEffect(() => {
-    buildExternalURL();
+    // buildExternalURL();
   }, []);
 
   // Employee Shift (Today):
@@ -97,14 +97,14 @@ const EmployeeUser = () => {
               <p className="welcome-p">
                 If you haven't clocked in today, you need to do it right away
               </p>
-              {userDept === "hr" && (
-                <div
-                  className="btn btn-primary"
-                  onClick={() => window.open(externalURL, "_blank")}
-                >
-                  Go to KPI
-                </div>
-              )}
+              // {userDept === "hr" && (
+              //   <div
+              //     className="btn btn-primary"
+              //     onClick={() => window.open(externalURL, "_blank")}
+              //   >
+              //     Go to KPI
+              //   </div>
+              // )}
             </div>
             <div className="col-md-3">
               <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />
