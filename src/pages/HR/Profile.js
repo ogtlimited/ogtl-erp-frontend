@@ -387,10 +387,18 @@ const Profile = () => {
                           </div>
                         </li>
                         <li>
-                          <div className="title">Leave Count:</div>
-                          <div className="text">
-                            {userData?.employee?.leave_count || "Not Available"}
-                          </div>
+                          <div className="title">Leave balance:</div>
+                          {userData?.employee?.leave_count ? (
+                            <div className="text">
+                              {userData?.employee?.leave_count > 1
+                                ? userData?.employee?.leave_count +
+                                  " days remaining"
+                                : userData?.employee?.leave_count +
+                                  " day remaining"}
+                            </div>
+                          ) : (
+                            <div className="text">Not Available</div>
+                          )}
                         </li>
                         {CurrentUserIsLead ||
                         CurrentUserRoles.includes("hr_manager") ||
