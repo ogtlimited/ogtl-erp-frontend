@@ -201,13 +201,13 @@ const LeavesUser = () => {
     fetchYourLeaves();
     if (currentUserIsLead) {
       fetchReporteesLeaves();
-      // fetchTeamLeaveHistory();
+      fetchTeamLeaveHistory();
     }
   }, [
     currentUserIsLead,
     fetchYourLeaves,
     fetchReporteesLeaves,
-    // fetchTeamLeaveHistory,
+    fetchTeamLeaveHistory,
   ]);
 
   const handleApproveLeave = async (row) => {
