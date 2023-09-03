@@ -66,7 +66,7 @@ const EmployeeSalaryUpload = ({
   const uploadData = () => {
     setLoading(true);
     let obj = {};
-    if (path === "api/v1/employee_salaries.json") {
+    if (path === "/api/v1/employee_salaries.json") {
       const formatted = data.map((e) => {
         return {
           ogid: e["OGID"],
@@ -78,8 +78,6 @@ const EmployeeSalaryUpload = ({
         payload: formatted,
       };
     }
-
-    console.log("This is the data obj:", obj);
 
     axiosInstance
       .post(path, {

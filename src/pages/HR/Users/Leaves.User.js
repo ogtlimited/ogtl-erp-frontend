@@ -36,7 +36,6 @@ const LeavesUser = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [rejectModal, setRejectModal] = useState(false);
   const [requestEditModal, setRequestEditModal] = useState(false);
@@ -578,7 +577,7 @@ const LeavesUser = () => {
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
-          {historyStatus === "approved" ? (
+          {row?.status === "approved" ? (
             <>
               {value === "Scheduled Leave" ? (
                 <span className="btn btn-gray btn-sm btn-rounded">
@@ -730,7 +729,7 @@ const LeavesUser = () => {
                   </a>
                 </li>
 
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <a
                     className="nav-link"
                     data-toggle="tab"
@@ -738,7 +737,7 @@ const LeavesUser = () => {
                   >
                     Team Leave History
                   </a>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>
