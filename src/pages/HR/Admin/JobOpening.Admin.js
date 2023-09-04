@@ -1,3 +1,4 @@
+// !REMOVE
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useEffect, useState } from 'react';
@@ -47,17 +48,6 @@ const JobOpening = () => {
     setclickedRow(formatted);
   };
 
-  const create = () => {
-    let initialValues = {};
-    let temp = HelperService.formArrayToObject(template.Fields);
-    for (let i in temp) {
-      initialValues[i] = '';
-    }
-    setmode('add');
-
-    setFormValue(initialValues);
-    seteditData(initialValues);
-  };
 
   const fetchJobOpenings = () => {
     axiosInstance
@@ -82,56 +72,6 @@ const JobOpening = () => {
       setData(filt);
     }
   };
-
-  useEffect(() => {
-    createRecruitmens()
-      .then((res) => {
-        const { projects, designations, branches } =
-          res.data.createRecruitmentForm;
-        const projectsOpts = projects?.map((e) => {
-          return {
-            label: e.project_name,
-            value: e._id,
-          };
-        });
-        const designationOpts = designations?.map((e) => {
-          return {
-            label: e.designation,
-            value: e._id,
-          };
-        });
-        const branchOpts = branches?.map((e) => {
-          return {
-            label: e.branch,
-            value: e._id,
-          };
-        });
-        const finalForm = jobOpeningFormJson.Fields.map((field) => {
-          // console.log(field);
-          if (field.name === 'designation_id') {
-            field.options = designationOpts;
-            return field;
-          } else if (field.name === 'project_id') {
-            field.options = projectsOpts;
-            return field;
-          } else if (field.name === 'location') {
-            field.options = branchOpts;
-            return field;
-          }
-          return field;
-        });
-        // setTemplate({
-        //   title: jobOpeningFormJson.title,
-        //   Fields: finalForm,
-        // });
-        if (!loadSelect) {
-          setloadSelect(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [loadSelect]);
 
   //create job opening
   useEffect(() => {
@@ -357,7 +297,7 @@ const JobOpening = () => {
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={() => create()}
+                // onClick={() => create()}
               >
                 Add Job Opening
               </a>
@@ -367,7 +307,7 @@ const JobOpening = () => {
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
                 data-target="#FormModal"
-                onClick={() => create()}
+                // onClick={() => create()}
               >
                 <div className="spinner-border" role="status" style={{height: "20px", width: "20px"}}>
                   <span className="sr-only">Loading...</span>

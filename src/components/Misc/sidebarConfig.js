@@ -39,7 +39,7 @@ const ICONS = {
 
 const sidebarConfig = [
   // GENERAL
-  // ----------------------------------------------------------------------
+  // Dashboard:
   {
     subheader: "Main",
     canView: "all",
@@ -62,6 +62,7 @@ const sidebarConfig = [
           },
         ],
       },
+      // Apps:
       {
         canView: "all",
         title: "Apps",
@@ -175,6 +176,7 @@ const sidebarConfig = [
                 },
               ],
       },
+      // Payroll:
       {
         canView: "hr",
         title: "Payroll",
@@ -193,6 +195,7 @@ const sidebarConfig = [
           },
         ],
       },
+      // Reports:
       {
         canView: "super",
         title: "Reports",
@@ -206,6 +209,7 @@ const sidebarConfig = [
           },
         ],
       },
+      // Recruitment:
       {
         canView: "hr",
         title: "Recruitment",
