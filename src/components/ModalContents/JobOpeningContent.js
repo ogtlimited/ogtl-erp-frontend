@@ -6,6 +6,8 @@ const JobOpeningContent = ({ Content = {} }) => {
   const filteredApplication = {
     ...Content,
     id: undefined,
+    start_date: undefined,
+    dead_line: undefined,
     created_at: undefined,
     updated_at: undefined,
     operation_branch: undefined,

@@ -9,6 +9,8 @@ import UniversalTable from "../../../components/Tables/UniversalTable";
 import moment from "moment";
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobOpeningContent from "../../../components/ModalContents/JobOpeningContent";
+import { JobOpeningForm } from "./../../../components/FormJSON/CreateJobOpening";
+import { JobOpeningFormModal } from "../../../components/Modal/JobOpeningFormModal";
 
 const JobOpeningContainer = () => {
   const { ErrorHandler, user } = useAppContext();
@@ -43,8 +45,8 @@ const JobOpeningContainer = () => {
             office_type: e?.operation_office?.office_type,
             office: e?.operation_office?.title,
             created_at: moment(e?.created_at).format("ddd. MMMM Do, YYYY"),
-            start_date: moment(e?.start_date).format("ddd. MMMM Do, YYYY"),
-            dead_line: moment(e?.dead_line).format("ddd. MMMM Do, YYYY"),
+            start__date: moment(e?.start_date).format("ddd. MMMM Do, YYYY"),
+            dead__line: moment(e?.dead_line).format("ddd. MMMM Do, YYYY"),
           };
         });
 
@@ -64,7 +66,7 @@ const JobOpeningContainer = () => {
 
   const handleCreate = () => {
     setMode("Create");
-    // setForm(DesignationForm);
+    setForm(JobOpeningForm);
   };
 
   const handleEdit = (row) => {
@@ -110,13 +112,13 @@ const JobOpeningContainer = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "start_date",
+      dataField: "start__date",
       text: "Start Date",
       sort: true,
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "dead_line",
+      dataField: "dead__line",
       text: "Deadline",
       sort: true,
       headerStyle: { width: "100%" },
@@ -155,6 +157,18 @@ const JobOpeningContainer = () => {
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
+
+            {CurrentUserCanCreateAndEdit && (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#JobOpeningFormModal"
+                onClick={() => handleEdit(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            )}
           </div>
         </div>
       ),
@@ -180,7 +194,7 @@ const JobOpeningContainer = () => {
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#JobOpeningFormModal"
-                // onClick={handleCreate}
+                onClick={handleCreate}
               >
                 <i className="fa fa-plus"></i> Add Job Opening
               </a>
@@ -206,6 +220,12 @@ const JobOpeningContainer = () => {
       ) : (
         ""
       )}
+
+      <JobOpeningFormModal
+        mode={mode}
+        data={form}
+        fetchJobOpening={fetchJobOpening}
+      />
     </>
   );
 };
