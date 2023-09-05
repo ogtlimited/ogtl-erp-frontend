@@ -22,7 +22,7 @@ const JobOpeningContainer = () => {
   const [mode, setMode] = useState("Create");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate", "hr_associate"];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -92,18 +92,37 @@ const JobOpeningContainer = () => {
       text: "Office Type",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {value === "open" ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-online"></span>{" "}
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+            </a>
+          ) : (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-terminated"></span>{" "}
+              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+            </a>
+          )}
+        </>
+      ),
     },
     {
       dataField: "created_at",

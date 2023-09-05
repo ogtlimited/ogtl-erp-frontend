@@ -30,12 +30,12 @@ export const officeTypeOptions = [
 
 export const jobOpeningStatus = [
   {
-    label: "CLOSED",
-    value: "closed",
-  },
-  {
     label: "OPEN",
     value: "open",
+  },
+  {
+    label: "CLOSED",
+    value: "closed",
   },
 ];
 

@@ -140,10 +140,6 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
   const handleCreateJobOpening = async (e) => {
     e.preventDefault();
 
-    const parser = new DOMParser();
-    const parsedHTML = parser.parseFromString(editorContent, "text/html");
-    const extractedText = parsedHTML.querySelector("p").textContent;
-
     const dataPayload = {
       job_title: jobOpening.job_title,
       operation_office_id: jobOpening.operation_office_id,
@@ -155,48 +151,42 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
       vacancy: +jobOpening.vacancy,
       position_type: jobOpening.position_type,
       admin_role: jobOpening.admin_role,
-      description: extractedText,
+      description: editorContent,
     };
 
-    console.log("payload:", dataPayload);
+    setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(`/api/v1/job_openings.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: dataPayload,
+      });
 
-    // setLoading(true);
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.post(`/api/v1/job_openings.json`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "ngrok-skip-browser-warning": "69420",
-    //     },
-    //     payload: dataPayload
-    //   });
-
-    //   showAlert(
-    //     true,
-    //     "Job opening created successfully",
-    //     "alert alert-success"
-    //   );
-    //   fetchJobOpening();
-    //   $("#JobOpeningFormModal").modal("toggle");
-    //   cancelEvent();
-    //   setLoading(false);
-    //   goToTop();
-    // } catch (error) {
-    //   const errorMsg = error?.response?.data?.errors;
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   $("#JobOpeningFormModal").modal("toggle");
-    //   goToTop();
-    //   setLoading(false);
-    // }
+      showAlert(
+        true,
+        "Job opening created successfully",
+        "alert alert-success"
+      );
+      fetchJobOpening();
+      $("#JobOpeningFormModal").modal("toggle");
+      cancelEvent();
+      setLoading(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#JobOpeningFormModal").modal("toggle");
+      goToTop();
+      setLoading(false);
+    }
   };
 
   const handleEditJobOpening = async (e) => {
     e.preventDefault();
-
-    const parser = new DOMParser();
-    const parsedHTML = parser.parseFromString(editorContent, "text/html");
-    const extractedText = parsedHTML.querySelector("p").textContent;
 
     const dataPayload = {
       job_title: jobOpening.job_title,
@@ -209,43 +199,41 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
       vacancy: +jobOpening.vacancy,
       position_type: jobOpening.position_type,
       admin_role: jobOpening.admin_role || false,
-      description: extractedText,
+      description: editorContent,
     };
 
-    console.log("Edit payload:", dataPayload);
+    setLoading(true);
+    const id = jobOpening?.id;
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/api/v1/job_openings/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: dataPayload,
+        }
+      );
 
-    // setLoading(true);
-    // const id = jobOpening?.id;
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.patch(
-    //     `/api/v1/job_openings/${id}.json`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Access-Control-Allow-Origin": "*",
-    //         "ngrok-skip-browser-warning": "69420",
-    //       },
-    //       payload: dataPayload
-    //     }
-    //   );
-
-    //   showAlert(
-    //     true,
-    //     "Job opening successfully updated",
-    //     "alert alert-success"
-    //   );
-    //   fetchJobOpening();
-    //   $("#JobOpeningFormModal").modal("toggle");
-    //   setLoading(false);
-    //   goToTop();
-    // } catch (error) {
-    //   const errorMsg = error?.response?.data?.errors;
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   $("#JobOpeningFormModal").modal("toggle");
-    //   goToTop();
-    //   setLoading(false);
-    // }
+      showAlert(
+        true,
+        "Job opening successfully updated",
+        "alert alert-success"
+      );
+      fetchJobOpening();
+      $("#JobOpeningFormModal").modal("toggle");
+      setLoading(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#JobOpeningFormModal").modal("toggle");
+      goToTop();
+      setLoading(false);
+    }
   };
 
   return (
