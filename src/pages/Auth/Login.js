@@ -42,151 +42,121 @@ const Login = () => {
     userData.userGroup = groups;
   };
 
-  const onSubmit = (data) => {
-    setLoading(true);
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
 
-    msalInstance
-      .ssoSilent(loginRequest)
-      .then((e) => {
+      const e = await msalInstance.ssoSilent(loginRequest);
+      userData.name = e.account.name;
+      userData.email = e.account.username;
 
-        userData.name = e.account.name;
-        userData.email = e.account.username;
+      await fetchMsGraph(e.accessToken, userData);
 
-        fetchMsGraph(e.accessToken);
+      tokenService.setKpiUser(userData);
 
-        tokenService.setKpiUser(userData);
+      //   const activeUser = e?.account?.username;
 
-        // const activeUser = e?.account?.username;
+      const obj = {
+        company_email: data.company_email.trim(),
+      };
 
-        const obj = {
-          company_email: data.company_email.trim(),
-        };
+      //   if (obj.company_email !== activeUser) {
+      //     setErrorMsg("There is an active user on this device");
+      //     return;
+      //   }
 
-        // if (obj.company_email !== activeUser) {
-        //   return setErrorMsg("There is an active user on this device");
-        // }
+      setErrorMsg("");
 
-        setErrorMsg("");
+      const res = await axios.post(
+        config.ApiUrl + "/api/v1/auth/login.json",
+        {
+          email: obj.company_email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-        axios
-          .post(config.ApiUrl + "/api/v1/auth/login.json", {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            email: obj.company_email,
-          })
-          .then((res) => {
-            tokenService.setUser(res.data.data);
-            tokenService.setToken(res.data.data.token);
+      tokenService.setUser(res.data.data);
+      tokenService.setToken(res.data.data.token);
 
-            if (res.data.data.token) {
-              window.location.href = "/dashboard/employee-dashboard";
-            } else {
-              return setErrorMsg("Network Error. Please try again");
-            }
-          })
-          .catch((err) => {
-            if (err?.response?.status <= 400) {
-              return setErrorMsg("Unable to login. Please try again");
-            } else if (err?.response?.status === 404) {
-              return setErrorMsg(
-                "Invalid email. Please double-check and try again"
-              );
-            } else if (err?.response?.status >= 500 || !err?.response) {
-              return setErrorMsg(
-                "Unable to communicate with server. Please try again later."
-              );
-            }
-            setErrorMsg(
-              `${
-                err?.response?.data?.errors ||
-                "Error accessing server, please try again later."
-              }`
-            );
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      })
-      .catch((e) => {
-        if (e.name === "InteractionRequiredAuthError") {
-          msalInstance
-            .loginPopup(loginRequest)
-            .then((e) => {
+      if (res.data.data.token) {
+        window.location.href = "/dashboard/employee-dashboard";
+      } else {
+        setErrorMsg("Network Error. Please try again");
+      }
+    } catch (e) {
+      if (e.name === "InteractionRequiredAuthError") {
+        try {
+          const e = await msalInstance.loginPopup(loginRequest);
+          userData.name = e.account.name;
+          userData.email = e.account.username;
 
-              userData.name = e.account.name;
-              userData.email = e.account.username;
+          await fetchMsGraph(e.accessToken);
 
-              fetchMsGraph(e.accessToken);
+          tokenService.setKpiUser(userData);
 
-              tokenService.setKpiUser(userData);
+          const activeUser = e?.account?.username;
 
-              // const activeUser = e?.account?.username;
-            
-              const obj = {
-                company_email: data.company_email.trim(),
-              };
+          const obj = {
+            company_email: data.company_email.trim(),
+          };
 
-              // if (obj.company_email !== activeUser) {
-              //   return setErrorMsg("Please login with your credentials");
-              // }
-
-              setErrorMsg("");
-
-              axios
-                .post(config.ApiUrl + "/api/v1/auth/login.json", {
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "ngrok-skip-browser-warning": "69420",
-                  },
-                  email: obj.company_email,
-                })
-                .then((res) => {
-                  tokenService.setUser(res.data.data);
-                  tokenService.setToken(res.data.data.token);
-
-                  if (res.data.data.token) {
-                    window.location.href = "/dashboard/employee-dashboard";
-                  } else {
-                    return setErrorMsg("Network Error. Please try again");
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-                .finally(() => {
-                  setLoading(false);
-                });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          if (e?.response?.status <= 400) {
-            return setErrorMsg("Unable to login. Please try again");
-          } else if (e?.response?.status === 404) {
-            return setErrorMsg(
-              "Invalid email. Please double-check and try again"
-            );
-          } else if (e?.response?.status >= 500 || !e?.response) {
-            return setErrorMsg(
-              "Unable to communicate with server. Please try again later."
-            );
+          if (obj.company_email !== activeUser) {
+            setErrorMsg("Please login with your credentials");
+            return;
           }
+
+          setErrorMsg("");
+
+          const res = await axios.post(
+            config.ApiUrl + "/api/v1/auth/login.json",
+            {
+              email: obj.company_email,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+
+          tokenService.setUser(res.data.data);
+          tokenService.setToken(res.data.data.token);
+
+          if (res.data.data.token) {
+            window.location.href = "/dashboard/employee-dashboard";
+          } else {
+            setErrorMsg("Network Error. Please try again");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        if (e?.response?.status <= 400) {
+          setErrorMsg("Unable to login. Please try again");
+        } else if (e?.response?.status === 404) {
+          setErrorMsg("Invalid email. Please double-check and try again");
+        } else if (e?.response?.status >= 500 || !e?.response) {
           setErrorMsg(
-            `${
-              e?.response?.data?.errors ||
-              "Error accessing server, please try again later."
-            }`
+            "Unable to communicate with the server. Please try again later."
+          );
+        } else {
+          setErrorMsg(
+            e?.response?.data?.errors ||
+              "Error accessing the server, please try again later."
           );
         }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEndSession = (e) => {
