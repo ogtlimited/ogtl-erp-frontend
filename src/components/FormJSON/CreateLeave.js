@@ -3,15 +3,9 @@ export const CREATE_LEAVE = {
   start_date: "",
   end_date: "",
   reason: "",
+  proofs: null,
 
   leaveTypeTitle: "",
-};
-
-export const EDIT_LEAVE = {
-  hr_leave_type_id: "",
-  start_date: "",
-  end_date: "",
-  reason: "",
 };
 
 export const HR_CREATE_LEAVE = {
@@ -20,12 +14,22 @@ export const HR_CREATE_LEAVE = {
   start_date: "",
   end_date: "",
   reason: "",
+  proofs: null,
 
   leaveTypeTitle: "",
   officeName: "",
   employeeName: "",
   operation_office_id: "",
 };
+
+
+export const EDIT_LEAVE = {
+  hr_leave_type_id: "",
+  start_date: "",
+  end_date: "",
+  reason: "",
+};
+
 
 export const officeTypeOptions = [
   {

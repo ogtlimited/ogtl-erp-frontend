@@ -16,6 +16,7 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     status_action: undefined,
     leave: undefined,
     user: undefined,
+    proofs: undefined,
     rejection_reason:
       leaveContent?.leave?.rejection_reason === null
         ? undefined

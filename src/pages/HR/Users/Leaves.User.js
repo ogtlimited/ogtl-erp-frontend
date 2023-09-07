@@ -1,19 +1,16 @@
+// *IN USE
+
 /* eslint-disable no-unused-vars */
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import ReporteeLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/ReporteeLeaveTable";
-import LeadLeaveHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/LeadLeaveHistoryTable";
 import axiosInstance from "../../../services/api";
 import ViewModal from "../../../components/Modal/ViewModal";
 import { ApplyLeaveModal } from "../../../components/Modal/ApplyLeaveModal";
-import { EditLeaveModal } from "../../../components/Modal/EditLeaveModal";
 import { useAppContext } from "../../../Context/AppContext";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectLeaveModal from "../../../components/Modal/RejectLeaveModal";
-import RequestEditModal from "../../../components/Modal/RequestEditModal";
-import AppealRejectionModal from "../../../components/Modal/AppealRejectionModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
@@ -28,8 +25,6 @@ const LeavesUser = () => {
     goToTop,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
-  const [appealedLeaveApplicationCount, setAppealedLeaveApplicationCount] =
-    useState(0);
   const [modalType, setModalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
 
@@ -38,13 +33,8 @@ const LeavesUser = () => {
   const [leaveHistory, setLeaveHistory] = useState([]);
 
   const [rejectModal, setRejectModal] = useState(false);
-  const [requestEditModal, setRequestEditModal] = useState(false);
-  const [appealRejectionModal, setAppealRejectionModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [rejectLeave, setRejectLeave] = useState([]);
-  const [editLeave, setEditLeave] = useState([]);
-  const [requestEdit, setRequestEdit] = useState([]);
-  const [appealRejection, setAppealRejection] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const [page, setPage] = useState(1);
@@ -92,6 +82,7 @@ const LeavesUser = () => {
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        proofs: leave?.proofs,
       }));
 
       setallLeaves(formatted);
@@ -128,6 +119,7 @@ const LeavesUser = () => {
           leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        proofs: leave?.proofs,
       }));
 
       const reporteeLeaves = resData.length;
@@ -178,6 +170,7 @@ const LeavesUser = () => {
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        proofs: leave?.proofs,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
@@ -187,7 +180,8 @@ const LeavesUser = () => {
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
-      }));
+      }))
+
       setLeaveHistory(formatted);
     } catch (error) {
       const component = "Leave History Error:";
@@ -219,7 +213,7 @@ const LeavesUser = () => {
       );
       showAlert(true, "Leave Approved", "alert alert-success");
       fetchReporteesLeaves();
-      // fetchHRLeavesNotificationCount();
+      fetchHRLeavesNotificationCount();
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
@@ -320,6 +314,57 @@ const LeavesUser = () => {
           {row.requested_leave_days > 1
             ? row.requested_leave_days + " days"
             : row.requested_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "proofs",
+      text: "Proofs",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          {row?.proofs ? (
+            <>
+              {row?.proofs.length > 1 ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-sm btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Downloads
+                  </button>
+                  <div className="dropdown-menu">
+                    {row?.proofs.map((proof, index) => (
+                      <a
+                        key={index}
+                        href={proof}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-item"
+                        download
+                      >
+                        <i className="fa fa-download"></i> Download {index + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  href={value[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-primary"
+                  download
+                >
+                  <i className="fa fa-download"></i> Download
+                </a>
+              )}
+            </>
+          ) : null}
         </>
       ),
     },
@@ -449,6 +494,57 @@ const LeavesUser = () => {
           {row.requested_leave_days > 1
             ? row.requested_leave_days + " days"
             : row.requested_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "proofs",
+      text: "Proofs",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          {row?.proofs ? (
+            <>
+              {row?.proofs.length > 1 ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-sm btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Downloads
+                  </button>
+                  <div className="dropdown-menu">
+                    {row?.proofs.map((proof, index) => (
+                      <a
+                        key={index}
+                        href={proof}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-item"
+                        download
+                      >
+                        <i className="fa fa-download"></i> Download {index + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  href={value[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-primary"
+                  download
+                >
+                  <i className="fa fa-download"></i> Download
+                </a>
+              )}
+            </>
+          ) : null}
         </>
       ),
     },
@@ -632,6 +728,57 @@ const LeavesUser = () => {
       ),
     },
     {
+      dataField: "proofs",
+      text: "Proofs",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          {row?.proofs ? (
+            <>
+              {row?.proofs.length > 1 ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-sm btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Downloads
+                  </button>
+                  <div className="dropdown-menu">
+                    {row?.proofs.map((proof, index) => (
+                      <a
+                        key={index}
+                        href={proof}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-item"
+                        download
+                      >
+                        <i className="fa fa-download"></i> Download {index + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  href={value[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-primary"
+                  download
+                >
+                  <i className="fa fa-download"></i> Download
+                </a>
+              )}
+            </>
+          ) : null}
+        </>
+      ),
+    },
+    {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
@@ -722,7 +869,7 @@ const LeavesUser = () => {
                     {leaveApplicationCount > 0 && (
                       <div id="leave-application-count-div">
                         <span id="leave-application-count">
-                          {leaveApplicationCount} 
+                          {leaveApplicationCount}
                         </span>
                       </div>
                     )}
@@ -801,32 +948,11 @@ const LeavesUser = () => {
           loading={loading}
           setLoading={setLoading}
           fetchReporteesLeaves={fetchReporteesLeaves}
-        />
-      )}
-
-      {requestEditModal && (
-        <RequestEditModal
-          requestEdit={requestEdit}
-          closeModal={setRequestEditModal}
-          loading={loading}
-          setLoading={setLoading}
-          fetchReporteesLeaves={fetchReporteesLeaves}
-        />
-      )}
-
-      {appealRejectionModal && (
-        <AppealRejectionModal
-          appealRejection={appealRejection}
-          closeModal={setAppealRejectionModal}
-          loading={loading}
-          setLoading={setLoading}
-          fetchYourLeaves={fetchYourLeaves}
-          fetchReporteesLeaves={fetchReporteesLeaves}
+          fetchTeamLeaveHistory={fetchTeamLeaveHistory}
         />
       )}
 
       <ApplyLeaveModal fetchYourLeaves={fetchYourLeaves} />
-      <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} />
 
       {modalType === "cancel" ? (
         <ConfirmModal
