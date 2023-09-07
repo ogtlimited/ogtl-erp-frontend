@@ -8,15 +8,14 @@ import $ from "jquery";
 import ms from "ms";
 import moment from "moment";
 import Select from "react-select";
-import secureLocalStorage from "react-secure-storage";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
-  const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
+  const { showAlert, loadingSelect, selectLeaveTypes, user } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
-  const user = JSON.parse(secureLocalStorage.getItem("user"));
+  const [proofUpload, setProofUpload] = useState(null);
 
   const [today, setToday] = useState(null);
   const [minDate, setMinDate] = useState(null);
@@ -57,6 +56,13 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    e.preventDefault();
+    setProofUpload(e.target.files);
+  };
+
+  const files = proofUpload ? [...proofUpload] : [];
+
   const handleSelectLeave = (e) => {
     setLeave({
       ...leave,
@@ -69,6 +75,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const handleApplyLeave = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const leaveTypeQuery =
+      leaveType.charAt(0).toUpperCase() + leaveType.slice(1);
 
     const dataPayload = {
       hr_leave_type_id: leave.hr_leave_type_id,
@@ -77,17 +87,37 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       reason: leave.reason,
     };
 
-    setLoading(true);
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/leaves.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: dataPayload,
-      });
+      if (leaveType.includes("emergency") || leaveType.includes("sick")) {
+        let formData = new FormData();
+
+        files.forEach((file) => {
+          formData.append("proofs[]", file);
+        });
+        formData.append("hr_leave_type_id", leave.hr_leave_type_id);
+        formData.append("start_date", leave.start_date);
+        formData.append("end_date", leave.end_date);
+        formData.append("reason", leave.reason);
+
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.post(
+          `/api/v1/leaves.json?leave_type=${leaveTypeQuery}`,
+          formData
+        );
+      } else {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.post(
+          `/api/v1/leaves.json?leave_type=${leaveTypeQuery}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: dataPayload,
+          }
+        );
+      }
 
       showAlert(
         true,
@@ -98,9 +128,11 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       setLeave(CREATE_LEAVE);
       $("#FormModal").modal("toggle");
     } catch (error) {
+      $("#FormModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -219,6 +251,26 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                               required
                             />
                           )}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {leaveType.includes("emergency") ||
+                    leaveType.includes("sick") ? (
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label htmlFor="proofs">Proof Upload</label>
+                          <input
+                            name="proofs"
+                            type="file"
+                            className="form-control proof_upload"
+                            accept="image/*,.pdf,.doc,.csv,.txt"
+                            placeholder="Click to upload "
+                            value={leave?.proofs}
+                            onChange={handleFileChange}
+                            multiple
+                            required
+                          />
                         </div>
                       </div>
                     ) : null}

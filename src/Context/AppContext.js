@@ -143,7 +143,9 @@ const AppProvider = (props) => {
         const dataCount = resData.length;
         setCount(dataCount);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   // SELECT APIs
