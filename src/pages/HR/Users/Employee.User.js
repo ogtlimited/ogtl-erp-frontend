@@ -9,8 +9,8 @@ import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
 import HeroImage from "../../../assets/img/HR-nextImg.png";
-import tokenService from "../../../services/token.service";
-import sign from "jwt-encode";
+// import tokenService from "../../../services/token.service";
+// import sign from "jwt-encode";
 // import config from "../../../config.json";
 
 const EmployeeUser = () => {
@@ -18,31 +18,31 @@ const EmployeeUser = () => {
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
-  const [externalURL, setExternalURL] = useState(null);
+  // const [externalURL, setExternalURL] = useState(null);
 
-  const userDept =
-    user?.office?.office_type === "department" ? user?.office?.title : null;
+  // const userDept =
+  //   user?.office?.office_type === "department" ? user?.office?.title : null;
 
-  const buildExternalURL = () => {
-    try {
-      const kpiData = tokenService.getKpiUser();
-      const secret = process.env.REACT_APP_HMAC_SECRET;
+  // const buildExternalURL = () => {
+  //   try {
+  //     const kpiData = tokenService.getKpiUser();
+  //     const secret = process.env.REACT_APP_HMAC_SECRET;
 
-      const generatedJWT = sign(kpiData, secret);
+  //     const generatedJWT = sign(kpiData, secret);
 
-      const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
-      const queryParams = `auth_param=${generatedJWT}`;
+  //     const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+  //     const queryParams = `auth_param=${generatedJWT}`;
 
-      const externalAppUrl = `${kpiUrl}?${queryParams}`;
-      setExternalURL(externalAppUrl);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const externalAppUrl = `${kpiUrl}?${queryParams}`;
+  //     setExternalURL(externalAppUrl);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    buildExternalURL();
-  }, []);
+  // useEffect(() => {
+  //   buildExternalURL();
+  // }, []);
 
   // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
@@ -97,14 +97,14 @@ const EmployeeUser = () => {
               <p className="welcome-p">
                 If you haven't clocked in today, you need to do it right away
               </p>
-              {userDept === "hr" && (
+              {/* {userDept === "hr" && (
                 <div
                   className="btn btn-primary"
                   onClick={() => window.open(externalURL, "_blank")}
                 >
                   Go to KPI
                 </div>
-              )}
+              )} */}
             </div>
             <div className="col-md-3">
               <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />

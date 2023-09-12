@@ -123,55 +123,72 @@ const Sidebar = () => {
                   )}
                   {nav.items.map((item) => (
                     <>
-                      {item.children ? (
-                        <>
-                          {canView(item?.canView) && (
-                            <li
-                              className={`submenu ${
-                                dropdownStates[item.title]
-                                  ? "active subdrop"
-                                  : ""
-                              }`}
-                              key={item.title}
-                            >
-                              <a
-                                href=""
-                                onClick={(e) => e.preventDefault()}
-                                data-dropdown-key={item.title}
-                              >
-                                {item.icon} <span> {item.title}</span>{" "}
-                                <span className="menu-arrow"></span>
-                              </a>
-                              <ul
-                                style={{
-                                  display: dropdownStates[item.title]
-                                    ? "block"
-                                    : "none",
-                                }}
-                              >
-                                {item.children.map((child) => (
-                                  <>
-                                    {canView(child?.canView) && (
-                                      <li key={child.path} className="">
-                                        <Link to={`${child.path}`} className="">
-                                          {child.title}
-                                        </Link>
-                                      </li>
-                                    )}
-                                  </>
-                                ))}
-                              </ul>
-                            </li>
-                          )}
-                        </>
+                      {item.externalLink ? (
+                        <li key={item.title}>
+                          <a
+                            href={item.externalLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {item.icon} <span>{item.title}</span>
+                          </a>
+                        </li>
                       ) : (
                         <>
-                          {canView(item?.canView) && (
-                            <li key={item.path}>
-                              <Link to={item.path}>
-                                {item.icon} <span>{item.title}</span>
-                              </Link>
-                            </li>
+                          {item.children ? (
+                            <>
+                              {canView(item?.canView) && (
+                                <li
+                                  className={`submenu ${
+                                    dropdownStates[item.title]
+                                      ? "active subdrop"
+                                      : ""
+                                  }`}
+                                  key={item.title}
+                                >
+                                  <a
+                                    href=""
+                                    onClick={(e) => e.preventDefault()}
+                                    data-dropdown-key={item.title}
+                                  >
+                                    {item.icon} <span> {item.title}</span>{" "}
+                                    <span className="menu-arrow"></span>
+                                  </a>
+                                  <ul
+                                    style={{
+                                      display: dropdownStates[item.title]
+                                        ? "block"
+                                        : "none",
+                                    }}
+                                  >
+                                    {item.children.map((child) => (
+                                      <>
+                                        {canView(child?.canView) && (
+                                          <li key={child.path} className="">
+                                            <Link
+                                              to={`${child.path}`}
+                                              className=""
+                                            >
+                                              {child.title}
+                                            </Link>
+                                          </li>
+                                        )}
+                                      </>
+                                    ))}
+                                  </ul>
+                                </li>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              {canView(item?.canView) && (
+                                <li key={item.path}>
+                                  <Link to={item.path}>
+                                    {item.icon} <span>{item.title}</span>
+                                  </Link>
+                                </li>
+                              )}
+                            </>
                           )}
                         </>
                       )}

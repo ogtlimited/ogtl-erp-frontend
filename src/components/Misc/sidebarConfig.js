@@ -2,6 +2,7 @@
 
 import { PATH_DASHBOARD } from "../../routes/paths";
 import tokenService from "../../services/token.service";
+import sign from "jwt-encode";
 
 const user = tokenService.getUser();
 const userDept =
@@ -35,6 +36,24 @@ const ICONS = {
   shadowing: getIcon("la-users"),
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
+  kpi: getIcon("la-bar-chart"),
+};
+
+const buildExternalURL = () => {
+  try {
+    const kpiData = tokenService.getKpiUser();
+    const secret = process.env.REACT_APP_HMAC_SECRET;
+
+    const generatedJWT = sign(kpiData, secret);
+
+    const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+    const queryParams = `auth_param=${generatedJWT}`;
+
+    const externalAppUrl = `${kpiUrl}?${queryParams}`;
+    return externalAppUrl;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const sidebarConfig = [
@@ -43,40 +62,82 @@ const sidebarConfig = [
   {
     subheader: "Main",
     canView: "all",
-    items: [
-      {
-        canView: "all",
-        title: "Dashboard",
-        path: PATH_DASHBOARD.main.root,
-        icon: ICONS.dashboard,
-        children: [
-          {
-            canView: "all",
-            title: "Employee Dashboard",
-            path: PATH_DASHBOARD.main.employeeDashboard,
-          },
-          {
-            canView: "hr",
-            title: "HR Dashboard",
-            path: PATH_DASHBOARD.main.hrDashboard,
-          },
-        ],
-      },
-      // Apps:
-      {
-        canView: "all",
-        title: "Apps",
-        path: PATH_DASHBOARD.apps.root,
-        icon: ICONS.apps,
-        children: [
-          {
-            canView: "all",
-            title: "Email Signature",
-            path: PATH_DASHBOARD.apps.signature,
-          },
-        ],
-      },
-    ],
+    items:
+      userDept === "hr"
+        ? [
+            {
+              canView: "all",
+              title: "Dashboard",
+              path: PATH_DASHBOARD.main.root,
+              icon: ICONS.dashboard,
+              children: [
+                {
+                  canView: "all",
+                  title: "Employee Dashboard",
+                  path: PATH_DASHBOARD.main.employeeDashboard,
+                },
+                {
+                  canView: "hr",
+                  title: "HR Dashboard",
+                  path: PATH_DASHBOARD.main.hrDashboard,
+                },
+              ],
+            },
+            // Apps:
+            {
+              canView: "all",
+              title: "Apps",
+              path: PATH_DASHBOARD.apps.root,
+              icon: ICONS.apps,
+              children: [
+                {
+                  canView: "all",
+                  title: "Email Signature",
+                  path: PATH_DASHBOARD.apps.signature,
+                },
+              ],
+            },
+            {
+              canView: "hr",
+              title: "KPI",
+              externalLink: buildExternalURL(),
+              icon: ICONS.kpi,
+            },
+          ]
+        : [
+            {
+              canView: "all",
+              title: "Dashboard",
+              path: PATH_DASHBOARD.main.root,
+              icon: ICONS.dashboard,
+              children: [
+                {
+                  canView: "all",
+                  title: "Employee Dashboard",
+                  path: PATH_DASHBOARD.main.employeeDashboard,
+                },
+                {
+                  canView: "hr",
+                  title: "HR Dashboard",
+                  path: PATH_DASHBOARD.main.hrDashboard,
+                },
+              ],
+            },
+            // Apps:
+            {
+              canView: "all",
+              title: "Apps",
+              path: PATH_DASHBOARD.apps.root,
+              icon: ICONS.apps,
+              children: [
+                {
+                  canView: "all",
+                  title: "Email Signature",
+                  path: PATH_DASHBOARD.apps.signature,
+                },
+              ],
+            },
+          ],
   },
 
   // HR CONFIG:
