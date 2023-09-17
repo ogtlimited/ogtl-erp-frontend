@@ -12,7 +12,7 @@ function RejectLeaveModal({
   loading,
   setLoading,
   fetchReporteesLeaves,
-  fetchLeaveHistory,
+  fetchTeamLeaveHistory,
 }) {
   const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
@@ -34,7 +34,7 @@ function RejectLeaveModal({
           payload: leave,
         }
       );
-      
+
       showAlert(true, "Leave Rejected", "alert alert-info");
 
       closeModal(false);
@@ -44,8 +44,8 @@ function RejectLeaveModal({
       setLoading(false);
     }
     fetchReporteesLeaves();
-    fetchLeaveHistory();
-    // fetchHRLeavesNotificationCount();
+    fetchTeamLeaveHistory();
+    fetchHRLeavesNotificationCount();
   };
 
   return (

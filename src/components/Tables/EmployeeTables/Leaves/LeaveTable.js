@@ -28,7 +28,7 @@ const LeavesTable = ({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length > 8) {
+    if (columns.length >= 8) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);

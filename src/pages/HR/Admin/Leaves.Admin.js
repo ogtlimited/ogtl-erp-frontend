@@ -312,6 +312,57 @@ const LeavesAdmin = () => {
       ),
     },
     {
+      dataField: "proofs",
+      text: "Proofs",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {row?.proofs ? (
+            <>
+              {row?.proofs.length > 1 ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-sm btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Downloads
+                  </button>
+                  <div className="dropdown-menu">
+                    {row?.proofs.map((proof, index) => (
+                      <a
+                        key={index}
+                        href={proof}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-item"
+                        download
+                      >
+                        <i className="fa fa-download"></i> Download {index + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  href={value[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-primary"
+                  download
+                >
+                  <i className="fa fa-download"></i> Download
+                </a>
+              )}
+            </>
+          ) : null}
+        </>
+      ),
+    },
+    {
       dataField: "status_action",
       text: "Action",
       csvExport: false,
@@ -486,6 +537,57 @@ const LeavesAdmin = () => {
           {row.total_leave_days > 1
             ? row.total_leave_days + " days"
             : row.total_leave_days + " day"}
+        </>
+      ),
+    },
+    {
+      dataField: "proofs",
+      text: "Proofs",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <>
+          {row?.proofs ? (
+            <>
+              {row?.proofs.length > 1 ? (
+                <div className="dropdown">
+                  <button
+                    className="btn btn-sm btn-primary dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Downloads
+                  </button>
+                  <div className="dropdown-menu">
+                    {row?.proofs.map((proof, index) => (
+                      <a
+                        key={index}
+                        href={proof}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="dropdown-item"
+                        download
+                      >
+                        <i className="fa fa-download"></i> Download {index + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <a
+                  href={value[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-sm btn-primary"
+                  download
+                >
+                  <i className="fa fa-download"></i> Download
+                </a>
+              )}
+            </>
+          ) : null}
         </>
       ),
     },

@@ -2,25 +2,17 @@
 
 import React from "react";
 
-const LeaveApplicationContent = ({ leaveContent = {} }) => {
+const JobOpeningContent = ({ Content = {} }) => {
   const filteredApplication = {
-    ...leaveContent,
+    ...Content,
     id: undefined,
-    manager_id: undefined,
     start_date: undefined,
-    end_date: undefined,
-    updated_at: undefined,
+    dead_line: undefined,
     created_at: undefined,
-    acted_on: undefined,
-    hr_stage: undefined,
-    status_action: undefined,
-    leave: undefined,
-    user: undefined,
-    proofs: undefined,
-    rejection_reason:
-      leaveContent?.leave?.rejection_reason === null
-        ? undefined
-        : leaveContent?.leave?.rejection_reason,
+    updated_at: undefined,
+    operation_branch: undefined,
+    operation_office: undefined,
+    title: undefined,
   };
 
   const filteredKeys = Object.keys(filteredApplication).reverse();
@@ -58,4 +50,4 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
   );
 };
 
-export default LeaveApplicationContent;
+export default JobOpeningContent;
