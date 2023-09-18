@@ -13,4 +13,8 @@ export const officeTypeOptions = [
       label: "Campaign",
       value: 'campaign',
     },
+    {
+      label: "Team",
+      value: 'team',
+    },
 ];

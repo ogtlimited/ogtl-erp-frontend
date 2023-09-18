@@ -126,14 +126,19 @@ const Offices = () => {
     setMode("Create");
   };
 
+  const toggleTeamAction = () => {
+    setOfficeType("Team");
+    setMode("Create");
+  };
+
   const handleCreate = () => {
     setMode("Create");
     setOffice(OfficeForm);
   };
 
   const handleEdit = (row) => {
-    setOffice(row);
     setMode("Edit");
+    setOffice(row);
   };
 
   const columns = [
@@ -188,10 +193,10 @@ const Offices = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Offices</h3>
+            <h3 className="page-title">Facility</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Offices</li>
+              <li className="breadcrumb-item active">Facility</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -203,7 +208,7 @@ const Offices = () => {
                 data-target="#OfficeFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Create Office
+                <i className="fa fa-plus"></i> Add Facility
               </a>
             ) : null}
           </div>
@@ -218,6 +223,17 @@ const Offices = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
+                  href="#tab_departments"
+                  onClick={toggleDepartmentAction}
+                >
+                  Departments
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
                   href="#tab_campaigns"
                   onClick={toggleCampaignAction}
                 >
@@ -229,10 +245,10 @@ const Offices = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_departments"
-                  onClick={toggleDepartmentAction}
+                  href="#tab_teams"
+                  onClick={toggleTeamAction}
                 >
-                  Departments
+                  Teams
                 </a>
               </li>
             </ul>
