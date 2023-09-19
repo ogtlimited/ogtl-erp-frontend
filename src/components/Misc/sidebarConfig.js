@@ -217,7 +217,7 @@ const sidebarConfig = [
                 },
                 {
                   canView: "hr",
-                  title: "Facility",
+                  title: "Offices",
                   path: PATH_DASHBOARD.hr.offices,
                 },
                 {
