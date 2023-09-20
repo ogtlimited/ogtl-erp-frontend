@@ -82,7 +82,7 @@ const Departments = () => {
   const columns = [
     {
       dataField: "title",
-      text: "Office",
+      text: "Department",
       sort: true,
       headerStyle: { width: "40%" },
       formatter: (val, row) => (
