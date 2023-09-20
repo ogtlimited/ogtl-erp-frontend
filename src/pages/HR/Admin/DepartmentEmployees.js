@@ -1,3 +1,5 @@
+// *IN USE
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
@@ -5,12 +7,12 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams, Link } from "react-router-dom";
 
-const DepartmentsEmployees = () => {
+const DepartmentEmployees = () => {
   const { id } = useParams();
   const { title } = useParams();
   const { ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
-  const [departmentUsers, setDepartmentUsers] = useState([]);
+  const [departmentEmployees, setDepartmentEmployees] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -47,7 +49,7 @@ const DepartmentsEmployees = () => {
         };
       });
 
-      setDepartmentUsers(mapp);
+      setDepartmentEmployees(mapp);
       setLoading(false);
     } catch (error) {
       const component = "All Leaders:";
@@ -94,7 +96,7 @@ const DepartmentsEmployees = () => {
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
-          data={departmentUsers}
+          data={departmentEmployees}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -109,4 +111,4 @@ const DepartmentsEmployees = () => {
   );
 };
 
-export default DepartmentsEmployees;
+export default DepartmentEmployees;

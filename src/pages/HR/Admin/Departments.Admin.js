@@ -30,20 +30,18 @@ const Departments = () => {
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/departments.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "department",
           pages: page,
           limit: sizePerPage,
         },
       });
-      // console.log("All departments.", response?.data);
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.departments;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;

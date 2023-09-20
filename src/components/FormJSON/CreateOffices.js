@@ -1,12 +1,6 @@
-export const OfficeForm = {
-    title: "",
-    leave_approval_level: 0,
-    office_type: "",
-}
-
 export const DepartmentForm = {
     title: "",
-    leave_approval_level: 0,
+    leave_approval_level: "",
 }
 
 export const DepartmentCampaignForm = {
