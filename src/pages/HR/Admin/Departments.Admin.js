@@ -1,18 +1,30 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/*eslint-disable jsx-a11y/anchor-is-valid*/
+
 import React, { useState, useEffect, useCallback } from "react";
-import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import { DepartmentFormModal } from "../../../components/Modal/DepartmentFormModal";
+import { DepartmentForm } from "../../../components/FormJSON/CreateOffices";
 import moment from "moment";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
-const AllDepartments = () => {
-  const { ErrorHandler } = useAppContext();
-  const [loading, setLoading] = useState(true);
+const Departments = () => {
+  const { user, ErrorHandler } = useAppContext();
+  const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState([]);
+  const [mode, setMode] = useState("Create");
+  const [office, setOffice] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
@@ -58,6 +70,16 @@ const AllDepartments = () => {
     fetchAllDepartments();
   }, [fetchAllDepartments]);
 
+  const handleCreate = () => {
+    setMode("Create");
+    setOffice(DepartmentForm);
+  };
+
+  const handleEdit = (row) => {
+    setMode("Edit");
+    setOffice(row);
+  };
+
   const columns = [
     {
       dataField: "title",
@@ -78,14 +100,58 @@ const AllDepartments = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#DepartmentFormModal"
+              onClick={() => handleEdit(row)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   return (
-    <div className="tab-pane" id="tab_departments">
+    <>
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">Departments</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item active">Departments</li>
+            </ul>
+          </div>
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserCanCreateAndEdit ? (
+              <a
+                href="/"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#DepartmentFormModal"
+                onClick={handleCreate}
+              >
+                <i className="fa fa-plus"></i> Add Department
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
       <div className="row">
         <UniversalPaginatedTable
-          columns={columns}
           data={departments}
+          columns={columns}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -96,8 +162,14 @@ const AllDepartments = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-    </div>
+
+      <DepartmentFormModal
+        mode={mode}
+        data={office}
+        fetchAllDepartments={fetchAllDepartments}
+      />
+    </>
   );
 };
 
-export default AllDepartments;
+export default Departments;

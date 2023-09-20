@@ -389,10 +389,26 @@ export default function Router() {
             },
             { path: "resignation", element: <ResignationUser /> },
             {
-              path: "offices",
+              path: "departments",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <Offices />
+                  <Departments />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "campaigns",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <Campaigns />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "teams",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <Teams />
                 </GuardedRoute>
               ),
             },
@@ -1079,7 +1095,9 @@ const AttendanceRecord = Loadable(
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
 );
-const Offices = Loadable(lazy(() => import("../pages/HR/Admin/Offices.Admin")));
+const Departments = Loadable(lazy(() => import("../pages/HR/Admin/Departments.Admin")));
+const Campaigns = Loadable(lazy(() => import("../pages/HR/Admin/Campaigns.Admin")));
+const Teams = Loadable(lazy(() => import("../pages/HR/Admin/Teams.Admin")));
 const BranchAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Branch.Admin"))
 );

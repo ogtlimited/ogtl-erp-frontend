@@ -1,18 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import Departments from "./AllDepartments";
-import DepartmentCampaigns from "./AllDepartmentCampaigns";
+import AllDepartments from "./AllDepartments";
+import AllDepartmentCampaigns from "./AllDepartmentCampaigns";
 
-const Offices = () => {
+const Teams = () => {
   return (
     <>
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Offices</h3>
+            <h3 className="page-title">Teams</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Offices</li>
+              <li className="breadcrumb-item active">Teams</li>
             </ul>
           </div>
         </div>
@@ -45,11 +45,11 @@ const Offices = () => {
       <div>
         <div className="row tab-content">
           <div id="tab_departments" className="col-12 tab-pane show active">
-            <Departments />
+            <AllDepartments />
           </div>
 
           <div id="tab_campaigns" className="col-12 tab-pane">
-            <DepartmentCampaigns />
+            <AllDepartmentCampaigns />
           </div>
         </div>
       </div>
@@ -57,4 +57,4 @@ const Offices = () => {
   );
 };
 
-export default Offices;
+export default Teams;

@@ -1,29 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
-import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices.js";
 import moment from "moment";
 
-const DepartmentCampaigns = () => {
-  const { user, ErrorHandler } = useAppContext();
+const AllDepartmentCampaigns = () => {
+  const { ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
-  const [mode, setMode] = useState("Create");
-  const [office, setOffice] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
-
-  const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
-
-  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-    canCreateAndEdit.includes(role)
-  );
 
   // All Department Campaign:
   const fetchAllDepartmentCampaign = useCallback(async () => {
@@ -69,16 +58,6 @@ const DepartmentCampaigns = () => {
     fetchAllDepartmentCampaign();
   }, [fetchAllDepartmentCampaign]);
 
-  const handleCreate = () => {
-    setMode("Create");
-    setOffice(DepartmentCampaignForm);
-  };
-
-  const handleEdit = (row) => {
-    setMode("Edit");
-    setOffice(row);
-  };
-
   const columns = [
     {
       dataField: "title",
@@ -99,47 +78,10 @@ const DepartmentCampaigns = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    CurrentUserCanCreateAndEdit && {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#CampaignFormModal"
-              onClick={() => handleEdit(row)}
-            >
-              Edit
-            </button>
-          </div>
-        </div>
-      ),
-    },
   ];
 
   return (
     <div className="tab-pane" id="tab_campaigns">
-      <div style={{ marginBottom: "50px" }}>
-        <div className="row">
-          {CurrentUserCanCreateAndEdit ? (
-            <div className="col-auto float-right ml-auto">
-              <a
-                href="/"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#CampaignFormModal"
-                onClick={handleCreate}
-              >
-                <i className="fa fa-plus"></i> Add Campaign
-              </a>
-            </div>
-          ) : null}
-        </div>
-      </div>
-
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
@@ -154,14 +96,8 @@ const DepartmentCampaigns = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-
-      <CampaignFormModal
-        mode={mode}
-        data={office}
-        fetchAllCampaigns={fetchAllDepartmentCampaign}
-      />
     </div>
   );
 };
 
-export default DepartmentCampaigns;
+export default AllDepartmentCampaigns;
