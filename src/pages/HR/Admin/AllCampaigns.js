@@ -5,7 +5,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
 
-const AllDepartmentCampaigns = () => {
+const AllCampaigns = () => {
   const { ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaigns, setCampaigns] = useState([]);
@@ -14,8 +14,8 @@ const AllDepartmentCampaigns = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Department Campaign:
-  const fetchAllDepartmentCampaign = useCallback(async () => {
+  // All Campaign:
+  const fetchAllCampaigns = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/api/v1/offices.json", {
         headers: {
@@ -39,12 +39,12 @@ const AllDepartmentCampaigns = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartmentCampaign = resData.map((e, index) => ({
+      const formattedCampaign = resData.map((e, index) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setCampaigns(formattedDepartmentCampaign);
+      setCampaigns(formattedCampaign);
       setLoading(false);
     } catch (error) {
       const component = "Campaign Error:";
@@ -55,8 +55,8 @@ const AllDepartmentCampaigns = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartmentCampaign();
-  }, [fetchAllDepartmentCampaign]);
+    fetchAllCampaigns();
+  }, [fetchAllCampaigns]);
 
   const columns = [
     {
@@ -100,4 +100,4 @@ const AllDepartmentCampaigns = () => {
   );
 };
 
-export default AllDepartmentCampaigns;
+export default AllCampaigns;

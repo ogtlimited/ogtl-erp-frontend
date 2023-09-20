@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import AllDepartments from "./AllDepartments";
-import AllDepartmentCampaigns from "./AllDepartmentCampaigns";
+import AllCampaigns from "./AllCampaigns";
 
 const Teams = () => {
   return (
@@ -49,7 +49,7 @@ const Teams = () => {
           </div>
 
           <div id="tab_campaigns" className="col-12 tab-pane">
-            <AllDepartmentCampaigns />
+            <AllCampaigns />
           </div>
         </div>
       </div>

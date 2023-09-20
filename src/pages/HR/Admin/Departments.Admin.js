@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import { DepartmentFormModal } from "../../../components/Modal/DepartmentFormModal";
 import { DepartmentForm } from "../../../components/FormJSON/CreateOffices";
@@ -86,7 +87,16 @@ const Departments = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "40%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => (
+        <p>
+          <Link
+            to={`/dashboard/hr/departments/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
+            {val?.toUpperCase()}
+          </Link>
+        </p>
+      ),
     },
     {
       dataField: "created_at",
