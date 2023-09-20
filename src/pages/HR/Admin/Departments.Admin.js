@@ -50,7 +50,7 @@ const Departments = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartments = resData.map((e, index) => ({
+      const formattedDepartments = resData.map((e) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));

@@ -40,7 +40,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/offices.json`, {
+      const response = await axiosInstance.post(`/api/v1/campaigns.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -76,7 +76,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
     const id = office.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/offices/${id}.json`, {
+      const response = await axiosInstance.patch(`/api/v1/campaigns/${id}.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -141,6 +141,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
                         className="form-control"
                         value={office.title}
                         onChange={handleFormChange}
+                        required
                       />
                     </div>
                   </div>
@@ -155,6 +156,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
                         className="form-control"
                         value={office.leave_approval_level}
                         onChange={handleFormChange}
+                        required
                       />
                     </div>
                   </div>

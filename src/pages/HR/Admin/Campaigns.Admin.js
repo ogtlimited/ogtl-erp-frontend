@@ -2,9 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
+import { CampaignForm } from "../../../components/FormJSON/CreateOffices";
 import moment from "moment";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
@@ -26,23 +27,21 @@ const Campaigns = () => {
     canCreateAndEdit.includes(role)
   );
 
-   // All Department Campaign:
-   const fetchAllDepartmentCampaign = useCallback(async () => {
+  // All Campaign:
+  const fetchAllCampaign = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/campaigns.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "campaign",
           pages: page,
           limit: sizePerPage,
         },
       });
-      // console.log("All campaigns.", response?.data);
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.campaigns;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -51,12 +50,12 @@ const Campaigns = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartmentCampaign = resData.map((e, index) => ({
+      const formattedCampaign = resData.map((e) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setCampaigns(formattedDepartmentCampaign);
+      setCampaigns(formattedCampaign);
       setLoading(false);
     } catch (error) {
       const component = "Campaign Error:";
@@ -67,12 +66,12 @@ const Campaigns = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartmentCampaign();
-  }, [fetchAllDepartmentCampaign]);
+    fetchAllCampaign();
+  }, [fetchAllCampaign]);
 
   const handleCreate = () => {
     setMode("Create");
-    setOffice(DepartmentCampaignForm);
+    setOffice(CampaignForm);
   };
 
   const handleEdit = (row) => {
@@ -83,10 +82,19 @@ const Campaigns = () => {
   const columns = [
     {
       dataField: "title",
-      text: "Office",
+      text: "Campaign",
       sort: true,
       headerStyle: { width: "40%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => (
+        <p>
+          <Link
+            to={`/dashboard/hr/campaigns/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
+            {val?.toUpperCase()}
+          </Link>
+        </p>
+      ),
     },
     {
       dataField: "created_at",
@@ -166,7 +174,7 @@ const Campaigns = () => {
       <CampaignFormModal
         mode={mode}
         data={office}
-        fetchAllCampaigns={fetchAllDepartmentCampaign}
+        fetchAllCampaigns={fetchAllCampaign}
       />
     </>
   );
