@@ -52,19 +52,19 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
         },
       });
 
-      goToTop();
       showAlert(true, `Department successfully created`, "alert alert-success");
       fetchAllDepartments();
       $("#DepartmentFormModal").modal("toggle");
-
+      
+      goToTop();
       setOffice(data);
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
-      goToTop();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#DepartmentFormModal").modal("toggle");
-
+      
+      goToTop();
       setLoading(false);
     }
   };

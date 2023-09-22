@@ -52,19 +52,18 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
         },
       });
 
-      goToTop();
       showAlert(true, `Campaign successfully created`, "alert alert-success");
       fetchAllCampaigns();
       $("#CampaignFormModal").modal("toggle");
-
+      
       setOffice(data);
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
-      goToTop();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#CampaignFormModal").modal("toggle");
-
+      
+      goToTop();
       setLoading(false);
     }
   };
@@ -88,18 +87,18 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
         },
       });
 
-      goToTop();
       showAlert(true, `Campaign successfully updated`, "alert alert-success");
       fetchAllCampaigns();
       $("#CampaignFormModal").modal("toggle");
-
+      
+      // goToTop();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
-      goToTop();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#CampaignFormModal").modal("toggle");
-
+      
+      goToTop();
       setLoading(false);
     }
   };

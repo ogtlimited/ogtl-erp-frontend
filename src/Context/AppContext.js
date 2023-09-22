@@ -180,19 +180,18 @@ const AppProvider = (props) => {
   const fetchAllCampaigns = async () => {
     setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/campaigns.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "campaign",
           pages: 1,
           limit: 1000,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.campaigns;
 
       const formattedCampaigns = resData
         .map((e) => ({
@@ -212,19 +211,18 @@ const AppProvider = (props) => {
   const fetchAllDepartments = async () => {
     setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/departments.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "department",
           pages: 1,
           limit: 1000,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.departments;
 
       const formattedDepartments = resData
         .map((e) => ({

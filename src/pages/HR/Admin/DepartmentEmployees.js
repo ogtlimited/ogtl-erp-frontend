@@ -18,50 +18,50 @@ const DepartmentEmployees = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Department Employees:
-  const fetchAllDepartmentEmployees = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/leaders.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-        },
-      });
+  // // All Department Employees:
+  // const fetchAllDepartmentEmployees = useCallback(async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/api/v1/leaders.json", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420",
+  //       },
+  //       params: {
+  //         page: page,
+  //         limit: sizePerPage,
+  //       },
+  //     });
 
-      const resData = response?.data?.data?.leaders;
-      const totalPages = response?.data?.data?.total_pages;
+  //     const resData = response?.data?.data?.leaders;
+  //     const totalPages = response?.data?.data?.total_pages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
+  //     const thisPageLimit = sizePerPage;
+  //     const thisTotalPageSize = totalPages;
 
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+  //     setSizePerPage(thisPageLimit);
+  //     setTotalPages(thisTotalPageSize);
 
-      const mapp = resData.map((e) => {
-        return {
-          ...e,
-          fullName: e?.first_name + " " + e?.last_name,
-        };
-      });
+  //     const mapp = resData.map((e) => {
+  //       return {
+  //         ...e,
+  //         fullName: e?.first_name + " " + e?.last_name,
+  //       };
+  //     });
 
-      setDepartmentEmployees(mapp);
-      setLoading(false);
-    } catch (error) {
-      const component = "All Leaders:";
-      ErrorHandler(error, component);
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  //     setDepartmentEmployees(mapp);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     const component = "All Leaders:";
+  //     ErrorHandler(error, component);
+  //     setLoading(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [page, sizePerPage]);
 
-  useEffect(() => {
-    fetchAllDepartmentEmployees();
-  }, [fetchAllDepartmentEmployees]);
+  // useEffect(() => {
+  //   fetchAllDepartmentEmployees();
+  // }, [fetchAllDepartmentEmployees]);
 
   const columns = [
     {

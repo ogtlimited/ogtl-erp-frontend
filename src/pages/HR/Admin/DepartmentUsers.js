@@ -34,9 +34,9 @@ const DepartmentUsers = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
-                  href="#tab_department_employees"
+                  href="#tab_department_campaigns"
                 >
-                  Employees
+                  Campaigns
                 </a>
               </li>
 
@@ -44,9 +44,9 @@ const DepartmentUsers = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_department_campaigns"
+                  href="#tab_department_employees"
                 >
-                  Campaigns
+                  Employees
                 </a>
               </li>
 
@@ -67,14 +67,14 @@ const DepartmentUsers = () => {
       <div>
         <div className="row tab-content">
           <div
-            id="tab_department_employees"
-            className="col-12 tab-pane show active"
+            id="tab_department_campaigns"
+            className="col-12 tab-pane  show active"
           >
-            <DepartmentEmployees />
+            <DepartmentCampaigns />
           </div>
 
-          <div id="tab_department_campaigns" className="col-12 tab-pane">
-            <DepartmentCampaigns />
+          <div id="tab_department_employees" className="col-12 tab-pane">
+            <DepartmentEmployees />
           </div>
 
           <div id="tab_department_supervisors" className="col-12 tab-pane">

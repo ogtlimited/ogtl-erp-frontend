@@ -149,7 +149,7 @@ const Departments = () => {
                 data-target="#DepartmentFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Department
+                <i className="fa fa-plus"></i> Create Department
               </a>
             ) : null}
           </div>

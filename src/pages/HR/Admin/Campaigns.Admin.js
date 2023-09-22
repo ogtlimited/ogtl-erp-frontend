@@ -149,7 +149,7 @@ const Campaigns = () => {
                 data-target="#CampaignFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Add Campaign
+                <i className="fa fa-plus"></i> Create Campaign
               </a>
             ) : null}
           </div>

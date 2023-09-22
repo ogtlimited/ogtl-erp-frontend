@@ -9,10 +9,11 @@ export const CampaignForm = {
 };
 
 export const DepartmentCampaignForm = {
-  // title: "",
-  // leave_approval_level: 0,
   operation_department_id: "",
   operation_campaign_id: "",
+
+  department_title: "",
+  campaign_title: "",
 };
 
 export const officeTypeOptions = [
