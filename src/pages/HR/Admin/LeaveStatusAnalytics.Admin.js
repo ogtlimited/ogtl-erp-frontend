@@ -43,7 +43,7 @@ const AllLeaveStatusAdmin = () => {
     var businessDays = 0;
 
     while (day.isSameOrBefore(endDate, "day")) {
-      if (day.day() !== 0 && day.day() !== 5) businessDays++;
+      if (day.day() !== 0 && day.day() !== 6) businessDays++;
       day.add(1, "d");
     }
     return businessDays;
