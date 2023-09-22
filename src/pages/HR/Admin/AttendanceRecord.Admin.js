@@ -259,23 +259,30 @@ const AttendanceRecord = () => {
 
       <div className="daily-attendance-card-group">
         <div className="daily-attendance-card">
-          <div className="card-body">
+          <span>Total Clock In</span>
+          <div className="card-body inner">
             <span className="dash-widget-icon">
               <i className="las la-clock"></i>
             </span>
             <div className="daily-attendance-card-info">
               {loading ? (
-                <h3>-</h3>
+                <h3>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/xjovhxra.json"
+                    trigger="loop"
+                    colors="primary:#121331,secondary:#08a88a"
+                  ></lord-icon>
+                </h3>
               ) : (
-                <h3>{dailyAttendanceSummary?.clock_in || "-"}</h3>
+                <h3>{dailyAttendanceSummary?.clock_in || "0"}</h3>
               )}
             </div>
           </div>
-          <span>Total Clock In</span>
         </div>
 
         <div className="daily-attendance-card">
-          <div className="card-body">
+          <span>Total Clock Out</span>
+          <div className="card-body inner">
             <span className="dash-widget-icon">
               <i
                 className="las la-clock"
@@ -284,17 +291,22 @@ const AttendanceRecord = () => {
             </span>
             <div className="daily-attendance-card-info">
               {loading ? (
-                <h3>-</h3>
+                <h3>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/xjovhxra.json"
+                    trigger="loop"
+                    colors="primary:#121331,secondary:#08a88a"
+                  ></lord-icon>
+                </h3>
               ) : (
-                <h3> {dailyAttendanceSummary?.clock_out || "-"} </h3>
+                <h3> {dailyAttendanceSummary?.clock_out || "0"} </h3>
               )}
             </div>
           </div>
-          <span>Total Clock Out</span>
         </div>
 
         <div className="daily-attendance-card">
-          <div className="card-body">
+          <div className="card-body inner">
             <span className="dash-widget-icon">
               <i
                 className="las la-calendar"
@@ -303,7 +315,13 @@ const AttendanceRecord = () => {
             </span>
             <div className="daily-attendance-card-info">
               {loading ? (
-                <h3>-</h3>
+                <h3>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/xjovhxra.json"
+                    trigger="loop"
+                    colors="primary:#121331,secondary:#08a88a"
+                  ></lord-icon>
+                </h3>
               ) : (
                 <h3>
                   {" "}
@@ -314,7 +332,6 @@ const AttendanceRecord = () => {
               )}
             </div>
           </div>
-          <span>Date</span>
         </div>
       </div>
 

@@ -103,6 +103,7 @@ const CapturedBiometricsAdmin = () => {
 
       <div className="hr-employee-card-group">
         <div className="hr-dashboard-card">
+          <span>Total Biometrics Captured</span>
           <div className="card-body">
             <span className="dash-widget-icon">
               <i className="las la-fingerprint"></i>
@@ -111,7 +112,6 @@ const CapturedBiometricsAdmin = () => {
               <h3>{totalCapturedBiometrics}</h3>
             </div>
           </div>
-          <span>Total Biometrics Captured</span>
         </div>
       </div>
 
