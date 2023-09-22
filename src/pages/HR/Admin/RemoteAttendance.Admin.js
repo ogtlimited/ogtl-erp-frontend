@@ -299,13 +299,18 @@ const RemoteAttendanceAdmin = () => {
             </span>
             <div className="daily-attendance-card-info">
               {loading ? (
-                <h3>-</h3>
+                <h3>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/xjovhxra.json"
+                    trigger="loop"
+                    colors="primary:#121331,secondary:#08a88a"
+                  ></lord-icon>
+                </h3>
               ) : (
                 <h3> {moment(date).format("Do MMMM, YYYY")} </h3>
               )}
             </div>
           </div>
-          <span>Date</span>
         </div>
       </div>
 
