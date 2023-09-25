@@ -1,26 +1,21 @@
-// *IN USE
-
-/*eslint-disable jsx-a11y/anchor-is-valid*/
-
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../../../services/api";
-import { Link } from "react-router-dom";
-import { useAppContext } from "../../../Context/AppContext";
-import { DepartmentFormModal } from "../../../components/Modal/DepartmentFormModal";
-import { DepartmentForm } from "../../../components/FormJSON/CreateOffices";
-import moment from "moment";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import { useParams } from "react-router-dom";
+import moment from "moment";
+import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
+import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
+import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
 
-const Departments = () => {
+const DepartmentTeams = () => {
+  const { id } = useParams();
   const { user, ErrorHandler } = useAppContext();
-  const [loading, setLoading] = useState(false);
-  const [departments, setDepartments] = useState([]);
-  const [mode, setMode] = useState("Create");
+  const [loading, setLoading] = useState(true);
+  const [departmentCampaigns, setDepartmentCampaigns] = useState([]);
+  const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
-
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -29,21 +24,28 @@ const Departments = () => {
     canCreateAndEdit.includes(role)
   );
 
-  // All Departments:
-  const fetchAllDepartments = useCallback(async () => {
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
+
+  // All Department Campaign:
+  const fetchAllDepartmentCampaigns = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/departments.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          pages: page,
-          limit: sizePerPage,
-        },
-      });
-      const resData = response?.data?.data?.departments;
+      const response = await axiosInstance.get(
+        `/api/v1/departments_campaigns/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: page,
+            limit: sizePerPage,
+          },
+        }
+      );
+      const resData = response?.data?.data?.campaigns;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -52,15 +54,15 @@ const Departments = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartments = resData.map((e) => ({
+      const formattedDepartmentCampaign = resData.map((e) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setDepartments(formattedDepartments);
+      setDepartmentCampaigns(formattedDepartmentCampaign);
       setLoading(false);
     } catch (error) {
-      const component = "Department Error:";
+      const component = "Campaign Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -68,12 +70,12 @@ const Departments = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartments();
-  }, [fetchAllDepartments]);
+    fetchAllDepartmentCampaigns();
+  }, [fetchAllDepartmentCampaigns]);
 
   const handleCreate = () => {
-    setMode("Create");
-    setOffice(DepartmentForm);
+    setMode("Add");
+    setOffice(DepartmentCampaignForm);
   };
 
   const handleEdit = (row) => {
@@ -84,19 +86,10 @@ const Departments = () => {
   const columns = [
     {
       dataField: "title",
-      text: "Department",
+      text: "Campaign",
       sort: true,
-      headerStyle: { width: "40%" },
-      formatter: (val, row) => (
-        <p>
-          <Link
-            to={`/dashboard/hr/departments/${row?.title}/${row.id}`}
-            className="attendance-record-for-office"
-          >
-            {val?.toUpperCase()}
-          </Link>
-        </p>
-      ),
+      headerStyle: { width: "30%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "created_at",
@@ -120,7 +113,7 @@ const Departments = () => {
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              data-target="#DepartmentFormModal"
+              data-target="#CampaignFormModal"
               onClick={() => handleEdit(row)}
             >
               Edit
@@ -132,36 +125,29 @@ const Departments = () => {
   ];
 
   return (
-    <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Departments</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Departments</li>
-            </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateAndEdit ? (
+    <div className="tab-pane" id="tab_department_campaigns">
+      <div style={{ marginBottom: "50px" }}>
+        <div className="row">
+          {CurrentUserCanCreateAndEdit && (
+            <div className="col-auto float-right ml-auto">
               <a
-                href="/"
-                className="btn add-btn"
+                href="#"
+                className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentFormModal"
+                data-target="#DepartmentCampaignFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Create Department
+                Add Campaign
               </a>
-            ) : null}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
       <div className="row">
         <UniversalPaginatedTable
-          data={departments}
           columns={columns}
+          data={departmentCampaigns}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -173,13 +159,19 @@ const Departments = () => {
         />
       </div>
 
-      <DepartmentFormModal
+      <DepartmentCampaignFormModal
         mode={mode}
         data={office}
-        fetchAllDepartments={fetchAllDepartments}
+        fetchAllDepartmentCampaigns={fetchAllDepartmentCampaigns}
       />
-    </>
+
+      <CampaignFormModal
+        mode={mode}
+        data={office}
+        fetchAllCampaigns={fetchAllDepartmentCampaigns}
+      />
+    </div>
   );
 };
 
-export default Departments;
+export default DepartmentTeams;

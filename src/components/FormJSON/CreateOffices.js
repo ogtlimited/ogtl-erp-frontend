@@ -8,6 +8,10 @@ export const CampaignForm = {
   leave_approval_level: "",
 };
 
+export const TeamForm = {
+  title: "",
+};
+
 export const DepartmentCampaignForm = {
   operation_department_id: "",
   operation_campaign_id: "",

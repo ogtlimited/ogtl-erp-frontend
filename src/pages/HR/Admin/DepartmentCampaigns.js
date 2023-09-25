@@ -5,16 +5,12 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import {
-  DepartmentCampaignForm,
-  CampaignForm,
-} from "../../../components/FormJSON/CreateOffices";
+import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
 import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
 import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
 
 const DepartmentCampaigns = () => {
   const { id } = useParams();
-  const { title } = useParams();
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [departmentCampaigns, setDepartmentCampaigns] = useState([]);
@@ -49,7 +45,6 @@ const DepartmentCampaigns = () => {
           },
         }
       );
-      console.log("All dept campaigns.", response?.data);
       const resData = response?.data?.data?.campaigns;
       const totalPages = response?.data?.data?.pages;
 

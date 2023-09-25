@@ -44,6 +44,16 @@ const DepartmentUsers = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
+                  href="#tab_department_teams"
+                >
+                  Teams
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
                   href="#tab_department_employees"
                 >
                   Employees
@@ -71,6 +81,10 @@ const DepartmentUsers = () => {
             className="col-12 tab-pane  show active"
           >
             <DepartmentCampaigns />
+          </div>
+
+          <div id="tab_department_teams" className="col-12 tab-pane">
+            <DepartmentEmployees />
           </div>
 
           <div id="tab_department_employees" className="col-12 tab-pane">
