@@ -3,8 +3,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { useParams } from "react-router-dom";
-import DepartmentEmployees from "./DepartmentEmployees";
 import DepartmentCampaigns from "./DepartmentCampaigns";
+import DepartmentTeams from "./DepartmentTeams";
+import DepartmentEmployees from "./DepartmentEmployees";
 import DepartmentSupervisors from "./DepartmentSupervisors";
 
 const DepartmentUsers = () => {
@@ -84,7 +85,7 @@ const DepartmentUsers = () => {
           </div>
 
           <div id="tab_department_teams" className="col-12 tab-pane">
-            <DepartmentEmployees />
+            <DepartmentTeams />
           </div>
 
           <div id="tab_department_employees" className="col-12 tab-pane">

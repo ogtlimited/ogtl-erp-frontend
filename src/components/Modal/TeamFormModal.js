@@ -111,7 +111,7 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-dialog modal-dialog-centered col-md-6">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">

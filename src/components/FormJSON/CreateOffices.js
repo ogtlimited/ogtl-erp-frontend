@@ -20,6 +20,14 @@ export const DepartmentCampaignForm = {
   campaign_title: "",
 };
 
+export const DepartmentTeamForm = {
+  operation_department_id: "",
+  operation_team_id: "",
+
+  department_title: "",
+  team_title: "",
+};
+
 export const officeTypeOptions = [
   {
     label: "Department",

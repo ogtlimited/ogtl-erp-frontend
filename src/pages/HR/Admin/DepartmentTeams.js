@@ -5,15 +5,15 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
-import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
-import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
+import { DepartmentTeamForm } from "../../../components/FormJSON/CreateOffices";
+import { DepartmentTeamFormModal } from "../../../components/Modal/DepartmentTeamFormModal";
+import { TeamFormModal } from "../../../components/Modal/TeamFormModal";
 
 const DepartmentTeams = () => {
   const { id } = useParams();
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
-  const [departmentCampaigns, setDepartmentCampaigns] = useState([]);
+  const [departmentTeams, setDepartmentTeams] = useState([]);
   const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
 
@@ -28,11 +28,11 @@ const DepartmentTeams = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Department Campaign:
-  const fetchAllDepartmentCampaigns = useCallback(async () => {
+  // All Department Teams:
+  const fetchAllDepartmentTeams = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/departments_campaigns/${id}.json`,
+        `/api/v1/departments_teams/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const DepartmentTeams = () => {
           },
         }
       );
-      const resData = response?.data?.data?.campaigns;
+      const resData = response?.data?.data?.teams;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -54,15 +54,15 @@ const DepartmentTeams = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartmentCampaign = resData.map((e) => ({
+      const formattedDepartmentTeam = resData.map((e) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setDepartmentCampaigns(formattedDepartmentCampaign);
+      setDepartmentTeams(formattedDepartmentTeam);
       setLoading(false);
     } catch (error) {
-      const component = "Campaign Error:";
+      const component = "Department Team Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -70,12 +70,12 @@ const DepartmentTeams = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartmentCampaigns();
-  }, [fetchAllDepartmentCampaigns]);
+    fetchAllDepartmentTeams();
+  }, [fetchAllDepartmentTeams]);
 
   const handleCreate = () => {
     setMode("Add");
-    setOffice(DepartmentCampaignForm);
+    setOffice(DepartmentTeamForm);
   };
 
   const handleEdit = (row) => {
@@ -86,7 +86,7 @@ const DepartmentTeams = () => {
   const columns = [
     {
       dataField: "title",
-      text: "Campaign",
+      text: "Team",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
@@ -96,12 +96,6 @@ const DepartmentTeams = () => {
       text: "Date Created",
       sort: true,
       headerStyle: { width: "30%" },
-    },
-    {
-      dataField: "leave_approval_level",
-      text: "Leave Approval Level",
-      sort: true,
-      headerStyle: { width: "20%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
@@ -113,7 +107,7 @@ const DepartmentTeams = () => {
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              data-target="#CampaignFormModal"
+              data-target="#TeamFormModal"
               onClick={() => handleEdit(row)}
             >
               Edit
@@ -125,7 +119,7 @@ const DepartmentTeams = () => {
   ];
 
   return (
-    <div className="tab-pane" id="tab_department_campaigns">
+    <div className="tab-pane" id="tab_department_teams">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
           {CurrentUserCanCreateAndEdit && (
@@ -134,10 +128,10 @@ const DepartmentTeams = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentCampaignFormModal"
+                data-target="#DepartmentTeamFormModal"
                 onClick={handleCreate}
               >
-                Add Campaign
+                Add Team
               </a>
             </div>
           )}
@@ -147,7 +141,7 @@ const DepartmentTeams = () => {
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
-          data={departmentCampaigns}
+          data={departmentTeams}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -159,16 +153,16 @@ const DepartmentTeams = () => {
         />
       </div>
 
-      <DepartmentCampaignFormModal
+      <DepartmentTeamFormModal
         mode={mode}
         data={office}
-        fetchAllDepartmentCampaigns={fetchAllDepartmentCampaigns}
+        fetchAllDepartmentTeams={fetchAllDepartmentTeams}
       />
 
-      <CampaignFormModal
+      <TeamFormModal
         mode={mode}
         data={office}
-        fetchAllCampaigns={fetchAllDepartmentCampaigns}
+        fetchAllTeams={fetchAllDepartmentTeams}
       />
     </div>
   );
