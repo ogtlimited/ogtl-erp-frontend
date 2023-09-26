@@ -28,6 +28,22 @@ export const DepartmentTeamForm = {
   team_title: "",
 };
 
+export const DepartmentSupervisorForm = {
+  department_id: "",
+  supervisor_id: "",
+
+  department_title: "",
+  supervisor_title: "",
+};
+
+export const DepartmentEmployeeForm = {
+  operation_department_id: "",
+  employee_id: "",
+
+  department_title: "",
+  employee_title: "",
+};
+
 export const officeTypeOptions = [
   {
     label: "Department",

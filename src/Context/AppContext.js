@@ -33,6 +33,7 @@ const AppProvider = (props) => {
   const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectCampaigns, setSelectCampaigns] = useState([]);
   const [selectTeams, setSelectTeams] = useState([]);
+  const [selectLeaders, setSelectLeaders] = useState([]);
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
@@ -301,6 +302,37 @@ const AppProvider = (props) => {
     }
   };
 
+  // All Leaders:
+  const fetchAllLeaders = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/leaders.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.leaders;
+
+      const formattedLeaders = resData
+        .map((e) => ({
+          label: e?.first_name + " " + e?.last_name,
+          value: e?.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectLeaders(formattedLeaders);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
   // All Branches:
   const fetchAllBranches = async () => {
     setLoadingSelect(true);
@@ -424,6 +456,7 @@ const AppProvider = (props) => {
         fetchAllDepartments();
         fetchAllCampaigns();
         fetchAllTeams();
+        fetchAllLeaders();
         fetchAllDesignations();
         fetchAllBranches();
         fetchAllLeaveTypes();
@@ -435,6 +468,7 @@ const AppProvider = (props) => {
         fetchAllDepartments();
         fetchAllCampaigns();
         fetchAllTeams();
+        fetchAllLeaders();
         fetchAllDesignations();
         fetchAllLeaveTypes();
         fetchHRLeavesNotificationCount();
@@ -458,10 +492,14 @@ const AppProvider = (props) => {
         selectCampaigns,
         setSelectCampaigns,
         fetchAllCampaigns,
-        
+
         selectTeams,
         setSelectTeams,
         fetchAllTeams,
+
+        selectLeaders,
+        setSelectLeaders,
+        fetchAllLeaders,
 
         selectDesignations,
         setSelectDesignations,

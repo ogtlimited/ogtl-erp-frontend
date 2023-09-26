@@ -413,6 +413,14 @@ export default function Router() {
               ),
             },
             {
+              path: "campaigns/:title/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <CampaignUsers />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "teams",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1106,6 +1114,7 @@ const RemoteAttendanceAdmin = Loadable(
 const Departments = Loadable(lazy(() => import("../pages/HR/Admin/Departments.Admin")));
 const DepartmentUsers = Loadable(lazy(() => import("../pages/HR/Admin/DepartmentUsers")));
 const Campaigns = Loadable(lazy(() => import("../pages/HR/Admin/Campaigns.Admin")));
+const CampaignUsers = Loadable(lazy(() => import("../pages/HR/Admin/CampaignUsers")));
 const Teams = Loadable(lazy(() => import("../pages/HR/Admin/Teams.Admin")));
 const BranchAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Branch.Admin"))

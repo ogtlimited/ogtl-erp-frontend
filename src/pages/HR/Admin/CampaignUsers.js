@@ -8,7 +8,7 @@ import DepartmentTeams from "./DepartmentTeams";
 import DepartmentEmployees from "./DepartmentEmployees";
 import DepartmentSupervisors from "./DepartmentSupervisors";
 
-const DepartmentUsers = () => {
+const CampaignUsers = () => {
   const { title } = useParams();
 
   return (
@@ -101,4 +101,4 @@ const DepartmentUsers = () => {
   );
 };
 
-export default DepartmentUsers;
+export default CampaignUsers;

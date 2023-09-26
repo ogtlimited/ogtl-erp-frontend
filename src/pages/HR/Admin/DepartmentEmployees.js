@@ -1,102 +1,171 @@
-// *IN USE
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import moment from "moment";
+import { DepartmentEmployeeForm } from "../../../components/FormJSON/CreateOffices";
+import { DepartmentEmployeeFormModal } from "../../../components/Modal/DepartmentEmployeeFormModal";
 
 const DepartmentEmployees = () => {
   const { id } = useParams();
-  const { title } = useParams();
-  const { ErrorHandler } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
-  const [departmentEmployees, setDepartmentEmployees] = useState([]);
+  const [departmentEmployee, setDepartmentEmployee] = useState([]);
+  const [mode, setMode] = useState("Add");
+  const [office, setOffice] = useState([]);
+  // const [selectedRow, setSelectedRow] = useState(null);
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // // All Department Employees:
-  // const fetchAllDepartmentEmployees = useCallback(async () => {
-  //   try {
-  //     const response = await axiosInstance.get("/api/v1/leaders.json", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //       params: {
-  //         page: page,
-  //         limit: sizePerPage,
-  //       },
-  //     });
+  // All Department Employees:
+  const fetchAllDepartmentEmployees = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/departments_employees/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: page,
+            limit: sizePerPage,
+          },
+        }
+      );
+      const resData = response?.data?.data?.employees;
+      const totalPages = response?.data?.data?.pages;
 
-  //     const resData = response?.data?.data?.leaders;
-  //     const totalPages = response?.data?.data?.total_pages;
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
 
-  //     const thisPageLimit = sizePerPage;
-  //     const thisTotalPageSize = totalPages;
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
 
-  //     setSizePerPage(thisPageLimit);
-  //     setTotalPages(thisTotalPageSize);
+      const formattedDepartmentEmployee = resData.map((e) => ({
+        ...e,
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+      }));
 
-  //     const mapp = resData.map((e) => {
-  //       return {
-  //         ...e,
-  //         fullName: e?.first_name + " " + e?.last_name,
-  //       };
-  //     });
+      setDepartmentEmployee(formattedDepartmentEmployee);
+      setLoading(false);
+    } catch (error) {
+      const component = "Department Employees Error:";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
-  //     setDepartmentEmployees(mapp);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     const component = "All Leaders:";
-  //     ErrorHandler(error, component);
-  //     setLoading(false);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [page, sizePerPage]);
+  useEffect(() => {
+    fetchAllDepartmentEmployees();
+  }, [fetchAllDepartmentEmployees]);
 
-  // useEffect(() => {
-  //   fetchAllDepartmentEmployees();
-  // }, [fetchAllDepartmentEmployees]);
+  const handleCreate = () => {
+    setMode("Add");
+    setOffice(DepartmentEmployeeForm);
+  };
+
+  // const handleEdit = (row) => {
+  //   setMode("Edit");
+  //   setOffice(row);
+  // };
 
   const columns = [
     {
-      dataField: "fullName",
-      text: "Employee Name",
+      dataField: "name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.designation}</span>
+            {value} <span>{row?.department}</span>
           </Link>
         </h2>
       ),
     },
     {
       dataField: "ogid",
-      text: "Employee ID",
+      text: "OGID",
       sort: true,
       headerStyle: { width: "20%" },
     },
     {
       dataField: "email",
-      text: "Company Email",
+      text: "Email",
       sort: true,
       headerStyle: { width: "20%" },
     },
+    // CurrentUserCanCreateAndEdit && {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { width: "10%" },
+    //   formatter: (value, row) => (
+    //     <div className="dropdown dropdown-action text-right">
+    //       <a
+    //         href="#"
+    //         className="action-icon dropdown-toggle"
+    //         data-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //       </a>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           data-toggle="modal"
+    //           data-target="#exampleModal"
+    //           onClick={() => {
+    //             setSelectedRow(row);
+    //           }}
+    //         >
+    //           <i className="fa fa-trash m-r-5"></i> Remove
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
     <div className="tab-pane" id="tab_department_employees">
+      <div style={{ marginBottom: "50px" }}>
+        <div className="row">
+          {CurrentUserCanCreateAndEdit && (
+            <div className="col-auto float-right ml-auto">
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#DepartmentEmployeeFormModal"
+                onClick={handleCreate}
+              >
+                Add Employee
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
-          data={departmentEmployees}
+          data={departmentEmployee}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -107,6 +176,12 @@ const DepartmentEmployees = () => {
           setTotalPages={setTotalPages}
         />
       </div>
+
+      <DepartmentEmployeeFormModal
+        mode={mode}
+        data={office}
+        fetchAllDepartmentEmployees={fetchAllDepartmentEmployees}
+      />
     </div>
   );
 };
