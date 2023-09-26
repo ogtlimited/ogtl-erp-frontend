@@ -27,14 +27,6 @@ export const DepartmentEmployeeFormModal = ({
     setOffice(data);
   };
 
-  // const handleDepartmentSupervisorAction = async (e) => {
-  //   if (mode === "Add") {
-  //     return handleCreateDepartmentSupervisor(e);
-  //   } else {
-  //     return handleEditDepartmentSupervisor(e);
-  //   }
-  // };
-
   const handleCreateDepartmentEmployee = async (e) => {
     e.preventDefault();
 
@@ -76,43 +68,6 @@ export const DepartmentEmployeeFormModal = ({
       setLoading(false);
     }
   };
-
-  // const handleEditDepartmentSupervisor = async (e) => {
-  //   e.preventDefault();
-
-  //   setLoading(true);
-  //   const id = office.id;
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const response = await axiosInstance.patch(
-  //       `/api/v1/departments_supervisors/${id}.json`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "ngrok-skip-browser-warning": "69420",
-  //         },
-  //         payload: {
-  //           title: office.title,
-  //         },
-  //       }
-  //     );
-
-  //     goToTop();
-  //     showAlert(true, `Team successfully updated`, "alert alert-success");
-  //     fetchAllDepartmentTeams();
-  //     $("#TeamFormModal").modal("toggle");
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     goToTop();
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //     $("#TeamFormModal").modal("toggle");
-
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <>

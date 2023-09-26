@@ -16,7 +16,6 @@ const DepartmentSupervisor = () => {
   const [departmentSupervisor, setDepartmentSupervisor] = useState([]);
   const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
-  // const [selectedRow, setSelectedRow] = useState(null);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -79,11 +78,6 @@ const DepartmentSupervisor = () => {
     setOffice(DepartmentSupervisorForm);
   };
 
-  // const handleEdit = (row) => {
-  //   setMode("Edit");
-  //   setOffice(row);
-  // };
-
   const columns = [
     {
       dataField: "name",
@@ -110,36 +104,6 @@ const DepartmentSupervisor = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    // CurrentUserCanCreateAndEdit && {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { width: "10%" },
-    //   formatter: (value, row) => (
-    //     <div className="dropdown dropdown-action text-right">
-    //       <a
-    //         href="#"
-    //         className="action-icon dropdown-toggle"
-    //         data-toggle="dropdown"
-    //         aria-expanded="false"
-    //       >
-    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-    //       </a>
-    //       <div className="dropdown-menu dropdown-menu-right">
-    //         <a
-    //           className="dropdown-item"
-    //           href="#"
-    //           data-toggle="modal"
-    //           data-target="#exampleModal"
-    //           onClick={() => {
-    //             setSelectedRow(row);
-    //           }}
-    //         >
-    //           <i className="fa fa-trash m-r-5"></i> Remove
-    //         </a>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (
