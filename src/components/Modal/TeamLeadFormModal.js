@@ -7,12 +7,12 @@ import { useParams } from "react-router-dom";
 import $ from "jquery";
 import Select from "react-select";
 
-export const DepartmentSupervisorFormModal = ({
+export const TeamLeadFormModal = ({
   mode,
   data,
-  fetchAllDepartmentSupervisors,
+  fetchTeamLead,
 }) => {
-  const { selectLeaders, selectDepartments, showAlert, goToTop } =
+  const { selectLeaders, selectTeams, showAlert, goToTop } =
     useAppContext();
   const { id } = useParams();
   const { title } = useParams();
@@ -27,14 +27,14 @@ export const DepartmentSupervisorFormModal = ({
     setOffice(data);
   };
 
-  const handleCreateDepartmentSupervisor = async (e) => {
+  const handleAssignTeamLead = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(
-        `/api/v1/departments_supervisors.json`,
+        `/api/v1/teams_leads.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -42,8 +42,8 @@ export const DepartmentSupervisorFormModal = ({
             "ngrok-skip-browser-warning": "69420",
           },
           payload: {
-            department_id: +id,
-            supervisor_id: office.supervisor_id,
+            operation_team_id: +id,
+            team_lead_id: office.team_lead_id,
           },
         }
       );
@@ -51,11 +51,11 @@ export const DepartmentSupervisorFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.supervisor_title} successfully added to ${title} Department as a Supervisor`,
+        `${office?.lead_title} successfully assigned as ${title} Team Lead`,
         "alert alert-success"
       );
-      fetchAllDepartmentSupervisors();
-      $("#DepartmentSupervisorFormModal").modal("toggle");
+      fetchTeamLead();
+      $("#TeamLeadFormModal").modal("toggle");
 
       setOffice(data);
       setLoading(false);
@@ -63,7 +63,7 @@ export const DepartmentSupervisorFormModal = ({
       const errorMsg = error?.response?.data?.errors;
       goToTop();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      $("#DepartmentSupervisorFormModal").modal("toggle");
+      $("#TeamLeadFormModal").modal("toggle");
 
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export const DepartmentSupervisorFormModal = ({
     <>
       <div
         className="modal fade"
-        id="DepartmentSupervisorFormModal"
+        id="TeamLeadFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -82,7 +82,7 @@ export const DepartmentSupervisorFormModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {mode} Supervisor
+                {mode} Team Lead
               </h4>
               <button
                 type="button"
@@ -95,26 +95,26 @@ export const DepartmentSupervisorFormModal = ({
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleCreateDepartmentSupervisor}>
+              <form onSubmit={handleAssignTeamLead}>
                 <div className="row">
                   {mode === "Edit" ? (
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="department_id">
-                          Department
+                        <label htmlFor="operation_team_id">
+                          Team
                         </label>
                         <Select
-                          name="department_id"
-                          options={selectDepartments}
+                          name="operation_team_id"
+                          options={selectTeams}
                           value={{
-                            label: office?.department_title,
-                            value: office?.department_id,
+                            label: office?.team_title,
+                            value: office?.operation_team_id,
                           }}
                           onChange={(e) =>
                             setOffice({
                               ...office,
-                              department_id: e?.value,
-                              department_title: e?.label,
+                              operation_team_id: e?.value,
+                              team_title: e?.label,
                             })
                           }
                           style={{ display: "inline-block" }}
@@ -124,11 +124,11 @@ export const DepartmentSupervisorFormModal = ({
                   ) : (
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="department_id">
-                          Department
+                        <label htmlFor="operation_team_id">
+                          Team
                         </label>
                         <input
-                          name="department_id"
+                          name="operation_team_id"
                           type="text"
                           className="form-control"
                           value={title}
@@ -140,19 +140,19 @@ export const DepartmentSupervisorFormModal = ({
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="supervisor_id">Supervisor</label>
+                      <label htmlFor="team_lead_id">Team Lead</label>
                       <Select
-                        name="supervisor_id"
+                        name="team_lead_id"
                         options={selectLeaders}
                         value={{
-                          label: office?.supervisor_title,
-                          value: office?.supervisor_id,
+                          label: office?.lead_title,
+                          value: office?.team_lead_id,
                         }}
                         onChange={(e) =>
                           setOffice({
                             ...office,
-                            supervisor_id: e?.value,
-                            supervisor_title: e?.label,
+                            team_lead_id: e?.value,
+                            lead_title: e?.label,
                           })
                         }
                         style={{ display: "inline-block" }}

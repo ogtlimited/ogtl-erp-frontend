@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import moment from "moment";
 import { DepartmentTeamForm } from "../../../components/FormJSON/CreateOffices";
 import { DepartmentTeamFormModal } from "../../../components/Modal/DepartmentTeamFormModal";
@@ -89,7 +89,16 @@ const DepartmentTeams = () => {
       text: "Team",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => (
+        <p>
+          <Link
+            to={`/dashboard/hr/teams/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
+            {val?.toUpperCase()}
+          </Link>
+        </p>
+      ),
     },
     {
       dataField: "created_at",

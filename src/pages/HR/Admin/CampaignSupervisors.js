@@ -2,9 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
-import { useParams } from "react-router-dom";
 import moment from "moment";
 import { CampaignSupervisorForm } from "../../../components/FormJSON/CreateOffices";
 import { CampaignSupervisorFormModal } from "../../../components/Modal/CampaignSupervisorFormModal";

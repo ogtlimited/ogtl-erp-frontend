@@ -140,7 +140,7 @@ export const CampaignSupervisorFormModal = ({
 
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="supervisor_id">Leader</label>
+                      <label htmlFor="supervisor_id">Supervisor</label>
                       <Select
                         name="supervisor_id"
                         options={selectLeaders}

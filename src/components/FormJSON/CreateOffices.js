@@ -65,6 +65,21 @@ export const CampaignEmployeeForm = {
   employee_title: "",
 };
 
+export const TeamLeadForm = {
+  operation_team_id: "",
+  team_lead_id: "",
+
+  team_title: "",
+  lead_title: "",
+};
+export const TeamMemberForm = {
+  operation_team_id: "",
+  employee_id: "",
+
+  team_title: "",
+  employee_title: "",
+};
+
 export const officeTypeOptions = [
   {
     label: "Department",
