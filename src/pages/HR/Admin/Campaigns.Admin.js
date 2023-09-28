@@ -42,6 +42,7 @@ const Campaigns = () => {
         },
       });
       const resData = response?.data?.data?.campaigns;
+      console.log("This camp:", response?.data)
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;

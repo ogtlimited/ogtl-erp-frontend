@@ -3,17 +3,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
-import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
-import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
+import { CampaignTeamForm } from "../../../components/FormJSON/CreateOffices";
+import { CampaignTeamFormModal } from "../../../components/Modal/CampaignTeamFormModal";
+import { TeamFormModal } from "../../../components/Modal/TeamFormModal";
 
-const DepartmentCampaigns = () => {
+const CampaignTeams = () => {
   const { id } = useParams();
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
-  const [departmentCampaigns, setDepartmentCampaigns] = useState([]);
+  const [campaignTeams, setCampaignTeams] = useState([]);
   const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
 
@@ -28,11 +28,11 @@ const DepartmentCampaigns = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Department Campaign:
-  const fetchAllDepartmentCampaigns = useCallback(async () => {
+  // All Campaign Teams:
+  const fetchAllCampaignTeams = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/departments_campaigns/${id}.json`,
+        `/api/v1/campaigns_teams/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const DepartmentCampaigns = () => {
           },
         }
       );
-      const resData = response?.data?.data?.campaigns;
+      const resData = response?.data?.data?.teams;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -54,15 +54,15 @@ const DepartmentCampaigns = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartmentCampaign = resData.map((e) => ({
-        ...e,
-        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+      const formattedCampaignTeam = resData.map((e) => ({
+        ...e?.team,
+        created_at: moment(e?.team?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setDepartmentCampaigns(formattedDepartmentCampaign);
+      setCampaignTeams(formattedCampaignTeam);
       setLoading(false);
     } catch (error) {
-      const component = "Campaign Error:";
+      const component = "Campaign Team Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -70,12 +70,12 @@ const DepartmentCampaigns = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartmentCampaigns();
-  }, [fetchAllDepartmentCampaigns]);
+    fetchAllCampaignTeams();
+  }, [fetchAllCampaignTeams]);
 
   const handleCreate = () => {
     setMode("Add");
-    setOffice(DepartmentCampaignForm);
+    setOffice(CampaignTeamForm);
   };
 
   const handleEdit = (row) => {
@@ -86,31 +86,16 @@ const DepartmentCampaigns = () => {
   const columns = [
     {
       dataField: "title",
-      text: "Campaign",
+      text: "Team",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (val, row) => (
-        <p>
-          <Link
-            to={`/dashboard/hr/campaigns/${row?.title}/${row.id}`}
-            className="attendance-record-for-office"
-          >
-            {val?.toUpperCase()}
-          </Link>
-        </p>
-      ),
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
       headerStyle: { width: "30%" },
-    },
-    {
-      dataField: "leave_approval_level",
-      text: "Leave Approval Level",
-      sort: true,
-      headerStyle: { width: "20%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
@@ -122,7 +107,7 @@ const DepartmentCampaigns = () => {
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              data-target="#CampaignFormModal"
+              data-target="#TeamFormModal"
               onClick={() => handleEdit(row)}
             >
               Edit
@@ -134,7 +119,7 @@ const DepartmentCampaigns = () => {
   ];
 
   return (
-    <div className="tab-pane" id="tab_department_campaigns">
+    <div className="tab-pane" id="tab_campaign_teams">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
           {CurrentUserCanCreateAndEdit && (
@@ -143,10 +128,10 @@ const DepartmentCampaigns = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentCampaignFormModal"
+                data-target="#CampaignTeamFormModal"
                 onClick={handleCreate}
               >
-                Add Campaign
+                Add Team
               </a>
             </div>
           )}
@@ -156,7 +141,7 @@ const DepartmentCampaigns = () => {
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
-          data={departmentCampaigns}
+          data={campaignTeams}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -168,19 +153,19 @@ const DepartmentCampaigns = () => {
         />
       </div>
 
-      <DepartmentCampaignFormModal
+      <CampaignTeamFormModal
         mode={mode}
         data={office}
-        fetchAllDepartmentCampaigns={fetchAllDepartmentCampaigns}
+        fetchAllCampaignTeams={fetchAllCampaignTeams}
       />
 
-      <CampaignFormModal
+      <TeamFormModal
         mode={mode}
         data={office}
-        fetchAllCampaigns={fetchAllDepartmentCampaigns}
+        fetchAllTeams={fetchAllCampaignTeams}
       />
     </div>
   );
 };
 
-export default DepartmentCampaigns;
+export default CampaignTeams;

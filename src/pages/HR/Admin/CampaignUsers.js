@@ -3,10 +3,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { useParams } from "react-router-dom";
-import DepartmentCampaigns from "./DepartmentCampaigns";
-import DepartmentTeams from "./DepartmentTeams";
-import DepartmentEmployees from "./DepartmentEmployees";
-import DepartmentSupervisors from "./DepartmentSupervisors";
+import CampaignTeams from "./CampaignTeams";
+import CampaignSupervisor from "./CampaignSupervisors";
+import CampaignEmployees from "./CampaignEmployees";
 
 const CampaignUsers = () => {
   const { title } = useParams();
@@ -21,7 +20,7 @@ const CampaignUsers = () => {
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Department</li>
+              <li className="breadcrumb-item active">Campaign</li>
             </ul>
           </div>
         </div>
@@ -35,17 +34,7 @@ const CampaignUsers = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
-                  href="#tab_department_campaigns"
-                >
-                  Campaigns
-                </a>
-              </li>
-
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  data-toggle="tab"
-                  href="#tab_department_teams"
+                  href="#tab_campaign_teams"
                 >
                   Teams
                 </a>
@@ -55,7 +44,7 @@ const CampaignUsers = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_department_supervisors"
+                  href="#tab_campaign_supervisors"
                 >
                   Supervisors
                 </a>
@@ -65,7 +54,7 @@ const CampaignUsers = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_department_employees"
+                  href="#tab_campaign_employees"
                 >
                   Employees
                 </a>
@@ -77,23 +66,16 @@ const CampaignUsers = () => {
 
       <div>
         <div className="row tab-content">
-          <div
-            id="tab_department_campaigns"
-            className="col-12 tab-pane  show active"
-          >
-            <DepartmentCampaigns />
+          <div id="tab_campaign_teams" className="col-12 tab-pane show active">
+            <CampaignTeams />
           </div>
 
-          <div id="tab_department_teams" className="col-12 tab-pane">
-            <DepartmentTeams />
+          <div id="tab_campaign_supervisors" className="col-12 tab-pane">
+            <CampaignSupervisor />
           </div>
 
-          <div id="tab_department_supervisors" className="col-12 tab-pane">
-            <DepartmentSupervisors />
-          </div>
-
-          <div id="tab_department_employees" className="col-12 tab-pane">
-            <DepartmentEmployees />
+          <div id="tab_campaign_employees" className="col-12 tab-pane">
+            <CampaignEmployees />
           </div>
         </div>
       </div>

@@ -2,18 +2,18 @@
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
-import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
-import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
+import { CampaignEmployeeForm } from "../../../components/FormJSON/CreateOffices";
+import { CampaignEmployeeFormModal } from "../../../components/Modal/CampaignEmployeeFormModal";
 
-const DepartmentCampaigns = () => {
+const CampaignEmployees = () => {
   const { id } = useParams();
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
-  const [departmentCampaigns, setDepartmentCampaigns] = useState([]);
+  const [campaignEmployee, setCampaignEmployee] = useState([]);
   const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
 
@@ -28,11 +28,11 @@ const DepartmentCampaigns = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Department Campaign:
-  const fetchAllDepartmentCampaigns = useCallback(async () => {
+  // All Campaign Employees:
+  const fetchAllCampaignEmployees = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
-        `/api/v1/departments_campaigns/${id}.json`,
+        `/api/v1/campaign_employees/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const DepartmentCampaigns = () => {
           },
         }
       );
-      const resData = response?.data?.data?.campaigns;
+      const resData = response?.data?.data?.employees;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -54,15 +54,15 @@ const DepartmentCampaigns = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedDepartmentCampaign = resData.map((e) => ({
+      const formattedCampaignEmployee = resData.map((e) => ({
         ...e,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
-      setDepartmentCampaigns(formattedDepartmentCampaign);
+      setCampaignEmployee(formattedCampaignEmployee);
       setLoading(false);
     } catch (error) {
-      const component = "Campaign Error:";
+      const component = "Campaign Employees Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -70,71 +70,44 @@ const DepartmentCampaigns = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllDepartmentCampaigns();
-  }, [fetchAllDepartmentCampaigns]);
+    fetchAllCampaignEmployees();
+  }, [fetchAllCampaignEmployees]);
 
   const handleCreate = () => {
     setMode("Add");
-    setOffice(DepartmentCampaignForm);
-  };
-
-  const handleEdit = (row) => {
-    setMode("Edit");
-    setOffice(row);
+    setOffice(CampaignEmployeeForm);
   };
 
   const columns = [
     {
-      dataField: "title",
-      text: "Campaign",
+      dataField: "name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (val, row) => (
-        <p>
-          <Link
-            to={`/dashboard/hr/campaigns/${row?.title}/${row.id}`}
-            className="attendance-record-for-office"
-          >
-            {val?.toUpperCase()}
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <Link to={`/dashboard/user/profile/${row.ogid}`}>
+            {value} <span>{row?.department}</span>
           </Link>
-        </p>
+        </h2>
       ),
     },
     {
-      dataField: "created_at",
-      text: "Date Created",
-      sort: true,
-      headerStyle: { width: "30%" },
-    },
-    {
-      dataField: "leave_approval_level",
-      text: "Leave Approval Level",
+      dataField: "ogid",
+      text: "OGID",
       sort: true,
       headerStyle: { width: "20%" },
     },
-    CurrentUserCanCreateAndEdit && {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#CampaignFormModal"
-              onClick={() => handleEdit(row)}
-            >
-              Edit
-            </button>
-          </div>
-        </div>
-      ),
+    {
+      dataField: "email",
+      text: "Email",
+      sort: true,
+      headerStyle: { width: "20%" },
     },
   ];
 
   return (
-    <div className="tab-pane" id="tab_department_campaigns">
+    <div className="tab-pane" id="tab_campaign_employees">
       <div style={{ marginBottom: "50px" }}>
         <div className="row">
           {CurrentUserCanCreateAndEdit && (
@@ -143,10 +116,10 @@ const DepartmentCampaigns = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentCampaignFormModal"
+                data-target="#CampaignEmployeeFormModal"
                 onClick={handleCreate}
               >
-                Add Campaign
+                Add Employee
               </a>
             </div>
           )}
@@ -156,7 +129,7 @@ const DepartmentCampaigns = () => {
       <div className="row">
         <UniversalPaginatedTable
           columns={columns}
-          data={departmentCampaigns}
+          data={campaignEmployee}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -168,19 +141,13 @@ const DepartmentCampaigns = () => {
         />
       </div>
 
-      <DepartmentCampaignFormModal
+      <CampaignEmployeeFormModal
         mode={mode}
         data={office}
-        fetchAllDepartmentCampaigns={fetchAllDepartmentCampaigns}
-      />
-
-      <CampaignFormModal
-        mode={mode}
-        data={office}
-        fetchAllCampaigns={fetchAllDepartmentCampaigns}
+        fetchAllCampaignEmployees={fetchAllCampaignEmployees}
       />
     </div>
   );
 };
 
-export default DepartmentCampaigns;
+export default CampaignEmployees;

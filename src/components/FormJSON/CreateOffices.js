@@ -27,6 +27,13 @@ export const DepartmentTeamForm = {
   department_title: "",
   team_title: "",
 };
+export const CampaignTeamForm = {
+  operation_campaign_id: "",
+  operation_team_id: "",
+
+  campaign_title: "",
+  team_title: "",
+};
 
 export const DepartmentSupervisorForm = {
   department_id: "",
@@ -35,12 +42,26 @@ export const DepartmentSupervisorForm = {
   department_title: "",
   supervisor_title: "",
 };
+export const CampaignSupervisorForm = {
+  operation_campaign_id: "",
+  supervisor_id: "",
+
+  campaign_title: "",
+  supervisor_title: "",
+};
 
 export const DepartmentEmployeeForm = {
   operation_department_id: "",
   employee_id: "",
 
   department_title: "",
+  employee_title: "",
+};
+export const CampaignEmployeeForm = {
+  operation_campaign_id: "",
+  employee_id: "",
+
+  campaign_title: "",
   employee_title: "",
 };
 
