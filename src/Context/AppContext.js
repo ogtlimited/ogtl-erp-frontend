@@ -30,8 +30,10 @@ const AppProvider = (props) => {
   // Select API States:
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [selectEmployees, setSelectEmployees] = useState([]);
-  const [selectCampaigns, setSelectCampaigns] = useState([]);
   const [selectDepartments, setSelectDepartments] = useState([]);
+  const [selectCampaigns, setSelectCampaigns] = useState([]);
+  const [selectTeams, setSelectTeams] = useState([]);
+  const [selectLeaders, setSelectLeaders] = useState([]);
   const [selectDesignations, setSelectDesignations] = useState([]);
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
@@ -176,23 +178,53 @@ const AppProvider = (props) => {
     } catch (error) {}
   };
 
-  // All Campaigns:
-  const fetchAllCampaigns = async () => {
+  // All Departments:
+  const fetchAllDepartments = async () => {
     setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/departments.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "campaign",
           pages: 1,
           limit: 1000,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.departments;
+
+      const formattedDepartments = resData
+        .map((e) => ({
+          label: e?.title.toUpperCase(),
+          value: e.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectDepartments(formattedDepartments);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Campaigns:
+  const fetchAllCampaigns = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/campaigns.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.campaigns;
 
       const formattedCampaigns = resData
         .map((e) => ({
@@ -208,32 +240,31 @@ const AppProvider = (props) => {
     }
   };
 
-  // All Departments:
-  const fetchAllDepartments = async () => {
+  // All Teams:
+  const fetchAllTeams = async () => {
     setLoadingSelect(true);
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/teams.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "department",
           pages: 1,
           limit: 1000,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.teams;
 
-      const formattedDepartments = resData
+      const formattedTeams = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
           value: e.id,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setSelectDepartments(formattedDepartments);
+      setSelectTeams(formattedTeams);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -265,6 +296,37 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectDesignations(formattedDesignation);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  };
+
+  // All Leaders:
+  const fetchAllLeaders = async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/leaders.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: 1,
+          limit: 1000,
+        },
+      });
+      const resData = response?.data?.data?.leaders;
+
+      const formattedLeaders = resData
+        .map((e) => ({
+          label: e?.first_name + " " + e?.last_name,
+          value: e?.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectLeaders(formattedLeaders);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -391,8 +453,10 @@ const AppProvider = (props) => {
     if (token) {
       if (isHr) {
         fetchAllEmployees();
-        fetchAllCampaigns();
         fetchAllDepartments();
+        fetchAllCampaigns();
+        fetchAllTeams();
+        fetchAllLeaders();
         fetchAllDesignations();
         fetchAllBranches();
         fetchAllLeaveTypes();
@@ -401,8 +465,10 @@ const AppProvider = (props) => {
       }
       if (isTeamLead && !isHr) {
         fetchAllEmployees();
-        fetchAllCampaigns();
         fetchAllDepartments();
+        fetchAllCampaigns();
+        fetchAllTeams();
+        fetchAllLeaders();
         fetchAllDesignations();
         fetchAllLeaveTypes();
         fetchHRLeavesNotificationCount();
@@ -419,13 +485,21 @@ const AppProvider = (props) => {
         setSelectEmployees,
         fetchAllEmployees,
 
+        selectDepartments,
+        setSelectDepartments,
+        fetchAllDepartments,
+
         selectCampaigns,
         setSelectCampaigns,
         fetchAllCampaigns,
 
-        selectDepartments,
-        setSelectDepartments,
-        fetchAllDepartments,
+        selectTeams,
+        setSelectTeams,
+        fetchAllTeams,
+
+        selectLeaders,
+        setSelectLeaders,
+        fetchAllLeaders,
 
         selectDesignations,
         setSelectDesignations,

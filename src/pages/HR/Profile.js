@@ -97,6 +97,7 @@ const Profile = () => {
             }
           );
           const resData = response?.data?.data;
+          console.log("Employee Profile:", resData)
           setUserdata(resData);
 
           const userId = resData?.employee?.email;
@@ -124,6 +125,7 @@ const Profile = () => {
           );
           const resData = response?.data?.data;
           setUserdata(resData);
+          console.log("Employee Profile:", resData)
 
           const userId = resData?.employee?.email;
           const employeeId = resData?.employee?.personal_detail?.id;
