@@ -119,9 +119,9 @@ const TeamMembers = () => {
   };
 
   // const handleEdit = () => {
-  //   setMode("Edit");
+  //   setMode("Update");
   //   setOffice(TeamMemberForm);
-  // }
+  // };
 
   const columns = [
     {
@@ -209,14 +209,16 @@ const TeamMembers = () => {
                   <strong>Email: </strong> {teamLead[0]?.email}
                 </li>
               </ul>
-              {/* <a
-                className="edit-icon teams"
-                data-toggle="modal"
-                data-target="#TeamLeadFormModal"
-                onClick={handleEdit}
-              >
-                <i className="fa fa-pencil"></i>
-              </a> */}
+              {/* {CurrentUserCanCreateAndEdit && (
+                <a
+                  className="edit-icon teams"
+                  data-toggle="modal"
+                  data-target="#TeamLeadFormModal"
+                  onClick={handleEdit}
+                >
+                  <i className="fa fa-pencil"></i>
+                </a>
+              )} */}
             </div>
           </div>
         ) : (
