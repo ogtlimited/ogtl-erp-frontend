@@ -33,8 +33,8 @@ export const TeamLeadFormModal = ({
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        `/api/v1/teams_leads.json`,
+      const response = await axiosInstance.patch(
+        `/api/v1/teams_leads/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
