@@ -118,10 +118,10 @@ const TeamMembers = () => {
     setOffice(TeamMemberForm);
   };
 
-  // const handleEdit = () => {
-  //   setMode("Update");
-  //   setOffice(TeamMemberForm);
-  // };
+  const handleEdit = () => {
+    setMode("Update");
+    setOffice(TeamMemberForm);
+  };
 
   const columns = [
     {
@@ -200,16 +200,22 @@ const TeamMembers = () => {
             <div className="client-info-div">
               <ul className="client-list list-unstyled">
                 <li>
-                  <strong>Name: </strong> {teamLead[0]?.name}
+                  <strong>Name: </strong>
+                  <Link to={`/dashboard/user/profile/${teamLead[0]?.ogid}`}>
+                    {teamLead[0]?.name}
+                  </Link>
                 </li>
                 <li>
                   <strong>OGID: </strong> {teamLead[0]?.ogid}
                 </li>
                 <li>
-                  <strong>Email: </strong> {teamLead[0]?.email}
+                  <strong>Email: </strong>
+                  <a href={`mailto:${teamLead[0]?.email}`}>
+                    {teamLead[0]?.email}
+                  </a>
                 </li>
               </ul>
-              {/* {CurrentUserCanCreateAndEdit && (
+              {CurrentUserCanCreateAndEdit && (
                 <a
                   className="edit-icon teams"
                   data-toggle="modal"
@@ -218,7 +224,7 @@ const TeamMembers = () => {
                 >
                   <i className="fa fa-pencil"></i>
                 </a>
-              )} */}
+              )}
             </div>
           </div>
         ) : (
