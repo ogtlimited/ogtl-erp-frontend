@@ -69,7 +69,7 @@ const AllLeaveStatusAdmin = () => {
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          page: page,
+          pages: page,
           limit: sizePerPage,
           status: id,
         },
