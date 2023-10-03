@@ -144,7 +144,10 @@ const LeavesAdmin = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format("YYYY, MM (MMM), DD - h:mma"),
+        reason: leave?.leave?.reason,
+        rejection_reason: leave?.leave?.rejection_reason,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
@@ -466,6 +469,14 @@ const LeavesAdmin = () => {
           ) : null}
         </>
       ),
+    },
+    {
+      dataField: ["date_" + historyStatus],
+      text: `Date ${
+        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
+      }`,
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "leave_type",
