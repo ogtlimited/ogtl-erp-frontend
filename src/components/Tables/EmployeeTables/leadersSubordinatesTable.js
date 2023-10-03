@@ -133,7 +133,17 @@ const LeadersSubordinatesTable = ({
     setTimeout(() => {
       setShow(true);
     }, 10000);
-    return <>{show ? "No Data Available" : null}</>;
+    return (
+      <>
+        {show ? (
+          "No Data Available"
+        ) : (
+          <div className="spinner-border text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        )}
+      </>
+    );
   };
 
   return (
