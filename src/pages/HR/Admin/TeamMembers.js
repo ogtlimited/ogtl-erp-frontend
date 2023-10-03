@@ -193,7 +193,7 @@ const TeamMembers = () => {
         </div>
       </div>
 
-      <div className="client-card-container">
+      {/* <div className="client-card-container">
         {teamLead.length ? (
           <div className="client-info-card">
             <h4 className="client-title">Team Lead</h4>
@@ -232,7 +232,34 @@ const TeamMembers = () => {
             <h4 className="client-title">No Team Lead</h4>
           </div>
         )}
-      </div>
+      </div> */}
+
+      <ul class="tl cards">
+        <li class="tl cards_item">
+          <div class="tl card">
+            <div class="tl card_content">
+              <h2 class="tl card_title">Team Lead</h2>
+              <div class="tl card_text">
+                <p>
+                  <strong>Name: </strong>
+                  <Link to={`/dashboard/user/profile/${teamLead[0]?.ogid}`}>
+                    {teamLead[0]?.name}
+                  </Link>
+                </p>
+                <p>
+                  <strong>OGID: </strong> {teamLead[0]?.ogid}
+                </p>
+                <p>
+                  <strong>Email: </strong>
+                  <a href={`mailto:${teamLead[0]?.email}`}>
+                    {teamLead[0]?.email}
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
 
       <div className="row">
         <UniversalPaginatedTable
