@@ -168,6 +168,21 @@ const sidebarConfig = [
                   title: "Leaves",
                   path: PATH_DASHBOARD.hr.leavesEmployee,
                 },
+                {
+                  canView: "all",
+                  title: "Departments",
+                  path: PATH_DASHBOARD.hr.departments,
+                },
+                {
+                  canView: "all",
+                  title: "Campaigns",
+                  path: PATH_DASHBOARD.hr.campaigns,
+                },
+                {
+                  canView: "all",
+                  title: "Teams",
+                  path: PATH_DASHBOARD.hr.teams,
+                },
               ]
             : [
                 {

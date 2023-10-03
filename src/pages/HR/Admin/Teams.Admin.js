@@ -23,7 +23,7 @@ const Teams = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate", "supervisor", "team_lead"];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -43,7 +43,7 @@ const Teams = () => {
           limit: sizePerPage,
         },
       });
-      console.log("team data:", response.data);
+
       const resData = response?.data?.data?.teams;
       const totalPages = response?.data?.data?.pages;
 
