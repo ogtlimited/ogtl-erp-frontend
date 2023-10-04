@@ -12,11 +12,25 @@ export const ReportToModal = ({
   fetchEmployeeProfile,
   setHideReportToModal,
 }) => {
-  const { selectCampaigns, selectDepartments, showAlert } = useAppContext();
+  const { selectCampaigns, selectDepartments, showAlert, user } =
+    useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+
+  const canEditReportTo = [
+    "hr_manager",
+    "hr_associate",
+    "team_lead",
+    "supervisor",
+  ];
+
+  const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
+    canEditReportTo.includes(role)
+  );
 
   useEffect(() => {
     setReportTo(data);
@@ -59,8 +73,10 @@ export const ReportToModal = ({
   }, [reportTo?.office?.id, setHideReportToModal]);
 
   useEffect(() => {
-    fetchAllLeaders();
-  }, [fetchAllLeaders]);
+    if (CurrentUserCanEditReportTo) {
+      fetchAllLeaders();
+    }
+  }, [CurrentUserCanEditReportTo, fetchAllLeaders]);
 
   const handleOfficeTypeChange = (e) => {
     setReportTo({
