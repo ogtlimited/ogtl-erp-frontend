@@ -902,7 +902,9 @@ const LeavesUser = () => {
 
                 <li className="nav-item">
                   <a
-                    className="nav-link"
+                    className={
+                      leaveApplicationCount > 0 ? "tla nav-link" : "nav-link"
+                    }
                     data-toggle="tab"
                     href="#tab_subordinates-leaves"
                   >
