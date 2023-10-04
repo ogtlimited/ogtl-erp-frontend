@@ -193,73 +193,37 @@ const TeamMembers = () => {
         </div>
       </div>
 
-      {/* <div className="client-card-container">
-        {teamLead.length ? (
-          <div className="client-info-card">
-            <h4 className="client-title">Team Lead</h4>
-            <div className="client-info-div">
-              <ul className="client-list list-unstyled">
-                <li>
-                  <strong>Name: </strong>
-                  <Link to={`/dashboard/user/profile/${teamLead[0]?.ogid}`}>
-                    {teamLead[0]?.name}
-                  </Link>
-                </li>
-                <li>
-                  <strong>OGID: </strong> {teamLead[0]?.ogid}
-                </li>
-                <li>
-                  <strong>Email: </strong>
-                  <a href={`mailto:${teamLead[0]?.email}`}>
-                    {teamLead[0]?.email}
-                  </a>
-                </li>
-              </ul>
-              {CurrentUserCanCreateAndEdit && (
-                <a
-                  className="edit-icon teams"
-                  data-toggle="modal"
-                  data-target="#TeamLeadFormModal"
-                  onClick={handleEdit}
-                >
-                  <i className="fa fa-pencil"></i>
-                </a>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="client-info-card">
-            <h4 className="client-title">No Team Lead</h4>
-          </div>
-        )}
-      </div> */}
-
-      <ul class="tl cards">
-        <li class="tl cards_item">
+      {teamLead.length ? (
+        <div class="tl row">
           <div class="tl card">
-            <div class="tl card_content">
-              <h2 class="tl card_title">Team Lead</h2>
-              <div class="tl card_text">
-                <p>
-                  <strong>Name: </strong>
-                  <Link to={`/dashboard/user/profile/${teamLead[0]?.ogid}`}>
-                    {teamLead[0]?.name}
-                  </Link>
-                </p>
-                <p>
-                  <strong>OGID: </strong> {teamLead[0]?.ogid}
-                </p>
-                <p>
-                  <strong>Email: </strong>
-                  <a href={`mailto:${teamLead[0]?.email}`}>
-                    {teamLead[0]?.email}
-                  </a>
-                </p>
-              </div>
-            </div>
+            <h4>Team Lead</h4>
+            <p>
+              <Link
+                className="tl link"
+                to={`/dashboard/user/profile/${teamLead[0]?.ogid}`}
+              >
+                {teamLead[0]?.name}
+              </Link>{" "}
+            </p>
+            <p>{teamLead[0]?.ogid}</p>
+            <p>
+              <a className="tl link" href={`mailto:${teamLead[0]?.email}`}>
+                {teamLead[0]?.email}
+              </a>
+            </p>
           </div>
-        </li>
-      </ul>
+          {CurrentUserCanCreateAndEdit && (
+            <a
+              className="edit-icon teams"
+              data-toggle="modal"
+              data-target="#TeamLeadFormModal"
+              onClick={handleEdit}
+            >
+              <i className="fa fa-pencil"></i>
+            </a>
+          )}
+        </div>
+      ) : null}
 
       <div className="row">
         <UniversalPaginatedTable
