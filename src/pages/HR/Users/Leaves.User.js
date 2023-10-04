@@ -82,6 +82,15 @@ const LeavesUser = () => {
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        leave_marker:
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+            ? "Leave Ended"
+            : today_date <
+                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                today_date
+            ? "Scheduled Leave"
+            : "On Leave",
         proofs: leave?.proofs,
       }));
 
@@ -180,7 +189,7 @@ const LeavesUser = () => {
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
-      }))
+      }));
 
       setLeaveHistory(formatted);
     } catch (error) {
@@ -257,27 +266,6 @@ const LeavesUser = () => {
       formatter: (val, row) => <p>{val}</p>,
     },
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: "from_date",
-      text: "From",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: "to_date",
-      text: "To",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
       dataField: "status",
       text: "Status",
       sort: true,
@@ -303,6 +291,61 @@ const LeavesUser = () => {
           ) : null}
         </>
       ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "leave_marker",
+      text: "Leave",
+      sort: true,
+      headerStyle: { width: "100%", textAlign: "center" },
+      formatter: (value, row) => (
+        <>
+          {row?.status === "approved" ? (
+            <>
+              {value === "Scheduled Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-warning"></i> {value}
+                </span>
+              ) : value === "On Leave" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-success"></i> {value}
+                </span>
+              ) : value === "Leave Ended" ? (
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i className="fa fa-dot-circle-o text-danger"></i> {value}
+                </span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i className="fa fa-dot-circle-o text-secondary"></i> Not
+                Approved
+              </span>
+            </>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "from_date",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
+      dataField: "to_date",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "requested_leave_days",
@@ -830,16 +873,14 @@ const LeavesUser = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.employee_info?.leave_count > 0 && (
-              <a
-                href="#"
-                className="btn add-btn m-r-5"
-                data-toggle="modal"
-                data-target="#FormModal"
-              >
-                Apply For Leave
-              </a>
-            )}
+            <a
+              href="#"
+              className="btn add-btn m-r-5"
+              data-toggle="modal"
+              data-target="#FormModal"
+            >
+              Apply For Leave
+            </a>
           </div>
         </div>
       </div>
