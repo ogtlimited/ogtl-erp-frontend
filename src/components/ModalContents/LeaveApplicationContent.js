@@ -18,9 +18,9 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     user: undefined,
     proofs: undefined,
     rejection_reason:
-      leaveContent?.status === "approved"
-        ? undefined
-        : leaveContent?.leave?.rejection_reason,
+      leaveContent?.status === "rejected"
+        ? leaveContent?.rejection_reason
+        : undefined,
   };
 
   const filteredKeys = Object.keys(filteredApplication).reverse();
