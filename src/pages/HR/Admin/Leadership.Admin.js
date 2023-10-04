@@ -323,6 +323,7 @@ const LeadershipAdmin = () => {
 
       <ConfirmModal
         title="Leader"
+        message={`Are you sure you want to remove ${selectedRow?.fullName} from leaders?`}
         selectedRow={selectedRow}
         deleteFunction={removeLeader}
       />
