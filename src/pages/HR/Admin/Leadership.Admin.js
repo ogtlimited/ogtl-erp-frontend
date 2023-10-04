@@ -35,6 +35,11 @@ const LeadershipAdmin = () => {
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
+  const canCreate = ["hr_manager", "senior_hr_associate"];
+  const CurrentUserCanCreateLeave = CurrentUserRoles.some((role) =>
+    canCreate.includes(role)
+  );
+
   // All Leaders:
   const fetchAllLeaders = useCallback(async () => {
     try {
@@ -283,16 +288,18 @@ const LeadershipAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <>
-              <a
-                href="#"
-                className="btn add-btn "
-                data-toggle="modal"
-                data-target="#LeaderFormModal"
-              >
-                <i className="fa fa-plus"></i> Add Leader
-              </a>
-            </>
+            {CurrentUserCanCreateLeave && (
+              <>
+                <a
+                  href="#"
+                  className="btn add-btn "
+                  data-toggle="modal"
+                  data-target="#LeaderFormModal"
+                >
+                  <i className="fa fa-plus"></i> Add Leader
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
