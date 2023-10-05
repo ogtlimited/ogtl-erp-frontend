@@ -320,10 +320,13 @@
   text-decoration: none;
 }
 
-
 .edit-icon.teams {
   height: 0;
   margin-left: 50px;
   background-color: #fff;
   border-color: #00c5fb;
+}
+
+.logout {
+  color: #ff4136 !important;
 }

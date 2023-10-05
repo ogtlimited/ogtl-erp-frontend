@@ -128,7 +128,7 @@ const Header = () => {
               >
                 <BiUser style={{fontSize: "14px", margin: "-2px 5px 0 0"}} />My Profile
               </Link>
-              <a className="dropdown-item" onClick={(e) => logout(e)}>
+              <a className="dropdown-item logout" onClick={(e) => logout(e)}>
                <BiLogOut style={{fontSize: "14px", margin: "-2px 3px 0 0"}} /> Logout
               </a>
             </div>
