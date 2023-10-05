@@ -125,7 +125,7 @@ export const ReportToModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Report To
+                Update Reports To
               </h4>
               <button
                 type="button"
