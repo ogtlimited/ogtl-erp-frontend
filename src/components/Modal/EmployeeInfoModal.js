@@ -26,7 +26,11 @@ export const EmployeeInfoModal = ({
   const CurrentUserRoles = user?.employee_info?.roles;
   const isHr = user?.office?.title === "hr" ? true : false;
 
-  // const canView = ["hr_manager", "senior_hr_associate"];
+  const canView = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanView = CurrentUserRoles.some((role) =>
+    canView.includes(role)
+  );
 
   useEffect(() => {
     setEmployeeInfo(data);
@@ -167,8 +171,7 @@ export const EmployeeInfoModal = ({
             <div className="modal-body">
               <form onSubmit={handleEditEmployeeInfo}>
                 <div className="row">
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="ogid">OGID</label>
@@ -191,8 +194,7 @@ export const EmployeeInfoModal = ({
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="email">Email</label>
@@ -215,8 +217,7 @@ export const EmployeeInfoModal = ({
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="date_of_joining">Date of Joining</label>
@@ -346,8 +347,7 @@ export const EmployeeInfoModal = ({
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="remote">
@@ -378,8 +378,7 @@ export const EmployeeInfoModal = ({
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="leave_count">Leave Count</label>
@@ -402,8 +401,7 @@ export const EmployeeInfoModal = ({
                     </div>
                   ) : null}
 
-                  {CurrentUserRoles.includes("hr_manager") ||
-                  CurrentUserRoles.includes("senior_hr_associate") ? (
+                  {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="leave_approval_level">
