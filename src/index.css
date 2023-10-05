@@ -242,3 +242,7 @@
     margin-bottom: 30px;
   }
 }
+
+.logout {
+  color: #ff4136 !important;
+}
