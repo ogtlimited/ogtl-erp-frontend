@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import {
   TeamLeadForm,
@@ -18,6 +18,7 @@ import $ from "jquery";
 const TeamMembers = () => {
   const { id } = useParams();
   const { title } = useParams();
+  const navigate = useNavigate();
   const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [teamLead, setTeamLead] = useState({});
@@ -79,7 +80,7 @@ const TeamMembers = () => {
           },
         }
       );
-      console.log("team members:", response.data);
+
       const resData = response?.data?.data?.employees;
       const totalPages = response?.data?.data?.pages;
 
@@ -195,7 +196,12 @@ const TeamMembers = () => {
 
       {teamLead.length ? (
         <div class="tl row">
-          <div class="tl card">
+          <div
+            class="tl card"
+            onClick={() =>
+              navigate(`/dashboard/user/profile/${teamLead[0]?.ogid}`)
+            }
+          >
             <h4>Team Lead</h4>
             <p>
               <Link
