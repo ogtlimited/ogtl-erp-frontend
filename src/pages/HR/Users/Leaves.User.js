@@ -75,8 +75,8 @@ const LeavesUser = () => {
         ...leave?.leave,
         status_action: leave?.leave?.status,
         leave_type: leave?.leave_type,
-        from_date: new Date(leave?.leave?.start_date).toDateString(),
-        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
         requested_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -121,8 +121,8 @@ const LeavesUser = () => {
         full_name: leave.first_name + " " + leave.last_name,
         status_action: leave?.status,
         leave_type: leave?.leave_type,
-        from_date: new Date(leave?.start_date).toDateString(),
-        to_date: new Date(leave?.end_date).toDateString(),
+        from_date: moment(leave?.start_date).format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.end_date).format('ddd MMM Do, YYYY'),
         requested_leave_days: calcBusinessDays(
           leave?.start_date,
           leave?.end_date
@@ -169,8 +169,8 @@ const LeavesUser = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
-        from_date: new Date(leave?.leave?.start_date).toDateString(),
-        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
         status: leave?.leave?.status,
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
@@ -476,6 +476,7 @@ const LeavesUser = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "leave_type",
@@ -741,14 +742,12 @@ const LeavesUser = () => {
       text: "From",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "total_leave_days",
