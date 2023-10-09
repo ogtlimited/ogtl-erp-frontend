@@ -127,7 +127,7 @@ const LeavesUser = () => {
           leave?.start_date,
           leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
         proofs: leave?.proofs,
       }));
 
