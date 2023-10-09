@@ -87,8 +87,8 @@ const LeavesAdmin = () => {
         ...leave,
         ...leave?.leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: new Date(leave?.leave?.start_date).toDateString(),
-        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -138,8 +138,8 @@ const LeavesAdmin = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: new Date(leave?.leave?.start_date).toDateString(),
-        to_date: new Date(leave?.leave?.end_date).toDateString(),
+        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -292,14 +292,12 @@ const LeavesAdmin = () => {
       text: "From",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "total_leave_days",
@@ -529,14 +527,12 @@ const LeavesAdmin = () => {
       text: "From",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "to_date",
       text: "To",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{new Date(val).toDateString()}</p>,
     },
     {
       dataField: "total_leave_days",
