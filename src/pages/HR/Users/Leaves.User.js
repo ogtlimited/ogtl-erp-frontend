@@ -46,7 +46,7 @@ const LeavesUser = () => {
 
   const currentUserIsLead = user?.employee_info?.is_lead;
 
-  // Calculates Leave Days for Business Days
+  // Calculates Leave Days for Business Days:
   function calcBusinessDays(startDate, endDate) {
     var day = moment(startDate);
     var businessDays = 0;
@@ -58,7 +58,7 @@ const LeavesUser = () => {
     return businessDays;
   }
 
-  // Leaves:
+  // User Leaves:
   const fetchYourLeaves = useCallback(async () => {
     try {
       const response = await axiosInstance.get("/api/v1/leaves.json", {
@@ -213,6 +213,7 @@ const LeavesUser = () => {
     fetchTeamLeaveHistory,
   ]);
 
+  // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
     const id = row.id;
     try {
@@ -228,11 +229,13 @@ const LeavesUser = () => {
     }
   };
 
+  // Handle Reject Leave:
   const handleRejectLeave = (row) => {
     setRejectLeave(row);
     setRejectModal(true);
   };
 
+  // Handle Cancel Leave:
   const handleCancelLeaveApplication = async (row) => {
     try {
       const response = await axiosInstance.patch(
@@ -639,16 +642,6 @@ const LeavesUser = () => {
                 <i className="fa fa-ban m-r-5"></i> Reject
               </a>
             ) : null}
-
-            {/* {value === "pending" ? (
-              <a
-                href="#"
-                className="dropdown-item"
-                onClick={() => handleRequestModification(row)}
-              >
-                <i className="fa fa-edit m-r-5"></i> Request modification
-              </a>
-            ) : null} */}
           </div>
         </div>
       ),

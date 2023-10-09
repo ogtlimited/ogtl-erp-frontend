@@ -330,3 +330,17 @@
 .logout {
   color: #ff4136 !important;
 }
+
+.date_error {
+  color: #ff4136;
+  font-size: 12px;
+  font-style: italic;
+  font-family: outfit;
+  font-weight: 600;
+}
+
+.date_error_icon {
+  color: #ff4136;
+  font-size: 12px;
+  margin-right: 5px;
+}
