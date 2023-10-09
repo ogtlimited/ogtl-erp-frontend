@@ -34,12 +34,11 @@
 .client-card-container {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40px;
 }
 
 .client-info-card {
-  width: 60%;
-  border-radius: 15px;
+  width: auto;
+  border-radius: 10px;
   background-color: #fff;
   padding: 2% 5%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
@@ -56,9 +55,13 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
+.client-info-div {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
 .client-title {
-  font-family: 'Poppins', sans-serif;
-  margin-bottom: 20px;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -67,17 +70,17 @@
 
 .client-list {
   font-size: 16px;
-  font-family: 'Poppins', sans-serif;
+}
+.client-list > li {
+  margin-top: 10px;
 }
 
 .client-card-div > p {
   text-align: center;
   font-size: 50px;
-  font-family: 'Poppins', sans-serif;
 }
 
 .client-count-title {
-  font-family: 'Outfit', sans-serif;
   word-spacing: 5px;
   margin-bottom: 20px;
   font-weight: 600;

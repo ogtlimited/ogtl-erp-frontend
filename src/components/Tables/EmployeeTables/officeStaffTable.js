@@ -44,24 +44,24 @@ const OfficeStaffTable = ({
   hideComponent,
   context,
 }) => {
-  const status = [
-    {
-      code: "active",
-      label: "ACTIVE",
-    },
-    {
-      code: "left",
-      label: "RESIGNED",
-    },
-    {
-      code: "terminated",
-      label: "TERMINATED",
-    },
-    {
-      code: "deactivated",
-      label: "DEACTIVATED",
-    },
-  ];
+  // const status = [
+  //   {
+  //     code: "active",
+  //     label: "ACTIVE",
+  //   },
+  //   {
+  //     code: "left",
+  //     label: "RESIGNED",
+  //   },
+  //   {
+  //     code: "terminated",
+  //     label: "TERMINATED",
+  //   },
+  //   {
+  //     code: "deactivated",
+  //     label: "DEACTIVATED",
+  //   },
+  // ];
 
   const males = [male, male2, male3];
   const females = [female, female2, female3];
@@ -218,7 +218,7 @@ const OfficeStaffTable = ({
       const handleKeydown = (e) => {
         if (e.key === "Enter") {
           setPage(1);
-          setLoading(true);
+          setData([]);
           props.onSearch(input.value);
           const searchTerm = input.value;
           setDesignationFilter("");
@@ -226,6 +226,7 @@ const OfficeStaffTable = ({
           setSearchTerm(searchTerm);
 
           if (page === 1) {
+            setLoading(true);
             axiosInstance
               .get("/api/v1/employees.json", {
                 headers: {
@@ -265,13 +266,13 @@ const OfficeStaffTable = ({
                   };
                 });
                 setData(mapp);
+                setLoading(false);
               })
               .catch((error) => {
                 console.log(error);
                 setLoading(false);
               });
           }
-          setLoading(false);
         }
       };
 
@@ -305,122 +306,144 @@ const OfficeStaffTable = ({
         </div>
       );
     },
-    [officeId, page, setData, setDesignationFilter, setLoading, setPage, setSearchTerm, setSizePerPage, setStatusFilter, setTotalPages, sizePerPage]
+    [
+      officeId,
+      page,
+      setData,
+      setDesignationFilter,
+      setLoading,
+      setPage,
+      setSearchTerm,
+      setSizePerPage,
+      setStatusFilter,
+      setTotalPages,
+      sizePerPage,
+    ]
   );
 
-  // Filter by Designation:
-  const handleDesignationFilter = (e) => {
-    setDesignationFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
+  // // Filter by Designation:
+  // const handleDesignationFilter = (e) => {
+  //   setDesignationFilter(e.target.value);
+  //   setPage(1);
+  //   setLoading(true);
 
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+  //   axiosInstance
+  //     .get("/api/v1/employees.json", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420",
+  //       },
 
-        params: {
-          operation_office_id: officeId,
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm,
-          hr_designation_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null,
-        },
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
+  //       params: {
+  //         operation_office_id: officeId,
+  //         page: page,
+  //         limit: sizePerPage,
+  //         name: searchTerm,
+  //         hr_designation_id: e.target.value,
+  //         status: statusFilter.length ? statusFilter : null,
+  //       },
+  //     })
+  //     .then((e) => {
+  //       const resData = e?.data?.data?.employees;
+  //       const totalPages = e?.data?.data?.pages;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+  //       const thisPageLimit = sizePerPage;
+  //       const thisTotalPageSize = totalPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+  //       setSizePerPage(thisPageLimit);
+  //       setTotalPages(thisTotalPageSize);
 
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email,
-          };
-        });
+  //       const mapp = resData?.map((emp) => {
+  //         return {
+  //           ...emp,
+  //           fullName: emp?.full_name,
+  //           office: emp?.office?.office_type,
+  //           officeName: emp?.office?.title,
+  //           designation: emp?.designation,
+  //           company_email: emp?.email,
+  //         };
+  //       });
 
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
+  //       setData(mapp);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
+  //   setLoading(false);
+  // };
 
-  // Filter by Status:
-  const handleStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
+  // // Filter by Status:
+  // const handleStatusFilter = (e) => {
+  //   setStatusFilter(e.target.value);
+  //   setPage(1);
+  //   setLoading(true);
 
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+  //   axiosInstance
+  //     .get("/api/v1/employees.json", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420",
+  //       },
 
-        params: {
-          operation_office_id: officeId,
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm.length ? searchTerm : null,
-          hr_designation_id: designationFilter.length
-            ? designationFilter
-            : null,
-          status: e.target.value,
-        },
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
+  //       params: {
+  //         operation_office_id: officeId,
+  //         page: page,
+  //         limit: sizePerPage,
+  //         name: searchTerm.length ? searchTerm : null,
+  //         hr_designation_id: designationFilter.length
+  //           ? designationFilter
+  //           : null,
+  //         status: e.target.value,
+  //       },
+  //     })
+  //     .then((e) => {
+  //       const resData = e?.data?.data?.employees;
+  //       const totalPages = e?.data?.data?.pages;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+  //       const thisPageLimit = sizePerPage;
+  //       const thisTotalPageSize = totalPages;
 
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+  //       setSizePerPage(thisPageLimit);
+  //       setTotalPages(thisTotalPageSize);
 
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email,
-          };
-        });
+  //       const mapp = resData?.map((emp) => {
+  //         return {
+  //           ...emp,
+  //           fullName: emp?.full_name,
+  //           office: emp?.office?.office_type,
+  //           officeName: emp?.office?.title,
+  //           designation: emp?.designation,
+  //           company_email: emp?.email,
+  //         };
+  //       });
 
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
+  //       setData(mapp);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
+  //   setLoading(false);
+  // };
 
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
     }, 5000);
-    return <>{show ? "No Data Available" : null}</>;
+    return (
+      <>
+        {show ? (
+          "No Data Available"
+        ) : (
+          <div className="spinner-border text-primary" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        )}
+      </>
+    );
   };
 
   return (
@@ -436,7 +459,6 @@ const OfficeStaffTable = ({
           {(props) => (
             <div className="col-12">
               <div className="col-12">
-
                 <MySearch
                   {...props.searchProps}
                   style={{ paddingLeft: "12%" }}
@@ -444,7 +466,7 @@ const OfficeStaffTable = ({
                 />
               </div>
 
-              <div className="hr-filter-select col-12">
+              {/* <div className="hr-filter-select col-12">
                 {!hideComponent && <div className="col-md-3">
                   <select
                     className="leave-filter-control"
@@ -480,7 +502,7 @@ const OfficeStaffTable = ({
                     ))}
                   </select>
                 </div>
-              </div>
+              </div> */}
 
               <div className="app-table-div">
                 <BootstrapTable

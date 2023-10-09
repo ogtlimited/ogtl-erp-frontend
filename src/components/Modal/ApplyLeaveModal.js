@@ -8,6 +8,7 @@ import $ from "jquery";
 import ms from "ms";
 import moment from "moment";
 import Select from "react-select";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const { showAlert, loadingSelect, selectLeaveTypes, user } = useAppContext();
@@ -15,6 +16,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [leaveType, setLeaveType] = useState([]);
+  const [selectedStartDate, setSelectedStartDate] = useState("");
+  const [selectedEndDate, setSelectedEndDate] = useState("");
+  const [selectedStartDateError, setSelectedStartDateError] = useState("");
+  const [selectedEndDateError, setSelectedEndDateError] = useState("");
   const [proofUpload, setProofUpload] = useState(null);
 
   const [today, setToday] = useState(null);
@@ -49,19 +54,14 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const cancelEvent = () => {
     setLeave(CREATE_LEAVE);
+    setSelectedStartDate("");
+    setSelectedEndDate("");
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
-
-  const handleFileChange = (e) => {
-    e.preventDefault();
-    setProofUpload(e.target.files);
-  };
-
-  const files = proofUpload ? [...proofUpload] : [];
 
   const handleSelectLeave = (e) => {
     setLeave({
@@ -71,7 +71,57 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       hr_leave_type_id: e?.value,
       leaveTypeTitle: e?.label,
     });
+
+    setSelectedStartDate("");
+    setSelectedEndDate("");
   };
+
+  const handleDateChange = (e) => {
+    e.preventDefault();
+
+    const selectedDate = e.target.value;
+    const parsedDate = new Date(selectedDate);
+    const weekend = parsedDate.getDay() === 6 || parsedDate.getDay() === 0;
+
+    if (weekend) {
+      if (e.target.name === "start_date") {
+        setSelectedStartDateError(
+          `You can not select ${moment(parsedDate).format(
+            "dddd"
+          )}, please select a weekday.`
+        );
+        setSelectedStartDate("");
+        
+        setSelectedEndDateError("");
+      } else {
+        setSelectedEndDateError(
+          `
+          You can not select ${moment(parsedDate).format(
+            "dddd"
+          )}, please select a weekday.`
+        );
+      }
+      setSelectedEndDate("");
+    } else {
+      if (e.target.name === "start_date") {
+        setSelectedStartDate(selectedDate);
+        setSelectedStartDateError("");
+
+        setSelectedEndDateError("");
+      } else {
+        setSelectedEndDate(selectedDate);
+        setSelectedEndDateError("");
+      }
+      setLeave({ ...leave, [e.target.name]: selectedDate });
+    }
+  };
+
+  const handleFileChange = (e) => {
+    e.preventDefault();
+    setProofUpload(e.target.files);
+  };
+
+  const files = proofUpload ? [...proofUpload] : [];
 
   const handleApplyLeave = async (e) => {
     e.preventDefault();
@@ -124,8 +174,11 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
         "Your leave application is successful, please await an approval",
         "alert alert-success"
       );
+
       fetchYourLeaves();
       setLeave(CREATE_LEAVE);
+      setSelectedStartDate("");
+      setSelectedEndDate("");
       $("#FormModal").modal("toggle");
     } catch (error) {
       $("#FormModal").modal("toggle");
@@ -204,9 +257,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           <input
                             type="date"
                             name="start_date"
-                            value={leave.start_date}
-                            onChange={handleFormChange}
+                            value={selectedStartDate}
+                            onChange={handleDateChange}
                             className="form-control "
+                            id="dateInput"
                             min={today}
                             required
                           />
@@ -214,17 +268,24 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                           <input
                             type="date"
                             name="start_date"
-                            value={leave.start_date}
-                            onChange={handleFormChange}
+                            value={selectedStartDate}
+                            onChange={handleDateChange}
                             className="form-control "
+                            id="dateInput"
                             min={minDate}
                             required
                           />
                         )}
+                        {selectedStartDateError && (
+                          <span className="date_error">
+                            <RiErrorWarningLine className="date_error_icon" />
+                            {selectedStartDateError}
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    {leave.start_date.length ? (
+                    {leave.start_date ? (
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="end_date">Last Day of Leave</label>
@@ -233,9 +294,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                             <input
                               type="date"
                               name="end_date"
-                              value={leave.end_date}
-                              onChange={handleFormChange}
+                              value={selectedEndDate}
+                              onChange={handleDateChange}
                               className="form-control "
+                              id="dateInput"
                               min={leave.start_date}
                               required
                             />
@@ -243,13 +305,20 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                             <input
                               type="date"
                               name="end_date"
-                              value={leave.end_date}
-                              onChange={handleFormChange}
+                              value={selectedEndDate}
+                              onChange={handleDateChange}
                               className="form-control "
+                              id="dateInput"
                               min={leave.start_date}
                               max={maxDate}
                               required
                             />
+                          )}
+                          {selectedEndDateError && (
+                            <span className="date_error">
+                              <RiErrorWarningLine className="date_error_icon" />
+                              {selectedEndDateError}
+                            </span>
                           )}
                         </div>
                       </div>

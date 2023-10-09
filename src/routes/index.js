@@ -389,10 +389,50 @@ export default function Router() {
             },
             { path: "resignation", element: <ResignationUser /> },
             {
-              path: "offices",
+              path: "departments",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <Offices />
+                  <Departments />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "departments/:title/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <DepartmentUsers />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "campaigns",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <Campaigns />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "campaigns/:title/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <CampaignUsers />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "teams",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <Teams />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "teams/:title/:id",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TeamMembers />
                 </GuardedRoute>
               ),
             },
@@ -934,7 +974,7 @@ export default function Router() {
             {
               path: "",
               element: (
-                <Navigate to="/dashboard/settings/roles-permissionss" replace />
+                <Navigate to="/dashboard/settings/roles-permissions" replace />
               ),
             },
             {
@@ -1079,7 +1119,12 @@ const AttendanceRecord = Loadable(
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
 );
-const Offices = Loadable(lazy(() => import("../pages/HR/Admin/Offices.Admin")));
+const Departments = Loadable(lazy(() => import("../pages/HR/Admin/Departments.Admin")));
+const DepartmentUsers = Loadable(lazy(() => import("../pages/HR/Admin/DepartmentUsers")));
+const Campaigns = Loadable(lazy(() => import("../pages/HR/Admin/Campaigns.Admin")));
+const CampaignUsers = Loadable(lazy(() => import("../pages/HR/Admin/CampaignUsers")));
+const Teams = Loadable(lazy(() => import("../pages/HR/Admin/Teams.Admin")));
+const TeamMembers = Loadable(lazy(() => import("../pages/HR/Admin/TeamMembers")));
 const BranchAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Branch.Admin"))
 );
@@ -1370,3 +1415,4 @@ const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets")));
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))
 );
+

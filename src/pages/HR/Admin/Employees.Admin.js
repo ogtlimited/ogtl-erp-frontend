@@ -1,3 +1,5 @@
+//* IN USE
+
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -9,7 +11,14 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
-  const { showAlert, ErrorHandler, user } = useAppContext();
+  const {
+    showAlert,
+    ErrorHandler,
+    user,
+    selectDepartments,
+    selectCampaigns,
+    selectDesignations,
+  } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -32,6 +41,12 @@ const AllEmployeesAdmin = () => {
   const [selectedRow, setSelectedRow] = useState(null);
 
   const CurrentUserRoles = user?.employee_info?.roles;
+
+  useEffect(() => {
+    setDepartments(selectDepartments);
+    setCampaigns(selectCampaigns);
+    setDesignations(selectDesignations);
+  }, [selectCampaigns, selectDepartments, selectDesignations]);
 
   // All Employees:
   const fetchAllEmployees = useCallback(async () => {
@@ -92,105 +107,8 @@ const AllEmployeesAdmin = () => {
     statusFilter,
   ]);
 
-  // All Campaigns:
-  const fetchAllCampaigns = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: "campaign",
-          pages: 1,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const formattedCampaigns = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setCampaigns(formattedCampaigns);
-      setLoading(false);
-    } catch (error) {
-      console.log("Get All Campaigns error:", error);
-      setLoading(false);
-    }
-  };
-
-  // All Departments:
-  const fetchAllDepartments = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: "department",
-          pages: 1,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const formattedDepartments = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setDepartments(formattedDepartments);
-      setLoading(false);
-    } catch (error) {
-      console.log("Get All Departments error:", error);
-      setLoading(false);
-    }
-  };
-
-  // All Designations:
-  const fetchDesignation = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("/api/v1/designations.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.designations;
-
-      const formattedDesignation = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setDesignations(formattedDesignation);
-      setLoading(false);
-    } catch (error) {
-      console.log("Get All Designations error:", error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchAllEmployees();
-    fetchAllCampaigns();
-    fetchAllDepartments();
-    fetchDesignation();
   }, [fetchAllEmployees]);
 
   useEffect(() => {

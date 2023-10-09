@@ -10,7 +10,7 @@ import OfficeStaffTable from "../../../components/Tables/EmployeeTables/officeSt
 
 const SupervisorAdmin = () => {
   const { user, showAlert, ErrorHandler } = useAppContext();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [allLeadersSubordinates, setAllLeadersSubordinates] = useState([]);
   const [allOfficeStaff, setAllOfficeStaff] = useState([]);
   const [hideComponent, setHideComponent] = useState(false);
@@ -26,11 +26,11 @@ const SupervisorAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const officeId = user?.office?.id;
-  console.log(" officeId: " + officeId);
 
   // Team Members:
   const fetchAllLeadersSubordinates = useCallback(async () => {
     const supervisorOgid = user?.employee_info?.ogid;
+    setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/subordinates.json", {
         headers: {
@@ -114,40 +114,40 @@ const SupervisorAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage, searchTerm, designationFilter, statusFilter]);
 
-  // All Designations:
-  const fetchDesignation = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get("/api/v1/designations.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
-      const resData = response?.data?.data?.designations;
+  // // All Designations:
+  // const fetchDesignation = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await axiosInstance.get("/api/v1/designations.json", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420",
+  //       },
+  //     });
+  //     const resData = response?.data?.data?.designations;
 
-      const formattedDesignation = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+  //     const formattedDesignation = resData
+  //       .map((e) => ({
+  //         label: e?.title.toUpperCase(),
+  //         value: e.id,
+  //       }))
+  //       .sort((a, b) => a.label.localeCompare(b.label));
 
-      setDesignations(formattedDesignation);
-      setLoading(false);
-    } catch (error) {
-      if (error?.response?.status === 403) {
-        setHideComponent(true);
-      }
-      setLoading(false);
-    }
-  };
+  //     setDesignations(formattedDesignation);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     if (error?.response?.status === 403) {
+  //       setHideComponent(true);
+  //     }
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     fetchAllLeadersSubordinates();
     fetchAllOfficeStaff();
-    fetchDesignation();
+    // fetchDesignation();
   }, [fetchAllLeadersSubordinates, fetchAllOfficeStaff, user]);
 
   useEffect(() => {
