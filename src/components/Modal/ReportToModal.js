@@ -1,7 +1,7 @@
 // *IN USE - FIXED!
 
 import React, { useState, useEffect, useCallback } from "react";
-import { officeTypeOptions } from "../FormJSON/AddEmployee";
+import { officeTypeOptions, leaderTypeOptions } from "../FormJSON/AddEmployee";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
@@ -12,72 +12,39 @@ export const ReportToModal = ({
   fetchEmployeeProfile,
   setHideReportToModal,
 }) => {
-  const { selectCampaigns, selectDepartments, showAlert, user } =
+  const { selectCampaigns, selectDepartments, selectTeams, showAlert, user } =
     useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
+  const [teamSelected, setTeamSelected] = useState(false);
+  const [allTeams, setAllTeams] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
+  const [leadershipType, setLeadershipType] = useState({
+    label: "",
+    value: "",
+  });
 
-  const CurrentUserRoles = user?.employee_info?.roles;
+  // const CurrentUserRoles = user?.employee_info?.roles;
 
-  const canEditReportTo = [
-    "hr_manager",
-    "hr_associate",
-    "team_lead",
-    "supervisor",
-  ];
+  // const canEditReportTo = [
+  //   "hr_manager",
+  //   "hr_associate",
+  //   "team_lead",
+  //   "supervisor",
+  // ];
 
-  const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
-    canEditReportTo.includes(role)
-  );
+  // const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
+  //   canEditReportTo.includes(role)
+  // );
 
   useEffect(() => {
     setReportTo(data);
     setOfficeType(data?.office?.office_type);
+    console.log("Current User: ", data);
   }, [data]);
 
-  // All Leaders:
-  const fetchAllLeaders = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/leaders.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office: reportTo?.office?.id,
-          pages: 1,
-          limit: 1000,
-        },
-      });
-
-      const resData = response?.data?.data?.leaders;
-
-      const formattedLeaders = resData
-        .map((e) => ({
-          label: e?.first_name + " " + e?.last_name,
-          value: e.ogid,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setAllLeaders(formattedLeaders);
-      setLoading(false);
-    } catch (error) {
-      if (error?.response?.status === 403) {
-        return setHideReportToModal(true);
-      }
-      setLoading(false);
-    }
-  }, [reportTo?.office?.id, setHideReportToModal]);
-
-  useEffect(() => {
-    if (CurrentUserCanEditReportTo) {
-      fetchAllLeaders();
-    }
-  }, [CurrentUserCanEditReportTo, fetchAllLeaders]);
-
+  // Office Type change:
   const handleOfficeTypeChange = (e) => {
     setReportTo({
       ...reportTo,
@@ -96,8 +63,188 @@ export const ReportToModal = ({
       },
     });
     setOfficeType(e?.value);
+    setLeadershipType({
+      label: "",
+      value: "",
+    });
+    setTeamSelected(false);
   };
 
+  // Office change:
+  const handleOfficeChange = (e) => {
+    setReportTo({
+      ...reportTo,
+      office: {
+        ...reportTo.office,
+        id: e?.value,
+        title: e?.label,
+      },
+      employee: {
+        ...reportTo.employee,
+        reports_to: {
+          ogid: "",
+          full_name: "",
+        },
+      },
+    });
+    setLeadershipType({
+      label: "",
+      value: "",
+    });
+    setTeamSelected(false);
+  };
+
+  // Leadership Type change:
+  const handleLeadershipTypeChange = async (e) => {
+    setLeadershipType({
+      label: e?.label,
+      value: e?.value,
+    });
+    setAllLeaders([]);
+    setTeamSelected(false);
+    setReportTo({
+      ...reportTo,
+      employee: {
+        ...reportTo.employee,
+        reports_to: {
+          ogid: "",
+          full_name: "",
+        },
+      },
+    });
+
+    const reportToData = {
+      office: officeType + "s",
+      leadershipType: e?.value + "s",
+      officeId: reportTo?.office?.id,
+    };
+
+    console.log("Report To Data: ", reportToData);
+
+    try {
+      if (reportToData?.leadershipType === "supervisors") {
+        const response = await axiosInstance.get(
+          `/api/v1/${reportToData?.office}_supervisors/${reportToData?.officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 400,
+            },
+          }
+        );
+        const resData = response?.data?.data?.supervisors;
+
+        const formattedLeaders = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setAllLeaders(formattedLeaders);
+      } else if (reportToData?.leadershipType === "team_leads") {
+        setTeamSelected(true);
+        const response = await axiosInstance.get(
+          `/api/v1/${reportToData?.office}_teams/${reportToData?.officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 400,
+            },
+          }
+        );
+        const resData = response?.data?.data?.teams;
+
+        const formattedTeams = resData
+          .map((e) => ({
+            label: e?.title,
+            value: e?.id,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setAllTeams(formattedTeams);
+        console.log("All teams", formattedTeams);
+      } else {
+        return;
+      }
+    } catch (error) {
+      if (error?.response?.status === 403) {
+        return setHideReportToModal(true);
+      }
+    }
+  };
+
+  // Teams change:
+  const handleTeamsChange = (e) => {
+    setReportTo({
+      ...reportTo,
+      employee: {
+        ...reportTo.employee,
+        reports_to: {
+          ogid: "",
+          full_name: "",
+        },
+      },
+    });
+    setLeadershipType({
+      label: "",
+      value: "",
+    });
+    setTeamSelected(false);
+  };
+
+  // // All Leaders:
+  // const fetchAllLeaders = useCallback(async () => {
+  //   try {
+  //     const response = await axiosInstance.get("/api/v1/leaders.json", {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420",
+  //       },
+  //       params: {
+  //         office: reportTo?.office?.id,
+  //         pages: 1,
+  //         limit: 1000,
+  //       },
+  //     });
+
+  //     const resData = response?.data?.data?.leaders;
+
+  //     const formattedLeaders = resData
+  //       .map((e) => ({
+  //         label: e?.first_name + " " + e?.last_name,
+  //         value: e.ogid,
+  //       }))
+  //       .sort((a, b) => a.label.localeCompare(b.label));
+
+  //     // setAllLeaders(formattedLeaders);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     if (error?.response?.status === 403) {
+  //       return setHideReportToModal(true);
+  //     }
+  //     setLoading(false);
+  //   }
+  // }, [reportTo?.office?.id, setHideReportToModal]);
+
+  // useEffect(() => {
+  //   if (CurrentUserCanEditReportTo) {
+  //     fetchAllLeaders();
+  //   }
+  // }, [CurrentUserCanEditReportTo, fetchAllLeaders]);
+
+  // Edit Report To:
   const handleEditReportTo = async (e) => {
     e.preventDefault();
 
@@ -163,11 +310,15 @@ export const ReportToModal = ({
                       <Select
                         options={officeTypeOptions}
                         value={{
-                          label: reportTo?.office?.office_type,
+                          label:
+                            reportTo?.office?.office_type
+                              .charAt(0)
+                              .toUpperCase() +
+                            reportTo?.office?.office_type.slice(1),
                           value: officeType,
                         }}
                         style={{ display: "inline-block" }}
-                        onChange={(e) => handleOfficeTypeChange(e)}
+                        onChange={handleOfficeTypeChange}
                       />
                     </div>
                   </div>
@@ -187,32 +338,51 @@ export const ReportToModal = ({
                           label: reportTo?.office?.title,
                           value: reportTo?.office?.id,
                         }}
-                        onChange={(e) =>
-                          setReportTo({
-                            ...reportTo,
-                            office: {
-                              ...reportTo.office,
-                              id: e?.value,
-                              title: e?.label,
-                            },
-                            employee: {
-                              ...reportTo.employee,
-                              reports_to: {
-                                ogid: "",
-                                full_name: "",
-                              },
-                            },
-                          })
-                        }
+                        onChange={handleOfficeChange}
                         style={{ display: "inline-block" }}
                       />
                     </div>
                   </div>
 
+                  {/* Leadership Type */}
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="leadership_type">Leadership Type</label>
+                      <Select
+                        options={leaderTypeOptions}
+                        value={{
+                          label: leadershipType?.label,
+                          value: leadershipType?.value,
+                        }}
+                        style={{ display: "inline-block" }}
+                        onChange={(e) => handleLeadershipTypeChange(e)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Teams */}
+                  {teamSelected && (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="operation_team_id">Teams</label>
+                        <Select
+                          name="operation_team_id"
+                          options={allTeams}
+                          // value={{
+                          //   label: reportTo?.office?.title,
+                          //   value: reportTo?.office?.id,
+                          // }}
+                          onChange={handleTeamsChange}
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Supervisor/Team Lead */}
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="report_to">Supervisor/Team Lead</label>
+                      <label htmlFor="report_to">Leaders</label>
                       <Select
                         name="report_to"
                         options={allLeaders}
@@ -224,7 +394,7 @@ export const ReportToModal = ({
                           setReportTo({
                             ...reportTo,
                             employee: {
-                              ...reportTo.employee,
+                              ...reportTo?.employee,
                               reports_to: {
                                 ogid: e?.value,
                                 full_name: e?.label,

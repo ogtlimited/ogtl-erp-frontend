@@ -42,6 +42,17 @@ export const officeTypeOptions = [
   },
 ];
 
+export const leaderTypeOptions = [
+  {
+    label: "Supervisor",
+    value: 'supervisor',
+  },
+  {
+    label: "Team Lead",
+    value: 'team_lead',
+  },
+];
+
 export const genderOptions = [
   {
     label: "Female",
