@@ -12,8 +12,7 @@ export const ReportToModal = ({
   fetchEmployeeProfile,
   setHideReportToModal,
 }) => {
-  const { selectCampaigns, selectDepartments, selectTeams, showAlert, user } =
-    useAppContext();
+  const { selectCampaigns, selectDepartments, showAlert, user } = useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [teamSelected, setTeamSelected] = useState(false);
@@ -25,23 +24,9 @@ export const ReportToModal = ({
     value: "",
   });
 
-  // const CurrentUserRoles = user?.employee_info?.roles;
-
-  // const canEditReportTo = [
-  //   "hr_manager",
-  //   "hr_associate",
-  //   "team_lead",
-  //   "supervisor",
-  // ];
-
-  // const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
-  //   canEditReportTo.includes(role)
-  // );
-
   useEffect(() => {
     setReportTo(data);
     setOfficeType(data?.office?.office_type);
-    console.log("Current User: ", data);
   }, [data]);
 
   // Office Type change:
@@ -95,13 +80,111 @@ export const ReportToModal = ({
   };
 
   // Leadership Type change:
-  const handleLeadershipTypeChange = async (e) => {
-    setLeadershipType({
-      label: e?.label,
-      value: e?.value,
-    });
-    setAllLeaders([]);
-    setTeamSelected(false);
+  const handleLeadershipTypeChange = useCallback(
+    async (e) => {
+      setLeadershipType({
+        label: e?.label,
+        value: e?.value,
+      });
+      setAllLeaders([]);
+      setTeamSelected(false);
+      setReportTo({
+        ...reportTo,
+        employee: {
+          ...reportTo.employee,
+          reports_to: {
+            ogid: "",
+            full_name: "",
+          },
+        },
+      });
+
+      const reportToData = {
+        office: officeType + "s",
+        leadershipType: e?.value + "s",
+        officeId: reportTo?.office?.id,
+      };
+
+      try {
+        if (reportToData?.leadershipType === "supervisors") {
+          const response = await axiosInstance.get(
+            `/api/v1/${reportToData?.office}_supervisors/${reportToData?.officeId}.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+              params: {
+                pages: 1,
+                limit: 400,
+              },
+            }
+          );
+          const resData = response?.data?.data?.supervisors;
+
+          const formattedLeaders = resData
+            .map((e) => ({
+              label: e?.name,
+              value: e.ogid,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+
+          setAllLeaders(formattedLeaders);
+        } else if (reportToData?.leadershipType === "team_leads") {
+          setTeamSelected(true);
+          const response = await axiosInstance.get(
+            `/api/v1/${reportToData?.office}_teams/${reportToData?.officeId}.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+              params: {
+                pages: 1,
+                limit: 400,
+              },
+            }
+          );
+
+          const resData = response?.data?.data?.teams;
+
+          if (officeType === "campaign") {
+            const formattedTeams = resData
+              .map((e) => ({
+                ...e.team,
+                label: e?.team?.title,
+                value: e?.team?.id,
+              }))
+              .sort((a, b) => a.label.localeCompare(b.label));
+
+            setAllTeams(formattedTeams);
+          } else {
+            const formattedTeams = resData
+              .map((e) => ({
+                label: e?.title,
+                value: e?.id,
+              }))
+              .sort((a, b) => a.label.localeCompare(b.label));
+
+            setAllTeams(formattedTeams);
+          }
+        } else {
+          return;
+        }
+      } catch (error) {
+        if (error?.response?.status === 403) {
+          return setHideReportToModal(true);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [officeType, reportTo]
+  );
+
+  // Teams change:
+  const handleTeamsChange = async (e) => {
     setReportTo({
       ...reportTo,
       employee: {
@@ -113,139 +196,34 @@ export const ReportToModal = ({
       },
     });
 
-    const reportToData = {
-      office: officeType + "s",
-      leadershipType: e?.value + "s",
-      officeId: reportTo?.office?.id,
-    };
-
-    console.log("Report To Data: ", reportToData);
-
     try {
-      if (reportToData?.leadershipType === "supervisors") {
-        const response = await axiosInstance.get(
-          `/api/v1/${reportToData?.office}_supervisors/${reportToData?.officeId}.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            params: {
-              pages: 1,
-              limit: 400,
-            },
-          }
-        );
-        const resData = response?.data?.data?.supervisors;
+      const response = await axiosInstance.get(
+        `/api/v1/teams_leads/${e?.value}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+      const resData = response?.data?.data?.leads;
 
-        const formattedLeaders = resData
-          .map((e) => ({
-            label: e?.name,
-            value: e.ogid,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label));
+      const formattedLeaders = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-        setAllLeaders(formattedLeaders);
-      } else if (reportToData?.leadershipType === "team_leads") {
-        setTeamSelected(true);
-        const response = await axiosInstance.get(
-          `/api/v1/${reportToData?.office}_teams/${reportToData?.officeId}.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            params: {
-              pages: 1,
-              limit: 400,
-            },
-          }
-        );
-        const resData = response?.data?.data?.teams;
-
-        const formattedTeams = resData
-          .map((e) => ({
-            label: e?.title,
-            value: e?.id,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label));
-
-        setAllTeams(formattedTeams);
-        console.log("All teams", formattedTeams);
-      } else {
-        return;
-      }
+      setAllLeaders(formattedLeaders);
     } catch (error) {
-      if (error?.response?.status === 403) {
-        return setHideReportToModal(true);
-      }
+      console.log(error);
     }
   };
 
-  // Teams change:
-  const handleTeamsChange = (e) => {
-    setReportTo({
-      ...reportTo,
-      employee: {
-        ...reportTo.employee,
-        reports_to: {
-          ogid: "",
-          full_name: "",
-        },
-      },
-    });
-    setLeadershipType({
-      label: "",
-      value: "",
-    });
-    setTeamSelected(false);
-  };
-
-  // // All Leaders:
-  // const fetchAllLeaders = useCallback(async () => {
-  //   try {
-  //     const response = await axiosInstance.get("/api/v1/leaders.json", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //       params: {
-  //         office: reportTo?.office?.id,
-  //         pages: 1,
-  //         limit: 1000,
-  //       },
-  //     });
-
-  //     const resData = response?.data?.data?.leaders;
-
-  //     const formattedLeaders = resData
-  //       .map((e) => ({
-  //         label: e?.first_name + " " + e?.last_name,
-  //         value: e.ogid,
-  //       }))
-  //       .sort((a, b) => a.label.localeCompare(b.label));
-
-  //     // setAllLeaders(formattedLeaders);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     if (error?.response?.status === 403) {
-  //       return setHideReportToModal(true);
-  //     }
-  //     setLoading(false);
-  //   }
-  // }, [reportTo?.office?.id, setHideReportToModal]);
-
-  // useEffect(() => {
-  //   if (CurrentUserCanEditReportTo) {
-  //     fetchAllLeaders();
-  //   }
-  // }, [CurrentUserCanEditReportTo, fetchAllLeaders]);
-
-  // Edit Report To:
-  const handleEditReportTo = async (e) => {
+  // Update Report To:
+  const handleUpdateReportTo = async (e) => {
     e.preventDefault();
 
     const employeeId = data?.employee?.ogid;
@@ -255,12 +233,16 @@ export const ReportToModal = ({
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/add_reports_to/${reportToId}.json?ogid=${employeeId}`,
+        `/api/v1/add_reports_to/${user?.employee_info?.ogid}.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            employee_ogid: employeeId,
+            manager_ogid: reportToId,
           },
         }
       );
@@ -301,7 +283,7 @@ export const ReportToModal = ({
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleEditReportTo}>
+              <form onSubmit={handleUpdateReportTo}>
                 <div className="row">
                   {/* Office Type */}
                   <div className="col-md-6">
