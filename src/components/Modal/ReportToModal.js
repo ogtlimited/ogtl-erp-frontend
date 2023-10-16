@@ -153,7 +153,7 @@ export const ReportToModal = ({
           if (officeType === "campaign") {
             const formattedTeams = resData
               .map((e) => ({
-                ...e.team,
+                ...e?.team,
                 label: e?.team?.title,
                 value: e?.team?.id,
               }))
