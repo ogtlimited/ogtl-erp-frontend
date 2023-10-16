@@ -101,12 +101,12 @@ export const ReportToModal = ({
 
       const reportToData = {
         office: officeType + "s",
-        leadershipType: e?.value + "s",
+        leadershipType: e?.value,
         officeId: reportTo?.office?.id,
       };
 
       try {
-        if (reportToData?.leadershipType === "supervisors") {
+        if (reportToData?.leadershipType === "supervisor") {
           const response = await axiosInstance.get(
             `/api/v1/${reportToData?.office}_supervisors/${reportToData?.officeId}.json`,
             {
@@ -131,7 +131,7 @@ export const ReportToModal = ({
             .sort((a, b) => a.label.localeCompare(b.label));
 
           setAllLeaders(formattedLeaders);
-        } else if (reportToData?.leadershipType === "team_leads") {
+        } else if (reportToData?.leadershipType === "team_lead") {
           setTeamSelected(true);
           const response = await axiosInstance.get(
             `/api/v1/${reportToData?.office}_teams/${reportToData?.officeId}.json`,
@@ -350,10 +350,6 @@ export const ReportToModal = ({
                         <Select
                           name="operation_team_id"
                           options={allTeams}
-                          // value={{
-                          //   label: reportTo?.office?.title,
-                          //   value: reportTo?.office?.id,
-                          // }}
                           onChange={handleTeamsChange}
                           style={{ display: "inline-block" }}
                         />
