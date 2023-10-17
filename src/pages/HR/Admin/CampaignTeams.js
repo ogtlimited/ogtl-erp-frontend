@@ -5,8 +5,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams, Link } from "react-router-dom";
 import moment from "moment";
-import { CampaignTeamForm } from "../../../components/FormJSON/CreateOffices";
-import { CampaignTeamFormModal } from "../../../components/Modal/CampaignTeamFormModal";
+import { TeamForm } from "../../../components/FormJSON/CreateOffices";
 import { TeamFormModal } from "../../../components/Modal/TeamFormModal";
 
 const CampaignTeams = () => {
@@ -74,8 +73,8 @@ const CampaignTeams = () => {
   }, [fetchAllCampaignTeams]);
 
   const handleCreate = () => {
-    setMode("Add");
-    setOffice(CampaignTeamForm);
+    setMode("Create");
+    setOffice(TeamForm);
   };
 
   const handleEdit = (row) => {
@@ -136,10 +135,10 @@ const CampaignTeams = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#CampaignTeamFormModal"
+                data-target="#TeamFormModal"
                 onClick={handleCreate}
               >
-                Add Team
+                Create Team
               </a>
             </div>
           )}
@@ -160,12 +159,6 @@ const CampaignTeams = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-
-      <CampaignTeamFormModal
-        mode={mode}
-        data={office}
-        fetchAllCampaignTeams={fetchAllCampaignTeams}
-      />
 
       <TeamFormModal
         mode={mode}

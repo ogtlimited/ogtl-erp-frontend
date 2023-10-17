@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import { useParams } from "react-router-dom";
 import $ from "jquery";
 
 export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
   const { showAlert, goToTop } = useAppContext();
+  const { id } = useParams();
+  const { title } = useParams();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +57,7 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
       showAlert(true, `Team successfully created`, "alert alert-success");
       fetchAllTeams();
       $("#TeamFormModal").modal("toggle");
-      
+
       goToTop();
       setOffice(data);
       setLoading(false);
@@ -62,7 +65,7 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#TeamFormModal").modal("toggle");
-      
+
       goToTop();
       setLoading(false);
     }
@@ -111,7 +114,11 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered col-md-6">
+        <div
+          className={`modal-dialog modal-dialog-centered ${
+            mode === "Create" ? "modal-lg" : "col-md-6"
+          }`}
+        >
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
@@ -130,7 +137,28 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
             <div className="modal-body">
               <form onSubmit={handleTeamAction}>
                 <div className="row">
-                  <div className="col-md-12">
+                  {mode === "Create" ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="operation_department_id">
+                          Department
+                        </label>
+                        <input
+                          name="operation_department_id"
+                          type="text"
+                          className="form-control"
+                          value={title}
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div
+                    className={`${
+                      mode === "Create" ? "col-md-6" : "col-md-12"
+                    } `}
+                  >
                     <div className="form-group">
                       <label htmlFor="title">Title</label>
                       <input

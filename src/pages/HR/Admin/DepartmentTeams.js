@@ -5,8 +5,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams, Link } from "react-router-dom";
 import moment from "moment";
-import { DepartmentTeamForm } from "../../../components/FormJSON/CreateOffices";
-import { DepartmentTeamFormModal } from "../../../components/Modal/DepartmentTeamFormModal";
+import { TeamForm } from "../../../components/FormJSON/CreateOffices";
 import { TeamFormModal } from "../../../components/Modal/TeamFormModal";
 
 const DepartmentTeams = () => {
@@ -74,8 +73,8 @@ const DepartmentTeams = () => {
   }, [fetchAllDepartmentTeams]);
 
   const handleCreate = () => {
-    setMode("Add");
-    setOffice(DepartmentTeamForm);
+    setMode("Create");
+    setOffice(TeamForm);
   };
 
   const handleEdit = (row) => {
@@ -137,10 +136,10 @@ const DepartmentTeams = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentTeamFormModal"
+                data-target="#TeamFormModal"
                 onClick={handleCreate}
               >
-                Add Team
+                Create Team
               </a>
             </div>
           )}
@@ -161,12 +160,6 @@ const DepartmentTeams = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-
-      <DepartmentTeamFormModal
-        mode={mode}
-        data={office}
-        fetchAllDepartmentTeams={fetchAllDepartmentTeams}
-      />
 
       <TeamFormModal
         mode={mode}
