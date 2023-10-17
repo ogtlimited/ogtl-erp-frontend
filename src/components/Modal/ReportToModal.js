@@ -12,7 +12,8 @@ export const ReportToModal = ({
   fetchEmployeeProfile,
   setHideReportToModal,
 }) => {
-  const { selectCampaigns, selectDepartments, showAlert, user } = useAppContext();
+  const { selectCampaigns, selectDepartments, showAlert, user } =
+    useAppContext();
   const [reportTo, setReportTo] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [teamSelected, setTeamSelected] = useState(false);
@@ -232,17 +233,13 @@ export const ReportToModal = ({
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.put(
-        `/api/v1/add_reports_to/${user?.employee_info?.ogid}.json`,
+      const response = await axiosInstance.patch(
+        `/api/v1/add_reports_to/${user?.employee_info?.ogid}.json?employee_ogid=${employeeId}&manager_ogid=${reportToId}`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            employee_ogid: employeeId,
-            manager_ogid: reportToId,
           },
         }
       );
