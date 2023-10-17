@@ -756,7 +756,7 @@ const EmployeesTable = ({
               </div>
 
               <div className="hr-filter-select col-12">
-                <div className="col-md-3">
+                {/* <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDepartmentFilter(e)}
@@ -772,9 +772,9 @@ const EmployeesTable = ({
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
-                <div className="col-md-3">
+                {/* <div className="col-md-3">
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleCampaignFilter(e)}
@@ -790,7 +790,7 @@ const EmployeesTable = ({
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 <div className="col-md-3">
                   <select
