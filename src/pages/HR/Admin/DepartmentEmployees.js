@@ -87,7 +87,7 @@ const DepartmentEmployees = () => {
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.department}</span>
+            {value} <span>{row?.department?.toUpperCase()}</span>
           </Link>
         </h2>
       ),

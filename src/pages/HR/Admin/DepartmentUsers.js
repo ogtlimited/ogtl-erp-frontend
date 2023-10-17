@@ -17,7 +17,7 @@ const DepartmentUsers = () => {
         <div className="row align-items-center">
           <div className="col">
             <h3 className="page-title">
-              {title.charAt(0).toUpperCase() + title.slice(1)}
+              {title.replace(/\b\w/g, char => char.toUpperCase())}
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
