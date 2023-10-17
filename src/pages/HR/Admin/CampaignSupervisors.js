@@ -86,7 +86,7 @@ const CampaignSupervisor = () => {
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.campaign}</span>
+            {value} <span>{row?.campaign?.toUpperCase()}</span>
           </Link>
         </h2>
       ),
