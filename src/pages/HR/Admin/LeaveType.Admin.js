@@ -139,7 +139,7 @@ const LeaveType = () => {
       <LeaveTypeFormModal
         mode={mode}
         data={leaveType}
-        fetchAllLeaveTypes={fetchAllLeaveTypes}
+        handleRefresh={fetchAllLeaveTypes}
       />
     </>
   );
