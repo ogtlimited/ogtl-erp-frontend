@@ -37,40 +37,61 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
     }
   };
 
+  // CREATE:
   const handleCreateCampaign = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/campaigns.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-          leave_approval_level: +office.leave_approval_level,
-        },
-      });
 
-      showAlert(true, `Campaign successfully created`, "alert alert-success");
-      fetchAllCampaigns();
-      $("#CampaignFormModal").modal("toggle");
+    try {
+      const campaignData = {
+        title: office.title,
+        leave_approval_level: +office.leave_approval_level,
+      };
+
+      const response = await createCampaign(campaignData);
+
+      if (response.status === 200) {
+        const departmentData = {
+          operation_department_id: +id,
+          operation_campaign_id: response?.data?.data?.campaign?.id,
+        };
+        await createDepartmentCampaign(departmentData);
+      }
 
       setOffice(data);
-      setLoading(false);
+      showAlert(true, "Campaign successfully created", "alert alert-success");
+      fetchAllCampaigns();
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      handleErrorResponse(error);
+    } finally {
       $("#CampaignFormModal").modal("toggle");
-
       goToTop();
       setLoading(false);
     }
   };
 
+  // creates the campaign:
+  const createCampaign = async (campaignData) => {
+    return axiosInstance.post("/api/v1/campaigns.json", {
+      payload: campaignData,
+    });
+  };
+
+  // assigns the campaign to the department:
+  const createDepartmentCampaign = async (departmentData) => {
+    return axiosInstance.post("/api/v1/departments_campaigns.json", {
+      payload: departmentData,
+    });
+  };
+
+  // handles the error response:
+  const handleErrorResponse = (error) => {
+    const errorMsg = error?.response?.data?.errors;
+    showAlert(true, errorMsg, "alert alert-warning");
+  };
+
+  // EDIT:
   const handleEditCampaign = async (e) => {
     e.preventDefault();
 

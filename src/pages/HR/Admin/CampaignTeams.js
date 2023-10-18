@@ -164,6 +164,7 @@ const CampaignTeams = () => {
         mode={mode}
         data={office}
         fetchAllTeams={fetchAllCampaignTeams}
+        officeType="campaign"
       />
     </div>
   );

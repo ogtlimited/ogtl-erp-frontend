@@ -165,6 +165,7 @@ const DepartmentTeams = () => {
         mode={mode}
         data={office}
         fetchAllTeams={fetchAllDepartmentTeams}
+        officeType="department"
       />
     </div>
   );

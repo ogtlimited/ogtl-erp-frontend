@@ -6,7 +6,7 @@ import axiosInstance from "../../services/api";
 import { useParams } from "react-router-dom";
 import $ from "jquery";
 
-export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
+export const TeamFormModal = ({ mode, data, fetchAllTeams, officeType }) => {
   const { showAlert, goToTop } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
@@ -37,40 +37,77 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
     }
   };
 
+  // CREATE:
   const handleCreateTeam = async (e) => {
     e.preventDefault();
 
     setLoading(true);
+
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/teams.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-        },
-      });
+      const teamData = {
+        title: office.title,
+      };
 
-      showAlert(true, `Team successfully created`, "alert alert-success");
-      fetchAllTeams();
-      $("#TeamFormModal").modal("toggle");
+      const response = await createTeam(teamData);
 
-      goToTop();
+      if (response.status === 201) {
+        if (officeType === "department") {
+          const departmentData = {
+            operation_department_id: +id,
+            operation_team_id: response?.data?.data?.team?.id,
+          };
+          await createDepartmentTeam(departmentData);
+        }
+
+        if (officeType === "campaign") {
+          const campaignData = {
+            operation_campaign_id: +id,
+            operation_team_id: response?.data?.data?.team?.id,
+          };
+          await createCampaignTeam(campaignData);
+        }
+      }
+
       setOffice(data);
-      setLoading(false);
+      showAlert(true, "Team successfully created", "alert alert-success");
+      fetchAllTeams();
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      handleErrorResponse(error);
+    } finally {
       $("#TeamFormModal").modal("toggle");
-
       goToTop();
       setLoading(false);
     }
   };
 
+  // creates the team:
+  const createTeam = async (teamData) => {
+    return axiosInstance.post("/api/v1/teams.json", {
+      payload: teamData,
+    });
+  };
+
+  // assigns the team to the department if department:
+  const createDepartmentTeam = async (departmentData) => {
+    return axiosInstance.post("/api/v1/departments_teams.json", {
+      payload: departmentData,
+    });
+  };
+
+  // assigns the team to the campaign if campaign:
+  const createCampaignTeam = async (campaignData) => {
+    return axiosInstance.post("/api/v1/campaigns_teams.json", {
+      payload: campaignData,
+    });
+  };
+
+  // handles the error response:
+  const handleErrorResponse = (error) => {
+    const errorMsg = error?.response?.data?.errors;
+    showAlert(true, errorMsg, "alert alert-warning");
+  };
+
+  // EDIT:
   const handleEditTeam = async (e) => {
     e.preventDefault();
 
