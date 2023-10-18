@@ -5,8 +5,7 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams, Link } from "react-router-dom";
 import moment from "moment";
-import { DepartmentCampaignForm } from "../../../components/FormJSON/CreateOffices";
-import { DepartmentCampaignFormModal } from "../../../components/Modal/DepartmentCampaignFormModal";
+import { CampaignForm } from "../../../components/FormJSON/CreateOffices";
 import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
 
 const DepartmentCampaigns = () => {
@@ -74,8 +73,8 @@ const DepartmentCampaigns = () => {
   }, [fetchAllDepartmentCampaigns]);
 
   const handleCreate = () => {
-    setMode("Add");
-    setOffice(DepartmentCampaignForm);
+    setMode("Create");
+    setOffice(CampaignForm);
   };
 
   const handleEdit = (row) => {
@@ -143,10 +142,10 @@ const DepartmentCampaigns = () => {
                 href="#"
                 className="btn add-btn m-r-5"
                 data-toggle="modal"
-                data-target="#DepartmentCampaignFormModal"
+                data-target="#CampaignFormModal"
                 onClick={handleCreate}
               >
-                Add Campaign
+                Create Campaign
               </a>
             </div>
           )}
@@ -167,12 +166,6 @@ const DepartmentCampaigns = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-
-      <DepartmentCampaignFormModal
-        mode={mode}
-        data={office}
-        fetchAllDepartmentCampaigns={fetchAllDepartmentCampaigns}
-      />
 
       <CampaignFormModal
         mode={mode}

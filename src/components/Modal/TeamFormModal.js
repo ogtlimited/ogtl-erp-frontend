@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import { useParams } from "react-router-dom";
 import $ from "jquery";
 
-export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
+export const TeamFormModal = ({ mode, data, fetchAllTeams, officeType }) => {
   const { showAlert, goToTop } = useAppContext();
+  const { id } = useParams();
+  const { title } = useParams();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,40 +37,77 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
     }
   };
 
+  // CREATE:
   const handleCreateTeam = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/teams.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-        },
-      });
 
-      showAlert(true, `Team successfully created`, "alert alert-success");
-      fetchAllTeams();
-      $("#TeamFormModal").modal("toggle");
-      
-      goToTop();
+    try {
+      const teamData = {
+        title: office.title,
+      };
+
+      const response = await createTeam(teamData);
+
+      if (response.status === 201) {
+        if (officeType === "department") {
+          const departmentData = {
+            operation_department_id: +id,
+            operation_team_id: response?.data?.data?.team?.id,
+          };
+          await createDepartmentTeam(departmentData);
+        }
+
+        if (officeType === "campaign") {
+          const campaignData = {
+            operation_campaign_id: +id,
+            operation_team_id: response?.data?.data?.team?.id,
+          };
+          await createCampaignTeam(campaignData);
+        }
+      }
+
       setOffice(data);
-      setLoading(false);
+      showAlert(true, "Team successfully created", "alert alert-success");
+      fetchAllTeams();
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      handleErrorResponse(error);
+    } finally {
       $("#TeamFormModal").modal("toggle");
-      
       goToTop();
       setLoading(false);
     }
   };
 
+  // creates the team:
+  const createTeam = async (teamData) => {
+    return axiosInstance.post("/api/v1/teams.json", {
+      payload: teamData,
+    });
+  };
+
+  // assigns the team to the department if department:
+  const createDepartmentTeam = async (departmentData) => {
+    return axiosInstance.post("/api/v1/departments_teams.json", {
+      payload: departmentData,
+    });
+  };
+
+  // assigns the team to the campaign if campaign:
+  const createCampaignTeam = async (campaignData) => {
+    return axiosInstance.post("/api/v1/campaigns_teams.json", {
+      payload: campaignData,
+    });
+  };
+
+  // handles the error response:
+  const handleErrorResponse = (error) => {
+    const errorMsg = error?.response?.data?.errors;
+    showAlert(true, errorMsg, "alert alert-warning");
+  };
+
+  // EDIT:
   const handleEditTeam = async (e) => {
     e.preventDefault();
 
@@ -111,7 +151,11 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered col-md-6">
+        <div
+          className={`modal-dialog modal-dialog-centered ${
+            mode === "Create" ? "modal-lg" : "col-md-6"
+          }`}
+        >
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
@@ -130,7 +174,28 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams }) => {
             <div className="modal-body">
               <form onSubmit={handleTeamAction}>
                 <div className="row">
-                  <div className="col-md-12">
+                  {mode === "Create" ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="operation_department_id">
+                          Department
+                        </label>
+                        <input
+                          name="operation_department_id"
+                          type="text"
+                          className="form-control"
+                          value={title}
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div
+                    className={`${
+                      mode === "Create" ? "col-md-6" : "col-md-12"
+                    } `}
+                  >
                     <div className="form-group">
                       <label htmlFor="title">Title</label>
                       <input

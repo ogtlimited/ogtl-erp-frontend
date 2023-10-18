@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import { useParams } from "react-router-dom";
 import $ from "jquery";
 
 export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
   const { showAlert, goToTop } = useAppContext();
+  const { id } = useParams();
+  const { title } = useParams();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,40 +37,61 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
     }
   };
 
+  // CREATE:
   const handleCreateCampaign = async (e) => {
     e.preventDefault();
 
     setLoading(true);
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/campaigns.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-          leave_approval_level: +office.leave_approval_level,
-        },
-      });
 
-      showAlert(true, `Campaign successfully created`, "alert alert-success");
-      fetchAllCampaigns();
-      $("#CampaignFormModal").modal("toggle");
-      
+    try {
+      const campaignData = {
+        title: office.title,
+        leave_approval_level: +office.leave_approval_level,
+      };
+
+      const response = await createCampaign(campaignData);
+
+      if (response.status === 200) {
+        const departmentData = {
+          operation_department_id: +id,
+          operation_campaign_id: response?.data?.data?.campaign?.id,
+        };
+        await createDepartmentCampaign(departmentData);
+      }
+
       setOffice(data);
-      setLoading(false);
+      showAlert(true, "Campaign successfully created", "alert alert-success");
+      fetchAllCampaigns();
     } catch (error) {
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      handleErrorResponse(error);
+    } finally {
       $("#CampaignFormModal").modal("toggle");
-      
       goToTop();
       setLoading(false);
     }
   };
 
+  // creates the campaign:
+  const createCampaign = async (campaignData) => {
+    return axiosInstance.post("/api/v1/campaigns.json", {
+      payload: campaignData,
+    });
+  };
+
+  // assigns the campaign to the department:
+  const createDepartmentCampaign = async (departmentData) => {
+    return axiosInstance.post("/api/v1/departments_campaigns.json", {
+      payload: departmentData,
+    });
+  };
+
+  // handles the error response:
+  const handleErrorResponse = (error) => {
+    const errorMsg = error?.response?.data?.errors;
+    showAlert(true, errorMsg, "alert alert-warning");
+  };
+
+  // EDIT:
   const handleEditCampaign = async (e) => {
     e.preventDefault();
 
@@ -75,29 +99,32 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
     const id = office.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/campaigns/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-          leave_approval_level: +office.leave_approval_level,
-        },
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/campaigns/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: office.title,
+            leave_approval_level: +office.leave_approval_level,
+          },
+        }
+      );
 
       showAlert(true, `Campaign successfully updated`, "alert alert-success");
       fetchAllCampaigns();
       $("#CampaignFormModal").modal("toggle");
-      
+
       // goToTop();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#CampaignFormModal").modal("toggle");
-      
+
       goToTop();
       setLoading(false);
     }
@@ -131,9 +158,25 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
             <div className="modal-body">
               <form onSubmit={handleCampaignAction}>
                 <div className="row">
+                  {mode === "Create" ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="operation_department_id">
+                          Department
+                        </label>
+                        <input
+                          name="operation_department_id"
+                          type="text"
+                          className="form-control"
+                          value={title}
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                  ) : null}
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="title">Title</label>
+                      <label htmlFor="title">Campaign Title</label>
                       <input
                         name="title"
                         type="text"

@@ -5,7 +5,6 @@ import axiosInstance from "../../../services/api";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import { CampaignFormModal } from "../../../components/Modal/CampaignFormModal";
-import { CampaignForm } from "../../../components/FormJSON/CreateOffices";
 import moment from "moment";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
@@ -69,11 +68,6 @@ const Campaigns = () => {
   useEffect(() => {
     fetchAllCampaign();
   }, [fetchAllCampaign]);
-
-  const handleCreate = () => {
-    setMode("Create");
-    setOffice(CampaignForm);
-  };
 
   const handleEdit = (row) => {
     setMode("Edit");
@@ -140,19 +134,6 @@ const Campaigns = () => {
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Campaigns</li>
             </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateAndEdit ? (
-              <a
-                href="/"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#CampaignFormModal"
-                onClick={handleCreate}
-              >
-                <i className="fa fa-plus"></i> Create Campaign
-              </a>
-            ) : null}
           </div>
         </div>
       </div>
