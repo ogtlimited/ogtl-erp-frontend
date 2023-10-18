@@ -359,7 +359,7 @@ const AppProvider = (props) => {
   };
 
   // All Leave Types:
-  const fetchAllLeaveTypes = async () => {
+  const fetchAllLeaveTypes = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/leave_types.json", {
@@ -383,7 +383,7 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Deduction Types:
   const fetchDeductionTypes = useCallback(async () => {
@@ -476,7 +476,7 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
     }
-  }, [fetchDeductionTypes, isHr, isTeamLead, userToken]);
+  }, [fetchAllLeaveTypes, fetchDeductionTypes, isHr, isTeamLead, userToken]);
 
   return (
     <AppContext.Provider

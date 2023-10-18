@@ -11,7 +11,13 @@ import Select from "react-select";
 import { RiErrorWarningLine } from "react-icons/ri";
 
 export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
-  const { showAlert, loadingSelect, selectLeaveTypes, user } = useAppContext();
+  const {
+    showAlert,
+    loadingSelect,
+    selectLeaveTypes,
+    fetchAllLeaveTypes,
+    user,
+  } = useAppContext();
   const [leave, setLeave] = useState(CREATE_LEAVE);
   const [isLeaveTypeValid, setIsLeaveTypeValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,9 +54,13 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   }, [leave.start_date, today, user?.employee_info?.leave_count]);
 
   useEffect(() => {
+    fetchAllLeaveTypes();
+  }, [fetchAllLeaveTypes]);
+
+  useEffect(() => {
     const selectedLeave = leave?.leaveTypeTitle.toLowerCase();
     setLeaveType(selectedLeave);
-  }, [leave.leaveTypeTitle, leaveType]);
+  }, [leave?.leaveTypeTitle, leaveType]);
 
   const cancelEvent = () => {
     setLeave(CREATE_LEAVE);
@@ -91,7 +101,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
           )}, please select a weekday.`
         );
         setSelectedStartDate("");
-        
         setSelectedEndDateError("");
       } else {
         setSelectedEndDateError(

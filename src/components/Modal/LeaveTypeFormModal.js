@@ -3,8 +3,8 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
-  const { showAlert, goToTop } = useAppContext();
+export const LeaveTypeFormModal = ({ mode, data, handleRefresh }) => {
+  const { showAlert, goToTop, fetchAllLeaveTypes} = useAppContext();
   const [leaveType, setLeaveType] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -50,6 +50,7 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
       });
 
       showAlert(true, "Leave type successfully created", "alert alert-success");
+      handleRefresh();
       fetchAllLeaveTypes();
       $("#LeaveTypeFormModal").modal("hide");
       setLeaveType(data);
@@ -85,6 +86,7 @@ export const LeaveTypeFormModal = ({ mode, data, fetchAllLeaveTypes }) => {
       );
 
       showAlert(true, "Leave type successfully updated", "alert alert-success");
+      handleRefresh();
       fetchAllLeaveTypes();
       $("#LeaveTypeFormModal").modal("hide");
       setLeaveType(data);
