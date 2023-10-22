@@ -12,7 +12,13 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
-  const { showAlert, loadingSelect, fetchDeductionTypes } = useAppContext();
+  const {
+    selectDepartments,
+    selectCampaigns,
+    showAlert,
+    loadingSelect,
+    fetchDeductionTypes,
+  } = useAppContext();
   const [data, setData] = useState(HR_ADD_DEDUCTION_TYPE);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,7 +27,6 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
   const [isDeductionTypeSelected, setIsDeductionTypeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [deductionType, setDeductionType] = useState("");
-  const [allOffices, setAllOffices] = useState([]);
 
   useEffect(() => {
     if (data?.operation_office_id && deductionType.length) {
@@ -46,7 +51,6 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
       officeName: "",
     });
 
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeTypeSelected(true);
   };
@@ -78,48 +82,6 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
     });
   };
 
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("Get All Offices error:", error);
-    }
-  };
-
   const handleAddDeductionType = async (e) => {
     e.preventDefault();
 
@@ -134,16 +96,19 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/deduction_types.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          ...dataPayload,
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/v1/deduction_types.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            ...dataPayload,
+          },
+        }
+      );
 
       showAlert(
         true,
@@ -214,7 +179,11 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
                             Office
                           </label>
                           <Select
-                            options={allOffices}
+                            options={
+                              officeType === "Department"
+                                ? selectDepartments
+                                : selectCampaigns
+                            }
                             isSearchable={true}
                             value={{
                               label: data?.officeName,
@@ -269,7 +238,7 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
                       </div>
                     </div>
 
-                    {isDeductionTypeSelected &&  (
+                    {isDeductionTypeSelected && (
                       <div className="col-md-6">
                         {deductionType === "percentage" ? (
                           <div className="form-group">

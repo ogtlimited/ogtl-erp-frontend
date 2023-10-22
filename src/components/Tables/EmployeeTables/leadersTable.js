@@ -218,7 +218,7 @@ const LeadersTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select col-12">
+              {/* <div className="hr-filter-select col-12">
                 <div className="col-md-3">
                   <select
                     className="leave-filter-control"
@@ -254,7 +254,9 @@ const LeadersTable = ({
                     ))}
                   </select>
                 </div>
-              </div>
+              </div> */}
+
+              <div className="hr-filter-select col-12"></div>
 
               <div className="custom-table-div">
                 <BootstrapTable
