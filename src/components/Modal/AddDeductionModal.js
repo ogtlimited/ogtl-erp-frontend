@@ -9,6 +9,9 @@ import Select from "react-select";
 
 export const AddDeductionModal = ({ fetchDeductions }) => {
   const {
+    selectDepartments,
+    selectCampaigns,
+    selectTeams,
     showAlert,
     loadingSelect,
     selectDeductionTypes,
@@ -22,7 +25,6 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
-  const [allOffices, setAllOffices] = useState([]);
 
   useEffect(() => {
     fetchDeductionTypes();
@@ -52,11 +54,11 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
       employeeName: "",
     });
 
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeTypeSelected(true);
   };
 
+  // Office change:
   const handleOfficeChange = (e) => {
     setData({
       ...data,
@@ -69,78 +71,96 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     fetchAllEmployees(e?.value);
   };
 
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("Get All Offices error:", error);
-    }
-  };
-
   // All Employees:
   const fetchAllEmployees = async (officeId) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          pages: 1,
-          limit: 1000,
-        },
-      });
+    if (officeType === "Department") {
+      const response = await axiosInstance.get(
+        `/api/v1/departments_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employees;
 
-      const formattedLeaders = resData
+      const formattedData = resData
         .map((e) => ({
-          label: e?.full_name,
+          label: e?.name,
           value: e.ogid,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedLeaders);
+      setAllEmployees(formattedData);
       setLoading(false);
-    } catch (error) {
-      console.log("Get All employees error:", error);
+      return;
+    }
+
+    if (officeType === "Campaign") {
+      const response = await axiosInstance.get(
+        `/api/v1/campaign_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
       setLoading(false);
+      return;
+    }
+
+    if (officeType === "Team") {
+      const response = await axiosInstance.get(
+        `/api/v1/teams_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
+      setLoading(false);
+      return;
     }
   };
 
@@ -210,6 +230,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
               {!loadingSelect ? (
                 <form onSubmit={handleAddDeduction}>
                   <div className="row">
+                    {/* Office Type */}
                     <div className="col-md-6">
                       <div className="form-group">
                         <label>Office Type</label>
@@ -232,7 +253,13 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                             Office
                           </label>
                           <Select
-                            options={allOffices}
+                            options={
+                              officeType === "Department"
+                                ? selectDepartments
+                                : officeType === "Campaign"
+                                ? selectCampaigns
+                                : selectTeams
+                            }
                             isSearchable={true}
                             value={{
                               label: data?.officeName,
