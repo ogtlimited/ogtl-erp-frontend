@@ -3,20 +3,16 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import {
-  RoleUserForm,
-  officeTypeOptions,
-} from "../FormJSON/CreateLeader.js";
+import { RoleUserForm, officeTypeOptions } from "../FormJSON/CreateLeader.js";
 import $ from "jquery";
 import Select from "react-select";
 
 export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
-  const { showAlert } = useAppContext();
+  const { selectDepartments, selectCampaigns, showAlert } = useAppContext();
   const [roleUser, setRoleUser] = useState(RoleUserForm);
   const [loading, setLoading] = useState(false);
   const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
-  const [allOffices, setAllOffices] = useState([]);
   const [allLeaders, setAllLeaders] = useState([]);
   const [officeType, setOfficeType] = useState("");
 
@@ -31,9 +27,12 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
     setRoleUser({
       ...roleUser,
       operation_office_id: "",
+      hr_user_id: "",
+      admin_role_id: "",
+      officeName: "",
+      roleUserName: "",
     });
 
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeTypeSelected(true);
   };
@@ -48,78 +47,97 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
     fetchAllUsers(e?.value);
   };
 
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("Get All Offices error:", error);
-    }
-  };
-
+  // All Employees:
   const fetchAllUsers = async (officeId) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          pages: 1,
-          limit: 1000,
-        },
-      });
+    if (officeType === "Department") {
+      const response = await axiosInstance.get(
+        `/api/v1/departments_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employees;
 
-      const formattedLeaders = resData
+      const formattedData = resData
         .map((e) => ({
-          label: e?.full_name,
+          label: e?.name,
           value: e.ogid,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllLeaders(formattedLeaders);
+      setAllLeaders(formattedData);
       setLoading(false);
-    } catch (error) {
-      console.log("Get All Leaders error:", error);
-      setLoading(false);
+      return;
     }
+
+    if (officeType === "Campaign") {
+      const response = await axiosInstance.get(
+        `/api/v1/campaign_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllLeaders(formattedData);
+      setLoading(false);
+      return;
+    }
+
+    // if (officeType === "Team") {
+    //   const response = await axiosInstance.get(
+    //     `/api/v1/teams_employees/${officeId}.json`,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         "Access-Control-Allow-Origin": "*",
+    //         "ngrok-skip-browser-warning": "69420",
+    //       },
+    //       params: {
+    //         pages: 1,
+    //         limit: 1000,
+    //       },
+    //     }
+    //   );
+
+    //   const resData = response?.data?.data?.employees;
+
+    //   const formattedData = resData
+    //     .map((e) => ({
+    //       label: e?.name,
+    //       value: e.ogid,
+    //     }))
+    //     .sort((a, b) => a.label.localeCompare(b.label));
+
+    //   setAllEmployees(formattedData);
+    //   setLoading(false);
+    //   return;
+    // }
   };
 
   const handleLeaderAction = async (e) => {
@@ -133,14 +151,17 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/role_assignments.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: leaderData,
-      });
+      const response = await axiosInstance.post(
+        `/api/v1/role_assignments.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: leaderData,
+        }
+      );
 
       showAlert(true, response?.data?.data?.message, "alert alert-success");
 
@@ -206,7 +227,11 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
                           Office
                         </label>
                         <Select
-                          options={allOffices}
+                          options={
+                            officeType === "Department"
+                              ? selectDepartments
+                              : selectCampaigns
+                          }
                           isSearchable={true}
                           isClearable={true}
                           value={{
@@ -246,8 +271,6 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
                       </div>
                     </div>
                   )}
-
-                  
                 </div>
 
                 <div className="modal-footer">
