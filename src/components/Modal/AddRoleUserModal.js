@@ -42,6 +42,9 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
       ...roleUser,
       operation_office_id: e?.value,
       officeName: e?.label,
+      hr_user_id: "",
+      admin_role_id: "",
+      roleUserName: "",
     });
     setIsOfficeSelected(true);
     fetchAllUsers(e?.value);
@@ -169,6 +172,7 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
       setRoleUser(RoleUserForm);
       fetchRoleUsers();
       setLoading(false);
+      cancelEvent();	
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
