@@ -14,7 +14,8 @@ import male3 from "../../../assets/img/male_avater3.png";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const LeadershipAdmin = () => {
-  const { showAlert, user, ErrorHandler } = useAppContext();
+  const { selectDepartments, selectCampaigns, showAlert, user, ErrorHandler } =
+    useAppContext();
   const [allLeaders, setAllLeaders] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
@@ -39,6 +40,11 @@ const LeadershipAdmin = () => {
   const CurrentUserCanCreateLeave = CurrentUserRoles.some((role) =>
     canCreate.includes(role)
   );
+
+  useEffect(() => {
+    setDepartments(selectDepartments);
+    setCampaigns(selectCampaigns);
+  }, [selectCampaigns, selectDepartments]);
 
   // All Leaders:
   const fetchAllLeaders = useCallback(async () => {
@@ -82,74 +88,8 @@ const LeadershipAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [officeFilter, page, sizePerPage]);
 
-  // All Campaigns:
-  const fetchAllCampaigns = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: "campaign",
-          pages: 1,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const formattedCampaigns = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setCampaigns(formattedCampaigns);
-      setLoading(false);
-    } catch (error) {
-      console.log("All Campaigns error:", error);
-      setLoading(false);
-    }
-  };
-
-  // All Departments:
-  const fetchAllDepartments = async () => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: "department",
-          pages: 1,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const formattedDepartments = resData
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setDepartments(formattedDepartments);
-      setLoading(false);
-    } catch (error) {
-      console.log("All Departments error:", error);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchAllLeaders();
-    fetchAllCampaigns();
-    fetchAllDepartments();
   }, [fetchAllLeaders]);
 
   useEffect(() => {
