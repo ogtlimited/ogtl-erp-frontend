@@ -41,7 +41,6 @@ const Campaigns = () => {
         },
       });
       const resData = response?.data?.data?.campaigns;
-      console.log("This camp:", response?.data)
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -79,7 +78,7 @@ const Campaigns = () => {
       dataField: "title",
       text: "Campaign",
       sort: true,
-      headerStyle: { width: "40%" },
+      headerStyle: { width: "30%" },
       formatter: (val, row) => (
         <p>
           <Link
@@ -101,7 +100,12 @@ const Campaigns = () => {
       dataField: "leave_approval_level",
       text: "Leave Approval Level",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
+      formatter: (value, row) => (
+        <p>
+          {value === 1 ? "1 Approver" : value > 1 ? `${value} Approvers` : null}
+        </p>
+      ),
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",

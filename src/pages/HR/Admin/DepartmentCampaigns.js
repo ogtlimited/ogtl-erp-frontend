@@ -109,7 +109,12 @@ const DepartmentCampaigns = () => {
       dataField: "leave_approval_level",
       text: "Leave Approval Level",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
+      formatter: (value, row) => (
+        <p>
+          {value === 1 ? "1 Approver" : value > 1 ? `${value} Approvers` : null}
+        </p>
+      ),
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
