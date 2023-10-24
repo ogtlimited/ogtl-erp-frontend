@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { CREATE_LEAVE } from "../FormJSON/CreateLeave";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -28,39 +28,77 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const [selectedEndDateError, setSelectedEndDateError] = useState("");
   const [proofUpload, setProofUpload] = useState(null);
 
-  const [today, setToday] = useState(null);
+  const employeeGender = user?.employee_info?.personal_details?.gender;
+
   const [minDate, setMinDate] = useState(null);
   const [maxDate, setMaxDate] = useState(null);
+  const [noticePeriod, setNoticePeriod] = useState(15);
+  const [allowableDays, setAllowableDays] = useState(19);
+
+  const needsProof = ["emergency", "sick", "maternity", "paternity"];
+
+  const CurrentUserNeedsUpload = needsProof.some((role) =>
+    leaveType.includes(role)
+  );
 
   useEffect(() => {
-    if (leave.hr_leave_type_id) {
-      setIsLeaveTypeValid(true);
-    } else {
-      setIsLeaveTypeValid(false);
-    }
+    setIsLeaveTypeValid(leave.hr_leave_type_id ? true : false);
   }, [leave.hr_leave_type_id]);
 
   useEffect(() => {
-    const time = new Date().toDateString();
-    const today_date = moment(time).format("yyyy-MM-DD");
-    setToday(today_date);
-    const minSec = ms("15d");
-    const allowableDays = 20;
-    const maxSec = ms(`${allowableDays}d`);
-    const min_date = new Date(+new Date(today) + minSec);
-    const max_date = new Date(+new Date(leave.start_date) + maxSec);
-    setMinDate(moment(min_date).format("yyyy-MM-DD"));
-    setMaxDate(moment(max_date).format("yyyy-MM-DD"));
-  }, [leave.start_date, today, user?.employee_info?.leave_count]);
+    const todayDate = moment().format("YYYY-MM-DD");
+
+    const parsedDate = new Date(selectedStartDate);
+    const dayChecker = parsedDate.getDay() || null;
+
+    if (leaveType.includes("emergency") || leaveType.includes("sick")) {
+      setAllowableDays(365);
+    } else if (leaveType.includes("maternity")) {
+      setAllowableDays(83);
+    } else if (leaveType.includes("paternity")) {
+      setAllowableDays(6);
+    } else {
+      setAllowableDays(dayChecker < 2 ? 17 : 19);
+    }
+
+    const leaveNoticePeriod = ms(`${noticePeriod}d`);
+    const maxLeaveDays = ms(`${allowableDays}d`);
+
+    const minDate = moment(todayDate).add(leaveNoticePeriod, "ms");
+    const maxDate = moment(leave?.start_date).add(maxLeaveDays, "ms");
+
+    setMinDate(moment(minDate).format("yyyy-MM-DD"));
+    setMaxDate(moment(maxDate).format("yyyy-MM-DD"));
+  }, [
+    allowableDays,
+    leave?.start_date,
+    leaveType,
+    noticePeriod,
+    selectedStartDate,
+  ]);
 
   useEffect(() => {
     fetchAllLeaveTypes();
   }, [fetchAllLeaveTypes]);
 
-  useEffect(() => {
+  const leaveTypeSelection = useCallback(() => {
     const selectedLeave = leave?.leaveTypeTitle.toLowerCase();
     setLeaveType(selectedLeave);
+
+    if (
+      leaveType.includes("emergency") ||
+      leaveType.includes("sick") ||
+      leaveType.includes("paternity")
+    ) {
+      setNoticePeriod(0);
+    } else {
+      setNoticePeriod(15);
+    }
   }, [leave?.leaveTypeTitle, leaveType]);
+
+  useEffect(() => {
+    leaveTypeSelection();
+  }, [leaveTypeSelection]);
 
   const cancelEvent = () => {
     setLeave(CREATE_LEAVE);
@@ -147,7 +185,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     };
 
     try {
-      if (leaveType.includes("emergency") || leaveType.includes("sick")) {
+      if (CurrentUserNeedsUpload) {
         let formData = new FormData();
 
         files.forEach((file) => {
@@ -261,30 +299,16 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="start_date">Start</label>
-                        {leaveType.includes("emergency") ||
-                        leaveType.includes("sick") ? (
-                          <input
-                            type="date"
-                            name="start_date"
-                            value={selectedStartDate}
-                            onChange={handleDateChange}
-                            className="form-control "
-                            id="dateInput"
-                            min={today}
-                            required
-                          />
-                        ) : (
-                          <input
-                            type="date"
-                            name="start_date"
-                            value={selectedStartDate}
-                            onChange={handleDateChange}
-                            className="form-control "
-                            id="dateInput"
-                            min={minDate}
-                            required
-                          />
-                        )}
+                        <input
+                          type="date"
+                          name="start_date"
+                          value={selectedStartDate}
+                          onChange={handleDateChange}
+                          className="form-control "
+                          id="dateInput"
+                          min={minDate}
+                          required
+                        />
                         {selectedStartDateError && (
                           <span className="date_error">
                             <RiErrorWarningLine className="date_error_icon" />
@@ -298,31 +322,17 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="end_date">Last Day of Leave</label>
-                          {leaveType.includes("emergency") ||
-                          leaveType.includes("sick") ? (
-                            <input
-                              type="date"
-                              name="end_date"
-                              value={selectedEndDate}
-                              onChange={handleDateChange}
-                              className="form-control "
-                              id="dateInput"
-                              min={leave.start_date}
-                              required
-                            />
-                          ) : (
-                            <input
-                              type="date"
-                              name="end_date"
-                              value={selectedEndDate}
-                              onChange={handleDateChange}
-                              className="form-control "
-                              id="dateInput"
-                              min={leave.start_date}
-                              max={maxDate}
-                              required
-                            />
-                          )}
+                          <input
+                            type="date"
+                            name="end_date"
+                            value={selectedEndDate}
+                            onChange={handleDateChange}
+                            className="form-control "
+                            id="dateInput"
+                            min={leave.start_date}
+                            max={maxDate}
+                            required
+                          />
                           {selectedEndDateError && (
                             <span className="date_error">
                               <RiErrorWarningLine className="date_error_icon" />
@@ -333,8 +343,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       </div>
                     ) : null}
 
-                    {leaveType.includes("emergency") ||
-                    leaveType.includes("sick") ? (
+                    {CurrentUserNeedsUpload ? (
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="proofs">Proof Upload</label>
@@ -363,21 +372,26 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                     >
                       Cancel
                     </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={!isLeaveTypeValid}
-                    >
-                      {loading ? (
-                        <span
-                          className="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : (
-                        "Submit"
-                      )}
-                    </button>
+                    {(leaveType.includes("maternity") &&
+                      employeeGender === "male") ||
+                    (leaveType.includes("paternity") &&
+                      employeeGender === "female") ? null : (
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={!isLeaveTypeValid}
+                      >
+                        {loading ? (
+                          <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                        ) : (
+                          "Submit"
+                        )}
+                      </button>
+                    )}
                   </div>
                 </form>
               ) : (
