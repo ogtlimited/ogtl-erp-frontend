@@ -9,8 +9,7 @@ const EmployeeInfo = ({
   fetchEmployeeProfile,
   setEmployeeOgid,
 }) => {
-  const { user } =
-    useAppContext();
+  const { user } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
   // const canCreate = ["hr_manager", "hr_associate"];
@@ -84,8 +83,15 @@ const EmployeeInfo = ({
               <div className="title">Leave Approval Level</div>
               <div className="text">
                 <strong>
-                  {employeeInfo?.employee?.leave_approval_level ||
-                    "Not Available"}
+                  {employeeInfo?.employee?.leave_approval_level === 1
+                    ? "1st Approver"
+                    : employeeInfo?.employee?.leave_approval_level === 2
+                    ? "2nd Approver"
+                    : employeeInfo?.employee?.leave_approval_level === 3
+                    ? "3rd Approver"
+                    : employeeInfo?.employee?.leave_approval_level > 3
+                    ? `${employeeInfo?.employee?.leave_approval_level}th Approver`
+                    : "Not Available"}
                 </strong>
               </div>
             </li>
