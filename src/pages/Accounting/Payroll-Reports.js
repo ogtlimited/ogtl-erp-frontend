@@ -178,6 +178,7 @@ const PayrollReports = () => {
       dataField: "id",
       text: "Action",
       sort: true,
+      csvExport: false,
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <>
