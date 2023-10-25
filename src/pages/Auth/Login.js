@@ -51,6 +51,7 @@ const Login = () => {
 
       await fetchMsGraph(e.accessToken, userData);
 
+
       const activeUser = e?.account?.username;
 
       const obj = {
@@ -97,6 +98,7 @@ const Login = () => {
           userData.email = e.account.username;
 
           await fetchMsGraph(e.accessToken);
+
 
           const activeUser = e?.account?.username;
 
