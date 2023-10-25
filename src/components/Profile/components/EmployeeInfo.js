@@ -80,6 +80,12 @@ const EmployeeInfo = ({
               </div>
             </li>
             <li>
+              <div className="title">Strict Attendance</div>
+              <div className="text">
+                {employeeInfo?.employee?.strict_attendance ? "Yes" : "No"}
+              </div>
+            </li>
+            <li>
               <div className="title">Leave Approval Level</div>
               <div className="text">
                 <strong>
