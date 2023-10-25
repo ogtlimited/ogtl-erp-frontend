@@ -12,7 +12,7 @@ const EmployeeInfo = ({
   const { user } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  // const canCreate = ["hr_manager", "hr_associate"];
+
   const canEditOffice = [
     "hr_manager",
     "hr_associate",
@@ -20,13 +20,17 @@ const EmployeeInfo = ({
     "supervisor",
   ];
 
+  const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
+    canEditOffice.includes(role)
+  );
+
   return (
     <>
       <div className="card profile-box flex-fill">
         <div className="card-body">
           <h3 className="card-title">
             Employee Information{" "}
-            {canEditOffice.includes(...CurrentUserRoles) ? (
+            {CurrentUserCanEdit ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -58,19 +62,29 @@ const EmployeeInfo = ({
             <li>
               <div className="title">Office Type</div>
               <div className="text">
-                {employeeInfo?.office?.office_type || "Not Available"}
+                {employeeInfo?.office?.office_type.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ) || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Office</div>
               <div className="text">
-                {employeeInfo?.office?.title || "Not Available"}
+                {employeeInfo?.office?.title &&
+                employeeInfo?.office?.title.length < 3
+                  ? employeeInfo?.office?.title.toUpperCase()
+                  : employeeInfo?.office?.title.replace(/\b\w/g, (char) =>
+                      char.toUpperCase()
+                    ) || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Designation</div>
               <div className="text">
-                {employeeInfo?.employee?.designation?.title || "Not Available"}
+                {employeeInfo?.employee?.designation?.title
+                  .toLowerCase()
+                  .replace(/\b\w/g, (char) => char.toUpperCase()) ||
+                  "Not Available"}
               </div>
             </li>
             <li>

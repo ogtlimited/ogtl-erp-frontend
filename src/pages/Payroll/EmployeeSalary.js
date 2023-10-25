@@ -181,7 +181,7 @@ const EmployeeSalary = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Employee Salary</h3>
+            <h3 className="page-title">STAFF MONTHLY SALARY</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Payroll</li>
               <li className="breadcrumb-item active">Employee Salary</li>
