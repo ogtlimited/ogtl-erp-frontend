@@ -19,6 +19,11 @@ const EmployeeSalary = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
+  const isAuthorized = ["hr_manager", "accountant"];
+
+  const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
+    isAuthorized.includes(role)
+  );
 
   const downloadTemplate = () => {
     const csvContent = "OGID,Annual Gross Salary\n"; // CSV header row

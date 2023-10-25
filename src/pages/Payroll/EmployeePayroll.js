@@ -27,6 +27,13 @@ const EmployeePayroll = () => {
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
 
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const isAuthorized = ["hr_manager", "accountant"];
+
+  const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
+    isAuthorized.includes(role)
+  );
+
   const fetchEmployeeSalarySlip = useCallback(() => {
     axiosInstance
       .get("/api/v1/salary_slips.json", {
