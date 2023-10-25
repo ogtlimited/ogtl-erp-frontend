@@ -357,7 +357,7 @@ export const ReportToModal = ({
                   {/* Supervisor/Team Lead */}
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="report_to">Leaders</label>
+                      <label htmlFor="report_to">Leader</label>
                       <Select
                         name="report_to"
                         options={allLeaders}

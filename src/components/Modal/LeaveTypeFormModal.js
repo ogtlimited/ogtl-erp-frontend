@@ -109,7 +109,7 @@ export const LeaveTypeFormModal = ({ mode, data, handleRefresh }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-dialog modal-dialog-centered modal-l">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
