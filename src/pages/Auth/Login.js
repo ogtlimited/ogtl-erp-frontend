@@ -14,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const userData = {
-    name: "",
+    userId: null,
     email: "",
     userGroup: [],
   };
@@ -47,23 +47,20 @@ const Login = () => {
       setLoading(true);
 
       const e = await msalInstance.ssoSilent(loginRequest);
-      userData.name = e.account.name;
       userData.email = e.account.username;
 
       await fetchMsGraph(e.accessToken, userData);
 
-      tokenService.setKpiUser(userData);
-
-        // const activeUser = e?.account?.username;
+      // const activeUser = e?.account?.username;
 
       const obj = {
         company_email: data.company_email.trim(),
       };
 
-        // if (obj.company_email !== activeUser) {
-        //   setErrorMsg("There is an active user on this device");
-        //   return;
-        // }
+      // if (obj.company_email !== activeUser) {
+      //   setErrorMsg("There is an active user on this device");
+      //   return;
+      // }
 
       setErrorMsg("");
 
@@ -84,6 +81,10 @@ const Login = () => {
       tokenService.setUser(res.data.data);
       tokenService.setToken(res.data.data.token);
 
+      userData.userId = res?.data?.data?.employee_info?.personal_details?.id;
+
+      tokenService.setKpiUser(userData);
+
       if (res.data.data.token) {
         window.location.href = "/dashboard/employee-dashboard";
       } else {
@@ -93,12 +94,9 @@ const Login = () => {
       if (e.name === "InteractionRequiredAuthError") {
         try {
           const e = await msalInstance.loginPopup(loginRequest);
-          userData.name = e.account.name;
           userData.email = e.account.username;
 
           await fetchMsGraph(e.accessToken);
-
-          tokenService.setKpiUser(userData);
 
           // const activeUser = e?.account?.username;
 
@@ -129,6 +127,11 @@ const Login = () => {
 
           tokenService.setUser(res.data.data);
           tokenService.setToken(res.data.data.token);
+
+          userData.userId =
+            res?.data?.data?.employee_info?.personal_details?.id;
+
+          tokenService.setKpiUser(userData);
 
           if (res.data.data.token) {
             window.location.href = "/dashboard/employee-dashboard";
