@@ -69,22 +69,24 @@ const EmployeeInfo = ({
             </li>
             <li>
               <div className="title">Office</div>
-              <div className="text">
-                {employeeInfo?.office?.title &&
-                employeeInfo?.office?.title.length < 3
-                  ? employeeInfo?.office?.title.toUpperCase()
-                  : employeeInfo?.office?.title.replace(/\b\w/g, (char) =>
-                      char.toUpperCase()
-                    ) || "Not Available"}
+              <div
+                className="text"
+                style={{
+                  fontSize: "14px",
+                }}
+              >
+                {employeeInfo?.office?.title.toUpperCase() || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Designation</div>
-              <div className="text">
-                {employeeInfo?.employee?.designation?.title
-                  .toLowerCase()
-                  .replace(/\b\w/g, (char) => char.toUpperCase()) ||
-                  "Not Available"}
+              <div
+                className="text"
+                style={{
+                  fontSize: "14px",
+                }}
+              >
+                {employeeInfo?.employee?.designation?.title || "Not Available"}
               </div>
             </li>
             <li>

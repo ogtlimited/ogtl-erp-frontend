@@ -97,7 +97,7 @@ const Profile = () => {
             }
           );
           const resData = response?.data?.data;
-          console.log("Employee Profile:", resData)
+          console.log("Employee Profile:", resData);
           setUserdata(resData);
 
           const userId = resData?.employee?.email;
@@ -125,7 +125,7 @@ const Profile = () => {
           );
           const resData = response?.data?.data;
           setUserdata(resData);
-          console.log("Employee Profile:", resData)
+          console.log("Employee Profile:", resData);
 
           const userId = resData?.employee?.email;
           const employeeId = resData?.employee?.personal_detail?.id;
@@ -333,9 +333,6 @@ const Profile = () => {
                           {userData?.employee?.designation?.title ||
                             "Not Available"}
                         </h6>
-                        <small className="text-muted">
-                          {userData?.office?.title || "Not Available"}
-                        </small>
                         <div className="staff-id">
                           Employee ID : {userData?.employee?.ogid}
                         </div>
@@ -347,6 +344,11 @@ const Profile = () => {
                               ).format("Do MMMM, YYYY")
                             : "Not Available"}
                         </div>
+
+                        <small className="text-muted">
+                          {userData?.office?.title.toUpperCase() ||
+                            "Not Available"}
+                        </small>
                       </div>
                     </div>
                     <div className="col-md-7">
