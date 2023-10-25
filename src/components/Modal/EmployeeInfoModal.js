@@ -61,6 +61,7 @@ export const EmployeeInfoModal = ({
           employeeInfo?.employee?.leave_approval_level
         ),
         remote: employeeInfo?.employee?.remote,
+        strict_attendance: employeeInfo?.employee?.strict_attendance,
         leave_count: employeeInfo?.employee?.leave_count,
         ogid: employeeInfo?.employee?.ogid,
       };
@@ -369,6 +370,37 @@ export const EmployeeInfoModal = ({
                                 ...employeeInfo.employee,
                                 remote: e?.value,
                                 remoteName: e?.label,
+                              },
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {CurrentUserCanView ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="strict_attendance">
+                          Does this Employee have a Strict Attendance?
+                        </label>
+                        <Select
+                          name="strict_attendance"
+                          options={categoryOptions}
+                          value={{
+                            label: employeeInfo?.employee?.strict_attendance
+                              ? "Yes"
+                              : "No",
+                            value: employeeInfo?.employee?.strict_attendance,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                strict_attendance: e?.value,
+                                strictAttendanceName: e?.label,
                               },
                             })
                           }
