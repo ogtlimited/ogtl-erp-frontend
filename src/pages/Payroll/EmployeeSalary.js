@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import helper from "../../services/helper";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
@@ -57,15 +58,15 @@ const EmployeeSalary = () => {
         const formattedData = AllEmployeeSalaries?.map((e) => ({
           ...e,
           employee: e?.first_name + " " + e?.last_name,
+          basic: e?.salary?.basic,
           housing: e?.salary?.housing,
           medical: e?.salary?.medical,
-          netPay: e?.salary?.net_pay,
+          transport: e?.salary?.transport,
+          otherAllowances: e?.salary?.other_allowances,
           monthlySalary: e?.salary?.monthly_salary,
           monthlyIncomeTax: e?.salary?.monthly_income_tax,
           monthlyEmployeePension: e?.salary?.monthly_pension,
-          otherAllowances: e?.salary?.other_allowances,
-          transport: e?.salary?.transport,
-          basic: e?.salary?.basic,
+          netPay: e?.salary?.net_pay,
         }));
 
         setAllSalaries(formattedData);
@@ -131,28 +132,28 @@ const EmployeeSalary = () => {
     },
     {
       dataField: "monthlySalary",
-      text: "Monthly Salary",
+      text: "Gross Salary",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlyIncomeTax",
-      text: "Monthly Income Tax",
+      text: "Tax",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlyEmployeePension",
-      text: "Monthly Pension",
+      text: "Pension",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "netPay",
-      text: "Net Pay",
+      text: "Net Salary",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
@@ -160,7 +161,7 @@ const EmployeeSalary = () => {
     // {
     //   dataField: "",
     //   text: "Action",
-    //   headerStyle: { minWidth: "150px" },
+    //   headerStyle: { minWidth: "10%" },
     //   csvExport: false,
     //   formatter: (value, row) => (
     //     <Link
@@ -181,7 +182,7 @@ const EmployeeSalary = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">STAFF MONTHLY SALARY</h3>
+            <h3 className="page-title">Staff Monthly Salary</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Payroll</li>
               <li className="breadcrumb-item active">Employee Salary</li>

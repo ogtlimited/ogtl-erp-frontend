@@ -56,16 +56,16 @@ const PayrollReports = () => {
           employee: e?.user?.first_name + " " + e?.user?.last_name,
           ogid: e?.user?.ogid,
           email: e?.user?.email,
-          salary: e?.slip?.salary,
-          disciplinary_deductions: e?.slip?.disciplinary_deductions,
 
           basic: e?.slip?.basic,
           medical: e?.slip?.medical,
           housing: e?.slip?.housing,
           transport: e?.slip?.transport,
           otherAllowances: e?.slip?.other_allowances,
+
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
+          disciplinary_deductions: e?.slip?.disciplinary_deductions,
           netPay: e?.slip?.net_pay,
         }));
 
@@ -87,91 +87,84 @@ const PayrollReports = () => {
       dataField: "employee",
       text: "Employee Name",
       sort: true,
-      headerStyle: { minWidth: "200px" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => <h2 className="table-avatar">{value}</h2>,
     },
     {
       dataField: "ogid",
       text: "OGID",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { minWidth: "100px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{val || "Not Available"}</p>,
     },
     {
       dataField: "basic",
       text: "Basic",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowances",
       sort: true,
-      headerStyle: { minWidth: "150px" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
-    },
-    {
-      dataField: "salary",
-      text: "Salary",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "tax",
       text: "Tax",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "pension",
       text: "Pension",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
       dataField: "netPay",
-      text: "Net Pay",
+      text: "Net Salary",
       sort: true,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{formatter.format(val)}</p>,
     },
     {
@@ -179,7 +172,7 @@ const PayrollReports = () => {
       text: "Action",
       sort: true,
       csvExport: false,
-      headerStyle: { minWidth: "150px" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <>
           <Link
@@ -188,7 +181,7 @@ const PayrollReports = () => {
               pathname: `/dashboard/payroll/payslip/${value}`,
             }}
           >
-            View Pay Slip
+            View Payslip
           </Link>
         </>
       ),
@@ -197,84 +190,14 @@ const PayrollReports = () => {
 
   return (
     <>
-      {user?.role?.title === "CEO" ? (
-        <div className="alert alert-primary sliding-text" role="alert">
-          <div>
-            <AlertSvg />
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-            >
-              <use xlinkHref="#info-fill" />
-            </svg>
-            <span className="pl-3">
-              Payroll is generated on the 25th of every month
-            </span>
-            <span className="pl-3">
-              {" "}
-              | &nbsp; You can preview and approve payroll once generated
-            </span>
-          </div>
-        </div>
-      ) : (
-        <div className="alert alert-primary sliding-text" role="alert">
-          <div>
-            <AlertSvg />
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-            >
-              <use xlinkHref="#info-fill" />
-            </svg>
-            <span className="pl-3">
-              Payroll is generated on the 25th of every month
-            </span>
-            <span className="pl-3">
-              {" "}
-              | &nbsp; You can click the generate button to generate payroll for
-              the current month
-            </span>
-          </div>
-        </div>
-      )}
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Payroll Reports</h3>
+            <h3 className="page-title">Staff Monthly Payslip</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item ">Dashboard</li>
-              <li className="breadcrumb-item active">Payroll Reports</li>
+              <li className="breadcrumb-item ">Reports</li>
+              <li className="breadcrumb-item active">Payslip Reports</li>
             </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            {user?.role?.title !== "CEO" && (
-              <a
-                href="#"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#GeneratePayrollModal"
-              >
-                <i className="fa fa-plus"></i> Generate Payroll
-              </a>
-            )}
-
-            {user?.role?.title === "CEO" && (
-              <button
-                data-toggle="modal"
-                data-target="#generalModal"
-                className="btn add-btn mx-5"
-                onClick={() => {
-                  setGenerating("raw");
-                  console.log("state", displayState);
-                }}
-              >
-                Preview and approve payroll
-              </button>
-            )}
           </div>
         </div>
       </div>
