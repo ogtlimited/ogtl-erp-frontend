@@ -4,6 +4,7 @@ import EmployeeAttendanceRecordTable from "../../../components/Tables/EmployeeTa
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
+import AttendanceChart from "../../../components/charts/attendance-tardiness";
 
 const EmployeeAttendanceRecordAdmin = () => {
   const { ErrorHandler } = useAppContext();
@@ -70,7 +71,7 @@ const EmployeeAttendanceRecordAdmin = () => {
       setLoading(true);
       const response = await axiosInstance.get(
         // `/api/v1/attendance_tardiness/${id}.json`,
-        `/api/v1/attendance_tardiness/OG233423.json`,
+        `/api/v1/attendance_tardiness/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -81,7 +82,26 @@ const EmployeeAttendanceRecordAdmin = () => {
       );
 
       const resData = response?.data?.data?.result;
-      console.log("Attendance tardiness:", resData);
+
+      function formatDataKeys(data) {
+        const formattedData = {};
+        for (const day in data) {
+          const formattedDay = {};
+          for (const key in data[day]) {
+            const formattedKey = key.replace(/_/g, " ");
+            formattedDay[
+              formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1)
+            ] = data[day][key];
+          }
+          formattedData[day] = formattedDay;
+        }
+        return formattedData;
+      }
+
+      const formattedData = formatDataKeys(resData);
+
+      setEmployeeTardiness(formattedData);
+      console.log("Attendance tardiness:", formattedData);
 
       setLoading(false);
     } catch (error) {
@@ -90,7 +110,7 @@ const EmployeeAttendanceRecordAdmin = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     fetchEmployeeAttendanceRecords();
@@ -113,17 +133,21 @@ const EmployeeAttendanceRecordAdmin = () => {
         </div>
       </div>
 
-      <EmployeeAttendanceRecordTable
-        data={employeeAttendance}
-        setData={setEmployeeAttendance}
-        loading={loading}
-        setLoading={setLoading}
-        fromDate={fromDate}
-        toDate={toDate}
-        today={today}
-        setFromDate={setFromDate}
-        setToDate={setToDate}
-      />
+      <AttendanceChart data={employeeTardiness} />
+
+      <div className="custom-table-div">
+        <EmployeeAttendanceRecordTable
+          data={employeeAttendance}
+          setData={setEmployeeAttendance}
+          loading={loading}
+          setLoading={setLoading}
+          fromDate={fromDate}
+          toDate={toDate}
+          today={today}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+        />
+      </div>
     </>
   );
 };
