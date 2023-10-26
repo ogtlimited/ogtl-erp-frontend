@@ -1,30 +1,31 @@
-
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import EmployeeAttendanceRecordTable from '../../../components/Tables/EmployeeTables/EmployeeAttendanceRecordTable';
-import axiosInstance from '../../../services/api';
-import { useAppContext } from '../../../Context/AppContext';
-import moment from 'moment';
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useParams } from "react-router-dom";
+import EmployeeAttendanceRecordTable from "../../../components/Tables/EmployeeTables/EmployeeAttendanceRecordTable";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import moment from "moment";
 
 const EmployeeAttendanceRecordAdmin = () => {
   const { ErrorHandler } = useAppContext();
   const [employeeAttendance, setEmployeeAttendance] = useState([]);
+  const [employeeTardiness, setEmployeeTardiness] = useState([]);
   const [loading, setLoading] = useState(false);
   const { employee } = useParams();
   const { id } = useParams();
 
-  const firstDay = moment().startOf('month').format('YYYY-MM-DD');
-  const lastDay = moment().endOf('month').format('YYYY-MM-DD');
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
-	const [today, setToday] = useState(null);
+  const [today, setToday] = useState(null);
 
   useEffect(() => {
-		const time = new Date().toDateString();
-		const today_date = moment(time).format("yyyy-MM-DD");
-		setToday(today_date);
-	}, []);
-  
+    const time = new Date().toDateString();
+    const today_date = moment(time).format("yyyy-MM-DD");
+    setToday(today_date);
+  }, []);
+
+  // Fetch Employee Attendance Records:
   const fetchEmployeeAttendanceRecords = useCallback(async () => {
     try {
       setLoading(true);
@@ -60,12 +61,41 @@ const EmployeeAttendanceRecordAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, id, toDate]);
+
+  // Fetch Employee Attendance Tardiness:
+  const fetchEmployeeAttendanceTardiness = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        // `/api/v1/attendance_tardiness/${id}.json`,
+        `/api/v1/attendance_tardiness/OG233423.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.result;
+      console.log("Attendance tardiness:", resData);
+
+      setLoading(false);
+    } catch (error) {
+      const component = "Attendance Tardiness:";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchEmployeeAttendanceRecords();
-  }, [fetchEmployeeAttendanceRecords]);
+    fetchEmployeeAttendanceTardiness();
+  }, [fetchEmployeeAttendanceRecords, fetchEmployeeAttendanceTardiness]);
 
   return (
     <>
@@ -82,20 +112,18 @@ const EmployeeAttendanceRecordAdmin = () => {
           </div>
         </div>
       </div>
-    
+
       <EmployeeAttendanceRecordTable
         data={employeeAttendance}
         setData={setEmployeeAttendance}
         loading={loading}
         setLoading={setLoading}
-        
         fromDate={fromDate}
         toDate={toDate}
         today={today}
         setFromDate={setFromDate}
         setToDate={setToDate}
       />
-         
     </>
   );
 };
