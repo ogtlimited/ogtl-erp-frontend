@@ -527,6 +527,14 @@ export default function Router() {
               ),
             },
             {
+              path: "payroll-processing",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <EmployeePayroll />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "payroll-batches",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1217,6 +1225,9 @@ const ResignationUser = Loadable(
 );
 const EmployeeSalary = Loadable(
   lazy(() => import("../pages/Payroll/EmployeeSalary"))
+);
+const EmployeePayroll = Loadable(
+  lazy(() => import("../pages/Payroll/EmployeePayroll"))
 );
 const PaySlip = Loadable(lazy(() => import("../pages/Payroll/PaySlip")));
 const SalaryBreakdown = Loadable(

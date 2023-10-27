@@ -203,6 +203,7 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectDepartments(formattedDepartments);
+      console.log("All Departments:", formattedDepartments);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -234,6 +235,7 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectCampaigns(formattedCampaigns);
+      console.log("All Campaigns:", formattedCampaigns);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);

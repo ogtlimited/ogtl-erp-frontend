@@ -260,6 +260,11 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
+            canView: "super",
+            title: "Payroll Processing",
+            path: PATH_DASHBOARD.payroll.payrollProcessing,
+          },
+          {
             canView: "hr",
             title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions,

@@ -94,19 +94,18 @@ const AttendanceRecord = () => {
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/campaigns.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "campaign",
           pages: CampaignPage,
           limit: CampaignSizePerPage,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.campaigns;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = CampaignSizePerPage;
@@ -122,6 +121,7 @@ const AttendanceRecord = () => {
       }));
 
       setCampaigns(formattedCampaigns);
+      console.log("All Camps:", formattedCampaigns);
       setLoading(false);
     } catch (error) {
       console.log("All Campaigns error:", error);
@@ -132,19 +132,18 @@ const AttendanceRecord = () => {
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
+      const response = await axiosInstance.get("/api/v1/departments.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          office_type: "department",
           pages: DepartmentPage,
           limit: DepartmentSizePerPage,
         },
       });
-      const resData = response?.data?.data?.offices;
+      const resData = response?.data?.data?.departments;
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = DepartmentSizePerPage;
@@ -160,6 +159,7 @@ const AttendanceRecord = () => {
       }));
 
       setDepartments(formattedDepartments);
+      console.log("All Depts:", formattedDepartments);
       setLoading(false);
     } catch (error) {
       console.log("All Departments error:", error);
@@ -191,6 +191,15 @@ const AttendanceRecord = () => {
       text: "Employee Name",
       sort: true,
       headerStyle: { width: "30%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <Link
+            to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
+          >
+            {value}
+          </Link>
+        </h2>
+      ),
     },
     {
       dataField: "ogid",
@@ -218,7 +227,7 @@ const AttendanceRecord = () => {
     },
   ];
 
-  const officeColumns = [
+  const campaignColumns = [
     {
       dataField: "title",
       text: "Office",
@@ -227,10 +236,35 @@ const AttendanceRecord = () => {
       formatter: (val, row) => (
         <p>
           <Link
-            to={`/dashboard/hr/${row?.office_type}/employees/${row?.title}/${row.id}`}
+            to={`/dashboard/hr/campaign/employees/${row?.title}/${row.id}`}
             className="attendance-record-for-office"
           >
-            {val}
+            {val?.toUpperCase()}
+          </Link>
+        </p>
+      ),
+    },
+    {
+      dataField: "created_at",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+  ];
+
+  const departmentColumns = [
+    {
+      dataField: "title",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "35%" },
+      formatter: (val, row) => (
+        <p>
+          <Link
+            to={`/dashboard/hr/department/employees/${row?.title}/${row.id}`}
+            className="attendance-record-for-office"
+          >
+            {val?.toUpperCase()}
           </Link>
         </p>
       ),
@@ -384,7 +418,7 @@ const AttendanceRecord = () => {
 
           <div id="tab_campaigns" className="col-12 tab-pane">
             <UniversalPaginatedTable
-              columns={officeColumns}
+              columns={campaignColumns}
               data={campaigns}
               loading={loading}
               setLoading={setLoading}
@@ -399,7 +433,7 @@ const AttendanceRecord = () => {
 
           <div id="tab_departments" className="col-12 tab-pane">
             <UniversalPaginatedTable
-              columns={officeColumns}
+              columns={departmentColumns}
               data={departments}
               loading={loading}
               setLoading={setLoading}
