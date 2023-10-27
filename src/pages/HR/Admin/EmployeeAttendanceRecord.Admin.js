@@ -49,11 +49,29 @@ const EmployeeAttendanceRecordAdmin = () => {
       const resData =
         response?.data?.data?.result === "no record for date range"
           ? []
-          : response?.data?.data?.result.map((e, index) => ({
+          : response?.data?.data?.result.map((e) => ({
               ...e,
-              idx: index + 1,
-              date: moment(e?.date).format("Do MMMM, YYYY"),
+              date: moment(e?.date).format("ddd, Do MMM. YYYY"),
             }));
+
+      resData.forEach((attendance) => {
+        const clockIn = new Date(`2000-01-01 ${attendance.clock_in}`);
+        if (attendance.clock_out !== "No Clock out") {
+          const clockOut = new Date(`2000-01-01 ${attendance.clock_out}`);
+          const workHours = (clockOut - clockIn) / 1000 / 3600;
+
+          const hours = Math.floor(workHours);
+          const minutes = Math.round((workHours - hours) * 60);
+
+          attendance.work_hours = `${hours}h ${minutes}m`;
+
+          if (workHours < 0) {
+            attendance.work_hours = `-`;
+          }
+        } else {
+          attendance.work_hours = "No Clock out";
+        }
+      });
 
       setEmployeeAttendance(resData);
       setLoading(false);
@@ -117,6 +135,47 @@ const EmployeeAttendanceRecordAdmin = () => {
     fetchEmployeeAttendanceTardiness();
   }, [fetchEmployeeAttendanceRecords, fetchEmployeeAttendanceTardiness]);
 
+  const columns = [
+    {
+      dataField: "date",
+      text: "Date",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+    },
+    {
+      dataField: "clock_in",
+      text: "Clock In",
+      sort: true,
+      headerStyle: { minWidth: "150px" },
+      formatter: (value) => {
+        return value === "No Clock in" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
+    },
+    {
+      dataField: "clock_out",
+      text: "Clock Out",
+      sort: true,
+      headerStyle: { minWidth: "100px" },
+      formatter: (value) => {
+        return value === "No Clock out" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
+    },
+    {
+      dataField: "work_hours",
+      text: "Work Hours",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+  ];
+
   return (
     <>
       <div className="page-header">
@@ -139,6 +198,7 @@ const EmployeeAttendanceRecordAdmin = () => {
         <EmployeeAttendanceRecordTable
           data={employeeAttendance}
           setData={setEmployeeAttendance}
+          columns={columns}
           loading={loading}
           setLoading={setLoading}
           fromDate={fromDate}

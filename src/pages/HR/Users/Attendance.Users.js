@@ -1,22 +1,31 @@
 //* IN USE
 
 import React, { useState, useEffect, useCallback } from "react";
-import UniversalTable from "./../../../components/Tables/UniversalTable";
+import EmployeeAttendanceRecordTable from "../../../components/Tables/EmployeeTables/EmployeeAttendanceRecordTable";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
 import axiosInstance from "../../../services/api";
+import AttendanceChart from "../../../components/charts/attendance-tardiness";
 
 const EmployeeAttendance = () => {
-  const { ErrorHandler } = useAppContext();
+  const { ErrorHandler, user } = useAppContext();
   const [attendance, setAttendance] = useState([]);
+  const [employeeTardiness, setEmployeeTardiness] = useState([]);
   const [loading, setLoading] = useState([]);
 
-  const [fromDate, setFromDate] = useState(
-    moment().startOf("month").format("YYYY-MM-DD")
-  );
-  const [toDate, setToDate] = useState(
-    moment().endOf("month").format("YYYY-MM-DD")
-  );
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+  const [today, setToday] = useState(null);
+
+  useEffect(() => {
+    const time = new Date().toDateString();
+    const today_date = moment(time).format("yyyy-MM-DD");
+    setToday(today_date);
+  }, []);
+
+  const id = user?.employee_info?.ogid;
 
   // Get Employee Attendance:
   const fetchEmployeeAttendance = useCallback(async () => {
@@ -38,10 +47,9 @@ const EmployeeAttendance = () => {
       const resData =
         typeof records === "string"
           ? []
-          : records.map((e, index) => {
+          : records.map((e) => {
               return {
                 ...e,
-                idx: index + 1,
                 date: moment(e?.date).format("ddd. MMMM Do, YYYY"),
               };
             });
@@ -74,17 +82,59 @@ const EmployeeAttendance = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, toDate]);
 
+  // Fetch Employee Attendance Tardiness:
+  const fetchEmployeeAttendanceTardiness = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        // `/api/v1/attendance_tardiness/${id}.json`,
+        `/api/v1/attendance_tardiness/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.result;
+
+      function formatDataKeys(data) {
+        const formattedData = {};
+        for (const day in data) {
+          const formattedDay = {};
+          for (const key in data[day]) {
+            const formattedKey = key.replace(/_/g, " ");
+            formattedDay[
+              formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1)
+            ] = data[day][key];
+          }
+          formattedData[day] = formattedDay;
+        }
+        return formattedData;
+      }
+
+      const formattedData = formatDataKeys(resData);
+
+      setEmployeeTardiness(formattedData);
+      console.log("Attendance tardiness:", formattedData);
+
+      setLoading(false);
+    } catch (error) {
+      const component = "Attendance Tardiness:";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   useEffect(() => {
     fetchEmployeeAttendance();
-  }, [fetchEmployeeAttendance]);
+    fetchEmployeeAttendanceTardiness();
+  }, [fetchEmployeeAttendance, fetchEmployeeAttendanceTardiness]);
 
   const columns = [
-    {
-      dataField: "idx",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
     {
       dataField: "date",
       text: "Date",
@@ -96,12 +146,26 @@ const EmployeeAttendance = () => {
       text: "Clock In",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (value) => {
+        return value === "No Clock in" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
     },
     {
       dataField: "clock_out",
       text: "Clock Out",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (value) => {
+        return value === "No Clock out" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
     },
     {
       dataField: "work_hours",
@@ -125,40 +189,20 @@ const EmployeeAttendance = () => {
         </div>
       </div>
 
-      <div className="hr-filter-select col-12" style={{ marginLeft: "-30px" }}>
-        <div className="col-md-3">
-          <div className="form-group">
-            <label htmlFor="fromDate">From</label>
-            <input
-              type="date"
-              name="fromDate"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="form-control "
-            />
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="form-group">
-            <label htmlFor="toDate">To</label>
-            <input
-              type="date"
-              name="toDate"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="form-control "
-            />
-          </div>
-        </div>
-      </div>
+      <AttendanceChart data={employeeTardiness} />
 
-      <div className="row">
-        <div className="col-lg-12" />
-        <UniversalTable
+      <div className="custom-table-div">
+        <EmployeeAttendanceRecordTable
           data={attendance}
+          setData={setAttendance}
           columns={columns}
           loading={loading}
           setLoading={setLoading}
+          fromDate={fromDate}
+          toDate={toDate}
+          today={today}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
           emptyDataMessage="No Attendance Record Found"
         />
       </div>
