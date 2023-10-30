@@ -14,10 +14,11 @@ const EmployeeAttendanceRecordTable = ({
   designation,
   data,
   setData,
+  columns,
   loading,
   setLoading,
   context,
-  
+
   fromDate,
   toDate,
   today,
@@ -43,38 +44,11 @@ const EmployeeAttendanceRecordTable = ({
     });
   }, [mobileView]);
 
-  const columns = [
-    {
-      dataField: "idx",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
-    {
-      dataField: "date",
-      text: "Date",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
-      dataField: "clock_in",
-      text: "Clock In",
-      sort: true,
-      headerStyle: { minWidth: "150px" },
-    },
-    {
-      dataField: "clock_out",
-      text: "Clock Out",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-  ];
-
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
     }, 5000);
-    return <>{show ? <strong>No record for date</strong> : null}</>;
+    return <>{show ? <strong>No Attendance Record Found</strong> : null}</>;
   };
 
   return (
@@ -91,7 +65,12 @@ const EmployeeAttendanceRecordTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: "5%", width: "310px" }}
+                style={{
+                  marginBottom: 15,
+                  paddingLeft: "5%",
+                  width: "310px",
+                  marginTop: "10px",
+                }}
                 className="inputSearch"
               />
 

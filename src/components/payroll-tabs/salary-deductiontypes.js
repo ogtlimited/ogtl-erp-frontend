@@ -41,10 +41,14 @@ const DeductionType = () => {
           officeName: item.office?.title || "-",
           deductionTitle: item?.deduction?.title,
           deductionDesc: item?.deduction?.description,
-          deductionPercentage: item?.deduction?.percentage
-            ? item?.deduction?.percentage + "%"
+          deductionMode: item?.deduction?.percentage
+            ? "Percentage"
+            : item?.deduction?.amount
+            ? "Flat Rate"
             : "-",
-          deductionAmount: item?.deduction?.amount
+          deductionValue: item?.deduction?.percentage
+            ? item?.deduction?.percentage + "%"
+            : item?.deduction?.amount
             ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
             : "-",
         };
@@ -92,14 +96,14 @@ const DeductionType = () => {
       headerStyle: { width: "25%" },
     },
     {
-      dataField: "deductionAmount",
-      text: "Amount",
+      dataField: "deductionMode",
+      text: "Deduction Mode",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "25%" },
     },
     {
-      dataField: "deductionPercentage",
-      text: "Percentage",
+      dataField: "deductionValue",
+      text: "Deduction",
       sort: true,
       headerStyle: { width: "10%" },
     },

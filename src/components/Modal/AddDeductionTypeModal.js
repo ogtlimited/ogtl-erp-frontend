@@ -60,6 +60,8 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
       ...data,
       percentage: "",
       amount: "",
+
+      deductionTitle: e?.label,
     });
 
     setDeductionType(e?.value);
@@ -229,7 +231,7 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
                         <Select
                           options={deductionProcessOptions}
                           value={{
-                            label: deductionType,
+                            label: data?.deductionTitle,
                             value: deductionType,
                           }}
                           style={{ display: "inline-block" }}

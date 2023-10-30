@@ -17,6 +17,7 @@ export const HR_ADD_DEDUCTION_TYPE = {
   amount: null,
 
   officeName: "",
+  deductionTitle: "",
 };
 
 export const officeTypeOptions = [
@@ -40,7 +41,7 @@ export const deductionProcessOptions = [
     value: "percentage",
   },
   {
-    label: "Amount",
+    label: "Flat Rate",
     value: "amount",
   },
 ];

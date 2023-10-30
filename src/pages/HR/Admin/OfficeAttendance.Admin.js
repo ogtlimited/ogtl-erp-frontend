@@ -1,4 +1,4 @@
-// *IN USE 
+// *IN USE
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -41,9 +41,8 @@ const OfficeAttendanceAdmin = () => {
       const resData =
         response?.data?.data?.result === "no record for date"
           ? []
-          : response?.data?.data?.result.map((e, index) => ({
+          : response?.data?.data?.result.map((e) => ({
               ...e,
-              idx: index + 1,
               date: moment(e?.date).format("Do MMMM, YYYY"),
             }));
 
@@ -54,7 +53,7 @@ const OfficeAttendanceAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, id]);
 
   useEffect(() => {
@@ -62,12 +61,6 @@ const OfficeAttendanceAdmin = () => {
   }, [fetchEmployeeByOffice]);
 
   const columns = [
-    {
-      dataField: "idx",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
     {
       dataField: "full_name",
       text: "Employee Name",
@@ -78,7 +71,7 @@ const OfficeAttendanceAdmin = () => {
           <Link
             to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
           >
-             {value}
+            {value}
           </Link>
         </h2>
       ),
@@ -114,7 +107,7 @@ const OfficeAttendanceAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{office}</h3>
+            <h3 className="page-title">{office.toUpperCase()}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/dashboard/hr/attendance-record">

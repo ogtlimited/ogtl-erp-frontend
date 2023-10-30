@@ -12,7 +12,7 @@ const EmployeeInfo = ({
   const { user } = useAppContext();
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  // const canCreate = ["hr_manager", "hr_associate"];
+
   const canEditOffice = [
     "hr_manager",
     "hr_associate",
@@ -20,13 +20,17 @@ const EmployeeInfo = ({
     "supervisor",
   ];
 
+  const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
+    canEditOffice.includes(role)
+  );
+
   return (
     <>
       <div className="card profile-box flex-fill">
         <div className="card-body">
           <h3 className="card-title">
             Employee Information{" "}
-            {canEditOffice.includes(...CurrentUserRoles) ? (
+            {CurrentUserCanEdit ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -58,18 +62,30 @@ const EmployeeInfo = ({
             <li>
               <div className="title">Office Type</div>
               <div className="text">
-                {employeeInfo?.office?.office_type || "Not Available"}
+                {employeeInfo?.office?.office_type.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ) || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Office</div>
-              <div className="text">
-                {employeeInfo?.office?.title || "Not Available"}
+              <div
+                className="text"
+                style={{
+                  fontSize: "14px",
+                }}
+              >
+                {employeeInfo?.office?.title.toUpperCase() || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Designation</div>
-              <div className="text">
+              <div
+                className="text"
+                style={{
+                  fontSize: "14px",
+                }}
+              >
                 {employeeInfo?.employee?.designation?.title || "Not Available"}
               </div>
             </li>

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import "./profileCard.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useReactToPrint } from "react-to-print";
 import PersonalInfo from "./components/PersonalInfo";
 import EmployeeInfo from "./components/EmployeeInfo";
@@ -17,6 +17,8 @@ import { ViewEmployeeShift } from "../Modal/ViewEmployeeShift";
 import { ViewRemoteEmployeeShift } from "../Modal/ViewRemoteEmployeeShift";
 import { useAppContext } from "../../Context/AppContext";
 import { BsFillPrinterFill } from "react-icons/bs";
+import AttendanceChart from "../charts/attendance-tardiness";
+import axiosInstance from "../../services/api";
 
 const ProfileCards = ({
   setformType,
@@ -49,7 +51,9 @@ const ProfileCards = ({
   hideRemoteShiftComponent,
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
-  const { user, isFromBiometrics, isFromBiometricsClockIn } = useAppContext();
+  const { user, isFromBiometrics, isFromBiometricsClockIn, ErrorHandler } =
+    useAppContext();
+  const [employeeTardiness, setEmployeeTardiness] = useState([]);
 
   const canView = ["hr_manager", "senior_hr_associate", "hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -70,9 +74,52 @@ const ProfileCards = ({
     content: () => BackVirtualIDRef.current,
   });
 
+  // Fetch Employee Attendance Tardiness:
+  const fetchEmployeeAttendanceTardiness = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/attendance_tardiness/${userOgid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.result;
+
+      function formatDataKeys(data) {
+        const formattedData = {};
+        for (const day in data) {
+          const formattedDay = {};
+          for (const key in data[day]) {
+            const formattedKey = key.replace(/_/g, " ");
+            formattedDay[
+              formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1)
+            ] = data[day][key];
+          }
+          formattedData[day] = formattedDay;
+        }
+        return formattedData;
+      }
+
+      const formattedData = formatDataKeys(resData);
+
+      setEmployeeTardiness(formattedData);
+      console.log("Attendance tardiness:", formattedData);
+    } catch (error) {
+      const component = "Attendance Tardiness:";
+      ErrorHandler(error, component);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ogid]);
+
   useEffect(() => {
+    fetchEmployeeAttendanceTardiness();
     setemployeeDetails(userData?.employee);
-  }, [userData]);
+  }, [fetchEmployeeAttendanceTardiness, userData]);
 
   return (
     <>
@@ -132,6 +179,16 @@ const ProfileCards = ({
                   </a>
                 </li>
               ) : null}
+
+              <li className="nav-item">
+                <a
+                  href="#emp_attendance"
+                  data-toggle="tab"
+                  className="nav-link"
+                >
+                  Weekly Attendance Record
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -356,6 +413,15 @@ const ProfileCards = ({
             </div>
           </div>
         )}
+
+        {/* Attendance Record */}
+        <div
+          id="emp_attendance"
+          className="pro-overview tab-pane fade"
+          style={{ backgroundColor: "#fff" }}
+        >
+          <AttendanceChart data={employeeTardiness} />
+        </div>
       </div>
     </>
   );
