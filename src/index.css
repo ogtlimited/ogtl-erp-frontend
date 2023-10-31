@@ -348,5 +348,39 @@
 /* Payroll Earnings & Deductions */
 
 .payroll_earnings_div {
-  background-color: pink;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.payroll_earnings_container {
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+  font-weight: 500;
+}
+.payroll_earnings_icon {
+  color: green;
+  font-weight: 500;
+  margin-right: 10px;
+  font-size: 25px;
+}
+.payroll_earnings {
+  color: green;
+  /* font-weight: 500; */
+}
+
+.payroll_deductions_container {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+.payroll_deductions_icon {
+  color: red;
+  font-weight: 500;
+  margin-right: 10px;
+  font-size: 25px;
+}
+.payroll_deductions {
+  color: red;
+  /* font-weight: 500; */
 }

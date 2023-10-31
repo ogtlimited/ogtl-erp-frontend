@@ -105,35 +105,45 @@ const EmployeeSalary = () => {
       text: "Basic",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowance",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "monthlySalary",
@@ -147,14 +157,18 @@ const EmployeeSalary = () => {
       text: "Tax",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_deductions">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "monthlyEmployeePension",
       text: "Pension",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
+      formatter: (val, row) => (
+        <p className="payroll_deductions">{helper.handleMoneyFormat(val)} </p>
+      ),
     },
     {
       dataField: "netPay",

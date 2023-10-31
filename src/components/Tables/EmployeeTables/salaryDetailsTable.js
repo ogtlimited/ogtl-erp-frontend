@@ -107,10 +107,10 @@ const SalaryDetailsTable = ({
 
               <div className="payroll_earnings_div col-12">
                 <div className="payroll_earnings_container">
-                  <AiOutlineRise className="payroll_earnings" /> Earnings
+                  <AiOutlineRise className="payroll_earnings_icon" /> Earnings
                 </div>
                 <div className="payroll_deductions_container">
-                  <AiOutlineFall className="payroll_deductions" /> Deductions
+                  <AiOutlineFall className="payroll_deductions_icon" /> Deductions
                 </div>
               </div>
 

@@ -6,6 +6,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ViewModal from "../../components/Modal/ViewModal";
 import { useAppContext } from "../../Context/AppContext";
+import helper from "../../services/helper";
 import AlertSvg from "../../layouts/AlertSvg";
 import axiosInstance from "../../services/api";
 import { formatter } from "../../services/numberFormatter";
@@ -109,63 +110,79 @@ const PayrollReports = () => {
       text: "Basic",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowances",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "tax",
       text: "Tax",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "pension",
       text: "Pension",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => (
+        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
+      ),
     },
     {
       dataField: "netPay",
       text: "Net Salary",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{formatter.format(val)}</p>,
+      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)}</p>,
     },
     {
       dataField: "id",
