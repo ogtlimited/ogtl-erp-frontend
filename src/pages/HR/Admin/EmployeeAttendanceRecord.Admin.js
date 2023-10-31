@@ -83,7 +83,7 @@ const EmployeeAttendanceRecordAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, id, toDate]);
 
-  // Fetch Employee Attendance Tardiness:
+  // Fetch Employee Weekly Attendance Tardiness:
   const fetchEmployeeAttendanceTardiness = useCallback(async () => {
     try {
       setLoading(true);
@@ -123,7 +123,7 @@ const EmployeeAttendanceRecordAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      const component = "Attendance Tardiness:";
+      const component = "Weekly Attendance Tardiness:";
       ErrorHandler(error, component);
       setLoading(false);
     }

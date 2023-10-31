@@ -44,7 +44,7 @@ const AttendanceChart = ({ data }) => {
     <div className="custom-table-div d-flex">
       <div className=" flex-fill hr-dashboard-charts ">
         <div className="leave-card-body">
-          <h3 className="card-title">Attendance Tardiness</h3>
+          <h3 className="card-title">Weekly Attendance Tardiness</h3>
           <Bar
             height={50}
             data={chartData}
