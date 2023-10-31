@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
+import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
 import AddNewSalaryForm from "./../../components/Forms/AddNewSalaryForm";
 
@@ -13,6 +14,7 @@ const EmployeeSalary = () => {
   const [AllSalaries, setAllSalaries] = useState([]);
   const [toggleModal, settoggleModal] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(25);
@@ -38,6 +40,7 @@ const EmployeeSalary = () => {
   };
 
   const fetchAllSalaries = useCallback(() => {
+    setLoading(true);
     axiosInstance
       .get("/api/v1/employee_salaries.json", {
         headers: {
@@ -75,10 +78,13 @@ const EmployeeSalary = () => {
         }));
 
         setAllSalaries(formattedData);
+        console.log("Data i need:", formattedData);
+        setLoading(false);
       })
       .catch((error) => {
         const component = "All Salaries Error:";
         ErrorHandler(error, component);
+        setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
@@ -244,16 +250,19 @@ const EmployeeSalary = () => {
       </div>
 
       <div className="row  ">
-        <SalaryDetailsTable
+        {/* <SalaryDetailsTable
           data={AllSalaries}
           columns={columns}
+          loading={loading}
+          setLoading={setLoading}
           page={page}
           setPage={setPage}
           sizePerPage={sizePerPage}
           setSizePerPage={setSizePerPage}
           totalPages={totalPages}
           setTotalPages={setTotalPages}
-        />
+        /> */}
+        <EmployeeSalaryTable data={AllSalaries} />
       </div>
 
       {toggleModal && (

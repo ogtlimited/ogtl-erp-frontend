@@ -384,3 +384,39 @@
   color: red;
   /* font-weight: 500; */
 }
+
+/* Employee Salary Table */
+.emp_salary_container {
+  background-color: green;
+}
+
+.emp_salary_custom-table-div {
+  background-color: #fff;
+  padding: 15px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.emp_salary_custom-table-div table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.emp_salary_custom-table-thead th,
+.emp_salary_custom-table-tbody th {
+  border: 1px solid #000; 
+  padding: 8px;
+  text-align: center;
+}
+
+.emp_salary_custom-table-tbody td {
+  border: 1px solid #999;
+  text-align: center;
+  padding: 8px;
+}
+
+.emp_salary_tr_th.exempt {
+  border: none
+}

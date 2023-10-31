@@ -75,7 +75,7 @@ export const GeneratePayrollModal = ({
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-dialog modal-dialog-centered modal-l">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
@@ -94,12 +94,12 @@ export const GeneratePayrollModal = ({
             <div className="modal-body">
               <form onSubmit={handleGeneratePayroll}>
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="start_time">Start Time</label>
+                      <label htmlFor="start_time">Select Month & Year</label>
                       <input
                         name="start_time"
-                        type="date"
+                        type="month"
                         className="form-control"
                         value={createPayslips.start_time}
                         onChange={handleFormChange}
@@ -108,19 +108,19 @@ export const GeneratePayrollModal = ({
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="end_time">End Time</label>
+                      <label htmlFor="end_time">Year</label>
                       <input
                         name="end_time"
-                        type="date"
+                        type="year"
                         className="form-control"
                         value={createPayslips.end_time}
                         onChange={handleFormChange}
                         required
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="modal-footer">

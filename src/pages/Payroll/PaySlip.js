@@ -398,16 +398,6 @@ const PaySlip = () => {
                       </table>
                     </div>
                   </div>
-
-                  <div className="col-sm-12">
-                    <p>
-                      {/* {paySlip.netPay ? (
-                        <strong>
-                          Net Salary: {formatter.format(paySlip?.netPay)}
-                        </strong>
-                      ) : null} */}
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
