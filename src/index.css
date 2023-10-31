@@ -344,3 +344,9 @@
   font-size: 12px;
   margin-right: 5px;
 }
+
+/* Payroll Earnings & Deductions */
+
+.payroll_earnings_div {
+  background-color: pink;
+}
