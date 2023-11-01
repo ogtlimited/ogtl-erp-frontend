@@ -11,6 +11,7 @@ import axiosInstance from "../../services/api";
 import helper from "../../services/helper";
 // import ApprovePayroll from "./ApprovePayroll";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
+import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 
 const EmployeePayroll = () => {
@@ -22,6 +23,7 @@ const EmployeePayroll = () => {
   const [displayState, setDisplayState] = useState("");
   const [previewData, setPreviewData] = useState(null);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -35,6 +37,7 @@ const EmployeePayroll = () => {
   );
 
   const fetchEmployeeSalarySlip = useCallback(() => {
+    setLoading(true);
     axiosInstance
       .get("/api/v1/salary_slips.json", {
         headers: {
@@ -69,6 +72,7 @@ const EmployeePayroll = () => {
           housing: e?.slip?.housing,
           transport: e?.slip?.transport,
           otherAllowances: e?.slip?.other_allowances,
+          monthlySalary: e?.slip?.monthly_salary,
 
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
@@ -77,10 +81,12 @@ const EmployeePayroll = () => {
         }));
 
         setData(formattedData);
+        setLoading(false);
       })
       .catch((error) => {
         const component = "Employee Salary Slip Error:";
         ErrorHandler(error, component);
+        setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
@@ -93,121 +99,54 @@ const EmployeePayroll = () => {
     {
       dataField: "employee",
       text: "Employee Name",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2 className="table-avatar">{value}</h2>,
     },
     {
       dataField: "ogid",
       text: "OGID",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "email",
       text: "Email",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{val || "Not Available"}</p>,
     },
     {
       dataField: "basic",
       text: "Basic",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "medical",
       text: "Medical",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "housing",
       text: "Housing",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "transport",
       text: "Transport",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowances",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)}</p>
-      ),
+    },
+    {
+      dataField: "monthlySalary",
+      text: "Gross Salary",
     },
     {
       dataField: "tax",
       text: "Tax",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "pension",
       text: "Pension",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_deductions">{helper.handleMoneyFormat(val)}</p>
-      ),
     },
     {
       dataField: "netPay",
       text: "Net Salary",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)}</p>,
-    },
-    {
-      dataField: "id",
-      text: "Action",
-      sort: true,
-      csvExport: false,
-      headerStyle: { width: "10%" },
-      formatter: (value, row) => (
-        <>
-          <Link
-            className="btn btn-sm btn-primary"
-            to={{
-              pathname: `/dashboard/payroll/payslip/${value}`,
-            }}
-          >
-            View Payroll
-          </Link>
-        </>
-      ),
     },
   ];
 
@@ -297,9 +236,23 @@ const EmployeePayroll = () => {
 
       <div className="row">
         <div className="col-md-12">
-          <SalaryDetailsTable
+          {/* <SalaryDetailsTable
             data={data}
             columns={columns}
+            page={page}
+            setPage={setPage}
+            sizePerPage={sizePerPage}
+            setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
+            setTotalPages={setTotalPages}
+          /> */}
+          <EmployeeSalaryTable
+            data={data}
+            loading={loading}
+            setLoading={setLoading}
+            columns={columns}
+            viewAction={true}
+            actionTitle="View Payroll"
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}

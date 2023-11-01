@@ -97,109 +97,51 @@ const EmployeeSalary = () => {
     {
       dataField: "employee",
       text: "Employee",
-      sort: true,
-      headerStyle: { width: "100%" },
     },
     {
       dataField: "ogid",
       text: "Employee ID",
-      sort: true,
-      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "email",
+      text: "Email",
     },
     {
       dataField: "basic",
       text: "Basic",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "medical",
       text: "Medical",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "housing",
       text: "Housing",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "transport",
       text: "Transport",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowance",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_earnings">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "monthlySalary",
       text: "Gross Salary",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
     {
       dataField: "monthlyIncomeTax",
       text: "Tax",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_deductions">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "monthlyEmployeePension",
       text: "Pension",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => (
-        <p className="payroll_deductions">{helper.handleMoneyFormat(val)} </p>
-      ),
     },
     {
       dataField: "netPay",
       text: "Net Salary",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{helper.handleMoneyFormat(val)} </p>,
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { minWidth: "10%" },
-    //   csvExport: false,
-    //   formatter: (value, row) => (
-    //     <Link
-    //       className="btn btn-sm btn-primary"
-    //       to={{
-    //         pathname: `/dashboard/payroll/salary-breakdown/${row?.employeeId}`,
-    //         state: { employee: row?.employeeId },
-    //       }}
-    //     >
-    //       View
-    //     </Link>
-    //   ),
-    // },
   ];
 
   return (
@@ -262,7 +204,19 @@ const EmployeeSalary = () => {
           totalPages={totalPages}
           setTotalPages={setTotalPages}
         /> */}
-        <EmployeeSalaryTable data={AllSalaries} />
+        <EmployeeSalaryTable
+          data={AllSalaries}
+          loading={loading}
+          setLoading={setLoading}
+          columns={columns}
+          viewAction={false}
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
+        />
       </div>
 
       {toggleModal && (

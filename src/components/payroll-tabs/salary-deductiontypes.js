@@ -32,6 +32,8 @@ const DeductionType = () => {
 
       const resData = response?.data?.data?.deduction_types;
 
+      console.log("Deduction type response:", resData);
+
       const formattedData = resData.map((item) => {
         return {
           ...item,
@@ -41,16 +43,18 @@ const DeductionType = () => {
           officeName: item.office?.title || "-",
           deductionTitle: item?.deduction?.title,
           deductionDesc: item?.deduction?.description,
-          deductionMode: item?.deduction?.percentage
-            ? "Percentage"
-            : item?.deduction?.amount
-            ? "Flat Rate"
-            : "-",
-          deductionValue: item?.deduction?.percentage
-            ? item?.deduction?.percentage + "%"
-            : item?.deduction?.amount
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
-            : "-",
+          deductionMode:
+            item?.deduction?.deduction_mode === "percentage"
+              ? "Percentage"
+              : item?.deduction?.deduction_mode === "flat_rate"
+              ? "Flat Rate"
+              : "-",
+          deductionValue:
+            item?.deduction?.deduction_mode === "percentage"
+              ? item?.deduction?.value + "%"
+              : item?.deduction?.deduction_mode === "flat_rate"
+              ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+              : "-",
         };
       });
 
@@ -103,7 +107,7 @@ const DeductionType = () => {
     },
     {
       dataField: "deductionValue",
-      text: "Deduction",
+      text: "Value",
       sort: true,
       headerStyle: { width: "10%" },
     },

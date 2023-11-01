@@ -29,10 +29,6 @@ export const officeTypeOptions = [
     label: "Campaign",
     value: "campaign",
   },
-  {
-    label: "Team",
-    value: "team",
-  }
 ];
 
 export const deductionProcessOptions = [
@@ -42,6 +38,6 @@ export const deductionProcessOptions = [
   },
   {
     label: "Flat Rate",
-    value: "amount",
+    value: "flat_rate",
   },
 ];

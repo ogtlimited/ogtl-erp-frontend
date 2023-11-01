@@ -36,18 +36,18 @@ const DashboardStatistics = ({
     }
   };
 
-  const handleLeaveTypeChartClick = (element, leaveTypeLabel) => {
-    try {
-      if (element.length > 0) {
-        const dataIndex = element[0].index;
-        const leaveType = formattedLeaveType;
-        const id = leaveType[dataIndex];
-        navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleLeaveTypeChartClick = (element, leaveTypeLabel) => {
+  //   try {
+  //     if (element.length > 0) {
+  //       const dataIndex = element[0].index;
+  //       const leaveType = formattedLeaveType;
+  //       const id = leaveType[dataIndex];
+  //       navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const leaveStatus = {
     labels: leaveStatusLabel,
