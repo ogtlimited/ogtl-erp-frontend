@@ -179,7 +179,7 @@ const AppProvider = (props) => {
   };
 
   // All Departments:
-  const fetchAllDepartments = async () => {
+  const fetchAllDepartments = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/departments.json", {
@@ -208,10 +208,10 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Campaigns:
-  const fetchAllCampaigns = async () => {
+  const fetchAllCampaigns = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/campaigns.json", {
@@ -240,10 +240,10 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Teams:
-  const fetchAllTeams = async () => {
+  const fetchAllTeams = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/teams.json", {
@@ -271,10 +271,10 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Designations:
-  const fetchAllDesignations = async () => {
+  const fetchAllDesignations = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/designations.json", {
@@ -302,10 +302,10 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Leaders:
-  const fetchAllLeaders = async () => {
+  const fetchAllLeaders = useCallback(async () => {
     setLoadingSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/leaders.json", {
@@ -333,7 +333,7 @@ const AppProvider = (props) => {
     } catch (error) {
       setLoadingSelect(false);
     }
-  };
+  }, []);
 
   // All Branches:
   const fetchAllBranches = async () => {
@@ -478,7 +478,18 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
     }
-  }, [fetchAllLeaveTypes, fetchDeductionTypes, isHr, isTeamLead, userToken]);
+  }, [
+    fetchAllCampaigns,
+    fetchAllDepartments,
+    fetchAllDesignations,
+    fetchAllLeaders,
+    fetchAllLeaveTypes,
+    fetchAllTeams,
+    fetchDeductionTypes,
+    isHr,
+    isTeamLead,
+    userToken,
+  ]);
 
   return (
     <AppContext.Provider
