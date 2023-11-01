@@ -127,7 +127,7 @@ function EmployeeSalaryTable({
                 <th className="emp_salary_tr_th exempt" colSpan="3"></th>
                 <th colSpan="5">Earnings</th>
                 <th className="emp_salary_tr_th exempt"></th>
-                <th colSpan="2">Deductions</th>
+                <th colSpan={columns.length <= 12 ? "2" : "3"}>Deductions</th>
                 <th className="emp_salary_tr_th exempt"></th>
               </tr>
 
@@ -141,7 +141,7 @@ function EmployeeSalaryTable({
             </thead>
             {loading ? (
               <tr className="emp_salary_custom-table-tbody loading">
-                <td colSpan={columns?.length}>
+                <td colSpan={columns?.length + 1}>
                   <div
                     className="spinner-border text-primary loading"
                     role="status"
@@ -156,7 +156,7 @@ function EmployeeSalaryTable({
                   renderTableRows()
                 ) : (
                   <tr className="emp_salary_custom-table-tbody no-data">
-                    <td colSpan={columns?.length}>{showNullMessage()}</td>
+                    <td colSpan={columns?.length + 1}>{showNullMessage()}</td>
                   </tr>
                 )}
               </tbody>

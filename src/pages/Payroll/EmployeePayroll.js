@@ -252,7 +252,7 @@ const EmployeePayroll = () => {
             setLoading={setLoading}
             columns={columns}
             viewAction={true}
-            actionTitle="View Payroll"
+            actionTitle="View"
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
