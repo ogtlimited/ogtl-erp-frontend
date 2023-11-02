@@ -95,6 +95,9 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.end_date
           ),
           date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
+          current_approver: !leave?.leave?.hr_stage
+            ? leave?.current_stage_manager?.manager_full_name
+            : "HR",
           leave_marker:
             moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
               ? "Leave Ended"
@@ -113,6 +116,7 @@ const AllLeaveStatusAdmin = () => {
         }));
 
         setallApplications(formatted);
+        console.log("Status Formatted:", formatted);
         setLoading(false);
       })
       .catch((error) => {
@@ -274,7 +278,7 @@ const AllLeaveStatusAdmin = () => {
     },
     {
       dataField: "current_approver",
-      text: "Current Approver",
+      text: "Current Leave Approver",
       sort: true,
       headerStyle: { width: "100%" },
     },
