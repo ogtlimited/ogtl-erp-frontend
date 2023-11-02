@@ -197,6 +197,7 @@ const AllLeaveStatusAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <span>{value.toUpperCase()}</span>,
     },
     {
       dataField: "status",
@@ -270,6 +271,12 @@ const AllLeaveStatusAdmin = () => {
           )}
         </>
       ),
+    },
+    {
+      dataField: "current_approver",
+      text: "Current Approver",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "leave_manager_name",

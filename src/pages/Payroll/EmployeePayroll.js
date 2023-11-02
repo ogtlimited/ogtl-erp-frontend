@@ -54,6 +54,8 @@ const EmployeePayroll = () => {
         const AllEmployeeSlips = res?.data?.data?.slips;
         const totalPages = res?.data?.data?.pages;
 
+        console.log(" AllEmployeeSlips", res?.data?.data);
+
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -252,6 +254,7 @@ const EmployeePayroll = () => {
             setLoading={setLoading}
             columns={columns}
             viewAction={true}
+            regenerate={true}
             actionTitle="View"
             page={page}
             setPage={setPage}
@@ -259,6 +262,8 @@ const EmployeePayroll = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+            fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+            setGenerating={setGenerating}
           />
         </div>
       </div>

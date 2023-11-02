@@ -91,7 +91,6 @@ const PaySlip = () => {
         }));
 
         const employeeSalarySlip = formattedSalary[0];
-        console.log("Employee Salary Slip:", employeeSalarySlip);
         setPaySlip(employeeSalarySlip);
 
         Object.keys(employeeSalarySlip).forEach((e) => {
@@ -226,9 +225,7 @@ const PaySlip = () => {
           <div className="col">
             <h3 className="page-title">Payslip</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
+              <li className="breadcrumb-item">Reports</li>
               <li className="breadcrumb-item active">Payslip</li>
             </ul>
           </div>

@@ -1,9 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import helper from "../../../services/helper";
 import { useNavigate } from "react-router-dom";
+import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
+import { useAppContext } from "../../../Context/AppContext";
 
 function EmployeeSalaryTable({
   data,
@@ -12,6 +15,7 @@ function EmployeeSalaryTable({
   loading,
   setLoading,
   viewAction,
+  regenerate,
   actionTitle,
 
   page,
@@ -20,14 +24,19 @@ function EmployeeSalaryTable({
   setSizePerPage,
   totalPages,
   setTotalPages,
+
+  fetchEmployeeSalarySlip,
+  setGenerating,
   context,
 }) {
   const navigate = useNavigate();
+  const { user } = useAppContext();
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+  const [userId, setUserId] = useState("");
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -80,6 +89,10 @@ function EmployeeSalaryTable({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  const handleRegeneratePayroll = (employee) => {
+    setUserId(employee?.ogid);
+  };
+
   const handleAction = (action) => {
     navigate(`/dashboard/payroll/payslip/${action?.id}`);
   };
@@ -97,8 +110,28 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            <button
+            {/* <button
               className="btn btn-sm btn-primary"
+              onClick={() => handleRegeneratePayroll(employee)}
+              style={{ marginRight: "20px" }}
+            >
+              Regenerate
+            </button> */}
+            {regenerate && user?.role?.title !== "CEO" ? (
+              <a
+                href="#"
+                className="btn btn-sm btn-primary"
+                data-toggle="modal"
+                data-target="#RegeneratePayrollModal"
+                onClick={() => handleRegeneratePayroll(employee)}
+                style={{ marginRight: "20px" }}
+              >
+                Regenerate
+              </a>
+            ) : null}
+
+            <button
+              className="btn btn-sm btn-secondary"
               onClick={() => handleAction(employee)}
             >
               {actionTitle}
@@ -110,89 +143,97 @@ function EmployeeSalaryTable({
   };
 
   return (
-    <div className="emp_salary_container col-12">
-      <div className="emp_salary_custom-table-div">
-        <div
-          className={`salary-header-class ${
-            !mobileView
-              ? "table"
-              : context
-              ? "table stable-responsive"
-              : "table table-responsive"
-          }`}
+    <>
+      <div className="emp_salary_container col-12">
+        <div className="emp_salary_custom-table-div">
+          <div
+            className={`salary-header-class ${
+              !mobileView
+                ? "table"
+                : context
+                ? "table stable-responsive"
+                : "table table-responsive"
+            }`}
+          >
+            <table className="emp_salary_custom_table custom-table">
+              <thead className="emp_salary_custom-table-thead">
+                <tr>
+                  <th className="emp_salary_tr_th exempt" colSpan="3"></th>
+                  <th colSpan="5">Earnings</th>
+                  <th className="emp_salary_tr_th exempt"></th>
+                  <th colSpan={columns.length <= 12 ? "2" : "3"}>Deductions</th>
+                  <th className="emp_salary_tr_th exempt"></th>
+                </tr>
+
+                <tr className="emp_salary_custom-table-thead_sub_tr">
+                  {columns?.map((column) => (
+                    <th key={column.dataField}>{column.text}</th>
+                  ))}
+
+                  {viewAction && <th>Action</th>}
+                </tr>
+              </thead>
+              {loading ? (
+                <tr className="emp_salary_custom-table-tbody loading">
+                  <td colSpan={columns?.length + 1}>
+                    <div
+                      className="spinner-border text-primary loading"
+                      role="status"
+                    >
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                <tbody className="emp_salary_custom-table-tbody">
+                  {data?.length ? (
+                    renderTableRows()
+                  ) : (
+                    <tr className="emp_salary_custom-table-tbody no-data">
+                      <td colSpan={columns?.length + 1}>{showNullMessage()}</td>
+                    </tr>
+                  )}
+                </tbody>
+              )}
+            </table>
+          </div>
+        </div>
+
+        <select
+          className="application-table-sizePerPage"
+          name="sizePerPage"
+          value={info.sizePerPage}
+          onChange={handleChangeSizePerPage}
         >
-          <table className="emp_salary_custom_table custom-table">
-            <thead className="emp_salary_custom-table-thead">
-              <tr>
-                <th className="emp_salary_tr_th exempt" colSpan="3"></th>
-                <th colSpan="5">Earnings</th>
-                <th className="emp_salary_tr_th exempt"></th>
-                <th colSpan={columns.length <= 12 ? "2" : "3"}>Deductions</th>
-                <th className="emp_salary_tr_th exempt"></th>
-              </tr>
-
-              <tr className="emp_salary_custom-table-thead_sub_tr">
-                {columns?.map((column) => (
-                  <th key={column.dataField}>{column.text}</th>
-                ))}
-
-                {viewAction && <th>Action</th>}
-              </tr>
-            </thead>
-            {loading ? (
-              <tr className="emp_salary_custom-table-tbody loading">
-                <td colSpan={columns?.length + 1}>
-                  <div
-                    className="spinner-border text-primary loading"
-                    role="status"
-                  >
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              <tbody className="emp_salary_custom-table-tbody">
-                {data?.length ? (
-                  renderTableRows()
-                ) : (
-                  <tr className="emp_salary_custom-table-tbody no-data">
-                    <td colSpan={columns?.length + 1}>{showNullMessage()}</td>
-                  </tr>
-                )}
-              </tbody>
-            )}
-          </table>
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+          <option value={3}>30</option>
+          <option value={2}>50</option>
+        </select>
+        <div className="application-table-pagination">
+          <Stack className="application-table-pagination-stack">
+            <Pagination
+              className="job-applicant-pagination"
+              count={count}
+              page={page}
+              boundaryCount={4}
+              onChange={handleChange}
+              color="primary"
+              showFirstButton
+              showLastButton
+              variant="outlined"
+              shape="rounded"
+            />
+          </Stack>
         </div>
       </div>
 
-      <select
-        className="application-table-sizePerPage"
-        name="sizePerPage"
-        value={info.sizePerPage}
-        onChange={handleChangeSizePerPage}
-      >
-        <option value={10}>10</option>
-        <option value={25}>25</option>
-        <option value={3}>30</option>
-        <option value={2}>50</option>
-      </select>
-      <div className="application-table-pagination">
-        <Stack className="application-table-pagination-stack">
-          <Pagination
-            className="job-applicant-pagination"
-            count={count}
-            page={page}
-            boundaryCount={4}
-            onChange={handleChange}
-            color="primary"
-            showFirstButton
-            showLastButton
-            variant="outlined"
-            shape="rounded"
-          />
-        </Stack>
-      </div>
-    </div>
+      <RegeneratePayrollModal
+        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        setGenerating={setGenerating}
+        userId={userId}
+      />
+    </>
   );
 }
 
