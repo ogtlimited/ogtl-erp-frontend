@@ -26,8 +26,6 @@ export const ViewCampaignScheduleTimeModal = ({
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
-    console.log("Edit this schedule time:", editSchedule);
-
     const formattedShiftSchedule = editSchedule?.map((shift) => ({
       day: shift.day,
       start_time: shift.start_time,
@@ -37,7 +35,6 @@ export const ViewCampaignScheduleTimeModal = ({
       huddle_time: shift.huddle_time,
       id: shift.id,
     }));
-    console.log("Edit formatted schedule time:", formattedShiftSchedule);
 
     let monday = {};
     const monday_shifts = formattedShiftSchedule?.filter(

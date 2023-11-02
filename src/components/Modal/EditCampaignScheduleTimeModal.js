@@ -29,9 +29,6 @@ export const EditCampaignScheduleTimeModal = ({
   const [dataLoading, setDataLoading] = useState(false);
 
   useEffect(() => {
-
-    console.log("Edit thuis", editSchedule)
-
     const formattedShiftSchedule = editSchedule?.map((shift) => ({
       day: shift.day,
       start_time: shift.start_time,
@@ -124,8 +121,6 @@ export const EditCampaignScheduleTimeModal = ({
       shifts.push(createFridayShift);
       shifts.push(createSaturdayShift);
       shifts.push(createSundayShift);
-
-      console.log("update this:", shifts);
 
       const response = await axiosInstance.put(
         `/api/v1/employee_shifts_items/${scheduleId}.json`,

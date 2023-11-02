@@ -127,7 +127,6 @@ const JobOpening = () => {
               error?.response?.data?.message,
               'alert alert-danger'
             );
-            console.log("edit this formValue:", formValue);
           });
       }
     }
@@ -163,7 +162,6 @@ const JobOpening = () => {
         project_id: statusRow.project_id?._id,
       };
       delete update.__v;
-      console.log('Updated?:', update);
       axiosInstance
         .patch('/api/jobOpening/' + statusRow._id, {
           _id: update._id,

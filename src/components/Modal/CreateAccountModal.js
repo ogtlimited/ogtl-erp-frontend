@@ -26,8 +26,6 @@ export const CreateAccountModal = ({ data, onClick, setClientAccount }) => {
       const res = await axiosInstance.post('api/clients-accounts/client-account', client);
       const resData = res.data.data;
 
-      console.log("created account", resData)
-
       setClientAccount(resData);
       // showAlert(true, 'Account created successfully', 'alert alert-success');
       onClick();

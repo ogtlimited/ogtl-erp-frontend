@@ -51,7 +51,6 @@ const SupervisorAttendanceAdmin = () => {
     setLoading(true);
     try {
       const res = await axiosInstance.get("/api/attendance");
-      console.log("This is the attendance", res.data.data);
       setallAttendance(res.data.data);
       setLoading(false);
     } catch (error) {

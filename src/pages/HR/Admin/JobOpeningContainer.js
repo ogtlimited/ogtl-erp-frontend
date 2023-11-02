@@ -51,7 +51,6 @@ const JobOpeningContainer = () => {
         });
 
         setJobOpenings(data);
-        console.log("Job opening:", data);
       })
       .catch((err) => {
         const component = "Job Openings:";

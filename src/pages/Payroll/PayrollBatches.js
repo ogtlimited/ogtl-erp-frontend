@@ -21,7 +21,6 @@ const PayrollBatches = () => {
     axiosInstance
       .get('/api/batch')
       .then((res) => {
-        console.log('Payroll Batches', res?.data?.data);
         let resData = res?.data?.data;
         setData(resData);
       })

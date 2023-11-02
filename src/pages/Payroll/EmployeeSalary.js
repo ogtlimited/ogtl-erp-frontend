@@ -78,7 +78,6 @@ const EmployeeSalary = () => {
         }));
 
         setAllSalaries(formattedData);
-        console.log("Data i need:", formattedData);
         setLoading(false);
       })
       .catch((error) => {

@@ -59,9 +59,7 @@ const DashboardStatistics = ({
   };
 
   const handleLeaveStatusChartClick = (element, leaveStatusLabel) => {
-    console.log("This was accessed!");
     try {
-      console.log("Element length:", element.length);
       if (element.length > 0) {
         const dataIndex = element[0].index;
         const leaveStatus = formattedLeaveStatus;

@@ -34,20 +34,16 @@ const AcademyApplicants = () => {
     axiosInstance
       .get('/api/academy')
       .then((res) => {
-        console.log('Academy Application', res?.data?.data);
         let resData = res?.data?.data;
         let formatted = resData.map((e) => ({
           ...e,
           full_name: e.first_name + ' ' + e.last_name,
         }));
         
-         console.log('This formatted', formatted);
-         console.log('This app user', user);
          if (user?.isRepSiever) {
            const userApplications = formatted.filter(
              (apl) => apl.rep_sieving_call?._id === user._id
            );
-           console.log("This user app", userApplications);
            setData(userApplications);
            setunfiltered(userApplications);
          } else {

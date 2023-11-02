@@ -217,11 +217,9 @@ const EmployeesGenderTable = ({
     },
   ];
 
-  console.log('Pagination:', prevPage, page, nextPage, sizePerPage, totalPages);
 
   const handleChangeDesignation = (e) => {
     setDesignationFilter(e.target.value);
-    console.log("Search for this:", e.target.value);
     setPage(1);
     setLoading(true);
 

@@ -25,13 +25,11 @@ const ContactDetails = ({
           obj[item] = formValue[item];
         }
       }
-      console.log(obj, "OBJECT");
       let newFormValue = {
         _id: contactDetails?.contactDetails?._id,
         employee_id: id,
         ...obj,
       };
-      console.log(newFormValue);
       axiosInstance
         .post("/ContactDetails", newFormValue)
         .then((res) => {

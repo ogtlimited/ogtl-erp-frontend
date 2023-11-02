@@ -108,7 +108,6 @@ const ProfileCards = ({
       const formattedData = formatDataKeys(resData);
 
       setEmployeeTardiness(formattedData);
-      console.log("Attendance tardiness:", formattedData);
     } catch (error) {
       const component = "Attendance Tardiness:";
       ErrorHandler(error, component);

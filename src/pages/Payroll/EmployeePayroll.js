@@ -54,8 +54,6 @@ const EmployeePayroll = () => {
         const AllEmployeeSlips = res?.data?.data?.slips;
         const totalPages = res?.data?.data?.pages;
 
-        console.log(" AllEmployeeSlips", res?.data?.data);
-
         const thisPageLimit = sizePerPage;
         const thisTotalPageSize = totalPages;
 
@@ -226,7 +224,6 @@ const EmployeePayroll = () => {
                 className="btn add-btn mx-5"
                 onClick={() => {
                   setGenerating("raw");
-                  console.log("state", displayState);
                 }}
               >
                 Preview and approve payroll

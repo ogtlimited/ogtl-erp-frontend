@@ -73,6 +73,10 @@ const AppProvider = (props) => {
       label: "Campaign",
       value: "campaign",
     },
+    {
+      label: "Team",
+      value: "team",
+    },
   ];
 
   const handleProgress = ({ count, state }) => {

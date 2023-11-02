@@ -187,8 +187,6 @@ const RemoteAttendance = () => {
         }
       );
 
-      console.log("Generated Attendance:", response);
-
       showAlert(
         true,
         `Attendance for ${date} has been generated successfully!`,

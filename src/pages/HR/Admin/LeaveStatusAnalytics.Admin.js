@@ -116,7 +116,6 @@ const AllLeaveStatusAdmin = () => {
         }));
 
         setallApplications(formatted);
-        console.log("Status Formatted:", formatted);
         setLoading(false);
       })
       .catch((error) => {
