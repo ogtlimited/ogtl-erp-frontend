@@ -12,8 +12,7 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const AddLeaderModal = ({ fetchLeaders }) => {
-  const { selectDepartments, selectCampaigns, selectTeams, showAlert } =
-    useAppContext();
+  const { selectDepartments, selectCampaigns, showAlert } = useAppContext();
   const [leader, setLeader] = useState(LeaderForm);
   const [loading, setLoading] = useState(false);
   const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
@@ -32,6 +31,8 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
     setLeader({
       ...leader,
       operation_office_id: "",
+
+      officeName: "",
     });
 
     setOfficeType(e?.label);
@@ -45,35 +46,68 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
       officeName: e?.label,
     });
     setIsOfficeSelected(true);
-    fetchAllLeaders(e?.value);
+    fetchAllEmployees(e?.value);
   };
 
-  const fetchAllLeaders = async (officeId) => {
+  const fetchAllEmployees = async (officeId) => {
     try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          pages: 1,
-          limit: 1000,
-        },
-      });
+      if (officeType === "Department") {
+        const response = await axiosInstance.get(
+          `/api/v1/departments_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 1000,
+            },
+          }
+        );
+        const resData = response?.data?.data?.employees;
 
-      const resData = response?.data?.data?.employees;
+        const formattedLeaders = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-      const formattedLeaders = resData
-        .map((e) => ({
-          label: e?.full_name,
-          value: e.ogid,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        setAllLeaders(formattedLeaders);
+        setLoading(false);
+        return;
+      }
 
-      setAllLeaders(formattedLeaders);
-      setLoading(false);
+      if (officeType === "Campaign") {
+        const response = await axiosInstance.get(
+          `/api/v1/campaign_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 1000,
+            },
+          }
+        );
+        const resData = response?.data?.data?.employees;
+
+        const formattedLeaders = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setAllLeaders(formattedLeaders);
+        setLoading(false);
+        return;
+      }
     } catch (error) {
       console.log("All Leaders error:", error);
       setLoading(false);
@@ -170,7 +204,7 @@ export const AddLeaderModal = ({ fetchLeaders }) => {
                               ? selectDepartments
                               : officeType === "Campaign"
                               ? selectCampaigns
-                              : selectTeams
+                              : null
                           }
                           isSearchable={true}
                           isClearable={true}
