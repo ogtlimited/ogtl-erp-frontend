@@ -32,31 +32,26 @@ const DeductionType = () => {
 
       const resData = response?.data?.data?.deduction_types;
 
-      console.log("Deduction type response:", resData);
-
-      const formattedData = resData.map((item) => {
-        return {
-          ...item,
-          officeType:
-            item.office?.office_type.charAt(0).toUpperCase() +
-              item.office?.office_type.slice(1) || "N/A",
-          officeName: item.office?.title || "-",
-          deductionTitle: item?.deduction?.title,
-          deductionDesc: item?.deduction?.description,
-          deductionMode:
-            item?.deduction?.deduction_mode === "percentage"
-              ? "Percentage"
-              : item?.deduction?.deduction_mode === "flat_rate"
-              ? "Flat Rate"
-              : "-",
-          deductionValue:
-            item?.deduction?.deduction_mode === "percentage"
-              ? item?.deduction?.value + "%"
-              : item?.deduction?.deduction_mode === "flat_rate"
-              ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
-              : "-",
-        };
-      });
+      const formattedData = resData.map((item) => ({
+        officeType:
+          item?.deduction?.office_type.charAt(0).toUpperCase() +
+            item?.deduction?.office_type.slice(1) || "N/A",
+        officeName: item.office?.title || "-",
+        deductionTitle: item?.deduction?.title,
+        deductionDesc: item?.deduction?.description,
+        deductionMode:
+          item?.deduction?.deduction_mode === "percentage"
+            ? "Percentage"
+            : item?.deduction?.deduction_mode === "flat_rate"
+            ? "Flat Rate"
+            : "-",
+        deductionValue:
+          item?.deduction?.deduction_mode === "percentage"
+            ? item?.deduction?.value + "%"
+            : item?.deduction?.deduction_mode === "flat_rate"
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+            : "-",
+      }));
 
       setDeductionTypes(formattedData);
       setLoading(false);

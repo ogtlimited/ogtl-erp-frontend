@@ -88,7 +88,7 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
     e.preventDefault();
 
     const dataPayload = {
-      office_type: officeType,
+      office_type: officeType.toLowerCase(),
       office_id: data?.operation_office_id,
       title: data?.title,
       description: data?.description,
