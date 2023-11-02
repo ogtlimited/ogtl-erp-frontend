@@ -50,7 +50,6 @@ const AllLeaveTypeAdmin = () => {
       })
       .then((res) => {
         let resData = res?.data?.data;
-        console.log('Leave Type Response Data:', resData);
 
         const formatted = resData.map((leave) => ({
           ...leave,
@@ -74,7 +73,6 @@ const AllLeaveTypeAdmin = () => {
         }));
 
         setallApplications(formatted);
-        console.log('Leave Type Response Formatted Data:', formatted);
         setLoading(false);
       })
       .catch((error) => {

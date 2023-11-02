@@ -142,8 +142,6 @@ export const CreateEmployeeShiftModal = ({
       .then((e) => {
         let resData = e?.data?.data?.employee_shifts_schedule;
 
-        console.log("My schedule listr:", resData)
-
         const formatted = resData?.map((e) => ({
           day: e.day,
           start_time: e.start_time,

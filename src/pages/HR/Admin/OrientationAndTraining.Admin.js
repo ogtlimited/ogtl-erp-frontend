@@ -12,7 +12,6 @@ import helper from "../../../services/helper";
 
 const OrientationAndTraining = () => {
   const [template, setTemplate] = useState(orientationFormJson);
-  console.log(orientationFormJson);
   const { createEmployee, showAlert, setformUpdate } = useAppContext();
   const [editData, seteditData] = useState({});
   const [data, setData] = useState([]);
@@ -50,7 +49,6 @@ const OrientationAndTraining = () => {
       .get("/api/orientation-and-training")
       .then((res) => {
         setData(res.data.data);
-        console.log("data", res.data.data)
       })
       .catch((error) => {
         console.log(error);
@@ -97,7 +95,6 @@ const OrientationAndTraining = () => {
         }
         return field;
       });
-      console.log(orientationFormJson);
       // console.log(finalForm)
       // setTemplate({
       //   title: orientationFormJson.title,
@@ -128,7 +125,6 @@ const OrientationAndTraining = () => {
           ...editData,
           department_id: editData.department_id?._id,
         }
-        console.log("editttttt", editInfo);
         delete editInfo.createdAt;
         delete editInfo.updatedAt;
         delete editInfo.__v;

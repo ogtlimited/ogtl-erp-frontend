@@ -32,27 +32,26 @@ const DeductionType = () => {
 
       const resData = response?.data?.data?.deduction_types;
 
-      const formattedData = resData.map((item) => {
-        return {
-          ...item,
-          officeType:
-            item.office?.office_type.charAt(0).toUpperCase() +
-              item.office?.office_type.slice(1) || "N/A",
-          officeName: item.office?.title || "-",
-          deductionTitle: item?.deduction?.title,
-          deductionDesc: item?.deduction?.description,
-          deductionMode: item?.deduction?.percentage
+      const formattedData = resData.map((item) => ({
+        officeType:
+          item?.deduction?.office_type.charAt(0).toUpperCase() +
+            item?.deduction?.office_type.slice(1) || "N/A",
+        officeName: item.office?.title || "-",
+        deductionTitle: item?.deduction?.title,
+        deductionDesc: item?.deduction?.description,
+        deductionMode:
+          item?.deduction?.deduction_mode === "percentage"
             ? "Percentage"
-            : item?.deduction?.amount
+            : item?.deduction?.deduction_mode === "flat_rate"
             ? "Flat Rate"
             : "-",
-          deductionValue: item?.deduction?.percentage
-            ? item?.deduction?.percentage + "%"
-            : item?.deduction?.amount
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
+        deductionValue:
+          item?.deduction?.deduction_mode === "percentage"
+            ? item?.deduction?.value + "%"
+            : item?.deduction?.deduction_mode === "flat_rate"
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
             : "-",
-        };
-      });
+      }));
 
       setDeductionTypes(formattedData);
       setLoading(false);
@@ -103,7 +102,7 @@ const DeductionType = () => {
     },
     {
       dataField: "deductionValue",
-      text: "Deduction",
+      text: "Value",
       sort: true,
       headerStyle: { width: "10%" },
     },

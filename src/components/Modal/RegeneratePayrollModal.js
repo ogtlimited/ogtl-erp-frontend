@@ -7,9 +7,10 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import secureLocalStorage from "react-secure-storage";
 
-export const GeneratePayrollModal = ({
+export const RegeneratePayrollModal = ({
   fetchEmployeeSalarySlip,
   setGenerating,
+  userId,
 }) => {
   const { showAlert } = useAppContext();
   const [createPayslips, setCreatePayslips] = useState("");
@@ -28,17 +29,17 @@ export const GeneratePayrollModal = ({
     });
   };
 
-  const handleGeneratePayroll = async (e) => {
+  const handleRegeneratePayroll = async (e) => {
     e.preventDefault();
 
     setLoading(true);
 
-    const month = createPayslips.month.split("-")[1];
-    const year = createPayslips.month.split("-")[0];
+    const month = createPayslips.monthAndYear.split("-")[1];
+    const year = createPayslips.monthAndYear.split("-")[0];
 
     try {
-      const res = await axiosInstance.post(
-        `/api/v1/salary_slips.json?month=${month}&year=${year}`,
+      const res = await axiosInstance.patch(
+        `/api/v1/regenerate_salary_slips/${userId}.json?month=${month}&year=${year}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -50,11 +51,11 @@ export const GeneratePayrollModal = ({
 
       showAlert(
         true,
-        `Salary slips are being generated`,
+        `Salary slip is being regenerated`,
         "alert alert-success"
       );
       setCreatePayslips("");
-      $("#GeneratePayrollModal").modal("toggle");
+      $("#RegeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
       setGenerating(false);
       setLoading(false);
@@ -66,34 +67,11 @@ export const GeneratePayrollModal = ({
     }
   };
 
-  function getMinMonth() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
-
-    if (currentMonth === 12) {
-      return `${currentYear}-${currentMonth}`;
-    }
-
-    return `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
-  }
-
-  function getMaxMonth() {
-    const today = new Date();
-    const nextMonth = new Date(today);
-    nextMonth.setMonth(today.getMonth() + 1);
-
-    const year = nextMonth.getFullYear();
-    const month = nextMonth.getMonth() + 1;
-
-    return `${year}-${month.toString().padStart(2, "0")}`;
-  }
-
   return (
     <>
       <div
         className="modal fade"
-        id="GeneratePayrollModal"
+        id="RegeneratePayrollModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -102,7 +80,7 @@ export const GeneratePayrollModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Generate Payroll
+                Regenerate Payroll
               </h4>
               <button
                 type="button"
@@ -115,19 +93,17 @@ export const GeneratePayrollModal = ({
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleGeneratePayroll}>
+              <form onSubmit={handleRegeneratePayroll}>
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="month">Select Month</label>
+                      <label htmlFor="monthAndYear">Select Month & Year</label>
                       <input
-                        name="month"
+                        name="monthAndYear"
                         type="month"
                         className="form-control"
                         value={createPayslips.month}
                         onChange={handleFormChange}
-                        min={getMinMonth()}
-                        max={getMaxMonth()}
                         required
                       />
                     </div>
@@ -151,7 +127,7 @@ export const GeneratePayrollModal = ({
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      "Generate Payroll"
+                      "Regenerate Payroll"
                     )}
                   </button>
                 </div>

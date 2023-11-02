@@ -119,7 +119,6 @@ const EmployeeAttendanceRecordAdmin = () => {
       const formattedData = formatDataKeys(resData);
 
       setEmployeeTardiness(formattedData);
-      console.log("Attendance tardiness:", formattedData);
 
       setLoading(false);
     } catch (error) {

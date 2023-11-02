@@ -42,8 +42,6 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
             
           ) {
             setData(jsonData.slice(0, jsonData.length - 1));
-            // setinvalid(true)
-            console.log("invalid value")
           } else {
             setinvalid(false);
             setData(jsonData);
@@ -65,7 +63,6 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           annualGrossSalary:  Number(e.annualGrossSalary.replace(/[^0-9.-]+/g,""))
         }
       })
-      console.log(formatted)
       obj = {
         data: formatted
       }

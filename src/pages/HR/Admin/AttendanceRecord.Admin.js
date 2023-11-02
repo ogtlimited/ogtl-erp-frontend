@@ -121,7 +121,6 @@ const AttendanceRecord = () => {
       }));
 
       setCampaigns(formattedCampaigns);
-      console.log("All Camps:", formattedCampaigns);
       setLoading(false);
     } catch (error) {
       console.log("All Campaigns error:", error);
@@ -159,7 +158,6 @@ const AttendanceRecord = () => {
       }));
 
       setDepartments(formattedDepartments);
-      console.log("All Depts:", formattedDepartments);
       setLoading(false);
     } catch (error) {
       console.log("All Departments error:", error);

@@ -31,7 +31,6 @@ export const EditLeaveCountModal = ({leaveCountEdit, fetchAllSubordinates}) => {
       ogid: leaveCountEdit.ogid,
       leaveCount: leaveCount,
     };
-    console.log("EmployeeRecord:", employeeRecord);
 
     setLoading(true);
     axiosInstance
@@ -39,7 +38,6 @@ export const EditLeaveCountModal = ({leaveCountEdit, fetchAllSubordinates}) => {
         leaveCount: employeeRecord.leaveCount,
       })
       .then((res) => {
-        console.log("Response:", res);
         showAlert(
           true,
           `${leaveCountEdit.first_name}'s Leave Count Successfully Updated!`,

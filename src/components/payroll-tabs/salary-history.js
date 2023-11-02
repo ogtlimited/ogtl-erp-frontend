@@ -29,7 +29,6 @@ const SalaryHistory = ({ salaryStructure }) => {
 
 
   const handleOnSelect = (row, isSelect) => {
-    console.log(row);
     if (isSelect) {
       const sel = [...selected, row.id];
       setselected(sel);
@@ -66,8 +65,6 @@ const SalaryHistory = ({ salaryStructure }) => {
         ...filterObj,
         [key]: val,
       });
-      
-      console.log(filterObj, key, val)
 
     }else{
       delete filterObj[key]
@@ -90,7 +87,6 @@ const SalaryHistory = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/payroll-archive?${queryString}`)
       .then((res) => {
-        console.log("initial Salary?", res.data.data);
 
         setData(handleResponse(res.data.data));
         setUploadSuccess(false);
@@ -104,7 +100,6 @@ const SalaryHistory = ({ salaryStructure }) => {
     axiosInstance
       .get(`/api/payroll-archive`)
       .then((res) => {
-        console.log("Salary?", res.data.data);
 
         setData(handleResponse(res.data.data));
         setUploadSuccess(false);
@@ -120,7 +115,6 @@ const SalaryHistory = ({ salaryStructure }) => {
       .then((res) => {
         console.log(res);
         let formatted = handleResponse(res.data.data);
-        console.log("Salary Breakdown", formatted);
         setData(formatted);
       })
       .catch((error) => {

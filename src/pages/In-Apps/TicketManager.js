@@ -28,7 +28,6 @@ const TicketManager = () => {
   };
 
   const updateTicketStatus = (id, status) => {
-    console.log({status, employee_id: user._id})
     axiosInstance
     .patch(`api/ticketing/${id}`, {status, employee_id: user._id})
     .then((e) => {

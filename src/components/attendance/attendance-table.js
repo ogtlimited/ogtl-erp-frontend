@@ -1,3 +1,5 @@
+//! DELETE
+
 import React, { useMemo, useState, useEffect, useContext } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import axiosInstance from "../../services/api";

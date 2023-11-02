@@ -95,6 +95,9 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.end_date
           ),
           date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
+          current_approver: !leave?.leave?.hr_stage
+            ? leave?.current_stage_manager?.manager_full_name
+            : "HR",
           leave_marker:
             moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
               ? "Leave Ended"
@@ -197,6 +200,7 @@ const AllLeaveStatusAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <span>{value.toUpperCase()}</span>,
     },
     {
       dataField: "status",
@@ -270,6 +274,12 @@ const AllLeaveStatusAdmin = () => {
           )}
         </>
       ),
+    },
+    {
+      dataField: "current_approver",
+      text: "Current Leave Approver",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "leave_manager_name",

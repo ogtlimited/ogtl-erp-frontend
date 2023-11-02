@@ -49,7 +49,6 @@ const LeaveApprovalView = () => {
         ...e,
         designation: e.designation_id.designation,
       }))
-      console.log("Filter and formatted for this department", formatted)
 
       setallDepartments(formatted);
       setunfiltered(formatted);
@@ -80,8 +79,7 @@ const LeaveApprovalView = () => {
 
   useEffect(() => {
     if (submitted) {
-      console.log(formValue);
-      if (mode == "add") {
+      if (mode === "add") {
         axiosInstance
           .post("/department", formValue)
           .then((e) => {

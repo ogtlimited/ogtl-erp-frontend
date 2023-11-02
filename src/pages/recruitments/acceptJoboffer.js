@@ -130,11 +130,6 @@ const AcceptJoboffer = () => {
         })}
         onSubmit={(fields) => {
           handleSubmit(null, fields);
-          console.log("SUCCESS!! :-)\n\n" + JSON.stringify(fields, null, 4));
-        }}
-        onChange={(fields) => {
-          // handleChange(null, fields);
-          console.log("Hello")
         }}
         render={({ errors, status, touched, setFieldValue, handleChange }) => (
           <div

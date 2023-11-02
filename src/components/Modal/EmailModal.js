@@ -12,7 +12,6 @@ export const EmailModal = ({ data, fetchEmployeeProfile }) => {
     e.preventDefault();
 
     const employeeId = data?.employee?.ogid;
-    console.log("edit this email:", email)
 
     // setLoading(true);
     // try {
