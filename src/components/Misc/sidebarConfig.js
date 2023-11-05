@@ -6,7 +6,9 @@ import sign from "jwt-encode";
 
 const user = tokenService.getUser();
 const userDept =
-  user?.office?.office_type === "department" ? user?.office?.title : null;
+  user?.office?.office_type === "department"
+    ? user?.office?.title.toLowerCase()
+    : null;
 
 const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
