@@ -21,7 +21,9 @@ const Sidebar = () => {
       : false;
 
   const userDept =
-    user?.office?.office_type === "department" ? user?.office?.title : null;
+    user?.office?.office_type === "department"
+      ? user?.office?.title?.toLowerCase()
+      : null;
 
   useEffect(() => {
     console.log({
