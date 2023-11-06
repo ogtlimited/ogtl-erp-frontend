@@ -1,46 +1,45 @@
 /** @format */
 
-import React, { useEffect, useState } from 'react';
-import logo from '../../assets/img/outsource.png';
+import React, { useEffect, useState } from "react";
+import logo from "../../assets/img/outsource.png";
 // import PageHeader from "../../components/page-header";
-import Pdf from 'react-to-pdf';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import axiosInstance from '../../services/api';
-import moment from 'moment';
-import { formatter } from '../../services/numberFormatter';
-import ViewModal from '../../components/Modal/ViewModal';
-import SalaryAssignmentModal from '../../components/Modal/SalaryAssignmentModal';
-import SalaryDeductionContent from '../../components/ModalContents/SalaryDeductionContent';
+import Pdf from "react-to-pdf";
+import { Link, useParams, useLocation } from "react-router-dom";
+import axiosInstance from "../../services/api";
+import moment from "moment";
+import helper from "../../services/helper";
+import ViewModal from "../../components/Modal/ViewModal";
+import SalaryAssignmentModal from "../../components/Modal/SalaryAssignmentModal";
+import SalaryDeductionContent from "../../components/ModalContents/SalaryDeductionContent";
+import Salary from "./../../components/payroll-tabs/Salary";
 const ref = React.createRef();
-const options = {
-  // orientation: 'port',
-  unit: 'in',
-  format: [4, 2],
-};
-const RightSide = () => {
-  return (
-    <div className="col-auto float-right ml-auto">
-      <div className="btn-group btn-group-sm">
-        <button className="btn btn-white">CSV</button>
-        <Pdf targetRef={ref} filename="payslip.pdf" x={1} y={1} scale={0.8}>
-          {({ toPdf }) => (
-            <button className="btn btn-white" onClick={toPdf}>
-              Pdf
-            </button>
-          )}
-        </Pdf>
-        <button onClick={() => window.print()} className="btn btn-white">
-          <i className="fa fa-print fa-lg"></i> Print
-        </button>
-      </div>
-    </div>
-  );
-};
+
+// const RightSide = () => {
+//   return (
+//     <div className="col-auto float-right ml-auto">
+//       <div className="btn-group btn-group-sm">
+//         <button className="btn btn-white">CSV</button>
+//         <Pdf targetRef={ref} filename="payslip.pdf" x={1} y={1} scale={0.8}>
+//           {({ toPdf }) => (
+//             <button className="btn btn-white" onClick={toPdf}>
+//               Pdf
+//             </button>
+//           )}
+//         </Pdf>
+//         <button onClick={() => window.print()} className="btn btn-white">
+//           <i className="fa fa-print fa-lg"></i> Print
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
 const PaySlip = () => {
   const { id } = useParams();
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
   const [deductions, setDeductions] = useState({});
+  const [netSalary, setNetSalary] = useState({});
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   const [totalDeduction, settotalDeduction] = useState(0);
@@ -49,48 +48,165 @@ const PaySlip = () => {
   useEffect(() => {
     const fetchPaySlip = async () => {
       try {
-        const res = await axiosInstance.get(
-          `/api/v1/salary_slips/${id}.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        )
-
-        const payslip = res?.data?.data?.slip
-        console.log("my payslip:", res?.data?.data?.slip)
-        
-        setPaySlip(payslip)
+        const res = await axiosInstance.get(`/api/v1/salary_slips/${id}.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        });
 
         const earnings = {};
-        const deductions ={};
-        
-        Object.keys(payslip).forEach((e) => {
+        const deductions = {};
+        const netSalary = {};
+
+        const payslip = res?.data?.data?.slip;
+
+        const empSalary = [payslip];
+        const formattedSalary = empSalary.map((salary) => ({
+          ...salary,
+          leaveBuyout: 0,
+          attendanceBonus: 0,
+          WFHAllowance: 0,
+          hourlyDeductions: 0,
+          hourlyDeductionAmount: 0,
+          hourlyDeductionDates: null,
+          DailyDeductionsCount: 0,
+          DailyDeductionsDays: null,
+          DailyDeductionsAmount: 0,
+          NCNSCount: 0,
+          NCNSDays: null,
+          NCNSAmount: 0,
+          phoneOnCallFloorCount: 0,
+          phoneOnCallFloorDays: null,
+          phoneOnCallFloorAmount: 0,
+          thirtyMinShiftCount: 0,
+          oneHourShiftCount: 0,
+          breakdownOfDaysWorked: 0,
+          loanAndOtherDeductions: 0,
+          totalDeductions: 0,
+          loanAndOtherDeductionsExplanation: null,
+          otherAdditions: 0,
+          otherAdditionsExplanation: null,
+        }));
+
+        const employeeSalarySlip = formattedSalary[0];
+        setPaySlip(employeeSalarySlip);
+
+        Object.keys(employeeSalarySlip).forEach((e) => {
           switch (e) {
-            case 'monthly_pension':
-              earnings['Pension'] = payslip[e];
+            // Earnings:
+            case "monthly_salary":
+              earnings["Monthly Salary"] = employeeSalarySlip[e];
               break;
-            case 'monthly_income_tax':
-              earnings['Tax'] = payslip[e];
+            case "transport":
+              earnings["Transportation"] = employeeSalarySlip[e];
               break;
-            case 'monthly_salary':
-              earnings['Salary'] = payslip[e];
+            case "medical":
+              earnings["HMO Coverage"] = employeeSalarySlip[e];
+              break;
+            case "leaveBuyout":
+              earnings["Leave Buyout"] = employeeSalarySlip[e];
+              break;
+            case "attendanceBonus":
+              earnings["Attendance Bonus"] = employeeSalarySlip[e];
+              break;
+            case "WFHAllowance":
+              earnings["WHF Allowance"] = employeeSalarySlip[e];
+              break;
+
+            // Deductions:
+            case "monthly_income_tax":
+              deductions["Monthly Income Tax"] = employeeSalarySlip[e];
+              break;
+            case "monthly_pension":
+              deductions["Monthly Employee Pension"] = employeeSalarySlip[e];
+              break;
+            case "hourlyDeductions":
+              deductions["Hourly Deductions"] = employeeSalarySlip[e];
+              break;
+            case "hourlyDeductionAmount":
+              deductions["Hourly Deduction Amount"] = employeeSalarySlip[e];
+              break;
+            case "hourlyDeductionDates":
+              deductions["Hourly Deduction Dates"] = employeeSalarySlip[e];
+              break;
+            case "DailyDeductionsCount":
+              deductions["Daily Deductions Count"] = employeeSalarySlip[e];
+              break;
+            case "DailyDeductionsDays":
+              deductions["Daily Deductions Days"] = employeeSalarySlip[e];
+              break;
+            case "DailyDeductionsAmount":
+              deductions["Daily Deductions Amount"] = employeeSalarySlip[e];
+              break;
+            case "NCNSCount":
+              deductions["NCNS Count"] = employeeSalarySlip[e];
+              break;
+            case "NCNSDays":
+              deductions["NCNS Days"] = employeeSalarySlip[e];
+              break;
+            case "NCNSAmount":
+              deductions["NCNS Amount"] = employeeSalarySlip[e];
+              break;
+            case "phoneOnCallFloorCount":
+              deductions["Phone on the call floor count"] =
+                employeeSalarySlip[e];
+              break;
+            case "phoneOnCallFloorDays":
+              deductions["Phone on the call floor days"] =
+                employeeSalarySlip[e];
+              break;
+            case "phoneOnCallFloorAmount":
+              deductions["Phone on the call floor amount"] =
+                employeeSalarySlip[e];
+              break;
+            case "thirtyMinShiftCount":
+              deductions["30mins shift count (20th - 25th)"] =
+                employeeSalarySlip[e];
+              break;
+            case "oneHourShiftCount":
+              deductions["1 hour shift count"] = employeeSalarySlip[e];
+              break;
+            case "breakdownOfDaysWorked":
+              deductions["Breakdown of days worked"] = employeeSalarySlip[e];
+              break;
+            case "loanAndOtherDeductions":
+              deductions["Loan & Other Deductions"] = employeeSalarySlip[e];
+              break;
+            case "totalDeductions":
+              deductions["Total Deductions"] =
+                employeeSalarySlip.monthly_income_tax +
+                employeeSalarySlip.monthly_pension +
+                employeeSalarySlip.disciplinary_deductions;
+              break;
+            case "loanAndOtherDeductionsExplanation":
+              deductions["Loan & Other Deduction Explanation"] =
+                employeeSalarySlip[e];
+              break;
+            case "otherAdditions":
+              deductions["Other Additions"] = employeeSalarySlip[e];
+              break;
+            case "otherAdditionsExplanation":
+              deductions["Other Addition Explanation"] = employeeSalarySlip[e];
+              break;
+
+            // Net Salary:
+            case "net_pay":
+              netSalary[""] = employeeSalarySlip[e];
               break;
             default:
               let key = e.charAt(0).toUpperCase() + e.slice(1);
               break;
           }
         });
-        
-        console.log("Earnings", earnings)
+
         setEarnings(earnings);
 
-        deductions['Disciplinary Deductions'] = payslip.disciplinary_deductions;
+        deductions["Disciplinary Deductions"] = payslip.disciplinary_deductions;
         setDeductions(deductions);
-        console.log("deductions", deductions)
+
+        setNetSalary(netSalary);
 
         setFetched(true);
         setLoading(false);
@@ -109,9 +225,7 @@ const PaySlip = () => {
           <div className="col">
             <h3 className="page-title">Payslip</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
+              <li className="breadcrumb-item">Reports</li>
               <li className="breadcrumb-item active">Payslip</li>
             </ul>
           </div>
@@ -137,8 +251,8 @@ const PaySlip = () => {
             <div className="card px-5 ">
               <div className="card-body">
                 <h4 className="payslip-title">
-                  Payslip for the month of{' '}
-                  {moment(paySlip?.createdAt).format('MMMM YYYY')}
+                  Payslip for the month of{" "}
+                  {moment(paySlip?.createdAt).format("MMMM YYYY")}
                 </h4>
                 <div className="row">
                   <div className="col-sm-6 m-b-20">
@@ -155,10 +269,10 @@ const PaySlip = () => {
                       <h3 className="text-uppercase">Payslip</h3>
                       <ul className="list-unstyled">
                         <li>
-                          Salary Month:{' '}
+                          Salary Month:{" "}
                           <span>
-                            {' '}
-                            {moment(paySlip?.createdAt).format('MMMM, YYYY')}
+                            {" "}
+                            {moment(paySlip?.createdAt).format("MMMM, YYYY")}
                           </span>
                         </li>
                       </ul>
@@ -171,12 +285,13 @@ const PaySlip = () => {
                       <li>
                         <h5 className="mb-0">
                           <strong>
-                            {paySlip?.first_name} {paySlip?.middle_name}{' '}
+                            {paySlip?.first_name} {paySlip?.middle_name}{" "}
                             {paySlip?.last_name}
                           </strong>
                         </h5>
                       </li>
                       <li>Employee ID: {paySlip?.ogid}</li>
+                      <li>Designation: {paySlip?.designation}</li>
                     </ul>
                   </div>
                 </div>
@@ -195,13 +310,47 @@ const PaySlip = () => {
                             Object.keys(earnings).map((earning, index) => (
                               <tr key={index}>
                                 <td>
-                                  <strong>{earning}</strong>{' '}
-                                  {earning !== 'department' ? (
+                                  <strong>{earning}</strong>{" "}
+                                  {typeof earnings[earning] === "number" &&
+                                  earnings[earning] !== 0 ? (
                                     <span className="float-right">
-                                      {formatter.format(earnings[earning])}
+                                      {helper.handleMoneyFormat(
+                                        earnings[earning]
+                                      )}
                                     </span>
                                   ) : (
-                                    ''
+                                    <span className="float-right">
+                                      {earnings[earning] === 0
+                                        ? null
+                                        : earnings[earning]}
+                                    </span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div>
+                      {paySlip.net_pay ? (
+                        <h4 className="m-b-10">
+                          <strong>Net Pay</strong>
+                        </h4>
+                      ) : null}
+                      <table className="table table-bordered">
+                        <tbody>
+                          {fetched &&
+                            Object.keys(netSalary).map((net, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <strong>{net}</strong>{" "}
+                                  {net !== "department" ? (
+                                    <span className="float-right">
+                                      {helper.handleMoneyFormat(netSalary[net])}
+                                    </span>
+                                  ) : (
+                                    ""
                                   )}
                                 </td>
                               </tr>
@@ -224,10 +373,21 @@ const PaySlip = () => {
                             Object.keys(deductions).map((deduction, index) => (
                               <tr key={index}>
                                 <td>
-                                  <strong>{deduction}</strong>{' '}
-                                  <span className="float-right">
-                                      {formatter.format(deductions[deduction])}
-                                  </span>
+                                  <strong>{deduction}</strong>{" "}
+                                  {typeof deductions[deduction] === "number" &&
+                                  deductions[deduction] !== 0 ? (
+                                    <span className="float-right">
+                                      {helper.handleMoneyFormat(
+                                        deductions[deduction]
+                                      )}
+                                    </span>
+                                  ) : (
+                                    <span className="float-right">
+                                      {deductions[deduction] === 0
+                                        ? null
+                                        : deductions[deduction]}
+                                    </span>
+                                  )}
                                 </td>
                               </tr>
                             ))}
@@ -235,23 +395,13 @@ const PaySlip = () => {
                       </table>
                     </div>
                   </div>
-
-                  <div className="col-sm-12">
-                    <p>
-                      {/* {paySlip.netPay ? (
-                        <strong>
-                          Net Salary: {formatter.format(paySlip?.netPay)}
-                        </strong>
-                      ) : null} */}
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
-      
+
       {fetched && (
         <ViewModal
           title="Salary Deduction Breakdown"

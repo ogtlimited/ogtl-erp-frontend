@@ -15,7 +15,13 @@ import TextEditor from "../Forms/TextEditor";
 import moment from "moment";
 
 export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
-  const { showAlert, selectBranches, goToTop } = useAppContext();
+  const {
+    selectCampaigns,
+    selectDepartments,
+    showAlert,
+    selectBranches,
+    goToTop,
+  } = useAppContext();
   const [jobOpening, setJobOpening] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
@@ -42,7 +48,9 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
         statusName: data?.status === "open" ? "OPEN" : "CLOSED",
         adminRole: data?.admin_role ? "YES" : "NO",
       });
-      setOfficeType(data?.office_type);
+      setOfficeType(
+        data?.office_type.replace(/\b\w/g, (char) => char.toUpperCase())
+      );
       setIsOfficeSelected(true);
       setEditorContent(data?.description);
     }
@@ -64,7 +72,6 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
   };
 
   const handleOfficeTypeChange = (e) => {
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeSelected(true);
   };
@@ -86,48 +93,6 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
     jobOpening?.position_type,
     jobOpening?.status,
   ]);
-
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("All Offices error:", error);
-    }
-  };
 
   const handleJobOpeningActions = async (e) => {
     if (mode === "Create") {
@@ -299,7 +264,13 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
                       <div className="form-group">
                         <label htmlFor="operation_office_id">Office</label>
                         <Select
-                          options={allOffices}
+                          options={
+                            officeType === "Department"
+                              ? selectDepartments
+                              : officeType === "Campaign"
+                              ? selectCampaigns
+                              : null
+                          }
                           isSearchable={true}
                           value={{
                             label: jobOpening?.officeName,

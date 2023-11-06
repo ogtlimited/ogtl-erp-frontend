@@ -44,7 +44,6 @@ const DesignationList = ({
   }, [allDesignation]);
 
   useEffect(() => {
-    console.log(formValue)
     if (submitted) {
       if (mode === "add") {
         axiosInstance

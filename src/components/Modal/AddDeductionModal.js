@@ -73,94 +73,99 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
 
   // All Employees:
   const fetchAllEmployees = async (officeId) => {
-    if (officeType === "Department") {
-      const response = await axiosInstance.get(
-        `/api/v1/departments_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            pages: 1,
-            limit: 1000,
-          },
-        }
-      );
+    try {
+      if (officeType === "Department") {
+        const response = await axiosInstance.get(
+          `/api/v1/departments_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 1000,
+            },
+          }
+        );
 
-      const resData = response?.data?.data?.employees;
+        const resData = response?.data?.data?.employees;
 
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedData);
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
+
+      if (officeType === "Campaign") {
+        const response = await axiosInstance.get(
+          `/api/v1/campaign_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 1000,
+            },
+          }
+        );
+
+        const resData = response?.data?.data?.employees;
+
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
+
+      if (officeType === "Team") {
+        const response = await axiosInstance.get(
+          `/api/v1/teams_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: 1,
+              limit: 1000,
+            },
+          }
+        );
+
+        const resData = response?.data?.data?.employees;
+
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
+    } catch (error) {
+      console.log("All Employees error:", error);
       setLoading(false);
-      return;
-    }
-
-    if (officeType === "Campaign") {
-      const response = await axiosInstance.get(
-        `/api/v1/campaign_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            pages: 1,
-            limit: 1000,
-          },
-        }
-      );
-
-      const resData = response?.data?.data?.employees;
-
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setAllEmployees(formattedData);
-      setLoading(false);
-      return;
-    }
-
-    if (officeType === "Team") {
-      const response = await axiosInstance.get(
-        `/api/v1/teams_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            pages: 1,
-            limit: 1000,
-          },
-        }
-      );
-
-      const resData = response?.data?.data?.employees;
-
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      setAllEmployees(formattedData);
-      setLoading(false);
-      return;
     }
   };
 

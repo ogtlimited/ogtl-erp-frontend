@@ -22,7 +22,11 @@ const JobOpeningContainer = () => {
   const [mode, setMode] = useState("Create");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate", "hr_associate"];
+  const canCreateAndEdit = [
+    "hr_manager",
+    "senior_hr_associate",
+    "hr_associate",
+  ];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -47,11 +51,11 @@ const JobOpeningContainer = () => {
             created_at: moment(e?.created_at).format("ddd. MMMM Do, YYYY"),
             start__date: moment(e?.start_date).format("ddd. MMMM Do, YYYY"),
             dead__line: moment(e?.dead_line).format("ddd. MMMM Do, YYYY"),
+            role: e?.admin_role ? "Admin" : "Staff",
           };
         });
 
         setJobOpenings(data);
-        console.log("Job opening:", data);
       })
       .catch((err) => {
         const component = "Job Openings:";
@@ -123,6 +127,12 @@ const JobOpeningContainer = () => {
           )}
         </>
       ),
+    },
+    {
+      dataField: "role",
+      text: "Role",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "created_at",

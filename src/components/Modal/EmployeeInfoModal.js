@@ -14,14 +14,23 @@ export const EmployeeInfoModal = ({
   const navigate = useNavigate();
   const {
     selectCampaigns,
+    fetchAllCampaigns,
     selectDepartments,
+    fetchAllDepartments,
     selectDesignations,
+    fetchAllDesignations,
     user,
     showAlert,
   } = useAppContext();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
+
+  useEffect(() => {
+    fetchAllCampaigns();
+    fetchAllDepartments();
+    fetchAllDesignations();
+  }, [fetchAllCampaigns, fetchAllDepartments, fetchAllDesignations]);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const isHr = user?.office?.title === "hr" ? true : false;

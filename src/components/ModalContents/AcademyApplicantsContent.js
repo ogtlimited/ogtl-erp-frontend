@@ -38,10 +38,6 @@ const AcademyApplicantsContent = ({ jobApplication = {} }) => {
     ? jobApplication.default_job_opening_id
     : jobApplication.job_opening_id;
 
-    console.log("job", job)
-    console.log("jobApplication.default_job_opening_id", jobApplication.default_job_opening_id)
-    console.log("jobApplication.job_opening_id", jobApplication.job_opening_id)
-    console.log("jobApplication_id", jobApplication._id)
   return (
     <div className="row d-flex justify-content-center">
       {/* {jobApplication['rep_sieving_call']?.first_name} */}

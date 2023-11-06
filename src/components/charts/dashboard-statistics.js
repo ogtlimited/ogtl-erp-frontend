@@ -1,8 +1,8 @@
 /** @format */
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import LeaveVerticalBar from './leaveVerticalBar';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import LeaveVerticalBar from "./leaveVerticalBar";
 
 const DashboardStatistics = ({
   leaveStatusLabel,
@@ -23,31 +23,18 @@ const DashboardStatistics = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleLeaveStatusChartClick = (element, leaveStatusLabel) => {
-    try {
-      if (element.length > 0) {
-        const dataIndex = element[0].index;
-        const leaveStatus = formattedLeaveStatus;
-        const id = leaveStatus[dataIndex];
-        navigate(`/dashboard/hr/leaves-admin/application/leave-status/${id}/${fromDate}/${toDate}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleLeaveTypeChartClick = (element, leaveTypeLabel) => {
-    try {
-      if (element.length > 0) {
-        const dataIndex = element[0].index;
-        const leaveType = formattedLeaveType;
-        const id = leaveType[dataIndex];
-        navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleLeaveTypeChartClick = (element, leaveTypeLabel) => {
+  //   try {
+  //     if (element.length > 0) {
+  //       const dataIndex = element[0].index;
+  //       const leaveType = formattedLeaveType;
+  //       const id = leaveType[dataIndex];
+  //       navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const leaveStatus = {
     labels: leaveStatusLabel,
@@ -55,20 +42,35 @@ const DashboardStatistics = ({
       {
         data: leaveStatusData,
         backgroundColor: [
-          'rgba(255, 159, 64)',
-          'rgba(205, 19, 84)',
-          'rgba(55, 159, 64)',
-          'rgba(153, 102, 255)',
+          "rgba(255, 159, 64)",
+          "rgba(205, 19, 84)",
+          "rgba(55, 159, 64)",
+          "rgba(153, 102, 255)",
         ],
         borderColor: [
-          'rgba(255, 159, 64, 1)',
-          'rgba(205, 19, 84, 1)',
-          'rgba(55, 159, 64, 1)',
-          'rgba(153, 102, 255, 1)',
+          "rgba(255, 159, 64, 1)",
+          "rgba(205, 19, 84, 1)",
+          "rgba(55, 159, 64, 1)",
+          "rgba(153, 102, 255, 1)",
         ],
         borderWidth: 1,
       },
     ],
+  };
+
+  const handleLeaveStatusChartClick = (element, leaveStatusLabel) => {
+    try {
+      if (element.length > 0) {
+        const dataIndex = element[0].index;
+        const leaveStatus = formattedLeaveStatus;
+        const id = leaveStatus[dataIndex];
+        navigate(
+          `/dashboard/hr/leaves-admin/application/leave-status/${id}/${fromDate}/${toDate}`
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const leaveType = {
@@ -77,24 +79,24 @@ const DashboardStatistics = ({
       {
         data: leaveTypeData,
         backgroundColor: [
-          'rgba(255, 99, 132)',
-          'rgba(54, 162, 235)',
-          'rgba(255, 206, 86)',
-          'rgba(75, 192, 192)',
-          'rgba(153, 102, 255)',
-          'rgba(255, 159, 64)',
-          'rgba(205, 19, 84)',
-          'rgba(55, 159, 64)',
+          "rgba(255, 99, 132)",
+          "rgba(54, 162, 235)",
+          "rgba(255, 206, 86)",
+          "rgba(75, 192, 192)",
+          "rgba(153, 102, 255)",
+          "rgba(255, 159, 64)",
+          "rgba(205, 19, 84)",
+          "rgba(55, 159, 64)",
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(205, 19, 84, 1)',
-          'rgba(55, 159, 64, 1)',
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+          "rgba(205, 19, 84, 1)",
+          "rgba(55, 159, 64, 1)",
         ],
         borderWidth: 1,
       },

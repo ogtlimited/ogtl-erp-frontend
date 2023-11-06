@@ -59,7 +59,7 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
     setData({
       ...data,
       percentage: "",
-      amount: "",
+      flat_rate: "",
 
       deductionTitle: e?.label,
     });
@@ -88,11 +88,17 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
     e.preventDefault();
 
     const dataPayload = {
+      office_type: officeType.toLowerCase(),
       office_id: data?.operation_office_id,
       title: data?.title,
       description: data?.description,
-      percentage: data?.percentage?.length ? +data?.percentage : null,
-      amount: data?.amount?.length ? +data?.amount : null,
+      deduction_mode: deductionType,
+      value:
+        deductionType === "percentage"
+          ? +data?.percentage
+          : deductionType === "flat_rate"
+          ? +data?.flat_rate
+          : null,
     };
 
     setLoading(true);
@@ -256,14 +262,14 @@ export const AddDeductionTypeModal = ({ fetchAllDeductionTypes, goToTop }) => {
                               required
                             />
                           </div>
-                        ) : deductionType === "amount" ? (
+                        ) : deductionType === "flat_rate" ? (
                           <div className="form-group">
-                            <label htmlFor="amount">Amount</label>
+                            <label htmlFor="flat_rate">Flat Rate</label>
                             <input
-                              name="amount"
+                              name="flat_rate"
                               type="number"
                               className="form-control"
-                              value={data?.amount}
+                              value={data?.flat_rate}
                               onChange={handleFormChange}
                               required
                             />

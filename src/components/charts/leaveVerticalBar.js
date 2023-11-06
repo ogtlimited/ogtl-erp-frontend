@@ -45,7 +45,7 @@ const LeaveVerticalBar = ({ data, handleChartClick }) => {
   return (
     <>
       <Bar
-        // style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer' }}
         data={data}
         width={100}
         height={100}

@@ -5,7 +5,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import JobApplicantsTable from "./JobApplicantsTable";
+import JobApplicantsAdminRolesTable from "./JobApplicantsAdminRolesTable";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { JobApplicationSieveModalAdmin } from "../../../components/Modal/JobApplicationSieveModalAdmin";
@@ -565,7 +565,7 @@ const JobApplicantsAdmin = () => {
 
       <div className="row tab-content">
         <div id="tab_job-applications" className="col-12 tab-pane show active">
-          <JobApplicantsTable
+          <JobApplicantsAdminRolesTable
             columns={columns}
             data={data}
             setData={setData}
