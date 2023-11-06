@@ -65,8 +65,11 @@ const JobApplicantsAdmin = () => {
 
   const canEdit = ["hr_manager", "senior_hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
+  
   const userDept =
-    user?.office?.office_type === "department" ? user?.office?.title : null;
+    user?.office?.office_type === "department"
+      ? user?.office?.title?.toLowerCase()
+      : null;
 
   const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
     canEdit.includes(role)
@@ -538,7 +541,7 @@ const JobApplicantsAdmin = () => {
                   Job Applications
                 </a>
               </li>
-              
+
               <li className="nav-item">
                 <a
                   className="nav-link"

@@ -21,7 +21,9 @@ const EmployeeUser = () => {
   // const [externalURL, setExternalURL] = useState(null);
 
   // const userDept =
-  //   user?.office?.office_type === "department" ? user?.office?.title : null;
+  //   user?.office?.office_type === "department"
+  //     ? user?.office?.title?.toLowerCase()
+  //     : null;
 
   // const buildExternalURL = () => {
   //   try {

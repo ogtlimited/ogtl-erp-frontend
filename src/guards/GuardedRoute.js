@@ -19,8 +19,11 @@ export default function GuardedRoute({ title, dept, children }) {
   // const AllAccess = ["super", "ceo", "hr_manager"];
 
   const CurrentUserRoles = user?.employee_info?.roles;
+
   const userDept =
-    user?.office?.office_type === "department" ? user?.office?.title : null;
+    user?.office?.office_type === "department"
+      ? user?.office?.title?.toLowerCase()
+      : null;
 
   const canView = (title, dept) => {
     if (
