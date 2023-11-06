@@ -7,6 +7,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import LeadersSubordinatesTable from "../../../components/Tables/EmployeeTables/leadersSubordinatesTable";
 import OfficeStaffTable from "../../../components/Tables/EmployeeTables/officeStaffTable";
+import { department } from './../../../constants/index';
 
 const SupervisorAdmin = () => {
   const { user, showAlert, ErrorHandler } = useAppContext();
@@ -26,6 +27,7 @@ const SupervisorAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const officeId = user?.office?.id;
+  const officeType = user?.office?.office_type;
 
   // Team Members:
   const fetchAllLeadersSubordinates = useCallback(async () => {
@@ -66,51 +68,137 @@ const SupervisorAdmin = () => {
   const fetchAllOfficeStaff = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm.length ? searchTerm : null,
-          hr_designation_id: designationFilter.length
-            ? designationFilter
-            : null,
-          status: statusFilter.length ? statusFilter : null,
-        },
-      });
+      if (officeType === "department") {
+        const response = await axiosInstance.get(
+          `/api/v1/departments_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: page,
+              limit: sizePerPage,
+              name: searchTerm.length ? searchTerm : null,
+            },
+          }
+        );
+        const resData = response?.data?.data?.employees;
+        const totalPages = response?.data?.data?.pages;
 
-      const resData = response?.data?.data?.employees;
-      const totalPages = response?.data?.data?.pages;
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
 
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName: emp?.name,
+            office: officeType.toUpperCase(),
+            officeName: emp?.department.toUpperCase(),
+            company_email: emp?.email,
+          };
+        });
 
-      const mapp = resData.map((emp) => {
-        return {
-          ...emp,
-          fullName: emp?.full_name,
-          office: emp?.office?.office_type,
-          officeName: emp?.office?.title,
-          designation: emp?.designation,
-          company_email: emp?.email,
-        };
-      });
+        setAllOfficeStaff(mapp);
+        setLoading(false);
+        return;
+      }
 
-      setAllOfficeStaff(mapp);
-      setLoading(false);
+      if (officeType === "campaign") {
+        const response = await axiosInstance.get(
+          `/api/v1/campaign_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              pages: page,
+              limit: sizePerPage,
+              name: searchTerm.length ? searchTerm : null,
+            },
+          }
+        );
+        const resData = response?.data?.data?.employees;
+        const totalPages = response?.data?.data?.pages;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const mapp = resData.map((emp) => {
+          return {
+            ...emp,
+            fullName: emp?.name,
+            office: officeType.toUpperCase(),
+            officeName: emp?.campaign.toUpperCase(),
+            company_email: emp?.email,
+          };
+        });
+
+        setAllOfficeStaff(mapp);
+        setLoading(false);
+        return;
+      }
     } catch (error) {
       const component = "Office Staff Error:";
       ErrorHandler(error, component);
       setLoading(false);
     }
+
+    // try {
+    //   const response = await axiosInstance.get("/api/v1/employees.json", {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Access-Control-Allow-Origin": "*",
+    //       "ngrok-skip-browser-warning": "69420",
+    //     },
+    //     params: {
+    //       operation_office_id: officeId,
+    //       page: page,
+    //       limit: sizePerPage,
+    //       name: searchTerm.length ? searchTerm : null,
+    //       hr_designation_id: designationFilter.length
+    //         ? designationFilter
+    //         : null,
+    //       status: statusFilter.length ? statusFilter : null,
+    //     },
+    //   });
+
+    //   const resData = response?.data?.data?.employees;
+    //   const totalPages = response?.data?.data?.pages;
+
+    //   const thisPageLimit = sizePerPage;
+    //   const thisTotalPageSize = totalPages;
+
+    //   setSizePerPage(thisPageLimit);
+    //   setTotalPages(thisTotalPageSize);
+
+    //   const mapp = resData.map((emp) => {
+    //     return {
+    //       ...emp,
+    //       fullName: emp?.full_name,
+    //       office: emp?.office?.office_type,
+    //       officeName: emp?.office?.title,
+    //       designation: emp?.designation,
+    //       company_email: emp?.email,
+    //     };
+    //   });
+
+    //   setAllOfficeStaff(mapp);
+    //   setLoading(false);
+    // } catch (error) {
+    //   const component = "Office Staff Error:";
+    //   ErrorHandler(error, component);
+    //   setLoading(false);
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage, searchTerm, designationFilter, statusFilter]);
 
