@@ -14,7 +14,16 @@ export const GeneratePayrollModal = ({
   const { showAlert } = useAppContext();
   const [createPayslips, setCreatePayslips] = useState("");
   const [loading, setLoading] = useState(false);
-  const user = JSON.parse(secureLocalStorage.getItem("user"));
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  useEffect(() => {
+    setCreatePayslips({
+      month: `${currentYear}-${currentMonth.toString().padStart(2, "0")}`,
+    });
+  }, [currentMonth, currentYear]);
 
   const cancelEvent = () => {
     setCreatePayslips("");
