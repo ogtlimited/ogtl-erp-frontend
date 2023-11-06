@@ -1,17 +1,17 @@
-/** @format */
+// *IN USE
 
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/img/outsource.png";
 // import PageHeader from "../../components/page-header";
 import Pdf from "react-to-pdf";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import moment from "moment";
 import helper from "../../services/helper";
-import ViewModal from "../../components/Modal/ViewModal";
-import SalaryAssignmentModal from "../../components/Modal/SalaryAssignmentModal";
-import SalaryDeductionContent from "../../components/ModalContents/SalaryDeductionContent";
-import Salary from "./../../components/payroll-tabs/Salary";
+// import ViewModal from "../../components/Modal/ViewModal";
+// import SalaryAssignmentModal from "../../components/Modal/SalaryAssignmentModal";
+// import SalaryDeductionContent from "../../components/ModalContents/SalaryDeductionContent";
+// import Salary from "./../../components/payroll-tabs/Salary";
 const ref = React.createRef();
 
 // const RightSide = () => {
@@ -42,8 +42,9 @@ const PaySlip = () => {
   const [netSalary, setNetSalary] = useState({});
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [totalDeduction, settotalDeduction] = useState(0);
-  const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
+
+  // const [totalDeduction, settotalDeduction] = useState(0);
+  // const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
 
   useEffect(() => {
     const fetchPaySlip = async () => {
@@ -122,73 +123,76 @@ const PaySlip = () => {
             case "monthly_pension":
               deductions["Monthly Employee Pension"] = employeeSalarySlip[e];
               break;
-            case "hourlyDeductions":
-              deductions["Hourly Deductions"] = employeeSalarySlip[e];
+            case "disciplinary_deductions":
+              deductions["Disciplinary Deductions"] = employeeSalarySlip[e];
               break;
-            case "hourlyDeductionAmount":
-              deductions["Hourly Deduction Amount"] = employeeSalarySlip[e];
-              break;
-            case "hourlyDeductionDates":
-              deductions["Hourly Deduction Dates"] = employeeSalarySlip[e];
-              break;
-            case "DailyDeductionsCount":
-              deductions["Daily Deductions Count"] = employeeSalarySlip[e];
-              break;
-            case "DailyDeductionsDays":
-              deductions["Daily Deductions Days"] = employeeSalarySlip[e];
-              break;
-            case "DailyDeductionsAmount":
-              deductions["Daily Deductions Amount"] = employeeSalarySlip[e];
-              break;
-            case "NCNSCount":
-              deductions["NCNS Count"] = employeeSalarySlip[e];
-              break;
-            case "NCNSDays":
-              deductions["NCNS Days"] = employeeSalarySlip[e];
-              break;
-            case "NCNSAmount":
-              deductions["NCNS Amount"] = employeeSalarySlip[e];
-              break;
-            case "phoneOnCallFloorCount":
-              deductions["Phone on the call floor count"] =
-                employeeSalarySlip[e];
-              break;
-            case "phoneOnCallFloorDays":
-              deductions["Phone on the call floor days"] =
-                employeeSalarySlip[e];
-              break;
-            case "phoneOnCallFloorAmount":
-              deductions["Phone on the call floor amount"] =
-                employeeSalarySlip[e];
-              break;
-            case "thirtyMinShiftCount":
-              deductions["30mins shift count (20th - 25th)"] =
-                employeeSalarySlip[e];
-              break;
-            case "oneHourShiftCount":
-              deductions["1 hour shift count"] = employeeSalarySlip[e];
-              break;
-            case "breakdownOfDaysWorked":
-              deductions["Breakdown of days worked"] = employeeSalarySlip[e];
-              break;
-            case "loanAndOtherDeductions":
-              deductions["Loan & Other Deductions"] = employeeSalarySlip[e];
-              break;
+            // case "hourlyDeductions":
+            //   deductions["Hourly Deductions"] = employeeSalarySlip[e];
+            //   break;
+            // case "hourlyDeductionAmount":
+            //   deductions["Hourly Deduction Amount"] = employeeSalarySlip[e];
+            //   break;
+            // case "hourlyDeductionDates":
+            //   deductions["Hourly Deduction Dates"] = employeeSalarySlip[e];
+            //   break;
+            // case "DailyDeductionsCount":
+            //   deductions["Daily Deductions Count"] = employeeSalarySlip[e];
+            //   break;
+            // case "DailyDeductionsDays":
+            //   deductions["Daily Deductions Days"] = employeeSalarySlip[e];
+            //   break;
+            // case "DailyDeductionsAmount":
+            //   deductions["Daily Deductions Amount"] = employeeSalarySlip[e];
+            //   break;
+            // case "NCNSCount":
+            //   deductions["NCNS Count"] = employeeSalarySlip[e];
+            //   break;
+            // case "NCNSDays":
+            //   deductions["NCNS Days"] = employeeSalarySlip[e];
+            //   break;
+            // case "NCNSAmount":
+            //   deductions["NCNS Amount"] = employeeSalarySlip[e];
+            //   break;
+            // case "phoneOnCallFloorCount":
+            //   deductions["Phone on the call floor count"] =
+            //     employeeSalarySlip[e];
+            //   break;
+            // case "phoneOnCallFloorDays":
+            //   deductions["Phone on the call floor days"] =
+            //     employeeSalarySlip[e];
+            //   break;
+            // case "phoneOnCallFloorAmount":
+            //   deductions["Phone on the call floor amount"] =
+            //     employeeSalarySlip[e];
+            //   break;
+            // case "thirtyMinShiftCount":
+            //   deductions["30mins shift count (20th - 25th)"] =
+            //     employeeSalarySlip[e];
+            //   break;
+            // case "oneHourShiftCount":
+            //   deductions["1 hour shift count"] = employeeSalarySlip[e];
+            //   break;
+            // case "breakdownOfDaysWorked":
+            //   deductions["Breakdown of days worked"] = employeeSalarySlip[e];
+            //   break;
+            // case "loanAndOtherDeductions":
+            //   deductions["Loan & Other Deductions"] = employeeSalarySlip[e];
+            //   break;
+            // case "loanAndOtherDeductionsExplanation":
+            //   deductions["Loan & Other Deduction Explanation"] =
+            //     employeeSalarySlip[e];
+            //   break;
+            // case "otherAdditions":
+            //   deductions["Other Additions"] = employeeSalarySlip[e];
+            //   break;
+            // case "otherAdditionsExplanation":
+            //   deductions["Other Addition Explanation"] = employeeSalarySlip[e];
+            //   break;
             case "totalDeductions":
               deductions["Total Deductions"] =
                 employeeSalarySlip.monthly_income_tax +
                 employeeSalarySlip.monthly_pension +
                 employeeSalarySlip.disciplinary_deductions;
-              break;
-            case "loanAndOtherDeductionsExplanation":
-              deductions["Loan & Other Deduction Explanation"] =
-                employeeSalarySlip[e];
-              break;
-            case "otherAdditions":
-              deductions["Other Additions"] = employeeSalarySlip[e];
-              break;
-            case "otherAdditionsExplanation":
-              deductions["Other Addition Explanation"] = employeeSalarySlip[e];
               break;
 
             // Net Salary:
@@ -196,16 +200,12 @@ const PaySlip = () => {
               netSalary[""] = employeeSalarySlip[e];
               break;
             default:
-              let key = e.charAt(0).toUpperCase() + e.slice(1);
               break;
           }
         });
 
         setEarnings(earnings);
-
-        deductions["Disciplinary Deductions"] = payslip.disciplinary_deductions;
         setDeductions(deductions);
-
         setNetSalary(netSalary);
 
         setFetched(true);
@@ -402,6 +402,7 @@ const PaySlip = () => {
         )}
       </div>
 
+      {/* 
       {fetched && (
         <ViewModal
           title="Salary Deduction Breakdown"
@@ -409,7 +410,7 @@ const PaySlip = () => {
             <SalaryDeductionContent deductionsBreakDown={deductionsBreakDown} />
           }
         />
-      )}
+      )} */}
     </>
   );
 };
