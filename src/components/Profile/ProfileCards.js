@@ -74,7 +74,7 @@ const ProfileCards = ({
     content: () => BackVirtualIDRef.current,
   });
 
-  // Fetch Employee Attendance Tardiness:
+  // Fetch Employee Weekly Attendance Tardiness:
   const fetchEmployeeAttendanceTardiness = useCallback(async () => {
     try {
       const response = await axiosInstance.get(
@@ -109,7 +109,7 @@ const ProfileCards = ({
 
       setEmployeeTardiness(formattedData);
     } catch (error) {
-      const component = "Attendance Tardiness:";
+      const component = "Weekly Attendance Tardiness:";
       ErrorHandler(error, component);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
