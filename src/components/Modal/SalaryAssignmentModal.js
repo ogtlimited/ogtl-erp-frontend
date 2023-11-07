@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -6,7 +7,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 
 const SalaryAssignmentModal = ({ salaryStructure }) => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [formOptions, setFormOptions] = useState([]);
   const [employeeOpts, setEmployeeOpts] = useState([]);
 
@@ -26,18 +27,6 @@ const SalaryAssignmentModal = ({ salaryStructure }) => {
     setFormOptions(salaruStruc);
   }, [salaryStructure]);
 
-  useEffect(() => {
-    combineRequest().then((res) => {
-      const { employees } = res.data.createEmployeeFormSelection;
-      const employeeOpts = employees?.map((e) => {
-        return {
-          label: `${e.first_name} ${e.last_name}`,
-          value: e._id,
-        };
-      });
-      setEmployeeOpts(employeeOpts);
-    });
-  }, []);
 
   return (
     <>

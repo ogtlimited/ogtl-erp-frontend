@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import AccountDashboardChart from "../../components/charts/account-dashboard-charts";
 import DashboardStatistics from "../../components/charts/dashboard-statistics";
-import DashboardStats from "../../components/charts/dashboard-stats";
 import DashboardTable from "../../components/Tables/Dashboard/dashboard-table";
 import axiosInstance from "../../services/api";
 

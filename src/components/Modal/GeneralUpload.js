@@ -1,11 +1,13 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import Papa from "papaparse";
 import helper from "../../services/helper";
-import { object } from "yup/lib/locale";
 import { useAppContext } from "../../Context/AppContext";
+
 const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
   const [uploadState, setuploadState] = useState(title);
@@ -13,12 +15,6 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
   const [invalid, setinvalid] = useState(false);
   const [data, setData] = useState([]);
   const [path, setpath] = useState(url);
-  const updateState = (path, msg) => {
-    setpath(path);
-    setuploadState(msg);
-    setfileName("");
-    setinvalid(false);
-  };
   const onFileUpload = (e) => {
     const files = e.target.files;
 
@@ -29,9 +25,9 @@ const GeneralUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           const res = helper.arrayToJSONObject(results.data);
            const jsonData = res.filter(element => {
             if(typeof element == "object") {
-              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length == 0 : true).length
+              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length === 0 : true).length
               console.log(emptyStringCount);
-              if(Object.values(element).length != emptyStringCount){
+              if(Object.values(element).length !== emptyStringCount){
                 return element
               }
             }

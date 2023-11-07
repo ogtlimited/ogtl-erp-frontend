@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import female from "../../assets/img/female_avatar.png";
@@ -6,11 +8,8 @@ import female3 from "../../assets/img/female_avatar3.png";
 import male from "../../assets/img/male_avater.png";
 import male2 from "../../assets/img/male_avater2.png";
 import male3 from "../../assets/img/male_avater3.png";
-import { departmentFormJson } from "../../components/FormJSON/HR/Employee/department";
-import EmployeesTable from "../../components/Tables/EmployeeTables/employeeTable";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { useAppContext } from "../../Context/AppContext";
-import data from "../../db/employeeReport.json";
 import axiosInstance from "../../services/api";
 
 const EmployeeReport = () => {

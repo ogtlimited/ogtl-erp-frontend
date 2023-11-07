@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -57,6 +58,7 @@ const PayrollBatchesTable = ({
     window.addEventListener('resize', () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const PayrollBatchesTable = ({
     setTimeout(() => {
       setLoading(true);
     }, 7000);
-  }, [data]);
+  }, [data, setLoading]);
 
 
   const imageUrl = 'https://erp.outsourceglobal.com';

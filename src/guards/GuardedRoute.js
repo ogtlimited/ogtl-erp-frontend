@@ -4,9 +4,7 @@ import { Navigate } from "react-router-dom";
 // hooks
 
 // routes
-import { PATH_DASHBOARD } from "../routes/paths";
 import tokenService from "../services/token.service";
-import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 

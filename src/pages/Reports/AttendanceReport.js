@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { textFilter, selectFilter } from "react-bootstrap-table2-filter";
@@ -28,47 +29,6 @@ const AttendanceReport = () => {
     "December",
   ];
 
-  useEffect(() => {
-    combineRequest()
-      .then((res) => {
-        const { projects, dept } = res.data.createEmployeeFormSelection;
-        const projectsOpts = projects?.map((e) => {
-          return {
-            label: e.project_name,
-            value: e._id,
-          };
-        });
-        const deptOpts = dept?.map((e) => {
-          return {
-            label: e.designation,
-            value: e._id,
-          };
-        });
-        setcampaign(projectsOpts);
-        setdepts(deptOpts);
-        setquery(projectsOpts[0].value);
-        if (query) {
-          axiosInstance
-            .get(
-              `/api/attendance?startOfMonth=2021-11-01&endOfMonth=2021-11-31&departmentId=613a7d5b8f7b0734ccfa1f50`
-            )
-            .then((res) => {
-              let data = res.data.data;
-              setattendance(data);
-              for (const i of data) {
-              }
-            });
-          // const startOfMonth= new Date(moment().startOf('M')).toLocaleDateString()
-          //  const endOfMonth= new Date(moment().endOf('M')).toLocaleDateString()
-          //  axiosInstance.get(`/api/attendance?startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}&${queryType}=${query}`).then( res =>{
-
-          //  })
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [query]);
   useEffect(() => {}, [attendance]);
   const empOpts = Object.assign(
     {},
