@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -100,6 +102,7 @@ const CoachingModal = ({
     setemployeeOptions(emp);
     // setsupervisor(user.reports_to);
   }, [supervisor, coachingForm, coachingFormEdit, allEmployees]);
+  
   useEffect(() => {
     setgoalCount(goals.split(" ").length);
     setopportunityCount(opportunities.split(" ").length);

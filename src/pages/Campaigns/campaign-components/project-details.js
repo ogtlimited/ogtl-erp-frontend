@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import male from "../../../assets/img/male_avater.png";
 import female from "../../../assets/img/female_avatar.png";

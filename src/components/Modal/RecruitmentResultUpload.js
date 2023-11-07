@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/api';
@@ -6,7 +7,7 @@ import helper from '../../services/helper';
 import { useAppContext } from '../../Context/AppContext';
 
 const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess, fetchAllTests }) => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
   const [uploadState, setuploadState] = useState(title);
@@ -14,6 +15,7 @@ const RecruitmentResultUpload = ({ settoggleModal, title, url, setUploadSuccess,
   const [invalid, setinvalid] = useState(false);
   const [data, setData] = useState([]);
   const [path, setpath] = useState(url);
+  
   const updateState = (path, msg) => {
     setpath(path);
     setuploadState(msg);

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useCallback } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import { leaveList } from "../../db/leaves";
 import male from "../../assets/img/male_avater.png";
@@ -26,7 +28,7 @@ const ClientApproval = () => {
       color: "text-danger",
     },
   ]);
-  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [allLeaves, setallLeaves] = useState([]);
   const { showAlert, allEmployees, combineRequest } = useAppContext();
   const [template, settemplate] = useState([]);
@@ -48,7 +50,7 @@ const ClientApproval = () => {
   const user = tokenService.getUser();
   console.log("userrrrrr", user);
 
-  const fetchLeaves = () => {
+  const fetchLeaves = useCallback(() => {
     axiosInstance
       .get(`/leave-application/client-approval/${user?.projectId?._id}`)
       .then((e) => {
@@ -63,10 +65,12 @@ const ClientApproval = () => {
         setpresent(allEmployees.length - approved);
         setfetched(true);
       });
-  };
+  }, [allEmployees.length, user?.projectId?._id]);
+
   useEffect(() => {
     fetchLeaves();
-  }, []);
+  }, [fetchLeaves]);
+
   const columns = [
     {
       dataField: "employee_id",

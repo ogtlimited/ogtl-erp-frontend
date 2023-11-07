@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -34,6 +35,7 @@ const ShiftScheduleListTable = ({ loading, data, columns, context }) => {
     window.addEventListener("resize", () => {
       resizeTable();
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
   useEffect(() => {

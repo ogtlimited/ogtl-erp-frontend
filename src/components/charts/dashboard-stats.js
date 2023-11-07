@@ -1,7 +1,7 @@
 import React from "react";
 
 const DashboardStats = () => {
-  const sampleData = [{}];
+
   return (
     <div className="col-md-12">
       <div className="card-group m-b-30">

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React, { useEffect, useState } from "react";
 import { useNoAuthContext } from "../../Context/NoAuthContext";
 import axios from "axios";

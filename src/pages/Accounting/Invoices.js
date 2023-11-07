@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";

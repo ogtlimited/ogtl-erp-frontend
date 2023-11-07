@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import avater from "../../assets/img/male_avater.png";
@@ -76,7 +78,9 @@ const Clients = () => {
           });
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formValue, editData]);
+  
   useEffect(() => {
     seteditData(clickedRow);
     return () => {

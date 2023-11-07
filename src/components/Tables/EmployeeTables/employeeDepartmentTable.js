@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 /** @format */
 
 import React, { useState, useEffect } from 'react';
@@ -76,7 +78,7 @@ const EmployeesDepartmentTable = ({
     if (i?.value === 'All' || i == null) {
       setAllEmployee(unfiltered);
     } else {
-      const filt = unfiltered.filter((e) => i.value == e[type]?._id);
+      const filt = unfiltered.filter((e) => i.value === e[type]?._id);
 
       setAllEmployee(filt);
     }
