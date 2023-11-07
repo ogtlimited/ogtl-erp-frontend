@@ -38,7 +38,7 @@ const LeavesAdmin = () => {
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
-  const isHr = user?.office?.title === "hr" ? true : false;
+  const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreate = ["hr_manager", "senior_hr_associate"];

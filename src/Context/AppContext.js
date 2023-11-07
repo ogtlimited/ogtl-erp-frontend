@@ -40,7 +40,7 @@ const AppProvider = (props) => {
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
 
   const isTeamLead = user?.employee_info?.is_lead;
-  const isHr = user?.office?.title === "hr" ? true : false;
+  const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
   const goToTop = () => {
     window.scrollTo({

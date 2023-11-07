@@ -33,7 +33,7 @@ export const EmployeeInfoModal = ({
   }, [fetchAllCampaigns, fetchAllDepartments, fetchAllDesignations]);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const isHr = user?.office?.title === "hr" ? true : false;
+  const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
   const canView = ["hr_manager", "senior_hr_associate"];
 
