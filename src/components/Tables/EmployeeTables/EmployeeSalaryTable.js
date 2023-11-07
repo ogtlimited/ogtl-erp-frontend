@@ -110,13 +110,6 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            {/* <button
-              className="btn btn-sm btn-primary"
-              onClick={() => handleRegeneratePayroll(employee)}
-              style={{ marginRight: "20px" }}
-            >
-              Regenerate
-            </button> */}
             {regenerate && user?.role?.title !== "CEO" ? (
               <a
                 href="#"
@@ -161,7 +154,7 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="3"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns.length <= 12 ? "2" : "3"}>Deductions</th>
+                  <th colSpan={columns.length <= 13 ? "3" : "4"}>Deductions</th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 

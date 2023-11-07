@@ -70,6 +70,7 @@ const PayrollReports = () => {
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
           disciplinary_deductions: e?.slip?.disciplinary_deductions,
+          totalDeduction: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
         }));
 
@@ -138,6 +139,10 @@ const PayrollReports = () => {
       text: "Disciplinary Deduction",
     },
     {
+      dataField: "totalDeduction",
+      text: "Total Deductions",
+    },
+    {
       dataField: "netPay",
       text: "Net Salary",
     },
@@ -159,16 +164,6 @@ const PayrollReports = () => {
 
       <div className="row">
         <div className="col-md-12">
-          {/* <SalaryDetailsTable
-            data={data}
-            columns={columns}
-            page={page}
-            setPage={setPage}
-            sizePerPage={sizePerPage}
-            setSizePerPage={setSizePerPage}
-            totalPages={totalPages}
-            setTotalPages={setTotalPages}
-          /> */}
           <EmployeeSalaryTable
             data={data}
             loading={loading}

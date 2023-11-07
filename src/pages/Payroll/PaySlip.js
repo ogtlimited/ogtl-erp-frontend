@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/img/outsource.png";
 // import PageHeader from "../../components/page-header";
-import Pdf from "react-to-pdf";
+// import Pdf from "react-to-pdf";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import moment from "moment";
@@ -38,13 +38,14 @@ const PaySlip = () => {
   const { id } = useParams();
   const [paySlip, setPaySlip] = useState({});
   const [earnings, setEarnings] = useState({});
+  const [grossSalary, setGrossSalary] = useState({});
   const [deductions, setDeductions] = useState({});
   const [netSalary, setNetSalary] = useState({});
   const [fetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // const [totalDeduction, settotalDeduction] = useState(0);
-  // const [deductionsBreakDown, setdeductionsBreakDown] = useState([]);
+  // const [totalDeduction, setTotalDeduction] = useState(0);
+  // const [deductionsBreakDown, setDeductionsBreakDown] = useState([]);
 
   useEffect(() => {
     const fetchPaySlip = async () => {
@@ -58,6 +59,7 @@ const PaySlip = () => {
         });
 
         const earnings = {};
+        const grossSalary = {};
         const deductions = {};
         const netSalary = {};
 
@@ -97,23 +99,37 @@ const PaySlip = () => {
         Object.keys(employeeSalarySlip).forEach((e) => {
           switch (e) {
             // Earnings:
-            case "monthly_salary":
-              earnings["Monthly Salary"] = employeeSalarySlip[e];
+            case "basic":
+              earnings["Basic Salary"] = employeeSalarySlip[e];
               break;
-            case "transport":
-              earnings["Transportation"] = employeeSalarySlip[e];
+            case "housing":
+              earnings["Housing Allowance"] = employeeSalarySlip[e];
               break;
             case "medical":
               earnings["HMO Coverage"] = employeeSalarySlip[e];
               break;
-            case "leaveBuyout":
-              earnings["Leave Buyout"] = employeeSalarySlip[e];
+            case "transport":
+              earnings["Transportation"] = employeeSalarySlip[e];
               break;
-            case "attendanceBonus":
-              earnings["Attendance Bonus"] = employeeSalarySlip[e];
+            case "other_allowances":
+              earnings["Other Allowances"] = employeeSalarySlip[e];
               break;
-            case "WFHAllowance":
-              earnings["WHF Allowance"] = employeeSalarySlip[e];
+            // case "monthly_salary":
+            //   earnings["Gross Salary"] = employeeSalarySlip[e];
+            //   break;
+            // case "leaveBuyout":
+            //   earnings["Leave Buyout"] = employeeSalarySlip[e];
+            //   break;
+            // case "attendanceBonus":
+            //   earnings["Attendance Bonus"] = employeeSalarySlip[e];
+            //   break;
+            // case "WFHAllowance":
+            //   earnings["WHF Allowance"] = employeeSalarySlip[e];
+            //   break;
+
+            // Gross Salary:
+            case "monthly_salary":
+              grossSalary[""] = employeeSalarySlip[e];
               break;
 
             // Deductions:
@@ -188,6 +204,9 @@ const PaySlip = () => {
             // case "otherAdditionsExplanation":
             //   deductions["Other Addition Explanation"] = employeeSalarySlip[e];
             //   break;
+            // case "totalDeductions":
+            //   deductions["Total Deductions"] = employeeSalarySlip[e];
+            //   break;
             case "totalDeductions":
               deductions["Total Deductions"] =
                 employeeSalarySlip.monthly_income_tax +
@@ -205,6 +224,7 @@ const PaySlip = () => {
         });
 
         setEarnings(earnings);
+        setGrossSalary(grossSalary);
         setDeductions(deductions);
         setNetSalary(netSalary);
 
@@ -334,20 +354,22 @@ const PaySlip = () => {
 
                     <div>
                       {paySlip.net_pay ? (
-                        <h4 className="m-b-10">
-                          <strong>Net Pay</strong>
-                        </h4>
+                        <h5 className="m-b-10">
+                          <strong>Gross Salary</strong>
+                        </h5>
                       ) : null}
                       <table className="table table-bordered">
                         <tbody>
                           {fetched &&
-                            Object.keys(netSalary).map((net, index) => (
+                            Object.keys(grossSalary).map((gross, index) => (
                               <tr key={index}>
                                 <td>
-                                  <strong>{net}</strong>{" "}
-                                  {net !== "department" ? (
+                                  <strong>{gross}</strong>{" "}
+                                  {gross !== "department" ? (
                                     <span className="float-right">
-                                      {helper.handleMoneyFormat(netSalary[net])}
+                                      {helper.handleMoneyFormat(
+                                        grossSalary[gross]
+                                      )}
                                     </span>
                                   ) : (
                                     ""
@@ -395,6 +417,32 @@ const PaySlip = () => {
                       </table>
                     </div>
                   </div>
+                </div>
+                <div>
+                  {paySlip.net_pay ? (
+                    <h5 className="m-b-10">
+                      <strong>Net Salary</strong>
+                    </h5>
+                  ) : null}
+                  <table className="table table-bordered">
+                    <tbody>
+                      {fetched &&
+                        Object.keys(netSalary).map((net, index) => (
+                          <tr key={index}>
+                            <td>
+                              <strong>{net}</strong>{" "}
+                              {net !== "department" ? (
+                                <span className="float-right">
+                                  {helper.handleMoneyFormat(netSalary[net])}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
