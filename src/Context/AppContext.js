@@ -406,8 +406,20 @@ const AppProvider = (props) => {
       const resData = response?.data?.data?.deduction_types;
 
       const formattedData = resData.map((item) => {
+        const deductionValue =
+          item?.deduction?.deduction_mode === "percentage"
+            ? item?.deduction?.value + "%"
+            : item?.deduction?.deduction_mode === "flat_rate"
+            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+            : "-";
+
         return {
-          label: item?.deduction?.title,
+          label:
+            item?.deduction?.title +
+            " | " +
+            item?.office?.title.replace(/\b\w/g, (char) => char.toUpperCase()) +
+            " | " +
+            deductionValue,
           value: item?.deduction?.id,
         };
       });

@@ -141,46 +141,47 @@ const OfficeStaffTable = ({
             />
           </a>
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.designation}</span>
+            {value}
+            {/* <span>{row?.ogid}</span> */}
           </Link>
         </h2>
       ),
     },
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (value, row) => (
-        <>
-          {value === "active" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-online"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          ) : value === "left" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-pending"></span>{" "}
-              <span className="ml-4 d-block">{"RESIGNED"}</span>
-            </a>
-          ) : value === "terminated" ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          ) : (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
-            </a>
-          )}
-        </>
-      ),
-    },
+    // {
+    //   dataField: "status",
+    //   text: "Status",
+    //   sort: true,
+    //   headerStyle: { width: "100%" },
+    //   formatter: (value, row) => (
+    //     <>
+    //       {value === "active" ? (
+    //         <a href="" className="pos-relative">
+    //           {" "}
+    //           <span className="status-online"></span>{" "}
+    //           <span className="ml-4 d-block">{value.toUpperCase()}</span>
+    //         </a>
+    //       ) : value === "left" ? (
+    //         <a href="" className="pos-relative">
+    //           {" "}
+    //           <span className="status-pending"></span>{" "}
+    //           <span className="ml-4 d-block">{"RESIGNED"}</span>
+    //         </a>
+    //       ) : value === "terminated" ? (
+    //         <a href="" className="pos-relative">
+    //           {" "}
+    //           <span className="status-terminated"></span>{" "}
+    //           <span className="ml-4 d-block">{value.toUpperCase()}</span>
+    //         </a>
+    //       ) : (
+    //         <a href="" className="pos-relative">
+    //           {" "}
+    //           <span className="status-terminated"></span>{" "}
+    //           <span className="ml-4 d-block">{value.toUpperCase()}</span>
+    //         </a>
+    //       )}
+    //     </>
+    //   ),
+    // },
     {
       dataField: "ogid",
       text: "Employee ID",
@@ -192,14 +193,12 @@ const OfficeStaffTable = ({
       text: "Office Type",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "officeName",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "company_email",
