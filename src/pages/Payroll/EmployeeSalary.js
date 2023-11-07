@@ -74,6 +74,7 @@ const EmployeeSalary = () => {
           monthlySalary: e?.salary?.monthly_salary,
           monthlyIncomeTax: e?.salary?.monthly_income_tax,
           monthlyEmployeePension: e?.salary?.monthly_pension,
+          totalDeductions: e?.salary?.total_deductions,
           netPay: e?.salary?.net_pay,
         }));
 
@@ -138,6 +139,10 @@ const EmployeeSalary = () => {
       text: "Pension",
     },
     {
+      dataField: "totalDeductions",
+      text: "Total Deductions",
+    },
+    {
       dataField: "netPay",
       text: "Net Salary",
     },
@@ -191,18 +196,6 @@ const EmployeeSalary = () => {
       </div>
 
       <div className="row  ">
-        {/* <SalaryDetailsTable
-          data={AllSalaries}
-          columns={columns}
-          loading={loading}
-          setLoading={setLoading}
-          page={page}
-          setPage={setPage}
-          sizePerPage={sizePerPage}
-          setSizePerPage={setSizePerPage}
-          totalPages={totalPages}
-          setTotalPages={setTotalPages}
-        /> */}
         <EmployeeSalaryTable
           data={AllSalaries}
           loading={loading}

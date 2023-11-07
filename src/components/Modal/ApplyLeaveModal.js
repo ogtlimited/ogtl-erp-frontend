@@ -126,41 +126,42 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const handleDateChange = (e) => {
     e.preventDefault();
-
     const selectedDate = e.target.value;
-    const parsedDate = new Date(selectedDate);
-    const weekend = parsedDate.getDay() === 6 || parsedDate.getDay() === 0;
+    
+    // ! Restricts selection of weekends
+    // const parsedDate = new Date(selectedDate);
+    // const weekend = parsedDate.getDay() === 6 || parsedDate.getDay() === 0;
 
-    if (weekend) {
-      if (e.target.name === "start_date") {
-        setSelectedStartDateError(
-          `You can not select ${moment(parsedDate).format(
-            "dddd"
-          )}, please select a weekday.`
-        );
-        setSelectedStartDate("");
-        setSelectedEndDateError("");
-      } else {
-        setSelectedEndDateError(
-          `
-          You can not select ${moment(parsedDate).format(
-            "dddd"
-          )}, please select a weekday.`
-        );
-      }
-      setSelectedEndDate("");
+    // if (weekend) {
+    // if (e.target.name === "start_date") {
+    //   setSelectedStartDateError(
+    //     `You can not select ${moment(parsedDate).format(
+    //       "dddd"
+    //     )}, please select a weekday.`
+    //   );
+    //   setSelectedStartDate("");
+    //   setSelectedEndDateError("");
+    // } else {
+    //   setSelectedEndDateError(
+    //     `
+    //     You can not select ${moment(parsedDate).format(
+    //       "dddd"
+    //     )}, please select a weekday.`
+    //   );
+    // }
+    //   setSelectedEndDate("");
+    // } else {
+    if (e.target.name === "start_date") {
+      setSelectedStartDate(selectedDate);
+      setSelectedStartDateError("");
+
+      setSelectedEndDateError("");
     } else {
-      if (e.target.name === "start_date") {
-        setSelectedStartDate(selectedDate);
-        setSelectedStartDateError("");
-
-        setSelectedEndDateError("");
-      } else {
-        setSelectedEndDate(selectedDate);
-        setSelectedEndDateError("");
-      }
-      setLeave({ ...leave, [e.target.name]: selectedDate });
+      setSelectedEndDate(selectedDate);
+      setSelectedEndDateError("");
     }
+    setLeave({ ...leave, [e.target.name]: selectedDate });
+    // }
   };
 
   const handleFileChange = (e) => {

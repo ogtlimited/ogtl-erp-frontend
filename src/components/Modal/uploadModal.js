@@ -1,8 +1,8 @@
+/* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import Papa from "papaparse";
 import helper from "../../services/helper";
-import { object } from "yup/lib/locale";
 import { useAppContext } from "../../Context/AppContext";
 import config from "../../config.json";
 const UploadModal = ({
@@ -11,7 +11,7 @@ const UploadModal = ({
   setuploading,
   setUploadSuccess,
 }) => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
   const [uploadState, setuploadState] = useState("Upload New Employees");
@@ -37,9 +37,9 @@ const UploadModal = ({
           // console.log("bulk upload data", res)
            const jsonData = res.filter(element => {
             if(typeof element == "object") {
-              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length == 0 : true).length
+              const emptyStringCount = Object.values(element).filter(e => typeof e == "string" ? e.length === 0 : true).length
               console.log(emptyStringCount);
-              if(Object.values(element).length != emptyStringCount){
+              if(Object.values(element).length !== emptyStringCount){
                 return element
               }
             }

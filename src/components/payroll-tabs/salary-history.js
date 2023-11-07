@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { selectFilter } from "react-bootstrap-table2-filter";

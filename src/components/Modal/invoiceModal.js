@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -73,12 +76,12 @@ const InvoiceModal = () => {
           //   setSubmitting(false);
         }, 300);
       }}
-      validationSchema={Yup.object().shape({
-        employee_id: Yup.string().required("Employee is required"),
-        supervisor: Yup.string().required("Supervisor is required."),
-        incident_date: Yup.string().required("Incident date is required."),
-        coaching_type: Yup.string().required("coaching type is required."),
-      })}
+      // validationSchema={Yup.object().shape({
+      //   employee_id: Yup.string().required("Employee is required"),
+      //   supervisor: Yup.string().required("Supervisor is required."),
+      //   incident_date: Yup.string().required("Incident date is required."),
+      //   coaching_type: Yup.string().required("coaching type is required."),
+      // })}
     >
       {(props) => {
         const {

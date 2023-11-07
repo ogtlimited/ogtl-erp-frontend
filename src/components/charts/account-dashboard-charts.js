@@ -1,5 +1,4 @@
 import React from "react";
-import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 
 const AccountDashboardChart = ({title, data}) => {

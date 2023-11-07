@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /** @format */
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../services/api';
@@ -32,7 +33,7 @@ const AcademyReport = () => {
     console.log('Successfully uploaded!');
   }
     fetchAcademyApplicants();
-  }, []);
+  }, [uploadSuccess]);
 
 
   return (

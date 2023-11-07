@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -209,7 +210,7 @@ const Salary = ({ salaryStructure }) => {
         });
         setEmployeeOpts(employeeOpts);
       });
-  }, [data2]);
+  }, [createPayroll, data2]);
 
 
 

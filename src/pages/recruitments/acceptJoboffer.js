@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useCallback } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Pdf from "react-to-pdf";
@@ -17,11 +18,12 @@ const AcceptJoboffer = () => {
 
   let { id } = useParams();
   const [state, setstate] = useState({});
-  const fetchJobOpening = () => {
+
+  const fetchJobOpening = useCallback(() => {
     axios.get(config.ApiUrl + "/api/jobOffer/" + id).then((res) => {
       setstate(res.data.data);
     });
-  };
+  }, [id]);
 
   const jobOpening = (status) => {
     const data = {
@@ -32,15 +34,15 @@ const AcceptJoboffer = () => {
       designation_id: state.designation_id?._id,
       job_offer_terms: PopStateEvent.job_offer_terms,
       terms_and_conditions: state.terms_and_conditions,
-  }
+    };
     axios.patch(config.ApiUrl + "/api/jobOffer/" + id, data).then((res) => {
-      setResponse(res.data.message)
-    })
+      setResponse(res.data.message);
+    });
   };
 
   useEffect(() => {
     fetchJobOpening();
-  }, []);
+  }, [fetchJobOpening]);
 
   const handleApplicantName = (full_name) => {
     setApplicantName(full_name);
@@ -48,25 +50,23 @@ const AcceptJoboffer = () => {
 
   const handleSubmit = (e, field) => {
     setSubmitted(true);
-    jobOpening('Accepted');
+    jobOpening("Accepted");
   };
 
   const handleReject = () => {
     setSubmitted(true);
-    jobOpening('Rejected');
-  }
+    jobOpening("Rejected");
+  };
 
   return (
     <>
-      <RecruitmentHeader/>
+      <RecruitmentHeader />
       <div className="letter-box">
         <div ref={ref} className="row justify-content-center">
           <div className="col-md-10 mt-5">
             <div className="card px-5 ">
               <div className="card-body">
-                <h4 className="payslip-title">
-                  Job Offer Letter
-                </h4>
+                <h4 className="payslip-title">Job Offer Letter</h4>
                 <div className="row">
                   <div className="col-sm-6 m-b-20">
                     <img src={logo} className="inv-logo" alt="" />
@@ -77,9 +77,16 @@ const AcceptJoboffer = () => {
                     </ul>
                   </div>
                   <div className="offer-letter-content">
-                    <p>Dear {state.job_applicant_id?.first_name} {state.job_applicant_id?.middle_name} {state.job_applicant_id?.last_name}</p>
-                    <p>We are delighted to extend this offer of employment for the position of <b>{state.designation_id?.designation}</b> with <b>Outsource Global Limited</b>. 
-                      We believe your skills and experience are excellent match for this role.
+                    <p>
+                      Dear {state.job_applicant_id?.first_name}{" "}
+                      {state.job_applicant_id?.middle_name}{" "}
+                      {state.job_applicant_id?.last_name}
+                    </p>
+                    <p>
+                      We are delighted to extend this offer of employment for
+                      the position of <b>{state.designation_id?.designation}</b>{" "}
+                      with <b>Outsource Global Limited</b>. We believe your
+                      skills and experience are excellent match for this role.
                     </p>
 
                     <p>{state.job_offer_terms}</p>
@@ -88,35 +95,38 @@ const AcceptJoboffer = () => {
 
                     <p>Accepted by</p>
                     <h3 className="applicant-signature">{applicantName}</h3>
-                    <div className="signature-line"><hr /></div>
+                    <div className="signature-line">
+                      <hr />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
-        {!submitted &&
-        <>
-        <p className="confirmation">Do you Accept this offer?</p>
-        <div className="confirmation-btns">
-          <button
-            data-toggle="modal"
-            data-target="#confirmationModal"
-            type="button"
-            className="btn btn-primary confirmation-btn"
-          >
-            Accept
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary confirmation-btn"
-            onClick={handleReject}
-          >
-            Decline
-          </button>
-        </div>
-        </>}
+
+        {!submitted && (
+          <>
+            <p className="confirmation">Do you Accept this offer?</p>
+            <div className="confirmation-btns">
+              <button
+                data-toggle="modal"
+                data-target="#confirmationModal"
+                type="button"
+                className="btn btn-primary confirmation-btn"
+              >
+                Accept
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary confirmation-btn"
+                onClick={handleReject}
+              >
+                Decline
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <Formik
@@ -126,7 +136,9 @@ const AcceptJoboffer = () => {
         }}
         validationSchema={Yup.object().shape({
           full_name: Yup.string().required("Full Name is required"),
-          email_address: Yup.string().email("Invalid Email").required("Email is required"),
+          email_address: Yup.string()
+            .email("Invalid Email")
+            .required("Email is required"),
         })}
         onSubmit={(fields) => {
           handleSubmit(null, fields);
@@ -141,7 +153,9 @@ const AcceptJoboffer = () => {
             <div className="modal-dialog modal-dialog-centered" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Fill the form to comfirm acceptance</h5>
+                  <h5 className="modal-title">
+                    Fill the form to comfirm acceptance
+                  </h5>
                   <button
                     type="button"
                     className="close"
@@ -162,7 +176,7 @@ const AcceptJoboffer = () => {
                           className="form-control"
                           onChange={(e) => {
                             handleChange(e);
-                            handleApplicantName(e.currentTarget.value)
+                            handleApplicantName(e.currentTarget.value);
                           }}
                         />
                         <ErrorMessage
@@ -188,7 +202,13 @@ const AcceptJoboffer = () => {
                       </div>
                     </div>
                     <div className="submit-section">
-                      <Pdf targetRef={ref} filename="outsouce-offer-letter.pdf" x={1} y={1} scale={0.81}>
+                      <Pdf
+                        targetRef={ref}
+                        filename="outsouce-offer-letter.pdf"
+                        x={1}
+                        y={1}
+                        scale={0.81}
+                      >
                         {({ toPdf }) => (
                           <button
                             type="submit"
@@ -214,6 +234,3 @@ const AcceptJoboffer = () => {
 };
 
 export default AcceptJoboffer;
-
-
-

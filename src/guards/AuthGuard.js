@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";

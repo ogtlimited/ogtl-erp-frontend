@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useCallback } from "react";
 import JobWidget from "./JobWidget";
 import RecruitmentPageHeader from "./PageHeader";
 import jobs from "./job.json";
@@ -19,17 +20,19 @@ const Jobview = () => {
   const [showAlert, setshowAlert] = useState(false);
   let { id } = useParams();
   const [state, setstate] = useState({});
-  const fetchJobOpening = () => {
+
+  const fetchJobOpening = useCallback(() => {
     axios.get(config.ApiUrl + "/api/jobOpening/" + id).then((res) => {
       setstate(res.data.data);
     });
-  };
+  }, [id]);
+
   useEffect(() => {
     fetchJobOpening();
-  }, []);
+  }, [fetchJobOpening]);
+
   useEffect(() => {
     if (submitted === true) {
-      return;
       axios
         .post("/api/warningLetter", formValue)
         .then((res) => {
@@ -44,6 +47,7 @@ const Jobview = () => {
         });
     }
   }, [submitted, formValue]);
+
   return (
     <>
       <RecruitmentPageHeader />
