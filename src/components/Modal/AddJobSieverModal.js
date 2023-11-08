@@ -8,7 +8,13 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const AddJobSieverModal = ({ fetchJobSievers }) => {
-  const { showAlert, loadingSelect, goToTop } = useAppContext();
+  const {
+    showAlert,
+    loadingSelect,
+    goToTop,
+    selectDepartments,
+    selectCampaigns,
+  } = useAppContext();
   const [data, setData] = useState(HR_ADD_JOB_SIEVER);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,7 +23,6 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
-  const [allOffices, setAllOffices] = useState([]);
 
   useEffect(() => {
     if (data?.hr_employee_id) {
@@ -43,7 +48,6 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
       employeeName: "",
     });
 
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeTypeSelected(true);
   };
@@ -60,78 +64,95 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
     fetchAllEmployees(e?.value);
   };
 
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e?.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("Get All Offices error:", error);
-    }
-  };
-
-  // All Employees:
   const fetchAllEmployees = async (officeId) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          pages: 1,
-          limit: 1000,
-        },
-      });
+    if (officeType === "Department") {
+      const response = await axiosInstance.get(
+        `/api/v1/departments_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employees;
 
-      const formattedLeaders = resData
+      const formattedData = resData
         .map((e) => ({
-          label: e?.full_name,
-          value: e?.ogid,
+          label: e?.name,
+          value: e.ogid,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedLeaders);
+      setAllEmployees(formattedData);
       setLoading(false);
-    } catch (error) {
-      console.log("Get All employees error:", error);
+      return;
+    }
+
+    if (officeType === "Campaign") {
+      const response = await axiosInstance.get(
+        `/api/v1/campaign_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
       setLoading(false);
+      return;
+    }
+
+    if (officeType === "Team") {
+      const response = await axiosInstance.get(
+        `/api/v1/teams_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
+      setLoading(false);
+      return;
     }
   };
 
@@ -145,16 +166,19 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/add_rep_sievers.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          ...dataPayload,
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/v1/add_rep_sievers.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            ...dataPayload,
+          },
+        }
+      );
 
       showAlert(
         true,
@@ -220,11 +244,15 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
                     {isOfficeTypeSelected && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="operation_office_id">
-                            Office
-                          </label>
+                          <label htmlFor="operation_office_id">Office</label>
                           <Select
-                            options={allOffices}
+                            options={
+                              officeType === "Department"
+                                ? selectDepartments
+                                : officeType === "Campaign"
+                                ? selectCampaigns
+                                : null
+                            }
                             isSearchable={true}
                             value={{
                               label: data?.officeName,
@@ -240,9 +268,7 @@ export const AddJobSieverModal = ({ fetchJobSievers }) => {
                     {isOfficeSelected && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="hr_employee_id">
-                            Employee
-                          </label>
+                          <label htmlFor="hr_employee_id">Employee</label>
                           <Select
                             options={allEmployees}
                             isSearchable={true}
