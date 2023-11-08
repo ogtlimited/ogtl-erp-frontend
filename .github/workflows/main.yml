@@ -49,11 +49,19 @@ jobs:
     - name: Build
       run: CI=false npm run build
 
+    - name: copy env
+      if: endsWith(github.ref, '/dev')
+      uses: qoqa/action-s3-cp@v1.1
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        FILE: '.env'  
+
     - name: Deploy
       if: endsWith(github.ref, '/dev')
       run: |
         echo "deploying to dev"
         aws s3 sync ./build s3://ogtl-erp-test
+        
     - name: Prod
       if: endsWith(github.ref, '/main')
       run: |
