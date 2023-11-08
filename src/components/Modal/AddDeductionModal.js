@@ -1,6 +1,6 @@
 //* IN USE
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { HR_ADD_DEDUCTION, officeTypeOptions } from "../FormJSON/AddDeduction";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
@@ -17,6 +17,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     selectDeductionTypes,
     fetchDeductionTypes,
   } = useAppContext();
+  const selectDeductionTypeRef = useRef();
   const [data, setData] = useState(HR_ADD_DEDUCTION);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     setOfficeType("");
     setIsOfficeTypeSelected(false);
     setIsOfficeSelected(false);
+    selectDeductionTypeRef.current.select.clearValue();
   };
 
   const handleOfficeTypeChange = (e) => {
@@ -311,10 +313,6 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                         <Select
                           options={selectDeductionTypes}
                           isSearchable={true}
-                          value={{
-                            value: data?.hr_deduction_type_id,
-                            label: data?.deductionTitle,
-                          }}
                           onChange={(e) =>
                             setData({
                               ...data,
@@ -322,6 +320,9 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                               deductionTitle: e?.label,
                             })
                           }
+                          ref={selectDeductionTypeRef}
+                          defaultValue={null}
+                          placeholder="Title | Office | Deduction Value"
                           style={{ display: "inline-block" }}
                         />
                       </div>
