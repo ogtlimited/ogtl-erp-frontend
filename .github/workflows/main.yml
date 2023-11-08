@@ -53,7 +53,7 @@ jobs:
       if: endsWith(github.ref, '/dev')
       uses: qoqa/action-s3-cp@v1.1
       env:
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_S3_BUCKET: 'ogtl-erp-test'
         FILE: '.env'  
 
     - name: Deploy
