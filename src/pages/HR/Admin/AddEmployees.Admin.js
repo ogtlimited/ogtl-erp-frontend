@@ -83,18 +83,21 @@ const AddEmployeesAdmin = () => {
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          user_info: employee.user_info,
-          employee_info: employee.employee_info,
-          personal_details: employee.personal_details,
-        },
-      });
+      const response = await axiosInstance.post(
+        `/api/v1/employees.json?office_type=${officeType?.toLowerCase()}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            user_info: employee.user_info,
+            employee_info: employee.employee_info,
+            personal_details: employee.personal_details,
+          },
+        }
+      );
 
       showAlert(true, "Employee added successfully", "alert alert-success");
       clearEvent();

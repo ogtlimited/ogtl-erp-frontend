@@ -286,10 +286,12 @@ export const EmployeeInfoModal = ({
                       <Select
                         options={officeTypeOptions}
                         value={{
-                          label: employeeInfo?.office?.office_type?.replace(
-                            /\b\w/g,
-                            (char) => char.toUpperCase()
-                          ),
+                          label: employeeInfo?.office?.office_type
+                            ? employeeInfo?.office?.office_type?.replace(
+                                /\b\w/g,
+                                (char) => char.toUpperCase()
+                              )
+                            : employeeInfo?.office?.office_type,
                           value: officeType,
                         }}
                         style={{ display: "inline-block" }}
@@ -311,7 +313,9 @@ export const EmployeeInfoModal = ({
                               : selectCampaigns
                           }
                           value={{
-                            label: employeeInfo?.office?.title.toUpperCase(),
+                            label: employeeInfo?.office?.title
+                              ? employeeInfo?.office?.title.toUpperCase()
+                              : employeeInfo?.office?.title,
                             value: employeeInfo?.office?.id,
                           }}
                           onChange={(e) =>
