@@ -9,42 +9,14 @@ import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
 import HeroImage from "../../../assets/img/HR-nextImg.png";
-// import tokenService from "../../../services/token.service";
-// import sign from "jwt-encode";
-// import config from "../../../config.json";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
-  // const [externalURL, setExternalURL] = useState(null);
 
-  // const userDept =
-  //   user?.office?.office_type === "department"
-  //     ? user?.office?.title?.toLowerCase()
-  //     : null;
-
-  // const buildExternalURL = () => {
-  //   try {
-  //     const kpiData = tokenService.getKpiUser();
-  //     const secret = process.env.REACT_APP_HMAC_SECRET;
-
-  //     const generatedJWT = sign(kpiData, secret);
-
-  //     const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
-  //     const queryParams = `auth_param=${generatedJWT}`;
-
-  //     const externalAppUrl = `${kpiUrl}?${queryParams}`;
-  //     setExternalURL(externalAppUrl);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   buildExternalURL();
-  // }, []);
+  const isRemoteStaff = user?.employee_info?.remote;
 
   // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
@@ -96,17 +68,11 @@ const EmployeeUser = () => {
                 `}{" "}
                 !
               </h4>
-              <p className="welcome-p">
-                If you haven't clocked in today, you need to do it right away
-              </p>
-              {/* {userDept === "hr" && (
-                <div
-                  className="btn btn-primary"
-                  onClick={() => window.open(externalURL, "_blank")}
-                >
-                  Go to KPI
-                </div>
-              )} */}
+              {!isRemoteStaff && (
+                <p className="welcome-p">
+                  If you haven't clocked in today, you need to do it right away
+                </p>
+              )}
             </div>
             <div className="col-md-3">
               <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />

@@ -111,36 +111,6 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
       setLoading(false);
       return;
     }
-
-    // if (officeType === "Team") {
-    //   const response = await axiosInstance.get(
-    //     `/api/v1/teams_employees/${officeId}.json`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Access-Control-Allow-Origin": "*",
-    //         "ngrok-skip-browser-warning": "69420",
-    //       },
-    //       params: {
-    //         pages: 1,
-    //         limit: 1000,
-    //       },
-    //     }
-    //   );
-
-    //   const resData = response?.data?.data?.employees;
-
-    //   const formattedData = resData
-    //     .map((e) => ({
-    //       label: e?.name,
-    //       value: e.ogid,
-    //     }))
-    //     .sort((a, b) => a.label.localeCompare(b.label));
-
-    //   setAllEmployees(formattedData);
-    //   setLoading(false);
-    //   return;
-    // }
   };
 
   const handleLeaderAction = async (e) => {
@@ -166,13 +136,23 @@ export const AddRoleUserModal = ({ roleId, fetchRoleUsers }) => {
         }
       );
 
-      showAlert(true, response?.data?.data?.message, "alert alert-success");
+      showAlert(
+        true,
+        response?.data?.data?.message
+          .split(" ")[0]
+          .split("_")
+          .join(" ")
+          .toUpperCase() +
+          " " +
+          response?.data?.data?.message.split(" ").slice(1).join(" "),
+        "alert alert-success"
+      );
 
       $("#RoleUserFormModal").modal("toggle");
       setRoleUser(RoleUserForm);
       fetchRoleUsers();
       setLoading(false);
-      cancelEvent();	
+      cancelEvent();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");

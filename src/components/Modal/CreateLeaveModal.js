@@ -14,7 +14,13 @@ export const CreateLeaveModal = ({
   fetchHRLeaveHistory,
   fetchAllEmpOnLeave,
 }) => {
-  const { showAlert, loadingSelect, selectLeaveTypes } = useAppContext();
+  const {
+    showAlert,
+    loadingSelect,
+    selectLeaveTypes,
+    selectDepartments,
+    selectCampaigns,
+  } = useAppContext();
   const [leave, setLeave] = useState(HR_CREATE_LEAVE);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -82,7 +88,6 @@ export const CreateLeaveModal = ({
       employeeName: "",
     });
 
-    fetchAllOffices(e?.value);
     setOfficeType(e?.label);
     setIsOfficeTypeSelected(true);
   };
@@ -99,77 +104,95 @@ export const CreateLeaveModal = ({
     fetchAllEmployees(e?.value);
   };
 
-  // All Offices:
-  const fetchAllOffices = async (office) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/offices.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          office_type: office,
-          limit: 1000,
-        },
-      });
-      const resData = response?.data?.data?.offices;
-
-      const allDepartments = resData.filter(
-        (e) => e?.office_type === "department"
-      );
-      const allCampaigns = resData.filter((e) => e?.office_type === "campaign");
-
-      const formattedDepartments = allDepartments
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      const formattedCampaigns = allCampaigns
-        .map((e) => ({
-          label: e?.title.toUpperCase(),
-          value: e.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-
-      if (office === "department") setAllOffices(formattedDepartments);
-      if (office === "campaign") setAllOffices(formattedCampaigns);
-    } catch (error) {
-      console.log("Get All Offices error:", error);
-    }
-  };
-
   const fetchAllEmployees = async (officeId) => {
-    try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          operation_office_id: officeId,
-          pages: 1,
-          limit: 1000,
-        },
-      });
+    if (officeType === "Department") {
+      const response = await axiosInstance.get(
+        `/api/v1/departments_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
 
       const resData = response?.data?.data?.employees;
 
-      const formattedLeaders = resData
+      const formattedData = resData
         .map((e) => ({
-          label: e?.full_name,
+          label: e?.name,
           value: e.ogid,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedLeaders);
+      setAllEmployees(formattedData);
       setLoading(false);
-    } catch (error) {
-      console.log("Get All employees error:", error);
+      return;
+    }
+
+    if (officeType === "Campaign") {
+      const response = await axiosInstance.get(
+        `/api/v1/campaign_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
       setLoading(false);
+      return;
+    }
+
+    if (officeType === "Team") {
+      const response = await axiosInstance.get(
+        `/api/v1/teams_employees/${officeId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            pages: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      const formattedData = resData
+        .map((e) => ({
+          label: e?.name,
+          value: e.ogid,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setAllEmployees(formattedData);
+      setLoading(false);
+      return;
     }
   };
 
@@ -291,7 +314,13 @@ export const CreateLeaveModal = ({
                             Office
                           </label>
                           <Select
-                            options={allOffices}
+                            options={
+                              officeType === "Department"
+                                ? selectDepartments
+                                : officeType === "Campaign"
+                                ? selectCampaigns
+                                : null
+                            }
                             isSearchable={true}
                             value={{
                               label: leave?.officeName,

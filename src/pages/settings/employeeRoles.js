@@ -111,6 +111,7 @@ const EmployeeRoles = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (val) => <p>{val?.toUpperCase()}</p>,
     },
     CurrentUserRoles.includes("hr_manager") && {
       dataField: "",
@@ -140,11 +141,13 @@ const EmployeeRoles = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{title}</h3>
+            <h3 className="page-title">
+              {title.split("_").join(" ").toUpperCase()}
+            </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/dashboard/settings/roles-permissions">
-                  Roles &amp; Permissions
+                  Roles & Permissions
                 </Link>
               </li>
               <li className="breadcrumb-item active">Users</li>
