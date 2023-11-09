@@ -551,6 +551,14 @@ export default function Router() {
               ),
             },
             {
+              path: "staff-deductions/:id/:month/:year",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <DeductionSlip />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "archive",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1229,6 +1237,7 @@ const EmployeeSalary = Loadable(
 const EmployeePayroll = Loadable(
   lazy(() => import("../pages/Payroll/EmployeePayroll"))
 );
+const DeductionSlip = Loadable(lazy(() => import("../pages/Payroll/DeductionSlip.js")))
 const PaySlip = Loadable(lazy(() => import("../pages/Payroll/PaySlip")));
 const SalaryBreakdown = Loadable(
   lazy(() => import("../pages/Payroll/SalaryBreakdown"))
