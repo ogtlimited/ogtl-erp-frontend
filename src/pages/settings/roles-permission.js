@@ -62,7 +62,7 @@ const RolePermission = () => {
             to={`/dashboard/settings/roles-permissions/users/${row?.title}/${row.id}`}
             className="attendance-record-for-office"
           >
-            {val}
+            {val.split("_").join(" ").toUpperCase()}
           </Link>
         </p>
       ),
