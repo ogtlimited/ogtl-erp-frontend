@@ -6,7 +6,6 @@ import DeductionTable from "../Tables/DeductionTable";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
-import DeductionReversalModal from "../Modal/DeductionReversalModal";
 import { useNavigate } from "react-router-dom";
 
 const Deductions = () => {
@@ -14,7 +13,6 @@ const Deductions = () => {
   const { ErrorHandler, user } = useAppContext();
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
 
   const today = new Date();
   const currentYear = today.getFullYear();
@@ -34,11 +32,6 @@ const Deductions = () => {
     const month = date.split("-")[1];
     const year = date.split("-")[0];
 
-    console.log({
-      month,
-      year,
-    });
-
     setLoading(true);
     try {
       const response = await axiosInstance.get(
@@ -53,7 +46,6 @@ const Deductions = () => {
       );
 
       const resData = response?.data?.data?.deductions;
-      console.log("Deductions:", resData);
 
       const formattedData = resData.map((item) => {
         return {
@@ -165,11 +157,6 @@ const Deductions = () => {
       </div>
 
       <AddDeductionModal fetchDeductions={fetchDeductions} />
-
-      <DeductionReversalModal
-        selectedRow={selectedRow}
-        fetchDeductions={fetchDeductions}
-      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../Tables/UniversalTable";
 import { AddDeductionTypeModal } from "../Modal/AddDeductionTypeModal";
+import helper from "../../services/helper";
 
 const DeductionType = () => {
   const { ErrorHandler, user, goToTop } = useAppContext();
@@ -49,7 +50,7 @@ const DeductionType = () => {
           item?.deduction?.deduction_mode === "percentage"
             ? item?.deduction?.value + "%"
             : item?.deduction?.deduction_mode === "flat_rate"
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+            ? helper.handleMoneyFormat(item?.deduction?.value)
             : "-",
       }));
 

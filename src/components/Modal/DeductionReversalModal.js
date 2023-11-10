@@ -46,7 +46,7 @@ function DeductionReversalModal({ selectedRow, fetchDeductions }) {
 
       showAlert(
         true,
-        `${selectedRow?.employeeName} deduction has been reversed successfully`,
+        `${selectedRow?.user?.full_name} deduction has been reversed successfully`,
         "alert alert-success"
       );
       $("#DeductionReversalFormModal").modal("toggle");
