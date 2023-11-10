@@ -7,6 +7,7 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
 import { useNavigate } from "react-router-dom";
+import helper from "../../services/helper";
 
 const Deductions = () => {
   const navigate = useNavigate();
@@ -54,8 +55,7 @@ const Deductions = () => {
           employeeId: item?.ogid,
           office: item?.office,
           totalDeductions:
-            "₦" + Intl.NumberFormat("en-US").format(item?.total_deductions) ||
-            "-",
+            helper.handleMoneyFormat(item?.total_deductions) || "-",
         };
       });
 
