@@ -321,7 +321,7 @@ const PaySlip = () => {
                     <div>
                       {paySlip.net_pay ? (
                         <h4 className="m-b-10">
-                          <strong>Earnings</strong>
+                          <strong style={{ color: "green" }}>Earnings</strong>
                         </h4>
                       ) : null}
                       <table className="table table-bordered">
@@ -333,7 +333,10 @@ const PaySlip = () => {
                                   <strong>{earning}</strong>{" "}
                                   {typeof earnings[earning] === "number" &&
                                   earnings[earning] !== 0 ? (
-                                    <span className="float-right">
+                                    <span
+                                      className="float-right"
+                                      style={{ color: "green" }}
+                                    >
                                       {helper.handleMoneyFormat(
                                         earnings[earning]
                                       )}
@@ -366,7 +369,10 @@ const PaySlip = () => {
                                 <td>
                                   <strong>{gross}</strong>{" "}
                                   {gross !== "department" ? (
-                                    <span className="float-right">
+                                    <span
+                                      className="float-right"
+                                      style={{ color: "green" }}
+                                    >
                                       {helper.handleMoneyFormat(
                                         grossSalary[gross]
                                       )}
@@ -386,7 +392,7 @@ const PaySlip = () => {
                     <div>
                       {paySlip.net_pay ? (
                         <h4 className="m-b-10">
-                          <strong>Deductions</strong>
+                          <strong style={{ color: "red" }}>Deductions</strong>
                         </h4>
                       ) : null}
                       <table className="table table-bordered">
@@ -398,7 +404,10 @@ const PaySlip = () => {
                                   <strong>{deduction}</strong>{" "}
                                   {typeof deductions[deduction] === "number" &&
                                   deductions[deduction] !== 0 ? (
-                                    <span className="float-right">
+                                    <span
+                                      className="float-right"
+                                      style={{ color: "red" }}
+                                    >
                                       {helper.handleMoneyFormat(
                                         deductions[deduction]
                                       )}

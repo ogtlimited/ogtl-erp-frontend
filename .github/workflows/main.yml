@@ -42,6 +42,7 @@ jobs:
       run: |
         echo "deploying to dev"
         aws s3 sync ./build s3://ogtl-erp-test
+        
     - name: Prod
       if: endsWith(github.ref, '/main')
       run: |

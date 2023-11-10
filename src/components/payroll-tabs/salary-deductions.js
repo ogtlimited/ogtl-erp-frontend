@@ -1,18 +1,26 @@
 // *IN USE
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
-import UniversalTable from "../Tables/UniversalTable";
+import React, { useCallback, useEffect, useState } from "react";
+import DeductionTable from "../Tables/DeductionTable";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
-import DeductionReversalModal from "../Modal/DeductionReversalModal";
+import { useNavigate } from "react-router-dom";
+import helper from "../../services/helper";
 
 const Deductions = () => {
+  const navigate = useNavigate();
   const { ErrorHandler, user } = useAppContext();
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  const [date, setDate] = useState(
+    `${currentYear}-${currentMonth.toString().padStart(2, "0")}`
+  );
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -21,32 +29,33 @@ const Deductions = () => {
     canCreateAndEdit.includes(role)
   );
 
-  const fetchDeductions = async () => {
+  const fetchDeductions = useCallback(async () => {
+    const month = date.split("-")[1];
+    const year = date.split("-")[0];
+
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/deductions.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/deductions.json?month=${month}&year=${year}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
       const resData = response?.data?.data?.deductions;
 
       const formattedData = resData.map((item) => {
         return {
           ...item,
-          employeeName: item?.user
-            ? item?.user?.first_name + " " + item?.user?.last_name
-            : "N/A",
-          employeeId: item?.user?.ogid,
-          office: item?.user?.office,
-          deductionType: item?.deduction_type?.title,
-          deductionStatus: item?.deduction?.status ? "Active" : "Inactive",
-          deductionAmount: item?.deduction?.amount
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.amount)
-            : "-",
+          employeeName: item?.name || "N/A",
+          employeeId: item?.ogid,
+          office: item?.office,
+          totalDeductions:
+            helper.handleMoneyFormat(item?.total_deductions) || "-",
         };
       });
 
@@ -57,12 +66,12 @@ const Deductions = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date]);
 
   useEffect(() => {
     fetchDeductions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchDeductions]);
 
   const columns = [
     {
@@ -86,54 +95,32 @@ const Deductions = () => {
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
-      dataField: "deductionType",
-      text: "Deduction Type",
-      sort: true,
-      headerStyle: { width: "18%" },
-    },
-    {
-      dataField: "deductionStatus",
-      text: "Deduction Status",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (value, row) => (
-        <>
-          {value === "Active" ? (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
-            </span>
-          ) : (
-            <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
-            </span>
-          )}
-        </>
-      ),
-    },
-    {
-      dataField: "deductionAmount",
-      text: "Deduction",
+      dataField: "totalDeductions",
+      text: "Total Deduction",
       sort: true,
       headerStyle: { width: "15%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "17%" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="text-center">
-          {row?.deductionStatus === "Active" ? (
-            <div className="leave-user-action-btns">
-              <button
-                className="btn btn-sm btn-primary"
-                data-toggle="modal"
-                data-target="#DeductionReversalFormModal"
-                onClick={() => setSelectedRow(row)}
-              >
-                Reverse Deduction
-              </button>
-            </div>
-          ) : null}
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              onClick={() =>
+                navigate(
+                  `/dashboard/payroll/staff-deductions/${row?.ogid}/${
+                    date.split("-")[1]
+                  }/${date.split("-")[0]}`
+                )
+              }
+            >
+              View Deductions
+            </button>
+          </div>
         </div>
       ),
     },
@@ -159,20 +146,17 @@ const Deductions = () => {
       </div>
 
       <div className="row">
-        <UniversalTable
+        <DeductionTable
           data={deductions}
           columns={columns}
           loading={loading}
           setLoading={setLoading}
+          date={date}
+          setDate={setDate}
         />
       </div>
 
       <AddDeductionModal fetchDeductions={fetchDeductions} />
-
-      <DeductionReversalModal
-        selectedRow={selectedRow}
-        fetchDeductions={fetchDeductions}
-      />
     </div>
   );
 };
