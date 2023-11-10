@@ -75,8 +75,8 @@ const LeavesUser = () => {
         ...leave?.leave,
         status_action: leave?.leave?.status,
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).utc().format('ddd MMM Do, YYYY'),
+        to_date: moment(leave?.leave?.end_date).utc().format('ddd MMM Do, YYYY'),
         requested_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date

@@ -442,3 +442,23 @@ Employee Salary Table
 table.custom-table thead th {
   border: 2px solid #6c757d !important;
 }
+
+/*--------------------- 
+    Deduction Card 
+-----------------------*/
+
+.deduction_card {
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  width: auto !important;
+  height: auto !important;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.deduction_card > span {
+  margin-bottom: 10px;
+}
+
