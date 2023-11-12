@@ -44,7 +44,8 @@ jobs:
         touch .env
         echo REACT_APP_HMAC_SECRET="$REACT_APP_HMAC_SECRET" >> .env
         echo REACT_APP_KPI_APP_URL="$REACT_APP_KPI_APP_URL" >> .env
-  
+
+        pwd 
         ls -la .
         cat .env
 
