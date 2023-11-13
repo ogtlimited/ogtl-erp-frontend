@@ -71,11 +71,8 @@ const JobApplicants = () => {
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
-
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
 
       const formatted = resData.map((emp) => ({
         ...emp,

@@ -105,7 +105,6 @@ const JobApplicantsTable = ({
       let input;
 
       const handleKeydown = (e) => {
-
         if (e.key === "Enter") {
           setPage(1);
           setLoading(true);
@@ -116,7 +115,7 @@ const JobApplicantsTable = ({
           if (page === 1) {
             const persistedFromDate = secureLocalStorage.getItem("fromDate");
             const persistedToDate = secureLocalStorage.getItem("toDate");
-            
+
             axiosInstance
               .get("/api/v1/rep_siever_job_applications.json", {
                 headers: {
@@ -145,7 +144,9 @@ const JobApplicantsTable = ({
 
                 const formatted = resData.map((emp) => ({
                   ...emp,
-                  full_name: `${emp?.first_name} ${emp?.last_name}`,
+                  full_name: `${emp?.first_name} ${
+                    emp?.middle_name ? emp?.middle_name : ""
+                  } ${emp?.last_name}`,
                   job_title: emp?.job_opening?.job_title,
                   application_date: moment(emp?.created_at).format(
                     "Do MMMM, YYYY"
@@ -153,6 +154,7 @@ const JobApplicantsTable = ({
                   interview_date: emp?.interview_date
                     ? moment(emp?.interview_date).format("Do MMMM, YYYY")
                     : "Not Scheduled",
+                  resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
                 }));
 
                 setData(formatted);
@@ -193,7 +195,17 @@ const JobApplicantsTable = ({
         </div>
       );
     },
-    [page, processingStageFilter, setData, setLoading, setPage, setSearchTerm, setSizePerPage, setTotalPages, sizePerPage]
+    [
+      page,
+      processingStageFilter,
+      setData,
+      setLoading,
+      setPage,
+      setSearchTerm,
+      setSizePerPage,
+      setTotalPages,
+      sizePerPage,
+    ]
   );
 
   // Filter by Process Stage:
@@ -230,12 +242,15 @@ const JobApplicantsTable = ({
 
           const mapp = resData.map((emp) => ({
             ...emp,
-            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            full_name: `${emp?.first_name} ${
+              emp?.middle_name ? emp?.middle_name : ""
+            } ${emp?.last_name}`,
             job_title: emp?.job_opening?.job_title,
             application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
             interview_date: emp?.interview_date
               ? moment(emp?.interview_date).format("Do MMMM, YYYY")
               : "Not Scheduled",
+            resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
           }));
 
           setData(mapp);
@@ -277,12 +292,15 @@ const JobApplicantsTable = ({
 
           const mapp = resData.map((emp) => ({
             ...emp,
-            full_name: `${emp?.first_name} ${emp?.last_name}`,
+            full_name: `${emp?.first_name} ${
+              emp?.middle_name ? emp?.middle_name : ""
+            } ${emp?.last_name}`,
             job_title: emp?.job_opening?.job_title,
             application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
             interview_date: emp?.interview_date
               ? moment(emp?.interview_date).format("Do MMMM, YYYY")
               : "Not Scheduled",
+            resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
           }));
 
           setData(mapp);
