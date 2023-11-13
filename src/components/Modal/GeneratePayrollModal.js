@@ -12,18 +12,15 @@ export const GeneratePayrollModal = ({
   setGenerating,
 }) => {
   const { showAlert } = useAppContext();
-  const [createPayslips, setCreatePayslips] = useState("");
   const [loading, setLoading] = useState(false);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
-  useEffect(() => {
-    setCreatePayslips({
-      month: `${currentYear}-${currentMonth.toString().padStart(2, "0")}`,
-    });
-  }, [currentMonth, currentYear]);
+  const [createPayslips, setCreatePayslips] = useState({
+    monthAndYear: `${currentYear}-${currentMonth}`,
+  });
 
   const cancelEvent = () => {
     setCreatePayslips("");
@@ -42,8 +39,8 @@ export const GeneratePayrollModal = ({
 
     setLoading(true);
 
-    const month = createPayslips.month.split("-")[1];
-    const year = createPayslips.month.split("-")[0];
+    const month = createPayslips.monthAndYear.split("-")[1];
+    const year = createPayslips.monthAndYear.split("-")[0];
 
     try {
       const res = await axiosInstance.post(
@@ -62,7 +59,6 @@ export const GeneratePayrollModal = ({
         `Salary slips are being generated`,
         "alert alert-success"
       );
-      setCreatePayslips("");
       $("#GeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
       setGenerating(false);
@@ -128,12 +124,12 @@ export const GeneratePayrollModal = ({
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="month">Select Month</label>
+                      <label htmlFor="monthAndYear">Select Month</label>
                       <input
-                        name="month"
+                        name="monthAndYear"
                         type="month"
                         className="form-control"
-                        value={createPayslips.month}
+                        value={createPayslips?.monthAndYear}
                         onChange={handleFormChange}
                         min={getMinMonth()}
                         max={getMaxMonth()}
