@@ -7,6 +7,7 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
+import moment from "moment";
 
 const ReversedDeductions = () => {
   const navigate = useNavigate();
@@ -19,13 +20,6 @@ const ReversedDeductions = () => {
   const currentMonth = today.getMonth() + 1;
   const [date, setDate] = useState(
     `${currentYear}-${currentMonth.toString().padStart(2, "0")}`
-  );
-
-  const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
-
-  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-    canCreateAndEdit.includes(role)
   );
 
   const fetchReversedDeductions = useCallback(async () => {
@@ -45,21 +39,29 @@ const ReversedDeductions = () => {
         }
       );
 
-      const resData = response?.data?.data;
-      console.log(resData);
+      const resData = response?.data?.data?.reversed_deductions;
+      console.log(resData)
 
-      // const formattedData = resData.map((item) => {
-      //   return {
-      //     ...item,
-      //     employeeName: item?.name || "N/A",
-      //     employeeId: item?.ogid,
-      //     office: item?.office,
-      //     totalDeductions:
-      //       helper.handleMoneyFormat(item?.total_deductions) || "-",
-      //   };
-      // });
+      const formattedData = resData.map((item) => {
+        return {
+          ...item,
+          deductionDate: moment(item?.deduction?.created_at).format(
+            "ddd. DD MMM, YYYY"
+          ),
+          employeeName: item?.deduction?.full_name,
+          reversedAmount:
+            helper.handleMoneyFormat(item?.deduction?.amount) || "-",
 
-      // setReversedDeductions(formattedData);
+          deductionStatus: item?.deduction?.status ? "Active" : "Inactive",
+          reversedBy: item?.deduction_reversal[0]?.reversed_by,
+          reversalReason: item?.deduction_reversal[0]?.reason,
+          reversedOn: moment(item?.deduction_reversal[0]?.created_at).format(
+            "ddd. DD MMM, YYYY"
+          ),
+        };
+      });
+
+      setReversedDeductions(formattedData);
       setLoading(false);
     } catch (error) {
       const component = "Deduction Error:";
@@ -75,54 +77,59 @@ const ReversedDeductions = () => {
 
   const columns = [
     {
+      dataField: "deductionDate",
+      text: "Date",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
       dataField: "employeeName",
-      text: "Employee",
-      sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <div>
-            {row?.employeeName} <span>{row?.employeeId}</span>
-          </div>
-        </h2>
-      ),
-    },
-    {
-      dataField: "office",
-      text: "Office",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
-    },
-    {
-      dataField: "totalDeductions",
-      text: "Total Deduction",
+      text: "Staff Name",
       sort: true,
       headerStyle: { width: "15%" },
     },
-    CurrentUserCanCreateAndEdit && {
-      dataField: "",
-      text: "Action",
+    {
+      dataField: "reversedAmount",
+      text: "Amount",
+      sort: true,
+      headerStyle: { width: "10%" },
+    },
+    {
+      dataField: "deductionStatus",
+      text: "Status",
+      sort: true,
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              onClick={() =>
-                navigate(
-                  `/dashboard/payroll/staff-deductions/${row?.ogid}/${
-                    date.split("-")[1]
-                  }/${date.split("-")[0]}`
-                )
-              }
-            >
-              View Deductions
-            </button>
-          </div>
-        </div>
+        <>
+          {value === "Active" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+            </span>
+          )}
+        </>
       ),
+    },
+    {
+      dataField: "reversedBy",
+      text: "Reversed By",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "reversalReason",
+      text: "Reason",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "reversedOn",
+      text: "Date Reversed",
+      sort: true,
+      headerStyle: { width: "15%" },
     },
   ];
 

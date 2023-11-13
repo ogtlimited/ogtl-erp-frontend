@@ -38,6 +38,7 @@ const AppProvider = (props) => {
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
+  const [selectJobOpenings, setSelectJobOpenings] = useState([]);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -431,39 +432,56 @@ const AppProvider = (props) => {
     }
   }, []);
 
+  // All Job Openings:
+  const fetchJobOpenings = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/job_openings.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.job_openings;
+
+      const formattedData = resData
+        .map((item) => {
+          return {
+            label: item?.job_title,
+            value: item?.id,
+          };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectJobOpenings(formattedData);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Universal Error Handler:
   const ErrorHandler = (error, component) => {
     console.log("Route error:", error?.response);
-    const errorMessage = error.response?.data?.errors;
-    const errorStatus = error.response?.status;
 
-    if (errorStatus >= 500) {
-      return showAlert(
-        true,
-        `Unable to communicate with server`,
-        "alert alert-warning"
-      );
-    } else if (errorStatus < 500 && !errorMessage) {
-      return showAlert(
-        true,
-        `Unable to process request`,
-        "alert alert-warning"
-      );
-    } else {
-      if (errorMessage === undefined || !errorMessage) {
-        return showAlert(
-          true,
-          `Unable to process request`,
-          "alert alert-warning"
-        );
-      } else {
-        return showAlert(
-          true,
-          `${component} ${errorMessage}`,
-          "alert alert-warning"
-        );
-      }
-    }
+    const errorMessage =
+      error.response?.data?.errors || "Unable to process request";
+    const errorStatus = error.response?.status || 0;
+
+    const message =
+      errorStatus >= 500
+        ? "Unable to communicate with server"
+        : errorMessage || "Unable to process request";
+
+    const alertClass = "alert alert-warning";
+
+    return showAlert(
+      true,
+      component ? `${component} ${message}` : message,
+      alertClass
+    );
   };
 
   useEffect(() => {
@@ -479,6 +497,7 @@ const AppProvider = (props) => {
         fetchAllBranches();
         fetchAllLeaveTypes();
         fetchDeductionTypes();
+        fetchJobOpenings();
         fetchHRLeavesNotificationCount();
       }
       if (isTeamLead && !isHr) {
@@ -502,6 +521,7 @@ const AppProvider = (props) => {
     fetchAllLeaveTypes,
     fetchAllTeams,
     fetchDeductionTypes,
+    fetchJobOpenings,
     isHr,
     isTeamLead,
     userToken,
@@ -545,6 +565,10 @@ const AppProvider = (props) => {
         selectDeductionTypes,
         setSelectDeductionTypes,
         fetchDeductionTypes,
+
+        selectJobOpenings,
+        setSelectJobOpenings,
+        fetchJobOpenings,
 
         loadingSelect,
         setLoadingSelect,
