@@ -47,7 +47,8 @@ const PersonalInfoForm = () => {
           .sort((a, b) => a.label.localeCompare(b.label));
 
         setDefaultJob(data);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
       });
   };
