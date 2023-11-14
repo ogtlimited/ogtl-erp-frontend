@@ -15,6 +15,7 @@
 # config base urls
 /src/config.json*
 config.json*
+LEGACY_sidebarConfig.js
 
 # misc
 .DS_Store

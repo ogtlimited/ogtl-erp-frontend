@@ -629,7 +629,7 @@ export default function Router() {
               path: "payslip-reports",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <PayrollReports />
+                  <PayslipReports />
                 </GuardedRoute>
               ),
             },
@@ -817,10 +817,10 @@ export default function Router() {
               ),
             },
             {
-              path: "payroll-reports",
+              path: "payslip-reports",
               element: (
                 <GuardedRoute title="" dept="accounting">
-                  <PayrollReports />
+                  <PayslipReports />
                 </GuardedRoute>
               ),
             },
@@ -1382,8 +1382,8 @@ const ProductItems = Loadable(
   lazy(() => import("../pages/ProductItems/ProductItems"))
 );
 // const Bill = Loadable(lazy(() => import('../pages/Vendors/bill')));
-const PayrollReports = Loadable(
-  lazy(() => import("../pages/Accounting/Payroll-Reports"))
+const PayslipReports = Loadable(
+  lazy(() => import("../pages/Accounting/Payslip-Reports.js"))
 );
 const Notifications = Loadable(
   lazy(() => import("../pages/In-Apps/Notifications"))

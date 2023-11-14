@@ -6,7 +6,9 @@ import sign from "jwt-encode";
 
 const user = tokenService.getUser();
 const userDept =
-  user?.office?.office_type === "department" ? user?.office?.title?.toLowerCase() : null;
+  user?.office?.office_type === "department"
+    ? user?.office?.title?.toLowerCase()
+    : null;
 
 const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
@@ -347,6 +349,112 @@ const sidebarConfig = [
               icon: ICONS.schedule,
             },
           ],
+  },
+
+  // ACCOUNTING CONFIG:
+  {
+    subheader: "Accounting",
+    canView: "accounting",
+    items: [
+      // {
+      //   canView: "accounting",
+      //   title: "Accounting",
+      //   path: PATH_DASHBOARD.accounts.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     {
+      //       canView: "accounting",
+      //       title: "Accounts",
+      //       path: PATH_DASHBOARD.accounts.chartOfAccount,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Budget",
+      //       path: PATH_DASHBOARD.accounts.budgets,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Journals",
+      //       path: PATH_DASHBOARD.accounts.journals,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "General Ledger",
+      //       path: PATH_DASHBOARD.accounts.ledger,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Expense",
+      //       path: PATH_DASHBOARD.accounts.expenseHeads,
+      //     },
+      //   ],
+      // },
+      {
+        canView: "accounting",
+        title: "Accounting Reports",
+        path: PATH_DASHBOARD.accountingReports.root,
+        icon: ICONS.user,
+        children: [
+          {
+            canView: "accounting",
+            title: "Payslip Reports",
+            path: PATH_DASHBOARD.accountingReports.payslipReport,
+          },
+          // {
+          //   canView: "accounting",
+          //   title: "Balance Sheet",
+          //   path: PATH_DASHBOARD.accountingReports.balanceSheet,
+          // },
+        ],
+      },
+      // {
+      //   canView: "accounting",
+      //   title: "Clients",
+      //   path: PATH_DASHBOARD.clients.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     {
+      //       canView: "accounting",
+      //       title: "Invoices",
+      //       path: PATH_DASHBOARD.clients.invoices,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Payments",
+      //       path: PATH_DASHBOARD.clients.payments,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "accounting",
+      //   title: "Vendors",
+      //   path: PATH_DASHBOARD.vendors.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     {
+      //       canView: "accounting",
+      //       title: "Vendors",
+      //       path: PATH_DASHBOARD.vendors.vendors,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Bills",
+      //       path: PATH_DASHBOARD.vendors.bills,
+      //     },
+      //     {
+      //       canView: "accounting",
+      //       title: "Payments",
+      //       path: PATH_DASHBOARD.vendors.payments,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "accounting",
+      //   title: "Product Items",
+      //   path: PATH_DASHBOARD.productItems,
+      //   icon: ICONS.productItems,
+      // },
+    ],
   },
 
   // SETTINGS CONFIG:
