@@ -13,7 +13,7 @@ import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveMod
 import moment from "moment";
 import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
-const LeavesAdmin = () => {
+const WorkforceLeaveApplications = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
@@ -666,10 +666,10 @@ const LeavesAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leave Applications</h3>
+            <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Leave</li>
+              <li className="breadcrumb-item">Operations</li>
+              <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -790,4 +790,4 @@ const LeavesAdmin = () => {
   );
 };
 
-export default LeavesAdmin;
+export default WorkforceLeaveApplications;
