@@ -414,16 +414,16 @@ const sidebarConfig = [
   // OPERATIONS CONFIG:
   {
     subheader: "Operations",
-    canView: "super",
+    canView: "operations",
     items: [
       {
-        canView: "super",
+        canView: "operations",
         title: "Workforce",
         path: PATH_DASHBOARD.operations.root,
         icon: ICONS.users,
         children: [
           {
-            canView: "super",
+            canView: "operations",
             title: "Leave Applications",
             path: PATH_DASHBOARD.operations.workforceLeaveApplications,
           },

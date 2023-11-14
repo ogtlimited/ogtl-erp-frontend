@@ -11,14 +11,12 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
 import moment from "moment";
-import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
 const WorkforceLeaveApplications = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
     useAppContext();
-  const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,10 +39,10 @@ const WorkforceLeaveApplications = () => {
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "senior_hr_associate"];
+  const canApproveAndReject = ["hr_manager", "senior_hr_associate"];
 
-  const CurrentUserCanCreateLeave = CurrentUserRoles.some((role) =>
-    canCreate.includes(role)
+  const CurrentUserCanApproveAndRejectLeave = CurrentUserRoles.some((role) =>
+  canApproveAndReject.includes(role)
   );
 
   // Calculates Leave Days (Week Days Only)
@@ -87,8 +85,8 @@ const WorkforceLeaveApplications = () => {
         ...leave,
         ...leave?.leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -138,14 +136,16 @@ const WorkforceLeaveApplications = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format("YYYY, MM (MMM), DD - h:mma"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
+          "YYYY, MM (MMM), DD - h:mma"
+        ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         leave_marker:
@@ -168,36 +168,10 @@ const WorkforceLeaveApplications = () => {
     }
   }, [historyPage, historySizePerPage, historyStatus, today_date]);
 
-  // All Active Leave Count:
-  const fetchAllEmpOnLeave = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/active_leaves.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      const resData = response?.data?.data?.active_leaves;
-      setOnLeave(resData);
-
-      setLoading(false);
-    } catch (error) {
-      const component = "Leave Count Error:";
-      ErrorHandler(error, component);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (isHr) {
       fetchHRLeaves();
       fetchHRLeaveHistory();
-      fetchAllEmpOnLeave();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
@@ -211,7 +185,6 @@ const WorkforceLeaveApplications = () => {
       );
       showAlert(true, "Leave Approved", "alert alert-success");
       fetchHRLeaves();
-      fetchAllEmpOnLeave();
       fetchHRLeaveHistory();
       fetchHRLeavesNotificationCount();
     } catch (error) {
@@ -392,7 +365,7 @@ const WorkforceLeaveApplications = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+            {row.status === "pending" && CurrentUserCanApproveAndRejectLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -402,7 +375,7 @@ const WorkforceLeaveApplications = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+            {row.status === "pending" && CurrentUserCanApproveAndRejectLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -672,18 +645,6 @@ const WorkforceLeaveApplications = () => {
               <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateLeave && (
-              <a
-                href="#"
-                className="btn add-btn m-r-5"
-                data-toggle="modal"
-                data-target="#CreateLeaveModal"
-              >
-                Create Leave
-              </a>
-            )}
-          </div>
         </div>
       </div>
 
@@ -730,15 +691,6 @@ const WorkforceLeaveApplications = () => {
           id="tab_hr-leave-application"
           className="col-12 tab-pane show active"
         >
-          {/* <div className="Hr-cards">
-            <div className="col-md-3">
-              <div className="stats-info">
-                <h6>Employees On Leave</h6>
-                <h4>{onLeave}</h4>
-              </div>
-            </div>
-          </div> */}
-
           <AdminLeavesTable
             data={allLeaves}
             columns={pendingColumns}
@@ -780,12 +732,6 @@ const WorkforceLeaveApplications = () => {
       ) : (
         ""
       )}
-
-      <CreateLeaveModal
-        fetchHRLeaves={fetchHRLeaves}
-        fetchHRLeaveHistory={fetchHRLeaveHistory}
-        fetchAllEmpOnLeave={fetchAllEmpOnLeave}
-      />
     </>
   );
 };
