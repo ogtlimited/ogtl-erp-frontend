@@ -153,9 +153,10 @@ const DeductionSlip = () => {
 
       {allDeductions.length ? (
         <div className="col" style={{ marginTop: "100px" }}>
-          <h3 className="page-title">{owner?.full_name}</h3>
+          <h4 className="page-title">{owner?.full_name}</h4>
           <ul className="breadcrumb">
-            <li className="breadcrumb-item">{owner?.ogid}</li>
+            <li className="">{owner?.ogid}</li>{" "}
+            <span style={{ marginLeft: "10px", marginRight: "10px" }}>|</span>
             <li className="breadcrumb-item active">{owner?.designation}</li>
           </ul>
         </div>

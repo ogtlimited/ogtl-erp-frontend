@@ -2,6 +2,7 @@
 
 import React from "react";
 import Deductions from "../../components/payroll-tabs/salary-deductions";
+import ReversedDeductions from "../../components/payroll-tabs/reversed-salary-deductions";
 import DeductionType from "../../components/payroll-tabs/salary-deductiontypes";
 
 const PayrollItems = () => {
@@ -36,6 +37,15 @@ const PayrollItems = () => {
                 <a
                   className="nav-link"
                   data-toggle="tab"
+                  href="#tab_reversed_deductions"
+                >
+                  Reversed Deductions
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
                   href="#tab_deduction_types"
                 >
                   Deduction Types
@@ -49,6 +59,10 @@ const PayrollItems = () => {
       <div className="row tab-content">
         <div id="tab_deductions" className="col-12 tab-pane show active">
           <Deductions />
+        </div>
+
+        <div id="tab_reversed_deductions" className="col-12 tab-pane">
+          <ReversedDeductions />
         </div>
 
         <div id="tab_deduction_types" className="col-12 tab-pane">
