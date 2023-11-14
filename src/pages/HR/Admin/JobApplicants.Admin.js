@@ -144,7 +144,6 @@ const JobApplicantsAdmin = () => {
         },
       });
 
-      console.log("HR Applications:.", response?.data?.data);
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
 
