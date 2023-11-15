@@ -22,6 +22,8 @@ export const PATH_DASHBOARD = {
     clientDashboard: path(ROOTS_DASHBOARD, "/client-dashboard"),
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
+    employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
+    employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
   },
 
   apps: {
@@ -42,8 +44,6 @@ export const PATH_DASHBOARD = {
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
     resignationAdmin: path(ROOTS_DASHBOARD, "/hr/resignation-admin"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
-    employeeAttendance: path(ROOTS_DASHBOARD, "/hr/attendance"),
-    leavesEmployee: path(ROOTS_DASHBOARD, "/hr/leaves"),
     resignationEmployee: path(ROOTS_DASHBOARD, "/hr/resignation"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
@@ -129,6 +129,11 @@ export const PATH_DASHBOARD = {
     allCampaign: path(ROOTS_DASHBOARD, "/operations/campaigns"),
     lead: path(ROOTS_DASHBOARD, "/operations/leads"),
     branch: path(ROOTS_DASHBOARD, "/operations/branch"),
+  },
+
+  operations: {
+    root: path(ROOTS_DASHBOARD, "/operations"),
+    workforceLeaveApplications: path(ROOTS_DASHBOARD, "/operations/workforce-leave-applications"),
   },
 
   accounts: {

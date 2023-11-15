@@ -247,7 +247,7 @@ const RemoteAttendanceAdmin = () => {
             <h3 className="page-title">Remote Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Remote Attendance</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
         </div>

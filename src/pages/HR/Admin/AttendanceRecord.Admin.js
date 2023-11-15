@@ -283,7 +283,7 @@ const AttendanceRecord = () => {
             <h3 className="page-title">Employees Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Attendance Record</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
         </div>

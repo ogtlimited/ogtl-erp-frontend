@@ -29,9 +29,10 @@ import UniversalPaginatedTable from "./../../../components/Tables/UniversalPagin
 import JobSieversViewAdmin from "./JobSieversView.Admin";
 
 const JobApplicantsAdmin = () => {
+  const { showAlert, user, ErrorHandler, goToTop, selectJobOpenings } =
+    useAppContext();
   const [allInactiveRepSievers, setAllInactiveRepSievers] = useState([]);
   const [data, setData] = useState([]);
-  const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
@@ -54,6 +55,7 @@ const JobApplicantsAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [jobOpeningFilter, setJobOpeningFilter] = useState("");
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,7 +67,7 @@ const JobApplicantsAdmin = () => {
 
   const canEdit = ["hr_manager", "senior_hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
-  
+
   const userDept =
     user?.office?.office_type === "department"
       ? user?.office?.title?.toLowerCase()
@@ -125,26 +127,22 @@ const JobApplicantsAdmin = () => {
 
     setLoading(true);
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/admin_role_job_applications.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: page,
-            limit: sizePerPage,
-            name: searchTerm.length ? searchTerm : null,
-            process_status: processingStageFilter
-              ? processingStageFilter
-              : null,
-            start_date: persistedFromDate,
-            end_date: persistedToDate,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/job_applicants.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+          name: searchTerm.length ? searchTerm : null,
+          job_opening_id: jobOpeningFilter.length ? jobOpeningFilter : null,
+          process_status: processingStageFilter ? processingStageFilter : null,
+          start_date: persistedFromDate,
+          end_date: persistedToDate,
+        },
+      });
 
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
@@ -160,6 +158,7 @@ const JobApplicantsAdmin = () => {
         interview_scheduled_date: emp?.interview_date
           ? moment(emp?.interview_date).format("Do MMMM, YYYY")
           : null,
+        resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
       }));
 
       setData(formatted);
@@ -169,8 +168,16 @@ const JobApplicantsAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    fromDate,
+    toDate,
+    page,
+    sizePerPage,
+    searchTerm,
+    jobOpeningFilter,
+    processingStageFilter,
+  ]);
 
   useEffect(() => {
     fetchAllInactiveRepSievers();
@@ -180,14 +187,6 @@ const JobApplicantsAdmin = () => {
   //update jobOpening
   const handleUpdate = useCallback(
     (id, update) => {
-      if (!CurrentUserRoles.includes("rep_siever")) {
-        return showAlert(
-          true,
-          "You are not a rep siever",
-          "alert alert-warning"
-        );
-      }
-
       axiosInstance
         .patch(`/api/v1/job_applicants/${id}.json`, {
           headers: {
@@ -203,7 +202,6 @@ const JobApplicantsAdmin = () => {
             "Job application updated successfully",
             "alert alert-success"
           );
-          setProcessingStageFilter("Open");
           fetchAllJobApplicants();
         })
         .catch((error) => {
@@ -589,6 +587,9 @@ const JobApplicantsAdmin = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             fetchAllJobApplicants={fetchAllJobApplicants}
+            jobOpenings={selectJobOpenings}
+            jobOpeningFilter={jobOpeningFilter}
+            setJobOpeningFilter={setJobOpeningFilter}
             interviewStatusFilter={interviewStatusFilter}
             setInterviewStatusFilter={setInterviewStatusFilter}
             processingStageFilter={processingStageFilter}

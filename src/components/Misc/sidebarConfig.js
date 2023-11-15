@@ -18,9 +18,11 @@ const getIcon = (name) => <i className={"la " + name}></i>;
 
 const ICONS = {
   user: getIcon("la-user"),
+  users: getIcon("la-users"),
   reports: getIcon("la-pie-chart"),
   recruitment: getIcon("la-briefcase"),
   payroll: getIcon("la-money"),
+  account: getIcon("la-money-check-alt"),
   dashboard: getIcon("la-dashboard"),
   apps: getIcon("la-cube"),
   performance: getIcon("la-graduation-cap"),
@@ -39,6 +41,11 @@ const ICONS = {
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
   kpi: getIcon("la-bar-chart"),
+  leave: getIcon("la-calendar-times-o"),
+  biometrics: getIcon("la-fingerprint"),
+  organizationalStructure: getIcon("la-sitemap"),
+  leader: getIcon("la-user-tie"),
+  userAttendance: getIcon("la-user-clock"),
 };
 
 const buildExternalURL = () => {
@@ -105,6 +112,18 @@ const sidebarConfig = [
               externalLink: buildExternalURL(),
               icon: ICONS.kpi,
             },
+            {
+              canView: "all",
+              title: "Attendance",
+              path: PATH_DASHBOARD.main.employeeAttendance,
+              icon: ICONS.userAttendance,
+            },
+            {
+              canView: "all",
+              title: "Leave",
+              path: PATH_DASHBOARD.main.employeeLeave,
+              icon: ICONS.leave,
+            },
           ]
         : [
             {
@@ -117,11 +136,6 @@ const sidebarConfig = [
                   canView: "all",
                   title: "Employee Dashboard",
                   path: PATH_DASHBOARD.main.employeeDashboard,
-                },
-                {
-                  canView: "hr",
-                  title: "HR Dashboard",
-                  path: PATH_DASHBOARD.main.hrDashboard,
                 },
               ],
             },
@@ -139,17 +153,30 @@ const sidebarConfig = [
                 },
               ],
             },
+            {
+              canView: "all",
+              title: "Attendance",
+              path: PATH_DASHBOARD.main.employeeAttendance,
+              icon: ICONS.userAttendance,
+            },
+            {
+              canView: "all",
+              title: "Leave",
+              path: PATH_DASHBOARD.main.employeeLeave,
+              icon: ICONS.leave,
+            },
           ],
   },
 
   // HR CONFIG:
   {
     subheader: "HR",
-    canView: "all",
+    canView: CurrentUserIsLead && userDept !== "hr" ? "all" : "hr",
     items: [
+      // Employee:
       {
-        canView: "all",
-        title: "Employees",
+        canView: CurrentUserIsLead && userDept !== "hr" ? "all" : "hr",
+        title: "Employee",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.user,
         children:
@@ -159,16 +186,6 @@ const sidebarConfig = [
                   canView: "all",
                   title: "All Employees",
                   path: PATH_DASHBOARD.hr.allEmployees,
-                },
-                {
-                  canView: "all",
-                  title: "Attendance",
-                  path: PATH_DASHBOARD.hr.employeeAttendance,
-                },
-                {
-                  canView: "all",
-                  title: "Leaves",
-                  path: PATH_DASHBOARD.hr.leavesEmployee,
                 },
                 {
                   canView: "all",
@@ -187,68 +204,109 @@ const sidebarConfig = [
                   title: "Add Employee",
                   path: PATH_DASHBOARD.hr.addEmployees,
                 },
-                {
-                  canView: "hr",
-                  title: "Leadership",
-                  path: PATH_DASHBOARD.hr.leadership,
-                },
-                {
-                  canView: "hr",
-                  title: "Captured Biometrics",
-                  path: PATH_DASHBOARD.hr.capturedBiometrics,
-                },
-                {
-                  canView: "hr",
-                  title: "Attendance Record",
-                  path: PATH_DASHBOARD.hr.attendanceRecord,
-                },
-                {
-                  canView: "hr",
-                  title: "Remote Attendance",
-                  path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
-                },
-                {
-                  canView: "hr",
-                  title: "Leave Applications",
-                  path: PATH_DASHBOARD.hr.leavesAdmin,
-                },
-                {
-                  canView: "all",
-                  title: "Attendance",
-                  path: PATH_DASHBOARD.hr.employeeAttendance,
-                },
-                {
-                  canView: "all",
-                  title: "Leaves",
-                  path: PATH_DASHBOARD.hr.leavesEmployee,
-                },
-                {
-                  canView: "hr",
-                  title: "Departments",
-                  path: PATH_DASHBOARD.hr.departments,
-                },
-                {
-                  canView: "hr",
-                  title: "Campaigns",
-                  path: PATH_DASHBOARD.hr.campaigns,
-                },
-                {
-                  canView: "hr",
-                  title: "Designations",
-                  path: PATH_DASHBOARD.hr.designations,
-                },
-                {
-                  canView: "hr",
-                  title: "Branch",
-                  path: PATH_DASHBOARD.hr.branch,
-                },
-                {
-                  canView: "hr",
-                  title: "Leave Types",
-                  path: PATH_DASHBOARD.hr.leaveType,
-                },
               ],
       },
+
+      // Leadership:
+      {
+        canView: "hr",
+        title: "Leadership",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.leader,
+        children: [
+          {
+            canView: "hr",
+            title: "Leaders",
+            path: PATH_DASHBOARD.hr.leadership,
+          },
+        ],
+      },
+
+      // Biometrics:
+      {
+        canView: "hr",
+        title: "Biometrics",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.biometrics,
+        children: [
+          {
+            canView: "hr",
+            title: "Captured Biometrics",
+            path: PATH_DASHBOARD.hr.capturedBiometrics,
+          },
+        ],
+      },
+
+      // Attendance:
+      {
+        canView: "hr",
+        title: "Attendance",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.attendance,
+        children: [
+          {
+            canView: "hr",
+            title: "Attendance Record",
+            path: PATH_DASHBOARD.hr.attendanceRecord,
+          },
+          {
+            canView: "hr",
+            title: "Remote Attendance",
+            path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
+          },
+        ],
+      },
+
+      // Leave:
+      {
+        canView: "hr",
+        title: "Leave",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.leave,
+        children: [
+          {
+            canView: "hr",
+            title: "Leave Applications",
+            path: PATH_DASHBOARD.hr.leavesAdmin,
+          },
+          {
+            canView: "hr",
+            title: "Leave Types",
+            path: PATH_DASHBOARD.hr.leaveType,
+          },
+        ],
+      },
+
+      // Organizational Structure:
+      {
+        canView: "hr",
+        title: "Office Structure",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.organizationalStructure,
+        children: [
+          {
+            canView: "hr",
+            title: "Departments",
+            path: PATH_DASHBOARD.hr.departments,
+          },
+          {
+            canView: "hr",
+            title: "Campaigns",
+            path: PATH_DASHBOARD.hr.campaigns,
+          },
+          {
+            canView: "hr",
+            title: "Designations",
+            path: PATH_DASHBOARD.hr.designations,
+          },
+          {
+            canView: "hr",
+            title: "Branch",
+            path: PATH_DASHBOARD.hr.branch,
+          },
+        ],
+      },
+
       // Payroll:
       {
         canView: "hr",
@@ -273,6 +331,7 @@ const sidebarConfig = [
           },
         ],
       },
+
       // Reports:
       {
         canView: "super",
@@ -287,6 +346,7 @@ const sidebarConfig = [
           },
         ],
       },
+
       // Recruitment:
       {
         canView: "hr",
@@ -351,6 +411,108 @@ const sidebarConfig = [
           ],
   },
 
+  // OPERATIONS CONFIG:
+  {
+    subheader: "Operations",
+    canView: CurrentUserRoles.includes("data_manager") ? "operations" : "none",
+    items: [
+      {
+        canView: CurrentUserRoles.includes("data_manager")
+          ? "operations"
+          : "none",
+        title: "Workforce",
+        path: PATH_DASHBOARD.operations.root,
+        icon: ICONS.users,
+        children: [
+          {
+            canView: "operations",
+            title: "Leave Applications",
+            path: PATH_DASHBOARD.operations.workforceLeaveApplications,
+          },
+        ],
+      },
+      // {
+      //   canView: "super",
+      //   title: "Campaign",
+      //   path: PATH_DASHBOARD.campaign.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     {
+      //       canView: "super",
+      //       title: "All Campaigns",
+      //       path: PATH_DASHBOARD.campaign.allCampaign,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Leads",
+      //       path: PATH_DASHBOARD.campaign.lead,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Branch",
+      //       path: PATH_DASHBOARD.campaign.branch,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Client Leave Approvals",
+      //       path: PATH_DASHBOARD.clients.leaveApprovals,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "super",
+      //   title: "Payroll",
+      //   path: PATH_DASHBOARD.payroll.root,
+      //   icon: ICONS.payroll,
+      //   children: [
+      //     {
+      //       canView: "super",
+      //       title: "Employee Salary",
+      //       path: PATH_DASHBOARD.payroll.salary,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payroll Items",
+      //       path: PATH_DASHBOARD.payroll.payrollItem,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payroll Notes",
+      //       path: PATH_DASHBOARD.payroll.payrollNotes,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "HR",
+      //   title: "Reports",
+      //   path: PATH_DASHBOARD.payroll.root,
+      //   icon: ICONS.reports,
+      //   children: [
+      //     {
+      //       canView: "HR",
+      //       title: "Employee Reports",
+      //       path: PATH_DASHBOARD.reports.employeeReport,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payslip Reports",
+      //       path: PATH_DASHBOARD.reports.payslipReport,
+      //     },
+      //     {
+      //       canView: "HR",
+      //       title: "Attendance Reports",
+      //       path: PATH_DASHBOARD.reports.attendanceReports,
+      //     },
+      //     {
+      //       canView: "HR",
+      //       title: "Academy Reports",
+      //       path: PATH_DASHBOARD.reports.academyReports,
+      //     },
+      //   ],
+      // },
+    ],
+  },
+
   // ACCOUNTING CONFIG:
   {
     subheader: "Accounting",
@@ -393,7 +555,7 @@ const sidebarConfig = [
         canView: "accounting",
         title: "Accounting Reports",
         path: PATH_DASHBOARD.accountingReports.root,
-        icon: ICONS.user,
+        icon: ICONS.account,
         children: [
           {
             canView: "accounting",

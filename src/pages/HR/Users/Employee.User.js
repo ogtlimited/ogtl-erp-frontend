@@ -138,7 +138,7 @@ const EmployeeUser = () => {
                       </div>
                       <div className="request-btn">
                         <Link
-                          to="/dashboard/hr/leaves"
+                          to="/dashboard/main/leave"
                           className="btn btn-primary"
                         >
                           Apply For Leave
