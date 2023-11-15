@@ -414,10 +414,12 @@ const sidebarConfig = [
   // OPERATIONS CONFIG:
   {
     subheader: "Operations",
-    canView: "operations",
+    canView: CurrentUserRoles.includes("data_manager") ? "operations" : "none",
     items: [
       {
-        canView: "operations",
+        canView: CurrentUserRoles.includes("data_manager")
+          ? "operations"
+          : "none",
         title: "Workforce",
         path: PATH_DASHBOARD.operations.root,
         icon: ICONS.users,

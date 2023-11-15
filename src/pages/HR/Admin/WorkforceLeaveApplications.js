@@ -9,20 +9,19 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
-import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
+import RejectWorkforceLeaveModal from "../../../components/Modal/RejectWorkforceLeaveModal";
 import moment from "moment";
 
 const WorkforceLeaveApplications = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
-    useAppContext();
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
-  const [hrReject, setHrReject] = useState([]);
+  const [dataManagerReject, setDataManagerReject] = useState([]);
   const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
@@ -36,13 +35,15 @@ const WorkforceLeaveApplications = () => {
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
-  const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
+  const isWorkforceManager = user?.employee_info?.roles.includes("data_manager")
+    ? true
+    : false;
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canApproveAndReject = ["hr_manager", "senior_hr_associate"];
+  const canApproveAndReject = ["data_manager"];
 
   const CurrentUserCanApproveAndRejectLeave = CurrentUserRoles.some((role) =>
-  canApproveAndReject.includes(role)
+    canApproveAndReject.includes(role)
   );
 
   // Calculates Leave Days (Week Days Only)
@@ -57,12 +58,12 @@ const WorkforceLeaveApplications = () => {
     return businessDays;
   }
 
-  // All Leaves at HR stage - Pending
-  const fetchHRLeaves = useCallback(async () => {
+  // All Leaves at Workforce stage - Pending
+  const fetchWorkforceLeaves = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/hr_dashboard/leaves.json`,
+        `/api/v1/workforce_leaves.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -104,12 +105,12 @@ const WorkforceLeaveApplications = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
-  // All Leaves at HR stage - History
-  const fetchHRLeaveHistory = useCallback(async () => {
+  // All Leaves at Workforce stage - History
+  const fetchWorkforceLeaveHistory = useCallback(async () => {
     try {
       setLoadingHistory(true);
       const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/leaves.json",
+        "/api/v1/workforce_leaves.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -169,31 +170,29 @@ const WorkforceLeaveApplications = () => {
   }, [historyPage, historySizePerPage, historyStatus, today_date]);
 
   useEffect(() => {
-    if (isHr) {
-      fetchHRLeaves();
-      fetchHRLeaveHistory();
+    if (isWorkforceManager) {
+      fetchWorkforceLeaves();
+      fetchWorkforceLeaveHistory();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
+  }, [fetchWorkforceLeaves, fetchWorkforceLeaveHistory, isWorkforceManager]);
 
   const handleApproveLeave = async (row) => {
     const id = row.id;
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/hr_approve_leave/${id}.json`
+        `/api/v1/workforce_approve_leave/${id}.json`
       );
       showAlert(true, "Leave Approved", "alert alert-success");
-      fetchHRLeaves();
-      fetchHRLeaveHistory();
-      fetchHRLeavesNotificationCount();
+      fetchWorkforceLeaves();
+      fetchWorkforceLeaveHistory();
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
   };
 
   const handleRejectLeave = (row) => {
-    setHrReject(row);
+    setDataManagerReject(row);
     setRejectModal(true);
   };
 
@@ -627,15 +626,6 @@ const WorkforceLeaveApplications = () => {
 
   return (
     <>
-      {rejectModal && (
-        <RejectAdminLeaveModal
-          hrReject={hrReject}
-          closeModal={setRejectModal}
-          fetchAllLeaves={fetchHRLeaves}
-          fetchHRLeaveHistory={fetchHRLeaveHistory}
-        />
-      )}
-
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -723,11 +713,20 @@ const WorkforceLeaveApplications = () => {
         </div>
       </div>
 
+      {rejectModal && (
+        <RejectWorkforceLeaveModal
+          dataManagerReject={dataManagerReject}
+          closeModal={setRejectModal}
+          fetchAllLeaves={fetchWorkforceLeaves}
+          fetchWorkforceLeaveHistory={fetchWorkforceLeaveHistory}
+        />
+      )}
+
       {modalType === "view-details" ? (
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          handleRefresh={fetchHRLeaves}
+          // handleRefresh={fetchWorkforceLeaves}
         />
       ) : (
         ""
