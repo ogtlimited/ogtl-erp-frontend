@@ -46,6 +46,10 @@ export const REJECT_LEAVE = {
   rejection_reason: "",
 };
 
+export const HR_CANCEL_LEAVE = {
+  reason_for_cancellation: "",
+};
+
 export const REQUEST_EDIT = {
   reasons: "",
 };

@@ -85,6 +85,7 @@ const WorkforceLeaveApplications = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         ...leave?.leave,
+        office: leave.office.toUpperCase(),
         full_name: leave?.first_name + " " + leave?.last_name,
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
@@ -92,13 +93,13 @@ const WorkforceLeaveApplications = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
       }));
 
       setallLeaves(formatted);
       setLoading(false);
     } catch (error) {
-      const component = "Pending Leaves Error:";
+      const component = "Pending Leave Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -143,9 +144,10 @@ const WorkforceLeaveApplications = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
+        office: leave.office.toUpperCase(),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
         ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
-          "YYYY, MM (MMM), DD - h:mma"
+          "YYYY, MM (MMM), Do - h:mma"
         ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
@@ -163,7 +165,7 @@ const WorkforceLeaveApplications = () => {
       setLeaveHistory(formatted);
       setLoadingHistory(false);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Leave History Error | ";
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
@@ -178,12 +180,28 @@ const WorkforceLeaveApplications = () => {
 
   const handleApproveLeave = async (row) => {
     const id = row.id;
+
+    const firstName = row?.first_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+    const lastName = row?.last_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+
+    const fullName = firstName + " " + lastName;
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
         `/api/v1/workforce_approve_leave/${id}.json`
       );
-      showAlert(true, "Leave Approved", "alert alert-success");
+
+      showAlert(
+        true,
+        `Success! ${fullName} Leave Request has been Approved.`,
+        "alert alert-success"
+      );
+
       fetchWorkforceLeaves();
       fetchWorkforceLeaveHistory();
     } catch (error) {
@@ -198,17 +216,20 @@ const WorkforceLeaveApplications = () => {
 
   const pendingColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="#" className="avatar">
-            <img alt="" src={male} />
-          </a>
           <div>
-            {row?.full_name} <span>{row?.ogid}</span>
+            {row?.full_name.toUpperCase()} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
@@ -218,7 +239,7 @@ const WorkforceLeaveApplications = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     {
       dataField: "status",
@@ -250,12 +271,6 @@ const WorkforceLeaveApplications = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
       sort: true,
       headerStyle: { width: "100%" },
     },
@@ -391,15 +406,26 @@ const WorkforceLeaveApplications = () => {
 
   const historyColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: ["date_" + historyStatus],
+      text: `Date ${
+        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
+      }`,
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="#" className="avatar">
-            <img alt="" src={male} />
-          </a>
           <div>
             {row?.full_name} <span>{row?.ogid}</span>
           </div>
@@ -411,7 +437,7 @@ const WorkforceLeaveApplications = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     {
       dataField: "status",
@@ -441,28 +467,14 @@ const WorkforceLeaveApplications = () => {
       ),
     },
     {
-      dataField: ["date_" + historyStatus],
-      text: `Date ${
-        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
-      }`,
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "leave_marker",
-      text: "Leave",
+      text: "Leave Progress",
       sort: true,
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (

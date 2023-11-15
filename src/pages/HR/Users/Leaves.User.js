@@ -75,8 +75,12 @@ const LeavesUser = () => {
         ...leave?.leave,
         status_action: leave?.leave?.status,
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.leave?.start_date).utc().format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).utc().format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         requested_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -96,7 +100,7 @@ const LeavesUser = () => {
 
       setallLeaves(formatted);
     } catch (error) {
-      const component = "Leaves Error:";
+      const component = "Leaves Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
@@ -121,8 +125,8 @@ const LeavesUser = () => {
         full_name: leave.first_name + " " + leave.last_name,
         status_action: leave?.status,
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
         requested_leave_days: calcBusinessDays(
           leave?.start_date,
           leave?.end_date
@@ -135,7 +139,7 @@ const LeavesUser = () => {
       setAllReporteesLeaves(formatted);
       setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Team Leaves Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
@@ -169,8 +173,8 @@ const LeavesUser = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         status: leave?.leave?.status,
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
@@ -193,7 +197,7 @@ const LeavesUser = () => {
 
       setLeaveHistory(formatted);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Team Leave History Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
@@ -216,12 +220,26 @@ const LeavesUser = () => {
   // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
     const id = row.id;
+
+    const firstName = row?.first_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+    const lastName = row?.last_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+
+    const fullName = firstName + " " + lastName;
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
         `/api/v1/approve_subordinate_leave/${id}.json`
       );
-      showAlert(true, "Leave Approved", "alert alert-success");
+      showAlert(
+        true,
+        `Success! ${fullName} Leave Request has been Approved.`,
+        "alert alert-success"
+      );
       fetchReporteesLeaves();
       fetchHRLeavesNotificationCount();
     } catch (error) {
@@ -454,7 +472,7 @@ const LeavesUser = () => {
                   setSelectedRow(row);
                 }}
               >
-                <i className="fa fa-remove m-r-5"></i> Cancel Application
+                <i className="fa fa-remove m-r-5"></i> Cancel
               </a>
             ) : null}
           </div>

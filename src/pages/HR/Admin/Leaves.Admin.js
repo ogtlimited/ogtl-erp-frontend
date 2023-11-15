@@ -10,6 +10,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
+import CancelAdminLeaveModal from "../../../components/Modal/CancelAdminLeaveModal";
 import moment from "moment";
 import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
@@ -25,6 +26,8 @@ const LeavesAdmin = () => {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
   const [hrReject, setHrReject] = useState([]);
+  const [cancelModal, setCancelModal] = useState(false);
+  const [hrCancel, setHrCancel] = useState([]);
   const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
@@ -87,8 +90,8 @@ const LeavesAdmin = () => {
         ...leave,
         ...leave?.leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -99,7 +102,7 @@ const LeavesAdmin = () => {
       setallLeaves(formatted);
       setLoading(false);
     } catch (error) {
-      const component = "Pending Leaves Error:";
+      const component = "Pending Leaves Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -138,14 +141,16 @@ const LeavesAdmin = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format("YYYY, MM (MMM), DD - h:mma"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
+          "YYYY, MM (MMM), DD - h:mma"
+        ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         leave_marker:
@@ -187,8 +192,7 @@ const LeavesAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      const component = "Leave Count Error:";
-      ErrorHandler(error, component);
+      console.log(error);
       setLoading(false);
     }
   };
@@ -202,14 +206,30 @@ const LeavesAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
 
+  // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
     const id = row.id;
+
+    const firstName = row?.first_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+    const lastName = row?.last_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+
+    const fullName = firstName + " " + lastName;
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
         `/api/v1/hr_approve_leave/${id}.json`
       );
-      showAlert(true, "Leave Approved", "alert alert-success");
+      showAlert(
+        true,
+        `Success! ${fullName} Leave Request has been Approved.`,
+        "alert alert-success"
+      );
+
       fetchHRLeaves();
       fetchAllEmpOnLeave();
       fetchHRLeaveHistory();
@@ -219,9 +239,16 @@ const LeavesAdmin = () => {
     }
   };
 
+  // Handle Reject Leave:
   const handleRejectLeave = (row) => {
     setHrReject(row);
     setRejectModal(true);
+  };
+
+  // Handle Cancel Leave:
+  const handleCancelLeave = (row) => {
+    setHrCancel(row);
+    setCancelModal(true);
   };
 
   const pendingColumns = [
@@ -646,6 +673,18 @@ const LeavesAdmin = () => {
                 <i className="fa fa-ban m-r-5"></i> Reject
               </a>
             ) : null}
+
+            {row.status === "approved" &&
+            row?.leave_marker !== "Leave Ended" &&
+            CurrentUserCanCreateLeave ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={() => handleCancelLeave(row)}
+              >
+                <i className="fa fa-remove m-r-5"></i> Cancel
+              </a>
+            ) : null}
           </div>
         </div>
       ),
@@ -654,15 +693,6 @@ const LeavesAdmin = () => {
 
   return (
     <>
-      {rejectModal && (
-        <RejectAdminLeaveModal
-          hrReject={hrReject}
-          closeModal={setRejectModal}
-          fetchAllLeaves={fetchHRLeaves}
-          fetchHRLeaveHistory={fetchHRLeaveHistory}
-        />
-      )}
-
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -707,7 +737,7 @@ const LeavesAdmin = () => {
                   href="#tab_hr-leave-history"
                   onClick={() => setHistoryStatus("approved")}
                 >
-                  Approved Leave History
+                  Approved Leaves
                 </a>
               </li>
               <li className="nav-item">
@@ -717,7 +747,17 @@ const LeavesAdmin = () => {
                   href="#tab_hr-leave-history"
                   onClick={() => setHistoryStatus("rejected")}
                 >
-                  Rejected Leave History
+                  Rejected Leaves
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_hr-leave-history"
+                  onClick={() => setHistoryStatus("cancelled")}
+                >
+                  Cancelled Leaves
                 </a>
               </li>
             </ul>
@@ -786,6 +826,24 @@ const LeavesAdmin = () => {
         fetchHRLeaveHistory={fetchHRLeaveHistory}
         fetchAllEmpOnLeave={fetchAllEmpOnLeave}
       />
+
+      {rejectModal && (
+        <RejectAdminLeaveModal
+          hrReject={hrReject}
+          closeModal={setRejectModal}
+          fetchAllLeaves={fetchHRLeaves}
+          fetchHRLeaveHistory={fetchHRLeaveHistory}
+        />
+      )}
+
+      {cancelModal && (
+        <CancelAdminLeaveModal
+          hrCancel={hrCancel}
+          closeModal={setCancelModal}
+          fetchAllLeaves={fetchHRLeaves}
+          fetchHRLeaveHistory={fetchHRLeaveHistory}
+        />
+      )}
     </>
   );
 };
