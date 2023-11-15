@@ -13,7 +13,7 @@ function RejectWorkforceLeaveModal({
   fetchAllLeaves,
   fetchWorkforceLeaveHistory,
 }) {
-  const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
+  const { showAlert } = useAppContext();
   const [leave, setLeave] = useState(REJECT_LEAVE);
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +43,6 @@ function RejectWorkforceLeaveModal({
     }
     fetchAllLeaves();
     fetchWorkforceLeaveHistory();
-    // fetchHRLeavesNotificationCount();
   };
 
   return (

@@ -1,20 +1,20 @@
 /* eslint-disable no-unused-vars */
 /** @format */
 
-import React, { useState } from 'react';
-import { RiCloseCircleFill } from 'react-icons/ri';
-import axiosInstance from '../../services/api';
-import { REJECT_LEAVE } from '../FormJSON/CreateLeave';
-import { useAppContext } from '../../Context/AppContext';
+import React, { useState } from "react";
+import { RiCloseCircleFill } from "react-icons/ri";
+import axiosInstance from "../../services/api";
+import { HR_CANCEL_LEAVE } from "../FormJSON/CreateLeave";
+import { useAppContext } from "../../Context/AppContext";
 
-function RejectAdminLeaveModal({
+function CancelAdminLeaveModal({
   closeModal,
-  hrReject,
+  hrCancel,
   fetchAllLeaves,
-  fetchHRLeaveHistory
+  fetchHRLeaveHistory,
 }) {
   const { showAlert, fetchHRLeavesNotificationCount } = useAppContext();
-  const [leave, setLeave] = useState(REJECT_LEAVE);
+  const [leave, setLeave] = useState(HR_CANCEL_LEAVE);
   const [loading, setLoading] = useState(false);
 
   const handleFormChange = (e) => {
@@ -22,26 +22,43 @@ function RejectAdminLeaveModal({
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
-  const handleRejectLeave = async (e) => {
-      e.preventDefault();
-      const id = hrReject.id;
-      setLoading(true);
-      try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await axiosInstance.put(`/api/v1/hr_reject_leave/${id}.json`, {
-          payload: leave
-        })
+  const handleCancelLeave = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const id = hrCancel.leave?.id;
 
-        showAlert(true, 'Leave Rejected', 'alert alert-info');
-  
-        closeModal(false);
-      } catch (error) {
-        showAlert(true, error?.response?.data?.errors, "alert alert-warning");
-      }
-      fetchAllLeaves();
-      fetchHRLeaveHistory();
-      fetchHRLeavesNotificationCount();
-  }
+    const firstName = hrCancel?.first_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+    const lastName = hrCancel?.last_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+
+    const fullName = firstName + " " + lastName;
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(
+        `/api/v1/leaves_cancellation/${id}.json`,
+        {
+          payload: leave,
+        }
+      );
+
+      showAlert(
+        true,
+        `${fullName} Leave Request has been Cancelled!`,
+        "alert alert-info"
+      );
+
+      closeModal(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
+    fetchAllLeaves();
+    fetchHRLeaveHistory();
+    fetchHRLeavesNotificationCount();
+  };
 
   return (
     <>
@@ -52,16 +69,16 @@ function RejectAdminLeaveModal({
             onClick={() => closeModal(false)}
           />
           <div className="rejection-modal-body">
-            <form onSubmit={handleRejectLeave}>
+            <form onSubmit={handleCancelLeave}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="rejection_reason">
-                    Reason for Rejection
+                  <label htmlFor="reason_for_cancellation">
+                    Reason for Cancellation
                   </label>
                   <textarea
-                    name="rejection_reason"
+                    name="reason_for_cancellation"
                     className="form-control rejection-textarea"
-                    value={leave.rejection_reason}
+                    value={leave.reason_for_cancellation}
                     onChange={handleFormChange}
                     required
                   />
@@ -83,7 +100,7 @@ function RejectAdminLeaveModal({
                       aria-hidden="true"
                     ></span>
                   ) : (
-                    'Submit'
+                    "Submit"
                   )}
                 </button>
               </div>
@@ -95,4 +112,4 @@ function RejectAdminLeaveModal({
   );
 }
 
-export default RejectAdminLeaveModal;
+export default CancelAdminLeaveModal;
