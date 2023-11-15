@@ -13,8 +13,8 @@
 /build
 
 # config base urls
-/src/config.json*
-config.json*
+src/config.json
+config.json
 LEGACY_sidebarConfig.js
 
 # misc
