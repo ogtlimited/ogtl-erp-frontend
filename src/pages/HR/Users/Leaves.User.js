@@ -75,8 +75,12 @@ const LeavesUser = () => {
         ...leave?.leave,
         status_action: leave?.leave?.status,
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.leave?.start_date).utc().format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).utc().format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         requested_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
@@ -120,14 +124,15 @@ const LeavesUser = () => {
         ...leave,
         full_name: leave.first_name + " " + leave.last_name,
         status_action: leave?.status,
+        office: leave.office.toUpperCase(),
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
         requested_leave_days: calcBusinessDays(
           leave?.start_date,
           leave?.end_date
         ),
-        date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
         proofs: leave?.proofs,
       }));
 
@@ -154,7 +159,7 @@ const LeavesUser = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            pages: page,
+            page: page,
             limit: sizePerPage,
           },
         }
@@ -169,8 +174,8 @@ const LeavesUser = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         status: leave?.leave?.status,
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
@@ -304,7 +309,7 @@ const LeavesUser = () => {
     },
     {
       dataField: "leave_marker",
-      text: "Leave",
+      text: "Leave Progress",
       sort: true,
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
@@ -465,29 +470,29 @@ const LeavesUser = () => {
 
   const reporteeColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
       dataField: "full_name",
       text: "Full Name",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     {
       dataField: "leave_type",
       text: "Leave Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <p>{val}</p>,
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <p>{val}</p>,
@@ -651,11 +656,17 @@ const LeavesUser = () => {
 
   const historyColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
       text: "Full Name",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
     },
     {
       dataField: "office",
@@ -698,14 +709,8 @@ const LeavesUser = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "leave_marker",
-      text: "Leave",
+      text: "Leave Progress",
       sort: true,
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (

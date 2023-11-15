@@ -86,14 +86,15 @@ const LeavesAdmin = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         ...leave?.leave,
+        office: leave?.office?.toUpperCase(),
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -138,14 +139,17 @@ const LeavesAdmin = () => {
       const formatted = resData.map((leave) => ({
         ...leave,
         full_name: leave?.first_name + " " + leave?.last_name,
-        from_date: moment(leave?.leave?.start_date).format('ddd MMM Do, YYYY'),
-        to_date: moment(leave?.leave?.end_date).format('ddd MMM Do, YYYY'),
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
+        office: leave?.office?.toUpperCase(),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format("YYYY, MM (MMM), DD - h:mma"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
+          "YYYY, MM (MMM), Do - h:mma"
+        ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         leave_marker:
@@ -226,15 +230,18 @@ const LeavesAdmin = () => {
 
   const pendingColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="#" className="avatar">
-            <img alt="" src={male} />
-          </a>
           <div>
             {row?.full_name} <span>{row?.ogid}</span>
           </div>
@@ -246,7 +253,7 @@ const LeavesAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     {
       dataField: "status",
@@ -278,12 +285,6 @@ const LeavesAdmin = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
       sort: true,
       headerStyle: { width: "100%" },
     },
@@ -419,15 +420,26 @@ const LeavesAdmin = () => {
 
   const historyColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: ["date_" + historyStatus],
+      text: `Date ${
+        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
+      }`,
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="#" className="avatar">
-            <img alt="" src={male} />
-          </a>
           <div>
             {row?.full_name} <span>{row?.ogid}</span>
           </div>
@@ -439,7 +451,7 @@ const LeavesAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val}</span>,
     },
     {
       dataField: "status",
@@ -469,28 +481,14 @@ const LeavesAdmin = () => {
       ),
     },
     {
-      dataField: ["date_" + historyStatus],
-      text: `Date ${
-        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
-      }`,
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "leave_marker",
-      text: "Leave",
+      text: "Leave Progress",
       sort: true,
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
