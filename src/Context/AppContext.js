@@ -508,7 +508,6 @@ const AppProvider = (props) => {
         fetchAllLeaders();
         fetchAllDesignations();
         fetchAllLeaveTypes();
-        fetchHRLeavesNotificationCount();
       }
 
       fetchAllLeaveTypes();

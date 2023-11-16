@@ -1,5 +1,3 @@
-/** @format */
-
 import React from "react";
 
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
@@ -8,6 +6,8 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     id: undefined,
     manager_id: undefined,
     start_date: undefined,
+    first_name: undefined,
+    last_name: undefined,
     end_date: undefined,
     updated_at: undefined,
     created_at: undefined,
@@ -21,24 +21,50 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
       leaveContent?.status === "rejected"
         ? leaveContent?.rejection_reason
         : undefined,
+    reason_for_cancellation:
+      leaveContent?.status === "cancelled"
+        ? leaveContent?.reason_for_cancellation
+        : undefined,
   };
 
-  const filteredKeys = Object.keys(filteredApplication).reverse();
+  const orderedKeys = [
+    "date_applied",
+    "ogid",
+    "full_name",
+    "office",
+    "status",
+    "from_date",
+    "to_date",
+    "requested_leave_days",
+    "leave_type",
+    "reason",
+    "rejection_reason",
+    "reason_for_cancellation",
+  ];
 
   return (
     <div className="row d-flex justify-content-center">
-      {filteredKeys.map((key, index) => {
+      {orderedKeys.map((key, index) => {
         const value = filteredApplication[key];
         if (typeof value !== "undefined") {
           return (
             <React.Fragment key={index}>
               <div className="col-md-6 mt-3">
-                <p className="job-field">{key.split("_").join(" ")}</p>
+                <p className="job-field">
+                  {key
+                    .split("_")
+                    .join(" ")
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                </p>
               </div>
               <div className="col-md-6 mt-3">
                 <p className="">
-                  {typeof value === "string"
+                  {key === "reason" ||
+                  key === "rejection_reason" ||
+                  key === "reason_for_cancellation"
                     ? value
+                    : typeof value === "string"
+                    ? value.replace(/\b\w/g, (char) => char.toUpperCase())
                     : value === null
                     ? "Not Provided"
                     : typeof value === "number"

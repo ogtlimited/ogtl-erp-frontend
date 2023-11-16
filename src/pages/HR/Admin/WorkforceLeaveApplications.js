@@ -151,6 +151,7 @@ const WorkforceLeaveApplications = () => {
         ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
+        reason_for_cancellation: leave?.leave?.reason_for_cancellation,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
