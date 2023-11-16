@@ -23,6 +23,7 @@ const LeavesUser = () => {
     user,
     ErrorHandler,
     goToTop,
+    selectDepartments,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [modalType, setModalType] = useState("");
@@ -45,12 +46,17 @@ const LeavesUser = () => {
   const today_date = moment(time).format("yyyy-MM-DD");
 
   const currentUserIsLead = user?.employee_info?.is_lead;
-
+  const currentUserOffice = user?.office?.title.toUpperCase();
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canViewDepartmentLeaves = ["hr_manager"];
+
+  const managers = selectDepartments.map((item) => {
+    const modifiedLabel =
+      item.label.toLowerCase().replace(/\s/g, "_") + "_manager";
+    return modifiedLabel;
+  });
 
   const CurrentUserCanViewDepartmentLeaves = CurrentUserRoles.some((role) =>
-    canViewDepartmentLeaves.includes(role)
+    managers.includes(role)
   );
 
   // Calculates Leave Days for Business Days:
@@ -955,7 +961,7 @@ const LeavesUser = () => {
                       data-toggle="tab"
                       href="#tab_department_leave-history"
                     >
-                      Department Leave History
+                      Department Leave History ( {currentUserOffice} )
                     </a>
                   </li>
                 ) : null}
