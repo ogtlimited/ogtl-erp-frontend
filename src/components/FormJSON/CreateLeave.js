@@ -50,6 +50,13 @@ export const HR_CANCEL_LEAVE = {
   reason_for_cancellation: "",
 };
 
+export const HR_UPDATE_LEAVE = {
+  start_date: "",
+  end_date: "",
+  reasons_for_update: "",
+};
+
+
 export const REQUEST_EDIT = {
   reasons: "",
 };

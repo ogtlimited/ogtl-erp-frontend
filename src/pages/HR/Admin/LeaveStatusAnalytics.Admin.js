@@ -94,7 +94,7 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.start_date,
             leave?.leave?.end_date
           ),
-          date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
+          date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
           current_approver: !leave?.leave?.hr_stage
             ? leave?.current_stage_manager?.manager_full_name
             : "HR",
@@ -171,26 +171,20 @@ const AllLeaveStatusAdmin = () => {
 
   const columns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
       text: "Employee Name",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row.gender === "Male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
           <div>
-            {value} <span>{row?.ogid}</span>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
@@ -232,12 +226,6 @@ const AllLeaveStatusAdmin = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
       sort: true,
       headerStyle: { width: "100%" },
     },

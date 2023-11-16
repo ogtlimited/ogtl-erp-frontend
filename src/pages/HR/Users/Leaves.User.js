@@ -961,7 +961,8 @@ const LeavesUser = () => {
                       data-toggle="tab"
                       href="#tab_department_leave-history"
                     >
-                      Department Leave History ( {currentUserOffice} )
+                      Department Leave History
+                      {/* ( {currentUserOffice} ) */}
                     </a>
                   </li>
                 ) : null}
