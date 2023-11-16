@@ -22,9 +22,13 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
         ? leaveContent?.rejection_reason
         : undefined,
     reason_for_cancellation:
-      leaveContent?.status === "cancelled"
+      leaveContent?.status === "cancelled" &&
+      leaveContent?.reason_for_cancellation
         ? leaveContent?.reason_for_cancellation
         : undefined,
+    reasons_for_update: leaveContent?.reasons_for_update
+      ? leaveContent?.reasons_for_update
+      : undefined,
   };
 
   const orderedKeys = [
@@ -38,8 +42,9 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     "requested_leave_days",
     "leave_type",
     "reason",
-    "rejection_reason",
+    "reasons_for_update",
     "reason_for_cancellation",
+    "rejection_reason",
   ];
 
   return (
@@ -61,7 +66,8 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
                 <p className="">
                   {key === "reason" ||
                   key === "rejection_reason" ||
-                  key === "reason_for_cancellation"
+                  key === "reason_for_cancellation" ||
+                  key === "reasons_for_update"
                     ? value
                     : typeof value === "string"
                     ? value.replace(/\b\w/g, (char) => char.toUpperCase())

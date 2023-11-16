@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -10,6 +11,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
 import RejectAdminLeaveModal from "../../../components/Modal/RejectAdminLeaveModal";
 import CancelAdminLeaveModal from "../../../components/Modal/CancelAdminLeaveModal";
+import EditAdminLeaveModal from "../../../components/Modal/EditAdminLeaveModal";
 import moment from "moment";
 import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
@@ -27,6 +29,8 @@ const LeavesAdmin = () => {
   const [hrReject, setHrReject] = useState([]);
   const [cancelModal, setCancelModal] = useState(false);
   const [hrCancel, setHrCancel] = useState([]);
+  const [hrEdit, setHrEdit] = useState([]);
+
   const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
@@ -155,6 +159,7 @@ const LeavesAdmin = () => {
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
+        reasons_for_update: leave?.leave?.reasons_for_update,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
@@ -169,7 +174,7 @@ const LeavesAdmin = () => {
       setLeaveHistory(formatted);
       setLoadingHistory(false);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Leave History Error | ";
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
@@ -247,10 +252,33 @@ const LeavesAdmin = () => {
     setRejectModal(true);
   };
 
+  // Handle Edit Leave:
+  const handleEditLeave = (row) => {
+    setHrEdit(row);
+  };
+
   // Handle Cancel Leave:
   const handleCancelLeave = (row) => {
     setHrCancel(row);
     setCancelModal(true);
+  };
+
+  // Handle Viewing Approved Leaves:
+  const handleViewingApproved = () => {
+    setHistoryStatus("approved");
+    setHistoryPage(1);
+  };
+
+  // Handle Viewing Rejected Leaves:
+  const handleViewingRejected = () => {
+    setHistoryStatus("rejected");
+    setHistoryPage(1);
+  };
+
+  // Handle Viewing Cancelled Leaves:
+  const handleViewingCancelled = () => {
+    setHistoryStatus("cancelled");
+    setHistoryPage(1);
   };
 
   const pendingColumns = [
@@ -417,6 +445,18 @@ const LeavesAdmin = () => {
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
+
+            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#EditLeaveModal"
+                onClick={() => handleEditLeave(row)}
+              >
+                <i className="fa fa-edit m-r-5"></i> Update
+              </a>
+            ) : null}
 
             {row.status === "pending" && CurrentUserCanCreateLeave ? (
               <a
@@ -650,6 +690,20 @@ const LeavesAdmin = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
+            {row.status === "approved" &&
+            row?.leave_marker !== "Leave Ended" &&
+            CurrentUserCanCreateLeave ? (
+              <a
+                href="#"
+                className="dropdown-item"
+                data-toggle="modal"
+                data-target="#EditLeaveModal"
+                onClick={() => handleEditLeave(row)}
+              >
+                <i className="fa fa-edit m-r-5"></i> Update
+              </a>
+            ) : null}
+
             {row.status === "pending" ? (
               <a
                 href="#"
@@ -731,7 +785,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("approved")}
+                  onClick={handleViewingApproved}
                 >
                   Approved Leaves
                 </a>
@@ -741,7 +795,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("rejected")}
+                  onClick={handleViewingRejected}
                 >
                   Rejected Leaves
                 </a>
@@ -751,7 +805,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("cancelled")}
+                  onClick={handleViewingCancelled}
                 >
                   Cancelled Leaves
                 </a>
@@ -840,6 +894,12 @@ const LeavesAdmin = () => {
           fetchHRLeaveHistory={fetchHRLeaveHistory}
         />
       )}
+
+      <EditAdminLeaveModal
+        hrEdit={hrEdit}
+        fetchAllLeaves={fetchHRLeaves}
+        fetchHRLeaveHistory={fetchHRLeaveHistory}
+      />
     </>
   );
 };
