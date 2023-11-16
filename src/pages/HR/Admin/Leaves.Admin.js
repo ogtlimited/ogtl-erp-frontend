@@ -4,7 +4,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
-import male from "../../../assets/img/male_avater.png";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";
@@ -151,14 +150,11 @@ const LeavesAdmin = () => {
         office: leave?.office?.toUpperCase(),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
         ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
-<<<<<<< HEAD
-          "YYYY, MM (MMM), DD - h:mma"
-=======
           "YYYY, MM (MMM), Do - h:mma"
->>>>>>> 399d0988666b7fa474d6a06fde6621e61cd0f45a
         ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
+        reason_for_cancellation: leave?.leave?.reason_for_cancellation,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"

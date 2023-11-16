@@ -27,6 +27,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const [selectedStartDateError, setSelectedStartDateError] = useState("");
   const [selectedEndDateError, setSelectedEndDateError] = useState("");
   const [proofUpload, setProofUpload] = useState(null);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   const employeeGender = user?.employee_info?.personal_details?.gender;
 
@@ -37,8 +38,8 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const needsProof = ["emergency", "sick", "maternity", "paternity"];
 
-  const CurrentUserNeedsUpload = needsProof.some((role) =>
-    leaveType.includes(role)
+  const CurrentUserNeedsUpload = needsProof.some((type) =>
+    leaveType.includes(type)
   );
 
   useEffect(() => {
@@ -111,23 +112,36 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
     setLeave({ ...leave, [e.target.name]: e.target.value });
   };
 
+  // Handle leave type change:
   const handleSelectLeave = (e) => {
     setLeave({
       ...leave,
       start_date: "",
       end_date: "",
+      reason: "",
       hr_leave_type_id: e?.value,
       leaveTypeTitle: e?.label,
     });
 
     setSelectedStartDate("");
     setSelectedEndDate("");
+
+    const leaveTypeRequiresProof = needsProof.includes(e?.label.toLowerCase());
+    setIsLeaveTypeValid(true);
+
+    if (leaveTypeRequiresProof && !proofUpload) {
+      setIsLeaveTypeValid(false);
+    }
+
+    setProofUpload(null);
+    setFileInputKey((prevKey) => prevKey + 1);
   };
 
+  // Handle date change:
   const handleDateChange = (e) => {
     e.preventDefault();
     const selectedDate = e.target.value;
-    
+
     // ! Restricts selection of weekends
     // const parsedDate = new Date(selectedDate);
     // const weekend = parsedDate.getDay() === 6 || parsedDate.getDay() === 0;
@@ -349,12 +363,12 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                         <div className="form-group">
                           <label htmlFor="proofs">Proof Upload</label>
                           <input
+                            key={fileInputKey}
                             name="proofs"
                             type="file"
                             className="form-control proof_upload"
                             accept="image/*,.pdf,.doc,.csv,.txt"
                             placeholder="Click to upload "
-                            value={leave?.proofs}
                             onChange={handleFileChange}
                             multiple
                             required
@@ -380,7 +394,10 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={!isLeaveTypeValid}
+                        disabled={
+                          !isLeaveTypeValid ||
+                          (CurrentUserNeedsUpload && !proofUpload)
+                        }
                       >
                         {loading ? (
                           <span
