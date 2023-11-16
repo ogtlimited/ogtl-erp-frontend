@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -260,6 +261,24 @@ const LeavesAdmin = () => {
   const handleCancelLeave = (row) => {
     setHrCancel(row);
     setCancelModal(true);
+  };
+
+  // Handle Viewing Approved Leaves:
+  const handleViewingApproved = () => {
+    setHistoryStatus("approved");
+    setHistoryPage(1);
+  };
+
+  // Handle Viewing Rejected Leaves:
+  const handleViewingRejected = () => {
+    setHistoryStatus("rejected");
+    setHistoryPage(1);
+  };
+
+  // Handle Viewing Cancelled Leaves:
+  const handleViewingCancelled = () => {
+    setHistoryStatus("cancelled");
+    setHistoryPage(1);
   };
 
   const pendingColumns = [
@@ -766,7 +785,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("approved")}
+                  onClick={handleViewingApproved}
                 >
                   Approved Leaves
                 </a>
@@ -776,7 +795,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("rejected")}
+                  onClick={handleViewingRejected}
                 >
                   Rejected Leaves
                 </a>
@@ -786,7 +805,7 @@ const LeavesAdmin = () => {
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_hr-leave-history"
-                  onClick={() => setHistoryStatus("cancelled")}
+                  onClick={handleViewingCancelled}
                 >
                   Cancelled Leaves
                 </a>

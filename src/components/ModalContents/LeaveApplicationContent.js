@@ -42,9 +42,9 @@ const LeaveApplicationContent = ({ leaveContent = {} }) => {
     "requested_leave_days",
     "leave_type",
     "reason",
-    "rejection_reason",
-    "reason_for_cancellation",
     "reasons_for_update",
+    "reason_for_cancellation",
+    "rejection_reason",
   ];
 
   return (

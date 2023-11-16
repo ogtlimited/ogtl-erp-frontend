@@ -47,13 +47,15 @@ function CancelAdminLeaveModal({
 
       showAlert(
         true,
-        `${fullName} Leave Request has been Cancelled!`,
+        `${fullName} Leave has been Cancelled!`,
         "alert alert-info"
       );
 
       closeModal(false);
+      setLoading(false);	
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
     }
     fetchAllLeaves();
     fetchHRLeaveHistory();

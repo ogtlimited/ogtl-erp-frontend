@@ -24,8 +24,6 @@ function EditAdminLeaveModal({ hrEdit, fetchAllLeaves, fetchHRLeaveHistory }) {
     hrEdit.leave?.start_date,
   ]);
 
-  console.log("Edit this:", hrEdit)
-
   const cancelEvent = () => {
     setLeave(HR_UPDATE_LEAVE);
   };
@@ -65,9 +63,11 @@ function EditAdminLeaveModal({ hrEdit, fetchAllLeaves, fetchHRLeaveHistory }) {
       );
 
       $("#EditLeaveModal").modal("toggle");
+      setLoading(false);
     } catch (error) {
       $("#EditLeaveModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoading(false);
     }
     fetchAllLeaves();
     fetchHRLeaveHistory();
@@ -104,13 +104,23 @@ function EditAdminLeaveModal({ hrEdit, fetchAllLeaves, fetchHRLeaveHistory }) {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="start_date">Start</label>
-                      <input
-                        type="date"
-                        name="start_date"
-                        value={leave.start_date?.split("T")[0]}
-                        onChange={handleFormChange}
-                        className="form-control "
-                      />
+                      {hrEdit?.leave_marker === "On Leave" ? (
+                        <input
+                          type="date"
+                          name="start_date"
+                          value={leave.start_date?.split("T")[0]}
+                          className="form-control "
+                          readOnly
+                        />
+                      ) : (
+                        <input
+                          type="date"
+                          name="start_date"
+                          value={leave.start_date?.split("T")[0]}
+                          onChange={handleFormChange}
+                          className="form-control "
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -123,7 +133,7 @@ function EditAdminLeaveModal({ hrEdit, fetchAllLeaves, fetchHRLeaveHistory }) {
                         value={leave.end_date?.split("T")[0]}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={leave.start_date}
+                        min={leave.start_date?.split("T")[0]}
                       />
                     </div>
                   </div>
