@@ -291,6 +291,9 @@ const LeavesUser = () => {
     if (currentUserIsLead) {
       fetchReporteesLeaves();
       fetchTeamLeaveHistory();
+    }
+
+    if (CurrentUserCanViewDepartmentLeaves) {
       fetchDepartmentLeaveHistory();
     }
   }, [
@@ -299,6 +302,7 @@ const LeavesUser = () => {
     fetchReporteesLeaves,
     fetchTeamLeaveHistory,
     fetchDepartmentLeaveHistory,
+    CurrentUserCanViewDepartmentLeaves,
   ]);
 
   // Handle Approve Leave:

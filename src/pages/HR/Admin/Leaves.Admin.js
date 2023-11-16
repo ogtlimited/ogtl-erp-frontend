@@ -93,7 +93,10 @@ const LeavesAdmin = () => {
         ...leave,
         ...leave?.leave,
         office: leave?.office?.toUpperCase(),
-        full_name: leave?.first_name + " " + leave?.last_name,
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
@@ -144,7 +147,10 @@ const LeavesAdmin = () => {
 
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave?.first_name + " " + leave?.last_name,
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
