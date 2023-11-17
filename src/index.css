@@ -468,6 +468,13 @@ table.custom-table thead th {
 
 /* Header Dropdown */
 
+.header-display-name {
+  max-width: 205px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 .header_user_profile_div {
   display: flex;
   justify-content: space-between;
@@ -501,9 +508,11 @@ table.custom-table thead th {
 }
 
 .profile_name,
-.profile_ogid,
-.profile_email {
+.profile_ogid {
   margin-bottom: 0px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .profile_image_div > img {
