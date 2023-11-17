@@ -135,7 +135,7 @@ const Header = () => {
                       {user?.employee_info?.personal_details?.first_name?.toUpperCase()}{" "}
                       {user?.employee_info?.personal_details?.last_name?.toUpperCase()}
                     </p>
-                    <p className="profile_ogid">{user?.employee_info?.ogid}</p>
+                    <p className="profile_designation">{user?.employee_info?.designation}</p>
                   </div>
                   <button
                     className="profile_button"

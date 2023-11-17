@@ -122,7 +122,7 @@ const EmployeeAttendanceRecordAdmin = () => {
 
       setLoading(false);
     } catch (error) {
-      const component = "Weekly Attendance Tardiness:";
+      const component = "Weekly Attendance Record | ";
       ErrorHandler(error, component);
       setLoading(false);
     }

@@ -508,11 +508,16 @@ table.custom-table thead th {
 }
 
 .profile_name,
-.profile_ogid {
+.profile_designation {
   margin-bottom: 0px;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+}
+
+.profile_designation {
+  font-size: 11px;
+  color: #999;
 }
 
 .profile_image_div > img {
