@@ -26,15 +26,16 @@ const LeavesUser = () => {
     selectDepartments,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [modalType, setModalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
 
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
+  const [departmentLeaveHistory, setDepartmentLeaveHistory] = useState([]);
 
   const [rejectModal, setRejectModal] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [rejectLeave, setRejectLeave] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -42,12 +43,17 @@ const LeavesUser = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [deptPage, setDeptPage] = useState(1);
+  const [deptSizePerPage, setDeptSizePerPage] = useState(10);
+  const [deptTotalPages, setDeptTotalPages] = useState("");
+
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
   const currentUserIsLead = user?.employee_info?.is_lead;
   const currentUserOffice = user?.office?.title.toUpperCase();
   const CurrentUserRoles = user?.employee_info?.roles;
+  const departmentId = user?.office?.id;
 
   const managers = selectDepartments.map((item) => {
     const modifiedLabel =
@@ -219,17 +225,87 @@ const LeavesUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
+  // Department Leave History:
+  const fetchDepartmentLeaveHistory = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/departments_leave_history.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            department_id: departmentId,
+          },
+        }
+      );
+
+      console.log(
+        "Department Leave History response:",
+        response?.data?.data?.leaves?.leave_records
+      );
+      const resData = response?.data?.data?.leaves?.leave_records;
+      const totalPages = response?.data?.data?.leaves?.pages;
+
+      setDeptSizePerPage(deptSizePerPage);
+      setDeptTotalPages(totalPages);
+
+      const formatted = resData.map((leave) => ({
+        ...leave,
+        full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
+        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        status: leave?.leave?.status,
+        total_leave_days: calcBusinessDays(
+          leave?.leave?.start_date,
+          leave?.leave?.end_date
+        ),
+        reason: leave?.leave?.reason,
+        rejection_reason: leave?.leave?.rejection_reason,
+        reason_for_cancellation: leave?.leave?.reason_for_cancellation,
+        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        proofs: leave?.proofs,
+        leave_marker:
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+            ? "Leave Ended"
+            : today_date <
+                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                today_date
+            ? "Scheduled Leave"
+            : "On Leave",
+      }));
+
+      setDepartmentLeaveHistory(formatted);
+    } catch (error) {
+      const component = "Department Leave History Error | ";
+      ErrorHandler(error, component);
+    }
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deptPage, deptSizePerPage]);
+
   useEffect(() => {
     fetchYourLeaves();
     if (currentUserIsLead) {
       fetchReporteesLeaves();
       fetchTeamLeaveHistory();
     }
+
+    if (CurrentUserCanViewDepartmentLeaves) {
+      fetchDepartmentLeaveHistory();
+    }
   }, [
     currentUserIsLead,
     fetchYourLeaves,
     fetchReporteesLeaves,
     fetchTeamLeaveHistory,
+    fetchDepartmentLeaveHistory,
+    CurrentUserCanViewDepartmentLeaves,
   ]);
 
   // Handle Approve Leave:
@@ -961,8 +1037,12 @@ const LeavesUser = () => {
                       data-toggle="tab"
                       href="#tab_department_leave-history"
                     >
-                      Department Leave History
-                      {/* ( {currentUserOffice} ) */}
+                      Department Leave History{" "}
+                      {user?.office?.office_type === "department" ? (
+                        <span className="department_leave_history_span">
+                          | {currentUserOffice}
+                        </span>
+                      ) : null}
                     </a>
                   </li>
                 ) : null}
@@ -1013,16 +1093,16 @@ const LeavesUser = () => {
           <div id="tab_department_leave-history" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={historyColumns}
-              data={leaveHistory}
-              setData={setLeaveHistory}
+              data={departmentLeaveHistory}
+              setData={setDepartmentLeaveHistory}
               loading={loading}
               setLoading={setLoading}
-              page={page}
-              setPage={setPage}
-              sizePerPage={sizePerPage}
-              setSizePerPage={setSizePerPage}
-              totalPages={totalPages}
-              setTotalPages={setTotalPages}
+              page={deptPage}
+              setPage={setDeptPage}
+              sizePerPage={deptSizePerPage}
+              setSizePerPage={setDeptSizePerPage}
+              totalPages={deptTotalPages}
+              setTotalPages={setDeptTotalPages}
             />
           </div>
         </div>

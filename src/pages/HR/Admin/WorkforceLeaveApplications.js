@@ -86,7 +86,10 @@ const WorkforceLeaveApplications = () => {
         ...leave,
         ...leave?.leave,
         office: leave.office.toUpperCase(),
-        full_name: leave?.first_name + " " + leave?.last_name,
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
@@ -111,7 +114,7 @@ const WorkforceLeaveApplications = () => {
     try {
       setLoadingHistory(true);
       const response = await axiosInstance.get(
-        "/api/v1/workforce_leaves.json",
+        "/api/v1/workforce_leave_histories.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -137,7 +140,10 @@ const WorkforceLeaveApplications = () => {
 
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave?.first_name + " " + leave?.last_name,
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
@@ -146,9 +152,6 @@ const WorkforceLeaveApplications = () => {
         ),
         office: leave.office.toUpperCase(),
         date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
-          "YYYY, MM (MMM), Do - h:mma"
-        ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
@@ -413,14 +416,6 @@ const WorkforceLeaveApplications = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: ["date_" + historyStatus],
-      text: `Date ${
-        historyStatus.charAt(0).toUpperCase() + historyStatus.slice(1)
-      }`,
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee",
       sort: true,
@@ -480,7 +475,7 @@ const WorkforceLeaveApplications = () => {
       headerStyle: { width: "100%", textAlign: "center" },
       formatter: (value, row) => (
         <>
-          {historyStatus === "approved" ? (
+          {row?.status === "approved" ? (
             <>
               {value === "Scheduled Leave" ? (
                 <span className="btn btn-gray btn-sm btn-rounded">
@@ -671,7 +666,7 @@ const WorkforceLeaveApplications = () => {
                   href="#tab_hr-leave-history"
                   onClick={() => setHistoryStatus("approved")}
                 >
-                  Approved Leave History
+                  Pending HR Approval
                 </a>
               </li>
               <li className="nav-item">
