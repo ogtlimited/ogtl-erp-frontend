@@ -1,19 +1,22 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useRef, useEffect } from 'react';
-import logo from '../../assets/img/og-white-logo.png';
-import cropped from '../../assets/img/cropped-white.png';
+import React, { useRef, useEffect } from "react";
+import logo from "../../assets/img/og-white-logo.png";
+import cropped from "../../assets/img/cropped-white.png";
 import { useAppContext } from "../../Context/AppContext";
-import { Link, useNavigate } from 'react-router-dom';
-import tokenService from '../../services/token.service';
-import { BsBell } from 'react-icons/bs';
-import { msalInstance  } from '../../authConfig';
+import { Link, useNavigate } from "react-router-dom";
+import tokenService from "../../services/token.service";
+import { BsBell } from "react-icons/bs";
+import { msalInstance } from "../../authConfig";
 // import { useMsal } from '@azure/msal-react';
-import { BiLogOut, BiUser } from "react-icons/bi"
-import NotificationSound from '../../assets/notifications/mixkit-positive-notification-951.wav';
+import { BiLogOut, BiUser } from "react-icons/bi";
+import NotificationSound from "../../assets/notifications/mixkit-positive-notification-951.wav";
+import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
+import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 
 const Header = () => {
-  const { fetchHRLeavesNotificationCount, count, setDropDownClicked } = useAppContext();
+  const { fetchHRLeavesNotificationCount, count, setDropDownClicked } =
+    useAppContext();
   const audioPlayer = useRef(null);
   const navigate = useNavigate();
   // const { instance } = useMsal();
@@ -21,7 +24,7 @@ const Header = () => {
   const logout = (e) => {
     e.preventDefault();
     tokenService.clearStorage();
-    navigate('/auth/login');
+    navigate("/auth/login");
     msalInstance
       .ssoSilent() //<-- This will silently logout the user without having to select an account
       // .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
@@ -35,7 +38,7 @@ const Header = () => {
 
   const user = tokenService.getUser();
   const userOgid = user?.employee_info?.ogid;
-  
+
   const CurrentUserRoles = user?.employee_info?.roles;
 
   function playAudio() {
@@ -43,15 +46,15 @@ const Header = () => {
   }
 
   const handleNotificationRequest = () => {
-    navigate('/dashboard/hr/leaves-admin');
+    navigate("/dashboard/hr/leaves-admin");
   };
-  
+
   // useEffect(() => {
   //   fetchHRLeavesNotificationCount()
   // }, [fetchHRLeavesNotificationCount]);
 
   useEffect(() => {
-    if (user?.role?.title === 'HR Manager' && count > 0) {
+    if (user?.role?.title === "HR Manager" && count > 0) {
       playAudio();
     }
   }, [count, user?.role?.title]);
@@ -61,7 +64,7 @@ const Header = () => {
       <div className="header">
         <div className="header-left">
           <div className="logo">
-            <img src={logo} style={{ width: '100px' }} alt="" />
+            <img src={logo} style={{ width: "100px" }} alt="" />
           </div>
           <div className="cropped-logo">
             <img src={cropped} alt="" />
@@ -86,22 +89,13 @@ const Header = () => {
 
         <audio ref={audioPlayer} src={NotificationSound} allow="autoplay" />
 
-        <ul className="nav user-menu">
+        {/* Desktop: */}
+        <ul className="nav user-menu desktop_header">
           <li className="nav-item mr-4">
             <div className="top-nav-search">
               <a className="responsive-search">
                 <i className="fa fa-search"></i>
               </a>
-              {/* <form>
-                <input
-                  className="form-control"
-                  type="text"
-                  placeholder="Search here"
-                />
-                <button className="btn" type="submit">
-                  <i className="fa fa-search"></i>
-                </button>
-              </form> */}
             </div>
           </li>
 
@@ -115,28 +109,90 @@ const Header = () => {
                 <img src="" alt="" />
                 <span
                   className="status online"
-                  style={{ bottom: 25, right: 5}}
+                  style={{ bottom: 25, right: 10 }}
                 ></span>
               </span>
-              <span
-                  style={{ paddingRight: 10}}>{user?.employee_info?.personal_details?.first_name}</span>
+              <span style={{ paddingRight: 10 }}>
+                {user?.employee_info?.personal_details?.first_name?.toUpperCase()}
+              </span>
             </a>
-            <div className="dropdown-menu" onClick={() => setDropDownClicked(true)}>
-              <Link
+            <div
+              className="dropdown-menu header-dropdown-menu"
+              onClick={() => setDropDownClicked(true)}
+            >
+              <div className="header_user_profile_div">
+                <div className="profile_image_div">
+                  {user?.employee_info?.personal_details?.gender === "male" ? (
+                    <img src={malePlaceholder} alt={malePlaceholder} />
+                  ) : (
+                    <img src={femalePlaceholder} alt={femalePlaceholder} />
+                  )}
+                </div>
+                <div className="profile_info_div">
+                  <div className="profile_user_info">
+                    <p className="profile_name">
+                      {user?.employee_info?.personal_details?.first_name?.toUpperCase()}{" "}
+                      {user?.employee_info?.personal_details?.last_name?.toUpperCase()}
+                    </p>
+                    <p className="profile_ogid">{user?.employee_info?.ogid}</p>
+                  </div>
+                  <button
+                    className="profile_button"
+                    onClick={() =>
+                      navigate(`/dashboard/user/profile/${userOgid}`)
+                    }
+                  >
+                    View Profile
+                  </button>
+                </div>
+              </div>
+
+              <div className="profile_email_div">
+                <p className="profile_email">{user?.employee_info?.email}</p>
+              </div>
+
+              <div className="profile_items">
+                <div
+                  className="profile_item_inner"
+                  onClick={() => navigate(`/dashboard/main/attendance`)}
+                >
+                  <p>My Attendance</p>
+                </div>
+                <div
+                  className="profile_item_inner"
+                  onClick={() => navigate(`/dashboard/main/leave`)}
+                >
+                  <p>My Leaves</p>
+                </div>
+              </div>
+
+              <div className="profile_logout_items">
+                <div
+                  className="profile_logout_item_inner"
+                  onClick={(e) => logout(e)}
+                >
+                  <p>Logout</p>
+                </div>
+              </div>
+
+              {/* <Link
                 className="dropdown-item"
                 to={`/dashboard/user/profile/${userOgid}`}
               >
-                <BiUser style={{fontSize: "14px", margin: "-2px 5px 0 0"}} />My Profile
+                <BiUser style={{ fontSize: "14px", margin: "-2px 5px 0 0" }} />
+                My Profile
               </Link>
               <a className="dropdown-item logout" onClick={(e) => logout(e)}>
-               <BiLogOut style={{fontSize: "14px", margin: "-2px 3px 0 0"}} /> Logout
-              </a>
+                <BiLogOut
+                  style={{ fontSize: "14px", margin: "-2px 3px 0 0" }}
+                />{" "}
+                Logout
+              </a> */}
             </div>
           </li>
-
         </ul>
-        
 
+        {/* Mobile: */}
         <div className="dropdown mobile-user-menu">
           <a
             href="#"
@@ -158,8 +214,8 @@ const Header = () => {
             </a>
           </div>
         </div>
-        
-          
+
+        {/* Notification: */}
         {CurrentUserRoles.includes("hr_manager") ? (
           <div
             className="home-notification-div"

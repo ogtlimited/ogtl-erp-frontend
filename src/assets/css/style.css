@@ -1669,6 +1669,15 @@ table.dataTable thead > tr > td.sorting {
   box-shadow: inherit;
   background-color: #fff;
 }
+.header-dropdown-menu {
+  width: 270px;
+  height: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  transform-origin: left top 0;
+  box-shadow: inherit;
+  background-color: #fff;
+}
 .navbar-nav .open .dropdown-menu {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -2359,7 +2368,7 @@ table.dataTable thead > tr > td.sorting {
   color: #fff;
   font-size: 15px;
   line-height: 60px;
-  padding: 0 15px;
+  padding: 0 20px 0 35px;
   height: 60px;
 }
 .user-menu.nav > li > a:hover,
