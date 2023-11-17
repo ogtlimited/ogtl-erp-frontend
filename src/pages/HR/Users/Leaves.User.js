@@ -244,12 +244,15 @@ const LeavesUser = () => {
         }
       );
 
-      console.log("Department Leave History response:", response?.data?.data);
-      const resData = response?.data?.data?.leave_histories;
-      const totalPages = response?.data?.data?.total_pages;
+      console.log(
+        "Department Leave History response:",
+        response?.data?.data?.leaves?.leave_records
+      );
+      const resData = response?.data?.data?.leaves?.leave_records;
+      const totalPages = response?.data?.data?.leaves?.pages;
 
       setDeptSizePerPage(deptSizePerPage);
-      setDeptTotalPages(deptTotalPages);
+      setDeptTotalPages(totalPages);
 
       const formatted = resData.map((leave) => ({
         ...leave,
