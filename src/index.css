@@ -468,6 +468,13 @@ table.custom-table thead th {
 
 /* Header Dropdown */
 
+.header-display-name {
+  max-width: 205px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 .header_user_profile_div {
   display: flex;
   justify-content: space-between;
@@ -501,9 +508,11 @@ table.custom-table thead th {
 }
 
 .profile_name,
-.profile_ogid,
-.profile_email {
+.profile_ogid {
   margin-bottom: 0px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .profile_image_div > img {
@@ -547,10 +556,10 @@ table.custom-table thead th {
 }
 .profile_item_inner {
   padding: 5px 20px;
+  cursor: pointer;
 }
 .profile_item_inner > p {
   margin-bottom: 0;
-  cursor: pointer;
 }
 .profile_item_inner:hover {
   background-color: #ececec;
@@ -562,11 +571,11 @@ table.custom-table thead th {
 }
 .profile_logout_item_inner {
   padding: 5px 20px;
+  cursor: pointer;
 }
 .profile_logout_item_inner > p {
   margin-bottom: 0;
   color: #ff4136;
-  cursor: pointer;
 }
 .profile_logout_item_inner:hover {
   background-color: #ececec;

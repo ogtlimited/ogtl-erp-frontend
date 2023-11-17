@@ -4,14 +4,15 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import { PersonalDetailsModal } from "../../Modal/PersonalDetailsModal";
 
-const PersonalInfo = ({
-  personalDetails,
-  fetchEmployeeProfile,
-}) => {
+const PersonalInfo = ({ personalDetails, fetchEmployeeProfile }) => {
   const { user } = useAppContext();
-  
+
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "hr_associate"]
+  const canCreate = ["hr_manager", "hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreate.includes(role)
+  );
 
   return (
     <>
@@ -19,7 +20,7 @@ const PersonalInfo = ({
         <div className="card-body">
           <h3 className="card-title">
             Personal Details{" "}
-            {canCreate.includes(...CurrentUserRoles) ? (
+            {CurrentUserCanCreateAndEdit ? (
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -83,7 +84,10 @@ const PersonalInfo = ({
         </div>
       </div>
 
-      <PersonalDetailsModal data={personalDetails} fetchEmployeeProfile={fetchEmployeeProfile} />
+      <PersonalDetailsModal
+        data={personalDetails}
+        fetchEmployeeProfile={fetchEmployeeProfile}
+      />
     </>
   );
 };

@@ -102,7 +102,7 @@ const Header = () => {
           <li className="nav-item dropdown has-arrow main-drop">
             <a
               href="#"
-              className="dropdown-toggle nav-link"
+              className="dropdown-toggle nav-link header-display-name"
               data-toggle="dropdown"
             >
               <span className="user-img">
@@ -116,6 +116,7 @@ const Header = () => {
                 {user?.employee_info?.personal_details?.first_name?.toUpperCase()}
               </span>
             </a>
+
             <div
               className="dropdown-menu header-dropdown-menu"
               onClick={() => setDropDownClicked(true)}
