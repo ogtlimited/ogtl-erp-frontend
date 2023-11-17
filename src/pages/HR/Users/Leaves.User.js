@@ -203,7 +203,7 @@ const LeavesUser = () => {
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
         proofs: leave?.proofs,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
@@ -256,25 +256,25 @@ const LeavesUser = () => {
 
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
-        status: leave?.leave?.status,
+        full_name: leave?.first_name + " " + leave?.last_name,
+        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
+        status: leave?.status,
         total_leave_days: calcBusinessDays(
-          leave?.leave?.start_date,
-          leave?.leave?.end_date
+          leave?.start_date,
+          leave?.end_date
         ),
-        reason: leave?.leave?.reason,
-        rejection_reason: leave?.leave?.rejection_reason,
-        reason_for_cancellation: leave?.leave?.reason_for_cancellation,
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        reason: leave?.reason,
+        rejection_reason: leave?.rejection_reason,
+        reason_for_cancellation: leave?.reason_for_cancellation,
+        date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
         proofs: leave?.proofs,
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
             : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                moment(leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.start_date).format("yyyy-MM-DD") !==
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
