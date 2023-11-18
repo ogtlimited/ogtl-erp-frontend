@@ -4,7 +4,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 import AdminLeavesHistoryTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveHistoryTable";
-import male from "../../../assets/img/male_avater.png";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";

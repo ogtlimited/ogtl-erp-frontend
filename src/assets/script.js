@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import $ from "jquery";
 // import './jquery.slimscroll.min'
 $(document).ready(function () {
@@ -245,7 +246,7 @@ $(document).ready(function () {
 
   $(document).on("change", ".leave-box .onoffswitch-checkbox", function () {
     var id = $(this).attr("id").split("_")[1];
-    if ($(this).prop("checked") == true) {
+    if ($(this).prop("checked") === true) {
       $("#leave_" + id + " .leave-edit-btn").prop("disabled", false);
       $("#leave_" + id + " .leave-action .btn").prop("disabled", false);
     } else {
@@ -269,7 +270,7 @@ $(document).ready(function () {
 
   $(".leave-box .onoffswitch-checkbox").each(function () {
     var id = $(this).attr("id").split("_")[1];
-    if ($(this).prop("checked") == true) {
+    if ($(this).prop("checked") === true) {
       $("#leave_" + id + " .leave-edit-btn").prop("disabled", false);
       $("#leave_" + id + " .leave-action .btn").prop("disabled", false);
     } else {
@@ -314,7 +315,7 @@ $(document).ready(function () {
         (e.which >= 96 && e.which <= 105)
       ) {
         $(e.target).next(".otp-input").focus();
-      } else if (e.which == 8) {
+      } else if (e.which === 8) {
         $(e.target).prev(".otp-input").focus();
       }
     });

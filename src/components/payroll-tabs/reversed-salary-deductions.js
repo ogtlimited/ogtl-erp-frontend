@@ -5,13 +5,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import DeductionTable from "../Tables/DeductionTable";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
-import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
 import moment from "moment";
 
 const ReversedDeductions = () => {
-  const navigate = useNavigate();
-  const { ErrorHandler, user } = useAppContext();
+  const { ErrorHandler } = useAppContext();
   const [reversedDeductions, setReversedDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -40,7 +38,7 @@ const ReversedDeductions = () => {
       );
 
       const resData = response?.data?.data?.reversed_deductions;
-      console.log(resData)
+      console.log(resData);
 
       const formattedData = resData.map((item) => {
         return {

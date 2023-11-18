@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import HrClientViewProjectTable from './HrClientViewProjectTable';
+import HrClientViewProjectTable from '../../../components/Tables/HrClientViewProjectTable';
 import axiosInstance from '../../../services/api';
 import { CreateAccountModal } from '../../../components/Modal/CreateAccountModal';
 import ViewModal from '../../../components/Modal/ViewModal';

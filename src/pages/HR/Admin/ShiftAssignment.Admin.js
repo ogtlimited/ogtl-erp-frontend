@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -120,7 +122,7 @@ const ShiftAssignment = () => {
 
   useEffect(() => {
     if (submitted) {
-      if (mode == "add") {
+      if (mode === "add") {
         axiosInstance
           .post("/api/shiftAssignment", formValue)
           .then((res) => {

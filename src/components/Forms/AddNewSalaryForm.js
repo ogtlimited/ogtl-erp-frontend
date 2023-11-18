@@ -24,7 +24,6 @@ const AddNewSalaryForm = ({ fetchAllSalaries }) => {
     loadingSelect,
     showAlert,
     goToTop,
-    ErrorHandler,
   } = useAppContext();
   const [data, setData] = useState(defaultValues);
   const [isFormValid, setIsFormValid] = useState(false);

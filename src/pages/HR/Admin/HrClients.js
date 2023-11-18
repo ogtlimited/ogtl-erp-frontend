@@ -1,20 +1,14 @@
-/**
- * /* eslint-disable jsx-a11y/anchor-is-valid
- *
- * @format
- */
-
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import HrClientsTable from './HrClientsTable';
-import axiosInstance from '../../../services/api';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import HrClientsTable from "../../../components/Tables/HrClientsTable";
+import axiosInstance from "../../../services/api";
 
 const HrClients = () => {
   const [data, setData] = useState([]);
 
   const fetchClients = () => {
     axiosInstance
-      .get('/api/client')
+      .get("/api/client")
       .then((res) => {
         const resData = res.data.data;
         setData(resData);
@@ -30,28 +24,28 @@ const HrClients = () => {
 
   const columns = [
     {
-      dataField: 'client_name',
-      text: 'Name',
+      dataField: "client_name",
+      text: "Name",
       sort: true,
-      headerStyle: { width: '350px' },
+      headerStyle: { width: "350px" },
     },
     {
-      dataField: 'email',
-      text: 'Email',
+      dataField: "email",
+      text: "Email",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: 'code',
-      text: 'Code',
+      dataField: "code",
+      text: "Code",
       sort: true,
-      headerStyle: { minWidth: '100px' },
+      headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: '',
-      text: 'Action',
+      dataField: "",
+      text: "Action",
       csvExport: false,
-      headerStyle: { width: '120px' },
+      headerStyle: { width: "120px" },
       formatter: (value, row) => (
         <Link
           className="btn btn-sm btn-secondary"

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -5,11 +6,7 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import Select from "react-select";
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from "react-bootstrap-table2-filter";
+import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import female from "../../../assets/img/female_avatar.png";
 import female2 from "../../../assets/img/female_avatar2.png";
@@ -17,9 +14,7 @@ import female3 from "../../../assets/img/female_avatar3.png";
 import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
-import { Link } from "react-router-dom";
-// import ToggleTable from '../toggleTable';
-// import EditEmployeeModal from '../modals/EditEmployeeModal';
+
 const AdminAttendanceTable = ({
   data,
   defaultSorted,
@@ -188,7 +183,6 @@ const AdminAttendanceTable = ({
           )}
         </ToolkitProvider>
       )}
-      {/* <EditEmployeeModal employee={editEmployee} /> */}
     </>
   );
 };

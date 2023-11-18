@@ -6857,7 +6857,7 @@ table.table-inbox tbody tr.checked {
   align-items: center;
   display: flex;
   flex: 0 0 200px;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 31px;
   min-height: 44px;
   text-align: right;
@@ -8207,7 +8207,7 @@ ul.comment-list li ul.children {
   justify-content: space-between;
   font-size: 12px;
   margin-top: 10px;
-  align-items: end;
+  align-items: flex-end;
 }
 .kanban-list
   > .kanban-wrap

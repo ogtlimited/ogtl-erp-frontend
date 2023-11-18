@@ -36,6 +36,7 @@ export const AddShiftScheduleModal = ({
   const [createSaturdayShift, setCreateSaturdayShift] =
     useState(saturday_shifts);
   const [createSundayShift, setCreateSundayShift] = useState(sunday_shifts);
+  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
 
   const cancelEvent = () => {

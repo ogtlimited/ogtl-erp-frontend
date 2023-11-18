@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-redundant-roles */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 import moment from "moment";
 import React, { useEffect, useState } from "react";

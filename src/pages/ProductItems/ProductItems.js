@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import axiosInstance from "../../services/api";

@@ -1,13 +1,13 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
 
+// eslint-disable-next-line no-unused-vars
 let renderCount = 0;
-
 
 const FieldArray = ({ control, register, setValue, getValues }) => {
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "test"
+    name: "test",
   });
 
   renderCount++;
@@ -76,7 +76,6 @@ const FieldArray = ({ control, register, setValue, getValues }) => {
       </section>
     </>
   );
-}
+};
 
-export default FieldArray
-
+export default FieldArray;

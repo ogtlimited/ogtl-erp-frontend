@@ -30,7 +30,6 @@ export const CreateLeaveModal = ({
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [allEmployees, setAllEmployees] = useState([]);
-  const [allOffices, setAllOffices] = useState([]);
   const [allEmergencyLeaveTypes, setAllEmergencyLeaveType] = useState([]);
 
   const [today, setToday] = useState(null);

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useCallback } from "react";
 import SalaryHistory from "../../components/payroll-tabs/salary-history";
 import { useAppContext } from "../../Context/AppContext";

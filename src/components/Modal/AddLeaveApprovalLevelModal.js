@@ -1,11 +1,10 @@
 /** @format */
 
-import React, { useState, useEffect } from 'react';
-import { create_approval_level } from '../FormJSON/CreateLeaveApprovalLevel';
-import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
-import $ from 'jquery';
-import  secureLocalStorage  from  "react-secure-storage";
+import React, { useState, useEffect } from "react";
+import { create_approval_level } from "../FormJSON/CreateLeaveApprovalLevel";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
 
 export const AddLeaveApprovalLevelModal = () => {
   const { showAlert } = useAppContext();
@@ -14,9 +13,8 @@ export const AddLeaveApprovalLevelModal = () => {
   const [departments, setDepartments] = useState([]);
   const [designations, setDesignations] = useState([]);
   const [designationInfo, setDesignationInfo] = useState(
-    'Select designation ...'
+    "Select designation ..."
   );
-  const user = JSON.parse(secureLocalStorage.getItem('user'));
 
   const cancelEvent = () => {
     setApprovalLevel(create_approval_level);
@@ -32,14 +30,14 @@ export const AddLeaveApprovalLevelModal = () => {
       .then((res) => {
         const resData = res.data.data;
         if (!resData.length) {
-          setDesignationInfo('No Designation');
+          setDesignationInfo("No Designation");
         } else {
-          setDesignationInfo('Select designation ...');
+          setDesignationInfo("Select designation ...");
           setDesignations(res?.data?.data);
         }
       })
       .catch((error) => {
-        console.log('this designation error response:', error.response);
+        console.log("this designation error response:", error.response);
       });
   };
 
@@ -48,30 +46,31 @@ export const AddLeaveApprovalLevelModal = () => {
 
     setLoading(true);
     try {
-      const res = await axiosInstance.post('/leave-approval-level', {
+      const res = await axiosInstance.post("/leave-approval-level", {
         department_id: approvalLevel.department,
         designation_id: approvalLevel.designation,
         approval_level: +approvalLevel.approval_level,
       });
+      // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
 
       showAlert(
         true,
-        'Leave approval level created successfully',
-        'alert alert-success'
+        "Leave approval level created successfully",
+        "alert alert-success"
       );
       setApprovalLevel(create_approval_level);
-      $('#FormModal').modal('toggle');
+      $("#FormModal").modal("toggle");
     } catch (error) {
       const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
     }
     setLoading(false);
   };
 
   const fetchDepartment = async () => {
     try {
-      const response = await axiosInstance.get('/department');
+      const response = await axiosInstance.get("/department");
       const resData = response?.data?.data;
 
       setDepartments(resData);
@@ -198,7 +197,7 @@ export const AddLeaveApprovalLevelModal = () => {
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      'Submit'
+                      "Submit"
                     )}
                   </button>
                 </div>
