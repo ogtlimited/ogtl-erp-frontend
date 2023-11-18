@@ -559,6 +559,12 @@ table.custom-table thead th {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.profile_email_div > p:hover {
+  color: #007bff;
+  transition: all 0.3s ease-in-out;
 }
 
 .profile_items {

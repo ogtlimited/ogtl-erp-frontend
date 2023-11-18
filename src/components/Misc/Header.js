@@ -14,8 +14,7 @@ import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 
 const Header = () => {
-  const { count, setDropDownClicked } =
-    useAppContext();
+  const { count, setDropDownClicked } = useAppContext();
   const audioPlayer = useRef(null);
   const navigate = useNavigate();
   // const { instance } = useMsal();
@@ -37,6 +36,11 @@ const Header = () => {
 
   const user = tokenService.getUser();
   const userOgid = user?.employee_info?.ogid;
+  const emailAddress = user?.employee_info?.email;
+
+  const openGmailCompose = () => {
+    window.open("https://mail.google.com/mail/?view=cm&fs=1");
+  };
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -134,7 +138,9 @@ const Header = () => {
                       {user?.employee_info?.personal_details?.first_name?.toUpperCase()}{" "}
                       {user?.employee_info?.personal_details?.last_name?.toUpperCase()}
                     </p>
-                    <p className="profile_designation">{user?.employee_info?.designation}</p>
+                    <p className="profile_designation">
+                      {user?.employee_info?.designation}
+                    </p>
                     <p className="profile_ogid">{user?.employee_info?.ogid}</p>
                   </div>
                   <button
@@ -149,7 +155,9 @@ const Header = () => {
               </div>
 
               <div className="profile_email_div">
-                <p className="profile_email">{user?.employee_info?.email}</p>
+                <p onClick={openGmailCompose} className="profile_email">
+                  {emailAddress}
+                </p>
               </div>
 
               <div className="profile_items">
