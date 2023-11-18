@@ -9,13 +9,12 @@ import tokenService from "../../services/token.service";
 import { BsBell } from "react-icons/bs";
 import { msalInstance } from "../../authConfig";
 // import { useMsal } from '@azure/msal-react';
-import { BiLogOut, BiUser } from "react-icons/bi";
 import NotificationSound from "../../assets/notifications/mixkit-positive-notification-951.wav";
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 
 const Header = () => {
-  const { fetchHRLeavesNotificationCount, count, setDropDownClicked } =
+  const { count, setDropDownClicked } =
     useAppContext();
   const audioPlayer = useRef(null);
   const navigate = useNavigate();
@@ -136,6 +135,7 @@ const Header = () => {
                       {user?.employee_info?.personal_details?.last_name?.toUpperCase()}
                     </p>
                     <p className="profile_designation">{user?.employee_info?.designation}</p>
+                    <p className="profile_ogid">{user?.employee_info?.ogid}</p>
                   </div>
                   <button
                     className="profile_button"

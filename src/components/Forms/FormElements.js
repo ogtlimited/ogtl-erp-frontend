@@ -1,4 +1,6 @@
-import React, { useState, useContext, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
 import {
   Formik,
   Form as FormikForm,
@@ -13,7 +15,7 @@ import "react-quill/dist/quill.snow.css";
 import { useAppContext } from "../../Context/AppContext";
 export function Form(props) {
   return (
-    <Formik  {...props}>
+    <Formik {...props}>
       render=
       {({
         values,
@@ -47,7 +49,6 @@ export function TextField(props) {
           id={name}
           disabled={disabled}
           placeholder={placeholder || ""}
-
           {...rest}
         />
 
@@ -335,8 +336,11 @@ export function SelectField(props) {
           key={val}
           name={name}
           onChange={(opt) => {
-            console.log( opt, typeof opt.value)
-            let val = typeof opt?.value !== 'string' ? opt.map(op => op.value) : opt.value
+            console.log(opt, typeof opt.value);
+            let val =
+              typeof opt?.value !== "string"
+                ? opt.map((op) => op.value)
+                : opt.value;
             setFieldValue(name, val);
             // setFieldValue("employee_name", opt.value);
           }}

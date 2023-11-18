@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import placeholder from "../../../assets/img/placeholder.jpg";
 const CampaignLeftCard = ({ campaign_info }) => {

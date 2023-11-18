@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import ReactQuill from "react-quill";
 import InputMask from "react-input-mask";
 import "react-quill/dist/quill.snow.css";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
+
 const renderOptions = (options) => {
   return options.map((child) => {
     return (

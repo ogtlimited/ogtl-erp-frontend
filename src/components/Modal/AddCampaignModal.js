@@ -1,17 +1,16 @@
 /** @format */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { CREATE_CAMPAIGN } from '../FormJSON/AddCampaign';
-import { useAppContext } from '../../Context/AppContext';
-import axiosInstance from '../../services/api';
-import $ from 'jquery';
-import Select from 'react-select';
-import CampaignHelperService from '../../pages/Campaigns/campaign.helper';
-import  secureLocalStorage  from  "react-secure-storage";
+import React, { useState, useEffect } from "react";
+import { CREATE_CAMPAIGN } from "../FormJSON/AddCampaign";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
+import Select from "react-select";
+import CampaignHelperService from "../../pages/Campaigns/campaign.helper";
+import secureLocalStorage from "react-secure-storage";
 
-export const AddCampaignModal = ({fetchCampaign}) => {
-  const { createCampaign, showAlert, status } =
-    useAppContext();
+export const AddCampaignModal = ({ fetchCampaign }) => {
+  const { createCampaign, showAlert, status } = useAppContext();
   const [campaign, setCampaign] = useState(CREATE_CAMPAIGN);
   const [loading, setLoading] = useState(false);
 
@@ -20,11 +19,11 @@ export const AddCampaignModal = ({fetchCampaign}) => {
   const [isTypeValid, setIsTypeValid] = useState(false);
 
   const [services, setServices] = useState([]);
-  const [clientId, setClientId] = useState('');
-  const [supervisor, setSupervisor] = useState('');
-  const [qualityAnalyst, setQualityAnalyst] = useState('');
+  const [clientId, setClientId] = useState("");
+  const [supervisor, setSupervisor] = useState("");
+  const [qualityAnalyst, setQualityAnalyst] = useState("");
 
-  const user = JSON.parse(secureLocalStorage.getItem('user'));
+  const user = JSON.parse(secureLocalStorage.getItem("user"));
 
   useEffect(() => {
     setIsClientValid(campaign.client_id ? true : false);
@@ -34,15 +33,9 @@ export const AddCampaignModal = ({fetchCampaign}) => {
 
   useEffect(() => {
     createCampaign().then((res) => {
-      const {
-        clientS,
-        employees,
-      } = res.data.createCampaignForm;
+      const { clientS, employees } = res.data.createCampaignForm;
 
-      const empHelper = new CampaignHelperService(
-        clientS,
-        employees,
-      );
+      const empHelper = new CampaignHelperService(clientS, employees);
 
       const service = empHelper.mapRecords();
       setServices([service]);
@@ -55,53 +48,51 @@ export const AddCampaignModal = ({fetchCampaign}) => {
 
       const qltyAnalyst = service.qualityAnalystOpts;
       setQualityAnalyst(qltyAnalyst);
-
     });
   }, [createCampaign, status]);
 
-
   const type = [
     {
-      label: 'Domestic',
-      value: 'domestic',
+      label: "Domestic",
+      value: "domestic",
     },
     {
-      label: 'Foreign',
-      value: 'foreign',
+      label: "Foreign",
+      value: "foreign",
     },
   ];
 
   const diallers = [
     {
-      label: 'In House',
-      value: 'inhouse',
+      label: "In House",
+      value: "inhouse",
     },
     {
-      label: 'External',
-      value: 'external',
+      label: "External",
+      value: "external",
     },
     {
-      label: 'Others',
-      value: 'others',
+      label: "Others",
+      value: "others",
     },
   ];
 
   const billingStructure = [
     {
-      label: 'Standard',
-      value: 'standard',
+      label: "Standard",
+      value: "standard",
     },
     {
-      label: 'Hourly',
-      value: 'per_hour',
+      label: "Hourly",
+      value: "per_hour",
     },
     {
-      label: 'Seat',
-      value: 'seat',
+      label: "Seat",
+      value: "seat",
     },
     {
-      label: 'Per Hour /Seat',
-      value: 'per_hour/seat',
+      label: "Per Hour /Seat",
+      value: "per_hour/seat",
     },
   ];
 
@@ -128,24 +119,20 @@ export const AddCampaignModal = ({fetchCampaign}) => {
     const formData = Object.fromEntries(
       Object.entries(newValue).filter(([_, v]) => v)
     );
-    
+
     try {
-      const res = await axiosInstance.post('/office', formData);
+      const res = await axiosInstance.post("/office", formData);
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      showAlert(
-        true,
-        'Campaign Created Successfully!',
-        'alert alert-success'
-      );
-      $('#AddCampaignFormModal').modal('toggle');
+      showAlert(true, "Campaign Created Successfully!", "alert alert-success");
+      $("#AddCampaignFormModal").modal("toggle");
       fetchCampaign();
       setLoading(false);
       setCampaign(CREATE_CAMPAIGN);
     } catch (error) {
-      $('#AddCampaignFormModal').modal('toggle');
+      $("#AddCampaignFormModal").modal("toggle");
       const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, 'alert alert-warning');
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
     }
   };
@@ -178,7 +165,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
             <div className="modal-body">
               {!services.length ? (
                 <>
-                  <p style={{ textAlign: 'center' }}>Loading Form...</p>
+                  <p style={{ textAlign: "center" }}>Loading Form...</p>
                   <span
                     className="spinner-border spinner-border-sm"
                     role="status"
@@ -213,7 +200,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                           onChange={(e) =>
                             setCampaign({ ...campaign, client_id: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                           required
                         />
                       </div>
@@ -230,15 +217,17 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                           onChange={(e) =>
                             setCampaign({ ...campaign, type: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="diallers">
-                          Diallers{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Diallers{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <Select
                           options={diallers}
@@ -247,15 +236,17 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                           onChange={(e) =>
                             setCampaign({ ...campaign, diallers: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="number_of_employees">
-                          Number of employees{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Number of employees{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <input
                           className="form-control"
@@ -269,8 +260,10 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="billing_structure">
-                          Billing Structure{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Billing Structure{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <Select
                           options={billingStructure}
@@ -282,7 +275,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                               billing_structure: e?.value,
                             })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -302,8 +295,10 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="end_date">
-                          End date{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          End date{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <input
                           className="form-control"
@@ -317,8 +312,10 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="manager">
-                          Manager{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Manager{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <Select
                           options={supervisor}
@@ -327,15 +324,17 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                           onChange={(e) =>
                             setCampaign({ ...campaign, manager: e?.value })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="quality_analyst">
-                          Quality Analyst{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Quality Analyst{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <Select
                           options={qualityAnalyst}
@@ -347,7 +346,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                               quality_analyst: e?.value,
                             })
                           }
-                          style={{ display: 'inline-block' }}
+                          style={{ display: "inline-block" }}
                         />
                       </div>
                     </div>
@@ -355,8 +354,10 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                     <div className="col-sm-12">
                       <div className="form-group">
                         <label htmlFor="objectives">
-                          Objectives{' '}
-                          <span style={{ color: '#999', fontSize: '12px' }}>(optional)</span>
+                          Objectives{" "}
+                          <span style={{ color: "#999", fontSize: "12px" }}>
+                            (optional)
+                          </span>
                         </label>
                         <textarea
                           className="form-control"
@@ -370,7 +371,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                   </div>
 
                   <hr className="horizontal-department-rule" />
-                  <h5 style={{ marginBottom: '20px' }}>Campaign Shift</h5>
+                  <h5 style={{ marginBottom: "20px" }}>Campaign Shift</h5>
 
                   <div className="row">
                     <div className="col-md-6">
@@ -436,7 +437,7 @@ export const AddCampaignModal = ({fetchCampaign}) => {
                           aria-hidden="true"
                         ></span>
                       ) : (
-                        'Submit'
+                        "Submit"
                       )}
                     </button>
                   </div>

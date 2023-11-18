@@ -466,7 +466,9 @@ table.custom-table thead th {
   font-size: 14px;
 }
 
-/* Header Dropdown */
+/*---------------------- 
+    Header Dropdown 
+----------------------*/
 
 .header-display-name {
   max-width: 205px !important;
@@ -479,7 +481,7 @@ table.custom-table thead th {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
+  height: 110px;
   width: 100%;
   margin-bottom: 10px;
   padding: 10px 20px;
@@ -490,8 +492,6 @@ table.custom-table thead th {
   height: 100%;
   width: 40%;
   border-radius: 10px;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
-    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
 }
 
 .profile_info_div {
@@ -508,14 +508,20 @@ table.custom-table thead th {
 }
 
 .profile_name,
-.profile_designation {
+.profile_designation,
+.profile_ogid {
   margin-bottom: 0px;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
 
-.profile_designation {
+.profile_name {
+  font-weight: 500;
+}
+
+.profile_designation,
+.profile_ogid {
   font-size: 11px;
   color: #999;
 }
@@ -525,8 +531,8 @@ table.custom-table thead th {
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
-    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+  box-shadow: rgba(67, 71, 85, 0.733) 0px 0px 0.25em,
+    rgba(90, 124, 188, 0.459) 0px 0.25em 1em;
 }
 
 .profile_button {

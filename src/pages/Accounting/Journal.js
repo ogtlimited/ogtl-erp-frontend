@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import DashboardStats from "../../components/charts/dashboard-stats";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
@@ -11,6 +12,7 @@ import { useAppContext } from "../../Context/AppContext";
 import FormModal2 from "../../components/Modal/FormModal2";
 import helper from "../../services/helper";
 import InvoiceModal from "../../components/Modal/invoiceModal";
+
 const Journals = () => {
   const [data, setData] = useState([]);
   const [formValue, setFormValue] = useState({});

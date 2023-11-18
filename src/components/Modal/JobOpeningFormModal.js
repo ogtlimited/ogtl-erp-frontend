@@ -1,4 +1,4 @@
-/** @format */
+// *IN USE
 
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
@@ -26,7 +26,6 @@ export const JobOpeningFormModal = ({ mode, data, fetchJobOpening }) => {
   const [loading, setLoading] = useState(false);
   const [officeType, setOfficeType] = useState("");
   const [isOfficeSelected, setIsOfficeSelected] = useState(false);
-  const [allOffices, setAllOffices] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
   const [editorContent, setEditorContent] = useState("");
 

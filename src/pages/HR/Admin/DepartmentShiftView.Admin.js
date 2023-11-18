@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 import LeaveTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { AddDepartmentShiftModal } from "../../../components/Modal/AddDepartmentShiftModal";

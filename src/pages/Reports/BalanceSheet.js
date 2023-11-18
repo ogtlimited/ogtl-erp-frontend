@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
+
 import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import assets from "./assets.json";
@@ -57,7 +58,7 @@ const BalanceSheet = () => {
           <div className="col-auto float-right ml-auto">
             {user?.role?.account?.create && (
               <a
-                href="#"
+                href=""
                 className="btn add-btn"
                 data-toggle="modal"
                 data-target="#FormModal"

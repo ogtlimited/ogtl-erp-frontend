@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
@@ -20,7 +22,7 @@ const AcceptDeclineModal = ({
   const [wordCount, setwordCount] = useState(0);
   const [disabled, setdisabled] = useState(true);
   const handleClick = (e, str) => {
-    if (str == "Accepted") {
+    if (str === "Accepted") {
       setsubmitAction(str);
     } else {
       setshowReason(true);

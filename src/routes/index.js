@@ -1,5 +1,4 @@
-/** @format */
-
+/* eslint-disable no-unused-vars */
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import { AppProvider } from "../Context/AppContext";

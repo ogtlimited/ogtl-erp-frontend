@@ -69,7 +69,7 @@ const ShiftAdmin = () => {
   };
   useEffect(() => {
     if (submitted) {
-      if (mode == "add") {
+      if (mode === "add") {
         axiosInstance
           .post("/api/shiftType", formValue)
           .then((res) => {

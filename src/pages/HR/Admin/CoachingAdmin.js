@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/heading-has-content */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import LeavesTable from "../../../components/Tables/EmployeeTables/Leaves/LeaveTable";
 import avater from "../../../assets/img/male_avater.png";
@@ -33,7 +37,7 @@ const CoachingAdmin = () => {
     setcoachingFormEdit("add");
   };
   useEffect(() => {
-    if (formSubmitted == true) {
+    if (formSubmitted === true) {
       fetchCoachingForms();
     }
   }, [formSubmitted]);
@@ -240,13 +244,13 @@ const CoachingAdmin = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <>
-          {value == "Accepted" ? (
+          {value === "Accepted" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          ) : value == "Rejected" ? (
+          ) : value === "Rejected" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
