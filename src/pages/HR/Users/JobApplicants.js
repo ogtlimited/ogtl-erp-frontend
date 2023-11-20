@@ -19,7 +19,7 @@ import secureLocalStorage from "react-secure-storage";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
-  const { showAlert, user, ErrorHandler } = useAppContext();
+  const { showAlert, user, ErrorHandler, getAvatarColor } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
@@ -80,9 +80,9 @@ const JobApplicants = () => {
           emp?.middle_name ? emp?.middle_name : ""
         } ${emp?.last_name}`,
         job_title: emp?.job_opening?.job_title,
-        application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+        application_date: moment(emp?.created_at).format("ddd, Do MMM. YYYY"),
         interview_scheduled_date: emp?.interview_date
-          ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+          ? moment(emp?.interview_date).format("ddd, Do MMM. YYYY")
           : null,
         resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
       }));
@@ -177,7 +177,19 @@ const JobApplicants = () => {
       text: "Job Applicant",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.email}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "job_title",

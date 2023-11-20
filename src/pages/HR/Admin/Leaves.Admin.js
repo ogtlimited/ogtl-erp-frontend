@@ -16,10 +16,15 @@ import moment from "moment";
 import { CreateLeaveModal } from "../../../components/Modal/CreateLeaveModal";
 
 const LeavesAdmin = () => {
+  const {
+    showAlert,
+    fetchHRLeavesNotificationCount,
+    user,
+    ErrorHandler,
+    getAvatarColor,
+  } = useAppContext();
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert, fetchHRLeavesNotificationCount, user, ErrorHandler } =
-    useAppContext();
   const [onLeave, setOnLeave] = useState(0);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -289,23 +294,29 @@ const LeavesAdmin = () => {
 
   const pendingColumns = [
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <div>
             {row?.full_name} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "office",
@@ -491,6 +502,25 @@ const LeavesAdmin = () => {
 
   const historyColumns = [
     {
+      dataField: "full_name",
+      text: "Employee",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {row?.full_name} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      ),
+    },
+    {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
@@ -503,19 +533,6 @@ const LeavesAdmin = () => {
       }`,
       sort: true,
       headerStyle: { width: "100%" },
-    },
-    {
-      dataField: "full_name",
-      text: "Employee",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <div>
-            {row?.full_name} <span>{row?.ogid}</span>
-          </div>
-        </h2>
-      ),
     },
     {
       dataField: "office",

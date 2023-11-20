@@ -14,7 +14,7 @@ import moment from "moment";
 const WorkforceLeaveApplications = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
-  const { showAlert, user, ErrorHandler } = useAppContext();
+  const { showAlert, user, ErrorHandler, getAvatarColor } = useAppContext();
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -219,23 +219,29 @@ const WorkforceLeaveApplications = () => {
 
   const pendingColumns = [
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <div>
-            {row?.full_name.toUpperCase()} <span>{row?.ogid}</span>
+            {value.toUpperCase()} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "office",
@@ -409,23 +415,29 @@ const WorkforceLeaveApplications = () => {
 
   const historyColumns = [
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <div>
-            {row?.full_name} <span>{row?.ogid}</span>
+            {value?.full_name} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "office",

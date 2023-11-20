@@ -67,7 +67,7 @@ const RepSieverAdmin = () => {
       setProcessRecords(records?.process_status || {});
       setLoading(false);
     } catch (error) {
-      ErrorHandler(error, "Rep Sievers Task Overview:");
+      ErrorHandler(error, "Rep Sievers Task Overview | ");
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

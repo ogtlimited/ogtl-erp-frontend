@@ -13,7 +13,7 @@ import { AddRoleUserModal } from "../../components/Modal/AddRoleUserModal";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 
 const EmployeeRoles = () => {
-  const { user, showAlert, ErrorHandler } = useAppContext();
+  const { user, showAlert, ErrorHandler, getAvatarColor } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [loading, setLoading] = useState(true);
@@ -96,21 +96,28 @@ const EmployeeRoles = () => {
   const columns = [
     {
       dataField: "fullName",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "35%" },
-    },
-    {
-      dataField: "ogid",
-      text: "Employee ID",
-      sort: true,
-      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
       formatter: (val) => <p>{val?.toUpperCase()}</p>,
     },
     CurrentUserRoles.includes("hr_manager") && {
