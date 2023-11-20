@@ -12,8 +12,7 @@ const OfficeAttendanceAdmin = () => {
   const { ErrorHandler } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { office } = useParams();
-  const { id } = useParams();
+  const { office_type, office, id } = useParams();
 
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
@@ -32,6 +31,7 @@ const OfficeAttendanceAdmin = () => {
           },
           params: {
             date: date,
+            office_type: office_type,
             office: id,
             limit: 400,
           },
