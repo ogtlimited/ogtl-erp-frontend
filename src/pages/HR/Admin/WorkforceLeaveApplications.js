@@ -181,6 +181,7 @@ const WorkforceLeaveApplications = () => {
     }
   }, [fetchWorkforceLeaves, fetchWorkforceLeaveHistory, isWorkforceManager]);
 
+  // Approve Leave
   const handleApproveLeave = async (row) => {
     const id = row.id;
 
@@ -212,6 +213,7 @@ const WorkforceLeaveApplications = () => {
     }
   };
 
+  // Reject Leave
   const handleRejectLeave = (row) => {
     setDataManagerReject(row);
     setRejectModal(true);
@@ -232,7 +234,7 @@ const WorkforceLeaveApplications = () => {
             {value?.charAt(0)}
           </span>
           <div>
-            {value.toUpperCase()} <span>{row?.ogid}</span>
+            {value} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
@@ -428,7 +430,7 @@ const WorkforceLeaveApplications = () => {
             {value?.charAt(0)}
           </span>
           <div>
-            {value?.full_name} <span>{row?.ogid}</span>
+            {value} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
