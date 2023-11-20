@@ -1,10 +1,6 @@
-/**
- * /* eslint-disable eqeqeq
- *
- * @format
- */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 
-/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -184,7 +180,7 @@ const AllEmployeesGenderAdmin = () => {
         initialValues[i] = '';
       }
 
-      if (mode == 'add') {
+      if (mode === 'add') {
         // seteditData(initialValues);
         settemplate(obj);
       } else {
@@ -197,9 +193,9 @@ const AllEmployeesGenderAdmin = () => {
   const create = () => {
     let initialValues = {};
     for (let i in template) {
-      if (i == 'isAdmin') {
+      if (i === 'isAdmin') {
         initialValues[i] = false;
-      } else if (i == 'date_of_joining') {
+      } else if (i === 'date_of_joining') {
         initialValues[i] = new Date().toISOString().slice(0, 10);
       } else {
         initialValues[i] = '';

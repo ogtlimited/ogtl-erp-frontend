@@ -19,19 +19,20 @@ import JobApplicationContent from "../../../components/ModalContents/JobApplicat
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
 import moment from "moment";
 import secureLocalStorage from "react-secure-storage";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 import JobSieversViewAdmin from "./JobSieversView.Admin";
 
 const JobApplicantsAdmin = () => {
+  const {
+    showAlert,
+    user,
+    ErrorHandler,
+    goToTop,
+    selectJobOpenings,
+    getAvatarColor,
+  } = useAppContext();
   const [allInactiveRepSievers, setAllInactiveRepSievers] = useState([]);
   const [data, setData] = useState([]);
-  const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
@@ -42,10 +43,6 @@ const JobApplicantsAdmin = () => {
   const [isJobSieverActivated, setIsJobSieverActivated] = useState(false);
   const [isJobSieverDeactivated, setIsJobSieverDeactivated] = useState(false);
 
-  const imageUrl = "https://erp.outsourceglobal.com";
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
-
   const [repPage, setRepPage] = useState(1);
   const [repSizePerPage, setRepSizePerPage] = useState(10);
   const [repTotalPages, setRepTotalPages] = useState("");
@@ -54,6 +51,7 @@ const JobApplicantsAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [jobOpeningFilter, setJobOpeningFilter] = useState("");
   const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,7 +63,7 @@ const JobApplicantsAdmin = () => {
 
   const canEdit = ["hr_manager", "senior_hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
-  
+
   const userDept =
     user?.office?.office_type === "department"
       ? user?.office?.title?.toLowerCase()
@@ -125,26 +123,22 @@ const JobApplicantsAdmin = () => {
 
     setLoading(true);
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/hr_dashboard/admin_role_job_applications.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: page,
-            limit: sizePerPage,
-            name: searchTerm.length ? searchTerm : null,
-            process_status: processingStageFilter
-              ? processingStageFilter
-              : null,
-            start_date: persistedFromDate,
-            end_date: persistedToDate,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/job_applicants.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+          name: searchTerm.length ? searchTerm : null,
+          job_opening_id: jobOpeningFilter.length ? jobOpeningFilter : null,
+          process_status: processingStageFilter ? processingStageFilter : null,
+          start_date: persistedFromDate,
+          end_date: persistedToDate,
+        },
+      });
 
       const resData = response?.data?.data?.job_applicants;
       const totalPages = response?.data?.data?.total_pages;
@@ -156,21 +150,31 @@ const JobApplicantsAdmin = () => {
         ...emp,
         full_name: `${emp?.first_name} ${emp?.last_name}`,
         job_title: emp?.job_opening?.job_title,
-        application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+        application_date: moment(emp?.created_at).format("ddd, Do MMM. YYYY"),
         interview_scheduled_date: emp?.interview_date
-          ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+          ? moment(emp?.interview_date).format("ddd, Do MMM. YYYY")
           : null,
+        resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
       }));
 
       setData(formatted);
+      console.log("Formatted:", formatted)
       setLoading(false);
     } catch (error) {
-      const component = "Job Applicants Error:";
+      const component = "Job Applicants Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, page, processingStageFilter, sizePerPage, toDate, searchTerm]);
+  }, [
+    fromDate,
+    toDate,
+    page,
+    sizePerPage,
+    searchTerm,
+    jobOpeningFilter,
+    processingStageFilter,
+  ]);
 
   useEffect(() => {
     fetchAllInactiveRepSievers();
@@ -180,14 +184,6 @@ const JobApplicantsAdmin = () => {
   //update jobOpening
   const handleUpdate = useCallback(
     (id, update) => {
-      if (!CurrentUserRoles.includes("rep_siever")) {
-        return showAlert(
-          true,
-          "You are not a rep siever",
-          "alert alert-warning"
-        );
-      }
-
       axiosInstance
         .patch(`/api/v1/job_applicants/${id}.json`, {
           headers: {
@@ -203,7 +199,6 @@ const JobApplicantsAdmin = () => {
             "Job application updated successfully",
             "alert alert-success"
           );
-          setProcessingStageFilter("Open");
           fetchAllJobApplicants();
         })
         .catch((error) => {
@@ -290,23 +285,17 @@ const JobApplicantsAdmin = () => {
   const repColumns = [
     {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "60%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row?.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link
             to={`/dashboard/recruitment/rep-siever/${row.full_name}/${row.ogid}`}
           >
@@ -361,7 +350,19 @@ const JobApplicantsAdmin = () => {
       text: "Job Applicant",
       sort: true,
       headerStyle: { width: "30%" },
-      formatter: (value, row) => <h2>{row?.full_name}</h2>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.email}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "job_title",
@@ -589,6 +590,9 @@ const JobApplicantsAdmin = () => {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             fetchAllJobApplicants={fetchAllJobApplicants}
+            jobOpenings={selectJobOpenings}
+            jobOpeningFilter={jobOpeningFilter}
+            setJobOpeningFilter={setJobOpeningFilter}
             interviewStatusFilter={interviewStatusFilter}
             setInterviewStatusFilter={setInterviewStatusFilter}
             processingStageFilter={processingStageFilter}

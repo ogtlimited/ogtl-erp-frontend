@@ -109,7 +109,7 @@ const ProfileCards = ({
 
       setEmployeeTardiness(formattedData);
     } catch (error) {
-      const component = "Weekly Attendance Tardiness:";
+      const component = "Weekly Attendance Record | ";
       ErrorHandler(error, component);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

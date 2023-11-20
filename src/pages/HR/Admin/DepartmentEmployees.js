@@ -11,7 +11,7 @@ import { DepartmentEmployeeFormModal } from "../../../components/Modal/Departmen
 
 const DepartmentEmployees = () => {
   const { id } = useParams();
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [departmentEmployee, setDepartmentEmployee] = useState([]);
   const [mode, setMode] = useState("Add");
@@ -83,26 +83,26 @@ const DepartmentEmployees = () => {
       dataField: "name",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {value} <span>{row?.department?.toUpperCase()}</span>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
           </Link>
         </h2>
       ),
     },
     {
-      dataField: "ogid",
-      text: "OGID",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "50%" },
     },
   ];
 

@@ -23,17 +23,20 @@ const LeavesUser = () => {
     user,
     ErrorHandler,
     goToTop,
+    selectDepartments,
+    getAvatarColor,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [modalType, setModalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
 
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
+  const [departmentLeaveHistory, setDepartmentLeaveHistory] = useState([]);
 
   const [rejectModal, setRejectModal] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [rejectLeave, setRejectLeave] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -41,10 +44,27 @@ const LeavesUser = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [deptPage, setDeptPage] = useState(1);
+  const [deptSizePerPage, setDeptSizePerPage] = useState(10);
+  const [deptTotalPages, setDeptTotalPages] = useState("");
+
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
   const currentUserIsLead = user?.employee_info?.is_lead;
+  const currentUserOffice = user?.office?.title.toUpperCase();
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const departmentId = user?.office?.id;
+
+  const managers = selectDepartments.map((item) => {
+    const modifiedLabel =
+      item.label.toLowerCase().replace(/\s/g, "_") + "_manager";
+    return modifiedLabel;
+  });
+
+  const CurrentUserCanViewDepartmentLeaves = CurrentUserRoles.some((role) =>
+    managers.includes(role)
+  );
 
   // Calculates Leave Days for Business Days:
   function calcBusinessDays(startDate, endDate) {
@@ -100,7 +120,7 @@ const LeavesUser = () => {
 
       setallLeaves(formatted);
     } catch (error) {
-      const component = "Leaves Error:";
+      const component = "Leaves Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
@@ -140,7 +160,7 @@ const LeavesUser = () => {
       setAllReporteesLeaves(formatted);
       setLeaveApplicationCount(reporteeLeaves);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Team Leaves Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
@@ -166,6 +186,7 @@ const LeavesUser = () => {
       );
 
       const resData = response?.data?.data?.leave_histories;
+
       const totalPages = response?.data?.data?.total_pages;
 
       setSizePerPage(sizePerPage);
@@ -183,7 +204,8 @@ const LeavesUser = () => {
         ),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
-        date_applied: moment(leave?.leave?.created_at).format("Do MMMM, YYYY"),
+        reason_for_cancellation: leave?.leave?.reason_for_cancellation,
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
         proofs: leave?.proofs,
         leave_marker:
           moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
@@ -198,12 +220,71 @@ const LeavesUser = () => {
 
       setLeaveHistory(formatted);
     } catch (error) {
-      const component = "Leave History Error:";
+      const component = "Team Leave History Error | ";
       ErrorHandler(error, component);
     }
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
+
+  // Department Leave History:
+  const fetchDepartmentLeaveHistory = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/departments_leave_history.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            department_id: departmentId,
+          },
+        }
+      );
+
+      console.log(
+        "Department Leave History response | ",
+        response?.data?.data?.leaves?.leave_records
+      );
+      const resData = response?.data?.data?.leaves?.leave_records;
+      const totalPages = response?.data?.data?.leaves?.pages;
+
+      setDeptSizePerPage(deptSizePerPage);
+      setDeptTotalPages(totalPages);
+
+      const formatted = resData.map((leave) => ({
+        ...leave,
+        full_name: leave?.first_name + " " + leave?.last_name,
+        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
+        status: leave?.status,
+        total_leave_days: calcBusinessDays(leave?.start_date, leave?.end_date),
+        reason: leave?.reason,
+        rejection_reason: leave?.rejection_reason,
+        reason_for_cancellation: leave?.reason_for_cancellation,
+        date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
+        proofs: leave?.proofs,
+        leave_marker:
+          moment(leave?.end_date).format("yyyy-MM-DD") < today_date
+            ? "Leave Ended"
+            : today_date < moment(leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.start_date).format("yyyy-MM-DD") !== today_date
+            ? "Scheduled Leave"
+            : "On Leave",
+      }));
+
+      setDepartmentLeaveHistory(formatted);
+    } catch (error) {
+      const component = "Department Leave History Error | ";
+      ErrorHandler(error, component);
+    }
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deptPage, deptSizePerPage]);
 
   useEffect(() => {
     fetchYourLeaves();
@@ -211,22 +292,42 @@ const LeavesUser = () => {
       fetchReporteesLeaves();
       fetchTeamLeaveHistory();
     }
+
+    if (CurrentUserCanViewDepartmentLeaves) {
+      fetchDepartmentLeaveHistory();
+    }
   }, [
     currentUserIsLead,
     fetchYourLeaves,
     fetchReporteesLeaves,
     fetchTeamLeaveHistory,
+    fetchDepartmentLeaveHistory,
+    CurrentUserCanViewDepartmentLeaves,
   ]);
 
   // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
     const id = row.id;
+
+    const firstName = row?.first_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+    const lastName = row?.last_name
+      .toLowerCase()
+      .replace(/\b\w/g, (match) => match.toUpperCase());
+
+    const fullName = firstName + " " + lastName;
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
         `/api/v1/approve_subordinate_leave/${id}.json`
       );
-      showAlert(true, "Leave Approved", "alert alert-success");
+      showAlert(
+        true,
+        `Success! ${fullName} Leave Request has been Approved.`,
+        "alert alert-success"
+      );
       fetchReporteesLeaves();
       fetchHRLeavesNotificationCount();
     } catch (error) {
@@ -267,6 +368,13 @@ const LeavesUser = () => {
 
   const userColumns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (val, row) => <p>{val}</p>,
+    },
+    {
       dataField: "leave_type",
       text: "Leave Type",
       sort: true,
@@ -299,13 +407,6 @@ const LeavesUser = () => {
           ) : null}
         </>
       ),
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "leave_marker",
@@ -459,7 +560,7 @@ const LeavesUser = () => {
                   setSelectedRow(row);
                 }}
               >
-                <i className="fa fa-remove m-r-5"></i> Cancel Application
+                <i className="fa fa-remove m-r-5"></i> Cancel
               </a>
             ) : null}
           </div>
@@ -473,15 +574,27 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "full_name",
-      text: "Full Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "office",
@@ -659,21 +772,26 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "full_name",
-      text: "Full Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
-    },
-    {
-      dataField: "office",
-      text: "Office",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.office?.toUpperCase()}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "status",
@@ -863,10 +981,10 @@ const LeavesUser = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Leaves</h3>
+            <h3 className="page-title">Leave Application</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Employee</li>
-              <li className="breadcrumb-item active">Leaves</li>
+              <li className="breadcrumb-item">Main</li>
+              <li className="breadcrumb-item active">Leave</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -925,6 +1043,23 @@ const LeavesUser = () => {
                     Team Leave History
                   </a>
                 </li>
+
+                {CurrentUserCanViewDepartmentLeaves ? (
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      data-toggle="tab"
+                      href="#tab_department_leave-history"
+                    >
+                      Department Leave History{" "}
+                      {user?.office?.office_type === "department" ? (
+                        <span className="department_leave_history_span">
+                          | {currentUserOffice}
+                        </span>
+                      ) : null}
+                    </a>
+                  </li>
+                ) : null}
               </ul>
             </div>
           </div>
@@ -966,6 +1101,22 @@ const LeavesUser = () => {
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
+            />
+          </div>
+
+          <div id="tab_department_leave-history" className="col-12 tab-pane">
+            <UniversalPaginatedTable
+              columns={historyColumns}
+              data={departmentLeaveHistory}
+              setData={setDepartmentLeaveHistory}
+              loading={loading}
+              setLoading={setLoading}
+              page={deptPage}
+              setPage={setDeptPage}
+              sizePerPage={deptSizePerPage}
+              setSizePerPage={setDeptSizePerPage}
+              totalPages={deptTotalPages}
+              setTotalPages={setDeptTotalPages}
             />
           </div>
         </div>

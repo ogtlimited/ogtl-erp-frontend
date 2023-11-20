@@ -1,22 +1,15 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../../services/api";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import AdminLeavesTable from "../../../components/Tables/EmployeeTables/Leaves/AdminLeaveTable";
 
 const AllLeaveStatusAdmin = () => {
-  const males = [male, male2, male3];
-  const { ErrorHandler } = useAppContext();
-  const females = [female, female2, female3];
+  const { ErrorHandler, getAvatarColor } = useAppContext();
   const imageUrl = "https://erp.outsourceglobal.com";
 
   const [allApplications, setallApplications] = useState([]);
@@ -94,7 +87,7 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.start_date,
             leave?.leave?.end_date
           ),
-          date_applied: moment(leave?.created_at).format("Do MMMM, YYYY"),
+          date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
           current_approver: !leave?.leave?.hr_stage
             ? leave?.current_stage_manager?.manager_full_name
             : "HR",
@@ -171,26 +164,27 @@ const AllLeaveStatusAdmin = () => {
 
   const columns = [
     {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row.gender === "Male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+        {console.log(value?.charAt(0))}
           <div>
-            {value} <span>{row?.ogid}</span>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
@@ -232,12 +226,6 @@ const AllLeaveStatusAdmin = () => {
     {
       dataField: "leave_type",
       text: "Leave Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
-      dataField: "date_applied",
-      text: "Date Applied",
       sort: true,
       headerStyle: { width: "100%" },
     },

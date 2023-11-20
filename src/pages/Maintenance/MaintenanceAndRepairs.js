@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -12,7 +13,6 @@ import FormModal2 from "../../components/Modal/FormModal2";
 import { maintenanceAndRepairFormJson } from "../../components/FormJSON/Maintenance/MaintenanceAndReparis";
 import { formatter } from "../../services/numberFormatter";
 import { ApproverBtn } from "../../components/ApproverBtn";
-import tokenService from "../../services/token.service";
 
 const MaintenanceAndRepairs = () => {
   const [formValue, setFormValue] = useState(null);
@@ -25,7 +25,6 @@ const MaintenanceAndRepairs = () => {
   const [template, setTemplate] = useState(maintenanceAndRepairFormJson);
   const [statusRow, setstatusRow] = useState(null);
   const [status, setStatus] = useState("");
-  const user = tokenService.getUser();
   const { showAlert, setformUpdate } = useAppContext();
 
   const editRow = (row) => {

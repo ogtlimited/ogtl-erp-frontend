@@ -22,7 +22,10 @@ export const PATH_DASHBOARD = {
     clientDashboard: path(ROOTS_DASHBOARD, "/client-dashboard"),
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
+    employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
+    employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
   },
+
   apps: {
     root: path(ROOTS_DASHBOARD, "/apps"),
     email: path(ROOTS_DASHBOARD, "/apps/email"),
@@ -32,6 +35,7 @@ export const PATH_DASHBOARD = {
     tickets: path(ROOTS_DASHBOARD, "/apps/tickets"),
     ticketManager: path(ROOTS_DASHBOARD, "/apps/ticket-manager"),
   },
+
   hr: {
     root: path(ROOTS_DASHBOARD, "/hr"),
     allEmployees: path(ROOTS_DASHBOARD, "/hr/all-employees"),
@@ -40,8 +44,6 @@ export const PATH_DASHBOARD = {
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
     resignationAdmin: path(ROOTS_DASHBOARD, "/hr/resignation-admin"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
-    employeeAttendance: path(ROOTS_DASHBOARD, "/hr/attendance"),
-    leavesEmployee: path(ROOTS_DASHBOARD, "/hr/leaves"),
     resignationEmployee: path(ROOTS_DASHBOARD, "/hr/resignation"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
@@ -57,6 +59,7 @@ export const PATH_DASHBOARD = {
     shiftAssignment: path(ROOTS_DASHBOARD, "/hr/shift-assignment"),
     shiftRequest: path(ROOTS_DASHBOARD, "/hr/shift-request"),
   },
+
   leadership: {
     root: path(ROOTS_DASHBOARD, "/leadership"),
     supervisor: path(ROOTS_DASHBOARD, "/leadership/supervisor"),
@@ -67,6 +70,7 @@ export const PATH_DASHBOARD = {
     campaignSchedule: path(ROOTS_DASHBOARD, "/leadership/campaign-schedule"),
     remoteAttendance: path(ROOTS_DASHBOARD, "/leadership/attendance-record"),
   },
+
   payroll: {
     root: path(ROOTS_DASHBOARD, "/payroll"),
     publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
@@ -77,6 +81,7 @@ export const PATH_DASHBOARD = {
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
   },
+
   reports: {
     root: path(ROOTS_DASHBOARD, "/reports"),
     employeeReport: path(ROOTS_DASHBOARD, "/reports/employee-reports"),
@@ -84,6 +89,7 @@ export const PATH_DASHBOARD = {
     attendanceReports: path(ROOTS_DASHBOARD, "/reports/attendance-reports"),
     academyReports: path(ROOTS_DASHBOARD, "/reports/academy-reports"),
   },
+
   recruitment: {
     root: path(ROOTS_DASHBOARD, "/recruitment"),
     jobOpening: path(ROOTS_DASHBOARD, "/recruitment/job-opening"),
@@ -98,30 +104,38 @@ export const PATH_DASHBOARD = {
       "/recruitment/orientation-and-training"
     ),
   },
+
   performance: {
     root: path(ROOTS_DASHBOARD, "/performance"),
     warningLetter: path(ROOTS_DASHBOARD, "/performance/warning-letter"),
     scoreCards: path(ROOTS_DASHBOARD, "/performance/score-cards"),
   },
-  hrclients: path(ROOTS_DASHBOARD, "/hr-clients"),
-  hrclient: path(ROOTS_DASHBOARD, "/hr-client"),
+
   coaching: path(ROOTS_DASHBOARD, "/coaching"),
   employeeCoaching: path(ROOTS_DASHBOARD, "/employee-coaching"),
   promotion: path(ROOTS_DASHBOARD, "/promotion"),
   resignation: path(ROOTS_DASHBOARD, "/resignation"),
   termination: path(ROOTS_DASHBOARD, "/termination"),
   productItems: path(ROOTS_DASHBOARD, "/product-items"),
+
   settings: {
     root: path(ROOTS_DASHBOARD, "/settings"),
     rolesPermission: path(ROOTS_DASHBOARD, "/settings/roles-permissions"),
     rolesAssignment: path(ROOTS_DASHBOARD, "/settings/roles-assignment"),
   },
+
   campaign: {
     root: path(ROOTS_DASHBOARD, "/operations"),
     allCampaign: path(ROOTS_DASHBOARD, "/operations/campaigns"),
     lead: path(ROOTS_DASHBOARD, "/operations/leads"),
     branch: path(ROOTS_DASHBOARD, "/operations/branch"),
   },
+
+  operations: {
+    root: path(ROOTS_DASHBOARD, "/operations"),
+    workforceLeaveApplications: path(ROOTS_DASHBOARD, "/operations/workforce-leave-applications"),
+  },
+
   accounts: {
     root: path(ROOTS_DASHBOARD, "/accounts"),
     chartOfAccount: path(ROOTS_DASHBOARD, "/accounts/chart-of-account"),
@@ -130,11 +144,13 @@ export const PATH_DASHBOARD = {
     ledger: path(ROOTS_DASHBOARD, "/accounts/ledger"),
     expenseHeads: path(ROOTS_DASHBOARD, "/accounts/expense-heads"),
   },
+
   accountingReports: {
     root: path(ROOTS_DASHBOARD, "/accounting-reports/"),
-    payrollReport: path(ROOTS_DASHBOARD, "/accounting-reports/payroll-reports"),
+    payslipReport: path(ROOTS_DASHBOARD, "/accounting-reports/payslip-reports"),
     balanceSheet: path(ROOTS_DASHBOARD, "/accounting-reports/balance-sheet"),
   },
+
   clients: {
     root: path(ROOTS_DASHBOARD, "/clients/"),
     clients: path(ROOTS_DASHBOARD, "/clients/all"),
@@ -142,17 +158,20 @@ export const PATH_DASHBOARD = {
     payments: path(ROOTS_DASHBOARD, "/clients/payments"),
     leaveApprovals: path(ROOTS_DASHBOARD, "/clients/leave-approval"),
   },
+
   vendors: {
     root: path(ROOTS_DASHBOARD, "/vendors/"),
     vendors: path(ROOTS_DASHBOARD, "/vendors/all"),
     bills: path(ROOTS_DASHBOARD, "/vendors/bills"),
     payments: path(ROOTS_DASHBOARD, "/vendors/payments"),
   },
+
   assets: {
     root: path(ROOTS_DASHBOARD, "/assets/"),
     all: path(ROOTS_DASHBOARD, "/assets/all"),
     assignment: path(ROOTS_DASHBOARD, "/assets/assignment"),
   },
+
   facility: {
     root: path(ROOTS_DASHBOARD, "/maintenance/"),
     all: path(ROOTS_DASHBOARD, "/maintenance/reports"),

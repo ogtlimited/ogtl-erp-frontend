@@ -7,7 +7,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
-  const { ErrorHandler } = useAppContext();
+  const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
@@ -78,13 +78,32 @@ const AttendanceRecord = () => {
           : response?.data?.data?.info.map((e, index) => ({
               ...e,
               idx: index + 1,
-              date: moment(e?.date).format("Do MMMM, YYYY"),
+              date: moment(e?.date).format("ddd, Do MMM. YYYY"),
             }));
+
+      resData.forEach((attendance) => {
+        const clockIn = new Date(`2000-01-01 ${attendance.clock_in}`);
+        if (attendance.clock_out !== "No Clock out") {
+          const clockOut = new Date(`2000-01-01 ${attendance.clock_out}`);
+          const workHours = (clockOut - clockIn) / 1000 / 3600;
+
+          const hours = Math.floor(workHours);
+          const minutes = Math.round((workHours - hours) * 60);
+
+          attendance.work_hours = `${hours}h ${minutes}m`;
+
+          if (workHours < 0) {
+            attendance.work_hours = `-`;
+          }
+        } else {
+          attendance.work_hours = "No Clock out";
+        }
+      });
 
       setDailyAttendance(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Daily Attendance - Summary:";
+      const component = "Daily Attendance - Summary | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -151,9 +170,8 @@ const AttendanceRecord = () => {
       setDepartmentSizePerPage(thisPageLimit);
       setTotalDepartmentPages(thisTotalPageSize);
 
-      const formattedDepartments = resData.map((e, index) => ({
+      const formattedDepartments = resData.map((e) => ({
         ...e,
-        // index: index + 1,
         created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
       }));
 
@@ -179,31 +197,25 @@ const AttendanceRecord = () => {
 
   const columns = [
     {
-      dataField: "idx",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
-    {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link
             to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
           >
-            {value}
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
           </Link>
         </h2>
       ),
-    },
-    {
-      dataField: "ogid",
-      text: "OGID",
-      sort: true,
-      headerStyle: { width: "15%" },
     },
     {
       dataField: "date",
@@ -216,12 +228,32 @@ const AttendanceRecord = () => {
       text: "Clock In",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (value) => {
+        return value === "No Clock in" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
     },
     {
       dataField: "clock_out",
       text: "Clock Out",
       sort: true,
       headerStyle: { width: "15%" },
+      formatter: (value) => {
+        return value === "No Clock out" ? (
+          <span className="text-danger">{value}</span>
+        ) : (
+          moment(value, "HH:mm:ss").format("hh:mma")
+        );
+      },
+    },
+    {
+      dataField: "work_hours",
+      text: "Work Hours",
+      sort: true,
+      headerStyle: { width: "20%" },
     },
   ];
 
@@ -283,7 +315,7 @@ const AttendanceRecord = () => {
             <h3 className="page-title">Employees Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Attendance Record</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
         </div>

@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 import CustomForm from "../Forms/CustomForm";
-import FieldArray from "../Forms/FieldArray";
 import $ from "jquery";
 const FormModal = ({
   template,
@@ -11,17 +10,9 @@ const FormModal = ({
   editData,
   formMode,
 }) => {
-  const {
-    control,
-    register,
-    handleSubmit,
-    getValues,
-    watch,
-    errors,
-    setValue,
-    formState,
-    reset,
-  } = useForm();
+  const { control, register, handleSubmit, watch, setValue, formState, reset } =
+    useForm();
+
   let handleform = {
     register: register,
     errors: formState,
@@ -54,7 +45,7 @@ const FormModal = ({
     reset();
     $("#FormModal").modal("toggle");
   };
-  
+
   return (
     <>
       <div

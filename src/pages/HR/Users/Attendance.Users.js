@@ -121,7 +121,7 @@ const EmployeeAttendance = () => {
 
       setLoading(false);
     } catch (error) {
-      const component = "Weekly Attendance Tardiness:";
+      const component = "Weekly Attendance Record | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -181,7 +181,7 @@ const EmployeeAttendance = () => {
           <div className="col">
             <h3 className="page-title">Attendance Record</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Employee</li>
+              <li className="breadcrumb-item">Main</li>
               <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import AcademyTable from './AcademyApplicantsTable';
+import AcademyTable from '../../../components/Tables/AcademyApplicantsTable';
 import axiosInstance from '../../../services/api';
 import { useAppContext } from '../../../Context/AppContext';
 // import ConfirmModal from '../../../components/Modal/ConfirmModal';

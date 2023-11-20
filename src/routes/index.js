@@ -1,5 +1,4 @@
-/** @format */
-
+/* eslint-disable no-unused-vars */
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import { AppProvider } from "../Context/AppContext";
@@ -115,6 +114,7 @@ export default function Router() {
           </AuthGuard>
         </AppProvider>
       ),
+
       children: [
         { path: "", element: <Navigate to="/dashboard/main" replace /> },
         {
@@ -124,15 +124,8 @@ export default function Router() {
               path: "main",
               element: <EmployeeUser />,
             },
-            {
-              path: "client-dashboard",
-              // element: (
-              //   <GuardedRoute title="" dept="super">
-              //     <ClientUser />{' '}
-              //   </GuardedRoute>
-              // ),
-              element: <ClientUser />,
-            },
+            { path: "main/attendance", element: <EmployeeAttendance /> },
+            { path: "main/leave", element: <LeavesUser /> },
             {
               path: "hr-dashboard",
               element: (
@@ -160,6 +153,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "apps",
           children: [
@@ -190,50 +184,8 @@ export default function Router() {
             },
           ],
         },
-        {
-          path: "operations",
-          children: [
-            {
-              path: "",
-              element: (
-                <Navigate to="/dashboard/operations/campaigns" replace />
-              ),
-            },
-            {
-              path: "campaigns",
-              element: (
-                <GuardedRoute title="" dept="super">
-                  <AllCampaigns />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: "campaigns/shifts/:id",
-              element: (
-                <GuardedRoute title="" dept="super">
-                  <CampaignShiftView />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: "campaign-info/:id",
-              element: (
-                <GuardedRoute title="" dept="super">
-                  <CampaignInfo />
-                </GuardedRoute>
-              ),
-            },
-            { path: "leads", element: <Leads /> },
-            {
-              path: "branch",
-              element: (
-                <GuardedRoute title="" dept="super">
-                  <Branch />
-                </GuardedRoute>
-              ),
-            },
-          ],
-        },
+
+        // HR
         {
           path: "hr",
           children: [
@@ -305,8 +257,6 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
-            { path: "leaves", element: <LeavesUser /> },
-            { path: "attendance", element: <EmployeeAttendance /> },
             {
               path: "all-employees/employee/leader",
               element: (
@@ -356,15 +306,7 @@ export default function Router() {
               ),
             },
             {
-              path: "campaign/employees/:office/:id",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <OfficeAttendanceAdmin />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: "department/employees/:office/:id",
+              path: ":office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />
@@ -503,6 +445,28 @@ export default function Router() {
             { path: "shift-request", element: <ShiftRequest /> },
           ],
         },
+
+        // Operations
+        {
+          path: "operations",
+          children: [
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/operations/workforce" replace />
+              ),
+            },
+            {
+              path: "workforce-leave-applications",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <WorkforceLeaveApplications />
+                </GuardedRoute>
+              ),
+            },
+          ],
+        },
+
         {
           path: "payroll",
           children: [
@@ -592,6 +556,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "reports",
           children: [
@@ -629,12 +594,13 @@ export default function Router() {
               path: "payslip-reports",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <PayrollReports />
+                  <PayslipReports />
                 </GuardedRoute>
               ),
             },
           ],
         },
+
         {
           path: "recruitment",
           children: [
@@ -726,6 +692,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "performance",
           children: [
@@ -753,6 +720,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "accounts",
           children: [
@@ -804,6 +772,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "accounting-reports",
           children: [
@@ -817,10 +786,10 @@ export default function Router() {
               ),
             },
             {
-              path: "payroll-reports",
+              path: "payslip-reports",
               element: (
                 <GuardedRoute title="" dept="accounting">
-                  <PayrollReports />
+                  <PayslipReports />
                 </GuardedRoute>
               ),
             },
@@ -834,6 +803,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "clients",
           children: [
@@ -875,6 +845,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "vendors",
           children: [
@@ -908,6 +879,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "assets",
           children: [
@@ -933,6 +905,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "user",
           children: [
@@ -943,6 +916,7 @@ export default function Router() {
             { path: "profile/:id", element: <Profile /> },
           ],
         },
+
         {
           path: "maintenance",
           children: [
@@ -984,6 +958,7 @@ export default function Router() {
             },
           ],
         },
+
         {
           path: "settings",
           children: [
@@ -1019,17 +994,21 @@ export default function Router() {
             },
           ],
         },
+
         { path: "employee-coaching", element: <CoachingEmployee /> },
         { path: "leadership/supervisor", element: <SupervisorAdmin /> },
         {
           path: "leadership/campaign-schedule",
           element: <ShiftScheduleList />,
         },
+
         { path: "leadership/attendance-record", element: <RemoteAttendance /> },
+
         {
           path: "leadership/subordinate-attendance",
           element: <SupervisorAttendanceAdmin />,
         },
+
         {
           path: "product-items",
           element: (
@@ -1038,6 +1017,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "hr-clients",
           element: (
@@ -1046,6 +1026,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "hr-client/:id",
           element: (
@@ -1054,6 +1035,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "coaching",
           element: (
@@ -1062,6 +1044,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "purchase-order",
           element: (
@@ -1070,6 +1053,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "id-request",
           element: (
@@ -1078,6 +1062,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "promotion",
           element: (
@@ -1086,6 +1071,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "resignation",
           element: (
@@ -1094,6 +1080,7 @@ export default function Router() {
             </GuardedRoute>
           ),
         },
+
         {
           path: "termination",
           element: (
@@ -1135,12 +1122,22 @@ const AttendanceRecord = Loadable(
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
 );
-const Departments = Loadable(lazy(() => import("../pages/HR/Admin/Departments.Admin")));
-const DepartmentUsers = Loadable(lazy(() => import("../pages/HR/Admin/DepartmentUsers")));
-const Campaigns = Loadable(lazy(() => import("../pages/HR/Admin/Campaigns.Admin")));
-const CampaignUsers = Loadable(lazy(() => import("../pages/HR/Admin/CampaignUsers")));
+const Departments = Loadable(
+  lazy(() => import("../pages/HR/Admin/Departments.Admin"))
+);
+const DepartmentUsers = Loadable(
+  lazy(() => import("../pages/HR/Admin/DepartmentUsers"))
+);
+const Campaigns = Loadable(
+  lazy(() => import("../pages/HR/Admin/Campaigns.Admin"))
+);
+const CampaignUsers = Loadable(
+  lazy(() => import("../pages/HR/Admin/CampaignUsers"))
+);
 const Teams = Loadable(lazy(() => import("../pages/HR/Admin/Teams.Admin")));
-const TeamMembers = Loadable(lazy(() => import("../pages/HR/Admin/TeamMembers")));
+const TeamMembers = Loadable(
+  lazy(() => import("../pages/HR/Admin/TeamMembers"))
+);
 const BranchAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Branch.Admin"))
 );
@@ -1188,6 +1185,9 @@ const AllEmployeesGenderAdmin = Loadable(
 );
 const LeavesAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Leaves.Admin"))
+);
+const WorkforceLeaveApplications = Loadable(
+  lazy(() => import("../pages/HR/Admin/WorkforceLeaveApplications.js"))
 );
 const ResignationAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Resignation.Admin"))
@@ -1237,7 +1237,9 @@ const EmployeeSalary = Loadable(
 const EmployeePayroll = Loadable(
   lazy(() => import("../pages/Payroll/EmployeePayroll"))
 );
-const DeductionSlip = Loadable(lazy(() => import("../pages/Payroll/DeductionSlip.js")))
+const DeductionSlip = Loadable(
+  lazy(() => import("../pages/Payroll/DeductionSlip.js"))
+);
 const PaySlip = Loadable(lazy(() => import("../pages/Payroll/PaySlip")));
 const SalaryBreakdown = Loadable(
   lazy(() => import("../pages/Payroll/SalaryBreakdown"))
@@ -1382,8 +1384,8 @@ const ProductItems = Loadable(
   lazy(() => import("../pages/ProductItems/ProductItems"))
 );
 // const Bill = Loadable(lazy(() => import('../pages/Vendors/bill')));
-const PayrollReports = Loadable(
-  lazy(() => import("../pages/Accounting/Payroll-Reports"))
+const PayslipReports = Loadable(
+  lazy(() => import("../pages/Accounting/Payslip-Reports.js"))
 );
 const Notifications = Loadable(
   lazy(() => import("../pages/In-Apps/Notifications"))
@@ -1435,4 +1437,3 @@ const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets")));
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))
 );
-

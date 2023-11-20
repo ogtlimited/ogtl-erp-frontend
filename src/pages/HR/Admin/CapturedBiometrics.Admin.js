@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -46,7 +47,7 @@ const CapturedBiometricsAdmin = () => {
       setAllEmployees(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Captured Biometrics:";
+      const component = "Captured Biometrics | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -71,7 +72,7 @@ const CapturedBiometricsAdmin = () => {
       setTotalCapturedBiometrics(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Total Captured Biometrics:";
+      const component = "Total Captured Biometrics | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -95,7 +96,7 @@ const CapturedBiometricsAdmin = () => {
             <h3 className="page-title">Captured Biometrics</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Captured Biometrics</li>
+              <li className="breadcrumb-item active">Biometrics</li>
             </ul>
           </div>
         </div>
@@ -105,8 +106,12 @@ const CapturedBiometricsAdmin = () => {
         <div className="hr-dashboard-card">
           <span>Total Biometrics Captured</span>
           <div className="card-body">
-            <span className="dash-widget-icon">
-              <i className="las la-fingerprint"></i>
+            <span className="biometrics-widget-icon">
+              <lord-icon
+                src="https://cdn.lordicon.com/bdwluond.json"
+                trigger="loop"
+                style={{ width: "60px", height: "60px" }}
+              ></lord-icon>
             </span>
             <div className="card-info">
               <h3>{totalCapturedBiometrics}</h3>

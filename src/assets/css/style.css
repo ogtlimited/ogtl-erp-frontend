@@ -132,7 +132,6 @@
   width: 43%;
   padding: 20px;
   z-index: 1000;
-  height: 50%;
   background-color: #fff;
   border-radius: 10px;
   border: 2px solid #00000080;
@@ -1670,6 +1669,15 @@ table.dataTable thead > tr > td.sorting {
   box-shadow: inherit;
   background-color: #fff;
 }
+.header-dropdown-menu {
+  width: 270px;
+  height: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  transform-origin: left top 0;
+  box-shadow: inherit;
+  background-color: #fff;
+}
 .navbar-nav .open .dropdown-menu {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -2360,7 +2368,7 @@ table.dataTable thead > tr > td.sorting {
   color: #fff;
   font-size: 15px;
   line-height: 60px;
-  padding: 0 15px;
+  padding: 0 20px 0 35px;
   height: 60px;
 }
 .user-menu.nav > li > a:hover,
@@ -2906,11 +2914,20 @@ table.dataTable thead > tr > td.sorting {
   padding-right: 15px;
 }
 
+.biometrics-widget-icon {
+  border-radius: 100%;
+  float: left;
+  font-size: 30px;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 10px;
+  text-align: center;
+  width: 60px;
+}
 .dash-widget-icon {
   background-color: rgba(0, 197, 251, 0.2);
   border-radius: 100%;
   color: #00c5fb;
-  display: inline-block;
   float: left;
   font-size: 30px;
   height: 60px;
@@ -3287,7 +3304,7 @@ table.dataTable thead > tr > td.sorting {
   width: 100%;
 }
 .profile-img-wrap img {
-  border-radius: 50%;
+  border-radius: 10px;
   height: 120px;
   width: 120px;
 }
@@ -6849,7 +6866,7 @@ table.table-inbox tbody tr.checked {
   align-items: center;
   display: flex;
   flex: 0 0 200px;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 31px;
   min-height: 44px;
   text-align: right;
@@ -8199,7 +8216,7 @@ ul.comment-list li ul.children {
   justify-content: space-between;
   font-size: 12px;
   margin-top: 10px;
-  align-items: end;
+  align-items: flex-end;
 }
 .kanban-list
   > .kanban-wrap

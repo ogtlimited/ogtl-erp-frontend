@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-import { useAppContext } from "../../../Context/AppContext";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
@@ -32,10 +31,12 @@ const JobApplicantsAdminRolesTable = ({
   setToDate,
   searchTerm,
   setSearchTerm,
+  jobOpenings,
+  jobOpeningFilter,
+  setJobOpeningFilter,
   processingStageFilter,
   setProcessingStageFilter,
 }) => {
-  const { user } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
   const [dataToFilter, setDataToFilter] = useState("");
@@ -45,8 +46,6 @@ const JobApplicantsAdminRolesTable = ({
 
   secureLocalStorage.setItem("fromDate", fromDate);
   secureLocalStorage.setItem("toDate", toDate);
-
-  const CurrentUserRoles = user?.employee_info?.roles;
 
   const ProcessStatusOptions = [
     { title: "Open" },
@@ -117,7 +116,7 @@ const JobApplicantsAdminRolesTable = ({
             const persistedToDate = secureLocalStorage.getItem("toDate");
 
             axiosInstance
-              .get("/api/v1/hr_dashboard/admin_role_job_applications.json", {
+              .get("/api/v1/job_applicants.json", {
                 headers: {
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
@@ -127,6 +126,7 @@ const JobApplicantsAdminRolesTable = ({
                   page: page,
                   limit: sizePerPage,
                   name: searchTerm,
+                  job_opening_id: jobOpeningFilter,
                   process_status: processingStageFilter,
                   start_date: persistedFromDate,
                   end_date: persistedToDate,
@@ -152,6 +152,7 @@ const JobApplicantsAdminRolesTable = ({
                   interview_date: emp?.interview_date
                     ? moment(emp?.interview_date).format("Do MMMM, YYYY")
                     : "Not Scheduled",
+                  resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
                 }));
 
                 setData(formatted);
@@ -193,6 +194,7 @@ const JobApplicantsAdminRolesTable = ({
       );
     },
     [
+      jobOpeningFilter,
       page,
       processingStageFilter,
       setData,
@@ -205,13 +207,13 @@ const JobApplicantsAdminRolesTable = ({
     ]
   );
 
-  // Filter by Process Stage:
-  const handleProcessStageFilter = (e) => {
-    setProcessingStageFilter(e.target.value);
+  // Filter by Job Opening:
+  const handleJobOpeningFilter = (e) => {
+    setJobOpeningFilter(e.target.value);
     setPage(1);
     setLoading(true);
     axiosInstance
-      .get("/api/v1/hr_dashboard/admin_role_job_applications.json", {
+      .get("/api/v1/job_applicants.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -221,6 +223,60 @@ const JobApplicantsAdminRolesTable = ({
           page: page,
           limit: sizePerPage,
           name: searchTerm.length ? searchTerm : null,
+          job_opening_id: e.target.value,
+          process_status: processingStageFilter,
+          start_date: fromDate,
+          end_date: toDate,
+        },
+      })
+      .then((e) => {
+        const resData = e?.data?.data?.job_applicants;
+        const totalPages = e?.data?.data?.total_pages;
+
+        const thisPageLimit = sizePerPage;
+        const thisTotalPageSize = totalPages;
+
+        setSizePerPage(thisPageLimit);
+        setTotalPages(thisTotalPageSize);
+
+        const mapp = resData.map((emp) => ({
+          ...emp,
+          full_name: `${emp?.first_name} ${emp?.last_name}`,
+          job_title: emp?.job_opening?.job_title,
+          application_date: moment(emp?.created_at).format("Do MMMM, YYYY"),
+          interview_date: emp?.interview_date
+            ? moment(emp?.interview_date).format("Do MMMM, YYYY")
+            : "Not Scheduled",
+          resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
+        }));
+
+        setData(mapp);
+        setDataToFilter(mapp);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+    setLoading(false);
+  };
+
+  // Filter by Process Stage:
+  const handleProcessStageFilter = (e) => {
+    setProcessingStageFilter(e.target.value);
+    setPage(1);
+    setLoading(true);
+    axiosInstance
+      .get("/api/v1/job_applicants.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+          name: searchTerm.length ? searchTerm : null,
+          job_opening_id: jobOpeningFilter,
           process_status: e.target.value,
           start_date: fromDate,
           end_date: toDate,
@@ -244,6 +300,7 @@ const JobApplicantsAdminRolesTable = ({
           interview_date: emp?.interview_date
             ? moment(emp?.interview_date).format("Do MMMM, YYYY")
             : "Not Scheduled",
+          resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
         }));
 
         setData(mapp);
@@ -313,6 +370,25 @@ const JobApplicantsAdminRolesTable = ({
                       className="form-control "
                     />
                   </div>
+                </div>
+
+                <div className="col-md-3">
+                  <label htmlFor="toDate">Filter By </label>
+                  <select
+                    className="leave-filter-control"
+                    onChange={(e) => handleJobOpeningFilter(e)}
+                    defaultValue={jobOpeningFilter}
+                    value={jobOpeningFilter}
+                  >
+                    <option value="" disabled selected hidden>
+                      Job Openings
+                    </option>
+                    {jobOpenings.map((option, idx) => (
+                      <option key={idx} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="col-md-3">

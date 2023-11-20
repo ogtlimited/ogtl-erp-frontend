@@ -13,18 +13,15 @@ export const RegeneratePayrollModal = ({
   userId,
 }) => {
   const { showAlert } = useAppContext();
-  const [createPayslips, setCreatePayslips] = useState("");
   const [loading, setLoading] = useState(false);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
-  useEffect(() => {
-    setCreatePayslips({
-      month: `${currentYear}-${currentMonth.toString().padStart(2, "0")}`,
-    });
-  }, [currentMonth, currentYear]);
+  const [createPayslips, setCreatePayslips] = useState({
+    monthAndYear: `${currentYear}-${currentMonth}`,
+  });
 
   const cancelEvent = () => {
     setCreatePayslips("");
@@ -63,7 +60,6 @@ export const RegeneratePayrollModal = ({
         `Salary slip is being regenerated`,
         "alert alert-success"
       );
-      setCreatePayslips("");
       $("#RegeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
       setGenerating(false);
@@ -111,7 +107,7 @@ export const RegeneratePayrollModal = ({
                         name="monthAndYear"
                         type="month"
                         className="form-control"
-                        value={createPayslips.month}
+                        value={createPayslips.monthAndYear}
                         onChange={handleFormChange}
                         required
                       />

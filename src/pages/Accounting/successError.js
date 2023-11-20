@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import success from "../../assets/img/success.svg";
 import failed from "../../assets/img/info-danger.svg";

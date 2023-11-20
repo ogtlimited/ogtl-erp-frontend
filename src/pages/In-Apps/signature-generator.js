@@ -96,9 +96,13 @@ const SignatureGenerator = () => {
         <React.Fragment>
           <Signature
             fullName={state.fullName}
-            position=<p style={{ color: "red" }}>
-              <strong>Please enter your designation</strong>
-            </p>
+            position={
+              <>
+                <p style={{ color: "red" }}>
+                  <strong>Please enter your designation</strong>
+                </p>
+              </>
+            }
             email={state.email}
             phone={state.phone}
           />
@@ -115,23 +119,25 @@ const SignatureGenerator = () => {
   };
 
   const copyToClipboard = () => {
-    let copyText = document.querySelector(".signature");
-    const range = document.createRange();
-    if (copyText) {
-      range.selectNode(copyText);
-    }
-    const windowSelection = window.getSelection();
-    if (windowSelection) {
-      windowSelection.removeAllRanges();
-      windowSelection.addRange(range);
-    }
-    try {
-      setState((prevState) => ({
-        ...prevState,
-        copied: true,
-      }));
-    } catch (err) {
-      console.log("Fail");
+    const signatureElement = document.querySelector(".signature");
+    if (signatureElement) {
+      const range = document.createRange();
+      range.selectNode(signatureElement);
+      const windowSelection = window.getSelection();
+      if (windowSelection) {
+        windowSelection.removeAllRanges();
+        windowSelection.addRange(range);
+        try {
+          document.execCommand("copy");
+          setState((prevState) => ({
+            ...prevState,
+            copied: true,
+          }));
+        } catch (err) {
+          console.error("Failed to Copy | ", err);
+        }
+        windowSelection.removeAllRanges();
+      }
     }
   };
 

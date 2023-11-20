@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LeavesTable from "../../components/Tables/EmployeeTables/Leaves/LeaveTable";
@@ -93,19 +95,19 @@ const Leads = () => {
       headerStyle: { minWidth: "150px" },
       formatter: (value, row) => (
         <>
-          {value == "active" ? (
+          {value === "active" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          ) : value == "left" ? (
+          ) : value === "left" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-pending"></span>{" "}
               <span className="ml-4 d-block">{value}</span>
             </a>
-          ) : value == "terminated" ? (
+          ) : value === "terminated" ? (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}

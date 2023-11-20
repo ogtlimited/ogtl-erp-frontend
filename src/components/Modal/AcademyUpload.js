@@ -1,28 +1,24 @@
-/**
- * /* eslint-disable no-unused-vars
- *
- * @format
- */
-
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../services/api';
-import Papa from 'papaparse';
-import helper from '../../services/helper';
-import { useAppContext } from '../../Context/AppContext';
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../services/api";
+import Papa from "papaparse";
+import helper from "../../services/helper";
+import { useAppContext } from "../../Context/AppContext";
 
 const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
-  const { combineRequest, showAlert } = useAppContext();
+  const { showAlert } = useAppContext();
   const [buttonRef, setbuttonRef] = useState(React.createRef());
   const [loading, setloading] = useState(false);
   const [uploadState, setuploadState] = useState(title);
-  const [fileName, setfileName] = useState('');
+  const [fileName, setfileName] = useState("");
   const [invalid, setinvalid] = useState(false);
   const [data, setData] = useState([]);
   const [path, setpath] = useState(url);
+  
+  // eslint-disable-next-line no-unused-vars
   const updateState = (path, msg) => {
     setpath(path);
     setuploadState(msg);
-    setfileName('');
+    setfileName("");
     setinvalid(false);
   };
 
@@ -36,9 +32,9 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           const res = helper.arrayToJSONObject(results.data);
           // eslint-disable-next-line array-callback-return
           const jsonData = res.filter((element) => {
-            if (typeof element == 'object') {
+            if (typeof element == "object") {
               const emptyStringCount = Object.values(element).filter((e) =>
-                typeof e == 'string' ? e.length === 0 : true
+                typeof e == "string" ? e.length === 0 : true
               ).length;
               // console.log(emptyStringCount);
               if (Object.values(element).length !== emptyStringCount) {
@@ -48,7 +44,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
           });
           if (
             Object.values(jsonData[jsonData.length - 1]).includes(undefined) ||
-            Object.values(jsonData[jsonData.length - 1]).includes('')
+            Object.values(jsonData[jsonData.length - 1]).includes("")
           ) {
             setData(jsonData.slice(0, jsonData.length));
             // console.log('invalid value');
@@ -66,32 +62,32 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
   const uploadData = () => {
     setloading(true);
     let obj = {};
-    if (path === '/api/academy') {
+    if (path === "/api/academy") {
       // console.log("This very", data)
       const formatted = data.map((e) => {
         return {
-          application_date: e['Timestamp'],
-          user_name: e['Username'],
-          first_name: e['First Name'],
-          middle_name: e['Middle Name'],
-          last_name: e['Last Name'],
-          mobile_number: e['Mobile Number'],
-          alt_mobile_number: e['Alternate Phone Number'],
-          highest_qualification_attained: e['Highest Qualification Attained'],
+          application_date: e["Timestamp"],
+          user_name: e["Username"],
+          first_name: e["First Name"],
+          middle_name: e["Middle Name"],
+          last_name: e["Last Name"],
+          mobile_number: e["Mobile Number"],
+          alt_mobile_number: e["Alternate Phone Number"],
+          highest_qualification_attained: e["Highest Qualification Attained"],
           other_option: e["If 'Other' was selected above, please state which."],
-          interested_program: e['Interested program'],
-          mode_of_engagement: e['What mode of engagement would you prefer'],
-          gender: e['Please select your gender'],
-          cv: e['Please upload your CV.'],
-          process_stage: e['process_stage'],
-          interview_status: e['interview_status'],
+          interested_program: e["Interested program"],
+          mode_of_engagement: e["What mode of engagement would you prefer"],
+          gender: e["Please select your gender"],
+          cv: e["Please upload your CV."],
+          process_stage: e["process_stage"],
+          interview_status: e["interview_status"],
           weekly_hours:
-            e['How many hours in a week can you commit to this program'],
-          stack: e['What is your Stack?'],
-          fav_programming_lang: [e['Favored Programming Language(s)']],
-          years_of_experience: e['Years of Experience'],
-          certifications: e['Certifications'],
-          consent: e['Consent'],
+            e["How many hours in a week can you commit to this program"],
+          stack: e["What is your Stack?"],
+          fav_programming_lang: [e["Favored Programming Language(s)"]],
+          years_of_experience: e["Years of Experience"],
+          certifications: e["Certifications"],
+          consent: e["Consent"],
         };
       });
       // console.log("this is the formatted data", formatted)
@@ -106,7 +102,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
     axiosInstance
       .post(path, obj.data)
       .then((res) => {
-        showAlert(true, 'Data successfully uploaded', 'alert alert-success');
+        showAlert(true, "Data successfully uploaded", "alert alert-success");
         settoggleModal(false);
         setloading(false);
         window.location.reload(true);
@@ -115,7 +111,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
       })
       .catch((err) => {
         console.log(err);
-        showAlert(false, 'Error uploading data', 'alert alert-success');
+        showAlert(false, "Error uploading data", "alert alert-success");
         setloading(false);
         buttonRef.click();
         settoggleModal(false);
@@ -128,7 +124,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
       id="uploadAttendance"
       tabIndex="-1"
       aria-labelledby="FormModalModalLabel"
-      style={{ display: 'block' }}
+      style={{ display: "block" }}
       aria-hidden="true"
     >
       <div className="modal-dialog ">
@@ -159,12 +155,12 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
                   >
                     <input
                       type="file"
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       accept=".csv"
                       onChange={(e) => onFileUpload(e)}
                     />
                     <i
-                      style={{ fontSize: '20px' }}
+                      style={{ fontSize: "20px" }}
                       className="fa fa-cloud-upload pr-4"
                     ></i>
                     Click to {uploadState}
@@ -200,7 +196,7 @@ const AcademyUpload = ({ settoggleModal, title, url, setUploadSuccess }) => {
                   aria-hidden="true"
                 ></span>
               ) : (
-                'Upload'
+                "Upload"
               )}
             </button>
           </div>

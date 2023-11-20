@@ -6,12 +6,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSieverModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
@@ -23,13 +17,10 @@ const JobSieversViewAdmin = ({
   setIsJobSieverActivated,
 }) => {
   const [allRepSievers, setAllRepSievers] = useState([]);
-  const { showAlert, user, ErrorHandler, goToTop } = useAppContext();
+  const { showAlert, user, ErrorHandler, goToTop, getAvatarColor } =
+    useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingRep, setLoadingRep] = useState(false);
-
-  const imageUrl = "https://erp.outsourceglobal.com";
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
 
   const [repPage, setRepPage] = useState(1);
   const [repSizePerPage, setRepSizePerPage] = useState(10);
@@ -125,23 +116,17 @@ const JobSieversViewAdmin = ({
   const repColumns = [
     {
       dataField: "full_name",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row?.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link
             to={`/dashboard/recruitment/rep-siever/${row.full_name}/${row.ogid}`}
           >

@@ -134,10 +134,10 @@ const PaySlip = () => {
 
             // Deductions:
             case "monthly_income_tax":
-              deductions["Monthly Income Tax"] = employeeSalarySlip[e];
+              deductions["Income Tax"] = employeeSalarySlip[e];
               break;
             case "monthly_pension":
-              deductions["Monthly Employee Pension"] = employeeSalarySlip[e];
+              deductions["Employee Pension"] = employeeSalarySlip[e];
               break;
             case "disciplinary_deductions":
               deductions["Disciplinary Deductions"] = employeeSalarySlip[e];
@@ -321,7 +321,7 @@ const PaySlip = () => {
                     <div>
                       {paySlip.net_pay ? (
                         <h4 className="m-b-10">
-                          <strong style={{ color: "green" }}>Earnings</strong>
+                          <strong>Earnings</strong>
                         </h4>
                       ) : null}
                       <table className="table table-bordered">
@@ -392,7 +392,7 @@ const PaySlip = () => {
                     <div>
                       {paySlip.net_pay ? (
                         <h4 className="m-b-10">
-                          <strong style={{ color: "red" }}>Deductions</strong>
+                          <strong>Deductions</strong>
                         </h4>
                       ) : null}
                       <table className="table table-bordered">

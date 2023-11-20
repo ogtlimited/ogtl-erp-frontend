@@ -35,12 +35,14 @@ function RejectAdminLeaveModal({
         showAlert(true, 'Leave Rejected', 'alert alert-info');
   
         closeModal(false);
+        setLoading(false);
       } catch (error) {
         showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+        setLoading(false);
       }
       fetchAllLeaves();
       fetchHRLeaveHistory();
-      // fetchHRLeavesNotificationCount();
+      fetchHRLeavesNotificationCount();
   }
 
   return (

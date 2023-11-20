@@ -1,5 +1,6 @@
 // *IN USE - FIXED!
 
+/* eslint-disable no-unused-vars */
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -7,7 +8,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import LeadersSubordinatesTable from "../../../components/Tables/EmployeeTables/leadersSubordinatesTable";
 import OfficeStaffTable from "../../../components/Tables/EmployeeTables/officeStaffTable";
-import { department } from './../../../constants/index';
+import { department } from "./../../../constants/index";
 
 const SupervisorAdmin = () => {
   const { user, showAlert, ErrorHandler } = useAppContext();
@@ -57,7 +58,7 @@ const SupervisorAdmin = () => {
       setAllLeadersSubordinates(mapp);
       setLoading(false);
     } catch (error) {
-      const component = "Team Members Error:";
+      const component = "Team Members Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -137,7 +138,6 @@ const SupervisorAdmin = () => {
           return {
             ...emp,
             fullName: emp?.name,
-            office: officeType.toUpperCase(),
             officeName: emp?.campaign.toUpperCase(),
             company_email: emp?.email,
           };
@@ -148,7 +148,7 @@ const SupervisorAdmin = () => {
         return;
       }
     } catch (error) {
-      const component = "Office Staff Error:";
+      const component = "Office Staff Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }

@@ -1,17 +1,15 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
+import React, { useState, useEffect } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
   CSVExport,
-} from 'react-bootstrap-table2-toolkit';
-import filterFactory, {
-  textFilter,
-  selectFilter,
-  dateFilter,
-} from 'react-bootstrap-table2-filter';
+} from "react-bootstrap-table2-toolkit";
+import filterFactory from "react-bootstrap-table2-filter";
 
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import paginationFactory from "react-bootstrap-table2-paginator";
 
 const AcademyTable = ({
   data,
@@ -25,25 +23,18 @@ const AcademyTable = ({
   handleOnSelect,
   handleOnSelectAll,
   statusInterview,
-  processingStage
+  processingStage,
 }) => {
-  const { SearchBar, ClearSearchButton } = Search;
+  const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
-  const selectRow = {
-    mode: 'checkbox',
-    clickToSelect: clickToSelect,
-    selected: selected,
-    onSelect: handleOnSelect,
-    onSelectAll: handleOnSelectAll,
-  };
 
   // const months = ["Not set","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
   const [mobileView, setmobileView] = useState(false);
-  const [monthlyFilter, setMonthlyFilter] = useState('');
-  const [intervieStatusFilter, setIntervieStatusFilter] = useState('');
-  const [processingStageFilter, setprocessingStageFilter] = useState('');
-  const [dataToFilter, setDataToFilter] = useState('');
+  const [monthlyFilter, setMonthlyFilter] = useState("");
+  const [intervieStatusFilter, setIntervieStatusFilter] = useState("");
+  const [processingStageFilter, setprocessingStageFilter] = useState("");
+  const [dataToFilter, setDataToFilter] = useState("");
 
   // const handleMonthlyFilter = (e)=>{
   //   setMonthlyFilter(e.target.value)
@@ -64,7 +55,7 @@ const AcademyTable = ({
     // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems);
     setLoading(false);
-    setprocessingStageFilter('');
+    setprocessingStageFilter("");
     // console.log("Processing Status",processingStageFilter)
   };
 
@@ -77,7 +68,7 @@ const AcademyTable = ({
     // setDataToFilter(filteredItems)
     setDataToFilter(filteredItems);
     setLoading(false);
-    setIntervieStatusFilter('');
+    setIntervieStatusFilter("");
   };
 
   const resizeTable = () => {
@@ -92,7 +83,7 @@ const AcademyTable = ({
   };
   useEffect(() => {
     resizeTable();
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       resizeTable();
     });
   }, [mobileView]);
@@ -108,8 +99,6 @@ const AcademyTable = ({
   //   setNewList(dataToFilter)
   // }, [dataToFilter,newList]);
 
-  const imageUrl = 'https://erp.outsourceglobal.com';
-
   return (
     <>
       {dataToFilter && (
@@ -124,7 +113,7 @@ const AcademyTable = ({
             <div className="col-12">
               <SearchBar
                 {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: '12%' }}
+                style={{ marginBottom: 15, paddingLeft: "12%" }}
                 className="inputSearch"
               />
 
@@ -148,30 +137,34 @@ const AcademyTable = ({
               </div> */}
 
                 <div class="interview_status_filter">
-                  <select 
-                  onChange={(e) => handleIntervieStatusFilter(e)}
-                  defaultValue={intervieStatusFilter}
-                  value={intervieStatusFilter}
+                  <select
+                    onChange={(e) => handleIntervieStatusFilter(e)}
+                    defaultValue={intervieStatusFilter}
+                    value={intervieStatusFilter}
                   >
-                     <option value="" disabled selected hidden>Filter By Academy Status</option>
+                    <option value="" disabled selected hidden>
+                      Filter By Academy Status
+                    </option>
                     {statusInterview.map((option, idx) => (
-                        <option key={idx}>{option.title}</option>
-                      ))}
+                      <option key={idx}>{option.title}</option>
+                    ))}
                   </select>
-              </div>
+                </div>
 
                 <div class="processing_stage_filter">
-                  <select 
-                  onChange={(e) => handleProcessingStageFilter(e)}
-                  defaultValue={processingStageFilter}
-                  value={processingStageFilter}
+                  <select
+                    onChange={(e) => handleProcessingStageFilter(e)}
+                    defaultValue={processingStageFilter}
+                    value={processingStageFilter}
                   >
-                    <option value="" disabled selected hidden>Filter By Processing Stage</option>
+                    <option value="" disabled selected hidden>
+                      Filter By Processing Stage
+                    </option>
                     {processingStage.map((option, idx) => (
-                        <option key={idx}>{option.title}</option>
-                      ))}
+                      <option key={idx}>{option.title}</option>
+                    ))}
                   </select>
-              </div>
+                </div>
               </div>
 
               <BootstrapTable
@@ -182,10 +175,10 @@ const AcademyTable = ({
                 headerClasses="header-class"
                 classes={
                   !mobileView
-                    ? 'table '
+                    ? "table "
                     : context
-                    ? 'table table-responsive'
-                    : 'table table-responsive'
+                    ? "table table-responsive"
+                    : "table table-responsive"
                 }
                 noDataIndication={
                   loading ? (
@@ -193,7 +186,7 @@ const AcademyTable = ({
                       <span className="sr-only">Loading...</span>
                     </div>
                   ) : (
-                    'No Record Found'
+                    "No Record Found"
                   )
                 }
                 pagination={paginationFactory()}
