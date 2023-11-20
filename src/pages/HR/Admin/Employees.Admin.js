@@ -72,8 +72,6 @@ const AllEmployeesAdmin = () => {
 
       const resData = response?.data?.data?.employees;
 
-      console.log(resData);
-
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;

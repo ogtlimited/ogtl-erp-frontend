@@ -717,8 +717,7 @@
   right: -15%;
   background-color: #ff0000;
   color: #fff;
-  font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   height: 50%;
   width: 50%;
   border-radius: 50%;
@@ -727,7 +726,7 @@
 .home-notification-count > p {
   text-align: center;
   padding: 1px;
-  font-weight: 600;
+  font-weight: 400 !important;
 }
 
 .home-notification-icon {

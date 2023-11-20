@@ -164,12 +164,6 @@ const AllLeaveStatusAdmin = () => {
 
   const columns = [
     {
-      dataField: "date_applied",
-      text: "Date Applied",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
-    {
       dataField: "full_name",
       text: "Employee",
       sort: true,
@@ -182,12 +176,17 @@ const AllLeaveStatusAdmin = () => {
           >
             {value?.charAt(0)}
           </span>
-        {console.log(value?.charAt(0))}
           <div>
             {value?.toUpperCase()} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "office",
