@@ -3,6 +3,7 @@ import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
 import secureLocalStorage from "react-secure-storage";
+import backgroundColors from "../components/Misc/BackgroundColors.json";
 
 export default createBrowserHistory();
 const AppContext = createContext();
@@ -79,6 +80,11 @@ const AppProvider = (props) => {
       value: "team",
     },
   ];
+
+  const getAvatarColor = (char) => {
+    const colorIndex = char.charCodeAt(0) % backgroundColors.length;
+    return backgroundColors[colorIndex];
+  };
 
   const handleProgress = ({ count, state }) => {
     console.log(count, state);
@@ -575,6 +581,7 @@ const AppProvider = (props) => {
         dropDownClicked,
         setDropDownClicked,
 
+        getAvatarColor,
         showProgress,
         uploadProgress,
         handleProgress,

@@ -7,14 +7,9 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import { Link } from "react-router-dom";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import { useAppContext } from "../../../Context/AppContext";
 
 const LeadersSubordinatesTable = ({
   data,
@@ -23,14 +18,12 @@ const LeadersSubordinatesTable = ({
   setLoading,
   context,
 }) => {
+  const { getAvatarColor } = useAppContext();
   const { SearchBar } = Search;
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = "https://erp.outsourceglobal.com";
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -63,18 +56,12 @@ const LeadersSubordinatesTable = ({
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link to={`/dashboard/user/profile/${row?.ogid}`}>
             {value} <span>{row?.designation}</span>
           </Link>
@@ -106,27 +93,6 @@ const LeadersSubordinatesTable = ({
       sort: true,
       headerStyle: { width: "100%" },
     },
-    // {
-    //   dataField: '',
-    //   text: 'Action',
-    //   sort: true,
-    //   headerStyle: { minWidth: '100px', textAlign: 'left' },
-    //   formatter: (value, row) => (
-    //     <>
-    //       <div className="text-center">
-    //         <div className="leave-user-action-btns">
-    //           <button
-    //             className="btn btn-sm btn-primary"
-    //             data-toggle="modal"
-    //             onClick={() => navigate(`/dashboard/hr/all-employees/employee/update/${row._id}`)}
-    //           >
-    //             Edit
-    //           </button>
-    //         </div>
-    //       </div>
-    //     </>
-    //   ),
-    // },
   ];
 
   const showNullMessage = () => {
