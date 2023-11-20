@@ -81,8 +81,17 @@ const AppProvider = (props) => {
     },
   ];
 
+  // // Get Avatar Color, with A at line 15:
+  // const getAvatarColor = (char) => {
+  //   const charCode = char.charCodeAt(0);
+  //   const colorIndex = charCode % 26;
+  //   return backgroundColors[colorIndex];
+  // };
+
+  // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
-    const colorIndex = char.charCodeAt(0) % backgroundColors.length;
+    const charCode = char.toLowerCase().charCodeAt(0) - 97;
+    const colorIndex = charCode >= 0 && charCode <= 25 ? charCode : 0;
     return backgroundColors[colorIndex];
   };
 
