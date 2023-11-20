@@ -3,20 +3,6 @@ import React from "react";
 const LeaveApplicationContent = ({ leaveContent = {} }) => {
   const filteredApplication = {
     ...leaveContent,
-    id: undefined,
-    manager_id: undefined,
-    start_date: undefined,
-    first_name: undefined,
-    last_name: undefined,
-    end_date: undefined,
-    updated_at: undefined,
-    created_at: undefined,
-    acted_on: undefined,
-    hr_stage: undefined,
-    status_action: undefined,
-    leave: undefined,
-    user: undefined,
-    proofs: undefined,
     rejection_reason:
       leaveContent?.status === "rejected"
         ? leaveContent?.rejection_reason

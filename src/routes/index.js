@@ -306,15 +306,7 @@ export default function Router() {
               ),
             },
             {
-              path: "campaign/employees/:office/:id",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <OfficeAttendanceAdmin />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: "department/employees/:office/:id",
+              path: ":office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />

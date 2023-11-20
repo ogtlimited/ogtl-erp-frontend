@@ -4,6 +4,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import avater from "../../assets/img/profile.png";
+import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
+import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 import { ReportToModal } from "../../components/Modal/ReportToModal";
 import ProfileCards from "../../components/Profile/ProfileCards";
 import axiosInstance from "../../services/api";
@@ -24,6 +26,7 @@ const Profile = () => {
   const [officeID, setOfficeId] = useState("");
   const [mode, setMode] = useState("");
   const [remoteMode, setRemoteMode] = useState("");
+  const [gender, setGender] = useState("");
 
   const [hideReportToModal, setHideReportToModal] = useState(false);
   const [hideAttendanceComponent, setHideAttendanceComponent] = useState(false);
@@ -103,10 +106,12 @@ const Profile = () => {
           const userId = resData?.employee?.email;
           const employeeId = resData?.employee?.personal_detail?.id;
           const officeId = resData?.office?.id;
+          const gender = resData?.employee?.personal_detail?.gender;
 
           setUserId(userId);
           setEmployeeId(employeeId);
           setOfficeId(officeId);
+          setGender(gender);
         } catch (error) {
           const component = "Employee Profile Error:";
           ErrorHandler(error, component);
@@ -130,10 +135,12 @@ const Profile = () => {
           const userId = resData?.employee?.email;
           const employeeId = resData?.employee?.personal_detail?.id;
           const officeId = resData?.office?.id;
+          const gender = resData?.employee?.personal_detail?.gender;
 
           setUserId(userId);
           setEmployeeId(employeeId);
           setOfficeId(officeId);
+          setGender(gender);
         } catch (error) {
           const component = "Employee Profile Error:";
           ErrorHandler(error, component);
@@ -318,7 +325,22 @@ const Profile = () => {
                 <div className="profile-img-wrap">
                   <div className="profile-img">
                     <a href="#">
-                      <img alt="" src={userData?.employee?.image || avater} />
+                      {gender === "male" ? (
+                        <img
+                          alt=""
+                          src={userData?.employee?.image || malePlaceholder}
+                        />
+                      ) : gender === "female" ? (
+                        <img
+                          alt=""
+                          src={userData?.employee?.image || femalePlaceholder}
+                        />
+                      ) : (
+                        <img
+                          src="https://res.cloudinary.com/dhantey/image/upload/v1679528249/unknown-user-images_k0jjaq.png"
+                          alt="No Employee"
+                        />
+                      )}
                     </a>
                   </div>
                 </div>

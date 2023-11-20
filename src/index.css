@@ -598,3 +598,25 @@ table.custom-table thead th {
   background-color: #ececec;
   transition: all 0.3s ease-in-out;
 }
+
+/*---------------------- 
+    Avatar Span
+----------------------*/
+
+.avatar-span {
+  background-color: #00c5fb;
+  border-radius: 50%;
+  color: #fff !important;
+  font-size: 25px !important;
+  font-weight: 400;
+  height: 38px;
+  line-height: 38px;
+  margin: 0 10px 0 0;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: 38px;
+  position: relative;
+  white-space: nowrap;
+}

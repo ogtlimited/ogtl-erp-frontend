@@ -19,7 +19,7 @@ const TeamMembers = () => {
   const { id } = useParams();
   const { title } = useParams();
   const navigate = useNavigate();
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [teamLead, setTeamLead] = useState({});
   const [teamMembers, setTeamMembers] = useState([]);
@@ -129,20 +129,20 @@ const TeamMembers = () => {
       dataField: "name",
       text: "Name",
       sort: true,
-      headerStyle: { width: "60%" },
+      headerStyle: { width: "50%" },
       formatter: (val, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(val?.charAt(0)) }}
+          >
+            {val?.charAt(0)}
+          </span>
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
-            {val} <span>{row?.team}</span>
+            {val?.toUpperCase()} <span>{row?.ogid}</span>
           </Link>
         </h2>
       ),
-    },
-    {
-      dataField: "ogid",
-      text: "OGID",
-      sort: true,
-      headerStyle: { width: "40%" },
     },
     {
       dataField: "email",
@@ -157,7 +157,9 @@ const TeamMembers = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{title}</h3>
+            <h3 className="page-title">
+              {title?.charAt(0).toUpperCase() + title.slice(1)}
+            </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Team Members</li>
