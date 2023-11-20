@@ -51,7 +51,7 @@ const LeadersSubordinatesTable = ({
   const columns = [
     {
       dataField: "fullName",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (

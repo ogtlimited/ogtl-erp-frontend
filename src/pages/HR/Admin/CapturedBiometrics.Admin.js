@@ -38,6 +38,8 @@ const CapturedBiometricsAdmin = () => {
       const resData = response?.data?.data?.staff;
       const totalPages = response?.data?.data?.total_pages;
 
+      console.log("Captured Biometrics: ", resData);
+
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
 
@@ -47,7 +49,7 @@ const CapturedBiometricsAdmin = () => {
       setAllEmployees(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Captured Biometrics:";
+      const component = "Captured Biometrics | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -72,7 +74,7 @@ const CapturedBiometricsAdmin = () => {
       setTotalCapturedBiometrics(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Total Captured Biometrics:";
+      const component = "Total Captured Biometrics | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -106,8 +108,12 @@ const CapturedBiometricsAdmin = () => {
         <div className="hr-dashboard-card">
           <span>Total Biometrics Captured</span>
           <div className="card-body">
-            <span className="dash-widget-icon">
-              <i className="las la-fingerprint"></i>
+            <span className="biometrics-widget-icon">
+              <lord-icon
+                src="https://cdn.lordicon.com/bdwluond.json"
+                trigger="loop"
+                style={{ width: "60px", height: "60px" }}
+              ></lord-icon>
             </span>
             <div className="card-info">
               <h3>{totalCapturedBiometrics}</h3>

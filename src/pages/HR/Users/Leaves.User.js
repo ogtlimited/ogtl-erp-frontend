@@ -24,6 +24,7 @@ const LeavesUser = () => {
     ErrorHandler,
     goToTop,
     selectDepartments,
+    getAvatarColor,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -185,6 +186,7 @@ const LeavesUser = () => {
       );
 
       const resData = response?.data?.data?.leave_histories;
+
       const totalPages = response?.data?.data?.total_pages;
 
       setSizePerPage(sizePerPage);
@@ -245,7 +247,7 @@ const LeavesUser = () => {
       );
 
       console.log(
-        "Department Leave History response:",
+        "Department Leave History response | ",
         response?.data?.data?.leaves?.leave_records
       );
       const resData = response?.data?.data?.leaves?.leave_records;
@@ -260,10 +262,7 @@ const LeavesUser = () => {
         from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
         status: leave?.status,
-        total_leave_days: calcBusinessDays(
-          leave?.start_date,
-          leave?.end_date
-        ),
+        total_leave_days: calcBusinessDays(leave?.start_date, leave?.end_date),
         reason: leave?.reason,
         rejection_reason: leave?.rejection_reason,
         reason_for_cancellation: leave?.reason_for_cancellation,
@@ -272,10 +271,8 @@ const LeavesUser = () => {
         leave_marker:
           moment(leave?.end_date).format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
-            : today_date <
-                moment(leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.start_date).format("yyyy-MM-DD") !==
-                today_date
+            : today_date < moment(leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.start_date).format("yyyy-MM-DD") !== today_date
             ? "Scheduled Leave"
             : "On Leave",
       }));
@@ -577,15 +574,27 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
       formatter: (val, row) => <p>{val}</p>,
     },
     {
       dataField: "full_name",
-      text: "Full Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "office",
@@ -763,21 +772,26 @@ const LeavesUser = () => {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "full_name",
-      text: "Full Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{row?.full_name?.toUpperCase()}</h2>,
-    },
-    {
-      dataField: "office",
-      text: "Office",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value?.toUpperCase()} <span>{row?.office?.toUpperCase()}</span>
+          </div>
+        </h2>
+      ),
     },
     {
       dataField: "status",

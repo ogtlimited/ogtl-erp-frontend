@@ -80,7 +80,8 @@ const EmployeesTable = ({
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const imageUrl = "https://erp.outsourceglobal.com";
-  const { setIsFromBiometrics, showAlert, user } = useAppContext();
+  const { setIsFromBiometrics, showAlert, user, getAvatarColor } =
+    useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -165,23 +166,17 @@ const EmployeesTable = ({
   const columns = [
     {
       dataField: "fullName",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar" onClick={handleNavigate}>
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
             {value} <span>{row?.designation}</span>
           </Link>

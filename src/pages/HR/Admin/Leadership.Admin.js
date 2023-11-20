@@ -14,8 +14,14 @@ import male3 from "../../../assets/img/male_avater3.png";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const LeadershipAdmin = () => {
-  const { selectDepartments, selectCampaigns, showAlert, user, ErrorHandler } =
-    useAppContext();
+  const {
+    selectDepartments,
+    selectCampaigns,
+    showAlert,
+    user,
+    ErrorHandler,
+    getAvatarColor,
+  } = useAppContext();
   const [allLeaders, setAllLeaders] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
@@ -135,34 +141,28 @@ const LeadershipAdmin = () => {
   const columns = [
     {
       dataField: "fullName",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
-          <a href="" className="avatar">
-            <img
-              alt=""
-              src={
-                row.image
-                  ? imageUrl + row.image
-                  : row?.gender === "male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
-              }
-            />
-          </a>
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <Link
             to={`/dashboard/hr/all-employees/employee/leader/${row.fullName}/${row.ogid}`}
           >
-            {value} <span>{row?.designation}</span>
+            {value?.toUpperCase()} <span>{row?.designation}</span>
           </Link>
         </h2>
       ),
     },
     {
       dataField: "ogid",
-      text: "Employee ID",
+      text: "OGID",
       sort: true,
       headerStyle: { width: "20%" },
     },

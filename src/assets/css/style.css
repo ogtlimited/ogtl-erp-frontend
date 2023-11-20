@@ -2914,11 +2914,20 @@ table.dataTable thead > tr > td.sorting {
   padding-right: 15px;
 }
 
+.biometrics-widget-icon {
+  border-radius: 100%;
+  float: left;
+  font-size: 30px;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 10px;
+  text-align: center;
+  width: 60px;
+}
 .dash-widget-icon {
   background-color: rgba(0, 197, 251, 0.2);
   border-radius: 100%;
   color: #00c5fb;
-  display: inline-block;
   float: left;
   font-size: 30px;
   height: 60px;
@@ -3295,7 +3304,7 @@ table.dataTable thead > tr > td.sorting {
   width: 100%;
 }
 .profile-img-wrap img {
-  border-radius: 50%;
+  border-radius: 10px;
   height: 120px;
   width: 120px;
 }

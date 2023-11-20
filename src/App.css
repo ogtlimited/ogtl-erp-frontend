@@ -185,7 +185,9 @@ a {
 .status-online,
 .status-pending,
 .status-terminated,
-.status-ticket {
+.status-ticket,
+.status-strict,
+.status-flexible {
   border: 2px solid #fff;
   bottom: 3px;
   height: 15px;
@@ -206,6 +208,12 @@ a {
 }
 .status-open {
   background-color: #2dcecc;
+}
+.status-strict {
+  background-color: #00c5fb;
+}
+.status-flexible {
+  background-color: #808080;
 }
 .btn-gray {
   background: #fff;

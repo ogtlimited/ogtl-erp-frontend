@@ -37,6 +37,7 @@ const Header = () => {
   const user = tokenService.getUser();
   const userOgid = user?.employee_info?.ogid;
   const emailAddress = user?.employee_info?.email;
+  const gender = user?.employee_info?.personal_details?.gender;
 
   const openGmailCompose = () => {
     window.open("https://mail.google.com/mail/?view=cm&fs=1");
@@ -126,7 +127,7 @@ const Header = () => {
             >
               <div className="header_user_profile_div">
                 <div className="profile_image_div">
-                  {user?.employee_info?.personal_details?.gender === "male" ? (
+                  {gender === "male" ? (
                     <img src={malePlaceholder} alt={malePlaceholder} />
                   ) : (
                     <img src={femalePlaceholder} alt={femalePlaceholder} />

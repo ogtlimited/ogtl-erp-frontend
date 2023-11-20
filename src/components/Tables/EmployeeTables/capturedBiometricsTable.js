@@ -7,16 +7,12 @@ import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import csvDownload from "json-to-csv-export";
 import axiosInstance from "../../../services/api";
+import malePlaceholder from "../../../assets/img/male-placeholder.jpeg";
+import femalePlaceholder from "../../../assets/img/female-placeholder.jpg";
 
 const CapturedBiometricsTable = ({
   data,
@@ -33,8 +29,6 @@ const CapturedBiometricsTable = ({
   context,
 }) => {
   const navigate = useNavigate();
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const { ExportCSVButton } = CSVExport;
   const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = React.useState(false);
@@ -97,7 +91,7 @@ const CapturedBiometricsTable = ({
   const columns = [
     {
       dataField: "FullName",
-      text: "Employee Name",
+      text: "Employee",
       sort: true,
       headerStyle: { width: "50%" },
       formatter: (value, row) => (
@@ -106,32 +100,73 @@ const CapturedBiometricsTable = ({
             <img
               alt=""
               src={
-                row.image
-                  ? imageUrl + row.image
+                row?.PictureUrl
+                  ? row?.PictureUrl
                   : row.Gender === "Male"
-                  ? males[Math.floor(Math.random() * males.length)]
-                  : females[Math.floor(Math.random() * females.length)]
+                  ? malePlaceholder
+                  : row.Gender === "Female"
+                  ? femalePlaceholder
+                  : "https://res.cloudinary.com/dhantey/image/upload/v1679528249/unknown-user-images_k0jjaq.png"
               }
             />
           </a>
           <Link to={`/dashboard/user/profile/${row.StaffUniqueId}`}>
-            {value} <span>{row?.Role}</span>
+            {value?.toUpperCase()} <span>{row?.Role?.toUpperCase()}</span>
           </Link>
         </h2>
       ),
     },
     {
       dataField: "StaffUniqueId",
-      text: "Employee ID",
+      text: "OGID",
       sort: true,
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "Role",
-      text: "Role",
+      dataField: "IsActive",
+      text: "Status",
       sort: true,
       headerStyle: { width: "20%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (value, row) => (
+        <>
+          {value === true ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-online"></span>{" "}
+              <span className="ml-4 d-block">ACTIVE</span>
+            </a>
+          ) : (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-terminated"></span>{" "}
+              <span className="ml-4 d-block">INACTIVE</span>
+            </a>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "StrictAttendance",
+      text: "Attendance",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <>
+          {value === true ? (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-strict"></span>{" "}
+              <span className="ml-4 d-block">STRICT</span>
+            </a>
+          ) : (
+            <a href="" className="pos-relative">
+              {" "}
+              <span className="status-flexible"></span>{" "}
+              <span className="ml-4 d-block">REMOTE</span>
+            </a>
+          )}
+        </>
+      ),
     },
     {
       dataField: "Email",
@@ -173,26 +208,29 @@ const CapturedBiometricsTable = ({
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axiosInstance.get("/api/v1/biometric_enrolled_staff.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: 1000,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/biometric_enrolled_staff.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: 1000,
+          },
+        }
+      );
 
       const responseData = response?.data?.data?.staff;
 
       const formatted = responseData.map((data, index) => ({
         "S/N": index + 1,
         "Employee Name": data?.FullName,
-        "OGID": data?.StaffUniqueId,
-        "Role": data?.Role,
-        "Email": data?.Email,
+        OGID: data?.StaffUniqueId,
+        Role: data?.Role,
+        Email: data?.Email,
       }));
 
       const dataToConvert = {
@@ -224,7 +262,7 @@ const CapturedBiometricsTable = ({
           {(props) => (
             <div className="col-12">
               <ExportCSVButton
-                  onClick={handleDownloadCSV}
+                onClick={handleDownloadCSV}
                 className="float-right btn export-csv"
                 style={{ marginBottom: 15 }}
               >
