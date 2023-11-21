@@ -142,7 +142,8 @@ const LeavesUser = () => {
 
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave.first_name + " " + leave.last_name,
+        full_name:
+          leave.first_name.toUpperCase() + " " + leave.last_name.toUpperCase(),
         status_action: leave?.status,
         office: leave.office.toUpperCase(),
         leave_type: leave?.leave_type,
@@ -178,24 +179,19 @@ const LeavesUser = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          params: {
-            page: page,
-            limit: sizePerPage,
-          },
         }
       );
 
       const resData = response?.data?.data?.leave_histories;
 
-      const totalPages = response?.data?.data?.total_pages;
-
-      setSizePerPage(sizePerPage);
-      setTotalPages(totalPages);
-
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave?.user?.first_name + " " + leave?.user?.last_name,
+        full_name:
+          leave?.user?.first_name?.toUpperCase() +
+          " " +
+          leave?.user?.last_name?.toUpperCase(),
         from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
+        office: leave?.office?.toUpperCase(),
         to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
         status: leave?.leave?.status,
         total_leave_days: calcBusinessDays(
@@ -225,7 +221,7 @@ const LeavesUser = () => {
     }
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [today_date]);
 
   // Department Leave History:
   const fetchDepartmentLeaveHistory = useCallback(async () => {
@@ -239,26 +235,26 @@ const LeavesUser = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            page: page,
-            limit: sizePerPage,
+            pages: deptPage,
+            limit: deptSizePerPage,
             department_id: departmentId,
           },
         }
       );
 
-      console.log(
-        "Department Leave History response | ",
-        response?.data?.data?.leaves?.leave_records
-      );
       const resData = response?.data?.data?.leaves?.leave_records;
-      const totalPages = response?.data?.data?.leaves?.pages;
+      const deptTotalPages = response?.data?.data?.leaves?.pages;
 
       setDeptSizePerPage(deptSizePerPage);
-      setDeptTotalPages(totalPages);
+      setDeptTotalPages(deptTotalPages);
 
       const formatted = resData.map((leave) => ({
         ...leave,
-        full_name: leave?.first_name + " " + leave?.last_name,
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
+        office: leave?.office?.toUpperCase(),
         from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
         to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
         status: leave?.status,
@@ -284,7 +280,7 @@ const LeavesUser = () => {
     }
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deptPage, deptSizePerPage]);
+  }, [departmentId, deptPage, deptSizePerPage, today_date]);
 
   useEffect(() => {
     fetchYourLeaves();
@@ -591,7 +587,7 @@ const LeavesUser = () => {
             {value?.charAt(0)}
           </span>
           <div>
-            {value?.toUpperCase()} <span>{row?.ogid}</span>
+            {value} <span>{row?.ogid}</span>
           </div>
         </h2>
       ),
@@ -788,7 +784,7 @@ const LeavesUser = () => {
             {value?.charAt(0)}
           </span>
           <div>
-            {value?.toUpperCase()} <span>{row?.office?.toUpperCase()}</span>
+            {value} <span>{row?.office}</span>
           </div>
         </h2>
       ),
@@ -1079,28 +1075,16 @@ const LeavesUser = () => {
               setData={setAllReporteesLeaves}
               loading={loading}
               setLoading={setLoading}
-              page={page}
-              setPage={setPage}
-              sizePerPage={sizePerPage}
-              setSizePerPage={setSizePerPage}
-              totalPages={totalPages}
-              setTotalPages={setTotalPages}
             />
           </div>
 
           <div id="tab_leave-history" className="col-12 tab-pane">
-            <UniversalPaginatedTable
+            <UniversalTable
               columns={historyColumns}
               data={leaveHistory}
               setData={setLeaveHistory}
               loading={loading}
               setLoading={setLoading}
-              page={page}
-              setPage={setPage}
-              sizePerPage={sizePerPage}
-              setSizePerPage={setSizePerPage}
-              totalPages={totalPages}
-              setTotalPages={setTotalPages}
             />
           </div>
 
