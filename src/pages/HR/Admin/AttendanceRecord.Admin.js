@@ -200,7 +200,7 @@ const AttendanceRecord = () => {
       dataField: "full_name",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <span
@@ -212,10 +212,16 @@ const AttendanceRecord = () => {
           <Link
             to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
           >
-            {value?.toUpperCase()} <span>{row?.ogid}</span>
+            {value?.toUpperCase()}
           </Link>
         </h2>
       ),
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { width: "10%" },
     },
     {
       dataField: "date",
@@ -253,7 +259,7 @@ const AttendanceRecord = () => {
       dataField: "work_hours",
       text: "Work Hours",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
   ];
 
