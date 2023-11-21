@@ -54,7 +54,7 @@ const LeavesAdmin = () => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreate = ["hr_manager", "senior_hr_associate"];
 
-  const CurrentUserCanCreateLeave = CurrentUserRoles.some((role) =>
+  const CurrentUserCanCreateAndActOnLeave = CurrentUserRoles.some((role) =>
     canCreate.includes(role)
   );
 
@@ -463,7 +463,7 @@ const LeavesAdmin = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+            {row.status === "pending" && CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -475,7 +475,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+            {row.status === "pending" && CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -485,7 +485,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" && CurrentUserCanCreateLeave ? (
+            {row.status === "pending" && CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -715,7 +715,7 @@ const LeavesAdmin = () => {
 
             {row.status === "approved" &&
             row?.leave_marker !== "Leave Ended" &&
-            CurrentUserCanCreateLeave ? (
+            CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -727,7 +727,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" ? (
+            {row.status === "pending" && CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -737,7 +737,7 @@ const LeavesAdmin = () => {
               </a>
             ) : null}
 
-            {row.status === "pending" ? (
+            {row.status === "pending" && CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -749,7 +749,7 @@ const LeavesAdmin = () => {
 
             {row.status === "approved" &&
             row?.leave_marker !== "Leave Ended" &&
-            CurrentUserCanCreateLeave ? (
+            CurrentUserCanCreateAndActOnLeave ? (
               <a
                 href="#"
                 className="dropdown-item"
@@ -776,7 +776,7 @@ const LeavesAdmin = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateLeave && (
+            {CurrentUserCanCreateAndActOnLeave && (
               <a
                 href="#"
                 className="btn add-btn m-r-5"
