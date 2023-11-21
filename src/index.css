@@ -635,3 +635,9 @@ table.custom-table thead th {
   color: #808080;
   font-size: 12px;
 }
+
+.payroll_month_indicator {
+  color: #808080;
+  font-weight: 500;
+  font-family: "Inter", "san-serif" !important;
+}
