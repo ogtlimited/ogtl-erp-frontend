@@ -114,32 +114,45 @@ const EmployeePayroll = () => {
         },
         params: {
           page: page,
-          limit: 1000,
+          limit: 4000,
         },
       });
 
-      const responseData = response?.data?.data?.employees;
+      const responseData = response?.data?.data?.slips;
 
-      const formatted = responseData.map((data, index) => ({
-        "S/N": index + 1,
-        "Employee Name": data?.full_name,
-        OGID: data?.ogid,
-        "Office Type": data?.office?.office_type,
-        Office: data?.office?.title,
-        Designation: data?.designation,
-        Email: data?.email,
+      const formatted = responseData.map((data) => ({
+        EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
+        OGID: data?.user?.ogid,
+        EMAIL: data?.user?.email,
+
+        BASIC: helper.handleMoneyFormat(data?.slip?.basic),
+        MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
+        HOUSING: helper.handleMoneyFormat(data?.slip?.housing),
+        TRANSPORT: helper.handleMoneyFormat(data?.slip?.transport),
+        "OTHER ALLOWANCES": helper.handleMoneyFormat(
+          data?.slip?.other_allowances
+        ),
+        "MONTHLY SALARY": helper.handleMoneyFormat(data?.slip?.monthly_salary),
+
+        TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
+        PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+        "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
+          data?.slip?.disciplinary_deductions
+        ),
+        "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
+          data?.slip?.total_deductions
+        ),
+        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
 
-      console.log("Download this payroll:", formatted);
+      const dataToConvert = {
+        data: formatted,
+        filename: `OGTL - Staff Monthly Payslip - ${currMonthName} ${year}`,
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
 
-      // const dataToConvert = {
-      //   data: formatted,
-      //   filename: "OGTL - All Employees Record",
-      //   delimiter: ",",
-      //   useKeysAsHeaders: true,
-      // };
-
-      // csvDownload(dataToConvert);
+      csvDownload(dataToConvert);
 
       setLoadingCSV(false);
     } catch (error) {
@@ -274,7 +287,7 @@ const EmployeePayroll = () => {
                   style={{ marginLeft: "20px" }}
                   onClick={handleExportCSV}
                 >
-                  <i className="fa fa-download"></i> Export CSV
+                  <i className="fa fa-download"></i> Download Report
                 </button>
               )
             )}
