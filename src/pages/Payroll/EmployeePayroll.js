@@ -13,9 +13,12 @@ import helper from "../../services/helper";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
+import csvDownload from "json-to-csv-export";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const EmployeePayroll = () => {
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, showAlert } = useAppContext();
   const handleClose = () => {};
   const [generating, setGenerating] = useState(false);
   const year = moment().format("YYYY");
@@ -24,6 +27,7 @@ const EmployeePayroll = () => {
   const [previewData, setPreviewData] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingCSV, setLoadingCSV] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -95,6 +99,54 @@ const EmployeePayroll = () => {
   useEffect(() => {
     fetchEmployeeSalarySlip();
   }, [fetchEmployeeSalarySlip]);
+
+  // Handle CSV Export:
+  const handleExportCSV = async (e) => {
+    e.preventDefault();
+    setLoadingCSV(true);
+
+    try {
+      const response = await axiosInstance.get("/api/v1/salary_slips.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: 1000,
+        },
+      });
+
+      const responseData = response?.data?.data?.employees;
+
+      const formatted = responseData.map((data, index) => ({
+        "S/N": index + 1,
+        "Employee Name": data?.full_name,
+        OGID: data?.ogid,
+        "Office Type": data?.office?.office_type,
+        Office: data?.office?.title,
+        Designation: data?.designation,
+        Email: data?.email,
+      }));
+
+      console.log("Download this payroll:", formatted);
+
+      // const dataToConvert = {
+      //   data: formatted,
+      //   filename: "OGTL - All Employees Record",
+      //   delimiter: ",",
+      //   useKeysAsHeaders: true,
+      // };
+
+      // csvDownload(dataToConvert);
+
+      setLoadingCSV(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoadingCSV(false);
+    }
+  };
 
   const columns = [
     {
@@ -201,13 +253,32 @@ const EmployeePayroll = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Staff Monthly Payroll</h3>
+            <h3 className="page-title">
+              Staff Monthly Payroll |{" "}
+              <span className="payroll_month_indicator">{currMonthName}</span>
+            </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item ">Payroll</li>
               <li className="breadcrumb-item active">Payroll Processing</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
+            {loadingCSV ? (
+              <button className="btn add-btn" style={{ marginLeft: "20px" }}>
+                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+              </button>
+            ) : (
+              data.length > 0 && (
+                <button
+                  className="btn add-btn"
+                  style={{ marginLeft: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Export CSV
+                </button>
+              )
+            )}
+
             {user?.role?.title !== "CEO" && (
               <a
                 href="#"

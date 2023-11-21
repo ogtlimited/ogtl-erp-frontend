@@ -150,7 +150,10 @@ const PayslipReports = () => {
       <div className="page-header">
         <div className="row">
           <div className="col">
-            <h3 className="page-title">Staff Monthly Payslip</h3>
+            <h3 className="page-title">
+              Staff Monthly Payslip |{" "}
+              <span className="payroll_month_indicator">{currMonthName}</span>
+            </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item ">Reports</li>
               <li className="breadcrumb-item active">Payslip Reports</li>

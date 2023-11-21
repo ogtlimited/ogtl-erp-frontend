@@ -131,6 +131,11 @@ export const PATH_DASHBOARD = {
     branch: path(ROOTS_DASHBOARD, "/operations/branch"),
   },
 
+  dataManagement: {
+    root: path(ROOTS_DASHBOARD, "/data-management"),
+    workforceLeaveApplications: path(ROOTS_DASHBOARD, "/data-management/workforce-leave-applications"),
+  },
+
   operations: {
     root: path(ROOTS_DASHBOARD, "/operations"),
     workforceLeaveApplications: path(ROOTS_DASHBOARD, "/operations/workforce-leave-applications"),
