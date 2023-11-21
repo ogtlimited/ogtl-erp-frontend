@@ -16,9 +16,7 @@ const ReversedDeductions = () => {
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-  const [date, setDate] = useState(
-    `${currentYear}-${currentMonth.toString().padStart(2, "0")}`
-  );
+  const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
 
   const fetchReversedDeductions = useCallback(async () => {
     const month = date.split("-")[1];

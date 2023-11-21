@@ -30,7 +30,7 @@ function EmployeeSalaryTable({
   context,
 }) {
   const navigate = useNavigate();
-  const { user } = useAppContext();
+  const { user, getAvatarColor } = useAppContext();
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [info, setInfo] = useState({
@@ -97,14 +97,78 @@ function EmployeeSalaryTable({
     navigate(`/dashboard/payroll/payslip/${action?.id}`);
   };
 
+  /**
+   ** !This is the original code without the avatar:
+   * 
+   * const renderTableRows = () => {
+      return data.map((employee, index) => (
+        <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
+          {columns.map((column) => (
+            <td key={column.dataField}>
+              {typeof employee[column.dataField] === "number"
+                ? helper.handleMoneyFormat(employee[column.dataField])
+                : employee[column.dataField]}
+            </td>
+          ))}
+
+          {viewAction && (
+            <td>
+              {regenerate && user?.role?.title !== "CEO" ? (
+                <a
+                  href="#"
+                  className="btn btn-sm btn-primary"
+                  data-toggle="modal"
+                  data-target="#RegeneratePayrollModal"
+                  onClick={() => handleRegeneratePayroll(employee)}
+                  style={{ marginRight: "20px" }}
+                >
+                  Regenerate
+                </a>
+              ) : null}
+
+              <button
+                className="btn btn-sm btn-secondary"
+                onClick={() => handleAction(employee)}
+              >
+                {actionTitle}
+              </button>
+            </td>
+          )}
+        </tr>
+      ));
+    };
+  *
+  * 
+  */
+
+  // * !This is the code with the avatar:
   const renderTableRows = () => {
     return data.map((employee, index) => (
       <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-        {columns.map((column) => (
+        {columns.map((column, columnIndex) => (
           <td key={column.dataField}>
-            {typeof employee[column.dataField] === "number"
-              ? helper.handleMoneyFormat(employee[column.dataField])
-              : employee[column.dataField]}
+            {columnIndex === 0 ? (
+              <div className="payroll-table-avatar">
+                <div
+                  className="avatar-span"
+                  style={{
+                    backgroundColor: getAvatarColor(
+                      employee[column.dataField]?.charAt(0)
+                    ),
+                  }}
+                >
+                  {employee[column.dataField]?.charAt(0)}
+                </div>
+                <div className="payroll-table-avatar-name">
+                  {employee[column.dataField]}{" "}
+                  <span> {employee[column.idDataField]}</span>
+                </div>
+              </div>
+            ) : typeof employee[column.dataField] === "number" ? (
+              helper.handleMoneyFormat(employee[column.dataField])
+            ) : (
+              employee[column.dataField]
+            )}
           </td>
         ))}
 
@@ -151,10 +215,10 @@ function EmployeeSalaryTable({
             <table className="emp_salary_custom_table custom-table">
               <thead className="emp_salary_custom-table-thead">
                 <tr>
-                  <th className="emp_salary_tr_th exempt" colSpan="3"></th>
+                  <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns.length <= 13 ? "3" : "4"}>Deductions</th>
+                  <th colSpan={columns.length <= 12 ? "3" : "4"}>Deductions</th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 
@@ -162,7 +226,6 @@ function EmployeeSalaryTable({
                   {columns?.map((column) => (
                     <th key={column.dataField}>{column.text}</th>
                   ))}
-
                   {viewAction && <th>Action</th>}
                 </tr>
               </thead>
