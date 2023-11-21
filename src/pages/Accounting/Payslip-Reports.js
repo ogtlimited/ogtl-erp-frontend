@@ -93,10 +93,7 @@ const PayslipReports = () => {
     {
       dataField: "employee",
       text: "Employee Name",
-    },
-    {
-      dataField: "ogid",
-      text: "OGID",
+      idDataField: "ogid",
     },
     {
       dataField: "email",

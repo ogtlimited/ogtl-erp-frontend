@@ -620,3 +620,18 @@ table.custom-table thead th {
   position: relative;
   white-space: nowrap;
 }
+
+.payroll-table-avatar {
+  display: flex;
+  align-items: center;
+}
+
+.payroll-table-avatar-name {
+  display: flex;
+  flex-direction: column;
+}
+
+.payroll-table-avatar-name > span {
+  color: #808080;
+  font-size: 12px;
+}

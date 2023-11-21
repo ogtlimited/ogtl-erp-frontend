@@ -85,7 +85,7 @@ const EmployeePayroll = () => {
         setLoading(false);
       })
       .catch((error) => {
-        const component = "Employee Salary Slip Error:";
+        const component = "Employee Salary Slip Error | ";
         ErrorHandler(error, component);
         setLoading(false);
       });
@@ -99,11 +99,8 @@ const EmployeePayroll = () => {
   const columns = [
     {
       dataField: "employee",
-      text: "Employee Name",
-    },
-    {
-      dataField: "ogid",
-      text: "OGID",
+      text: "Employee",
+      idDataField: "ogid",
     },
     {
       dataField: "email",

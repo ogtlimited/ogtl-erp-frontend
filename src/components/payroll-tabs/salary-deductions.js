@@ -11,16 +11,14 @@ import helper from "../../services/helper";
 
 const Deductions = () => {
   const navigate = useNavigate();
-  const { ErrorHandler, user } = useAppContext();
+  const { ErrorHandler, user, getAvatarColor } = useAppContext();
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-  const [date, setDate] = useState(
-    `${currentYear}-${currentMonth.toString().padStart(2, "0")}`
-  );
+  const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -30,8 +28,8 @@ const Deductions = () => {
   );
 
   const fetchDeductions = useCallback(async () => {
-    const month = date.split("-")[1];
-    const year = date.split("-")[0];
+    const month = date?.split("-")[1];
+    const year = date?.split("-")[0];
 
     setLoading(true);
     try {
@@ -73,6 +71,15 @@ const Deductions = () => {
     fetchDeductions();
   }, [fetchDeductions]);
 
+  const handleViewAllBreakdown = (row) => {
+    const month = date.split("-")[1];
+    const year = date.split("-")[0];
+
+    navigate(
+      `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}/`
+    );
+  };
+
   const columns = [
     {
       dataField: "employeeName",
@@ -81,8 +88,14 @@ const Deductions = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
           <div>
-            {row?.employeeName} <span>{row?.employeeId}</span>
+            {value} <span>{row?.employeeId}</span>
           </div>
         </h2>
       ),
@@ -110,13 +123,7 @@ const Deductions = () => {
             <button
               className="btn btn-sm btn-primary"
               data-toggle="modal"
-              onClick={() =>
-                navigate(
-                  `/dashboard/payroll/staff-deductions/${row?.ogid}/${
-                    date.split("-")[1]
-                  }/${date.split("-")[0]}`
-                )
-              }
+              onClick={() => handleViewAllBreakdown(row)}
             >
               View Deductions
             </button>

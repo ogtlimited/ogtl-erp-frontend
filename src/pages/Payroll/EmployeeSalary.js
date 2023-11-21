@@ -83,7 +83,7 @@ const EmployeeSalary = () => {
         setLoading(false);
       })
       .catch((error) => {
-        const component = "All Salaries Error:";
+        const component = "All Salaries Error | ";
         ErrorHandler(error, component);
         setLoading(false);
       });
@@ -98,10 +98,7 @@ const EmployeeSalary = () => {
     {
       dataField: "employee",
       text: "Employee",
-    },
-    {
-      dataField: "ogid",
-      text: "Employee ID",
+      idDataField: "ogid",
     },
     {
       dataField: "email",
