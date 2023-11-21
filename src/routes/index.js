@@ -446,7 +446,28 @@ export default function Router() {
           ],
         },
 
-        // Operations
+        // DATA MANAGEMENT:
+        {
+          path: "data-management",
+          children: [
+            {
+              path: "",
+              element: (
+                <Navigate to="/dashboard/data-management/workforce" replace />
+              ),
+            },
+            {
+              path: "workforce-leave-applications",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <WorkforceLeaveApplications />
+                </GuardedRoute>
+              ),
+            },
+          ],
+        },
+
+        // OPERATIONS:
         {
           path: "operations",
           children: [

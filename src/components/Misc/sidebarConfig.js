@@ -411,6 +411,29 @@ const sidebarConfig = [
           ],
   },
 
+  // DATA MANAGEMENT CONFIG:
+  {
+    subheader: "Data Management",
+    canView: CurrentUserRoles.includes("data_manager") ? "data management" : "none",
+    items: [
+      {
+        canView: CurrentUserRoles.includes("data_manager")
+          ? "data management"
+          : "none",
+        title: "Workforce",
+        path: PATH_DASHBOARD.dataManagement.root,
+        icon: ICONS.users,
+        children: [
+          {
+            canView: "data management",
+            title: "Leave Applications",
+            path: PATH_DASHBOARD.dataManagement.workforceLeaveApplications,
+          },
+        ],
+      },
+    ],
+  },
+
   // OPERATIONS CONFIG:
   {
     subheader: "Operations",

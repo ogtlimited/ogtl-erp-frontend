@@ -71,11 +71,8 @@ const AllLeaveStatusAdmin = () => {
         const resData = res?.data?.data?.leave_status;
         const totalPages = res?.data?.data?.total_pages;
 
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
+        setSizePerPage(sizePerPage);
+        setTotalPages(totalPages);
 
         const formatted = resData.map((leave) => ({
           ...leave,
@@ -88,9 +85,11 @@ const AllLeaveStatusAdmin = () => {
             leave?.leave?.end_date
           ),
           date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
-          current_approver: !leave?.leave?.hr_stage
-            ? leave?.current_stage_manager?.manager_full_name
-            : "HR",
+          current_approver: leave?.leave?.hr_stage
+            ? "HR"
+            : leave?.leave?.workforce_stage
+            ? "WORKFORCE"
+            : leave?.current_stage_manager?.manager_full_name,
           leave_marker:
             moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
               ? "Leave Ended"
