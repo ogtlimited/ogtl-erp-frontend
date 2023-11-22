@@ -131,7 +131,7 @@ export const DepartmentSupervisorFormModal = ({
                           name="department_id"
                           type="text"
                           className="form-control"
-                          value={title}
+                          value={title?.toUpperCase()}
                           readOnly
                         />
                       </div>

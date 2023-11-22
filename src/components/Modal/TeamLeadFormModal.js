@@ -7,13 +7,8 @@ import { useParams } from "react-router-dom";
 import $ from "jquery";
 import Select from "react-select";
 
-export const TeamLeadFormModal = ({
-  mode,
-  data,
-  fetchTeamLead,
-}) => {
-  const { selectLeaders, selectTeams, showAlert, goToTop } =
-    useAppContext();
+export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
+  const { selectLeaders, selectTeams, showAlert, goToTop } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);
@@ -32,26 +27,44 @@ export const TeamLeadFormModal = ({
 
     setLoading(true);
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(
-        `/api/v1/teams_leads/${id}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            operation_team_id: +id,
-            team_lead_id: office.team_lead_id,
-          },
-        }
-      );
+      if (mode === "Assign") {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.post(
+          `/api/v1/teams_leads.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: {
+              operation_team_id: +id,
+              team_lead_id: office.team_lead_id,
+            },
+          }
+        );
+      } else {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axiosInstance.patch(
+          `/api/v1/teams_leads/${id}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: {
+              operation_team_id: +id,
+              team_lead_id: office.team_lead_id,
+            },
+          }
+        );
+      }
 
       goToTop();
       showAlert(
         true,
-        `${office?.lead_title} successfully assigned as ${title} Team Lead`,
+        `${office?.lead_title} successfully assigned as ${title?.toUpperCase()} Team Lead`,
         "alert alert-success"
       );
       fetchTeamLead();
@@ -100,9 +113,7 @@ export const TeamLeadFormModal = ({
                   {mode === "Edit" ? (
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="operation_team_id">
-                          Team
-                        </label>
+                        <label htmlFor="operation_team_id">Team</label>
                         <Select
                           name="operation_team_id"
                           options={selectTeams}
@@ -124,9 +135,7 @@ export const TeamLeadFormModal = ({
                   ) : (
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="operation_team_id">
-                          Team
-                        </label>
+                        <label htmlFor="operation_team_id">Team</label>
                         <input
                           name="operation_team_id"
                           type="text"
