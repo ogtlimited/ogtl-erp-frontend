@@ -19,12 +19,9 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const PayslipReports = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
-  const handleClose = () => {};
   const [generating, setGenerating] = useState(false);
   const year = moment().format("YYYY");
   const currMonthName = moment().format("MMMM");
-  const [displayState, setDisplayState] = useState("");
-  const [previewData, setPreviewData] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
