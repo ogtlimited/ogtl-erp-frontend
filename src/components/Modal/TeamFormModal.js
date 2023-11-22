@@ -184,7 +184,7 @@ export const TeamFormModal = ({ mode, data, fetchAllTeams, officeType }) => {
                           name="operation_department_id"
                           type="text"
                           className="form-control"
-                          value={title}
+                          value={title?.toUpperCase()}
                           readOnly
                         />
                       </div>

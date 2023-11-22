@@ -131,7 +131,7 @@ export const CampaignSupervisorFormModal = ({
                           name="operation_campaign_id"
                           type="text"
                           className="form-control"
-                          value={title}
+                          value={title?.toUpperCase()}
                           readOnly
                         />
                       </div>
