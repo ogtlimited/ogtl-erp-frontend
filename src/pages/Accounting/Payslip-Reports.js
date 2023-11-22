@@ -13,9 +13,12 @@ import { formatter } from "../../services/numberFormatter";
 import ApprovePayroll from "./ApprovePayroll";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
+import csvDownload from "json-to-csv-export";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const PayslipReports = () => {
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, showAlert } = useAppContext();
   const handleClose = () => {};
   const [generating, setGenerating] = useState(false);
   const year = moment().format("YYYY");
@@ -24,6 +27,7 @@ const PayslipReports = () => {
   const [previewData, setPreviewData] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingCSV, setLoadingCSV] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -78,7 +82,7 @@ const PayslipReports = () => {
         setLoading(false);
       })
       .catch((error) => {
-        const component = "Employee Salary Slip Error:";
+        const component = "Employee Salary Slip Error | ";
         ErrorHandler(error, component);
         setLoading(false);
       });
@@ -88,6 +92,67 @@ const PayslipReports = () => {
   useEffect(() => {
     fetchEmployeeSalarySlip();
   }, [fetchEmployeeSalarySlip]);
+
+  // Handle CSV Export:
+  const handleExportCSV = async (e) => {
+    e.preventDefault();
+    setLoadingCSV(true);
+
+    try {
+      const response = await axiosInstance.get("/api/v1/salary_slips.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: 4000,
+        },
+      });
+
+      const responseData = response?.data?.data?.slips;
+
+      const formatted = responseData.map((data) => ({
+        EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
+        OGID: data?.user?.ogid,
+        EMAIL: data?.user?.email,
+
+        BASIC: helper.handleMoneyFormat(data?.slip?.basic),
+        MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
+        HOUSING: helper.handleMoneyFormat(data?.slip?.housing),
+        TRANSPORT: helper.handleMoneyFormat(data?.slip?.transport),
+        "OTHER ALLOWANCES": helper.handleMoneyFormat(
+          data?.slip?.other_allowances
+        ),
+        "MONTHLY SALARY": helper.handleMoneyFormat(data?.slip?.monthly_salary),
+
+        TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
+        PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+        "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
+          data?.slip?.disciplinary_deductions
+        ),
+        "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
+          data?.slip?.total_deductions
+        ),
+        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
+      }));
+
+      const dataToConvert = {
+        data: formatted,
+        filename: `OGTL - Staff Monthly Payslip - ${currMonthName} ${year}`,
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+
+      setLoadingCSV(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoadingCSV(false);
+    }
+  };
 
   const columns = [
     {
@@ -158,6 +223,23 @@ const PayslipReports = () => {
               <li className="breadcrumb-item ">Reports</li>
               <li className="breadcrumb-item active">Payslip Reports</li>
             </ul>
+          </div>
+          <div className="col-auto float-right ml-auto">
+            {loadingCSV ? (
+              <button className="btn add-btn" style={{ marginLeft: "20px" }}>
+                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+              </button>
+            ) : (
+              data.length > 0 && (
+                <button
+                  className="btn add-btn"
+                  style={{ marginLeft: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Download Payslips
+                </button>
+              )
+            )}
           </div>
         </div>
       </div>
