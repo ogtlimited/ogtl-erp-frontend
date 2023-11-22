@@ -16,7 +16,7 @@ const CampaignUsers = () => {
         <div className="row align-items-center">
           <div className="col">
             <h3 className="page-title">
-              {title.replace(/\b\w/g, char => char.toUpperCase())}
+              {title.toUpperCase()}
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
