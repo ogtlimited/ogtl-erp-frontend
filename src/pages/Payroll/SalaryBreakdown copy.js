@@ -55,7 +55,7 @@ const PaySlip = () => {
         const endOfMonth = moment().endOf("month").format("YYYY-MM-DD");
         console.log(startOfMonth, endOfMonth);
         const res = await axiosInstance.get(
-          `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}`
+          `/api/salary-slip/employee-report?empId=${id}&startOfMonth=${startOfMonth}&endOfMonth=${endOfMonth}/`
         );
         // const res = await axiosInstance.get(`/api/salary-slip/${id}`);
         // console.log("Salary Breakdown Response:", res?.data?.data?.employeeSlip);
