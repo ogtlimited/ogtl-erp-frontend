@@ -641,3 +641,37 @@ table.custom-table thead th {
   font-weight: 500;
   font-family: "Inter", "san-serif" !important;
 }
+
+/*---------------------- 
+    Resignation
+----------------------*/
+
+.resignation_form_inner {
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  outline: 0;
+}
+
+.resignation_reason {
+  min-height: 100px !important;
+}
+
+.resignation_form_footer {
+  border-top: none !important;
+}
+
+@media only screen and (max-width: 991px) {
+  .resignation_icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

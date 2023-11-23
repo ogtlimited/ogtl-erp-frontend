@@ -124,6 +124,12 @@ const sidebarConfig = [
               path: PATH_DASHBOARD.main.employeeLeave,
               icon: ICONS.leave,
             },
+            {
+              canView: "all",
+              title: "Resignation",
+              path: PATH_DASHBOARD.main.resignation,
+              icon: ICONS.resignation,
+            },
           ]
         : [
             {
@@ -164,6 +170,12 @@ const sidebarConfig = [
               title: "Leave",
               path: PATH_DASHBOARD.main.employeeLeave,
               icon: ICONS.leave,
+            },
+            {
+              canView: "all",
+              title: "Resignation",
+              path: PATH_DASHBOARD.main.resignation,
+              icon: ICONS.resignation,
             },
           ],
   },
@@ -366,6 +378,21 @@ const sidebarConfig = [
           },
         ],
       },
+
+      // Exit Management:
+      {
+        canView: "hr",
+        title: "Exit",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.resignation,
+        children: [
+          {
+            canView: "hr",
+            title: "Resignations",
+            path: PATH_DASHBOARD.hr.resignation,
+          },
+        ],
+      },
     ],
   },
 
@@ -414,7 +441,9 @@ const sidebarConfig = [
   // DATA MANAGEMENT CONFIG:
   {
     subheader: "Data Management",
-    canView: CurrentUserRoles.includes("data_manager") ? "data management" : "none",
+    canView: CurrentUserRoles.includes("data_manager")
+      ? "data management"
+      : "none",
     items: [
       {
         canView: CurrentUserRoles.includes("data_manager")
