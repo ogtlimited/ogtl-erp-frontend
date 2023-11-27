@@ -3730,6 +3730,13 @@ table.dataTable thead > tr > td.sorting {
   height: 100%;
   width: 100%;
 }
+
+.table th, .table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
+}
+
 .table-content {
   bottom: 0;
   left: 0;
