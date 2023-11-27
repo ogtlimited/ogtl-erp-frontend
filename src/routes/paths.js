@@ -76,6 +76,7 @@ export const PATH_DASHBOARD = {
     publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
     payrollProcessing: path(ROOTS_DASHBOARD, "/payroll/payroll-processing"),
+    payrollDates: path(ROOTS_DASHBOARD, "/payroll/payroll-dates"),
     payrollBatches: path(ROOTS_DASHBOARD, "/payroll/payroll-batches"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),

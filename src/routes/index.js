@@ -530,6 +530,14 @@ export default function Router() {
               ),
             },
             {
+              path: "payroll-dates",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PayrollDates />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "deductions",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1324,6 +1332,9 @@ const PublicHoliday = Loadable(
 );
 const PayrollBatches = Loadable(
   lazy(() => import("../pages/Payroll/PayrollBatches"))
+);
+const PayrollDates = Loadable(
+  lazy(() => import("../pages/Payroll/PayrollDates.js"))
 );
 const PayrollDeductions = Loadable(
   lazy(() => import("../pages/Payroll/Deductions"))
