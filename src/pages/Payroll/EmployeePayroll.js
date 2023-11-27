@@ -26,6 +26,8 @@ const EmployeePayroll = () => {
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
 
+  const [payday, setPayday] = useState("");
+
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
@@ -37,6 +39,56 @@ const EmployeePayroll = () => {
     isAuthorized.includes(role)
   );
 
+  // Format Generation Dates:
+  const generateOrdinal = (day) => {
+    if (day >= 11 && day <= 13) {
+      return `${day}th`;
+    }
+
+    const lastDigit = day % 10;
+    const suffixes = ["st", "nd", "rd"];
+    const suffix = suffixes[lastDigit - 1] || "th";
+
+    return `${day}${suffix}`;
+  };
+
+  // All Paydays:
+  const fetchAllPayrollDates = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = response?.data?.data?.payroll_config;
+
+      const formatted = resData.map((data) => ({
+        ...data,
+        created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
+        payday: generateOrdinal(data.generation_date),
+      }));
+
+      const currentPayday = formatted.slice(0, 1)[0]?.payday;
+
+      setPayday(currentPayday);
+      setLoading(false);
+    } catch (error) {
+      const component = "Payroll Dates Error | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPayrollDates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fetch Employee Salary Slip:
   const fetchEmployeeSalarySlip = useCallback(() => {
     setLoading(true);
     axiosInstance
@@ -229,7 +281,7 @@ const EmployeePayroll = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the 25th of every month
+              Payroll is generated on the {payday} of every month
             </span>
             <span className="pl-3">
               {" "}
@@ -250,7 +302,7 @@ const EmployeePayroll = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the 25th of every month
+              Payroll is generated on the {payday} of every month
             </span>
             <span className="pl-3">
               {" "}
@@ -273,22 +325,6 @@ const EmployeePayroll = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadingCSV ? (
-              <button className="btn add-btn" style={{ marginLeft: "20px" }}>
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
-              </button>
-            ) : (
-              data.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginLeft: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
-              )
-            )}
-
             {user?.role?.title !== "CEO" && (
               <a
                 href="#"
@@ -300,7 +336,23 @@ const EmployeePayroll = () => {
               </a>
             )}
 
-            {user?.role?.title === "CEO" && (
+            {loadingCSV ? (
+              <button className="btn add-btn" style={{ marginRight: "20px" }}>
+                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+              </button>
+            ) : (
+              data.length > 0 && (
+                <button
+                  className="btn add-btn"
+                  style={{ marginRight: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Download Report
+                </button>
+              )
+            )}
+
+            {/* {user?.role?.title === "CEO" && (
               <button
                 data-toggle="modal"
                 data-target="#generalModal"
@@ -311,7 +363,7 @@ const EmployeePayroll = () => {
               >
                 Preview and approve payroll
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </div>

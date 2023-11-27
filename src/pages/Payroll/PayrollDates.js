@@ -3,13 +3,12 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../../components/Tables/UniversalTable";
+import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 import moment from "moment";
 
 const PayrollDates = () => {
   const [allDates, setallDates] = useState([]);
   const { user, ErrorHandler } = useAppContext();
-  const [mode, setMode] = useState("Create");
-  const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -18,6 +17,19 @@ const PayrollDates = () => {
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
   );
+
+  // Format Generation Dates:
+  const generateOrdinal = (day) => {
+    if (day >= 11 && day <= 13) {
+      return `${day}th`;
+    }
+
+    const lastDigit = day % 10;
+    const suffixes = ["st", "nd", "rd"];
+    const suffix = suffixes[lastDigit - 1] || "th";
+
+    return `${day}${suffix}`;
+  };
 
   // All Payroll Dates:
   const fetchAllPayrollDates = async () => {
@@ -31,24 +43,18 @@ const PayrollDates = () => {
         },
       });
 
-      const resData = response?.data?.data;
+      const resData = response?.data?.data?.payroll_config;
 
-      console.log("dates", resData)
+      const formatted = resData.map((data) => ({
+        ...data,
+        created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
+        payday: generateOrdinal(data.generation_date),
+      }));
 
-      // const formatted = resData.map((branch, index) => ({
-      //   ...branch,
-      //   index: index + 1,
-      //   title: branch?.title.toUpperCase(),
-      //   state: branch?.state,
-      //   country: branch?.country,
-      //   created_at: moment(branch?.created_at).format("Do MMMM, YYYY"),
-      //   value: branch.id,
-      // }));
-
-      // setallBranch(formatted);
+      setallDates(formatted);
       setLoading(false);
     } catch (error) {
-      const component = "Branch Error:";
+      const component = "Payroll Dates Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -59,65 +65,24 @@ const PayrollDates = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCreate = () => {
-    setMode("Create");
-    // setBranch([]);
-  };
-
-  const handleEdit = (row) => {
-    // setBranch(row);
-    setMode("Edit");
-  };
-
   const columns = [
-    {
-      dataField: "index",
-      text: "S/N",
-      sort: true,
-      headerStyle: { width: "5%" },
-    },
-    {
-      dataField: "title",
-      text: "Branch",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "state",
-      text: "State",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "country",
-      text: "Country",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "30%" },
     },
-    CurrentUserCanCreateAndEdit && {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
-      formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#BranchFormModal"
-              onClick={() => handleEdit(row)}
-            >
-              Edit
-            </button>
-          </div>
-        </div>
-      ),
+    {
+      dataField: "payday",
+      text: "Payday",
+      sort: true,
+      headerStyle: { width: "30%" },
+    },
+    {
+      dataField: "created_by",
+      text: "Created By",
+      sort: true,
+      headerStyle: { width: "30%" },
     },
   ];
 
@@ -126,11 +91,11 @@ const PayrollDates = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Payroll Generation Dates</h3>
+            <h3 className="page-title">Payroll Generation Days</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item">Payroll</li>
-              <li className="breadcrumb-item active">Payroll Dates</li>
+              <li className="breadcrumb-item active">Payday</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -139,10 +104,9 @@ const PayrollDates = () => {
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#PayrollDatesFormModal"
-                onClick={handleCreate}
+                data-target="#PayrollDatesModal"
               >
-                <i className="fa fa-plus"></i> Add Payroll Date
+                <i className="fa fa-plus"></i> Create Payday
               </a>
             ) : null}
           </div>
@@ -157,11 +121,7 @@ const PayrollDates = () => {
         />
       </div>
 
-      {/* <BranchFormModal
-        mode={mode}
-        data={branch}
-        fetchAllBranches={fetchAllBranches}
-      /> */}
+      <PayrollDatesModal fetchAllPayrollDates={fetchAllPayrollDates} />
     </>
   );
 };

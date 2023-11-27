@@ -530,7 +530,7 @@ export default function Router() {
               ),
             },
             {
-              path: "payroll-dates",
+              path: "payday",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <PayrollDates />

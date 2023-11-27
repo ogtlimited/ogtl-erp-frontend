@@ -1,106 +1,89 @@
 /* eslint-disable no-unused-vars */
-/** @format */
 
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import secureLocalStorage from "react-secure-storage";
 
-export const GeneratePayrollModal = ({
-  fetchEmployeeSalarySlip,
-  setGenerating,
-}) => {
+export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [ordinals, setOrdinals] = useState("");
 
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
-
-  const [createPayslips, setCreatePayslips] = useState({
-    monthAndYear: `${currentYear}-${currentMonth}`,
+  const [createPayday, setCreatePayday] = useState({
+    day: "",
   });
 
   const cancelEvent = () => {
-    setCreatePayslips({
-      monthAndYear: `${currentYear}-${currentMonth}`,
+    setCreatePayday({
+      day: "",
     });
+
+    setOrdinals("");
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
-    setCreatePayslips({
-      ...createPayslips,
-      [e.target.name]: e.target.value,
-    });
+    const day = e.target.value;
+
+    setCreatePayday((prevCreatePayday) => ({
+      ...prevCreatePayday,
+      [e.target.name]: day,
+    }));
+
+    const generateOrdinal = (day) => {
+      if (day >= 11 && day <= 13) {
+        return `${day}th`;
+      }
+
+      const lastDigit = day % 10;
+      const suffixes = ["st", "nd", "rd"];
+      const suffix = suffixes[lastDigit - 1] || "th";
+
+      return `${day}${suffix}`;
+    };
+
+    setOrdinals(generateOrdinal(day));
   };
 
-  const handleGeneratePayroll = async (e) => {
+  // Handle Payroll Config - Payday Generation:
+  const handleGeneratePayday = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
-    const month = createPayslips.monthAndYear.split("-")[1];
-    const year = createPayslips.monthAndYear.split("-")[0];
-
     try {
-      const res = await axiosInstance.post(
-        `/api/v1/salary_slips.json?month=${month}&year=${year}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
+      const res = await axiosInstance.post(`/api/v1/payroll_configs.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          generation_date: +createPayday?.day,
+        },
+      });
 
       showAlert(
         true,
-        `Salary slips are being generated`,
+        `Payday (${ordinals}) has been created successfully.`,
         "alert alert-success"
       );
-      $("#GeneratePayrollModal").modal("toggle");
-      fetchEmployeeSalarySlip();
-      setGenerating(false);
+      $("#PayrollDatesModal").modal("toggle");
+      fetchAllPayrollDates();
+      cancelEvent();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
-      setGenerating(false);
     }
   };
-
-  function getMinMonth() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
-
-    if (currentMonth === 12) {
-      return `${currentYear}-${currentMonth}`;
-    }
-
-    return `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
-  }
-
-  function getMaxMonth() {
-    const today = new Date();
-    const nextMonth = new Date(today);
-    nextMonth.setMonth(today.getMonth() + 1);
-
-    const year = nextMonth.getFullYear();
-    const month = nextMonth.getMonth() + 1;
-
-    return `${year}-${month.toString().padStart(2, "0")}`;
-  }
 
   return (
     <>
       <div
         className="modal fade"
-        id="GeneratePayrollModal"
+        id="PayrollDatesModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -109,7 +92,7 @@ export const GeneratePayrollModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Generate Payroll
+                Create Payday
               </h4>
               <button
                 type="button"
@@ -122,20 +105,35 @@ export const GeneratePayrollModal = ({
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleGeneratePayroll}>
+              <form onSubmit={handleGeneratePayday}>
                 <div className="row">
-                  <div className="col-md-12">
+                  <div className="col-md-9">
                     <div className="form-group">
-                      <label htmlFor="monthAndYear">Select Month</label>
+                      <label htmlFor="day">
+                        Enter a day when payroll should be generated
+                      </label>
                       <input
-                        name="monthAndYear"
-                        type="month"
+                        name="day"
+                        type="number"
                         className="form-control"
-                        value={createPayslips?.monthAndYear}
+                        value={createPayday?.day}
                         onChange={handleFormChange}
-                        min={getMinMonth()}
-                        max={getMaxMonth()}
+                        min={1}
+                        max={31}
                         required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-3">
+                    <div className="form-group">
+                      <label htmlFor="ordinals">Payday</label>
+                      <input
+                        name="ordinals"
+                        type="text"
+                        className="form-control"
+                        value={ordinals}
+                        readOnly
                       />
                     </div>
                   </div>
@@ -158,7 +156,7 @@ export const GeneratePayrollModal = ({
                         aria-hidden="true"
                       ></span>
                     ) : (
-                      "Generate Payroll"
+                      "Submit"
                     )}
                   </button>
                 </div>
