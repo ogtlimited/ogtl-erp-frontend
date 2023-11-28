@@ -2,15 +2,20 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
+import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendanceTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
+import monthlyAttendanceRecords from "./monthlyAttendance.json";
 
 const AttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
+  const [monthlyAttendance, setMonthlyAttendance] = useState(
+    monthlyAttendanceRecords
+  );
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
 
@@ -25,6 +30,61 @@ const AttendanceRecord = () => {
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
+  const [dateColumns, setDateColumns] = useState([]);
+
+  // Monthly Attendance - Dynamic Date Columns:
+  useEffect(() => {
+    const attendanceDates =
+      monthlyAttendance[0]?.attendance.map((entry) => entry.date) || [];
+
+    const dateColumns = attendanceDates.map((date) => ({
+      dataField: `attendance_${date}`,
+      text: moment(date).format("DD-MMM-YYYY"),
+      headerStyle: { width: "100%" },
+      formatter: (cell, row) => {
+        const attendanceRecord = row.attendance.find(
+          (entry) => entry?.date === date
+        );
+
+        let backgroundColor = "";
+        let color = "";
+        if (attendanceRecord) {
+          switch (attendanceRecord.status) {
+            case "Absent":
+              backgroundColor = "#ff0000";
+              color = "#fff";
+              break;
+            case "Was Sick":
+              backgroundColor = "#6f42c1";
+              color = "#fff";
+              break;
+            case "On Leave":
+              backgroundColor = "#20c997";
+              color = "#fff";
+              break;
+            default:
+              backgroundColor = "";
+              color = "";
+          }
+        }
+
+        return (
+          <div
+            style={{
+              textAlign: "center",
+              backgroundColor: backgroundColor,
+              padding: "5px 0",
+              color: color,
+            }}
+          >
+            {attendanceRecord ? attendanceRecord.status : ""}
+          </div>
+        );
+      },
+    }));
+
+    setDateColumns(dateColumns);
+  }, [monthlyAttendance]);
 
   // Daily Attendance - Cards:
   const fetchDailyAttendanceSummary = useCallback(async () => {
@@ -263,6 +323,37 @@ const AttendanceRecord = () => {
     },
   ];
 
+  const monthlyAttendanceColumns = [
+    {
+      dataField: "staffName",
+      text: "Employee",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <Link
+            to={`/dashboard/hr/office/employee-attendance/${row?.staffName}/${row?.ogid}`}
+          >
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
+          </Link>
+        </h2>
+      ),
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    ...dateColumns,
+  ];
+
   const campaignColumns = [
     {
       dataField: "title",
@@ -420,6 +511,16 @@ const AttendanceRecord = () => {
               </li>
 
               <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_monthlyAttendance"
+                >
+                  Monthly Attendance
+                </a>
+              </li>
+
+              <li className="nav-item">
                 <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
                   Campaigns
                 </a>
@@ -449,6 +550,23 @@ const AttendanceRecord = () => {
               setLoading={setLoading}
               date={date}
               setDate={setDate}
+            />
+          </div>
+
+          <div id="tab_monthlyAttendance" className="col-12 tab-pane">
+            <MonthlyAttendanceTable
+              columns={monthlyAttendanceColumns}
+              data={monthlyAttendance}
+              loading={loading}
+              setLoading={setLoading}
+              date={date}
+              setDate={setDate}
+              // page={CampaignPage}
+              // setPage={setCampaignPage}
+              // sizePerPage={CampaignSizePerPage}
+              // setSizePerPage={setCampaignSizePerPage}
+              // totalPages={totalCampaignPages}
+              // setTotalPages={setTotalCampaignPages}
             />
           </div>
 

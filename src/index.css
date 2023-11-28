@@ -141,6 +141,9 @@
   border-top-right-radius: 10px;
   margin-bottom: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  
+  overflow-x: auto;
+  width: 100%;
 }
 
 .rep-siever-status-group {
@@ -640,6 +643,19 @@ table.custom-table thead th {
   color: #808080;
   font-weight: 500;
   font-family: "Inter", "san-serif" !important;
+}
+
+/*------------------------ 
+    Monthly Attendance
+--------------------------*/
+
+.monthly-attendance-table > thead > tr > th:first-child,
+.monthly-attendance-table > tbody > tr > td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #d8d8d8;
+  border-right: 2px solid #dee2e6;
 }
 
 /*---------------------- 
