@@ -9,12 +9,22 @@ import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
 import HeroImage from "../../../assets/img/HR-nextImg.png";
+import ERP1 from "../../../assets/img/erp1.png";
+import ERP2 from "../../../assets/img/erp2.png";
+import ERP3 from "../../../assets/img/erp3.png";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [heroIcons, setHeroIcons] = useState({
+    hero: HeroImage,
+    erp1: ERP1,
+    erp2: ERP2,
+    erp3: ERP3,
+  });
 
   const isRemoteStaff = user?.employee_info?.remote;
 
@@ -54,12 +64,29 @@ const EmployeeUser = () => {
     };
   }, [user]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 4);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setHeroIcons({
+      hero: [HeroImage, ERP1, ERP2, ERP3][currentIndex],
+      erp1: [ERP1, ERP2, ERP3, HeroImage][currentIndex],
+      erp2: [ERP2, ERP3, HeroImage, ERP1][currentIndex],
+      erp3: [HeroImage, ERP1, ERP2, ERP3][currentIndex],
+    });
+  }, [currentIndex]);
+
   return (
     <>
       <div className="col">
         <div className="col-lg-12 col-md-12">
           <div className="row welcome-card p-5">
-            <div className="col-md-9 left-card">
+            <div className="col-md-8 left-card">
               <h4 className="welcome-text">
                 Welcome back, <br />{" "}
                 {`${user?.employee_info?.personal_details?.first_name} 
@@ -74,8 +101,12 @@ const EmployeeUser = () => {
                 </p>
               )}
             </div>
-            <div className="col-md-3">
-              <img style={{ width: "100%" }} className="mt-4" src={HeroImage} />
+            <div className="col-md-4">
+              <img
+                style={{ width: "100%" }}
+                className="mt-4"
+                src={heroIcons.hero}
+              />
             </div>
           </div>
           <div className="row mt-4">

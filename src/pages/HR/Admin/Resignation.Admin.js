@@ -1,69 +1,66 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import male from '../../../assets/img/male_avater.png';
-import axiosInstance from '../../../services/api';
-import { useAppContext } from '../../../Context/AppContext';
-import ViewModal from '../../../components/Modal/ViewModal';
-import ResignationContent from '../../../components/ModalContents/ResignationContent';
-import AdminResignationTable from '../../../components/Tables/EmployeeTables/AdminResignationTable';
-import moment from 'moment';
+import React, { useState, useEffect, useCallback } from "react";
+import axiosInstance from "../../../services/api";
+import { useAppContext } from "../../../Context/AppContext";
+import ViewModal from "../../../components/Modal/ViewModal";
+import ResignationContent from "../../../components/ModalContents/ResignationContent";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 
 const ResignationAdmin = () => {
+  const { ErrorHandler } = useAppContext();
   const [data, setData] = useState([]);
-  const [resignationHistory, setResignationHistory] = useState([]);
-  const [modalType, setmodalType] = useState('');
+  const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  const [totalPages, setTotalPages] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const fetchHRResignation = useCallback(() => {
-    axiosInstance
-      .get('/Exit/paginated', {
+  const fetchResignations = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get("api/v1/resignations.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
         params: {
-          search: searchTerm,
           page: page,
           limit: sizePerPage,
         },
-      })
-      .then((res) => {
-        let resData = res?.data?.data?.employees;
-        let resOptions = res?.data?.data?.pagination;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = resOptions?.numberOfPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const map = resData.map(e => {
-          return {
-            ...e,
-            fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`,
-            effective_date: new Date(e?.effective_date).toDateString(),
-
-          }
-        })
-
-        setData(map);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error?.response);
-        setLoading(false);
       });
-  }, [page, searchTerm, sizePerPage]);
-  
+
+      let resData = res?.data?.data?.resignations;
+      let totalPages = res?.data?.data?.total_pages;
+
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
+
+      // const map = resData.map((e) => {
+      //   return {
+      //     ...e,
+      //     fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`,
+      //     effective_date: new Date(e?.effective_date).toDateString(),
+      //   };
+      // });
+
+      setData(resData);
+      setLoading(false);
+    } catch (error) {
+      const component = "Employee Resignations | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
+
   useEffect(() => {
-    fetchHRResignation();
-  }, [fetchHRResignation]);
-  
+    fetchResignations();
+  }, [fetchResignations]);
+
   const columns = [
     {
       dataField: "fullName",
@@ -84,10 +81,10 @@ const ResignationAdmin = () => {
       headerStyle: { minWidth: "100px" },
     },
     {
-      dataField: 'status_action',
-      text: 'Action',
+      dataField: "status_action",
+      text: "Action",
       csvExport: false,
-      headerStyle: { width: '10%' },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -105,7 +102,7 @@ const ResignationAdmin = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                setmodalType('view-details');
+                setmodalType("view-details");
                 setViewRow(row);
               }}
             >
@@ -124,45 +121,36 @@ const ResignationAdmin = () => {
           <div className="col">
             <h3 className="page-title">Resignations</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
-              </li>
-              <li className="breadcrumb-item active">Resignation</li>
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item">Exit</li>
+              <li className="breadcrumb-item active">Resignations</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto"></div>
         </div>
       </div>
 
-      <div className="row tab-content">
-        <div id="tab_hr-leave-application" className="col-12 tab-pane show active">
-          <AdminResignationTable
-            columns={columns}
-            data={data}
-            setData={setData}
-            loading={loading}
-            
-            page={page}
-            setPage={setPage}
-            sizePerPage={sizePerPage}
-            setSizePerPage={setSizePerPage}
-            totalPages={totalPages}
-            setTotalPages={setTotalPages}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            setLoading={setLoading}
-          />
-        </div>
-        
-        </div>
+      <div className="row">
+        <UniversalPaginatedTable
+          data={data}
+          columns={columns}
+          loading={loading}
+          setLoading={setLoading}
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
+        />
+      </div>
 
-      {modalType === 'view-details' ? (
+      {modalType === "view-details" ? (
         <ViewModal
           title="Resignation Details"
           content={<ResignationContent Content={viewRow} />}
         />
       ) : (
-        ''
+        ""
       )}
     </>
   );

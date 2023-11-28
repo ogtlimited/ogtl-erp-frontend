@@ -23,7 +23,9 @@ export const GeneratePayrollModal = ({
   });
 
   const cancelEvent = () => {
-    setCreatePayslips("");
+    setCreatePayslips({
+      monthAndYear: `${currentYear}-${currentMonth}`,
+    });
   };
 
   const handleFormChange = (e) => {
