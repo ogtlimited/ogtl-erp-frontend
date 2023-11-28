@@ -1,3 +1,5 @@
+// *IN USE
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -16,6 +18,7 @@ import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModa
 import csvDownload from "json-to-csv-export";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 
 const EmployeePayroll = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
@@ -25,6 +28,11 @@ const EmployeePayroll = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
+  const [mode, setMode] = useState("Create");
+  const [dates, setDates] = useState([]);
+
+  const [payday, setPayday] = useState("");
+  const [currentData, setCurrentData] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -37,6 +45,58 @@ const EmployeePayroll = () => {
     isAuthorized.includes(role)
   );
 
+  // Format Generation Dates:
+  const generateOrdinal = (day) => {
+    if (day >= 11 && day <= 13) {
+      return `${day}th`;
+    }
+
+    const lastDigit = day % 10;
+    const suffixes = ["st", "nd", "rd"];
+    const suffix = suffixes[lastDigit - 1] || "th";
+
+    return `${day}${suffix}`;
+  };
+
+  // All Paydays:
+  const fetchAllPayrollDates = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = response?.data?.data?.payroll_config;
+
+      const formatted = resData.map((data) => ({
+        ...data,
+        created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
+        payday: generateOrdinal(data.generation_date),
+      }));
+
+      const currentPayday = formatted.slice(0, 1)[0]?.payday;
+      const currentData = formatted.slice(0, 1)[0];
+
+      setPayday(currentPayday);
+      setCurrentData(currentData);
+      setLoading(false);
+    } catch (error) {
+      const component = "Payroll Dates Error | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPayrollDates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Fetch Employee Salary Slip:
   const fetchEmployeeSalarySlip = useCallback(() => {
     setLoading(true);
     axiosInstance
@@ -158,6 +218,12 @@ const EmployeePayroll = () => {
     }
   };
 
+  // Handle Edit:
+  const handleEdit = (e) => {
+    setDates(currentData);
+    setMode("Edit");
+  };
+
   const columns = [
     {
       dataField: "employee",
@@ -229,7 +295,7 @@ const EmployeePayroll = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the 25th of every month
+              Payroll is generated on the {payday || "25th"} of every month
             </span>
             <span className="pl-3">
               {" "}
@@ -238,28 +304,45 @@ const EmployeePayroll = () => {
           </div>
         </div>
       ) : (
-        <div className="alert alert-primary sliding-text" role="alert">
-          <div>
-            <AlertSvg />
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-            >
-              <use xlinkHref="#info-fill" />
-            </svg>
-            <span className="pl-3">
-              Payroll is generated on the 25th of every month
-            </span>
-            <span className="pl-3">
-              {" "}
-              | &nbsp; You can click the generate button to generate payroll for
-              the current month
-            </span>
+        <div className="payroll_alert_container">
+          <div
+            className="alert alert-primary sliding-text payroll_alert_left"
+            role="alert"
+          >
+            <div>
+              <AlertSvg />
+              <svg
+                className="bi flex-shrink-0 me-2"
+                width="24"
+                height="24"
+                role="img"
+              >
+                <use xlinkHref="#info-fill" />
+              </svg>
+              <span className="pl-3">
+                Payroll is generated on the {payday || "25th"} of every month
+              </span>
+              <span className="pl-3">
+                {" "}
+                | &nbsp; You can click the generate button to generate payroll
+                for the current month
+              </span>
+            </div>
           </div>
+
+          {CurrentUserIsAuthorized && (
+            <a
+              className="edit-icon payday"
+              data-toggle="modal"
+              data-target="#PayrollDatesModal"
+              onClick={handleEdit}
+            >
+              <i className="fa fa-pencil"></i>
+            </a>
+          )}
         </div>
       )}
+
       <div className="page-header">
         <div className="row">
           <div className="col">
@@ -273,22 +356,6 @@ const EmployeePayroll = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadingCSV ? (
-              <button className="btn add-btn" style={{ marginLeft: "20px" }}>
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
-              </button>
-            ) : (
-              data.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginLeft: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
-              )
-            )}
-
             {user?.role?.title !== "CEO" && (
               <a
                 href="#"
@@ -300,7 +367,23 @@ const EmployeePayroll = () => {
               </a>
             )}
 
-            {user?.role?.title === "CEO" && (
+            {loadingCSV ? (
+              <button className="btn add-btn" style={{ marginRight: "20px" }}>
+                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+              </button>
+            ) : (
+              data.length > 0 && (
+                <button
+                  className="btn add-btn"
+                  style={{ marginRight: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Download Report
+                </button>
+              )
+            )}
+
+            {/* {user?.role?.title === "CEO" && (
               <button
                 data-toggle="modal"
                 data-target="#generalModal"
@@ -311,7 +394,7 @@ const EmployeePayroll = () => {
               >
                 Preview and approve payroll
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -341,6 +424,12 @@ const EmployeePayroll = () => {
       <GeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
         setGenerating={setGenerating}
+      />
+
+      <PayrollDatesModal
+        mode={mode}
+        data={dates}
+        fetchAllPayrollDates={fetchAllPayrollDates}
       />
 
       {/* <ViewModal

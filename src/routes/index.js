@@ -124,8 +124,11 @@ export default function Router() {
               path: "main",
               element: <EmployeeUser />,
             },
+
+            // USER:
             { path: "main/attendance", element: <EmployeeAttendance /> },
             { path: "main/leave", element: <LeavesUser /> },
+            { path: "main/resignation", element: <ResignationUser /> },
             {
               path: "hr-dashboard",
               element: (
@@ -322,14 +325,13 @@ export default function Router() {
               ),
             },
             {
-              path: "resignation-admin",
+              path: "resignation",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <ResignationAdmin />
                 </GuardedRoute>
               ),
             },
-            { path: "resignation", element: <ResignationUser /> },
             {
               path: "departments",
               element: (
@@ -524,6 +526,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="hr">
                   <PayrollBatches />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "payday",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PayrollDates />
                 </GuardedRoute>
               ),
             },
@@ -1322,6 +1332,9 @@ const PublicHoliday = Loadable(
 );
 const PayrollBatches = Loadable(
   lazy(() => import("../pages/Payroll/PayrollBatches"))
+);
+const PayrollDates = Loadable(
+  lazy(() => import("../pages/Payroll/PayrollDates.js"))
 );
 const PayrollDeductions = Loadable(
   lazy(() => import("../pages/Payroll/Deductions"))

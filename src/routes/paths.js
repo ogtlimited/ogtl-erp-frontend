@@ -24,6 +24,7 @@ export const PATH_DASHBOARD = {
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
     employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
     employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
+    resignation: path(ROOTS_DASHBOARD, "/main/resignation"),  
   },
 
   apps: {
@@ -42,9 +43,8 @@ export const PATH_DASHBOARD = {
     addEmployees: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/add"),
     leadership: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/leader"),
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
-    resignationAdmin: path(ROOTS_DASHBOARD, "/hr/resignation-admin"),
+    resignation: path(ROOTS_DASHBOARD, "/hr/resignation"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
-    resignationEmployee: path(ROOTS_DASHBOARD, "/hr/resignation"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
     remoteAttendanceAdmin: path(ROOTS_DASHBOARD, "/hr/remote-attendance"),
@@ -76,6 +76,7 @@ export const PATH_DASHBOARD = {
     publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
     payrollProcessing: path(ROOTS_DASHBOARD, "/payroll/payroll-processing"),
+    payday: path(ROOTS_DASHBOARD, "/payroll/payday"),
     payrollBatches: path(ROOTS_DASHBOARD, "/payroll/payroll-batches"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
