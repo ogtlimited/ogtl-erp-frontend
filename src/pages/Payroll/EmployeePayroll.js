@@ -1,3 +1,5 @@
+// *IN USE
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -16,6 +18,7 @@ import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModa
 import csvDownload from "json-to-csv-export";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 
 const EmployeePayroll = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
@@ -25,8 +28,11 @@ const EmployeePayroll = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
+  const [mode, setMode] = useState("Create");
+  const [dates, setDates] = useState([]);
 
   const [payday, setPayday] = useState("");
+  const [currentData, setCurrentData] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -73,8 +79,10 @@ const EmployeePayroll = () => {
       }));
 
       const currentPayday = formatted.slice(0, 1)[0]?.payday;
+      const currentData = formatted.slice(0, 1)[0];
 
       setPayday(currentPayday);
+      setCurrentData(currentData);
       setLoading(false);
     } catch (error) {
       const component = "Payroll Dates Error | ";
@@ -210,6 +218,12 @@ const EmployeePayroll = () => {
     }
   };
 
+  // Handle Edit:
+  const handleEdit = (e) => {
+    setDates(currentData);
+    setMode("Edit");
+  };
+
   const columns = [
     {
       dataField: "employee",
@@ -281,7 +295,7 @@ const EmployeePayroll = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the {payday} of every month
+              Payroll is generated on the {payday || "25th"} of every month
             </span>
             <span className="pl-3">
               {" "}
@@ -290,28 +304,45 @@ const EmployeePayroll = () => {
           </div>
         </div>
       ) : (
-        <div className="alert alert-primary sliding-text" role="alert">
-          <div>
-            <AlertSvg />
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-            >
-              <use xlinkHref="#info-fill" />
-            </svg>
-            <span className="pl-3">
-              Payroll is generated on the {payday} of every month
-            </span>
-            <span className="pl-3">
-              {" "}
-              | &nbsp; You can click the generate button to generate payroll for
-              the current month
-            </span>
+        <div className="payroll_alert_container">
+          <div
+            className="alert alert-primary sliding-text payroll_alert_left"
+            role="alert"
+          >
+            <div>
+              <AlertSvg />
+              <svg
+                className="bi flex-shrink-0 me-2"
+                width="24"
+                height="24"
+                role="img"
+              >
+                <use xlinkHref="#info-fill" />
+              </svg>
+              <span className="pl-3">
+                Payroll is generated on the {payday || "25th"} of every month
+              </span>
+              <span className="pl-3">
+                {" "}
+                | &nbsp; You can click the generate button to generate payroll
+                for the current month
+              </span>
+            </div>
           </div>
+
+          {CurrentUserIsAuthorized && (
+            <a
+              className="edit-icon payday"
+              data-toggle="modal"
+              data-target="#PayrollDatesModal"
+              onClick={handleEdit}
+            >
+              <i className="fa fa-pencil"></i>
+            </a>
+          )}
         </div>
       )}
+
       <div className="page-header">
         <div className="row">
           <div className="col">
@@ -393,6 +424,12 @@ const EmployeePayroll = () => {
       <GeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
         setGenerating={setGenerating}
+      />
+
+      <PayrollDatesModal
+        mode={mode}
+        data={dates}
+        fetchAllPayrollDates={fetchAllPayrollDates}
       />
 
       {/* <ViewModal

@@ -5,29 +5,36 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
+export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
   const { showAlert } = useAppContext();
+  const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [ordinals, setOrdinals] = useState("");
 
-  const [createPayday, setCreatePayday] = useState({
-    day: "",
-  });
+  useEffect(() => {
+    setDates(data);
+  }, [data]);
 
   const cancelEvent = () => {
-    setCreatePayday({
-      day: "",
-    });
-
-    setOrdinals("");
+    if (mode === "Create") {
+      setDates({
+        day: "",
+      });
+      setOrdinals("");
+    } else {
+      setDates({
+        day: dates?.generation_date,
+      });
+      setOrdinals(data?.payday);
+    }
   };
 
   const handleFormChange = (e) => {
     e.preventDefault();
     const day = e.target.value;
 
-    setCreatePayday((prevCreatePayday) => ({
-      ...prevCreatePayday,
+    setDates((prev) => ({
+      ...prev,
       [e.target.name]: day,
     }));
 
@@ -46,6 +53,14 @@ export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
     setOrdinals(generateOrdinal(day));
   };
 
+  const handlePaydayActions = async (e) => {
+    if (mode === "Create") {
+      return handleGeneratePayday(e);
+    } else {
+      return handleEditPayday(e);
+    }
+  };
+
   // Handle Payroll Config - Payday Generation:
   const handleGeneratePayday = async (e) => {
     e.preventDefault();
@@ -59,13 +74,46 @@ export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
-          generation_date: +createPayday?.day,
+          generation_date: +dates?.day,
         },
       });
 
       showAlert(
         true,
         `Payday (${ordinals}) has been created successfully.`,
+        "alert alert-success"
+      );
+      $("#PayrollDatesModal").modal("toggle");
+      fetchAllPayrollDates();
+      cancelEvent();
+      setLoading(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
+  };
+
+  // Handle Payroll Config - Payday Assignment:
+  const handleEditPayday = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axiosInstance.post(`/api/v1/payroll_configs.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          generation_date: +dates?.day,
+        },
+      });
+
+      showAlert(
+        true,
+        `Payday (${ordinals}) has been updated successfully.`,
         "alert alert-success"
       );
       $("#PayrollDatesModal").modal("toggle");
@@ -92,7 +140,7 @@ export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Create Payday
+                {mode === "Edit" ? "Update" : mode} Payday
               </h4>
               <button
                 type="button"
@@ -105,36 +153,58 @@ export const PayrollDatesModal = ({ fetchAllPayrollDates }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleGeneratePayday}>
+              <form onSubmit={handlePaydayActions}>
                 <div className="row">
                   <div className="col-md-9">
                     <div className="form-group">
                       <label htmlFor="day">
                         Enter a day when payroll should be generated
                       </label>
-                      <input
-                        name="day"
-                        type="number"
-                        className="form-control"
-                        value={createPayday?.day}
-                        onChange={handleFormChange}
-                        min={1}
-                        max={31}
-                        required
-                      />
+                      {mode === "Create" ? (
+                        <input
+                          name="day"
+                          type="number"
+                          className="form-control"
+                          value={dates?.day}
+                          onChange={handleFormChange}
+                          min={1}
+                          max={31}
+                          required
+                        />
+                      ) : (
+                        <input
+                          name="day"
+                          type="number"
+                          className="form-control"
+                          defaultValue={dates?.generation_date}
+                          onChange={handleFormChange}
+                          min={1}
+                          max={31}
+                        />
+                      )}
                     </div>
                   </div>
 
                   <div className="col-md-3">
                     <div className="form-group">
                       <label htmlFor="ordinals">Payday</label>
-                      <input
-                        name="ordinals"
-                        type="text"
-                        className="form-control"
-                        value={ordinals}
-                        readOnly
-                      />
+                      {mode === "Create" ? (
+                        <input
+                          name="ordinals"
+                          type="text"
+                          className="form-control"
+                          value={ordinals}
+                          readOnly
+                        />
+                      ) : (
+                        <input
+                          name="ordinals"
+                          type="text"
+                          className="form-control"
+                          defaultValue={!ordinals ? dates?.payday : ordinals}
+                          readOnly
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

@@ -675,3 +675,26 @@ table.custom-table thead th {
     object-fit: cover;
   }
 }
+
+/*------------------------- 
+    Payroll Date Config
+----------------------------*/
+
+.payroll_alert_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.payroll_alert_left {
+  width: 100% !important;
+  margin-bottom: 0 !important;
+}
+
+.edit-icon.payday {
+  height: 0;
+  margin-left: 10px;
+  background-color: #fff;
+  border-color: #00c5fb;
+}

@@ -333,13 +333,13 @@ const sidebarConfig = [
           },
           {
             canView: "super",
-            title: "Payday",
-            path: PATH_DASHBOARD.payroll.payday,
+            title: "Payroll Processing",
+            path: PATH_DASHBOARD.payroll.payrollProcessing,
           },
           {
             canView: "super",
-            title: "Payroll Processing",
-            path: PATH_DASHBOARD.payroll.payrollProcessing,
+            title: "Payday",
+            path: PATH_DASHBOARD.payroll.payday,
           },
           {
             canView: "hr",
