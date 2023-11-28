@@ -122,7 +122,7 @@ const ResignationAdmin = () => {
             <h3 className="page-title">Resignations</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item">Exit Management</li>
+              <li className="breadcrumb-item">Exit</li>
               <li className="breadcrumb-item active">Resignations</li>
             </ul>
           </div>
