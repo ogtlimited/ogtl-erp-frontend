@@ -343,7 +343,7 @@ const EmployeePayroll = () => {
         </div>
       )}
 
-      <div className="page-header">
+      <div className="page-header" style={{ marginBottom: "100px" }}>
         <div className="row">
           <div className="col">
             <h3 className="page-title">

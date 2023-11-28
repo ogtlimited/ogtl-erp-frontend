@@ -389,10 +389,6 @@
 /*--------------------- 
 Employee Salary Table 
 -----------------------*/
-.emp_salary_container {
-  margin-top: 100px;
-}
-
 .emp_salary_custom-table-div {
   background-color: #fff;
   padding: 15px;
