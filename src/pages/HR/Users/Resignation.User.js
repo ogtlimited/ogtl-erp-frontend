@@ -96,17 +96,34 @@ const ResignationUser = () => {
               <div className="modal-body">
                 <form onSubmit={handleApplyResignation}>
                   <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-12">
                       <div className="form-group">
                         <label htmlFor="effective_date">Effective Date</label>
+                      </div>
+                    </div>
+
+                    {/* Today */}
+                    <div className="col-md-2">
+                      <div className="form-group">
+                        <label htmlFor="effective_date">Today</label>
+                        <input
+                          type="checkbox"
+                          name="effective_date"
+                          className="form-control "
+                        />
+                      </div>
+                    </div>
+
+                    {/* Later Date */}
+                    <div className="col-md-10">
+                      <div className="form-group">
+                        <label htmlFor="effective_date">Later Date</label>
                         <input
                           type="date"
                           name="effective_date"
                           value={data.effective_date}
                           onChange={handleFormChange}
                           className="form-control "
-                          min={today}
-                          required
                         />
                       </div>
                     </div>
