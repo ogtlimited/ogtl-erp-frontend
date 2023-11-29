@@ -1,3 +1,5 @@
+// *IN USE
+
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
@@ -6,18 +8,21 @@ import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendance
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
-import monthlyAttendanceRecords from "./monthlyAttendance.json";
 
 const AttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [loadingMonthlyRecord, setLoadingMonthlyRecord] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
-  const [monthlyAttendance, setMonthlyAttendance] = useState(
-    monthlyAttendanceRecords
-  );
+  const [monthlyAttendance, setMonthlyAttendance] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [dateColumns, setDateColumns] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
 
   const [CampaignPage, setCampaignPage] = useState(1);
   const [CampaignSizePerPage, setCampaignSizePerPage] = useState(10);
@@ -27,57 +32,129 @@ const AttendanceRecord = () => {
   const [DepartmentSizePerPage, setDepartmentSizePerPage] = useState(10);
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
 
+  // Daily Attendance Summary:
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
-  const [dateColumns, setDateColumns] = useState([]);
 
+  // Monthly Attendance:
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+  const [officeType, setOfficeType] = useState("");
+  const [officeId, setOfficeId] = useState("");
+
+  // ! This code is for generating dynamic date columns for the Monthly Attendance table | without clock in and clock out times
   // Monthly Attendance - Dynamic Date Columns:
-  useEffect(() => {
-    const attendanceDates =
-      monthlyAttendance[0]?.attendance.map((entry) => entry.date) || [];
+  // useEffect(() => {
+  //   const attendanceDates =
+  //     monthlyAttendance.map((entry) => entry.date) || [];
 
-    const dateColumns = attendanceDates.map((date) => ({
+  //   const dateColumns = attendanceDates.map((date) => ({
+  //     dataField: `attendance_${date}`,
+  //     text: moment(date).format("DD-MMM-YYYY"),
+  //     headerStyle: { width: "100%" },
+  //     formatter: (cell, row) => {
+  //       const attendanceRecord = row.attendance.find(
+  //         (entry) => entry?.date === date
+  //       );
+
+  //       let backgroundColor = "";
+  //       let color = "";
+  //       if (attendanceRecord) {
+  //         switch (attendanceRecord.status) {
+  //           case "Absent":
+  //             backgroundColor = "#BE3144";
+  //             color = "#fff";
+  //             break;
+  //           case "Was Sick":
+  //             backgroundColor = "#6f42c1";
+  //             color = "#fff";
+  //             break;
+  //           case "On Leave":
+  //             backgroundColor = "#20c997";
+  //             color = "#fff";
+  //             break;
+  //           default:
+  //             backgroundColor = "";
+  //             color = "";
+  //         }
+  //       }
+
+  //       return (
+  //         <div
+  //           style={{
+  //             textAlign: "center",
+  //              backgroundColor: backgroundColor,
+  //              padding: attendanceRecord.status === "Absent" ? "5px 20px" : "",
+  //              color: color,
+  //           }}
+  //         >
+  //           {attendanceRecord ? attendanceRecord.status : ""}
+  //         </div>
+  //       );
+  //     },
+  //   }));
+
+  //   setDateColumns(dateColumns);
+  // }, [monthlyAttendance]);
+
+  useEffect(() => {
+    const allDates = Array.from(
+      new Set(
+        monthlyAttendance.reduce((acc, entry) => {
+          entry.attendance.forEach((record) => {
+            acc.push(record.date);
+          });
+          return acc;
+        }, [])
+      )
+    );
+
+    const dateColumns = allDates.map((date) => ({
       dataField: `attendance_${date}`,
       text: moment(date).format("DD-MMM-YYYY"),
       headerStyle: { width: "100%" },
       formatter: (cell, row) => {
         const attendanceRecord = row.attendance.find(
-          (entry) => entry?.date === date
+          (entry) => entry.date === date
         );
 
-        let backgroundColor = "";
-        let color = "";
-        if (attendanceRecord) {
-          switch (attendanceRecord.status) {
-            case "Absent":
-              backgroundColor = "#ff0000";
-              color = "#fff";
-              break;
-            case "Was Sick":
-              backgroundColor = "#6f42c1";
-              color = "#fff";
-              break;
-            case "On Leave":
-              backgroundColor = "#20c997";
-              color = "#fff";
-              break;
-            default:
-              backgroundColor = "";
-              color = "";
-          }
-        }
-
         return (
-          <div
-            style={{
-              textAlign: "center",
-              backgroundColor: backgroundColor,
-              padding: "5px 0",
-              color: color,
-            }}
-          >
-            {attendanceRecord ? attendanceRecord.status : ""}
+          <div>
+            {attendanceRecord.status === "Present" ? (
+              <>
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i
+                    className="fa fa-dot-circle-o text-success"
+                    style={{ marginRight: "10px" }}
+                  ></i>{" "}
+                  {moment(attendanceRecord.clock_in, "HH:mm:ss").format(
+                    "hh:mma"
+                  )}
+                </span>
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i
+                    className="fa fa-dot-circle-o text-info"
+                    style={{ marginRight: "10px" }}
+                  ></i>{" "}
+                  {attendanceRecord.clock_out
+                    ? moment(attendanceRecord.clock_out, "HH:mm:ss").format(
+                        "hh:mma"
+                      )
+                    : "-"}
+                </span>
+              </>
+            ) : (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className="fa fa-dot-circle-o text-danger"
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
+            )}
           </div>
         );
       },
@@ -170,6 +247,76 @@ const AttendanceRecord = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
+  // Monthly Attendance:
+  const fetchMonthlyAttendance = useCallback(async () => {
+    setLoadingMonthlyRecord(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/office_employees_attendances.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            office_type: officeType,
+            office_id: officeId,
+            start_date: fromDate,
+            end_date: toDate,
+            page: page,
+            limit: sizePerPage,
+          },
+        }
+      );
+
+      const attendanceRecords =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.records;
+
+      const recordPages =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.pages;
+
+      const dataArray = Object.keys(attendanceRecords).map((key) => ({
+        days: attendanceRecords[key].days,
+        user: attendanceRecords[key].user,
+      }));
+
+      const formattedData = dataArray.map((data) => ({
+        staffName: data?.user?.full_name,
+        ogid: data?.user?.staff_unique_Id,
+        email: data?.user?.email,
+        attendance: Object.keys(data?.days).map((key) => ({
+          date: key,
+          clock_in: data?.days[key]?.clock_in
+            ? data?.days[key]?.clock_in
+            : null,
+          clock_out: data?.days[key]?.clock_out
+            ? data?.days[key]?.clock_out
+            : null,
+          status:
+            !data?.days[key]?.clock_in && !data?.days[key]?.clock_out
+              ? "Absent"
+              : "Present",
+        })),
+      }));
+
+      setSizePerPage(sizePerPage);
+      setTotalPages(recordPages);
+
+      setMonthlyAttendance(formattedData);
+      setLoadingMonthlyRecord(false);
+    } catch (error) {
+      const component = "Monthly Attendance | ";
+      ErrorHandler(error, component);
+      setLoadingMonthlyRecord(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, officeId, officeType, page, sizePerPage, toDate]);
+
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
     try {
@@ -254,6 +401,10 @@ const AttendanceRecord = () => {
     fetchAllCampaigns,
     fetchAllDepartments,
   ]);
+
+  useEffect(() => {
+    fetchMonthlyAttendance();
+  }, [fetchMonthlyAttendance]);
 
   const columns = [
     {
@@ -348,6 +499,12 @@ const AttendanceRecord = () => {
     {
       dataField: "ogid",
       text: "OGID",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "email",
+      text: "Email",
       sort: true,
       headerStyle: { width: "100%" },
     },
@@ -557,16 +714,22 @@ const AttendanceRecord = () => {
             <MonthlyAttendanceTable
               columns={monthlyAttendanceColumns}
               data={monthlyAttendance}
-              loading={loading}
-              setLoading={setLoading}
-              date={date}
-              setDate={setDate}
-              // page={CampaignPage}
-              // setPage={setCampaignPage}
-              // sizePerPage={CampaignSizePerPage}
-              // setSizePerPage={setCampaignSizePerPage}
-              // totalPages={totalCampaignPages}
-              // setTotalPages={setTotalCampaignPages}
+              loading={loadingMonthlyRecord}
+              setLoading={setLoadingMonthlyRecord}
+              fromDate={fromDate}
+              toDate={toDate}
+              setFromDate={setFromDate}
+              setToDate={setToDate}
+              officeType={officeType}
+              setOfficeType={setOfficeType}
+              officeId={officeId}
+              setOfficeId={setOfficeId}
+              page={page}
+              setPage={setPage}
+              sizePerPage={sizePerPage}
+              setSizePerPage={setSizePerPage}
+              totalPages={totalPages}
+              setTotalPages={setTotalPages}
             />
           </div>
 

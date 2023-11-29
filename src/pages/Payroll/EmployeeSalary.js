@@ -148,7 +148,7 @@ const EmployeeSalary = () => {
 
   return (
     <>
-      <div className="page-header">
+      <div className="page-header" style={{ marginBottom: "100px" }}>
         <div className="row align-items-center">
           <div className="col">
             <h3 className="page-title">Staff Monthly Salary</h3>
