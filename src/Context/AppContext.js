@@ -214,6 +214,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.departments;
+      console.log("All Departments:", resData)
 
       const formattedDepartments = resData
         .map((e) => ({
@@ -246,6 +247,7 @@ const AppProvider = (props) => {
         },
       });
       const resData = response?.data?.data?.campaigns;
+      console.log("All Campaigns:", resData);
 
       const formattedCampaigns = resData
         .map((e) => ({
