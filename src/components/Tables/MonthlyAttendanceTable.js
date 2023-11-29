@@ -141,6 +141,22 @@ const MonthlyAttendanceTable = ({
         STAFF: item.staffName,
         "EMPLOYEE ID": item.ogid,
         EMAIL: item.email,
+        ...item.attendance.reduce(
+          (acc, curr) => ({
+            ...acc,
+            [curr.date]:
+              curr.status === "Absent"
+                ? curr.status
+                : `IN: ${moment(curr.clock_in, "HH:mm:ss").format(
+                    "hh:mma"
+                  )} - OUT: ${
+                    curr.clock_out
+                      ? moment(curr.clock_out, "HH:mm:ss").format("hh:mma")
+                      : "No clock out"
+                  }`,
+          }),
+          {}
+        ),
       }));
 
       const dataToConvert = {
