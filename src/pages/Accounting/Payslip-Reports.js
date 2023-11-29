@@ -356,7 +356,10 @@ const PayslipReports = () => {
             <h3 className="page-title">
               Staff Monthly Payslip |{" "}
               <span className="payroll_month_indicator">
-                {viewing === "Current" ? thisMonth : selectedMonthAndYear}
+                {viewing === "Current" ||
+                selectedMonthAndYear === "Invalid date"
+                  ? thisMonth
+                  : selectedMonthAndYear}
               </span>
             </h3>
             <ul className="breadcrumb">
@@ -444,21 +447,18 @@ const PayslipReports = () => {
         {/* Payslip History */}
         <div id="tab_history" className="col-12 tab-pane">
           <div className="page-header" style={{ marginBottom: "80px" }}>
-
-            
             <div className="row">
-
-            <div className="col-md-3">
-              <div className="form-group">
-                <input
-                  type="month"
-                  name="date"
-                  value={date}
-                  onChange={(e) => setDate(e?.target?.value)}
-                  className="form-control "
-                />
+              <div className="col-md-3">
+                <div className="form-group">
+                  <input
+                    type="month"
+                    name="date"
+                    value={date}
+                    onChange={(e) => setDate(e?.target?.value)}
+                    className="form-control "
+                  />
+                </div>
               </div>
-            </div>
 
               <div className="col-auto float-right ml-auto">
                 {loadingCSV ? (
@@ -469,21 +469,23 @@ const PayslipReports = () => {
                     <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
                   </button>
                 ) : (
-                  data.length > 0 && (
+                  payslipHistory.length > 0 && (
                     <button
                       className="btn add-btn"
                       style={{ marginLeft: "20px" }}
                       onClick={handleExportCSV}
                     >
                       <i className="fa fa-download"></i> Download{" "}
-                      {moment(selectedMonthAndYear).format("MMMM")} Payslips
+                      {moment(selectedMonthAndYear).format("MMMM") ===
+                      "Invalid date"
+                        ? ""
+                        : moment(selectedMonthAndYear).format("MMMM")}{" "}
+                      Payslips
                     </button>
                   )
                 )}
               </div>
             </div>
-
-            
           </div>
 
           <EmployeeSalaryTable
