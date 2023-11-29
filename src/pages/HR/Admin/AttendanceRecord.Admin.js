@@ -12,6 +12,7 @@ import { useAppContext } from "../../../Context/AppContext";
 const AttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [loadingMonthlyRecord, setLoadingMonthlyRecord] = useState(false);
   const [dailyAttendanceSummary, setDailyAttendanceSummary] = useState([]);
   const [dailyAttendance, setDailyAttendance] = useState([]);
   const [monthlyAttendance, setMonthlyAttendance] = useState([]);
@@ -41,6 +42,8 @@ const AttendanceRecord = () => {
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
+  const [officeType, setOfficeType] = useState("");
+  const [officeId, setOfficeId] = useState("");
 
   // ! This code is for generating dynamic date columns for the Monthly Attendance table | without clock in and clock out times
   // Monthly Attendance - Dynamic Date Columns:
@@ -97,7 +100,6 @@ const AttendanceRecord = () => {
   //   setDateColumns(dateColumns);
   // }, [monthlyAttendance]);
 
-  // * This code is for generating dynamic date columns for the Monthly Attendance table | with clock in and clock out times
   useEffect(() => {
     const allDates = Array.from(
       new Set(
@@ -247,7 +249,7 @@ const AttendanceRecord = () => {
 
   // Monthly Attendance:
   const fetchMonthlyAttendance = useCallback(async () => {
-    setLoading(true);
+    setLoadingMonthlyRecord(true);
     try {
       const response = await axiosInstance.get(
         "/api/v1/office_employees_attendances.json",
@@ -258,24 +260,29 @@ const AttendanceRecord = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            office_type: "campaign",
-            office_id: 34,
-            start_date: "2023-10-01",
-            end_date: "2023-10-31",
-            // start_date: fromDate,
-            // end_date: toDate,
+            office_type: officeType,
+            office_id: officeId,
+            start_date: fromDate,
+            end_date: toDate,
             page: page,
             limit: sizePerPage,
           },
         }
       );
 
-      const resData = response?.data?.data?.records;
-      const pages = response?.data?.data?.pages;
+      const attendanceRecords =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.records;
 
-      const dataArray = Object.keys(resData).map((key) => ({
-        days: resData[key].days,
-        user: resData[key].user,
+      const recordPages =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.pages;
+
+      const dataArray = Object.keys(attendanceRecords).map((key) => ({
+        days: attendanceRecords[key].days,
+        user: attendanceRecords[key].user,
       }));
 
       const formattedData = dataArray.map((data) => ({
@@ -297,17 +304,18 @@ const AttendanceRecord = () => {
         })),
       }));
 
-      setCampaignSizePerPage(sizePerPage);
-      setTotalCampaignPages(pages);
+      setSizePerPage(sizePerPage);
+      setTotalPages(recordPages);
 
       setMonthlyAttendance(formattedData);
-      setLoading(false);
+      setLoadingMonthlyRecord(false);
     } catch (error) {
       const component = "Monthly Attendance | ";
       ErrorHandler(error, component);
-      setLoading(false);
+      setLoadingMonthlyRecord(false);
     }
-  }, [fromDate, page, sizePerPage, toDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, officeId, officeType, page, sizePerPage, toDate]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -384,17 +392,19 @@ const AttendanceRecord = () => {
 
   useEffect(() => {
     fetchDailyAttendanceSummary();
-    fetchMonthlyAttendance();
     fetchDailyAttendance();
     fetchAllCampaigns();
     fetchAllDepartments();
   }, [
     fetchDailyAttendanceSummary,
-    fetchMonthlyAttendance,
     fetchDailyAttendance,
     fetchAllCampaigns,
     fetchAllDepartments,
   ]);
+
+  useEffect(() => {
+    fetchMonthlyAttendance();
+  }, [fetchMonthlyAttendance]);
 
   const columns = [
     {
@@ -704,12 +714,16 @@ const AttendanceRecord = () => {
             <MonthlyAttendanceTable
               columns={monthlyAttendanceColumns}
               data={monthlyAttendance}
-              loading={loading}
-              setLoading={setLoading}
+              loading={loadingMonthlyRecord}
+              setLoading={setLoadingMonthlyRecord}
               fromDate={fromDate}
               toDate={toDate}
               setFromDate={setFromDate}
               setToDate={setToDate}
+              officeType={officeType}
+              setOfficeType={setOfficeType}
+              officeId={officeId}
+              setOfficeId={setOfficeId}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}

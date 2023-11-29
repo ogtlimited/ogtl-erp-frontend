@@ -698,8 +698,7 @@ const EmployeesTable = ({
 
       const responseData = response?.data?.data?.employees;
 
-      const formatted = responseData.map((data, index) => ({
-        "S/N": index + 1,
+      const formatted = responseData.map((data) => ({
         "Employee Name": data?.full_name,
         OGID: data?.ogid,
         "Office Type": data?.office?.office_type,
