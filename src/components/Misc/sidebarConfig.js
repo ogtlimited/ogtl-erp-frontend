@@ -161,6 +161,12 @@ const sidebarConfig = [
             },
             {
               canView: "all",
+              title: "KPI",
+              externalLink: buildExternalURL(),
+              icon: ICONS.kpi,
+            },
+            {
+              canView: "all",
               title: "Attendance",
               path: PATH_DASHBOARD.main.employeeAttendance,
               icon: ICONS.userAttendance,
