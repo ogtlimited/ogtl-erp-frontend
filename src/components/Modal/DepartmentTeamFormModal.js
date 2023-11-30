@@ -59,7 +59,7 @@ export const DepartmentTeamFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.team_title} Team successfully added to ${title} Department`,
+        `${office?.team_title} Team successfully added to ${title?.toUpperCase()} Department`,
         "alert alert-success"
       );
       fetchAllDepartmentTeams();

@@ -51,7 +51,7 @@ export const DepartmentSupervisorFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.supervisor_title} successfully added to ${title} Department as a Supervisor`,
+        `${office?.supervisor_title} successfully added to ${title?.toUpperCase()} Department as a Supervisor`,
         "alert alert-success"
       );
       fetchAllDepartmentSupervisors();

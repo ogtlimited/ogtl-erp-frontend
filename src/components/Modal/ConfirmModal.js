@@ -11,7 +11,7 @@ const ConfirmModal = ({
   return (
     <>
       <div
-        className="modal fade"
+        className="modal confirm_modal fade"
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"

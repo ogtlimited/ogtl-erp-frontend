@@ -51,7 +51,9 @@ export const DepartmentEmployeeFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.employee_title} successfully added to ${title} Department`,
+        `${
+          office?.employee_title
+        } successfully added to ${title?.toUpperCase()} Department`,
         "alert alert-success"
       );
       fetchAllDepartmentEmployees();

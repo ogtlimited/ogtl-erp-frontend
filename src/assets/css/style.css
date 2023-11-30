@@ -2195,6 +2195,9 @@ table.dataTable thead > tr > td.sorting {
 .modal {
   -webkit-overflow-scrolling: touch;
 }
+.confirm_modal {
+  top: 30%;
+}
 .modal-footer.text-center {
   justify-content: center;
 }

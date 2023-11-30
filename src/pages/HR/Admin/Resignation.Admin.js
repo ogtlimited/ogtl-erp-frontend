@@ -1,3 +1,5 @@
+// *IN USE
+
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
@@ -7,9 +9,12 @@ import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";
 import ResignationContent from "../../../components/ModalContents/ResignationContent";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import moment from "moment";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
 const ResignationAdmin = () => {
-  const { ErrorHandler } = useAppContext();
+  const { ErrorHandler, getAvatarColor, user, showAlert, goToTop } =
+    useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -18,6 +23,13 @@ const ResignationAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const fetchResignations = useCallback(async () => {
     try {
@@ -39,15 +51,22 @@ const ResignationAdmin = () => {
       setSizePerPage(sizePerPage);
       setTotalPages(totalPages);
 
-      // const map = resData.map((e) => {
-      //   return {
-      //     ...e,
-      //     fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`,
-      //     effective_date: new Date(e?.effective_date).toDateString(),
-      //   };
-      // });
+      const formattedData = resData.map((data) => ({
+        id: data?.id,
+        full_name: data?.full_name,
+        office: data.office?.toUpperCase(),
+        approved: data.approved ? "Approved" : "Pending",
+        date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
+        notice_period_start_date: moment(data?.notice_period_start_date).format(
+          "ddd, DD MMM YYYY"
+        ),
+        last_day_at_work: moment(data?.last_day_at_work).format(
+          "ddd, DD MMM YYYY"
+        ),
+        reason_for_resignation: data?.resignation_reason,
+      }));
 
-      setData(resData);
+      setData(formattedData);
       setLoading(false);
     } catch (error) {
       const component = "Employee Resignations | ";
@@ -63,42 +82,72 @@ const ResignationAdmin = () => {
 
   const columns = [
     {
-      dataField: "fullName",
-      text: "Employee name",
+      dataField: "full_name",
+      text: "Employee",
       sort: true,
-      headerStyle: { width: "300px" },
-    },
-    {
-      dataField: "effective_date",
-      text: "Effective Resignation Date",
-      sort: true,
-      headerStyle: { width: "250px" },
-    },
-    {
-      dataField: "reason_for_resignation",
-      text: "Reason for Resignation",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-    {
-      dataField: "status_action",
-      text: "Action",
-      csvExport: false,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
           >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              href="#"
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {row?.full_name} <span>{row?.office}</span>
+          </div>
+        </h2>
+      ),
+    },
+    {
+      dataField: "date_applied",
+      text: "Date Applied",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "approved",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          {value === "Approved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-success"></i> {value}
+            </span>
+          ) : (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+            </span>
+          )}
+        </>
+      ),
+    },
+    {
+      dataField: "notice_period_start_date",
+      text: "Notice Period Start Date",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "last_day_at_work",
+      text: "Last Day at Work",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      csvExport: false,
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              style={{ marginRight: "10px" }}
+              className="btn btn-sm btn-primary"
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
@@ -106,13 +155,53 @@ const ResignationAdmin = () => {
                 setViewRow(row);
               }}
             >
-              <i className="fa fa-eye m-r-5"></i> View
-            </a>
+              View
+            </button>
+            <button
+              className="btn btn-sm btn-success"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => {
+                setmodalType("approve");
+                setViewRow(row);
+              }}
+            >
+              Approve
+            </button>
           </div>
         </div>
       ),
     },
   ];
+
+  const handleApproveResignation = async (viewRow) => {
+    const resignationId = viewRow.id;
+
+    try {
+      const res = await axiosInstance.patch(
+        `/api/v1/resignations/${resignationId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        `${viewRow?.full_name} resignation application is successfully approved!`,
+        "alert alert-success"
+      );
+
+      goToTop();
+    } catch (error) {
+      const errorMsg = error.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      goToTop();
+    }
+  };
 
   return (
     <>
@@ -152,6 +241,13 @@ const ResignationAdmin = () => {
       ) : (
         ""
       )}
+
+      <ConfirmModal
+        title="Resignation Approval"
+        selectedRow={viewRow}
+        deleteFunction={handleApproveResignation}
+        message="Are you sure you want to approve this resignation?"
+      />
     </>
   );
 };
