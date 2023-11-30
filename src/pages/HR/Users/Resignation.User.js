@@ -1,26 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import resignationIcon from "../../../assets/img/resign.png";
 import axiosInstance from "../../../services/api";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+
+const resignationModel = {
+  effective_today: "",
+  effective_date: "",
+  reason_for_resignation: "",
+};
 
 const ResignationUser = () => {
   const { showAlert, user } = useAppContext();
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({
-    effective_date: "",
-    reason_for_resignation: "",
-  });
+  const [data, setData] = useState(resignationModel);
 
   const today = moment().utc().format("yyyy-MM-DD");
+  const [todaySelected, setTodaySelected] = useState(false);
 
-  const currentUserOgid = user?.employee_info?.ogid;
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const currentUserDesignation = user?.employee_info?.designation.toLowerCase();
+  const currentUserIsLead = user?.employee_info?.is_lead;
+  // const currentUserIsManagement = user;
+
+  const [minDate, setMinDate] = useState(null);
+
+  // Calculates Resignation Notice Period:
+  useEffect(() => {
+    let noticePeriod = 0;
+
+    if (currentUserIsLead) {
+      noticePeriod = 30;
+    } else if (currentUserDesignation === "agent") {
+      noticePeriod = 14;
+    }
+
+    const todayDate = moment().utc();
+    const minDate = todayDate.add(noticePeriod, "days").format("yyyy-MM-DD");
+
+    setMinDate(minDate);
+  }, [currentUserDesignation, currentUserIsLead]);
 
   const cancelEvent = () => {
     setData({
+      effective_today: "",
       effective_date: "",
       reason_for_resignation: "",
     });
+    setTodaySelected(false);
   };
 
   const handleFormChange = (e) => {
@@ -28,11 +56,7 @@ const ResignationUser = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleApplyResignation = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-
+  const handleApplyResignation = async (data) => {
     try {
       const res = await axiosInstance.post(`/api/v1/resignations.json`, {
         headers: {
@@ -41,10 +65,9 @@ const ResignationUser = () => {
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
-          ogid: currentUserOgid,
-          effective_date: moment(data.effective_date).format(
-            "ddd, DD MMM YYYY"
-          ),
+          effective_date: todaySelected
+            ? moment(data.effective_today).format("ddd, DD MMM YYYY")
+            : moment(data.effective_date).format("ddd, DD MMM YYYY"),
           reason_for_resignation: data.reason_for_resignation,
         },
       });
@@ -58,17 +81,12 @@ const ResignationUser = () => {
         "alert alert-success"
       );
 
-      setData({
-        effective_date: "",
-        reason_for_resignation: "",
-      });
-      setLoading(false);
+      setData(resignationModel);
+      setTodaySelected(false);
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -94,36 +112,45 @@ const ResignationUser = () => {
               </div>
 
               <div className="modal-body">
-                <form onSubmit={handleApplyResignation}>
+                <div>
                   <div className="row">
+                    {/* Today */}
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="effective_date">Effective Date</label>
-                      </div>
-                    </div>
-
-                    {/* Today */}
-                    <div className="col-md-2">
-                      <div className="form-group">
-                        <label htmlFor="effective_date">Today</label>
+                        <label htmlFor="effective_date">
+                          Effective Immediately (to start today)
+                        </label>
                         <input
                           type="checkbox"
                           name="effective_date"
-                          className="form-control "
+                          className="form-control resignation_effective_today"
+                          value={true}
+                          checked={todaySelected}
+                          onChange={(e) => {
+                            setTodaySelected(e.target.checked);
+                            setData({
+                              ...data,
+                              effective_today: today,
+                              effective_date: "",
+                            });
+                          }}
                         />
                       </div>
                     </div>
 
                     {/* Later Date */}
-                    <div className="col-md-10">
+                    <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="effective_date">Later Date</label>
+                        <label htmlFor="effective_date">Further Date</label>
                         <input
                           type="date"
                           name="effective_date"
                           value={data.effective_date}
                           onChange={handleFormChange}
                           className="form-control "
+                          readOnly={todaySelected}
+                          required={!todaySelected}
+                          min={minDate}
                         />
                       </div>
                     </div>
@@ -153,24 +180,34 @@ const ResignationUser = () => {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn btn-primary">
-                      {loading ? (
-                        <span
-                          className="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : (
-                        "Confirm"
-                      )}
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      data-toggle="modal"
+                      data-target="#exampleModal"
+                      onClick={() => setSelectedRow(data)}
+                      disabled={
+                        (!data?.effective_today.length &&
+                          !data?.effective_date.length) ||
+                        !data?.reason_for_resignation.length
+                      }
+                    >
+                      Confirm
                     </button>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        title="Resignation"
+        selectedRow={selectedRow}
+        deleteFunction={handleApplyResignation}
+        message="Are you sure you want to submit your resignation?"
+      />
     </>
   );
 };

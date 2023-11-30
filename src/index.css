@@ -141,7 +141,7 @@
   border-top-right-radius: 10px;
   margin-bottom: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  
+
   overflow-x: auto;
   width: 100%;
 }
@@ -709,4 +709,10 @@ table.custom-table thead th {
   margin-left: 10px;
   background-color: #fff;
   border-color: #00c5fb;
+}
+
+.form-control.resignation_effective_today {
+  width: 20px;
+  height: 20px;
+  cursor: pointer !important;
 }

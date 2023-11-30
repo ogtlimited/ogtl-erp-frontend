@@ -2193,6 +2193,7 @@ table.dataTable thead > tr > td.sorting {
 -----------------------*/
 
 .modal {
+  top: 30%;
   -webkit-overflow-scrolling: touch;
 }
 .modal-footer.text-center {
