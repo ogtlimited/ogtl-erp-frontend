@@ -59,7 +59,7 @@ export const DepartmentCampaignFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.campaign_title} Campaign successfully added to ${title} Department`,
+        `${office?.campaign_title} Campaign successfully added to ${title?.toUpperCase()} Department`,
         "alert alert-success"
       );
       fetchAllDepartmentCampaigns();

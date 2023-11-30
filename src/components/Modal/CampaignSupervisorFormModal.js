@@ -51,7 +51,7 @@ export const CampaignSupervisorFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.supervisor_title} successfully added to ${title} Campaign as a Supervisor`,
+        `${office?.supervisor_title} successfully added to ${title?.toUpperCase()} Campaign as a Supervisor`,
         "alert alert-success"
       );
       fetchAllCampaignSupervisors();
