@@ -72,12 +72,14 @@ const ResignationUser = () => {
         },
       });
 
-      // eslint-disable-next-line no-unused-vars
       const resData = res?.data?.data;
+      const exitDate = resData?.resignation?.exit_date;
 
       showAlert(
         true,
-        "Your resignation application is successfully submitted",
+        `Your resignation application is successfully submitted, your exit date is ${moment(
+          exitDate
+        ).format("ddd, DD MMM YYYY")} `,
         "alert alert-success"
       );
 
