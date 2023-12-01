@@ -127,7 +127,7 @@ const AttendanceRecord = () => {
               <>
                 <span className="btn btn-gray btn-sm btn-rounded">
                   <i
-                    className="fa fa-dot-circle-o text-success"
+                    className="fa fa-dot-circle-o text-info"
                     style={{ marginRight: "10px" }}
                   ></i>{" "}
                   {moment(attendanceRecord.clock_in, "HH:mm:ss").format(
@@ -136,7 +136,7 @@ const AttendanceRecord = () => {
                 </span>
                 <span className="btn btn-gray btn-sm btn-rounded">
                   <i
-                    className="fa fa-dot-circle-o text-info"
+                    className="fa fa-dot-circle-o text-success"
                     style={{ marginRight: "10px" }}
                   ></i>{" "}
                   {attendanceRecord.clock_out
