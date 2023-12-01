@@ -144,7 +144,7 @@ const MonthlyAttendanceTable = ({
         ...item.attendance.reduce(
           (acc, curr) => ({
             ...acc,
-            [curr.date]:
+            [moment(curr.date).format("DD-MMM-YYYY")]:
               curr.status === "Absent"
                 ? curr.status
                 : `IN: ${moment(curr.clock_in, "HH:mm:ss").format(
