@@ -10,7 +10,7 @@ const ResignationContent = ({ Content = {} }) => {
     "full_name",
     "office",
     "date_applied",
-    "approved",
+    "status",
     "notice_period_start_date",
     "last_day_at_work",
     "reason_for_resignation",

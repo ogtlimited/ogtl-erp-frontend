@@ -55,7 +55,7 @@ const ResignationAdmin = () => {
         id: data?.id,
         full_name: data?.full_name,
         office: data.office?.toUpperCase(),
-        approved: data.approved ? "Approved" : "Pending",
+        status: data.approved ? "Approved" : "Pending",
         date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
         notice_period_start_date: moment(data?.notice_period_start_date).format(
           "ddd, DD MMM YYYY"
@@ -107,7 +107,7 @@ const ResignationAdmin = () => {
       headerStyle: { width: "15%" },
     },
     {
-      dataField: "approved",
+      dataField: "status",
       text: "Status",
       sort: true,
       headerStyle: { width: "15%" },
@@ -195,6 +195,7 @@ const ResignationAdmin = () => {
         "alert alert-success"
       );
 
+      fetchResignations();
       goToTop();
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
