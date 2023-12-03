@@ -143,7 +143,7 @@ const ResignationUser = () => {
                     {/* Later Date */}
                     <div className="col-md-12">
                       <div className="form-group">
-                        <label htmlFor="effective_date">Further Date</label>
+                        <label htmlFor="effective_date">Future Date</label>
                         <input
                           type="date"
                           name="effective_date"
