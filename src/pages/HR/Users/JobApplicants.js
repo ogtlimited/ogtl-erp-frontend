@@ -395,12 +395,7 @@ const JobApplicants = () => {
       {modalType === "view-details" && (
         <ViewModal
           title="Applicant Details"
-          content={
-            <JobApplicationContent
-              jobApplication={viewRow}
-              handleRefresh={fetchAllJobApplicants}
-            />
-          }
+          content={<JobApplicationContent jobApplication={viewRow} />}
         />
       )}
 
@@ -411,7 +406,6 @@ const JobApplicants = () => {
             <ScheduleInterview
               jobApplication={selectedRow}
               handleUpdate={handleUpdate}
-              handleRefresh={fetchAllJobApplicants}
               setModalType={setModalType}
             />
           }

@@ -158,7 +158,6 @@ const JobApplicantsAdmin = () => {
       }));
 
       setData(formatted);
-      console.log("Formatted:", formatted)
       setLoading(false);
     } catch (error) {
       const component = "Job Applicants Error | ";
@@ -629,12 +628,7 @@ const JobApplicantsAdmin = () => {
       {modalType === "view-details" && (
         <ViewModal
           title="Applicant Details"
-          content={
-            <JobApplicationContent
-              jobApplication={viewRow}
-              handleRefresh={fetchAllJobApplicants}
-            />
-          }
+          content={<JobApplicationContent jobApplication={viewRow} />}
         />
       )}
 
@@ -645,7 +639,6 @@ const JobApplicantsAdmin = () => {
             <ScheduleInterview
               jobApplication={selectedRow}
               handleUpdate={handleUpdate}
-              handleRefresh={fetchAllJobApplicants}
               setModalType={setModalType}
             />
           }

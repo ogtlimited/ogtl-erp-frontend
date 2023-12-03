@@ -888,7 +888,6 @@ const LeavesAdmin = () => {
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          handleRefresh={fetchHRLeaves}
         />
       ) : (
         ""

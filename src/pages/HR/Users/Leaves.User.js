@@ -966,12 +966,6 @@ const LeavesUser = () => {
     },
   ];
 
-  const SilentRefresh = () => {
-    if (currentUserIsLead) {
-      fetchReporteesLeaves();
-    }
-  };
-
   return (
     <>
       <div className="page-header">
@@ -1110,7 +1104,6 @@ const LeavesUser = () => {
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          handleRefresh={SilentRefresh}
         />
       ) : (
         ""
