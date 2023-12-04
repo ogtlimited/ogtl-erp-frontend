@@ -109,7 +109,6 @@ const AdminLeavesTable = ({
               input.value = "";
               props.onSearch("");
               setPage(1);
-              setLoading(true);
             }}
           >
             Reset
