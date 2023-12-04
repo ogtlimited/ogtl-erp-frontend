@@ -104,6 +104,7 @@ const AdminLeavesHistoryTable = ({
             onClick={() => {
               input.value = "";
               props.onSearch("");
+              setSearchTerm("");
               setPage(1);
               setLoading(true);
             }}
