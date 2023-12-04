@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -41,13 +40,15 @@ const LeavesAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [historyPage, setHistoryPage] = useState(1);
   const [historySizePerPage, setHistorySizePerPage] = useState(10);
   const [historyTotalPages, setHistoryTotalPages] = useState("");
+  const [historySearchTerm, setHistorySearchTerm] = useState("");
 
   const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment(time).utc().format("yyyy-MM-DD");
 
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
@@ -73,6 +74,7 @@ const LeavesAdmin = () => {
   // All Leaves at HR stage - Pending
   const fetchHRLeaves = useCallback(async () => {
     setLoading(true);
+
     try {
       const response = await axiosInstance.get(
         `/api/v1/hr_dashboard/leaves.json`,
@@ -85,6 +87,7 @@ const LeavesAdmin = () => {
           params: {
             pages: page,
             limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
           },
         }
       );
@@ -102,13 +105,19 @@ const LeavesAdmin = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -119,12 +128,17 @@ const LeavesAdmin = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [page, searchTerm, sizePerPage]);
 
-  // All Leaves at HR stage - History
+  useEffect(() => {
+    isHr && fetchHRLeaves();
+  }, [fetchHRLeaves, isHr]);
+
+  // All Leaves at HR stage - History (Approved, Rejected, & Cancelled)
   const fetchHRLeaveHistory = useCallback(async () => {
+    setLoadingHistory(true);
+
     try {
-      setLoadingHistory(true);
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",
         {
@@ -136,6 +150,7 @@ const LeavesAdmin = () => {
           params: {
             pages: historyPage,
             limit: historySizePerPage,
+            name: historySearchTerm.length ? historySearchTerm : null,
             status: historyStatus,
           },
         }
@@ -156,27 +171,33 @@ const LeavesAdmin = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
         office: leave?.office?.toUpperCase(),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
-          "YYYY, MM (MMM), Do - h:mma"
-        ),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at)
+          .utc()
+          .format("YYYY, MM (MMM), Do - h:mma"),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
         reasons_for_update: leave?.leave?.reasons_for_update,
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.leave?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
             : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") !==
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
@@ -189,7 +210,18 @@ const LeavesAdmin = () => {
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
-  }, [historyPage, historySizePerPage, historyStatus, today_date]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    historyPage,
+    historySizePerPage,
+    historyStatus,
+    historySearchTerm,
+    today_date,
+  ]);
+
+  useEffect(() => {
+    isHr && fetchHRLeaveHistory();
+  }, [fetchHRLeaveHistory, isHr]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -214,15 +246,6 @@ const LeavesAdmin = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (isHr) {
-      fetchHRLeaves();
-      fetchHRLeaveHistory();
-      fetchAllEmpOnLeave();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
 
   // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
@@ -864,11 +887,13 @@ const LeavesAdmin = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
           />
         </div>
 
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
-          <AdminLeavesHistoryTable
+          <AdminLeavesTable
             columns={historyColumns}
             data={leaveHistory}
             setData={setLeaveHistory}
@@ -880,6 +905,8 @@ const LeavesAdmin = () => {
             setSizePerPage={setHistorySizePerPage}
             totalPages={historyTotalPages}
             setTotalPages={setHistoryTotalPages}
+            searchTerm={historySearchTerm}
+            setSearchTerm={setHistorySearchTerm}
           />
         </div>
       </div>
@@ -888,7 +915,6 @@ const LeavesAdmin = () => {
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          handleRefresh={fetchHRLeaves}
         />
       ) : (
         ""

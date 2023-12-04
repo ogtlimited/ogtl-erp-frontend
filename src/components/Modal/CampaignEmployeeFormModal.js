@@ -51,7 +51,7 @@ export const CampaignEmployeeFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.employee_title} successfully added to ${title} Campaign`,
+        `${office?.employee_title} successfully added to ${title?.toUpperCase()} Campaign`,
         "alert alert-success"
       );
       fetchAllCampaignEmployees();

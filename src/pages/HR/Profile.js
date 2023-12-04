@@ -3,7 +3,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import avater from "../../assets/img/profile.png";
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 import { ReportToModal } from "../../components/Modal/ReportToModal";

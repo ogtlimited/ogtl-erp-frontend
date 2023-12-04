@@ -49,7 +49,7 @@ const LeavesUser = () => {
   const [deptTotalPages, setDeptTotalPages] = useState("");
 
   const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment(time).utc().format("yyyy-MM-DD");
 
   const currentUserIsLead = user?.employee_info?.is_lead;
   const currentUserOffice = user?.office?.title.toUpperCase();
@@ -105,13 +105,15 @@ const LeavesUser = () => {
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.leave?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
             : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") !==
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
@@ -147,13 +149,13 @@ const LeavesUser = () => {
         status_action: leave?.status,
         office: leave.office.toUpperCase(),
         leave_type: leave?.leave_type,
-        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.start_date).utc().format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).utc().format("ddd MMM Do, YYYY"),
         requested_leave_days: calcBusinessDays(
           leave?.start_date,
           leave?.end_date
         ),
-        date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.created_at).utc().format("Do MMM, YYYY"),
         proofs: leave?.proofs,
       }));
 
@@ -190,9 +192,13 @@ const LeavesUser = () => {
           leave?.user?.first_name?.toUpperCase() +
           " " +
           leave?.user?.last_name?.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
         office: leave?.office?.toUpperCase(),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         status: leave?.leave?.status,
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
@@ -201,14 +207,16 @@ const LeavesUser = () => {
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
         proofs: leave?.proofs,
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.leave?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
             : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") !==
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
@@ -255,20 +263,22 @@ const LeavesUser = () => {
           " " +
           leave?.last_name.toUpperCase(),
         office: leave?.office?.toUpperCase(),
-        from_date: moment(leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.start_date).utc().format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.end_date).utc().format("ddd MMM Do, YYYY"),
         status: leave?.status,
         total_leave_days: calcBusinessDays(leave?.start_date, leave?.end_date),
         reason: leave?.reason,
         rejection_reason: leave?.rejection_reason,
         reason_for_cancellation: leave?.reason_for_cancellation,
-        date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.created_at).utc().format("Do MMM, YYYY"),
         proofs: leave?.proofs,
         leave_marker:
-          moment(leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
-            : today_date < moment(leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.start_date).format("yyyy-MM-DD") !== today_date
+            : today_date <
+                moment(leave?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(leave?.start_date).utc().format("yyyy-MM-DD") !==
+                today_date
             ? "Scheduled Leave"
             : "On Leave",
       }));
@@ -966,12 +976,6 @@ const LeavesUser = () => {
     },
   ];
 
-  const SilentRefresh = () => {
-    if (currentUserIsLead) {
-      fetchReporteesLeaves();
-    }
-  };
-
   return (
     <>
       <div className="page-header">
@@ -1110,7 +1114,6 @@ const LeavesUser = () => {
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          handleRefresh={SilentRefresh}
         />
       ) : (
         ""

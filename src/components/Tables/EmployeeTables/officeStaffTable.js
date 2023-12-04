@@ -186,6 +186,7 @@ const OfficeStaffTable = ({
       let input;
 
       const handleKeydown = (e) => {
+        setLoading(true);
         if (e.key === "Enter") {
           setPage(1);
           setData([]);
@@ -194,56 +195,8 @@ const OfficeStaffTable = ({
           setDesignationFilter("");
           setStatusFilter("");
           setSearchTerm(searchTerm);
-
-          if (page === 1) {
-            setLoading(true);
-            axiosInstance
-              .get("/api/v1/employees.json", {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                  "ngrok-skip-browser-warning": "69420",
-                },
-                params: {
-                  operation_office_id: officeId,
-                  page: page,
-                  limit: sizePerPage,
-                  name: searchTerm,
-                },
-              })
-              .then((e) => {
-                let resData = e?.data?.employees;
-                let resOptions = e?.data?.pagination;
-
-                const thisPageLimit = sizePerPage;
-                const thisTotalPageSize = resOptions?.numberOfPages;
-
-                setSizePerPage(thisPageLimit);
-                setTotalPages(thisTotalPageSize);
-
-                const mapp = resData.map((emp) => {
-                  return {
-                    ...emp,
-                    fullName:
-                      emp.first_name +
-                      " " +
-                      emp.middle_name +
-                      " " +
-                      emp?.last_name,
-                    designation_name: emp?.designation?.designation,
-                    department_name: emp?.department?.department,
-                    project: emp?.projectId?.project_name,
-                  };
-                });
-                setData(mapp);
-                setLoading(false);
-              })
-              .catch((error) => {
-                console.log(error);
-                setLoading(false);
-              });
-          }
         }
+        setLoading(false);
       };
 
       return (
@@ -276,19 +229,7 @@ const OfficeStaffTable = ({
         </div>
       );
     },
-    [
-      officeId,
-      page,
-      setData,
-      setDesignationFilter,
-      setLoading,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setStatusFilter,
-      setTotalPages,
-      sizePerPage,
-    ]
+    [setData, setDesignationFilter, setLoading, setPage, setSearchTerm, setStatusFilter]
   );
 
   // // Filter by Designation:

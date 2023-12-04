@@ -104,66 +104,14 @@ const JobApplicantsAdminRolesTable = ({
       let input;
 
       const handleKeydown = (e) => {
+        setLoading(true);
         if (e.key === "Enter") {
           setPage(1);
-          setLoading(true);
           props.onSearch(input.value);
           const searchTerm = input.value;
           setSearchTerm(searchTerm);
-
-          if (page === 1) {
-            const persistedFromDate = secureLocalStorage.getItem("fromDate");
-            const persistedToDate = secureLocalStorage.getItem("toDate");
-
-            axiosInstance
-              .get("/api/v1/job_applicants.json", {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                  "ngrok-skip-browser-warning": "69420",
-                },
-                params: {
-                  page: page,
-                  limit: sizePerPage,
-                  name: searchTerm,
-                  job_opening_id: jobOpeningFilter,
-                  process_status: processingStageFilter,
-                  start_date: persistedFromDate,
-                  end_date: persistedToDate,
-                },
-              })
-              .then((e) => {
-                const resData = e?.data?.data?.job_applicants;
-                const totalPages = e?.data?.data?.total_pages;
-
-                const thisPageLimit = sizePerPage;
-                const thisTotalPageSize = totalPages;
-
-                setSizePerPage(thisPageLimit);
-                setTotalPages(thisTotalPageSize);
-
-                const formatted = resData.map((emp) => ({
-                  ...emp,
-                  full_name: `${emp?.first_name} ${emp?.last_name}`,
-                  job_title: emp?.job_opening?.job_title,
-                  application_date: moment(emp?.created_at).format(
-                    "Do MMMM, YYYY"
-                  ),
-                  interview_date: emp?.interview_date
-                    ? moment(emp?.interview_date).format("Do MMMM, YYYY")
-                    : "Not Scheduled",
-                  resume: emp?.old_cv_url ? emp?.old_cv_url : emp?.resume,
-                }));
-
-                setData(formatted);
-              })
-              .catch((error) => {
-                console.log(error);
-                setLoading(false);
-              });
-          }
-          setLoading(false);
         }
+        setLoading(false);
       };
 
       return (
@@ -193,18 +141,7 @@ const JobApplicantsAdminRolesTable = ({
         </div>
       );
     },
-    [
-      jobOpeningFilter,
-      page,
-      processingStageFilter,
-      setData,
-      setLoading,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setTotalPages,
-      sizePerPage,
-    ]
+    [setLoading, setPage, setSearchTerm]
   );
 
   // Filter by Job Opening:

@@ -20,16 +20,37 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 const PayslipReports = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
   const [generating, setGenerating] = useState(false);
-  const year = moment().format("YYYY");
-  const currMonthName = moment().format("MMMM");
   const [data, setData] = useState([]);
+  const [payslipHistory, setPayslipHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
+  const [viewing, setViewing] = useState("Current");
+
+  const today = new Date();
+
+  // Numeric representation:
+  const currentMonth = today.getMonth() + 1;
+  const currentYear = today.getFullYear();
+
+  // String representation:
+  const thisMonth = moment().format("MMMM");
+  const thisYear = moment().format("YYYY");
+
+  const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
+  const [selectedMonthAndYear, setSelectedMonthAndYear] = useState(
+    `${thisMonth} ${thisYear}`
+  );
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
 
+  const [historyPage, setHistoryPage] = useState(1);
+  const [historySizePerPage, setHistorySizePerPage] = useState(10);
+  const [historyTotalPages, setHistoryTotalPages] = useState("");
+
+  // Handle Employee Salary Slip:
   const fetchEmployeeSalarySlip = useCallback(() => {
     setLoading(true);
     axiosInstance
@@ -86,9 +107,71 @@ const PayslipReports = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
+  // Handle Employee Salary Slip History:
+  const fetchEmployeeSalarySlipHistory = useCallback(() => {
+    const month = date?.split("-")[1];
+    const year = date?.split("-")[0];
+
+    setSelectedMonthAndYear(moment(date).format("MMMM YYYY"));
+    setLoadingHistory(true);
+    axiosInstance
+      .get("/api/v1/salary_slips_histories.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          month: month,
+          year: year,
+          page: historyPage,
+          limit: historySizePerPage,
+        },
+      })
+      .then((res) => {
+        const AllHistorySlips = res?.data?.data?.slips;
+        const totalHistoryPages = res?.data?.data?.pages;
+
+        setHistorySizePerPage(historySizePerPage);
+        setHistoryTotalPages(totalHistoryPages);
+
+        const formattedData = AllHistorySlips?.map((e) => ({
+          ...e,
+          id: e?.slip?.id,
+          employee: e?.user?.first_name + " " + e?.user?.last_name,
+          ogid: e?.user?.ogid,
+          email: e?.user?.email,
+
+          basic: e?.slip?.basic,
+          medical: e?.slip?.medical,
+          housing: e?.slip?.housing,
+          transport: e?.slip?.transport,
+          otherAllowances: e?.slip?.other_allowances,
+          monthlySalary: e?.slip?.monthly_salary,
+
+          tax: e?.slip?.monthly_income_tax,
+          pension: e?.slip?.monthly_pension,
+          disciplinary_deductions: e?.slip?.disciplinary_deductions,
+          totalDeduction: e?.slip?.total_deductions,
+          netPay: e?.slip?.net_pay,
+        }));
+
+        setPayslipHistory(formattedData);
+        setLoadingHistory(false);
+      })
+      .catch((error) => {
+        const component = "Employee Salary Slip History Error | ";
+        ErrorHandler(error, component);
+        setLoadingHistory(false);
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, historyPage, historySizePerPage]);
+
   useEffect(() => {
     fetchEmployeeSalarySlip();
-  }, [fetchEmployeeSalarySlip]);
+    fetchEmployeeSalarySlipHistory();
+  }, [fetchEmployeeSalarySlip, fetchEmployeeSalarySlipHistory]);
 
   // Handle CSV Export:
   const handleExportCSV = async (e) => {
@@ -96,53 +179,111 @@ const PayslipReports = () => {
     setLoadingCSV(true);
 
     try {
-      const response = await axiosInstance.get("/api/v1/salary_slips.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: 4000,
-        },
-      });
+      if (viewing === "Current") {
+        const response = await axiosInstance.get("/api/v1/salary_slips.json", {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: 4000,
+          },
+        });
 
-      const responseData = response?.data?.data?.slips;
+        const responseData = response?.data?.data?.slips;
 
-      const formatted = responseData.map((data) => ({
-        EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
-        OGID: data?.user?.ogid,
-        EMAIL: data?.user?.email,
+        const formatted = responseData.map((data) => ({
+          EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
+          OGID: data?.user?.ogid,
+          EMAIL: data?.user?.email,
+          BASIC: helper.handleMoneyFormat(data?.slip?.basic),
+          MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
+          HOUSING: helper.handleMoneyFormat(data?.slip?.housing),
+          TRANSPORT: helper.handleMoneyFormat(data?.slip?.transport),
+          "OTHER ALLOWANCES": helper.handleMoneyFormat(
+            data?.slip?.other_allowances
+          ),
+          "MONTHLY SALARY": helper.handleMoneyFormat(
+            data?.slip?.monthly_salary
+          ),
+          TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
+          PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+          "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
+            data?.slip?.disciplinary_deductions
+          ),
+          "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
+            data?.slip?.total_deductions
+          ),
+          "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
+        }));
 
-        BASIC: helper.handleMoneyFormat(data?.slip?.basic),
-        MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
-        HOUSING: helper.handleMoneyFormat(data?.slip?.housing),
-        TRANSPORT: helper.handleMoneyFormat(data?.slip?.transport),
-        "OTHER ALLOWANCES": helper.handleMoneyFormat(
-          data?.slip?.other_allowances
-        ),
-        "MONTHLY SALARY": helper.handleMoneyFormat(data?.slip?.monthly_salary),
+        const dataToConvert = {
+          data: formatted,
+          filename: `OGTL - Staff Monthly Payslip - ${thisMonth} ${thisYear}`,
+          delimiter: ",",
+          useKeysAsHeaders: true,
+        };
 
-        TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
-        PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
-        "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
-          data?.slip?.disciplinary_deductions
-        ),
-        "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
-          data?.slip?.total_deductions
-        ),
-        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
-      }));
+        csvDownload(dataToConvert);
+      } else {
+        const month = date?.split("-")[1];
+        const year = date?.split("-")[0];
 
-      const dataToConvert = {
-        data: formatted,
-        filename: `OGTL - Staff Monthly Payslip - ${currMonthName} ${year}`,
-        delimiter: ",",
-        useKeysAsHeaders: true,
-      };
+        const response = await axiosInstance.get(
+          "/api/v1/salary_slips_histories.json",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            params: {
+              month: month,
+              year: year,
+              page: page,
+              limit: 4000,
+            },
+          }
+        );
 
-      csvDownload(dataToConvert);
+        const responseData = response?.data?.data?.slips;
+
+        const formatted = responseData.map((data) => ({
+          EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
+          OGID: data?.user?.ogid,
+          EMAIL: data?.user?.email,
+          BASIC: helper.handleMoneyFormat(data?.slip?.basic),
+          MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
+          HOUSING: helper.handleMoneyFormat(data?.slip?.housing),
+          TRANSPORT: helper.handleMoneyFormat(data?.slip?.transport),
+          "OTHER ALLOWANCES": helper.handleMoneyFormat(
+            data?.slip?.other_allowances
+          ),
+          "MONTHLY SALARY": helper.handleMoneyFormat(
+            data?.slip?.monthly_salary
+          ),
+          TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
+          PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+          "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
+            data?.slip?.disciplinary_deductions
+          ),
+          "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
+            data?.slip?.total_deductions
+          ),
+          "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
+        }));
+
+        const dataToConvert = {
+          data: formatted,
+          filename: `OGTL - Staff Monthly Payslip - ${selectedMonthAndYear}`,
+          delimiter: ",",
+          useKeysAsHeaders: true,
+        };
+
+        csvDownload(dataToConvert);
+      }
 
       setLoadingCSV(false);
     } catch (error) {
@@ -214,35 +355,79 @@ const PayslipReports = () => {
           <div className="col">
             <h3 className="page-title">
               Staff Monthly Payslip |{" "}
-              <span className="payroll_month_indicator">{currMonthName}</span>
+              <span className="payroll_month_indicator">
+                {viewing === "Current" ||
+                selectedMonthAndYear === "Invalid date"
+                  ? thisMonth
+                  : selectedMonthAndYear}
+              </span>
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item ">Reports</li>
               <li className="breadcrumb-item active">Payslip Reports</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            {loadingCSV ? (
-              <button className="btn add-btn" style={{ marginLeft: "20px" }}>
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
-              </button>
-            ) : (
-              data.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginLeft: "20px" }}
-                  onClick={handleExportCSV}
+        </div>
+      </div>
+
+      <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_current"
+                  onClick={() => setViewing("Current")}
                 >
-                  <i className="fa fa-download"></i> Download Payslips
-                </button>
-              )
-            )}
+                  {thisMonth} Payslip
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_history"
+                  onClick={() => setViewing("History")}
+                >
+                  Payslip History
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-md-12">
+      <div className="row tab-content">
+        {/* Current Payslip */}
+        <div id="tab_current" className="col-12 tab-pane show active">
+          <div className="page-header" style={{ marginBottom: "100px" }}>
+            <div className="row">
+              <div className="col-auto float-right ml-auto">
+                {loadingCSV ? (
+                  <button
+                    className="btn add-btn"
+                    style={{ marginLeft: "20px" }}
+                  >
+                    <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+                  </button>
+                ) : (
+                  data.length > 0 && (
+                    <button
+                      className="btn add-btn"
+                      style={{ marginLeft: "20px" }}
+                      onClick={handleExportCSV}
+                    >
+                      <i className="fa fa-download"></i> Download {thisMonth}{" "}
+                      Payslips
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
           <EmployeeSalaryTable
             data={data}
             loading={loading}
@@ -256,6 +441,66 @@ const PayslipReports = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+          />
+        </div>
+
+        {/* Payslip History */}
+        <div id="tab_history" className="col-12 tab-pane">
+          <div className="page-header" style={{ marginBottom: "80px" }}>
+            <div className="row">
+              <div className="col-md-3">
+                <div className="form-group">
+                  <input
+                    type="month"
+                    name="date"
+                    value={date}
+                    onChange={(e) => setDate(e?.target?.value)}
+                    className="form-control "
+                  />
+                </div>
+              </div>
+
+              <div className="col-auto float-right ml-auto">
+                {loadingCSV ? (
+                  <button
+                    className="btn add-btn"
+                    style={{ marginLeft: "20px" }}
+                  >
+                    <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
+                  </button>
+                ) : (
+                  payslipHistory.length > 0 && (
+                    <button
+                      className="btn add-btn"
+                      style={{ marginLeft: "20px" }}
+                      onClick={handleExportCSV}
+                    >
+                      <i className="fa fa-download"></i> Download{" "}
+                      {moment(selectedMonthAndYear).format("MMMM") ===
+                      "Invalid date"
+                        ? ""
+                        : moment(selectedMonthAndYear).format("MMMM")}{" "}
+                      Payslips
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
+          <EmployeeSalaryTable
+            data={payslipHistory}
+            loading={loadingHistory}
+            setLoading={setLoadingHistory}
+            columns={columns}
+            viewAction={true}
+            actionTitle="View Payslip"
+            page={historyPage}
+            setPage={setHistoryPage}
+            sizePerPage={historySizePerPage}
+            setSizePerPage={setHistorySizePerPage}
+            totalPages={historyTotalPages}
+            setTotalPages={setHistoryTotalPages}
           />
         </div>
       </div>

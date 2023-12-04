@@ -59,7 +59,7 @@ export const CampaignTeamFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${office?.team_title} Team successfully added to ${title} Campaign`,
+        `${office?.team_title} Team successfully added to ${title?.toUpperCase()} Campaign`,
         "alert alert-success"
       );
       fetchAllCampaignTeams();

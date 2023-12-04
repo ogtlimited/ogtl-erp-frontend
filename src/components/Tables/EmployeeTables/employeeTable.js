@@ -335,9 +335,9 @@ const EmployeesTable = ({
       let input;
 
       const handleKeydown = (e) => {
+        setLoading(true);
         if (e.key === "Enter") {
           setPage(1);
-          setLoading(true);
           props.onSearch(input.value);
           const searchTerm = input.value;
           setOfficeFilter("");
@@ -346,54 +346,8 @@ const EmployeesTable = ({
           setDesignationFilter("");
           setStatusFilter("");
           setSearchTerm(searchTerm);
-
-          if (page === 1) {
-            axiosInstance
-              .get("/api/v1/employees.json", {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                  "ngrok-skip-browser-warning": "69420",
-                },
-                params: {
-                  page: page,
-                  limit: sizePerPage,
-                  name: searchTerm,
-                },
-              })
-              .then((e) => {
-                let resData = e?.data?.employees;
-                let resOptions = e?.data?.pagination;
-
-                const thisPageLimit = sizePerPage;
-                const thisTotalPageSize = resOptions?.numberOfPages;
-
-                setSizePerPage(thisPageLimit);
-                setTotalPages(thisTotalPageSize);
-
-                const mapp = resData.map((emp) => {
-                  return {
-                    ...emp,
-                    fullName:
-                      emp.first_name +
-                      " " +
-                      emp.middle_name +
-                      " " +
-                      emp?.last_name,
-                    designation_name: emp?.designation?.designation,
-                    department_name: emp?.department?.department,
-                    project: emp?.projectId?.project_name,
-                  };
-                });
-                setData(mapp);
-              })
-              .catch((error) => {
-                console.log(error);
-                setLoading(false);
-              });
-          }
-          setLoading(false);
         }
+        setLoading(false);
       };
 
       return (
@@ -409,15 +363,6 @@ const EmployeesTable = ({
             type="search"
             onKeyDown={handleKeydown}
           />
-          {/* <button
-            style={{
-              marginRight: "10px",
-            }}
-            className="btn btn-primary custom-search-btn"
-            onClick={handleClick}
-          >
-            Search
-          </button> */}
           <button
             className="btn btn-secondary custom-search-btn"
             onClick={() => {
@@ -430,7 +375,6 @@ const EmployeesTable = ({
               setDesignationFilter("");
               setStatusFilter("");
               setPage(1);
-              setLoading(true);
             }}
           >
             Reset
@@ -438,21 +382,7 @@ const EmployeesTable = ({
         </div>
       );
     },
-    [
-      page,
-      setCampaignFilter,
-      setData,
-      setDepartmentFilter,
-      setDesignationFilter,
-      setLoading,
-      setOfficeFilter,
-      setPage,
-      setSearchTerm,
-      setSizePerPage,
-      setStatusFilter,
-      setTotalPages,
-      sizePerPage,
-    ]
+    [setCampaignFilter, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setStatusFilter]
   );
 
   // Filter by Departments:
@@ -698,8 +628,7 @@ const EmployeesTable = ({
 
       const responseData = response?.data?.data?.employees;
 
-      const formatted = responseData.map((data, index) => ({
-        "S/N": index + 1,
+      const formatted = responseData.map((data) => ({
         "Employee Name": data?.full_name,
         OGID: data?.ogid,
         "Office Type": data?.office?.office_type,

@@ -747,7 +747,6 @@ const WorkforceLeaveApplications = () => {
         <ViewModal
           title="Leave Application Details"
           content={<LeaveApplicationContent leaveContent={viewRow} />}
-          // handleRefresh={fetchWorkforceLeaves}
         />
       ) : (
         ""

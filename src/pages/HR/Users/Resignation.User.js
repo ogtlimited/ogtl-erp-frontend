@@ -1,150 +1,215 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/*eslint-disable jsx-a11y/anchor-is-valid*/
+import React, { useState, useEffect } from "react";
+import moment from "moment";
+import { useAppContext } from "../../../Context/AppContext";
+import resignationIcon from "../../../assets/img/resign.png";
+import axiosInstance from "../../../services/api";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import LeavesTable from '../../../components/Tables/EmployeeTables/Leaves/LeaveTable';
-import tokenService from '../../../services/token.service';
-import axiosInstance from '../../../services/api';
-import ViewModal from '../../../components/Modal/ViewModal';
-import { ApplyResignationModal } from '../../../components/Modal/ApplyResignationModal';
-// import { EditLeaveModal } from '../../../components/Modal/EditLeaveModal';
-import ResignationContent from '../../../components/ModalContents/ResignationContent';
-import moment from 'moment';
+const resignationModel = {
+  effective_today: "",
+  effective_date: "",
+  reason_for_resignation: "",
+};
 
 const ResignationUser = () => {
-  const [data, setData] = useState([]);
-  const [modalType, setmodalType] = useState('');
-  const [viewRow, setViewRow] = useState(null);
-  const [loading, setLoading] = useState(true);
-  
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState('');
+  const { showAlert, user } = useAppContext();
+  const [data, setData] = useState(resignationModel);
 
-  const user = tokenService.getUser();
+  const today = moment().utc().format("yyyy-MM-DD");
+  const [todaySelected, setTodaySelected] = useState(false);
 
-  const fetchResignation = () => {
-    axiosInstance
-      .get(`/Exit`)
-      .then((res) => {
-        const resData = res?.data?.data.filter(e => e.employee_id._id === user._id)
+  const [selectedRow, setSelectedRow] = useState(null);
 
-        const map = resData.map(e => {
-          return {
-            ...e,
-            fullName: `${e?.employee_id?.first_name} ${e?.employee_id?.last_name}`,
-            effective_date: new Date(e?.effective_date).toDateString(),
+  const currentUserDesignation = user?.employee_info?.designation.toLowerCase();
+  const currentUserIsLead = user?.employee_info?.is_lead;
+  // const currentUserIsManagement = user;
 
-          }
-        })
-        setData(map);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
+  const [minDate, setMinDate] = useState(null);
+
+  // Calculates Resignation Notice Period:
   useEffect(() => {
-    fetchResignation();
-  }, []);
+    let noticePeriod = 0;
 
-  const userColumns = [
-    {
-      dataField: "fullName",
-      text: "Employee name",
-      sort: true,
-      headerStyle: { width: "300px" },
-    },
-    {
-      dataField: "effective_date",
-      text: "Effective Resignation Date",
-      sort: true,
-      headerStyle: { width: "250px" },
-    },
-    {
-      dataField: "reason_for_resignation",
-      text: "Reason for Resignation",
-      sort: true,
-      headerStyle: { minWidth: "100px" },
-    },
-    {
-      dataField: 'status_action',
-      text: 'Action',
-      csvExport: false,
-      headerStyle: { width: '10%' },
-      formatter: (value, row) => (
-        <div className="dropdown dropdown-action text-right">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#generalModal"
-              onClick={() => {
-                setmodalType('view-details');
-                setViewRow(row);
-              }}
-            >
-              <i className="fa fa-eye m-r-5"></i> View
-            </a>
-          </div>
-        </div>
-      ),
-    },
-  ];
+    if (currentUserIsLead) {
+      noticePeriod = 30;
+    } else if (currentUserDesignation === "agent") {
+      noticePeriod = 14;
+    }
+
+    const todayDate = moment().utc();
+    const minDate = todayDate.add(noticePeriod, "days").format("yyyy-MM-DD");
+
+    setMinDate(minDate);
+  }, [currentUserDesignation, currentUserIsLead]);
+
+  const cancelEvent = () => {
+    setData({
+      effective_today: "",
+      effective_date: "",
+      reason_for_resignation: "",
+    });
+    setTodaySelected(false);
+  };
+
+  const handleFormChange = (e) => {
+    e.preventDefault();
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const handleApplyResignation = async (data) => {
+    try {
+      const res = await axiosInstance.post(`/api/v1/resignations.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          effective_date: todaySelected
+            ? moment(data.effective_today).format("ddd, DD MMM YYYY")
+            : moment(data.effective_date).format("ddd, DD MMM YYYY"),
+          reason_for_resignation: data.reason_for_resignation,
+        },
+      });
+
+      const resData = res?.data?.data;
+      const exitDate = resData?.resignation?.exit_date;
+
+      showAlert(
+        true,
+        `Your resignation application is successfully submitted, your exit date is ${moment(
+          exitDate
+        ).format("ddd, DD MMM YYYY")} `,
+        "alert alert-success"
+      );
+
+      setData(resignationModel);
+      setTodaySelected(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+    }
+  };
 
   return (
     <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Resignation</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <a href="index.html">Dashboard</a>
-              </li>
-              <li className="breadcrumb-item active">Resignation</li>
-            </ul>
+      <div className="row resignation_form">
+        <div className="col-sm-6">
+          <div className="modal-dialog modal-dialog-centered modal-xl">
+            <img
+              src={resignationIcon}
+              alt="resignation"
+              className="resignation_icon"
+            />
           </div>
-          <div className="col-auto float-right ml-auto">
-              <a
-                href="#"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#ResignationFormModal"
-              >
-                <i className="fa fa-plus"></i> Apply Resignation
-              </a>
+        </div>
+
+        <div className="col-sm-6">
+          <div className="modal-dialog modal-dialog-centered modal-xl">
+            <div className="resignation_form_inner">
+              <div className="modal-header">
+                <h4 className="modal-title" id="FormModalLabel">
+                  Resignation Form
+                </h4>
+              </div>
+
+              <div className="modal-body">
+                <div>
+                  <div className="row">
+                    {/* Today */}
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label htmlFor="effective_date">
+                          Effective Immediately (to start today)
+                        </label>
+                        <input
+                          type="checkbox"
+                          name="effective_date"
+                          className="form-control resignation_effective_today"
+                          value={true}
+                          checked={todaySelected}
+                          onChange={(e) => {
+                            setTodaySelected(e.target.checked);
+                            setData({
+                              ...data,
+                              effective_today: today,
+                              effective_date: "",
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Later Date */}
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label htmlFor="effective_date">Future Date</label>
+                        <input
+                          type="date"
+                          name="effective_date"
+                          value={data.effective_date}
+                          onChange={handleFormChange}
+                          className="form-control "
+                          readOnly={todaySelected}
+                          required={!todaySelected}
+                          min={minDate}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label htmlFor="reason_for_resignation">
+                          Reason for Resignation
+                        </label>
+                        <textarea
+                          name="reason_for_resignation"
+                          className="form-control resignation_reason"
+                          value={data.reason_for_resignation}
+                          onChange={handleFormChange}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="modal-footer resignation_form_footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                      onClick={cancelEvent}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      data-toggle="modal"
+                      data-target="#exampleModal"
+                      onClick={() => setSelectedRow(data)}
+                      disabled={
+                        (!data?.effective_today.length &&
+                          !data?.effective_date.length) ||
+                        !data?.reason_for_resignation.length
+                      }
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-sm-12">
-          <LeavesTable data={data} columns={userColumns} />
-        </div>
-      </div>
-
-      {modalType === 'view-details' ? (
-        <ViewModal
-          title="Resignation Details"
-          content={<ResignationContent Content={viewRow} />}
-        />
-      ) : (
-        ''
-      )}
-
-      <ApplyResignationModal fetchResignation={fetchResignation} />
-      {/* <EditLeaveModal editLeave={editLeave} fetchYourLeaves={fetchYourLeaves} /> */}
+      <ConfirmModal
+        title="Resignation"
+        selectedRow={selectedRow}
+        deleteFunction={handleApplyResignation}
+        message="Are you sure you want to submit your resignation?"
+      />
     </>
   );
 };

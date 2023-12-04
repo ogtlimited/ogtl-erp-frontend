@@ -82,46 +82,14 @@ const JobSieversTable = ({
       let input;
 
       const handleKeydown = (e) => {
+        setLoading(true);
         if (e.key === "Enter") {
           setPage(1);
-          setLoading(true);
           props.onSearch(input.value);
           const searchTerm = input.value;
           setSearchTerm(searchTerm);
-
-          if (page === 1) {
-            axiosInstance
-              .get("/api/v1/job_applications_sievers.json", {
-              // .get("/api/v1/employees.json", {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                  "ngrok-skip-browser-warning": "69420",
-                },
-                params: {
-                  page: page,
-                  limit: sizePerPage,
-                  name: searchTerm,
-                },
-              })
-              .then((e) => {
-                const resData = e?.data?.data?.job_application_sievers;
-                // const resData = e?.data?.data?.employees;
-                const totalPages = e?.data?.data?.total_pages;
-                // const totalPages = e?.data?.data?.pages;
-
-                setSizePerPage(sizePerPage);
-                setTotalPages(totalPages);
-
-                setData(resData);
-              })
-              .catch((error) => {
-                console.log(error);
-                setLoading(false);
-              });
-          }
-          setLoading(false);
         }
+        setLoading(false);
       };
 
       return (
