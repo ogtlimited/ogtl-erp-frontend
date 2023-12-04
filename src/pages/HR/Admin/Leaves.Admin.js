@@ -48,7 +48,7 @@ const LeavesAdmin = () => {
   const [historySearchTerm, setHistorySearchTerm] = useState("");
 
   const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment(time).utc().format("yyyy-MM-DD");
 
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
@@ -105,13 +105,19 @@ const LeavesAdmin = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
       }));
 
       setallLeaves(formatted);
@@ -165,27 +171,33 @@ const LeavesAdmin = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
+        to_date: moment(leave?.leave?.end_date)
+          .utc()
+          .format("ddd MMM Do, YYYY"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date
         ),
         office: leave?.office?.toUpperCase(),
-        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-        ["date_" + historyStatus]: moment(leave?.leave?.updated_at).format(
-          "YYYY, MM (MMM), Do - h:mma"
-        ),
+        date_applied: moment(leave?.leave?.created_at)
+          .utc()
+          .format("Do MMM, YYYY"),
+        ["date_" + historyStatus]: moment(leave?.leave?.updated_at)
+          .utc()
+          .format("YYYY, MM (MMM), Do - h:mma"),
         reason: leave?.leave?.reason,
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
         reasons_for_update: leave?.leave?.reasons_for_update,
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.leave?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "Leave Ended"
             : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") !==
                 today_date
             ? "Scheduled Leave"
             : "On Leave",
