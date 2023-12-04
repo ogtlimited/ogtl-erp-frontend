@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -41,10 +40,12 @@ const LeavesAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [historyPage, setHistoryPage] = useState(1);
   const [historySizePerPage, setHistorySizePerPage] = useState(10);
   const [historyTotalPages, setHistoryTotalPages] = useState("");
+  const [historySearchTerm, setHistorySearchTerm] = useState("");
 
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
@@ -73,6 +74,7 @@ const LeavesAdmin = () => {
   // All Leaves at HR stage - Pending
   const fetchHRLeaves = useCallback(async () => {
     setLoading(true);
+
     try {
       const response = await axiosInstance.get(
         `/api/v1/hr_dashboard/leaves.json`,
@@ -85,6 +87,7 @@ const LeavesAdmin = () => {
           params: {
             pages: page,
             limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
           },
         }
       );
@@ -119,12 +122,17 @@ const LeavesAdmin = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [page, searchTerm, sizePerPage]);
 
-  // All Leaves at HR stage - History
+  useEffect(() => {
+    isHr && fetchHRLeaves();
+  }, [fetchHRLeaves, isHr]);
+
+  // All Leaves at HR stage - History (Approved, Rejected, & Cancelled)
   const fetchHRLeaveHistory = useCallback(async () => {
+    setLoadingHistory(true);
+
     try {
-      setLoadingHistory(true);
       const response = await axiosInstance.get(
         "/api/v1/hr_dashboard/leaves.json",
         {
@@ -136,6 +144,7 @@ const LeavesAdmin = () => {
           params: {
             pages: historyPage,
             limit: historySizePerPage,
+            name: historySearchTerm.length ? historySearchTerm : null,
             status: historyStatus,
           },
         }
@@ -189,7 +198,18 @@ const LeavesAdmin = () => {
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
-  }, [historyPage, historySizePerPage, historyStatus, today_date]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    historyPage,
+    historySizePerPage,
+    historyStatus,
+    historySearchTerm,
+    today_date,
+  ]);
+
+  useEffect(() => {
+    isHr && fetchHRLeaveHistory();
+  }, [fetchHRLeaveHistory, isHr]);
 
   // All Active Leave Count:
   const fetchAllEmpOnLeave = async () => {
@@ -214,15 +234,6 @@ const LeavesAdmin = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (isHr) {
-      fetchHRLeaves();
-      fetchHRLeaveHistory();
-      fetchAllEmpOnLeave();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchHRLeaveHistory, fetchHRLeaves, isHr]);
 
   // Handle Approve Leave:
   const handleApproveLeave = async (row) => {
@@ -864,11 +875,13 @@ const LeavesAdmin = () => {
             setSizePerPage={setSizePerPage}
             totalPages={totalPages}
             setTotalPages={setTotalPages}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
           />
         </div>
 
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
-          <AdminLeavesHistoryTable
+          <AdminLeavesTable
             columns={historyColumns}
             data={leaveHistory}
             setData={setLeaveHistory}
@@ -880,6 +893,8 @@ const LeavesAdmin = () => {
             setSizePerPage={setHistorySizePerPage}
             totalPages={historyTotalPages}
             setTotalPages={setHistoryTotalPages}
+            searchTerm={historySearchTerm}
+            setSearchTerm={setHistorySearchTerm}
           />
         </div>
       </div>

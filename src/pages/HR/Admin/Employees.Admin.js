@@ -94,7 +94,7 @@ const AllEmployeesAdmin = () => {
       setallEmployees(mapp);
       setLoading(false);
     } catch (error) {
-      const component = "All Employees:";
+      const component = "All Employees | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
