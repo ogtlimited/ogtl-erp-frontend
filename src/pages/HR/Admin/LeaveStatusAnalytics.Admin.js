@@ -19,7 +19,7 @@ const AllLeaveStatusAdmin = () => {
   const { id, from_date, to_date } = useParams();
 
   const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment(time).utc().format("yyyy-MM-DD");
 
   // const [departments, setDepartments] = useState([]);
   // const [leaveTypes, setLeaveTypes] = useState([]);
@@ -29,6 +29,7 @@ const AllLeaveStatusAdmin = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Calculates Leave Days (Week Days Only)
   function calcBusinessDays(startDate, endDate) {
@@ -64,6 +65,7 @@ const AllLeaveStatusAdmin = () => {
         params: {
           pages: page,
           limit: sizePerPage,
+          name: searchTerm.length ? searchTerm : null,
           status: id,
         },
       })
@@ -78,24 +80,29 @@ const AllLeaveStatusAdmin = () => {
           ...leave,
           ...leave?.leave,
           full_name: leave?.first_name + " " + leave?.last_name,
-          from_date: new Date(leave?.leave?.start_date).toDateString(),
-          to_date: new Date(leave?.leave?.end_date).toDateString(),
+          from_date: moment(leave?.leave?.start_date)
+            .utc()
+            .format("ddd MMM Do, YYYY"),
+          to_date: moment(leave?.leave?.end_date)
+            .utc()
+            .format("ddd MMM Do, YYYY"),
           total_leave_days: calcBusinessDays(
             leave?.leave?.start_date,
             leave?.leave?.end_date
           ),
-          date_applied: moment(leave?.created_at).format("Do MMM, YYYY"),
+          date_applied: moment(leave?.created_at).utc().format("Do MMM, YYYY"),
           current_approver: leave?.leave?.hr_stage
             ? "HR"
             : leave?.leave?.workforce_stage
             ? "WORKFORCE"
             : leave?.current_stage_manager?.manager_full_name,
           leave_marker:
-            moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+            moment(leave?.leave?.end_date).utc().format("yyyy-MM-DD") <
+            today_date
               ? "Leave Ended"
               : today_date <
-                  moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
+                  moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") &&
+                moment(leave?.leave?.start_date).utc().format("yyyy-MM-DD") !==
                   today_date
               ? "Scheduled Leave"
               : "On Leave",
@@ -111,12 +118,12 @@ const AllLeaveStatusAdmin = () => {
         setLoading(false);
       })
       .catch((error) => {
-        const component = `${id} Error:`;
+        const component = `${id} Error | `;
         ErrorHandler(error, component);
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, page, sizePerPage]);
+  }, [id, page, sizePerPage, searchTerm]);
 
   // const fetchDepartment = async () => {
   //   try {
@@ -336,6 +343,8 @@ const AllLeaveStatusAdmin = () => {
         setSizePerPage={setSizePerPage}
         totalPages={totalPages}
         setTotalPages={setTotalPages}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
         // departments={departments}
         // leaveTypes={leaveTypes}
       />
