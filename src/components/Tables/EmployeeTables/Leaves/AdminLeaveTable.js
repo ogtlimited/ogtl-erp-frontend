@@ -1,10 +1,6 @@
-/** @format */
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, {
-  CSVExport,
-} from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
@@ -23,11 +19,12 @@ const AdminLeavesTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
-  
+  searchTerm,
+  setSearchTerm,
 }) => {
-  // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [show, setShow] = useState(false);
+  const [dataToFilter, setDataToFilter] = useState("");
   const [mobileView, setmobileView] = useState(false);
   const [info, setInfo] = useState({
     sizePerPage: 10,
@@ -55,6 +52,10 @@ const AdminLeavesTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
+  useEffect(() => {
+    setDataToFilter(data);
+  }, [data]);
+
   // Pagination
   const count = totalPages;
   const _DATA = usePagination(data, sizePerPage, totalPages);
@@ -73,6 +74,52 @@ const AdminLeavesTable = ({
     setPage(1);
   };
 
+  // Search Name:
+  const MySearch = useCallback(
+    (props) => {
+      let input;
+
+      const handleKeydown = (e) => {
+        setLoading(true);
+        if (e.key === "Enter") {
+          setPage(1);
+          props.onSearch(input.value);
+          const searchTerm = input.value;
+          setSearchTerm(searchTerm);
+        }
+        setLoading(false);
+      };
+
+      return (
+        <div className="custom-search">
+          <input
+            className="custom-search-input"
+            style={{
+              backgroundColor: "#fff",
+              width: "33.5%",
+              marginRight: "20px",
+            }}
+            ref={(n) => (input = n)}
+            type="search"
+            onKeyDown={handleKeydown}
+          />
+          <button
+            className="btn btn-secondary custom-search-btn"
+            onClick={() => {
+              input.value = "";
+              props.onSearch("");
+              setSearchTerm("");
+              setPage(1);
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      );
+    },
+    [setLoading, setPage, setSearchTerm]
+  );
+
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
@@ -82,10 +129,10 @@ const AdminLeavesTable = ({
 
   return (
     <>
-      {data && (
+      {dataToFilter && (
         <ToolkitProvider
           keyField="id"
-          data={loading ? [] : data}
+          data={loading ? [] : dataToFilter}
           columns={columns}
           search
           exportCSV
@@ -94,13 +141,14 @@ const AdminLeavesTable = ({
             <div className="col-12">
               <ExportCSVButton
                 className="float-right btn export-csv"
-                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select col-12"></div>
+              <div className="col-12" style={{ marginTop: 30 }}>
+                <MySearch {...props.searchProps} className="inputSearch" />
+              </div>
 
               <div className="custom-table-div">
                 <BootstrapTable

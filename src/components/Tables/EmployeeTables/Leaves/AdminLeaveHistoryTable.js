@@ -1,6 +1,4 @@
-/** @format */
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, { CSVExport } from "react-bootstrap-table2-toolkit";
 import usePagination from "../../../../pages/HR/Admin/JobApplicantsPagination.Admin";
@@ -21,6 +19,8 @@ const AdminLeavesHistoryTable = ({
   setSizePerPage,
   totalPages,
   setTotalPages,
+  searchTerm,
+  setSearchTerm,
 }) => {
   // const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -70,6 +70,53 @@ const AdminLeavesHistoryTable = ({
     setPage(1);
   };
 
+  // Search Name:
+  const MySearch = useCallback(
+    (props) => {
+      let input;
+
+      const handleKeydown = (e) => {
+        setLoading(true);
+        if (e.key === "Enter") {
+          setPage(1);
+          props.onSearch(input.value);
+          const searchTerm = input.value;
+          setSearchTerm(searchTerm);
+        }
+        setLoading(false);
+      };
+
+      return (
+        <div className="custom-search">
+          <input
+            className="custom-search-input"
+            style={{
+              backgroundColor: "#fff",
+              width: "33.5%",
+              marginRight: "20px",
+            }}
+            ref={(n) => (input = n)}
+            type="search"
+            onKeyDown={handleKeydown}
+          />
+          <button
+            className="btn btn-secondary custom-search-btn"
+            onClick={() => {
+              input.value = "";
+              props.onSearch("");
+              setSearchTerm("");
+              setPage(1);
+              setLoading(true);
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      );
+    },
+    [setLoading, setPage, setSearchTerm]
+  );
+
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
@@ -91,13 +138,14 @@ const AdminLeavesHistoryTable = ({
             <div className="col-12">
               <ExportCSVButton
                 className="float-right btn export-csv"
-                style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
               </ExportCSVButton>
 
-              <div className="hr-filter-select col-12"></div>
+              <div className="col-12" style={{ marginTop: 30 }}>
+                <MySearch {...props.searchProps} className="inputSearch" />
+              </div>
 
               <div className="custom-table-div">
                 <BootstrapTable

@@ -375,7 +375,6 @@ const EmployeesTable = ({
               setDesignationFilter("");
               setStatusFilter("");
               setPage(1);
-              setLoading(true);
             }}
           >
             Reset
