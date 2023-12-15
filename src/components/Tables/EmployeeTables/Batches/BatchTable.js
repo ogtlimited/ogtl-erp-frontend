@@ -187,8 +187,9 @@ function BatchTable({
       setLoading(false);
       return "Batch approval successful";
     } catch (error) {
-      const errorMsg = error.response?.data?.message;
-      setErrorMessage("Batch is not at your stage. Batch is at stage: 3");
+      showAlert(true, error.response.data.errors, "alert alert-warning");
+      // const errorMsg = error.response?.data?.message;
+      // setErrorMessage("Batch is not at your stage. Batch is at stage: 3");
       console.error("Error:", error);
       setLoading(false);
     }
