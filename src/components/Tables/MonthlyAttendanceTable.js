@@ -116,12 +116,26 @@ const MonthlyAttendanceTable = ({
       const dataArray = Object.keys(attendanceRecords).map((key) => ({
         days: attendanceRecords[key].days,
         user: attendanceRecords[key].user,
+        total_hours: attendanceRecords[key].total_hours,
+        lateness_and_absence: attendanceRecords[key].lateness_and_absence,
       }));
 
       const formattedData = dataArray.map((data) => ({
         staffName: data?.user?.full_name,
         ogid: data?.user?.staff_unique_Id,
         email: data?.user?.email,
+        total_hours: data?.total_hours,
+        lateness:
+          data?.lateness_and_absence?.lateness !== undefined
+            ? data.lateness_and_absence.lateness
+            : 0,
+        NCNS:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data.lateness_and_absence.NCNS
+            : 0,
+        absent: data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+            : 0,
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
           clock_in: data?.days[key]?.clock_in
@@ -141,6 +155,11 @@ const MonthlyAttendanceTable = ({
         STAFF: item.staffName,
         "EMPLOYEE ID": item.ogid,
         EMAIL: item.email,
+        "TOTAL HOURS": item.total_hours,
+        LATENESS: item.lateness,
+        NCNS: item.NCNS,
+        "NCNS (did not clock out)": item.absent,
+
         ...item.attendance.reduce(
           (acc, curr) => ({
             ...acc,
