@@ -1,13 +1,16 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
-
-
-export const EditSalarySlipModal = ({ salarySlipId, initialSalary, initialNetPay, initialProrate }) => {
-const { showAlert} = useAppContext();
-const [loading, setLoading] = useState(false);
+export const EditSalarySlipModal = ({
+  salarySlipId,
+  initialSalary,
+  initialNetPay,
+  initialProrate,
+}) => {
+  const { showAlert } = useAppContext();
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     salary: initialSalary || "",
@@ -20,8 +23,8 @@ const [loading, setLoading] = useState(false);
     const clearForm = () => {
       setFormData({
         salary: initialSalary || "",
-    netPay: initialNetPay || "",
-    prorate: initialProrate || false,
+        netPay: initialNetPay || "",
+        prorate: initialProrate || false,
       });
     };
 
@@ -32,7 +35,6 @@ const [loading, setLoading] = useState(false);
       $("#EditSalarySlipModal").off("hidden.bs.modal", clearForm);
     };
   }, []); // Empty dependency array ensures the effect runs once after the initial render
-
 
   const handleChange = (e) => {
     console.log("handleChange", e.target.name, e.target.value);
@@ -64,13 +66,14 @@ const [loading, setLoading] = useState(false);
       );
       // eslint-disable-next-line no-unused-vars
       const resData = res.data.data;
-      showAlert(true, "Campaign Created Successfully!", "alert alert-success");
+      showAlert(true, "Successful!", "alert alert-success");
       $("#EditSalarySlipModal").modal("toggle");
       setLoading(false);
     } catch (error) {
+      showAlert(true, error.response.data.errors, "alert alert-warning");
       $("#EditSalarySlipModal").modal("toggle");
-      const errorMsg = error.response?.data?.message;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      // const errorMsg = error.response?.data?.message;
+      // showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
       console.error("Error:", error);
       setLoading(false);
@@ -103,7 +106,6 @@ const [loading, setLoading] = useState(false);
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
-               
                 {/* <label htmlFor="salary">Salary</label>
                 <input
                   name="salary"
@@ -135,19 +137,23 @@ const [loading, setLoading] = useState(false);
                 />
 
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
                     Cancel
                   </button>
                   <button type="submit" className="btn btn-primary">
-                  {loading ? (
-                        <span
-                          className="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : (
-                        "Edit"
-                      )}
+                    {loading ? (
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    ) : (
+                      "Edit"
+                    )}
                   </button>
                 </div>
               </form>
