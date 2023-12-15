@@ -7,11 +7,12 @@ import helper from "../../../services/helper";
 import { useNavigate } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
+import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
 
 function EmployeeSalaryTable({
-  data,
-  setData,
-  columns,
+  employeeData, // Updated prop name
+  setEmployeeData,
+  slipcolumns,
   loading,
   setLoading,
   viewAction,
@@ -33,6 +34,8 @@ function EmployeeSalaryTable({
   const { user, getAvatarColor } = useAppContext();
   const [show, setShow] = React.useState(false);
   const [mobileView, setmobileView] = useState(false);
+  const [selectedSalarySlipId, setSelectedSalarySlipId] = useState(null);
+
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -42,7 +45,7 @@ function EmployeeSalaryTable({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length >= 7) {
+    if (slipcolumns?.length >= 7) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -66,7 +69,7 @@ function EmployeeSalaryTable({
 
   // Pagination
   const count = totalPages;
-  const _DATA = usePagination(data, sizePerPage, totalPages);
+  const _DATA = usePagination(employeeData, sizePerPage, totalPages);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -97,13 +100,20 @@ function EmployeeSalaryTable({
     navigate(`/dashboard/payroll/payslip/${action?.id}`);
   };
 
+  const handleEdit = (employee) => {
+    setSelectedSalarySlipId(employee?.id);
+    console.log("hello");
+  };
+
+  console.log(employeeData, "dataa");
+
   /**
    ** !This is the original code without the avatar:
    * 
    * const renderTableRows = () => {
       return data.map((employee, index) => (
         <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-          {columns.map((column) => (
+          {slipcolumns.map((column) => (
             <td key={column.dataField}>
               {typeof employee[column.dataField] === "number"
                 ? helper.handleMoneyFormat(employee[column.dataField])
@@ -143,9 +153,9 @@ function EmployeeSalaryTable({
 
   // * !This is the code with the avatar:
   const renderTableRows = () => {
-    return data.map((employee, index) => (
+    return employeeData.map((employee, index) => (
       <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-        {columns.map((column, columnIndex) => (
+        {slipcolumns.map((column, columnIndex) => (
           <td key={column.dataField}>
             {columnIndex === 0 ? (
               <div className="payroll-table-avatar">
@@ -166,6 +176,12 @@ function EmployeeSalaryTable({
               </div>
             ) : typeof employee[column.dataField] === "number" ? (
               helper.handleMoneyFormat(employee[column.dataField])
+            ) : column.dataField === "prorate" ? (
+              employee[column.dataField] ? (
+                "True"
+              ) : (
+                "False"
+              )
             ) : (
               employee[column.dataField]
             )}
@@ -193,6 +209,17 @@ function EmployeeSalaryTable({
             >
               {actionTitle}
             </button>
+
+{/* {employee?.ogid === } */}
+            <button
+              className="btn btn-sm btn-secondary"
+              style={{ marginLeft: "20px" }}
+              data-toggle="modal"
+              data-target="#EditSalarySlipModal"
+              onClick={() => handleEdit(employee)}
+            >
+              Edit
+            </button>
           </td>
         )}
       </tr>
@@ -218,12 +245,14 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns.length <= 12 ? "3" : "4"}>Deductions</th>
+                  <th colSpan={slipcolumns?.length <= 12 ? "3" : "4"}>
+                    Deductions
+                  </th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 
                 <tr className="emp_salary_custom-table-thead_sub_tr">
-                  {columns?.map((column) => (
+                  {slipcolumns?.map((column) => (
                     <th key={column.dataField}>{column.text}</th>
                   ))}
                   {viewAction && <th>Action</th>}
@@ -231,7 +260,7 @@ function EmployeeSalaryTable({
               </thead>
               {loading ? (
                 <tr className="emp_salary_custom-table-tbody loading">
-                  <td colSpan={columns?.length + 1}>
+                  <td colSpan={slipcolumns?.length + 1}>
                     <div
                       className="spinner-border text-primary loading"
                       role="status"
@@ -242,11 +271,13 @@ function EmployeeSalaryTable({
                 </tr>
               ) : (
                 <tbody className="emp_salary_custom-table-tbody">
-                  {data?.length ? (
+                  {employeeData?.length ? (
                     renderTableRows()
                   ) : (
                     <tr className="emp_salary_custom-table-tbody no-data">
-                      <td colSpan={columns?.length + 1}>{showNullMessage()}</td>
+                      <td colSpan={slipcolumns?.length + 1}>
+                        {showNullMessage()}
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -288,6 +319,22 @@ function EmployeeSalaryTable({
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
         setGenerating={setGenerating}
         userId={userId}
+      />
+
+      <EditSalarySlipModal
+        salarySlipId={selectedSalarySlipId}
+        initialSalary={
+          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+            ?.monthlySalary || 0
+        }
+        initialNetPay={
+          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+            ?.netPay || 0
+        }
+        initialProrate={
+          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+            ?.prorate || false
+        }
       />
     </>
   );
