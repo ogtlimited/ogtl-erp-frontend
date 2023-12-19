@@ -16,9 +16,9 @@ import { GeneratePayrollModal } from "../../../Modal/GeneratePayrollModal";
 import $ from "jquery";
 
 function BatchTable({
-  data,
-  setData,
-  columns,
+  batchData,
+  setBatchData,
+  batchColumns,
   loading,
   setLoading,
   viewAction,
@@ -36,17 +36,11 @@ function BatchTable({
   setGenerating,
   context,
 }) {
-  const navigate = useNavigate();
-  const { user, getAvatarColor, ErrorHandler, showAlert } = useAppContext();
-  // const { } = useAppContext();
-
+  const {  ErrorHandler, showAlert } = useAppContext();
+ 
   const [show, setShow] = React.useState(false);
   const [dol, setDol] = useState([]);
   const [batchId, setBatchId] = useState(0);
-  // Add this at the beginning of your component
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-
   const [mobileView, setmobileView] = useState(false);
   const [showBatchTable, setShowBatchTable] = useState(true);
   const [info, setInfo] = useState({
@@ -58,7 +52,7 @@ function BatchTable({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length >= 7) {
+    if (batchColumns.length >= 7) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -82,7 +76,7 @@ function BatchTable({
 
   // Pagination
   const count = totalPages;
-  const _DATA = usePagination(data, sizePerPage, totalPages);
+  const _DATA = usePagination(batchData, sizePerPage, totalPages);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -155,8 +149,7 @@ function BatchTable({
           totalDeductions: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
         }));
-        // console.log(formattedData, "yeah");
-
+      
         setDol(formattedData);
 
         setLoading(false);
@@ -177,19 +170,17 @@ function BatchTable({
     setLoading(true);
 
     try {
-      const res = await axiosInstance.put("api/v1/approve_batch/7.json");
-      // const res = await axiosInstance.put(`api/v1/approve_batch/${batchId}.json`);
+      // const res = await axiosInstance.put("api/v1/approve_batch/7.json");
+      const res = await axiosInstance.put(`api/v1/approve_batch/${batchId}.json`);
 
       const resData = res.data.data;
-      setSuccessMessage("Batch approval successful");
-      showAlert(true, "Successful!", "alert alert-success");
-      // console.log(res, 'submit');
+      showAlert(true, "Successfully Approved Batch!", "alert alert-success");
+
       setLoading(false);
       return "Batch approval successful";
     } catch (error) {
       showAlert(true, error.response.data.errors, "alert alert-warning");
-      // const errorMsg = error.response?.data?.message;
-      // setErrorMessage("Batch is not at your stage. Batch is at stage: 3");
+
       console.error("Error:", error);
       setLoading(false);
     }
@@ -203,7 +194,6 @@ function BatchTable({
     setShowBatchTable(true);
   };
 
-  // Empployee slip table
   const renderDetailTable = () => {
     const slipcolumns = [
       {
@@ -277,11 +267,11 @@ function BatchTable({
         <div className="row">
           <div className="col-md-12">
             <EmployeeSalaryTable
-              employeeData={dol} // Updated prop name
-              setEmployeeData={setDol}
+              data={dol}
+              setData={setDol}
               loading={loading}
               setLoading={setLoading}
-              slipcolumns={slipcolumns}
+              columns={slipcolumns}
               viewAction={true}
               regenerate={true}
               actionTitle="View"
@@ -303,11 +293,11 @@ function BatchTable({
   };
 
   const renderTableRows = () => {
-    return data.map((employee, index) => {
+    return batchData.map((employee, index) => {
       console.log(employee, "employ");
       return (
         <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-          {columns.map((column, columnIndex) => (
+          {batchColumns.map((column, columnIndex) => (
             <td key={column.dataField}>
               {columnIndex === 0 ? (
                 <div className="payroll-table-avatar">
@@ -345,8 +335,6 @@ function BatchTable({
               <button
                 className="btn btn-sm btn-secondary"
                 style={{ marginLeft: "20px" }}
-                // data-toggle="modal"
-                // data-target="#ApproveBatchModal"
                 onClick={() => {
                   setBatchId(employee?.id);
                   handleSubmit();
@@ -363,8 +351,6 @@ function BatchTable({
 
   return (
     <>
-      {/* {successMessage && <p className="success-message">{successMessage}</p>} */}
-      {/* {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>} */}
       {showBatchTable ? (
         <div className="emp_salary_container col-12">
           <div className="emp_salary_custom-table-div">
@@ -380,7 +366,7 @@ function BatchTable({
               <table className="emp_salary_custom_table custom-table">
                 <thead className="emp_salary_custom-table-thead">
                   <tr className="emp_salary_custom-table-thead_sub_tr">
-                    {columns?.map((column) => (
+                    {batchColumns?.map((column) => (
                       <th key={column.dataField}>{column.text}</th>
                     ))}
                     {viewAction && <th>Action</th>}
@@ -388,7 +374,7 @@ function BatchTable({
                 </thead>
                 {loading ? (
                   <tr className="emp_salary_custom-table-tbody loading">
-                    <td colSpan={columns?.length + 1}>
+                    <td colSpan={batchColumns?.length + 1}>
                       <div
                         className="spinner-border text-primary loading"
                         role="status"
@@ -399,11 +385,11 @@ function BatchTable({
                   </tr>
                 ) : (
                   <tbody className="emp_salary_custom-table-tbody">
-                    {data?.length ? (
+                    {batchData?.length ? (
                       renderTableRows()
                     ) : (
                       <tr className="emp_salary_custom-table-tbody no-data">
-                        <td colSpan={columns?.length + 1}>
+                        <td colSpan={batchColumns?.length + 1}>
                           {showNullMessage()}
                         </td>
                       </tr>
