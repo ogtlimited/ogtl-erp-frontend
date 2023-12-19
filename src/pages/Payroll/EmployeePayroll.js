@@ -41,7 +41,7 @@ const EmployeePayroll = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [batchId, setBatchId] = useState(8);
+  const [batchId, setBatchId] = useState(null);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -149,6 +149,7 @@ const EmployeePayroll = () => {
         }));
 
         setData(formattedData);
+        setBatchId(formattedData[0]?.id)
         setLoading(false);
       })
       .catch((error) => {

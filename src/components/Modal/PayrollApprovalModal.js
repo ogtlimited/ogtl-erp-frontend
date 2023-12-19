@@ -5,8 +5,7 @@ import React , { useEffect, useState, useCallback} from "react";
 import axiosInstance from "../../services/api";
 
 
-export const PayrollApprovalModal = ({
-  batchId}) => {
+export const PayrollApprovalModal = ({batchId}) => {
   const [approversData, setApproversData] = useState([]);
   
   const fetchApproversData = useCallback(() => {
@@ -72,7 +71,7 @@ export const PayrollApprovalModal = ({
                 <main>
                   <p style={{ fontWeight: "500" }}>{approver?.full_name}</p>
                   <p style={{ marginTop: "-1rem" }}>{approver?.email}</p>
-                  <p style={{ marginTop: "-1rem" }}>{approver?.created_at}</p>
+                  {/* <p style={{ marginTop: "-1rem" }}>{approver?.created_at}</p> */}
                 </main>
               </div>
               <div className="card-body inner">
