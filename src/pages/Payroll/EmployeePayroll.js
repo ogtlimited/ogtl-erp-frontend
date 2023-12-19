@@ -125,8 +125,6 @@ const EmployeePayroll = () => {
       })
       .then((res) => {
         const Allbatches = res?.data?.data?.batches; 
-
-        console.log("All Batches:", Allbatches);
         const totalPages = res?.data?.data?.pages;
 
         const thisPageLimit = sizePerPage;
@@ -400,27 +398,9 @@ const EmployeePayroll = () => {
 
       <div className="row">
         <div className="col-md-12">
-          {/* <EmployeeSalaryTable
-            data={data}
-            loading={loading}
-            setLoading={setLoading}
-            columns={columns}
-            viewAction={true}
-            regenerate={true}
-            actionTitle="View"
-            page={page}
-            setPage={setPage}
-            sizePerPage={sizePerPage}
-            setSizePerPage={setSizePerPage}
-            totalPages={totalPages}
-            setTotalPages={setTotalPages}
-            fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-            setGenerating={setGenerating}
-          /> */}
-
           <BatchTable
-            columns={columns}
-            data={data}
+            batchColumns={columns}
+            batchData={data}
             setLoading={setLoading}
             page={page}
             viewAction={true}

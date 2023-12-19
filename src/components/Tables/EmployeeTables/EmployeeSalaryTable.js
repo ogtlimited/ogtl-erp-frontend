@@ -10,9 +10,9 @@ import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
 
 function EmployeeSalaryTable({
-  employeeData, // Updated prop name
-  setEmployeeData,
-  slipcolumns,
+  data,
+  setData,
+  columns,
   loading,
   setLoading,
   viewAction,
@@ -45,12 +45,14 @@ function EmployeeSalaryTable({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (slipcolumns?.length >= 7) {
+    if (columns?.length >= 7) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
     }
   };
+
+  console.log(user, "useeees");
 
   useEffect(() => {
     resizeTable();
@@ -69,7 +71,7 @@ function EmployeeSalaryTable({
 
   // Pagination
   const count = totalPages;
-  const _DATA = usePagination(employeeData, sizePerPage, totalPages);
+  const _DATA = usePagination(data, sizePerPage, totalPages);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -102,10 +104,7 @@ function EmployeeSalaryTable({
 
   const handleEdit = (employee) => {
     setSelectedSalarySlipId(employee?.id);
-    console.log("hello");
   };
-
-  console.log(employeeData, "dataa");
 
   /**
    ** !This is the original code without the avatar:
@@ -113,7 +112,7 @@ function EmployeeSalaryTable({
    * const renderTableRows = () => {
       return data.map((employee, index) => (
         <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-          {slipcolumns.map((column) => (
+          {columns.map((column) => (
             <td key={column.dataField}>
               {typeof employee[column.dataField] === "number"
                 ? helper.handleMoneyFormat(employee[column.dataField])
@@ -153,9 +152,9 @@ function EmployeeSalaryTable({
 
   // * !This is the code with the avatar:
   const renderTableRows = () => {
-    return employeeData.map((employee, index) => (
+    return data.map((employee, index) => (
       <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-        {slipcolumns.map((column, columnIndex) => (
+        {columns.map((column, columnIndex) => (
           <td key={column.dataField}>
             {columnIndex === 0 ? (
               <div className="payroll-table-avatar">
@@ -210,16 +209,17 @@ function EmployeeSalaryTable({
               {actionTitle}
             </button>
 
-{/* {employee?.ogid === } */}
-            <button
-              className="btn btn-sm btn-secondary"
-              style={{ marginLeft: "20px" }}
-              data-toggle="modal"
-              data-target="#EditSalarySlipModal"
-              onClick={() => handleEdit(employee)}
-            >
-              Edit
-            </button>
+            {user?.employee_info?.ogid === "OG211" ? null : (
+              <button
+                className="btn btn-sm btn-secondary"
+                style={{ marginLeft: "20px" }}
+                data-toggle="modal"
+                data-target="#EditSalarySlipModal"
+                onClick={() => handleEdit(employee)}
+              >
+                Edit
+              </button>
+            )}
           </td>
         )}
       </tr>
@@ -245,14 +245,14 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={slipcolumns?.length <= 12 ? "3" : "4"}>
+                  <th colSpan={columns?.length <= 12 ? "3" : "4"}>
                     Deductions
                   </th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 
                 <tr className="emp_salary_custom-table-thead_sub_tr">
-                  {slipcolumns?.map((column) => (
+                  {columns?.map((column) => (
                     <th key={column.dataField}>{column.text}</th>
                   ))}
                   {viewAction && <th>Action</th>}
@@ -260,7 +260,7 @@ function EmployeeSalaryTable({
               </thead>
               {loading ? (
                 <tr className="emp_salary_custom-table-tbody loading">
-                  <td colSpan={slipcolumns?.length + 1}>
+                  <td colSpan={columns?.length + 1}>
                     <div
                       className="spinner-border text-primary loading"
                       role="status"
@@ -271,13 +271,11 @@ function EmployeeSalaryTable({
                 </tr>
               ) : (
                 <tbody className="emp_salary_custom-table-tbody">
-                  {employeeData?.length ? (
+                  {data?.length ? (
                     renderTableRows()
                   ) : (
                     <tr className="emp_salary_custom-table-tbody no-data">
-                      <td colSpan={slipcolumns?.length + 1}>
-                        {showNullMessage()}
-                      </td>
+                      <td colSpan={columns?.length + 1}>{showNullMessage()}</td>
                     </tr>
                   )}
                 </tbody>
@@ -324,15 +322,15 @@ function EmployeeSalaryTable({
       <EditSalarySlipModal
         salarySlipId={selectedSalarySlipId}
         initialSalary={
-          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+          data?.find((employee) => employee.id === selectedSalarySlipId)
             ?.monthlySalary || 0
         }
         initialNetPay={
-          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+          data?.find((employee) => employee.id === selectedSalarySlipId)
             ?.netPay || 0
         }
         initialProrate={
-          employeeData?.find((employee) => employee.id === selectedSalarySlipId)
+          data?.find((employee) => employee.id === selectedSalarySlipId)
             ?.prorate || false
         }
       />
