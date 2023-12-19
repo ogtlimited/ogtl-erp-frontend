@@ -41,6 +41,7 @@ const EmployeePayroll = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [batchId, setBatchId] = useState(8);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -108,7 +109,7 @@ const EmployeePayroll = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-    // Fetch Employee Salary Slip:
+  // Fetch Employee Salary Slip:
   const fetchAllBatches = useCallback(() => {
     setLoading(true);
     axiosInstance
@@ -124,7 +125,7 @@ const EmployeePayroll = () => {
         },
       })
       .then((res) => {
-        const Allbatches = res?.data?.data?.batches; 
+        const Allbatches = res?.data?.data?.batches;
         const totalPages = res?.data?.data?.pages;
 
         const thisPageLimit = sizePerPage;
@@ -146,7 +147,7 @@ const EmployeePayroll = () => {
           referenceId: e?.batch?.reference_id,
           bank3DBatchId: e?.batch?.bank3D_batch_id,
         }));
-        
+
         setData(formattedData);
         setLoading(false);
       })
@@ -361,24 +362,27 @@ const EmployeePayroll = () => {
               </button>
             ) : (
               data?.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginRight: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
+                <>
+                  <button
+                    className="btn add-btn"
+                    style={{ marginRight: "20px" }}
+                    onClick={handleExportCSV}
+                  >
+                    <i className="fa fa-download"></i> Download Report
+                  </button>
+                  {batchId && (
+                    <button
+                      className="btn add-btn"
+                      style={{ marginRight: "20px" }}
+                      data-toggle="modal"
+                      data-target="#PayrollApprovalModal"
+                    >
+                      <i className="fa fa-check"></i> Payroll Approval Report
+                    </button>
+                  )}
+                </>
               )
             )}
-
-            <button
-              className="btn add-btn"
-              style={{ marginRight: "20px" }}
-              data-toggle="modal"
-              data-target="#PayrollApprovalModal"
-            >
-              <i className="fa fa-check"></i> Payroll Approval Report
-            </button>
 
             {/* {user?.role?.title === "CEO" && (
               <button
@@ -411,16 +415,18 @@ const EmployeePayroll = () => {
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
             setTotalPages={setTotalPages}
+            setBatchId={setBatchId}
+            batchId={batchId}
           />
         </div>
       </div>
 
       {/* <GeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating}
+        setGenerating={setGenerating},
       /> */}
 
-      <PayrollApprovalModal setGenerating={setGenerating} />
+      <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} />
 
       <PayrollDatesModal
         mode={mode}

@@ -307,6 +307,20 @@
   margin-bottom: 30px;
 }
 
+.current-processor {
+  background-color: rgba(28, 221, 41, 0.2);
+  border-radius: 100%;
+  /* color: #00c5fb; */
+  color: green;
+  float: left;
+  font-size: 30px;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 10px;
+  text-align: center;
+  width: 60px;
+}
+
 .daily-attendance-card {
   background-color: #fff;
   min-width: 20%;
@@ -572,7 +586,7 @@
 }
 
 .custom-modal-width {
-  max-width: 1150px;
+  max-width: 1250px;
 }
 
 .leave-filter-control {

@@ -52,8 +52,6 @@ function EmployeeSalaryTable({
     }
   };
 
-  console.log(user, "useeees");
-
   useEffect(() => {
     resizeTable();
     window.addEventListener("resize", () => {

@@ -19,7 +19,7 @@ export const EditSalarySlipModal = ({
   });
 
   useEffect(() => {
-    // This effect runs after the modal is closed
+
     const clearForm = () => {
       setFormData({
         salary: initialSalary || "",
@@ -29,12 +29,10 @@ export const EditSalarySlipModal = ({
     };
 
     $("#EditSalarySlipModal").on("hidden.bs.modal", clearForm);
-
-    // Clean up the event listener when the component unmounts
     return () => {
       $("#EditSalarySlipModal").off("hidden.bs.modal", clearForm);
     };
-  }, []); // Empty dependency array ensures the effect runs once after the initial render
+  }, []); 
 
   const handleChange = (e) => {
     console.log("handleChange", e.target.name, e.target.value);
@@ -48,9 +46,6 @@ export const EditSalarySlipModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    console.log("Submitting form with data:", formData);
-    // Additional logic to handle data format or validation if needed
     const formattedData = {
       payload: {
         prorate: formData.prorate,
@@ -72,8 +67,6 @@ export const EditSalarySlipModal = ({
     } catch (error) {
       showAlert(true, error.response.data.errors, "alert alert-warning");
       $("#EditSalarySlipModal").modal("toggle");
-      // const errorMsg = error.response?.data?.message;
-      // showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
       console.error("Error:", error);
       setLoading(false);
@@ -93,7 +86,7 @@ export const EditSalarySlipModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Generate Payroll
+                Edit 
               </h4>
               <button
                 type="button"
@@ -126,7 +119,7 @@ export const EditSalarySlipModal = ({
                   required
                 />
 
-                <label htmlFor="prorate">Prorate</label>
+                {/* <label htmlFor="prorate">Prorate</label>
                 <input
                   name="prorate"
                   type="text"
@@ -134,7 +127,7 @@ export const EditSalarySlipModal = ({
                   value={formData.prorate}
                   onChange={handleChange}
                   required
-                />
+                /> */}
 
                 <div className="modal-footer">
                   <button

@@ -35,12 +35,12 @@ function BatchTable({
   // fetchEmployeeSalarySlip,
   setGenerating,
   context,
+  setBatchId,
+  batchId,
 }) {
-  const {  ErrorHandler, showAlert } = useAppContext();
- 
+  const { ErrorHandler, showAlert } = useAppContext();
   const [show, setShow] = React.useState(false);
   const [dol, setDol] = useState([]);
-  const [batchId, setBatchId] = useState(0);
   const [mobileView, setmobileView] = useState(false);
   const [showBatchTable, setShowBatchTable] = useState(true);
   const [info, setInfo] = useState({
@@ -149,7 +149,7 @@ function BatchTable({
           totalDeductions: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
         }));
-      
+
         setDol(formattedData);
 
         setLoading(false);
@@ -171,7 +171,9 @@ function BatchTable({
 
     try {
       // const res = await axiosInstance.put("api/v1/approve_batch/7.json");
-      const res = await axiosInstance.put(`api/v1/approve_batch/${batchId}.json`);
+      const res = await axiosInstance.put(
+        `api/v1/approve_batch/${batchId}.json`
+      );
 
       const resData = res.data.data;
       showAlert(true, "Successfully Approved Batch!", "alert alert-success");
@@ -294,7 +296,6 @@ function BatchTable({
 
   const renderTableRows = () => {
     return batchData.map((employee, index) => {
-      console.log(employee, "employ");
       return (
         <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
           {batchColumns.map((column, columnIndex) => (

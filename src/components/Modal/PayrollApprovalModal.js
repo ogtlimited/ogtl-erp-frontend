@@ -1,9 +1,36 @@
 /* eslint-disable no-unused-vars */
 /** @format */
 
-import React from "react";
+import React , { useEffect, useState, useCallback} from "react";
+import axiosInstance from "../../services/api";
 
-export const PayrollApprovalModal = ({}) => {
+
+export const PayrollApprovalModal = ({
+  batchId}) => {
+  const [approversData, setApproversData] = useState([]);
+  
+  const fetchApproversData = useCallback(() => {
+    axiosInstance
+      .get(`/api/v1/payroll_processors.json?batch_id=${batchId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.payroll_processors ; 
+        setApproversData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching approvers data:", error);
+      });
+  }, [batchId]);
+
+  useEffect(() => {
+    fetchApproversData();
+  }, [fetchApproversData, batchId]);
+  
   return (
     <>
       <div
@@ -30,11 +57,31 @@ export const PayrollApprovalModal = ({}) => {
             </div>
 
             <div className="modal-body">
+            
               <main
                 className="payroll-approval-modal-body"
                 style={{ display: "flex" }}
               >
-                <div className="daily-attendance-card-group">
+                {approversData.map((approver, index) => (
+          <div className="daily-attendance-card-group" key={index}>
+            <div className="daily-attendance-card">
+              <div>
+                <h4 >
+                    {`Approver ${index + 1}`}
+                  </h4>
+                <main>
+                  <p style={{ fontWeight: "500" }}>{approver?.full_name}</p>
+                  <p style={{ marginTop: "-1rem" }}>{approver?.email}</p>
+                  <p style={{ marginTop: "-1rem" }}>{approver?.created_at}</p>
+                </main>
+              </div>
+              <div className="card-body inner">
+                <span className={approver.current_processor ? "current-processor" : "dash-widget-icon"}>{index + 1}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+                {/* <div className="daily-attendance-card-group">
                   <div className="daily-attendance-card">
                     <div>
                       <h4>First Approver</h4>
@@ -82,7 +129,7 @@ export const PayrollApprovalModal = ({}) => {
                       <span className="dash-widget-icon">3</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </main>
             </div>
           </div>
