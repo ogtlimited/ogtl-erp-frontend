@@ -170,9 +170,14 @@ function BatchTable({
     setLoading(true);
 
     try {
-      // const res = await axiosInstance.put("api/v1/approve_batch/7.json");
       const res = await axiosInstance.put(
-        `api/v1/approve_batch/${batchId}.json`
+        `api/v1/approve_batch/${batchId}.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
 
       const resData = res.data.data;
@@ -186,6 +191,7 @@ function BatchTable({
       console.error("Error:", error);
       setLoading(false);
     }
+    
   };
 
   const handleAction = () => {
