@@ -19,7 +19,10 @@ export const PayrollApprovalModal = ({batchId}) => {
       })
       .then((res) => {
         const data = res?.data?.data?.payroll_processors ; 
-        setApproversData(data);
+        const sortedData = data.sort((a, b) => a.stage - b.stage);
+
+        setApproversData(sortedData);
+        // setApproversData(data);
       })
       .catch((error) => {
         console.error("Error fetching approvers data:", error);
@@ -75,7 +78,8 @@ export const PayrollApprovalModal = ({batchId}) => {
                 </main>
               </div>
               <div className="card-body inner">
-                <span className={approver.current_processor ? "current-processor" : "dash-widget-icon"}>{index + 1}</span>
+                {/* <span className={approver.current_processor ? "current-processor" : "dash-widget-icon"}>{index + 1}</span> */}
+                <span className={approver.current_processor ? "current-processor" : "dash-widget-icon"}>{approver?.stage}</span>
               </div>
             </div>
           </div>
