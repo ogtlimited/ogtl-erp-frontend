@@ -180,7 +180,10 @@ function BatchTable({
         }
       );
 
-      const resData = res.data.data;
+      const updatedBatchData = res.data.updatedBatchData; 
+      setBatchData(updatedBatchData);
+      await fetchEmployeeSalarySlip();
+
       showAlert(true, "Successfully Approved Batch!", "alert alert-success");
 
       setLoading(false);
