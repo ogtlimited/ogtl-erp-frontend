@@ -46,6 +46,7 @@ const ICONS = {
   organizationalStructure: getIcon("la-sitemap"),
   leader: getIcon("la-user-tie"),
   userAttendance: getIcon("la-user-clock"),
+  helpdesk: getIcon("la-question"),
 };
 
 const buildExternalURL = () => {
@@ -130,6 +131,35 @@ const sidebarConfig = [
               path: PATH_DASHBOARD.main.resignation,
               icon: ICONS.resignation,
             },
+            {
+              canView: "all",
+              title: "Help Desk",
+              path: PATH_DASHBOARD.main.resignation,
+              icon: ICONS.helpdesk,
+              children: [
+                {
+                  canView: "all",
+                  title: "IT Help Desk",
+                  externalLink: "https://sdpondemand.manageengine.com/",
+                },
+                {
+                  canView: "all",
+                  title: "Facilities Help Desk",
+                  externalLink: "https://ogtl-facilities.on.spiceworks.com/portal/",
+                },
+                {
+                  canView: "all",
+                  title: "HR Help Desk",
+                  externalLink: "https://ogtl-hr.on.spiceworks.com/portal",
+                },
+                {
+                  canView: "all",
+                  title: "Complaints Help Desk",
+                  externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
+                },
+              ],
+            }
+            
           ]
         : [
             {

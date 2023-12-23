@@ -47,6 +47,7 @@ export const GeneratePayrollModal = ({
     try {
       const res = await axiosInstance.post(
         `/api/v1/salary_slips.json?month=${month}&year=${year}`,
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,6 +56,9 @@ export const GeneratePayrollModal = ({
           },
         }
       );
+
+      console.log(res, "Res");
+      window.location.reload();
 
       showAlert(
         true,
@@ -66,6 +70,7 @@ export const GeneratePayrollModal = ({
       setGenerating(false);
       setLoading(false);
     } catch (error) {
+      console.log("fati");
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);

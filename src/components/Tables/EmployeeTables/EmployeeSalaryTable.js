@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
+import { PayrollApprovalModal } from "../../Modal/PayrollApprovalModal";
 
 function EmployeeSalaryTable({
   data,
@@ -207,7 +208,7 @@ function EmployeeSalaryTable({
               {actionTitle}
             </button>
 
-            {user?.employee_info?.ogid === "OG211" ? null : (
+            {/* {user?.employee_info?.ogid === "OG211" ? null : ( */}
               <button
                 className="btn btn-sm btn-secondary"
                 style={{ marginLeft: "20px" }}
@@ -217,7 +218,7 @@ function EmployeeSalaryTable({
               >
                 Edit
               </button>
-            )}
+            {/* )} */}
           </td>
         )}
       </tr>
@@ -310,6 +311,10 @@ function EmployeeSalaryTable({
           </Stack>
         </div>
       </div>
+
+      {/* <PayrollApprovalModal setGenerating={setGenerating}  /> */}
+      {/* <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} /> */}
+
 
       <RegeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}

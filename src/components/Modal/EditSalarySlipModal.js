@@ -119,7 +119,7 @@ export const EditSalarySlipModal = ({
                   required
                 />
 
-                {/* <label htmlFor="prorate">Prorate</label>
+                <label htmlFor="prorate">Prorate</label>
                 <input
                   name="prorate"
                   type="text"
@@ -127,7 +127,7 @@ export const EditSalarySlipModal = ({
                   value={formData.prorate}
                   onChange={handleChange}
                   required
-                /> */}
+                />
 
                 <div className="modal-footer">
                   <button
