@@ -149,7 +149,7 @@ const EmployeePayroll = () => {
         }));
 
         setData(formattedData);
-        setBatchId(formattedData[0]?.id)
+        setBatchId(formattedData[0]?.id);
         setLoading(false);
       })
       .catch((error) => {
@@ -371,6 +371,7 @@ const EmployeePayroll = () => {
                   >
                     <i className="fa fa-download"></i> Download Report
                   </button>
+
                   {batchId && (
                     <button
                       className="btn add-btn"
@@ -410,7 +411,7 @@ const EmployeePayroll = () => {
             page={page}
             viewAction={true}
             actionTitle="Salary Slips"
-            totalPages={totalPages}
+            // totalPages={totalPages}
             loading={loading}
             fetchAllBatches={fetchAllBatches}
             sizePerPage={sizePerPage}
@@ -418,14 +419,16 @@ const EmployeePayroll = () => {
             setTotalPages={setTotalPages}
             setBatchId={setBatchId}
             batchId={batchId}
+            // fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
           />
         </div>
       </div>
 
-      {/* <GeneratePayrollModal
-        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating},
-      /> */}
+      <GeneratePayrollModal
+        // fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        setGenerating={setGenerating}
+      />
+
 
       <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} />
 

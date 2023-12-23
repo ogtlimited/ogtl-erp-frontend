@@ -17,6 +17,7 @@ import $ from "jquery";
 
 function BatchTable({
   batchData,
+  fetchAllBatches,
   setBatchData,
   batchColumns,
   loading,
@@ -166,12 +167,14 @@ function BatchTable({
     fetchEmployeeSalarySlip();
   }, [fetchEmployeeSalarySlip]);
 
+  // the approve request
   const handleSubmit = async () => {
     setLoading(true);
 
     try {
       const res = await axiosInstance.put(
-        `api/v1/approve_batch/${batchId}.json`, {
+        `api/v1/approve_batch/${batchId}.json`,
+        {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -179,11 +182,7 @@ function BatchTable({
           },
         }
       );
-
-      const updatedBatchData = res.data.updatedBatchData; 
-      setBatchData(updatedBatchData);
-      await fetchEmployeeSalarySlip();
-
+      handleBatchApprovalSuccess();
       showAlert(true, "Successfully Approved Batch!", "alert alert-success");
 
       setLoading(false);
@@ -194,7 +193,10 @@ function BatchTable({
       console.error("Error:", error);
       setLoading(false);
     }
-    
+  };
+
+  const handleBatchApprovalSuccess = () => {
+    fetchAllBatches();
   };
 
   const handleAction = () => {
@@ -305,6 +307,7 @@ function BatchTable({
 
   const renderTableRows = () => {
     return batchData.map((employee, index) => {
+      // console.log(batchData?.[index]?.approved, "batch data");
       return (
         <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
           {batchColumns.map((column, columnIndex) => (
@@ -342,16 +345,18 @@ function BatchTable({
                 {actionTitle}
               </button>
 
-              <button
-                className="btn btn-sm btn-secondary"
-                style={{ marginLeft: "20px" }}
-                onClick={() => {
-                  setBatchId(employee?.id);
-                  handleSubmit();
-                }}
-              >
-                Approve Batch
-              </button>
+              {batchData?.[index]?.approved === true ? null : (
+                <button
+                  className="btn btn-sm btn-secondary"
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => {
+                    setBatchId(employee?.id);
+                    handleSubmit();
+                  }}
+                >
+                  Approve Batch
+                </button>
+              )}
             </td>
           )}
         </tr>
@@ -518,10 +523,10 @@ function BatchTable({
         </div>
       </div> */}
 
-      <GeneratePayrollModal
+      {/* <GeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
         setGenerating={setGenerating}
-      />
+      /> */}
 
       <RegeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}

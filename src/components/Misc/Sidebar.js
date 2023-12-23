@@ -163,7 +163,7 @@ const Sidebar = () => {
                                         : "none",
                                     }}
                                   >
-                                    {item.children.map((child) => (
+                                    {/* {item.children.map((child) => (
                                       <>
                                         {canView(child?.canView) && (
                                           <li key={child.path} className="">
@@ -176,7 +176,33 @@ const Sidebar = () => {
                                           </li>
                                         )}
                                       </>
-                                    ))}
+                                    ))} */}
+                                    {item.children.map((child) => (
+                                  <>
+                                    {canView(child?.canView) && (
+                                      <li key={child.path} className="">
+                                        {child.externalLink ? (
+                                          // External link inside children
+                                          <a
+                                            href={child.externalLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            {child.title}
+                                          </a>
+                                        ) : (
+                                          // Internal link inside children
+                                          <Link
+                                            to={`${child.path}`}
+                                            className=""
+                                          >
+                                            {child.title}
+                                          </Link>
+                                        )}
+                                      </li>
+                                    )}
+                                  </>
+                                ))}
                                   </ul>
                                 </li>
                               )}
