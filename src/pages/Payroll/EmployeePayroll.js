@@ -13,7 +13,6 @@ import axiosInstance from "../../services/api";
 import helper from "../../services/helper";
 // import ApprovePayroll from "./ApprovePayroll";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
-import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import csvDownload from "json-to-csv-export";
@@ -42,6 +41,7 @@ const EmployeePayroll = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [batchId, setBatchId] = useState(null);
+  const [showPayrollReport, setShowPayrollReport] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -372,7 +372,7 @@ const EmployeePayroll = () => {
                     <i className="fa fa-download"></i> Download Report
                   </button>
 
-                  {batchId && (
+                  {showPayrollReport && (
                     <button
                       className="btn add-btn"
                       style={{ marginRight: "20px" }}
@@ -419,6 +419,8 @@ const EmployeePayroll = () => {
             setTotalPages={setTotalPages}
             setBatchId={setBatchId}
             batchId={batchId}
+            showPayrollReport={showPayrollReport}
+            setShowPayrollReport={setShowPayrollReport}
             // fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
           />
         </div>

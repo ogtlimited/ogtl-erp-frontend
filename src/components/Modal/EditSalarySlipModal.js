@@ -19,7 +19,6 @@ export const EditSalarySlipModal = ({
   });
 
   useEffect(() => {
-
     const clearForm = () => {
       setFormData({
         salary: initialSalary || "",
@@ -32,7 +31,7 @@ export const EditSalarySlipModal = ({
     return () => {
       $("#EditSalarySlipModal").off("hidden.bs.modal", clearForm);
     };
-  }, []); 
+  }, []);
 
   const handleChange = (e) => {
     console.log("handleChange", e.target.name, e.target.value);
@@ -86,7 +85,7 @@ export const EditSalarySlipModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Edit 
+                Edit Payroll
               </h4>
               <button
                 type="button"
@@ -99,35 +98,92 @@ export const EditSalarySlipModal = ({
             </div>
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
-                {/* <label htmlFor="salary">Salary</label>
-                <input
-                  name="salary"
-                  type="number"
-                  className="form-control"
-                  value={formData.salary}
-                  onChange={handleChange}
-                  required
-                /> */}
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="tax">Tax</label>
+                      <input
+                        name="tax"
+                        type="number"
+                        className="form-control"
+                        // value={formData.tax}
+                        // onChange={handleChange}
+                        // required
+                      />
+                    </div>
+                  </div>
 
-                <label htmlFor="netPay">Net Pay</label>
-                <input
-                  name="netPay"
-                  type="number"
-                  className="form-control"
-                  value={formData.netPay}
-                  onChange={handleChange}
-                  required
-                />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="salary">Salary</label>
+                      <input
+                        name="salary"
+                        type="number"
+                        className="form-control"
+                        value={formData.salary}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
-                <label htmlFor="prorate">Prorate</label>
-                <input
-                  name="prorate"
-                  type="text"
-                  className="form-control"
-                  value={formData.prorate}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="netPay">Net Pay</label>
+                      <input
+                        name="netPay"
+                        type="number"
+                        className="form-control"
+                        value={formData.netPay}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="netPay">Pension</label>
+                      <input
+                        name="pension"
+                        type="number"
+                        className="form-control"
+                        // value={formData.pension}
+                        // onChange={handleChange}
+                        // required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="prorate">Prorate</label>
+                      <select
+                        name="prorate"
+                        className="form-control"
+                        value={formData.prorate.toString()}
+                        onChange={(e) =>
+                          handleChange({
+                            ...e,
+                            target: {
+                              name: "prorate",
+                              value: e.target.value === "true",
+                            },
+                          })
+                        }
+                        style={{ cursor: "pointer" }}
+                        required
+                      >
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
 
                 <div className="modal-footer">
                   <button
