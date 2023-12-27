@@ -11,6 +11,7 @@ import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
 import { PayrollApprovalModal } from "../../Modal/PayrollApprovalModal";
 
 function EmployeeSalaryTable({
+  batchData,
   data,
   setData,
   columns,
@@ -176,9 +177,9 @@ function EmployeeSalaryTable({
               helper.handleMoneyFormat(employee[column.dataField])
             ) : column.dataField === "prorate" ? (
               employee[column.dataField] ? (
-                "True"
+                "Yes"
               ) : (
-                "False"
+                "No"
               )
             ) : (
               employee[column.dataField]
@@ -208,9 +209,9 @@ function EmployeeSalaryTable({
               {actionTitle}
             </button>
 
-            {/* {user?.employee_info?.ogid === "OG211" ? null : ( */}
+            {/* {batchData?.[index]?.approved === false ? null : ( */}
               <button
-                className="btn btn-sm btn-secondary"
+                className="btn btn-sm btn-primary"
                 style={{ marginLeft: "20px" }}
                 data-toggle="modal"
                 data-target="#EditSalarySlipModal"
@@ -311,10 +312,6 @@ function EmployeeSalaryTable({
           </Stack>
         </div>
       </div>
-
-      {/* <PayrollApprovalModal setGenerating={setGenerating}  /> */}
-      {/* <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} /> */}
-
 
       <RegeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}

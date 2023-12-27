@@ -16,6 +16,7 @@ import { GeneratePayrollModal } from "../../../Modal/GeneratePayrollModal";
 import $ from "jquery";
 
 function BatchTable({
+  setShowPayrollReport,
   batchData,
   fetchAllBatches,
   setBatchData,
@@ -201,10 +202,12 @@ function BatchTable({
 
   const handleAction = () => {
     setShowBatchTable(false);
+    setShowPayrollReport(true);
   };
 
   const handleBackToBatchTable = () => {
     setShowBatchTable(true);
+    setShowPayrollReport(false);
   };
 
   const renderDetailTable = () => {
@@ -296,6 +299,7 @@ function BatchTable({
               setTotalPages={setTotalPages}
               fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
               setGenerating={setGenerating}
+              batchData={batchData}
             />
           </div>
         </div>
@@ -347,7 +351,11 @@ function BatchTable({
 
               {batchData?.[index]?.approved === true ? null : (
                 <button
-                  className="btn btn-sm btn-secondary"
+                  className={`btn btn-sm ${
+                    batchData?.[index]?.approved === false
+                      ? "btn-primary"
+                      : "btn-secondary"
+                  }`}
                   style={{ marginLeft: "20px" }}
                   onClick={() => {
                     setBatchId(employee?.id);
