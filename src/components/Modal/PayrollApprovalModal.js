@@ -40,8 +40,8 @@ export const PayrollApprovalModal = ({ batchId }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered custom-modal-width">
-          <div className="modal-content">
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content custom-modal-width">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
                 Payroll Approval Reports
@@ -62,15 +62,21 @@ export const PayrollApprovalModal = ({ batchId }) => {
                 style={{ display: "flex" }}
               >
                 {approversData.map((approver, index) => (
-                  <div className="daily-attendance-card-group" key={index}>
-                    <div className="daily-attendance-card">
+                  <div className="payroll-approval-card-group" key={index}>
+                    <div
+                      className={
+                        approver.current_processor
+                          ? "payroll-approval-card payroll-processor"
+                          : "payroll-approval-card"
+                      }
+                    >
                       <div>
-                        <h4>{`Approver ${index + 1}`}</h4>
+                        <h5>{`Approver ${index + 1}`}</h5>
                         <main>
                           <p style={{ fontWeight: "500" }}>
                             {approver?.full_name}
                           </p>
-                          <p style={{ marginTop: "-1rem" }}>
+                          <p style={{ marginTop: "-1rem", fontSize: "13px" }}>
                             {approver?.email}
                           </p>
                         </main>

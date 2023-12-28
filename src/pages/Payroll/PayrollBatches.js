@@ -27,9 +27,6 @@ const PayrollBatches = () => {
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
 
-  const [batchId, setBatchId] = useState(null);
-  const [batchOgid, setBatchOgid] = useState(null);
-
   const currentUserOgid = user?.employee_info?.ogid;
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "accountant"];
@@ -133,8 +130,6 @@ const PayrollBatches = () => {
         }));
 
         setData(formattedData);
-        setBatchId(formattedData[0]?.id);
-        setBatchOgid(formattedData[0]?.ogid);
         setLoading(false);
       })
       .catch((error) => {
@@ -164,6 +159,8 @@ const PayrollBatches = () => {
   // Handle Approve Batch:
   const handleApprove = async (row) => {
     setLoading(true);
+
+    const batchId = row?.id;
 
     try {
       // eslint-disable-next-line no-unused-vars
@@ -293,7 +290,14 @@ const PayrollBatches = () => {
               Salary Slips
             </button>
 
-            {batchOgid && currentUserOgid === batchOgid ? (
+            {
+              console.log({
+                currentUserOgid,
+                row,
+              })
+            }
+
+            {currentUserOgid === row?.ogid ? (
               <div className="leave-user-action-btns">
                 <button
                   className="btn btn-sm btn-primary"

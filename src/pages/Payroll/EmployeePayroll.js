@@ -1,9 +1,8 @@
 // *IN USE
 
-
 import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import helper from "../../services/helper";
@@ -11,25 +10,27 @@ import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/Employee
 import csvDownload from "json-to-csv-export";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 
 const EmployeePayroll = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { user, ErrorHandler, showAlert } = useAppContext();
   const year = moment().format("YYYY");
   const currMonthName = moment().format("MMMM");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
-  const [mode, setMode] = useState("Create");
-  const [dates, setDates] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
+  const [currentApproverEmail, setCurrentApproverEmail] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "accountant"];
 
+  // eslint-disable-next-line no-unused-vars
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
   );
@@ -76,6 +77,8 @@ const EmployeePayroll = () => {
           disciplinary_deductions: e?.slip?.disciplinary_deductions,
           totalDeductions: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
+
+          prorate: e?.slip?.prorate ? "Yes" : "No",
         }));
 
         setData(formattedData);
@@ -209,7 +212,41 @@ const EmployeePayroll = () => {
       dataField: "netPay",
       text: "Net Salary",
     },
+    {
+      dataField: "prorate",
+      text: "Prorate",
+    },
   ];
+
+  const handleBackToBatchTable = () => {
+    navigate(`/dashboard/payroll/payroll-processing`);
+  };
+
+  // Fetch Approvers Data:
+  const fetchApproversData = useCallback(() => {
+    axiosInstance
+      .get(`/api/v1/payroll_processors.json?batch_id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.payroll_processors;
+        const sortedData = data.find((data) => data?.current_processor === true)
+        const currentApproverEmail = sortedData?.email
+
+        setCurrentApproverEmail(currentApproverEmail);
+      })
+      .catch((error) => {
+        console.error("Error fetching approvers data | ", error);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    fetchApproversData();
+  }, [fetchApproversData, id]);
 
   return (
     <>
@@ -231,14 +268,25 @@ const EmployeePayroll = () => {
                 <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
               </button>
             ) : (
-              data.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginRight: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
+              data?.length > 0 && (
+                <>
+                  <button
+                    className="btn add-btn"
+                    style={{ marginRight: "20px" }}
+                    onClick={handleExportCSV}
+                  >
+                    <i className="fa fa-download"></i> Download Report
+                  </button>
+
+                  <button
+                    className="btn add-btn"
+                    style={{ marginRight: "20px" }}
+                    data-toggle="modal"
+                    data-target="#PayrollApprovalModal"
+                  >
+                    <i className="fa fa-check"></i> Payroll Approval Report
+                  </button>
+                </>
               )
             )}
           </div>
@@ -247,6 +295,14 @@ const EmployeePayroll = () => {
 
       <div className="row">
         <div className="col-md-12">
+          <button
+            className="btn btn-primary"
+            style={{ margin: "0 0 1rem 1rem" }}
+            onClick={handleBackToBatchTable}
+          >
+            Back to Batch Table
+          </button>
+
           <EmployeeSalaryTable
             data={data}
             loading={loading}
@@ -262,9 +318,12 @@ const EmployeePayroll = () => {
             totalPages={totalPages}
             setTotalPages={setTotalPages}
             fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+            currentApproverEmail={currentApproverEmail}
           />
         </div>
       </div>
+
+      <PayrollApprovalModal batchId={id} />
     </>
   );
 };
