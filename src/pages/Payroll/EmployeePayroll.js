@@ -1,6 +1,5 @@
 // *IN USE
 
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import moment from "moment";
@@ -20,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 import BatchTable from "../../components/Tables/EmployeeTables/Batches/BatchTable";
+import ShowSalaryTable from "../../components/Tables/EmployeeTables/Batches/ShowSalaryTable";
 
 const EmployeePayroll = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
@@ -125,6 +125,7 @@ const EmployeePayroll = () => {
         },
       })
       .then((res) => {
+        console.log("Batch Data:", res?.data?.data)
         const Allbatches = res?.data?.data?.batches;
         const totalPages = res?.data?.data?.pages;
 
@@ -386,18 +387,6 @@ const EmployeePayroll = () => {
               )
             )}
 
-            {/* {user?.role?.title === "CEO" && (
-              <button
-                data-toggle="modal"
-                data-target="#generalModal"
-                className="btn add-btn mx-5"
-                onClick={() => {
-                  setGenerating("raw");
-                }}
-              >
-                Preview and approve payroll
-              </button>
-            )} */}
           </div>
         </div>
       </div>
@@ -411,7 +400,7 @@ const EmployeePayroll = () => {
             page={page}
             viewAction={true}
             actionTitle="Salary Slips"
-            // totalPages={totalPages}
+            totalPages={totalPages}
             loading={loading}
             fetchAllBatches={fetchAllBatches}
             sizePerPage={sizePerPage}
@@ -426,31 +415,7 @@ const EmployeePayroll = () => {
         </div>
       </div>
 
-      <GeneratePayrollModal
-        // fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating}
-      />
-
-
       <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} />
-
-      <PayrollDatesModal
-        mode={mode}
-        data={dates}
-        fetchAllPayrollDates={fetchAllPayrollDates}
-      />
-
-      {/* <ViewModal
-        closeModal={handleClose}
-        title={`Payroll Approval for ${currMonthName}  ${year}`}
-        content={
-          <ApprovePayroll
-            setDisplayState={setDisplayState}
-            state={displayState}
-            previewData={previewData}
-          />
-        }
-      /> */}
     </>
   );
 };

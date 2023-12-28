@@ -159,16 +159,14 @@ const JobSieversViewAdmin = ({
               Reassign
             </button>
 
-            <div className="leave-user-action-btns">
-              <button
-                className="btn btn-sm btn-danger"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => setSelectedRow(row)}
-              >
-                Remove
-              </button>
-            </div>
+            <button
+              className="btn btn-sm btn-danger"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => setSelectedRow(row)}
+            >
+              Remove
+            </button>
           </div>
         </div>
       ),

@@ -1,6 +1,5 @@
 // *IN USE
 
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import moment from "moment";
@@ -13,13 +12,14 @@ import axiosInstance from "../../services/api";
 import helper from "../../services/helper";
 // import ApprovePayroll from "./ApprovePayroll";
 import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
-import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import csvDownload from "json-to-csv-export";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
+import BatchTable from "../../components/Tables/EmployeeTables/Batches/BatchTable";
+import ShowSalaryTable from "../../components/Tables/EmployeeTables/Batches/ShowSalaryTable";
 
 const EmployeePayroll = () => {
   const { user, ErrorHandler, showAlert } = useAppContext();
@@ -40,6 +40,8 @@ const EmployeePayroll = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [batchId, setBatchId] = useState(null);
+  const [showPayrollReport, setShowPayrollReport] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -108,10 +110,10 @@ const EmployeePayroll = () => {
   }, []);
 
   // Fetch Employee Salary Slip:
-  const fetchEmployeeSalarySlip = useCallback(() => {
+  const fetchAllBatches = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get("/api/v1/salary_slips.json", {
+      .get("/api/v1/batches.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -123,7 +125,8 @@ const EmployeePayroll = () => {
         },
       })
       .then((res) => {
-        const AllEmployeeSlips = res?.data?.data?.slips;
+        console.log("Batch Data:", res?.data?.data)
+        const Allbatches = res?.data?.data?.batches;
         const totalPages = res?.data?.data?.pages;
 
         const thisPageLimit = sizePerPage;
@@ -132,28 +135,22 @@ const EmployeePayroll = () => {
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
 
-        const formattedData = AllEmployeeSlips?.map((e) => ({
+        const formattedData = Allbatches?.map((e) => ({
           ...e,
-          id: e?.slip?.id,
-          employee: e?.user?.first_name + " " + e?.user?.last_name,
-          ogid: e?.user?.ogid,
-          email: e?.user?.email,
-
-          basic: e?.slip?.basic,
-          medical: e?.slip?.medical,
-          housing: e?.slip?.housing,
-          transport: e?.slip?.transport,
-          otherAllowances: e?.slip?.other_allowances,
-          monthlySalary: e?.slip?.monthly_salary,
-
-          tax: e?.slip?.monthly_income_tax,
-          pension: e?.slip?.monthly_pension,
-          disciplinary_deductions: e?.slip?.disciplinary_deductions,
-          totalDeductions: e?.slip?.total_deductions,
-          netPay: e?.slip?.net_pay,
+          id: e?.batch?.id,
+          approved: e?.batch?.approved,
+          status: e?.batch?.status,
+          title: e?.batch?.title,
+          stage: e?.batch?.stage,
+          lastName: e?.current_processor?.last_name,
+          ogid: e?.current_processor?.ogid,
+          firstName: e?.current_processor?.first_name,
+          referenceId: e?.batch?.reference_id,
+          bank3DBatchId: e?.batch?.bank3D_batch_id,
         }));
 
         setData(formattedData);
+        setBatchId(formattedData[0]?.id);
         setLoading(false);
       })
       .catch((error) => {
@@ -165,8 +162,8 @@ const EmployeePayroll = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchEmployeeSalarySlip();
-  }, [fetchEmployeeSalarySlip]);
+    fetchAllBatches();
+  }, [fetchAllBatches]);
 
   // Handle CSV Export:
   const handleExportCSV = async (e) => {
@@ -237,57 +234,40 @@ const EmployeePayroll = () => {
 
   const columns = [
     {
-      dataField: "employee",
-      text: "Employee",
-      idDataField: "ogid",
+      dataField: "ogid",
+      text: "OGID",
     },
     {
-      dataField: "email",
-      text: "Email",
+      dataField: "lastName",
+      text: "Last Name",
     },
     {
-      dataField: "basic",
-      text: "Basic",
+      dataField: "firstName",
+      text: "First Name",
     },
     {
-      dataField: "medical",
-      text: "Medical",
+      dataField: "referenceId",
+      text: "Reference ID",
     },
     {
-      dataField: "housing",
-      text: "Housing",
+      dataField: "bank3DBatchId",
+      text: "Batch ID",
     },
     {
-      dataField: "transport",
-      text: "Transport",
+      dataField: "approved",
+      text: "Approved",
     },
     {
-      dataField: "otherAllowances",
-      text: "Other Allowances",
+      dataField: "status",
+      text: "Status",
     },
     {
-      dataField: "monthlySalary",
-      text: "Gross Salary",
+      dataField: "title",
+      text: "Title",
     },
     {
-      dataField: "tax",
-      text: "Tax",
-    },
-    {
-      dataField: "pension",
-      text: "Pension",
-    },
-    {
-      dataField: "disciplinary_deductions",
-      text: "Disciplinary Deduction",
-    },
-    {
-      dataField: "totalDeductions",
-      text: "Total Deductions",
-    },
-    {
-      dataField: "netPay",
-      text: "Net Salary",
+      dataField: "stage",
+      text: "Stage",
     },
   ];
 
@@ -383,88 +363,59 @@ const EmployeePayroll = () => {
                 <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
               </button>
             ) : (
-              data.length > 0 && (
-                <button
-                  className="btn add-btn"
-                  style={{ marginRight: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
+              data?.length > 0 && (
+                <>
+                  <button
+                    className="btn add-btn"
+                    style={{ marginRight: "20px" }}
+                    onClick={handleExportCSV}
+                  >
+                    <i className="fa fa-download"></i> Download Report
+                  </button>
+
+                  {showPayrollReport && (
+                    <button
+                      className="btn add-btn"
+                      style={{ marginRight: "20px" }}
+                      data-toggle="modal"
+                      data-target="#PayrollApprovalModal"
+                    >
+                      <i className="fa fa-check"></i> Payroll Approval Report
+                    </button>
+                  )}
+                </>
               )
             )}
 
-            <button className="btn add-btn" style={{ marginRight: "20px" }}
-             data-toggle="modal"
-             data-target="#PayrollApprovalModal"
-            >
-              <i className="fa fa-check"></i> Payroll Approval Report
-            </button>
-
-            {/* {user?.role?.title === "CEO" && (
-              <button
-                data-toggle="modal"
-                data-target="#generalModal"
-                className="btn add-btn mx-5"
-                onClick={() => {
-                  setGenerating("raw");
-                }}
-              >
-                Preview and approve payroll
-              </button>
-            )} */}
           </div>
         </div>
       </div>
 
       <div className="row">
         <div className="col-md-12">
-          <EmployeeSalaryTable
-            data={data}
-            loading={loading}
+          <BatchTable
+            batchColumns={columns}
+            batchData={data}
             setLoading={setLoading}
-            columns={columns}
-            viewAction={true}
-            regenerate={true}
-            actionTitle="View"
             page={page}
-            setPage={setPage}
+            viewAction={true}
+            actionTitle="Salary Slips"
+            totalPages={totalPages}
+            loading={loading}
+            fetchAllBatches={fetchAllBatches}
             sizePerPage={sizePerPage}
             setSizePerPage={setSizePerPage}
-            totalPages={totalPages}
             setTotalPages={setTotalPages}
-            fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-            setGenerating={setGenerating}
+            setBatchId={setBatchId}
+            batchId={batchId}
+            showPayrollReport={showPayrollReport}
+            setShowPayrollReport={setShowPayrollReport}
+            // fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
           />
         </div>
       </div>
 
-      <GeneratePayrollModal
-        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating}
-      />
-
-      <PayrollApprovalModal
-       setGenerating={setGenerating}
-      />
-
-      <PayrollDatesModal
-        mode={mode}
-        data={dates}
-        fetchAllPayrollDates={fetchAllPayrollDates}
-      />
-
-      {/* <ViewModal
-        closeModal={handleClose}
-        title={`Payroll Approval for ${currMonthName}  ${year}`}
-        content={
-          <ApprovePayroll
-            setDisplayState={setDisplayState}
-            state={displayState}
-            previewData={previewData}
-          />
-        }
-      /> */}
+      <PayrollApprovalModal setGenerating={setGenerating} batchId={batchId} />
     </>
   );
 };

@@ -560,6 +560,7 @@
 .leave-user-action-btns {
   display: flex;
   justify-content: space-evenly;
+  gap: 10px;
 }
 
 .leave-btn {
