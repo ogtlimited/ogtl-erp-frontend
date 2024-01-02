@@ -20,8 +20,6 @@ export const EditSalarySlipModal = ({ salarySlipId, onClose }) => {
 
     const apiUrl = `http://localhost:3000/api/v1/salary_slips/${salarySlipId}.json`;
 
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo3ODYsImV4cCI6MTcwMjU5NjQxMX0.yEXHfnqOUcJ0aqXUZxTxFDeO2VzOM4H_5GsK_tFdwWM";
-
     const requestOptions = {
       method: "PUT", // or "POST" based on your requirement
       headers: {
