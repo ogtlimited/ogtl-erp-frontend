@@ -152,7 +152,6 @@ const PayrollBatches = () => {
 
   // Handle View Salary Slips:
   const handleViewSalarySlips = async (row) => {
-    console.log(row?.id);
     navigate(`/dashboard/payroll/payroll-processing/batch-slips/${row?.id}`);
   };
 
@@ -190,7 +189,7 @@ const PayrollBatches = () => {
   const columns = [
     {
       dataField: "employeeName",
-      text: "Employee",
+      text: "Current Processor",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
