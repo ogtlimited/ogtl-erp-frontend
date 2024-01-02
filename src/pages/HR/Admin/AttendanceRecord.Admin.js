@@ -283,12 +283,28 @@ const AttendanceRecord = () => {
       const dataArray = Object.keys(attendanceRecords).map((key) => ({
         days: attendanceRecords[key].days,
         user: attendanceRecords[key].user,
+        total_hours: attendanceRecords[key].total_hours,
+        lateness_and_absence: attendanceRecords[key].lateness_and_absence,
       }));
 
       const formattedData = dataArray.map((data) => ({
         staffName: data?.user?.full_name,
         ogid: data?.user?.staff_unique_Id,
         email: data?.user?.email,
+        total_hours: data?.total_hours,
+        lateness:
+          data?.lateness_and_absence?.lateness !== undefined
+            ? data.lateness_and_absence.lateness
+            : 0,
+        NCNS:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data.lateness_and_absence.NCNS
+            : 0,
+        absent: data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+            : 0,
+
+
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
           clock_in: data?.days[key]?.clock_in
@@ -303,6 +319,8 @@ const AttendanceRecord = () => {
               : "Present",
         })),
       }));
+
+      console.log(formattedData, "formatted");
 
       setSizePerPage(sizePerPage);
       setTotalPages(recordPages);
@@ -505,6 +523,30 @@ const AttendanceRecord = () => {
     {
       dataField: "email",
       text: "Email",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "total_hours",
+      text: "Total Hours",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "lateness",
+      text: "Lateness",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "NCNS",
+      text: "Absent",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "absent",
+      text: "Absent(did not clock out)",
       sort: true,
       headerStyle: { width: "100%" },
     },

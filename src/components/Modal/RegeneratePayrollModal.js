@@ -9,7 +9,6 @@ import secureLocalStorage from "react-secure-storage";
 
 export const RegeneratePayrollModal = ({
   fetchEmployeeSalarySlip,
-  setGenerating,
   userId,
 }) => {
   const { showAlert } = useAppContext();
@@ -62,13 +61,11 @@ export const RegeneratePayrollModal = ({
       );
       $("#RegeneratePayrollModal").modal("toggle");
       fetchEmployeeSalarySlip();
-      setGenerating(false);
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
-      setGenerating(false);
     }
   };
 

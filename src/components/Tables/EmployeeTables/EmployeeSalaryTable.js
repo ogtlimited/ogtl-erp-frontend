@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect } from "react";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
@@ -7,6 +8,8 @@ import helper from "../../../services/helper";
 import { useNavigate } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
+import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
+import Email from "./../../../pages/In-Apps/Email";
 
 function EmployeeSalaryTable({
   data,
@@ -26,13 +29,17 @@ function EmployeeSalaryTable({
   setTotalPages,
 
   fetchEmployeeSalarySlip,
-  setGenerating,
+  currentApproverEmail,
   context,
 }) {
   const navigate = useNavigate();
   const { user, getAvatarColor } = useAppContext();
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
+  const [selectedSalarySlip, setSelectedSalarySlip] = useState(null);
+
+  const currentUserEmail = user?.employee_info?.email;
+
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
@@ -97,51 +104,21 @@ function EmployeeSalaryTable({
     navigate(`/dashboard/payroll/payslip/${action?.id}`);
   };
 
-  /**
-   ** !This is the original code without the avatar:
-   * 
-   * const renderTableRows = () => {
-      return data.map((employee, index) => (
-        <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-          {columns.map((column) => (
-            <td key={column.dataField}>
-              {typeof employee[column.dataField] === "number"
-                ? helper.handleMoneyFormat(employee[column.dataField])
-                : employee[column.dataField]}
-            </td>
-          ))}
-
-          {viewAction && (
-            <td>
-              {regenerate && user?.role?.title !== "CEO" ? (
-                <a
-                  href="#"
-                  className="btn btn-sm btn-primary"
-                  data-toggle="modal"
-                  data-target="#RegeneratePayrollModal"
-                  onClick={() => handleRegeneratePayroll(employee)}
-                  style={{ marginRight: "20px" }}
-                >
-                  Regenerate
-                </a>
-              ) : null}
-
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={() => handleAction(employee)}
-              >
-                {actionTitle}
-              </button>
-            </td>
-          )}
-        </tr>
-      ));
+  const handleEdit = (employee) => {
+    const formattedData = {
+      id: employee?.id,
+      employeeName: employee?.employee,
+      initialTax: +employee?.tax || null,
+      initialPension: +employee?.pension || null,
+      initialNetPay: +employee?.netPay || null,
+      initialProrate: employee?.prorate === "Yes" ? true : false,
+      // initialSalary: +employee?.monthlySalary || null,
     };
-  *
-  * 
-  */
 
-  // * !This is the code with the avatar:
+    setSelectedSalarySlip(formattedData);
+  };
+
+  // Render Table Rows:
   const renderTableRows = () => {
     return data.map((employee, index) => (
       <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
@@ -181,18 +158,30 @@ function EmployeeSalaryTable({
                 data-toggle="modal"
                 data-target="#RegeneratePayrollModal"
                 onClick={() => handleRegeneratePayroll(employee)}
-                style={{ marginRight: "20px" }}
+                style={{ marginRight: "10px" }}
               >
                 Regenerate
               </a>
             ) : null}
 
             <button
-              className="btn btn-sm btn-secondary"
+              className="btn btn-sm btn-info"
               onClick={() => handleAction(employee)}
             >
               {actionTitle}
             </button>
+
+            {currentUserEmail === currentApproverEmail ? (
+              <button
+                className="btn btn-sm btn-secondary"
+                style={{ marginLeft: "10px" }}
+                data-toggle="modal"
+                data-target="#EditSalarySlipModal"
+                onClick={() => handleEdit(employee)}
+              >
+                Edit
+              </button>
+            ) : null}
           </td>
         )}
       </tr>
@@ -286,8 +275,12 @@ function EmployeeSalaryTable({
 
       <RegeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating}
         userId={userId}
+      />
+
+      <EditSalarySlipModal
+        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        data={selectedSalarySlip}
       />
     </>
   );

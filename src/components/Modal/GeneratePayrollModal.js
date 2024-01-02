@@ -1,16 +1,9 @@
-/* eslint-disable no-unused-vars */
-/** @format */
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import secureLocalStorage from "react-secure-storage";
 
-export const GeneratePayrollModal = ({
-  fetchEmployeeSalarySlip,
-  setGenerating,
-}) => {
+export const GeneratePayrollModal = ({ fetchAllBatches }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
@@ -45,6 +38,7 @@ export const GeneratePayrollModal = ({
     const year = createPayslips.monthAndYear.split("-")[0];
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const res = await axiosInstance.post(
         `/api/v1/salary_slips.json?month=${month}&year=${year}`,
         {
@@ -62,14 +56,12 @@ export const GeneratePayrollModal = ({
         "alert alert-success"
       );
       $("#GeneratePayrollModal").modal("toggle");
-      fetchEmployeeSalarySlip();
-      setGenerating(false);
+      fetchAllBatches();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       setLoading(false);
-      setGenerating(false);
     }
   };
 

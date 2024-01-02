@@ -517,15 +517,15 @@ export default function Router() {
               path: "payroll-processing",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <EmployeePayroll />
+                  <PayrollBatches />
                 </GuardedRoute>
               ),
             },
             {
-              path: "payroll-batches",
+              path: "payroll-processing/batch-slips/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
-                  <PayrollBatches />
+                  <EmployeePayroll />
                 </GuardedRoute>
               ),
             },
