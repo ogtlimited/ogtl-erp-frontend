@@ -86,7 +86,7 @@ const PayrollBatches = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Fetch Employee Salary Slip:
+  // Fetch Payroll Batches:
   const fetchAllBatches = useCallback(() => {
     setLoading(true);
     axiosInstance
@@ -103,10 +103,10 @@ const PayrollBatches = () => {
       })
       .then((res) => {
         const AllBatches = res?.data?.data?.batches;
-        const totalPages = res?.data?.data?.pages;
+        const dataPages = res?.data?.data?.pages;
 
         const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
+        const thisTotalPageSize = dataPages;
 
         setSizePerPage(thisPageLimit);
         setTotalPages(thisTotalPageSize);
@@ -128,6 +128,8 @@ const PayrollBatches = () => {
           referenceId: e?.batch?.reference_id,
           bank3DBatchId: e?.batch?.bank3D_batch_id,
         }));
+
+        console.log("formattedData", formattedData)
 
         setData(formattedData);
         setLoading(false);
@@ -207,6 +209,12 @@ const PayrollBatches = () => {
       ),
     },
     {
+      dataField: "designation",
+      text: "Designation",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
       dataField: "referenceId",
       text: "Reference ID",
       sort: true,
@@ -219,13 +227,13 @@ const PayrollBatches = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "approved",
-      text: "Approved",
+      dataField: "status",
+      text: "Status",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <>
-          {value === "Yes" ? (
+          {value === "Approved" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i
                 className="fa fa-dot-circle-o text-success"
@@ -236,7 +244,7 @@ const PayrollBatches = () => {
           ) : (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i
-                className="fa fa-dot-circle-o text-secondary"
+                className="fa fa-dot-circle-o text-primary"
                 style={{ marginRight: "10px" }}
               ></i>{" "}
               {value}
@@ -244,12 +252,6 @@ const PayrollBatches = () => {
           )}
         </>
       ),
-    },
-    {
-      dataField: "status",
-      text: "Status",
-      sort: true,
-      headerStyle: { width: "100%" },
     },
     {
       dataField: "title",
@@ -296,7 +298,7 @@ const PayrollBatches = () => {
               })
             }
 
-            {currentUserOgid === row?.ogid ? (
+            {currentUserOgid === row?.ogid && row?.status !== "Approved" ? (
               <div className="leave-user-action-btns">
                 <button
                   className="btn btn-sm btn-primary"

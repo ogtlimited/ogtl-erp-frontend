@@ -151,7 +151,7 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            {regenerate && user?.role?.title !== "CEO" ? (
+            {regenerate && currentUserEmail === currentApproverEmail ? (
               <a
                 href="#"
                 className="btn btn-sm btn-primary"
