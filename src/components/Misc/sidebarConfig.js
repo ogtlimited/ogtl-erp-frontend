@@ -46,7 +46,7 @@ const ICONS = {
   organizationalStructure: getIcon("la-sitemap"),
   leader: getIcon("la-user-tie"),
   userAttendance: getIcon("la-user-clock"),
-  helpdesk: getIcon("la-question"),
+  helpDesk: getIcon("la-question"),
 };
 
 const buildExternalURL = () => {
@@ -135,7 +135,7 @@ const sidebarConfig = [
               canView: "all",
               title: "Help Desk",
               path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.helpdesk,
+              icon: ICONS.helpDesk,
               children: [
                 {
                   canView: "all",

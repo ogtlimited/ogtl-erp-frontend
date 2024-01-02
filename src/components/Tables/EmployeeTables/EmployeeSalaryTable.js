@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 import React, { useState, useEffect } from "react";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
@@ -8,10 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
-import { PayrollApprovalModal } from "../../Modal/PayrollApprovalModal";
+import Email from "./../../../pages/In-Apps/Email";
 
 function EmployeeSalaryTable({
-  batchData,
   data,
   setData,
   columns,
@@ -29,14 +29,16 @@ function EmployeeSalaryTable({
   setTotalPages,
 
   fetchEmployeeSalarySlip,
-  setGenerating,
+  currentApproverEmail,
   context,
 }) {
   const navigate = useNavigate();
   const { user, getAvatarColor } = useAppContext();
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const [selectedSalarySlipId, setSelectedSalarySlipId] = useState(null);
+  const [selectedSalarySlip, setSelectedSalarySlip] = useState(null);
+
+  const currentUserEmail = user?.employee_info?.email;
 
   const [info, setInfo] = useState({
     sizePerPage: 10,
@@ -47,7 +49,7 @@ function EmployeeSalaryTable({
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns?.length >= 7) {
+    if (columns.length >= 7) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -103,54 +105,20 @@ function EmployeeSalaryTable({
   };
 
   const handleEdit = (employee) => {
-    setSelectedSalarySlipId(employee?.id);
+    const formattedData = {
+      id: employee?.id,
+      employeeName: employee?.employee,
+      initialTax: +employee?.tax || null,
+      initialPension: +employee?.pension || null,
+      initialNetPay: +employee?.netPay || null,
+      initialProrate: employee?.prorate === "Yes" ? true : false,
+      // initialSalary: +employee?.monthlySalary || null,
+    };
+
+    setSelectedSalarySlip(formattedData);
   };
 
-  /**
-   ** !This is the original code without the avatar:
-   * 
-   * const renderTableRows = () => {
-      return data.map((employee, index) => (
-        <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
-          {columns.map((column) => (
-            <td key={column.dataField}>
-              {typeof employee[column.dataField] === "number"
-                ? helper.handleMoneyFormat(employee[column.dataField])
-                : employee[column.dataField]}
-            </td>
-          ))}
-
-          {viewAction && (
-            <td>
-              {regenerate && user?.role?.title !== "CEO" ? (
-                <a
-                  href="#"
-                  className="btn btn-sm btn-primary"
-                  data-toggle="modal"
-                  data-target="#RegeneratePayrollModal"
-                  onClick={() => handleRegeneratePayroll(employee)}
-                  style={{ marginRight: "20px" }}
-                >
-                  Regenerate
-                </a>
-              ) : null}
-
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={() => handleAction(employee)}
-              >
-                {actionTitle}
-              </button>
-            </td>
-          )}
-        </tr>
-      ));
-    };
-  *
-  * 
-  */
-
-  // * !This is the code with the avatar:
+  // Render Table Rows:
   const renderTableRows = () => {
     return data.map((employee, index) => (
       <tr className="emp_salary_custom-table-tbody_sub_tr" key={index}>
@@ -175,12 +143,6 @@ function EmployeeSalaryTable({
               </div>
             ) : typeof employee[column.dataField] === "number" ? (
               helper.handleMoneyFormat(employee[column.dataField])
-            ) : column.dataField === "prorate" ? (
-              employee[column.dataField] ? (
-                "Yes"
-              ) : (
-                "No"
-              )
             ) : (
               employee[column.dataField]
             )}
@@ -196,30 +158,30 @@ function EmployeeSalaryTable({
                 data-toggle="modal"
                 data-target="#RegeneratePayrollModal"
                 onClick={() => handleRegeneratePayroll(employee)}
-                style={{ marginRight: "20px" }}
+                style={{ marginRight: "10px" }}
               >
                 Regenerate
               </a>
             ) : null}
 
             <button
-              className="btn btn-sm btn-secondary"
+              className="btn btn-sm btn-info"
               onClick={() => handleAction(employee)}
             >
               {actionTitle}
             </button>
 
-            {/* {batchData?.[index]?.approved === false ? null : ( */}
+            {currentUserEmail === currentApproverEmail ? (
               <button
-                className="btn btn-sm btn-primary"
-                style={{ marginLeft: "20px" }}
+                className="btn btn-sm btn-secondary"
+                style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#EditSalarySlipModal"
                 onClick={() => handleEdit(employee)}
               >
                 Edit
               </button>
-            {/* )} */}
+            ) : null}
           </td>
         )}
       </tr>
@@ -245,9 +207,7 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns?.length <= 12 ? "3" : "4"}>
-                    Deductions
-                  </th>
+                  <th colSpan={columns.length <= 12 ? "3" : "4"}>Deductions</th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 
@@ -315,24 +275,12 @@ function EmployeeSalaryTable({
 
       <RegeneratePayrollModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
-        setGenerating={setGenerating}
         userId={userId}
       />
 
       <EditSalarySlipModal
-        salarySlipId={selectedSalarySlipId}
-        initialSalary={
-          data?.find((employee) => employee.id === selectedSalarySlipId)
-            ?.monthlySalary || 0
-        }
-        initialNetPay={
-          data?.find((employee) => employee.id === selectedSalarySlipId)
-            ?.netPay || 0
-        }
-        initialProrate={
-          data?.find((employee) => employee.id === selectedSalarySlipId)
-            ?.prorate || false
-        }
+        fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        data={selectedSalarySlip}
       />
     </>
   );

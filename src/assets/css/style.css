@@ -307,20 +307,6 @@
   margin-bottom: 30px;
 }
 
-.current-processor {
-  background-color: rgba(28, 221, 41, 0.2);
-  border-radius: 100%;
-  /* color: #00c5fb; */
-  color: green;
-  float: left;
-  font-size: 30px;
-  height: 60px;
-  line-height: 60px;
-  margin-right: 10px;
-  text-align: center;
-  width: 60px;
-}
-
 .daily-attendance-card {
   background-color: #fff;
   min-width: 20%;
@@ -560,6 +546,7 @@
 .leave-user-action-btns {
   display: flex;
   justify-content: space-evenly;
+  gap: 10px;
 }
 
 .leave-btn {
@@ -577,16 +564,6 @@
 .rejection-textarea {
   width: 100%;
   height: 20vh !important;
-}
-
-.payroll-approval-modal-body {
-  display: "flex";
-  justify-content: space-between;
-  align-items: center;
-}
-
-.custom-modal-width {
-  max-width: 1250px;
 }
 
 .leave-filter-control {
@@ -2957,7 +2934,7 @@ table.dataTable thead > tr > td.sorting {
   border-radius: 100%;
   color: #00c5fb;
   float: left;
-  font-size: 30px;
+  font-size: 25px;
   height: 60px;
   line-height: 60px;
   margin-right: 10px;
@@ -9733,4 +9710,54 @@ ul.comment-list li ul.children {
   align-items: center;
   justify-content: center;
   font-size: 11px;
+}
+
+.payroll-approval-modal-body {
+  display: "flex";
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-modal-width {
+  width: auto !important;
+}
+
+.payroll-approval-card-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  flex-shrink: 1;
+  width: 100%;
+}
+
+.payroll-approval-card {
+  background-color: #fff;
+  width: auto;
+  margin: 0 10px;
+  border: 1px solid #ededed;
+  padding: 15px 20px 15px 10px;
+  border-radius: 15px !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px !important;
+}
+
+.current-processor {
+  background-color: rgba(28, 221, 41, 0.2);
+  border-radius: 100%;
+  color: green;
+  float: left;
+  font-size: 30px;
+  height: 60px;
+  line-height: 60px;
+  margin-right: 10px;
+  text-align: center;
+  width: 60px;
+  font-weight: 500;
+}
+
+.payroll-processor {
+  background-color: #f1f1f1 !important;
+  border: 2px solid rgba(28, 221, 41, 0.2) !important;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
 }
