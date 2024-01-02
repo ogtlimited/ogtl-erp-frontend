@@ -28,7 +28,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const [selectedEndDateError, setSelectedEndDateError] = useState("");
   const [proofUpload, setProofUpload] = useState(null);
   const [fileInputKey, setFileInputKey] = useState(0);
-  const [hideReason, setHideReason] = useState(false);
 
   const employeeGender = user?.employee_info?.personal_details?.gender;
 
@@ -86,7 +85,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
   const leaveTypeSelection = useCallback(() => {
     const selectedLeave = leave?.leaveTypeTitle.toLowerCase();
     setLeaveType(selectedLeave);
-    setHideReason(selectedLeave === "vacation");
 
     if (
       leaveType.includes("emergency") ||
@@ -187,6 +185,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
 
   const files = proofUpload ? [...proofUpload] : [];
 
+  // Handle Leave Application
   const handleApplyLeave = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -198,8 +197,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
       hr_leave_type_id: leave.hr_leave_type_id,
       start_date: leave.start_date,
       end_date: leave.end_date,
-      // reason: leave.reason,
-      ...(leaveType !== "vacation" && { reason: leave.reason }),
+      reason: leaveType.includes("vacation") ? "Vacation" : leave.reason,
     };
 
     try {
@@ -212,10 +210,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
         formData.append("hr_leave_type_id", leave.hr_leave_type_id);
         formData.append("start_date", leave.start_date);
         formData.append("end_date", leave.end_date);
-        // formData.append("reason", leave.reason);
-        if (leaveType !== "vacation") {
-          formData.append("reason", leave.reason);
-        }
+        formData.append("reason", leave.reason);
 
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.post(
@@ -226,8 +221,6 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.post(
           `/api/v1/leaves.json?leave_type=${leaveTypeQuery}`,
-          // 
-          leaveType !== "vacation" ? { ...dataPayload } : {},
           {
             headers: {
               "Content-Type": "application/json",
@@ -304,7 +297,7 @@ export const ApplyLeaveModal = ({ fetchYourLeaves }) => {
                       </div>
                     </div>
 
-                    {!hideReason && (
+                    {leaveType.includes("vacation") ? null : (
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="reason">Reason for Application</label>
