@@ -2,7 +2,7 @@
 
 import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import helper from "../../services/helper";
@@ -11,6 +11,7 @@ import csvDownload from "json-to-csv-export";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
+import { RequestReviewModal } from "../../components/Modal/RequestReviewModal";
 
 const EmployeePayroll = () => {
   const { id } = useParams();
@@ -21,11 +22,14 @@ const EmployeePayroll = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
+  const [refreshApproversData, setRefreshApproversData] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
   const [currentApproverEmail, setCurrentApproverEmail] = useState("");
+
+  const [reviewersData, setReviewersData] = useState([]);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "accountant"];
@@ -234,8 +238,10 @@ const EmployeePayroll = () => {
       })
       .then((res) => {
         const data = res?.data?.data?.payroll_processors;
-        const sortedData = data.find((data) => data?.current_processor === true)
-        const currentApproverEmail = sortedData?.email
+        const sortedData = data.find(
+          (data) => data?.current_processor === true
+        );
+        const currentApproverEmail = sortedData?.email;
 
         setCurrentApproverEmail(currentApproverEmail);
       })
@@ -244,8 +250,29 @@ const EmployeePayroll = () => {
       });
   }, [id]);
 
+  // Fetch Reviewers Data:
+  const fetchReviewersData = () => {
+    axiosInstance
+      .get(`/api/v1/request_payroll_reviews.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.processors;
+        const sortedData = data.sort((a, b) => a.stage - b.stage);
+        setReviewersData(sortedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching approvers data:", error);
+      });
+  };
+
   useEffect(() => {
     fetchApproversData();
+    fetchReviewersData();
   }, [fetchApproversData, id]);
 
   return (
@@ -267,28 +294,37 @@ const EmployeePayroll = () => {
               <button className="btn add-btn" style={{ marginRight: "20px" }}>
                 <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
               </button>
-            ) : (
-              data?.length > 0 && (
-                <>
-                  <button
-                    className="btn add-btn"
-                    style={{ marginRight: "20px" }}
-                    onClick={handleExportCSV}
-                  >
-                    <i className="fa fa-download"></i> Download Report
-                  </button>
+            ) : data?.length > 0 ? (
+              <>
+                <button
+                  className="btn add-btn"
+                  style={{ marginRight: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Download Report
+                </button>
 
+                <button
+                  className="btn add-btn"
+                  style={{ marginRight: "20px" }}
+                  data-toggle="modal"
+                  data-target="#PayrollApprovalModal"
+                >
+                  <i className="fa fa-check"></i> Payroll Approval Report
+                </button>
+
+                {reviewersData?.length ? (
                   <button
                     className="btn add-btn"
                     style={{ marginRight: "20px" }}
                     data-toggle="modal"
-                    data-target="#PayrollApprovalModal"
+                    data-target="#RequestReviewModal"
                   >
-                    <i className="fa fa-check"></i> Payroll Approval Report
+                    <i className="fa fa-rotate-left"></i> Request Review
                   </button>
-                </>
-              )
-            )}
+                ) : null}
+              </>
+            ) : null}
           </div>
         </div>
       </div>
@@ -323,7 +359,12 @@ const EmployeePayroll = () => {
         </div>
       </div>
 
-      <PayrollApprovalModal batchId={id} />
+      <PayrollApprovalModal refreshApproversData={refreshApproversData} />
+
+      <RequestReviewModal
+        setRefreshApproversData={setRefreshApproversData}
+        reviewersData={reviewersData}
+      />
     </>
   );
 };

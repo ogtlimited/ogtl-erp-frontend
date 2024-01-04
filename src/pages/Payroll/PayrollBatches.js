@@ -115,7 +115,7 @@ const PayrollBatches = () => {
           ...e,
           id: e?.batch?.id,
           approved: e?.batch?.approved ? "Yes" : "No",
-          status: e?.batch?.status.replace(/\b\w/g, (char) =>
+          status: e?.batch?.status && e?.batch?.status.replace(/\b\w/g, (char) =>
             char.toUpperCase()
           ),
           title: e?.batch?.title,
@@ -125,17 +125,16 @@ const PayrollBatches = () => {
             " " +
             e?.current_processor?.last_name,
           ogid: e?.current_processor?.ogid,
+          designation: e?.current_processor?.designation,
           referenceId: e?.batch?.reference_id,
           bank3DBatchId: e?.batch?.bank3D_batch_id,
         }));
-
-        console.log("formattedData", formattedData)
 
         setData(formattedData);
         setLoading(false);
       })
       .catch((error) => {
-        const component = "Employee Salary Slip Error | ";
+        const component = "Payroll Batch Error | ";
         ErrorHandler(error, component);
         setLoading(false);
       });
@@ -290,13 +289,6 @@ const PayrollBatches = () => {
             >
               Salary Slips
             </button>
-
-            {
-              console.log({
-                currentUserOgid,
-                row,
-              })
-            }
 
             {currentUserOgid === row?.ogid && row?.status !== "Approved" ? (
               <div className="leave-user-action-btns">

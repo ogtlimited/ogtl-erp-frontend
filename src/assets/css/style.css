@@ -9716,6 +9716,7 @@ ul.comment-list li ul.children {
   display: "flex";
   justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .custom-modal-width {
@@ -9742,6 +9743,29 @@ ul.comment-list li ul.children {
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px !important;
 }
 
+.payroll-approvers {
+  cursor: pointer;
+  transition: 0.3s;
+  min-width: 300px !important;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+}
+.payroll-approvers:hover {
+  transition: 0.3s;
+  transform: scale(1.05);
+  background-color: #f1f1f1 !important;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px !important;
+  border: 2px solid rgba(0, 197, 251, 0.5);
+}
+.active_reviewer {
+  transition: 0.3s;
+  transform: scale(1.05);
+  background-color: #f1f1f1 !important;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px !important;
+  border: 2px solid rgba(28, 221, 41, 0.5) !important;
+}
+
 .current-processor {
   background-color: rgba(28, 221, 41, 0.2);
   border-radius: 100%;
@@ -9758,6 +9782,6 @@ ul.comment-list li ul.children {
 
 .payroll-processor {
   background-color: #f1f1f1 !important;
-  border: 2px solid rgba(28, 221, 41, 0.2) !important;
+  border: 2px solid rgba(28, 221, 41, 0.5) !important;
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
 }

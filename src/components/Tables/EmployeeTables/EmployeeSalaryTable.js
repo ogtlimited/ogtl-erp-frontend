@@ -110,7 +110,7 @@ function EmployeeSalaryTable({
       employeeName: employee?.employee,
       initialTax: +employee?.tax || null,
       initialPension: +employee?.pension || null,
-      initialNetPay: +employee?.netPay || null,
+      initialBasic: +employee?.basic || null,
       initialProrate: employee?.prorate === "Yes" ? true : false,
       // initialSalary: +employee?.monthlySalary || null,
     };

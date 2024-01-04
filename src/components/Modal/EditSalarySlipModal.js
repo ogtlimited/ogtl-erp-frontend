@@ -14,14 +14,14 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     setFormData({
       monthly_income_tax: data?.initialTax,
       monthly_pension: data?.initialPension,
-      netPay: data?.initialNetPay,
+      basic: data?.initialBasic,
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
   }, [
     data?.initialTax,
     data?.initialPension,
-    data?.initialNetPay,
+    data?.initialBasic,
     data?.initialProrate,
     // data?.initialSalary,
   ]);
@@ -30,7 +30,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     setFormData({
       monthly_income_tax: data?.initialTax,
       monthly_pension: data?.initialPension,
-      netPay: data?.initialNetPay,
+      basic: data?.initialBasic,
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
@@ -51,7 +51,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     const formattedData = {
       monthly_income_tax: +formData?.monthly_income_tax,
       monthly_pension: +formData?.monthly_pension,
-      netPay: +formData?.netPay,
+      basic: +formData?.basic,
       prorate: formData?.prorate,
       // salary: +formData?.salary,
     };
@@ -148,12 +148,12 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="netPay">Net Pay</label>
+                      <label htmlFor="basic">Basic</label>
                       <input
-                        name="netPay"
+                        name="basic"
                         type="number"
                         className="form-control"
-                        value={formData.netPay}
+                        value={formData.basic}
                         onChange={handleChange}
                       />
                     </div>
