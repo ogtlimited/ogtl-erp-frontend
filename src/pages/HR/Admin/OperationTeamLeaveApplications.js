@@ -8,10 +8,10 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import ViewModal from "../../../components/Modal/ViewModal";
 import LeaveApplicationContent from "../../../components/ModalContents/LeaveApplicationContent";
-import RejectWorkforceLeaveModal from "../../../components/Modal/RejectWorkforceLeaveModal";
+import RejectOperationTeamLeaveModal from "../../../components/Modal/RejectOperationTeamLeaveModal";
 import moment from "moment";
 
-const WorkforceLeaveApplications = () => {
+const OperationTeamLeaveApplications = () => {
   const [allLeaves, setallLeaves] = useState([]);
   const [leaveHistory, setLeaveHistory] = useState([]);
   const { showAlert, user, ErrorHandler, getAvatarColor } = useAppContext();
@@ -20,7 +20,7 @@ const WorkforceLeaveApplications = () => {
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
-  const [dataManagerReject, setDataManagerReject] = useState([]);
+  const [operationTeamReject, setOperationTeamReject] = useState([]);
   const [historyStatus, setHistoryStatus] = useState("approved");
 
   const [page, setPage] = useState(1);
@@ -34,12 +34,14 @@ const WorkforceLeaveApplications = () => {
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
-  const isWorkforceManager = user?.employee_info?.roles.includes("data_manager")
+  const isOperationTeamMember = user?.employee_info?.roles.includes(
+    "operation_team"
+  )
     ? true
     : false;
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canApproveAndReject = ["data_manager"];
+  const canApproveAndReject = ["operation_team"];
 
   const CurrentUserCanApproveAndRejectLeave = CurrentUserRoles.some((role) =>
     canApproveAndReject.includes(role)
@@ -57,12 +59,12 @@ const WorkforceLeaveApplications = () => {
     return businessDays;
   }
 
-  // All Leaves at Workforce stage - Pending
-  const fetchWorkforceLeaves = useCallback(async () => {
+  // All Leaves at Operation Team stage - Pending
+  const fetchOperationTeamLeaves = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/workforce_leaves.json`,
+        `/api/v1/operation_team_stage.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -77,6 +79,8 @@ const WorkforceLeaveApplications = () => {
       );
       const resData = response?.data?.data?.leaves;
       const totalPages = response?.data?.data?.total_pages;
+
+      console.log("Operation team leaves", resData);
 
       setSizePerPage(sizePerPage);
       setTotalPages(totalPages);
@@ -108,8 +112,8 @@ const WorkforceLeaveApplications = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
-  // All Leaves at Workforce stage - History
-  const fetchWorkforceLeaveHistory = useCallback(async () => {
+  // All Leaves at Operation Team stage - History
+  const fetchOperationTeamLeaveHistory = useCallback(async () => {
     try {
       setLoadingHistory(true);
       const response = await axiosInstance.get(
@@ -130,6 +134,8 @@ const WorkforceLeaveApplications = () => {
 
       const resData = response?.data?.data?.leaves;
       const totalHistoryPages = response?.data?.data?.total_pages;
+
+      console.log("fetchOperationTeamLeaveHistory", resData);
 
       const thisPageLimit = historySizePerPage;
       const thisTotalPageSize = totalHistoryPages;
@@ -175,11 +181,15 @@ const WorkforceLeaveApplications = () => {
   }, [historyPage, historySizePerPage, historyStatus, today_date]);
 
   useEffect(() => {
-    if (isWorkforceManager) {
-      fetchWorkforceLeaves();
-      fetchWorkforceLeaveHistory();
+    if (isOperationTeamMember) {
+      fetchOperationTeamLeaves();
+      fetchOperationTeamLeaveHistory();
     }
-  }, [fetchWorkforceLeaves, fetchWorkforceLeaveHistory, isWorkforceManager]);
+  }, [
+    fetchOperationTeamLeaves,
+    fetchOperationTeamLeaveHistory,
+    isOperationTeamMember,
+  ]);
 
   // Approve Leave
   const handleApproveLeave = async (row) => {
@@ -197,7 +207,7 @@ const WorkforceLeaveApplications = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/workforce_approve_leave/${id}.json`
+        `/api/v1/operation_team_approve_leave/${id}.json`
       );
 
       showAlert(
@@ -206,8 +216,8 @@ const WorkforceLeaveApplications = () => {
         "alert alert-success"
       );
 
-      fetchWorkforceLeaves();
-      fetchWorkforceLeaveHistory();
+      fetchOperationTeamLeaves();
+      fetchOperationTeamLeaveHistory();
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
@@ -215,7 +225,7 @@ const WorkforceLeaveApplications = () => {
 
   // Reject Leave
   const handleRejectLeave = (row) => {
-    setDataManagerReject(row);
+    setOperationTeamReject(row);
     setRejectModal(true);
   };
 
@@ -652,7 +662,7 @@ const WorkforceLeaveApplications = () => {
           <div className="col">
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Data Management</li>
+              <li className="breadcrumb-item">Operations</li>
               <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
@@ -735,11 +745,11 @@ const WorkforceLeaveApplications = () => {
       </div>
 
       {rejectModal && (
-        <RejectWorkforceLeaveModal
-          dataManagerReject={dataManagerReject}
+        <RejectOperationTeamLeaveModal
+          operationTeamReject={setOperationTeamReject}
           closeModal={setRejectModal}
-          fetchAllLeaves={fetchWorkforceLeaves}
-          fetchWorkforceLeaveHistory={fetchWorkforceLeaveHistory}
+          fetchAllLeaves={fetchOperationTeamLeaves}
+          fetchLeaveHistory={fetchOperationTeamLeaveHistory}
         />
       )}
 
@@ -755,4 +765,4 @@ const WorkforceLeaveApplications = () => {
   );
 };
 
-export default WorkforceLeaveApplications;
+export default OperationTeamLeaveApplications;
