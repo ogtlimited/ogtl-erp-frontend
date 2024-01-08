@@ -4,7 +4,10 @@ import React, { useEffect, useState, useCallback } from "react";
 import axiosInstance from "../../services/api";
 import { useParams } from "react-router-dom";
 
-export const PayrollApprovalModal = ({ refreshApproversData }) => {
+export const PayrollApprovalModal = ({
+  fetchEmployeeSalarySlip,
+  refreshApproversData,
+}) => {
   const { id } = useParams();
   const [approversData, setApproversData] = useState([]);
 
@@ -44,7 +47,7 @@ export const PayrollApprovalModal = ({ refreshApproversData }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered modal-xl">
+        <div className="modal-dialog modal-dialog-centered custom-modal-dialog-centered modal-xl">
           <div className="modal-content custom-modal-width">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">

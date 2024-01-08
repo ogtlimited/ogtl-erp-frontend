@@ -30,6 +30,7 @@ function EmployeeSalaryTable({
 
   fetchEmployeeSalarySlip,
   currentApproverEmail,
+  currentBatchApprovalStatus,
   context,
 }) {
   const navigate = useNavigate();
@@ -151,7 +152,9 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            {regenerate && currentUserEmail === currentApproverEmail ? (
+            {regenerate &&
+            currentUserEmail === currentApproverEmail &&
+            currentBatchApprovalStatus !== "Approved" ? (
               <a
                 href="#"
                 className="btn btn-sm btn-primary"
@@ -171,7 +174,8 @@ function EmployeeSalaryTable({
               {actionTitle}
             </button>
 
-            {currentUserEmail === currentApproverEmail ? (
+            {currentUserEmail === currentApproverEmail &&
+            currentBatchApprovalStatus !== "Approved" ? (
               <button
                 className="btn btn-sm btn-secondary"
                 style={{ marginLeft: "10px" }}

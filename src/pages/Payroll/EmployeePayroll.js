@@ -29,8 +29,12 @@ const EmployeePayroll = () => {
   const [totalPages, setTotalPages] = useState("");
   const [currentApproverEmail, setCurrentApproverEmail] = useState("");
 
+  const [currentBatchApprovalStatus, setCurrentBatchApprovalStatus] =
+    useState("");
+
   const [reviewersData, setReviewersData] = useState([]);
 
+  const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "accountant"];
 
@@ -38,6 +42,46 @@ const EmployeePayroll = () => {
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
   );
+
+  // Fetch Batch Status:
+  const fetchBatchStatus = useCallback(() => {
+    axiosInstance
+      .get("/api/v1/batches.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 400,
+        },
+      })
+      .then((res) => {
+        const AllBatches = res?.data?.data?.batches;
+
+        const formattedData = AllBatches?.map((e) => ({
+          ...e,
+          status:
+            e?.batch?.status &&
+            e?.batch?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
+        }));
+
+        const currentBatchStatus = formattedData?.filter(
+          (data) => data?.batch?.id === +id
+        );
+
+        const status = currentBatchStatus[0]?.status;
+        setCurrentBatchApprovalStatus(status);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    fetchBatchStatus();
+  }, [fetchBatchStatus]);
 
   // Fetch Employee Salary Slip:
   const fetchEmployeeSalarySlip = useCallback(() => {
@@ -271,9 +315,13 @@ const EmployeePayroll = () => {
   };
 
   useEffect(() => {
+    if (refreshApproversData) {
+      fetchApproversData();
+    }
+
     fetchApproversData();
     fetchReviewersData();
-  }, [fetchApproversData, id]);
+  }, [fetchApproversData, id, refreshApproversData]);
 
   return (
     <>
@@ -313,7 +361,9 @@ const EmployeePayroll = () => {
                   <i className="fa fa-check"></i> Payroll Approval Report
                 </button>
 
-                {reviewersData?.length ? (
+                {reviewersData?.length &&
+                currentApproverEmail === currentUserEmail &&
+                currentBatchApprovalStatus !== "Approved" ? (
                   <button
                     className="btn add-btn"
                     style={{ marginRight: "20px" }}
@@ -355,6 +405,7 @@ const EmployeePayroll = () => {
             setTotalPages={setTotalPages}
             fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
             currentApproverEmail={currentApproverEmail}
+            currentBatchApprovalStatus={currentBatchApprovalStatus}
           />
         </div>
       </div>

@@ -716,3 +716,9 @@ table.custom-table thead th {
   height: 20px;
   cursor: pointer !important;
 }
+
+.custom-modal-dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -67,7 +67,7 @@ export const RequestReviewModal = ({
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-xl custom-modal-dialog-centered">
           <div className="modal-content custom-modal-width">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
