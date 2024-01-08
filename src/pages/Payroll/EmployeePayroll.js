@@ -36,6 +36,7 @@ const EmployeePayroll = () => {
 
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
+  const currentUserDesignation = user?.employee_info?.designation
   const isAuthorized = ["hr_manager", "accountant"];
 
   // eslint-disable-next-line no-unused-vars
@@ -348,13 +349,15 @@ const EmployeePayroll = () => {
               </button>
             ) : data?.length > 0 ? (
               <>
-                <button
-                  className="btn add-btn"
-                  style={{ marginRight: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
+                {currentUserDesignation === "CEO" ? (
+                  <button
+                    className="btn add-btn"
+                    style={{ marginRight: "20px" }}
+                    onClick={handleExportCSV}
+                  >
+                    <i className="fa fa-download"></i> Download Report
+                  </button>
+                ) : null}
 
                 <button
                   className="btn add-btn"
