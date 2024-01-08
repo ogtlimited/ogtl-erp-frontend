@@ -654,6 +654,19 @@ table.custom-table thead th {
   border-right: 2px solid #dee2e6;
 }
 
+/*------------------------ 
+    Payslip
+--------------------------*/
+
+.payslip-table > table > thead > tr:nth-child(2) > th:first-child,
+.payslip-table > table > tbody > tr > td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #d8d8d8;
+  border-right: 2px solid #dee2e6;
+}
+
 /*---------------------- 
     Resignation
 ----------------------*/

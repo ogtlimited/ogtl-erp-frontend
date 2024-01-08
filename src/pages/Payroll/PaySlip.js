@@ -341,7 +341,7 @@ const PaySlip = () => {
                       <div>
                         {paySlip.net_pay ? (
                           <h5 className="m-b-10" style={{ color: "#808080" }}>
-                            Disciplinary Deductions
+                            Other Deductions
                           </h5>
                         ) : null}
                         <table className="table table-bordered">

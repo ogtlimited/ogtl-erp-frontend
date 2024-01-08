@@ -250,6 +250,10 @@ const EmployeePayroll = () => {
     },
     {
       dataField: "disciplinary_deductions",
+      text: "Attendance Deduction",
+    },
+    {
+      dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
     },
     {
@@ -375,6 +379,36 @@ const EmployeePayroll = () => {
                 ) : null}
               </>
             ) : null}
+          </div>
+        </div>
+
+        {/* Card | Totals */}
+        <div className="hr-employee-card-group" style={{ marginTop: "50px" }}>
+          <div className="hr-dashboard-card">
+            <span>Total Tax</span>
+            <div className="card-body">
+              <div className="card-info">
+                <h3>{helper.handleMoneyFormat(45000)}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="hr-dashboard-card">
+            <span>Total Pension</span>
+            <div className="card-body">
+              <div className="card-info">
+                <h3>{helper.handleMoneyFormat(435000)}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="hr-dashboard-card">
+            <span>Total Net Salary</span>
+            <div className="card-body">
+              <div className="card-info">
+                <h3>{helper.handleMoneyFormat(895000)}</h3>
+              </div>
+            </div>
           </div>
         </div>
       </div>

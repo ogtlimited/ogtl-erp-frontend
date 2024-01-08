@@ -201,8 +201,8 @@ function EmployeeSalaryTable({
               !mobileView
                 ? "table"
                 : context
-                ? "table stable-responsive"
-                : "table table-responsive"
+                ? "table table-responsive payslip-table"
+                : "table table-responsive payslip-table"
             }`}
           >
             <table className="emp_salary_custom_table custom-table">
@@ -211,7 +211,7 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns.length <= 12 ? "3" : "4"}>Deductions</th>
+                  <th colSpan={columns.length <= 12 ? "3" : "5"}>Deductions</th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 
