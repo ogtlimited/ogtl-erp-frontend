@@ -13,6 +13,29 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import { RequestReviewModal } from "../../components/Modal/RequestReviewModal";
 
+const CardSection = ({ title, value, loading, helper }) => {
+  return (
+    <div className="hr-dashboard-card">
+      <span>{title}</span>
+      <div className="card-body">
+        <div className="card-info">
+          {loading ? (
+            <h3>
+              <lord-icon
+                src="https://cdn.lordicon.com/xjovhxra.json"
+                trigger="loop"
+                colors="primary:#121331,secondary:#08a88a"
+              ></lord-icon>
+            </h3>
+          ) : (
+            <h3>{value ? helper.handleMoneyFormat(value) : 0}</h3>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const EmployeePayroll = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,8 +43,10 @@ const EmployeePayroll = () => {
   const year = moment().format("YYYY");
   const currMonthName = moment().format("MMMM");
   const [data, setData] = useState([]);
+  const [totals, setTotals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
+  const [loadingTotals, setLoadingTotals] = useState(false);
   const [refreshApproversData, setRefreshApproversData] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -36,7 +61,7 @@ const EmployeePayroll = () => {
 
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
-  const currentUserDesignation = user?.employee_info?.designation
+  const currentUserDesignation = user?.employee_info?.designation;
   const isAuthorized = ["hr_manager", "accountant"];
 
   // eslint-disable-next-line no-unused-vars
@@ -83,6 +108,35 @@ const EmployeePayroll = () => {
   useEffect(() => {
     fetchBatchStatus();
   }, [fetchBatchStatus]);
+
+  // Fetch Payroll Totals:
+  const fetchPayrollTotals = useCallback(async () => {
+    setLoadingTotals(true);
+    try {
+      const res = await axiosInstance.get(
+        `/api/v1/total_monthly_salary.json?month=1&year=2024`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = res?.data?.data?.total_monthly_salary;
+      setTotals(resData);
+      setLoadingTotals(false);
+    } catch (error) {
+      const component = "Payslip Totals | ";
+      ErrorHandler(error, component);
+      setLoadingTotals(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    fetchPayrollTotals();
+  }, [fetchPayrollTotals]);
 
   // Fetch Employee Salary Slip:
   const fetchEmployeeSalarySlip = useCallback(() => {
@@ -387,32 +441,24 @@ const EmployeePayroll = () => {
 
         {/* Card | Totals */}
         <div className="hr-employee-card-group" style={{ marginTop: "50px" }}>
-          <div className="hr-dashboard-card">
-            <span>Total Tax</span>
-            <div className="card-body">
-              <div className="card-info">
-                <h3>{helper.handleMoneyFormat(45000)}</h3>
-              </div>
-            </div>
-          </div>
-
-          <div className="hr-dashboard-card">
-            <span>Total Pension</span>
-            <div className="card-body">
-              <div className="card-info">
-                <h3>{helper.handleMoneyFormat(435000)}</h3>
-              </div>
-            </div>
-          </div>
-
-          <div className="hr-dashboard-card">
-            <span>Total Net Salary</span>
-            <div className="card-body">
-              <div className="card-info">
-                <h3>{helper.handleMoneyFormat(895000)}</h3>
-              </div>
-            </div>
-          </div>
+          <CardSection
+            title="Total Tax"
+            value={totals?.tax}
+            loading={loadingTotals}
+            helper={helper}
+          />
+          <CardSection
+            title="Total Pension"
+            value={totals?.pension}
+            loading={loadingTotals}
+            helper={helper}
+          />
+          <CardSection
+            title="Total Net Salary"
+            value={totals?.net_pay}
+            loading={loadingTotals}
+            helper={helper}
+          />
         </div>
       </div>
 
