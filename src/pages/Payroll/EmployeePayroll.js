@@ -494,23 +494,28 @@ const EmployeePayroll = () => {
               Back to Batch Table
             </button>
 
-            {loadingSendMails ? (
-              <button
-                className="btn btn-primary"
-                style={{ margin: "0 1rem 1rem 0" }}
-                onClick={handleNotifyEmployees}
-              >
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Sending mails...
-              </button>
-            ) : (
-              <button
-                className="btn btn-primary"
-                style={{ margin: "0 1rem 1rem 0" }}
-                onClick={handleNotifyEmployees}
-              >
-                Notify Employees
-              </button>
-            )}
+            {currentBatchApprovalStatus === "Approved" ? (
+              <>
+                {loadingSendMails ? (
+                  <button
+                    className="btn btn-primary"
+                    style={{ margin: "0 1rem 1rem 0" }}
+                    onClick={handleNotifyEmployees}
+                  >
+                    <FontAwesomeIcon icon={faSpinner} spin pulse /> Sending
+                    mails...
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    style={{ margin: "0 1rem 1rem 0" }}
+                    onClick={handleNotifyEmployees}
+                  >
+                    Notify Employees
+                  </button>
+                )}
+              </>
+            ) : null}
           </div>
 
           <EmployeeSalaryTable
