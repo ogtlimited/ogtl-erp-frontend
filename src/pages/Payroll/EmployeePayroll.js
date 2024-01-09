@@ -41,12 +41,14 @@ const EmployeePayroll = () => {
   const navigate = useNavigate();
   const { user, ErrorHandler, showAlert } = useAppContext();
   const year = moment().format("YYYY");
+  const currMonth = moment().format("M");
   const currMonthName = moment().format("MMMM");
   const [data, setData] = useState([]);
   const [totals, setTotals] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingCSV, setLoadingCSV] = useState(false);
   const [loadingTotals, setLoadingTotals] = useState(false);
+  const [loadingSendMails, setLoadingSendMails] = useState(false);
   const [refreshApproversData, setRefreshApproversData] = useState(false);
 
   const [page, setPage] = useState(1);
@@ -114,7 +116,7 @@ const EmployeePayroll = () => {
     setLoadingTotals(true);
     try {
       const res = await axiosInstance.get(
-        `/api/v1/total_monthly_salary.json?month=1&year=2024`,
+        `/api/v1/total_monthly_salary.json?month=${currMonth}&year=${year}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -132,7 +134,8 @@ const EmployeePayroll = () => {
       ErrorHandler(error, component);
       setLoadingTotals(false);
     }
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchPayrollTotals();
@@ -258,6 +261,24 @@ const EmployeePayroll = () => {
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoadingCSV(false);
+    }
+  };
+
+  // Handle Notify Employees:
+  const handleNotifyEmployees = async () => {
+    setLoadingSendMails(true);
+
+    try {
+      const response = await axiosInstance.post(
+        `/api/v1/send_payslip_emails.json?month=${currMonth}&year=${year}`
+      );
+
+      const responseData = response?.data?.data?.message;
+      showAlert(true, responseData, "alert alert-success");
+      setLoadingSendMails(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoadingSendMails(false);
     }
   };
 
@@ -464,13 +485,33 @@ const EmployeePayroll = () => {
 
       <div className="row">
         <div className="col-md-12">
-          <button
-            className="btn btn-primary"
-            style={{ margin: "0 0 1rem 1rem" }}
-            onClick={handleBackToBatchTable}
-          >
-            Back to Batch Table
-          </button>
+          <div className="payroll_action_btn_div">
+            <button
+              className="btn btn-primary"
+              style={{ margin: "0 0 1rem 1rem" }}
+              onClick={handleBackToBatchTable}
+            >
+              Back to Batch Table
+            </button>
+
+            {loadingSendMails ? (
+              <button
+                className="btn btn-primary"
+                style={{ margin: "0 1rem 1rem 0" }}
+                onClick={handleNotifyEmployees}
+              >
+                <FontAwesomeIcon icon={faSpinner} spin pulse /> Sending mails...
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary"
+                style={{ margin: "0 1rem 1rem 0" }}
+                onClick={handleNotifyEmployees}
+              >
+                Notify Employees
+              </button>
+            )}
+          </div>
 
           <EmployeeSalaryTable
             data={data}

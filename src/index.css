@@ -735,3 +735,8 @@ table.custom-table thead th {
   justify-content: center;
   align-items: center;
 }
+
+.payroll_action_btn_div {
+  display: flex;
+  justify-content: space-between;
+}
