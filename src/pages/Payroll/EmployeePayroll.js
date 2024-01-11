@@ -240,6 +240,9 @@ const EmployeePayroll = () => {
 
         TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
         PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+        "ATTENDANCE DEDUCTION": helper.handleMoneyFormat(
+          data?.slip?.attendance_deduction
+        ),
         "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
           data?.slip?.disciplinary_deductions
         ),
