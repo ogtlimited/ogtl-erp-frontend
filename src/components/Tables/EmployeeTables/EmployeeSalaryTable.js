@@ -30,6 +30,7 @@ function EmployeeSalaryTable({
 
   fetchEmployeeSalarySlip,
   currentApproverEmail,
+  currentBatchApprovalStatus,
   context,
 }) {
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ function EmployeeSalaryTable({
       employeeName: employee?.employee,
       initialTax: +employee?.tax || null,
       initialPension: +employee?.pension || null,
-      initialNetPay: +employee?.netPay || null,
+      initialBasic: +employee?.basic || null,
       initialProrate: employee?.prorate === "Yes" ? true : false,
       // initialSalary: +employee?.monthlySalary || null,
     };
@@ -151,7 +152,9 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            {regenerate && user?.role?.title !== "CEO" ? (
+            {regenerate &&
+            currentUserEmail === currentApproverEmail &&
+            currentBatchApprovalStatus !== "Approved" ? (
               <a
                 href="#"
                 className="btn btn-sm btn-primary"
@@ -171,7 +174,8 @@ function EmployeeSalaryTable({
               {actionTitle}
             </button>
 
-            {currentUserEmail === currentApproverEmail ? (
+            {currentUserEmail === currentApproverEmail &&
+            currentBatchApprovalStatus !== "Approved" ? (
               <button
                 className="btn btn-sm btn-secondary"
                 style={{ marginLeft: "10px" }}
@@ -197,8 +201,8 @@ function EmployeeSalaryTable({
               !mobileView
                 ? "table"
                 : context
-                ? "table stable-responsive"
-                : "table table-responsive"
+                ? "table table-responsive payslip-table"
+                : "table table-responsive payslip-table"
             }`}
           >
             <table className="emp_salary_custom_table custom-table">
@@ -207,7 +211,7 @@ function EmployeeSalaryTable({
                   <th className="emp_salary_tr_th exempt" colSpan="2"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
-                  <th colSpan={columns.length <= 12 ? "3" : "4"}>Deductions</th>
+                  <th colSpan={columns.length <= 12 ? "3" : "5"}>Deductions</th>
                   <th className="emp_salary_tr_th exempt"></th>
                 </tr>
 

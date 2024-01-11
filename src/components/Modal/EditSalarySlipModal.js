@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
+import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
@@ -14,14 +15,14 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     setFormData({
       monthly_income_tax: data?.initialTax,
       monthly_pension: data?.initialPension,
-      netPay: data?.initialNetPay,
+      basic: data?.initialBasic,
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
   }, [
     data?.initialTax,
     data?.initialPension,
-    data?.initialNetPay,
+    data?.initialBasic,
     data?.initialProrate,
     // data?.initialSalary,
   ]);
@@ -30,7 +31,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     setFormData({
       monthly_income_tax: data?.initialTax,
       monthly_pension: data?.initialPension,
-      netPay: data?.initialNetPay,
+      basic: data?.initialBasic,
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
@@ -51,7 +52,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
     const formattedData = {
       monthly_income_tax: +formData?.monthly_income_tax,
       monthly_pension: +formData?.monthly_pension,
-      netPay: +formData?.netPay,
+      basic: +formData?.basic,
       prorate: formData?.prorate,
       // salary: +formData?.salary,
     };
@@ -123,10 +124,13 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                       <label htmlFor="monthly_income_tax">Tax</label>
                       <input
                         name="monthly_income_tax"
-                        type="number"
+                        type="text"
                         className="form-control"
-                        value={formData.monthly_income_tax}
-                        onChange={handleChange}
+                        value={helper.handleMoneyFormat(
+                          formData.monthly_income_tax
+                        )}
+                        readOnly
+                        // onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -136,10 +140,13 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                       <label htmlFor="monthly_pension">Pension</label>
                       <input
                         name="monthly_pension"
-                        type="number"
+                        type="text"
                         className="form-control"
-                        value={formData.monthly_pension}
-                        onChange={handleChange}
+                        value={helper.handleMoneyFormat(
+                          formData.monthly_pension
+                        )}
+                        readOnly
+                        // onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -148,12 +155,12 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="netPay">Net Pay</label>
+                      <label htmlFor="basic">Basic</label>
                       <input
-                        name="netPay"
+                        name="basic"
                         type="number"
                         className="form-control"
-                        value={formData.netPay}
+                        value={formData.basic}
                         onChange={handleChange}
                       />
                     </div>

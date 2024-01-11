@@ -1,15 +1,19 @@
 /* eslint-disable no-unused-vars */
-/** @format */
 
 import React, { useEffect, useState, useCallback } from "react";
 import axiosInstance from "../../services/api";
+import { useParams } from "react-router-dom";
 
-export const PayrollApprovalModal = ({ batchId }) => {
+export const PayrollApprovalModal = ({
+  fetchEmployeeSalarySlip,
+  refreshApproversData,
+}) => {
+  const { id } = useParams();
   const [approversData, setApproversData] = useState([]);
 
   const fetchApproversData = useCallback(() => {
     axiosInstance
-      .get(`/api/v1/payroll_processors.json?batch_id=${batchId}`, {
+      .get(`/api/v1/payroll_processors.json?batch_id=${id}`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -25,11 +29,14 @@ export const PayrollApprovalModal = ({ batchId }) => {
       .catch((error) => {
         console.error("Error fetching approvers data:", error);
       });
-  }, [batchId]);
+  }, [id]);
 
   useEffect(() => {
+    if (refreshApproversData) {
+      fetchApproversData();
+    }
     fetchApproversData();
-  }, [fetchApproversData, batchId]);
+  }, [fetchApproversData, id, refreshApproversData]);
 
   return (
     <>
@@ -40,7 +47,7 @@ export const PayrollApprovalModal = ({ batchId }) => {
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-dialog-centered modal-xl">
+        <div className="modal-dialog modal-dialog-centered custom-modal-dialog-centered modal-xl">
           <div className="modal-content custom-modal-width">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
