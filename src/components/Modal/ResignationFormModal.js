@@ -3,12 +3,27 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
-import {
-  resignationReason,
-  resignationDoubleOptions,
-  resignationTripleOptions,
-} from "../FormJSON/ResignationForm";
-import DropdownCheckbox from "../Misc/dropdownCheckbox";
+
+const CheckboxList = ({ options, selectedOptions, onChange }) => {
+  return (
+    <div>
+      {options.map((option, index) => (
+        <div key={index} className="form-check">
+          <input
+            type="checkbox"
+            id={`option_${index}`}
+            value={option}
+            checked={selectedOptions.includes(option)}
+            onChange={onChange}
+          />
+          <label className="form-check-label" htmlFor={`option_${index}`}>
+            {option}
+          </label>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const ResignationFormModal = ({
   exitForm,
@@ -19,21 +34,32 @@ export const ResignationFormModal = ({
     useAppContext();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [
-    selectedResignationReasonOptions,
-    setSelectedResignationReasonOptions,
-  ] = useState([]);
-  const [errorIndicator, setErrorIndicator] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   console.log("Resignation Survey form", exitForm);
 
-  // useEffect(() => {
-  //   setBranch(data);
-  // }, [data]);
+  // Handle Radio Change:
+  const handleRadioChange = (e) => {
+    setData({
+      ...data,
+      [`${e.target.name}`]: e.target.value,
+    });
+  };
 
-  // const cancelEvent = () => {
-  //   setBranch(data);
-  // };
+  // Handle Checkbox Change:
+  const handleCheckboxChange = (e) => {
+    const question = e.target.name;
+    const option = e.target.value;
+    // setSelectedOptions((prevOptions) => {
+    //   if (prevOptions.includes(option)) {
+    //     return prevOptions.filter((prevOption) => prevOption !== option);
+    //   } else {
+    //     const allOptions = [...prevOptions, option];
+    //     return allOptions;
+    //   }
+    // });
+    
+  };
 
   // Handle Form Change:
   const handleFormChange = (e) => {
@@ -45,17 +71,18 @@ export const ResignationFormModal = ({
   };
 
   // Submit Resignation Survey:
-  const handleSubmitResignation = async (e) => {
+  const handleConfirmExitFormSubmission = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    if (selectedResignationReasonOptions.length === 0) {
-      setErrorIndicator("reason_for_leaving-not-ok");
-      setLoading(false);
-      return;
-    }
+    const formData = {
+      ...data,
+      selectedOptions: selectedOptions,
+    };
 
-    console.log("Resignation survey form:", e);
+    console.log("Submit this survey form:", formData);
+
+    setLoading(true);
   };
 
   return (
@@ -91,22 +118,74 @@ export const ResignationFormModal = ({
               </div>
             ) : (
               <div className="modal-body">
-                <form onSubmit={handleSubmitResignation}>
+                <form onSubmit={handleConfirmExitFormSubmission}>
                   <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                          name="email"
-                          type="email"
-                          className="form-control"
-                          value={data.email}
-                          onChange={handleFormChange}
-                          placeholder="Your email"
-                          required
-                        />
-                      </div>
-                    </div>
+                    {exitForm[0]?.form_content?.questions.map(
+                      (question, index) => (
+                        <div className="col-md-12" key={index}>
+                          <div className="form-group">
+                            <label
+                              htmlFor={`${question.question}`}
+                              style={{ fontWeight: "500" }}
+                            >
+                              {question.question}
+                            </label>
+
+                            {/* Radio */}
+                            {question.question_type === "radio" && (
+                              <div>
+                                {question.question_options.map(
+                                  (option, optionIndex) => (
+                                    <div
+                                      key={optionIndex}
+                                      className="form-check"
+                                    >
+                                      <input
+                                        type="radio"
+                                        id={`${question.question}`}
+                                        name={`${question.question}`}
+                                        value={option}
+                                        onChange={handleRadioChange}
+                                      />
+                                      <label
+                                        htmlFor={`${question.question}`}
+                                        className="form-check-label"
+                                      >
+                                        {option}
+                                      </label>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+
+                            {/* Check Box */}
+                            {question.question_type === "check box" && (
+                              <CheckboxList
+                                options={
+                                  exitForm[0]?.form_content.questions[1]
+                                    .question_options
+                                }
+                                selectedOptions={selectedOptions}
+                                onChange={handleCheckboxChange}
+                              />
+                            )}
+
+                            {/* Textarea */}
+                            {question.question_type === "question" && (
+                              <textarea
+                                name={`${question.question}`}
+                                value={data[`${question.question}`]}
+                                onChange={handleFormChange}
+                                className="form-control"
+                                placeholder="Your answer"
+                                // required
+                              />
+                            )}
+                          </div>
+                        </div>
+                      )
+                    )}
                   </div>
 
                   <div className="modal-footer">
