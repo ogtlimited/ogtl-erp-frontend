@@ -19,6 +19,7 @@ const ResignationUser = () => {
   const today = moment().utc().format("yyyy-MM-DD");
   const [todaySelected, setTodaySelected] = useState(false);
   const [surveyFormFilled, setSurveyFormFilled] = useState(false);
+  const [resignationSurveyForm, setResignationSurveyForm] = useState([])
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -44,6 +45,7 @@ const ResignationUser = () => {
     setMinDate(minDate);
   }, [currentUserDesignation, currentUserIsLead]);
 
+  // Cancel Application:
   const cancelEvent = () => {
     setData({
       effective_today: "",
@@ -53,11 +55,15 @@ const ResignationUser = () => {
     setTodaySelected(false);
   };
 
+  // Get resignation Survey Form
+
+  // Handle Form Change:
   const handleFormChange = (e) => {
     e.preventDefault();
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  // Handle Apply Resignation:
   const handleApplyResignation = async (data) => {
     try {
       const res = await axiosInstance.post(`/api/v1/resignations.json`, {
