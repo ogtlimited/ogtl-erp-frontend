@@ -4,6 +4,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import resignationIcon from "../../../assets/img/resign.png";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import { ResignationFormModal } from "../../../components/Modal/ResignationFormModal";
 
 const resignationModel = {
   effective_today: "",
@@ -17,6 +18,7 @@ const ResignationUser = () => {
 
   const today = moment().utc().format("yyyy-MM-DD");
   const [todaySelected, setTodaySelected] = useState(false);
+  const [surveyFormFilled, setSurveyFormFilled] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -109,7 +111,7 @@ const ResignationUser = () => {
             <div className="resignation_form_inner">
               <div className="modal-header">
                 <h4 className="modal-title" id="FormModalLabel">
-                  Resignation Form
+                  Resignation
                 </h4>
               </div>
 
@@ -182,20 +184,31 @@ const ResignationUser = () => {
                     >
                       Cancel
                     </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      onClick={() => setSelectedRow(data)}
-                      disabled={
-                        (!data?.effective_today.length &&
-                          !data?.effective_date.length) ||
-                        !data?.reason_for_resignation.length
-                      }
-                    >
-                      Confirm
-                    </button>
+                    {surveyFormFilled ? (
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                        onClick={() => setSelectedRow(data)}
+                        disabled={
+                          (!data?.effective_today.length &&
+                            !data?.effective_date.length) ||
+                          !data?.reason_for_resignation.length
+                        }
+                      >
+                        Confirm
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#ResignationFormModal"
+                      >
+                        Next
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -210,6 +223,8 @@ const ResignationUser = () => {
         deleteFunction={handleApplyResignation}
         message="Are you sure you want to submit your resignation?"
       />
+
+      <ResignationFormModal />
     </>
   );
 };
