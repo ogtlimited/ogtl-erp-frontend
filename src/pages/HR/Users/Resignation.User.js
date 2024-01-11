@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import resignationIcon from "../../../assets/img/resign.png";
@@ -13,13 +13,14 @@ const resignationModel = {
 };
 
 const ResignationUser = () => {
-  const { showAlert, user } = useAppContext();
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [data, setData] = useState(resignationModel);
-
   const today = moment().utc().format("yyyy-MM-DD");
   const [todaySelected, setTodaySelected] = useState(false);
   const [surveyFormFilled, setSurveyFormFilled] = useState(false);
-  const [resignationSurveyForm, setResignationSurveyForm] = useState([])
+  const [loadingResignationSurveyForm, setLoadingResignationSurveyForm] =
+    useState(false);
+  const [resignationSurveyForm, setResignationSurveyForm] = useState([]);
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -55,7 +56,33 @@ const ResignationUser = () => {
     setTodaySelected(false);
   };
 
-  // Get resignation Survey Form
+  // Get resignation Survey Form:
+  const fetchResignationSurveyForm = useCallback(async () => {
+    setLoadingResignationSurveyForm(true);
+    try {
+      const res = await axiosInstance.get(`/api/v1/survey_forms.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = res?.data?.data?.survey_forms;
+
+      setResignationSurveyForm(resData);
+      setLoadingResignationSurveyForm(false);
+    } catch (error) {
+      const component = "Resignation Survey form Error | ";
+      ErrorHandler(error, component);
+      setLoadingResignationSurveyForm(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchResignationSurveyForm();
+  }, [fetchResignationSurveyForm]);
 
   // Handle Form Change:
   const handleFormChange = (e) => {
@@ -230,7 +257,11 @@ const ResignationUser = () => {
         message="Are you sure you want to submit your resignation?"
       />
 
-      <ResignationFormModal />
+      <ResignationFormModal
+        exitForm={resignationSurveyForm}
+        loadingExitForm={loadingResignationSurveyForm}
+        setSurveyFormFilled={setSurveyFormFilled}
+      />
     </>
   );
 };
