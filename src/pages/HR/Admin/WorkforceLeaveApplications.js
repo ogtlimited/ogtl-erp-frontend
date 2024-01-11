@@ -679,7 +679,7 @@ const WorkforceLeaveApplications = () => {
                   href="#tab_hr-leave-history"
                   onClick={() => setHistoryStatus("approved")}
                 >
-                  Pending HR Approval
+                  Acted On
                 </a>
               </li>
               <li className="nav-item">
