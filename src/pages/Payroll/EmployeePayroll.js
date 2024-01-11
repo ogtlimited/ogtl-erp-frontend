@@ -180,6 +180,7 @@ const EmployeePayroll = () => {
 
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
+          attendance_deduction: e?.slip?.attendance_deduction,
           disciplinary_deductions: e?.slip?.disciplinary_deductions,
           totalDeductions: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
@@ -325,7 +326,7 @@ const EmployeePayroll = () => {
       text: "Pension",
     },
     {
-      dataField: "disciplinary_deductions",
+      dataField: "attendance_deduction",
       text: "Attendance Deduction",
     },
     {

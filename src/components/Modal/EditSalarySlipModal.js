@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
+import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
@@ -123,10 +124,13 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                       <label htmlFor="monthly_income_tax">Tax</label>
                       <input
                         name="monthly_income_tax"
-                        type="number"
+                        type="text"
                         className="form-control"
-                        value={formData.monthly_income_tax}
-                        onChange={handleChange}
+                        value={helper.handleMoneyFormat(
+                          formData.monthly_income_tax
+                        )}
+                        readOnly
+                        // onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -136,10 +140,13 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                       <label htmlFor="monthly_pension">Pension</label>
                       <input
                         name="monthly_pension"
-                        type="number"
+                        type="text"
                         className="form-control"
-                        value={formData.monthly_pension}
-                        onChange={handleChange}
+                        value={helper.handleMoneyFormat(
+                          formData.monthly_pension
+                        )}
+                        readOnly
+                        // onChange={handleChange}
                       />
                     </div>
                   </div>

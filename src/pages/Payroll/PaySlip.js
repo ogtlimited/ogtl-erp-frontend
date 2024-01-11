@@ -130,6 +130,7 @@ const PaySlip = () => {
               totalDeductions["Total Deductions"] =
                 employeeSalarySlip.monthly_income_tax +
                 employeeSalarySlip.monthly_pension +
+                employeeSalarySlip.attendance_deduction +
                 employeeSalarySlip.disciplinary_deductions;
               break;
 

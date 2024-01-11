@@ -126,7 +126,7 @@ class HelperService {
     return hash;
   }
   handleMoneyFormat(number) {
-    return "₦" + new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
+    return "₦" + new Intl.NumberFormat("en-NG", { maximumFractionDigits: 2 }).format(
       number
     );
   }
