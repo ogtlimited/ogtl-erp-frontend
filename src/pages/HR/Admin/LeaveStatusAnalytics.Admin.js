@@ -93,6 +93,8 @@ const AllLeaveStatusAdmin = () => {
           date_applied: moment(leave?.created_at).utc().format("Do MMM, YYYY"),
           current_approver: leave?.leave?.hr_stage
             ? "HR"
+            : leave?.leave?.operation_team_stage
+            ? "OPERATIONS"
             : leave?.leave?.workforce_stage
             ? "WORKFORCE"
             : leave?.current_stage_manager?.manager_full_name,
@@ -113,6 +115,8 @@ const AllLeaveStatusAdmin = () => {
             : null,
           leave_manager_email: leave?.manager?.manager_email,
         }));
+
+        // console.log("Leave Tracker:", formatted);
 
         setallApplications(formatted);
         setLoading(false);
@@ -199,7 +203,9 @@ const AllLeaveStatusAdmin = () => {
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <span>{value.toUpperCase()}</span>,
+      formatter: (value, row) => (
+        <span>{value ? value.toUpperCase() : value}</span>
+      ),
     },
     {
       dataField: "status",

@@ -145,7 +145,8 @@ const sidebarConfig = [
                 {
                   canView: "all",
                   title: "Facilities Help Desk",
-                  externalLink: "https://ogtl-facilities.on.spiceworks.com/portal/",
+                  externalLink:
+                    "https://ogtl-facilities.on.spiceworks.com/portal/",
                 },
                 {
                   canView: "all",
@@ -155,11 +156,11 @@ const sidebarConfig = [
                 {
                   canView: "all",
                   title: "Complaints Help Desk",
-                  externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
+                  externalLink:
+                    "https://ogtl-complaints.on.spiceworks.com/portal/",
                 },
               ],
-            }
-            
+            },
           ]
         : [
             {
@@ -504,107 +505,109 @@ const sidebarConfig = [
     ],
   },
 
-  // // OPERATIONS CONFIG:
-  // {
-  //   subheader: "Operations",
-  //   canView: CurrentUserRoles.includes("data_manager") ? "operations" : "none",
-  //   items: [
-  //     {
-  //       canView: CurrentUserRoles.includes("data_manager")
-  //         ? "operations"
-  //         : "none",
-  //       title: "Workforce",
-  //       path: PATH_DASHBOARD.operations.root,
-  //       icon: ICONS.users,
-  //       children: [
-  //         {
-  //           canView: "operations",
-  //           title: "Leave Applications",
-  //           path: PATH_DASHBOARD.operations.workforceLeaveApplications,
-  //         },
-  //       ],
-  //     },
-  //     // {
-  //     //   canView: "super",
-  //     //   title: "Campaign",
-  //     //   path: PATH_DASHBOARD.campaign.root,
-  //     //   icon: ICONS.user,
-  //     //   children: [
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "All Campaigns",
-  //     //       path: PATH_DASHBOARD.campaign.allCampaign,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Leads",
-  //     //       path: PATH_DASHBOARD.campaign.lead,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Branch",
-  //     //       path: PATH_DASHBOARD.campaign.branch,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Client Leave Approvals",
-  //     //       path: PATH_DASHBOARD.clients.leaveApprovals,
-  //     //     },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   canView: "super",
-  //     //   title: "Payroll",
-  //     //   path: PATH_DASHBOARD.payroll.root,
-  //     //   icon: ICONS.payroll,
-  //     //   children: [
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Employee Salary",
-  //     //       path: PATH_DASHBOARD.payroll.salary,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Payroll Items",
-  //     //       path: PATH_DASHBOARD.payroll.payrollItem,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Payroll Notes",
-  //     //       path: PATH_DASHBOARD.payroll.payrollNotes,
-  //     //     },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   canView: "HR",
-  //     //   title: "Reports",
-  //     //   path: PATH_DASHBOARD.payroll.root,
-  //     //   icon: ICONS.reports,
-  //     //   children: [
-  //     //     {
-  //     //       canView: "HR",
-  //     //       title: "Employee Reports",
-  //     //       path: PATH_DASHBOARD.reports.employeeReport,
-  //     //     },
-  //     //     {
-  //     //       canView: "super",
-  //     //       title: "Payslip Reports",
-  //     //       path: PATH_DASHBOARD.reports.payslipReport,
-  //     //     },
-  //     //     {
-  //     //       canView: "HR",
-  //     //       title: "Attendance Reports",
-  //     //       path: PATH_DASHBOARD.reports.attendanceReports,
-  //     //     },
-  //     //     {
-  //     //       canView: "HR",
-  //     //       title: "Academy Reports",
-  //     //       path: PATH_DASHBOARD.reports.academyReports,
-  //     //     },
-  //     //   ],
-  //     // },
-  //   ],
-  // },
+  // OPERATIONS CONFIG:
+  {
+    subheader: "Operations",
+    canView: CurrentUserRoles.includes("operation_team")
+      ? "operations"
+      : "none",
+    items: [
+      {
+        canView: CurrentUserRoles.includes("operation_team")
+          ? "operations"
+          : "none",
+        title: "Operation Team",
+        path: PATH_DASHBOARD.operations.root,
+        icon: ICONS.users,
+        children: [
+          {
+            canView: "operations",
+            title: "Leave Applications",
+            path: PATH_DASHBOARD.operations.operationTeamLeaveApplications,
+          },
+        ],
+      },
+      // {
+      //   canView: "super",
+      //   title: "Campaign",
+      //   path: PATH_DASHBOARD.campaign.root,
+      //   icon: ICONS.user,
+      //   children: [
+      //     {
+      //       canView: "super",
+      //       title: "All Campaigns",
+      //       path: PATH_DASHBOARD.campaign.allCampaign,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Leads",
+      //       path: PATH_DASHBOARD.campaign.lead,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Branch",
+      //       path: PATH_DASHBOARD.campaign.branch,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Client Leave Approvals",
+      //       path: PATH_DASHBOARD.clients.leaveApprovals,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "super",
+      //   title: "Payroll",
+      //   path: PATH_DASHBOARD.payroll.root,
+      //   icon: ICONS.payroll,
+      //   children: [
+      //     {
+      //       canView: "super",
+      //       title: "Employee Salary",
+      //       path: PATH_DASHBOARD.payroll.salary,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payroll Items",
+      //       path: PATH_DASHBOARD.payroll.payrollItem,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payroll Notes",
+      //       path: PATH_DASHBOARD.payroll.payrollNotes,
+      //     },
+      //   ],
+      // },
+      // {
+      //   canView: "HR",
+      //   title: "Reports",
+      //   path: PATH_DASHBOARD.payroll.root,
+      //   icon: ICONS.reports,
+      //   children: [
+      //     {
+      //       canView: "HR",
+      //       title: "Employee Reports",
+      //       path: PATH_DASHBOARD.reports.employeeReport,
+      //     },
+      //     {
+      //       canView: "super",
+      //       title: "Payslip Reports",
+      //       path: PATH_DASHBOARD.reports.payslipReport,
+      //     },
+      //     {
+      //       canView: "HR",
+      //       title: "Attendance Reports",
+      //       path: PATH_DASHBOARD.reports.attendanceReports,
+      //     },
+      //     {
+      //       canView: "HR",
+      //       title: "Academy Reports",
+      //       path: PATH_DASHBOARD.reports.academyReports,
+      //     },
+      //   ],
+      // },
+    ],
+  },
 
   // ACCOUNTING CONFIG:
   {
