@@ -21,6 +21,7 @@ const ResignationUser = () => {
   const [loadingResignationSurveyForm, setLoadingResignationSurveyForm] =
     useState(false);
   const [resignationSurveyForm, setResignationSurveyForm] = useState([]);
+  const [formContent, setFormContent] = useState([]);
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -92,6 +93,19 @@ const ResignationUser = () => {
 
   // Handle Apply Resignation:
   const handleApplyResignation = async (data) => {
+    const resignationPayload = {
+      effective_date: todaySelected
+        ? moment(data.effective_today).format("ddd, DD MMM YYYY")
+        : moment(data.effective_date).format("ddd, DD MMM YYYY"),
+      reason_for_resignation: data.reason_for_resignation,
+      survey_form: {
+        hr_survey_form_id: resignationSurveyForm[0]?.id,
+        answer: Object.entries(formContent).map(([question, answer]) => {
+          return { question, answer };
+        }),
+      },
+    };
+
     try {
       const res = await axiosInstance.post(`/api/v1/resignations.json`, {
         headers: {
@@ -99,12 +113,7 @@ const ResignationUser = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        payload: {
-          effective_date: todaySelected
-            ? moment(data.effective_today).format("ddd, DD MMM YYYY")
-            : moment(data.effective_date).format("ddd, DD MMM YYYY"),
-          reason_for_resignation: data.reason_for_resignation,
-        },
+        payload: resignationPayload,
       });
 
       const resData = res?.data?.data;
@@ -230,7 +239,7 @@ const ResignationUser = () => {
                           !data?.reason_for_resignation.length
                         }
                       >
-                        Confirm
+                        Submit
                       </button>
                     ) : (
                       <button
@@ -260,6 +269,7 @@ const ResignationUser = () => {
       <ResignationFormModal
         exitForm={resignationSurveyForm}
         loadingExitForm={loadingResignationSurveyForm}
+        setFormContent={setFormContent}
         setSurveyFormFilled={setSurveyFormFilled}
       />
     </>

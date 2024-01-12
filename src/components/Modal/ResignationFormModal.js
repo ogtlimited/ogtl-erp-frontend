@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
-import axiosInstance from "../../services/api";
 import $ from "jquery";
-import Select from "react-select";
 
-const CheckboxList = ({ options, selectedOptions, onChange }) => {
+const CheckboxList = ({ question, options, selectedOptions, onChange }) => {
   return (
     <div>
       {options.map((option, index) => (
         <div key={index} className="form-check">
           <input
             type="checkbox"
-            id={`option_${index}`}
+            id={`${question}`}
+            name={`${question}`}
             value={option}
             checked={selectedOptions.includes(option)}
             onChange={onChange}
           />
-          <label className="form-check-label" htmlFor={`option_${index}`}>
+          <label className="form-check-label" htmlFor={`${question}`}>
             {option}
           </label>
         </div>
@@ -28,15 +27,14 @@ const CheckboxList = ({ options, selectedOptions, onChange }) => {
 export const ResignationFormModal = ({
   exitForm,
   loadingExitForm,
+  setFormContent,
   setSurveyFormFilled,
 }) => {
-  const { selectCampaigns, showAlert, goToTop, FontAwesomeIcon, faSpinner } =
-    useAppContext();
+  const { FontAwesomeIcon, faSpinner } = useAppContext();
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  console.log("Resignation Survey form", exitForm);
+  // console.log("Resignation Survey form", exitForm);
 
   // Handle Radio Change:
   const handleRadioChange = (e) => {
@@ -47,18 +45,22 @@ export const ResignationFormModal = ({
   };
 
   // Handle Checkbox Change:
-  const handleCheckboxChange = (e) => {
-    const question = e.target.name;
+  const handleCheckboxChange = (e, question) => {
     const option = e.target.value;
-    // setSelectedOptions((prevOptions) => {
-    //   if (prevOptions.includes(option)) {
-    //     return prevOptions.filter((prevOption) => prevOption !== option);
-    //   } else {
-    //     const allOptions = [...prevOptions, option];
-    //     return allOptions;
-    //   }
-    // });
-    
+
+    setSelectedOptions((prevOptions) => {
+      if (prevOptions.includes(option)) {
+        return prevOptions.filter((prevOption) => prevOption !== option);
+      } else {
+        const allOptions = [...prevOptions, option];
+        return allOptions;
+      }
+    });
+
+    setData((prevData) => ({
+      ...prevData,
+      [question]: selectedOptions,
+    }));
   };
 
   // Handle Form Change:
@@ -73,16 +75,9 @@ export const ResignationFormModal = ({
   // Submit Resignation Survey:
   const handleConfirmExitFormSubmission = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    const formData = {
-      ...data,
-      selectedOptions: selectedOptions,
-    };
-
-    console.log("Submit this survey form:", formData);
-
-    setLoading(true);
+    setFormContent(data);
+    setSurveyFormFilled(true);
+    $("#ResignationFormModal").modal("toggle");
   };
 
   return (
@@ -162,12 +157,15 @@ export const ResignationFormModal = ({
                             {/* Check Box */}
                             {question.question_type === "check box" && (
                               <CheckboxList
+                                question={question.question}
                                 options={
                                   exitForm[0]?.form_content.questions[1]
                                     .question_options
                                 }
                                 selectedOptions={selectedOptions}
-                                onChange={handleCheckboxChange}
+                                onChange={(e) =>
+                                  handleCheckboxChange(e, question.question)
+                                }
                               />
                             )}
 
@@ -179,7 +177,7 @@ export const ResignationFormModal = ({
                                 onChange={handleFormChange}
                                 className="form-control"
                                 placeholder="Your answer"
-                                // required
+                                required
                               />
                             )}
                           </div>
@@ -193,20 +191,11 @@ export const ResignationFormModal = ({
                       type="button"
                       className="btn btn-secondary"
                       data-dismiss="modal"
-                      // onClick={cancelEvent}
                     >
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      {loading ? (
-                        <span
-                          className="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : (
-                        "Confirm"
-                      )}
+                      Confirm
                     </button>
                   </div>
                 </form>
