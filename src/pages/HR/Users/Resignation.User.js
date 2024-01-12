@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import resignationIcon from "../../../assets/img/resign.png";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import { ResignationFormModal } from "../../../components/Modal/ResignationFormModal";
 
 const resignationModel = {
   effective_today: "",
@@ -12,11 +13,15 @@ const resignationModel = {
 };
 
 const ResignationUser = () => {
-  const { showAlert, user } = useAppContext();
+  const { showAlert, user, ErrorHandler } = useAppContext();
   const [data, setData] = useState(resignationModel);
-
   const today = moment().utc().format("yyyy-MM-DD");
   const [todaySelected, setTodaySelected] = useState(false);
+  const [surveyFormFilled, setSurveyFormFilled] = useState(false);
+  const [loadingResignationSurveyForm, setLoadingResignationSurveyForm] =
+    useState(false);
+  const [resignationSurveyForm, setResignationSurveyForm] = useState([]);
+  const [formContent, setFormContent] = useState([]);
 
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -42,6 +47,7 @@ const ResignationUser = () => {
     setMinDate(minDate);
   }, [currentUserDesignation, currentUserIsLead]);
 
+  // Cancel Application:
   const cancelEvent = () => {
     setData({
       effective_today: "",
@@ -51,12 +57,55 @@ const ResignationUser = () => {
     setTodaySelected(false);
   };
 
+  // Get resignation Survey Form:
+  const fetchResignationSurveyForm = useCallback(async () => {
+    setLoadingResignationSurveyForm(true);
+    try {
+      const res = await axiosInstance.get(`/api/v1/survey_forms.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = res?.data?.data?.survey_forms;
+
+      setResignationSurveyForm(resData);
+      setLoadingResignationSurveyForm(false);
+    } catch (error) {
+      const component = "Resignation Survey form Error | ";
+      ErrorHandler(error, component);
+      setLoadingResignationSurveyForm(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchResignationSurveyForm();
+  }, [fetchResignationSurveyForm]);
+
+  // Handle Form Change:
   const handleFormChange = (e) => {
     e.preventDefault();
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  // Handle Apply Resignation:
   const handleApplyResignation = async (data) => {
+    const resignationPayload = {
+      effective_date: todaySelected
+        ? moment(data.effective_today).format("ddd, DD MMM YYYY")
+        : moment(data.effective_date).format("ddd, DD MMM YYYY"),
+      reason_for_resignation: data.reason_for_resignation,
+      survey_form: {
+        hr_survey_form_id: resignationSurveyForm[0]?.id,
+        answer: Object.entries(formContent).map(([question, answer]) => {
+          return { question, answer };
+        }),
+      },
+    };
+
     try {
       const res = await axiosInstance.post(`/api/v1/resignations.json`, {
         headers: {
@@ -64,12 +113,7 @@ const ResignationUser = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        payload: {
-          effective_date: todaySelected
-            ? moment(data.effective_today).format("ddd, DD MMM YYYY")
-            : moment(data.effective_date).format("ddd, DD MMM YYYY"),
-          reason_for_resignation: data.reason_for_resignation,
-        },
+        payload: resignationPayload,
       });
 
       const resData = res?.data?.data;
@@ -109,7 +153,7 @@ const ResignationUser = () => {
             <div className="resignation_form_inner">
               <div className="modal-header">
                 <h4 className="modal-title" id="FormModalLabel">
-                  Resignation Form
+                  Resignation
                 </h4>
               </div>
 
@@ -182,20 +226,31 @@ const ResignationUser = () => {
                     >
                       Cancel
                     </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      onClick={() => setSelectedRow(data)}
-                      disabled={
-                        (!data?.effective_today.length &&
-                          !data?.effective_date.length) ||
-                        !data?.reason_for_resignation.length
-                      }
-                    >
-                      Confirm
-                    </button>
+                    {surveyFormFilled ? (
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                        onClick={() => setSelectedRow(data)}
+                        disabled={
+                          (!data?.effective_today.length &&
+                            !data?.effective_date.length) ||
+                          !data?.reason_for_resignation.length
+                        }
+                      >
+                        Submit
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        data-toggle="modal"
+                        data-target="#ResignationFormModal"
+                      >
+                        Next
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -209,6 +264,13 @@ const ResignationUser = () => {
         selectedRow={selectedRow}
         deleteFunction={handleApplyResignation}
         message="Are you sure you want to submit your resignation?"
+      />
+
+      <ResignationFormModal
+        exitForm={resignationSurveyForm}
+        loadingExitForm={loadingResignationSurveyForm}
+        setFormContent={setFormContent}
+        setSurveyFormFilled={setSurveyFormFilled}
       />
     </>
   );
