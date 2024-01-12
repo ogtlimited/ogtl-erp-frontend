@@ -130,6 +130,7 @@ const PaySlip = () => {
               totalDeductions["Total Deductions"] =
                 employeeSalarySlip.monthly_income_tax +
                 employeeSalarySlip.monthly_pension +
+                employeeSalarySlip.attendance_deduction +
                 employeeSalarySlip.disciplinary_deductions;
               break;
 
@@ -341,7 +342,7 @@ const PaySlip = () => {
                       <div>
                         {paySlip.net_pay ? (
                           <h5 className="m-b-10" style={{ color: "#808080" }}>
-                            Disciplinary Deductions
+                            Other Deductions
                           </h5>
                         ) : null}
                         <table className="table table-bordered">

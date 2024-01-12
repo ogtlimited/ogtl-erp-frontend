@@ -4,6 +4,8 @@ import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
 import secureLocalStorage from "react-secure-storage";
 import backgroundColors from "../components/Misc/BackgroundColors.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default createBrowserHistory();
 const AppContext = createContext();
@@ -626,6 +628,8 @@ const AppProvider = (props) => {
         status,
         officeTypeOptions,
         goToTop,
+        FontAwesomeIcon,
+        faSpinner,
       }}
     >
       {props.children}

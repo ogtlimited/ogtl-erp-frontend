@@ -91,6 +91,7 @@ const PayslipReports = () => {
 
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
+          attendance_deduction: e?.slip?.attendance_deduction,
           disciplinary_deductions: e?.slip?.disciplinary_deductions,
           totalDeduction: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
@@ -151,6 +152,7 @@ const PayslipReports = () => {
 
           tax: e?.slip?.monthly_income_tax,
           pension: e?.slip?.monthly_pension,
+          attendance_deduction: e?.slip?.attendance_deduction,
           disciplinary_deductions: e?.slip?.disciplinary_deductions,
           totalDeduction: e?.slip?.total_deductions,
           netPay: e?.slip?.net_pay,
@@ -210,6 +212,9 @@ const PayslipReports = () => {
           ),
           TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
           PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+          "ATTENDANCE DEDUCTION": helper.handleMoneyFormat(
+            data?.slip?.attendance_deduction
+          ),
           "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
             data?.slip?.disciplinary_deductions
           ),
@@ -266,6 +271,9 @@ const PayslipReports = () => {
           ),
           TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
           PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+          "ATTENDANCE DEDUCTION": helper.handleMoneyFormat(
+            data?.slip?.attendance_deduction
+          ),
           "DISCIPLINARY DEDUCTIONS": helper.handleMoneyFormat(
             data?.slip?.disciplinary_deductions
           ),
@@ -333,6 +341,10 @@ const PayslipReports = () => {
     {
       dataField: "pension",
       text: "Pension",
+    },
+    {
+      dataField: "attendance_deduction",
+      text: "Attendance Deduction",
     },
     {
       dataField: "disciplinary_deductions",

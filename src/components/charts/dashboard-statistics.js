@@ -29,7 +29,7 @@ const DashboardStatistics = ({
   //       const dataIndex = element[0].index;
   //       const leaveType = formattedLeaveType;
   //       const id = leaveType[dataIndex];
-  //       navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}/${fromDate2}/${toDate2}`);
+  //       navigate(`/dashboard/hr/leaves-admin/application/leave-type/${id}`);
   //     }
   //   } catch (error) {
   //     console.log(error);
@@ -65,7 +65,7 @@ const DashboardStatistics = ({
         const leaveStatus = formattedLeaveStatus;
         const id = leaveStatus[dataIndex];
         navigate(
-          `/dashboard/hr/leaves-admin/application/leave-status/${id}/${fromDate}/${toDate}`
+          `/dashboard/hr/leaves-admin/application/leave-status/${id}`
         );
       }
     } catch (error) {

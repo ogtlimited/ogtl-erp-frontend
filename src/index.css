@@ -654,6 +654,19 @@ table.custom-table thead th {
   border-right: 2px solid #dee2e6;
 }
 
+/*------------------------ 
+    Payslip
+--------------------------*/
+
+.payslip-table > table > thead > tr:nth-child(2) > th:first-child,
+.payslip-table > table > tbody > tr > td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #d8d8d8;
+  border-right: 2px solid #dee2e6;
+}
+
 /*---------------------- 
     Resignation
 ----------------------*/
@@ -715,4 +728,64 @@ table.custom-table thead th {
   width: 20px;
   height: 20px;
   cursor: pointer !important;
+}
+
+.custom-modal-dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payroll_action_btn_div {
+  display: flex;
+  justify-content: space-between;
+}
+
+/*------------------------- 
+    Checkbox Input
+----------------------------*/
+
+.dropdown_checkbox > button {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: #c2c2c2;
+  font-weight: 400;
+  margin-bottom: 20px;
+  background-color: #fff;
+  text-align: left;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='darkblue' height='25' viewBox='0 0 24 24' width='50' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: top 9px right 0;
+}
+
+.checkbox_options {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #667080;
+  border-radius: 6px;
+  padding: 10px;
+  z-index: 1;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(1fr);
+}
+
+.checkbox_input {
+  width: 100%;
+  font-size: 14px;
+  padding-right: 10px;
+}
+.checkbox_input > input {
+  margin-right: 10px;
+}
+
+.reason_for_leaving-not-ok {
+  border: 1px solid red !important;
 }
