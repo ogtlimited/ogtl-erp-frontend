@@ -5,7 +5,11 @@ import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
+export const EditSalarySlipModal = ({
+  data,
+  fetchEmployeeSalarySlip,
+  fetchPayrollTotals,
+}) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
@@ -73,6 +77,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
       const resData = res.data.data;
 
       fetchEmployeeSalarySlip();
+      fetchPayrollTotals();
 
       showAlert(
         true,
@@ -121,46 +126,13 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="monthly_income_tax">Tax</label>
-                      <input
-                        name="monthly_income_tax"
-                        type="text"
-                        className="form-control"
-                        value={helper.handleMoneyFormat(
-                          formData.monthly_income_tax
-                        )}
-                        readOnly
-                        // onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="monthly_pension">Pension</label>
-                      <input
-                        name="monthly_pension"
-                        type="text"
-                        className="form-control"
-                        value={helper.handleMoneyFormat(
-                          formData.monthly_pension
-                        )}
-                        readOnly
-                        // onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
                       <label htmlFor="basic">Basic</label>
                       <input
-                        name="basic"
+                        name="basic" 
                         type="number"
                         className="form-control"
                         value={formData.basic}
+                        max={formData.basic}
                         onChange={handleChange}
                       />
                     </div>

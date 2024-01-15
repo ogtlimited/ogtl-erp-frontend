@@ -64,10 +64,10 @@ const EmployeePayroll = () => {
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
   const currentUserDesignation = user?.employee_info?.designation;
-  const isAuthorized = ["hr_manager", "accountant"];
+  const isAuthorized = ["hr_manager"];
 
   // eslint-disable-next-line no-unused-vars
-  const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
+  const CurrentUserCanNotifyEmployees = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
   );
 
@@ -428,15 +428,13 @@ const EmployeePayroll = () => {
               </button>
             ) : data?.length > 0 ? (
               <>
-                {currentUserDesignation === "CEO" ? (
-                  <button
-                    className="btn add-btn"
-                    style={{ marginRight: "20px" }}
-                    onClick={handleExportCSV}
-                  >
-                    <i className="fa fa-download"></i> Download Report
-                  </button>
-                ) : null}
+                <button
+                  className="btn add-btn"
+                  style={{ marginRight: "20px" }}
+                  onClick={handleExportCSV}
+                >
+                  <i className="fa fa-download"></i> Download Report
+                </button>
 
                 <button
                   className="btn add-btn"
@@ -498,7 +496,8 @@ const EmployeePayroll = () => {
               Back to Batch Table
             </button>
 
-            {currentBatchApprovalStatus === "Approved" ? (
+            {currentBatchApprovalStatus === "Approved" &&
+            CurrentUserCanNotifyEmployees ? (
               <>
                 {loadingSendMails ? (
                   <button
@@ -537,6 +536,7 @@ const EmployeePayroll = () => {
             totalPages={totalPages}
             setTotalPages={setTotalPages}
             fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+            fetchPayrollTotals={fetchPayrollTotals}
             currentApproverEmail={currentApproverEmail}
             currentBatchApprovalStatus={currentBatchApprovalStatus}
           />
