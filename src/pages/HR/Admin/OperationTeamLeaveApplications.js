@@ -80,7 +80,7 @@ const OperationTeamLeaveApplications = () => {
       const resData = response?.data?.data?.leaves;
       const totalPages = response?.data?.data?.total_pages;
 
-      console.log("Operation team leaves", resData);
+      // console.log("Operation team leaves", resData);
 
       setSizePerPage(sizePerPage);
       setTotalPages(totalPages);
@@ -117,7 +117,7 @@ const OperationTeamLeaveApplications = () => {
     try {
       setLoadingHistory(true);
       const response = await axiosInstance.get(
-        "/api/v1/workforce_leave_histories.json",
+        "/api/v1/operation_team_leave_histories.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -135,7 +135,7 @@ const OperationTeamLeaveApplications = () => {
       const resData = response?.data?.data?.leaves;
       const totalHistoryPages = response?.data?.data?.total_pages;
 
-      console.log("fetchOperationTeamLeaveHistory", resData);
+      // console.log("fetchOperationTeamLeaveHistory", resData);
 
       const thisPageLimit = historySizePerPage;
       const thisTotalPageSize = totalHistoryPages;
