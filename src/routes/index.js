@@ -483,7 +483,15 @@ export default function Router() {
               path: "operation-team-leave-applications",
               element: (
                 <GuardedRoute title="" dept="super">
-                  <OperationTeamLeaveApplications />
+                  <OperationsTeamLeaveApplications />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "resignation",
+              element: (
+                <GuardedRoute title="" dept="operations">
+                  <OperationsResignationAdmin />
                 </GuardedRoute>
               ),
             },
@@ -1220,11 +1228,14 @@ const LeavesAdmin = Loadable(
 const WorkforceLeaveApplications = Loadable(
   lazy(() => import("../pages/HR/Admin/WorkforceLeaveApplications.js"))
 );
-const OperationTeamLeaveApplications = Loadable(
-  lazy(() => import("../pages/HR/Admin/OperationTeamLeaveApplications.js"))
+const OperationsTeamLeaveApplications = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTeamLeaveApplications.js"))
 );
 const ResignationAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Resignation.Admin"))
+);
+const OperationsResignationAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsResignation.Admin"))
 );
 const AllLeaveStatusAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/LeaveStatusAnalytics.Admin"))

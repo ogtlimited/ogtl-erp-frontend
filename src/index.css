@@ -789,3 +789,7 @@ table.custom-table thead th {
 .reason_for_leaving-not-ok {
   border: 1px solid red !important;
 }
+
+.resignation_note {
+  font-size: 14px;
+}
