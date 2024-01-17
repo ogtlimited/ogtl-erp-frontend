@@ -257,13 +257,13 @@ const EmployeePayroll = () => {
 
       const responseData = response?.data?.data?.slips;
 
-      console.log("Original slip:", responseData);
+      // console.log("Original slip:", responseData);
 
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
         EMAIL: data?.user?.email,
-        "REFERENCE ID": data?.reference_id,
+        "REFERENCE ID": data?.slip?.reference_id,
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
@@ -287,6 +287,8 @@ const EmployeePayroll = () => {
         ),
         "NET SALARY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
+
+      // console.log("Download this:", formatted);
 
       const dataToConvert = {
         data: formatted,
@@ -581,7 +583,7 @@ const EmployeePayroll = () => {
               isSearchable={true}
               value={{
                 value: officeId?.id,
-                label: officeId?.title
+                label: officeId?.title,
               }}
               onChange={(e) => setOfficeId({ id: e?.value, title: e?.label })}
               style={{ display: "inline-block" }}
@@ -599,7 +601,7 @@ const EmployeePayroll = () => {
               isSearchable={true}
               value={{
                 value: prorateFilter,
-                label: prorateFilter ? "Yes" : "No"
+                label: prorateFilter ? "Yes" : "No",
               }}
               onChange={(e) => setProrateFilter(e?.value)}
               style={{ display: "inline-block" }}
@@ -642,16 +644,21 @@ const EmployeePayroll = () => {
             </button>
 
             <div>
-              <button
-                className="btn btn-primary"
-                data-toggle="modal"
-                style={{ margin: "0 1rem 1rem 0" }}
-                data-target="#EmployeePayslipUploadModal"
-                onClick={() => setToggleUploadModal(true)}
-              >
-                <i className="fa fa-upload" style={{ marginRight: "10px" }}></i>
-                Update Slips
-              </button>
+              {currentApproverEmail === currentUserEmail ? (
+                <button
+                  className="btn btn-primary"
+                  data-toggle="modal"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                  data-target="#EmployeePayslipUploadModal"
+                  onClick={() => setToggleUploadModal(true)}
+                >
+                  <i
+                    className="fa fa-upload"
+                    style={{ marginRight: "10px" }}
+                  ></i>
+                  Update Slips
+                </button>
+              ) : null}
 
               {loadingCSV ? (
                 <button
