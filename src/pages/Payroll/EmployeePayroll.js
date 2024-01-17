@@ -13,6 +13,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import { RequestReviewModal } from "../../components/Modal/RequestReviewModal";
 import EmployeePayslipUpload from "../../components/Modal/EmployeePayslipUpload";
+import Select from "react-select";
 
 const CardSection = ({ title, value, loading, helper }) => {
   return (
@@ -40,7 +41,14 @@ const CardSection = ({ title, value, loading, helper }) => {
 const EmployeePayroll = () => {
   const { referenceId, id } = useParams();
   const navigate = useNavigate();
-  const { user, ErrorHandler, showAlert } = useAppContext();
+  const {
+    selectOfficeTypes,
+    selectDepartments,
+    selectCampaigns,
+    user,
+    ErrorHandler,
+    showAlert,
+  } = useAppContext();
   const year = moment().format("YYYY");
   const currMonth = moment().format("M");
   const currMonthName = moment().format("MMMM");
@@ -54,6 +62,15 @@ const EmployeePayroll = () => {
 
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [toggleUploadModal, setToggleUploadModal] = useState(false);
+
+  const [name, setName] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+  const [officeType, setOfficeType] = useState("");
+  const [officeId, setOfficeId] = useState({
+    id: "",
+    title: "",
+  });
+  const [prorateFilter, setProrateFilter] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -159,6 +176,10 @@ const EmployeePayroll = () => {
           batch_id: id,
           page: page,
           limit: sizePerPage,
+          name: nameSearch ? nameSearch : null,
+          office_type: officeType ? officeType : null,
+          office_id: officeId?.id ? officeId?.id : null,
+          prorate: prorateFilter ? prorateFilter : null,
         },
       })
       .then((res) => {
@@ -201,7 +222,15 @@ const EmployeePayroll = () => {
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, page, sizePerPage]);
+  }, [
+    id,
+    nameSearch,
+    officeId?.id,
+    officeType,
+    page,
+    prorateFilter,
+    sizePerPage,
+  ]);
 
   useEffect(() => {
     fetchEmployeeSalarySlip();
@@ -228,7 +257,7 @@ const EmployeePayroll = () => {
 
       const responseData = response?.data?.data?.slips;
 
-      console.log("Original slip:", responseData)
+      console.log("Original slip:", responseData);
 
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
@@ -414,9 +443,16 @@ const EmployeePayroll = () => {
     fetchReviewersData();
   }, [fetchApproversData, id, refreshApproversData]);
 
+  // Handle Name Search:
+  const handleKeydownNameSearch = (e) => {
+    if (e.key === "Enter") {
+      setNameSearch(e.target.value);
+    }
+  };
+
   return (
     <>
-      <div className="page-header" style={{ marginBottom: "100px" }}>
+      <div className="page-header" style={{ marginBottom: "50px" }}>
         <div className="row">
           <div className="col">
             <h3 className="page-title">
@@ -481,6 +517,116 @@ const EmployeePayroll = () => {
       </div>
 
       <div className="row">
+        <div className="col-12 payroll_search_div">
+          {/* Name Search */}
+          <div className="payroll-custom-search">
+            <input
+              className="custom-payroll-search-input"
+              style={{
+                backgroundColor: "#fff",
+                margin: "0 10px 0 1rem",
+              }}
+              type="search"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleKeydownNameSearch}
+            />
+
+            <button
+              className="btn btn-secondary custom-search-btn"
+              onClick={() => {
+                setName("");
+                setNameSearch("");
+                setPage(1);
+              }}
+            >
+              Clear
+            </button>
+          </div>
+
+          {/* Office Type */}
+          <div className="col-md-2">
+            <label htmlFor="officeType">Filter By</label>
+            <Select
+              options={selectOfficeTypes}
+              isSearchable={true}
+              value={{
+                value: officeType,
+                label: officeType.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ),
+              }}
+              onChange={(e) => {
+                setOfficeType(e?.value);
+                setOfficeId("");
+              }}
+              style={{ display: "inline-block" }}
+            />
+          </div>
+
+          {/* Office */}
+          <div className="col-md-3">
+            <label htmlFor="office_id">
+              {officeType.replace(/\b\w/g, (char) => char.toUpperCase()) ||
+                "Office"}
+            </label>
+            <Select
+              options={
+                officeType === "department"
+                  ? selectDepartments
+                  : officeType === "campaign"
+                  ? selectCampaigns
+                  : null
+              }
+              isSearchable={true}
+              value={{
+                value: officeId?.id,
+                label: officeId?.title
+              }}
+              onChange={(e) => setOfficeId({ id: e?.value, title: e?.label })}
+              style={{ display: "inline-block" }}
+            />
+          </div>
+
+          {/* Prorate */}
+          <div className="col-md-2">
+            <label htmlFor="office_id">Prorate</label>
+            <Select
+              options={[
+                { value: true, label: "Yes" },
+                { value: false, label: "No" },
+              ]}
+              isSearchable={true}
+              value={{
+                value: prorateFilter,
+                label: prorateFilter ? "Yes" : "No"
+              }}
+              onChange={(e) => setProrateFilter(e?.value)}
+              style={{ display: "inline-block" }}
+            />
+          </div>
+
+          {/* Reset */}
+          <div className="payroll-custom-search">
+            <button
+              className="btn btn-secondary custom-search-btn"
+              onClick={() => {
+                setName("");
+                setNameSearch("");
+                setOfficeType("");
+                setOfficeId({
+                  id: "",
+                  title: "",
+                });
+                setProrateFilter("");
+                setPage(1);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
         <div className="col-md-12">
           <div className="payroll_action_btn_div">
             <button
