@@ -16,11 +16,9 @@ const EmployeePayslipUpload = ({
   const { showAlert } = useAppContext();
   const [buttonRef, setButtonRef] = useState(React.createRef());
   const [loading, setLoading] = useState(false);
-  const [uploadState, setUploadState] = useState(title);
   const [fileName, setFilename] = useState("");
   const [invalid, setInvalid] = useState(false);
   const [data, setData] = useState([]);
-  const [path, setPath] = useState(url);
 
   function convertCurrencyToNumber(currencyString) {
     const numberValue = parseInt(currencyString?.replace(/[^\d]/g, ""), 10);
@@ -65,41 +63,24 @@ const EmployeePayslipUpload = ({
     setLoading(true);
     let obj = {};
 
-    if (path) {
+    if (url) {
       const formatted = data.map((e) => {
-        return {
-          ogid: e["OGID"],
-          basic: e["BASIC"] ? convertCurrencyToNumber(e["BASIC"]) : null,
-          medical: e["MEDICAL"] ? convertCurrencyToNumber(e["MEDICAL"]) : null,
-          housing: e["HOUSING"] ? convertCurrencyToNumber(e["HOUSING"]) : null,
-          transport: e["TRANSPORT"]
-            ? convertCurrencyToNumber(e["TRANSPORT"])
-            : null,
-          other_allowances: e["OTHER ALLOWANCES"]
-            ? convertCurrencyToNumber(e["OTHER ALLOWANCES"])
-            : null,
-          monthly_salary: e["MONTHLY SALARY"]
-            ? convertCurrencyToNumber(e["MONTHLY SALARY"])
-            : null,
-          monthly_income_tax: e["TAX"]
-            ? convertCurrencyToNumber(e["TAX"])
-            : null,
-          monthly_pension: e["PENSION"]
-            ? convertCurrencyToNumber(e["PENSION"])
-            : null,
-          attendance_deduction: e["ATTENDANCE DEDUCTION"]
-            ? convertCurrencyToNumber(e["ATTENDANCE DEDUCTION"])
-            : null,
-          disciplinary_deductions: e["DISCIPLINARY DEDUCTIONS"]
-            ? convertCurrencyToNumber(e["DISCIPLINARY DEDUCTIONS"])
-            : null,
-          total_deductions: e["TOTAL DEDUCTIONS"]
-            ? convertCurrencyToNumber(e["TOTAL DEDUCTIONS"])
-            : null,
-          net_pay: e["NET SALARY"]
-            ? convertCurrencyToNumber(e["NET SALARY"])
-            : null,
-        };
+        const formattedEntry = Object.entries(e).reduce((acc, [key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            const formattedKey = key.replace(/\s+/g, "_").toLowerCase();
+
+            if (["EMPLOYEE", "EMAIL", "REFERENCE ID"].includes(key)) {
+              return acc;
+            }
+
+            acc[formattedKey] = ["OGID"].includes(key)
+              ? value
+              : convertCurrencyToNumber(value);
+          }
+          return acc;
+        }, {});
+
+        return formattedEntry;
       });
 
       obj = {
@@ -112,7 +93,7 @@ const EmployeePayslipUpload = ({
     }
 
     axiosInstance
-      .put(path, {
+      .put(url, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -154,7 +135,7 @@ const EmployeePayslipUpload = ({
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="FormModalLabel">
-              {uploadState}
+              {title}
             </h5>
             <button
               ref={(input) => setButtonRef(input)}
@@ -188,7 +169,7 @@ const EmployeePayslipUpload = ({
                           style={{ fontSize: "20px" }}
                           className="fa fa-cloud-upload pr-4"
                         ></i>
-                        Click to {uploadState}
+                        Click to {title}
                       </div>
                     ) : (
                       <p className="pt-3">{fileName}</p>

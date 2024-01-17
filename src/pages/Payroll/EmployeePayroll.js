@@ -274,8 +274,12 @@ const EmployeePayroll = () => {
         ),
         "MONTHLY SALARY": helper.handleMoneyFormat(data?.slip?.monthly_salary),
 
-        TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
-        PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+        "MONTHLY INCOME TAX": helper.handleMoneyFormat(
+          data?.slip?.monthly_income_tax
+        ),
+        "MONTHLY PENSION": helper.handleMoneyFormat(
+          data?.slip?.monthly_pension
+        ),
         "ATTENDANCE DEDUCTION": helper.handleMoneyFormat(
           data?.slip?.attendance_deduction
         ),
@@ -285,7 +289,7 @@ const EmployeePayroll = () => {
         "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
           data?.slip?.total_deductions
         ),
-        "NET SALARY": helper.handleMoneyFormat(data?.slip?.net_pay),
+        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
 
       // console.log("Download this:", formatted);
