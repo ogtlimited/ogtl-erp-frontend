@@ -38,9 +38,9 @@ const EmployeePayslipUpload = ({
           const res = helper.arrayToJSONObject(results.data);
           // eslint-disable-next-line array-callback-return
           const jsonData = res.filter((element) => {
-            if (typeof element == "object") {
+            if (typeof element === "object") {
               const emptyStringCount = Object.values(element).filter((e) =>
-                typeof e == "string" ? e.length === 0 : true
+                typeof e === "string" ? e.length === 0 : true
               ).length;
               if (Object.values(element).length !== emptyStringCount) {
                 return element;
@@ -69,22 +69,36 @@ const EmployeePayslipUpload = ({
       const formatted = data.map((e) => {
         return {
           ogid: e["OGID"],
-          basic: convertCurrencyToNumber(e["BASIC"]),
-          medical: convertCurrencyToNumber(e["MEDICAL"]),
-          housing: convertCurrencyToNumber(e["HOUSING"]),
-          transport: convertCurrencyToNumber(e["TRANSPORT"]),
-          other_allowances: convertCurrencyToNumber(e["OTHER ALLOWANCES"]),
-          monthly_salary: convertCurrencyToNumber(e["MONTHLY SALARY"]),
-          monthly_income_tax: convertCurrencyToNumber(e["TAX"]),
-          monthly_pension: convertCurrencyToNumber(e["PENSION"]),
-          attendance_deduction: convertCurrencyToNumber(
-            e["ATTENDANCE DEDUCTION"]
-          ),
-          disciplinary_deductions: convertCurrencyToNumber(
-            e["DISCIPLINARY DEDUCTIONS"]
-          ),
-          total_deductions: convertCurrencyToNumber(e["TOTAL DEDUCTIONS"]),
-          net_pay: convertCurrencyToNumber(e["NET SALARY"]),
+          basic: e["BASIC"] ? convertCurrencyToNumber(e["BASIC"]) : null,
+          medical: e["MEDICAL"] ? convertCurrencyToNumber(e["MEDICAL"]) : null,
+          housing: e["HOUSING"] ? convertCurrencyToNumber(e["HOUSING"]) : null,
+          transport: e["TRANSPORT"]
+            ? convertCurrencyToNumber(e["TRANSPORT"])
+            : null,
+          other_allowances: e["OTHER ALLOWANCES"]
+            ? convertCurrencyToNumber(e["OTHER ALLOWANCES"])
+            : null,
+          monthly_salary: e["MONTHLY SALARY"]
+            ? convertCurrencyToNumber(e["MONTHLY SALARY"])
+            : null,
+          monthly_income_tax: e["TAX"]
+            ? convertCurrencyToNumber(e["TAX"])
+            : null,
+          monthly_pension: e["PENSION"]
+            ? convertCurrencyToNumber(e["PENSION"])
+            : null,
+          attendance_deduction: e["ATTENDANCE DEDUCTION"]
+            ? convertCurrencyToNumber(e["ATTENDANCE DEDUCTION"])
+            : null,
+          disciplinary_deductions: e["DISCIPLINARY DEDUCTIONS"]
+            ? convertCurrencyToNumber(e["DISCIPLINARY DEDUCTIONS"])
+            : null,
+          total_deductions: e["TOTAL DEDUCTIONS"]
+            ? convertCurrencyToNumber(e["TOTAL DEDUCTIONS"])
+            : null,
+          net_pay: e["NET SALARY"]
+            ? convertCurrencyToNumber(e["NET SALARY"])
+            : null,
         };
       });
 
@@ -94,38 +108,38 @@ const EmployeePayslipUpload = ({
         },
       };
 
-      console.log("submit this", obj);
+      // console.log("submit this", obj);
     }
 
-    // axiosInstance
-    //   .post(path, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "ngrok-skip-browser-warning": "69420",
-    //     },
-    //     payload: obj.payload,
-    //   })
-    //   .then((res) => {
-    //     showAlert(
-    //       true,
-    //       "Salaries successfully uploaded",
-    //       "alert alert-success"
-    //     );
-    //     setToggleUploadModal(false);
-    //     setLoading(false);
-    //     fetchPayrollTotals();
-    //     fetchEmployeeSalarySlip();
-    //     buttonRef.click();
-    //     setUploadSuccess(true);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     showAlert(true, err?.response?.data?.errors, "alert alert-danger");
-    //     setLoading(false);
-    //     buttonRef.click();
-    //     setToggleUploadModal(false);
-    //   });
+    axiosInstance
+      .put(path, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: obj.payload,
+      })
+      .then((res) => {
+        showAlert(
+          true,
+          "Payslips successfully uploaded",
+          "alert alert-success"
+        );
+        setToggleUploadModal(false);
+        setLoading(false);
+        fetchPayrollTotals();
+        fetchEmployeeSalarySlip();
+        buttonRef.click();
+        setUploadSuccess(true);
+      })
+      .catch((err) => {
+        console.log(err?.response?.data?.errors);
+        showAlert(true, err?.response?.data?.errors, "alert alert-danger");
+        setLoading(false);
+        buttonRef.click();
+        setToggleUploadModal(false);
+      });
   };
 
   return (
@@ -134,13 +148,12 @@ const EmployeePayslipUpload = ({
       id="EmployeePayslipUploadModal"
       tabIndex="-1"
       aria-labelledby="FormModalModalLabel"
-      style={{ display: "block" }}
       aria-hidden="true"
     >
-      <div className="modal-dialog ">
+      <div className="modal-dialog modal-dialog-centered ">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="staticBackdropLabel">
+            <h5 className="modal-title" id="FormModalLabel">
               {uploadState}
             </h5>
             <button
@@ -169,7 +182,7 @@ const EmployeePayslipUpload = ({
                       accept=".csv"
                       onChange={(e) => onFileUpload(e)}
                     />
-                    {!fileName && (
+                    {!fileName ? (
                       <div>
                         <i
                           style={{ fontSize: "20px" }}
@@ -177,8 +190,10 @@ const EmployeePayslipUpload = ({
                         ></i>
                         Click to {uploadState}
                       </div>
+                    ) : (
+                      <p className="pt-3">{fileName}</p>
                     )}
-                    <p className="pt-3">{fileName}</p>
+
                     {invalid ? (
                       <small className="pt-3 text-danger">
                         This file contains invalid fields
