@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import { RequestReviewModal } from "../../components/Modal/RequestReviewModal";
+import EmployeePayslipUpload from "../../components/Modal/EmployeePayslipUpload";
 
 const CardSection = ({ title, value, loading, helper }) => {
   return (
@@ -37,7 +38,7 @@ const CardSection = ({ title, value, loading, helper }) => {
 };
 
 const EmployeePayroll = () => {
-  const { id } = useParams();
+  const { referenceId, id } = useParams();
   const navigate = useNavigate();
   const { user, ErrorHandler, showAlert } = useAppContext();
   const year = moment().format("YYYY");
@@ -51,6 +52,9 @@ const EmployeePayroll = () => {
   const [loadingSendMails, setLoadingSendMails] = useState(false);
   const [refreshApproversData, setRefreshApproversData] = useState(false);
 
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [toggleUploadModal, setToggleUploadModal] = useState(false);
+
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
@@ -61,9 +65,9 @@ const EmployeePayroll = () => {
 
   const [reviewersData, setReviewersData] = useState([]);
 
+  // const currentUserDesignation = user?.employee_info?.designation;
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
-  const currentUserDesignation = user?.employee_info?.designation;
   const isAuthorized = ["hr_manager"];
 
   // eslint-disable-next-line no-unused-vars
@@ -217,17 +221,20 @@ const EmployeePayroll = () => {
         },
         params: {
           page: page,
-          limit: 4000,
+          limit: 10000,
           batch_id: id,
         },
       });
 
       const responseData = response?.data?.data?.slips;
 
+      console.log("Original slip:", responseData)
+
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
         EMAIL: data?.user?.email,
+        "REFERENCE ID": data?.reference_id,
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
@@ -249,7 +256,7 @@ const EmployeePayroll = () => {
         "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
           data?.slip?.total_deductions
         ),
-        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
+        "NET SALARY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
 
       const dataToConvert = {
@@ -422,20 +429,8 @@ const EmployeePayroll = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadingCSV ? (
-              <button className="btn add-btn" style={{ marginRight: "20px" }}>
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
-              </button>
-            ) : data?.length > 0 ? (
+            {data?.length > 0 ? (
               <>
-                <button
-                  className="btn add-btn"
-                  style={{ marginRight: "20px" }}
-                  onClick={handleExportCSV}
-                >
-                  <i className="fa fa-download"></i> Download Report
-                </button>
-
                 <button
                   className="btn add-btn"
                   style={{ marginRight: "20px" }}
@@ -493,32 +488,85 @@ const EmployeePayroll = () => {
               style={{ margin: "0 0 1rem 1rem" }}
               onClick={handleBackToBatchTable}
             >
+              <i
+                className="fa fa-chevron-left"
+                style={{ marginRight: "10px" }}
+              ></i>
               Back to Batch Table
             </button>
 
-            {currentBatchApprovalStatus === "Approved" &&
-            CurrentUserCanNotifyEmployees ? (
-              <>
-                {loadingSendMails ? (
-                  <button
-                    className="btn btn-primary"
-                    style={{ margin: "0 1rem 1rem 0" }}
-                    onClick={handleNotifyEmployees}
-                  >
-                    <FontAwesomeIcon icon={faSpinner} spin pulse /> Sending
-                    mails...
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary"
-                    style={{ margin: "0 1rem 1rem 0" }}
-                    onClick={handleNotifyEmployees}
-                  >
-                    Notify Employees
-                  </button>
-                )}
-              </>
-            ) : null}
+            <div>
+              <button
+                className="btn btn-primary"
+                data-toggle="modal"
+                style={{ margin: "0 1rem 1rem 0" }}
+                data-target="#EmployeePayslipUploadModal"
+                onClick={() => setToggleUploadModal(true)}
+              >
+                <i className="fa fa-upload" style={{ marginRight: "10px" }}></i>
+                Update Slips
+              </button>
+
+              {loadingCSV ? (
+                <button
+                  className="btn btn-primary"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    spin
+                    pulse
+                    style={{ marginRight: "10px" }}
+                  />
+                  Downloading...
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                  onClick={handleExportCSV}
+                >
+                  <i
+                    className="fa fa-download"
+                    style={{ marginRight: "10px" }}
+                  ></i>
+                  Download Slips
+                </button>
+              )}
+
+              {currentBatchApprovalStatus === "Approved" &&
+              CurrentUserCanNotifyEmployees ? (
+                <>
+                  {loadingSendMails ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{ margin: "0 1rem 1rem 0" }}
+                      onClick={handleNotifyEmployees}
+                    >
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin
+                        pulse
+                        style={{ marginRight: "10px" }}
+                      />
+                      Sending mails...
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{ margin: "0 1rem 1rem 0" }}
+                      onClick={handleNotifyEmployees}
+                    >
+                      <i
+                        className="fa fa-envelope"
+                        style={{ marginRight: "10px" }}
+                      ></i>
+                      Notify Employees
+                    </button>
+                  )}
+                </>
+              ) : null}
+            </div>
           </div>
 
           <EmployeeSalaryTable
@@ -549,6 +597,20 @@ const EmployeePayroll = () => {
         setRefreshApproversData={setRefreshApproversData}
         reviewersData={reviewersData}
       />
+
+      {toggleUploadModal && (
+        <div>
+          <EmployeePayslipUpload
+            setToggleUploadModal={setToggleUploadModal}
+            title="Upload Payslips"
+            url={`/api/v1/csv_salary_slips_upload/${referenceId}.json`}
+            uploadSuccess={uploadSuccess}
+            setUploadSuccess={setUploadSuccess}
+            fetchPayrollTotals={fetchPayrollTotals}
+            fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+          />
+        </div>
+      )}
     </>
   );
 };
