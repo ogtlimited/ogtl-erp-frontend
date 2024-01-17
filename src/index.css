@@ -789,3 +789,30 @@ table.custom-table thead th {
 .reason_for_leaving-not-ok {
   border: 1px solid red !important;
 }
+
+.payroll_search_div {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.payroll-custom-search {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 0 10px 10px 0;
+}
+
+.custom-payroll-search-input {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #66708080;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: #c2c2c2;
+  font-weight: 400;
+  background-color: #fff;
+}
