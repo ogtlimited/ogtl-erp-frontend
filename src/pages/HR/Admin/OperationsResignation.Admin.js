@@ -11,9 +11,10 @@ import ResignationContent from "../../../components/ModalContents/ResignationCon
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import Select from "react-select";
 
 const OperationsResignationAdmin = () => {
-  const { ErrorHandler, getAvatarColor, user, showAlert, goToTop } =
+  const { resignationStatusTypes,ErrorHandler, getAvatarColor, user, showAlert, goToTop } =
     useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
@@ -24,6 +25,8 @@ const OperationsResignationAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [statusFilter, setStatusFilter] = useState("")
+
   const CurrentUserRoles = user?.employee_info?.roles;
   const authorizedRoles = ["operation_team", "operations_manager"];
 
@@ -31,6 +34,7 @@ const OperationsResignationAdmin = () => {
     authorizedRoles.includes(role)
   );
 
+  // Fetch Operations resignation
   const fetchOperationsResignations = useCallback(async () => {
     try {
       const res = await axiosInstance.get(
@@ -49,7 +53,7 @@ const OperationsResignationAdmin = () => {
           },
         }
       );
-      
+
       console.log("Operations Resignation:", res?.data?.data)
 
       let resData = res?.data?.data?.resignations;
@@ -61,8 +65,8 @@ const OperationsResignationAdmin = () => {
       const formattedData = resData.map((data) => ({
         id: data?.id,
         full_name: data?.full_name,
-        office: data.office?.toUpperCase(),
-        status: data.approved ? "Approved" : "Pending",
+        office:  data?.office ? data?.office?.toUpperCase() : data?.office,
+        status: data?.status.replace(/\b\w/g, char => char.toUpperCase()),
         date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
         notice_period_start_date: moment(data?.notice_period_start_date).format(
           "ddd, DD MMM YYYY"
