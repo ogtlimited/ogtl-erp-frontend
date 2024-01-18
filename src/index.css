@@ -799,6 +799,14 @@ table.custom-table thead th {
   flex-direction: column;
   justify-content: center;
 }
+
+.resignation_search_div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 100%;
+}
+
 .payroll_search_div {
   margin-bottom: 40px;
   display: flex;
