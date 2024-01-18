@@ -11,6 +11,7 @@ import ResignationContent from "../../../components/ModalContents/ResignationCon
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import OperationsRetractResignationModal from "../../../components/Modal/OperationsRetractResignationModal";
 import Select from "react-select";
 
 const OperationsResignationAdmin = () => {
@@ -60,7 +61,7 @@ const OperationsResignationAdmin = () => {
         }
       );
 
-      console.log("Operations Resignation:", res?.data?.data);
+      // console.log("Operations Resignation:", res?.data?.data);
 
       let resData = res?.data?.data?.resignations;
       let totalPages = res?.data?.data?.total_pages;
@@ -178,17 +179,32 @@ const OperationsResignationAdmin = () => {
             >
               View
             </button>
-            <button
-              className="btn btn-sm btn-success"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setmodalType("approve");
-                setViewRow(row);
-              }}
-            >
-              Approve
-            </button>
+
+            {AuthorizedOperationsRoles ? (
+              <button
+                className="btn btn-sm btn-success"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => {
+                  setmodalType("approve");
+                  setViewRow(row);
+                }}
+              >
+                Approve
+              </button>
+            ) : null}
+
+            {AuthorizedOperationsRoles ? (
+              <button
+                className="btn btn-sm btn-secondary"
+                onClick={() => {
+                  setmodalType("retract");
+                  setViewRow(row);
+                }}
+              >
+                Retract
+              </button>
+            ) : null}
           </div>
         </div>
       ),
@@ -200,7 +216,7 @@ const OperationsResignationAdmin = () => {
 
     try {
       const res = await axiosInstance.patch(
-        `/api/v1/resignations/${resignationId}.json`,
+        `/api/v1/operation_team_approve_resignations/${resignationId}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -216,7 +232,7 @@ const OperationsResignationAdmin = () => {
         "alert alert-success"
       );
 
-      // fetchOperationsResignations();
+      fetchOperationsResignations();
       goToTop();
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
@@ -241,7 +257,7 @@ const OperationsResignationAdmin = () => {
       </div>
 
       <div className="row">
-        <div className="payroll_search_div">
+        <div className="resignation_search_div">
           <div className="col-md-2">
             <label htmlFor="officeType">Status</label>
             <Select
@@ -290,6 +306,14 @@ const OperationsResignationAdmin = () => {
         deleteFunction={handleApproveResignation}
         message="Are you sure you want to approve this resignation?"
       />
+
+      {modalType === "retract" ? (
+        <OperationsRetractResignationModal
+          setmodalType={setmodalType}
+          resignationContent={viewRow}
+          fetchOperationsResignations={fetchOperationsResignations}
+        />
+      ) : null}
     </>
   );
 };
