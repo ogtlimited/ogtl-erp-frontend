@@ -14,8 +14,14 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Select from "react-select";
 
 const OperationsResignationAdmin = () => {
-  const { resignationStatusTypes,ErrorHandler, getAvatarColor, user, showAlert, goToTop } =
-    useAppContext();
+  const {
+    resignationStatusTypes,
+    ErrorHandler,
+    getAvatarColor,
+    user,
+    showAlert,
+    goToTop,
+  } = useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -25,7 +31,7 @@ const OperationsResignationAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  const [statusFilter, setStatusFilter] = useState("")
+  const [statusFilter, setStatusFilter] = useState("pending");
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const authorizedRoles = ["operation_team", "operations_manager"];
@@ -48,13 +54,13 @@ const OperationsResignationAdmin = () => {
           params: {
             page: page,
             limit: sizePerPage,
+            status: statusFilter,
             stage: "operations",
-            status: "pending",
           },
         }
       );
 
-      console.log("Operations Resignation:", res?.data?.data)
+      console.log("Operations Resignation:", res?.data?.data);
 
       let resData = res?.data?.data?.resignations;
       let totalPages = res?.data?.data?.total_pages;
@@ -65,12 +71,10 @@ const OperationsResignationAdmin = () => {
       const formattedData = resData.map((data) => ({
         id: data?.id,
         full_name: data?.full_name,
-        office:  data?.office ? data?.office?.toUpperCase() : data?.office,
-        status: data?.status.replace(/\b\w/g, char => char.toUpperCase()),
+        office: data?.office ? data?.office?.toUpperCase() : data?.office,
+        status: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
+        stage: data?.stage,
         date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
-        notice_period_start_date: moment(data?.notice_period_start_date).format(
-          "ddd, DD MMM YYYY"
-        ),
         last_day_at_work: moment(data?.last_day_at_work).format(
           "ddd, DD MMM YYYY"
         ),
@@ -85,7 +89,7 @@ const OperationsResignationAdmin = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [page, sizePerPage, statusFilter]);
 
   useEffect(() => {
     fetchOperationsResignations();
@@ -118,6 +122,19 @@ const OperationsResignationAdmin = () => {
       headerStyle: { width: "15%" },
     },
     {
+      dataField: "stage",
+      text: "Stage",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i className="fa fa-dot-circle-o text-primary"></i> {value}
+          </span>
+        </>
+      ),
+    },
+    {
       dataField: "status",
       text: "Status",
       sort: true,
@@ -137,18 +154,6 @@ const OperationsResignationAdmin = () => {
       ),
     },
     {
-      dataField: "stage",
-      text: "Stage",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "notice_period_start_date",
-      text: "Notice Period Start Date",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
       dataField: "last_day_at_work",
       text: "Last Day at Work",
       sort: true,
@@ -163,7 +168,6 @@ const OperationsResignationAdmin = () => {
         <div className="text-center">
           <div className="leave-user-action-btns">
             <button
-              style={{ marginRight: "10px" }}
               className="btn btn-sm btn-primary"
               data-toggle="modal"
               data-target="#generalModal"
@@ -237,6 +241,26 @@ const OperationsResignationAdmin = () => {
       </div>
 
       <div className="row">
+        <div className="payroll_search_div">
+          <div className="col-md-2">
+            <label htmlFor="officeType">Status</label>
+            <Select
+              options={resignationStatusTypes}
+              isSearchable={true}
+              value={{
+                value: statusFilter,
+                label: statusFilter.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ),
+              }}
+              onChange={(e) => {
+                setStatusFilter(e?.value);
+              }}
+              style={{ display: "inline-block" }}
+            />
+          </div>
+        </div>
+
         <UniversalPaginatedTable
           data={data}
           columns={columns}
