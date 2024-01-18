@@ -14,6 +14,8 @@ export const EditSalarySlipModal = ({
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState([]);
+  const [maxBasic, setMaxBasic] = useState(null);
+  const [totalDaysWorked, setTotalDaysWorked] = useState(22);
 
   useEffect(() => {
     setFormData({
@@ -23,6 +25,8 @@ export const EditSalarySlipModal = ({
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
+
+    setMaxBasic(data?.initialBasic);
   }, [
     data?.initialTax,
     data?.initialPension,
@@ -39,8 +43,11 @@ export const EditSalarySlipModal = ({
       prorate: data?.initialProrate,
       // salary: data?.initialSalary,
     });
+
+    setTotalDaysWorked(22);
   };
 
+  // Handle Form Change:
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -49,6 +56,7 @@ export const EditSalarySlipModal = ({
     });
   };
 
+  // Handle Submit:
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -58,6 +66,8 @@ export const EditSalarySlipModal = ({
       monthly_pension: +formData?.monthly_pension,
       basic: +formData?.basic,
       prorate: formData?.prorate,
+      
+      total_days_worked: +totalDaysWorked,
       // salary: +formData?.salary,
     };
 
@@ -128,12 +138,29 @@ export const EditSalarySlipModal = ({
                     <div className="form-group">
                       <label htmlFor="basic">Basic</label>
                       <input
-                        name="basic" 
+                        name="basic"
                         type="number"
                         className="form-control"
                         value={formData.basic}
-                        max={formData.basic}
+                        max={maxBasic}
                         onChange={handleChange}
+                        step="any"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="total_days_worked">
+                        Total days worked
+                      </label>
+                      <input
+                        name="total_days_worked"
+                        type="number"
+                        className="form-control"
+                        value={totalDaysWorked}
+                        onChange={(e) => setTotalDaysWorked(e?.target?.value)}
+                        max={22}
                       />
                     </div>
                   </div>
