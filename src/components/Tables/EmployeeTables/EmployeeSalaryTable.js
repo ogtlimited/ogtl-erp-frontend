@@ -29,6 +29,7 @@ function EmployeeSalaryTable({
   setTotalPages,
 
   fetchEmployeeSalarySlip,
+  fetchPayrollTotals,
   currentApproverEmail,
   currentBatchApprovalStatus,
   context,
@@ -284,6 +285,7 @@ function EmployeeSalaryTable({
 
       <EditSalarySlipModal
         fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+        fetchPayrollTotals={fetchPayrollTotals}
         data={selectedSalarySlip}
       />
     </>

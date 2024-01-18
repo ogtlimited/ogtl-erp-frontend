@@ -530,7 +530,7 @@ export default function Router() {
               ),
             },
             {
-              path: "payroll-processing/batch-slips/:id",
+              path: "payroll-processing/batch-slips/:referenceId/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <EmployeePayroll />

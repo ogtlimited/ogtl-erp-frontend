@@ -1,60 +1,65 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
-export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
+export const EditSalarySlipModal = ({
+  data,
+  fetchEmployeeSalarySlip,
+  fetchPayrollTotals,
+}) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState([]);
+  const [totalDaysWorked, setTotalDaysWorked] = useState(22);
 
   useEffect(() => {
     setFormData({
-      monthly_income_tax: data?.initialTax,
-      monthly_pension: data?.initialPension,
-      basic: data?.initialBasic,
       prorate: data?.initialProrate,
+      // monthly_income_tax: data?.initialTax,
+      // monthly_pension: data?.initialPension,
+      // basic: data?.initialBasic,
       // salary: data?.initialSalary,
     });
   }, [
-    data?.initialTax,
-    data?.initialPension,
-    data?.initialBasic,
     data?.initialProrate,
+    // data?.initialTax,
+    // data?.initialPension,
+    // data?.initialBasic,
     // data?.initialSalary,
   ]);
 
   const clearForm = () => {
     setFormData({
-      monthly_income_tax: data?.initialTax,
-      monthly_pension: data?.initialPension,
-      basic: data?.initialBasic,
       prorate: data?.initialProrate,
+      // monthly_income_tax: data?.initialTax,
+      // monthly_pension: data?.initialPension,
+      // basic: data?.initialBasic,
       // salary: data?.initialSalary,
     });
+
+    setTotalDaysWorked(22);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // // Handle Form Change:
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   });
+  // };
 
+  // Handle Submit:
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const formattedData = {
-      monthly_income_tax: +formData?.monthly_income_tax,
-      monthly_pension: +formData?.monthly_pension,
-      basic: +formData?.basic,
       prorate: formData?.prorate,
-      // salary: +formData?.salary,
+      total_days_worked: +totalDaysWorked,
     };
 
     try {
@@ -73,6 +78,8 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
       const resData = res.data.data;
 
       fetchEmployeeSalarySlip();
+      fetchPayrollTotals();
+      setTotalDaysWorked(22);
 
       showAlert(
         true,
@@ -119,41 +126,7 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="monthly_income_tax">Tax</label>
-                      <input
-                        name="monthly_income_tax"
-                        type="text"
-                        className="form-control"
-                        value={helper.handleMoneyFormat(
-                          formData.monthly_income_tax
-                        )}
-                        readOnly
-                        // onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="monthly_pension">Pension</label>
-                      <input
-                        name="monthly_pension"
-                        type="text"
-                        className="form-control"
-                        value={helper.handleMoneyFormat(
-                          formData.monthly_pension
-                        )}
-                        readOnly
-                        // onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="basic">Basic</label>
                       <input
@@ -161,7 +134,25 @@ export const EditSalarySlipModal = ({ data, fetchEmployeeSalarySlip }) => {
                         type="number"
                         className="form-control"
                         value={formData.basic}
+                        max={maxBasic}
                         onChange={handleChange}
+                        step="any"
+                      />
+                    </div>
+                  </div> */}
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="total_days_worked">
+                        Total days worked
+                      </label>
+                      <input
+                        name="total_days_worked"
+                        type="number"
+                        className="form-control"
+                        value={totalDaysWorked}
+                        onChange={(e) => setTotalDaysWorked(e?.target?.value)}
+                        max={22}
                       />
                     </div>
                   </div>
