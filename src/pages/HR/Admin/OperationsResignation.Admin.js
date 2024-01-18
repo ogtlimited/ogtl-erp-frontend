@@ -74,7 +74,12 @@ const OperationsResignationAdmin = () => {
         full_name: data?.full_name,
         office: data?.office ? data?.office?.toUpperCase() : data?.office,
         status: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
-        stage: data?.stage,
+        stage:
+          data?.stage === "operations"
+            ? "Operations"
+            : data?.stage
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (match) => match.toUpperCase()),
         date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
         last_day_at_work: moment(data?.last_day_at_work).format(
           "ddd, DD MMM YYYY"
@@ -85,7 +90,7 @@ const OperationsResignationAdmin = () => {
       setData(formattedData);
       setLoading(false);
     } catch (error) {
-      const component = "Operation Resignations | ";
+      const component = "Resignations - Operation stage | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -95,6 +100,37 @@ const OperationsResignationAdmin = () => {
   useEffect(() => {
     fetchOperationsResignations();
   }, [fetchOperationsResignations]);
+
+  // Handle Approve
+  const handleApproveResignation = async (viewRow) => {
+    const resignationId = viewRow.id;
+
+    try {
+      const res = await axiosInstance.patch(
+        `/api/v1/operation_team_approve_resignations/${resignationId}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      showAlert(
+        true,
+        `${viewRow?.full_name} resignation application is successfully approved!`,
+        "alert alert-success"
+      );
+
+      fetchOperationsResignations();
+      goToTop();
+    } catch (error) {
+      const errorMsg = error.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      goToTop();
+    }
+  };
 
   const columns = [
     {
@@ -210,36 +246,6 @@ const OperationsResignationAdmin = () => {
       ),
     },
   ];
-
-  const handleApproveResignation = async (viewRow) => {
-    const resignationId = viewRow.id;
-
-    try {
-      const res = await axiosInstance.patch(
-        `/api/v1/operation_team_approve_resignations/${resignationId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      showAlert(
-        true,
-        `${viewRow?.full_name} resignation application is successfully approved!`,
-        "alert alert-success"
-      );
-
-      fetchOperationsResignations();
-      goToTop();
-    } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      goToTop();
-    }
-  };
 
   return (
     <>

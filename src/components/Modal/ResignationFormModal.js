@@ -34,8 +34,6 @@ export const ResignationFormModal = ({
   const [data, setData] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  // console.log("Resignation Survey form", exitForm);
-
   // Handle Radio Change:
   const handleRadioChange = (e) => {
     setData({
@@ -47,19 +45,21 @@ export const ResignationFormModal = ({
   // Handle Checkbox Change:
   const handleCheckboxChange = (e, question) => {
     const option = e.target.value;
+    let options = []
 
     setSelectedOptions((prevOptions) => {
       if (prevOptions.includes(option)) {
         return prevOptions.filter((prevOption) => prevOption !== option);
       } else {
         const allOptions = [...prevOptions, option];
+        options = allOptions;
         return allOptions;
       }
     });
 
     setData((prevData) => ({
       ...prevData,
-      [question]: selectedOptions,
+      [question]: [...options],
     }));
   };
 

@@ -1,17 +1,24 @@
 // *IN USE
 
-import React from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../../../Context/AppContext";
 import HrStaffResignationAdmin from "./HrStaffResignation.Admin";
+import HrManagerResignationAdmin from "./HrManagerResignation.Admin";
 
 const ResignationAdmin = () => {
   const { user } = useAppContext();
+  const [viewingStage2, setViewingStage2] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const authorizedRoles = ["hr_manager", "senior_hr_associate"];
+  const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
+  const authorizedJuniorRoles = ["hr_staff"];
 
-  const AuthorizedHrRoles = CurrentUserRoles.some((role) =>
-    authorizedRoles.includes(role)
+  const AuthorizedHrManagerRoles = CurrentUserRoles.some((role) =>
+    authorizedSeniorRoles.includes(role)
+  );
+
+  const AuthorizedHrStaffRoles = CurrentUserRoles.some((role) =>
+    authorizedJuniorRoles.includes(role)
   );
 
   return (
@@ -29,8 +36,8 @@ const ResignationAdmin = () => {
         </div>
       </div>
 
-      {AuthorizedHrRoles ? (
-        <div className="page-menu">
+      {AuthorizedHrStaffRoles && AuthorizedHrManagerRoles ? (
+        <div className="page-menu" style={{ marginBottom: "30px" }}>
           <div className="row">
             <div className="col-sm-12">
               <ul className="nav nav-tabs nav-tabs-bottom">
@@ -44,7 +51,7 @@ const ResignationAdmin = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" data-toggle="tab" href="#tab_stage_2">
+                  <a className="nav-link" data-toggle="tab" href="#tab_stage_2" onClick={() => setViewingStage2(true)}>
                     Stage 2
                   </a>
                 </li>
@@ -54,15 +61,36 @@ const ResignationAdmin = () => {
         </div>
       ) : null}
 
-      <div className="row tab-content">
-        <div id="tab_stage_1" className="col-12 tab-pane show active">
-          <HrStaffResignationAdmin />
+      {/* HR Staff Only  */}
+      {AuthorizedHrStaffRoles && !AuthorizedHrManagerRoles ? (
+        <div className="row tab-content">
+          <div id="tab_stage_1" className="col-12 tab-pane show active">
+            <HrStaffResignationAdmin />
+          </div>
         </div>
+      ) : null}
 
-        <div id="tab_stage_2" className="col-12 tab-pane">
-          {/* <ReversedDeductions /> */}
+      {/* HR Manager Only */}
+      {!AuthorizedHrStaffRoles && AuthorizedHrManagerRoles ? (
+        <div className="row tab-content">
+          <div id="tab_stage_2" className="col-12 tab-pane show active">
+            <HrManagerResignationAdmin />
+          </div>
         </div>
-      </div>
+      ) : null}
+
+      {/* Both HR Staff and HR Manager */}
+      {AuthorizedHrStaffRoles && AuthorizedHrManagerRoles ? (
+        <div className="row tab-content">
+          <div id="tab_stage_1" className="col-12 tab-pane show active">
+            <HrStaffResignationAdmin />
+          </div>
+
+          <div id="tab_stage_2" className="col-12 tab-pane">
+            <HrManagerResignationAdmin viewingStage2={viewingStage2} />
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };

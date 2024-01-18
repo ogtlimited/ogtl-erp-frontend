@@ -17,6 +17,7 @@ const ResignationUser = () => {
 
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const currentUserOffice = user?.office?.office_type;
   const currentUserDesignation = user?.employee_info?.designation.toLowerCase();
   const currentUserIsLead = user?.employee_info?.is_lead;
   // const currentUserIsManagement = user;
@@ -25,16 +26,18 @@ const ResignationUser = () => {
 
   // Calculates Resignation Notice Period:
   useEffect(() => {
-    let noticePeriod = 0;
+    let noticePeriod = 30;
 
-    if (currentUserIsLead) {
-      noticePeriod = 30;
-    } else if (currentUserDesignation === "agent") {
+    if (currentUserOffice === "campaign" && !currentUserIsLead) {
       noticePeriod = 14;
+    } else if (currentUserOffice === "department" && !currentUserIsLead) {
+      noticePeriod = 30;
+    } else if (currentUserIsLead) {
+      noticePeriod = 30;
     }
 
     setNoticePeriod(noticePeriod);
-  }, [currentUserDesignation, currentUserIsLead]);
+  }, [currentUserDesignation, currentUserIsLead, currentUserOffice]);
 
   // Cancel Application:
   const cancelEvent = () => {
@@ -97,11 +100,12 @@ const ResignationUser = () => {
         </div>
 
         <div className="col-sm-6 resignation_form_container">
-          <div style={{marginBottom: "20px"}}>
+          <div style={{ marginBottom: "20px" }}>
             <div className="resignation_form_inner">
               <div className="modal-header">
                 <p className="modal-title" id="FormModalLabel">
-                  You have a notice period of <strong>{noticePeriod}</strong> days.
+                  You have a notice period of <strong>{noticePeriod}</strong>{" "}
+                  days.
                 </p>
               </div>
             </div>

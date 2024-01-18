@@ -833,3 +833,8 @@ table.custom-table thead th {
   font-weight: 400;
   background-color: #fff;
 }
+
+.survey_answers_view {
+  padding: 20px 0 0 0;
+  border-top: 1px solid #ccc;
+}

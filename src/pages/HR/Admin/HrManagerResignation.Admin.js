@@ -10,11 +10,18 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import ResignationContent from "../../../components/ModalContents/ResignationContent";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import Select from "react-select";
+import HrManagerResignationFeedbackModal from "../../../components/Modal/HrManagerResignationFeedbackModal";
 
-const ResignationAdmin = () => {
-  const { ErrorHandler, getAvatarColor, user, showAlert, goToTop } =
-    useAppContext();
+const HrManagerResignationAdmin = ({ viewingStage2 }) => {
+  const {
+    resignationStatusTypes,
+    ErrorHandler,
+    getAvatarColor,
+    user,
+    showAlert,
+    goToTop,
+  } = useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -24,6 +31,8 @@ const ResignationAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
+  const [statusFilter, setStatusFilter] = useState("pending");
+
   const CurrentUserRoles = user?.employee_info?.roles;
   const authorizedRoles = ["hr_manager", "senior_hr_associate"];
 
@@ -31,19 +40,27 @@ const ResignationAdmin = () => {
     authorizedRoles.includes(role)
   );
 
-  const fetchResignations = useCallback(async () => {
+  // Fetch HR Manager Resignation:
+  const fetchHrManagerResignations = useCallback(async () => {
     try {
-      const res = await axiosInstance.get("api/v1/resignations.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-        },
-      });
+      const res = await axiosInstance.get(
+        "/api/v1/hr_manager_resignations.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+            status: statusFilter,
+            stage: "hr_manager",
+          },
+        }
+      );
+
+      // console.log("HR Manager Resignation:", res?.data?.data);
 
       let resData = res?.data?.data?.resignations;
       let totalPages = res?.data?.data?.total_pages;
@@ -54,31 +71,45 @@ const ResignationAdmin = () => {
       const formattedData = resData.map((data) => ({
         id: data?.id,
         full_name: data?.full_name,
-        office: data.office?.toUpperCase(),
-        status: data.approved ? "Approved" : "Pending",
+        office: data?.office ? data?.office?.toUpperCase() : data?.office,
+        status: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
+        stage:
+          data?.stage === "hr_manager"
+            ? "HR Manager"
+            : data?.stage
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (match) => match.toUpperCase()),
         date_applied: moment(data?.created_at).format("ddd, DD MMM YYYY"),
-        notice_period_start_date: moment(data?.notice_period_start_date).format(
-          "ddd, DD MMM YYYY"
-        ),
         last_day_at_work: moment(data?.last_day_at_work).format(
           "ddd, DD MMM YYYY"
         ),
         reason_for_resignation: data?.resignation_reason,
+        survey_answer: data?.survey_answer,
       }));
 
       setData(formattedData);
       setLoading(false);
     } catch (error) {
-      const component = "Employee Resignations | ";
+      const component = "Resignations - HR Manager stage | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [page, sizePerPage, statusFilter]);
 
   useEffect(() => {
-    fetchResignations();
-  }, [fetchResignations]);
+    if (authorizedRoles) {
+      fetchHrManagerResignations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchHrManagerResignations]);
+
+  useEffect(() => {
+    if (viewingStage2) {
+      fetchHrManagerResignations();
+    }
+
+  }, [fetchHrManagerResignations, viewingStage2]);
 
   const columns = [
     {
@@ -107,6 +138,19 @@ const ResignationAdmin = () => {
       headerStyle: { width: "15%" },
     },
     {
+      dataField: "stage",
+      text: "Stage",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i className="fa fa-dot-circle-o text-primary"></i> {value}
+          </span>
+        </>
+      ),
+    },
+    {
       dataField: "status",
       text: "Status",
       sort: true,
@@ -126,18 +170,6 @@ const ResignationAdmin = () => {
       ),
     },
     {
-      dataField: "stage",
-      text: "Stage",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "notice_period_start_date",
-      text: "Notice Period Start Date",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
       dataField: "last_day_at_work",
       text: "Last Day at Work",
       sort: true,
@@ -152,7 +184,6 @@ const ResignationAdmin = () => {
         <div className="text-center">
           <div className="leave-user-action-btns">
             <button
-              style={{ marginRight: "10px" }}
               className="btn btn-sm btn-primary"
               data-toggle="modal"
               data-target="#generalModal"
@@ -163,69 +194,47 @@ const ResignationAdmin = () => {
             >
               View
             </button>
-            <button
-              className="btn btn-sm btn-success"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => {
-                setmodalType("approve");
-                setViewRow(row);
-              }}
-            >
-              Approve
-            </button>
+
+            {AuthorizedHrRoles && row?.status !== "Approved" ? (
+              <button
+                className="btn btn-sm btn-success"
+                onClick={() => {
+                  setmodalType("feedback");
+                  setViewRow(row);
+                }}
+              >
+                Approve
+              </button>
+            ) : null}
           </div>
         </div>
       ),
     },
   ];
 
-  const handleApproveResignation = async (viewRow) => {
-    const resignationId = viewRow.id;
-
-    try {
-      const res = await axiosInstance.patch(
-        `/api/v1/resignations/${resignationId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      showAlert(
-        true,
-        `${viewRow?.full_name} resignation application is successfully approved!`,
-        "alert alert-success"
-      );
-
-      fetchResignations();
-      goToTop();
-    } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      goToTop();
-    }
-  };
-
   return (
-    <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Resignations</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item">Exit</li>
-              <li className="breadcrumb-item active">Resignations</li>
-            </ul>
+    <div className="tab-pane" id="tab_stage_2">
+      <div className="row">
+        <div className="resignation_search_div">
+          <div className="col-md-2">
+            <label htmlFor="officeType">Status</label>
+            <Select
+              options={resignationStatusTypes}
+              isSearchable={true}
+              value={{
+                value: statusFilter,
+                label: statusFilter.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ),
+              }}
+              onChange={(e) => {
+                setStatusFilter(e?.value);
+              }}
+              style={{ display: "inline-block" }}
+            />
           </div>
         </div>
-      </div>
 
-      <div className="row">
         <UniversalPaginatedTable
           data={data}
           columns={columns}
@@ -243,20 +252,22 @@ const ResignationAdmin = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Resignation Details"
+          expand={true}
           content={<ResignationContent Content={viewRow} />}
         />
       ) : (
         ""
       )}
 
-      <ConfirmModal
-        title="Resignation Approval"
-        selectedRow={viewRow}
-        deleteFunction={handleApproveResignation}
-        message="Are you sure you want to approve this resignation?"
-      />
-    </>
+      {modalType === "feedback" ? (
+        <HrManagerResignationFeedbackModal
+          setmodalType={setmodalType}
+          resignationContent={viewRow}
+          fetchHrManagerResignations={fetchHrManagerResignations}
+        />
+      ) : null}
+    </div>
   );
 };
 
-export default ResignationAdmin;
+export default HrManagerResignationAdmin;

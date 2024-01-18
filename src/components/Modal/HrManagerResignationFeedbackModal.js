@@ -3,45 +3,48 @@ import { RiCloseCircleFill } from "react-icons/ri";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 
-function OperationsRetractResignationModal({
+function HrManagerResignationFeedbackModal({
   setmodalType,
   resignationContent,
-  fetchOperationsResignations,
+  fetchHrManagerResignations,
 }) {
-  const { showAlert } = useAppContext();
+  const { showAlert, 
+    goToTop } = useAppContext();
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Handle Retract Resignation:
-  const handleRetractResignation = async (e) => {
+  // Handle Resignation Feedback:
+  const handleResignationFeedback = async (e) => {
     e.preventDefault();
 
     const id = resignationContent.id;
     setLoading(true);
-    
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/operation_team_resignation_retractions/${id}.json`,
+        `/api/v1/hr_manager_approve_resignations/${id}.json`,
         {
           payload: {
-            retraction_reason: data,
+            feedback: data,
           },
         }
       );
 
       showAlert(
         true,
-        `${resignationContent?.full_name} resignation has been retracted!`,
-        "alert alert-info"
+        `${resignationContent?.full_name} resignation has been successfully approved!`,
+        "alert alert-success"
       );
 
-      fetchOperationsResignations();
+      fetchHrManagerResignations();
       setmodalType("");
       setLoading(false);
+      goToTop();
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoading(false);
+      goToTop();
     }
   };
 
@@ -54,14 +57,14 @@ function OperationsRetractResignationModal({
             onClick={() => setmodalType("")}
           />
           <div className="rejection-modal-body">
-            <form onSubmit={handleRetractResignation}>
+            <form onSubmit={handleResignationFeedback}>
               <div>
                 <div className="form-group">
-                  <label htmlFor="retraction_reason">
-                    Reason for Retraction
+                  <label htmlFor="feedback">
+                    Feedback
                   </label>
                   <textarea
-                    name="retraction_reason"
+                    name="feedback"
                     className="form-control rejection-textarea"
                     value={data}
                     onChange={(e) => setData(e.target.value)}
@@ -97,4 +100,4 @@ function OperationsRetractResignationModal({
   );
 }
 
-export default OperationsRetractResignationModal;
+export default HrManagerResignationFeedbackModal;
