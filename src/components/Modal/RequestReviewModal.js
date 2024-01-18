@@ -50,7 +50,7 @@ export const RequestReviewModal = ({
         {
           payload: {
             ogid: selectedReviewer,
-            reason: data?.reason,
+            reason_for_review: data?.reason,
           },
         }
       );

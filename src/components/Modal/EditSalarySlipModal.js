@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import helper from "../../services/helper";
 import { useAppContext } from "../../Context/AppContext";
 import Select from "react-select";
 
@@ -14,47 +13,44 @@ export const EditSalarySlipModal = ({
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState([]);
-  const [maxBasic, setMaxBasic] = useState(null);
   const [totalDaysWorked, setTotalDaysWorked] = useState(22);
 
   useEffect(() => {
     setFormData({
-      monthly_income_tax: data?.initialTax,
-      monthly_pension: data?.initialPension,
-      basic: data?.initialBasic,
       prorate: data?.initialProrate,
+      // monthly_income_tax: data?.initialTax,
+      // monthly_pension: data?.initialPension,
+      // basic: data?.initialBasic,
       // salary: data?.initialSalary,
     });
-
-    setMaxBasic(data?.initialBasic);
   }, [
-    data?.initialTax,
-    data?.initialPension,
-    data?.initialBasic,
     data?.initialProrate,
+    // data?.initialTax,
+    // data?.initialPension,
+    // data?.initialBasic,
     // data?.initialSalary,
   ]);
 
   const clearForm = () => {
     setFormData({
-      monthly_income_tax: data?.initialTax,
-      monthly_pension: data?.initialPension,
-      basic: data?.initialBasic,
       prorate: data?.initialProrate,
+      // monthly_income_tax: data?.initialTax,
+      // monthly_pension: data?.initialPension,
+      // basic: data?.initialBasic,
       // salary: data?.initialSalary,
     });
 
     setTotalDaysWorked(22);
   };
 
-  // Handle Form Change:
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // // Handle Form Change:
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   });
+  // };
 
   // Handle Submit:
   const handleSubmit = async (e) => {
@@ -62,13 +58,8 @@ export const EditSalarySlipModal = ({
     setLoading(true);
 
     const formattedData = {
-      monthly_income_tax: +formData?.monthly_income_tax,
-      monthly_pension: +formData?.monthly_pension,
-      basic: +formData?.basic,
       prorate: formData?.prorate,
-      
       total_days_worked: +totalDaysWorked,
-      // salary: +formData?.salary,
     };
 
     try {
@@ -88,6 +79,7 @@ export const EditSalarySlipModal = ({
 
       fetchEmployeeSalarySlip();
       fetchPayrollTotals();
+      setTotalDaysWorked(22);
 
       showAlert(
         true,
@@ -134,7 +126,7 @@ export const EditSalarySlipModal = ({
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 <div className="row">
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="basic">Basic</label>
                       <input
@@ -147,7 +139,7 @@ export const EditSalarySlipModal = ({
                         step="any"
                       />
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-md-6">
                     <div className="form-group">
