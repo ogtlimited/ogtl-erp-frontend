@@ -96,8 +96,18 @@ const ResignationUser = () => {
           </div>
         </div>
 
-        <div className="col-sm-6">
-          <div className="modal-dialog modal-dialog-centered modal-xl">
+        <div className="col-sm-6 resignation_form_container">
+          <div style={{marginBottom: "20px"}}>
+            <div className="resignation_form_inner">
+              <div className="modal-header">
+                <p className="modal-title" id="FormModalLabel">
+                  You have a notice period of <strong>{noticePeriod}</strong> days.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
             <div className="resignation_form_inner">
               <div className="modal-header">
                 <h4 className="modal-title" id="FormModalLabel">
@@ -120,17 +130,6 @@ const ResignationUser = () => {
                           onChange={handleFormChange}
                           required
                         />
-                      </div>
-                    </div>
-
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <p className="resignation_note">
-                          <strong>Note:</strong>{" "}
-                          <span>
-                            You have a notice period of {noticePeriod} days.
-                          </span>
-                        </p>
                       </div>
                     </div>
                   </div>

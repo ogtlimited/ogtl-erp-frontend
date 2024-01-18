@@ -793,3 +793,9 @@ table.custom-table thead th {
 .resignation_note {
   font-size: 14px;
 }
+
+.resignation_form_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
