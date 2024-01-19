@@ -52,6 +52,17 @@ export const EditSalarySlipModal = ({
   //   });
   // };
 
+  // Handle Total Days Worked
+  const handleTotalDaysWorked = (e) => {
+    const isInteger = Number.isInteger(+e?.target?.value);
+
+    if (isInteger) {
+      setTotalDaysWorked(e?.target?.value);
+    } else {
+      setTotalDaysWorked(Math.floor(e?.target?.value));
+    }
+  };
+
   // Handle Submit:
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,7 +162,7 @@ export const EditSalarySlipModal = ({
                         type="number"
                         className="form-control"
                         value={totalDaysWorked}
-                        onChange={(e) => setTotalDaysWorked(e?.target?.value)}
+                        onChange={handleTotalDaysWorked}
                         max={22}
                         step="1"
                       />
