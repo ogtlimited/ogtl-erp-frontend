@@ -11,10 +11,12 @@ const ResignationContent = ({ Content = {} }) => {
     "office",
     "date_applied",
     "status",
-    "notice_period_start_date",
     "last_day_at_work",
     "reason_for_resignation",
   ];
+
+  const surveyData = Content.survey_answer?.answer?.answers || [];
+  const surveyFeedback = Content?.survey_answer?.feedback;
 
   return (
     <div className="row d-flex justify-content-center">
@@ -52,6 +54,29 @@ const ResignationContent = ({ Content = {} }) => {
           return null;
         }
       })}
+
+      {/* Display Survey Feedback */}
+      {surveyFeedback ? (
+        <div className="col-md-12 mt-3 survey_answers_view">
+          <p className="job-field">Feedback</p>
+          <div className="mt-2">
+            <p>{surveyFeedback}</p>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Display Survey Questions and Answers */}
+      {surveyData.length ? (
+        <div className="col-md-12 mt-3 survey_answers_view">
+          <p className="job-field">Survey</p>
+          {surveyData.map((item, index) => (
+            <div key={index} className="mt-2">
+              <p className="font-weight-bold">Q: {item?.question}</p>
+              <p>A: {item?.answer}</p>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -14,6 +14,9 @@ export const RequestReviewModal = ({
   const { showAlert } = useAppContext();
   const [selectedReviewer, setSelectedReviewer] = useState("");
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    reason: "",
+  });
 
   // Handle Select Reviewer:
   const handleSelectReviewer = async (data) => {
@@ -21,23 +24,33 @@ export const RequestReviewModal = ({
     setSelectedReviewer(ogid);
   };
 
+  // Handle Form Change:
+  const handleFormChange = (e) => {
+    e.preventDefault();
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
   // Cancel Event
   const cancelEvent = () => {
-    setSelectedReviewer("")
-  }
+    setSelectedReviewer("");
+    setData({
+      reason: "",
+    });
+  };
 
   // Handle Request Review:
-  const handleRequestReview = async () => {
+  const handleRequestReview = async (e) => {
+    e.preventDefault();
     setLoading(true);
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/request_payroll_reviews/${id}.json?ogid=${selectedReviewer}`,
+        `/api/v1/request_payroll_reviews/${id}.json`,
         {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+          payload: {
+            ogid: selectedReviewer,
+            reason_for_review: data?.reason,
           },
         }
       );
@@ -83,7 +96,7 @@ export const RequestReviewModal = ({
               </button>
             </div>
 
-            <div className="modal-body">
+            <form className="modal-body" onSubmit={handleRequestReview}>
               <p>Select Reviewer</p>
               <main
                 className="payroll-approval-modal-body"
@@ -129,6 +142,17 @@ export const RequestReviewModal = ({
                 ))}
               </main>
 
+              <div className="form-group">
+                <label htmlFor="reason">Reason for Review</label>
+                <textarea
+                  name="reason"
+                  className="form-control rejection-textarea"
+                  value={data.reason}
+                  onChange={handleFormChange}
+                  required
+                />
+              </div>
+
               <div className="modal-footer">
                 <button
                   type="button"
@@ -138,11 +162,7 @@ export const RequestReviewModal = ({
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={handleRequestReview}
-                >
+                <button type="submit" className="btn btn-primary">
                   {loading ? (
                     <span
                       className="spinner-border spinner-border-sm"
@@ -154,7 +174,7 @@ export const RequestReviewModal = ({
                   )}
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

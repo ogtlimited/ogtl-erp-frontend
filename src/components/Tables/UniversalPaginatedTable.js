@@ -74,7 +74,7 @@ const UniversalPaginatedTable = ({
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 60000);
+    }, 6000);
     return <>{show ? "No Data Available" : null}</>;
   };
 

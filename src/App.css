@@ -353,8 +353,9 @@ a.nav-link {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 30% 23px;
+  padding: 5% 23px;
   font-size: 20px;
+  cursor: pointer;
 }
 .balance-sheet tbody > tr:nth-of-type(2n + 1) {
   background-color: none !important;

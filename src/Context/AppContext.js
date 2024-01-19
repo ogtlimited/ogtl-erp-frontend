@@ -68,6 +68,18 @@ const AppProvider = (props) => {
     },
   ];
 
+  const resignationStatusTypes = [
+    {
+      label: "Pending",
+      value: "pending",
+    },
+    {
+      label: "Approved",
+      value: "approved",
+    },
+  ];
+
+
   const selectOfficeTypes = [
     {
       label: "Department",
@@ -563,6 +575,7 @@ const AppProvider = (props) => {
         setSelectEmployees,
         fetchAllEmployees,
 
+        resignationStatusTypes,
         selectOfficeTypes,
 
         selectDepartments,
