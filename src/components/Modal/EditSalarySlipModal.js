@@ -153,6 +153,7 @@ export const EditSalarySlipModal = ({
                         value={totalDaysWorked}
                         onChange={(e) => setTotalDaysWorked(e?.target?.value)}
                         max={22}
+                        step="1"
                       />
                     </div>
                   </div>

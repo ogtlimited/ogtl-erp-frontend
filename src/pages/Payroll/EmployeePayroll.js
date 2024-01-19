@@ -177,8 +177,8 @@ const EmployeePayroll = () => {
           page: page,
           limit: sizePerPage,
           name: nameSearch ? nameSearch : null,
-          office_type: officeType ? officeType : null,
-          office_id: officeId?.id ? officeId?.id : null,
+          // office_type: officeType ? officeType : null,
+          // office_id: officeId?.id ? officeId?.id : null,
           prorate: prorateFilter ? prorateFilter : null,
         },
       })
@@ -328,70 +328,6 @@ const EmployeePayroll = () => {
     }
   };
 
-  const columns = [
-    {
-      dataField: "employee",
-      text: "Employee",
-      idDataField: "ogid",
-    },
-    {
-      dataField: "email",
-      text: "Email",
-    },
-    {
-      dataField: "basic",
-      text: "Basic",
-    },
-    {
-      dataField: "medical",
-      text: "Medical",
-    },
-    {
-      dataField: "housing",
-      text: "Housing",
-    },
-    {
-      dataField: "transport",
-      text: "Transport",
-    },
-    {
-      dataField: "otherAllowances",
-      text: "Other Allowances",
-    },
-    {
-      dataField: "monthlySalary",
-      text: "Gross Salary",
-    },
-    {
-      dataField: "tax",
-      text: "Tax",
-    },
-    {
-      dataField: "pension",
-      text: "Pension",
-    },
-    {
-      dataField: "attendance_deduction",
-      text: "Attendance Deduction",
-    },
-    {
-      dataField: "disciplinary_deductions",
-      text: "Disciplinary Deduction",
-    },
-    {
-      dataField: "totalDeductions",
-      text: "Total Deductions",
-    },
-    {
-      dataField: "netPay",
-      text: "Net Salary",
-    },
-    {
-      dataField: "prorate",
-      text: "Prorate",
-    },
-  ];
-
   const handleBackToBatchTable = () => {
     navigate(`/dashboard/payroll/payroll-processing`);
   };
@@ -455,6 +391,70 @@ const EmployeePayroll = () => {
       setNameSearch(e.target.value);
     }
   };
+
+  const columns = [
+    {
+      dataField: "employee",
+      text: "Employee",
+      idDataField: "ogid",
+    },
+    {
+      dataField: "email",
+      text: "Email",
+    },
+    {
+      dataField: "basic",
+      text: "Basic",
+    },
+    {
+      dataField: "medical",
+      text: "Medical",
+    },
+    {
+      dataField: "housing",
+      text: "Housing",
+    },
+    {
+      dataField: "transport",
+      text: "Transport",
+    },
+    {
+      dataField: "otherAllowances",
+      text: "Other Allowances",
+    },
+    {
+      dataField: "monthlySalary",
+      text: "Gross Salary",
+    },
+    {
+      dataField: "tax",
+      text: "Tax",
+    },
+    {
+      dataField: "pension",
+      text: "Pension",
+    },
+    {
+      dataField: "attendance_deduction",
+      text: "Attendance Deduction",
+    },
+    {
+      dataField: "disciplinary_deductions",
+      text: "Disciplinary Deduction",
+    },
+    {
+      dataField: "totalDeductions",
+      text: "Total Deductions",
+    },
+    {
+      dataField: "netPay",
+      text: "Net Salary",
+    },
+    {
+      dataField: "prorate",
+      text: "Prorate",
+    },
+  ];
 
   return (
     <>
@@ -551,7 +551,7 @@ const EmployeePayroll = () => {
           </div>
 
           {/* Office Type */}
-          <div className="col-md-2">
+          {/* <div className="col-md-2">
             <label htmlFor="officeType">Filter By</label>
             <Select
               options={selectOfficeTypes}
@@ -568,10 +568,10 @@ const EmployeePayroll = () => {
               }}
               style={{ display: "inline-block" }}
             />
-          </div>
+          </div> */}
 
           {/* Office */}
-          <div className="col-md-3">
+          {/* <div className="col-md-3">
             <label htmlFor="office_id">
               {officeType.replace(/\b\w/g, (char) => char.toUpperCase()) ||
                 "Office"}
@@ -592,7 +592,7 @@ const EmployeePayroll = () => {
               onChange={(e) => setOfficeId({ id: e?.value, title: e?.label })}
               style={{ display: "inline-block" }}
             />
-          </div>
+          </div> */}
 
           {/* Prorate */}
           <div className="col-md-2">
@@ -613,7 +613,7 @@ const EmployeePayroll = () => {
           </div>
 
           {/* Reset */}
-          <div className="payroll-custom-search">
+          {/* <div className="payroll-custom-search">
             <button
               className="btn btn-secondary custom-search-btn"
               onClick={() => {
@@ -630,7 +630,7 @@ const EmployeePayroll = () => {
             >
               Reset
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-md-12">

@@ -329,7 +329,6 @@ const HrStaffResignationAdmin = () => {
       {modalType === "view-details" ? (
         <ViewModal
           title="Resignation Details"
-          expand={true}
           content={<ResignationContent Content={viewRow} />}
         />
       ) : (
