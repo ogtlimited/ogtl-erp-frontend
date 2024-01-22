@@ -512,6 +512,8 @@ const sidebarConfig = [
       ? "operations"
       : "none",
     items: [
+
+      // Leave:
       {
         canView: CurrentUserRoles.includes("operation_team")
           ? "operations"
@@ -527,6 +529,22 @@ const sidebarConfig = [
           },
         ],
       },
+
+      // Exit Management:
+      {
+        canView: "operations",
+        title: "Exit",
+        path: PATH_DASHBOARD.operations.root,
+        icon: ICONS.resignation,
+        children: [
+          {
+            canView: "operations",
+            title: "Resignations",
+            path: PATH_DASHBOARD.operations.resignation,
+          },
+        ],
+      },
+
       // {
       //   canView: "super",
       //   title: "Campaign",

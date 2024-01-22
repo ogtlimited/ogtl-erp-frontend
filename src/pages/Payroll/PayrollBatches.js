@@ -115,9 +115,9 @@ const PayrollBatches = () => {
           ...e,
           id: e?.batch?.id,
           approved: e?.batch?.approved ? "Yes" : "No",
-          status: e?.batch?.status && e?.batch?.status.replace(/\b\w/g, (char) =>
-            char.toUpperCase()
-          ),
+          status:
+            e?.batch?.status &&
+            e?.batch?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
           title: e?.batch?.title,
           stage: e?.batch?.stage,
           employeeName:
@@ -153,7 +153,9 @@ const PayrollBatches = () => {
 
   // Handle View Salary Slips:
   const handleViewSalarySlips = async (row) => {
-    navigate(`/dashboard/payroll/payroll-processing/batch-slips/${row?.id}`);
+    navigate(
+      `/dashboard/payroll/payroll-processing/batch-slips/${row?.batch?.reference_id}/${row?.id}`
+    );
   };
 
   // Handle Approve Batch:

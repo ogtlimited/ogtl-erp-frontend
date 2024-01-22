@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { PayrollApprovalModal } from "../../components/Modal/PayrollApprovalModal";
 import { RequestReviewModal } from "../../components/Modal/RequestReviewModal";
+import EmployeePayslipUpload from "../../components/Modal/EmployeePayslipUpload";
+import Select from "react-select";
 
 const CardSection = ({ title, value, loading, helper }) => {
   return (
@@ -37,9 +39,16 @@ const CardSection = ({ title, value, loading, helper }) => {
 };
 
 const EmployeePayroll = () => {
-  const { id } = useParams();
+  const { referenceId, id } = useParams();
   const navigate = useNavigate();
-  const { user, ErrorHandler, showAlert } = useAppContext();
+  const {
+    selectOfficeTypes,
+    selectDepartments,
+    selectCampaigns,
+    user,
+    ErrorHandler,
+    showAlert,
+  } = useAppContext();
   const year = moment().format("YYYY");
   const currMonth = moment().format("M");
   const currMonthName = moment().format("MMMM");
@@ -51,6 +60,18 @@ const EmployeePayroll = () => {
   const [loadingSendMails, setLoadingSendMails] = useState(false);
   const [refreshApproversData, setRefreshApproversData] = useState(false);
 
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [toggleUploadModal, setToggleUploadModal] = useState(false);
+
+  const [name, setName] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+  const [officeType, setOfficeType] = useState("");
+  const [officeId, setOfficeId] = useState({
+    id: "",
+    title: "",
+  });
+  const [prorateFilter, setProrateFilter] = useState("");
+
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
@@ -61,13 +82,13 @@ const EmployeePayroll = () => {
 
   const [reviewersData, setReviewersData] = useState([]);
 
+  // const currentUserDesignation = user?.employee_info?.designation;
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
-  const currentUserDesignation = user?.employee_info?.designation;
-  const isAuthorized = ["hr_manager", "accountant"];
+  const isAuthorized = ["hr_manager"];
 
   // eslint-disable-next-line no-unused-vars
-  const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
+  const CurrentUserCanNotifyEmployees = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
   );
 
@@ -155,6 +176,10 @@ const EmployeePayroll = () => {
           batch_id: id,
           page: page,
           limit: sizePerPage,
+          name: nameSearch ? nameSearch : null,
+          // office_type: officeType ? officeType : null,
+          // office_id: officeId?.id ? officeId?.id : null,
+          prorate: prorateFilter ? prorateFilter : null,
         },
       })
       .then((res) => {
@@ -197,7 +222,15 @@ const EmployeePayroll = () => {
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, page, sizePerPage]);
+  }, [
+    id,
+    nameSearch,
+    officeId?.id,
+    officeType,
+    page,
+    prorateFilter,
+    sizePerPage,
+  ]);
 
   useEffect(() => {
     fetchEmployeeSalarySlip();
@@ -217,17 +250,20 @@ const EmployeePayroll = () => {
         },
         params: {
           page: page,
-          limit: 4000,
+          limit: 10000,
           batch_id: id,
         },
       });
 
       const responseData = response?.data?.data?.slips;
 
+      // console.log("Original slip:", responseData);
+
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
         EMAIL: data?.user?.email,
+        "REFERENCE ID": data?.slip?.reference_id,
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
@@ -238,8 +274,12 @@ const EmployeePayroll = () => {
         ),
         "MONTHLY SALARY": helper.handleMoneyFormat(data?.slip?.monthly_salary),
 
-        TAX: helper.handleMoneyFormat(data?.slip?.monthly_income_tax),
-        PENSION: helper.handleMoneyFormat(data?.slip?.monthly_pension),
+        "MONTHLY INCOME TAX": helper.handleMoneyFormat(
+          data?.slip?.monthly_income_tax
+        ),
+        "MONTHLY PENSION": helper.handleMoneyFormat(
+          data?.slip?.monthly_pension
+        ),
         "ATTENDANCE DEDUCTION": helper.handleMoneyFormat(
           data?.slip?.attendance_deduction
         ),
@@ -251,6 +291,8 @@ const EmployeePayroll = () => {
         ),
         "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
+
+      // console.log("Download this:", formatted);
 
       const dataToConvert = {
         data: formatted,
@@ -283,6 +325,70 @@ const EmployeePayroll = () => {
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoadingSendMails(false);
+    }
+  };
+
+  const handleBackToBatchTable = () => {
+    navigate(`/dashboard/payroll/payroll-processing`);
+  };
+
+  // Fetch Approvers Data:
+  const fetchApproversData = useCallback(() => {
+    axiosInstance
+      .get(`/api/v1/payroll_processors.json?batch_id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.payroll_processors;
+        const sortedData = data.find(
+          (data) => data?.current_processor === true
+        );
+        const currentApproverEmail = sortedData?.email;
+
+        setCurrentApproverEmail(currentApproverEmail);
+      })
+      .catch((error) => {
+        console.error("Error fetching approvers data | ", error);
+      });
+  }, [id]);
+
+  // Fetch Reviewers Data:
+  const fetchReviewersData = () => {
+    axiosInstance
+      .get(`/api/v1/request_payroll_reviews.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      })
+      .then((res) => {
+        const data = res?.data?.data?.processors;
+        const sortedData = data.sort((a, b) => a.stage - b.stage);
+        setReviewersData(sortedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching approvers data:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (refreshApproversData) {
+      fetchApproversData();
+    }
+
+    fetchApproversData();
+    fetchReviewersData();
+  }, [fetchApproversData, id, refreshApproversData]);
+
+  // Handle Name Search:
+  const handleKeydownNameSearch = (e) => {
+    if (e.key === "Enter") {
+      setNameSearch(e.target.value);
     }
   };
 
@@ -350,66 +456,9 @@ const EmployeePayroll = () => {
     },
   ];
 
-  const handleBackToBatchTable = () => {
-    navigate(`/dashboard/payroll/payroll-processing`);
-  };
-
-  // Fetch Approvers Data:
-  const fetchApproversData = useCallback(() => {
-    axiosInstance
-      .get(`/api/v1/payroll_processors.json?batch_id=${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      })
-      .then((res) => {
-        const data = res?.data?.data?.payroll_processors;
-        const sortedData = data.find(
-          (data) => data?.current_processor === true
-        );
-        const currentApproverEmail = sortedData?.email;
-
-        setCurrentApproverEmail(currentApproverEmail);
-      })
-      .catch((error) => {
-        console.error("Error fetching approvers data | ", error);
-      });
-  }, [id]);
-
-  // Fetch Reviewers Data:
-  const fetchReviewersData = () => {
-    axiosInstance
-      .get(`/api/v1/request_payroll_reviews.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      })
-      .then((res) => {
-        const data = res?.data?.data?.processors;
-        const sortedData = data.sort((a, b) => a.stage - b.stage);
-        setReviewersData(sortedData);
-      })
-      .catch((error) => {
-        console.error("Error fetching approvers data:", error);
-      });
-  };
-
-  useEffect(() => {
-    if (refreshApproversData) {
-      fetchApproversData();
-    }
-
-    fetchApproversData();
-    fetchReviewersData();
-  }, [fetchApproversData, id, refreshApproversData]);
-
   return (
     <>
-      <div className="page-header" style={{ marginBottom: "100px" }}>
+      <div className="page-header" style={{ marginBottom: "50px" }}>
         <div className="row">
           <div className="col">
             <h3 className="page-title">
@@ -422,22 +471,8 @@ const EmployeePayroll = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {loadingCSV ? (
-              <button className="btn add-btn" style={{ marginRight: "20px" }}>
-                <FontAwesomeIcon icon={faSpinner} spin pulse /> Loading...
-              </button>
-            ) : data?.length > 0 ? (
+            {data?.length > 0 ? (
               <>
-                {currentUserDesignation === "CEO" ? (
-                  <button
-                    className="btn add-btn"
-                    style={{ marginRight: "20px" }}
-                    onClick={handleExportCSV}
-                  >
-                    <i className="fa fa-download"></i> Download Report
-                  </button>
-                ) : null}
-
                 <button
                   className="btn add-btn"
                   style={{ marginRight: "20px" }}
@@ -488,6 +523,116 @@ const EmployeePayroll = () => {
       </div>
 
       <div className="row">
+        <div className="col-12 payroll_search_div">
+          {/* Name Search */}
+          <div className="payroll-custom-search">
+            <input
+              className="custom-payroll-search-input"
+              style={{
+                backgroundColor: "#fff",
+                margin: "0 10px 0 1rem",
+              }}
+              type="search"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleKeydownNameSearch}
+            />
+
+            <button
+              className="btn btn-secondary custom-search-btn"
+              onClick={() => {
+                setName("");
+                setNameSearch("");
+                setPage(1);
+              }}
+            >
+              Clear
+            </button>
+          </div>
+
+          {/* Office Type */}
+          {/* <div className="col-md-2">
+            <label htmlFor="officeType">Filter By</label>
+            <Select
+              options={selectOfficeTypes}
+              isSearchable={true}
+              value={{
+                value: officeType,
+                label: officeType.replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                ),
+              }}
+              onChange={(e) => {
+                setOfficeType(e?.value);
+                setOfficeId("");
+              }}
+              style={{ display: "inline-block" }}
+            />
+          </div> */}
+
+          {/* Office */}
+          {/* <div className="col-md-3">
+            <label htmlFor="office_id">
+              {officeType.replace(/\b\w/g, (char) => char.toUpperCase()) ||
+                "Office"}
+            </label>
+            <Select
+              options={
+                officeType === "department"
+                  ? selectDepartments
+                  : officeType === "campaign"
+                  ? selectCampaigns
+                  : null
+              }
+              isSearchable={true}
+              value={{
+                value: officeId?.id,
+                label: officeId?.title,
+              }}
+              onChange={(e) => setOfficeId({ id: e?.value, title: e?.label })}
+              style={{ display: "inline-block" }}
+            />
+          </div> */}
+
+          {/* Prorate */}
+          <div className="col-md-2">
+            <label htmlFor="office_id">Prorate</label>
+            <Select
+              options={[
+                { value: true, label: "Yes" },
+                { value: false, label: "No" },
+              ]}
+              isSearchable={true}
+              value={{
+                value: prorateFilter,
+                label: prorateFilter ? "Yes" : "No",
+              }}
+              onChange={(e) => setProrateFilter(e?.value)}
+              style={{ display: "inline-block" }}
+            />
+          </div>
+
+          {/* Reset */}
+          {/* <div className="payroll-custom-search">
+            <button
+              className="btn btn-secondary custom-search-btn"
+              onClick={() => {
+                setName("");
+                setNameSearch("");
+                setOfficeType("");
+                setOfficeId({
+                  id: "",
+                  title: "",
+                });
+                setProrateFilter("");
+                setPage(1);
+              }}
+            >
+              Reset
+            </button>
+          </div> */}
+        </div>
+
         <div className="col-md-12">
           <div className="payroll_action_btn_div">
             <button
@@ -495,31 +640,90 @@ const EmployeePayroll = () => {
               style={{ margin: "0 0 1rem 1rem" }}
               onClick={handleBackToBatchTable}
             >
+              <i
+                className="fa fa-chevron-left"
+                style={{ marginRight: "10px" }}
+              ></i>
               Back to Batch Table
             </button>
 
-            {currentBatchApprovalStatus === "Approved" ? (
-              <>
-                {loadingSendMails ? (
-                  <button
-                    className="btn btn-primary"
-                    style={{ margin: "0 1rem 1rem 0" }}
-                    onClick={handleNotifyEmployees}
-                  >
-                    <FontAwesomeIcon icon={faSpinner} spin pulse /> Sending
-                    mails...
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary"
-                    style={{ margin: "0 1rem 1rem 0" }}
-                    onClick={handleNotifyEmployees}
-                  >
-                    Notify Employees
-                  </button>
-                )}
-              </>
-            ) : null}
+            <div>
+              {currentApproverEmail === currentUserEmail ? (
+                <button
+                  className="btn btn-primary"
+                  data-toggle="modal"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                  data-target="#EmployeePayslipUploadModal"
+                  onClick={() => setToggleUploadModal(true)}
+                >
+                  <i
+                    className="fa fa-upload"
+                    style={{ marginRight: "10px" }}
+                  ></i>
+                  Update Slips
+                </button>
+              ) : null}
+
+              {loadingCSV ? (
+                <button
+                  className="btn btn-primary"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faSpinner}
+                    spin
+                    pulse
+                    style={{ marginRight: "10px" }}
+                  />
+                  Downloading...
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary"
+                  style={{ margin: "0 1rem 1rem 0" }}
+                  onClick={handleExportCSV}
+                >
+                  <i
+                    className="fa fa-download"
+                    style={{ marginRight: "10px" }}
+                  ></i>
+                  Download Slips
+                </button>
+              )}
+
+              {currentBatchApprovalStatus === "Approved" &&
+              CurrentUserCanNotifyEmployees ? (
+                <>
+                  {loadingSendMails ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{ margin: "0 1rem 1rem 0" }}
+                      onClick={handleNotifyEmployees}
+                    >
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin
+                        pulse
+                        style={{ marginRight: "10px" }}
+                      />
+                      Sending mails...
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{ margin: "0 1rem 1rem 0" }}
+                      onClick={handleNotifyEmployees}
+                    >
+                      <i
+                        className="fa fa-envelope"
+                        style={{ marginRight: "10px" }}
+                      ></i>
+                      Notify Employees
+                    </button>
+                  )}
+                </>
+              ) : null}
+            </div>
           </div>
 
           <EmployeeSalaryTable
@@ -537,6 +741,7 @@ const EmployeePayroll = () => {
             totalPages={totalPages}
             setTotalPages={setTotalPages}
             fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+            fetchPayrollTotals={fetchPayrollTotals}
             currentApproverEmail={currentApproverEmail}
             currentBatchApprovalStatus={currentBatchApprovalStatus}
           />
@@ -549,6 +754,20 @@ const EmployeePayroll = () => {
         setRefreshApproversData={setRefreshApproversData}
         reviewersData={reviewersData}
       />
+
+      {toggleUploadModal && (
+        <div>
+          <EmployeePayslipUpload
+            setToggleUploadModal={setToggleUploadModal}
+            title="Upload Payslips"
+            url={`/api/v1/csv_salary_slips_upload/${referenceId}.json`}
+            uploadSuccess={uploadSuccess}
+            setUploadSuccess={setUploadSuccess}
+            fetchPayrollTotals={fetchPayrollTotals}
+            fetchEmployeeSalarySlip={fetchEmployeeSalarySlip}
+          />
+        </div>
+      )}
     </>
   );
 };
