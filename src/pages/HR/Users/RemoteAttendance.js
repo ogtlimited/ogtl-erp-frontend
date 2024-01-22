@@ -11,6 +11,8 @@ import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import Switch from "@mui/material/Switch";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const RemoteAttendance = () => {
   const { showAlert, user, ErrorHandler } = useAppContext();
@@ -23,35 +25,39 @@ const RemoteAttendance = () => {
 
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
+  const [allPresent, setAllPresent] = useState(null);
+  const [allAbsent, setAllAbsent] = useState(null);
   const [date, setDate] = useState(today_date);
 
-  // Daily Remote Attendance Summary - Cards:
-  const fetchDailyRemoteAttendanceSummary = useCallback(async () => {
-    try {
-      const response = await axiosInstance.get(
-        "api/v1/daily_attendance_summary.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            date: date,
-          },
-        }
-      );
-      const resData = response?.data?.data?.result;
+  // // Daily Remote Attendance Summary - Cards:
+  // const fetchDailyRemoteAttendanceSummary = useCallback(async () => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       "api/v1/remote_attendance_summary.json",
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Access-Control-Allow-Origin": "*",
+  //           "ngrok-skip-browser-warning": "69420",
+  //         },
+  //         params: {
+  //           date: date,
+  //         },
+  //       }
+  //     );
+  //     const resData = response?.data?.data?.result;
 
-      setDailyRemoteAttendanceSummary(resData);
-      setLoading(false);
-    } catch (error) {
-      const component = "Daily Remote Attendance Summary:";
-      ErrorHandler(error, component);
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  //     console.log("cards:", response?.data?.data)
+
+  //     setDailyRemoteAttendanceSummary(resData);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     const component = "Daily Remote Attendance Summary:";
+  //     ErrorHandler(error, component);
+  //     setLoading(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [date]);
 
   // Daily Remote Attendance - Table:
   const fetchDailyRemoteAttendance = useCallback(async () => {
@@ -73,6 +79,12 @@ const RemoteAttendance = () => {
       );
 
       const resData = response?.data?.data?.records;
+
+      const present = resData.filter((e) => e.present === true);
+      const absent = resData.filter((e) => e.present === false);
+
+      setAllPresent(present?.length);
+      setAllAbsent(absent?.length);
 
       const formatted = resData.map((e, index) => ({
         ...e,
@@ -130,48 +142,6 @@ const RemoteAttendance = () => {
     fetchAllLeadersSubordinates();
   }, [fetchAllLeadersSubordinates, fetchDailyRemoteAttendance]);
 
-  const columns = [
-    {
-      dataField: "full_name",
-      text: "Employee Name",
-      sort: true,
-      headerStyle: { width: "30%" },
-    },
-    {
-      dataField: "ogid",
-      text: "OGID",
-      sort: true,
-      headerStyle: { width: "15%" },
-    },
-    {
-      dataField: "present",
-      text: "Present",
-      sort: true,
-      headerStyle: { width: "15%" },
-      formatter: (value, row) => (
-        <>
-          <Switch
-            checked={row?.present}
-            value={row?.present}
-            onChange={() => handleSetPresent(row)}
-          />
-        </>
-      ),
-    },
-    {
-      dataField: "acted_on_by",
-      text: "Acted on by",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "formattedDate",
-      text: "Date generated",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-  ];
-
   // Generate Attendance:
   const handleGenerateAttendance = async () => {
     setGenerating(true);
@@ -225,6 +195,48 @@ const RemoteAttendance = () => {
     }
   };
 
+  const columns = [
+    {
+      dataField: "full_name",
+      text: "Employee Name",
+      sort: true,
+      headerStyle: { width: "30%" },
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "present",
+      text: "Present",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          <Switch
+            checked={row?.present}
+            value={row?.present}
+            onChange={() => handleSetPresent(row)}
+          />
+        </>
+      ),
+    },
+    {
+      dataField: "acted_on_by",
+      text: "Acted on by",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "formattedDate",
+      text: "Date generated",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+  ];
+
   return (
     <>
       <div className="page-header">
@@ -240,21 +252,22 @@ const RemoteAttendance = () => {
             <div className="col-auto float-right ml-auto">
               <>
                 {generating ? (
-                  <a href="#" className="btn add-btn ">
-                    <span
-                      className="spinner-border"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                  </a>
+                  <button className="btn add-btn ">
+                    <FontAwesomeIcon
+                      icon={faSpinner}
+                      spin
+                      pulse
+                      style={{ marginRight: "10px" }}
+                    />{" "}
+                    Generating Attendance
+                  </button>
                 ) : (
-                  <a
-                    href="#"
+                  <button
                     className="btn add-btn "
                     onClick={handleGenerateAttendance}
                   >
                     <i className="fa fa-refresh"></i> Generate Attendance
-                  </a>
+                  </button>
                 )}
               </>
             </div>
@@ -263,46 +276,12 @@ const RemoteAttendance = () => {
       </div>
 
       <div className="daily-attendance-card-group">
-        {/* <div className="daily-attendance-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
-              <i className="las la-users"></i>
-            </span>
-            <div className="daily-attendance-card-info">
-              {loading ? (
-                <h3>-</h3>
-              ) : (
-                <h3>{dailyRemoteAttendanceSummary?.clock_in || "-"}</h3>
-              )}
-            </div>
-          </div>
-          <span>Total Present</span>
-        </div> */}
-
-        {/* <div className="daily-attendance-card">
-          <div className="card-body">
-            <span className="dash-widget-icon">
-              <i
-                className="las la-users"
-                style={{ transform: "scaleX(-1)" }}
-              ></i>
-            </span>
-            <div className="daily-attendance-card-info">
-              {loading ? (
-                <h3>-</h3>
-              ) : (
-                <h3> {dailyRemoteAttendanceSummary?.clock_out || "-"} </h3>
-              )}
-            </div>
-          </div>
-          <span>Total Absent</span>
-        </div> */}
-
         <div className="daily-attendance-card">
-          <div className="card-body">
+          <span>Total Absent</span>
+          <div className="card-body inner">
             <span className="dash-widget-icon">
               <i
-                className="las la-calendar"
+                className="las la-calendar-times"
                 style={{ transform: "scaleX(-1)" }}
               ></i>
             </span>
@@ -316,8 +295,44 @@ const RemoteAttendance = () => {
                   ></lord-icon>
                 </h3>
               ) : (
-                <h3> {moment(date).format("Do MMMM, YYYY")} </h3>
+                <h3> {allAbsent || "0"} </h3>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div className="daily-attendance-card">
+          <span>Total Present</span>
+          <div className="card-body inner">
+            <span className="dash-widget-icon">
+              <i className="las la-calendar-check"></i>
+            </span>
+            <div className="daily-attendance-card-info">
+              {loading ? (
+                <h3>
+                  <lord-icon
+                    src="https://cdn.lordicon.com/xjovhxra.json"
+                    trigger="loop"
+                    colors="primary:#121331,secondary:#08a88a"
+                  ></lord-icon>
+                </h3>
+              ) : (
+                <h3>{allPresent || "0"}</h3>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="daily-attendance-card">
+          <div className="card-body">
+            <span className="dash-widget-icon">
+              <i
+                className="las la-calendar"
+                style={{ transform: "scaleX(-1)" }}
+              ></i>
+            </span>
+            <div className="daily-attendance-card-info">
+              <h3> {moment(date).format("Do MMMM, YYYY")} </h3>
             </div>
           </div>
         </div>
