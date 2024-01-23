@@ -379,6 +379,7 @@ const RemoteAttendance = () => {
               setLoading={setLoading}
               date={date}
               setDate={setDate}
+              today={today_date}
             />
           </div>
 
