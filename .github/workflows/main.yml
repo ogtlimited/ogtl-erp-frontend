@@ -48,6 +48,21 @@ jobs:
         pwd 
         ls -la .
         cat .env
+        
+    - name: Create prod env
+      if: endsWith(github.ref, '/main')
+      env:
+        REACT_APP_HMAC_SECRET: ${{ secrets.REACT_APP_HMAC_SECRET }}
+        REACT_APP_KPI_APP_URL: https://kpi.outsourceglobal.com
+        
+      run: |
+        touch .env
+        echo REACT_APP_KPI_URL_RAILS="$REACT_APP_KPI_URL_RAILS" >> .env
+        echo REACT_APP_ERP_URL="$REACT_APP_ERP_URL" >> .env
+
+        pwd 
+        ls -la .
+        cat .env
 
     - name: Build
       run: CI=false npm run build
