@@ -87,6 +87,7 @@ const DailyAttendanceTable = ({
                       type="date"
                       name="date"
                       value={date}
+                      max={date}
                       onChange={(e) => setDate(e?.target?.value)}
                       className="form-control "
                     />
