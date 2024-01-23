@@ -197,7 +197,7 @@ const RemoteAttendanceAdmin = () => {
       headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          <Switch checked={row?.present} />
+          <Switch checked={row?.present} value={row?.present} disabled={true} />
         </>
       ),
     },

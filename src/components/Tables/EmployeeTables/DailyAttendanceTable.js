@@ -18,6 +18,7 @@ const DailyAttendanceTable = ({
 
   date,
   setDate,
+  today,
   context,
 }) => {
   const { SearchBar } = Search;
@@ -87,6 +88,7 @@ const DailyAttendanceTable = ({
                       type="date"
                       name="date"
                       value={date}
+                      max={today}
                       onChange={(e) => setDate(e?.target?.value)}
                       className="form-control "
                     />
