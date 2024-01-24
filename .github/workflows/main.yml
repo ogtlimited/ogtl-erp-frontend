@@ -53,7 +53,7 @@ jobs:
       if: endsWith(github.ref, '/main')
       env:
         REACT_APP_HMAC_SECRET: ${{ secrets.REACT_APP_HMAC_SECRET }}
-        REACT_APP_KPI_APP_URL: https://kpi.outsourceglobal.com
+        REACT_APP_KPI_APP_URL: https://kpi.outsourceglobal.com/auth
         
       run: |
         touch .env
