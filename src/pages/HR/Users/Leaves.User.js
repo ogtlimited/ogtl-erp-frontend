@@ -15,6 +15,7 @@ import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
+import AlertSvg from "../../../layouts/AlertSvg";
 
 const LeavesUser = () => {
   const {
@@ -25,6 +26,8 @@ const LeavesUser = () => {
     goToTop,
     selectDepartments,
     getAvatarColor,
+    loadingUserResignation,
+    userResignations,
   } = useAppContext();
   const [leaveApplicationCount, setLeaveApplicationCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -978,6 +981,36 @@ const LeavesUser = () => {
 
   return (
     <>
+      {userResignations && userResignations?.pending_resignation ? (
+        <div className="payroll_alert_container">
+          <div
+            className="alert alert-primary sliding-text payroll_alert_left"
+            role="alert"
+          >
+            <div>
+              <AlertSvg />
+              <svg
+                className="bi flex-shrink-0 me-2"
+                width="24"
+                height="24"
+                role="img"
+              >
+                <use xlinkHref="#info-fill" />
+              </svg>
+              <span className="pl-3">
+                <strong>Important Notice</strong>
+              </span>
+              <span className="pl-3">
+                {" "}
+                | &nbsp; Your pending resignation restricts the submission of
+                new leave applications unless the resignation is retracted.
+                Questions? Contact HR.
+              </span>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
@@ -987,16 +1020,23 @@ const LeavesUser = () => {
               <li className="breadcrumb-item active">Leave</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn m-r-5"
-              data-toggle="modal"
-              data-target="#FormModal"
-            >
-              Apply For Leave
-            </a>
-          </div>
+          {loadingUserResignation ? null : (
+            <>
+              {userResignations &&
+              userResignations?.pending_resignation ? null : (
+                <div className="col-auto float-right ml-auto">
+                  <a
+                    href="#"
+                    className="btn add-btn m-r-5"
+                    data-toggle="modal"
+                    data-target="#FormModal"
+                  >
+                    Apply For Leave
+                  </a>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
 

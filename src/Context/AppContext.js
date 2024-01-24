@@ -29,6 +29,7 @@ const AppProvider = (props) => {
   const [isFromBiometrics, setIsFromBiometrics] = useState(false);
   const [isFromBiometricsClockIn, setIsFromBiometricsClockIn] = useState(false);
   const [dropDownClicked, setDropDownClicked] = useState(false);
+  const [loadingUserResignation, setLoadingUserResignation] = useState(true);
 
   // Select API States:
   const [loadingSelect, setLoadingSelect] = useState(false);
@@ -42,9 +43,11 @@ const AppProvider = (props) => {
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
+  const [userResignations, setUserResignations] = useState(null);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
+  const currentUserOgid = user?.employee_info?.ogid;
 
   const goToTop = () => {
     window.scrollTo({
@@ -78,7 +81,6 @@ const AppProvider = (props) => {
       value: "approved",
     },
   ];
-
 
   const selectOfficeTypes = [
     {
@@ -504,6 +506,31 @@ const AppProvider = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Fetch HR Staff Resignation:
+  const fetchStaffResignation = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/v1/resignations/${currentUserOgid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      // console.log("Staff Resignation:", res?.data?.data);
+      setUserResignations(res?.data?.data?.resignation);
+      setLoadingUserResignation(false);
+    } catch (error) {
+      const component = "Resignations | ";
+      ErrorHandler(error, component);
+      setLoadingUserResignation(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserOgid]);
+
   // Universal Error Handler:
   const ErrorHandler = (error, component) => {
     console.log("Route error:", error?.response);
@@ -537,7 +564,6 @@ const AppProvider = (props) => {
         fetchAllLeaders();
         fetchAllDesignations();
         fetchAllBranches();
-        fetchAllLeaveTypes();
         fetchDeductionTypes();
         fetchJobOpenings();
         fetchHRLeavesNotificationCount();
@@ -549,10 +575,10 @@ const AppProvider = (props) => {
         fetchAllTeams();
         fetchAllLeaders();
         fetchAllDesignations();
-        fetchAllLeaveTypes();
       }
 
       fetchAllLeaveTypes();
+      fetchStaffResignation();
     }
   }, [
     fetchAllCampaigns,
@@ -563,6 +589,7 @@ const AppProvider = (props) => {
     fetchAllTeams,
     fetchDeductionTypes,
     fetchJobOpenings,
+    fetchStaffResignation,
     isHr,
     isTeamLead,
     userToken,
@@ -619,6 +646,10 @@ const AppProvider = (props) => {
 
         dropDownClicked,
         setDropDownClicked,
+
+        loadingUserResignation,
+        userResignations,
+        fetchStaffResignation,
 
         getAvatarColor,
         showProgress,

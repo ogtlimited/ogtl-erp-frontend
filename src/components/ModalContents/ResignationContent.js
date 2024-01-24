@@ -58,7 +58,7 @@ const ResignationContent = ({ Content = {} }) => {
       {/* Display Survey Feedback */}
       {surveyFeedback ? (
         <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="job-field">Feedback</p>
+          <p className="job-field">HR Manager Feedback</p>
           <div className="mt-2">
             <p>{surveyFeedback}</p>
           </div>
@@ -68,7 +68,7 @@ const ResignationContent = ({ Content = {} }) => {
       {/* Display Survey Questions and Answers */}
       {surveyData.length ? (
         <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="job-field">Survey</p>
+          <p className="job-field">Exit Interview</p>
           {surveyData.map((item, index) => (
             <div key={index} className="mt-2">
               <p className="font-weight-bold">Q: {item?.question}</p>
