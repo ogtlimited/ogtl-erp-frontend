@@ -12,6 +12,7 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 import moment from "moment";
 import Select from "react-select";
 import HrManagerResignationFeedbackModal from "../../../components/Modal/HrManagerResignationFeedbackModal";
+import HrRetractResignationModal from "../../../components/Modal/HrRetractResignationModal";
 
 const HrManagerResignationAdmin = ({ viewingStage2 }) => {
   const {
@@ -108,7 +109,6 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
     if (viewingStage2) {
       fetchHrManagerResignations();
     }
-
   }, [fetchHrManagerResignations, viewingStage2]);
 
   const columns = [
@@ -161,6 +161,10 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-success"></i> {value}
             </span>
+          ) : value === "Retracted" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+            </span>
           ) : (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-warning"></i> {value}
@@ -195,16 +199,27 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
               View
             </button>
 
-            {AuthorizedHrRoles && row?.status !== "Approved" ? (
-              <button
-                className="btn btn-sm btn-success"
-                onClick={() => {
-                  setmodalType("feedback");
-                  setViewRow(row);
-                }}
-              >
-                Approve
-              </button>
+            {AuthorizedHrRoles && row?.status === "Pending" ? (
+              <>
+                <button
+                  className="btn btn-sm btn-success"
+                  onClick={() => {
+                    setmodalType("feedback");
+                    setViewRow(row);
+                  }}
+                >
+                  Approve
+                </button>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => {
+                    setmodalType("retract");
+                    setViewRow(row);
+                  }}
+                >
+                  Retract
+                </button>
+              </>
             ) : null}
           </div>
         </div>
@@ -263,6 +278,15 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
           setmodalType={setmodalType}
           resignationContent={viewRow}
           fetchHrManagerResignations={fetchHrManagerResignations}
+        />
+      ) : null}
+
+      {modalType === "retract" ? (
+        <HrRetractResignationModal
+          setmodalType={setmodalType}
+          resignationContent={viewRow}
+          url={`/api/v1/hr_manager_resignation_retractions/${viewRow?.id}.json`}
+          fetchHrResignations={fetchHrManagerResignations}
         />
       ) : null}
     </div>

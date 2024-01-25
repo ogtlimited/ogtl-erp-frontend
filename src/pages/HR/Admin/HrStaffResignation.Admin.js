@@ -12,6 +12,7 @@ import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginat
 import moment from "moment";
 import Select from "react-select";
 import { ResignationFormModal } from "../../../components/Modal/ResignationFormModal";
+import HrRetractResignationModal from "../../../components/Modal/HrRetractResignationModal";
 
 const HrStaffResignationAdmin = () => {
   const {
@@ -143,11 +144,13 @@ const HrStaffResignationAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyFormFilled, viewRow]);
 
+  // Handle Approve Resignation:
   const handleApproveResignation = useCallback(
     async (viewRow) => {
       const resignationId = viewRow.id;
 
       const resignationPayload = {
+        feedback: formContent?.hr_staff_resignation_feedbacks,
         survey_form: {
           hr_survey_form_id: resignationSurveyForm[0]?.id,
           answer: Object.entries(formContent).map(([question, answer]) => {
@@ -171,8 +174,8 @@ const HrStaffResignationAdmin = () => {
 
         showAlert(
           true,
-          `${viewRow?.full_name} resignation application is successfully approved!`,
-          "alert alert-success"
+          `${viewRow?.full_name} resignation application has been moved to the next stage`,
+          "alert alert-info"
         );
 
         fetchHrStaffResignations();
@@ -239,6 +242,10 @@ const HrStaffResignationAdmin = () => {
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-success"></i> {value}
             </span>
+          ) : value === "Retracted" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+            </span>
           ) : (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-warning"></i> {value}
@@ -273,15 +280,26 @@ const HrStaffResignationAdmin = () => {
               View
             </button>
 
-            {AuthorizedHrRoles && row?.status !== "Approved" ? (
-              <button
-                className="btn btn-sm btn-success"
-                data-toggle="modal"
-                data-target="#ResignationFormModal"
-                onClick={() => setViewRow(row)}
-              >
-                Approve
-              </button>
+            {AuthorizedHrRoles && row?.status === "Pending" ? (
+              <>
+                <button
+                  className="btn btn-sm btn-success"
+                  data-toggle="modal"
+                  data-target="#ResignationFormModal"
+                  onClick={() => setViewRow(row)}
+                >
+                  Approve
+                </button>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => {
+                    setmodalType("retract");
+                    setViewRow(row);
+                  }}
+                >
+                  Retract
+                </button>
+              </>
             ) : null}
           </div>
         </div>
@@ -341,6 +359,15 @@ const HrStaffResignationAdmin = () => {
         setFormContent={setFormContent}
         setSurveyFormFilled={setSurveyFormFilled}
       />
+
+      {modalType === "retract" ? (
+        <HrRetractResignationModal
+          setmodalType={setmodalType}
+          resignationContent={viewRow}
+          url={`/api/v1/hr_staff_resignation_retractions/${viewRow?.id}.json`}
+          fetchHrResignations={fetchHrStaffResignations}
+        />
+      ) : null}
     </div>
   );
 };

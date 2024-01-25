@@ -40,6 +40,13 @@ const DashboardChart = ({
   const { user } = useAppContext();
 
   const CurrentUserOffice = user?.office?.title;
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
+
+  const AuthorizedHrManagerRoles = CurrentUserRoles.some((role) =>
+    authorizedSeniorRoles.includes(role)
+  );
+
   // const navigate = useNavigate();
 
   // const handleDepartmentChartClick = async (element, employeeLabel) => {
@@ -179,7 +186,7 @@ const DashboardChart = ({
       <div className="col-md-12">
         <div className="col">
           {/* HR View */}
-          {CurrentUserOffice === "HR" ? (
+          {CurrentUserOffice === "HR" && AuthorizedHrManagerRoles ? (
             <>
               {/* Employee by Office */}
               <div className="col-md-12 text-center">

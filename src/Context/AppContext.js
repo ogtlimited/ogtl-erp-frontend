@@ -80,6 +80,10 @@ const AppProvider = (props) => {
       label: "Approved",
       value: "approved",
     },
+    {
+      label: "Retracted",
+      value: "retracted",
+    }
   ];
 
   const selectOfficeTypes = [

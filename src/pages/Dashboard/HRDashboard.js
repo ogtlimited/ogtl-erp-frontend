@@ -7,7 +7,7 @@ import axiosInstance from "../../services/api";
 import moment from "moment";
 
 const HRDashboard = () => {
-  const { ErrorHandler } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [employeeLabel, setEmployeeLabel] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
@@ -43,6 +43,13 @@ const HRDashboard = () => {
     moment(firstDay).format("yyyy-MM-DD")
   );
   const [toDate2, setToDate2] = useState(moment(lastDay).format("yyyy-MM-DD"));
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
+
+  const AuthorizedHrManagerRoles = CurrentUserRoles.some((role) =>
+    authorizedSeniorRoles.includes(role)
+  );
 
   // Head Count: Active
   const fetchHeadCount = async () => {
@@ -129,7 +136,6 @@ const HRDashboard = () => {
 
       setEmployeeLabel(label);
       setEmployeeData(data);
-
     } catch (error) {
       const component = "Employee by Office Error | ";
       ErrorHandler(error, component);
@@ -163,7 +169,6 @@ const HRDashboard = () => {
       setFormattedLeaveStatus(leaveStatusLabel);
       setLeaveStatusLabel(leaveStatusLabel);
       setLeaveStatusData(leaveStatusData);
-
     } catch (error) {
       const component = "Leave Report Error | ";
       ErrorHandler(error, component);
@@ -215,10 +220,12 @@ const HRDashboard = () => {
   };
 
   useEffect(() => {
-    fetchHeadCount();
-    fetchEmployeeGender();
-    fetchEmployeeData();
-    fetchLeaveReport();
+    if (AuthorizedHrManagerRoles) {
+      fetchHeadCount();
+      fetchEmployeeGender();
+      fetchEmployeeData();
+      fetchLeaveReport();
+    }
     fetchResignationReport();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -236,7 +243,7 @@ const HRDashboard = () => {
         </div>
       </div>
       <div className="hr-dashboard-card-group">
-        {!hideHeadCountCard && (
+        {!hideHeadCountCard && AuthorizedHrManagerRoles ? (
           <div className="hr-dashboard-card">
             <div className="card-body">
               <span className="dash-widget-icon">
@@ -248,9 +255,9 @@ const HRDashboard = () => {
             </div>
             <span>Head Count</span>
           </div>
-        )}
+        ) : null}
 
-        {!hideGenderDivRatioCard && (
+        {!hideGenderDivRatioCard && AuthorizedHrManagerRoles ? (
           <div className="hr-dashboard-card">
             <div className="card-body">
               <span className="dash-widget-icon">
@@ -265,7 +272,7 @@ const HRDashboard = () => {
             </div>
             <span>Gender Diversity Ratio (Females to Males)</span>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="row">

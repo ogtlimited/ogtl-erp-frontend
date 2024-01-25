@@ -45,7 +45,7 @@ export const ResignationFormModal = ({
   // Handle Checkbox Change:
   const handleCheckboxChange = (e, question) => {
     const option = e.target.value;
-    let options = []
+    let options = [];
 
     setSelectedOptions((prevOptions) => {
       if (prevOptions.includes(option)) {
@@ -184,6 +184,26 @@ export const ResignationFormModal = ({
                         </div>
                       )
                     )}
+
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <label
+                          htmlFor="hr_staff_resignation_feedbacks"
+                          style={{ fontWeight: "500" }}
+                        >
+                          HR Staff Feedback
+                        </label>
+
+                        <textarea
+                          name="hr_staff_resignation_feedbacks"
+                          value={data?.hr_staff_resignation_feedbacks}
+                          onChange={handleFormChange}
+                          className="form-control"
+                          placeholder="Your feedback"
+                          required
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="modal-footer">
