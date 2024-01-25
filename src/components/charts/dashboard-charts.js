@@ -3,6 +3,8 @@ import React from "react";
 import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 import DashboardStatistics from "./dashboard-statistics";
+import ResignationStatistics from "./resignation-statistics";
+import { useAppContext } from "../../Context/AppContext";
 // import secureLocalStorage from "react-secure-storage";
 
 const DashboardChart = ({
@@ -11,18 +13,20 @@ const DashboardChart = ({
   employeeLabel,
   genderLabel,
   genderData,
-  formattedData,
-  formattedGender,
 
-  data,
-  chartTitle,
-  chartData,
   leaveStatusLabel,
   leaveStatusData,
   leaveTypeLabel,
   leaveTypeData,
   formattedLeaveType,
   formattedLeaveStatus,
+
+  resignationByGenderLabel,
+  resignationByGenderData,
+  resignationStatusLabel,
+  resignationStatusData,
+  resignationReasonLabel,
+  resignationReasonData,
 
   fromDate,
   toDate,
@@ -33,6 +37,9 @@ const DashboardChart = ({
   setFromDate2,
   setToDate2,
 }) => {
+  const { user } = useAppContext();
+
+  const CurrentUserOffice = user?.office?.title;
   // const navigate = useNavigate();
 
   // const handleDepartmentChartClick = async (element, employeeLabel) => {
@@ -117,31 +124,122 @@ const DashboardChart = ({
     ],
   };
 
+  const resignationByGender = {
+    labels: resignationByGenderLabel,
+    datasets: [
+      {
+        data: resignationByGenderData,
+        backgroundColor: [
+          "rgba(54, 162, 235)",
+          "rgba(255, 99, 132)",
+          "rgba(255, 206, 86)",
+        ],
+        borderColor: [
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 99, 132, 1)",
+          "rgba(255, 206, 86, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const resignationReason = {
+    labels: resignationReasonLabel,
+    datasets: [
+      {
+        data: resignationReasonData,
+        backgroundColor: [
+          "rgba(255, 99, 132)",
+          "rgba(54, 162, 235)",
+          "rgba(255, 206, 86)",
+          "rgba(75, 192, 192)",
+          "rgba(153, 102, 255)",
+          "rgba(255, 159, 64)",
+          "rgba(205, 19, 84)",
+          "rgba(55, 159, 64)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+          "rgba(205, 19, 84, 1)",
+          "rgba(55, 159, 64, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <>
       <div className="col-md-12">
         <div className="col">
-          <div className="col-md-12 text-center">
-            <div className="card hr-dashboard-charts">
-              <div className="card-body">
-                <h3 className="card-title">{title}</h3>
-                <VerticalBar
-                  data={employee}
-                  // handleChartClick={(element) =>
-                  //   handleDepartmentChartClick(element, employeeLabel)
-                  // }
+          {/* HR View */}
+          {CurrentUserOffice === "HR" ? (
+            <>
+              {/* Employee by Office */}
+              <div className="col-md-12 text-center">
+                <div className="card hr-dashboard-charts">
+                  <div className="card-body">
+                    <h3 className="card-title">{title}</h3>
+                    <VerticalBar
+                      data={employee}
+                      // handleChartClick={(element) =>
+                      //   handleDepartmentChartClick(element, employeeLabel)
+                      // }
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Gender & Leave */}
+              <div className="row">
+                <div className="col-md-6 col-lg-6 col-xl-4 d-flex text-center">
+                  <div className="card flex-fill hr-dashboard-charts">
+                    <div className="card-body">
+                      <h3 className="card-title">Employee By Gender</h3>
+                      <DoughnutChart
+                        data={gender}
+                        // handleChartClick={(element) =>
+                        //   handleGenderChartClick(element, genderLabel)
+                        // }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <DashboardStatistics
+                  leaveStatusLabel={leaveStatusLabel}
+                  leaveStatusData={leaveStatusData}
+                  leaveTypeLabel={leaveTypeLabel}
+                  leaveTypeData={leaveTypeData}
+                  formattedLeaveType={formattedLeaveType}
+                  formattedLeaveStatus={formattedLeaveStatus}
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  setFromDate={setFromDate}
+                  setToDate={setToDate}
+                  fromDate2={fromDate2}
+                  toDate2={toDate2}
+                  setFromDate2={setFromDate2}
+                  setToDate2={setToDate2}
                 />
               </div>
-            </div>
-          </div>
+            </>
+          ) : null}
 
+          {/* Resignation */}
           <div className="row">
-            <div className="col-md-4 text-center">
-              <div className="card hr-dashboard-charts">
+            <div className="col-md-6 col-lg-6 col-xl-4 d-flex text-center">
+              <div className="card flex-fill hr-dashboard-charts">
                 <div className="card-body">
-                  <h3 className="card-title">Employee By Gender</h3>
+                  <h3 className="card-title">Resignation By Gender</h3>
                   <DoughnutChart
-                    data={gender}
+                    data={resignationByGender}
                     // handleChartClick={(element) =>
                     //   handleGenderChartClick(element, genderLabel)
                     // }
@@ -150,26 +248,25 @@ const DashboardChart = ({
               </div>
             </div>
 
-            <DashboardStatistics
-              title="Employee By Department"
-              data={data}
-              chartTitle="Employee By Gender"
-              chartData={gender}
-              leaveStatusLabel={leaveStatusLabel}
-              leaveStatusData={leaveStatusData}
-              leaveTypeLabel={leaveTypeLabel}
-              leaveTypeData={leaveTypeData}
-              formattedLeaveType={formattedLeaveType}
-              formattedLeaveStatus={formattedLeaveStatus}
-              fromDate={fromDate}
-              toDate={toDate}
-              setFromDate={setFromDate}
-              setToDate={setToDate}
-              fromDate2={fromDate2}
-              toDate2={toDate2}
-              setFromDate2={setFromDate2}
-              setToDate2={setToDate2}
+            <ResignationStatistics
+              resignationStatusLabel={resignationStatusLabel}
+              resignationStatusData={resignationStatusData}
             />
+          </div>
+
+          {/* Resignation Reason */}
+          <div className="col-md-12 text-center">
+            <div className="card hr-dashboard-charts">
+              <div className="card-body">
+                <h3 className="card-title">Resignation Reason</h3>
+                <VerticalBar
+                  data={resignationReason}
+                  // handleChartClick={(element) =>
+                  //   handleDepartmentChartClick(element, employeeLabel)
+                  // }
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

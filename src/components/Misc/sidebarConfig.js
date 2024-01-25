@@ -72,238 +72,126 @@ const sidebarConfig = [
   {
     subheader: "Main",
     canView: "all",
-    items:
+    items: [
       userDept === "hr"
-        ? [
-            {
-              canView: "all",
-              title: "Dashboard",
-              path: PATH_DASHBOARD.main.root,
-              icon: ICONS.dashboard,
-              children: [
-                {
-                  canView: "all",
-                  title: "Employee Dashboard",
-                  path: PATH_DASHBOARD.main.employeeDashboard,
-                },
-                {
-                  canView: "hr",
-                  title: "HR Dashboard",
-                  path: PATH_DASHBOARD.main.hrDashboard,
-                },
-              ],
-            },
-            // Apps:
-            {
-              canView: "all",
-              title: "Apps",
-              path: PATH_DASHBOARD.apps.root,
-              icon: ICONS.apps,
-              children: [
-                {
-                  canView: "all",
-                  title: "Email Signature",
-                  path: PATH_DASHBOARD.apps.signature,
-                },
-              ],
-            },
-            {
-              canView: "hr",
-              title: "KPI",
-              externalLink: buildExternalURL(),
-              icon: ICONS.kpi,
-            },
-            {
-              canView: "all",
-              title: "Attendance",
-              path: PATH_DASHBOARD.main.employeeAttendance,
-              icon: ICONS.userAttendance,
-            },
-            {
-              canView: "all",
-              title: "Leave",
-              path: PATH_DASHBOARD.main.employeeLeave,
-              icon: ICONS.leave,
-            },
-            {
-              canView: "all",
-              title: "Resignation",
-              path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.resignation,
-            },
-            {
-              canView: "all",
-              title: "Help Desk",
-              path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.helpDesk,
-              children: [
-                {
-                  canView: "all",
-                  title: "IT Help Desk",
-                  externalLink: "https://sdpondemand.manageengine.com/",
-                },
-                {
-                  canView: "all",
-                  title: "Facilities Help Desk",
-                  externalLink:
-                    "https://ogtl-facilities.on.spiceworks.com/portal/",
-                },
-                {
-                  canView: "all",
-                  title: "HR Help Desk",
-                  externalLink: "https://ogtl-hr.on.spiceworks.com/portal",
-                },
-                {
-                  canView: "all",
-                  title: "Complaints Help Desk",
-                  externalLink:
-                    "https://ogtl-complaints.on.spiceworks.com/portal/",
-                },
-              ],
-            },
-          ]
+        ? {
+            canView: "all",
+            title: "Dashboard",
+            path: PATH_DASHBOARD.main.root,
+            icon: ICONS.dashboard,
+            children: [
+              {
+                canView: "all",
+                title: "Employee Dashboard",
+                path: PATH_DASHBOARD.main.employeeDashboard,
+              },
+              {
+                canView: "hr",
+                title: "HR Dashboard",
+                path: PATH_DASHBOARD.main.hrDashboard,
+              },
+            ],
+          }
         : userDept === "operations"
-        ? [
-            {
-              canView: "all",
-              title: "Dashboard",
-              path: PATH_DASHBOARD.main.root,
-              icon: ICONS.dashboard,
-              children: [
-                {
-                  canView: "all",
-                  title: "Employee Dashboard",
-                  path: PATH_DASHBOARD.main.employeeDashboard,
-                },
-                {
-                  canView: "operations",
-                  title: "Operations Dashboard",
-                  path: PATH_DASHBOARD.main.hrDashboard,
-                },
-              ],
-            },
-            // Apps:
-            {
-              canView: "all",
-              title: "Apps",
-              path: PATH_DASHBOARD.apps.root,
-              icon: ICONS.apps,
-              children: [
-                {
-                  canView: "all",
-                  title: "Email Signature",
-                  path: PATH_DASHBOARD.apps.signature,
-                },
-              ],
-            },
-            {
-              canView: "hr",
-              title: "KPI",
-              externalLink: buildExternalURL(),
-              icon: ICONS.kpi,
-            },
-            {
-              canView: "all",
-              title: "Attendance",
-              path: PATH_DASHBOARD.main.employeeAttendance,
-              icon: ICONS.userAttendance,
-            },
-            {
-              canView: "all",
-              title: "Leave",
-              path: PATH_DASHBOARD.main.employeeLeave,
-              icon: ICONS.leave,
-            },
-            {
-              canView: "all",
-              title: "Resignation",
-              path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.resignation,
-            },
-            {
-              canView: "all",
-              title: "Help Desk",
-              path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.helpDesk,
-              children: [
-                {
-                  canView: "all",
-                  title: "IT Help Desk",
-                  externalLink: "https://sdpondemand.manageengine.com/",
-                },
-                {
-                  canView: "all",
-                  title: "Facilities Help Desk",
-                  externalLink:
-                    "https://ogtl-facilities.on.spiceworks.com/portal/",
-                },
-                {
-                  canView: "all",
-                  title: "HR Help Desk",
-                  externalLink: "https://ogtl-hr.on.spiceworks.com/portal",
-                },
-                {
-                  canView: "all",
-                  title: "Complaints Help Desk",
-                  externalLink:
-                    "https://ogtl-complaints.on.spiceworks.com/portal/",
-                },
-              ],
-            },
-          ]
-        : [
-            {
-              canView: "all",
-              title: "Dashboard",
-              path: PATH_DASHBOARD.main.root,
-              icon: ICONS.dashboard,
-              children: [
-                {
-                  canView: "all",
-                  title: "Employee Dashboard",
-                  path: PATH_DASHBOARD.main.employeeDashboard,
-                },
-              ],
-            },
-            // Apps:
-            {
-              canView: "all",
-              title: "Apps",
-              path: PATH_DASHBOARD.apps.root,
-              icon: ICONS.apps,
-              children: [
-                {
-                  canView: "all",
-                  title: "Email Signature",
-                  path: PATH_DASHBOARD.apps.signature,
-                },
-              ],
-            },
-            {
-              canView: "all",
-              title: "KPI",
-              externalLink: buildExternalURL(),
-              icon: ICONS.kpi,
-            },
-            {
-              canView: "all",
-              title: "Attendance",
-              path: PATH_DASHBOARD.main.employeeAttendance,
-              icon: ICONS.userAttendance,
-            },
-            {
-              canView: "all",
-              title: "Leave",
-              path: PATH_DASHBOARD.main.employeeLeave,
-              icon: ICONS.leave,
-            },
-            {
-              canView: "all",
-              title: "Resignation",
-              path: PATH_DASHBOARD.main.resignation,
-              icon: ICONS.resignation,
-            },
-          ],
+        ? {
+            canView: "all",
+            title: "Dashboard",
+            path: PATH_DASHBOARD.main.root,
+            icon: ICONS.dashboard,
+            children: [
+              {
+                canView: "all",
+                title: "Employee Dashboard",
+                path: PATH_DASHBOARD.main.employeeDashboard,
+              },
+              {
+                canView: "operations",
+                title: "Operations Dashboard",
+                path: PATH_DASHBOARD.main.operationsDashboard,
+              },
+            ],
+          }
+        : {
+            canView: "all",
+            title: "Dashboard",
+            path: PATH_DASHBOARD.main.root,
+            icon: ICONS.dashboard,
+            children: [
+              {
+                canView: "all",
+                title: "Employee Dashboard",
+                path: PATH_DASHBOARD.main.employeeDashboard,
+              },
+            ],
+          },
+
+      // Others:
+      {
+        canView: "all",
+        title: "Apps",
+        path: PATH_DASHBOARD.apps.root,
+        icon: ICONS.apps,
+        children: [
+          {
+            canView: "all",
+            title: "Email Signature",
+            path: PATH_DASHBOARD.apps.signature,
+          },
+        ],
+      },
+      {
+        canView: "hr",
+        title: "KPI",
+        externalLink: buildExternalURL(),
+        icon: ICONS.kpi,
+      },
+      {
+        canView: "all",
+        title: "Attendance",
+        path: PATH_DASHBOARD.main.employeeAttendance,
+        icon: ICONS.userAttendance,
+      },
+      {
+        canView: "all",
+        title: "Leave",
+        path: PATH_DASHBOARD.main.employeeLeave,
+        icon: ICONS.leave,
+      },
+      {
+        canView: "all",
+        title: "Resignation",
+        path: PATH_DASHBOARD.main.resignation,
+        icon: ICONS.resignation,
+      },
+      {
+        canView: "all",
+        title: "Help Desk",
+        path: PATH_DASHBOARD.main.resignation,
+        icon: ICONS.helpDesk,
+        children: [
+          {
+            canView: "all",
+            title: "IT Help Desk",
+            externalLink: "https://sdpondemand.manageengine.com/",
+          },
+          {
+            canView: "all",
+            title: "Facilities Help Desk",
+            externalLink: "https://ogtl-facilities.on.spiceworks.com/portal/",
+          },
+          {
+            canView: "all",
+            title: "HR Help Desk",
+            externalLink: "https://ogtl-hr.on.spiceworks.com/portal",
+          },
+          {
+            canView: "all",
+            title: "Complaints Help Desk",
+            externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
+          },
+        ],
+      },
+    ],
   },
 
   // HR CONFIG:
