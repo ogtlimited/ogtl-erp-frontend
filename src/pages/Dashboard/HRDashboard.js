@@ -7,20 +7,24 @@ import axiosInstance from "../../services/api";
 import moment from "moment";
 
 const HRDashboard = () => {
-  const { showAlert } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [employeeLabel, setEmployeeLabel] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
   const [genderLabel, setGenderLabel] = useState([]);
   const [genderData, setGenderData] = useState([]);
-  const [formattedData, setFormattedData] = useState([]);
-  const [formattedGender, setFormattedGender] = useState([]);
   const [leaveStatusLabel, setLeaveStatusLabel] = useState([]);
   const [leaveStatusData, setLeaveStatusData] = useState([]);
   const [leaveTypeLabel, setLeaveTypeLabel] = useState([]);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
   const [formattedLeaveType, setFormattedLeaveType] = useState([]);
   const [formattedLeaveStatus, setFormattedLeaveStatus] = useState([]);
+  const [resignationByGenderLabel, setResignationByGenderLabel] = useState([]);
+  const [resignationByGenderData, setResignationByGenderData] = useState([]);
+  const [resignationStatusLabel, setResignationStatusLabel] = useState([]);
+  const [resignationStatusData, setResignationStatusData] = useState([]);
+  const [resignationReasonLabel, setResignationReasonLabel] = useState([]);
+  const [resignationReasonData, setResignationReasonData] = useState([]);
 
   const [hideHeadCountCard, setHideHeadCountCard] = useState(false);
   const [hideGenderDivRatioCard, setHideGenderDivRatioCard] = useState(false);
@@ -39,6 +43,13 @@ const HRDashboard = () => {
     moment(firstDay).format("yyyy-MM-DD")
   );
   const [toDate2, setToDate2] = useState(moment(lastDay).format("yyyy-MM-DD"));
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
+
+  const AuthorizedHrManagerRoles = CurrentUserRoles.some((role) =>
+    authorizedSeniorRoles.includes(role)
+  );
 
   // Head Count: Active
   const fetchHeadCount = async () => {
@@ -59,25 +70,9 @@ const HRDashboard = () => {
       setheadCount(activeEmployeesCount);
       setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-
-      if (error?.response?.status === 403) {
-        return setHideHeadCountCard(true);
-      } else if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving employee head count. Please try again later.",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving head count information, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
+      const component = "Employee Head Count Error | ";
+      ErrorHandler(error, component);
+      setHideHeadCountCard(true);
       setLoading(false);
     }
   };
@@ -104,39 +99,15 @@ const HRDashboard = () => {
       employeeByGender.male = resData?.male;
       employeeByGender.female = resData?.female;
 
-      const formattedGender = Object.keys(employeeByGender).map((key) => ({
-        labels: key,
-        data: employeeByGender[key],
-      }));
-
       const labels = Object.keys(employeeByGender);
       const data = Object.values(employeeByGender);
 
-      setFormattedGender(formattedGender);
       setGenderLabel(labels);
       setGenderData(data);
-      setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-
-      if (error?.response?.status === 403) {
-        return setHideGenderDivRatioCard(true);
-      } else if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving gender data. Please try again later.",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving gender data, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
-      setLoading(false);
+      const component = "Gender by Gender Error | ";
+      ErrorHandler(error, component);
+      setHideGenderDivRatioCard(true);
     }
   };
 
@@ -163,30 +134,11 @@ const HRDashboard = () => {
       const label = [...formatted.map((e) => e.labels)];
       const data = [...formatted.map((e) => e.data)];
 
-      setFormattedData(formatted);
       setEmployeeLabel(label);
       setEmployeeData(data);
-
-      setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-
-      if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving office chart data. Please try again later.",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving office chart information, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
-      setLoading(false);
+      const component = "Employee by Office Error | ";
+      ErrorHandler(error, component);
     }
   };
 
@@ -217,35 +169,64 @@ const HRDashboard = () => {
       setFormattedLeaveStatus(leaveStatusLabel);
       setLeaveStatusLabel(leaveStatusLabel);
       setLeaveStatusData(leaveStatusData);
-
-      setLoading(false);
     } catch (error) {
-      const errorMsg = error.response?.data?.errors;
+      const component = "Leave Report Error | ";
+      ErrorHandler(error, component);
+    }
+  };
 
-      if (error?.response?.status === 500) {
-        showAlert(
-          true,
-          "Oops! Something went wrong, while retrieving leave report chart. Please try again later.",
-          "alert alert-warning"
-        );
-      } else if (error?.response?.status === 502) {
-        showAlert(
-          true,
-          "Error retrieving leave report chart information, please try again later!",
-          "alert alert-warning"
-        );
-      } else {
-        showAlert(true, `${errorMsg}`, "alert alert-warning");
-      }
-      setLoading(false);
+  // Resignation Report:
+  const fetchResignationReport = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/hr_dashboard/resignations.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+      const { gender_count, status, reason } =
+        response?.data?.data?.resignations;
+
+      // Gender:
+      const genders = gender_count.map((item) => item.gender);
+      const resignationCounts = gender_count.map(
+        (item) => item.resignation_count
+      );
+
+      setResignationByGenderLabel(genders);
+      setResignationByGenderData(resignationCounts);
+
+      // Status:
+      const statusLabels = Object.keys(status);
+      const statusData = Object.values(status);
+
+      setResignationStatusLabel(statusLabels);
+      setResignationStatusData(statusData);
+
+      // Reason:
+      const reasonLabels = Object.keys(reason);
+      const reasonData = Object.values(reason);
+
+      setResignationReasonLabel(reasonLabels);
+      setResignationReasonData(reasonData);
+    } catch (error) {
+      const component = "Resignation Report | ";
+      ErrorHandler(error, component);
     }
   };
 
   useEffect(() => {
-    fetchHeadCount();
-    fetchEmployeeGender();
-    fetchEmployeeData();
-    fetchLeaveReport();
+    if (AuthorizedHrManagerRoles) {
+      fetchHeadCount();
+      fetchEmployeeGender();
+      fetchEmployeeData();
+      fetchLeaveReport();
+    }
+    fetchResignationReport();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -254,7 +235,7 @@ const HRDashboard = () => {
       <div className="page-header">
         <div className="row">
           <div className="col-sm-12">
-            <h3 className="page-title">Welcome Admin!</h3>
+            <h3 className="page-title">Welcome HR!</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item active">Dashboard</li>
             </ul>
@@ -262,7 +243,7 @@ const HRDashboard = () => {
         </div>
       </div>
       <div className="hr-dashboard-card-group">
-        {!hideHeadCountCard && (
+        {!hideHeadCountCard && AuthorizedHrManagerRoles ? (
           <div className="hr-dashboard-card">
             <div className="card-body">
               <span className="dash-widget-icon">
@@ -274,9 +255,9 @@ const HRDashboard = () => {
             </div>
             <span>Head Count</span>
           </div>
-        )}
+        ) : null}
 
-        {!hideGenderDivRatioCard && (
+        {!hideGenderDivRatioCard && AuthorizedHrManagerRoles ? (
           <div className="hr-dashboard-card">
             <div className="card-body">
               <span className="dash-widget-icon">
@@ -291,7 +272,7 @@ const HRDashboard = () => {
             </div>
             <span>Gender Diversity Ratio (Females to Males)</span>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="row">
@@ -299,17 +280,20 @@ const HRDashboard = () => {
           title="Employee By Office"
           employeeData={employeeData}
           employeeLabel={employeeLabel}
-          formattedData={formattedData}
-          chartTitle="Employee By Gender"
-          genderData={genderData}
           genderLabel={genderLabel}
-          formattedGender={formattedGender}
+          genderData={genderData}
           leaveStatusLabel={leaveStatusLabel}
           leaveStatusData={leaveStatusData}
-          formattedLeaveStatus={formattedLeaveStatus}
           leaveTypeLabel={leaveTypeLabel}
           leaveTypeData={leaveTypeData}
           formattedLeaveType={formattedLeaveType}
+          formattedLeaveStatus={formattedLeaveStatus}
+          resignationByGenderLabel={resignationByGenderLabel}
+          resignationByGenderData={resignationByGenderData}
+          resignationStatusLabel={resignationStatusLabel}
+          resignationStatusData={resignationStatusData}
+          resignationReasonLabel={resignationReasonLabel}
+          resignationReasonData={resignationReasonData}
           fromDate={fromDate}
           toDate={toDate}
           setFromDate={setFromDate}
@@ -320,30 +304,6 @@ const HRDashboard = () => {
           setToDate2={setToDate2}
         />
       </div>
-
-      {/* <div className="row">
-        <DashboardStatistics
-          title="Employee By Department"
-          data={data}
-          chartTitle="Employee By Gender"
-          chartData={gender}
-          leaveStatusLabel={leaveStatusLabel}
-          leaveStatusData={leaveStatusData}
-          leaveTypeLabel={leaveTypeLabel}
-          leaveTypeData={leaveTypeData}
-          formattedLeaveType={formattedLeaveType}
-          formattedLeaveStatus={formattedLeaveStatus}
-
-          fromDate={fromDate}
-          toDate={toDate}
-          setFromDate={setFromDate}
-          setToDate={setToDate}
-          fromDate2={fromDate2}
-          toDate2={toDate2}
-          setFromDate2={setFromDate2}
-          setToDate2={setToDate2}
-        />
-      </div> */}
     </div>
   );
 };

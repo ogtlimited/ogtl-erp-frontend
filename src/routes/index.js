@@ -138,6 +138,14 @@ export default function Router() {
               ),
             },
             {
+              path: "operations-dashboard",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <OperationsDashboard />{" "}
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "account-dashboard",
               element: (
                 <GuardedRoute title="" dept="accounting">
@@ -1454,6 +1462,9 @@ const FileManager = Loadable(
 const Branch = Loadable(lazy(() => import("../pages/HR/Admin/Branch.Admin")));
 const HRDashboard = Loadable(
   lazy(() => import("../pages/Dashboard/HRDashboard"))
+);
+const OperationsDashboard = Loadable(
+  lazy(() => import("./../pages/Dashboard/OperationsDashboard"))
 );
 const SignatureGenerator = Loadable(
   lazy(() => import("../pages/In-Apps/signature-generator"))

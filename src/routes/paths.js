@@ -18,6 +18,7 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, "/dashboard"),
     main: path(ROOTS_DASHBOARD, "/main"),
     hrDashboard: path(ROOTS_DASHBOARD, "/hr-dashboard"),
+    operationsDashboard: path(ROOTS_DASHBOARD, "/operations-dashboard"),
     accountDashboard: path(ROOTS_DASHBOARD, "/account-dashboard"),
     clientDashboard: path(ROOTS_DASHBOARD, "/client-dashboard"),
     employeeDashboard: path(ROOTS_DASHBOARD, "/employee-dashboard"),

@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 const ResignationContent = ({ Content = {} }) => {
   const filteredApplication = {
@@ -15,8 +16,11 @@ const ResignationContent = ({ Content = {} }) => {
     "reason_for_resignation",
   ];
 
+  console.log("Content", Content);
+
   const surveyData = Content.survey_answer?.answer?.answers || [];
-  const surveyFeedback = Content?.survey_answer?.feedback;
+  const feedbacks = Content?.feedback || [];
+  const HrManagerFeedback = Content?.survey_answer?.feedback;
 
   return (
     <div className="row d-flex justify-content-center">
@@ -55,26 +59,64 @@ const ResignationContent = ({ Content = {} }) => {
         }
       })}
 
-      {/* Display Survey Feedback */}
-      {surveyFeedback ? (
+      {/* Display Operations & HR Staff Feedback */}
+      {feedbacks?.length ? (
         <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="job-field">Feedback</p>
-          <div className="mt-2">
-            <p>{surveyFeedback}</p>
-          </div>
+          {feedbacks.map((item, index) => {
+            return (
+              <div key={index} className="mt-2">
+                <p className="font-weight-bold" style={{ marginBottom: "0px" }}>
+                  {item?.stage === "operations"
+                    ? "Operations Feedback"
+                    : item?.stage === "hr_staff"
+                    ? "HR Staff Feedback"
+                    : item?.stage === "hr_manager"
+                    ? "HR Manager Feedback"
+                    : null}{" "}
+                  <span className="feedback_subInfo">
+                    |{" "}
+                    {item?.entered_by?.first_name +
+                      " " +
+                      item?.entered_by?.last_name}{" "}
+                    -{" "}
+                    {moment(item?.date_added)
+                      .utc()
+                      .format("Do MMM, YYYY [at] h:mmA")} 
+                  </span>
+                </p>
+                <p>{item?.feedback}</p>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+
+      {/* Display HR Manager Feedback */}
+      {HrManagerFeedback ? (
+        <div className="col-md-12 mt-2">
+          <p className="font-weight-bold" style={{ marginBottom: "0px" }}>
+            HR Manager Feedback
+          </p>
+          <p>{HrManagerFeedback}</p>
         </div>
       ) : null}
 
       {/* Display Survey Questions and Answers */}
       {surveyData.length ? (
         <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="job-field">Survey</p>
-          {surveyData.map((item, index) => (
-            <div key={index} className="mt-2">
-              <p className="font-weight-bold">Q: {item?.question}</p>
-              <p>A: {item?.answer}</p>
-            </div>
-          ))}
+          <p className="job-field">Exit Interview</p>
+          {surveyData.map((item, index) => {
+            if (item?.question === "hr_staff_resignation_feedbacks") {
+              return null;
+            }
+
+            return (
+              <div key={index} className="mt-2">
+                <p className="font-weight-bold">Q: {item?.question}</p>
+                <p>A: {item?.answer}</p>
+              </div>
+            );
+          })}
         </div>
       ) : null}
     </div>
