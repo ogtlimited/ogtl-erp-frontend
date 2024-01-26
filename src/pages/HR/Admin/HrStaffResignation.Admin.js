@@ -192,6 +192,31 @@ const HrStaffResignationAdmin = () => {
     [formContent, goToTop]
   );
 
+  const handleViewRowFeedback = async (row) => {
+    try {
+      const res = await axiosInstance.get(
+        `/api/v1/resignation_feedback/${row?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      let resData = res?.data?.data;
+
+      setViewRow((prevState) => ({
+        ...prevState,
+        feedback: resData,
+      }));
+    } catch (error) {
+      const component = "Resignations Feedback Error | ";
+      ErrorHandler(error, component);
+    }
+  };
+
   const columns = [
     {
       dataField: "full_name",
@@ -275,6 +300,7 @@ const HrStaffResignationAdmin = () => {
               onClick={() => {
                 setmodalType("view-details");
                 setViewRow(row);
+                handleViewRowFeedback(row);
               }}
             >
               View

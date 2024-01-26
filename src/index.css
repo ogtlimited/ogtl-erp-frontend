@@ -838,3 +838,9 @@ table.custom-table thead th {
   padding: 20px 0 0 0;
   border-top: 1px solid #ccc;
 }
+
+.feedback_subInfo {
+  color: #999;
+  font-size: 13px;
+  font-weight: 400 !important;
+}

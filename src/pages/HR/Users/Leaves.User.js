@@ -997,14 +997,13 @@ const LeavesUser = () => {
               >
                 <use xlinkHref="#info-fill" />
               </svg>
-              <span className="pl-3">
+              <span className="pl-3" style={{ width: "150px" }}>
                 <strong>Important Notice</strong>
               </span>
               <span className="pl-3">
                 {" "}
                 | &nbsp; Your pending resignation restricts the submission of
                 new leave applications unless the resignation is retracted.
-                Questions? Contact HR.
               </span>
             </div>
           </div>
