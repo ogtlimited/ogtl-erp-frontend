@@ -10,19 +10,13 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import ResignationContent from "../../../components/ModalContents/ResignationContent";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import OperationsResignationFeedbackModal from "../../../components/Modal/OperationsResignationFeedbackModal";
 import OperationsRetractResignationModal from "../../../components/Modal/OperationsRetractResignationModal";
 import Select from "react-select";
 
 const OperationsResignationAdmin = () => {
-  const {
-    resignationStatusTypes,
-    ErrorHandler,
-    getAvatarColor,
-    user,
-    showAlert,
-    goToTop,
-  } = useAppContext();
+  const { resignationStatusTypes, ErrorHandler, getAvatarColor, user } =
+    useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -101,37 +95,6 @@ const OperationsResignationAdmin = () => {
     fetchOperationsResignations();
   }, [fetchOperationsResignations]);
 
-  // Handle Approve
-  const handleApproveResignation = async (viewRow) => {
-    const resignationId = viewRow.id;
-
-    try {
-      const res = await axiosInstance.patch(
-        `/api/v1/operation_team_approve_resignations/${resignationId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      showAlert(
-        true,
-        `${viewRow?.full_name} resignation application is successfully approved!`,
-        "alert alert-success"
-      );
-
-      fetchOperationsResignations();
-      goToTop();
-    } catch (error) {
-      const errorMsg = error.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      goToTop();
-    }
-  };
-
   const columns = [
     {
       dataField: "full_name",
@@ -182,6 +145,10 @@ const OperationsResignationAdmin = () => {
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-success"></i> {value}
             </span>
+          ) : value === "Retracted" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i className="fa fa-dot-circle-o text-secondary"></i> {value}
+            </span>
           ) : (
             <span className="btn btn-gray btn-sm btn-rounded">
               <i className="fa fa-dot-circle-o text-warning"></i> {value}
@@ -216,30 +183,28 @@ const OperationsResignationAdmin = () => {
               View
             </button>
 
-            {AuthorizedOperationsRoles ? (
-              <button
-                className="btn btn-sm btn-success"
-                data-toggle="modal"
-                data-target="#exampleModal"
-                onClick={() => {
-                  setmodalType("approve");
-                  setViewRow(row);
-                }}
-              >
-                Approve
-              </button>
-            ) : null}
+            {AuthorizedOperationsRoles && row?.status === "Pending" ? (
+              <>
+                <button
+                  className="btn btn-sm btn-success"
+                  onClick={() => {
+                    setmodalType("feedback");
+                    setViewRow(row);
+                  }}
+                >
+                  Approve
+                </button>
 
-            {AuthorizedOperationsRoles ? (
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={() => {
-                  setmodalType("retract");
-                  setViewRow(row);
-                }}
-              >
-                Retract
-              </button>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => {
+                    setmodalType("retract");
+                    setViewRow(row);
+                  }}
+                >
+                  Retract
+                </button>
+              </>
             ) : null}
           </div>
         </div>
@@ -306,12 +271,13 @@ const OperationsResignationAdmin = () => {
         ""
       )}
 
-      <ConfirmModal
-        title="Resignation Approval"
-        selectedRow={viewRow}
-        deleteFunction={handleApproveResignation}
-        message="Are you sure you want to approve this resignation?"
-      />
+      {modalType === "feedback" ? (
+        <OperationsResignationFeedbackModal
+          setmodalType={setmodalType}
+          resignationContent={viewRow}
+          fetchOperationsResignations={fetchOperationsResignations}
+        />
+      ) : null}
 
       {modalType === "retract" ? (
         <OperationsRetractResignationModal

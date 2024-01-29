@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
-import Email from "./../../../pages/In-Apps/Email";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function EmployeeSalaryTable({
   data,
@@ -20,6 +21,9 @@ function EmployeeSalaryTable({
   viewAction,
   regenerate,
   actionTitle,
+  loadingSendMail,
+  handleNotifyStaff,
+  notifyFor,
 
   page,
   setPage,
@@ -41,6 +45,13 @@ function EmployeeSalaryTable({
   const [selectedSalarySlip, setSelectedSalarySlip] = useState(null);
 
   const currentUserEmail = user?.employee_info?.email;
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const isAuthorized = ["hr_manager"];
+
+  // eslint-disable-next-line no-unused-vars
+  const CurrentUserCanNotifyEmployees = CurrentUserRoles.some((role) =>
+    isAuthorized.includes(role)
+  );
 
   const [info, setInfo] = useState({
     sizePerPage: 10,
@@ -162,14 +173,30 @@ function EmployeeSalaryTable({
                 data-toggle="modal"
                 data-target="#RegeneratePayrollModal"
                 onClick={() => handleRegeneratePayroll(employee)}
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: "5px" }}
               >
                 Regenerate
               </a>
             ) : null}
 
+            {CurrentUserCanNotifyEmployees &&
+            currentBatchApprovalStatus === "Approved" ? (
+              <button
+                className="btn btn-sm btn-primary"
+                style={{ margin: "0 5px", width: "80px" }}
+                onClick={() => handleNotifyStaff(employee)}
+              >
+                {loadingSendMail && notifyFor === employee?.user?.ogid ? (
+                  <FontAwesomeIcon icon={faSpinner} spin pulse />
+                ) : (
+                  "Send Mail"
+                )}
+              </button>
+            ) : null}
+
             <button
               className="btn btn-sm btn-info"
+              style={{ margin: "0 5px" }}
               onClick={() => handleAction(employee)}
             >
               {actionTitle}
@@ -179,7 +206,7 @@ function EmployeeSalaryTable({
             currentBatchApprovalStatus !== "Approved" ? (
               <button
                 className="btn btn-sm btn-secondary"
-                style={{ marginLeft: "10px" }}
+                style={{ marginLeft: "5px" }}
                 data-toggle="modal"
                 data-target="#EditSalarySlipModal"
                 onClick={() => handleEdit(employee)}

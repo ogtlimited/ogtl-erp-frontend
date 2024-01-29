@@ -48,6 +48,7 @@ const EmployeePayroll = () => {
     user,
     ErrorHandler,
     showAlert,
+    goToTop,
   } = useAppContext();
   const year = moment().format("YYYY");
   const currMonth = moment().format("M");
@@ -58,6 +59,7 @@ const EmployeePayroll = () => {
   const [loadingCSV, setLoadingCSV] = useState(false);
   const [loadingTotals, setLoadingTotals] = useState(false);
   const [loadingSendMails, setLoadingSendMails] = useState(false);
+  const [loadingSendMail, setLoadingSendMail] = useState(false);
   const [refreshApproversData, setRefreshApproversData] = useState(false);
 
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -76,6 +78,8 @@ const EmployeePayroll = () => {
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
   const [currentApproverEmail, setCurrentApproverEmail] = useState("");
+  const [notificationSent, setNotificationSent] = useState(false);
+  const [notifyFor, setNotifyFor] = useState(null);
 
   const [currentBatchApprovalStatus, setCurrentBatchApprovalStatus] =
     useState("");
@@ -109,24 +113,25 @@ const EmployeePayroll = () => {
       .then((res) => {
         const AllBatches = res?.data?.data?.batches;
 
-        const formattedData = AllBatches?.map((e) => ({
-          ...e,
-          status:
-            e?.batch?.status &&
-            e?.batch?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
-        }));
-
-        const currentBatchStatus = formattedData?.filter(
+        const currentBatch = AllBatches?.filter(
           (data) => data?.batch?.id === +id
         );
 
-        const status = currentBatchStatus[0]?.status;
+        const status =
+          currentBatch[0]?.batch?.status.replace(/\b\w/g, (char) =>
+            char.toUpperCase()
+          ) || currentBatch[0]?.batch?.status;
+
+        const notification = currentBatch[0]?.batch?.payslip_notification;
+
         setCurrentBatchApprovalStatus(status);
+        setNotificationSent(notification);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, notificationSent]);
 
   useEffect(() => {
     fetchBatchStatus();
@@ -263,7 +268,6 @@ const EmployeePayroll = () => {
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
         EMAIL: data?.user?.email,
-        "REFERENCE ID": data?.slip?.reference_id,
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
@@ -316,15 +320,52 @@ const EmployeePayroll = () => {
 
     try {
       const response = await axiosInstance.post(
-        `/api/v1/send_payslip_emails.json?month=${currMonth}&year=${year}`
+        `/api/v1/send_payslip_emails.json?batch_id=${id}`
       );
 
       const responseData = response?.data?.data?.message;
-      showAlert(true, responseData, "alert alert-success");
+      showAlert(
+        true,
+        `${
+          notificationSent
+            ? "Payslip Email Has Been Resent Successfully"
+            : responseData
+        }`,
+        "alert alert-success"
+      );
       setLoadingSendMails(false);
+      fetchBatchStatus();
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       setLoadingSendMails(false);
+    }
+  };
+
+  // Handle Notify Staff:
+  const handleNotifyStaff = async (staff) => {
+    setLoadingSendMail(true);
+
+    const staffName = staff?.employee;
+    const employeeId = staff?.user?.ogid;
+    setNotifyFor(employeeId);
+
+    try {
+      const response = await axiosInstance.post(
+        `/api/v1/send_payslip_emails.json?batch_id=${id}&ogid=${employeeId}`
+      );
+
+      const responseData = response?.data?.data?.message;
+      showAlert(
+        true,
+        `${staffName + " " + responseData}`,
+        "alert alert-success"
+      );
+      setLoadingSendMail(false);
+      goToTop();
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoadingSendMails(false);
+      goToTop();
     }
   };
 
@@ -698,7 +739,6 @@ const EmployeePayroll = () => {
                     <button
                       className="btn btn-primary"
                       style={{ margin: "0 1rem 1rem 0" }}
-                      onClick={handleNotifyEmployees}
                     >
                       <FontAwesomeIcon
                         icon={faSpinner}
@@ -706,7 +746,9 @@ const EmployeePayroll = () => {
                         pulse
                         style={{ marginRight: "10px" }}
                       />
-                      Sending mails...
+                      {notificationSent
+                        ? "Resending mails..."
+                        : "Sending mails..."}
                     </button>
                   ) : (
                     <button
@@ -718,7 +760,7 @@ const EmployeePayroll = () => {
                         className="fa fa-envelope"
                         style={{ marginRight: "10px" }}
                       ></i>
-                      Notify Employees
+                      {notificationSent ? "Resend Mails" : "Notify Employees"}
                     </button>
                   )}
                 </>
@@ -734,6 +776,9 @@ const EmployeePayroll = () => {
             viewAction={true}
             regenerate={true}
             actionTitle="View"
+            loadingSendMail={loadingSendMail}
+            handleNotifyStaff={handleNotifyStaff}
+            notifyFor={notifyFor}
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
