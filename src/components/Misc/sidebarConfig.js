@@ -54,20 +54,20 @@ const buildExternalURL = () => {
     const secret = process.env.REACT_APP_HMAC_SECRET;
     const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
-        const log = {
-      secret,
-      kpiUrl
-    }
+    //     const log = {
+    //   secret,
+    //   kpiUrl
+    // }
 
-    localStorage.setItem("logs", JSON.stringify(log));
+    // localStorage.setItem("logs", JSON.stringify(log));
   
   try {
     const kpiData = tokenService.getKpiUser();
-    const secret = process.env.REACT_APP_HMAC_SECRET;
+    // const secret = process.env.REACT_APP_HMAC_SECRET;
 
     const generatedJWT = sign(kpiData, secret);
 
-    const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+    // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
     const queryParams = `auth_param=${generatedJWT}`;
 
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
