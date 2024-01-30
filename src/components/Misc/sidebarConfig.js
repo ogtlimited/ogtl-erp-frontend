@@ -60,6 +60,14 @@ const buildExternalURL = () => {
     const queryParams = `auth_param=${generatedJWT}`;
 
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
+
+        const log = {
+      secret,
+      kpiUrl
+    }
+
+    localStorage.setItem("logs", JSON.stringify(log));
+    
     return externalAppUrl;
   } catch (error) {
     console.log(error);
