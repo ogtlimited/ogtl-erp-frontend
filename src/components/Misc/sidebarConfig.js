@@ -68,7 +68,8 @@ const buildExternalURL = () => {
     const log = {
       secret,
       kpiUrl,
-      kpiData
+      kpiData,
+      fetched: "success"
     }
 
     console.log("KPI log:", log)
