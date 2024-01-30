@@ -50,6 +50,17 @@ const ICONS = {
 };
 
 const buildExternalURL = () => {
+  
+    const secret = process.env.REACT_APP_HMAC_SECRET;
+    const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+
+        const log = {
+      secret,
+      kpiUrl
+    }
+
+    localStorage.setItem("logs", JSON.stringify(log));
+  
   try {
     const kpiData = tokenService.getKpiUser();
     const secret = process.env.REACT_APP_HMAC_SECRET;
@@ -60,17 +71,10 @@ const buildExternalURL = () => {
     const queryParams = `auth_param=${generatedJWT}`;
 
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
-
-        const log = {
-      secret,
-      kpiUrl
-    }
-
-    localStorage.setItem("logs", JSON.stringify(log));
     
     return externalAppUrl;
   } catch (error) {
-    console.log(error);
+    console.log("KPI error | ", error);
   }
 };
 
