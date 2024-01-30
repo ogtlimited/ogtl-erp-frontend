@@ -65,6 +65,14 @@ const buildExternalURL = () => {
     const kpiData = tokenService.getKpiUser();
     // const secret = process.env.REACT_APP_HMAC_SECRET;
 
+    const log = {
+      secret,
+      kpiUrl,
+      kpiData
+    }
+
+    console.log("KPI log:", log)
+
     const generatedJWT = sign(kpiData, secret);
 
     // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
