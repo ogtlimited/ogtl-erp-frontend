@@ -7,18 +7,23 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
-
 import paginationFactory from "react-bootstrap-table2-paginator";
+import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const DailyAttendanceTable = ({
   columns,
   data,
   loading,
   setLoading,
-
   date,
   setDate,
   today,
+
+  officeType,
+  offices,
+
   context,
 }) => {
   const { SearchBar } = Search;
@@ -93,6 +98,38 @@ const DailyAttendanceTable = ({
                       className="form-control "
                     />
                   </div>
+                </div>
+
+                {/* Office Type */}
+                <div className="col-md-4">
+                  <label htmlFor="officeType">
+                    {officeType || (
+                      <>
+                        <FontAwesomeIcon
+                          icon={faSpinner}
+                          spin
+                          pulse
+                          style={{ marginRight: "10px" }}
+                        />{" "}
+                        fetching offices...
+                      </>
+                    )}
+                  </label>
+                  <Select
+                    options={offices}
+                    isSearchable={true}
+                    // value={{
+                    //   value: officeType,
+                    //   label: officeType.replace(/\b\w/g, (char) =>
+                    //     char.toUpperCase()
+                    //   ),
+                    // }}
+                    // onChange={(e) => {
+                    //   setOfficeType(e?.value);
+                    //   setOfficeId("");
+                    // }}
+                    style={{ display: "inline-block" }}
+                  />
                 </div>
               </div>
 

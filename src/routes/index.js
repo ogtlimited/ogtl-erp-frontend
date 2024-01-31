@@ -285,14 +285,6 @@ export default function Router() {
               ),
             },
             {
-              path: "attendance-admin",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <AttendanceAdmin />
-                </GuardedRoute>
-              ),
-            },
-            {
               path: "captured-biometrics",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1048,7 +1040,14 @@ export default function Router() {
           path: "leadership/campaign-schedule",
           element: <ShiftScheduleList />,
         },
-
+        {
+          path: "leadership/team-attendance-record",
+          element: (
+            <GuardedRoute title="" dept="hr">
+              <TeamAttendanceRecord />
+            </GuardedRoute>
+          ),
+        },
         { path: "leadership/attendance-record", element: <RemoteAttendance /> },
 
         {
@@ -1160,9 +1159,6 @@ const AcceptJoboffer = Loadable(
   lazy(() => import("../pages/recruitments/acceptJoboffer"))
 );
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
-const AttendanceAdmin = Loadable(
-  lazy(() => import("../pages/HR/Admin/Attendance.Admin"))
-);
 const AttendanceRecord = Loadable(
   lazy(() => import("../pages/HR/Admin/AttendanceRecord.Admin"))
 );
@@ -1382,6 +1378,9 @@ const ShiftScheduleList = Loadable(
 );
 const RemoteAttendance = Loadable(
   lazy(() => import("../pages/HR/Users/RemoteAttendance"))
+);
+const TeamAttendanceRecord = Loadable(
+  lazy(() => import("../pages/HR/Admin/TeamAttendanceRecord.Admin"))
 );
 const SupervisorAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/SupervisorAttendance.Admin"))

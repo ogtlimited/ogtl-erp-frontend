@@ -69,6 +69,7 @@ export const PATH_DASHBOARD = {
       "/leadership/subordinate-attendance"
     ),
     campaignSchedule: path(ROOTS_DASHBOARD, "/leadership/campaign-schedule"),
+    teamAttendance: path(ROOTS_DASHBOARD, "/leadership/team-attendance-record"),
     remoteAttendance: path(ROOTS_DASHBOARD, "/leadership/attendance-record"),
   },
 
