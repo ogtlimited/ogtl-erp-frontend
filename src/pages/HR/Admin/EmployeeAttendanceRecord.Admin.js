@@ -76,7 +76,7 @@ const EmployeeAttendanceRecordAdmin = () => {
       setEmployeeAttendance(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Employee Attendance:";
+      const component = "Employee Attendance | ";
       ErrorHandler(error, component);
       setLoading(false);
     }

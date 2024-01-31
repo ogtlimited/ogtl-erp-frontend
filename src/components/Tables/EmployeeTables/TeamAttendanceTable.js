@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -7,18 +5,25 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
-
 import paginationFactory from "react-bootstrap-table2-paginator";
+import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-const DailyAttendanceTable = ({
+const TeamAttendanceTable = ({
   columns,
   data,
   loading,
   setLoading,
-
   date,
   setDate,
   today,
+
+  officeType,
+  offices,
+  selectedOffice,
+  setSelectedOffice,
+
   context,
 }) => {
   const { SearchBar } = Search;
@@ -94,6 +99,41 @@ const DailyAttendanceTable = ({
                     />
                   </div>
                 </div>
+
+                {/* Office Type */}
+                <div className="col-md-4">
+                  <label htmlFor="officeType">
+                    {officeType?.replace(/\b\w/g, (char) =>
+                      char.toUpperCase()
+                    ) || (
+                      <>
+                        <FontAwesomeIcon
+                          icon={faSpinner}
+                          spin
+                          pulse
+                          style={{ marginRight: "10px" }}
+                        />{" "}
+                        fetching offices...
+                      </>
+                    )}
+                  </label>
+                  <Select
+                    options={offices}
+                    isSearchable={true}
+                    value={{
+                      value: selectedOffice?.id,
+                      label: selectedOffice?.title,
+                    }}
+                    onChange={(e) =>
+                      setSelectedOffice({
+                        id: e?.value,
+                        title: e?.label,
+                        office_type: officeType,
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                  />
+                </div>
               </div>
 
               <div className="custom-table-div">
@@ -134,4 +174,4 @@ const DailyAttendanceTable = ({
   );
 };
 
-export default DailyAttendanceTable;
+export default TeamAttendanceTable;

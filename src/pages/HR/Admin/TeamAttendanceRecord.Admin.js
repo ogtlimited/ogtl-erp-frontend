@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
+import TeamAttendanceTable from "../../../components/Tables/EmployeeTables/TeamAttendanceTable";
 
 const TeamAttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
@@ -37,14 +37,27 @@ const TeamAttendanceRecord = () => {
       });
 
       const resData = response?.data?.data?.office_details;
-      setOfficeType(resData?.office_type);
 
-      const formattedOffice = resData?.offices.map((office) => ({
-        label: office?.title?.toUpperCase(),
-        value: office?.id,
-      }));
+      if (resData?.office_type === "campaign") {
+        setOfficeType(resData?.office_type);
 
-      setOffices(formattedOffice);
+        const formattedOffice = resData?.offices.map((office) => ({
+          label: office?.title?.toUpperCase(),
+          value: office?.id,
+        }));
+
+        setOffices(formattedOffice);
+      } else if (resData?.office_type === "department") {
+        setOfficeType(resData?.office_type);
+        setSelectedOffice({
+          id: resData?.office?.id,
+          title: resData?.office?.title,
+          office_type: resData?.office_type,
+        });
+      } else {
+        return null;
+      }
+
       setLoading(false);
     } catch (error) {
       const component = "Staff Offices Error | ";
@@ -215,7 +228,7 @@ const TeamAttendanceRecord = () => {
       <div>
         <div className="row tab-content">
           <div className="col-12">
-            <DailyAttendanceTable
+            <TeamAttendanceTable
               columns={columns}
               data={allTeamAttendance}
               loading={loading}
