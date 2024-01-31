@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
@@ -23,6 +21,8 @@ const DailyAttendanceTable = ({
 
   officeType,
   offices,
+  selectedOffice,
+  setSelectedOffice,
 
   context,
 }) => {
@@ -103,7 +103,9 @@ const DailyAttendanceTable = ({
                 {/* Office Type */}
                 <div className="col-md-4">
                   <label htmlFor="officeType">
-                    {officeType || (
+                    {officeType.replace(/\b\w/g, (char) =>
+                      char.toUpperCase()
+                    ) || (
                       <>
                         <FontAwesomeIcon
                           icon={faSpinner}
@@ -118,16 +120,17 @@ const DailyAttendanceTable = ({
                   <Select
                     options={offices}
                     isSearchable={true}
-                    // value={{
-                    //   value: officeType,
-                    //   label: officeType.replace(/\b\w/g, (char) =>
-                    //     char.toUpperCase()
-                    //   ),
-                    // }}
-                    // onChange={(e) => {
-                    //   setOfficeType(e?.value);
-                    //   setOfficeId("");
-                    // }}
+                    value={{
+                      value: selectedOffice?.id,
+                      label: selectedOffice?.title,
+                    }}
+                    onChange={(e) =>
+                      setSelectedOffice({
+                        id: e?.value,
+                        title: e?.label,
+                        office_type: officeType,
+                      })
+                    }
                     style={{ display: "inline-block" }}
                   />
                 </div>

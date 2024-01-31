@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
-import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendanceTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
@@ -12,20 +10,16 @@ import { useAppContext } from "../../../Context/AppContext";
 const TeamAttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
-  const [dailyAttendance, setDailyAttendance] = useState([]);
+  const [allTeamAttendance, setAllTeamAttendance] = useState([]);
 
   const [officeType, setOfficeType] = useState("");
   const [offices, setOffices] = useState([]);
-  const [officeId, setOfficeId] = useState({
+  const [selectedOffice, setSelectedOffice] = useState({
     id: "",
     title: "",
+    office_type: "",
   });
 
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState("");
-
-  // Daily Attendance Summary:
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
@@ -43,9 +37,7 @@ const TeamAttendanceRecord = () => {
       });
 
       const resData = response?.data?.data?.office_details;
-      setOfficeType(
-        resData?.office_type.replace(/\b\w/g, (char) => char.toUpperCase())
-      );
+      setOfficeType(resData?.office_type);
 
       const formattedOffice = resData?.offices.map((office) => ({
         label: office?.title?.toUpperCase(),
@@ -60,14 +52,18 @@ const TeamAttendanceRecord = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  }, []);
+
+  useEffect(() => {
+    fetchLoggedInUserOffices();
+  }, [fetchLoggedInUserOffices]);
 
   // Team Attendance :
-  const fetchTeamAttendance = useCallback(async () => {
+  const fetchEmployeeByOffice = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        "/api/v1/daily_attendance.json",
+        "/api/v1/office_attendances.json",
         {
           headers: {
             "Content-Type": "application/json",
@@ -76,17 +72,29 @@ const TeamAttendanceRecord = () => {
           },
           params: {
             date: date,
+            office_type: selectedOffice?.office_type
+              ? selectedOffice?.office_type
+              : null,
+            office_id: selectedOffice?.id ? selectedOffice?.id : null,
             limit: 400,
           },
         }
       );
+
       const resData =
-        response?.data?.data?.info === "no record for date"
+        response?.data?.data?.result === "no record for date"
           ? []
-          : response?.data?.data?.info.map((e, index) => ({
+          : response?.data?.data?.result.map((e) => ({
               ...e,
-              idx: index + 1,
               date: moment(e?.date).format("ddd, Do MMM. YYYY"),
+              formattedClockIn:
+                e?.clock_in === "No Clock in"
+                  ? e?.clock_in
+                  : moment(e?.clock_in, "HH:mm:ss").format("hh:mma"),
+              formattedClockOut:
+                e?.clock_out === "No Clock out"
+                  ? e?.clock_out
+                  : moment(e?.clock_out, "HH:mm:ss").format("hh:mma"),
             }));
 
       resData.forEach((attendance) => {
@@ -108,7 +116,7 @@ const TeamAttendanceRecord = () => {
         }
       });
 
-      setDailyAttendance(resData);
+      setAllTeamAttendance(resData);
       setLoading(false);
     } catch (error) {
       const component = "Team Attendance | ";
@@ -116,11 +124,11 @@ const TeamAttendanceRecord = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  }, [date, selectedOffice?.id, selectedOffice?.office_type]);
 
   useEffect(() => {
-    fetchLoggedInUserOffices();
-  }, [fetchLoggedInUserOffices]);
+    fetchEmployeeByOffice();
+  }, [fetchEmployeeByOffice]);
 
   const columns = [
     {
@@ -157,7 +165,7 @@ const TeamAttendanceRecord = () => {
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "clock_in",
+      dataField: "formattedClockIn",
       text: "Clock In",
       sort: true,
       headerStyle: { width: "15%" },
@@ -165,12 +173,12 @@ const TeamAttendanceRecord = () => {
         return value === "No Clock in" ? (
           <span className="text-danger">{value}</span>
         ) : (
-          moment(value, "HH:mm:ss").format("hh:mma")
+          value
         );
       },
     },
     {
-      dataField: "clock_out",
+      dataField: "formattedClockOut",
       text: "Clock Out",
       sort: true,
       headerStyle: { width: "15%" },
@@ -178,7 +186,7 @@ const TeamAttendanceRecord = () => {
         return value === "No Clock out" ? (
           <span className="text-danger">{value}</span>
         ) : (
-          moment(value, "HH:mm:ss").format("hh:mma")
+          value
         );
       },
     },
@@ -209,13 +217,15 @@ const TeamAttendanceRecord = () => {
           <div className="col-12">
             <DailyAttendanceTable
               columns={columns}
-              data={dailyAttendance}
+              data={allTeamAttendance}
               loading={loading}
               setLoading={setLoading}
               date={date}
               setDate={setDate}
               officeType={officeType}
               offices={offices}
+              selectedOffice={selectedOffice}
+              setSelectedOffice={setSelectedOffice}
             />
           </div>
         </div>
