@@ -186,7 +186,7 @@ const DashboardChart = ({
       <div className="col-md-12">
         <div className="col">
           {/* HR View */}
-          {CurrentUserOffice === "HR" && AuthorizedHrManagerRoles ? (
+          {CurrentUserOffice === "hr" && AuthorizedHrManagerRoles ? (
             <>
               {/* Employee by Office */}
               <div className="col-md-12 text-center">
