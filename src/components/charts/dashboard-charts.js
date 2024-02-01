@@ -39,7 +39,7 @@ const DashboardChart = ({
 }) => {
   const { user } = useAppContext();
 
-  const CurrentUserOffice = user?.office?.title;
+  const CurrentUserOffice = user?.office?.title.toLowerCase();
   const CurrentUserRoles = user?.employee_info?.roles;
   const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
 
