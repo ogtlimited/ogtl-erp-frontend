@@ -39,7 +39,7 @@ const DashboardChart = ({
 }) => {
   const { user } = useAppContext();
 
-  const CurrentUserOffice = user?.office?.title;
+  const CurrentUserOffice = user?.office?.title.toLowerCase();
   const CurrentUserRoles = user?.employee_info?.roles;
   const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
 
@@ -186,7 +186,7 @@ const DashboardChart = ({
       <div className="col-md-12">
         <div className="col">
           {/* HR View */}
-          {CurrentUserOffice === "HR" && AuthorizedHrManagerRoles ? (
+          {CurrentUserOffice === "hr" && AuthorizedHrManagerRoles ? (
             <>
               {/* Employee by Office */}
               <div className="col-md-12 text-center">
