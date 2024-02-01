@@ -55,6 +55,10 @@ const buildExternalURL = () => {
     const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
   try {
+    if (!kpiUrl || !secret) {
+      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`)
+    }
+
     const kpiData = tokenService.getKpiUser();
     const log = {
       secret,
