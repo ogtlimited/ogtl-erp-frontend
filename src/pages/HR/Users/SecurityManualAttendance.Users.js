@@ -50,6 +50,15 @@ const SecurityManualAttendance = () => {
     });
   }, [today_date]);
 
+  const cancelEvent = () => {
+    setData({
+      ogid: "",
+      date: today_date,
+      clock_in: "",
+      clock_out: "",
+    });
+  };
+
   // Employee Attendance - Today:
   const fetchEmployeeAttendance = useCallback(
     async (ogid, staff) => {
@@ -145,12 +154,7 @@ const SecurityManualAttendance = () => {
       fetchEmployeeAttendance();
       goToTop();
 
-      setData({
-        ogid: "",
-        date: "",
-        clock_in: "",
-        clock_out: "",
-      });
+      cancelEvent();
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
       if (error?.response?.status === 500) {
@@ -210,7 +214,7 @@ const SecurityManualAttendance = () => {
         </div>
       </div>
 
-      <div className="custom-table-div">
+      <div className="custom-field-div">
         <div className="modal-body">
           <form onSubmit={handleSubmitAttendance}>
             <div className="row">
@@ -291,6 +295,14 @@ const SecurityManualAttendance = () => {
             </div>
 
             <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+                onClick={cancelEvent}
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
                 className="btn btn-primary"
