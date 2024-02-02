@@ -48,7 +48,7 @@ export const AddSupervisorAttendanceModal = ({fetchAllAttendance, allSubordinate
       reason: employee.reason,
     };
     
-    console.log('EmployeeRecord:', employeeRecord)
+    // console.log('EmployeeRecord:', employeeRecord)
 
     setLoading(true);
     try {

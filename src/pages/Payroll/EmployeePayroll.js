@@ -747,8 +747,8 @@ const EmployeePayroll = () => {
                         style={{ marginRight: "10px" }}
                       />
                       {notificationSent
-                        ? "Resending mails..."
-                        : "Sending mails..."}
+                        ? "Resending slips..."
+                        : "Sending slips..."}
                     </button>
                   ) : (
                     <button
@@ -760,7 +760,7 @@ const EmployeePayroll = () => {
                         className="fa fa-envelope"
                         style={{ marginRight: "10px" }}
                       ></i>
-                      {notificationSent ? "Resend Mails" : "Notify Employees"}
+                      {notificationSent ? "Resend Slips" : "Notify Employees"}
                     </button>
                   )}
                 </>

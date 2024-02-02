@@ -46,13 +46,13 @@ const ICONS = {
   organizationalStructure: getIcon("la-sitemap"),
   leader: getIcon("la-user-tie"),
   userAttendance: getIcon("la-user-clock"),
+  teamAttendance: getIcon("la-history"),
   helpDesk: getIcon("la-question"),
 };
 
 const buildExternalURL = () => {
-  
-    const secret = process.env.REACT_APP_HMAC_SECRET;
-    const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+  const secret = process.env.REACT_APP_HMAC_SECRET;
+  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
   try {
     if (!kpiUrl || !secret) {
@@ -60,16 +60,11 @@ const buildExternalURL = () => {
     }
 
     const kpiData = tokenService.getKpiUser();
-    const log = {
-      secret,
-      kpiUrl,
-      kpiData,
-      fetched: "success"
-    }
+
     const generatedJWT = sign(kpiData, secret);
     const queryParams = `auth_param=${generatedJWT}`;
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
-    
+
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
@@ -172,6 +167,12 @@ const sidebarConfig = [
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.resignation,
+      },
+      {
+        canView: CurrentUserRoles?.includes("security_attendance_team") ? "all" : "none",
+        title: "Manual Attendance",
+        path: PATH_DASHBOARD.main.manualAttendance,
+        icon: ICONS.userAttendance,
       },
       {
         canView: "all",
@@ -445,6 +446,12 @@ const sidebarConfig = [
               icon: ICONS.schedule,
             },
             {
+              canView: "lead",
+              title: "Team Attendance",
+              path: PATH_DASHBOARD.leadership.teamAttendance,
+              icon: ICONS.teamAttendance,
+            },
+            {
               canView: CurrentUserRoles,
               title: "Remote Attendance",
               path: PATH_DASHBOARD.leadership.remoteAttendance,
@@ -463,6 +470,12 @@ const sidebarConfig = [
               title: "Campaign Schedule",
               path: PATH_DASHBOARD.leadership.campaignSchedule,
               icon: ICONS.schedule,
+            },
+            {
+              canView: "lead",
+              title: "Team Attendance",
+              path: PATH_DASHBOARD.leadership.teamAttendance,
+              icon: ICONS.teamAttendance,
             },
           ],
   },

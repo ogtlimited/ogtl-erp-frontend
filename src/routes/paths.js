@@ -25,7 +25,8 @@ export const PATH_DASHBOARD = {
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
     employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
     employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
-    resignation: path(ROOTS_DASHBOARD, "/main/resignation"),  
+    resignation: path(ROOTS_DASHBOARD, "/main/resignation"), 
+    manualAttendance: path(ROOTS_DASHBOARD, "/main/manual-attendance"), 
   },
 
   apps: {
@@ -69,6 +70,7 @@ export const PATH_DASHBOARD = {
       "/leadership/subordinate-attendance"
     ),
     campaignSchedule: path(ROOTS_DASHBOARD, "/leadership/campaign-schedule"),
+    teamAttendance: path(ROOTS_DASHBOARD, "/leadership/team-attendance-record"),
     remoteAttendance: path(ROOTS_DASHBOARD, "/leadership/attendance-record"),
   },
 
