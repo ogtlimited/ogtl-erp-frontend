@@ -136,7 +136,7 @@ const SecurityManualAttendance = () => {
         true,
         `${data.staff} Attendance for ${moment(data?.date).format(
           "dddd, Do MMMM YYYY"
-        )} Successfully Submitted!`,
+        )} has been Successfully Submitted!`,
         "alert alert-success"
       );
 
