@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const SecurityManualAttendance = () => {
-  const { showAlert, loadingEmployeeSelect, selectEmployees, goToTop } = useAppContext();
+  const { showAlert, loadingEmployeeSelect, selectEmployees, goToTop } =
+    useAppContext();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
@@ -78,8 +79,8 @@ const SecurityManualAttendance = () => {
               clock_in: resData[0].clock_in,
               clock_out: resData[0].clock_out,
             });
-            resData[0].clock_in.length && setHasClockedIn(true);
-            resData[0].clock_out.length && setHasClockedOut(true);
+            resData[0].clock_in !== "No Clock in" && setHasClockedIn(true);
+            resData[0].clock_out !== "No Clock out" && setHasClockedOut(true);
           } else {
             setData({
               ...data,
