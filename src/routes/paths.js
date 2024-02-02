@@ -25,7 +25,8 @@ export const PATH_DASHBOARD = {
     jobDashboard: path(ROOTS_DASHBOARD, "/job-dashboard"),
     employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
     employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
-    resignation: path(ROOTS_DASHBOARD, "/main/resignation"),  
+    resignation: path(ROOTS_DASHBOARD, "/main/resignation"), 
+    manualAttendance: path(ROOTS_DASHBOARD, "/main/manual-attendance"), 
   },
 
   apps: {

@@ -127,6 +127,7 @@ export default function Router() {
 
             // USER:
             { path: "main/attendance", element: <EmployeeAttendance /> },
+            { path: "main/manual-attendance", element: <SecurityManualAttendance /> },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
             {
@@ -1267,6 +1268,9 @@ const ShiftAdmin = Loadable(
 const Profile = Loadable(lazy(() => import("../pages/HR/Profile")));
 const EmployeeAttendance = Loadable(
   lazy(() => import("../pages/HR/Users/Attendance.Users"))
+);
+const SecurityManualAttendance = Loadable(
+  lazy(() => import("../pages/HR/Users/SecurityManualAttendance.Users"))
 );
 const ClientUser = Loadable(
   lazy(() => import("../pages/HR/Users/Client.User"))

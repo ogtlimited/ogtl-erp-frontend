@@ -165,6 +165,12 @@ const sidebarConfig = [
         icon: ICONS.resignation,
       },
       {
+        canView: CurrentUserRoles?.includes("security_attendance_team") ? "all" : "none",
+        title: "Manual Attendance",
+        path: PATH_DASHBOARD.main.manualAttendance,
+        icon: ICONS.userAttendance,
+      },
+      {
         canView: "all",
         title: "Help Desk",
         path: PATH_DASHBOARD.main.resignation,

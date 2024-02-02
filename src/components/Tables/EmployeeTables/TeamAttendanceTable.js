@@ -113,7 +113,7 @@ const TeamAttendanceTable = ({
                           pulse
                           style={{ marginRight: "10px" }}
                         />{" "}
-                        fetching offices...
+                        Fetching offices...
                       </>
                     )}
                   </label>
