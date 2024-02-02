@@ -88,7 +88,7 @@ const TeamAttendanceRecord = () => {
             office_type: selectedOffice?.office_type
               ? selectedOffice?.office_type
               : null,
-            office_id: selectedOffice?.id ? selectedOffice?.id : null,
+            office: selectedOffice?.id ? selectedOffice?.id : null,
             limit: 400,
           },
         }
