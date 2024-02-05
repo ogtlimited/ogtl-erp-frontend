@@ -9,6 +9,7 @@ import TeamAttendanceTable from "../../../components/Tables/EmployeeTables/TeamA
 
 const TeamAttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
+  const [loadingOfficeType, setLoadingOfficeType] = useState(false);
   const [loading, setLoading] = useState(false);
   const [allTeamAttendance, setAllTeamAttendance] = useState([]);
 
@@ -26,8 +27,8 @@ const TeamAttendanceRecord = () => {
 
   // Fetch logged in user offices:
   const fetchLoggedInUserOffices = useCallback(async () => {
+    setLoadingOfficeType(true);
     try {
-      setLoading(true);
       const response = await axiosInstance.get("/api/v1/leaders_offices.json", {
         headers: {
           "Content-Type": "application/json",
@@ -58,11 +59,11 @@ const TeamAttendanceRecord = () => {
         return null;
       }
 
-      setLoading(false);
+      setLoadingOfficeType(false);
     } catch (error) {
       const component = "Staff Offices Error | ";
       ErrorHandler(error, component);
-      setLoading(false);
+      setLoadingOfficeType(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -73,8 +74,8 @@ const TeamAttendanceRecord = () => {
 
   // Team Attendance :
   const fetchEmployeeByOffice = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await axiosInstance.get(
         "/api/v1/office_attendances.json",
         {
@@ -231,6 +232,7 @@ const TeamAttendanceRecord = () => {
             <TeamAttendanceTable
               columns={columns}
               data={allTeamAttendance}
+              loadingOfficeType={loadingOfficeType}
               loading={loading}
               setLoading={setLoading}
               date={date}
