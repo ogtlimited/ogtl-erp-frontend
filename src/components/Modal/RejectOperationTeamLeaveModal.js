@@ -9,7 +9,7 @@ import { useAppContext } from "../../Context/AppContext";
 
 function RejectOperationTeamLeaveModal({
   closeModal,
-  setOperationTeamReject,
+  operationTeamReject,
   fetchAllLeaves,
   fetchLeaveHistory,
 }) {
@@ -24,8 +24,9 @@ function RejectOperationTeamLeaveModal({
 
   const handleRejectLeave = async (e) => {
     e.preventDefault();
-    const id = setOperationTeamReject.id;
+    const id = operationTeamReject.id;
     setLoading(true);
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
