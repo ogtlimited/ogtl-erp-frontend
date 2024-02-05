@@ -13,6 +13,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 const TeamAttendanceTable = ({
   columns,
   data,
+  loadingOfficeType,
   loading,
   setLoading,
   date,
@@ -102,10 +103,14 @@ const TeamAttendanceTable = ({
 
                 {/* Office Type */}
                 <div className="col-md-4">
-                  <label htmlFor="officeType">
-                    {officeType?.replace(/\b\w/g, (char) =>
-                      char.toUpperCase()
-                    ) || (
+                  {!loadingOfficeType ? (
+                    <label htmlFor="officeType">
+                      {officeType?.replace(/\b\w/g, (char) =>
+                        char.toUpperCase()
+                      ) || "Office"}
+                    </label>
+                  ) : (
+                    <label htmlFor="officeType">
                       <>
                         <FontAwesomeIcon
                           icon={faSpinner}
@@ -115,8 +120,8 @@ const TeamAttendanceTable = ({
                         />{" "}
                         Fetching offices...
                       </>
-                    )}
-                  </label>
+                    </label>
+                  )}
                   <Select
                     options={offices}
                     isSearchable={true}
