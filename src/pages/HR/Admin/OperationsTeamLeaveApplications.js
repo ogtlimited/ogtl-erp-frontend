@@ -746,7 +746,7 @@ const OperationTeamLeaveApplications = () => {
 
       {rejectModal && (
         <RejectOperationTeamLeaveModal
-          operationTeamReject={setOperationTeamReject}
+          operationTeamReject={operationTeamReject}
           closeModal={setRejectModal}
           fetchAllLeaves={fetchOperationTeamLeaves}
           fetchLeaveHistory={fetchOperationTeamLeaveHistory}
