@@ -33,6 +33,7 @@ const AppProvider = (props) => {
 
   // Select API States:
   const [loadingSelect, setLoadingSelect] = useState(false);
+  const [loadingEmployeeSelect, setLoadingEmployeeSelect] = useState(false);
   const [selectEmployees, setSelectEmployees] = useState([]);
   const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectCampaigns, setSelectCampaigns] = useState([]);
@@ -48,6 +49,8 @@ const AppProvider = (props) => {
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
   const currentUserOgid = user?.employee_info?.ogid;
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
   const goToTop = () => {
     window.scrollTo({
@@ -83,7 +86,7 @@ const AppProvider = (props) => {
     {
       label: "Retracted",
       value: "retracted",
-    }
+    },
   ];
 
   const selectOfficeTypes = [
@@ -203,7 +206,8 @@ const AppProvider = (props) => {
 
   // SELECT APIs
   // All Employees:
-  const fetchAllEmployees = async () => {
+  const fetchAllEmployees = useCallback(async () => {
+    setLoadingEmployeeSelect(true);
     try {
       const response = await axiosInstance.get("/api/v1/employees.json", {
         headers: {
@@ -213,7 +217,7 @@ const AppProvider = (props) => {
         },
         params: {
           page: 1,
-          limit: 1000,
+          limit: 5000,
         },
       });
       const resData = response?.data?.data?.employees;
@@ -226,8 +230,14 @@ const AppProvider = (props) => {
         .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectEmployees(formattedEmployees);
-    } catch (error) {}
-  };
+      setLoadingEmployeeSelect(false);
+    } catch (error) {
+      const component = "Staff Error | ";
+      ErrorHandler(error, component);
+      setLoadingEmployeeSelect(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // All Departments:
   const fetchAllDepartments = useCallback(async () => {
@@ -580,11 +590,15 @@ const AppProvider = (props) => {
         fetchAllLeaders();
         fetchAllDesignations();
       }
+      if (isSecurity) {
+        fetchAllEmployees();
+      }
 
       fetchAllLeaveTypes();
       fetchStaffResignation();
     }
   }, [
+    fetchAllEmployees,
     fetchAllCampaigns,
     fetchAllDepartments,
     fetchAllDesignations,
@@ -595,13 +609,15 @@ const AppProvider = (props) => {
     fetchJobOpenings,
     fetchStaffResignation,
     isHr,
-    isTeamLead,
     userToken,
+    isTeamLead,
+    isSecurity,
   ]);
 
   return (
     <AppContext.Provider
       value={{
+        loadingEmployeeSelect,
         selectEmployees,
         setSelectEmployees,
         fetchAllEmployees,

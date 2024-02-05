@@ -11,7 +11,7 @@ const EmployeeAttendance = () => {
   const { ErrorHandler, user } = useAppContext();
   const [attendance, setAttendance] = useState([]);
   const [employeeTardiness, setEmployeeTardiness] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const firstDay = moment().startOf("month").format("YYYY-MM-DD");
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");

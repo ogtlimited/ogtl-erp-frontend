@@ -189,7 +189,7 @@ function EmployeeSalaryTable({
                 {loadingSendMail && notifyFor === employee?.user?.ogid ? (
                   <FontAwesomeIcon icon={faSpinner} spin pulse />
                 ) : (
-                  "Send Mail"
+                  "Send Slip"
                 )}
               </button>
             ) : null}

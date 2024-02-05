@@ -89,8 +89,8 @@ const WorkforceLeaveApplications = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("ddd MMM Do, YYYY"),
-        to_date: moment(leave?.leave?.end_date).format("ddd MMM Do, YYYY"),
+        from_date: moment(leave?.leave?.start_date).format("YYYY, MM (MMM), Do"),
+        to_date: moment(leave?.leave?.end_date).format("YYYY, MM (MMM), Do"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
           leave?.leave?.end_date

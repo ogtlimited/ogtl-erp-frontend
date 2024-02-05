@@ -127,6 +127,7 @@ export default function Router() {
 
             // USER:
             { path: "main/attendance", element: <EmployeeAttendance /> },
+            { path: "main/manual-attendance", element: <SecurityManualAttendance /> },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
             {
@@ -281,14 +282,6 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="hr">
                   <LeadershipSubordinateAdmin />
-                </GuardedRoute>
-              ),
-            },
-            {
-              path: "attendance-admin",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <AttendanceAdmin />
                 </GuardedRoute>
               ),
             },
@@ -1048,7 +1041,14 @@ export default function Router() {
           path: "leadership/campaign-schedule",
           element: <ShiftScheduleList />,
         },
-
+        {
+          path: "leadership/team-attendance-record",
+          element: (
+            <GuardedRoute title="" dept="hr">
+              <TeamAttendanceRecord />
+            </GuardedRoute>
+          ),
+        },
         { path: "leadership/attendance-record", element: <RemoteAttendance /> },
 
         {
@@ -1160,9 +1160,6 @@ const AcceptJoboffer = Loadable(
   lazy(() => import("../pages/recruitments/acceptJoboffer"))
 );
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
-const AttendanceAdmin = Loadable(
-  lazy(() => import("../pages/HR/Admin/Attendance.Admin"))
-);
 const AttendanceRecord = Loadable(
   lazy(() => import("../pages/HR/Admin/AttendanceRecord.Admin"))
 );
@@ -1271,6 +1268,9 @@ const ShiftAdmin = Loadable(
 const Profile = Loadable(lazy(() => import("../pages/HR/Profile")));
 const EmployeeAttendance = Loadable(
   lazy(() => import("../pages/HR/Users/Attendance.Users"))
+);
+const SecurityManualAttendance = Loadable(
+  lazy(() => import("../pages/HR/Users/SecurityManualAttendance.Users"))
 );
 const ClientUser = Loadable(
   lazy(() => import("../pages/HR/Users/Client.User"))
@@ -1382,6 +1382,9 @@ const ShiftScheduleList = Loadable(
 );
 const RemoteAttendance = Loadable(
   lazy(() => import("../pages/HR/Users/RemoteAttendance"))
+);
+const TeamAttendanceRecord = Loadable(
+  lazy(() => import("../pages/HR/Admin/TeamAttendanceRecord.Admin"))
 );
 const SupervisorAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/SupervisorAttendance.Admin"))
