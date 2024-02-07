@@ -443,7 +443,7 @@ const JobApplicantsAdmin = () => {
       ),
     },
     {
-      dataField: "resume_attachment",
+      dataField: "resume",
       text: "Resume Attachment",
       sort: true,
       headerStyle: { width: "15%" },
