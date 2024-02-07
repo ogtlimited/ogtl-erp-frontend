@@ -367,7 +367,7 @@ const JobApplicantsAdmin = () => {
     },
     {
       dataField: "job_title",
-      text: "Job Opening",
+      text: "Job Title",
       sort: true,
       headerStyle: { width: "15%" },
       formatter: (value, row) => (
