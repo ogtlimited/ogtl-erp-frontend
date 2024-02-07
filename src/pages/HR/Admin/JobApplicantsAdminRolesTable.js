@@ -10,6 +10,7 @@ import usePagination from "./JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import secureLocalStorage from "react-secure-storage";
+import { useAppContext } from "../../../Context/AppContext";
 
 const JobApplicantsAdminRolesTable = ({
   data,
@@ -37,6 +38,8 @@ const JobApplicantsAdminRolesTable = ({
   processingStageFilter,
   setProcessingStageFilter,
 }) => {
+  const { loadingJobAppIntOpts, InterviewProcessStageOptions } =
+    useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
   const [dataToFilter, setDataToFilter] = useState("");
@@ -47,12 +50,16 @@ const JobApplicantsAdminRolesTable = ({
   secureLocalStorage.setItem("fromDate", fromDate);
   secureLocalStorage.setItem("toDate", toDate);
 
-  const ProcessStatusOptions = [
-    { title: "Open" },
-    { title: "Sieving" },
-    { title: "Phone screening" },
-    { title: "Interview scheduled" },
-  ];
+  const ProcessStatusOptions = loadingJobAppIntOpts
+    ? []
+    : InterviewProcessStageOptions;
+
+  // const ProcessStatusOptions = [
+  //   { title: "Open" },
+  //   { title: "Sieving" },
+  //   { title: "Phone screening" },
+  //   { title: "Interview scheduled" },
+  // ];
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -343,9 +350,9 @@ const JobApplicantsAdminRolesTable = ({
                     <option value="" disabled selected hidden>
                       Process Stage
                     </option>
-                    {ProcessStatusOptions.map((option, index) => (
-                      <option key={index} value={option.title}>
-                        {option.title}
+                    {ProcessStatusOptions?.map((option, index) => (
+                      <option key={index} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </select>
