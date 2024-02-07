@@ -161,7 +161,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
-            name: searchTerm,
+            name: searchTerm.length ? searchTerm : null,
             process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,
@@ -212,6 +212,7 @@ const JobApplicantsTable = ({
           params: {
             page: page,
             limit: sizePerPage,
+            name: searchTerm.length ? searchTerm : null,
             process_status: e.target.value,
             start_date: fromDate,
             end_date: toDate,

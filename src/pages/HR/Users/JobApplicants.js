@@ -19,7 +19,13 @@ import secureLocalStorage from "react-secure-storage";
 
 const JobApplicants = () => {
   const [data, setData] = useState([]);
-  const { showAlert, user, ErrorHandler, getAvatarColor } = useAppContext();
+  const {
+    showAlert,
+    user,
+    ErrorHandler,
+    getAvatarColor,
+    fetchAllJobApplicationISandIPS,
+  } = useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
   const [modalType, setModalType] = useState("schedule-interview");
@@ -39,6 +45,11 @@ const JobApplicants = () => {
   let lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
+
+  useEffect(() => {
+    fetchAllJobApplicationISandIPS();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
@@ -150,11 +161,13 @@ const JobApplicants = () => {
     const colorMap = {
       Open: "text-primary",
       "Scheduled for interview": "text-success",
-      "Not interested": "text-secondary",
+      "Uninterested in Job": "text-secondary",
       "Not a graduate": "text-dark",
       "Not in job location": "text-muted",
       "Failed screening": "text-danger",
-      "Missed call": "text-info",
+      "Internal Applicants": "text-info",
+      "Interested in other roles": "text-info",
+      "Already Called": "text-info",
     };
 
     return colorMap[value] || "text-warning";
