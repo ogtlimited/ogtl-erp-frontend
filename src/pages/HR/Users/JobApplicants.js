@@ -46,6 +46,11 @@ const JobApplicants = () => {
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
 
+  useEffect(() => {
+    fetchAllJobApplicationISandIPS();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Job Applicants
   const fetchAllJobApplicants = useCallback(async () => {
     const persistedFromDate = secureLocalStorage.getItem("fromDate");

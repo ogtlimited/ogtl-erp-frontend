@@ -16,8 +16,6 @@ const ResignationContent = ({ Content = {} }) => {
     "reason_for_resignation",
   ];
 
-  console.log("Content", Content);
-
   const surveyData = Content.survey_answer?.answer?.answers || [];
   const feedbacks = Content?.feedback || [];
   const HrManagerFeedback = Content?.survey_answer?.feedback;
