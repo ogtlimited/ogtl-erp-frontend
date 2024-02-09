@@ -172,11 +172,13 @@ const RemoteAttendance = () => {
   };
 
   // Mark Present:
-  const handleSetPresent = async (value) => {
+  const handleMarkAttendance = async (value) => {
     try {
       const id = value.id;
       const response = await axiosInstance.patch(
-        `/api/v1/remote_attendance_records/${id}.json?present=${true}`,
+        `/api/v1/remote_attendance_records/${id}.json?present=${
+          value?.present ? false : true
+        }`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -218,7 +220,7 @@ const RemoteAttendance = () => {
           <Switch
             checked={row?.present}
             value={row?.present}
-            onChange={() => handleSetPresent(row)}
+            onChange={() => handleMarkAttendance(row)}
           />
         </>
       ),
