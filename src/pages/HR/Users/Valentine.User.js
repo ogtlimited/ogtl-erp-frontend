@@ -123,7 +123,7 @@ const ValentineUser = () => {
                   </>
                 ) : (
                   <>
-                    {!findingVal && (
+                    {!findingVal && data ? (
                       <div className="val_pair">
                         <p>Your Val is</p>
                         <h1>{data?.full_name}</h1>
@@ -139,6 +139,10 @@ const ValentineUser = () => {
                           style={{ width: "80px", height: "80px" }}
                         ></lord-icon>
                       </div>
+                    ) : (
+                      <div className="val_pair">
+                        <p>Error fetching Val 💔</p>
+                      </div>
                     )}
                   </>
                 )}
@@ -147,49 +151,6 @@ const ValentineUser = () => {
           </>
         )}
       </div>
-
-      {/* <div className="valentine_page">
-        {data && !findingVal ? (
-          <>
-            {loading ? (
-              <div className="finding_Val_Spinner">
-                <img
-                  src={ValSpinner}
-                  alt="Valentine"
-                  className="val_spinner_icon"
-                />
-              </div>
-            ) : (
-              <div className="val_pair">
-                <p>Your Val is</p>
-                <h1>{data?.full_name}</h1>
-                <lord-icon
-                  src="https://cdn.lordicon.com/ppmqpdfo.json"
-                  trigger="loop"
-                  delay="2000"
-                  style={{ width: "80px", height: "80px" }}
-                ></lord-icon>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {!findingVal ? (
-              <button className="find_val_btn" onClick={handleFindVal}>
-                Find your Val.
-              </button>
-            ) : (
-              <div className="finding_Val_Spinner">
-                <img
-                  src={findingValSpinner}
-                  alt="Valentine"
-                  className="val_spinner_icon"
-                />
-              </div>
-            )}
-          </>
-        )}
-      </div> */}
     </div>
   );
 };
