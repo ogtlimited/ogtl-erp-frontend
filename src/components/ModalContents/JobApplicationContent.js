@@ -13,6 +13,7 @@ const JobApplicationContent = ({ jobApplication = {} }) => {
     "mobile_number",
     "interview_status",
     "process_status",
+    "rep_siever",
     "interview_scheduled_date",
     "highest_qualification",
     "certifications",
@@ -25,7 +26,7 @@ const JobApplicationContent = ({ jobApplication = {} }) => {
         if (typeof value !== "undefined") {
           return (
             <React.Fragment key={index}>
-              <div className="col-md-6 mt-3">
+              <div className="col-md-4 mt-3">
                 <p className="job-field">
                   {key
                     .split("_")
@@ -33,8 +34,8 @@ const JobApplicationContent = ({ jobApplication = {} }) => {
                     .replace(/\b\w/g, (char) => char.toUpperCase())}
                 </p>
               </div>
-              <div className="col-md-6 mt-3">
-                <p className="">
+              <div className="col-md-8 mt-3">
+                <p className="" style={{ wordWrap: "break-word" }}>
                   {typeof value === "string"
                     ? value.replace(/\b\w/g, (char) => char.toUpperCase())
                     : "-"}

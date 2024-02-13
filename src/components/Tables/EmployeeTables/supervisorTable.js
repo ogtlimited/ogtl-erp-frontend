@@ -318,7 +318,7 @@ const SupervisorTable = ({
           <input
             className="form-control"
             style={{
-              backgroundColor: '#fff',
+              backgroundColor: '#f7e3e8',
               width: '33.5%',
               marginRight: '20px',
             }}

@@ -34,6 +34,10 @@ const AppProvider = (props) => {
   // Select API States:
   const [loadingSelect, setLoadingSelect] = useState(false);
   const [loadingEmployeeSelect, setLoadingEmployeeSelect] = useState(false);
+  const [loadingJobAppIntOpts, setLoadingJobAppIntOpts] = useState(false);
+  const [InterviewStatusOptions, setInterviewStatusOptions] = useState(false);
+  const [InterviewProcessStageOptions, setInterviewProcessStageOptions] =
+    useState(false);
   const [selectEmployees, setSelectEmployees] = useState([]);
   const [selectDepartments, setSelectDepartments] = useState([]);
   const [selectCampaigns, setSelectCampaigns] = useState([]);
@@ -233,10 +237,10 @@ const AppProvider = (props) => {
       setLoadingEmployeeSelect(false);
     } catch (error) {
       const component = "Staff Error | ";
-      ErrorHandler(error, component);
+      console.log(error, component);
       setLoadingEmployeeSelect(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // All Departments:
@@ -423,6 +427,45 @@ const AppProvider = (props) => {
     }
   };
 
+  // All Job Application Interview Status & Interview Process Stage:
+  const fetchAllJobApplicationISandIPS = useCallback(async () => {
+    setLoadingJobAppIntOpts(true);
+
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/job_application_statuses.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+      const resData = response?.data?.data?.statuses;
+
+      const InterviewStatus = resData?.interview_status;
+      const processStatus = resData?.process_status;
+
+      const InterviewStatusOptions = InterviewStatus.map((status) => ({
+        label: status,
+        value: status,
+      }));
+
+      const InterviewProcessStageOptions = processStatus.map((status) => ({
+        label: status,
+        value: status,
+      }));
+
+      setInterviewStatusOptions(InterviewStatusOptions);
+      setInterviewProcessStageOptions(InterviewProcessStageOptions);
+
+      setLoadingJobAppIntOpts(false);
+    } catch (error) {
+      setLoadingJobAppIntOpts(false);
+    }
+  }, []);
+
   // All Leave Types:
   const fetchAllLeaveTypes = useCallback(async () => {
     setLoadingSelect(true);
@@ -539,7 +582,7 @@ const AppProvider = (props) => {
       setLoadingUserResignation(false);
     } catch (error) {
       const component = "Resignations | ";
-      ErrorHandler(error, component);
+      console.log(error, component);
       setLoadingUserResignation(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -670,6 +713,11 @@ const AppProvider = (props) => {
         loadingUserResignation,
         userResignations,
         fetchStaffResignation,
+
+        loadingJobAppIntOpts,
+        InterviewStatusOptions,
+        InterviewProcessStageOptions,
+        fetchAllJobApplicationISandIPS,
 
         getAvatarColor,
         showProgress,

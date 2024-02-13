@@ -7,11 +7,14 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const JobApplicationSieveModal = ({
-  row,
-  fetchAllJobApplicants,
-}) => {
-  const { showAlert, user, goToTop } = useAppContext();
+export const JobApplicationSieveModal = ({ row, fetchAllJobApplicants }) => {
+  const {
+    showAlert,
+    user,
+    goToTop,
+    InterviewStatusOptions,
+    InterviewProcessStageOptions,
+  } = useAppContext();
   const [status, setStatus] = useState({
     interview_status: "",
     process_status: "",
@@ -21,24 +24,6 @@ export const JobApplicationSieveModal = ({
   const [showDate, setShowDate] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-
-  const InterviewStatusOptions = [
-    { label: "Open", value: "Open" },
-    { label: "Scheduled for interview", value: "Scheduled for interview" },
-    { label: "Not interested", value: "Not interested" },
-    { label: "Not a graduate", value: "Not a graduate" },
-    { label: "Not in job location", value: "Not in job location" },
-    { label: "Failed screening", value: "Failed screening" },
-    { label: "Missed call", value: "Missed call" },
-    { label: "Call back", value: "Call back" },
-  ];
-
-  const InterviewProcessStageOptions = [
-    { label: "Open", value: "Open" },
-    { label: "Sieving", value: "Sieving" },
-    { label: "Phone screening", value: "Phone screening" },
-    { label: "Interview scheduled", value: "Interview scheduled" },
-  ];
 
   useEffect(() => {
     if (status?.process_status === "Interview scheduled") {
@@ -149,7 +134,7 @@ export const JobApplicationSieveModal = ({
                     <div className="form-group">
                       <label>Interview Status</label>
                       <Select
-                        options={InterviewStatusOptions}
+                        options={InterviewStatusOptions || []}
                         isSearchable={true}
                         style={{ display: "inline-block" }}
                         value={{
@@ -172,7 +157,7 @@ export const JobApplicationSieveModal = ({
                         Process Stage
                       </label>
                       <Select
-                        options={InterviewProcessStageOptions}
+                        options={InterviewProcessStageOptions || []}
                         isSearchable={true}
                         style={{ display: "inline-block" }}
                         value={{

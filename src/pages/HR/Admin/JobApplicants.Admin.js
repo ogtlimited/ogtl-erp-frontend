@@ -1,6 +1,5 @@
 // *IN USE
 
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -10,10 +9,6 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { JobApplicationSieveModalAdmin } from "../../../components/Modal/JobApplicationSieveModalAdmin";
 import helper from "../../../services/helper";
-import {
-  InterviewStatusOptions,
-  InterviewProcessStageOptions,
-} from "../../../constants";
 import ViewModal from "../../../components/Modal/ViewModal";
 import JobApplicationContent from "../../../components/ModalContents/JobApplicationContent";
 import ScheduleInterview from "../../../components/ModalContents/ScheduleInterview";
@@ -30,6 +25,7 @@ const JobApplicantsAdmin = () => {
     goToTop,
     selectJobOpenings,
     getAvatarColor,
+    fetchAllJobApplicationISandIPS,
   } = useAppContext();
   const [allInactiveRepSievers, setAllInactiveRepSievers] = useState([]);
   const [data, setData] = useState([]);
@@ -52,7 +48,6 @@ const JobApplicantsAdmin = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const [jobOpeningFilter, setJobOpeningFilter] = useState("");
-  const [interviewStatusFilter, setInterviewStatusFilter] = useState("");
   const [processingStageFilter, setProcessingStageFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -64,14 +59,14 @@ const JobApplicantsAdmin = () => {
   const canEdit = ["hr_manager", "senior_hr_associate"];
   const CurrentUserRoles = user?.employee_info?.roles;
 
-  const userDept =
-    user?.office?.office_type === "department"
-      ? user?.office?.title?.toLowerCase()
-      : null;
-
   const CurrentUserCanEdit = CurrentUserRoles.some((role) =>
     canEdit.includes(role)
   );
+
+  useEffect(() => {
+    fetchAllJobApplicationISandIPS();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Inactive Rep Sievers:
   const fetchAllInactiveRepSievers = useCallback(async () => {
@@ -116,6 +111,10 @@ const JobApplicantsAdmin = () => {
     setIsJobSieverDeactivated(false);
   }, [fetchAllInactiveRepSievers, isJobSieverDeactivated]);
 
+  useEffect(() => {
+    fetchAllInactiveRepSievers();
+  }, [fetchAllInactiveRepSievers]);
+
   // Job Applications:
   const fetchAllJobApplicants = useCallback(async () => {
     const persistedFromDate = secureLocalStorage.getItem("fromDate");
@@ -148,7 +147,9 @@ const JobApplicantsAdmin = () => {
 
       const formatted = resData.map((emp) => ({
         ...emp,
-        full_name: `${emp?.first_name} ${emp?.last_name}`,
+        full_name: `${emp?.first_name} ${emp?.middle_name ?? ""} ${
+          emp?.last_name
+        }`,
         job_title: emp?.job_opening?.job_title,
         application_date: moment(emp?.created_at).format("ddd, Do MMM. YYYY"),
         interview_scheduled_date: emp?.interview_date
@@ -176,9 +177,8 @@ const JobApplicantsAdmin = () => {
   ]);
 
   useEffect(() => {
-    fetchAllInactiveRepSievers();
     fetchAllJobApplicants();
-  }, [fetchAllInactiveRepSievers, fetchAllJobApplicants]);
+  }, [fetchAllJobApplicants]);
 
   //update jobOpening
   const handleUpdate = useCallback(
@@ -259,11 +259,13 @@ const JobApplicantsAdmin = () => {
     const colorMap = {
       Open: "text-primary",
       "Scheduled for interview": "text-success",
-      "Not interested": "text-secondary",
+      "Uninterested in Job": "text-secondary",
       "Not a graduate": "text-dark",
       "Not in job location": "text-muted",
       "Failed screening": "text-danger",
-      "Missed call": "text-info",
+      "Internal Applicants": "text-info",
+      "Interested in other roles": "text-info",
+      "Already Called": "text-info",
     };
 
     return colorMap[value] || "text-warning";
@@ -365,7 +367,7 @@ const JobApplicantsAdmin = () => {
     },
     {
       dataField: "job_title",
-      text: "Job Opening",
+      text: "Job Title",
       sort: true,
       headerStyle: { width: "15%" },
       formatter: (value, row) => (
@@ -443,12 +445,29 @@ const JobApplicantsAdmin = () => {
       ),
     },
     {
+      dataField: "rep_siever",
+      text: "Job Siever",
+      sort: true,
+      headerStyle: { width: "30%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <div>{value?.toUpperCase()}</div>
+        </h2>
+      ),
+    },
+    {
       dataField: "resume",
       text: "Resume Attachment",
       sort: true,
       headerStyle: { width: "15%" },
       formatter: (value, row) => (
-        <a href={value} className="btn btn-sm btn-primary" download>
+        <a
+          href={value}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-sm btn-primary"
+          download
+        >
           <i className="fa fa-download"></i> Download
         </a>
       ),
@@ -574,8 +593,6 @@ const JobApplicantsAdmin = () => {
             setData={setData}
             loading={loading}
             setLoading={setLoading}
-            interviewStatus={InterviewStatusOptions}
-            processingStage={InterviewProcessStageOptions}
             page={page}
             setPage={setPage}
             sizePerPage={sizePerPage}
@@ -592,8 +609,6 @@ const JobApplicantsAdmin = () => {
             jobOpenings={selectJobOpenings}
             jobOpeningFilter={jobOpeningFilter}
             setJobOpeningFilter={setJobOpeningFilter}
-            interviewStatusFilter={interviewStatusFilter}
-            setInterviewStatusFilter={setInterviewStatusFilter}
             processingStageFilter={processingStageFilter}
             setProcessingStageFilter={setProcessingStageFilter}
           />

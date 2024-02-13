@@ -10,6 +10,8 @@ import usePagination from "./JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import secureLocalStorage from "react-secure-storage";
+import { useAppContext } from "../../../Context/AppContext";
+import csvDownload from "json-to-csv-export";
 
 const JobApplicantsAdminRolesTable = ({
   data,
@@ -37,6 +39,8 @@ const JobApplicantsAdminRolesTable = ({
   processingStageFilter,
   setProcessingStageFilter,
 }) => {
+  const { showAlert, InterviewProcessStageOptions } = useAppContext();
+  const [loadingDownload, setLoadingDownload] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = React.useState(false);
   const [dataToFilter, setDataToFilter] = useState("");
@@ -47,12 +51,15 @@ const JobApplicantsAdminRolesTable = ({
   secureLocalStorage.setItem("fromDate", fromDate);
   secureLocalStorage.setItem("toDate", toDate);
 
-  const ProcessStatusOptions = [
-    { title: "Open" },
-    { title: "Sieving" },
-    { title: "Phone screening" },
-    { title: "Interview scheduled" },
+  const ProcessStatusOptionsFallback = [
+    { label: "Open", value: "Open" },
+    { label: "Sieving", value: "Sieving" },
+    { label: "Phone screening", value: "Phone screening" },
+    { label: "Interview scheduled", value: "Interview scheduled" },
   ];
+
+  const ProcessStatusOptions =
+    InterviewProcessStageOptions || ProcessStatusOptionsFallback;
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -119,7 +126,7 @@ const JobApplicantsAdminRolesTable = ({
           <input
             className="custom-search-input"
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "#f7e3e8",
               width: "33.5%",
               marginRight: "20px",
             }}
@@ -257,6 +264,71 @@ const JobApplicantsAdminRolesTable = ({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  const handleDownloadCSV = async (e) => {
+    e.preventDefault();
+
+    setLoadingDownload(true);
+
+    try {
+      const response = await axiosInstance.get("/api/v1/job_applicants.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+
+        params: {
+          page: 1,
+          limit: 100000,
+          name: searchTerm.length ? searchTerm : null,
+          job_opening_id: jobOpeningFilter.length ? jobOpeningFilter : null,
+          process_status: processingStageFilter ? processingStageFilter : null,
+          start_date: fromDate,
+          end_date: toDate,
+        },
+      });
+
+      const resData = response?.data?.data?.job_applicants;
+
+      const csvData = resData?.map((data) => ({
+        "JOB APPLICANT": `${data?.first_name} ${data?.middle_name ?? ""} ${
+          data?.last_name
+        }`,
+        EMAIL: data?.email,
+        "PHONE NUMBER": data?.mobile_number,
+        "JOB TITLE": data?.job_opening?.job_title,
+        "ADMIN ROLE": data?.admin_role ? "Yes" : "No",
+        "HIGHEST QUALIFICATION": data?.highest_qualification,
+        CERTIFICATIONS: data?.certifications,
+        "APPLICATION DATE": moment(data?.created_at).format(
+          "ddd, Do MMM. YYYY"
+        ),
+        "INTERVIEW DATE": data?.interview_date
+          ? moment(data?.interview_date).format("ddd, Do MMM. YYYY")
+          : "Not Scheduled",
+        "INTERVIEW STATUS": data?.interview_status,
+        "PROCESS STAGE": data?.process_status,
+        "JOB SIEVER": data?.rep_siever || "",
+        RESUME: data?.old_cv_url ? data?.old_cv_url : data?.resume,
+      }));
+
+      const dataToConvert = {
+        data: csvData,
+        filename: `OGTL - Job Applications - ${moment(fromDate).format(
+          "DD MMM, YYYY"
+        )} to ${moment(toDate).format("DD MMM, YYYY")}`,
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+      setLoadingDownload(false);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setLoadingDownload(false);
+    }
+  };
+
   return (
     <>
       {dataToFilter && (
@@ -269,7 +341,19 @@ const JobApplicantsAdminRolesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <div className="col-12">
+              {data?.length ? (
+                <button
+                  onClick={handleDownloadCSV}
+                  style={{ marginBottom: "10%" }}
+                  className="float-right btn export-csv"
+                >
+                  {loadingDownload
+                    ? "Exporting Job Applications..."
+                    : "Export Job Applications (CSV)"}
+                </button>
+              ) : null}
+
+              <div className="col-10">
                 <MySearch
                   {...props.searchProps}
                   style={{ paddingLeft: "12%" }}
@@ -343,9 +427,9 @@ const JobApplicantsAdminRolesTable = ({
                     <option value="" disabled selected hidden>
                       Process Stage
                     </option>
-                    {ProcessStatusOptions.map((option, index) => (
-                      <option key={index} value={option.title}>
-                        {option.title}
+                    {ProcessStatusOptions?.map((option, index) => (
+                      <option key={index} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </select>
