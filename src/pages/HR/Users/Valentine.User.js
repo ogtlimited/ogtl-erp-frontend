@@ -4,6 +4,8 @@ import axiosInstance from "../../../services/api";
 import ValSpinner from "../../../assets/img/val-loader-1.gif";
 import findingValSpinner from "../../../assets/img/val-loader-1.gif";
 import Confetti from "./Confetti";
+import Sound from "react-sound";
+import celebrationSound from "../../../assets/notifications/crowd-cheer-ii-6263.mp3";
 
 const ValentineUser = () => {
   const { showAlert } = useAppContext();
@@ -11,6 +13,7 @@ const ValentineUser = () => {
   const [loading, setLoading] = useState(true);
   const [findingVal, setFindingVal] = useState(false);
   const [valFound, setValFound] = useState(false);
+  const [playCelebration, setPlayCelebration] = useState(false);
 
   // Handle Get Val:
   const handleGetVal = useCallback(async () => {
@@ -57,6 +60,7 @@ const ValentineUser = () => {
         setData(resData);
         setFindingVal(false);
         setValFound(true);
+        setPlayCelebration(true);
       }
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
@@ -89,6 +93,12 @@ const ValentineUser = () => {
             {valFound ? (
               <>
                 <div className="val_pair">
+                  {playCelebration && (
+                    <Sound
+                      url={celebrationSound}
+                      playStatus={Sound.status.PLAYING}
+                    />
+                  )}
                   <Confetti />
                   <p>Your Val is</p>
                   <h1>{data?.full_name}</h1>
@@ -125,6 +135,7 @@ const ValentineUser = () => {
                   <>
                     {!findingVal && data ? (
                       <div className="val_pair">
+                        <Confetti />
                         <p>Your Val is</p>
                         <h1>{data?.full_name}</h1>
                         <h3>
