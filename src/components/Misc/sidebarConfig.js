@@ -48,6 +48,7 @@ const ICONS = {
   userAttendance: getIcon("la-user-clock"),
   teamAttendance: getIcon("la-history"),
   helpDesk: getIcon("la-question"),
+  valentine: getIcon("la-gratipay"),
 };
 
 const buildExternalURL = () => {
@@ -56,7 +57,7 @@ const buildExternalURL = () => {
 
   try {
     if (!kpiUrl || !secret) {
-      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`)
+      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
     }
 
     const kpiData = tokenService.getKpiUser();
@@ -169,7 +170,9 @@ const sidebarConfig = [
         icon: ICONS.resignation,
       },
       {
-        canView: CurrentUserRoles?.includes("security_attendance_team") ? "all" : "none",
+        canView: CurrentUserRoles?.includes("security_attendance_team")
+          ? "all"
+          : "none",
         title: "Manual Attendance",
         path: PATH_DASHBOARD.main.manualAttendance,
         icon: ICONS.userAttendance,
@@ -201,6 +204,12 @@ const sidebarConfig = [
             externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
           },
         ],
+      },
+      {
+        canView: "all",
+        title: "Valentine",
+        path: PATH_DASHBOARD.main.valentine,
+        icon: ICONS.valentine,
       },
     ],
   },

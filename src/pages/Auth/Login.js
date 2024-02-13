@@ -51,7 +51,6 @@ const Login = () => {
 
       await fetchMsGraph(e.accessToken, userData);
 
-
       // const activeUser = e?.account?.username;
 
       const obj = {
@@ -98,7 +97,6 @@ const Login = () => {
           userData.email = e.account.username;
 
           await fetchMsGraph(e.accessToken);
-
 
           // const activeUser = e?.account?.username;
 
@@ -191,6 +189,15 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
+              <span className="val_icons">
+                <lord-icon
+                  src="https://cdn.lordicon.com/ppmqpdfo.json"
+                  trigger="loop"
+                  delay="2000"
+                  style={{ width: "35px", height: "35px" }}
+                ></lord-icon>
+                <span className="hearts_icon">💕</span>
+              </span>
             </a>
           </div>
           <div className="account-box">

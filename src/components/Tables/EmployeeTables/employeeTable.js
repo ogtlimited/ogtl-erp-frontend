@@ -355,7 +355,7 @@ const EmployeesTable = ({
           <input
             className="custom-search-input"
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "#f7e3e8",
               width: "33.5%",
               marginRight: "20px",
             }}

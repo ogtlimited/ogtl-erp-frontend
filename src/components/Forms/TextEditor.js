@@ -26,7 +26,7 @@ const TextEditor = ({ editorContent, onContentChange }) => {
             "#008a00",
             "#0066cc",
             "#9933ff",
-            "#ffffff",
+            "#f7e3e8",
             "#facccc",
             "#ffebcc",
             "#ffffcc",

@@ -237,7 +237,7 @@ const AppProvider = (props) => {
       setLoadingEmployeeSelect(false);
     } catch (error) {
       const component = "Staff Error | ";
-      ErrorHandler(error, component);
+      console.log(error, component);
       setLoadingEmployeeSelect(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -582,7 +582,7 @@ const AppProvider = (props) => {
       setLoadingUserResignation(false);
     } catch (error) {
       const component = "Resignations | ";
-      ErrorHandler(error, component);
+      console.log(error, component);
       setLoadingUserResignation(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
