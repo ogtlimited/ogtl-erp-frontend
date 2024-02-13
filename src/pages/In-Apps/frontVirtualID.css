@@ -1,6 +1,6 @@
 
   .front-card {
-    background-color: #fff;
+    background-color: #f7e3e8;
     width: 20vw;
     margin: 10px;
     border-radius: 10px;
@@ -84,7 +84,7 @@
     margin: 0;
     padding: 10px;
     font-weight: 600;
-    color: #fff;
+    color: #f7e3e8;
   }
  
   @media screen and (max-width: 768px) {

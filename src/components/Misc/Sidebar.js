@@ -178,31 +178,31 @@ const Sidebar = () => {
                                       </>
                                     ))} */}
                                     {item.children.map((child) => (
-                                  <>
-                                    {canView(child?.canView) && (
-                                      <li key={child.path} className="">
-                                        {child.externalLink ? (
-                                          // External link inside children
-                                          <a
-                                            href={child.externalLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                          >
-                                            {child.title}
-                                          </a>
-                                        ) : (
-                                          // Internal link inside children
-                                          <Link
-                                            to={`${child.path}`}
-                                            className=""
-                                          >
-                                            {child.title}
-                                          </Link>
+                                      <>
+                                        {canView(child?.canView) && (
+                                          <li key={child.path} className="">
+                                            {child.externalLink ? (
+                                              // External link inside children
+                                              <a
+                                                href={child.externalLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                              >
+                                                {child.title}
+                                              </a>
+                                            ) : (
+                                              // Internal link inside children
+                                              <Link
+                                                to={`${child.path}`}
+                                                className=""
+                                              >
+                                                {child.title}
+                                              </Link>
+                                            )}
+                                          </li>
                                         )}
-                                      </li>
-                                    )}
-                                  </>
-                                ))}
+                                      </>
+                                    ))}
                                   </ul>
                                 </li>
                               )}
@@ -211,9 +211,24 @@ const Sidebar = () => {
                             <>
                               {canView(item?.canView) && (
                                 <li key={item.path}>
-                                  <Link to={item.path}>
-                                    {item.icon} <span>{item.title}</span>
-                                  </Link>
+                                  {item.title === "Valentine" ? (
+                                    <Link
+                                      to={item.path}
+                                      className="valentine_styling"
+                                    >
+                                      {item.icon}
+                                      <span>
+                                        {item.title}
+                                        <span className="hearts">
+                                          💕
+                                        </span>
+                                      </span>
+                                    </Link>
+                                  ) : (
+                                    <Link to={item.path}>
+                                      {item.icon} <span>{item.title}</span>
+                                    </Link>
+                                  )}
                                 </li>
                               )}
                             </>

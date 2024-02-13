@@ -236,7 +236,7 @@ const ProfileCards = ({
         <div
           id="emp_virtualID"
           className="pro-overview tab-pane fade"
-          style={{ backgroundColor: "#fff" }}
+          style={{ backgroundColor: "#f7e3e8" }}
         >
           <div className="row" style={{ padding: "0 20px" }}>
             {employeeDetails && (
@@ -417,7 +417,7 @@ const ProfileCards = ({
         <div
           id="emp_attendance"
           className="pro-overview tab-pane fade"
-          style={{ backgroundColor: "#fff" }}
+          style={{ backgroundColor: "#f7e3e8" }}
         >
           <AttendanceChart data={employeeTardiness} />
         </div>

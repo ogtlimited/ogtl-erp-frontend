@@ -570,7 +570,7 @@ const EmployeePayroll = () => {
             <input
               className="custom-payroll-search-input"
               style={{
-                backgroundColor: "#fff",
+                backgroundColor: "#f7e3e8",
                 margin: "0 10px 0 1rem",
               }}
               type="search"
