@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/*eslint-disable jsx-a11y/anchor-is-valid*/
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -9,12 +9,6 @@ import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import csvDownload from "json-to-csv-export";
@@ -74,12 +68,9 @@ const EmployeesTable = ({
     },
   ];
 
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
   const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
-  const imageUrl = "https://erp.outsourceglobal.com";
   const { setIsFromBiometrics, showAlert, user, getAvatarColor } =
     useAppContext();
   const [info, setInfo] = useState({
@@ -382,7 +373,16 @@ const EmployeesTable = ({
         </div>
       );
     },
-    [setCampaignFilter, setDepartmentFilter, setDesignationFilter, setLoading, setOfficeFilter, setPage, setSearchTerm, setStatusFilter]
+    [
+      setCampaignFilter,
+      setDepartmentFilter,
+      setDesignationFilter,
+      setLoading,
+      setOfficeFilter,
+      setPage,
+      setSearchTerm,
+      setStatusFilter,
+    ]
   );
 
   // Filter by Departments:

@@ -644,7 +644,8 @@ table.custom-table thead th {
   font-size: 12px;
 }
 
-.payroll_month_indicator {
+.payroll_month_indicator,
+.stage_indicator {
   color: #808080;
   font-weight: 500;
   font-family: "Inter", "san-serif" !important;
@@ -825,6 +826,14 @@ table.custom-table thead th {
 
 .payroll-custom-search {
   width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 0 10px 10px 0;
+}
+
+.resignation-custom-search {
+  width: 50%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
