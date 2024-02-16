@@ -29,7 +29,7 @@ const PayrollBatches = () => {
 
   const currentUserOgid = user?.employee_info?.ogid;
   const CurrentUserRoles = user?.employee_info?.roles;
-  const isAuthorized = ["hr_manager", "accountant"];
+  const isAuthorized = ["hr_manager", "payroll_processor"];
 
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
