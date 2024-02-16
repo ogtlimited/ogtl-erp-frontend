@@ -60,7 +60,7 @@ const ReversedDeductions = () => {
       setReversedDeductions(formattedData);
       setLoading(false);
     } catch (error) {
-      const component = "Deduction Error:";
+      const component = "Deduction Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
