@@ -80,7 +80,7 @@ const Header = () => {
             </span> */}
           </div>
           <div className="cropped-logo">
-            <img src="" alt="" />
+            <img src={cropped} alt="" />
           </div>
         </div>
 
