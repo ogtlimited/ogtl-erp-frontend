@@ -1,7 +1,7 @@
 /** @format */
 
 body {
-  background: #f7e3e8;
+  background: #ffffff;
 }
 
 .gfuSqG {
@@ -11,7 +11,7 @@ body {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   border-radius: 0;
   -webkit-box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
   box-shadow: 0 1px 20px 0 rgb(69 90 100 / 8%);
@@ -40,7 +40,7 @@ body {
 
 .bottom {
   display: flex;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 5px 0px;
 }
 .lab {
@@ -70,7 +70,7 @@ body {
 }
 
 .signature tbody {
-  background-color: #f7e3e8!important;
+  background-color: #ffffff!important;
 }
 .signature tr {
   background-color: none !important;
@@ -126,12 +126,12 @@ body {
   padding: 0;
 }
 .phone-td-container-tr {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   height: 9px;
 }
 
 .phone-td-container-children {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 0;
   align-items: center;
   display: flex;

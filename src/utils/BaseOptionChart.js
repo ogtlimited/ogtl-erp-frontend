@@ -88,7 +88,7 @@ export default function BaseOptionChart() {
       // Markers
       markers: {
         size: 0,
-        strokeColors: '#f7e3e8'
+        strokeColors: '#ffffff'
       },
   
       // Tooltip

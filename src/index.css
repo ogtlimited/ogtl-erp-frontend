@@ -18,7 +18,7 @@
   padding: 10px;
   margin-top: 5px;
   border: 1px;
-  border-color: #ed4b8d;
+  border-color: #00c5fb;
   border-radius: 5px;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .account-box {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   border: 1px solid #ededed;
   border-radius: 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -71,11 +71,11 @@
   margin-bottom: 25px;
 }
 .account-box .account-btn {
-  background: #ed4b8d;
-  background: -moz-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: -webkit-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: -ms-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: linear-gradient(to right, #ed4b8d 0%, #cb2631 100%);
+  background: #00c5fb;
+  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
   border: 0;
   border-radius: 4px;
   display: block;
@@ -125,7 +125,7 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   margin-bottom: 15px !important;
   padding: 15px !important;
-  background-color: #f7e3e8 !important;
+  background-color: #ffffff !important;
 }
 
 .table {
@@ -135,7 +135,7 @@
 }
 
 .custom-table-div {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -146,7 +146,7 @@
   width: 100%;
 }
 .custom-field-div {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -158,7 +158,7 @@
 .rep-siever-status-group {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   border-radius: 10px;
   gap: 20px 10px;
   padding: 20px 30px 20px 10px;
@@ -166,7 +166,7 @@
 }
 
 .rep-siever-status-card {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   min-width: 20%;
   margin-left: 20px;
   border-radius: 15px;
@@ -224,7 +224,7 @@
 
 .proof_upload::-webkit-file-upload-button {
   background-color: #528dc2;
-  color: #f7e3e8;
+  color: #ffffff;
   border: none;
   padding: 4px 15px;
   border-radius: 3px;
@@ -247,7 +247,7 @@
   .rep-siever-status-group {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    background-color: #f7e3e8;
+    background-color: #ffffff;
     border-radius: 10px;
     gap: 20px 10px;
     padding: 20px 30px 20px 10px;
@@ -266,10 +266,10 @@
 
 .tl.card {
   border-radius: 10px;
-  filter: drop-shadow(0 5px 10px 0 #f7e3e8);
+  filter: drop-shadow(0 5px 10px 0 #ffffff);
   width: 400px;
   height: 180px;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 20px;
   position: relative;
   z-index: 0;
@@ -290,11 +290,11 @@
   z-index: -1;
   top: -15px;
   right: -15px;
-  background: #ed4b8d;
-  background: -moz-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: -webkit-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: -ms-linear-gradient(left, #ed4b8d 0%, #cb2631 100%);
-  background: linear-gradient(to right, #ed4b8d 0%, #cb2631 100%);
+  background: #00c5fb;
+  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
+  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
   height: 220px;
   width: 25px;
   border-radius: 32px;
@@ -319,7 +319,7 @@
 .tl.card:hover h4,
 .tl.card:hover p,
 .tl.card:hover .tl.link {
-  color: #f7e3e8;
+  color: #ffffff;
 }
 
 .tl.card > p {
@@ -328,15 +328,15 @@
 }
 
 .tl.link {
-  color: #cb2631;
+  color: #0253cc;
   text-decoration: none;
 }
 
 .edit-icon.teams {
   height: 0;
   margin-left: 50px;
-  background-color: #f7e3e8;
-  border-color: #ed4b8d;
+  background-color: #ffffff;
+  border-color: #00c5fb;
 }
 
 .logout {
@@ -399,7 +399,7 @@
 Employee Salary Table 
 -----------------------*/
 .emp_salary_custom-table-div {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   padding: 15px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -547,8 +547,8 @@ table.custom-table thead th {
   width: 100%;
   height: 30px;
   border-radius: 20px;
-  background-color: #ed4b8d;
-  color: #f7e3e8;
+  background-color: #00c5fb;
+  color: #ffffff;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -612,9 +612,9 @@ table.custom-table thead th {
 ----------------------*/
 
 .avatar-span {
-  background-color: #ed4b8d;
+  background-color: #00c5fb;
   border-radius: 50%;
-  color: #f7e3e8 !important;
+  color: #ffffff !important;
   font-size: 25px !important;
   font-weight: 400;
   height: 38px;
@@ -688,7 +688,7 @@ table.custom-table thead th {
   flex-direction: column;
   width: 100%;
   pointer-events: auto;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   background-clip: padding-box;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -730,8 +730,8 @@ table.custom-table thead th {
 .edit-icon.payday {
   height: 0;
   margin-left: 10px;
-  background-color: #f7e3e8;
-  border-color: #ed4b8d;
+  background-color: #ffffff;
+  border-color: #00c5fb;
 }
 
 .form-control.resignation_effective_today {
@@ -765,7 +765,7 @@ table.custom-table thead th {
   outline: #c2c2c2;
   font-weight: 400;
   margin-bottom: 20px;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   text-align: left;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -777,7 +777,7 @@ table.custom-table thead th {
 
 .checkbox_options {
   width: 100%;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   border: 1px solid #667080;
   border-radius: 6px;
   padding: 10px;
@@ -849,7 +849,7 @@ table.custom-table thead th {
   font-size: 14px;
   outline: #c2c2c2;
   font-weight: 400;
-  background-color: #f7e3e8;
+  background-color: #ffffff;
 }
 
 .survey_answers_view {
@@ -911,7 +911,7 @@ table.custom-table thead th {
   top: 40%;
 }
 .clock-timer {
-  color: #f7e3e8;
+  color: #ffffff;
   font-size: 4.2rem;
   text-transform: uppercase;
   font-weight: 500;
@@ -954,7 +954,7 @@ table.custom-table thead th {
 .valentine_styling {
   font-size: 30px !important;
   font-weight: 700 !important;
-  background: -webkit-linear-gradient(#f7e3e8, #cb2631);
+  background: -webkit-linear-gradient(#ffffff, #0253cc);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -964,9 +964,9 @@ table.custom-table thead th {
 .valentine_styling_page {
   font-size: 50px !important;
   font-weight: 700 !important;
-  color: #cb2631;
+  color: #0253cc;
   font-family: "Dr Sugiyama", cursive;
-  background: -webkit-linear-gradient(#f7e3e8, #cb2631);
+  background: -webkit-linear-gradient(#ffffff, #0253cc);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1014,7 +1014,7 @@ table.custom-table thead th {
   font-size: 28px;
   border: none;
   cursor: pointer;
-  background-color: #cb2631;
+  background-color: #0253cc;
   transition: all 0.3 ease-in-out;
   border-radius: 5px;
 }
@@ -1022,7 +1022,7 @@ table.custom-table thead th {
 .find_val_btn:hover {
   font-size: 28px;
   border: none;
-  background-color: #ed4b8d;
+  background-color: #00c5fb;
   transition: all 0.3 ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -1051,7 +1051,7 @@ table.custom-table thead th {
 .val_pair > p {
   font-family: "Dr Sugiyama", cursive;
   font-size: 40px;
-  color: #cb2631;
+  color: #0253cc;
 }
 
 .val_pair > h1 {
