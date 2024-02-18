@@ -95,7 +95,7 @@ const AdminLeavesTable = ({
           <input
             className="custom-search-input"
             style={{
-              backgroundColor: "#f7e3e8",
+              backgroundColor: "#ffffff",
               width: "33.5%",
               marginRight: "20px",
             }}

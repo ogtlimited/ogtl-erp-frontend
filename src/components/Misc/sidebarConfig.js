@@ -205,12 +205,12 @@ const sidebarConfig = [
           },
         ],
       },
-      {
-        canView: "all",
-        title: "Valentine",
-        path: PATH_DASHBOARD.main.valentine,
-        icon: ICONS.valentine,
-      },
+      // {
+      //   canView: "all",
+      //   title: "Valentine",
+      //   path: PATH_DASHBOARD.main.valentine,
+      //   icon: ICONS.valentine,
+      // },
     ],
   },
 

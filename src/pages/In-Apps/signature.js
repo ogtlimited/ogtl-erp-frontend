@@ -7,7 +7,7 @@ const Signature = (props) => {
       <div className="signature">
         <table cellPadding={0} cellSpacing={0}>
           <tbody>
-            <tr className="pt-1" style={{backgroundColor: "#f7e3e8"}}>
+            <tr className="pt-1" style={{backgroundColor: "#ffffff"}}>
               <td
                 style={{
                   width: '35%',
@@ -168,7 +168,7 @@ const Signature = (props) => {
               </td>
             </tr>
             
-            <tr style={{ background: '#f7e3e8', borderTop: '1px solid #0A6D9199' }} >
+            <tr style={{ background: '#ffffff', borderTop: '1px solid #0A6D9199' }} >
               <td rowSpan={1} colSpan={2} >
                 <div className="signature-info__lower-first">
                   <a href={'https://ogtl-awards.netlify.app/'}>

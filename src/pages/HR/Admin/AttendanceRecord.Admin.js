@@ -66,15 +66,15 @@ const AttendanceRecord = () => {
   //         switch (attendanceRecord.status) {
   //           case "Absent":
   //             backgroundColor = "#BE3144";
-  //             color = "#f7e3e8";
+  //             color = "#ffffff";
   //             break;
   //           case "Was Sick":
   //             backgroundColor = "#6f42c1";
-  //             color = "#f7e3e8";
+  //             color = "#ffffff";
   //             break;
   //           case "On Leave":
   //             backgroundColor = "#20c997";
-  //             color = "#f7e3e8";
+  //             color = "#ffffff";
   //             break;
   //           default:
   //             backgroundColor = "";
