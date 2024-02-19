@@ -205,12 +205,12 @@ const sidebarConfig = [
           },
         ],
       },
-      {
-        canView: "all",
-        title: "Valentine",
-        path: PATH_DASHBOARD.main.valentine,
-        icon: ICONS.valentine,
-      },
+      // {
+      //   canView: "all",
+      //   title: "Valentine",
+      //   path: PATH_DASHBOARD.main.valentine,
+      //   icon: ICONS.valentine,
+      // },
     ],
   },
 
@@ -355,28 +355,30 @@ const sidebarConfig = [
 
       // Payroll:
       {
-        canView: "hr",
+        canView: CurrentUserRoles?.includes("payroll_processor")
+          ? "all"
+          : "none",
         title: "Payroll",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
         children: [
           {
-            canView: "super",
+            canView: "all",
             title: "Employee Salary",
             path: PATH_DASHBOARD.payroll.salary,
           },
           {
-            canView: "super",
+            canView: "all",
             title: "Payroll Processing",
             path: PATH_DASHBOARD.payroll.payrollProcessing,
           },
           {
-            canView: "super",
+            canView: "all",
             title: "Payday",
             path: PATH_DASHBOARD.payroll.payday,
           },
           {
-            canView: "hr",
+            canView: "all",
             title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions,
           },

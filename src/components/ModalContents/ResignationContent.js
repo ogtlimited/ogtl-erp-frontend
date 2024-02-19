@@ -13,9 +13,9 @@ const ResignationContent = ({ Content = {} }) => {
     "date_applied",
     "status",
     "last_day_at_work",
-    "reason_for_resignation",
   ];
 
+  const resignationReason = Content?.reason_for_resignation;
   const surveyData = Content.survey_answer?.answer?.answers || [];
   const feedbacks = Content?.feedback || [];
   const HrManagerFeedback = Content?.survey_answer?.feedback;
@@ -57,6 +57,16 @@ const ResignationContent = ({ Content = {} }) => {
         }
       })}
 
+      {/* Staff Reason for Resignation */}
+      {resignationReason ? (
+        <div className="col-md-12 mt-2">
+          <p className="font-weight-bold" style={{ marginBottom: "10px" }}>
+            Reason for Resignation
+          </p>
+          <p style={{ lineHeight: "30px" }}>{resignationReason}</p>
+        </div>
+      ) : null}
+
       {/* Display Operations & HR Staff Feedback */}
       {feedbacks?.length ? (
         <div className="col-md-12 mt-3 survey_answers_view">
@@ -79,7 +89,7 @@ const ResignationContent = ({ Content = {} }) => {
                     -{" "}
                     {moment(item?.date_added)
                       .utc()
-                      .format("Do MMM, YYYY [at] h:mmA")} 
+                      .format("Do MMM, YYYY [at] h:mmA")}
                   </span>
                 </p>
                 <p>{item?.feedback}</p>

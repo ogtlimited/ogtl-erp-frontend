@@ -15,6 +15,10 @@ import NotFound from "../pages/Error/NotFound";
 import Unauthorized from "../pages/Error/unauthorized";
 import BadGateway from "../pages/Error/BadGateway";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
+import tokenService from "../services/token.service.js";
+
+const user = tokenService.getUser();
+const CurrentUserIsCOO = user?.employee_info?.roles.includes("coo");
 
 const Loadable = (Component) => (props) => {
   return (
@@ -127,10 +131,13 @@ export default function Router() {
 
             // USER:
             { path: "main/attendance", element: <EmployeeAttendance /> },
-            { path: "main/manual-attendance", element: <SecurityManualAttendance /> },
+            {
+              path: "main/manual-attendance",
+              element: <SecurityManualAttendance />,
+            },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
-            { path: "main/valentine", element: <ValentineUser /> },
+            // { path: "main/valentine", element: <ValentineUser /> },
             {
               path: "hr-dashboard",
               element: (
@@ -493,7 +500,11 @@ export default function Router() {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="operations">
-                  <OperationsResignationAdmin />
+                  {CurrentUserIsCOO ? (
+                    <OperationsCOOResignationAdmin />
+                  ) : (
+                    <OperationsResignationAdmin />
+                  )}
                 </GuardedRoute>
               ),
             },
@@ -1243,6 +1254,9 @@ const ResignationAdmin = Loadable(
 const OperationsResignationAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsResignation.Admin"))
 );
+const OperationsCOOResignationAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsCOOResignation.Admin"))
+);
 const AllLeaveStatusAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/LeaveStatusAnalytics.Admin"))
 );
@@ -1285,9 +1299,9 @@ const LeavesUser = Loadable(
 const ResignationUser = Loadable(
   lazy(() => import("../pages/HR/Users/Resignation.User"))
 );
-const ValentineUser = Loadable(
-  lazy(() => import("../pages/HR/Users/Valentine.User"))
-);
+// const ValentineUser = Loadable(
+//   lazy(() => import("../pages/HR/Users/Valentine.User"))
+// );
 const EmployeeSalary = Loadable(
   lazy(() => import("../pages/Payroll/EmployeeSalary"))
 );

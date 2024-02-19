@@ -1,5 +1,5 @@
 .add-employee-form {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   border-radius: 10px !important;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
@@ -34,7 +34,7 @@
 }
 
 .virtual-card {
-  background-color: #f7e3e8;
+  background-color: #ffffff;
   width: 20vw;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -109,7 +109,7 @@
   margin: 0;
   padding: 10px;
   font-weight: 600;
-  color: #f7e3e8;
+  color: #ffffff;
 }
 
 .virtual-id-note {

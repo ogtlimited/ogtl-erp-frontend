@@ -304,7 +304,7 @@ const EmployeesGenderTable = ({
         <input
           className="form-control"
           style={{
-            backgroundColor: '#f7e3e8',
+            backgroundColor: '#ffffff',
             width: '33.5%',
             marginRight: '20px',
           }}

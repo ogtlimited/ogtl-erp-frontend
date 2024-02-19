@@ -57,7 +57,7 @@ const DeductionType = () => {
       setDeductionTypes(formattedData);
       setLoading(false);
     } catch (error) {
-      const component = "Deduction Types Error:";
+      const component = "Deduction Types Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }

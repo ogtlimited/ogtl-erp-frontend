@@ -51,16 +51,16 @@ const Login = () => {
 
       await fetchMsGraph(e.accessToken, userData);
 
-      const activeUser = e?.account?.username;
+      // const activeUser = e?.account?.username;
 
       const obj = {
         company_email: data.company_email.trim(),
       };
 
-      if (obj.company_email !== activeUser) {
-        setErrorMsg("There is an active user on this device");
-        return;
-      }
+      //       if (obj.company_email !== activeUser) {
+      //         setErrorMsg("There is an active user on this device");
+      //         return;
+      //       }
 
       setErrorMsg("");
 
@@ -98,16 +98,16 @@ const Login = () => {
 
           await fetchMsGraph(e.accessToken);
 
-          const activeUser = e?.account?.username;
+          // const activeUser = e?.account?.username;
 
           const obj = {
             company_email: data.company_email.trim(),
           };
 
-          if (obj.company_email !== activeUser) {
-            setErrorMsg("Please login with your credentials");
-            return;
-          }
+          //           if (obj.company_email !== activeUser) {
+          //             setErrorMsg("Please login with your credentials");
+          //             return;
+          //           }
 
           setErrorMsg("");
 
@@ -189,7 +189,7 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              <span className="val_icons">
+              {/* <span className="val_icons">
                 <lord-icon
                   src="https://cdn.lordicon.com/ppmqpdfo.json"
                   trigger="loop"
@@ -197,7 +197,7 @@ const Login = () => {
                   style={{ width: "35px", height: "35px" }}
                 ></lord-icon>
                 <span className="hearts_icon">💕</span>
-              </span>
+              </span> */}
             </a>
           </div>
           <div className="account-box">
