@@ -1512,7 +1512,7 @@ const OrientationAndTraining = Loadable(
   lazy(() => import("../pages/HR/Admin/OrientationAndTraining.Admin"))
 );
 
-const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets")));
+const Tickets = Loadable(lazy(() => import("../pages/In-Apps/Tickets.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))

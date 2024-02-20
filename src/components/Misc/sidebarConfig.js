@@ -143,6 +143,11 @@ const sidebarConfig = [
             title: "Email Signature",
             path: PATH_DASHBOARD.apps.signature,
           },
+          {
+            canView: "all",
+            title: "Ticket",
+            path: PATH_DASHBOARD.apps.tickets,
+          },
         ],
       },
       {
