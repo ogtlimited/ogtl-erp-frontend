@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
+import axios from "axios";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import TextEditor from "../Forms/TextEditor";
+import config from "../../config.json";
 
-export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
+export const ExternalTicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
   const { showAlert, goToTop } = useAppContext();
   const [ticket, setTicket] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,33 +41,30 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
 
   const handleCreateTicket = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
+    const axiosClient = loggedIn ? axiosInstance : axios;
+    const apiUrl = loggedIn
+      ? `/api/v1/tickets.json?logged_in=${loggedIn}`
+      : `${config?.ApiUrl}/api/v1/tickets.json?logged_in=${loggedIn}`;
+
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        `/api/v1/tickets.json?logged_in=${loggedIn}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            ...ticket,
-            complaint: editorContent,
-          },
-        }
-      );
+      const response = await axiosClient.post(apiUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: {
+          ...ticket,
+          complaint: editorContent,
+        },
+      });
 
       showAlert(true, "Ticket successfully created", "alert alert-success");
-      // fetchAllTickets();
       $("#TicketFormModal").modal("toggle");
-      setTicket(data);
+      setTicket(response.data);
       setEditorContent("");
-
-      setLoading(false);
       goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;

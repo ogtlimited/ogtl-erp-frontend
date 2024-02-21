@@ -1,13 +1,12 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../../Context/AppContext";
-import axiosInstance from "../../services/api";
+import axios from "axios";
 import $ from "jquery";
 import TextEditor from "../Forms/TextEditor";
+import config from "../../config.json";
 
-export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
-  const { showAlert, goToTop } = useAppContext();
+export const ExternalTicketFormModal = ({ data, loggedIn, showAlert }) => {
   const [ticket, setTicket] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editorContent, setEditorContent] = useState("");
@@ -29,23 +28,13 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
     });
   };
 
-  const handleTicketActions = async (e) => {
-    if (mode === "Create") {
-      return handleCreateTicket(e);
-    } else {
-      // return handleEditTicket(e);
-    }
-  };
-
   const handleCreateTicket = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        `/api/v1/tickets.json?logged_in=${loggedIn}`,
+      const response = await axios.post(
+        `${config?.ApiUrl}/api/v1/tickets.json?logged_in=${loggedIn}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -60,58 +49,16 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
       );
 
       showAlert(true, "Ticket successfully created", "alert alert-success");
-      // fetchAllTickets();
       $("#TicketFormModal").modal("toggle");
-      setTicket(data);
+      setTicket(response.data);
       setEditorContent("");
-
-      setLoading(false);
-      goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#TicketFormModal").modal("toggle");
-      goToTop();
       setLoading(false);
     }
   };
-
-  // const handleEditTicket = async (e) => {
-  //   e.preventDefault();
-
-  //   setLoading(true);
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const response = await axiosInstance.put(
-  //       `/api/v1/branches/${ticket.id}.json`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "ngrok-skip-browser-warning": "69420",
-  //         },
-  //         payload: {
-  //           title: ticket.title,
-  //           state: ticket.state,
-  //           country: ticket.country,
-  //         },
-  //       }
-  //     );
-
-  //     showAlert(true, "Branch successfully updated", "alert alert-success");
-  //     fetchAllTickets();
-  //     $("#TicketFormModal").modal("toggle");
-  //     setTicket(data);
-  //     setLoading(false);
-  //     goToTop();
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //     $("#TicketFormModal").modal("toggle");
-  //     goToTop();
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <>
@@ -126,7 +73,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {mode === "Create" ? "Submit a" : mode} Ticket
+                Submit a Ticket
               </h4>
               <button
                 type="button"
@@ -139,7 +86,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleTicketActions}>
+              <form onSubmit={handleCreateTicket}>
                 <div className="row">
                   {!loggedIn ? (
                     <>
@@ -153,6 +100,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                             value={ticket.first_name}
                             onChange={handleFormChange}
                             readOnly={loggedIn}
+                            required
                           />
                         </div>
                       </div>
@@ -167,6 +115,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                             value={ticket.last_name}
                             onChange={handleFormChange}
                             readOnly={loggedIn}
+                            required
                           />
                         </div>
                       </div>
@@ -181,6 +130,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                             value={ticket.ogid}
                             onChange={handleFormChange}
                             readOnly={loggedIn}
+                            required
                           />
                         </div>
                       </div>
@@ -195,6 +145,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                             value={ticket.email}
                             onChange={handleFormChange}
                             readOnly={loggedIn}
+                            required
                           />
                         </div>
                       </div>
@@ -213,17 +164,19 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                 </div>
 
                 <div className="modal-footer">
-                  {mode === "Create" && (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-dismiss="modal"
-                      onClick={cancelEvent}
-                    >
-                      Cancel
-                    </button>
-                  )}
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                    onClick={cancelEvent}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={!editorContent?.length}
+                  >
                     {loading ? (
                       <span
                         className="spinner-border spinner-border-sm"

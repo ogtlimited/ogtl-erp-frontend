@@ -2,7 +2,7 @@
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
@@ -11,7 +11,7 @@ import { TicketFormModal } from "../../components/Modal/TicketFormModal";
 import moment from "moment";
 
 const Tickets = () => {
-  const { user } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [allTickets, setAllTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("Create");
@@ -21,7 +21,35 @@ const Tickets = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  const handleCreate = () => {  
+  const fetchTickets = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.get(`/api/v1/tickets.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      console.log(response?.data?.data);
+
+      setLoading(false);
+    } catch (error) {
+      const component = "Tickets | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchTickets();
+  }, [fetchTickets]);
+
+  const handleCreate = () => {
     const prefilledTicketForm = {
       first_name: user?.employee_info?.personal_details?.first_name,
       last_name: user?.employee_info?.personal_details?.last_name,
@@ -29,7 +57,7 @@ const Tickets = () => {
       email: user?.employee_info?.email,
       complaint: "",
     };
-    
+
     setTicket(prefilledTicketForm);
     setMode("Create");
   };
@@ -169,6 +197,7 @@ const Tickets = () => {
       <TicketFormModal
         mode={mode}
         data={ticket}
+        loggedIn={true}
         // fetchAllTickets={fetchAllTickets}
       />
     </>
