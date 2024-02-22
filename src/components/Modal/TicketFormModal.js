@@ -223,7 +223,11 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
                       Cancel
                     </button>
                   )}
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={!editorContent.length}
+                  >
                     {loading ? (
                       <span
                         className="spinner-border spinner-border-sm"

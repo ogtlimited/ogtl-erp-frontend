@@ -210,6 +210,12 @@ const sidebarConfig = [
           },
         ],
       },
+      {
+        canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
+        title: "Ticket Management",
+        path: PATH_DASHBOARD.main.ticketManagement,
+        icon: ICONS.coaching,
+      },
       // {
       //   canView: "all",
       //   title: "Valentine",
