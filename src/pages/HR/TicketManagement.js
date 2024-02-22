@@ -8,15 +8,18 @@ import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import ViewModal from "../../components/Modal/ViewModal";
+import TicketContent from "../../components/ModalContents/TicketContent";
 import moment from "moment";
 import $ from "jquery";
 
 const TicketManagement = () => {
-  const { showAlert, ErrorHandler, getAvatarColor } = useAppContext();
+  const { showAlert, ErrorHandler, getAvatarColor, goToTop } = useAppContext();
   const [allTickets, setAllTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [viewRow, setViewRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -34,7 +37,7 @@ const TicketManagement = () => {
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          pages: page,
+          page: page,
           limit: sizePerPage,
         },
       });
@@ -46,17 +49,15 @@ const TicketManagement = () => {
       setTotalPages(totalPages);
 
       const formatted = resData.map((ticket) => ({
+        ...ticket,
         full_name: ticket?.first_name + " " + ticket?.last_name,
         email: ticket?.email,
         ogid: ticket?.ogid,
-        office:
-          ticket?.operation_department_id ?? ticket?.operation_campaign_id,
-        status: ticket?.resolved,
+        office: ticket?.office?.toUpperCase(),
+        status: ticket?.resolved ? "Resolved" : "Pending",
         date_created: moment(ticket?.created_at).utc().format("Do MMM, YYYY"),
         complaint: ticket?.complaint,
       }));
-
-      console.log(formatted);
 
       setAllTickets(formatted);
       setLoading(false);
@@ -74,10 +75,11 @@ const TicketManagement = () => {
 
   const handleResolveTicket = async () => {
     setIsResolving(true);
+
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        `/api/v1/resolve_tickets.json?logged_in=${"loggedIn"}`,
+      const response = await axiosInstance.patch(
+        `/api/v1/resolve_tickets/${selectedRow?.id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -90,13 +92,17 @@ const TicketManagement = () => {
         }
       );
 
+      goToTop();
       showAlert(true, "Ticket has been resolved!", "alert alert-success");
       fetchAllTickets();
       $("#exampleModal").modal("toggle");
-      setIsResolving(false);  
+      setIsResolving(false);
     } catch (error) {
+      goToTop();
       const errorMsg = error.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      fetchAllTickets();
+      $("#exampleModal").modal("toggle");
       setIsResolving(false);
     }
   };
@@ -125,7 +131,7 @@ const TicketManagement = () => {
       dataField: "date_created",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "email",
@@ -137,27 +143,31 @@ const TicketManagement = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "25%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <>
-          {value === true ? (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-ticket status-online"></span>{" "}
-              <span className="ml-4 d-block">RESOLVED</span>
-            </a>
+          {value === "Resolved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i
+                className="fa fa-dot-circle-o text-success"
+                style={{ marginRight: "5px" }}
+              ></i>{" "}
+              Resolved
+            </span>
           ) : (
-            <a href="" className="pos-relative">
-              {" "}
-              <span className="status-ticket status-pending"></span>{" "}
-              <span className="ml-4 d-block">PENDING</span>
-            </a>
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i
+                className="fa fa-dot-circle-o text-warning"
+                style={{ marginRight: "5px" }}
+              ></i>{" "}
+              Pending
+            </span>
           )}
         </>
       ),
@@ -165,7 +175,7 @@ const TicketManagement = () => {
     {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "5%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -183,12 +193,12 @@ const TicketManagement = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                // setViewRow(row);
+                setViewRow(row);
               }}
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
-            {!row.status && (
+            {!row.resolved && (
               <>
                 <a
                   className="dropdown-item"
@@ -236,8 +246,13 @@ const TicketManagement = () => {
         />
       </div>
 
+      <ViewModal
+        title="Ticket Details"
+        content={<TicketContent ticket={viewRow} />}
+      />
+
       <ConfirmModal
-        title="Resignation"
+        title="Ticket Management"
         selectedRow={selectedRow}
         deleteFunction={handleResolveTicket}
         message="Are you sure this ticket has been resolved?"

@@ -60,25 +60,28 @@ const ConfirmModal = ({
                   Deactivate
                 </button>
               ) : (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => {
-                    deleteFunction(selectedRow);
-                    !isLoading && $("#exampleModal").modal("toggle");
-                  }}
-                >
+                <>
                   {isLoading ? (
-                    <FontAwesomeIcon
-                      icon={faSpinner}
-                      spin
-                      pulse
-                      style={{ marginRight: "10px" }}
-                    />
+                    <button type="button" className="btn btn-primary">
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin
+                        pulse
+                        // style={{ margin: "0 10px" }}
+                      />
+                    </button>
                   ) : (
-                    "Confirm"
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        deleteFunction(selectedRow);
+                      }}
+                    >
+                      Confirm
+                    </button>
                   )}
-                </button>
+                </>
               )}
             </div>
           </div>

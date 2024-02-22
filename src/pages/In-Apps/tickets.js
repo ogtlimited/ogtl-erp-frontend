@@ -3,19 +3,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
 import { TicketFormModal } from "../../components/Modal/TicketFormModal";
+import ViewModal from "../../components/Modal/ViewModal";
+import TicketContent from "../../components/ModalContents/TicketContent";
 import moment from "moment";
 
 const Tickets = () => {
-  const { user, ErrorHandler } = useAppContext();
+  const { getAvatarColor, user, ErrorHandler } = useAppContext();
   const [allTickets, setAllTickets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("Create");
   const [ticket, setTicket] = useState([]);
+  const [viewRow, setViewRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -26,16 +28,39 @@ const Tickets = () => {
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(`/api/v1/tickets.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/employee_tickets.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+          },
+        }
+      );
 
-      console.log(response?.data?.data);
+      const resData = response?.data?.data?.tickets;
+      const totalPages = response?.data?.data?.pages;
 
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
+
+      const formatted = resData.map((ticket) => ({
+        ...ticket,
+        full_name: ticket?.first_name + " " + ticket?.last_name,
+        email: ticket?.email,
+        ogid: ticket?.ogid,
+        office: ticket?.office?.toUpperCase(),
+        status: ticket?.resolved ? "Resolved" : "Pending",
+        date_created: moment(ticket?.created_at).utc().format("Do MMM, YYYY"),
+        complaint: ticket?.complaint,
+      }));
+
+      setAllTickets(formatted);
       setLoading(false);
     } catch (error) {
       const component = "Tickets | ";
@@ -43,7 +68,7 @@ const Tickets = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchTickets();
@@ -62,46 +87,80 @@ const Tickets = () => {
     setMode("Create");
   };
 
+  // const handleEdit = (row) => {
+  //   setTicket(row);
+  //   setMode("Edit");
+  // };
+
   const columns = [
     {
-      dataField: "title",
-      text: "Title",
+      dataField: "full_name",
+      text: "Employee",
       sort: true,
-      headerStyle: { width: "40%" },
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {row?.full_name} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      ),
+    },
+    {
+      dataField: "date_created",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "email",
+      text: "Email",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "25%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "20%" },
-      // formatter: (value, row) => (
-      //   <>
-      //     {value === "Resolved" ? (
-      //       <a href="" className="pos-relative">
-      //         {" "}
-      //         <span className="status-ticket status-online"></span>{" "}
-      //         <span className="ml-4 d-block">{value.toUpperCase()}</span>
-      //       </a>
-      //     ) : value === "Processing" ? (
-      //       <a href="" className="pos-relative">
-      //         {" "}
-      //         <span className="status-ticket status-pending"></span>{" "}
-      //         <span className="ml-4 d-block">{value.toUpperCase()}</span>
-      //       </a>
-      //     ) : (
-      //       <a href="" className="pos-relative">
-      //         {" "}
-      //         <span className="status-ticket status-open"></span>{" "}
-      //         <span className="ml-4 d-block">{value.toUpperCase()}</span>
-      //       </a>
-      //     )}
-      //   </>
-      // ),
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <>
+          {value === "Resolved" ? (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i
+                className="fa fa-dot-circle-o text-success"
+                style={{ marginRight: "5px" }}
+              ></i>{" "}
+              Resolved
+            </span>
+          ) : (
+            <span className="btn btn-gray btn-sm btn-rounded">
+              <i
+                className="fa fa-dot-circle-o text-warning"
+                style={{ marginRight: "5px" }}
+              ></i>{" "}
+              Pending
+            </span>
+          )}
+        </>
+      ),
     },
     {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "5%" },
       formatter: (value, row) => (
         <div className="dropdown dropdown-action text-right">
           <a
@@ -119,35 +178,24 @@ const Tickets = () => {
               data-toggle="modal"
               data-target="#generalModal"
               onClick={() => {
-                // setViewRow(row);
+                setViewRow(row);
               }}
             >
-              <i className="lab la-readme m-r-5"></i> View
+              <i className="fa fa-eye m-r-5"></i> View
             </a>
-            {row.status === "Open" && (
+            {/* {!row.resolved && (
               <>
                 <a
                   className="dropdown-item"
                   href="#"
                   data-toggle="modal"
-                  data-target="#FormModal"
-                  // onClick={() => handleEdit(row)}
+                  data-target="#TicketFormModal"
+                  onClick={() => handleEdit(row)}
                 >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </a>
-                <a
-                  className="dropdown-item"
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => {
-                    // setSelectedRow(row);
-                  }}
-                >
-                  <i className="fa fa-trash m-r-5"></i> Delete
+                  <i className="fa fa-check m-r-5"></i> Edit
                 </a>
               </>
-            )}
+            )} */}
           </div>
         </div>
       ),
@@ -194,11 +242,17 @@ const Tickets = () => {
         />
       </div>
 
+      
+      <ViewModal
+        title="Ticket Details"
+        content={<TicketContent ticket={viewRow} />}
+      />
+
       <TicketFormModal
         mode={mode}
         data={ticket}
         loggedIn={true}
-        // fetchAllTickets={fetchAllTickets}
+        fetchTickets={fetchTickets}
       />
     </>
   );

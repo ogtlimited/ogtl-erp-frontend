@@ -16,6 +16,7 @@ import UniversalTable from "../../../components/Tables/UniversalTable";
 import UniversalPaginatedTable from "./../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 import AlertSvg from "../../../layouts/AlertSvg";
+import $ from "jquery";
 
 const LeavesUser = () => {
   const {
@@ -33,6 +34,7 @@ const LeavesUser = () => {
   const [loading, setLoading] = useState(true);
   const [modalType, setModalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
+  const [isResolving, setIsResolving] = useState(false);
 
   const [allLeaves, setallLeaves] = useState([]);
   const [allReporteesLeaves, setAllReporteesLeaves] = useState([]);
@@ -352,6 +354,7 @@ const LeavesUser = () => {
 
   // Handle Cancel Leave:
   const handleCancelLeaveApplication = async (row) => {
+    setIsResolving(true);
     try {
       const response = await axiosInstance.patch(
         `/api/v1/leaves/${selectedRow.id}.json`,
@@ -369,9 +372,13 @@ const LeavesUser = () => {
       showAlert(true, "Leave Cancelled", "alert alert-info");
       fetchYourLeaves();
       goToTop();
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
       goToTop();
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     }
   };
 
@@ -1178,6 +1185,7 @@ const LeavesUser = () => {
           deleteFunction={handleCancelLeaveApplication}
           modalType={modalType}
           message="Are you sure you want to cancel this leave application?"
+          isLoading={isResolving}
         />
       ) : null}
     </>

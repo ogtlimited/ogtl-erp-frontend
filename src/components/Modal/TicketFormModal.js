@@ -6,7 +6,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import TextEditor from "../Forms/TextEditor";
 
-export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
+export const TicketFormModal = ({ mode, data, loggedIn, fetchTickets }) => {
   const { showAlert, goToTop } = useAppContext();
   const [ticket, setTicket] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -14,6 +14,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
 
   useEffect(() => {
     setTicket(data);
+    setEditorContent(data?.complaint || "");
   }, [data]);
 
   const cancelEvent = () => {
@@ -33,7 +34,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
     if (mode === "Create") {
       return handleCreateTicket(e);
     } else {
-      // return handleEditTicket(e);
+      return handleEditTicket(e);
     }
   };
 
@@ -60,7 +61,7 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
       );
 
       showAlert(true, "Ticket successfully created", "alert alert-success");
-      // fetchAllTickets();
+      fetchTickets();
       $("#TicketFormModal").modal("toggle");
       setTicket(data);
       setEditorContent("");
@@ -76,42 +77,47 @@ export const TicketFormModal = ({ mode, data, loggedIn, fetchAllTickets }) => {
     }
   };
 
-  // const handleEditTicket = async (e) => {
-  //   e.preventDefault();
+  const handleEditTicket = async (e) => {
+    e.preventDefault();
 
-  //   setLoading(true);
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const response = await axiosInstance.put(
-  //       `/api/v1/branches/${ticket.id}.json`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "ngrok-skip-browser-warning": "69420",
-  //         },
-  //         payload: {
-  //           title: ticket.title,
-  //           state: ticket.state,
-  //           country: ticket.country,
-  //         },
-  //       }
-  //     );
+    setLoading(true);
 
-  //     showAlert(true, "Branch successfully updated", "alert alert-success");
-  //     fetchAllTickets();
-  //     $("#TicketFormModal").modal("toggle");
-  //     setTicket(data);
-  //     setLoading(false);
-  //     goToTop();
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //     $("#TicketFormModal").modal("toggle");
-  //     goToTop();
-  //     setLoading(false);
-  //   }
-  // };
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(
+        `/api/v1/tickets/${ticket?.id}.json?logged_in=${loggedIn}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            // first_name: ticket?.first_name,
+            // last_name: ticket?.last_name,
+            // ogid: ticket?.ogid,
+            // email: ticket?.email,
+            complaint: editorContent,
+          },
+        }
+      );
+
+      showAlert(true, "Ticket successfully updated", "alert alert-success");
+      fetchTickets();
+      $("#TicketFormModal").modal("toggle");
+      setTicket(data);
+      setEditorContent("");
+
+      setLoading(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#TicketFormModal").modal("toggle");
+      goToTop();
+      setLoading(false);
+    }
+  };
 
   return (
     <>
