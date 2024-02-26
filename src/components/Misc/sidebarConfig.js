@@ -143,6 +143,11 @@ const sidebarConfig = [
             title: "Email Signature",
             path: PATH_DASHBOARD.apps.signature,
           },
+          {
+            canView: "all",
+            title: "Ticket",
+            path: PATH_DASHBOARD.apps.tickets,
+          },
         ],
       },
       {
@@ -204,6 +209,12 @@ const sidebarConfig = [
             externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
           },
         ],
+      },
+      {
+        canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
+        title: "Ticket Management",
+        path: PATH_DASHBOARD.main.ticketManagement,
+        icon: ICONS.coaching,
       },
       // {
       //   canView: "all",

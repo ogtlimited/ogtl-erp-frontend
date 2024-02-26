@@ -1,47 +1,46 @@
 //* IN-USE
 
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
-import { TicketFormModal } from "../../components/Modal/TicketFormModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ViewModal from "../../components/Modal/ViewModal";
 import TicketContent from "../../components/ModalContents/TicketContent";
 import moment from "moment";
+import $ from "jquery";
 
-const Tickets = () => {
-  const { getAvatarColor, user, ErrorHandler } = useAppContext();
+const TicketManagement = () => {
+  const { showAlert, ErrorHandler, getAvatarColor, goToTop } = useAppContext();
   const [allTickets, setAllTickets] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState("Create");
-  const [ticket, setTicket] = useState([]);
+  const [isResolving, setIsResolving] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  const fetchTickets = useCallback(async () => {
+  const fetchAllTickets = useCallback(async () => {
     setLoading(true);
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(
-        `/api/v1/employee_tickets.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: page,
-            limit: sizePerPage,
-          },
-        }
-      );
+      const response = await axiosInstance.get(`/api/v1/all_tickets.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
+      });
 
       const resData = response?.data?.data?.tickets;
       const totalPages = response?.data?.data?.pages;
@@ -63,7 +62,7 @@ const Tickets = () => {
       setAllTickets(formatted);
       setLoading(false);
     } catch (error) {
-      const component = "Tickets | ";
+      const component = "All Tickets | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -71,26 +70,42 @@ const Tickets = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchTickets();
-  }, [fetchTickets]);
+    fetchAllTickets();
+  }, [fetchAllTickets]);
 
-  const handleCreate = () => {
-    const prefilledTicketForm = {
-      first_name: user?.employee_info?.personal_details?.first_name,
-      last_name: user?.employee_info?.personal_details?.last_name,
-      ogid: user?.employee_info?.ogid,
-      email: user?.employee_info?.email,
-      complaint: "",
-    };
+  const handleResolveTicket = async () => {
+    setIsResolving(true);
 
-    setTicket(prefilledTicketForm);
-    setMode("Create");
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.patch(
+        `/api/v1/resolve_tickets/${selectedRow?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            resolved: true,
+          },
+        }
+      );
+
+      goToTop();
+      showAlert(true, "Ticket has been resolved!", "alert alert-success");
+      fetchAllTickets();
+      $("#exampleModal").modal("toggle");
+      setIsResolving(false);
+    } catch (error) {
+      goToTop();
+      const errorMsg = error.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      fetchAllTickets();
+      $("#exampleModal").modal("toggle");
+      setIsResolving(false);
+    }
   };
-
-  // const handleEdit = (row) => {
-  //   setTicket(row);
-  //   setMode("Edit");
-  // };
 
   const columns = [
     {
@@ -183,19 +198,19 @@ const Tickets = () => {
             >
               <i className="fa fa-eye m-r-5"></i> View
             </a>
-            {/* {!row.resolved && (
+            {!row.resolved && (
               <>
                 <a
                   className="dropdown-item"
                   href="#"
                   data-toggle="modal"
-                  data-target="#TicketFormModal"
-                  onClick={() => handleEdit(row)}
+                  data-target="#exampleModal"
+                  onClick={() => setSelectedRow(row)}
                 >
-                  <i className="fa fa-check m-r-5"></i> Edit
+                  <i className="fa fa-check m-r-5"></i> Resolve
                 </a>
               </>
-            )} */}
+            )}
           </div>
         </div>
       ),
@@ -207,22 +222,11 @@ const Tickets = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Tickets</h3>
+            <h3 className="page-title">All Tickets</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Apps</li>
-              <li className="breadcrumb-item active">Ticket</li>
+              <li className="breadcrumb-item">Main</li>
+              <li className="breadcrumb-item active">Ticket Management</li>
             </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#TicketFormModal"
-              onClick={handleCreate}
-            >
-              <i className="las la-ticket-alt"></i> Generate Ticket
-            </a>
           </div>
         </div>
       </div>
@@ -242,20 +246,20 @@ const Tickets = () => {
         />
       </div>
 
-      
       <ViewModal
         title="Ticket Details"
         content={<TicketContent ticket={viewRow} />}
       />
 
-      <TicketFormModal
-        mode={mode}
-        data={ticket}
-        loggedIn={true}
-        fetchTickets={fetchTickets}
+      <ConfirmModal
+        title="Ticket Management"
+        selectedRow={selectedRow}
+        deleteFunction={handleResolveTicket}
+        message="Are you sure this ticket has been resolved?"
+        isLoading={isResolving}
       />
     </>
   );
 };
 
-export default Tickets;
+export default TicketManagement;

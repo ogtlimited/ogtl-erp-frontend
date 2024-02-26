@@ -8,6 +8,7 @@ import axiosInstance from "../../../services/api";
 import EmployeesTable from "../../../components/Tables/EmployeeTables/employeeTable";
 import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import $ from "jquery";
 
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const AllEmployeesAdmin = () => {
   } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isResolving, setIsResolving] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -123,7 +125,7 @@ const AllEmployeesAdmin = () => {
     const fullName = row.fullName;
     const userId = row?.ogid;
 
-    setLoading(true);
+    setIsResolving(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
@@ -157,11 +159,15 @@ const AllEmployeesAdmin = () => {
       }
 
       fetchAllEmployees();
-      setLoading(false);
+
+      $("#exampleModal").modal("toggle");
+      setIsResolving(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
+
+      $("#exampleModal").modal("toggle");
+      setIsResolving(false);
     }
   };
 
@@ -233,6 +239,7 @@ const AllEmployeesAdmin = () => {
         deleteFunction={handleEmployeeAction}
         modalType={modalType}
         message="Are you sure you want to deactivate this employee?"
+        isLoading={isResolving}
       />
     </>
   );

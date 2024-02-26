@@ -12,6 +12,7 @@ import male from "../../../assets/img/male_avater.png";
 import male2 from "../../../assets/img/male_avater2.png";
 import male3 from "../../../assets/img/male_avater3.png";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import $ from "jquery";
 
 const LeadershipAdmin = () => {
   const {
@@ -26,6 +27,7 @@ const LeadershipAdmin = () => {
   const [departments, setDepartments] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isResolving, setIsResolving] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState(null);
   const imageUrl = "https://erp.outsourceglobal.com";
@@ -109,7 +111,7 @@ const LeadershipAdmin = () => {
     const fullName = row.fullName;
     const userId = row?.id;
 
-    setLoading(true);
+    setIsResolving(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
@@ -130,11 +132,13 @@ const LeadershipAdmin = () => {
       );
 
       fetchAllLeaders();
-      setLoading(false);
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     }
   };
 
@@ -273,6 +277,7 @@ const LeadershipAdmin = () => {
         message={`Are you sure you want to remove ${selectedRow?.fullName} from leaders?`}
         selectedRow={selectedRow}
         deleteFunction={removeLeader}
+        isLoading={isResolving}
       />
     </>
   );

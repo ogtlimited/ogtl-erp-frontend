@@ -137,6 +137,7 @@ export default function Router() {
             },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
+            { path: "main/ticket-management", element: <TicketManagement /> },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
               path: "hr-dashboard",
@@ -1299,6 +1300,9 @@ const LeavesUser = Loadable(
 const ResignationUser = Loadable(
   lazy(() => import("../pages/HR/Users/Resignation.User"))
 );
+const TicketManagement = Loadable(
+  lazy(() => import("../pages/HR/TicketManagement"))
+);
 // const ValentineUser = Loadable(
 //   lazy(() => import("../pages/HR/Users/Valentine.User"))
 // );
@@ -1512,7 +1516,7 @@ const OrientationAndTraining = Loadable(
   lazy(() => import("../pages/HR/Admin/OrientationAndTraining.Admin"))
 );
 
-const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets")));
+const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))
