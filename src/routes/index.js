@@ -14,6 +14,7 @@ import ActivateClient from "../pages/Auth/ActivateClient";
 import NotFound from "../pages/Error/NotFound";
 import Unauthorized from "../pages/Error/unauthorized";
 import BadGateway from "../pages/Error/BadGateway";
+import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
 
@@ -1154,8 +1155,9 @@ export default function Router() {
     },
 
     { path: "*", element: <Navigate to="/404" replace /> },
-    { path: "/404", element: <NotFound /> },
     { path: "/403", element: <Unauthorized /> },
+    { path: "/404", element: <NotFound /> },
+    { path: "/500", element: <InternalServerError /> },
     { path: "/502", element: <BadGateway /> },
   ]);
 }
