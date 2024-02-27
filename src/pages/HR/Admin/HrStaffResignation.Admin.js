@@ -11,6 +11,7 @@ import ResignationContent from "../../../components/ModalContents/ResignationCon
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 import Select from "react-select";
+import $ from "jquery";
 import { ResignationFormModal } from "../../../components/Modal/ResignationFormModal";
 import HrRetractResignationModal from "../../../components/Modal/HrRetractResignationModal";
 
@@ -27,6 +28,7 @@ const HrStaffResignationAdmin = () => {
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sendingFeedback, setSendingFeedback] = useState(false);
 
   const [surveyFormFilled, setSurveyFormFilled] = useState(false);
   const [resignationSurveyForm, setResignationSurveyForm] = useState([]);
@@ -150,7 +152,7 @@ const HrStaffResignationAdmin = () => {
       const resignationId = viewRow.id;
 
       const resignationPayload = {
-        feedback: formContent?.hr_staff_resignation_feedbacks,
+        feedback: formContent?.hr_resignation_feedbacks,
         survey_form: {
           hr_survey_form_id: resignationSurveyForm[0]?.id,
           answer: Object.entries(formContent).map(([question, answer]) => {
@@ -158,6 +160,8 @@ const HrStaffResignationAdmin = () => {
           }),
         },
       };
+
+      setSendingFeedback(true);
 
       try {
         const res = await axiosInstance.patch(
@@ -178,14 +182,19 @@ const HrStaffResignationAdmin = () => {
           "alert alert-info"
         );
 
+        $("#ResignationFormModal").modal("toggle");
         fetchHrStaffResignations();
         setSurveyFormFilled(false);
         setFormContent([]);
         goToTop();
+        setSendingFeedback(false);
       } catch (error) {
         const errorMsg = error.response?.data?.errors;
         showAlert(true, `${errorMsg}`, "alert alert-warning");
+
+        $("#ResignationFormModal").modal("toggle");
         goToTop();
+        setSendingFeedback(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -384,6 +393,8 @@ const HrStaffResignationAdmin = () => {
         loadingExitForm={loadingResignationSurveyForm}
         setFormContent={setFormContent}
         setSurveyFormFilled={setSurveyFormFilled}
+        sendingFeedback={sendingFeedback}
+        HRstage="HR Staff"
       />
 
       {modalType === "retract" ? (

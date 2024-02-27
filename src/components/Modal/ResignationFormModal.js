@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
-import $ from "jquery";
 
 const CheckboxList = ({ question, options, selectedOptions, onChange }) => {
   return (
@@ -29,6 +28,8 @@ export const ResignationFormModal = ({
   loadingExitForm,
   setFormContent,
   setSurveyFormFilled,
+  sendingFeedback,
+  HRstage,
 }) => {
   const { FontAwesomeIcon, faSpinner } = useAppContext();
   const [data, setData] = useState([]);
@@ -77,7 +78,6 @@ export const ResignationFormModal = ({
     e.preventDefault();
     setFormContent(data);
     setSurveyFormFilled(true);
-    $("#ResignationFormModal").modal("toggle");
   };
 
   return (
@@ -188,15 +188,15 @@ export const ResignationFormModal = ({
                     <div className="col-md-12">
                       <div className="form-group">
                         <label
-                          htmlFor="hr_staff_resignation_feedbacks"
+                          htmlFor="hr_resignation_feedbacks"
                           style={{ fontWeight: "500" }}
                         >
-                          HR Staff Feedback
+                          {HRstage} Feedback
                         </label>
 
                         <textarea
-                          name="hr_staff_resignation_feedbacks"
-                          value={data?.hr_staff_resignation_feedbacks}
+                          name="hr_resignation_feedbacks"
+                          value={data?.hr_resignation_feedbacks}
                           onChange={handleFormChange}
                           className="form-control"
                           placeholder="Your feedback"
@@ -215,7 +215,11 @@ export const ResignationFormModal = ({
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      Confirm
+                      {sendingFeedback ? (
+                        <FontAwesomeIcon icon={faSpinner} spin pulse />
+                      ) : (
+                        "Confirm"
+                      )}
                     </button>
                   </div>
                 </form>
