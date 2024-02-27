@@ -198,7 +198,7 @@ const HrStaffResignationAdmin = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formContent, goToTop]
+    [fetchHrStaffResignations, formContent, goToTop, resignationSurveyForm]
   );
 
   const handleViewRowFeedback = async (row) => {
