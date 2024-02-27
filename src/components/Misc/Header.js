@@ -23,6 +23,7 @@ const Header = () => {
     e.preventDefault();
     tokenService.clearStorage();
     navigate("/auth/login");
+
     msalInstance
       .ssoSilent() //<-- This will silently logout the user without having to select an account
       // .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
@@ -119,10 +120,10 @@ const Header = () => {
               data-toggle="dropdown"
             >
               <span className="user-img">
-                <img src="" alt="" />
+                {/* <img src="" alt="" /> */}
                 <span
                   className="status online"
-                  style={{ bottom: 25, right: 10 }}
+                  style={{ bottom: 0, right: 10 }}
                 ></span>
               </span>
               <span style={{ paddingRight: 10 }}>

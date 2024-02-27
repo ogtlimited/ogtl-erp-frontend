@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
 import secureLocalStorage from "react-secure-storage";
@@ -22,6 +23,7 @@ const AppProvider = (props) => {
     class: "",
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
+  const navigate = useNavigate();
   const [userToken, setuserToken] = useState(null);
   const [count, setCount] = useState(0);
 
@@ -595,6 +597,11 @@ const AppProvider = (props) => {
     const errorMessage =
       error.response?.data?.errors || "Unable to process request";
     const errorStatus = error.response?.status || 0;
+
+    if (errorStatus === 500) {
+      navigate("/500");
+      return;
+    }
 
     const message =
       errorStatus >= 500

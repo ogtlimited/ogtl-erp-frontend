@@ -80,6 +80,8 @@ const ResignationContent = ({ Content = {} }) => {
                     ? "HR Staff Feedback"
                     : item?.stage === "hr_manager"
                     ? "HR Manager Feedback"
+                    : item?.stage === "coo"
+                    ? "COO Feedback"
                     : null}{" "}
                   <span className="feedback_subInfo">
                     |{" "}
@@ -114,7 +116,7 @@ const ResignationContent = ({ Content = {} }) => {
         <div className="col-md-12 mt-3 survey_answers_view">
           <p className="job-field">Exit Interview</p>
           {surveyData.map((item, index) => {
-            if (item?.question === "hr_staff_resignation_feedbacks") {
+            if (item?.question === "hr_resignation_feedbacks") {
               return null;
             }
 
