@@ -12,6 +12,9 @@ import HeroImage from "../../../assets/img/HR-nextImg.png";
 import ERP1 from "../../../assets/img/erp1.png";
 import ERP2 from "../../../assets/img/erp2.png";
 import ERP3 from "../../../assets/img/erp3.png";
+import ViewModal from "../../../components/Modal/ViewModal";
+import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
+import $ from "jquery";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -19,6 +22,7 @@ const EmployeeUser = () => {
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [modalType, setmodalType] = useState("CEO Message");
   const [heroIcons, setHeroIcons] = useState({
     hero: HeroImage,
     erp1: ERP1,
@@ -27,6 +31,11 @@ const EmployeeUser = () => {
   });
 
   const isRemoteStaff = user?.employee_info?.remote;
+
+  useEffect(() => {
+    setmodalType("CEO Message");
+    $("#generalModal").modal("show");
+  }, []);
 
   // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
@@ -184,7 +193,13 @@ const EmployeeUser = () => {
         </div>
       </div>
 
-      {/* <ToastContainer /> */}
+      {modalType === "CEO Message" ? (
+        <ViewModal
+          title="Message from the CEO"
+          expand={true}
+          content={<CEOMessageContent />}
+        />
+      ) : null}
     </>
   );
 };
