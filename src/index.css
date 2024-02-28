@@ -977,14 +977,14 @@ table.custom-table thead th {
   margin-left: -20px !important;
 }
 
-.valentine_styling {
-  font-size: 30px !important;
+.EA_styling {
+  font-size: 15px !important;
   font-weight: 700 !important;
-  background: -webkit-linear-gradient(#ffffff, #0253cc);
+  background: -webkit-linear-gradient(#ffffff, #00c5fb);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: "Dr Sugiyama", cursive;
+  font-family: "Outfit", cursive;
 }
 
 .valentine_styling_page {
@@ -1089,7 +1089,9 @@ table.custom-table thead th {
   z-index: 1000;
 }
 
-/* Toastify */
+/*--------------- 
+    Toastify 
+----------------*/
 
 .Toastify__toast-container--top-center {
   width: auto !important;

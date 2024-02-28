@@ -139,6 +139,10 @@ export default function Router() {
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
             { path: "main/ticket-management", element: <TicketManagement /> },
+            {
+              path: "main/employee-appreciation-eCertificate",
+              element: <EmployeeAppreciation />,
+            },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
               path: "hr-dashboard",
@@ -1304,6 +1308,9 @@ const ResignationUser = Loadable(
 );
 const TicketManagement = Loadable(
   lazy(() => import("../pages/HR/TicketManagement"))
+);
+const EmployeeAppreciation = Loadable(
+  lazy(() => import("../pages/HR/Users/EmployeeAppreciation.User"))
 );
 // const ValentineUser = Loadable(
 //   lazy(() => import("../pages/HR/Users/Valentine.User"))

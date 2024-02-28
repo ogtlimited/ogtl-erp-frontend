@@ -211,17 +211,14 @@ const Sidebar = () => {
                             <>
                               {canView(item?.canView) && (
                                 <li key={item.path}>
-                                  {item.title === "Valentine" ? (
+                                  {item.title === "Employee Appreciation" ? (
                                     <Link
                                       to={item.path}
-                                      className="valentine_styling"
+                                      className="EA_styling"
                                     >
                                       {item.icon}
                                       <span>
                                         {item.title}
-                                        <span className="hearts">
-                                          💕
-                                        </span>
                                       </span>
                                     </Link>
                                   ) : (
