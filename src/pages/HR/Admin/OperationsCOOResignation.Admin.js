@@ -305,18 +305,18 @@ const OperationsCOOResignationAdmin = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
-                  href="#tab_allResignations"
+                  href="#tab_mgtResignations"
                 >
-                  All Resignations
+                  Management Resignations
                 </a>
               </li>
               <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
-                  href="#tab_mgtResignations"
+                  href="#tab_allResignations"
                 >
-                  Management Resignations
+                  All Resignations
                 </a>
               </li>
             </ul>
@@ -326,7 +326,22 @@ const OperationsCOOResignationAdmin = () => {
 
       <div>
         <div className="row tab-content">
-          <div id="tab_allResignations" className="col-12 tab-pane show active">
+          <div id="tab_mgtResignations" className="col-12 tab-pane show active">
+            <UniversalPaginatedTable
+              data={mgtResignations}
+              columns={columns}
+              loading={loadingMgtResignations}
+              setLoading={setLoadingMgtResignations}
+              page={mgtPage}
+              setPage={setMgtPage}
+              sizePerPage={mgtSizePerPage}
+              setSizePerPage={setMgtSizePerPage}
+              totalPages={mgtTotalPages}
+              setTotalPages={setMgtTotalPages}
+            />
+          </div>
+
+          <div id="tab_allResignations" className="col-12 tab-pane">
             <div className="col-12 payroll_search_div">
               {/* Name Search */}
               <div className="resignation-custom-search">
@@ -385,21 +400,6 @@ const OperationsCOOResignationAdmin = () => {
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
-            />
-          </div>
-
-          <div id="tab_mgtResignations" className="col-12 tab-pane">
-            <UniversalPaginatedTable
-              data={mgtResignations}
-              columns={columns}
-              loading={loadingMgtResignations}
-              setLoading={setLoadingMgtResignations}
-              page={mgtPage}
-              setPage={setMgtPage}
-              sizePerPage={mgtSizePerPage}
-              setSizePerPage={setMgtSizePerPage}
-              totalPages={mgtTotalPages}
-              setTotalPages={setMgtTotalPages}
             />
           </div>
         </div>
