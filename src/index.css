@@ -1157,7 +1157,6 @@ table.custom-table thead th {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
 }
 
 .wtf_box > h3 {
@@ -1171,44 +1170,70 @@ table.custom-table thead th {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  height: 70vh;
   width: 95vw;
   padding: 2rem;
+  gap: 1.5rem;
+}
+
+.wtf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.wtf_crown_wrapper {
+  width: 100%;
+  height: 20%;
 }
 
 .wtf_wrapper {
-  width: 20%;
-  height: 100%;
   overflow: hidden;
   margin: 0 20px;
+  padding-bottom: 10px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   cursor: crosshair;
   border-radius: 15px;
-  gap: 2rem;
   transition: all 0.3s ease-in-out;
-  /* border: 3px solid #000; */
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 .wtf_wrapper:hover {
-  transform: scale(1.1);
   transition: all 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+  transform: scale(1.01);
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
 }
 
-.wtf_wrapper > p {
+.wtf_wrapper.data {
+  width: 100%;
+  height: 80%;
+}
+.wtf_wrapper.skeleton {
+  width: 20%;
+  height: 100%;
+}
+
+.wtf_p_wrapper > p {
   font-family: outfit;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
+}
+.wtf_p_wrapper > p > span {
+  font-weight: 800;
+  font-size: 18px;
 }
 
 .wtf_img_wrapper {
   width: 100%;
-  height: 70%;
+  height: 60%;
 }
 
 img {
