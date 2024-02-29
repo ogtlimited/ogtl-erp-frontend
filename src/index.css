@@ -1259,3 +1259,33 @@ img {
     gap: 2rem;
   }
 }
+
+
+/*------------------
+    eCertificate 
+-------------------*/
+
+.eCertificate_container {
+  background-color: pink;
+  width: 100%;
+  height: 100%;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.eCertificate_img_wrapper {
+  background-color: orange;
+  width: 50%;
+  height: 100%;
+}
+
+.eCertificate_img_wrapper > p {
+  background-color: red;
+}
+
+.eCertificate_container > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
