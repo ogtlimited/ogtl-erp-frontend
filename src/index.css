@@ -1260,13 +1260,11 @@ img {
   }
 }
 
-
 /*------------------
     eCertificate 
 -------------------*/
 
 .eCertificate_container {
-  background-color: pink;
   width: 100%;
   height: 100%;
   margin-top: 2rem;
@@ -1275,13 +1273,31 @@ img {
 }
 
 .eCertificate_img_wrapper {
-  background-color: orange;
   width: 50%;
   height: 100%;
+  position: relative;
 }
 
-.eCertificate_img_wrapper > p {
-  background-color: red;
+.eCertificate_p_wrapper {
+  width: 100%;
+  height: 5%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0%;
+  letter-spacing: 3px;
+  top: calc(100% - 66%);
+}
+
+.eCertificate_p_wrapper > p {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 3px;
+  font-family: "Dancing Script", cursive;
+  /* font-family: "MonteCarlo", cursive; */
+  /* font-family: "Alex Brush", cursive; */
+  /* font-family: "Dr Sugiyama", cursive; */
 }
 
 .eCertificate_container > img {

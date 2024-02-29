@@ -7,10 +7,8 @@ import eCertificate from "../../../assets/img/Certificate of Appreciation.jpg";
 const EmployeeAppreciation = () => {
   const { user } = useAppContext();
 
-  const employeeName = user?.employee_info?.personal_details
-  const {first_name, last_name} = employeeName;
-
-  console.log(employeeName)
+  const employeeName = user?.employee_info?.personal_details;
+  const { first_name, last_name } = employeeName;
 
   return (
     <>
@@ -30,7 +28,18 @@ const EmployeeAppreciation = () => {
 
         <div className="eCertificate_container">
           <div className="eCertificate_img_wrapper">
-            <p>{first_name} {last_name}</p>
+            <div className="eCertificate_p_wrapper">
+              <p>
+                <strong>
+                  {first_name
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}{" "}
+                  {last_name
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                </strong>
+              </p>
+            </div>
             <img src={eCertificate} alt="Certificate of Appreciation" />
           </div>
         </div>
