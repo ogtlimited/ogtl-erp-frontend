@@ -1326,3 +1326,25 @@ img {
     font-size: 50px !important;
   }
 }
+
+.signature_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+}
+
+.signature_container {
+  width: 150px;
+}
+
+.signature_container > img {
+  width: 100%;
+  height: 40%;
+}
+
+.signature_container > p {
+  margin: .5rem 1rem;
+  font-size: 12px;
+  font-weight: 500;
+}
