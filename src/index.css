@@ -1294,14 +1294,35 @@ img {
   margin: 0;
   font-size: 2rem;
   letter-spacing: 3px;
-  font-family: "Dancing Script", cursive;
-  /* font-family: "MonteCarlo", cursive; */
-  /* font-family: "Alex Brush", cursive; */
-  /* font-family: "Dr Sugiyama", cursive; */
+  font-family: "Beau Rivage", cursive;
 }
 
 .eCertificate_container > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media print {
+  html,
+  body {
+    height: initial !important;
+    overflow: initial !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+
+  .eCertificate_img_wrapper {
+    width: 100%;
+  }
+
+  .eCertificate_p_wrapper > p {
+    font-size: 50px !important;
+  }
 }

@@ -1,14 +1,19 @@
 //* IN USE
 
-import React from "react";
+import React, { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 import { useAppContext } from "../../../Context/AppContext";
-import eCertificate from "../../../assets/img/Certificate of Appreciation.jpg";
+import ECertificate from "../../In-Apps/eCertificate";
 
 const EmployeeAppreciation = () => {
   const { user } = useAppContext();
 
   const employeeName = user?.employee_info?.personal_details;
-  const { first_name, last_name } = employeeName;
+
+  const eCertificateRef = useRef();
+  const handlePrintCertificate = useReactToPrint({
+    content: () => eCertificateRef.current,
+  });
 
   return (
     <>
@@ -22,25 +27,23 @@ const EmployeeAppreciation = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <button className="btn add-btn m-r-5">Download</button>
+            <button
+              className="btn add-btn m-r-5"
+              onClick={handlePrintCertificate}
+            >
+              Download
+            </button>
           </div>
         </div>
 
         <div className="eCertificate_container">
-          <div className="eCertificate_img_wrapper">
-            <div className="eCertificate_p_wrapper">
-              <p>
-                <strong>
-                  {first_name
-                    .toLowerCase()
-                    .replace(/\b\w/g, (char) => char.toUpperCase())}{" "}
-                  {last_name
-                    .toLowerCase()
-                    .replace(/\b\w/g, (char) => char.toUpperCase())}
-                </strong>
-              </p>
-            </div>
-            <img src={eCertificate} alt="Certificate of Appreciation" />
+          {employeeName && (
+            <ECertificate
+              employeeDetails={employeeName}
+              ref={eCertificateRef}
+            />
+          )}
+          <div className="">
           </div>
         </div>
       </div>
