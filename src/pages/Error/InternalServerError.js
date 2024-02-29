@@ -5,6 +5,7 @@ import SnowdenMoses from "../../assets/img/SnowdenMoses.jpeg";
 import UD from "../../assets/img/undefined.jpg";
 import Maryam from "../../assets/img/Maryam.jpeg";
 import Muazat from "../../assets/img/Muazat.webp";
+import Crown from "../../assets/img/crown.gif";
 import axiosInstance from "../../services/api";
 import Skeleton from "@material-ui/lab/Skeleton";
 import AlertSvg from "./AlertSvg";
@@ -36,20 +37,6 @@ const ERPDevs = [
     image: `${Muazat}`,
   },
 ];
-
-const EmployeeCard = ({ id, voteCount, name, image, onClick }) => (
-  <div className="wtf_wrapper" onClick={() => onClick(id, name)}>
-    <div className="wtf_img_wrapper">
-      <img src={image} alt={name} />
-    </div>
-    <div className="wtf_p_wrapper">
-      <p>
-        <span>{voteCount}</span> {voteCount > 1 ? " votes" : " vote"}
-      </p>
-      <p>{name}</p>
-    </div>
-  </div>
-);
 
 const InternalServerError = () => {
   const [erpTeam, setErpTeam] = useState([]);
@@ -112,6 +99,38 @@ const InternalServerError = () => {
   useEffect(() => {
     fetchWhoToFire();
   }, [fetchWhoToFire]);
+
+  const EmployeeCard = ({ id, voteCount, name, image, onClick }) => (
+    <div className="wtf">
+      <div className="wtf_crown_wrapper">
+        {voteCount === getMaxVoteCount() && (
+          <img src={Crown} alt="Crown" className="crown-icon" />
+        )}
+      </div>
+      <div className="wtf_wrapper data" onClick={() => onClick(id, name)}>
+        <div className="wtf_img_wrapper">
+          <img src={image} alt={name} />
+        </div>
+        <div className="wtf_p_wrapper">
+          <p>
+            <span>{voteCount}</span> {voteCount > 1 ? " votes" : " vote"}
+          </p>
+          <p>{name}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const getMaxVoteCount = () => {
+    let maxVoteCount = 0;
+    erpTeam.forEach((employee) => {
+      if (employee.vote_count > maxVoteCount) {
+        maxVoteCount = employee.vote_count;
+      }
+    });
+
+    return maxVoteCount;
+  };
 
   const handleVoteWhoToFire = async (data) => {
     try {
@@ -186,21 +205,34 @@ const InternalServerError = () => {
               </div>
             ) : (
               <div className="wtf_container">
-                <div className="wtf_wrapper">
-                  <div className="wtf_img_wrapper">
-                    <Skeleton
-                      variant="rect"
-                      width="100%"
-                      height="100%"
-                      animation="wave"
-                    />
+                <div className="wtf">
+                  <div className="wtf_wrapper skeleton">
+                    <div className="wtf_img_wrapper">
+                      <Skeleton
+                        variant="rect"
+                        width="100%"
+                        height="100%"
+                        animation="wave"
+                      />
+                    </div>
+
+                    <div className="wtf_p_wrapper">
+                      <p>
+                        <Skeleton
+                          variant="text"
+                          width="100px"
+                          animation="wave"
+                        />
+                      </p>
+                      <p>
+                        <Skeleton
+                          variant="text"
+                          width="100px"
+                          animation="wave"
+                        />
+                      </p>
+                    </div>
                   </div>
-                  <p>
-                    <Skeleton variant="text" width="100px" animation="wave" />
-                  </p>
-                  <p>
-                    <Skeleton variant="text" width="100px" animation="wave" />
-                  </p>
                 </div>
               </div>
             )}
