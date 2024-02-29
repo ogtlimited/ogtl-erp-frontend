@@ -6,11 +6,53 @@ import UD from "../../assets/img/undefined.jpg";
 import Maryam from "../../assets/img/Maryam.jpeg";
 import Muazat from "../../assets/img/Muazat.webp";
 import axiosInstance from "../../services/api";
+import Skeleton from "@material-ui/lab/Skeleton";
 import AlertSvg from "./AlertSvg";
 
+const ERPDevs = [
+  {
+    id: "OG202036",
+    name: "Maryam",
+    image: `${Maryam}`,
+  },
+  {
+    id: "OG220233",
+    name: "SnowdenMoses",
+    image: `${SnowdenMoses}`,
+  },
+  {
+    id: "OG172422",
+    name: "Legal Debugger",
+    image: `${LegalDebugger}`,
+  },
+  {
+    id: "OG220133",
+    name: "UD",
+    image: `${UD}`,
+  },
+  {
+    id: "OG220848",
+    name: "Muazat (Illegal Debugger)",
+    image: `${Muazat}`,
+  },
+];
+
+const EmployeeCard = ({ id, voteCount, name, image, onClick }) => (
+  <div className="wtf_wrapper" onClick={() => onClick(id, name)}>
+    <div className="wtf_img_wrapper">
+      <img src={image} alt={name} />
+    </div>
+    <div className="wtf_p_wrapper">
+      <p>
+        <span>{voteCount}</span> {voteCount > 1 ? " votes" : " vote"}
+      </p>
+      <p>{name}</p>
+    </div>
+  </div>
+);
+
 const InternalServerError = () => {
-  const [loading, setLoading] = useState(false);
-  const [voting, setVoting] = useState(false);
+  const [erpTeam, setErpTeam] = useState([]);
   const [showAlertMsg, setShowAlertMsg] = useState({
     state: false,
     msg: "",
@@ -41,8 +83,6 @@ const InternalServerError = () => {
   };
 
   const fetchWhoToFire = useCallback(async () => {
-    setLoading(true);
-
     try {
       const response = await axiosInstance.get(`/api/v1/who_to_fire.json`, {
         headers: {
@@ -52,13 +92,20 @@ const InternalServerError = () => {
         },
       });
 
-      console.log("Who To Fire", response?.data?.data?.who_to_fire);
+      const resData = response?.data?.data?.who_to_fire;
 
-      setLoading(false);
+      resData.forEach((item) => {
+        const foundDev = ERPDevs.find((dev) => dev.id === item.ogid);
+        if (foundDev) {
+          item.name = foundDev.name;
+          item.image = foundDev.image;
+        }
+      });
+
+      setErpTeam(resData);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
     }
   }, []);
 
@@ -66,13 +113,11 @@ const InternalServerError = () => {
     fetchWhoToFire();
   }, [fetchWhoToFire]);
 
-  const handleVoteWhoToFire = async (ogid, name) => {
-    setVoting(true);
-
+  const handleVoteWhoToFire = async (data) => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.patch(
-        `/api/v1/who_to_fire/${ogid}.json`,
+        `/api/v1/who_to_fire/${data?.ogid}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -84,16 +129,14 @@ const InternalServerError = () => {
 
       showAlert(
         true,
-        `You have successfully voted for ${name} 😈`,
+        `You have successfully voted for ${data?.name} 😈`,
         "alert alert-success"
       );
 
       fetchWhoToFire();
-      setVoting(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setVoting(false);
     }
   };
 
@@ -103,7 +146,12 @@ const InternalServerError = () => {
       {showAlertMsg.state === true ? (
         <div
           className={"alert d-flex align-items-center" + showAlertMsg.class}
-          style={{ zIndex: 100, position: "absolute", right: "2%", top: "1.5rem" }}
+          style={{
+            zIndex: 100,
+            position: "absolute",
+            right: "2%",
+            top: "1.5rem",
+          }}
           role="alert"
         >
           <svg
@@ -123,55 +171,39 @@ const InternalServerError = () => {
         <div className="main-wrapper">
           <div className="wtf_box">
             <h3>Who should we fire?</h3>
-            <div className="wtf_container">
-              <div
-                className="wtf_wrapper"
-                onClick={() => handleVoteWhoToFire("OG202036", "Maryam")}
-              >
-                <div className="wtf_img_wrapper">
-                  <img src={Maryam} alt="Maryam" />
-                </div>
-                <p>Maryam</p>
+            {erpTeam.length ? (
+              <div className="wtf_container">
+                {erpTeam.map((employee) => (
+                  <EmployeeCard
+                    key={employee.ogid}
+                    id={employee.ogid}
+                    voteCount={employee.vote_count}
+                    name={employee.name}
+                    image={employee.image}
+                    onClick={() => handleVoteWhoToFire(employee)}
+                  />
+                ))}
               </div>
-              <div
-                className="wtf_wrapper"
-                onClick={() => handleVoteWhoToFire("OG220233", "SnowdenMoses")}
-              >
-                <div className="wtf_img_wrapper">
-                  <img src={SnowdenMoses} alt="SnowdenMoses" />
+            ) : (
+              <div className="wtf_container">
+                <div className="wtf_wrapper">
+                  <div className="wtf_img_wrapper">
+                    <Skeleton
+                      variant="rect"
+                      width="100%"
+                      height="100%"
+                      animation="wave"
+                    />
+                  </div>
+                  <p>
+                    <Skeleton variant="text" width="100px" animation="wave" />
+                  </p>
+                  <p>
+                    <Skeleton variant="text" width="100px" animation="wave" />
+                  </p>
                 </div>
-                <p>SnowdenMoses</p>
               </div>
-              <div
-                className="wtf_wrapper"
-                onClick={() =>
-                  handleVoteWhoToFire("OG172422", "Legal Debugger")
-                }
-              >
-                <div className="wtf_img_wrapper">
-                  <img src={LegalDebugger} alt="Legal Debugger" />
-                </div>
-                <p>Legal Debugger</p>
-              </div>
-              <div
-                className="wtf_wrapper"
-                onClick={() => handleVoteWhoToFire("OG220133", "UD")}
-              >
-                <div className="wtf_img_wrapper">
-                  <img src={UD} alt="UD" />
-                </div>
-                <p>UD</p>
-              </div>
-              <div
-                className="wtf_wrapper"
-                onClick={() => handleVoteWhoToFire("OG220848", "Muazat")}
-              >
-                <div className="wtf_img_wrapper">
-                  <img src={Muazat} alt="Muazat" />
-                </div>
-                <p>Muazat (Illegal Debugger)</p>
-              </div>
-            </div>
+            )}
             <Link to="/dashboard/employee-dashboard" className="back_btn">
               Back to Dashboard
             </Link>

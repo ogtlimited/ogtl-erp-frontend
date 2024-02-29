@@ -1179,15 +1179,15 @@ table.custom-table thead th {
   height: 100%;
   overflow: hidden;
   margin: 0 20px;
+  padding-bottom: 10px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   cursor: crosshair;
   border-radius: 15px;
-  gap: 2rem;
   transition: all 0.3s ease-in-out;
-  /* border: 3px solid #000; */
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
@@ -1197,16 +1197,20 @@ table.custom-table thead th {
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
 
-.wtf_wrapper > p {
+.wtf_p_wrapper > p {
   font-family: outfit;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
+}
+.wtf_p_wrapper > p > span {
+  font-weight: 800;
+  font-size: 18px;
 }
 
 .wtf_img_wrapper {
   width: 100%;
-  height: 70%;
+  height: 60%;
 }
 
 img {
