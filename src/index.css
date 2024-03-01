@@ -977,14 +977,14 @@ table.custom-table thead th {
   margin-left: -20px !important;
 }
 
-.valentine_styling {
-  font-size: 30px !important;
+.EA_styling {
+  font-size: 15px !important;
   font-weight: 700 !important;
-  background: -webkit-linear-gradient(#ffffff, #0253cc);
+  background: -webkit-linear-gradient(#ffffff, #00c5fb);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-family: "Dr Sugiyama", cursive;
+  font-family: "Outfit", cursive;
 }
 
 .valentine_styling_page {
@@ -1089,7 +1089,9 @@ table.custom-table thead th {
   z-index: 1000;
 }
 
-/* Toastify */
+/*--------------- 
+    Toastify 
+----------------*/
 
 .Toastify__toast-container--top-center {
   width: auto !important;
@@ -1281,4 +1283,93 @@ img {
     width: auto;
     gap: 2rem;
   }
+}
+
+/*------------------
+    eCertificate 
+-------------------*/
+
+.eCertificate_container {
+  width: 100%;
+  height: 100%;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.eCertificate_img_wrapper {
+  width: 50%;
+  height: 100%;
+  position: relative;
+}
+
+.eCertificate_p_wrapper {
+  width: 100%;
+  height: 5%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0%;
+  letter-spacing: 3px;
+  top: calc(100% - 66%);
+}
+
+.eCertificate_p_wrapper > p {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 3px;
+  font-family: "Dancing Script", cursive;
+}
+
+.eCertificate_container > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media print {
+  html,
+  body {
+    height: initial !important;
+    overflow: initial !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    margin-top: 1rem;
+    display: block;
+    page-break-before: auto;
+  }
+
+  .eCertificate_img_wrapper {
+    width: 100%;
+  }
+
+  .eCertificate_p_wrapper > p {
+    font-size: 50px !important;
+  }
+}
+
+.signature_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+}
+
+.signature_container {
+  width: 150px;
+}
+
+.signature_container > img {
+  width: 100%;
+  height: 40%;
+}
+
+.signature_container > p {
+  margin: .5rem 1rem;
+  font-size: 12px;
+  font-weight: 500;
 }

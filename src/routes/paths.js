@@ -28,6 +28,7 @@ export const PATH_DASHBOARD = {
     resignation: path(ROOTS_DASHBOARD, "/main/resignation"), 
     manualAttendance: path(ROOTS_DASHBOARD, "/main/manual-attendance"), 
     ticketManagement: path(ROOTS_DASHBOARD, "/main/ticket-management"), 
+    eCertificate: path(ROOTS_DASHBOARD, "/main/employee-appreciation-eCertificate"), 
     // valentine: path(ROOTS_DASHBOARD, "/main/valentine"), 
   },
 

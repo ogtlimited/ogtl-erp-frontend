@@ -49,6 +49,7 @@ const ICONS = {
   teamAttendance: getIcon("la-history"),
   helpDesk: getIcon("la-question"),
   valentine: getIcon("la-gratipay"),
+  certificate: getIcon("la-certificate"),
 };
 
 const buildExternalURL = () => {
@@ -215,6 +216,12 @@ const sidebarConfig = [
         title: "Ticket Management",
         path: PATH_DASHBOARD.main.ticketManagement,
         icon: ICONS.coaching,
+      },
+      {
+        canView: "all",
+        title: "Employee Appreciation",
+        path: PATH_DASHBOARD.main.eCertificate,
+        icon: ICONS.certificate,
       },
       // {
       //   canView: "all",
