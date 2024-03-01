@@ -22,7 +22,7 @@ const EmployeeUser = () => {
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [modalType, setmodalType] = useState("CEO Message");
+  const [modalType, setmodalType] = useState("CEO Messagez");
   const [heroIcons, setHeroIcons] = useState({
     hero: HeroImage,
     erp1: ERP1,
