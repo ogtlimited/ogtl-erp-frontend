@@ -148,7 +148,7 @@
   width: 30%;
   font-size: 20px;
   border-radius: 25px;
-  background-color: #BD1877;
+  background-color: var(--prm-color);
 }
 
 #pub-hol-chip {

@@ -1,3 +1,6 @@
+
+
+
 .filter {
   /* display: inline-block; */
   display: flex;
@@ -18,7 +21,7 @@
   padding: 10px;
   margin-top: 5px;
   border: 1px;
-  border-color: #bd1877;
+  border-color: var(--prm-color);
   border-radius: 5px;
 }
 
@@ -71,11 +74,11 @@
   margin-bottom: 25px;
 }
 .account-box .account-btn {
-  background: #bd1877;
-  background: -moz-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: -webkit-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: -ms-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: linear-gradient(to right, #bd1877 0%, #5d48b8 100%);
+  background: var(--prm-color);
+  background: -moz-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -webkit-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -ms-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: linear-gradient(to right, var(--prm-color) 0%, var(--sec-color) 100%);
   border: 0;
   border-radius: 4px;
   display: block;
@@ -316,11 +319,11 @@
   z-index: -1;
   top: -15px;
   right: -15px;
-  background: #bd1877;
-  background: -moz-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: -webkit-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: -ms-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
-  background: linear-gradient(to right, #bd1877 0%, #5d48b8 100%);
+  background: var(--prm-color);
+  background: -moz-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -webkit-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -ms-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: linear-gradient(to right, var(--prm-color) 0%, var(--sec-color) 100%);
   height: 220px;
   width: 25px;
   border-radius: 32px;
@@ -354,7 +357,7 @@
 }
 
 .tl.link {
-  color: #5d48b8;
+  color: var(--sec-color);
   text-decoration: none;
 }
 
@@ -362,7 +365,7 @@
   height: 0;
   margin-left: 50px;
   background-color: #ffffff;
-  border-color: #bd1877;
+  border-color: var(--prm-color);
 }
 
 .logout {
@@ -573,7 +576,7 @@ table.custom-table thead th {
   width: 100%;
   height: 30px;
   border-radius: 20px;
-  background-color: #bd1877;
+  background-color: var(--prm-color);
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -638,7 +641,7 @@ table.custom-table thead th {
 ----------------------*/
 
 .avatar-span {
-  background-color: #bd1877;
+  background-color: var(--prm-color);
   border-radius: 50%;
   color: #ffffff !important;
   font-size: 25px !important;
@@ -757,7 +760,7 @@ table.custom-table thead th {
   height: 0;
   margin-left: 10px;
   background-color: #ffffff;
-  border-color: #bd1877;
+  border-color: var(--prm-color);
 }
 
 .form-control.resignation_effective_today {
@@ -977,9 +980,9 @@ table.custom-table thead th {
 .valentine_styling_page {
   font-size: 50px !important;
   font-weight: 700 !important;
-  color: #5d48b8;
+  color: var(--sec-color);
   font-family: "Dr Sugiyama", cursive;
-  background: -webkit-linear-gradient(#ffffff, #5d48b8);
+  background: -webkit-linear-gradient(#ffffff, var(--sec-color));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1027,7 +1030,7 @@ table.custom-table thead th {
   font-size: 28px;
   border: none;
   cursor: pointer;
-  background-color: #5d48b8;
+  background-color: var(--sec-color);
   transition: all 0.3 ease-in-out;
   border-radius: 5px;
 }
@@ -1035,7 +1038,7 @@ table.custom-table thead th {
 .find_val_btn:hover {
   font-size: 28px;
   border: none;
-  background-color: #bd1877;
+  background-color: var(--prm-color);
   transition: all 0.3 ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -1064,7 +1067,7 @@ table.custom-table thead th {
 .val_pair > p {
   font-family: "Dr Sugiyama", cursive;
   font-size: 40px;
-  color: #5d48b8;
+  color: var(--sec-color);
 }
 
 .val_pair > h1 {
@@ -1150,7 +1153,7 @@ table.custom-table thead th {
   font-family: outfit;
   font-weight: 700;
   font-size: 35px;
-  color: #5d48b8;
+  color: var(--sec-color);
 }
 
 .wtf_container {
@@ -1235,7 +1238,7 @@ img {
   border: none;
   font-family: outfit;
   color: #fff;
-  background-color: #5d48b8;
+  background-color: var(--sec-color);
   cursor: pointer;
   border-radius: 10px;
   font-weight: 700;
