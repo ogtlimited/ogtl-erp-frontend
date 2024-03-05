@@ -18,7 +18,7 @@
   padding: 10px;
   margin-top: 5px;
   border: 1px;
-  border-color: #00c5fb;
+  border-color: #bd1877;
   border-radius: 5px;
 }
 
@@ -71,11 +71,11 @@
   margin-bottom: 25px;
 }
 .account-box .account-btn {
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+  background: #bd1877;
+  background: -moz-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: -webkit-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: -ms-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: linear-gradient(to right, #bd1877 0%, #5d48b8 100%);
   border: 0;
   border-radius: 4px;
   display: block;
@@ -316,11 +316,11 @@
   z-index: -1;
   top: -15px;
   right: -15px;
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+  background: #bd1877;
+  background: -moz-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: -webkit-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: -ms-linear-gradient(left, #bd1877 0%, #5d48b8 100%);
+  background: linear-gradient(to right, #bd1877 0%, #5d48b8 100%);
   height: 220px;
   width: 25px;
   border-radius: 32px;
@@ -354,7 +354,7 @@
 }
 
 .tl.link {
-  color: #0253cc;
+  color: #5d48b8;
   text-decoration: none;
 }
 
@@ -362,7 +362,7 @@
   height: 0;
   margin-left: 50px;
   background-color: #ffffff;
-  border-color: #00c5fb;
+  border-color: #bd1877;
 }
 
 .logout {
@@ -573,7 +573,7 @@ table.custom-table thead th {
   width: 100%;
   height: 30px;
   border-radius: 20px;
-  background-color: #00c5fb;
+  background-color: #bd1877;
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -638,7 +638,7 @@ table.custom-table thead th {
 ----------------------*/
 
 .avatar-span {
-  background-color: #00c5fb;
+  background-color: #bd1877;
   border-radius: 50%;
   color: #ffffff !important;
   font-size: 25px !important;
@@ -757,7 +757,7 @@ table.custom-table thead th {
   height: 0;
   margin-left: 10px;
   background-color: #ffffff;
-  border-color: #00c5fb;
+  border-color: #bd1877;
 }
 
 .form-control.resignation_effective_today {
@@ -968,31 +968,18 @@ table.custom-table thead th {
     Valentine  
 -----------------*/
 
-.val_icons {
-  margin-left: -8px;
-}
-
-.hearts_icon {
-  font-size: 20px;
-  margin-left: -20px !important;
-}
-
-.EA_styling {
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  background: -webkit-linear-gradient(#ffffff, #00c5fb);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: "Outfit", cursive;
+.header_logo_icons {
+  position: absolute;
+  top: 20%;
+  right: 17%;
 }
 
 .valentine_styling_page {
   font-size: 50px !important;
   font-weight: 700 !important;
-  color: #0253cc;
+  color: #5d48b8;
   font-family: "Dr Sugiyama", cursive;
-  background: -webkit-linear-gradient(#ffffff, #0253cc);
+  background: -webkit-linear-gradient(#ffffff, #5d48b8);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1040,7 +1027,7 @@ table.custom-table thead th {
   font-size: 28px;
   border: none;
   cursor: pointer;
-  background-color: #0253cc;
+  background-color: #5d48b8;
   transition: all 0.3 ease-in-out;
   border-radius: 5px;
 }
@@ -1048,7 +1035,7 @@ table.custom-table thead th {
 .find_val_btn:hover {
   font-size: 28px;
   border: none;
-  background-color: #00c5fb;
+  background-color: #bd1877;
   transition: all 0.3 ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -1077,7 +1064,7 @@ table.custom-table thead th {
 .val_pair > p {
   font-family: "Dr Sugiyama", cursive;
   font-size: 40px;
-  color: #0253cc;
+  color: #5d48b8;
 }
 
 .val_pair > h1 {
@@ -1163,7 +1150,7 @@ table.custom-table thead th {
   font-family: outfit;
   font-weight: 700;
   font-size: 35px;
-  color: #0253cc;
+  color: #5d48b8;
 }
 
 .wtf_container {
@@ -1248,7 +1235,7 @@ img {
   border: none;
   font-family: outfit;
   color: #fff;
-  background-color: #0253cc;
+  background-color: #5d48b8;
   cursor: pointer;
   border-radius: 10px;
   font-weight: 700;
@@ -1369,7 +1356,7 @@ img {
 }
 
 .signature_container > p {
-  margin: .5rem 1rem;
+  margin: 0.5rem 1rem;
   font-size: 12px;
   font-weight: 500;
 }

@@ -49,6 +49,7 @@ const ICONS = {
   teamAttendance: getIcon("la-history"),
   helpDesk: getIcon("la-question"),
   valentine: getIcon("la-gratipay"),
+  female: getIcon("la-venus"),
   certificate: getIcon("la-certificate"),
 };
 
@@ -222,6 +223,12 @@ const sidebarConfig = [
         title: "Employee Appreciation",
         path: PATH_DASHBOARD.main.eCertificate,
         icon: ICONS.certificate,
+      },
+      {
+        canView: "all",
+        title: "Int'l. Women's Day",
+        path: PATH_DASHBOARD.main.IWD,
+        icon: ICONS.female,
       },
       // {
       //   canView: "all",

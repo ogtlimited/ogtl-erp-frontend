@@ -53,3 +53,26 @@
 ::-webkit-scrollbar-thumb:hover {
   background: grey; 
 }
+
+/*-----------------------------
+    Employee Appreciation  
+------------------------------*/
+
+.extra_sidebar_styling {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: "Outfit", cursive;
+}
+
+.EA_styling {
+  background: -webkit-linear-gradient(#ffffff, #00c5fb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.IWD_styling {
+  background: -webkit-linear-gradient(#ffffff, #bd1877);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

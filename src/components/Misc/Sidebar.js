@@ -214,12 +214,17 @@ const Sidebar = () => {
                                   {item.title === "Employee Appreciation" ? (
                                     <Link
                                       to={item.path}
-                                      className="EA_styling"
+                                      className="extra_sidebar_styling EA_styling"
                                     >
                                       {item.icon}
-                                      <span>
-                                        {item.title}
-                                      </span>
+                                      <span>{item.title}</span>
+                                    </Link>
+                                  ) : item.title === "Int'l. Women's Day" ? (
+                                    <Link
+                                      to={item.path}
+                                      className="extra_sidebar_styling IWD_styling"
+                                    >
+                                      {item.icon} <span>{item.title}</span>
                                     </Link>
                                   ) : (
                                     <Link to={item.path}>
