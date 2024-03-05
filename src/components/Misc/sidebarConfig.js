@@ -226,7 +226,7 @@ const sidebarConfig = [
       },
       {
         canView: "all",
-        title: "Int'l. Women's Day",
+        title: "Women's Day",
         path: PATH_DASHBOARD.main.IWD,
         icon: ICONS.female,
       },

@@ -245,7 +245,7 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              <span className="val_icons">
+              <span className="login_logo_icons">
                 <lord-icon
                   src="https://cdn.lordicon.com/pyarizrk.json"
                   trigger="loop"

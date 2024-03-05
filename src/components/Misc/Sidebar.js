@@ -219,7 +219,7 @@ const Sidebar = () => {
                                       {item.icon}
                                       <span>{item.title}</span>
                                     </Link>
-                                  ) : item.title === "Int'l. Women's Day" ? (
+                                  ) : item.title === "Women's Day" ? (
                                     <Link
                                       to={item.path}
                                       className="extra_sidebar_styling IWD_styling"
