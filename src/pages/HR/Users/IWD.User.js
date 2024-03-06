@@ -1,8 +1,28 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axiosInstance from "../../../services/api";
 import IWDSpinner from "../../../assets/img/IWD_loader-2.gif";
-import profilePic from "../../../assets/img/Maryam.jpeg";
 import { IWDFormModal } from "../../../components/Modal/IWDFormModal";
+
+const Countdown = ({ onCountdownEnd }) => {
+  const [seconds, setSeconds] = useState(30);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if (prevSeconds === 1) {
+          clearInterval(interval);
+          onCountdownEnd();
+          return 30;
+        }
+        return prevSeconds - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [onCountdownEnd]);
+
+  return <div>{seconds}</div>;
+};
 
 const IWDUser = () => {
   const [loading, setLoading] = useState(true);
@@ -19,10 +39,7 @@ const IWDUser = () => {
       "#6B2B63",
       "#8E3C64",
 
-      "#FF91A4",
       "#FF69B4",
-      "#FF00FF",
-      "#FF66CC",
       "#C8A2C8",
       "#DA70D6",
       "#7851A9",
@@ -44,16 +61,9 @@ const IWDUser = () => {
         }
       );
 
-      console.log(
-        "IWD Messages:",
-        response?.data?.data?.womens_day_event_records
-      );
-
       const resData = response?.data?.data?.womens_day_event_records;
 
       setQuotes(resData || []);
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      setBackgroundColor(color);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -68,9 +78,13 @@ const IWDUser = () => {
     );
   }, [quotes.length]);
 
+  const handleCountdownEnd = () => {
+    nextQuote();
+  };
+
   useEffect(() => {
     fetchQuotes();
-    const interval = setInterval(nextQuote, 3000);
+    const interval = setInterval(nextQuote, 30000);
 
     return () => {
       clearInterval(interval);
@@ -120,7 +134,6 @@ const IWDUser = () => {
                 <div className="IWD_quote_text">
                   <i className="fa fa-quote-left"></i>
                   <span id="IWD_text">
-                    {console.log(quotes)}
                     {quotes[currentQuoteIndex]?.message}
                   </span>
                 </div>
@@ -132,16 +145,24 @@ const IWDUser = () => {
                       {quotes[currentQuoteIndex]?.image ? (
                         <img
                           src={quotes[currentQuoteIndex]?.image}
-                          alt="Author"
+                          alt={quotes[currentQuoteIndex]?.full_name}
                         />
                       ) : null}
                     </div>
                     <div className="IWD_Profile_info_div">
-                      <p>{quotes[currentQuoteIndex]?.full_name}</p>
+                      <p>
+                        {quotes[currentQuoteIndex]?.full_name &&
+                          quotes[currentQuoteIndex]?.full_name?.toUpperCase()}
+                      </p>
                       <p>{quotes[currentQuoteIndex]?.ogid}</p>
-                      <p>{quotes[currentQuoteIndex]?.office}</p>
+                      <p>
+                        {quotes[currentQuoteIndex]?.office &&
+                          quotes[currentQuoteIndex]?.office?.toUpperCase()}
+                      </p>
                     </div>
                   </div>
+
+                  <Countdown onCountdownEnd={handleCountdownEnd} />
 
                   <button
                     className="new_IWD_button"
