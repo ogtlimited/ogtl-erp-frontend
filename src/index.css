@@ -1101,10 +1101,11 @@ table.custom-table thead th {
 
 .IWD-page-wrapper {
   appearance: none;
-  background-image: url("./assets/img/IWD-3.jpeg");
-  /* background-repeat: no-repeat; */
-  background-size: contain;
-  background-position: top right 50%;
+  background-image: url("./assets/img/IWD-8.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-size: contain; */
+  /* background-position: top right 50%; */
   border-radius: 20px;
   height: 82vh;
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
@@ -1119,12 +1120,11 @@ table.custom-table thead th {
   padding: 20px 0 0 20px;
 }
 
-
 .IWD_page {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60%;
+  height: 100%;
   width: 100%;
 }
 
@@ -1150,6 +1150,120 @@ table.custom-table thead th {
   left: calc(100% - 54%);
   font-size: 30px !important;
 }
+
+#IWD_card_wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  transition: all 1s ease-in-out;
+  border-radius: 20px;
+}
+
+.IWD_quote_box {
+  max-width: 600px;
+  display: grid;
+  margin: auto auto;
+  border-radius: 20px;
+  padding: 40px 50px;
+  display: table;
+  background-color: #fff;
+  font-weight: 400;
+  box-shadow: 0px 0px 5px 5px rgba(88, 88, 85, 0.4);
+}
+
+.IWD_quote_text {
+  text-align: center;
+  height: auto;
+  font-weight: 500;
+  font-size: 1.75em;
+}
+
+.IWD_quote_text > i {
+  font-size: 1em;
+  margin-right: 0.4em;
+}
+
+.IWD_quote_author {
+  height: auto;
+  clear: both;
+  padding-top: 20px;
+  font-size: 1em;
+  text-align: right;
+}
+
+.IWD_button_div {
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 150px;
+  margin-top: 30px;
+}
+
+#new-IWD-quote {
+  float: right;
+  padding-bottom: 10px;
+  border-radius: 19px;
+  font-weight: 600px;
+  background-color: #333;
+}
+
+#new-IWD-quote:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+}
+
+.IWD_Profile_div {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: 70%;
+  gap: 15px;
+}
+
+.IWD_Profile_image_div {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.IWD_Profile_image_div > img {
+  border-radius: 50%;
+}
+
+.IWD_Profile_info_div {
+  padding: 5px;
+  width: 50%;
+}
+.IWD_Profile_info_div > p {
+  margin-bottom: 5px;
+  font-size: 14px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.new_IWD_button {
+  height: 38px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #333;
+  outline: none;
+  font-size: 0.85em;
+  padding: 8px 18px 6px 18px;
+  margin-top: 30px;
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px 2px rgb(88, 88, 85, 0.4);
+  transition: transform 0.5s;
+  font-family: "Outfit", san-serif;
+}
+
 
 /*--------------- 
     Toastify 

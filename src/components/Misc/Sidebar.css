@@ -71,7 +71,7 @@
   -webkit-text-fill-color: transparent;
 }
 .IWD_styling {
-  background: -webkit-linear-gradient(#ffffff, var(--prm-color));
+  background: -webkit-linear-gradient(#ffffff, var(--sec-color));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
