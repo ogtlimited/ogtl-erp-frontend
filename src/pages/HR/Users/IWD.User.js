@@ -146,6 +146,7 @@ const IWDUser = () => {
                           <img
                             src={quotes[currentQuoteIndex]?.image}
                             alt={quotes[currentQuoteIndex]?.full_name}
+                            loading="lazy"
                           />
                         ) : null}
                       </div>
