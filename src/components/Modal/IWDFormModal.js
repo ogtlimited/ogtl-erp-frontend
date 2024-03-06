@@ -1,109 +1,70 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
 export const IWDFormModal = ({ fetchAllQuotes }) => {
-  const { showAlert, goToTop } = useAppContext();
+  const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({
+    message: "",
+    image: null,
+  });
 
-  // const cancelEvent = () => {
-  //   setBranch(data);
-  // };
+  const cancelEvent = () => {
+    setData({
+      message: "",
+      image: null,
+    });
+  };
 
-  // const handleFormChange = (e) => {
-  //   e.preventDefault();
-  //   setBranch({
-  //     ...branch,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  const handleFormChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
-  // const handleBranchActions = async (e) => {
-  //   if (mode === "Create") {
-  //     return handleCreateBranch(e);
-  //   } else {
-  //     return handleEditBranch(e);
-  //   }
-  // };
+  const handleFileChange = (e) => {
+    setData({ ...data, image: e.target.files[0] });
+  };
 
-  // const handleCreateBranch = async (e) => {
-  //   e.preventDefault();
+  const handleCreateIWDMessage = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  //   setLoading(true);
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const response = await axiosInstance.post(`/api/v1/branches.json`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //       payload: {
-  //         title: branch.title,
-  //         state: branch.state,
-  //         country: branch.country,
-  //       },
-  //     });
+    const formData = new FormData();
+    formData.append("message", data.message);
+    formData.append("image", data.image);
 
-  //     showAlert(
-  //       true,
-  //       "Branch successfully created",
-  //       "alert alert-success"
-  //     );
-  //     fetchAllBranches();
-  //     $("#BranchFormModal").modal("toggle");
-  //     setBranch(data);
-  //     setLoading(false);
-  //     goToTop();
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //     $("#BranchFormModal").modal("toggle");
-  //     goToTop();
-  //     setLoading(false);
-  //   }
-  // }
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        `/api/v1/womens_day_events.json`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-  // const handleEditBranch = async (e) => {
-  //   e.preventDefault();
-
-  //   setLoading(true);
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const response = await axiosInstance.put(`/api/v1/branches/${branch.id}.json`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //       payload: {
-  //         title: branch.title,
-  //         state: branch.state,
-  //         country: branch.country,
-  //       },
-  //     });
-
-  //     showAlert(
-  //       true,
-  //       "Branch successfully updated",
-  //       "alert alert-success"
-  //     );
-  //     fetchAllBranches();
-  //     $("#BranchFormModal").modal("toggle");
-  //     setBranch(data);
-  //     setLoading(false);
-  //     goToTop();
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //     $("#BranchFormModal").modal("toggle");
-  //     goToTop();
-  //     setLoading(false);
-  //   }
-  // }
+      showAlert(
+        true,
+        "You International Women's Day Message have been created successfully!",
+        "alert alert-success"
+      );
+      fetchAllQuotes();
+      $("#IWDFormModal").modal("toggle");
+      cancelEvent();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#IWDFormModal").modal("toggle");
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -131,9 +92,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
             </div>
 
             <div className="modal-body">
-              <form
-              // onSubmit={handleBranchActions}
-              >
+              <form onSubmit={handleCreateIWDMessage}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -143,8 +102,9 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         type="file"
                         accept="image/*"
                         className="form-control"
-                        // value={}
-                        // onChange={handleFormChange}
+                        placeholder="Click to upload "
+                        onChange={handleFileChange}
+                        required
                       />
                     </div>
                   </div>
@@ -156,8 +116,9 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         name="message"
                         type="text"
                         className="form-control"
-                        // value={}
-                        // onChange={handleFormChange}
+                        value={data?.message}
+                        onChange={handleFormChange}
+                        required
                       />
                     </div>
                   </div>
@@ -168,7 +129,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                     type="button"
                     className="btn btn-secondary"
                     data-dismiss="modal"
-                    // onClick={cancelEvent}
+                    onClick={cancelEvent}
                   >
                     Cancel
                   </button>

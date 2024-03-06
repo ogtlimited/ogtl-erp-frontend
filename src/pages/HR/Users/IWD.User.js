@@ -1,39 +1,31 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useAppContext } from "../../../Context/AppContext";
-import axios from "axios";
+import axiosInstance from "../../../services/api";
 import IWDSpinner from "../../../assets/img/IWD_loader-2.gif";
+import profilePic from "../../../assets/img/Maryam.jpeg";
 import { IWDFormModal } from "../../../components/Modal/IWDFormModal";
 
 const IWDUser = () => {
-  const { showAlert } = useAppContext();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [quotes, setQuotes] = useState([]);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState("");
 
   const colors = useMemo(
     () => [
-      "#16a085",
-      "#27ae60",
-      "#2c3e50",
-      "#f39c12",
-      "#e74c3c",
+      "#BD1877",
+      "#7E77DD",
+      "#5D48B8",
       "#9b59b6",
-      "#FB6964",
-      "#342224",
-      "#472E32",
-      "#BDBB99",
-      "#77B1A9",
-      "#73A857",
-      "#000000",
-      "#426871",
-      "#F64F5C",
-      "#002050",
-      "#843629",
-      "#558390",
-      "#12989E",
       "#6B2B63",
       "#8E3C64",
+
+      "#FF91A4",
+      "#FF69B4",
+      "#FF00FF",
+      "#FF66CC",
+      "#C8A2C8",
+      "#DA70D6",
+      "#7851A9",
     ],
     []
   );
@@ -41,10 +33,25 @@ const IWDUser = () => {
   // Fetch quotes from the API
   const fetchQuotes = async () => {
     try {
-      const result = await axios.get(
-        "https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json"
+      const response = await axiosInstance.get(
+        "/api/v1/womens_day_events.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
       );
-      setQuotes(result?.data?.quotes || []);
+
+      console.log(
+        "IWD Messages:",
+        response?.data?.data?.womens_day_event_records
+      );
+
+      const resData = response?.data?.data?.womens_day_event_records;
+
+      setQuotes(resData || []);
       const color = colors[Math.floor(Math.random() * colors.length)];
       setBackgroundColor(color);
       setLoading(false);
@@ -63,7 +70,7 @@ const IWDUser = () => {
 
   useEffect(() => {
     fetchQuotes();
-    const interval = setInterval(nextQuote, 5000);
+    const interval = setInterval(nextQuote, 3000);
 
     return () => {
       clearInterval(interval);
@@ -80,10 +87,16 @@ const IWDUser = () => {
   return (
     <>
       <div className="IWD-page-wrapper">
-        <div className="page-header" style={{ position: "absolute" }}>
+        <div
+          className="page-header"
+          style={{ position: "absolute", width: "100%" }}
+        >
           <div className="row align-items-center">
             <div className="col">
-              <h2 className="page-title IWD_styling_page">International Women's Day</h2>
+              <div className="IWD_styling_page">
+                <h2>International Women's Day</h2>
+                <span>#InspireInclusion</span>
+              </div>
             </div>
           </div>
         </div>
@@ -106,19 +119,27 @@ const IWDUser = () => {
               <div className="IWD_quote_box">
                 <div className="IWD_quote_text">
                   <i className="fa fa-quote-left"></i>
-                  <span id="IWD_text">{quotes[currentQuoteIndex]?.quote}</span>
+                  <span id="IWD_text">
+                    {console.log(quotes)}
+                    {quotes[currentQuoteIndex]?.message}
+                  </span>
                 </div>
                 <div className="IWD_quote_author"></div>
 
                 <div className="IWD_button_div">
                   <div className="IWD_Profile_div">
                     <div className="IWD_Profile_image_div">
-                      <img src={IWDSpinner} alt="Author" />
+                      {quotes[currentQuoteIndex]?.image ? (
+                        <img
+                          src={quotes[currentQuoteIndex]?.image}
+                          alt="Author"
+                        />
+                      ) : null}
                     </div>
                     <div className="IWD_Profile_info_div">
-                      <p>{quotes[currentQuoteIndex]?.author}</p>
-                      <p>OGid</p>
-                      <p>Office</p>
+                      <p>{quotes[currentQuoteIndex]?.full_name}</p>
+                      <p>{quotes[currentQuoteIndex]?.ogid}</p>
+                      <p>{quotes[currentQuoteIndex]?.office}</p>
                     </div>
                   </div>
 

@@ -39,19 +39,19 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: grey; 
+  background: grey;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: grey; 
+  background: grey;
 }
 
 /*-----------------------------
@@ -65,14 +65,8 @@
 }
 
 .EA_styling {
-  background: -webkit-linear-gradient(#ffffff, #00c5fb);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #00c5fb !important;
 }
 .IWD_styling {
-  background: -webkit-linear-gradient(#ffffff, var(--sec-color));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #f8b9d4 !important;
 }

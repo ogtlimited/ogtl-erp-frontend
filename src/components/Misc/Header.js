@@ -75,7 +75,7 @@ const Header = () => {
                 src="https://cdn.lordicon.com/pyarizrk.json"
                 trigger="loop"
                 delay="2000"
-                colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#5d48b8"
+                colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
               ></lord-icon>
             </span>

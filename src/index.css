@@ -1114,11 +1114,17 @@ table.custom-table thead th {
 }
 
 .IWD_styling_page {
+  padding: 10px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.IWD_styling_page > h2,
+.IWD_styling_page > span  {
   font-size: 30px !important;
   font-weight: 600 !important;
   font-family: "Fugaz One", cursive;
-  color: #ffffffab !important;
-  padding: 20px 0 0 20px;
+  color: #ffffff !important;
 }
 
 .IWD_page {
@@ -1159,13 +1165,14 @@ table.custom-table thead th {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   transition: all 1s ease-in-out;
   border-radius: 20px;
 }
 
 .IWD_quote_box {
-  max-width: 600px;
+  min-width: 600px;
+  max-width: 900px;
   display: grid;
   margin: auto auto;
   border-radius: 20px;
@@ -1265,6 +1272,26 @@ table.custom-table thead th {
   font-family: "Outfit", san-serif;
 }
 
+@media only screen and (max-width: 900px) {
+  .IWD_styling_page {
+    padding: 10px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .IWD_styling_page > h2,
+  .IWD_styling_page > span  {
+    font-size: 30px !important;
+    font-weight: 600 !important;
+    font-family: "Fugaz One", cursive;
+    color: #ffffffab !important;
+  }
+
+  .IWD_quote_box {
+    display: none;
+  }
+}
 
 /*--------------- 
     Toastify 
@@ -1503,6 +1530,12 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media only screen and (max-width: 900px) {
+  .eCertificate_container {
+    display: none;
+  }
 }
 
 @media print {
