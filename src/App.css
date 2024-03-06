@@ -1,6 +1,16 @@
 html {
   scroll-behavior: smooth;
 }
+
+:root {
+  --prm-color: #5D48B8;
+  --prm-color-shade: #BD18774d;
+  --sidebar-bg-color: #362a6e;
+  --sec-color: #BD1877;
+  --prm-gray: #b1b1b1;
+}
+
+
 .page-wrapper {
   min-height: 643px;
 }
@@ -11,6 +21,10 @@ html {
 .account-wrapper {
   padding: 30px;
 }
+
+
+
+
 @media only screen and (max-width: 767.98px) {
   .page-title,
   .dash-widget-info > h3,
@@ -52,7 +66,7 @@ a {
 }
 .title-403,
 .rc-404-card .title-404 {
-  color: #00c5fb;
+  color: var(--prm-color);
   font-family: Montserrat;
   margin-top: 1rem;
   font-size: 37px;
@@ -80,7 +94,7 @@ a {
 .go-back,
 .export-csv {
   box-sizing: border-box;
-  border: 2px solid #00c5fb;
+  border: 2px solid var(--prm-color);
   border-radius: 3px;
   background-color: #ffffff;
   color: #161a37 !important;
@@ -97,7 +111,7 @@ a {
 .go-back:hover,
 .export-csv:hover {
   background: rgb(0, 197, 251);
-  border: 2px solid #00c5fb;
+  border: 2px solid var(--prm-color);
   color: #ffffff !important;
 }
 .designation-dropdown {
@@ -131,8 +145,8 @@ a {
   border: 1px solid #dee2e6;
 }
 .clear {
-  background-color: #00c5fb;
-  border: 1px solid #00c5fb;
+  background-color: var(--prm-color);
+  border: 1px solid var(--prm-color);
   box-shadow: none;
   font-size: 15px;
   height: 44px;
@@ -148,14 +162,14 @@ a {
 .btn-primary {
   z-index: 0;
   color: #ffffff;
-  background-color: #00c5fb;
-  border: 1px solid #00c5fb;
+  background-color: var(--prm-color);
+  border: 1px solid var(--prm-color);
 }
 .btn-primary.disabled,
 .btn-primary:disabled {
   color: #ffffff;
   background-color: #23b5dd;
-  border-color: #00c5fb;
+  border-color: var(--prm-color);
 }
 .card-header {
   background: #f1f1f1;
@@ -211,7 +225,7 @@ a {
   background-color: #2dcecc;
 }
 .status-strict {
-  background-color: #00c5fb;
+  background-color: var(--prm-color);
 }
 .status-flexible {
   background-color: #808080;
@@ -234,8 +248,9 @@ a {
   background-color: rgba(0, 0, 0, 0.5);
   text-decoration: none;
   font-weight: 500;
-  border-right: 5px solid #00c5fb;
-  text-transform: var(--prm-color);
+  border-right: 5px solid var(--sec-color);
+  text-transform: var(--sec-color);
+  color:  var(--sec-color);
   transition: 0.3s;
 }
 
@@ -337,8 +352,8 @@ tbody > tr:nth-of-type(2n + 1) {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #ffffff;
-  background-color: #00c5fb;
-  border: 1px solid #00c5fb;
+  background-color: var(--prm-color);
+  border: 1px solid var(--prm-color);
 }
 a.nav-link {
   color: #000;
@@ -371,7 +386,7 @@ a.nav-link {
   z-index: 0;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
-  background-color: #00c5fb4d;
+  background-color: var(--prm-color-shade);
 }
 
 @media (min-width: 900px) {
@@ -464,7 +479,7 @@ a.nav-link {
   font-size: 2.9375rem;
   line-height: 54px;
   text-align: center;
-  color: #00c5fb;
+  color: var(--prm-color);
 }
 
 .ju-percent-group p {
@@ -485,19 +500,15 @@ a.nav-link {
   width: 107px;
   height: 8px;
   border-radius: 2px;
-  background-color: #00c5fb;
+  background-color: var(--prm-color);
   position: absolute;
   bottom: -20px;
   left: 0px;
 }
 
 /* multi-step form */
-:root {
-  --prm-color: #00c5fb;
-  --prm-gray: #b1b1b1;
-}
 .application-form-header {
-  background: #00c5fb;
+  background: var(--prm-color);
   text-align: center;
 }
 /* CSS */

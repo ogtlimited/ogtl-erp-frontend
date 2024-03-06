@@ -18,7 +18,7 @@
   padding: 10px;
   margin-top: 5px;
   border: 1px;
-  border-color: #00c5fb;
+  border-color: var(--prm-color);
   border-radius: 5px;
 }
 
@@ -71,11 +71,27 @@
   margin-bottom: 25px;
 }
 .account-box .account-btn {
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+  background: var(--prm-color);
+  background: -moz-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: -webkit-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: -ms-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: linear-gradient(
+    to right,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
   border: 0;
   border-radius: 4px;
   display: block;
@@ -316,11 +332,27 @@
   z-index: -1;
   top: -15px;
   right: -15px;
-  background: #00c5fb;
-  background: -moz-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -webkit-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: -ms-linear-gradient(left, #00c5fb 0%, #0253cc 100%);
-  background: linear-gradient(to right, #00c5fb 0%, #0253cc 100%);
+  background: var(--prm-color);
+  background: -moz-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: -webkit-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: -ms-linear-gradient(
+    left,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
+  background: linear-gradient(
+    to right,
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
+  );
   height: 220px;
   width: 25px;
   border-radius: 32px;
@@ -354,7 +386,7 @@
 }
 
 .tl.link {
-  color: #0253cc;
+  color: var(--sec-color);
   text-decoration: none;
 }
 
@@ -362,7 +394,7 @@
   height: 0;
   margin-left: 50px;
   background-color: #ffffff;
-  border-color: #00c5fb;
+  border-color: var(--prm-color);
 }
 
 .logout {
@@ -573,7 +605,7 @@ table.custom-table thead th {
   width: 100%;
   height: 30px;
   border-radius: 20px;
-  background-color: #00c5fb;
+  background-color: var(--prm-color);
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -638,7 +670,7 @@ table.custom-table thead th {
 ----------------------*/
 
 .avatar-span {
-  background-color: #00c5fb;
+  background-color: var(--prm-color);
   border-radius: 50%;
   color: #ffffff !important;
   font-size: 25px !important;
@@ -757,7 +789,7 @@ table.custom-table thead th {
   height: 0;
   margin-left: 10px;
   background-color: #ffffff;
-  border-color: #00c5fb;
+  border-color: var(--prm-color);
 }
 
 .form-control.resignation_effective_today {
@@ -965,34 +997,25 @@ table.custom-table thead th {
 }
 
 /*----------------
-    Valentine  
+    Extras  
 -----------------*/
 
-.val_icons {
+.login_logo_icons {
   margin-left: -8px;
 }
 
-.hearts_icon {
-  font-size: 20px;
-  margin-left: -20px !important;
-}
-
-.EA_styling {
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  background: -webkit-linear-gradient(#ffffff, #00c5fb);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: "Outfit", cursive;
+.header_logo_icons {
+  position: absolute;
+  top: 20%;
+  right: 17%;
 }
 
 .valentine_styling_page {
   font-size: 50px !important;
   font-weight: 700 !important;
-  color: #0253cc;
+  color: var(--sec-color);
   font-family: "Dr Sugiyama", cursive;
-  background: -webkit-linear-gradient(#ffffff, #0253cc);
+  background: -webkit-linear-gradient(#ffffff, var(--sec-color));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1040,7 +1063,7 @@ table.custom-table thead th {
   font-size: 28px;
   border: none;
   cursor: pointer;
-  background-color: #0253cc;
+  background-color: var(--sec-color);
   transition: all 0.3 ease-in-out;
   border-radius: 5px;
 }
@@ -1048,23 +1071,10 @@ table.custom-table thead th {
 .find_val_btn:hover {
   font-size: 28px;
   border: none;
-  background-color: #00c5fb;
+  background-color: var(--prm-color);
   transition: all 0.3 ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-
-.finding_Val_Spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.val_spinner_icon {
-  width: 50%;
-  height: 50%;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .val_pair {
@@ -1077,7 +1087,7 @@ table.custom-table thead th {
 .val_pair > p {
   font-family: "Dr Sugiyama", cursive;
   font-size: 40px;
-  color: #0253cc;
+  color: var(--sec-color);
 }
 
 .val_pair > h1 {
@@ -1087,6 +1097,227 @@ table.custom-table thead th {
 .confetti {
   position: absolute;
   z-index: 1000;
+}
+
+.IWD-page-wrapper {
+  position: relative;
+  appearance: none;
+  background-image: url("./assets/img/IWD-1.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-size: contain; */
+  /* background-position: top right 50%; */
+  border-radius: 20px;
+  height: 95vh;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.IWD_page-header .breadcrumb {
+  background-color: transparent;
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  padding: 0;
+}
+.IWD_page-header .breadcrumb a {
+  color: #333;
+}
+
+.IWD_styling_page {
+  padding: 10px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.IWD_styling_page > h2,
+.IWD_styling_page > span {
+  font-size: 30px !important;
+  font-weight: 600 !important;
+  font-family: "Fugaz One", cursive;
+  color: #ffffff !important;
+}
+
+.IWD_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.IWD_Spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.IWD_spinner_icon {
+  width: 20%;
+  height: 20%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.IWD_Spinner > p {
+  position: absolute;
+  font-family: "Dr Sugiyama", cursive;
+  color: #fff;
+  top: 70%;
+  left: calc(100% - 54%);
+  font-size: 30px !important;
+}
+
+#IWD_card_wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Raleway", sans-serif;
+  transition: all 1s ease-in-out;
+  border-radius: 20px;
+}
+
+.IWD_quote_box {
+  min-width: 600px;
+  max-width: 900px;
+  display: grid;
+  margin: auto auto;
+  border-radius: 20px;
+  padding: 40px 50px;
+  display: table;
+  background-color: #fff;
+  font-weight: 400;
+  box-shadow: 0px 0px 5px 5px rgba(88, 88, 85, 0.4);
+}
+
+.IWD_quote_text {
+  text-align: center;
+  height: auto;
+  font-weight: 500;
+  font-size: 1.75em;
+}
+
+.IWD_quote_text > i {
+  font-size: 1em;
+  margin-right: 0.4em;
+}
+
+.IWD_quote_author {
+  height: auto;
+  clear: both;
+  padding-top: 20px;
+  font-size: 1em;
+  text-align: right;
+}
+
+.IWD_button_div {
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 150px;
+  margin-top: 30px;
+}
+
+#new-IWD-quote {
+  float: right;
+  padding-bottom: 10px;
+  border-radius: 19px;
+  font-weight: 600px;
+  background-color: #333;
+}
+
+#new-IWD-quote:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+}
+
+.IWD_Profile_div {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: 70%;
+  gap: 15px;
+}
+
+.IWD_Profile_image_div {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: url("./assets/img/IWD-BG.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0px 0px 5px 2px rgb(88, 88, 85, 0.4);
+}
+.IWD_Profile_image_div > img {
+  border-radius: 50%;
+}
+
+.IWD_Profile_info_div {
+  padding: 5px;
+  width: 50%;
+}
+.IWD_Profile_info_div > p {
+  margin-bottom: 5px;
+  font-size: 14px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.IWD_countdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  box-shadow: 0px 0px 5px 2px rgb(88, 88, 85, 0.4);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+}
+
+.new_IWD_button {
+  height: 38px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #333;
+  outline: none;
+  font-size: 0.85em;
+  padding: 8px 18px 6px 18px;
+  margin-top: 30px;
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px 2px rgb(88, 88, 85, 0.4);
+  transition: transform 0.5s;
+  font-family: "Outfit", san-serif;
+}
+
+@media only screen and (max-width: 900px) {
+  .IWD_styling_page {
+    padding: 10px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .IWD_styling_page > h2,
+  .IWD_styling_page > span {
+    font-size: 30px !important;
+    font-weight: 600 !important;
+    font-family: "Fugaz One", cursive;
+    color: #ffffffab !important;
+  }
+
+  .IWD_quote_box {
+    display: none;
+  }
 }
 
 /*--------------- 
@@ -1163,7 +1394,7 @@ table.custom-table thead th {
   font-family: outfit;
   font-weight: 700;
   font-size: 35px;
-  color: #0253cc;
+  color: var(--sec-color);
 }
 
 .wtf_container {
@@ -1248,7 +1479,7 @@ img {
   border: none;
   font-family: outfit;
   color: #fff;
-  background-color: #0253cc;
+  background-color: var(--sec-color);
   cursor: pointer;
   border-radius: 10px;
   font-weight: 700;
@@ -1328,6 +1559,12 @@ img {
   object-fit: cover;
 }
 
+@media only screen and (max-width: 900px) {
+  .eCertificate_container {
+    display: none;
+  }
+}
+
 @media print {
   html,
   body {
@@ -1369,7 +1606,7 @@ img {
 }
 
 .signature_container > p {
-  margin: .5rem 1rem;
+  margin: 0.5rem 1rem;
   font-size: 12px;
   font-weight: 500;
 }

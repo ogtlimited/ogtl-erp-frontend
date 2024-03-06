@@ -143,6 +143,7 @@ export default function Router() {
               path: "main/employee-appreciation-eCertificate",
               element: <EmployeeAppreciation />,
             },
+            { path: "main/international-women's-day", element: <IWDUser /> },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
               path: "hr-dashboard",
@@ -1312,9 +1313,12 @@ const TicketManagement = Loadable(
 const EmployeeAppreciation = Loadable(
   lazy(() => import("../pages/HR/Users/EmployeeAppreciation.User"))
 );
-// const ValentineUser = Loadable(
-//   lazy(() => import("../pages/HR/Users/Valentine.User"))
-// );
+const IWDUser = Loadable(
+  lazy(() => import("../pages/HR/Users/IWD.User"))
+);
+const ValentineUser = Loadable(
+  lazy(() => import("../pages/HR/Users/Valentine.User"))
+);
 const EmployeeSalary = Loadable(
   lazy(() => import("../pages/Payroll/EmployeeSalary"))
 );
