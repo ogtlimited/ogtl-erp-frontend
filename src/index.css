@@ -1100,6 +1100,7 @@ table.custom-table thead th {
 }
 
 .IWD-page-wrapper {
+  position: relative;
   appearance: none;
   background-image: url("./assets/img/IWD-8.jpeg");
   background-repeat: no-repeat;
