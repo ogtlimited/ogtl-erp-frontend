@@ -3,15 +3,13 @@ import axiosInstance from "../../../services/api";
 import IWDSpinner from "../../../assets/img/IWD_loader-2.gif";
 import { IWDFormModal } from "../../../components/Modal/IWDFormModal";
 
-const Countdown = ({ onCountdownEnd }) => {
+const Countdown = ({ currentQuoteIndex }) => {
   const [seconds, setSeconds] = useState(30);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 1) {
-          clearInterval(interval);
-          onCountdownEnd();
           return 30;
         }
         return prevSeconds - 1;
@@ -19,9 +17,13 @@ const Countdown = ({ onCountdownEnd }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [onCountdownEnd]);
+  }, [currentQuoteIndex]);
 
-  return <div>{seconds}</div>;
+  useEffect(() => {
+    setSeconds(30);
+  }, [currentQuoteIndex]);
+
+  return <div className="IWD_countdown">{seconds}</div>;
 };
 
 const IWDUser = () => {
@@ -29,6 +31,7 @@ const IWDUser = () => {
   const [quotes, setQuotes] = useState([]);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState("");
+  const [errorMsg, setErrorMsg] = useState(false);
 
   const colors = useMemo(
     () => [
@@ -40,7 +43,6 @@ const IWDUser = () => {
       "#8E3C64",
 
       "#FF69B4",
-      "#C8A2C8",
       "#DA70D6",
       "#7851A9",
     ],
@@ -67,6 +69,7 @@ const IWDUser = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      setErrorMsg(true);
       console.error("Error fetching quotes:", error);
     }
   };
@@ -77,10 +80,6 @@ const IWDUser = () => {
       prevIndex === quotes.length - 1 ? 0 : prevIndex + 1
     );
   }, [quotes.length]);
-
-  const handleCountdownEnd = () => {
-    nextQuote();
-  };
 
   useEffect(() => {
     fetchQuotes();
@@ -102,7 +101,7 @@ const IWDUser = () => {
     <>
       <div className="IWD-page-wrapper">
         <div
-          className="page-header"
+          className="IWD_page-header"
           style={{ position: "absolute", width: "100%" }}
         >
           <div className="row align-items-center">
@@ -115,68 +114,72 @@ const IWDUser = () => {
           </div>
         </div>
 
-        <div className="IWD_page">
-          {loading ? (
-            <div className="IWD_Spinner">
-              <img
-                src={IWDSpinner}
-                alt="IWD Spinner"
-                className="IWD_spinner_icon"
-              />
-              <p>loading...</p>
-            </div>
-          ) : (
-            <div
-              id="IWD_card_wrapper"
-              style={{ backgroundColor, color: backgroundColor }}
-            >
-              <div className="IWD_quote_box">
-                <div className="IWD_quote_text">
-                  <i className="fa fa-quote-left"></i>
-                  <span id="IWD_text">
-                    {quotes[currentQuoteIndex]?.message}
-                  </span>
-                </div>
-                <div className="IWD_quote_author"></div>
-
-                <div className="IWD_button_div">
-                  <div className="IWD_Profile_div">
-                    <div className="IWD_Profile_image_div">
-                      {quotes[currentQuoteIndex]?.image ? (
-                        <img
-                          src={quotes[currentQuoteIndex]?.image}
-                          alt={quotes[currentQuoteIndex]?.full_name}
-                        />
-                      ) : null}
-                    </div>
-                    <div className="IWD_Profile_info_div">
-                      <p>
-                        {quotes[currentQuoteIndex]?.full_name &&
-                          quotes[currentQuoteIndex]?.full_name?.toUpperCase()}
-                      </p>
-                      <p>{quotes[currentQuoteIndex]?.ogid}</p>
-                      <p>
-                        {quotes[currentQuoteIndex]?.office &&
-                          quotes[currentQuoteIndex]?.office?.toUpperCase()}
-                      </p>
-                    </div>
+        {errorMsg ? null : (
+          <div className="IWD_page">
+            {loading ? (
+              <div className="IWD_Spinner">
+                <img
+                  src={IWDSpinner}
+                  alt="IWD Spinner"
+                  className="IWD_spinner_icon"
+                />
+                <p>loading...</p>
+              </div>
+            ) : (
+              <div
+                id="IWD_card_wrapper"
+                style={{ backgroundColor, color: backgroundColor }}
+              >
+                <div className="IWD_quote_box">
+                  <div className="IWD_quote_text">
+                    <i className="fa fa-quote-left"></i>
+                    <span id="IWD_text">
+                      {quotes[currentQuoteIndex]?.message}
+                    </span>
                   </div>
+                  <div className="IWD_quote_author"></div>
 
-                  <Countdown onCountdownEnd={handleCountdownEnd} />
+                  <div className="IWD_button_div">
+                    <div className="IWD_Profile_div">
+                      <div className="IWD_Profile_image_div">
+                        {quotes[currentQuoteIndex]?.image ? (
+                          <img
+                            src={quotes[currentQuoteIndex]?.image}
+                            alt={quotes[currentQuoteIndex]?.full_name}
+                          />
+                        ) : null}
+                      </div>
+                      <div className="IWD_Profile_info_div">
+                        <p>
+                          {quotes[currentQuoteIndex]?.full_name &&
+                            quotes[currentQuoteIndex]?.full_name?.toUpperCase()}
+                        </p>
+                        <p>{quotes[currentQuoteIndex]?.ogid}</p>
+                        <p>
+                          {quotes[currentQuoteIndex]?.office &&
+                            quotes[currentQuoteIndex]?.office?.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
 
-                  <button
-                    className="new_IWD_button"
-                    id="new-IWD-quote"
-                    data-toggle="modal"
-                    data-target="#IWDFormModal"
-                  >
-                    New Message
-                  </button>
+                    {quotes?.length ? (
+                      <Countdown currentQuoteIndex={currentQuoteIndex} />
+                    ) : null}
+
+                    <button
+                      className="new_IWD_button"
+                      id="new-IWD-quote"
+                      data-toggle="modal"
+                      data-target="#IWDFormModal"
+                    >
+                      New Message
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       <IWDFormModal fetchAllQuotes={fetchQuotes} />

@@ -118,6 +118,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         className="form-control"
                         value={data?.message}
                         onChange={handleFormChange}
+                        maxLength={280}
                         required
                       />
                     </div>
