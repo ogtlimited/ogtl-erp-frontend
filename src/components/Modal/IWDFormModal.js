@@ -52,11 +52,12 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
 
       showAlert(
         true,
-        "You International Women's Day Message have been created successfully!",
+        "Your International Women's Day Message is successful! - #InspireInclusion",
         "alert alert-success"
       );
-      fetchAllQuotes();
       $("#IWDFormModal").modal("toggle");
+
+      fetchAllQuotes();
       cancelEvent();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
