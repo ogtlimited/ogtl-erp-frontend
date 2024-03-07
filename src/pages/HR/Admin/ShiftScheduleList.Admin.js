@@ -23,6 +23,7 @@ const ShiftScheduleList = () => {
   const [editScheduleTime, setEditScheduleTime] = useState([]);
   const [deleteData, setDeleteData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isResolving, setIsResolving] = useState(false);
 
   const [mode, setMode] = useState("create");
   const [scheduleId, setScheduleId] = useState("");
@@ -101,14 +102,19 @@ const ShiftScheduleList = () => {
   };
 
   const deleteCampaignSchedule = (row) => {
+    setIsResolving(true);
     axiosInstance
       .delete(`/campaign-schedules/${row._id}`)
       .then((res) => {
         fetchAllSchedule();
+        setIsResolving(false);
+        $("#exampleModal").modal("toggle");
         showAlert(true, "Campaign schedule deleted", "alert alert-info");
       })
       .catch((error) => {
         console.log(error);
+        setIsResolving(false);
+        $("#exampleModal").modal("toggle");
         showAlert(true, error.response.data.message, "alert alert-danger");
       });
   };
@@ -248,6 +254,7 @@ const ShiftScheduleList = () => {
         title="Campaign Schedule"
         selectedRow={deleteData}
         deleteFunction={deleteCampaignSchedule}
+        isLoading={isResolving}
       />
     </>
   );

@@ -10,6 +10,7 @@ import { ReassignRepSieverModal } from "../../../components/Modal/ReassignRepSie
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import { AddJobSieverModal } from "../../../components/Modal/AddJobSieverModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import $ from "jquery";
 
 const JobSieversViewAdmin = ({
   setIsJobSieverDeactivated,
@@ -21,6 +22,7 @@ const JobSieversViewAdmin = ({
     useAppContext();
   const [selectedRow, setSelectedRow] = useState(null);
   const [loadingRep, setLoadingRep] = useState(false);
+  const [isResolving, setIsResolving] = useState(false);
 
   const [repPage, setRepPage] = useState(1);
   const [repSizePerPage, setRepSizePerPage] = useState(10);
@@ -84,6 +86,7 @@ const JobSieversViewAdmin = ({
     const fullName = selectedRow?.full_name;
     const userId = selectedRow?.ogid;
 
+    setIsResolving(true)
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.patch(
@@ -105,10 +108,14 @@ const JobSieversViewAdmin = ({
 
       fetchAllRepSievers();
       setIsJobSieverDeactivated(true);
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
       goToTop();
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
       goToTop();
     }
   };
@@ -220,6 +227,7 @@ const JobSieversViewAdmin = ({
         selectedRow={selectedRow}
         deleteFunction={handleRemoveJobSiever}
         message={`Are you sure you want to remove ${selectedRow?.full_name} from job sievers?`}
+        isLoading={isResolving}
       />
     </div>
   );

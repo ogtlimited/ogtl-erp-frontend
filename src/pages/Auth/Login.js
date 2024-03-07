@@ -1,4 +1,4 @@
-// *IN-USE FIXED!
+//* IN-USE FIXED!
 
 import axios from "axios";
 import React, { useState } from "react";
@@ -6,12 +6,44 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import tokenService from "../../services/token.service";
 import { msalInstance, loginRequest, graphConfig } from "../../authConfig";
+import { TicketForm } from "../../components/FormJSON/CreateTicket";
 import config from "../../config.json";
+import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
+import AlertSvg from "./AlertSvg";
 
 const Login = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [ticket, setTicket] = useState([]);
+  const [showAlertMsg, setShowAlertMsg] = useState({
+    state: false,
+    msg: "",
+    class: "",
+  });
+
+  const showAlert = (state, msg, className) => {
+    let icon = className?.includes("alert-success")
+      ? "#check-circle-fill"
+      : "#exclamation-triangle-fill";
+    let label = className?.includes("alert-success") ? "Success:" : "Warning:";
+    setShowAlertMsg({
+      state: state,
+      msg: msg,
+      class: className,
+      icon,
+      label,
+    });
+    setTimeout(() => {
+      setShowAlertMsg({
+        state: "",
+        msg: "",
+        class: "",
+        icon: "",
+        label: "",
+      });
+    }, 5000);
+  };
 
   const userData = {
     userId: null,
@@ -178,9 +210,33 @@ const Login = () => {
     setErrorMsg("");
   };
 
+  const handleCreate = () => {
+    setTicket(TicketForm);
+  };
+
   return (
     <div className="main-wrapper">
       <div className="account-content">
+        <AlertSvg />
+        {showAlertMsg.state === true ? (
+          <div
+            className={"alert d-flex align-items-center" + showAlertMsg.class}
+            style={{ zIndex: 100, position: "absolute", right: "2%" }}
+            role="alert"
+          >
+            <svg
+              className="bi flex-shrink-0 me-2"
+              width="24"
+              height="24"
+              role="img"
+              aria-label={showAlertMsg.label}
+            >
+              <use xlinkHref={showAlertMsg.icon} />
+            </svg>
+            <div className="pl-3">{showAlertMsg.msg}</div>
+          </div>
+        ) : null}
+
         <div className="container">
           <div className="account-logo">
             <a href="https://www.outsourceglobal.com/">
@@ -189,15 +245,15 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              {/* <span className="val_icons">
+              <span className="login_logo_icons">
                 <lord-icon
-                  src="https://cdn.lordicon.com/ppmqpdfo.json"
+                  src="https://cdn.lordicon.com/pyarizrk.json"
                   trigger="loop"
                   delay="2000"
-                  style={{ width: "35px", height: "35px" }}
+                  colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#5d48b8"
+                  style={{ width: "40px", height: "40px" }}
                 ></lord-icon>
-                <span className="hearts_icon">💕</span>
-              </span> */}
+              </span>
             </a>
           </div>
           <div className="account-box">
@@ -255,7 +311,29 @@ const Login = () => {
             End Current Session
           </button>
         )}
+
+        <div
+          className="create_ticket_div"
+          data-toggle="modal"
+          data-target="#TicketFormModal"
+          onClick={handleCreate}
+        >
+          <lord-icon
+            src="https://cdn.lordicon.com/amjaykqd.json"
+            trigger="hover"
+            state="hover-conversation-alt"
+            colors="primary:#BD1877,secondary:#5D48B8"
+            style={{ width: "100px", height: "100px" }}
+          ></lord-icon>
+          <span className="create_ticket_text">Submit a Ticket</span>
+        </div>
       </div>
+
+      <ExternalTicketFormModal
+        data={ticket}
+        loggedIn={false}
+        showAlert={showAlert}
+      />
     </div>
   );
 };

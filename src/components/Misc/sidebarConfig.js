@@ -49,6 +49,8 @@ const ICONS = {
   teamAttendance: getIcon("la-history"),
   helpDesk: getIcon("la-question"),
   valentine: getIcon("la-gratipay"),
+  female: getIcon("la-venus"),
+  certificate: getIcon("la-certificate"),
 };
 
 const buildExternalURL = () => {
@@ -143,6 +145,11 @@ const sidebarConfig = [
             title: "Email Signature",
             path: PATH_DASHBOARD.apps.signature,
           },
+          {
+            canView: "all",
+            title: "Ticket",
+            path: PATH_DASHBOARD.apps.tickets,
+          },
         ],
       },
       {
@@ -204,6 +211,24 @@ const sidebarConfig = [
             externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
           },
         ],
+      },
+      {
+        canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
+        title: "Ticket Management",
+        path: PATH_DASHBOARD.main.ticketManagement,
+        icon: ICONS.coaching,
+      },
+      {
+        canView: "all",
+        title: "Employee Appreciation",
+        path: PATH_DASHBOARD.main.eCertificate,
+        icon: ICONS.certificate,
+      },
+      {
+        canView: "all",
+        title: "Women's Day",
+        path: PATH_DASHBOARD.main.IWD,
+        icon: ICONS.female,
       },
       // {
       //   canView: "all",

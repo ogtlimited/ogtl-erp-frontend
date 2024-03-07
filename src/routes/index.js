@@ -14,6 +14,7 @@ import ActivateClient from "../pages/Auth/ActivateClient";
 import NotFound from "../pages/Error/NotFound";
 import Unauthorized from "../pages/Error/unauthorized";
 import BadGateway from "../pages/Error/BadGateway";
+import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
 
@@ -137,6 +138,12 @@ export default function Router() {
             },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
+            { path: "main/ticket-management", element: <TicketManagement /> },
+            {
+              path: "main/employee-appreciation-eCertificate",
+              element: <EmployeeAppreciation />,
+            },
+            { path: "main/international-women's-day", element: <IWDUser /> },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
               path: "hr-dashboard",
@@ -1153,8 +1160,9 @@ export default function Router() {
     },
 
     { path: "*", element: <Navigate to="/404" replace /> },
-    { path: "/404", element: <NotFound /> },
     { path: "/403", element: <Unauthorized /> },
+    { path: "/404", element: <NotFound /> },
+    { path: "/500", element: <InternalServerError /> },
     { path: "/502", element: <BadGateway /> },
   ]);
 }
@@ -1299,9 +1307,18 @@ const LeavesUser = Loadable(
 const ResignationUser = Loadable(
   lazy(() => import("../pages/HR/Users/Resignation.User"))
 );
-// const ValentineUser = Loadable(
-//   lazy(() => import("../pages/HR/Users/Valentine.User"))
-// );
+const TicketManagement = Loadable(
+  lazy(() => import("../pages/HR/TicketManagement"))
+);
+const EmployeeAppreciation = Loadable(
+  lazy(() => import("../pages/HR/Users/EmployeeAppreciation.User"))
+);
+const IWDUser = Loadable(
+  lazy(() => import("../pages/HR/Users/IWD.User"))
+);
+const ValentineUser = Loadable(
+  lazy(() => import("../pages/HR/Users/Valentine.User"))
+);
 const EmployeeSalary = Loadable(
   lazy(() => import("../pages/Payroll/EmployeeSalary"))
 );
@@ -1512,7 +1529,7 @@ const OrientationAndTraining = Loadable(
   lazy(() => import("../pages/HR/Admin/OrientationAndTraining.Admin"))
 );
 
-const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets")));
+const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))

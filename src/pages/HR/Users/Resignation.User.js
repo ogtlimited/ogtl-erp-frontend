@@ -5,6 +5,7 @@ import resignationIcon from "../../../assets/img/resign.png";
 import axiosInstance from "../../../services/api";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Skeleton from "@material-ui/lab/Skeleton";
+import $ from "jquery";
 
 const resignationModel = {
   effective_today: "",
@@ -23,7 +24,7 @@ const ResignationUser = () => {
   const [data, setData] = useState(resignationModel);
 
   const [selectedRow, setSelectedRow] = useState(null);
-
+  const [isResolving, setIsResolving] = useState(false);
   const currentUserOffice = user?.office?.office_type;
   const currentUserDesignation = user?.employee_info?.designation.toLowerCase();
   const currentUserIsLead = user?.employee_info?.is_lead;
@@ -67,6 +68,7 @@ const ResignationUser = () => {
       reason_for_resignation: data.reason_for_resignation,
     };
 
+    setIsResolving(true);
     try {
       const res = await axiosInstance.post(`/api/v1/resignations.json`, {
         headers: {
@@ -90,9 +92,13 @@ const ResignationUser = () => {
 
       setData(resignationModel);
       fetchStaffResignation();
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     }
   };
 
@@ -278,6 +284,7 @@ const ResignationUser = () => {
         selectedRow={selectedRow}
         deleteFunction={handleApplyResignation}
         message="Are you sure you want to submit your resignation?"
+        isLoading={isResolving}
       />
     </>
   );

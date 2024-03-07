@@ -1,49 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import './TicketContent.css';
+import React from "react";
+import "./TicketContent.css";
 
-const TicketContent = ({ticket, manager, update}) => {
-  const { _id, content, department, status} = ticket || {};
-  const statusStyle = status === 'Open' ? 'alert-info' : (status === 'Processing' ? 'alert-warning' : 'alert-success')
+const TicketContent = ({ ticket }) => {
+  const { full_name, email, ogid, office, status, date_created, complaint } =
+    ticket || {};
+
+  const statusStyle = status === "Pending" ? "alert-warning" : "alert-success";
+
   return (
     <div>
-      <p className='ticket-department'>{department?.department}</p>
-      {manager &&
-        <div>
-          <a
-            href="#"
-            data-toggle="dropdown"
-          >
-            <p className={`display-status ${statusStyle}`}>{status}</p>
-          </a>
-          <div className="dropdown-menu dropdown-menu-left">
-            <a 
-            href="#"
-            className="dropdown-item"
-            onClick={() => { update(_id, 'Open');}}
-            >
-              Open
-            </a>
-            <a 
-            href="#"
-            className="dropdown-item"
-            onClick={() => { update(_id,'Processing');}}
-            >
-              Processing
-            </a>
-            <a 
-            href="#"
-            className="dropdown-item"
-            onClick={() => { update(_id, 'Resolved');}}
-            >
-             Resolved
-            </a>
-          </div>
-        </div>
-      }
-      <div className='well'>{content}</div>
+      <p className="ticket-info">
+        Date created <span>{date_created}</span>
+      </p>
+      <p className="ticket-info">
+        Name <span>{full_name}</span>
+      </p>
+      <p className="ticket-info">
+        Email <span>{email}</span>
+      </p>
+      <p className="ticket-info">
+        OGID <span>{ogid}</span>
+      </p>
+      <p className="ticket-info">
+        Office <span>{office?.toUpperCase()}</span>
+      </p>
+      <div>
+        <p className={`display-status ${statusStyle}`}>{status}</p>
+      </div>
+      <div className="well" dangerouslySetInnerHTML={{ __html: complaint }} />
     </div>
-  )
-}
+  );
+};
 
 export default TicketContent;

@@ -1,5 +1,7 @@
 import React from "react";
 import $ from "jquery";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const ConfirmModal = ({
   title,
@@ -7,6 +9,7 @@ const ConfirmModal = ({
   deleteFunction,
   modalType,
   message,
+  isLoading,
 }) => {
   return (
     <>
@@ -27,10 +30,16 @@ const ConfirmModal = ({
             {modalType === "deactivate" ? (
               <div className="modal-body">{message}</div>
             ) : modalType === "left" ? (
-              <div className="modal-body">Are you sure this employee has resigned?</div>
+              <div className="modal-body">
+                Are you sure this employee has resigned?
+              </div>
             ) : modalType === "terminated" ? (
-              <div className="modal-body">Are you sure you want to terminate this employee?</div>
-            ) : <div className="modal-body">{message}</div>}
+              <div className="modal-body">
+                Are you sure you want to terminate this employee?
+              </div>
+            ) : (
+              <div className="modal-body">{message}</div>
+            )}
             <div className="modal-footer">
               <button
                 type="button"
@@ -51,16 +60,28 @@ const ConfirmModal = ({
                   Deactivate
                 </button>
               ) : (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => {
-                    deleteFunction(selectedRow);
-                    $("#exampleModal").modal("toggle");
-                  }}
-                >
-                  Confirm
-                </button>
+                <>
+                  {isLoading ? (
+                    <button type="button" className="btn btn-primary">
+                      <FontAwesomeIcon
+                        icon={faSpinner}
+                        spin
+                        pulse
+                        // style={{ margin: "0 10px" }}
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        deleteFunction(selectedRow);
+                      }}
+                    >
+                      Confirm
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>

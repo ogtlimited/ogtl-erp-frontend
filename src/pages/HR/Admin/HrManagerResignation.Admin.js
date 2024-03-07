@@ -11,8 +11,10 @@ import ResignationContent from "../../../components/ModalContents/ResignationCon
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import moment from "moment";
 import Select from "react-select";
+import $ from "jquery";
 import HrManagerResignationFeedbackModal from "../../../components/Modal/HrManagerResignationFeedbackModal";
 import HrRetractResignationModal from "../../../components/Modal/HrRetractResignationModal";
+import { ResignationFormModal } from "../../../components/Modal/ResignationFormModal";
 
 const HrManagerResignationAdmin = ({ viewingStage2 }) => {
   const {
@@ -27,6 +29,13 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sendingFeedback, setSendingFeedback] = useState(false);
+
+  const [surveyFormFilled, setSurveyFormFilled] = useState(false);
+  const [resignationSurveyForm, setResignationSurveyForm] = useState([]);
+  const [loadingResignationSurveyForm, setLoadingResignationSurveyForm] =
+    useState(false);
+  const [formContent, setFormContent] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -40,6 +49,51 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
   const AuthorizedHrRoles = CurrentUserRoles.some((role) =>
     authorizedRoles.includes(role)
   );
+
+  const handleHRManagerActions = (row) => {
+    if (row?.management_team) {
+      setmodalType("");
+      setViewRow(row);
+    } else {
+      setmodalType("feedback");
+      setViewRow(row);
+    }
+  };
+
+  // Get resignation Survey Form:
+  const fetchResignationSurveyForm = useCallback(async () => {
+    setLoadingResignationSurveyForm(true);
+    try {
+      const res = await axiosInstance.get(`/api/v1/survey_forms.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+
+      const resData = res?.data?.data?.survey_forms;
+
+      setResignationSurveyForm(resData);
+      setLoadingResignationSurveyForm(false);
+    } catch (error) {
+      const component = "Resignation Survey form Error | ";
+      ErrorHandler(error, component);
+      setLoadingResignationSurveyForm(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchResignationSurveyForm();
+  }, [fetchResignationSurveyForm]);
+
+  useEffect(() => {
+    if (surveyFormFilled) {
+      handleApproveResignation(viewRow);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [surveyFormFilled, viewRow]);
 
   // Fetch HR Manager Resignation:
   const fetchHrManagerResignations = useCallback(async () => {
@@ -70,6 +124,7 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
       setTotalPages(totalPages);
 
       const formattedData = resData.map((data) => ({
+        ...data,
         id: data?.id,
         full_name: data?.full_name,
         office: data?.office ? data?.office?.toUpperCase() : data?.office,
@@ -110,6 +165,61 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
       fetchHrManagerResignations();
     }
   }, [fetchHrManagerResignations, viewingStage2]);
+
+  // Handle Approve Management Team Resignation:
+  const handleApproveResignation = useCallback(
+    async (viewRow) => {
+      const resignationId = viewRow.id;
+
+      const resignationPayload = {
+        feedback: formContent?.hr_resignation_feedbacks,
+        survey_form: {
+          hr_survey_form_id: resignationSurveyForm[0]?.id,
+          answer: Object.entries(formContent).map(([question, answer]) => {
+            return { question, answer };
+          }),
+        },
+      };
+
+      setSendingFeedback(true);
+
+      try {
+        const res = await axiosInstance.patch(
+          `/api/v1/hr_manager_approve_resignations/${resignationId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420",
+            },
+            payload: resignationPayload,
+          }
+        );
+
+        showAlert(
+          true,
+          `${viewRow?.full_name} resignation has been successfully approved!`,
+          "alert alert-info"
+        );
+
+        $("#ResignationFormModal").modal("toggle");
+        fetchHrManagerResignations();
+        setSurveyFormFilled(false);
+        setFormContent([]);
+        goToTop();
+        setSendingFeedback(false);
+      } catch (error) {
+        const errorMsg = error.response?.data?.errors;
+        showAlert(true, `${errorMsg}`, "alert alert-warning");
+
+        $("#ResignationFormModal").modal("toggle");
+        goToTop();
+        setSendingFeedback(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fetchHrManagerResignations, formContent, goToTop, resignationSurveyForm]
+  );
 
   const handleViewRowFeedback = async (row) => {
     try {
@@ -229,10 +339,11 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
               <>
                 <button
                   className="btn btn-sm btn-success"
-                  onClick={() => {
-                    setmodalType("feedback");
-                    setViewRow(row);
-                  }}
+                  data-toggle={row?.management_team ? "modal" : ""}
+                  data-target={
+                    row?.management_team ? "#ResignationFormModal" : ""
+                  }
+                  onClick={() => handleHRManagerActions(row)}
                 >
                   Approve
                 </button>
@@ -315,6 +426,15 @@ const HrManagerResignationAdmin = ({ viewingStage2 }) => {
           fetchHrResignations={fetchHrManagerResignations}
         />
       ) : null}
+
+      <ResignationFormModal
+        exitForm={resignationSurveyForm}
+        loadingExitForm={loadingResignationSurveyForm}
+        setFormContent={setFormContent}
+        setSurveyFormFilled={setSurveyFormFilled}
+        sendingFeedback={sendingFeedback}
+        HRstage="HR Manager"
+      />
     </div>
   );
 };

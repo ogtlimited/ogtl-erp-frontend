@@ -11,6 +11,7 @@ import UniversalTable from "../../components/Tables/UniversalTable";
 import { RoleForm } from "../../components/FormJSON/CreateRole";
 import { AddRoleUserModal } from "../../components/Modal/AddRoleUserModal";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
+import $ from "jquery";
 
 const EmployeeRoles = () => {
   const { user, showAlert, ErrorHandler, getAvatarColor } = useAppContext();
@@ -21,6 +22,7 @@ const EmployeeRoles = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [roleUsers, setRoleUsers] = useState([]);
   const [mode, setMode] = useState("Create");
+  const [isResolving, setIsResolving] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -61,7 +63,7 @@ const EmployeeRoles = () => {
   const revokeUserRole = async (row) => {
     const fullName = row.first_name + " " + row.last_name;
     const userId = row?.ogid;
-    setLoading(true);
+    setIsResolving(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
@@ -81,11 +83,13 @@ const EmployeeRoles = () => {
       showAlert(true, fullName + " removed from role", "alert alert-success");
 
       fetchAllRoleUsers();
-      setLoading(false);
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
+      setIsResolving(false);
+      $("#exampleModal").modal("toggle");
     }
   };
 
@@ -192,6 +196,7 @@ const EmployeeRoles = () => {
         selectedRow={selectedRow}
         deleteFunction={revokeUserRole}
         message="Are you sure you want to revoke this user's role?"
+        isLoading={isResolving}
       />
     </>
   );

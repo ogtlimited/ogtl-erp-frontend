@@ -23,6 +23,7 @@ const Header = () => {
     e.preventDefault();
     tokenService.clearStorage();
     navigate("/auth/login");
+
     msalInstance
       // .ssoSilent() //<-- This will silently logout the user without having to select an account
       .logoutPopup() //<-- This will open a popup to logout the user  (this is the default)
@@ -69,19 +70,19 @@ const Header = () => {
         <div className="header-left">
           <div className="logo">
             <img src={logo} style={{ width: "100px" }} alt="" />
-            {/* <span className="val_icons">
+            <span className="header_logo_icons">
               <lord-icon
-                src="https://cdn.lordicon.com/ppmqpdfo.json"
+                src="https://cdn.lordicon.com/pyarizrk.json"
                 trigger="loop"
                 delay="2000"
+                colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
               ></lord-icon>
-              <span className="hearts_icon">💕</span>
-            </span> */}
+            </span>
           </div>
-          <div className="cropped-logo">
+          {/* <div className="cropped-logo">
             <img src={cropped} alt="" />
-          </div>
+          </div> */}
         </div>
 
         <a id="toggle_btn">
@@ -119,10 +120,10 @@ const Header = () => {
               data-toggle="dropdown"
             >
               <span className="user-img">
-                <img src="" alt="" />
+                {/* <img src="" alt="" /> */}
                 <span
                   className="status online"
-                  style={{ bottom: 25, right: 10 }}
+                  style={{ bottom: 0, right: 10 }}
                 ></span>
               </span>
               <span style={{ paddingRight: 10 }}>

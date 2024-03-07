@@ -39,17 +39,34 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: grey; 
+  background: grey;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: grey; 
+  background: grey;
+}
+
+/*-----------------------------
+    Employee Appreciation  
+------------------------------*/
+
+.extra_sidebar_styling {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: "Outfit", cursive;
+}
+
+.EA_styling {
+  color: #00c5fb !important;
+}
+.IWD_styling {
+  color: #f8b9d4 !important;
 }
