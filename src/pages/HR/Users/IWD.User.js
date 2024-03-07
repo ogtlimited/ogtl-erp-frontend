@@ -137,19 +137,21 @@ const IWDUser = () => {
   return (
     <>
       <div className="IWD-page-wrapper">
-        <div
-          className="IWD_page-header"
-          style={{ position: "absolute", width: "100%" }}
-        >
-          <div className="row align-items-center">
-            <div className="col">
-              <div className="IWD_styling_page">
-                <h2>International Women's Day</h2>
-                <span>#InspireInclusion</span>
+        {loading ? null : (
+          <div
+            className="IWD_page-header"
+            style={{ position: "absolute", width: "100%" }}
+          >
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="IWD_styling_page">
+                  <h2>International Women's Day</h2>
+                  <span>#InspireInclusion</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         {errorMsg ? null : (
           <div className="IWD_page">
@@ -178,7 +180,6 @@ const IWDUser = () => {
                       {quotes[currentQuoteIndex]?.message}
                     </span>
                   </div>
-                  <div className="IWD_quote_author"></div>
 
                   <div className="IWD_button_div">
                     <div className="IWD_Profile_div">
