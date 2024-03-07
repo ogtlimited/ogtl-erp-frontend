@@ -167,11 +167,8 @@ const IWDUser = () => {
                 id="IWD_card_wrapper"
                 style={{ backgroundColor, color: backgroundColor }}
               >
-                <div className="scroll_IWD_div">
-                  <MdArrowForwardIos
-                    className="scroll_IWD_button back"
-                    onClick={prevQuote}
-                  />
+                <div className="scroll_IWD_div" onClick={prevQuote}>
+                  <MdArrowForwardIos className="scroll_IWD_button back" />
                 </div>
 
                 <div className="IWD_quote_box">
@@ -222,11 +219,8 @@ const IWDUser = () => {
                   </div>
                 </div>
 
-                <div className="scroll_IWD_div">
-                  <MdArrowForwardIos
-                    className="scroll_IWD_button"
-                    onClick={nextQuote}
-                  />
+                <div className="scroll_IWD_div" onClick={nextQuote}>
+                  <MdArrowForwardIos className="scroll_IWD_button" />
                 </div>
               </div>
             )}
