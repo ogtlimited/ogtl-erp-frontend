@@ -1,16 +1,46 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useReducer,
+} from "react";
 import axiosInstance from "../../../services/api";
 import IWDSpinner from "../../../assets/img/IWD_loader-2.gif";
 import { IWDFormModal } from "../../../components/Modal/IWDFormModal";
+import { MdArrowForwardIos } from "react-icons/md";
+
+const initialState = {
+  loading: true,
+  quotes: [],
+  currentQuoteIndex: 0,
+  backgroundColor: "",
+  errorMsg: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_QUOTES":
+      return { ...state, quotes: action.payload, loading: false };
+    case "SET_CURRENT_QUOTE_INDEX":
+      return { ...state, currentQuoteIndex: action.payload };
+    case "SET_BACKGROUND_COLOR":
+      return { ...state, backgroundColor: action.payload };
+    case "SET_ERROR_MSG":
+      return { ...state, errorMsg: action.payload, loading: false };
+    default:
+      return state;
+  }
+};
 
 const Countdown = ({ currentQuoteIndex }) => {
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(20);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 1) {
-          return 30;
+          return 20;
         }
         return prevSeconds - 1;
       });
@@ -20,18 +50,17 @@ const Countdown = ({ currentQuoteIndex }) => {
   }, [currentQuoteIndex]);
 
   useEffect(() => {
-    setSeconds(30);
+    setSeconds(20);
   }, [currentQuoteIndex]);
 
   return <div className="IWD_countdown">{seconds}</div>;
 };
 
 const IWDUser = () => {
-  const [loading, setLoading] = useState(true);
-  const [quotes, setQuotes] = useState([]);
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState("");
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [
+    { loading, quotes, currentQuoteIndex, backgroundColor, errorMsg },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const colors = useMemo(
     () => [
@@ -41,7 +70,6 @@ const IWDUser = () => {
       "#9b59b6",
       "#6B2B63",
       "#8E3C64",
-
       "#FF69B4",
       "#DA70D6",
       "#7851A9",
@@ -65,25 +93,34 @@ const IWDUser = () => {
 
       const resData = response?.data?.data?.womens_day_event_records;
 
-      setQuotes(resData || []);
-      setLoading(false);
+      dispatch({ type: "SET_QUOTES", payload: resData || [] });
     } catch (error) {
-      setLoading(false);
-      setErrorMsg(true);
+      dispatch({ type: "SET_ERROR_MSG", payload: true });
       console.error("Error fetching quotes:", error);
     }
   };
 
+  // Move to the previous quote
+  const prevQuote = useCallback(() => {
+    dispatch({
+      type: "SET_CURRENT_QUOTE_INDEX",
+      payload:
+        currentQuoteIndex === 0 ? quotes.length - 1 : currentQuoteIndex - 1,
+    });
+  }, [currentQuoteIndex, quotes.length]);
+
   // Move to the next quote
   const nextQuote = useCallback(() => {
-    setCurrentQuoteIndex((prevIndex) =>
-      prevIndex === quotes.length - 1 ? 0 : prevIndex + 1
-    );
-  }, [quotes.length]);
+    dispatch({
+      type: "SET_CURRENT_QUOTE_INDEX",
+      payload:
+        currentQuoteIndex === quotes.length - 1 ? 0 : currentQuoteIndex + 1,
+    });
+  }, [currentQuoteIndex, quotes.length]);
 
   useEffect(() => {
     fetchQuotes();
-    const interval = setInterval(nextQuote, 30000);
+    const interval = setInterval(nextQuote, 20000);
 
     return () => {
       clearInterval(interval);
@@ -94,7 +131,7 @@ const IWDUser = () => {
   // Update background color when currentQuoteIndex changes
   useEffect(() => {
     const color = colors[Math.floor(Math.random() * colors.length)];
-    setBackgroundColor(color);
+    dispatch({ type: "SET_BACKGROUND_COLOR", payload: color });
   }, [currentQuoteIndex, colors]);
 
   return (
@@ -130,6 +167,13 @@ const IWDUser = () => {
                 id="IWD_card_wrapper"
                 style={{ backgroundColor, color: backgroundColor }}
               >
+                <div className="scroll_IWD_div">
+                  <MdArrowForwardIos
+                    className="scroll_IWD_button back"
+                    onClick={prevQuote}
+                  />
+                </div>
+
                 <div className="IWD_quote_box">
                   <div className="IWD_quote_text">
                     <i className="fa fa-quote-left"></i>
@@ -146,7 +190,7 @@ const IWDUser = () => {
                           <img
                             src={quotes[currentQuoteIndex]?.image}
                             alt={quotes[currentQuoteIndex]?.full_name}
-                            loading="lazy"
+                            // loading="lazy"
                           />
                         ) : null}
                       </div>
@@ -176,6 +220,13 @@ const IWDUser = () => {
                       New Message
                     </button>
                   </div>
+                </div>
+
+                <div className="scroll_IWD_div">
+                  <MdArrowForwardIos
+                    className="scroll_IWD_button"
+                    onClick={nextQuote}
+                  />
                 </div>
               </div>
             )}
