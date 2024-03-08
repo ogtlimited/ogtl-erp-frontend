@@ -8,6 +8,7 @@ import $ from "jquery";
 export const IWDFormModal = ({ fetchAllQuotes }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [fileInputKey, setFileInputKey] = useState(0);
   const [data, setData] = useState({
     message: "",
     image: null,
@@ -18,6 +19,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
       message: "",
       image: null,
     });
+    setFileInputKey((prevKey) => prevKey + 1);
   };
 
   const handleFormChange = (e) => {
@@ -59,6 +61,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
 
       fetchAllQuotes();
       cancelEvent();
+      setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
@@ -105,6 +108,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         Image
                       </label>
                       <input
+                        key={fileInputKey}
                         name="image"
                         type="file"
                         accept="image/*"
