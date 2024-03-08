@@ -70,16 +70,20 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
   return (
     <>
       <div
-        className="modal fade"
+        className="modal fade IWD_modal"
         id="IWDFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered modal-lg">
-          <div className="modal-content">
+          <div className="modal-content" style={{ borderRadius: "15px" }}>
             <div className="modal-header">
-              <h4 className="modal-title" id="FormModalLabel">
+              <h4
+                className="modal-title"
+                id="FormModalLabel"
+                style={{ fontFamily: "Fugaz One" }}
+              >
                 International Women's Day Message
               </h4>
               <button
@@ -97,7 +101,9 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label htmlFor="image">Image</label>
+                      <label htmlFor="image" style={{ fontFamily: "Raleway" }}>
+                        Image
+                      </label>
                       <input
                         name="image"
                         type="file"
@@ -105,6 +111,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         className="form-control"
                         placeholder="Click to upload "
                         onChange={handleFileChange}
+                        style={{ fontFamily: "Outfit" }}
                         required
                       />
                     </div>
@@ -112,7 +119,12 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
 
                   <div className="col-md-12">
                     <div className="form-group">
-                      <label htmlFor="message">Message</label>
+                      <label
+                        htmlFor="message"
+                        style={{ fontFamily: "Raleway" }}
+                      >
+                        Message
+                      </label>
                       <textarea
                         name="message"
                         type="text"
@@ -120,6 +132,7 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                         value={data?.message}
                         onChange={handleFormChange}
                         maxLength={280}
+                        style={{ fontFamily: "Raleway" }}
                         required
                       />
                     </div>
@@ -132,10 +145,15 @@ export const IWDFormModal = ({ fetchAllQuotes }) => {
                     className="btn btn-secondary"
                     data-dismiss="modal"
                     onClick={cancelEvent}
+                    style={{ fontFamily: "Raleway" }}
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ fontFamily: "Raleway" }}
+                  >
                     {loading ? (
                       <span
                         className="spinner-border spinner-border-sm"
