@@ -57,18 +57,22 @@ const buildExternalURL = () => {
   const secret = process.env.REACT_APP_HMAC_SECRET;
   const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
-  if (!kpiUrl || !secret) {
-    throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+  try {
+    if (!kpiUrl || !secret) {
+      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+    }
+
+    const kpiData = tokenService.getKpiUser();
+
+    const generatedJWT = sign(kpiData, secret);
+    const queryParams = `auth_param=${generatedJWT}`;
+    const externalAppUrl = `${kpiUrl}?${queryParams}`;
+
+    console.log("KPI Url:", externalAppUrl);
+    return externalAppUrl;
+  } catch (error) {
+    console.log("KPI error | ", error);
   }
-
-  const kpiData = tokenService.getKpiUser();
-
-  const generatedJWT = sign(kpiData, secret);
-  const queryParams = `auth_param=${generatedJWT}`;
-  const externalAppUrl = `${kpiUrl}?${queryParams}`;
-
-  console.log("KPI Url:", externalAppUrl);
-  return externalAppUrl;
 };
 
 const sidebarConfig = [
