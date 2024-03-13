@@ -21,7 +21,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-2
+        aws-region: eu-west-1
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -53,7 +53,7 @@ jobs:
       if: endsWith(github.ref, '/main')
       env:
         REACT_APP_HMAC_SECRET: ${{ secrets.REACT_APP_HMAC_SECRET }}
-        REACT_APP_KPI_APP_URL: https://kpi.outsourceglobal.com/auth
+        REACT_APP_KPI_APP_URL: ${{ secrets.REACT_APP_HMAC_PROD_SECRET }}
         
       run: |
         touch .env
