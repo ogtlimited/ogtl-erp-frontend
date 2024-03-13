@@ -1,12 +1,12 @@
 import React from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LeaveVerticalBar from "./leaveVerticalBar";
 
 const ResignationStatistics = ({
   resignationStatusLabel,
   resignationStatusData,
 }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const resignationStatus = {
     labels: resignationStatusLabel,
@@ -28,18 +28,18 @@ const ResignationStatistics = ({
     ],
   };
 
-  // const handleLeaveStatusChartClick = (element, leaveStatusLabel) => {
-  //   try {
-  //     if (element.length > 0) {
-  //       const dataIndex = element[0].index;
-  //       const leaveStatus = formattedLeaveStatus;
-  //       const id = leaveStatus[dataIndex];
-  //       navigate(`/dashboard/hr/leaves-admin/application/leave-status/${id}`);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleResignationStatusChartClick = (element, resignationStatusLabel) => {
+    try {
+      if (element.length > 0) {
+        const dataIndex = element[0].index;
+        const resignationStatus = resignationStatusLabel;
+        const id = resignationStatus[dataIndex];
+        navigate(`/dashboard/hr/resignation/application/resignation-status/${id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -50,9 +50,9 @@ const ResignationStatistics = ({
 
             <LeaveVerticalBar
               data={resignationStatus}
-              // handleChartClick={(element) =>
-              //   handleLeaveStatusChartClick(element, leaveStatusLabel)
-              // }
+              handleChartClick={(element) =>
+                handleResignationStatusChartClick(element, resignationStatusLabel)
+              }
             />
           </div>
         </div>
