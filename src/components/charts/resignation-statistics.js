@@ -15,13 +15,13 @@ const ResignationStatistics = ({
         data: resignationStatusData,
         backgroundColor: [
           "rgba(255, 159, 64)",
-          "rgba(55, 159, 64)",
           "rgba(54, 162, 235)",
+          "rgba(55, 159, 64)",
         ],
         borderColor: [
           "rgba(255, 159, 64, 1)",
-          "rgba(55, 159, 64, 1)",
           "rgba(54, 162, 235, 1)",
+          "rgba(55, 159, 64, 1)",
         ],
         borderWidth: 1,
       },

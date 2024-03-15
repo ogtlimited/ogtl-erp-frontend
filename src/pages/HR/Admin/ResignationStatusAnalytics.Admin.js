@@ -59,7 +59,7 @@ const ResignationStatusAnalytics = () => {
   const fetchResignationStatus = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get("/api/v1/resignations.json", {
+      .get("/api/v1/hr_dashboard/resignation_status.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
