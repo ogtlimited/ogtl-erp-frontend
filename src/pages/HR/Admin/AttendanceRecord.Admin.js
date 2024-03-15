@@ -146,6 +146,22 @@ const AttendanceRecord = () => {
                     : "-"}
                 </span>
               </>
+            ) : attendanceRecord.status === "Leave" ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className="fa fa-dot-circle-o text-success"
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
+            ) : attendanceRecord.status === "---" ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className="fa fa-dot-circle-o text-muted"
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
             ) : (
               <span className="btn btn-gray btn-sm btn-rounded">
                 <i
@@ -287,6 +303,8 @@ const AttendanceRecord = () => {
         lateness_and_absence: attendanceRecords[key].lateness_and_absence,
       }));
 
+      // console.log("dataArray", dataArray);
+
       const formattedData = dataArray.map((data) => ({
         staffName: data?.user?.full_name,
         ogid: data?.user?.staff_unique_Id,
@@ -300,10 +318,10 @@ const AttendanceRecord = () => {
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent: data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+        absent:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
             : 0,
-
 
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
@@ -314,13 +332,17 @@ const AttendanceRecord = () => {
             ? data?.days[key]?.clock_out
             : null,
           status:
-            !data?.days[key]?.clock_in && !data?.days[key]?.clock_out
+            data?.days[key] === "absent"
               ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "---"
+              ? "---"
               : "Present",
         })),
       }));
 
-      console.log(formattedData, "formatted");
+      console.log("formatted", formattedData);
 
       setSizePerPage(sizePerPage);
       setTotalPages(recordPages);
@@ -453,10 +475,16 @@ const AttendanceRecord = () => {
       headerStyle: { width: "10%" },
     },
     {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "10%" },
+    },
+    {
       dataField: "date",
       text: "Date",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "clock_in",
