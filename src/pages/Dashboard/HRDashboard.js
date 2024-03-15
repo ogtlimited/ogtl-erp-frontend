@@ -208,8 +208,8 @@ const HRDashboard = () => {
       setResignationStatusData(statusData);
 
       // Reason:
-      const reasonLabels = Object.keys(reason);
-      const reasonData = Object.values(reason);
+      const reasonLabels = reason ? Object?.keys(reason) : null;
+      const reasonData = reason ? Object?.values(reason) : null;
 
       setResignationReasonLabel(reasonLabels);
       setResignationReasonData(reasonData);

@@ -326,7 +326,7 @@ const AllLeaveStatusAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">{header}</h3>
+            <h3 className="page-title">{header} Leaves</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
                 <Link to="/dashboard/hr-dashboard">Dashboard</Link>

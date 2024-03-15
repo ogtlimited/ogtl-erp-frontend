@@ -349,6 +349,14 @@ export default function Router() {
               ),
             },
             {
+              path: "resignation/application/resignation-status/:id",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <ResignationStatusAnalytics />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "departments",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1255,6 +1263,9 @@ const WorkforceLeaveApplications = Loadable(
 );
 const OperationsTeamLeaveApplications = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTeamLeaveApplications.js"))
+);
+const ResignationStatusAnalytics = Loadable(
+  lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))
 );
 const ResignationAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Resignation.Admin"))
