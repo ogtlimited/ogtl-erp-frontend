@@ -70,19 +70,19 @@ const Header = () => {
         <div className="header-left">
           <div className="logo">
             <img src={logo} style={{ width: "100px" }} alt="" />
-            <span className="header_logo_icons">
+            {/* <span className="header_logo_icons">
               <lord-icon
                 src="https://cdn.lordicon.com/pyarizrk.json"
                 trigger="loop"
                 delay="2000"
-                colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#000"
+                colors="primary:#121331,secondary:#f8b9d4,tertiary:#0253CC,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
               ></lord-icon>
-            </span>
+            </span> */}
           </div>
-          {/* <div className="cropped-logo">
+          <div className="cropped-logo">
             <img src={cropped} alt="" />
-          </div> */}
+          </div>
         </div>
 
         <a id="toggle_btn">

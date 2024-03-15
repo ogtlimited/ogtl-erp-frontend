@@ -45,61 +45,6 @@ const AttendanceRecord = () => {
   const [officeType, setOfficeType] = useState("");
   const [officeId, setOfficeId] = useState("");
 
-  // ! This code is for generating dynamic date columns for the Monthly Attendance table | without clock in and clock out times
-  // Monthly Attendance - Dynamic Date Columns:
-  // useEffect(() => {
-  //   const attendanceDates =
-  //     monthlyAttendance.map((entry) => entry.date) || [];
-
-  //   const dateColumns = attendanceDates.map((date) => ({
-  //     dataField: `attendance_${date}`,
-  //     text: moment(date).format("DD-MMM-YYYY"),
-  //     headerStyle: { width: "100%" },
-  //     formatter: (cell, row) => {
-  //       const attendanceRecord = row.attendance.find(
-  //         (entry) => entry?.date === date
-  //       );
-
-  //       let backgroundColor = "";
-  //       let color = "";
-  //       if (attendanceRecord) {
-  //         switch (attendanceRecord.status) {
-  //           case "Absent":
-  //             backgroundColor = "#BE3144";
-  //             color = "#ffffff";
-  //             break;
-  //           case "Was Sick":
-  //             backgroundColor = "#6f42c1";
-  //             color = "#ffffff";
-  //             break;
-  //           case "On Leave":
-  //             backgroundColor = "#20c997";
-  //             color = "#ffffff";
-  //             break;
-  //           default:
-  //             backgroundColor = "";
-  //             color = "";
-  //         }
-  //       }
-
-  //       return (
-  //         <div
-  //           style={{
-  //             textAlign: "center",
-  //              backgroundColor: backgroundColor,
-  //              padding: attendanceRecord.status === "Absent" ? "5px 20px" : "",
-  //              color: color,
-  //           }}
-  //         >
-  //           {attendanceRecord ? attendanceRecord.status : ""}
-  //         </div>
-  //       );
-  //     },
-  //   }));
-
-  //   setDateColumns(dateColumns);
-  // }, [monthlyAttendance]);
-
   useEffect(() => {
     const allDates = Array.from(
       new Set(
@@ -146,6 +91,22 @@ const AttendanceRecord = () => {
                     : "-"}
                 </span>
               </>
+            ) : attendanceRecord.status === "Leave" ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className="fa fa-dot-circle-o text-success"
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
+            ) : attendanceRecord.status === "---" ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className="fa fa-dot-circle-o text-muted"
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
             ) : (
               <span className="btn btn-gray btn-sm btn-rounded">
                 <i
@@ -215,6 +176,7 @@ const AttendanceRecord = () => {
           : response?.data?.data?.info.map((e, index) => ({
               ...e,
               idx: index + 1,
+              office: e?.office ? e?.office?.toUpperCase() : null,
               date: moment(e?.date).format("ddd, Do MMM. YYYY"),
             }));
 
@@ -287,6 +249,8 @@ const AttendanceRecord = () => {
         lateness_and_absence: attendanceRecords[key].lateness_and_absence,
       }));
 
+      // console.log("dataArray", dataArray);
+
       const formattedData = dataArray.map((data) => ({
         staffName: data?.user?.full_name,
         ogid: data?.user?.staff_unique_Id,
@@ -300,10 +264,10 @@ const AttendanceRecord = () => {
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent: data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+        absent:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
             : 0,
-
 
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
@@ -314,13 +278,17 @@ const AttendanceRecord = () => {
             ? data?.days[key]?.clock_out
             : null,
           status:
-            !data?.days[key]?.clock_in && !data?.days[key]?.clock_out
+            data?.days[key] === "absent"
               ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "---"
+              ? "---"
               : "Present",
         })),
       }));
 
-      console.log(formattedData, "formatted");
+      // console.log("formatted", formattedData);
 
       setSizePerPage(sizePerPage);
       setTotalPages(recordPages);
@@ -429,7 +397,7 @@ const AttendanceRecord = () => {
       dataField: "full_name",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <span
@@ -450,19 +418,25 @@ const AttendanceRecord = () => {
       dataField: "ogid",
       text: "OGID",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "date",
       text: "Date",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
       dataField: "clock_in",
       text: "Clock In",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "100%" },
       formatter: (value) => {
         return value === "No Clock in" ? (
           <span className="text-danger">{value}</span>
@@ -475,7 +449,7 @@ const AttendanceRecord = () => {
       dataField: "clock_out",
       text: "Clock Out",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "100%" },
       formatter: (value) => {
         return value === "No Clock out" ? (
           <span className="text-danger">{value}</span>
@@ -488,7 +462,7 @@ const AttendanceRecord = () => {
       dataField: "work_hours",
       text: "Work Hours",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "100%" },
     },
   ];
 

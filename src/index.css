@@ -1447,7 +1447,7 @@ table.custom-table thead th {
 }
 
 .IWD_modal {
-  background: #5d48b8cc;
+  background: #00C5FBcc;
   backdrop-filter: blur(10px);
 }
 
@@ -1674,7 +1674,7 @@ img {
   justify-content: center;
   left: 0%;
   letter-spacing: 3px;
-  top: calc(100% - 66%);
+  top: calc(100% - 69.5%);
 }
 
 .eCertificate_p_wrapper > p {
