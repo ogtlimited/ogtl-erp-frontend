@@ -65,7 +65,7 @@
 }
 
 .EA_styling {
-  color: #00c5fb !important;
+  color: var(--sec-color) !important;
 }
 .IWD_styling {
   color: #f8b9d4 !important;

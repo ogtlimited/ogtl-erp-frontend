@@ -245,15 +245,15 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              <span className="login_logo_icons">
+              {/* <span className="login_logo_icons">
                 <lord-icon
                   src="https://cdn.lordicon.com/pyarizrk.json"
                   trigger="loop"
                   delay="2000"
-                  colors="primary:#121331,secondary:#f8b9d4,tertiary:#bd1877,quaternary:#5d48b8"
+                  colors="primary:#121331,secondary:#f8b9d4,tertiary:#0253CC,quaternary:#00C5FB"
                   style={{ width: "40px", height: "40px" }}
                 ></lord-icon>
-              </span>
+              </span> */}
             </a>
           </div>
           <div className="account-box">
@@ -322,7 +322,7 @@ const Login = () => {
             src="https://cdn.lordicon.com/amjaykqd.json"
             trigger="hover"
             state="hover-conversation-alt"
-            colors="primary:#BD1877,secondary:#5D48B8"
+            colors="primary:#0253CC,secondary:#00C5FB"
             style={{ width: "100px", height: "100px" }}
           ></lord-icon>
           <span className="create_ticket_text">Submit a Ticket</span>

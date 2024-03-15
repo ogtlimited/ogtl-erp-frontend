@@ -3,10 +3,11 @@ html {
 }
 
 :root {
-  --prm-color: #5D48B8;
-  --prm-color-shade: #BD18774d;
-  --sidebar-bg-color: #362a6e;
-  --sec-color: #BD1877;
+  --prm-color: #00C5FB;
+  --prm-color-shade: #00C5FB4D;
+  --sidebar-bg-color: #212a36;
+  --sec-color: #0253CC;
+  --sec-color-shade: #0253CC4d;
   --prm-gray: #b1b1b1;
 }
 
@@ -248,9 +249,9 @@ a {
   background-color: rgba(0, 0, 0, 0.5);
   text-decoration: none;
   font-weight: 500;
-  border-right: 5px solid var(--sec-color);
-  text-transform: var(--sec-color);
-  color:  var(--sec-color);
+  border-right: 5px solid var(--prm-color);
+  text-transform: var(--prm-color);
+  color:  var(--prm-color);
   transition: 0.3s;
 }
 

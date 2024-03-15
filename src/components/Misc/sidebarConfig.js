@@ -225,12 +225,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.main.eCertificate,
         icon: ICONS.certificate,
       },
-      {
-        canView: "all",
-        title: "Women's Day",
-        path: PATH_DASHBOARD.main.IWD,
-        icon: ICONS.female,
-      },
+      // {
+      //   canView: "all",
+      //   title: "Women's Day",
+      //   path: PATH_DASHBOARD.main.IWD,
+      //   icon: ICONS.female,
+      // },
       // {
       //   canView: "all",
       //   title: "Valentine",

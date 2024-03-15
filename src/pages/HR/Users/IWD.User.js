@@ -64,9 +64,9 @@ const IWDUser = () => {
 
   const colors = useMemo(
     () => [
-      "#BD1877",
+      "#0253CC",
       "#7E77DD",
-      "#5D48B8",
+      "#00C5FB",
       "#9b59b6",
       "#6B2B63",
       "#8E3C64",
