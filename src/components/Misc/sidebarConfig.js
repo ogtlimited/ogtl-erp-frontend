@@ -151,6 +151,11 @@ const sidebarConfig = [
             title: "Ticket",
             path: PATH_DASHBOARD.apps.tickets,
           },
+          {
+            canView: "all",
+            title: "Announcement",
+            path: PATH_DASHBOARD.apps.announcement,
+          },
         ],
       },
       {

@@ -201,6 +201,7 @@ export default function Router() {
               ),
             },
             { path: "tickets", element: <Tickets /> },
+            { path: "announcement", element: <Announcement /> },
             {
               path: "ticket-manager",
               element: (
@@ -1541,6 +1542,7 @@ const OrientationAndTraining = Loadable(
 );
 
 const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets.js")));
+const Announcement = Loadable(lazy(() => import("../pages/In-Apps/Announcement.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))

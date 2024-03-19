@@ -40,6 +40,7 @@ export const PATH_DASHBOARD = {
     fileManager: path(ROOTS_DASHBOARD, "/apps/file-manager"),
     notification: path(ROOTS_DASHBOARD, "/apps/notifications"),
     tickets: path(ROOTS_DASHBOARD, "/apps/tickets"),
+    announcement: path(ROOTS_DASHBOARD, "/apps/announcement"),
     ticketManager: path(ROOTS_DASHBOARD, "/apps/ticket-manager"),
   },
 
