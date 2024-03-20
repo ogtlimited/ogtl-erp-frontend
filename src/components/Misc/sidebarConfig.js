@@ -51,6 +51,7 @@ const ICONS = {
   valentine: getIcon("la-gratipay"),
   female: getIcon("la-venus"),
   certificate: getIcon("la-certificate"),
+  survey: getIcon("la-poll"),
 };
 
 const buildExternalURL = () => {
@@ -444,6 +445,14 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.recruitment.jobApplicants,
           },
         ],
+      },
+
+      // Survey:
+      {
+        canView: "hr",
+        title: "Survey",
+        path: PATH_DASHBOARD.hr.survey,
+        icon: ICONS.survey,
       },
 
       // Exit Management:
