@@ -21,9 +21,13 @@ const formInputTypes = [
   },
 ];
 
-const QuestionInput = ({ onAddQuestion }) => {
-  const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState([]);
+const QuestionInput = ({ onAddQuestion, initialQuestion }) => {
+  const [question, setQuestion] = useState(
+    initialQuestion ? initialQuestion.question : ""
+  );
+  const [options, setOptions] = useState(
+    initialQuestion ? initialQuestion.options : []
+  );
   const [optionType, setOptionType] = useState("text");
   const [correctOptions, setCorrectOptions] = useState([]);
   const [optionAdded, setOptionAdded] = useState(false);
@@ -174,9 +178,21 @@ const QuestionInput = ({ onAddQuestion }) => {
 
 const SurveyFormBuilder = () => {
   const [questions, setQuestions] = useState([]);
+  const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
 
   const handleAddQuestion = (question) => {
     setQuestions((prevQuestions) => [...prevQuestions, question]);
+  };
+
+  const handleEditQuestion = (index) => {
+    setEditingQuestionIndex(index);
+  };
+
+  const handleUpdateQuestion = (updatedQuestion, index) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index] = updatedQuestion;
+    setQuestions(updatedQuestions);
+    setEditingQuestionIndex(null);
   };
 
   const handleSubmit = () => {
@@ -188,40 +204,51 @@ const SurveyFormBuilder = () => {
     <div className="form_builder_form">
       {questions.length ? (
         <div className="form_builder_form_sample_wrapper">
-          <h3>Survey Form</h3>
           {questions.map((question, index) => (
             <div className="form_builder_form_sample" key={index}>
               <h4>
                 {index + 1}. {question.question}
               </h4>
+              <button onClick={() => handleEditQuestion(index)}>Edit</button>
               <div className="col-md-12 form_builder_form_sample_fields">
-                {question.options.map((option, index) => (
-                  <div className="form_builder_form_sample_fields_inner">
+                {question.options.map((option, optionIndex) => (
+                  <div className="form_builder_form_sample_fields_inner" key={optionIndex}>
+                    {/* Render editable inputs based on option type */}
                     {option.type === "text" ? (
                       <input
                         className="form-control"
-                        type={option.type}
-                        placeholder={option.value}
-                        readOnly
+                        type="text"
+                        value={option.value}
+                        onChange={(e) => {
+                          const updatedQuestions = [...questions];
+                          updatedQuestions[index].options[optionIndex].value = e.target.value;
+                          setQuestions(updatedQuestions);
+                        }}
                       />
                     ) : option.type === "textarea" ? (
                       <textarea
                         className="form-control"
-                        placeholder={option.value}
-                        readOnly
+                        value={option.value}
+                        onChange={(e) => {
+                          const updatedQuestions = [...questions];
+                          updatedQuestions[index].options[optionIndex].value = e.target.value;
+                          setQuestions(updatedQuestions);
+                        }}
                       />
-                    ) : option.type === "radio" ||
-                      option.type === "checkbox" ? (
-                      <label className="checkbox_radio_input">
+                    ) : option.type === "radio" || option.type === "checkbox" ? (
+                      <div className="checkbox_radio_wrapper">
                         <input
-                          key={index}
                           type={option.type}
                           value={option.value}
                           checked={option.correct}
-                          readOnly
+                          onChange={(e) => {
+                            const updatedQuestions = [...questions];
+                            updatedQuestions[index].options[optionIndex].correct = e.target.checked;
+                            setQuestions(updatedQuestions);
+                          }}
                         />
                         {option.value}
-                      </label>
+                      </div>
                     ) : null}
                   </div>
                 ))}
@@ -231,7 +258,16 @@ const SurveyFormBuilder = () => {
         </div>
       ) : null}
 
-      <QuestionInput onAddQuestion={handleAddQuestion} />
+      {editingQuestionIndex !== null ? (
+        <QuestionInput
+          initialQuestion={questions[editingQuestionIndex]}
+          onAddQuestion={(updatedQuestion) =>
+            handleUpdateQuestion(updatedQuestion, editingQuestionIndex)
+          }
+        />
+      ) : (
+        <QuestionInput onAddQuestion={handleAddQuestion} />
+      )}
 
       <div className="submit_que_btn_wrapper">
         <button className="submit_que_btn btn-primary" onClick={handleSubmit}>
