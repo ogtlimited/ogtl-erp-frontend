@@ -27,6 +27,7 @@ const QuestionInput = ({ onAddQuestion }) => {
   const [optionType, setOptionType] = useState("text");
   const [correctOptions, setCorrectOptions] = useState([]);
   const [optionAdded, setOptionAdded] = useState(false);
+  const [showInstruction, setShowInstruction] = useState(false);
 
   const handleAddOption = () => {
     if (optionType === "radio") {
@@ -73,6 +74,14 @@ const QuestionInput = ({ onAddQuestion }) => {
   };
 
   const handleAddQuestion = () => {
+    if (
+      (optionType === "checkbox" || optionType === "radio") &&
+      !correctOptions.includes(true)
+    ) {
+      setShowInstruction(true);
+      return;
+    }
+
     if (question.trim() === "") return;
 
     const filteredOptions = options.filter(
@@ -95,6 +104,7 @@ const QuestionInput = ({ onAddQuestion }) => {
     setOptions([]);
     setCorrectOptions([]);
     setOptionAdded(false);
+    setShowInstruction(false);
   };
 
   const renderOptionInput = (option, index) => {
@@ -139,6 +149,7 @@ const QuestionInput = ({ onAddQuestion }) => {
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Enter question"
+        required
       />
       {options.length > 1 ? (
         <h5>Options</h5>
@@ -150,6 +161,11 @@ const QuestionInput = ({ onAddQuestion }) => {
           {renderOptionInput(option, index)}
         </div>
       ))}
+      {showInstruction ? (
+        <div className="correct_ans_instruction">
+          Select atleast one correct option
+        </div>
+      ) : null}
       <div className="form_builder_actions">
         <Select
           className="formInputTypeSelect"
