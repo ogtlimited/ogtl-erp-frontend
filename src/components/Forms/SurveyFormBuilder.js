@@ -196,7 +196,10 @@ const SurveyFormBuilder = () => {
               </h4>
               <div className="col-md-12 form_builder_form_sample_fields">
                 {question.options.map((option, index) => (
-                  <div className="form_builder_form_sample_fields_inner">
+                  <div
+                    className="form_builder_form_sample_fields_inner"
+                    key={index}
+                  >
                     {option.type === "text" ? (
                       <input
                         className="form-control"
@@ -214,7 +217,6 @@ const SurveyFormBuilder = () => {
                       option.type === "checkbox" ? (
                       <label className="checkbox_radio_input">
                         <input
-                          key={index}
                           type={option.type}
                           value={option.value}
                           checked={option.correct}
