@@ -89,6 +89,7 @@
     height: 44px;
     border-radius: 5px;
     font-size: 15px;
+    border: none;
 }
 
 .submit_que_btn_wrapper {

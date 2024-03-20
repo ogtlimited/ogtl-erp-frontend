@@ -1,5 +1,5 @@
 import "./surveyFormBuilder.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 const formInputTypes = [
@@ -172,16 +172,36 @@ const QuestionInput = ({ onAddQuestion }) => {
   );
 };
 
-const SurveyFormBuilder = () => {
+const SurveyFormBuilder = ({ setFormQuestions, setIsSubmitted }) => {
   const [questions, setQuestions] = useState([]);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    if (questions.length) {
+      const isFormValid = questions.every((question) => {
+        const hasValidQuestion = question.question.trim() !== "";
+        const hasValidOptions = question.options.some(
+          (option) =>
+            option.value.trim() !== "" ||
+            option.type === "text" ||
+            option.type === "textarea"
+        );
+        return hasValidQuestion && hasValidOptions;
+      });
+      setIsFormValid(isFormValid);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [questions]);
 
   const handleAddQuestion = (question) => {
     setQuestions((prevQuestions) => [...prevQuestions, question]);
   };
 
   const handleSubmit = () => {
-    // Handle submission of questions
-    console.log(questions);
+    setFormQuestions(questions);
+    setIsSubmitted(true);
+    setQuestions([]);
   };
 
   return (
@@ -236,7 +256,16 @@ const SurveyFormBuilder = () => {
       <QuestionInput onAddQuestion={handleAddQuestion} />
 
       <div className="submit_que_btn_wrapper">
-        <button className="submit_que_btn btn-primary" onClick={handleSubmit}>
+        <button
+          type="submit"
+          className={` ${
+            isFormValid
+              ? "submit_que_btn btn-primary"
+              : "submit_que_btn btn-secondary"
+          }`}
+          onClick={handleSubmit}
+          disabled={!isFormValid}
+        >
           Create Form
         </button>
       </div>

@@ -9,7 +9,6 @@ function DropdownCheckbox({
     errorIndicator,
 }) {
     const [isOpen, setIsOpen] = useState(false);
-    console.log(office, "option", options)
 
     const toggleDropdown = () => {
         setIsOpen((prevState) => !prevState);
