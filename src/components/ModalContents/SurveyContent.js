@@ -1,32 +1,21 @@
+import "../../components/Forms/surveyFormBuilder.css";
 import React from "react";
-import moment from "moment";
 
 const SurveyContent = ({ Content = {} }) => {
-  console.log(`SurveyContent: `, Content);
-  
-  // const filteredApplication = {
-  //   ...Content,
-  //   id: undefined,
-  // };
+  const filteredSurvey = {
+    ...Content,
+    id: undefined,
+  };
 
+  const orderedKeys = ["title", "created_at", "from", "to"];
 
-  // const orderedKeys = [
-  //   "full_name",
-  //   "office",
-  //   "date_applied",
-  //   "status",
-  //   "last_day_at_work",
-  // ];
-
-  // const resignationReason = Content?.reason_for_resignation;
-  // const surveyData = Content.survey_answer?.answer?.answers || [];
-  // const feedbacks = Content?.feedback || [];
-  // const HrManagerFeedback = Content?.survey_answer?.feedback;
+  const applicable_offices = Content?.applicable_offices?.offices || [];
+  const questions_details = Content?.question_details?.questions || [];
 
   return (
     <div className="row d-flex justify-content-center">
-      {/* {orderedKeys.map((key, index) => {
-        const value = filteredApplication[key];
+      {orderedKeys.map((key, index) => {
+        const value = filteredSurvey[key];
         if (typeof value !== "undefined") {
           return (
             <React.Fragment key={index}>
@@ -40,9 +29,7 @@ const SurveyContent = ({ Content = {} }) => {
               </div>
               <div className="col-md-6 mt-3">
                 <p className="">
-                  {key === "reason_for_resignation"
-                    ? value
-                    : typeof value === "string"
+                  {typeof value === "string"
                     ? value.replace(/\b\w/g, (char) => char.toUpperCase())
                     : value === null
                     ? "Not Provided"
@@ -58,80 +45,106 @@ const SurveyContent = ({ Content = {} }) => {
         } else {
           return null;
         }
-      })} */}
+      })}
 
-      {/* Staff Reason for Resignation */}
-      {/* {resignationReason ? (
-        <div className="col-md-12 mt-2">
+      {applicable_offices?.length ? (
+        <div className="col-md-12 mt-3 survey_answers_view">
           <p className="font-weight-bold" style={{ marginBottom: "10px" }}>
-            Reason for Resignation
+            Applicable Offices
           </p>
-          <p style={{ lineHeight: "30px" }}>{resignationReason}</p>
+          <ul>
+            {applicable_offices.map((item, index) => {
+              return (
+                <li key={index} className="mt-2">
+                  <p style={{ marginBottom: "0px" }}>
+                    {item?.name}{" "}
+                    <span className="feedback_subInfo">
+                      |{" "}
+                      {item?.type.replace(/\b\w/g, (char) =>
+                        char.toUpperCase()
+                      )}{" "}
+                    </span>
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      ) : null} */}
+      ) : null}
 
-      {/* Display Operations & HR Staff Feedback */}
-      {/* {feedbacks?.length ? (
+      {questions_details?.length ? (
         <div className="col-md-12 mt-3 survey_answers_view">
-          {feedbacks.map((item, index) => {
-            return (
-              <div key={index} className="mt-2">
-                <p className="font-weight-bold" style={{ marginBottom: "0px" }}>
-                  {item?.stage === "operations"
-                    ? "Operations Feedback"
-                    : item?.stage === "hr_staff"
-                    ? "HR Staff Feedback"
-                    : item?.stage === "hr_manager"
-                    ? "HR Manager Feedback"
-                    : item?.stage === "coo"
-                    ? "COO Feedback"
-                    : null}{" "}
-                  <span className="feedback_subInfo">
-                    |{" "}
-                    {item?.entered_by?.first_name +
-                      " " +
-                      item?.entered_by?.last_name}{" "}
-                    -{" "}
-                    {moment(item?.date_added)
-                      .utc()
-                      .format("Do MMM, YYYY [at] h:mmA")}
-                  </span>
-                </p>
-                <p>{item?.feedback}</p>
-              </div>
-            );
-          })}
-        </div>
-      ) : null} */}
-
-      {/* Display HR Manager Feedback */}
-      {/* {HrManagerFeedback ? (
-        <div className="col-md-12 mt-2">
-          <p className="font-weight-bold" style={{ marginBottom: "0px" }}>
-            HR Manager Feedback
+          <p className="font-weight-bold" style={{ marginBottom: "10px" }}>
+            Survey Questions and Correct Answers
           </p>
-          <p>{HrManagerFeedback}</p>
-        </div>
-      ) : null} */}
-
-      {/* Display Survey Questions and Answers */}
-      {/* {surveyData.length ? (
-        <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="job-field">Exit Interview</p>
-          {surveyData.map((item, index) => {
-            if (item?.question === "hr_resignation_feedbacks") {
-              return null;
-            }
-
-            return (
-              <div key={index} className="mt-2">
-                <p className="font-weight-bold">Q: {item?.question}</p>
-                <p>A: {item?.answer}</p>
+          {questions_details.map((question, index) => (
+            <div key={index}>
+              <div style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+                {index + 1}. {question.question}
               </div>
-            );
-          })}
+              <div className="col-md-12 form_builder_form_sample_fields">
+                {question.question_type === "checkbox" ? (
+                  <div className="form_builder_form_sample_fields_inner">
+                    {Object.keys(question.options).map(
+                      (optionKey, optionIndex) => (
+                        <label
+                          key={optionIndex}
+                          className="checkbox_radio_input"
+                        >
+                          <input
+                            type="checkbox"
+                            value={optionKey}
+                            checked={question.answers.includes(optionKey)}
+                            readOnly
+                          />
+                          {question.options[optionKey]}
+                        </label>
+                      )
+                    )}
+                  </div>
+                ) : question.question_type === "radio" ? (
+                  <div className="form_builder_form_sample_fields_inner">
+                    {Object.keys(question.options).map(
+                      (optionKey, optionIndex) => (
+                        <label
+                          key={optionIndex}
+                          className="checkbox_radio_input"
+                        >
+                          <input
+                            type="radio"
+                            name={`radio_${index}`}
+                            value={optionKey}
+                            checked={question.answers[0] === optionKey}
+                            readOnly
+                          />
+                          {question.options[optionKey]}
+                        </label>
+                      )
+                    )}
+                  </div>
+                ) : question.question_type === "text" ? (
+                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                    <input
+                      className="form-control"
+                      type="text"
+                      placeholder={Object.values(question.options)}
+                      readOnly
+                    />
+                  </div>
+                ) : question.question_type === "textarea" ? (
+                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                    <textarea
+                      className="form-control"
+                      placeholder={Object.values(question.options)}
+                      readOnly
+                    />
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          ))}
         </div>
-      ) : null} */}
+      ) : null}
     </div>
   );
 };

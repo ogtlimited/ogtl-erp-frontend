@@ -56,9 +56,9 @@ const SurveyAdmin = () => {
       const formatted = resData.map((survey) => ({
         ...survey,
         title: survey?.title,
-        dateCreated: moment(survey?.created_at).format("Do MMMM, YYYY"),
-        fromDate: moment(survey?.from).format("Do MMMM, YYYY"),
-        toDate: moment(survey?.to).format("Do MMMM, YYYY"),
+        created_at: moment(survey?.created_at).format("Do MMMM, YYYY"),
+        from: moment(survey?.from).format("Do MMMM, YYYY"),
+        to: moment(survey?.to).format("Do MMMM, YYYY"),
       }));
 
       console.log(resData, "All Survey Forms", formatted);
@@ -85,19 +85,19 @@ const SurveyAdmin = () => {
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "dateCreated",
+      dataField: "created_at",
       text: "Date Created",
       sort: true,
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "fromDate",
+      dataField: "from",
       text: "From",
       sort: true,
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "toDate",
+      dataField: "to",
       text: "To",
       sort: true,
       headerStyle: { width: "20%" },
@@ -116,7 +116,6 @@ const SurveyAdmin = () => {
               onClick={() => {
                 setmodalType("view-details");
                 setViewRow(row);
-                // handleViewRowFeedback(row);
               }}
             >
               View
@@ -132,7 +131,7 @@ const SurveyAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Survey</h3>
+            <h3 className="page-title">Survey Forms</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Survey</li>

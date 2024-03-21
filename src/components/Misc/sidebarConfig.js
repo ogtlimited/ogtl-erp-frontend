@@ -453,6 +453,18 @@ const sidebarConfig = [
         title: "Survey",
         path: PATH_DASHBOARD.hr.survey,
         icon: ICONS.survey,
+        children: [
+          {
+            canView: "hr",
+            title: "All Surveys",
+            path: PATH_DASHBOARD.hr.allSurvey,
+          },
+          {
+            canView: "hr",
+            title: "Survey Forms",
+            path: PATH_DASHBOARD.hr.survey,
+          },
+        ],
       },
 
       // Exit Management:
