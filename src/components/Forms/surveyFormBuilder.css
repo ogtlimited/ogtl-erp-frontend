@@ -73,10 +73,15 @@
 
 .form_builder_actions {
     display: flex;
-    height: 44px;
+    min-height: 44px !important;
     gap: 1rem;
     margin-bottom: .5rem;
 }
+
+.form_builder_actions > div > div {
+    min-height: 44px !important;
+}
+
 .form_builder_actions > button {
     font-size: 15px;
 }

@@ -29,6 +29,7 @@ const QuestionInput = ({ onAddQuestion }) => {
   const [optionAdded, setOptionAdded] = useState(false);
   const [showOptionInstruction, setShowOptionInstruction] = useState(false);
   const [showInstruction, setShowInstruction] = useState(false);
+  const [usedOptionTypes, setUsedOptionTypes] = useState([]);
 
   const handleAddOption = () => {
     if (optionType === "radio") {
@@ -50,6 +51,10 @@ const QuestionInput = ({ onAddQuestion }) => {
       ]);
       setOptionAdded(true);
     }
+    setUsedOptionTypes((prevUsedOptionTypes) => [
+      ...prevUsedOptionTypes,
+      optionType,
+    ]);
   };
 
   const handleOptionChange = (index, value) => {
@@ -136,6 +141,7 @@ const QuestionInput = ({ onAddQuestion }) => {
     setOptionAdded(false);
     setShowOptionInstruction(false);
     setShowInstruction(false);
+    setUsedOptionTypes([]);
   };
 
   const renderOptionInput = (option, index) => {
@@ -203,9 +209,10 @@ const QuestionInput = ({ onAddQuestion }) => {
       <div className="form_builder_actions">
         <Select
           className="formInputTypeSelect"
-          options={formInputTypes}
+          options={!usedOptionTypes.length ? formInputTypes : []}
           value={formInputTypes.find((option) => option.value === optionType)}
           onChange={(option) => setOptionType(option.value)}
+          isDisabled={usedOptionTypes.length}
         />
         <button
           className="btn btn-dark"
