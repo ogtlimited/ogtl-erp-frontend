@@ -188,6 +188,12 @@ const sidebarConfig = [
       },
       {
         canView: "all",
+        title: "Survey",
+        path: PATH_DASHBOARD.main.survey,
+        icon: ICONS.survey,
+      },
+      {
+        canView: "all",
         title: "Help Desk",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.helpDesk,

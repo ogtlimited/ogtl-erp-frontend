@@ -1,4 +1,3 @@
-import "../../components/Forms/surveyFormBuilder.css";
 import React from "react";
 
 const SurveyContent = ({ Content = {} }) => {

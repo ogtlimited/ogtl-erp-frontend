@@ -16,6 +16,7 @@ const UniversalTable = ({
   loading,
   setLoading,
   emptyDataMessage,
+  hideCSVExport,
   context,
 }) => {
   const { SearchBar } = Search;
@@ -77,12 +78,14 @@ const UniversalTable = ({
                 className="inputSearch"
               />
 
-              <ExportCSVButton
-                className="float-right btn export-csv"
-                {...props.csvProps}
-              >
-                Export CSV
-              </ExportCSVButton>
+              {hideCSVExport ? null : (
+                <ExportCSVButton
+                  className="float-right btn export-csv"
+                  {...props.csvProps}
+                >
+                  Export CSV
+                </ExportCSVButton>
+              )}
 
               <div className="hr-filter-select col-12"></div>
 

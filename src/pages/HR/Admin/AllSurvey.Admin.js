@@ -47,10 +47,15 @@ const AllSurveyAdmin = () => {
         }
       );
 
-      console.log("All Survey Rsponse", response?.data?.data?.survey_response_records?.survey_response_records)
+      console.log(
+        "All Survey Rsponse",
+        response?.data?.data?.survey_response_records?.survey_response_records
+      );
 
-      const resData = response?.data?.data?.survey_response_records?.survey_response;
-      const totalPages = response?.data?.data?.survey_response_records?.total_pages;
+      const resData =
+        response?.data?.data?.survey_response_records?.survey_response;
+      const totalPages =
+        response?.data?.data?.survey_response_records?.total_pages;
 
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
@@ -107,7 +112,7 @@ const AllSurveyAdmin = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    CurrentUserCanCreateAndEdit && {
+    {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
