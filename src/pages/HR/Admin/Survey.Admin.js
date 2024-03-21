@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
@@ -25,41 +25,44 @@ const SurveyAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // // All Surveys:
-  // const fetchAllBranches = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosInstance.get("/api/v1/branches.json", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420",
-  //       },
-  //     });
-  //     const resData = response?.data?.data?.branches;
+  // All Surveys:
+  const fetchAllSurveyForms = useCallback(async () => {
+    setLoading(true);
 
-  //     const formatted = resData.map((branch, index) => ({
-  //       ...branch,
-  //       index: index + 1,
-  //       title: branch?.title.toUpperCase(),
-  //       state: branch?.state,
-  //       country: branch?.country,
-  //       created_at: moment(branch?.created_at).format("Do MMMM, YYYY"),
-  //       value: branch.id,
-  //     }));
+    try {
+      const response = await axiosInstance.get("/api/v1/hr_surveys.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data;
 
-  //     setallBranch(formatted);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     const component = "Branch Error:";
-  //     ErrorHandler(error, component);
-  //     setLoading(false);
-  //   }
-  // };
+      console.log(resData, "All Survey Forms");
 
-  // useEffect(() => {
-  //   fetchAllBranches();
-  // }, []);
+      // const formatted = resData.map((branch, index) => ({
+      //   ...branch,
+      //   index: index + 1,
+      //   title: branch?.title.toUpperCase(),
+      //   state: branch?.state,
+      //   country: branch?.country,
+      //   created_at: moment(branch?.created_at).format("Do MMMM, YYYY"),
+      //   value: branch.id,
+      // }));
+
+      // setallBranch(formatted);
+      setLoading(false);
+    } catch (error) {
+      const component = "Survey Form Error | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAllSurveyForms();
+  }, [fetchAllSurveyForms]);
 
   const columns = [
     {

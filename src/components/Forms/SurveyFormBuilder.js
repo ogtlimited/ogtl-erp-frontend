@@ -229,6 +229,7 @@ const SurveyFormBuilder = ({
   selectedDepartment,
   selectedCampaign,
   onSubmitSurvey,
+  loading,
 }) => {
   const [questions, setQuestions] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -331,7 +332,15 @@ const SurveyFormBuilder = ({
           onClick={handleSubmit}
           disabled={!isFormValid}
         >
-          Create Form
+          {loading ? (
+            <span
+              className="spinner-border spinner-border-md"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          ) : (
+            "Create Form"
+          )}
         </button>
       </div>
     </div>

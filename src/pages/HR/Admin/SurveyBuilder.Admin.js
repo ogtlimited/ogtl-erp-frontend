@@ -9,15 +9,9 @@ import moment from "moment";
 
 const SurveyBuilder = () => {
   const navigate = useNavigate();
-  const {
-    showAlert,
-    user,
-    ErrorHandler,
-    selectDepartments,
-    selectCampaigns,
-    goToTop,
-  } = useAppContext();
-  const [allSurveys, setAllSurveys] = useState([]);
+  const { showAlert, selectDepartments, selectCampaigns, goToTop } =
+    useAppContext();
+  const [loading, setLoading] = useState(false);
   const today = moment().format("YYYY-MM-DD");
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");
 
@@ -102,22 +96,38 @@ const SurveyBuilder = () => {
       to,
     };
 
-    console.log("Submitting formatted survey data:", formattedSurveyData);
+    setLoading(true);
 
     try {
-      
-    } catch (error) {
-      
-    }
+      const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: formattedSurveyData,
+      });
 
-    // Clear form fields after submission
-    setTitle("");
-    setFrom(today);
-    setTo(lastDay);
-    setSelectedDepartmentOptions([]);
-    setSelectedDepartment([]);
-    setSelectedCampaignOptions([]);
-    setSelectedCampaign([]);
+      showAlert(
+        true,
+        `${response?.data?.data?.message}`,
+        "alert alert-success"
+      );
+
+      setTitle("");
+      setFrom(today);
+      setTo(lastDay);
+      setSelectedDepartmentOptions([]);
+      setSelectedDepartment([]);
+      setSelectedCampaignOptions([]);
+      setSelectedCampaign([]);
+      setLoading(false);
+    } catch (error) {
+      goToTop();
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setLoading(false);
+    }
   };
 
   return (
@@ -230,6 +240,7 @@ const SurveyBuilder = () => {
               selectedDepartment={selectedDepartment}
               selectedCampaign={selectedCampaign}
               onSubmitSurvey={handleSubmitSurvey}
+              loading={loading}
             />
           </div>
         ) : null}
