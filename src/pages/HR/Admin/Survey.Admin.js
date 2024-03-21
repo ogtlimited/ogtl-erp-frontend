@@ -100,7 +100,7 @@ const SurveyAdmin = () => {
       sort: true,
       headerStyle: { width: "20%" },
     },
-    CurrentUserCanCreateAndEdit && {
+    {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
