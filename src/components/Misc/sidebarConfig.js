@@ -51,6 +51,7 @@ const ICONS = {
   valentine: getIcon("la-gratipay"),
   female: getIcon("la-venus"),
   certificate: getIcon("la-certificate"),
+  survey: getIcon("la-poll"),
 };
 
 const buildExternalURL = () => {
@@ -442,6 +443,26 @@ const sidebarConfig = [
             canView: "hr",
             title: "Job Applications",
             path: PATH_DASHBOARD.recruitment.jobApplicants,
+          },
+        ],
+      },
+
+      // Survey:
+      {
+        canView: "hr",
+        title: "Survey",
+        path: PATH_DASHBOARD.hr.survey,
+        icon: ICONS.survey,
+        children: [
+          {
+            canView: "hr",
+            title: "All Surveys",
+            path: PATH_DASHBOARD.hr.allSurvey,
+          },
+          {
+            canView: "hr",
+            title: "Survey Forms",
+            path: PATH_DASHBOARD.hr.survey,
           },
         ],
       },

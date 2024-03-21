@@ -341,6 +341,30 @@ export default function Router() {
               ),
             },
             {
+              path: "survey",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <SurveyAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "survey/create",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <SurveyBuilder />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "all-survey",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <AllSurveyAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1267,6 +1291,15 @@ const OperationsTeamLeaveApplications = Loadable(
 const ResignationStatusAnalytics = Loadable(
   lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))
 );
+const SurveyAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/Survey.Admin"))
+);
+const AllSurveyAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/AllSurvey.Admin"))
+);
+const SurveyBuilder = Loadable(
+  lazy(() => import("../pages/HR/Admin/SurveyBuilder.Admin"))
+);
 const ResignationAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Resignation.Admin"))
 );
@@ -1324,9 +1357,7 @@ const TicketManagement = Loadable(
 const EmployeeAppreciation = Loadable(
   lazy(() => import("../pages/HR/Users/EmployeeAppreciation.User"))
 );
-const IWDUser = Loadable(
-  lazy(() => import("../pages/HR/Users/IWD.User"))
-);
+const IWDUser = Loadable(lazy(() => import("../pages/HR/Users/IWD.User")));
 const ValentineUser = Loadable(
   lazy(() => import("../pages/HR/Users/Valentine.User"))
 );

@@ -49,6 +49,8 @@ export const PATH_DASHBOARD = {
     addEmployees: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/add"),
     leadership: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/leader"),
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
+    survey: path(ROOTS_DASHBOARD, "/hr/survey"),
+    allSurvey: path(ROOTS_DASHBOARD, "/hr/all-survey"),
     resignation: path(ROOTS_DASHBOARD, "/hr/resignation"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),

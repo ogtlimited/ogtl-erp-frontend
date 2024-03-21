@@ -1741,3 +1741,22 @@ img {
   font-size: 12px;
   font-weight: 500;
 }
+
+/*------------------
+      Survey  
+-------------------*/
+
+.survey_builder {
+  background-color: #fff;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.survey_builder_container {
+  background-color: #fff;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  margin: 0 1rem;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;
+}
