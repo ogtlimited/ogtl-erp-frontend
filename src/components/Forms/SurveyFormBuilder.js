@@ -27,6 +27,7 @@ const QuestionInput = ({ onAddQuestion }) => {
   const [optionType, setOptionType] = useState("text");
   const [correctOptions, setCorrectOptions] = useState([]);
   const [optionAdded, setOptionAdded] = useState(false);
+  const [showOptionInstruction, setShowOptionInstruction] = useState(false);
   const [showInstruction, setShowInstruction] = useState(false);
 
   const handleAddOption = () => {
@@ -80,9 +81,38 @@ const QuestionInput = ({ onAddQuestion }) => {
     ) {
       setShowInstruction(true);
       return;
+    } else {
+      setShowInstruction(false);
     }
 
-    if (question.trim() === "") return;
+    if (question.trim() === "") {
+      return;
+    }
+
+    if (
+      (optionType === "checkbox" || optionType === "radio") &&
+      options.length === 0
+    ) {
+      setShowOptionInstruction(true);
+      return;
+    } else {
+      setShowOptionInstruction(false);
+    }
+
+    if (
+      (optionType === "checkbox" || optionType === "radio") &&
+      options.some((option) => option.value.trim() === "")
+    ) {
+      setShowOptionInstruction(true);
+      return;
+    } else {
+      setShowOptionInstruction(false);
+    }
+
+    if (options.length === 0) {
+      setOptionAdded(false);
+      return;
+    }
 
     const filteredOptions = options.filter(
       (option) =>
@@ -104,6 +134,7 @@ const QuestionInput = ({ onAddQuestion }) => {
     setOptions([]);
     setCorrectOptions([]);
     setOptionAdded(false);
+    setShowOptionInstruction(false);
     setShowInstruction(false);
   };
 
@@ -161,6 +192,9 @@ const QuestionInput = ({ onAddQuestion }) => {
           {renderOptionInput(option, index)}
         </div>
       ))}
+      {showOptionInstruction ? (
+        <div className="correct_ans_instruction">Option cannot be empty</div>
+      ) : null}
       {showInstruction ? (
         <div className="correct_ans_instruction">
           Select atleast one correct option
@@ -188,7 +222,14 @@ const QuestionInput = ({ onAddQuestion }) => {
   );
 };
 
-const SurveyFormBuilder = ({ setFormQuestions, setIsSubmitted }) => {
+const SurveyFormBuilder = ({
+  title,
+  from,
+  to,
+  selectedDepartment,
+  selectedCampaign,
+  onSubmitSurvey,
+}) => {
   const [questions, setQuestions] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -215,8 +256,16 @@ const SurveyFormBuilder = ({ setFormQuestions, setIsSubmitted }) => {
   };
 
   const handleSubmit = () => {
-    setFormQuestions(questions);
-    setIsSubmitted(true);
+    const surveyData = {
+      title: title,
+      from: from,
+      to: to,
+      departments: selectedDepartment,
+      campaigns: selectedCampaign,
+      questions: questions,
+    };
+
+    onSubmitSurvey(surveyData);
     setQuestions([]);
   };
 

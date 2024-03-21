@@ -12,6 +12,11 @@
     margin-bottom: 1rem;
 }
 
+.correct_ans_instruction {
+    margin-bottom: 1rem;
+    color: red;
+}
+
 .form_builder_form {
     padding: .5rem 1rem;
 }

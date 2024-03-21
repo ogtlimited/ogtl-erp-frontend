@@ -9,15 +9,17 @@ import moment from "moment";
 
 const SurveyBuilder = () => {
   const navigate = useNavigate();
-  const { showAlert, user, ErrorHandler, selectDepartments, selectCampaigns } =
-    useAppContext();
+  const {
+    showAlert,
+    user,
+    ErrorHandler,
+    selectDepartments,
+    selectCampaigns,
+    goToTop,
+  } = useAppContext();
   const [allSurveys, setAllSurveys] = useState([]);
-  const [errorIndicatorForDept, setErrorIndicatorForDept] = useState("");
-  const [errorIndicatorForCamp, setErrorIndicatorForCamp] = useState("");
   const today = moment().format("YYYY-MM-DD");
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");
-  const [formQuestions, setFormQuestions] = useState([]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [title, setTitle] = useState("");
   const [from, setFrom] = useState(today);
@@ -25,56 +27,75 @@ const SurveyBuilder = () => {
   const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
     []
   );
+  const [selectedDepartment, setSelectedDepartment] = useState([]);
   const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
+  const [selectedCampaign, setSelectedCampaign] = useState([]);
 
-  const handleCreateSurveyForm = (e) => {
-    e.preventDefault();
+  const handleSubmitSurvey = (surveyData) => {
+    // Extract relevant survey information
+    const { title, from, to, departments, campaigns } =
+      surveyData;
 
-    if (isSubmitted) {
-      if (!selectedDepartmentOptions.length) {
-        setErrorIndicatorForDept("office-not-ok");
-        return;
-      }
-      if (!selectedCampaignOptions.length) {
-        setErrorIndicatorForCamp("office-not-ok");
-        return;
-      }
-      if (!formQuestions.length) {
-        showAlert(
-          true,
-          `You can not ereate an empty survey form`,
-          "alert alert-info"
-        );
-        return;
-      }
+    // Reorganize questions data
+    const questions = surveyData.questions.map((question, index) => ({
+      id: index + 1,
+      question: question.question,
+      question_type: question.options[0].type,
+      options: question.options.reduce((acc, option, optionIndex) => {
+        acc[String.fromCharCode(97 + optionIndex)] = option.value;
+        return acc;
+      }, {}),
+      answers: question.options
+        .filter((option) => option.correct)
+        .map((option) => String.fromCharCode(97 + option.index)),
+    }));
 
-      const survey = {
-        title: title,
-        from: from,
-        to: to,
-        departments: selectedDepartmentOptions,
-        campaigns: selectedCampaignOptions,
-        questions: formQuestions,
-      };
-
-      console.log("payload", survey);
+    // Reorganize applicable offices data
+    const applicable_offices = [];
+    if (departments?.length > 0) {
+      applicable_offices.push(
+        ...departments.map((department) => ({
+          id: department.value,
+          type: "department",
+          name: department.label,
+        }))
+      );
     }
+    
+    if (campaigns?.length > 0) {
+      applicable_offices.push(
+        ...campaigns.map((campaign) => ({
+          id: campaign.value,
+          type: "campaign",
+          name: campaign.label,
+        }))
+      );
+    }
+
+    // Construct the final survey data object
+    const formattedSurveyData = {
+      title,
+      question_details: {
+        questions,
+      },
+      applicable_offices: {
+        offices: applicable_offices,
+      },
+      from,
+      to,
+    };
+
+    console.log("Submitting formatted survey data:", formattedSurveyData);
+
+    // Clear form fields after submission
+    setTitle("");
+    setFrom(today);
+    setTo(lastDay);
+    setSelectedDepartmentOptions([]);
+    setSelectedDepartment([]);
+    setSelectedCampaignOptions([]);
+    setSelectedCampaign([]);
   };
-
-  // useEffect(() => {
-  //   if (isSubmitted) {
-  //     const survey = {
-  //       title: title,
-  //       from: from,
-  //       to: to,
-  //       departments: selectedDepartmentOptions,
-  //       campaigns: selectedCampaignOptions,
-  //       questions: formQuestions,
-  //     };
-
-  //     console.log("payload", survey)
-  //   }
-  // }, [formQuestions, from, isSubmitted, selectedCampaignOptions, selectedDepartmentOptions, title, to]);
 
   return (
     <>
@@ -89,7 +110,7 @@ const SurveyBuilder = () => {
           </div>
         </div>
       </div>
-      <form className="column survey_builder" onSubmit={handleCreateSurveyForm}>
+      <div className="column survey_builder">
         {/* Title */}
         <div className="col-md-3">
           <div className="form-group">
@@ -149,13 +170,13 @@ const SurveyBuilder = () => {
                 Applicable Departments
               </label>
               <DropdownCheckbox
-                office="Departments"
+                office="department"
                 options={selectDepartments}
                 selectedOptions={selectedDepartmentOptions}
+                setSelected={setSelectedDepartment}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedDepartmentOptions(updatedSelectedOptions)
                 }
-                errorIndicator={errorIndicatorForDept}
               />
             </div>
           </div>
@@ -163,28 +184,33 @@ const SurveyBuilder = () => {
             <div className="form-group">
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox
-                office="Campaigns"
+                office="campaign"
                 options={selectCampaigns}
                 selectedOptions={selectedCampaignOptions}
+                setSelected={setSelectedCampaign}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedCampaignOptions(updatedSelectedOptions)
                 }
-                errorIndicator={errorIndicatorForCamp}
               />
             </div>
           </div>
         </div>
 
         {/* Form Container */}
-        {selectedDepartmentOptions.length && selectedCampaignOptions.length ? (
+        {(selectedDepartmentOptions.length || selectedCampaignOptions.length) &&
+        title.length ? (
           <div className="column survey_builder_container">
             <SurveyFormBuilder
-              setFormQuestions={setFormQuestions}
-              setIsSubmitted={setIsSubmitted}
+              title={title}
+              from={from}
+              to={to}
+              selectedDepartment={selectedDepartment}
+              selectedCampaign={selectedCampaign}
+              onSubmitSurvey={handleSubmitSurvey}
             />
           </div>
         ) : null}
-      </form>
+      </div>
     </>
   );
 };
