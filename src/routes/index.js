@@ -357,6 +357,14 @@ export default function Router() {
               ),
             },
             {
+              path: "all-survey",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <AllSurveyAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1285,6 +1293,9 @@ const ResignationStatusAnalytics = Loadable(
 );
 const SurveyAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/Survey.Admin"))
+);
+const AllSurveyAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/AllSurvey.Admin"))
 );
 const SurveyBuilder = Loadable(
   lazy(() => import("../pages/HR/Admin/SurveyBuilder.Admin"))

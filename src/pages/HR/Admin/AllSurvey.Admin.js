@@ -8,10 +8,10 @@ import moment from "moment";
 import ViewModal from "../../../components/Modal/ViewModal";
 import SurveyContent from "../../../components/ModalContents/SurveyContent";
 
-const SurveyAdmin = () => {
+const AllSurveyAdmin = () => {
   const navigate = useNavigate();
   const { user, ErrorHandler } = useAppContext();
-  const [allSurveys, setAllSurveys] = useState([]);
+  const [allSurveyResponse, setAllSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -27,25 +27,30 @@ const SurveyAdmin = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Surveys:
-  const fetchAllSurveyForms = useCallback(async () => {
+  // All Survey response:
+  const fetchAllSurveyResponse = useCallback(async () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/v1/hr_surveys.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: sizePerPage,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/hr_survey_responses.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: page,
+            limit: sizePerPage,
+          },
+        }
+      );
 
-      const resData = response?.data?.data?.survey_records?.surveys;
-      const totalPages = response?.data?.data?.survey_records?.total_page;
+      console.log("All Survey Rsponse", response?.data?.data?.survey_response_records?.survey_response_records)
+
+      const resData = response?.data?.data?.survey_response_records?.survey_response;
+      const totalPages = response?.data?.data?.survey_response_records?.total_pages;
 
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
@@ -61,7 +66,9 @@ const SurveyAdmin = () => {
         to: moment(survey?.to).format("Do MMMM, YYYY"),
       }));
 
-      setAllSurveys(formatted);
+      console.log(resData, "All Survey Forms", formatted);
+
+      setAllSurveyResponse([]);
       setLoading(false);
     } catch (error) {
       const component = "Survey Form Error | ";
@@ -72,8 +79,8 @@ const SurveyAdmin = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllSurveyForms();
-  }, [fetchAllSurveyForms]);
+    fetchAllSurveyResponse();
+  }, [fetchAllSurveyResponse]);
 
   const columns = [
     {
@@ -129,28 +136,19 @@ const SurveyAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Survey Forms</h3>
+            <h3 className="page-title">All Surveys</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Survey</li>
+              <li className="breadcrumb-item active">All Surveys</li>
             </ul>
-          </div>
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreateAndEdit ? (
-              <button
-                className="btn add-btn"
-                onClick={() => navigate("/dashboard/hr/survey/create")}
-              >
-                <i className="fa fa-plus"></i> Create Survey
-              </button>
-            ) : null}
           </div>
         </div>
       </div>
+
       <div className="row  ">
         <SurveyTable
           columns={columns}
-          data={allSurveys}
+          data={allSurveyResponse}
           loading={loading}
           setLoading={setLoading}
           page={page}
@@ -174,4 +172,4 @@ const SurveyAdmin = () => {
   );
 };
 
-export default SurveyAdmin;
+export default AllSurveyAdmin;
