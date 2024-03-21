@@ -45,7 +45,7 @@ export const SurveyFormModal = ({
         },
       },
     ];
-    
+
     setFormContent(finalPayload);
     setSurveyFormFilled(true);
   };
@@ -177,7 +177,7 @@ export const SurveyFormModal = ({
                     )
                   )}
 
-                <div className="modal-footer">
+                <div className="modal-footer" style={{ marginTop: "2rem" }}>
                   <button
                     type="button"
                     className="btn btn-secondary"

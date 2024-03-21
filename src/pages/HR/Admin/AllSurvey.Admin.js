@@ -10,7 +10,7 @@ import SurveyContent from "../../../components/ModalContents/SurveyContent";
 
 const AllSurveyAdmin = () => {
   const navigate = useNavigate();
-  const { user, ErrorHandler } = useAppContext();
+  const { getAvatarColor, user, ErrorHandler } = useAppContext();
   const [allSurveyResponse, setAllSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalType, setmodalType] = useState("");
@@ -47,11 +47,6 @@ const AllSurveyAdmin = () => {
         }
       );
 
-      console.log(
-        "All Survey Rsponse",
-        response?.data?.data?.survey_response_records?.survey_response_records
-      );
-
       const resData =
         response?.data?.data?.survey_response_records?.survey_response;
       const totalPages =
@@ -63,20 +58,10 @@ const AllSurveyAdmin = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formatted = resData.map((survey) => ({
-        ...survey,
-        title: survey?.title,
-        created_at: moment(survey?.created_at).format("Do MMMM, YYYY"),
-        from: moment(survey?.from).format("Do MMMM, YYYY"),
-        to: moment(survey?.to).format("Do MMMM, YYYY"),
-      }));
-
-      console.log(resData, "All Survey Forms", formatted);
-
-      setAllSurveyResponse([]);
+      setAllSurveyResponse(resData);
       setLoading(false);
     } catch (error) {
-      const component = "Survey Form Error | ";
+      const component = "All Survey Response Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -89,51 +74,56 @@ const AllSurveyAdmin = () => {
 
   const columns = [
     {
-      dataField: "title",
-      text: "Title",
+      dataField: "full_name",
+      text: "Full Name",
       sort: true,
       headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "created_at",
-      text: "Date Created",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "from",
-      text: "From",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "to",
-      text: "To",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "",
-      text: "Action",
-      headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#generalModal"
-              onClick={() => {
-                setmodalType("view-details");
-                setViewRow(row);
-              }}
-            >
-              View
-            </button>
-          </div>
-        </div>
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          {value}
+        </h2>
       ),
     },
+    {
+      dataField: "survey_title",
+      text: "Survey Title",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "score",
+      text: "Score",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { width: "10%" },
+    //   formatter: (value, row) => (
+    //     <div className="text-center">
+    //       <div className="leave-user-action-btns">
+    //         <button
+    //           className="btn btn-sm btn-primary"
+    //           data-toggle="modal"
+    //           data-target="#generalModal"
+    //           onClick={() => {
+    //             setmodalType("view-details");
+    //             setViewRow(row);
+    //           }}
+    //         >
+    //           View
+    //         </button>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (

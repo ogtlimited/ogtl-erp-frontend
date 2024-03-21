@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import moment from "moment";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import { SurveyFormModal } from "../../../components/Modal/SurveyFormModal";
+import $ from "jquery";
+import { values } from "lodash";
 
 const SurveyUser = () => {
-  const navigate = useNavigate();
-  const { user, ErrorHandler } = useAppContext();
+  const { showAlert, goToTop, user, ErrorHandler } = useAppContext();
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [viewRow, setViewRow] = useState(null);
@@ -18,7 +18,7 @@ const SurveyUser = () => {
   const [submittingForm, setSubmittingForm] = useState(false);
 
   const userOgid = user?.employee_info?.ogid;
-  const userOffice = user?.office?.title.toLowerCase();
+  // const userOffice = user?.office?.title.toLowerCase();
 
   // All Survey response:
   const fetchSurveys = useCallback(async () => {
@@ -37,8 +37,25 @@ const SurveyUser = () => {
       );
 
       console.log("Survey", response?.data?.data?.pending_surveys);
-
       const resData = response?.data?.data?.pending_surveys;
+
+      const userResponse = await axiosInstance.get(
+        `/api/v1/hr_survey_responses/${userOgid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: 1,
+            limit: 1000,
+          },
+        }
+      );
+
+      const userResData =
+        userResponse?.data?.data?.survey_response_records?.survey_response;
 
       const formatted = resData.map((survey) => ({
         ...survey,
@@ -48,9 +65,22 @@ const SurveyUser = () => {
         to: moment(survey?.to).format("Do MMMM, YYYY"),
       }));
 
-      console.log(resData, "Available Survey Forms", formatted);
+      const formattedWithUserData = formatted.map((survey) => {
+        const userResponse = userResData.find(
+          (response) => response.survey_title === survey.title
+        );
 
-      setSurveys(formatted);
+        return {
+          ...survey,
+          score: userResponse ? userResponse.score : "-",
+          status:
+            userResponse && userResponse?.survey_title === survey?.title
+              ? "Completed"
+              : "Pending",
+        };
+      });
+
+      setSurveys(formattedWithUserData);
       setLoading(false);
     } catch (error) {
       const component = "Survey Error | ";
@@ -64,48 +94,116 @@ const SurveyUser = () => {
     fetchSurveys();
   }, [fetchSurveys]);
 
+  const handleSubmitSurvey = useCallback(async () => {
+    setSubmittingForm(true);
+
+    try {
+      const res = await axiosInstance.post(`/api/v1/hr_survey_responses.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        payload: formContent[0]?.payload,
+      });
+
+      showAlert(
+        true,
+        `Survey response sent successfully!`,
+        "alert alert-success"
+      );
+
+      $("#SurveyFormModal").modal("toggle");
+      fetchSurveys();
+      setSurveyFormFilled(false);
+      setFormContent([]);
+      goToTop();
+      setSubmittingForm(false);
+    } catch (error) {
+      const errorMsg = error.response?.data?.errors;
+      goToTop();
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#SurveyFormModal").modal("toggle");
+      setSubmittingForm(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formContent]);
+
+  useEffect(() => {
+    if (surveyFormFilled) {
+      handleSubmitSurvey();
+    }
+  }, [handleSubmitSurvey, surveyFormFilled]);
+
   const columns = [
     {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "from",
       text: "From",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
     },
     {
       dataField: "to",
       text: "To",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "15%" },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <span className="btn btn-gray btn-sm btn-rounded">
+          <i
+            style={{ marginRight: "10px" }}
+            className={`fa fa-dot-circle-o ${
+              value === "Completed" ? "text-success" : "text-warning"
+            }`}
+          ></i>{" "}
+          {value}
+        </span>
+      ),
+    },
+    {
+      dataField: "score",
+      text: "Score",
+      sort: true,
+      headerStyle: { width: "10%" },
     },
     {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "20%" },
+      headerStyle: { maxWidth: "15%" },
       formatter: (value, row) => (
-        <div className="text-center">
-          <div className="leave-user-action-btns">
-            <button
-              className="btn btn-sm btn-primary"
-              data-toggle="modal"
-              data-target="#SurveyFormModal"
-              onClick={() => setViewRow(row)}
-            >
-              Take This Survey
-            </button>
-          </div>
-        </div>
+        <>
+          {row.status !== "Completed" && (
+            <div className="text-center">
+              <div className="leave-user-action-btns">
+                <button
+                  className="btn btn-sm btn-primary"
+                  data-toggle="modal"
+                  data-target="#SurveyFormModal"
+                  onClick={() => setViewRow(row)}
+                >
+                  Take Survey
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       ),
     },
   ];
