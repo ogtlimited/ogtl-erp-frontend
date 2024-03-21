@@ -164,7 +164,7 @@ const SurveyUser = () => {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "15%" },
       formatter: (value, row) => (
         <span className="btn btn-gray btn-sm btn-rounded">
           <i
