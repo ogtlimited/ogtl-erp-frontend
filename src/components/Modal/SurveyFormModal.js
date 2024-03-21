@@ -10,9 +10,6 @@ export const SurveyFormModal = ({
   const { FontAwesomeIcon, faSpinner } = useAppContext();
   const [formData, setFormData] = useState({});
 
-  console.log("Fill this form:", surveyForm);
-
-  // Update form data when inputs change
   const handleInputChange = (questionIndex, optionKey, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -23,11 +20,16 @@ export const SurveyFormModal = ({
   const handleConfirmFormSubmission = async (e) => {
     e.preventDefault();
 
-    // Transform formData into the desired structure
     const transformedFormData = Object.entries(formData)
       .map(([questionIndex, answerObj]) => {
         const question = surveyForm.question_details.questions[questionIndex];
-        const answers = Object.keys(answerObj);
+        const answers = Object.keys(answerObj).map((answerKey) => {
+          if (answerKey === "text" || answerKey === "textarea") {
+            return answerObj[answerKey];
+          } else {
+            return answerKey;
+          }
+        });
         return {
           id: question.id,
           answers: answers,
@@ -35,21 +37,17 @@ export const SurveyFormModal = ({
       })
       .filter((question) => question.answers.length > 0);
 
-    // Construct the final payload
     const finalPayload = [
       {
         payload: {
-          hr_survey_id: "2", // Assuming this is your survey ID
+          hr_survey_id: surveyForm?.id,
           response: { answers: transformedFormData },
         },
       },
     ];
-
-    console.log("Submit this:", finalPayload);
-
-    // Optionally update other state or trigger actions
-    // setFormContent(finalPayload);
-    // setSurveyFormFilled(true);
+    
+    setFormContent(finalPayload);
+    setSurveyFormFilled(true);
   };
 
   return (
