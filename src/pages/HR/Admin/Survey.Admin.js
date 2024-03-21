@@ -3,16 +3,18 @@ import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
-import { BranchForm } from "../../../components/FormJSON/CreateBranch";
 import SurveyTable from "../../../components/Tables/SurveyTable";
-import { BranchFormModal } from "../../../components/Modal/BranchFormModal";
 import moment from "moment";
+import ViewModal from "../../../components/Modal/ViewModal";
+import SurveyContent from "../../../components/ModalContents/SurveyContent";
 
 const SurveyAdmin = () => {
   const navigate = useNavigate();
   const { user, ErrorHandler } = useAppContext();
   const [allSurveys, setAllSurveys] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalType, setmodalType] = useState("");
+  const [viewRow, setViewRow] = useState(null);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -36,29 +38,40 @@ const SurveyAdmin = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
       });
-      const resData = response?.data;
 
-      console.log(resData, "All Survey Forms");
+      const resData = response?.data?.data?.survey_records?.surveys;
+      const totalPages = response?.data?.data?.survey_records?.total_page;
 
-      // const formatted = resData.map((branch, index) => ({
-      //   ...branch,
-      //   index: index + 1,
-      //   title: branch?.title.toUpperCase(),
-      //   state: branch?.state,
-      //   country: branch?.country,
-      //   created_at: moment(branch?.created_at).format("Do MMMM, YYYY"),
-      //   value: branch.id,
-      // }));
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
 
-      // setallBranch(formatted);
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
+
+      const formatted = resData.map((survey) => ({
+        ...survey,
+        title: survey?.title,
+        dateCreated: moment(survey?.created_at).format("Do MMMM, YYYY"),
+        fromDate: moment(survey?.from).format("Do MMMM, YYYY"),
+        toDate: moment(survey?.to).format("Do MMMM, YYYY"),
+      }));
+
+      console.log(resData, "All Survey Forms", formatted);
+
+      setAllSurveys(formatted);
       setLoading(false);
     } catch (error) {
       const component = "Survey Form Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   useEffect(() => {
     fetchAllSurveyForms();
@@ -69,33 +82,49 @@ const SurveyAdmin = () => {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
-      dataField: "created_at",
+      dataField: "dateCreated",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
-    // CurrentUserCanCreateAndEdit && {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { width: "10%" },
-    //   formatter: (value, row) => (
-    //     <div className="text-center">
-    //       <div className="leave-user-action-btns">
-    //         <button
-    //           className="btn btn-sm btn-primary"
-    //           data-toggle="modal"
-    //           data-target="#BranchFormModal"
-    //           onClick={() => handleEdit(row)}
-    //         >
-    //           Edit
-    //         </button>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
+    {
+      dataField: "fromDate",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "toDate",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType("view-details");
+                setViewRow(row);
+                // handleViewRowFeedback(row);
+              }}
+            >
+              View
+            </button>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -135,6 +164,16 @@ const SurveyAdmin = () => {
           setTotalPages={setTotalPages}
         />
       </div>
+
+      {modalType === "view-details" ? (
+        <ViewModal
+          title="Survey Details"
+          content={<SurveyContent Content={viewRow} />}
+        />
+      ) : (
+        ""
+      )}
+
     </>
   );
 };
