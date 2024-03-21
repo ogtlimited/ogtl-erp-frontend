@@ -186,7 +186,7 @@ const SurveyUser = () => {
     {
       dataField: "",
       text: "Action",
-      headerStyle: { maxWidth: "15%" },
+      headerStyle: { maxWidth: "10%" },
       formatter: (value, row) => (
         <>
           {row.status !== "Completed" && (
