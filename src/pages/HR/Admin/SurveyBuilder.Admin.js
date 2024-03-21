@@ -31,24 +31,41 @@ const SurveyBuilder = () => {
   const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState([]);
 
-  const handleSubmitSurvey = (surveyData) => {
+  const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
-    const { title, from, to, departments, campaigns } =
-      surveyData;
+    const { title, from, to, departments, campaigns } = surveyData;
 
     // Reorganize questions data
-    const questions = surveyData.questions.map((question, index) => ({
-      id: index + 1,
-      question: question.question,
-      question_type: question.options[0].type,
-      options: question.options.reduce((acc, option, optionIndex) => {
+    const questions = surveyData.questions.map((question, index) => {
+      const options = question.options.reduce((acc, option, optionIndex) => {
         acc[String.fromCharCode(97 + optionIndex)] = option.value;
         return acc;
-      }, {}),
-      answers: question.options
-        .filter((option) => option.correct)
-        .map((option) => String.fromCharCode(97 + option.index)),
-    }));
+      }, {});
+
+      // Find the indices of all correct answers
+      const correctIndices = question.options.reduce(
+        (acc, option, optionIndex) => {
+          if (option.correct) {
+            acc.push(optionIndex);
+          }
+          return acc;
+        },
+        []
+      );
+
+      // Map the indices of correct answers to their corresponding keys
+      const correctKeys = correctIndices.map((index) =>
+        String.fromCharCode(97 + index)
+      );
+
+      return {
+        id: index + 1,
+        question: question.question,
+        question_type: question.options[0].type,
+        options,
+        answers: correctKeys,
+      };
+    });
 
     // Reorganize applicable offices data
     const applicable_offices = [];
@@ -61,7 +78,7 @@ const SurveyBuilder = () => {
         }))
       );
     }
-    
+
     if (campaigns?.length > 0) {
       applicable_offices.push(
         ...campaigns.map((campaign) => ({
@@ -86,6 +103,12 @@ const SurveyBuilder = () => {
     };
 
     console.log("Submitting formatted survey data:", formattedSurveyData);
+
+    try {
+      
+    } catch (error) {
+      
+    }
 
     // Clear form fields after submission
     setTitle("");
