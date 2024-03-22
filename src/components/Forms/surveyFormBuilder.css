@@ -106,3 +106,14 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.form_builder_input_delete {
+    transition: all 0.3s ease-in-out;
+    color: var(--prm-gray);
+    margin-left: 1rem;
+    cursor: pointer;
+    font-size: 18px;
+}
+.form_builder_input_delete:hover {
+    color: red;
+}

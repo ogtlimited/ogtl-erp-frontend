@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { MdDelete } from "react-icons/md";
 
 const formInputTypes = [
   {
@@ -146,13 +147,25 @@ const QuestionInput = ({ onAddQuestion }) => {
   const renderOptionInput = (option, index) => {
     if (optionType === "text" || optionType === "textarea") {
       return (
-        <input
-          className="col-md-6 form-control"
-          type={optionType}
-          value={option.value}
-          placeholder="You may provide a hint or guide for this option"
-          onChange={(e) => handleOptionChange(index, e.target.value)}
-        />
+        <div className="checkbox_radio_wrapper">
+          <input
+            className="col-md-6 form-control"
+            type={optionType}
+            value={option.value}
+            placeholder="You may provide a hint or guide for this option"
+            onChange={(e) => handleOptionChange(index, e.target.value)}
+          />
+          <MdDelete
+            className="form_builder_input_delete"
+            onClick={() => {
+              setOptions((prevOptions) => {
+                const newOptions = [...prevOptions];
+                newOptions.splice(index, 1);
+                return newOptions;
+              });
+            }}
+          />
+        </div>
       );
     } else if (optionType === "radio" || optionType === "checkbox") {
       return (
@@ -171,6 +184,16 @@ const QuestionInput = ({ onAddQuestion }) => {
               onChange={() => handleCorrectOptionChange(index)}
             />
           )}
+          <MdDelete
+            className="form_builder_input_delete"
+            onClick={() => {
+              setOptions((prevOptions) => {
+                const newOptions = [...prevOptions];
+                newOptions.splice(index, 1);
+                return newOptions;
+              });
+            }}
+          />
         </div>
       );
     }
