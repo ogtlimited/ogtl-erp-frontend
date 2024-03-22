@@ -161,6 +161,10 @@ const QuestionInput = ({ onAddQuestion }) => {
               setOptions((prevOptions) => {
                 const newOptions = [...prevOptions];
                 newOptions.splice(index, 1);
+                if (!newOptions.length) {
+                  setOptionAdded(false);
+                  setUsedOptionTypes([]);
+                }
                 return newOptions;
               });
             }}
@@ -190,6 +194,10 @@ const QuestionInput = ({ onAddQuestion }) => {
               setOptions((prevOptions) => {
                 const newOptions = [...prevOptions];
                 newOptions.splice(index, 1);
+                if (!newOptions.length) {
+                  setOptionAdded(false);
+                  setUsedOptionTypes([]);
+                }
                 return newOptions;
               });
             }}
