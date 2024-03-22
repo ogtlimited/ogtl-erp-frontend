@@ -6,7 +6,6 @@ import moment from "moment";
 import UniversalTable from "../../../components/Tables/UniversalTable";
 import { SurveyFormModal } from "../../../components/Modal/SurveyFormModal";
 import $ from "jquery";
-import { values } from "lodash";
 
 const SurveyUser = () => {
   const { showAlert, goToTop, user, ErrorHandler } = useAppContext();
@@ -26,7 +25,7 @@ const SurveyUser = () => {
 
     try {
       const response = await axiosInstance.get(
-        `/api/v1/pending_survey_responses.json`,
+        `/api/v1/hr_surveys/${userOgid}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,51 +35,16 @@ const SurveyUser = () => {
         }
       );
 
-      console.log("Survey", response?.data?.data?.pending_surveys);
-      const resData = response?.data?.data?.pending_surveys;
-
-      const userResponse = await axiosInstance.get(
-        `/api/v1/hr_survey_responses/${userOgid}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: 1,
-            limit: 1000,
-          },
-        }
-      );
-
-      const userResData =
-        userResponse?.data?.data?.survey_response_records?.survey_response;
+      const resData = response?.data?.data?.survey_records;
 
       const formatted = resData.map((survey) => ({
         ...survey,
-        title: survey?.title,
         created_at: moment(survey?.created_at).format("Do MMMM, YYYY"),
         from: moment(survey?.from).format("Do MMMM, YYYY"),
         to: moment(survey?.to).format("Do MMMM, YYYY"),
       }));
 
-      const formattedWithUserData = formatted.map((survey) => {
-        const userResponse = userResData.find(
-          (response) => response.survey_title === survey.title
-        );
-
-        return {
-          ...survey,
-          score: userResponse ? userResponse.score : "-",
-          status:
-            userResponse && userResponse?.survey_title === survey?.title
-              ? "Completed"
-              : "Pending",
-        };
-      });
-
-      setSurveys(formattedWithUserData);
+      setSurveys(formatted);
       setLoading(false);
     } catch (error) {
       const component = "Survey Error | ";
@@ -106,6 +70,8 @@ const SurveyUser = () => {
         },
         payload: formContent[0]?.payload,
       });
+
+      console.log("Submitted response:", res)
 
       showAlert(
         true,
@@ -140,35 +106,35 @@ const SurveyUser = () => {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "from",
       text: "From",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "to",
       text: "To",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <span className="btn btn-gray btn-sm btn-rounded">
           <i
-            style={{ marginRight: "10px" }}
+            style={{ marginRight: "5px" }}
             className={`fa fa-dot-circle-o ${
               value === "Completed" ? "text-success" : "text-warning"
             }`}
@@ -181,12 +147,12 @@ const SurveyUser = () => {
       dataField: "score",
       text: "Score",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "50%" },
     },
     {
       dataField: "",
       text: "Action",
-      headerStyle: { maxWidth: "10%" },
+      headerStyle: { maxWidth: "50%" },
       formatter: (value, row) => (
         <>
           {row.status !== "Completed" && (
