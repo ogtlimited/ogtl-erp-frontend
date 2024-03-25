@@ -1760,3 +1760,24 @@ img {
   margin: 0 1rem;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;
 }
+
+/*-----------------------------
+      Survey Result Modal
+-------------------------------*/
+
+.survey_result_div {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.survey_result_div > p {
+  margin: 2rem 0 0 0;
+  font-weight: 600;
+}
+
+.survey_result_div > h1 {
+  font-size: 100px;
+}

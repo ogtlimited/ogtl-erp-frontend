@@ -4,6 +4,14 @@ import { MdDelete } from "react-icons/md";
 
 const formInputTypes = [
   {
+    label: "Text",
+    value: "text",
+  },
+  {
+    label: "Textarea",
+    value: "textarea",
+  },
+  {
     label: "Checkbox",
     value: "checkbox",
   },
@@ -13,24 +21,44 @@ const formInputTypes = [
   },
 ];
 
-const QuestionInput = ({ onAddQuestion }) => {
-  const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState([]);
-  const [optionType, setOptionType] = useState("checkbox");
-  const [correctOptions, setCorrectOptions] = useState([]);
+const QuestionInput = ({
+  onAddQuestion,
+  selectedQuestion,
+  onSaveQuestion,
+  questionCorrectOptions,
+}) => {
+  console.log("selectedQuestion", selectedQuestion);
+  console.log("questionCorrectOptions", questionCorrectOptions);
+
+  const [question, setQuestion] = useState(
+    selectedQuestion ? selectedQuestion.question : ""
+  );
+  const [options, setOptions] = useState(
+    selectedQuestion ? selectedQuestion.options : []
+  );
+  const [correctOptions, setCorrectOptions] = useState(
+    selectedQuestion
+      ? selectedQuestion.options.map((option) => option.correct)
+      : []
+  );
+  const [optionType, setOptionType] = useState( "text");
+  const [usedOptionTypes, setUsedOptionTypes] = useState([]);
   const [optionAdded, setOptionAdded] = useState(false);
   const [showOptionInstruction, setShowOptionInstruction] = useState(false);
   const [showInstruction, setShowInstruction] = useState(false);
-  const [usedOptionTypes, setUsedOptionTypes] = useState([]);
+
+  useEffect(() => {
+    if (selectedQuestion) {
+      setQuestion(selectedQuestion.question);
+      setOptions(selectedQuestion.options);
+      setCorrectOptions(
+        selectedQuestion.options.map((option) => option.correct)
+      );
+    }
+  }, [selectedQuestion]);
 
   const handleAddOption = () => {
-    if (optionType === "radio") {
-      setOptions((prevOptions) => [
-        ...prevOptions,
-        { type: optionType, value: "", correct: false },
-      ]);
-      setCorrectOptions((prevCorrectOptions) => [...prevCorrectOptions, false]);
-    } else if (optionType === "checkbox") {
+    if (optionType === "radio" || optionType === "checkbox") {
       setOptions((prevOptions) => [
         ...prevOptions,
         { type: optionType, value: "", correct: false },
@@ -43,6 +71,7 @@ const QuestionInput = ({ onAddQuestion }) => {
       ]);
       setOptionAdded(true);
     }
+
     setUsedOptionTypes((prevUsedOptionTypes) => [
       ...prevUsedOptionTypes,
       optionType,
@@ -136,6 +165,21 @@ const QuestionInput = ({ onAddQuestion }) => {
     setUsedOptionTypes([]);
   };
 
+  const handleSaveQuestion = () => {
+    const editedQuestion = {
+      question,
+      options,
+    };
+    onSaveQuestion(editedQuestion);
+    setQuestion("");
+    setOptions([]);
+    setCorrectOptions([]);
+    setOptionAdded(false);
+    setShowOptionInstruction(false);
+    setShowInstruction(false);
+    setUsedOptionTypes([]);
+  };
+
   const renderOptionInput = (option, index) => {
     if (optionType === "text" || optionType === "textarea") {
       return (
@@ -178,7 +222,6 @@ const QuestionInput = ({ onAddQuestion }) => {
               type={optionType}
               checked={correctOptions[index]}
               onChange={() => handleCorrectOptionChange(index)}
-              style={{ cursor: "pointer" }}
             />
           )}
           <MdDelete
@@ -245,8 +288,11 @@ const QuestionInput = ({ onAddQuestion }) => {
           Add Option
         </button>
       </div>
-      <button className="add_que_btn btn-info" onClick={handleAddQuestion}>
-        Add Question
+      <button
+        className="add_que_btn btn-info"
+        onClick={selectedQuestion ? handleSaveQuestion : handleAddQuestion}
+      >
+        {selectedQuestion ? "Save Question" : "Add Question"}
       </button>
     </div>
   );
@@ -263,6 +309,9 @@ const SurveyFormBuilder = ({
 }) => {
   const [questions, setQuestions] = useState([]);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [editedQuestionIndex, setEditedQuestionIndex] = useState(null);
+  const [questionCorrectOptions, setQuestionCorrectOptions] = useState([]);
 
   useEffect(() => {
     if (questions.length) {
@@ -286,6 +335,32 @@ const SurveyFormBuilder = ({
     setQuestions((prevQuestions) => [...prevQuestions, question]);
   };
 
+  const handleEditQuestion = (index) => {
+    console.log("edit this index", index);
+    console.log("questions", questions[index]);
+
+    const selectedQuestion = questions[index];
+    setSelectedQuestion({ ...selectedQuestion, index });
+    setQuestionCorrectOptions(
+      selectedQuestion.options.map((option) => option.correct)
+    );
+    setEditedQuestionIndex(index);
+  };
+
+  const handleSaveQuestion = (editedQuestion) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[editedQuestionIndex] = {
+      ...editedQuestion,
+      options: editedQuestion.options.map((option, index) => ({
+        ...option,
+        correct: questionCorrectOptions[index],
+      })),
+    };
+    setQuestions(updatedQuestions);
+    setSelectedQuestion(null);
+    setQuestionCorrectOptions([]);
+  };
+
   const handleSubmit = () => {
     const surveyData = {
       title: title,
@@ -296,7 +371,8 @@ const SurveyFormBuilder = ({
       questions: questions,
     };
 
-    onSubmitSurvey(surveyData);
+    console.log(surveyData);
+    // onSubmitSurvey(surveyData);
     setQuestions([]);
   };
 
@@ -307,9 +383,17 @@ const SurveyFormBuilder = ({
           <h3>Survey Form</h3>
           {questions.map((question, index) => (
             <div className="form_builder_form_sample" key={index}>
-              <h4>
-                {index + 1}. {question.question}
-              </h4>
+              <div className="form_builder_form_sample_question">
+                <button
+                  className="edit_form_builder_field"
+                  onClick={() => handleEditQuestion(index)}
+                >
+                  <i className="fa fa-pencil"></i>
+                </button>
+                <h4>
+                  {index + 1}. {question.question}
+                </h4>
+              </div>
               <div className="col-md-12 form_builder_form_sample_fields">
                 {question.options.map((option, index) => (
                   <div
@@ -349,7 +433,12 @@ const SurveyFormBuilder = ({
         </div>
       ) : null}
 
-      <QuestionInput onAddQuestion={handleAddQuestion} />
+      <QuestionInput
+        onAddQuestion={handleAddQuestion}
+        selectedQuestion={selectedQuestion}
+        onSaveQuestion={handleSaveQuestion}
+        questionCorrectOptions={questionCorrectOptions}
+      />
 
       <div className="submit_que_btn_wrapper">
         <button

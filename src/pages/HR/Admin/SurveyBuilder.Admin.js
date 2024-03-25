@@ -229,7 +229,6 @@ const SurveyBuilder = () => {
           </div>
         </div>
 
-        {/* Form Container */}
         {(selectedDepartmentOptions.length || selectedCampaignOptions.length) &&
         title.length ? (
           <div className="column survey_builder_container">
