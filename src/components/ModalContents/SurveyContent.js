@@ -48,7 +48,7 @@ const SurveyContent = ({ Content = {} }) => {
 
       {applicable_offices?.length ? (
         <div className="col-md-12 mt-3 app_offices_view">
-          <p className="font-weight-bold" style={{ marginBottom: "10px" }}>
+          <p className="font-weight-bold" style={{ margin: "0 0 10px 20px" }}>
             Applicable Offices
           </p>
           <ul>

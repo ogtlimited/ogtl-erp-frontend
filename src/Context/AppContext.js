@@ -221,9 +221,6 @@ const AppProvider = (props) => {
       );
 
       const resData = response?.data?.data?.pending_surveys;
-      console.log(resData);
-      console.log(resData.length);
-
       setPendingSurveys(resData);
     } catch (error) {
       const component = "Survey Error | ";
