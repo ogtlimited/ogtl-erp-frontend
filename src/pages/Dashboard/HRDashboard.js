@@ -25,6 +25,8 @@ const HRDashboard = () => {
   const [resignationStatusData, setResignationStatusData] = useState([]);
   const [resignationReasonLabel, setResignationReasonLabel] = useState([]);
   const [resignationReasonData, setResignationReasonData] = useState([]);
+  const [surveyLabel, setSurveyLabel] = useState([]);
+  const [surveyData, setSurveyData] = useState([]);
 
   const [hideHeadCountCard, setHideHeadCountCard] = useState(false);
   const [hideGenderDivRatioCard, setHideGenderDivRatioCard] = useState(false);
@@ -219,12 +221,47 @@ const HRDashboard = () => {
     }
   };
 
+  // Survey Report:
+  const fetchSurveyReport = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/hr_dashboard/survey_score_cards.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.survey_score_card;
+
+      const sorted = resData.sort((a, b) => {
+        const gradeOrder = { 'A': 1, 'B': 2, 'C': 3, 'D': 4, 'F': 5 };
+        return gradeOrder[a.grade] - gradeOrder[b.grade];
+      });
+
+      const grades = sorted.map((item) => item.grade);
+      const scoreCount = sorted.map(
+        (item) => item.score_count
+      );
+
+      setSurveyLabel(grades);
+      setSurveyData(scoreCount);
+    } catch (error) {
+      const component = "Survey Report | ";
+      ErrorHandler(error, component);
+    }
+  };
+
   useEffect(() => {
     if (AuthorizedHrManagerRoles) {
       fetchHeadCount();
       fetchEmployeeGender();
       fetchEmployeeData();
       fetchLeaveReport();
+      fetchSurveyReport();
     }
     fetchResignationReport();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -294,6 +331,8 @@ const HRDashboard = () => {
           resignationStatusData={resignationStatusData}
           resignationReasonLabel={resignationReasonLabel}
           resignationReasonData={resignationReasonData}
+          surveyLabel={surveyLabel}
+          surveyData={surveyData}
           fromDate={fromDate}
           toDate={toDate}
           setFromDate={setFromDate}
