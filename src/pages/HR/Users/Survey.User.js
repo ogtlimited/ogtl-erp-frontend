@@ -7,7 +7,7 @@ import UniversalTable from "../../../components/Tables/UniversalTable";
 import { SurveyFormModal } from "../../../components/Modal/SurveyFormModal";
 
 const SurveyUser = () => {
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, pendingSurveySubmitted } = useAppContext();
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(false);
   const [viewRow, setViewRow] = useState(null);
@@ -54,6 +54,12 @@ const SurveyUser = () => {
     fetchSurveys();
   }, [fetchSurveys]);
 
+  useEffect(() => {
+    if (pendingSurveySubmitted) {
+      fetchSurveys();
+    }
+  }, [fetchSurveys, pendingSurveySubmitted]);
+
   const columns = [
     {
       dataField: "title",
@@ -88,7 +94,7 @@ const SurveyUser = () => {
         <span className="btn btn-gray btn-sm btn-rounded">
           <i
             style={{ marginRight: "5px" }}
-            className={`fa fa-dot-circle-o ${
+            className={`fa fa-circle ${
               value === "Completed" ? "text-success" : "text-warning"
             }`}
           ></i>{" "}
@@ -101,6 +107,25 @@ const SurveyUser = () => {
       text: "Score",
       sort: true,
       headerStyle: { width: "50%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value < 40
+                  ? "text-danger"
+                  : value >= 40 && value < 60
+                  ? "text-warning"
+                  : value >= 60
+                  ? "text-success"
+                  : "text-danger"
+              }`}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {typeof value === "number" ? value : "-"}
+          </span>
+        </>
+      ),
     },
     {
       dataField: "",

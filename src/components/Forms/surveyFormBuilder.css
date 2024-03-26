@@ -48,6 +48,12 @@
     margin-left: 3rem;
 }
 
+.survey_form_sample_fields {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 3rem 0.5rem;
+}
+
 .form_builder_form_sample_fields_inner {
     width: 50%;
 }

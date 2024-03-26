@@ -1762,7 +1762,7 @@ img {
 }
 
 /*-----------------------------
-      Survey Result Modal
+      Survey Modal
 -------------------------------*/
 
 .survey_result_div {
@@ -1780,4 +1780,23 @@ img {
 
 .survey_result_div > h1 {
   font-size: 100px;
+}
+
+.modal-footer.survey_action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.survey_action_error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.IoMdAlert {
+  margin-right: 0.5rem;
+  font-size: 20px;
 }

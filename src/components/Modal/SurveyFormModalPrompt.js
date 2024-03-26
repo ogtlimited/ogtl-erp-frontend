@@ -3,21 +3,22 @@ import secureLocalStorage from "react-secure-storage";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
+import { IoMdAlert } from "react-icons/io";
+import { IoAlertCircleOutline } from "react-icons/io5";
 
-export const SurveyFormModal = ({
-  surveyForm,
-  fetchSurveys,
-  formSubmitted,
-  setFormSubmitted,
-}) => {
-  const { showAlert } = useAppContext();
+export const SurveyFormModalPrompt = ({ pendingSurveys, fetchSurveys }) => {
+  const { showAlert, pendingSurveySubmitted, setPendingSurveySubmitted } =
+    useAppContext();
   const [formData, setFormData] = useState({});
   const [formContent, setFormContent] = useState([]);
   const [surveyFormFilled, setSurveyFormFilled] = useState(false);
   const [submittingForm, setSubmittingForm] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   const message = secureLocalStorage.getItem("message");
   const score = secureLocalStorage.getItem("score");
+
+  const surveyForm = pendingSurveys;
 
   const handleInputChange = (questionIndex, optionKey, value) => {
     setFormData((prevData) => ({
@@ -29,9 +30,30 @@ export const SurveyFormModal = ({
   const handleConfirmFormSubmission = async (e) => {
     e.preventDefault();
 
+    const allQuestionsAnswered =
+      surveyForm[0]?.question_details?.questions.every((question, index) => {
+        const answerObj = formData[index];
+        if (!answerObj) return false;
+        if (
+          question.question_type === "checkbox" ||
+          question.question_type === "radio"
+        ) {
+          return Object.values(answerObj).some((value) => value);
+        }
+        return true;
+      });
+
+    if (!allQuestionsAnswered) {
+      setShowWarning(true);
+
+      console.log(allQuestionsAnswered)
+      return;
+    }
+
     const transformedFormData = Object.entries(formData)
       .map(([questionIndex, answerObj]) => {
-        const question = surveyForm.question_details.questions[questionIndex];
+        const question =
+          surveyForm[0].question_details.questions[questionIndex];
         const answers = Object.keys(answerObj).map((answerKey) => {
           if (answerKey === "text" || answerKey === "textarea") {
             return answerObj[answerKey];
@@ -49,7 +71,7 @@ export const SurveyFormModal = ({
     const finalPayload = [
       {
         payload: {
-          hr_survey_id: surveyForm?.id,
+          hr_survey_id: surveyForm[0]?.id,
           response: { answers: transformedFormData },
         },
       },
@@ -81,7 +103,8 @@ export const SurveyFormModal = ({
       setSurveyFormFilled(false);
       setFormContent([]);
       setSubmittingForm(false);
-      setFormSubmitted(true);
+      setPendingSurveySubmitted(true);
+      setShowWarning(false);
     } catch (error) {
       const errorMsg = error.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
@@ -97,14 +120,28 @@ export const SurveyFormModal = ({
     }
   }, [handleSubmitSurvey, surveyFormFilled]);
 
+  useEffect(() => {
+    if (pendingSurveySubmitted) {
+      const timeoutId = setTimeout(() => {
+        $("#SurveyFormModalPrompt").modal("hide");
+      }, 3000);
+
+      return () => {
+        clearTimeout(timeoutId);
+        setPendingSurveySubmitted(false);
+      };
+    }
+  }, [pendingSurveySubmitted, setPendingSurveySubmitted]);
+
   return (
     <>
       <div
         className="modal fade"
-        id="SurveyFormModal"
+        id="SurveyFormModalPrompt"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
+        data-backdrop="static"
       >
         {submittingForm ? (
           <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -123,7 +160,7 @@ export const SurveyFormModal = ({
           </div>
         ) : (
           <>
-            {formSubmitted ? (
+            {pendingSurveySubmitted ? (
               <div className="modal-dialog modal-dialog-centered modal-lg">
                 <div className="modal-content">
                   <div className="modal-body">
@@ -154,20 +191,12 @@ export const SurveyFormModal = ({
                     <h4 className="modal-title" id="FormModalLabel">
                       Survey Form
                     </h4>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
                   </div>
 
-                  <div className="modal-body">
+                  <div className="modal-body" style={{ paddingLeft: "3rem" }}>
                     <form onSubmit={handleConfirmFormSubmission}>
                       {surveyForm &&
-                        surveyForm?.question_details?.questions.map(
+                        surveyForm[0]?.question_details?.questions.map(
                           (question, index) => (
                             <div key={index}>
                               <div
@@ -273,17 +302,18 @@ export const SurveyFormModal = ({
                           )
                         )}
 
-                      <div
-                        className="modal-footer"
-                        style={{ marginTop: "2rem" }}
-                      >
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-dismiss="modal"
-                        >
-                          Cancel
-                        </button>
+                      <div className="modal-footer survey_action">
+                        {showWarning ? (
+                          <p className="text-danger survey_action_error">
+                            <IoMdAlert className="IoMdAlert" />
+                            Please provide an answer for each question
+                          </p>
+                        ) : (
+                          <p className="text-info survey_action_warning">
+                            <IoAlertCircleOutline className="IoMdAlert" />
+                            Please provide an answer for each question
+                          </p>
+                        )}
                         <button type="submit" className="btn btn-primary">
                           Confirm
                         </button>
