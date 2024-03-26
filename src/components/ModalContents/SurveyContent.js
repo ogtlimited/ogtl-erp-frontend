@@ -81,7 +81,7 @@ const SurveyContent = ({ Content = {} }) => {
               <div style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
                 {index + 1}. {question.question}
               </div>
-              <div className="col-md-12 form_builder_form_sample_fields">
+              <div className="col-md-12 survey_form_content_sample_fields">
                 {question.question_type === "checkbox" ? (
                   <div className="form_builder_form_sample_fields_inner">
                     {Object.keys(question.options).map(

@@ -1,27 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import SurveyTable from "../../../components/Tables/SurveyTable";
-import moment from "moment";
-import ViewModal from "../../../components/Modal/ViewModal";
-import SurveyContent from "../../../components/ModalContents/SurveyContent";
+// import ViewModal from "../../../components/Modal/ViewModal";
+// import SurveyContent from "../../../components/ModalContents/SurveyContent";
 
 const AllSurveyAdmin = () => {
-  const navigate = useNavigate();
-  const { getAvatarColor, user, ErrorHandler } = useAppContext();
+  const { getAvatarColor, ErrorHandler } = useAppContext();
   const [allSurveyResponse, setAllSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [modalType, setmodalType] = useState("");
-  const [viewRow, setViewRow] = useState(null);
+  // const [modalType, setmodalType] = useState("");
+  // const [viewRow, setViewRow] = useState(null);
 
-  const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+  // const CurrentUserRoles = user?.employee_info?.roles;
+  // const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
-  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-    canCreateAndEdit.includes(role)
-  );
+  // const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+  //   canCreateAndEdit.includes(role)
+  // );
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -101,6 +98,25 @@ const AllSurveyAdmin = () => {
       text: "Score",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value < 40
+                  ? "text-danger"
+                  : value >= 40 && value < 60
+                  ? "text-warning"
+                  : value >= 60
+                  ? "text-success"
+                  : "text-danger"
+              }`}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {typeof value === "number" ? value : "-"}
+          </span>
+        </>
+      ),
     },
     // {
     //   dataField: "",
@@ -155,14 +171,14 @@ const AllSurveyAdmin = () => {
         />
       </div>
 
-      {modalType === "view-details" ? (
+      {/* {modalType === "view-details" ? (
         <ViewModal
           title="Survey Details"
           content={<SurveyContent Content={viewRow} />}
         />
       ) : (
         ""
-      )}
+      )} */}
     </>
   );
 };

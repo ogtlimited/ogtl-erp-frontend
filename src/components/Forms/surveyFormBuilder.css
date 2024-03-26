@@ -54,8 +54,13 @@
     margin: 0 0 3rem 0.5rem;
 }
 
+.survey_form_content_sample_fields {
+    display: flex;
+    flex-direction: column;
+}
+
 .form_builder_form_sample_fields_inner {
-    width: 50%;
+    width: 100%;
 }
 
 .checkbox_radio_wrapper {
