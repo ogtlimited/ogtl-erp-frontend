@@ -5,7 +5,7 @@
     margin-bottom: 3rem;
 }
 
-.form_builder_wrapper>p {
+.form_builder_wrapper > p {
     margin: 0;
 }
 
@@ -28,7 +28,7 @@
     border-bottom: 3px solid #009efb;
 }
 
-.form_builder_form_sample_wrapper>h3 {
+.form_builder_form_sample_wrapper > h3 {
     margin-bottom: 1rem;
     text-align: center;
 }
@@ -45,7 +45,7 @@
 .form_builder_form_sample_fields {
     display: flex;
     flex-direction: column;
-    margin-left: 3rem;
+    margin-left: 5.5rem;
 }
 
 .survey_form_sample_fields {
@@ -69,6 +69,10 @@
     align-items: center;
 }
 
+.checkbox_radio_wrapper > input::placeholder {
+    color: rgba(255, 0, 0, 0.76);
+}
+
 .checkbox_radio_input {
     display: flex;
     align-items: flex-start;
@@ -78,7 +82,7 @@
     cursor: pointer;
 }
 
-.checkbox_radio_input>input {
+.checkbox_radio_input > input {
     margin-top: 3px;
     margin-right: 10px;
     cursor: pointer;
@@ -91,11 +95,11 @@
     margin-bottom: 0.5rem;
 }
 
-.form_builder_actions>div>div {
+.form_builder_actions > div > div {
     min-height: 44px !important;
 }
 
-.form_builder_actions>button {
+.form_builder_actions > button {
     font-size: 15px;
 }
 
@@ -129,7 +133,7 @@
 }
 
 .form_builder_input_delete:hover {
-    color: red;
+    color: var(--prm-delete);
 }
 
 .form_builder_form_sample_question {
@@ -137,11 +141,12 @@
     align-items: center;
 }
 
-.form_builder_form_sample_question>h4 {
+.form_builder_form_sample_question > h4 {
     margin: 0;
 }
 
-.edit_form_builder_field {
+.edit_form_builder_field,
+.delete_form_builder_field {
     background-color: #eee;
     border: 1px solid #e3e3e3;
     border-radius: 50%;
@@ -152,9 +157,19 @@
     margin-right: 1rem;
 }
 
+.edit_form_builder_field {
+    border-color: var(--prm-color);
+}
 .edit_form_builder_field:hover {
     background-color: var(--prm-color);
-    border-color: var(--prm-color);
+    color: #fff;
+}
+
+.delete_form_builder_field {
+    border-color: var(--prm-delete);
+}
+.delete_form_builder_field:hover {
+    background-color: var(--prm-delete);
     color: #fff;
 }
 

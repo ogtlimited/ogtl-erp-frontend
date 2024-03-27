@@ -68,6 +68,13 @@ const AppProvider = (props) => {
     });
   };
 
+  const goToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   const status = [
     {
       _id: "active",
@@ -769,6 +776,7 @@ const AppProvider = (props) => {
         status,
         officeTypeOptions,
         goToTop,
+        goToBottom,
         FontAwesomeIcon,
         faSpinner,
         pendingSurveys,
