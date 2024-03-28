@@ -57,6 +57,7 @@
 .survey_form_content_sample_fields {
     display: flex;
     flex-direction: column;
+    padding: 0;
 }
 
 .form_builder_form_sample_fields_inner {

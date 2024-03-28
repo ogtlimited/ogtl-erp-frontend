@@ -122,7 +122,7 @@ const SurveyContent = ({ Content = {} }) => {
                     )}
                   </div>
                 ) : question.question_type === "text" ? (
-                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                  <div>
                     <input
                       className="form-control"
                       type="text"
@@ -131,7 +131,7 @@ const SurveyContent = ({ Content = {} }) => {
                     />
                   </div>
                 ) : question.question_type === "textarea" ? (
-                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                  <div>
                     <textarea
                       className="form-control"
                       placeholder={Object.values(question.options)}
@@ -144,6 +144,22 @@ const SurveyContent = ({ Content = {} }) => {
           ))}
         </div>
       ) : null}
+
+      <div className="text-center" style={{ marginTop: "2rem" }}>
+        <div className="leave-user-action-btns">
+          <button
+            className="btn btn-sm btn-primary"
+            data-toggle="modal"
+            data-target="#generalModal"
+            // onClick={() => {
+            //   setmodalType("view-details");
+            //   setViewRow(row);
+            // }}
+          >
+            Edit
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
