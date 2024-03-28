@@ -3,7 +3,6 @@ import React from "react";
 const SurveyContent = ({ Content = {} }) => {
   const filteredSurvey = {
     ...Content,
-    id: undefined,
   };
 
   const orderedKeys = ["title", "created_at", "from", "to"];
@@ -144,22 +143,6 @@ const SurveyContent = ({ Content = {} }) => {
           ))}
         </div>
       ) : null}
-
-      <div className="text-center" style={{ marginTop: "2rem" }}>
-        <div className="leave-user-action-btns">
-          <button
-            className="btn btn-sm btn-primary"
-            data-toggle="modal"
-            data-target="#generalModal"
-            // onClick={() => {
-            //   setmodalType("view-details");
-            //   setViewRow(row);
-            // }}
-          >
-            Edit
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

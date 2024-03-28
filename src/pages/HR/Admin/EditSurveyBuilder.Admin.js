@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axiosInstance from "../../../services/api";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
@@ -9,6 +9,7 @@ import moment from "moment";
 
 const EditSurveyBuilder = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const survey = location?.state;
 
   const { showAlert, selectDepartments, selectCampaigns, goToTop } =
@@ -138,7 +139,7 @@ const EditSurveyBuilder = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
+      const response = await axiosInstance.patch(`/api/v1/hr_surveys.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -153,13 +154,7 @@ const EditSurveyBuilder = () => {
         "alert alert-success"
       );
 
-      setTitle("");
-      // setFrom(today);
-      // setTo(lastDay);
-      setSelectedDepartmentOptions([]);
-      setSelectedDepartment([]);
-      setSelectedCampaignOptions([]);
-      setSelectedCampaign([]);
+      navigate("/dashboard/hr/survey")
       setLoading(false);
     } catch (error) {
       goToTop();
