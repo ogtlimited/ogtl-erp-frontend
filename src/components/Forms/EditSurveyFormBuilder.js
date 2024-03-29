@@ -87,11 +87,7 @@ const EditSurveyFormBuilder = ({
       questions: questions,
     };
 
-    // onSubmitSurvey(surveyData);
-    console.log("Survey Data", surveyData);
-
-    showAlert(true, `Edited Successfully`, "alert alert-success");
-    navigate("/dashboard/hr/survey");
+    onSubmitSurvey(surveyData);
   };
 
   return (

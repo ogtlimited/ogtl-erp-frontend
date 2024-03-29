@@ -52,18 +52,20 @@ const EditSurveyBuilder = () => {
       }))
   );
 
-  const formattedQuestions = survey?.question_details?.questions.map(question => {
-    const options = Object.keys(question.options).map(key => ({
-      type: question.question_type,
-      value: question.options[key],
-      correct: question.answers.includes(key)
-    }));
-  
-    return {
-      question: question.question,
-      options: options
-    };
-  });
+  const formattedQuestions = survey?.question_details?.questions.map(
+    (question) => {
+      const options = Object.keys(question.options).map((key) => ({
+        type: question.question_type,
+        value: question.options[key],
+        correct: question.answers.includes(key),
+      }));
+
+      return {
+        question: question.question,
+        options: options,
+      };
+    }
+  );
 
   const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
@@ -139,22 +141,27 @@ const EditSurveyBuilder = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.patch(`/api/v1/hr_surveys.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: formattedSurveyData,
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/hr_surveys/${survey?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: formattedSurveyData,
+        }
+      );
 
       showAlert(
         true,
-        `${response?.data?.data?.message}`,
+        `${
+          response?.data?.data?.message || "Survey form successfully updated!"
+        }`,
         "alert alert-success"
       );
 
-      navigate("/dashboard/hr/survey")
+      navigate("/dashboard/hr/survey");
       setLoading(false);
     } catch (error) {
       goToTop();

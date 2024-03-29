@@ -70,7 +70,6 @@ const QuestionInput = ({
       const newOptions = [...prevOptions];
       newOptions[index].value = value;
 
-      console.log("newOptions", newOptions);
       return newOptions;
     });
   };
@@ -78,7 +77,6 @@ const QuestionInput = ({
   const handleDeleteOption = (index) => () => {
     setOptions((prevOptions) => {
       const newOptions = [...prevOptions];
-      console.log("newOptions b4 Slice", newOptions, index);
 
       newOptions.splice(index, 1);
       if (!newOptions.length) {
@@ -86,7 +84,6 @@ const QuestionInput = ({
         setUsedOptionTypes([]);
       }
 
-      console.log("newOptions after Slice", newOptions.length);
       return newOptions;
     });
 
