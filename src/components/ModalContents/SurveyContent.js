@@ -3,7 +3,6 @@ import React from "react";
 const SurveyContent = ({ Content = {} }) => {
   const filteredSurvey = {
     ...Content,
-    id: undefined,
   };
 
   const orderedKeys = ["title", "created_at", "from", "to"];
@@ -47,8 +46,8 @@ const SurveyContent = ({ Content = {} }) => {
       })}
 
       {applicable_offices?.length ? (
-        <div className="col-md-12 mt-3 survey_answers_view">
-          <p className="font-weight-bold" style={{ marginBottom: "10px" }}>
+        <div className="col-md-12 mt-3 app_offices_view">
+          <p className="font-weight-bold" style={{ margin: "0 0 10px 20px" }}>
             Applicable Offices
           </p>
           <ul>
@@ -81,7 +80,7 @@ const SurveyContent = ({ Content = {} }) => {
               <div style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
                 {index + 1}. {question.question}
               </div>
-              <div className="col-md-12 form_builder_form_sample_fields">
+              <div className="col-md-12 survey_form_content_sample_fields">
                 {question.question_type === "checkbox" ? (
                   <div className="form_builder_form_sample_fields_inner">
                     {Object.keys(question.options).map(
@@ -122,7 +121,7 @@ const SurveyContent = ({ Content = {} }) => {
                     )}
                   </div>
                 ) : question.question_type === "text" ? (
-                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                  <div>
                     <input
                       className="form-control"
                       type="text"
@@ -131,7 +130,7 @@ const SurveyContent = ({ Content = {} }) => {
                     />
                   </div>
                 ) : question.question_type === "textarea" ? (
-                  <div className="col-md-12" style={{ marginLeft: "-1rem" }}>
+                  <div>
                     <textarea
                       className="form-control"
                       placeholder={Object.values(question.options)}

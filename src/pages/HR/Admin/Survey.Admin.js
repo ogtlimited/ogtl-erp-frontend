@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import SurveyTable from "../../../components/Tables/SurveyTable";
 import moment from "moment";
@@ -118,6 +118,14 @@ const SurveyAdmin = () => {
             >
               View
             </button>
+
+            <Link
+              className="btn btn-sm btn-info"
+              to="/dashboard/hr/survey/edit"
+              state={row}
+            >
+              Edit
+            </Link>
           </div>
         </div>
       ),

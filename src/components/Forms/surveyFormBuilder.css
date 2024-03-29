@@ -45,16 +45,33 @@
 .form_builder_form_sample_fields {
     display: flex;
     flex-direction: column;
+    margin-left: 5.5rem;
+}
+
+.survey_form_sample_fields {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 3rem 0.5rem;
+}
+
+.survey_form_content_sample_fields {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
 }
 
 .form_builder_form_sample_fields_inner {
-    width: 50%;
+    width: 100%;
 }
 
 .checkbox_radio_wrapper {
     display: flex;
     gap: 1rem;
     align-items: center;
+}
+
+.checkbox_radio_wrapper > input::placeholder {
+    color: rgba(255, 0, 0, 0.76);
 }
 
 .checkbox_radio_input {
@@ -65,6 +82,7 @@
     padding-right: 10px;
     cursor: pointer;
 }
+
 .checkbox_radio_input > input {
     margin-top: 3px;
     margin-right: 10px;
@@ -114,6 +132,55 @@
     cursor: pointer;
     font-size: 18px;
 }
+
 .form_builder_input_delete:hover {
-    color: red;
+    color: var(--prm-delete);
+}
+
+.form_builder_form_sample_question {
+    display: flex;
+    align-items: center;
+}
+
+.form_builder_form_sample_question > h4 {
+    margin: 0;
+}
+
+.edit_form_builder_field,
+.delete_form_builder_field {
+    background-color: #eee;
+    border: 1px solid #e3e3e3;
+    border-radius: 50%;
+    color: #bbb;
+    float: right;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    margin-right: 1rem;
+}
+
+.edit_form_builder_field {
+    border-color: var(--prm-color);
+}
+.edit_form_builder_field:hover {
+    background-color: var(--prm-color);
+    color: #fff;
+}
+
+.delete_form_builder_field {
+    border-color: var(--prm-delete);
+}
+.delete_form_builder_field:hover {
+    background-color: var(--prm-delete);
+    color: #fff;
+}
+
+
+.app_offices_view {
+    padding: 20px 0 0 0;
+    border-top: 1px solid #ccc;
+}
+
+.app_offices_view > ul {
+    max-height: 210px;
+    overflow: auto;
 }

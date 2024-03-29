@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import QuestionInput from "./SurveyQuestionInput";
 import { useAppContext } from "../../Context/AppContext";
 
-const SurveyFormBuilder = ({
+const EditSurveyFormBuilder = ({
   title,
   from,
   to,
@@ -10,9 +11,11 @@ const SurveyFormBuilder = ({
   selectedCampaign,
   onSubmitSurvey,
   loading,
+  formattedQuestions,
 }) => {
-  const { goToBottom } = useAppContext();
-  const [questions, setQuestions] = useState([]);
+  const navigate = useNavigate();
+  const { showAlert, goToBottom } = useAppContext();
+  const [questions, setQuestions] = useState(formattedQuestions);
   const [isFormValid, setIsFormValid] = useState(false);
   const [selectedQuestionWithOptions, setSelectedQuestionWithOptions] =
     useState(null);
@@ -85,7 +88,6 @@ const SurveyFormBuilder = ({
     };
 
     onSubmitSurvey(surveyData);
-    setQuestions([]);
   };
 
   return (
@@ -181,7 +183,7 @@ const SurveyFormBuilder = ({
               aria-hidden="true"
             ></span>
           ) : (
-            "Create Form"
+            "Update Form"
           )}
         </button>
       </div>
@@ -189,4 +191,4 @@ const SurveyFormBuilder = ({
   );
 };
 
-export default SurveyFormBuilder;
+export default EditSurveyFormBuilder;

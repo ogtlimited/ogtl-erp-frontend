@@ -4,6 +4,7 @@ import DoughnutChart from "./dougnut";
 import VerticalBar from "./verticalBar";
 import DashboardStatistics from "./dashboard-statistics";
 import ResignationStatistics from "./resignation-statistics";
+import SurveyScoreCard from "./surey-score-card";
 import { useAppContext } from "../../Context/AppContext";
 // import secureLocalStorage from "react-secure-storage";
 
@@ -27,6 +28,10 @@ const DashboardChart = ({
   resignationStatusData,
   resignationReasonLabel,
   resignationReasonData,
+
+  
+  surveyLabel,
+  surveyData,
 
   fromDate,
   toDate,
@@ -258,6 +263,11 @@ const DashboardChart = ({
             <ResignationStatistics
               resignationStatusLabel={resignationStatusLabel}
               resignationStatusData={resignationStatusData}
+            />
+            
+            <SurveyScoreCard
+              surveyLabel={surveyLabel}
+              surveyData={surveyData}
             />
           </div>
 

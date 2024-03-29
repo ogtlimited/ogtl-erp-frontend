@@ -1,29 +1,71 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
-import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
+import axiosInstance from "../../../services/api";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
-import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
+import EditSurveyFormBuilder from "../../../components/Forms/EditSurveyFormBuilder";
 import moment from "moment";
 
-const SurveyBuilder = () => {
+const EditSurveyBuilder = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const survey = location?.state;
+
   const { showAlert, selectDepartments, selectCampaigns, goToTop } =
     useAppContext();
   const [loading, setLoading] = useState(false);
-  const today = moment().format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
 
-  const [title, setTitle] = useState("");
-  const [from, setFrom] = useState(today);
-  const [to, setTo] = useState(lastDay);
-  const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
-    []
+  const [title, setTitle] = useState(survey?.title);
+  const [from, setFrom] = useState(
+    moment(survey?.from, "Do MMMM, YYYY").format("YYYY-MM-DD")
   );
-  const [selectedDepartment, setSelectedDepartment] = useState([]);
-  const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
-  const [selectedCampaign, setSelectedCampaign] = useState([]);
+  const [to, setTo] = useState(
+    moment(survey?.to, "Do MMMM, YYYY").format("YYYY-MM-DD")
+  );
+  const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
+    survey?.applicable_offices?.offices
+      .filter((obj) => obj.type === "department")
+      .map((obj) => obj.id)
+  );
+  const [selectedDepartment, setSelectedDepartment] = useState(
+    survey?.applicable_offices?.offices
+      .filter((obj) => obj.type === "department")
+      .map((item) => ({
+        label: item.name,
+        value: item.id,
+        office: item.type,
+      }))
+  );
+  const [selectedCampaignOptions, setSelectedCampaignOptions] = useState(
+    survey?.applicable_offices?.offices
+      .filter((obj) => obj.type === "campaign")
+      .map((obj) => obj.id)
+  );
+  const [selectedCampaign, setSelectedCampaign] = useState(
+    survey?.applicable_offices?.offices
+      .filter((obj) => obj.type === "campaign")
+      .map((item) => ({
+        label: item.name,
+        value: item.id,
+        office: item.type,
+      }))
+  );
+
+  const formattedQuestions = survey?.question_details?.questions.map(
+    (question) => {
+      const options = Object.keys(question.options).map((key) => ({
+        type: question.question_type,
+        value: question.options[key],
+        correct: question.answers.includes(key),
+      }));
+
+      return {
+        question: question.question,
+        options: options,
+      };
+    }
+  );
 
   const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
@@ -99,28 +141,27 @@ const SurveyBuilder = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: formattedSurveyData,
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/hr_surveys/${survey?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: formattedSurveyData,
+        }
+      );
 
       showAlert(
         true,
-        `${response?.data?.data?.message}`,
+        `${
+          response?.data?.data?.message || "Survey form successfully updated!"
+        }`,
         "alert alert-success"
       );
 
-      setTitle("");
-      setFrom(today);
-      setTo(lastDay);
-      setSelectedDepartmentOptions([]);
-      setSelectedDepartment([]);
-      setSelectedCampaignOptions([]);
-      setSelectedCampaign([]);
+      navigate("/dashboard/hr/survey");
       setLoading(false);
     } catch (error) {
       goToTop();
@@ -135,7 +176,7 @@ const SurveyBuilder = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Create Survey Form</h3>
+            <h3 className="page-title">Edit Survey Form</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Survey</li>
@@ -232,7 +273,7 @@ const SurveyBuilder = () => {
         {(selectedDepartmentOptions.length || selectedCampaignOptions.length) &&
         title.length ? (
           <div className="column survey_builder_container">
-            <SurveyFormBuilder
+            <EditSurveyFormBuilder
               title={title}
               from={from}
               to={to}
@@ -240,6 +281,7 @@ const SurveyBuilder = () => {
               selectedCampaign={selectedCampaign}
               onSubmitSurvey={handleSubmitSurvey}
               loading={loading}
+              formattedQuestions={formattedQuestions}
             />
           </div>
         ) : null}
@@ -248,4 +290,4 @@ const SurveyBuilder = () => {
   );
 };
 
-export default SurveyBuilder;
+export default EditSurveyBuilder;

@@ -1760,3 +1760,43 @@ img {
   margin: 0 1rem;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;
 }
+
+/*-----------------------------
+      Survey Modal
+-------------------------------*/
+
+.survey_result_div {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.survey_result_div > p {
+  margin: 2rem 0 0 0;
+  font-weight: 600;
+}
+
+.survey_result_div > h1 {
+  font-size: 100px;
+}
+
+.modal-footer.survey_action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.survey_action_error {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.IoMdAlert {
+  margin-right: 0.5rem;
+  font-size: 20px;
+}
