@@ -1,21 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, Outlet } from "react-router-dom";
-
 import Header from "../components/Misc/Header";
 import Sidebar from "../components/Misc/Sidebar";
 import { useAppContext } from "../Context/AppContext";
 import AlertSvg from "./AlertSvg";
+import $ from "jquery";
+import { SurveyFormModalPrompt } from "../components/Modal/SurveyFormModalPrompt";
 
 const AdminLayout = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
-  const { showAlertMsg, showProgress } = useAppContext();
+  const {
+    showAlertMsg,
+    showProgress,
+    pendingSurveys,
+    fetchPendingSurveys,
+    setPendingSurveySubmitted,
+  } = useAppContext();
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
   }, [location]);
+
+  useEffect(() => {
+    if (pendingSurveys.length) {
+      setPendingSurveySubmitted(false);
+      $("#SurveyFormModalPrompt").modal("show");
+    }
+  }, [pendingSurveys.length, setPendingSurveySubmitted]);
 
   return (
     <>
@@ -42,22 +56,26 @@ const AdminLayout = (props) => {
               <div className="pl-3">{showAlertMsg.msg}</div>
             </div>
           ) : null}
-          {showProgress.state === true ? 
-          
-          <div className="progress mb-3">
-            <div
-              className="progress-bar progress-bar-striped progress-bar-animated"
-              role="progressbar"
-              aria-valuenow="75"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{width: showProgress.count + '%'}}
-            ></div>
-          </div>
-          : null}
+          {showProgress.state === true ? (
+            <div className="progress mb-3">
+              <div
+                className="progress-bar progress-bar-striped progress-bar-animated"
+                role="progressbar"
+                aria-valuenow="75"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style={{ width: showProgress.count + "%" }}
+              ></div>
+            </div>
+          ) : null}
           <Outlet />
         </div>
       </div>
+
+      <SurveyFormModalPrompt
+        pendingSurveys={pendingSurveys}
+        fetchSurveys={fetchPendingSurveys}
+      />
     </>
   );
 };

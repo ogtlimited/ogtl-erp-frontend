@@ -1,0 +1,186 @@
+.form_builder_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+}
+
+.form_builder_wrapper > p {
+    margin: 0;
+}
+
+.option_input_div {
+    margin-bottom: 1rem;
+}
+
+.correct_ans_instruction {
+    margin-bottom: 1rem;
+    color: red;
+}
+
+.form_builder_form {
+    padding: 0.5rem 1rem;
+}
+
+.form_builder_form_sample_wrapper {
+    padding-bottom: 5rem;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #009efb;
+}
+
+.form_builder_form_sample_wrapper > h3 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.form_builder_form_sample {
+    padding: 1rem 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.form_builder_form_sample_fields {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5.5rem;
+}
+
+.survey_form_sample_fields {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 3rem 0.5rem;
+}
+
+.survey_form_content_sample_fields {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.form_builder_form_sample_fields_inner {
+    width: 100%;
+}
+
+.checkbox_radio_wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.checkbox_radio_wrapper > input::placeholder {
+    color: rgba(255, 0, 0, 0.76);
+}
+
+.checkbox_radio_input {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    font-size: 14px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.checkbox_radio_input > input {
+    margin-top: 3px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.form_builder_actions {
+    display: flex;
+    min-height: 44px !important;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.form_builder_actions > div > div {
+    min-height: 44px !important;
+}
+
+.form_builder_actions > button {
+    font-size: 15px;
+}
+
+.formInputTypeSelect {
+    display: inline-block;
+    width: 13%;
+    height: 44px !important;
+}
+
+.add_que_btn,
+.submit_que_btn {
+    display: inline-block;
+    width: 13%;
+    height: 44px;
+    border-radius: 5px;
+    font-size: 15px;
+    border: none;
+}
+
+.submit_que_btn_wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form_builder_input_delete {
+    transition: all 0.3s ease-in-out;
+    color: var(--prm-gray);
+    margin-left: 1rem;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.form_builder_input_delete:hover {
+    color: var(--prm-delete);
+}
+
+.form_builder_form_sample_question {
+    display: flex;
+    align-items: center;
+}
+
+.form_builder_form_sample_question > h4 {
+    margin: 0;
+}
+
+.edit_form_builder_field,
+.delete_form_builder_field {
+    background-color: #eee;
+    border: 1px solid #e3e3e3;
+    border-radius: 50%;
+    color: #bbb;
+    float: right;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    margin-right: 1rem;
+}
+
+.edit_form_builder_field {
+    border-color: var(--prm-color);
+}
+.edit_form_builder_field:hover {
+    background-color: var(--prm-color);
+    color: #fff;
+}
+
+.delete_form_builder_field {
+    border-color: var(--prm-delete);
+}
+.delete_form_builder_field:hover {
+    background-color: var(--prm-delete);
+    color: #fff;
+}
+
+
+.app_offices_view {
+    padding: 20px 0 0 0;
+    border-top: 1px solid #ccc;
+}
+
+.app_offices_view > ul {
+    max-height: 210px;
+    overflow: auto;
+}

@@ -2,33 +2,38 @@
 
 import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import ToolkitProvider, {
-  Search,
-  CSVExport,
-} from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
+import usePagination from "../../pages/HR/Admin/JobApplicantsPagination.Admin";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
-import paginationFactory from "react-bootstrap-table2-paginator";
-
-const UniversalTable = ({
-  columns,
+const SurveyTable = ({
   data,
+  columns,
   loading,
   setLoading,
-  emptyDataMessage,
-  hideCSVExport,
+
+  page,
+  setPage,
+  sizePerPage,
+  setSizePerPage,
+  totalPages,
+  setTotalPages,
+
   context,
 }) => {
-  const { SearchBar } = Search;
-  const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = useState(false);
+  const [info, setInfo] = useState({
+    sizePerPage: 10,
+  });
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
       setmobileView(false);
     }
-    if (columns.length >= 7) {
+    if (columns.length >= 8) {
       setmobileView(true);
     } else if (window.innerWidth <= 768) {
       setmobileView(true);
@@ -47,17 +52,29 @@ const UniversalTable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
 
+  // Pagination
+  const count = totalPages;
+  const _DATA = usePagination(data, sizePerPage, totalPages);
+
+  const handleChange = (e, p) => {
+    setPage(p);
+    _DATA.jump(p);
+  };
+
+  const handleChangeSizePerPage = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setInfo((prevState) => ({ ...prevState, [name]: value }));
+
+    setSizePerPage(e.target.value);
+    setPage(1);
+  };
+
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
-    }, 10000);
-    return (
-      <>
-        {show ? (
-          <>{emptyDataMessage ? emptyDataMessage : "No Data Available"}</>
-        ) : null}
-      </>
-    );
+    }, 6000);
+    return <>{show ? "No Data Available" : null}</>;
   };
 
   return (
@@ -65,35 +82,17 @@ const UniversalTable = ({
       {data && (
         <ToolkitProvider
           keyField="id"
-          data={data}
+          data={loading ? [] : data}
           columns={columns}
           search
           exportCSV
         >
           {(props) => (
             <div className="col-12">
-              <SearchBar
-                {...props.searchProps}
-                style={{ marginBottom: 15, paddingLeft: "12%" }}
-                className="inputSearch"
-              />
-
-              {hideCSVExport ? null : (
-                <ExportCSVButton
-                  className="float-right btn export-csv"
-                  {...props.csvProps}
-                >
-                  Export CSV
-                </ExportCSVButton>
-              )}
-
-              <div className="hr-filter-select col-12"></div>
-
               <div className="custom-table-div">
                 <BootstrapTable
                   {...props.baseProps}
                   bordered={false}
-                  // selectRow={selectRow}
                   filter={filterFactory()}
                   headerClasses="header-class"
                   classes={
@@ -115,10 +114,35 @@ const UniversalTable = ({
                       showNullMessage()
                     )
                   }
-                  pagination={paginationFactory()}
-
-                  // defaultSorted={defaultSorted}
                 />
+              </div>
+
+              <select
+                className="application-table-sizePerPage"
+                name="sizePerPage"
+                value={info.sizePerPage}
+                onChange={handleChangeSizePerPage}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={30}>30</option>
+                <option value={50}>50</option>
+              </select>
+              <div className="application-table-pagination">
+                <Stack className="application-table-pagination-stack">
+                  <Pagination
+                    className="job-applicant-pagination"
+                    count={count}
+                    page={page}
+                    boundaryCount={4}
+                    onChange={handleChange}
+                    color="primary"
+                    showFirstButton
+                    showLastButton
+                    variant="outlined"
+                    shape="rounded"
+                  />
+                </Stack>
               </div>
             </div>
           )}
@@ -128,4 +152,4 @@ const UniversalTable = ({
   );
 };
 
-export default UniversalTable;
+export default SurveyTable;

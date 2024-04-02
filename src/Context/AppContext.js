@@ -58,9 +58,19 @@ const AppProvider = (props) => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
+  const [pendingSurveys, setPendingSurveys] = useState([]);
+  const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
+
   const goToTop = () => {
     window.scrollTo({
       top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const goToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
       behavior: "smooth",
     });
   };
@@ -120,13 +130,6 @@ const AppProvider = (props) => {
       value: "team",
     },
   ];
-
-  // // Get Avatar Color, with A at line 15:
-  // const getAvatarColor = (char) => {
-  //   const charCode = char.charCodeAt(0);
-  //   const colorIndex = charCode % 26;
-  //   return backgroundColors[colorIndex];
-  // };
 
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
@@ -209,6 +212,30 @@ const AppProvider = (props) => {
         console.log(error);
       });
   };
+
+  // All Pending Surveys:
+  const fetchPendingSurveys = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/pending_survey_responses.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.pending_surveys;
+      setPendingSurveys(resData);
+    } catch (error) {
+      const component = "Survey Error | ";
+      ErrorHandler(error, component);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   // SELECT APIs
   // All Employees:
@@ -646,6 +673,7 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
       fetchStaffResignation();
+      fetchPendingSurveys();
     }
   }, [
     fetchAllEmployees,
@@ -658,6 +686,7 @@ const AppProvider = (props) => {
     fetchDeductionTypes,
     fetchJobOpenings,
     fetchStaffResignation,
+    fetchPendingSurveys,
     isHr,
     userToken,
     isTeamLead,
@@ -747,8 +776,13 @@ const AppProvider = (props) => {
         status,
         officeTypeOptions,
         goToTop,
+        goToBottom,
         FontAwesomeIcon,
         faSpinner,
+        pendingSurveys,
+        fetchPendingSurveys,
+        pendingSurveySubmitted, 
+        setPendingSurveySubmitted
       }}
     >
       {props.children}
