@@ -7,6 +7,11 @@ import filterFactory from "react-bootstrap-table2-filter";
 import usePagination from "../../pages/HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import axiosInstance from "../../services/api";
+import csvDownload from "json-to-csv-export";
+import moment from "moment";
+import { useAppContext } from "../../Context/AppContext";
+import { useParams } from "react-router-dom";
 
 const SurveyTable = ({
   data,
@@ -21,13 +26,20 @@ const SurveyTable = ({
   totalPages,
   setTotalPages,
 
+  csvExport,
+
   context,
 }) => {
+  const { title, id } = useParams();
+  const { showAlert } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = useState(false);
   const [info, setInfo] = useState({
     sizePerPage: 10,
   });
+
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -77,6 +89,50 @@ const SurveyTable = ({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  const handleDownloadCSV = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/hr_survey_responses.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            survey_id: id,
+            page: 1,
+            limit: 10000,
+          },
+        }
+      );
+
+      const resData =
+        response?.data?.data?.survey_response_records?.survey_response;
+
+      const csvData = resData.map((item) => ({
+        STAFF: item.full_name,
+        "SURVEY TITLE": item.survey_title,
+        SCORE: item.score,
+      }));
+
+      const dataToConvert = {
+        data: csvData,
+        filename: `OGTL Survey - ${title} - ${moment(today_date).format(
+          "DD MMM, YYYY"
+        )} `,
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
+  };
+
   return (
     <>
       {data && (
@@ -89,6 +145,16 @@ const SurveyTable = ({
         >
           {(props) => (
             <div className="col-12">
+              {data?.length && csvExport ? (
+                <button
+                  onClick={handleDownloadCSV}
+                  style={{ marginBottom: "2rem" }}
+                  className="float-right btn export-csv"
+                >
+                  Export Survey Scores (CSV)
+                </button>
+              ) : null}
+
               <div className="custom-table-div">
                 <BootstrapTable
                   {...props.baseProps}
