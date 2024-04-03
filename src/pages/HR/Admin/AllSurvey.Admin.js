@@ -1,53 +1,46 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../../services/api";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import SurveyTable from "../../../components/Tables/SurveyTable";
-// import ViewModal from "../../../components/Modal/ViewModal";
-// import SurveyContent from "../../../components/ModalContents/SurveyContent";
+import moment from "moment";
 
 const AllSurveyAdmin = () => {
-  const { getAvatarColor, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler } = useAppContext();
   const [allSurveyResponse, setAllSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [modalType, setmodalType] = useState("");
-  // const [viewRow, setViewRow] = useState(null);
 
-  // const CurrentUserRoles = user?.employee_info?.roles;
-  // const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
-  // const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
-  //   canCreateAndEdit.includes(role)
-  // );
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // All Survey response:
+  // All Survey:
   const fetchAllSurveyResponse = useCallback(async () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/hr_survey_responses.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            page: page,
-            limit: sizePerPage,
-          },
-        }
-      );
+      const response = await axiosInstance.get("/api/v1/hr_surveys.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
+      });
 
-      const resData =
-        response?.data?.data?.survey_response_records?.survey_response;
-      const totalPages =
-        response?.data?.data?.survey_response_records?.total_pages;
+      const resData = response?.data?.data?.survey_records?.surveys;
+      const totalPages = response?.data?.data?.survey_records?.total_page;
 
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
@@ -55,7 +48,15 @@ const AllSurveyAdmin = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      setAllSurveyResponse(resData);
+      const formatted = resData.map((survey) => ({
+        ...survey,
+        title: survey?.title,
+        created_at: moment(survey?.created_at).format("Do MMMM, YYYY"),
+        from: moment(survey?.from).format("Do MMMM, YYYY"),
+        to: moment(survey?.to).format("Do MMMM, YYYY"),
+      }));
+
+      setAllSurveyResponse(formatted);
       setLoading(false);
     } catch (error) {
       const component = "All Survey Response Error | ";
@@ -71,75 +72,48 @@ const AllSurveyAdmin = () => {
 
   const columns = [
     {
-      dataField: "full_name",
-      text: "Full Name",
-      sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <span
-            className="avatar-span"
-            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
-          >
-            {value?.charAt(0)}
-          </span>
-          {value}
-        </h2>
-      ),
-    },
-    {
-      dataField: "survey_title",
-      text: "Survey Title",
+      dataField: "title",
+      text: "Title",
       sort: true,
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "score",
-      text: "Score",
+      dataField: "created_at",
+      text: "Date Created",
       sort: true,
       headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "from",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "to",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "",
+      text: "Action",
       formatter: (value, row) => (
-        <>
-          <span className="btn btn-gray btn-sm btn-rounded">
-            <i
-              className={`fa fa-dot-circle-o ${
-                value < 40
-                  ? "text-danger"
-                  : value >= 40 && value < 60
-                  ? "text-warning"
-                  : value >= 60
-                  ? "text-success"
-                  : "text-danger"
-              }`}
-              style={{ marginRight: "10px" }}
-            ></i>{" "}
-            {typeof value === "number" ? value : "-"}
-          </span>
-        </>
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            {CurrentUserCanCreateAndEdit ? (
+              <Link
+                className="btn btn-sm btn-info"
+                to={`/dashboard/hr/all-survey/${row?.title}/${row?.id}`}
+                state={row}
+              >
+                View Responses
+              </Link>
+            ) : null}
+          </div>
+        </div>
       ),
     },
-    // {
-    //   dataField: "",
-    //   text: "Action",
-    //   headerStyle: { width: "10%" },
-    //   formatter: (value, row) => (
-    //     <div className="text-center">
-    //       <div className="leave-user-action-btns">
-    //         <button
-    //           className="btn btn-sm btn-primary"
-    //           data-toggle="modal"
-    //           data-target="#generalModal"
-    //           onClick={() => {
-    //             setmodalType("view-details");
-    //             setViewRow(row);
-    //           }}
-    //         >
-    //           View
-    //         </button>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (
@@ -170,15 +144,6 @@ const AllSurveyAdmin = () => {
           setTotalPages={setTotalPages}
         />
       </div>
-
-      {/* {modalType === "view-details" ? (
-        <ViewModal
-          title="Survey Details"
-          content={<SurveyContent Content={viewRow} />}
-        />
-      ) : (
-        ""
-      )} */}
     </>
   );
 };
