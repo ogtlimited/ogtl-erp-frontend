@@ -119,13 +119,15 @@ const SurveyAdmin = () => {
               View
             </button>
 
-            <Link
-              className="btn btn-sm btn-info"
-              to="/dashboard/hr/survey/edit"
-              state={row}
-            >
-              Edit
-            </Link>
+            {CurrentUserCanCreateAndEdit ? (
+              <Link
+                className="btn btn-sm btn-info"
+                to="/dashboard/hr/survey/edit"
+                state={row}
+              >
+                Edit
+              </Link>
+            ) : null}
           </div>
         </div>
       ),
