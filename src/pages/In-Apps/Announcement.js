@@ -1,62 +1,17 @@
-//* IN-USE
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import React, { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../../services/api";
+import React from "react";
 import { useAppContext } from "../../Context/AppContext";
 import { AnnouncementFormModal } from "../../components/Modal/AnnouncementFormModal";
 import moment from "moment";
 
 const Announcement = () => {
-  const { getAvatarColor, user, ErrorHandler } = useAppContext();
-  const [announcement, setAnnouncement] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { user, announcement, loadingAnnouncement } = useAppContext();
 
-  const fetchAnnouncement = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(
-        `/api/v1/video_announcements.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-        }
-      );
-
-      const resData = response?.data?.data?.videos_record;
-
-      console.log("resData", resData);
-
-      // const formatted = resData.map((ticket) => ({
-      //   ...ticket,
-      //   full_name: ticket?.first_name + " " + ticket?.last_name,
-      //   email: ticket?.email,
-      //   ogid: ticket?.ogid,
-      //   office: ticket?.office?.toUpperCase(),
-      //   status: ticket?.resolved ? "Resolved" : "Pending",
-      //   date_created: moment(ticket?.created_at).utc().format("Do MMM, YYYY"),
-      //   complaint: ticket?.complaint,
-      // }));
-
-      // setAllTickets(formatted);
-      setLoading(false);
-    } catch (error) {
-      const component = "Announcement | ";
-      ErrorHandler(error, component);
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAnnouncement();
-  }, [fetchAnnouncement]);
-
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canUpload = ["hr_manager"];
+  const CurrentUserCanUpload = CurrentUserRoles.some((role) =>
+    canUpload.includes(role)
+  );
 
   return (
     <>
@@ -69,32 +24,57 @@ const Announcement = () => {
               <li className="breadcrumb-item active">Announcement</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
-            <a
-              href="#"
-              className="btn add-btn"
-              data-toggle="modal"
-              data-target="#TicketFormModal"
-            >
-              <i className="las la-file-video"></i> Upload Video
-            </a>
-          </div>
+          {CurrentUserCanUpload ? (
+            <div className="col-auto float-right ml-auto">
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#AnnouncementFormModal"
+              >
+                <i className="las la-file-video"></i> Upload Video
+              </a>
+            </div>
+          ) : null}
         </div>
       </div>
 
       <div className="announcement_container">
-        <lord-icon
-          src="https://cdn.lordicon.com/ilsmzilo.json"
-          trigger="hover"
-          colors="primary:#00c5fb,secondary:#0253cc"
-          style={{ width: "250px", height: "250px" }}
-        ></lord-icon>
-        <h3>No Video Announcement</h3>
+        {loadingAnnouncement ? (
+          <div>
+            <lord-icon
+              src="https://cdn.lordicon.com/ilsmzilo.json"
+              trigger="loop"
+              colors="primary:#00c5fb,secondary:#0253cc"
+              style={{ width: "250px", height: "250px" }}
+            ></lord-icon>
+          </div>
+        ) : announcement ? (
+          <div className="custom-field-div">
+            <video controls className="video_player">
+              <source src={announcement.video_url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="video_player_info">
+              <h3>{announcement.title}</h3>
+              <p>Uploaded by: {announcement.uploaded_by}</p>
+              <p>Created at: {moment(announcement.created_at).format("LLL")}</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <lord-icon
+              src="https://cdn.lordicon.com/ilsmzilo.json"
+              trigger="hover"
+              colors="primary:#00c5fb,secondary:#0253cc"
+              style={{ width: "250px", height: "250px" }}
+            ></lord-icon>
+            <h3>No Video Announcement</h3>
+          </div>
+        )}
       </div>
 
-      <AnnouncementFormModal
-        fetchAnnouncement={fetchAnnouncement}
-      />
+      <AnnouncementFormModal />
     </>
   );
 };

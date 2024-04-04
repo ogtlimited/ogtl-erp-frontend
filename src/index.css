@@ -335,23 +335,23 @@
   background: var(--prm-color);
   background: -moz-linear-gradient(
     left,
-    var(--sec-color) 0%,
-    var(--prm-color) 100%
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
   );
   background: -webkit-linear-gradient(
     left,
-    var(--sec-color) 0%,
-    var(--prm-color) 100%
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
   );
   background: -ms-linear-gradient(
     left,
-    var(--sec-color) 0%,
-    var(--prm-color) 100%
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
   );
   background: linear-gradient(
     to right,
-    var(--sec-color) 0%,
-    var(--prm-color) 100%
+    var(--prm-color) 0%,
+    var(--sec-color) 100%
   );
   height: 220px;
   width: 25px;
@@ -1447,7 +1447,7 @@ table.custom-table thead th {
 }
 
 .IWD_modal {
-  background: #00c5fbcc;
+  background: #00C5FBcc;
   backdrop-filter: blur(10px);
 }
 
@@ -1755,8 +1755,35 @@ img {
   gap: 2rem;
 }
 
-.announcement_container > img {
-  background-color: red;
+.video_good {
+  color: green;
+}
+
+.video_upload_spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.video_upload_spinner > p {
+  margin: 0;
+}
+
+.video_player {
+  width: 100%;
+}
+
+.video_player_info {
+  margin-top: 1rem;
+}
+.video_player_info > p {
+  margin-bottom: 0.5rem;
+}
+
+.modal_uploaded_by {
+  font-size: 15px;
+  margin: 0;
 }
 
 /*------------------

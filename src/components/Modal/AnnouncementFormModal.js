@@ -3,20 +3,26 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const AnnouncementFormModal = ({ fetchAnnouncement }) => {
-  const { showAlert } = useAppContext();
+export const AnnouncementFormModal = () => {
+  const { showAlert, fetchAnnouncement } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(0);
   const [data, setData] = useState({
     title: "",
     video: null,
   });
+  const [videoSize, setVideoSize] = useState(null);
+  const [videoSizeColor, setVideoSizeColor] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const cancelEvent = () => {
     setData({
       title: "",
       video: null,
     });
+    setVideoSize(null);
+    setVideoSizeColor(null);
+    setUploadProgress(0);
     setFileInputKey((prevKey) => prevKey + 1);
   };
 
@@ -25,7 +31,17 @@ export const AnnouncementFormModal = ({ fetchAnnouncement }) => {
   };
 
   const handleFileChange = (e) => {
-    setData({ ...data, image: e.target.files[0] });
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.size <= 52428800) {
+      setData({ ...data, video: selectedFile });
+      setVideoSize(selectedFile.size);
+      setVideoSizeColor("green");
+    } else {
+      setData({ ...data, video: selectedFile });
+      setVideoSize(selectedFile.size);
+      setVideoSizeColor("red");
+      showAlert(true, "File size exceeds 50MB limit", "alert alert-warning");
+    }
   };
 
   const handleCreateAnnouncement = async (e) => {
@@ -47,14 +63,16 @@ export const AnnouncementFormModal = ({ fetchAnnouncement }) => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+            setUploadProgress(progress);
+          },
         }
       );
 
-      showAlert(
-        true,
-        "Your Video Upload is Successful",
-        "alert alert-success"
-      );
+      showAlert(true, "Your Video Upload is Successful", "alert alert-success");
       $("#AnnouncementFormModal").modal("toggle");
 
       fetchAnnouncement();
@@ -94,107 +112,95 @@ export const AnnouncementFormModal = ({ fetchAnnouncement }) => {
             </div>
 
             <div className="modal-body">
-              {/* <form onSubmit={handleTicketActions}>
-                <div className="row">
-                  {!loggedIn ? (
-                    <>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label htmlFor="first_name">First Name</label>
-                          <input
-                            name="first_name"
-                            type="text"
-                            className="form-control"
-                            value={ticket.first_name}
-                            onChange={handleFormChange}
-                            readOnly={loggedIn}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label htmlFor="last_name">Last Name</label>
-                          <input
-                            name="last_name"
-                            type="text"
-                            className="form-control"
-                            value={ticket.last_name}
-                            onChange={handleFormChange}
-                            readOnly={loggedIn}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label htmlFor="ogid">OGID</label>
-                          <input
-                            name="ogid"
-                            type="text"
-                            className="form-control"
-                            value={ticket.ogid}
-                            onChange={handleFormChange}
-                            readOnly={loggedIn}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label htmlFor="email">Email</label>
-                          <input
-                            name="email"
-                            type="text"
-                            className="form-control"
-                            value={ticket.email}
-                            onChange={handleFormChange}
-                            readOnly={loggedIn}
-                          />
-                        </div>
-                      </div>
-                    </>
-                  ) : null}
-
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <label htmlFor="content">Content</label>
-                      <TextEditor
-                        editorContent={editorContent}
-                        onContentChange={setEditorContent}
-                      />
+              <form onSubmit={handleCreateAnnouncement}>
+                <div className="form-group">
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    name="title"
+                    value={data.title}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="video">Video</label>
+                  <input
+                    type="file"
+                    className="form-control-file"
+                    id="video"
+                    name="video"
+                    key={fileInputKey}
+                    onChange={handleFileChange}
+                    accept="video/*"
+                    required
+                    style={{ marginBottom: "1rem", cursor: "pointer" }}
+                  />
+                  {videoSize && (
+                    <div className="text-muted">
+                      Selected video size:{" "}
+                      <span
+                        className={
+                          videoSizeColor === "green"
+                            ? "video_good"
+                            : "text-danger"
+                        }
+                      >
+                        {(videoSize / (1024 * 1024)).toFixed(2)} MB
+                      </span>
                     </div>
+                  )}
+                </div>
+
+                <div className="progress mb-2">
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{ width: `${uploadProgress}%` }}
+                    aria-valuenow={uploadProgress}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    {uploadProgress}%
                   </div>
                 </div>
 
                 <div className="modal-footer">
-                  {mode === "Create" && (
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-dismiss="modal"
-                      onClick={cancelEvent}
-                    >
-                      Cancel
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                    onClick={cancelEvent}
+                  >
+                    Cancel
+                  </button>
                   <button
                     type="submit"
                     className="btn btn-primary"
-                    disabled={!editorContent.length}
+                    disabled={
+                      !data.title ||
+                      !data.video ||
+                      videoSizeColor === "red" ||
+                      loading
+                    }
                   >
                     {loading ? (
-                      <span
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
+                      <div className="video_upload_spinner">
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <p>Uploading, please wait</p>
+                      </div>
                     ) : (
                       "Submit"
                     )}
                   </button>
                 </div>
-              </form> */}
+              </form>
             </div>
           </div>
         </div>
