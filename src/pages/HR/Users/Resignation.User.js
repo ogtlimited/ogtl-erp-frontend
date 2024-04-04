@@ -3,6 +3,7 @@ import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import resignationIcon from "../../../assets/img/resign.png";
 import axiosInstance from "../../../services/api";
+import StaffRetractResignationModal from "../../../components/Modal/StaffRetractResignationModal";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import Skeleton from "@material-ui/lab/Skeleton";
 import $ from "jquery";
@@ -23,7 +24,8 @@ const ResignationUser = () => {
   } = useAppContext();
   const [data, setData] = useState(resignationModel);
 
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [modalType, setmodalType] = useState("");
+  const [selectedData, setSelectedData] = useState(null);
   const [isResolving, setIsResolving] = useState(false);
   const currentUserOffice = user?.office?.office_type;
   const currentUserDesignation = user?.employee_info?.designation.toLowerCase();
@@ -149,6 +151,21 @@ const ResignationUser = () => {
                         hesitate to reach out to the HR department.
                       </p>
                     </div>
+
+                    {userResignations?.pending_resignation ? (
+                      <div className="modal-footer resignation_form_footer">
+                        <button
+                          type="submit"
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setmodalType("retract");
+                            setSelectedData(userResignations);
+                          }}
+                        >
+                          Retract
+                        </button>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -206,7 +223,7 @@ const ResignationUser = () => {
                             className="btn btn-primary"
                             data-toggle="modal"
                             data-target="#exampleModal"
-                            onClick={() => setSelectedRow(data)}
+                            onClick={() => setSelectedData(data)}
                             disabled={!data?.reason_for_resignation.length}
                           >
                             Submit
@@ -281,11 +298,18 @@ const ResignationUser = () => {
 
       <ConfirmModal
         title="Resignation"
-        selectedRow={selectedRow}
+        selectedRow={selectedData}
         deleteFunction={handleApplyResignation}
         message="Are you sure you want to submit your resignation?"
         isLoading={isResolving}
       />
+
+      {modalType === "retract" ? (
+        <StaffRetractResignationModal
+          setmodalType={setmodalType}
+          resignationContent={selectedData}
+        />
+      ) : null}
     </>
   );
 };
