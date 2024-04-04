@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
 import moment from "moment";
 import $ from "jquery";
@@ -6,11 +6,23 @@ import { useAppContext } from "../../Context/AppContext";
 
 export const AnnouncementModalPrompt = () => {
   const { loadingAnnouncement, announcement } = useAppContext();
+  const videoRef = useRef(null);
 
   const closeModal = () => {
     $("#AnnouncementModalPrompt").modal("hide");
     secureLocalStorage.setItem("seenAnnouncement", true);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
   };
+
+  useEffect(() => {
+    if (announcement && videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error("Autoplay failed:", error);
+      });
+    }
+  }, [announcement]);
 
   return (
     <>
@@ -56,7 +68,7 @@ export const AnnouncementModalPrompt = () => {
                   </div>
                 ) : announcement ? (
                   <div>
-                    <video controls autoPlay className="video_player">
+                    <video ref={videoRef} controls className="video_player">
                       <source src={announcement.video_url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
