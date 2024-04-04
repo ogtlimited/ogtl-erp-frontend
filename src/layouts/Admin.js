@@ -6,6 +6,8 @@ import { useAppContext } from "../Context/AppContext";
 import AlertSvg from "./AlertSvg";
 import $ from "jquery";
 import { SurveyFormModalPrompt } from "../components/Modal/SurveyFormModalPrompt";
+import { AnnouncementModalPrompt } from "./../components/Modal/AnnouncementModalPrompt";
+import secureLocalStorage from "react-secure-storage";
 
 const AdminLayout = (props) => {
   const mainContent = React.useRef(null);
@@ -16,6 +18,7 @@ const AdminLayout = (props) => {
     pendingSurveys,
     fetchPendingSurveys,
     setPendingSurveySubmitted,
+    announcement,
   } = useAppContext();
 
   React.useEffect(() => {
@@ -30,6 +33,12 @@ const AdminLayout = (props) => {
       $("#SurveyFormModalPrompt").modal("show");
     }
   }, [pendingSurveys.length, setPendingSurveySubmitted]);
+
+  useEffect(() => {
+    if (announcement && !secureLocalStorage.getItem("seenAnnouncement")) {
+      $("#AnnouncementModalPrompt").modal("show");
+    }
+  }, [announcement]);
 
   return (
     <>
@@ -76,6 +85,8 @@ const AdminLayout = (props) => {
         pendingSurveys={pendingSurveys}
         fetchSurveys={fetchPendingSurveys}
       />
+
+      <AnnouncementModalPrompt />
     </>
   );
 };

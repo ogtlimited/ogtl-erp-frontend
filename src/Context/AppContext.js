@@ -58,8 +58,12 @@ const AppProvider = (props) => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
+  
+  const [announcement, setAnnouncement] = useState(null);
+  const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
+  
 
   const goToTop = () => {
     window.scrollTo({
@@ -212,6 +216,39 @@ const AppProvider = (props) => {
         console.log(error);
       });
   };
+
+  // Announcement:
+  const fetchAnnouncement = useCallback(async () => {
+    setLoadingAnnouncement(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/video_announcements.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.videos_record?.videos;
+      if (resData.length > 0) {
+        setAnnouncement(resData[0]);
+      }
+      setLoadingAnnouncement(false);
+    } catch (error) {
+      const component = "Announcement | ";
+      ErrorHandler(error, component);
+      setLoadingAnnouncement(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // All Pending Surveys:
   const fetchPendingSurveys = useCallback(async () => {
@@ -673,6 +710,7 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
       fetchStaffResignation();
+      fetchAnnouncement()
       fetchPendingSurveys();
     }
   }, [
@@ -686,6 +724,7 @@ const AppProvider = (props) => {
     fetchDeductionTypes,
     fetchJobOpenings,
     fetchStaffResignation,
+    fetchAnnouncement,
     fetchPendingSurveys,
     isHr,
     userToken,
@@ -755,6 +794,17 @@ const AppProvider = (props) => {
         InterviewProcessStageOptions,
         fetchAllJobApplicationISandIPS,
 
+        announcement,
+        setAnnouncement,
+        loadingAnnouncement, 
+        setLoadingAnnouncement,
+        fetchAnnouncement,
+
+        pendingSurveys,
+        fetchPendingSurveys,
+        pendingSurveySubmitted, 
+        setPendingSurveySubmitted,
+
         getAvatarColor,
         showProgress,
         uploadProgress,
@@ -779,10 +829,7 @@ const AppProvider = (props) => {
         goToBottom,
         FontAwesomeIcon,
         faSpinner,
-        pendingSurveys,
-        fetchPendingSurveys,
-        pendingSurveySubmitted, 
-        setPendingSurveySubmitted
+
       }}
     >
       {props.children}

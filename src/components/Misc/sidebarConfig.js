@@ -52,6 +52,7 @@ const ICONS = {
   female: getIcon("la-venus"),
   certificate: getIcon("la-certificate"),
   survey: getIcon("la-poll"),
+  announcement: getIcon("la-bullhorn"),
 };
 
 const buildExternalURL = () => {
@@ -152,6 +153,11 @@ const sidebarConfig = [
             title: "Ticket",
             path: PATH_DASHBOARD.apps.tickets,
           },
+          {
+            canView: "all",
+            title: "Announcement",
+            path: PATH_DASHBOARD.apps.announcement,
+          },
         ],
       },
       {
@@ -185,6 +191,12 @@ const sidebarConfig = [
         title: "Manual Attendance",
         path: PATH_DASHBOARD.main.manualAttendance,
         icon: ICONS.userAttendance,
+      },
+      {
+        canView: "all",
+        title: "Announcement",
+        path: PATH_DASHBOARD.apps.announcement,
+        icon: ICONS.announcement,
       },
       {
         canView: "all",
