@@ -56,8 +56,8 @@ const ICONS = {
 };
 
 const buildExternalURL = () => {
-  const secret = process.env.REACT_APP_HMAC_SECRET;
-  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+  const secret = process.env.REACT_APP_HMAC_SECRET || "whatever123@SecR37@@%^)74893S3c";
+  const kpiUrl = process.env.REACT_APP_KPI_APP_URL || "https://kpi.outsourceglobal.com/auth";
 
   try {
     if (!kpiUrl || !secret) {
@@ -76,7 +76,7 @@ const buildExternalURL = () => {
       "Sidebar KPI Url:",
       externalAppUrl ? "Status: ✅" : "Status: ❌"
     );
-    console.log(`✅ kpiUrl:${kpiUrl}, secret:${secret}`);
+    // console.log(`✅ kpiUrl:${kpiUrl}, secret:${secret}`);
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
