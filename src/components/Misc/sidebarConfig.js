@@ -2,7 +2,7 @@
 
 import { PATH_DASHBOARD } from "../../routes/paths";
 import tokenService from "../../services/token.service";
-// import sign from "jwt-encode";
+import sign from "jwt-encode";
 
 const user = tokenService.getUser();
 const userDept =
@@ -54,27 +54,27 @@ const ICONS = {
   survey: getIcon("la-poll"),
 };
 
-// const buildExternalURL = () => {
-//   const secret = process.env.REACT_APP_HMAC_SECRET;
-//   const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+const buildExternalURL = () => {
+  const secret = process.env.REACT_APP_HMAC_SECRET;
+  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
-//   try {
-//     if (!kpiUrl || !secret) {
-//       throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
-//     }
+  try {
+    if (!kpiUrl || !secret) {
+      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+    }
 
-//     const kpiData = tokenService.getKpiUser();
+    const kpiData = tokenService.getKpiUser();
 
-//     const generatedJWT = sign(kpiData, secret);
-//     const queryParams = `auth_param=${generatedJWT}`;
-//     const externalAppUrl = `${kpiUrl}?${queryParams}`;
+    const generatedJWT = sign(kpiData, secret);
+    const queryParams = `auth_param=${generatedJWT}`;
+    const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-//     console.log("KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
-//     return externalAppUrl;
-//   } catch (error) {
-//     console.log("KPI error | ", error);
-//   }
-// };
+    console.log("Sidebar KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
+    return externalAppUrl;
+  } catch (error) {
+    console.log("KPI error | ", error);
+  }
+};
 
 const sidebarConfig = [
   // GENERAL
@@ -154,12 +154,12 @@ const sidebarConfig = [
           },
         ],
       },
-      // {
-      //   canView: "all",
-      //   title: "KPI",
-      //   externalLink: buildExternalURL(),
-      //   icon: ICONS.kpi,
-      // },
+      {
+        canView: "all",
+        title: "KPI",
+        externalLink: buildExternalURL(),
+        icon: ICONS.kpi,
+      },
       {
         canView: "all",
         title: "Attendance",
