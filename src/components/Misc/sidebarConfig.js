@@ -154,12 +154,12 @@ const sidebarConfig = [
           },
         ],
       },
-      // {
-      //   canView: "all",
-      //   title: "KPI",
-      //   externalLink: buildExternalURL(),
-      //   icon: ICONS.kpi,
-      // },
+      {
+        canView: "all",
+        title: "KPI",
+        externalLink: buildExternalURL(),
+        icon: ICONS.kpi,
+      },
       {
         canView: "all",
         title: "Attendance",
