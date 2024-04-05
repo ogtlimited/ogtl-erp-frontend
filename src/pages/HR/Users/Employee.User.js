@@ -16,7 +16,7 @@ import ViewModal from "../../../components/Modal/ViewModal";
 import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 import tokenService from "../../../services/token.service";
-import sign from "jwt-encode";
+// import sign from "jwt-encode";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -100,27 +100,27 @@ const EmployeeUser = () => {
     throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
   }
 
-  const navigateToKPI = useCallback(() => {
-    try {
-      const kpiData = tokenService.getKpiUser();
+  // const navigateToKPI = useCallback(() => {
+  //   try {
+  //     const kpiData = tokenService.getKpiUser();
 
-      const generatedJWT = sign(kpiData, secret);
-      const queryParams = `auth_param=${generatedJWT}`;
-      const externalAppUrl = `${kpiUrl}?${queryParams}`;
+  //     const generatedJWT = sign(kpiData, secret);
+  //     const queryParams = `auth_param=${generatedJWT}`;
+  //     const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-      console.log(
-        "Dashboard KPI Url:",
-        externalAppUrl ? "Status: ✅" : "Status: ❌"
-      );
-      setKpiExtUrl(externalAppUrl);
-    } catch (error) {
-      console.error("KPI error:", error);
-    }
-  }, [kpiUrl, secret]);
+  //     console.log(
+  //       "Dashboard KPI Url:",
+  //       externalAppUrl ? "Status: ✅" : "Status: ❌"
+  //     );
+  //     setKpiExtUrl(externalAppUrl);
+  //   } catch (error) {
+  //     console.error("KPI error:", error);
+  //   }
+  // }, [kpiUrl, secret]);
 
-  useEffect(() => {
-    navigateToKPI();
-  }, [navigateToKPI]);
+  // useEffect(() => {
+  //   navigateToKPI();
+  // }, [navigateToKPI]);
 
   return (
     <>
@@ -143,14 +143,14 @@ const EmployeeUser = () => {
                     away
                   </p>
                 )}
-                <a
+                {/* <a
                   className="btn btn-sm btn-info"
                   href={kpiExtUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Go to KPI
-                </a>
+                </a> */}
               </>
             </div>
             <div className="col-md-4">
