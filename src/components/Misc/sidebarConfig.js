@@ -61,7 +61,9 @@ const buildExternalURL = () => {
 
   try {
     if (!kpiUrl || !secret) {
-      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+      throw new Error(
+        `Could not satisfy requirements! ❌ kpiUrl:${kpiUrl}, secret:${secret}`
+      );
     }
 
     const kpiData = tokenService.getKpiUser();
@@ -70,7 +72,10 @@ const buildExternalURL = () => {
     const queryParams = `auth_param=${generatedJWT}`;
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-    console.log("Sidebar KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
+    console.log(
+      "Sidebar KPI Url:",
+      externalAppUrl ? "Status: ✅" : "Status: ❌"
+    );
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
