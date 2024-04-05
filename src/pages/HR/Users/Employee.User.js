@@ -15,7 +15,7 @@ import ERP3 from "../../../assets/img/erp3.png";
 import ViewModal from "../../../components/Modal/ViewModal";
 import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
-import tokenService from "../../../services/token.service";
+// import tokenService from "../../../services/token.service";
 // import sign from "jwt-encode";
 
 const EmployeeUser = () => {
@@ -24,7 +24,7 @@ const EmployeeUser = () => {
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [kpiExtUrl, setKpiExtUrl] = useState("");
+  // const [kpiExtUrl, setKpiExtUrl] = useState("");
   const [modalType, setmodalType] = useState("CEO Messagez");
   const [heroIcons, setHeroIcons] = useState({
     hero: HeroImage,
@@ -33,8 +33,8 @@ const EmployeeUser = () => {
     erp3: ERP3,
   });
 
-  const secret = process.env.REACT_APP_HMAC_SECRET;
-  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+  // const secret = process.env.REACT_APP_HMAC_SECRET;
+  // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
   const isRemoteStaff = user?.employee_info?.remote;
 
@@ -96,9 +96,9 @@ const EmployeeUser = () => {
     });
   }, [currentIndex]);
 
-  if (!kpiUrl || !secret) {
-    throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
-  }
+  // if (!kpiUrl || !secret) {
+  //   throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+  // }
 
   // const navigateToKPI = useCallback(() => {
   //   try {
