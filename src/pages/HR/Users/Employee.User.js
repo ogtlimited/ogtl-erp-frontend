@@ -103,11 +103,12 @@ const EmployeeUser = () => {
   const navigateToKPI = useCallback(() => {
     try {
       const kpiData = tokenService.getKpiUser();
+
       const generatedJWT = sign(kpiData, secret);
       const queryParams = `auth_param=${generatedJWT}`;
       const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-      console.log("KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
+      console.log("Dashboard KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
       setKpiExtUrl(externalAppUrl);
     } catch (error) {
       console.error("KPI error:", error);

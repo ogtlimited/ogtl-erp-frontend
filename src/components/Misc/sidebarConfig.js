@@ -14,6 +14,9 @@ const remoteUser = user?.employee_info?.remote;
 const CurrentUserIsLead = user?.employee_info?.is_lead;
 const CurrentUserRoles = user?.employee_info?.roles || [];
 
+const secret = process.env.REACT_APP_HMAC_SECRET;
+const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+
 const getIcon = (name) => <i className={"la " + name}></i>;
 
 const ICONS = {
@@ -54,22 +57,19 @@ const ICONS = {
   survey: getIcon("la-poll"),
 };
 
+if (!kpiUrl || !secret) {
+  throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+}
+
 const buildExternalURL = () => {
-  const secret = process.env.REACT_APP_HMAC_SECRET;
-  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
-
   try {
-    if (!kpiUrl || !secret) {
-      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
-    }
-
     const kpiData = tokenService.getKpiUser();
 
     const generatedJWT = sign(kpiData, secret);
     const queryParams = `auth_param=${generatedJWT}`;
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-    console.log("KPI Url:", externalAppUrl);
+    console.log("Sidebar KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
