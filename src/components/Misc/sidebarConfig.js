@@ -76,7 +76,6 @@ const buildExternalURL = () => {
       "Sidebar KPI Url:",
       externalAppUrl ? "Status: ✅" : "Status: ❌"
     );
-    // console.log(`✅ kpiUrl:${kpiUrl}, secret:${secret}`);
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
