@@ -108,7 +108,10 @@ const EmployeeUser = () => {
       const queryParams = `auth_param=${generatedJWT}`;
       const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-      console.log("Dashboard KPI Url:", externalAppUrl ? "Status: ✅" : "Status: ❌");
+      console.log(
+        "Dashboard KPI Url:",
+        externalAppUrl ? "Status: ✅" : "Status: ❌"
+      );
       setKpiExtUrl(externalAppUrl);
     } catch (error) {
       console.error("KPI error:", error);
@@ -133,22 +136,22 @@ const EmployeeUser = () => {
                 `}{" "}
                 !
               </h4>
-              {!isRemoteStaff && (
-                <>
+              <>
+                {!isRemoteStaff && (
                   <p className="welcome-p">
                     If you haven't clocked in today, you need to do it right
                     away
                   </p>
-                  <a
-                    className="btn btn-sm btn-info"
-                    href={kpiExtUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Go to KPI
-                  </a>
-                </>
-              )}
+                )}
+                <a
+                  className="btn btn-sm btn-info"
+                  href={kpiExtUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Go to KPI
+                </a>
+              </>
             </div>
             <div className="col-md-4">
               <img
