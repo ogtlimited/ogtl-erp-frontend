@@ -56,8 +56,8 @@ const ICONS = {
 };
 
 const buildExternalURL = () => {
-  const secret = process.env.REACT_APP_HMAC_SECRET || "whatever123@SecR37@@%^)74893S3c";
-  const kpiUrl = process.env.REACT_APP_KPI_APP_URL || "https://kpi.outsourceglobal.com/auth";
+  const secret = process.env.REACT_APP_HMAC_SECRET;
+  const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
 
   try {
     if (!kpiUrl || !secret) {
