@@ -33,9 +33,6 @@ const EmployeeUser = () => {
     erp3: ERP3,
   });
 
-  // const secret = process.env.REACT_APP_HMAC_SECRET;
-  // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
-
   const isRemoteStaff = user?.employee_info?.remote;
 
   useEffect(() => {
@@ -96,11 +93,17 @@ const EmployeeUser = () => {
     });
   }, [currentIndex]);
 
+
+
+  // const navigateToKPI = useCallback(() => {
+    
+  // const secret = process.env.REACT_APP_HMAC_SECRET;
+  // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+
   // if (!kpiUrl || !secret) {
   //   throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
   // }
 
-  // const navigateToKPI = useCallback(() => {
   //   try {
   //     const kpiData = tokenService.getKpiUser();
 
