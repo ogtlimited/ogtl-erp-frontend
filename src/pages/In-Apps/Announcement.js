@@ -58,7 +58,7 @@ const Announcement = () => {
             <div className="video_player_info">
               <h3>{announcement.title}</h3>
               <p>Uploaded by: {announcement.uploaded_by}</p>
-              <p>Created at: {moment(announcement.created_at).format("LLL")}</p>
+              <p>Date: {moment(announcement.created_at).format("LLL")}</p>
             </div>
           </div>
         ) : (
