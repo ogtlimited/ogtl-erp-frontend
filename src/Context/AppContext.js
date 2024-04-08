@@ -662,10 +662,10 @@ const AppProvider = (props) => {
       error.response?.data?.errors || "Unable to process request";
     const errorStatus = error.response?.status || 0;
 
-    if (errorStatus === 500) {
-      navigate("/500");
-      return;
-    }
+    // if (errorStatus === 500) {
+    //   navigate("/500");
+    //   return;
+    // }
 
     const message =
       errorStatus >= 500
