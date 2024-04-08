@@ -355,7 +355,7 @@ const Profile = () => {
                             "Not Available"}
                         </h6>
                         <div className="staff-id">
-                          OGID: {userData?.employee?.ogid}
+                          OGID: {userData?.employee?.ogid || "Not Available"}
                         </div>
                         <div className="staff-id">
                           {userData?.office?.office_type.replace(
