@@ -89,10 +89,10 @@ const Login = () => {
         company_email: data.company_email.trim(),
       };
 
-            // if (obj.company_email !== activeUser) {
-            //   setErrorMsg("There is an active user on this device");
-            //   return;
-            // }
+      // if (obj.company_email !== activeUser) {
+      //   setErrorMsg("There is an active user on this device");
+      //   return;
+      // }
 
       setErrorMsg("");
 
@@ -136,10 +136,10 @@ const Login = () => {
             company_email: data.company_email.trim(),
           };
 
-                    // if (obj.company_email !== activeUser) {
-                    //   setErrorMsg("Please login with your credentials");
-                    //   return;
-                    // }
+          // if (obj.company_email !== activeUser) {
+          //   setErrorMsg("Please login with your credentials");
+          //   return;
+          // }
 
           setErrorMsg("");
 
