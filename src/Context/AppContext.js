@@ -23,7 +23,6 @@ const AppProvider = (props) => {
     class: "",
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
-  const navigate = useNavigate();
   const [userToken, setuserToken] = useState(null);
   const [count, setCount] = useState(0);
 
