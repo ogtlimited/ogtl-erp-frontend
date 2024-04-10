@@ -8,11 +8,14 @@ import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { AnnouncementViewModal } from "./../../components/Modal/AnnouncementViewModal";
+import $ from "jquery";
 
 const Announcement = () => {
   const { ErrorHandler, user, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [allAnnouncement, setAllAnnouncement] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -74,7 +77,6 @@ const Announcement = () => {
 
   const handleChange = (e, p) => {
     setPage(p);
-    console.log('p', p, _DATA)
     _DATA.jump(p);
   };
 
@@ -85,6 +87,11 @@ const Announcement = () => {
 
     setSizePerPage(e.target.value);
     setPage(1);
+  };
+
+  const handleViewAnnouncement = (announcement) => {
+    $("#AnnouncementViewModal").modal("show");
+    setSelectedVideo(announcement);
   };
 
   return (
@@ -127,8 +134,12 @@ const Announcement = () => {
           <>
             <div className="custom-video-field-div">
               {allAnnouncement.map((announcement, index) => (
-                <div className="video-field-div" key={index}>
-                  <video controls className="video_player">
+                <div
+                  className="video-field-div"
+                  key={index}
+                  onClick={() => handleViewAnnouncement(announcement)}
+                >
+                  <video className="video_player">
                     <source src={announcement?.video_url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -209,6 +220,12 @@ const Announcement = () => {
       </div>
 
       <AnnouncementFormModal fetchAllAnnouncement={fetchAllAnnouncement} />
+
+      <AnnouncementViewModal
+        loading={loading}
+        announcementContent={selectedVideo}
+        setSelectedVideo={setSelectedVideo}
+      />
     </>
   );
 };
