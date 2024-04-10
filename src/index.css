@@ -1770,21 +1770,124 @@ img {
   margin: 0;
 }
 
-.video_player {
+.custom-video-field-div {
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 15px;
   width: 100%;
+  height: auto;
+  display: grid;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 1rem;
 }
 
+.video-field-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1.5px solid #9999996c;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.video-field-div:hover {
+  border: 1.5px solid var(--sec-color);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  transform: scale(1.01);
+}
+
+.video_player {
+  max-height: 160px;
+  min-height: 160px;
+  width: 100% !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
 .video_player_info {
+  height: 50%;
+  padding: 10px;
   margin-top: 1rem;
 }
-.video_player_info > p {
-  margin-bottom: 0.5rem;
+
+.video_player_info > h3 {
+  font-size: 15px;
+}
+
+.video_info_wrapper {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.video_info_wrapper > div:first-child > span {
+  width: 100px;
+}
+
+.video_info_wrapper > div:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.video_info_wrapper > div:last-child > div {
+  display: flex;
+  align-items: center;
+}
+
+.video_info_wrapper > div:last-child > div > h4 {
+  font-size: 11px;
+  margin-bottom: 0.2rem;
+}
+
+.BsDot {
+  margin-top: -0.3rem;
+}
+
+.video_info_wrapper > div:last-child > div > span {
+  font-size: 11px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  
+}
+
+.video_info_wrapper > div:last-child > p {
+  font-size: 12px;
+  margin: 0;
 }
 
 .modal_uploaded_by {
   font-size: 15px;
   margin: 0;
 }
+
+.span_indicator {
+  color: #808080;
+}
+
+.video-avatar-span {
+  border-radius: 50%;
+  color: #ffffff !important;
+  font-size: 25px !important;
+  font-weight: 400;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  white-space: nowrap;
+}
+
 
 /*------------------
       Survey  

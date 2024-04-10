@@ -3,7 +3,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const AnnouncementFormModal = () => {
+export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
   const { showAlert, fetchAnnouncement } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(0);
@@ -20,6 +20,7 @@ export const AnnouncementFormModal = () => {
       title: "",
       video: null,
     });
+    setLoading(false);
     setVideoSize(null);
     setVideoSizeColor(null);
     setUploadProgress(0);
@@ -76,6 +77,7 @@ export const AnnouncementFormModal = () => {
       $("#AnnouncementFormModal").modal("toggle");
 
       fetchAnnouncement();
+      fetchAllAnnouncement();
       cancelEvent();
       setLoading(false);
     } catch (error) {
