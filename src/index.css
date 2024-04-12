@@ -1799,7 +1799,6 @@ img {
 .video-field-div:hover {
   border: 1.5px solid var(--sec-color);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  transform: scale(1.01);
 }
 
 .video_player {
@@ -1808,7 +1807,9 @@ img {
   width: 100% !important;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  background-color: #1d1d1d;
 }
+
 .video_player_info {
   height: 50%;
   padding: 10px;
