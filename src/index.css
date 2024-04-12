@@ -1786,7 +1786,7 @@ img {
 }
 
 .video-field-div {
-  width: 100%;
+  width: 95%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1799,7 +1799,6 @@ img {
 .video-field-div:hover {
   border: 1.5px solid var(--sec-color);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  transform: scale(1.01);
 }
 
 .video_player {
