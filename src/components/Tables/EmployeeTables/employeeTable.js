@@ -71,6 +71,7 @@ const EmployeesTable = ({
   const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const { setIsFromBiometrics, showAlert, user, getAvatarColor } =
     useAppContext();
   const [info, setInfo] = useState({
@@ -612,7 +613,7 @@ const EmployeesTable = ({
 
   const handleDownloadCSV = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsDownloading(true);
     try {
       const response = await axiosInstance.get("/api/v1/employees.json", {
         headers: {
@@ -622,7 +623,7 @@ const EmployeesTable = ({
         },
         params: {
           page: page,
-          limit: 1000,
+          limit: 10000,
         },
       });
 
@@ -646,10 +647,10 @@ const EmployeesTable = ({
 
       csvDownload(dataToConvert);
 
-      setLoading(false);
+      setIsDownloading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
-      setLoading(false);
+      setIsDownloading(false);
     }
   };
 
@@ -666,12 +667,27 @@ const EmployeesTable = ({
           {(props) => (
             <div className="col-12">
               <div className="col-12">
-                <button
-                  onClick={handleDownloadCSV}
-                  className="float-right btn export-csv"
-                >
-                  Export CSV
-                </button>
+                {isDownloading ? (
+                  <button
+                    onClick={handleDownloadCSV}
+                    className="float-right btn export-csv"
+                  >
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                      style={{ marginRight: "10px" }}
+                    ></span>
+                    Downloading, please wait
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleDownloadCSV}
+                    className="float-right btn export-csv"
+                  >
+                    Export Employee Records (CSV)
+                  </button>
+                )}
 
                 <MySearch
                   {...props.searchProps}
