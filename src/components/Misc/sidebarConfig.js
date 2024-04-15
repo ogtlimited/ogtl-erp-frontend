@@ -53,6 +53,7 @@ const ICONS = {
   certificate: getIcon("la-certificate"),
   survey: getIcon("la-poll"),
   announcement: getIcon("la-bullhorn"),
+  deduction: getIcon("la-money-check-alt"),
 };
 
 const buildExternalURL = () => {
@@ -158,11 +159,6 @@ const sidebarConfig = [
             title: "Ticket",
             path: PATH_DASHBOARD.apps.tickets,
           },
-          {
-            canView: "all",
-            title: "Announcement",
-            path: PATH_DASHBOARD.apps.announcement,
-          },
         ],
       },
       {
@@ -185,6 +181,12 @@ const sidebarConfig = [
       },
       {
         canView: "all",
+        title: "Deductions",
+        path: PATH_DASHBOARD.main.deductions,
+        icon: ICONS.deduction,
+      },
+      {
+        canView: "all",
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.resignation,
@@ -200,7 +202,7 @@ const sidebarConfig = [
       {
         canView: "all",
         title: "Announcement",
-        path: PATH_DASHBOARD.apps.announcement,
+        path: PATH_DASHBOARD.main.announcement,
         icon: ICONS.announcement,
       },
       {

@@ -35,10 +35,14 @@ const AdminLayout = (props) => {
   }, [pendingSurveys.length, setPendingSurveySubmitted]);
 
   useEffect(() => {
-    if (announcement && !secureLocalStorage.getItem("seenAnnouncement")) {
+    if (
+      announcement &&
+      !pendingSurveys.length &&
+      !secureLocalStorage.getItem("seenAnnouncement")
+    ) {
       $("#AnnouncementModalPrompt").modal("show");
     }
-  }, [announcement]);
+  }, [announcement, pendingSurveys.length]);
 
   return (
     <>
