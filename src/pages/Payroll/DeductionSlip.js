@@ -139,21 +139,10 @@ const DeductionSlip = () => {
 
   return (
     <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Deduction Breakdown</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">Payroll</li>
-              <li className="breadcrumb-item active">Deductions</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       {allDeductions.length ? (
-        <div className="col" style={{ marginTop: "100px" }}>
-          <h4 className="page-title">{owner?.full_name}</h4>
+        <div className="col" style={{ marginBottom: "50px" }}>
+          <h4 className="page-title">{owner?.full_name} |{" "}
+              <span className="payroll_month_indicator">Deduction Breakdown</span></h4>
           <ul className="breadcrumb">
             <li className="">{owner?.ogid}</li>{" "}
             <span style={{ marginLeft: "10px", marginRight: "10px" }}>|</span>
