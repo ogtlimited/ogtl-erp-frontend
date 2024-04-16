@@ -15,7 +15,7 @@ function StaffRetractResignationModal({ setmodalType, resignationContent }) {
     const id = resignationContent.id;
     setLoading(true);
 
-    console.log(resignationContent)
+    // console.log(resignationContent)
 
     try {
       // eslint-disable-next-line no-unused-vars
