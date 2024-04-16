@@ -6,12 +6,14 @@ import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import TeamAttendanceTable from "../../../components/Tables/EmployeeTables/TeamAttendanceTable";
+import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendanceTable";
 
 const TeamAttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
   const [loadingOfficeType, setLoadingOfficeType] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [allTeamAttendance, setAllTeamAttendance] = useState([]);
+  const [dailyAttendance, setDailyAttendance] = useState([]);
+  const [monthlyAttendance, setMonthlyAttendance] = useState([]);
 
   const [officeType, setOfficeType] = useState("");
   const [offices, setOffices] = useState([]);
@@ -130,7 +132,7 @@ const TeamAttendanceRecord = () => {
         }
       });
 
-      setAllTeamAttendance(resData);
+      setDailyAttendance(resData);
       setLoading(false);
     } catch (error) {
       const component = "Team Attendance | ";
@@ -217,7 +219,7 @@ const TeamAttendanceRecord = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Team Attendance Record</h3>
+            <h3 className="page-title">Team Attendance Records</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Leadership</li>
               <li className="breadcrumb-item active">Team Attendance</li>
@@ -226,12 +228,40 @@ const TeamAttendanceRecord = () => {
         </div>
       </div>
 
+      <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_dailyAttendance"
+                >
+                  Daily Attendance
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_monthlyAttendance"
+                >
+                  Monthly Attendance
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div>
         <div className="row tab-content">
-          <div className="col-12">
+          <div id="tab_dailyAttendance" className="col-12 tab-pane show active">
             <TeamAttendanceTable
               columns={columns}
-              data={allTeamAttendance}
+              data={dailyAttendance}
               loadingOfficeType={loadingOfficeType}
               loading={loading}
               setLoading={setLoading}
@@ -243,6 +273,29 @@ const TeamAttendanceRecord = () => {
               setSelectedOffice={setSelectedOffice}
             />
           </div>
+
+          {/* <div id="tab_monthlyAttendance" className="col-12 tab-pane">
+            <MonthlyAttendanceTable
+              columns={monthlyAttendanceColumns}
+              data={monthlyAttendance}
+              loading={loadingMonthlyRecord}
+              setLoading={setLoadingMonthlyRecord}
+              fromDate={fromDate}
+              toDate={toDate}
+              setFromDate={setFromDate}
+              setToDate={setToDate}
+              officeType={officeType}
+              setOfficeType={setOfficeType}
+              officeId={officeId}
+              setOfficeId={setOfficeId}
+              page={page}
+              setPage={setPage}
+              sizePerPage={sizePerPage}
+              setSizePerPage={setSizePerPage}
+              totalPages={totalPages}
+              setTotalPages={setTotalPages}
+            />
+          </div> */}
         </div>
       </div>
     </>

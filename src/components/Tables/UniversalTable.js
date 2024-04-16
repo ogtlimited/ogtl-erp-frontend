@@ -7,7 +7,6 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
-
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 const UniversalTable = ({
