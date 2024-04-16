@@ -97,7 +97,7 @@ const AttendanceRecord = () => {
                   className={`fa fa-dot-circle-o ${
                     attendanceRecord.status === "Leave"
                       ? "text-success"
-                      : attendanceRecord.status === "Off"
+                      : attendanceRecord.status === "Day off"
                       ? "text-secondary"
                       : attendanceRecord.status === "---"
                       ? "text-muted"
@@ -275,7 +275,7 @@ const AttendanceRecord = () => {
               : data?.days[key] === "leave"
               ? "Leave"
               : data?.days[key] === "off"
-              ? "Off"
+              ? "Day off"
               : data?.days[key] === "---"
               ? "---"
               : "Present",

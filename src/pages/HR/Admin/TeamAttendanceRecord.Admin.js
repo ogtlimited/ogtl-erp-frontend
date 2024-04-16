@@ -92,7 +92,7 @@ const TeamAttendanceRecord = () => {
                   className={`fa fa-dot-circle-o ${
                     attendanceRecord.status === "Leave"
                       ? "text-success"
-                      : attendanceRecord.status === "Off"
+                      : attendanceRecord.status === "Day off"
                       ? "text-secondary"
                       : attendanceRecord.status === "---"
                       ? "text-muted"
@@ -107,7 +107,6 @@ const TeamAttendanceRecord = () => {
         );
       },
     }));
-
 
     setDateColumns(dateColumns);
   }, [monthlyAttendance]);
@@ -305,7 +304,7 @@ const TeamAttendanceRecord = () => {
               : data?.days[key] === "leave"
               ? "Leave"
               : data?.days[key] === "off"
-              ? "Off"
+              ? "Day off"
               : data?.days[key] === "---"
               ? "---"
               : "Present",
@@ -413,6 +412,7 @@ const TeamAttendanceRecord = () => {
           >
             {value?.charAt(0)}
           </span>
+          {value?.toUpperCase()}
         </h2>
       ),
     },
