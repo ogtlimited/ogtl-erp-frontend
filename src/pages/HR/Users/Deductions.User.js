@@ -48,10 +48,10 @@ const EmployeeDeductions = () => {
       const formattedData = resData?.map((data) => ({
         ...data,
         deductionCategory: data?.deduction?.category.replace(/\b\w/g, char => char.toUpperCase()),
-        createdAt: moment(data?.deduction?.created_at).format(
+        createdAt: moment(data?.deduction?.created_at).utc().format(
           "YYYY, MM (MMM), Do - h:mma"
         ),
-        dataProcessed: moment(data?.deduction?.date_processed).format(
+        dataProcessed: moment(data?.deduction?.date_processed).utc().format(
           "YYYY, MM (MMM), Do - h:mma"
         ),
         deductionDescription: data?.deduction?.description,
