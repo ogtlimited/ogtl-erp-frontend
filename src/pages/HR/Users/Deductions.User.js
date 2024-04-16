@@ -47,20 +47,23 @@ const EmployeeDeductions = () => {
 
       const formattedData = resData?.map((data) => ({
         ...data,
-        deductionCategory: data?.deduction?.category.replace(/\b\w/g, char => char.toUpperCase()),
-        createdAt: moment(data?.deduction?.created_at).utc().format(
-          "YYYY, MM (MMM), Do - h:mma"
+        deductionCategory: data?.deduction?.category.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
         ),
-        dataProcessed: moment(data?.deduction?.date_processed).utc().format(
-          "YYYY, MM (MMM), Do - h:mma"
+        createdAt: moment(data?.deduction?.created_at)
+          .utc()
+          .format("YYYY, MM (MMM) Do - h:mma"),
+        dataProcessed: moment(data?.deduction?.date_processed)
+          .utc()
+          .format("YYYY, MM (MMM) Do - h:mma"),
+        deductionDescription:
+          data?.deduction?.category === "disciplinary"
+            ? data?.deduction_type?.description
+            : data?.deduction?.description || data?.deduction_type?.description,
+        deductionTitle: data?.deduction_type?.title.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
         ),
-        deductionDescription: data?.deduction?.description,
-        deductionMode: data?.deduction_type?.deduction_mode.replace(/\b\w/g, char => char.toUpperCase()),
-        deductionTitle: data?.deduction_type?.title,
-        deductionValue:
-          data?.deduction_type?.deduction_mode === "percentage"
-            ? data?.deduction_type?.value + "%"
-            : helper.handleMoneyFormat(data?.deduction_type?.value),
+        deductionValue: helper.handleMoneyFormat(data?.deduction?.amount),
       }));
 
       setDeductions(formattedData);
@@ -108,14 +111,8 @@ const EmployeeDeductions = () => {
       headerStyle: { width: "10%" },
     },
     {
-      dataField: "deductionMode",
-      text: "Mode",
-      sort: true,
-      headerStyle: { width: "10%" },
-    },
-    {
       dataField: "deductionValue",
-      text: "Value",
+      text: "Amount",
       sort: true,
       headerStyle: { width: "20%" },
     },
