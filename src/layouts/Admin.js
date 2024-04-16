@@ -28,21 +28,21 @@ const AdminLayout = (props) => {
   }, [location]);
 
   useEffect(() => {
-    if (pendingSurveys.length) {
+    if (pendingSurveys?.length) {
       setPendingSurveySubmitted(false);
       $("#SurveyFormModalPrompt").modal("show");
     }
-  }, [pendingSurveys.length, setPendingSurveySubmitted]);
+  }, [pendingSurveys?.length, setPendingSurveySubmitted]);
 
   useEffect(() => {
     if (
       announcement &&
-      !pendingSurveys.length &&
+      !pendingSurveys?.length &&
       !secureLocalStorage.getItem("seenAnnouncement")
     ) {
       $("#AnnouncementModalPrompt").modal("show");
     }
-  }, [announcement, pendingSurveys.length]);
+  }, [announcement, pendingSurveys?.length]);
 
   return (
     <>
