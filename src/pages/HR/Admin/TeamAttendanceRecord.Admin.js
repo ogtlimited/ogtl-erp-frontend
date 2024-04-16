@@ -6,7 +6,7 @@ import axiosInstance from "../../../services/api";
 import moment from "moment";
 import { useAppContext } from "../../../Context/AppContext";
 import TeamAttendanceTable from "../../../components/Tables/EmployeeTables/TeamAttendanceTable";
-import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendanceTable";
+import MonthlyTeamAttendanceTable from "../../../components/Tables/MonthlyTeamAttendanceTable";
 
 const TeamAttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
@@ -23,9 +23,94 @@ const TeamAttendanceRecord = () => {
     office_type: "",
   });
 
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
+
+  // Daily Attendance:
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
+
+  // Monthly Attendance:
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+  const [dateColumns, setDateColumns] = useState([]);
+  const [loadingMonthlyRecord, setLoadingMonthlyRecord] = useState(false);
+
+  useEffect(() => {
+    const allDates = Array.from(
+      new Set(
+        monthlyAttendance.reduce((acc, entry) => {
+          entry.attendance.forEach((record) => {
+            acc.push(record.date);
+          });
+          return acc;
+        }, [])
+      )
+    );
+
+    const dateColumns = allDates.map((date) => ({
+      dataField: `attendance_${date}`,
+      text: moment(date).format("DD-MMM-YYYY"),
+      headerStyle: { width: "100%" },
+      formatter: (cell, row) => {
+        const attendanceRecord = row.attendance.find(
+          (entry) => entry.date === date
+        );
+
+        return (
+          <div>
+            {attendanceRecord.status === "Present" ? (
+              <>
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i
+                    className="fa fa-dot-circle-o text-info"
+                    style={{ marginRight: "10px" }}
+                  ></i>{" "}
+                  {moment(attendanceRecord.clock_in, "HH:mm:ss").format(
+                    "hh:mma"
+                  )}
+                </span>
+                <span className="btn btn-gray btn-sm btn-rounded">
+                  <i
+                    className="fa fa-dot-circle-o text-success"
+                    style={{ marginRight: "10px" }}
+                  ></i>{" "}
+                  {attendanceRecord.clock_out
+                    ? moment(attendanceRecord.clock_out, "HH:mm:ss").format(
+                        "hh:mma"
+                      )
+                    : "-"}
+                </span>
+              </>
+            ) : (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className={`fa fa-dot-circle-o ${
+                    attendanceRecord.status === "Leave"
+                      ? "text-success"
+                      : attendanceRecord.status === "Off"
+                      ? "text-secondary"
+                      : attendanceRecord.status === "---"
+                      ? "text-muted"
+                      : "text-danger"
+                  }`}
+                  style={{ marginRight: "10px" }}
+                ></i>{" "}
+                {attendanceRecord.status}
+              </span>
+            )}
+          </div>
+        );
+      },
+    }));
+
+
+    setDateColumns(dateColumns);
+  }, [monthlyAttendance]);
 
   // Fetch logged in user offices:
   const fetchLoggedInUserOffices = useCallback(async () => {
@@ -92,7 +177,7 @@ const TeamAttendanceRecord = () => {
               ? selectedOffice?.office_type
               : null,
             office: selectedOffice?.id ? selectedOffice?.id : null,
-            limit: 400,
+            limit: 1000,
           },
         }
       );
@@ -145,6 +230,106 @@ const TeamAttendanceRecord = () => {
   useEffect(() => {
     fetchEmployeeByOffice();
   }, [fetchEmployeeByOffice]);
+
+  // Monthly Attendance:
+  const fetchMonthlyAttendance = useCallback(async () => {
+    setLoadingMonthlyRecord(true);
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/office_employees_attendances.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            office_type: officeType,
+            office_id: selectedOffice?.id ? selectedOffice?.id : null,
+            start_date: fromDate,
+            end_date: toDate,
+            page: page,
+            limit: sizePerPage,
+          },
+        }
+      );
+
+      const attendanceRecords =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.records;
+
+      const recordPages =
+        typeof response?.data?.data === "string"
+          ? []
+          : response?.data?.data?.pages;
+
+      const dataArray = Object.keys(attendanceRecords).map((key) => ({
+        days: attendanceRecords[key].days,
+        user: attendanceRecords[key].user,
+        total_hours: attendanceRecords[key].total_hours,
+        lateness_and_absence: attendanceRecords[key].lateness_and_absence,
+      }));
+
+      // console.log("dataArray", dataArray);
+
+      const formattedData = dataArray.map((data) => ({
+        staffName: data?.user?.full_name,
+        ogid: data?.user?.staff_unique_Id,
+        email: data?.user?.email,
+        total_hours: data?.total_hours,
+        lateness:
+          data?.lateness_and_absence?.lateness !== undefined
+            ? data.lateness_and_absence.lateness
+            : 0,
+        NCNS:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data.lateness_and_absence.NCNS
+            : 0,
+        absent:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
+            : 0,
+
+        attendance: Object.keys(data?.days).map((key) => ({
+          date: key,
+          clock_in: data?.days[key]?.clock_in
+            ? data?.days[key]?.clock_in
+            : null,
+          clock_out: data?.days[key]?.clock_out
+            ? data?.days[key]?.clock_out
+            : null,
+          status:
+            data?.days[key] === "absent"
+              ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "off"
+              ? "Off"
+              : data?.days[key] === "---"
+              ? "---"
+              : "Present",
+        })),
+      }));
+
+      // console.log("formatted", formattedData);
+
+      setSizePerPage(sizePerPage);
+      setTotalPages(recordPages);
+
+      setMonthlyAttendance(formattedData);
+      setLoadingMonthlyRecord(false);
+    } catch (error) {
+      const component = "Monthly Attendance | ";
+      ErrorHandler(error, component);
+      setLoadingMonthlyRecord(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, officeType, page, selectedOffice?.id, sizePerPage, toDate]);
+
+  useEffect(() => {
+    fetchMonthlyAttendance();
+  }, [fetchMonthlyAttendance]);
 
   const columns = [
     {
@@ -214,6 +399,62 @@ const TeamAttendanceRecord = () => {
     },
   ];
 
+  const monthlyAttendanceColumns = [
+    {
+      dataField: "staffName",
+      text: "Employee",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+        </h2>
+      ),
+    },
+    {
+      dataField: "ogid",
+      text: "OGID",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "email",
+      text: "Email",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "total_hours",
+      text: "Total Hours",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "lateness",
+      text: "Lateness",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "NCNS",
+      text: "Absent",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "absent",
+      text: "Absent(did not clock out)",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    ...dateColumns,
+  ];
+
   return (
     <>
       <div className="page-header">
@@ -274,10 +515,11 @@ const TeamAttendanceRecord = () => {
             />
           </div>
 
-          {/* <div id="tab_monthlyAttendance" className="col-12 tab-pane">
-            <MonthlyAttendanceTable
+          <div id="tab_monthlyAttendance" className="col-12 tab-pane">
+            <MonthlyTeamAttendanceTable
               columns={monthlyAttendanceColumns}
               data={monthlyAttendance}
+              loadingOfficeType={loadingOfficeType}
               loading={loadingMonthlyRecord}
               setLoading={setLoadingMonthlyRecord}
               fromDate={fromDate}
@@ -285,9 +527,9 @@ const TeamAttendanceRecord = () => {
               setFromDate={setFromDate}
               setToDate={setToDate}
               officeType={officeType}
-              setOfficeType={setOfficeType}
-              officeId={officeId}
-              setOfficeId={setOfficeId}
+              offices={offices}
+              selectedOffice={selectedOffice}
+              setSelectedOffice={setSelectedOffice}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}
@@ -295,7 +537,7 @@ const TeamAttendanceRecord = () => {
               totalPages={totalPages}
               setTotalPages={setTotalPages}
             />
-          </div> */}
+          </div>
         </div>
       </div>
     </>
