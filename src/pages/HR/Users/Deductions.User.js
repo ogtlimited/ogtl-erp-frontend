@@ -102,7 +102,7 @@ const EmployeeDeductions = () => {
       dataField: "deductionDescription",
       text: "Description",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
     },
     {
       dataField: "deductionCategory",
