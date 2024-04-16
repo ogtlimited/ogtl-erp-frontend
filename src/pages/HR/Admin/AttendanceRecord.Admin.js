@@ -91,26 +91,18 @@ const AttendanceRecord = () => {
                     : "-"}
                 </span>
               </>
-            ) : attendanceRecord.status === "Leave" ? (
-              <span className="btn btn-gray btn-sm btn-rounded">
-                <i
-                  className="fa fa-dot-circle-o text-success"
-                  style={{ marginRight: "10px" }}
-                ></i>{" "}
-                {attendanceRecord.status}
-              </span>
-            ) : attendanceRecord.status === "---" ? (
-              <span className="btn btn-gray btn-sm btn-rounded">
-                <i
-                  className="fa fa-dot-circle-o text-muted"
-                  style={{ marginRight: "10px" }}
-                ></i>{" "}
-                {attendanceRecord.status}
-              </span>
             ) : (
               <span className="btn btn-gray btn-sm btn-rounded">
                 <i
-                  className="fa fa-dot-circle-o text-danger"
+                  className={`fa fa-dot-circle-o ${
+                    attendanceRecord.status === "Leave"
+                      ? "text-success"
+                      : attendanceRecord.status === "Day off"
+                      ? "text-secondary"
+                      : attendanceRecord.status === "---"
+                      ? "text-muted"
+                      : "text-danger"
+                  }`}
                   style={{ marginRight: "10px" }}
                 ></i>{" "}
                 {attendanceRecord.status}
@@ -282,6 +274,8 @@ const AttendanceRecord = () => {
               ? "Absent"
               : data?.days[key] === "leave"
               ? "Leave"
+              : data?.days[key] === "off"
+              ? "Day off"
               : data?.days[key] === "---"
               ? "---"
               : "Present",
