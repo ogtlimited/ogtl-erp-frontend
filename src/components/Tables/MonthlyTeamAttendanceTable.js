@@ -11,10 +11,14 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import csvDownload from "json-to-csv-export";
 import moment from "moment";
+import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-const MonthlyAttendanceTable = ({
+const MonthlyTeamAttendanceTable = ({
   data,
   columns,
+  loadingOfficeType,
   loading,
   setLoading,
 
@@ -22,10 +26,11 @@ const MonthlyAttendanceTable = ({
   toDate,
   setFromDate,
   setToDate,
+
   officeType,
-  setOfficeType,
-  officeId,
-  setOfficeId,
+  offices,
+  selectedOffice,
+  setSelectedOffice,
 
   page,
   setPage,
@@ -36,7 +41,7 @@ const MonthlyAttendanceTable = ({
 
   context,
 }) => {
-  const { selectOfficeTypes, selectDepartments, selectCampaigns, showAlert } =
+  const { showAlert } =
     useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = useState(false);
@@ -99,7 +104,7 @@ const MonthlyAttendanceTable = ({
           },
           params: {
             office_type: officeType,
-            office_id: officeId,
+            office_id: selectedOffice?.id ? selectedOffice?.id : null,
             start_date: fromDate,
             end_date: toDate,
             page: 1,
@@ -133,8 +138,9 @@ const MonthlyAttendanceTable = ({
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent: data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+        absent:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
             : 0,
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
@@ -180,7 +186,7 @@ const MonthlyAttendanceTable = ({
 
       const dataToConvert = {
         data: csvData,
-        filename: `OGTL - Employee Monthly Attendance Record - ${moment(
+        filename: `OGTL - Team Monthly Attendance Record - ${moment(
           fromDate
         ).format("DD MMM, YYYY")} to ${moment(toDate).format("DD MMM, YYYY")}`,
         delimiter: ",",
@@ -248,57 +254,43 @@ const MonthlyAttendanceTable = ({
                   </div>
                 </div>
 
-                <div className="col-md-3">
-                  <label htmlFor="officeType">Filter By</label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => {
-                      setOfficeType(e.target.value);
-                      setOfficeId("");
+                {/* Office Type */}
+                <div className="col-md-4">
+                  {!loadingOfficeType ? (
+                    <label htmlFor="officeType">
+                      {officeType?.replace(/\b\w/g, (char) =>
+                        char.toUpperCase()
+                      ) || "Office"}
+                    </label>
+                  ) : (
+                    <label htmlFor="officeType">
+                      <>
+                        <FontAwesomeIcon
+                          icon={faSpinner}
+                          spin
+                          pulse
+                          style={{ marginRight: "10px" }}
+                        />{" "}
+                        Fetching offices...
+                      </>
+                    </label>
+                  )}
+                  <Select
+                    options={offices}
+                    isSearchable={true}
+                    value={{
+                      value: selectedOffice?.id,
+                      label: selectedOffice?.title,
                     }}
-                    defaultValue={officeType}
-                    value={officeType}
-                  >
-                    <option value="" disabled selected hidden>
-                      Office Type
-                    </option>
-                    {selectOfficeTypes.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="col-md-3">
-                  <label htmlFor="office_id">
-                    {officeType.replace(/\b\w/g, (char) =>
-                      char.toUpperCase()
-                    ) || "Office"}
-                  </label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => setOfficeId(e.target.value)}
-                    defaultValue={officeId}
-                    value={officeId}
-                  >
-                    <option value="" disabled selected hidden>
-                      Office Title
-                    </option>
-                    {officeType === "department"
-                      ? selectDepartments.map((option, idx) => (
-                          <option key={idx} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))
-                      : officeType === "campaign"
-                      ? selectCampaigns.map((option, idx) => (
-                          <option key={idx} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))
-                      : null}
-                  </select>
+                    onChange={(e) =>
+                      setSelectedOffice({
+                        id: e?.value,
+                        title: e?.label,
+                        office_type: officeType,
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                  />
                 </div>
               </div>
 
@@ -365,4 +357,4 @@ const MonthlyAttendanceTable = ({
   );
 };
 
-export default MonthlyAttendanceTable;
+export default MonthlyTeamAttendanceTable;
