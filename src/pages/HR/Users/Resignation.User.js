@@ -152,7 +152,8 @@ const ResignationUser = () => {
                       </p>
                     </div>
 
-                    {userResignations?.pending_resignation ? (
+                    {userResignations?.pending_resignation &&
+                    !userResignations?.acted_on ? (
                       <div className="modal-footer resignation_form_footer">
                         <button
                           type="submit"

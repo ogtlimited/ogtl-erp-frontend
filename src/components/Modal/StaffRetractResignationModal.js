@@ -12,13 +12,15 @@ function StaffRetractResignationModal({ setmodalType, resignationContent }) {
   const handleRetractResignation = async (e) => {
     e.preventDefault();
 
-    // const id = resignationContent.id;
+    const id = resignationContent.id;
     setLoading(true);
+
+    console.log(resignationContent)
 
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/employee_resignation_retraction.json`,
+        `/api/v1/employee_resignation_retraction/${id}.json`,
         {
           payload: {
             retraction_reason: data,

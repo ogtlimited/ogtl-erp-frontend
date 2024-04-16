@@ -606,7 +606,7 @@ const AppProvider = (props) => {
         }
       );
 
-      // console.log("Staff Resignation:", res?.data?.data);
+      console.log("Staff Resignation:", res?.data?.data);
       setUserResignations(res?.data?.data?.resignation);
       setLoadingUserResignation(false);
     } catch (error) {
