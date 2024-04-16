@@ -137,8 +137,10 @@ export default function Router() {
               element: <SecurityManualAttendance />,
             },
             { path: "main/leave", element: <LeavesUser /> },
+            { path: "main/deductions", element: <EmployeeDeductions /> },
             { path: "main/resignation", element: <ResignationUser /> },
             { path: "main/survey", element: <SurveyUser /> },
+            { path: "main/announcement", element: <Announcement /> },
             { path: "main/ticket-management", element: <TicketManagement /> },
             {
               path: "main/employee-appreciation-eCertificate",
@@ -1374,6 +1376,9 @@ const LeavesUser = Loadable(
 const ResignationUser = Loadable(
   lazy(() => import("../pages/HR/Users/Resignation.User"))
 );
+const EmployeeDeductions = Loadable(
+  lazy(() => import("../pages/HR/Users/Deductions.User"))
+);
 const SurveyUser = Loadable(
   lazy(() => import("../pages/HR/Users/Survey.User"))
 );
@@ -1598,6 +1603,7 @@ const OrientationAndTraining = Loadable(
 );
 
 const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets.js")));
+const Announcement = Loadable(lazy(() => import("../pages/In-Apps/Announcement.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))

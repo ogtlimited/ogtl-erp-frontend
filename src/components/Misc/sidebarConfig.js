@@ -52,6 +52,8 @@ const ICONS = {
   female: getIcon("la-venus"),
   certificate: getIcon("la-certificate"),
   survey: getIcon("la-poll"),
+  announcement: getIcon("la-bullhorn"),
+  deduction: getIcon("la-money-check-alt"),
 };
 
 const buildExternalURL = () => {
@@ -60,7 +62,9 @@ const buildExternalURL = () => {
 
   try {
     if (!kpiUrl || !secret) {
-      throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+      throw new Error(
+        `Could not satisfy requirements! ❌ kpiUrl:${kpiUrl}, secret:${secret}`
+      );
     }
 
     const kpiData = tokenService.getKpiUser();
@@ -69,7 +73,10 @@ const buildExternalURL = () => {
     const queryParams = `auth_param=${generatedJWT}`;
     const externalAppUrl = `${kpiUrl}?${queryParams}`;
 
-    console.log("KPI Url:", externalAppUrl);
+    console.log(
+      "Sidebar KPI Url:",
+      externalAppUrl ? "Status: ✅" : "Status: ❌"
+    );
     return externalAppUrl;
   } catch (error) {
     console.log("KPI error | ", error);
@@ -174,6 +181,12 @@ const sidebarConfig = [
       },
       {
         canView: "all",
+        title: "Deductions",
+        path: PATH_DASHBOARD.main.deductions,
+        icon: ICONS.deduction,
+      },
+      {
+        canView: "all",
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.resignation,
@@ -185,6 +198,12 @@ const sidebarConfig = [
         title: "Manual Attendance",
         path: PATH_DASHBOARD.main.manualAttendance,
         icon: ICONS.userAttendance,
+      },
+      {
+        canView: "all",
+        title: "Announcement",
+        path: PATH_DASHBOARD.main.announcement,
+        icon: ICONS.announcement,
       },
       {
         canView: "all",

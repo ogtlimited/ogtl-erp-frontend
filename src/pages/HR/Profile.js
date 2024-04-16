@@ -355,21 +355,29 @@ const Profile = () => {
                             "Not Available"}
                         </h6>
                         <div className="staff-id">
-                          Employee ID : {userData?.employee?.ogid}
+                          OGID: {userData?.employee?.ogid || "Not Available"}
+                        </div>
+                        <div className="staff-id">
+                          {userData?.office?.office_type.replace(
+                            /\b\w/g,
+                            (char) => char.toUpperCase()
+                          ) || "Office"}
+                          :{" "}
+                          {userData?.office?.title.toUpperCase() ||
+                            "Not Available"}
                         </div>
                         <div className="small doj text-muted">
-                          Date Joined :{" "}
+                          Date Joined:{" "}
                           {userData?.employee?.date_of_joining
                             ? moment(
                                 userData?.employee?.date_of_joining
                               ).format("Do MMMM, YYYY")
                             : "Not Available"}
                         </div>
-
-                        <small className="text-muted">
-                          {userData?.office?.title.toUpperCase() ||
-                            "Not Available"}
-                        </small>
+                        <div className="small doj text-muted">
+                          Tenure:{" "}
+                          {userData?.employee?.tenure || "Not Available"}
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-7">

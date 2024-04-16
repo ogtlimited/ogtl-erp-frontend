@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
@@ -15,6 +15,8 @@ import ERP3 from "../../../assets/img/erp3.png";
 import ViewModal from "../../../components/Modal/ViewModal";
 import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
+// import tokenService from "../../../services/token.service";
+// import sign from "jwt-encode";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -22,6 +24,7 @@ const EmployeeUser = () => {
   const { user } = useAppContext();
   const [quotes, setQuotes] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  // const [kpiExtUrl, setKpiExtUrl] = useState("");
   const [modalType, setmodalType] = useState("CEO Messagez");
   const [heroIcons, setHeroIcons] = useState({
     hero: HeroImage,
@@ -90,6 +93,38 @@ const EmployeeUser = () => {
     });
   }, [currentIndex]);
 
+
+
+  // const navigateToKPI = useCallback(() => {
+    
+  // const secret = process.env.REACT_APP_HMAC_SECRET;
+  // const kpiUrl = process.env.REACT_APP_KPI_APP_URL;
+
+  // if (!kpiUrl || !secret) {
+  //   throw new Error(`Could not satisfy requirements, ${kpiUrl}:${secret}`);
+  // }
+
+  //   try {
+  //     const kpiData = tokenService.getKpiUser();
+
+  //     const generatedJWT = sign(kpiData, secret);
+  //     const queryParams = `auth_param=${generatedJWT}`;
+  //     const externalAppUrl = `${kpiUrl}?${queryParams}`;
+
+  //     console.log(
+  //       "Dashboard KPI Url:",
+  //       externalAppUrl ? "Status: ✅" : "Status: ❌"
+  //     );
+  //     setKpiExtUrl(externalAppUrl);
+  //   } catch (error) {
+  //     console.error("KPI error:", error);
+  //   }
+  // }, [kpiUrl, secret]);
+
+  // useEffect(() => {
+  //   navigateToKPI();
+  // }, [navigateToKPI]);
+
   return (
     <>
       <div className="col">
@@ -104,11 +139,22 @@ const EmployeeUser = () => {
                 `}{" "}
                 !
               </h4>
-              {!isRemoteStaff && (
-                <p className="welcome-p">
-                  If you haven't clocked in today, you need to do it right away
-                </p>
-              )}
+              <>
+                {!isRemoteStaff && (
+                  <p className="welcome-p">
+                    If you haven't clocked in today, you need to do it right
+                    away
+                  </p>
+                )}
+                {/* <a
+                  className="btn btn-sm btn-info"
+                  href={kpiExtUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Go to KPI
+                </a> */}
+              </>
             </div>
             <div className="col-md-4">
               <img
