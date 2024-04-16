@@ -14,7 +14,7 @@ import $ from "jquery";
 const Announcement = () => {
   const { ErrorHandler, user, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
-  const [allAnnouncement, setAllAnnouncement] = useState(null);
+  const [allAnnouncement, setAllAnnouncement] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const [page, setPage] = useState(1);
@@ -130,7 +130,7 @@ const Announcement = () => {
               style={{ width: "250px", height: "250px" }}
             ></lord-icon>
           </div>
-        ) : allAnnouncement ? (
+        ) : allAnnouncement?.length ? (
           <>
             <div className="custom-video-field-div">
               {allAnnouncement.map((announcement, index) => (
