@@ -41,8 +41,7 @@ const MonthlyTeamAttendanceTable = ({
 
   context,
 }) => {
-  const { showAlert } =
-    useAppContext();
+  const { showAlert } = useAppContext();
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = useState(false);
   const [info, setInfo] = useState({
@@ -151,8 +150,14 @@ const MonthlyTeamAttendanceTable = ({
             ? data?.days[key]?.clock_out
             : null,
           status:
-            !data?.days[key]?.clock_in && !data?.days[key]?.clock_out
+            data?.days[key] === "absent"
               ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "off"
+              ? "Day off"
+              : data?.days[key] === "---"
+              ? "---"
               : "Present",
         })),
       }));
@@ -170,7 +175,7 @@ const MonthlyTeamAttendanceTable = ({
           (acc, curr) => ({
             ...acc,
             [moment(curr.date).format("DD-MMM-YYYY")]:
-              curr.status === "Absent"
+              curr.status !== "Present"
                 ? curr.status
                 : `IN: ${moment(curr.clock_in, "HH:mm:ss").format(
                     "hh:mma"
@@ -280,7 +285,7 @@ const MonthlyTeamAttendanceTable = ({
                     isSearchable={true}
                     value={{
                       value: selectedOffice?.id,
-                      label: selectedOffice?.title,
+                      label: selectedOffice?.title.toUpperCase(),
                     }}
                     onChange={(e) =>
                       setSelectedOffice({
