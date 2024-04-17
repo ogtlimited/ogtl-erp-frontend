@@ -69,6 +69,8 @@ export const EmployeeInfoModal = ({
         leave_approval_level: Number(
           employeeInfo?.employee?.leave_approval_level
         ),
+        pensionable: employeeInfo?.employee?.pensionable,
+        taxable: employeeInfo?.employee?.taxable,
         remote: employeeInfo?.employee?.remote,
         strict_attendance: employeeInfo?.employee?.strict_attendance,
         leave_count: employeeInfo?.employee?.leave_count,
@@ -367,8 +369,70 @@ export const EmployeeInfoModal = ({
                   {CurrentUserCanView ? (
                     <div className="col-md-6">
                       <div className="form-group">
+                        <label htmlFor="pensionable">
+                          Is this Employee <strong>Pensionable?</strong>
+                        </label>
+                        <Select
+                          name="pensionable"
+                          options={categoryOptions}
+                          value={{
+                            label: employeeInfo?.employee?.pensionable
+                              ? "Yes"
+                              : "No",
+                            value: employeeInfo?.employee?.pensionable,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                pensionable: e?.value,
+                                pensionableName: e?.label,
+                              },
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {CurrentUserCanView ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="taxable">
+                          Is this Employee <strong>Taxable?</strong>
+                        </label>
+                        <Select
+                          name="taxable"
+                          options={categoryOptions}
+                          value={{
+                            label: employeeInfo?.employee?.taxable
+                              ? "Yes"
+                              : "No",
+                            value: employeeInfo?.employee?.taxable,
+                          }}
+                          onChange={(e) =>
+                            setEmployeeInfo({
+                              ...employeeInfo,
+                              employee: {
+                                ...employeeInfo.employee,
+                                taxable: e?.value,
+                                taxableName: e?.label,
+                              },
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {CurrentUserCanView ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
                         <label htmlFor="remote">
-                          Is this Employee a Remote Staff?
+                          Is this Employee a <strong>Remote Staff?</strong>
                         </label>
                         <Select
                           name="remote"
@@ -399,7 +463,8 @@ export const EmployeeInfoModal = ({
                     <div className="col-md-6">
                       <div className="form-group">
                         <label htmlFor="strict_attendance">
-                          Does this Employee have a Strict Attendance?
+                          Does this Employee have a{" "}
+                          <strong>Strict Attendance?</strong>
                         </label>
                         <Select
                           name="strict_attendance"

@@ -5,9 +5,10 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import { useParams } from "react-router-dom";
 import $ from "jquery";
+import Select from "react-select";
 
 export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
-  const { showAlert, goToTop } = useAppContext();
+  const { categoryOptions, showAlert, goToTop } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);
@@ -47,6 +48,8 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
       const campaignData = {
         title: office.title,
         leave_approval_level: +office.leave_approval_level,
+        pensionable: office?.pensionable,
+        taxable: office?.taxable,
       };
 
       const response = await createCampaign(campaignData);
@@ -110,6 +113,8 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
           payload: {
             title: office.title,
             leave_approval_level: +office.leave_approval_level,
+            pensionable: office?.pensionable,
+            taxable: office?.taxable,
           },
         }
       );
@@ -187,6 +192,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leave_approval_level">
@@ -199,6 +205,48 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
                         value={office.leave_approval_level}
                         onChange={handleFormChange}
                         required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="pensionable">Pensionable</label>
+                      <Select
+                        name="pensionable"
+                        options={categoryOptions}
+                        value={{
+                          label: office?.pensionable ? "Yes" : "No",
+                          value: office?.pensionable,
+                        }}
+                        onChange={(e) =>
+                          setOffice({
+                            ...office,
+                            pensionable: e?.value,
+                          })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="taxable">Taxable</label>
+                      <Select
+                        name="taxable"
+                        options={categoryOptions}
+                        value={{
+                          label: office?.taxable ? "Yes" : "No",
+                          value: office?.taxable,
+                        }}
+                        onChange={(e) =>
+                          setOffice({
+                            ...office,
+                            taxable: e?.value,
+                          })
+                        }
+                        style={{ display: "inline-block" }}
                       />
                     </div>
                   </div>
