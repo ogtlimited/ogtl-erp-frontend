@@ -134,6 +134,18 @@ const AppProvider = (props) => {
     },
   ];
 
+  const categoryOptions = [
+    {
+      label: "Yes",
+      value: true,
+    },
+    {
+      label: "No",
+      value: false,
+    },
+  ];
+  
+
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
     const charCode = char?.toLowerCase()?.charCodeAt(0) - 97;
@@ -824,6 +836,7 @@ const AppProvider = (props) => {
         ErrorHandler,
         status,
         officeTypeOptions,
+        categoryOptions,
         goToTop,
         goToBottom,
         FontAwesomeIcon,
