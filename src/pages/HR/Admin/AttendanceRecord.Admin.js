@@ -43,7 +43,11 @@ const AttendanceRecord = () => {
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
   const [officeType, setOfficeType] = useState("");
-  const [officeId, setOfficeId] = useState("");
+  const [selectedOffice, setSelectedOffice] = useState({
+    id: null,
+    title: "",
+    office_type: "",
+  });
 
   useEffect(() => {
     const allDates = Array.from(
@@ -215,7 +219,7 @@ const AttendanceRecord = () => {
           },
           params: {
             office_type: officeType,
-            office_id: officeId,
+            office_id: selectedOffice?.id,
             start_date: fromDate,
             end_date: toDate,
             page: page,
@@ -295,7 +299,7 @@ const AttendanceRecord = () => {
       setLoadingMonthlyRecord(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, officeId, officeType, page, sizePerPage, toDate]);
+  }, [fromDate, selectedOffice?.id, officeType, page, sizePerPage, toDate]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -732,8 +736,8 @@ const AttendanceRecord = () => {
               setToDate={setToDate}
               officeType={officeType}
               setOfficeType={setOfficeType}
-              officeId={officeId}
-              setOfficeId={setOfficeId}
+              selectedOffice={selectedOffice}
+              setSelectedOffice={setSelectedOffice}
               page={page}
               setPage={setPage}
               sizePerPage={sizePerPage}
