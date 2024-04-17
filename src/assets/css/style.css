@@ -710,6 +710,7 @@
 .hr-filter-select {
   display: flex;
   margin-bottom: 20px;
+  z-index: 2;
 }
 
 .home-notification-count {

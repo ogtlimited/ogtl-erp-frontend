@@ -11,6 +11,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import csvDownload from "json-to-csv-export";
 import moment from "moment";
+import Select from "react-select";
 
 const MonthlyAttendanceTable = ({
   data,
@@ -24,8 +25,8 @@ const MonthlyAttendanceTable = ({
   setToDate,
   officeType,
   setOfficeType,
-  officeId,
-  setOfficeId,
+  selectedOffice,
+  setSelectedOffice,
 
   page,
   setPage,
@@ -99,7 +100,7 @@ const MonthlyAttendanceTable = ({
           },
           params: {
             office_type: officeType,
-            office_id: officeId,
+            office_id: selectedOffice?.id,
             start_date: fromDate,
             end_date: toDate,
             page: 1,
@@ -133,8 +134,9 @@ const MonthlyAttendanceTable = ({
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent: data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.['NCNS(did not clock out)']
+        absent:
+          data?.lateness_and_absence?.NCNS !== undefined
+            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
             : 0,
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
@@ -145,8 +147,14 @@ const MonthlyAttendanceTable = ({
             ? data?.days[key]?.clock_out
             : null,
           status:
-            !data?.days[key]?.clock_in && !data?.days[key]?.clock_out
+            data?.days[key] === "absent"
               ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "off"
+              ? "Day off"
+              : data?.days[key] === "---"
+              ? "---"
               : "Present",
         })),
       }));
@@ -164,7 +172,7 @@ const MonthlyAttendanceTable = ({
           (acc, curr) => ({
             ...acc,
             [moment(curr.date).format("DD-MMM-YYYY")]:
-              curr.status === "Absent"
+              curr.status !== "Present"
                 ? curr.status
                 : `IN: ${moment(curr.clock_in, "HH:mm:ss").format(
                     "hh:mma"
@@ -250,24 +258,22 @@ const MonthlyAttendanceTable = ({
 
                 <div className="col-md-3">
                   <label htmlFor="officeType">Filter By</label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => {
-                      setOfficeType(e.target.value);
-                      setOfficeId("");
+                  <Select
+                    options={selectOfficeTypes}
+                    value={selectOfficeTypes.find(
+                      (option) => option.value === officeType
+                    )}
+                    onChange={(selectedOption) => {
+                      setOfficeType(selectedOption.value);
+                      setSelectedOffice({
+                        id: null,
+                        title: "",
+                        office_type: "",
+                      });
                     }}
-                    defaultValue={officeType}
-                    value={officeType}
-                  >
-                    <option value="" disabled selected hidden>
-                      Office Type
-                    </option>
-                    {selectOfficeTypes.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Office Type"
+                    style={{ display: "inline-block" }}
+                  />
                 </div>
 
                 <div className="col-md-3">
@@ -276,29 +282,29 @@ const MonthlyAttendanceTable = ({
                       char.toUpperCase()
                     ) || "Office"}
                   </label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => setOfficeId(e.target.value)}
-                    defaultValue={officeId}
-                    value={officeId}
-                  >
-                    <option value="" disabled selected hidden>
-                      Office Title
-                    </option>
-                    {officeType === "department"
-                      ? selectDepartments.map((option, idx) => (
-                          <option key={idx} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))
-                      : officeType === "campaign"
-                      ? selectCampaigns.map((option, idx) => (
-                          <option key={idx} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))
-                      : null}
-                  </select>
+                  <Select
+                    options={
+                      officeType === "department"
+                        ? selectDepartments
+                        : officeType === "campaign"
+                        ? selectCampaigns
+                        : []
+                    }
+                    value={{
+                      value: selectedOffice?.id,
+                      label: selectedOffice?.title.toUpperCase() || "Office Title",
+                    }}
+                    onChange={(e) =>
+                      setSelectedOffice({
+                        id: e?.value,
+                        title: e?.label,
+                        office_type: officeType,
+                      })
+                    }
+                    placeholder="Office Title"
+                    style={{ display: "inline-block" }}
+                    isSearchable={true}
+                  />
                 </div>
               </div>
 
