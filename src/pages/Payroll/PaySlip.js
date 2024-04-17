@@ -353,7 +353,10 @@ const PaySlip = () => {
                                   <tr key={index}>
                                     <td>
                                       <strong>
-                                        {breakdownItem.deduction_type[0]?.title}
+                                        {breakdownItem.deduction_type[0]?.title.replace(
+                                          /\b\w/g,
+                                          (char) => char.toUpperCase()
+                                        )}
                                       </strong>{" "}
                                       {
                                         <span

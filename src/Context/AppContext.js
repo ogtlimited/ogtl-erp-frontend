@@ -57,12 +57,10 @@ const AppProvider = (props) => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
-  
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
-  
 
   const goToTop = () => {
     window.scrollTo({
@@ -144,7 +142,6 @@ const AppProvider = (props) => {
       value: false,
     },
   ];
-  
 
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
@@ -283,7 +280,6 @@ const AppProvider = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   // SELECT APIs
   // All Employees:
@@ -594,9 +590,11 @@ const AppProvider = (props) => {
 
         return {
           label:
-            item?.deduction?.title +
+            item?.deduction?.title.replace(/\b\w/g, (char) =>
+              char.toUpperCase()
+            ) +
             " | " +
-            item?.office?.title.replace(/\b\w/g, (char) => char.toUpperCase()) +
+            item?.office?.title.toUpperCase() +
             " | " +
             deductionValue,
           value: item?.deduction?.id,
@@ -721,7 +719,7 @@ const AppProvider = (props) => {
 
       fetchAllLeaveTypes();
       fetchStaffResignation();
-      fetchAnnouncement()
+      fetchAnnouncement();
       fetchPendingSurveys();
     }
   }, [
@@ -807,13 +805,13 @@ const AppProvider = (props) => {
 
         announcement,
         setAnnouncement,
-        loadingAnnouncement, 
+        loadingAnnouncement,
         setLoadingAnnouncement,
         fetchAnnouncement,
 
         pendingSurveys,
         fetchPendingSurveys,
-        pendingSurveySubmitted, 
+        pendingSurveySubmitted,
         setPendingSurveySubmitted,
 
         getAvatarColor,
@@ -841,7 +839,6 @@ const AppProvider = (props) => {
         goToBottom,
         FontAwesomeIcon,
         faSpinner,
-
       }}
     >
       {props.children}
