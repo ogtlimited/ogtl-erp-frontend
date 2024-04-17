@@ -689,7 +689,8 @@ const EmployeePayroll = () => {
             </button>
 
             <div>
-              {currentApproverEmail === currentUserEmail ? (
+              {currentApproverEmail === currentUserEmail &&
+              currentBatchApprovalStatus !== "Approved" ? (
                 <button
                   className="btn btn-primary"
                   data-toggle="modal"

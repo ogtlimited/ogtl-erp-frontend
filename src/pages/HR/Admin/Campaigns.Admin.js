@@ -94,17 +94,55 @@ const Campaigns = () => {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "leave_approval_level",
       text: "Leave Approval Level",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <p>
           {value === 1 ? "1 Approver" : value > 1 ? `${value} Approvers` : null}
         </p>
+      ),
+    },
+    {
+      dataField: "pensionable",
+      text: "Pensionable",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value ? "text-success" : "text-secondary"
+              } `}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {value ? "Yes" : "No"}
+          </span>
+        </>
+      ),
+    },
+    {
+      dataField: "taxable",
+      text: "Taxable",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value ? "text-success" : "text-secondary"
+              } `}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {value ? "Yes" : "No"}
+          </span>
+        </>
       ),
     },
     CurrentUserCanCreateAndEdit && {

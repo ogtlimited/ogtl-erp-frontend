@@ -85,7 +85,7 @@ const Deductions = () => {
       dataField: "employeeName",
       text: "Employee",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "30%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <span
@@ -104,19 +104,19 @@ const Deductions = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "30%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
     },
     {
       dataField: "totalDeductions",
       text: "Total Deduction",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">

@@ -4,9 +4,10 @@ import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
+import Select from "react-select";
 
 export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
-  const { showAlert, goToTop } = useAppContext();
+  const { categoryOptions, showAlert, goToTop } = useAppContext();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,15 +48,17 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
-          title: office.title,
-          leave_approval_level: +office.leave_approval_level,
+          title: office?.title,
+          leave_approval_level: +office?.leave_approval_level,
+          pensionable: office?.pensionable,
+          taxable: office?.taxable
         },
       });
 
       showAlert(true, `Department successfully created`, "alert alert-success");
       fetchAllDepartments();
       $("#DepartmentFormModal").modal("toggle");
-      
+
       goToTop();
       setOffice(data);
       setLoading(false);
@@ -63,7 +66,7 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
       $("#DepartmentFormModal").modal("toggle");
-      
+
       goToTop();
       setLoading(false);
     }
@@ -76,17 +79,22 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
     const id = office.id;
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(`/api/v1/departments/${id}.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: {
-          title: office.title,
-          leave_approval_level: +office.leave_approval_level,
-        },
-      });
+      const response = await axiosInstance.patch(
+        `/api/v1/departments/${id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: office?.title,
+            leave_approval_level: +office?.leave_approval_level,
+            pensionable: office?.pensionable,
+            taxable: office?.taxable
+          },
+        }
+      );
 
       goToTop();
       showAlert(true, `Department successfully updated`, "alert alert-success");
@@ -145,6 +153,7 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
                       />
                     </div>
                   </div>
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="leave_approval_level">
@@ -157,6 +166,52 @@ export const DepartmentFormModal = ({ mode, data, fetchAllDepartments }) => {
                         value={office.leave_approval_level}
                         onChange={handleFormChange}
                         required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="pensionable">Pensionable</label>
+                      <Select
+                        name="pensionable"
+                        options={categoryOptions}
+                        value={{
+                          label: office?.pensionable
+                            ? "Yes"
+                            : "No",
+                          value: office?.pensionable,
+                        }}
+                        onChange={(e) =>
+                          setOffice({
+                            ...office,
+                            pensionable: e?.value,
+                          })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="taxable">Taxable</label>
+                      <Select
+                        name="taxable"
+                        options={categoryOptions}
+                        value={{
+                          label: office?.taxable
+                            ? "Yes"
+                            : "No",
+                          value: office?.taxable,
+                        }}
+                        onChange={(e) =>
+                          setOffice({
+                            ...office,
+                            taxable: e?.value,
+                          })
+                        }
+                        style={{ display: "inline-block" }}
                       />
                     </div>
                   </div>
