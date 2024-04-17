@@ -127,7 +127,7 @@ const TeamAttendanceTable = ({
                     isSearchable={true}
                     value={{
                       value: selectedOffice?.id,
-                      label: selectedOffice?.title,
+                      label: selectedOffice?.title.toUpperCase(),
                     }}
                     onChange={(e) =>
                       setSelectedOffice({
