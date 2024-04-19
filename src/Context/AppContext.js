@@ -590,9 +590,10 @@ const AppProvider = (props) => {
 
         return {
           label:
-            item?.deduction?.title.replace(/\b\w/g, (char) =>
-              char.toUpperCase()
-            ) +
+            item?.deduction?.title
+              .replace(/_/g, " ")
+              .replace(/^./, (str) => str.toUpperCase())
+              .replace(/\b\w/g, (char) => char.toUpperCase()) +
             " | " +
             item?.office?.title.toUpperCase() +
             " | " +
