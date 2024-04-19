@@ -411,12 +411,10 @@ const Profile = () => {
                         <li>
                           <div className="title">Gender:</div>
                           <div className="text">
-                            {userData?.employee?.personal_detail?.gender
-                              ?.charAt(0)
-                              ?.toUpperCase() +
-                              userData?.employee?.personal_detail?.gender?.slice(
-                                1
-                              ) || "Not Available"}
+                            {userData?.employee?.personal_detail?.gender?.replace(
+                              /\b\w/g,
+                              (char) => char?.toUpperCase()
+                            ) || "Not Available"}
                           </div>
                         </li>
                         <li>
