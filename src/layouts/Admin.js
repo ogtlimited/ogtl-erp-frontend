@@ -37,7 +37,7 @@ const AdminLayout = (props) => {
   useEffect(() => {
     if (
       announcement &&
-      !pendingSurveys?.length &&
+      pendingSurveys?.length < 1 &&
       !secureLocalStorage.getItem("seenAnnouncement")
     ) {
       $("#AnnouncementModalPrompt").modal("show");
