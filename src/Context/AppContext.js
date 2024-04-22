@@ -143,6 +143,19 @@ const AppProvider = (props) => {
     },
   ];
 
+  
+const generateOrdinal = (day) => {
+  if (day >= 11 && day <= 13) {
+    return `${day}th`;
+  }
+
+  const lastDigit = day % 10;
+  const suffixes = ["st", "nd", "rd"];
+  const suffix = suffixes[lastDigit - 1] || "th";
+
+  return `${day}${suffix}`;
+};
+
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
     const charCode = char?.toLowerCase()?.charCodeAt(0) - 97;
@@ -815,6 +828,7 @@ const AppProvider = (props) => {
         pendingSurveySubmitted,
         setPendingSurveySubmitted,
 
+        generateOrdinal,
         getAvatarColor,
         showProgress,
         uploadProgress,

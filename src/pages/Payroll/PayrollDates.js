@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../../components/Tables/UniversalTable";
@@ -9,6 +9,18 @@ import moment from "moment";
 const PayrollDatesForm = {
   from_date: "",
   to_date: "",
+};
+
+const generateOrdinal = (day) => {
+  if (day >= 11 && day <= 13) {
+    return `${day}th`;
+  }
+
+  const lastDigit = day % 10;
+  const suffixes = ["st", "nd", "rd"];
+  const suffix = suffixes[lastDigit - 1] || "th";
+
+  return `${day}${suffix}`;
 };
 
 const PayrollDates = () => {
@@ -28,21 +40,8 @@ const PayrollDates = () => {
     canCreateAndEdit.includes(role)
   );
 
-  // Format Generation Dates:
-  const generateOrdinal = (day) => {
-    if (day >= 11 && day <= 13) {
-      return `${day}th`;
-    }
-
-    const lastDigit = day % 10;
-    const suffixes = ["st", "nd", "rd"];
-    const suffix = suffixes[lastDigit - 1] || "th";
-
-    return `${day}${suffix}`;
-  };
-
   // All Payroll Dates:
-  const fetchAllPayrollDates = async () => {
+  const fetchAllPayrollDates = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
@@ -72,12 +71,12 @@ const PayrollDates = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMonth, previousMonth]);
 
   useEffect(() => {
     fetchAllPayrollDates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchAllPayrollDates]);
 
   const handleCreate = () => {
     setMode("Create");
@@ -165,8 +164,6 @@ const PayrollDates = () => {
       <PayrollDatesModal
         mode={mode}
         data={dates}
-        previousMonth={previousMonth}
-        currentMonth={currentMonth}
         fetchAllPayrollDates={fetchAllPayrollDates}
       />
     </>
