@@ -31,18 +31,14 @@ const AdminLayout = (props) => {
     if (pendingSurveys?.length) {
       setPendingSurveySubmitted(false);
       $("#SurveyFormModalPrompt").modal("show");
-    }
-  }, [pendingSurveys?.length, setPendingSurveySubmitted]);
-
-  useEffect(() => {
-    if (
-      announcement &&
+    } else if (
       pendingSurveys?.length < 1 &&
+      announcement &&
       !secureLocalStorage.getItem("seenAnnouncement")
     ) {
       $("#AnnouncementModalPrompt").modal("show");
     }
-  }, [announcement, pendingSurveys?.length]);
+  }, [announcement, pendingSurveys?.length, setPendingSurveySubmitted]);
 
   return (
     <>
