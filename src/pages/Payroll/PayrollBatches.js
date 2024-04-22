@@ -30,6 +30,10 @@ const PayrollBatches = () => {
   const currentUserOgid = user?.employee_info?.ogid;
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "payroll_processor"];
+  
+  const currentMonth = moment().format("MMMM");
+  const previousMonth = moment().subtract(1, "months").format("MMMM");
+
 
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
@@ -65,10 +69,14 @@ const PayrollBatches = () => {
       const formatted = resData.map((data) => ({
         ...data,
         created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
-        payday: generateOrdinal(data.generation_date),
+        paydayRange: `${generateOrdinal(
+          data?.from_date
+        )} ${previousMonth} - ${generateOrdinal(
+          data?.to_date
+        )} ${currentMonth}`,
       }));
 
-      const currentPayday = formatted.slice(0, 1)[0]?.payday;
+      const currentPayday = formatted.slice(0, 1)[0]?.paydayRange;
       const currentData = formatted.slice(0, 1)[0];
 
       setPayday(currentPayday);
@@ -324,7 +332,7 @@ const PayrollBatches = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the {payday || "25th"} of every month
+              Payroll is generated on the {payday} of every month
             </span>
             <span className="pl-3">
               {" "}

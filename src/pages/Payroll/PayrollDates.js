@@ -7,7 +7,8 @@ import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 import moment from "moment";
 
 const PayrollDatesForm = {
-  day: "",
+  from_date: "",
+  to_date: "",
 };
 
 const PayrollDates = () => {
@@ -19,6 +20,9 @@ const PayrollDates = () => {
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const currentMonth = moment().format("MMMM");
+  const previousMonth = moment().subtract(1, "months").format("MMMM");
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -54,7 +58,11 @@ const PayrollDates = () => {
       const formatted = resData.map((data) => ({
         ...data,
         created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
-        payday: generateOrdinal(data.generation_date),
+        paydayRange: `${generateOrdinal(
+          data?.from_date
+        )} ${previousMonth} - ${generateOrdinal(
+          data?.to_date
+        )} ${currentMonth}`,
       }));
 
       setallDates(formatted);
@@ -84,8 +92,8 @@ const PayrollDates = () => {
       headerStyle: { width: "30%" },
     },
     {
-      dataField: "payday",
-      text: "Payday",
+      dataField: "paydayRange",
+      text: "Payday Range",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (value, row) => (
@@ -157,6 +165,8 @@ const PayrollDates = () => {
       <PayrollDatesModal
         mode={mode}
         data={dates}
+        previousMonth={previousMonth}
+        currentMonth={currentMonth}
         fetchAllPayrollDates={fetchAllPayrollDates}
       />
     </>
