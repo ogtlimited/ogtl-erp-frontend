@@ -86,7 +86,7 @@ const DeductionSlip = () => {
   const columns = [
     {
       dataField: "deductionDate",
-      text: "Date",
+      text: "Date Processed",
       sort: true,
       headerStyle: { width: "20%" },
     },
