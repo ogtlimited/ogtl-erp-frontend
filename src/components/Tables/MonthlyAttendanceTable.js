@@ -318,13 +318,13 @@ const MonthlyAttendanceTable = ({
                     !mobileView
                       ? "table "
                       : context
-                      ? "table table-responsive monthly-attendance-table"
-                      : "table table-responsive monthly-attendance-table"
+                      ? `table table-responsive monthly-attendance-table ${loading}`
+                      : `table table-responsive monthly-attendance-table ${loading}`
                   }
                   noDataIndication={
                     loading ? (
                       <div
-                        className="spinner-border text-primary"
+                        className="spinner-border text-primary monthly_attendance_spinner"
                         role="status"
                       >
                         <span className="sr-only">Loading...</span>

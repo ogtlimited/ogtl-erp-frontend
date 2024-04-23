@@ -183,7 +183,7 @@
   border-top-right-radius: 10px;
   margin-bottom: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-
+  position: relative;
   overflow-x: auto;
   width: 100%;
 }
@@ -195,6 +195,11 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   width: 100%;
   height: 100%;
+}
+
+.monthly_attendance_spinner {
+  position: absolute;
+  left: 30rem;
 }
 
 .rep-siever-status-group {
@@ -713,6 +718,11 @@ table.custom-table thead th {
     Monthly Attendance
 --------------------------*/
 
+.monthly-attendance-table.true {
+  min-height: 10vh;
+}
+
+
 .monthly-attendance-table > thead > tr > th:first-child,
 .monthly-attendance-table > tbody > tr > td:first-child {
   position: sticky;
@@ -720,6 +730,12 @@ table.custom-table thead th {
   z-index: 1;
   background-color: #d8d8d8;
   border-right: 2px solid #dee2e6;
+}
+
+.monthly-attendance-table.true > tbody > tr > td:first-child {
+  height: 10vh;
+  padding-bottom: 50px;
+  background-color: #f6f6f6;
 }
 
 /*------------------------ 
