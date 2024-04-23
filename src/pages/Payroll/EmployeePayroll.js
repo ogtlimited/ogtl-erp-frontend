@@ -482,6 +482,7 @@ const EmployeePayroll = () => {
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
+      link: "/dashboard/payroll/staff-deductions/OG230306/4/2024/"
     },
     {
       dataField: "totalDeductions",
