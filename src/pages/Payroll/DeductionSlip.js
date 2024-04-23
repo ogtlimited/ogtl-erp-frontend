@@ -42,11 +42,24 @@ const DeductionSlip = () => {
       const formattedData = resData.map((item) => {
         return {
           ...item,
-          deductionDate: moment(item?.deduction?.created_at).format(
-            "YYYY, MMM, ddd. DD - h:mmA"
+          deductionDate: moment(item?.deduction?.date_processed)
+            .utc()
+            .format("YYYY, MM (MMM), Do - h:mma"),
+          deductionType: item?.deduction_type[0]?.title?.replace(
+            /\b\w/g,
+            (char) => char.toUpperCase()
           ),
-          deductionType: item?.deduction_type[0]?.title,
-          deductionDescription: item?.deduction_type[0]?.description,
+
+          deductionDescription:
+            item?.deduction?.category === "disciplinary"
+              ? item?.deduction_type[0]?.description
+              : item?.deduction?.description ||
+                item?.deduction_type[0]?.description,
+
+          deductionCategory: item?.deduction?.category?.replace(
+            /\b\w/g,
+            (char) => char.toUpperCase()
+          ),
           deductionStatus: item?.deduction?.status ? "Active" : "Inactive",
           deductionAmount: helper.handleMoneyFormat(item?.deduction?.amount),
         };
@@ -73,7 +86,7 @@ const DeductionSlip = () => {
   const columns = [
     {
       dataField: "deductionDate",
-      text: "Date",
+      text: "Date Processed",
       sort: true,
       headerStyle: { width: "20%" },
     },
@@ -87,7 +100,13 @@ const DeductionSlip = () => {
       dataField: "deductionDescription",
       text: "Description",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "25%" },
+    },
+    {
+      dataField: "deductionCategory",
+      text: "Category",
+      sort: true,
+      headerStyle: { width: "10%" },
     },
     {
       dataField: "deductionAmount",
@@ -141,8 +160,10 @@ const DeductionSlip = () => {
     <>
       {allDeductions.length ? (
         <div className="col" style={{ marginBottom: "50px" }}>
-          <h4 className="page-title">{owner?.full_name} |{" "}
-              <span className="payroll_month_indicator">Deduction Breakdown</span></h4>
+          <h4 className="page-title">
+            {owner?.full_name} |{" "}
+            <span className="payroll_month_indicator">Deduction Breakdown</span>
+          </h4>
           <ul className="breadcrumb">
             <li className="">{owner?.ogid}</li>{" "}
             <span style={{ marginLeft: "10px", marginRight: "10px" }}>|</span>
