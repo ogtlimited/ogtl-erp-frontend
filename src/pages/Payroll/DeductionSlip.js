@@ -44,7 +44,7 @@ const DeductionSlip = () => {
           ...item,
           deductionDate: moment(item?.deduction?.date_processed)
             .utc()
-            .format("YYYY, MM (MMM), Do - h:mma"),
+            .format("YYYY-MM-DD (Do MMM.) - h:mma"),
           deductionType: item?.deduction_type[0]?.title?.replace(
             /\b\w/g,
             (char) => char.toUpperCase()
@@ -88,7 +88,7 @@ const DeductionSlip = () => {
       dataField: "deductionDate",
       text: "Date Processed",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "25%" },
     },
     {
       dataField: "deductionType",
