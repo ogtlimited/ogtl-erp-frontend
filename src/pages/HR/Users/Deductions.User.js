@@ -50,12 +50,9 @@ const EmployeeDeductions = () => {
         deductionCategory: data?.deduction?.category.replace(/\b\w/g, (char) =>
           char.toUpperCase()
         ),
-        createdAt: moment(data?.deduction?.created_at)
-          .utc()
-          .format("YYYY, MM (MMM) Do - h:mma"),
         dataProcessed: moment(data?.deduction?.date_processed)
           .utc()
-          .format("YYYY, MM (MMM) Do - h:mma"),
+          .format("YYYY-MM-DD (Do MMM.) - h:mma"),
         deductionDescription:
           data?.deduction?.category === "disciplinary"
             ? data?.deduction_type?.description
@@ -81,20 +78,14 @@ const EmployeeDeductions = () => {
 
   const columns = [
     {
-      dataField: "deductionTitle",
-      text: "Title",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
-      dataField: "createdAt",
-      text: "Date Created",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
-    {
       dataField: "dataProcessed",
       text: "Date Processed",
+      sort: true,
+      headerStyle: { width: "25%" },
+    },
+    {
+      dataField: "deductionTitle",
+      text: "Title",
       sort: true,
       headerStyle: { width: "20%" },
     },
