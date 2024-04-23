@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../../components/Tables/UniversalTable";
@@ -7,7 +7,20 @@ import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 import moment from "moment";
 
 const PayrollDatesForm = {
-  day: "",
+  from_date: "",
+  to_date: "",
+};
+
+const generateOrdinal = (day) => {
+  if (day >= 11 && day <= 13) {
+    return `${day}th`;
+  }
+
+  const lastDigit = day % 10;
+  const suffixes = ["st", "nd", "rd"];
+  const suffix = suffixes[lastDigit - 1] || "th";
+
+  return `${day}${suffix}`;
 };
 
 const PayrollDates = () => {
@@ -20,25 +33,15 @@ const PayrollDates = () => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
 
+  const currentMonth = moment().format("MMMM");
+  const previousMonth = moment().subtract(1, "months").format("MMMM");
+
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
   );
 
-  // Format Generation Dates:
-  const generateOrdinal = (day) => {
-    if (day >= 11 && day <= 13) {
-      return `${day}th`;
-    }
-
-    const lastDigit = day % 10;
-    const suffixes = ["st", "nd", "rd"];
-    const suffix = suffixes[lastDigit - 1] || "th";
-
-    return `${day}${suffix}`;
-  };
-
   // All Payroll Dates:
-  const fetchAllPayrollDates = async () => {
+  const fetchAllPayrollDates = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
@@ -54,7 +57,11 @@ const PayrollDates = () => {
       const formatted = resData.map((data) => ({
         ...data,
         created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
-        payday: generateOrdinal(data.generation_date),
+        paydayRange: `${generateOrdinal(
+          data?.from_date
+        )} ${previousMonth} - ${generateOrdinal(
+          data?.to_date
+        )} ${currentMonth}`,
       }));
 
       setallDates(formatted);
@@ -64,12 +71,12 @@ const PayrollDates = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMonth, previousMonth]);
 
   useEffect(() => {
     fetchAllPayrollDates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchAllPayrollDates]);
 
   const handleCreate = () => {
     setMode("Create");
@@ -84,8 +91,8 @@ const PayrollDates = () => {
       headerStyle: { width: "30%" },
     },
     {
-      dataField: "payday",
-      text: "Payday",
+      dataField: "paydayRange",
+      text: "Payday Range",
       sort: true,
       headerStyle: { width: "30%" },
       formatter: (value, row) => (

@@ -3,29 +3,58 @@
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import moment from "moment";
 import $ from "jquery";
+
+const generateOrdinal = (day) => {
+  if (day >= 11 && day <= 13) {
+    return `${day}th`;
+  }
+
+  const lastDigit = day % 10;
+  const suffixes = ["st", "nd", "rd"];
+  const suffix = suffixes[lastDigit - 1] || "th";
+
+  return `${day}${suffix}`;
+};
 
 export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
   const { showAlert } = useAppContext();
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [ordinals, setOrdinals] = useState("");
+  const [fromDateOrdinals, setFromDateOrdinals] = useState("");
+  const [toDateOrdinals, setToDateOrdinals] = useState("");
+
+  const currentMonth = moment().format("MMMM");
+  const previousMonth = moment().subtract(1, "months").format("MMMM");
 
   useEffect(() => {
     setDates(data);
-  }, [data]);
+
+    if (mode === "Edit") {
+      if (data.from_date &&  data?.to_date) {
+        setFromDateOrdinals(generateOrdinal(data?.from_date));
+        setToDateOrdinals(generateOrdinal(data?.to_date));
+      } else {
+        setFromDateOrdinals("");
+        setToDateOrdinals("");
+      }
+    }
+  }, [data, mode]);
 
   const cancelEvent = () => {
     if (mode === "Create") {
       setDates({
-        day: "",
+        from_date: "",
+        to_date: "",
       });
-      setOrdinals("");
+      setFromDateOrdinals("");
+      setToDateOrdinals("");
     } else {
       setDates({
-        day: dates?.generation_date,
+        from_date: dates?.from_date,
+        to_date: dates?.to_date,
       });
-      setOrdinals(data?.payday);
     }
   };
 
@@ -50,7 +79,13 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
       return `${day}${suffix}`;
     };
 
-    setOrdinals(generateOrdinal(day));
+    if (e.target.name === "from_date") {
+      setFromDateOrdinals(generateOrdinal(day));
+    } else if (e.target.name === "to_date") {
+      setToDateOrdinals(generateOrdinal(day));
+    } else {
+      return;
+    }
   };
 
   const handlePaydayActions = async (e) => {
@@ -61,7 +96,6 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
     }
   };
 
-  // Handle Payroll Config - Payday Generation:
   const handleGeneratePayday = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -74,13 +108,14 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
-          generation_date: +dates?.day,
+          from: +dates?.from_date,
+          to: +dates?.to_date,
         },
       });
 
       showAlert(
         true,
-        `Payday (${ordinals}) has been created successfully.`,
+        `Payday range (${fromDateOrdinals} ${previousMonth} - ${toDateOrdinals} ${currentMonth}) has been created successfully.`,
         "alert alert-success"
       );
       $("#PayrollDatesModal").modal("toggle");
@@ -94,7 +129,6 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
     }
   };
 
-  // Handle Payroll Config - Payday Assignment:
   const handleEditPayday = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -107,13 +141,14 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
           "ngrok-skip-browser-warning": "69420",
         },
         payload: {
-          generation_date: +dates?.day,
+          from: +dates?.from_date,
+          to: +dates?.to_date,
         },
       });
 
       showAlert(
         true,
-        `Payday (${ordinals}) has been updated successfully.`,
+        `Payday range has be successfully updated to (${fromDateOrdinals} ${previousMonth} - ${toDateOrdinals} ${currentMonth})`,
         "alert alert-success"
       );
       $("#PayrollDatesModal").modal("toggle");
@@ -155,56 +190,48 @@ export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
             <div className="modal-body">
               <form onSubmit={handlePaydayActions}>
                 <div className="row">
-                  <div className="col-md-9">
+                  <div className="col-md-3">
                     <div className="form-group">
-                      <label htmlFor="day">
-                        Enter a day when payroll should be generated
-                      </label>
-                      {mode === "Create" ? (
-                        <input
-                          name="day"
-                          type="number"
-                          className="form-control"
-                          value={dates?.day}
-                          onChange={handleFormChange}
-                          min={1}
-                          max={31}
-                          required
-                        />
-                      ) : (
-                        <input
-                          name="day"
-                          type="number"
-                          className="form-control"
-                          defaultValue={dates?.generation_date}
-                          onChange={handleFormChange}
-                          min={1}
-                          max={31}
-                        />
-                      )}
+                      <label htmlFor="from_date">From</label>
+                      <input
+                        name="from_date"
+                        type="number"
+                        className="form-control"
+                        value={dates?.from_date}
+                        onChange={handleFormChange}
+                        min={1}
+                        max={31}
+                        required={mode === "Create" ? true : false}
+                      />
                     </div>
                   </div>
 
                   <div className="col-md-3">
                     <div className="form-group">
+                      <label htmlFor="to_date">To</label>
+                      <input
+                        name="to_date"
+                        type="number"
+                        className="form-control"
+                        value={dates?.to_date}
+                        onChange={handleFormChange}
+                        min={1}
+                        max={31}
+                        required={mode === "Create" ? true : false}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
                       <label htmlFor="ordinals">Payday</label>
-                      {mode === "Create" ? (
-                        <input
-                          name="ordinals"
-                          type="text"
-                          className="form-control"
-                          value={ordinals}
-                          readOnly
-                        />
-                      ) : (
-                        <input
-                          name="ordinals"
-                          type="text"
-                          className="form-control"
-                          defaultValue={!ordinals ? dates?.payday : ordinals}
-                          readOnly
-                        />
-                      )}
+                      <input
+                        name="ordinals"
+                        type="text"
+                        className="form-control"
+                        value={`${fromDateOrdinals} ${previousMonth} - ${toDateOrdinals} ${currentMonth}`}
+                        readOnly
+                      />
                     </div>
                   </div>
                 </div>

@@ -3,7 +3,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const GeneratePayrollModal = ({ fetchAllBatches }) => {
+export const GeneratePayrollModal = ({ fetchAllBatches, payday }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
@@ -101,7 +101,13 @@ export const GeneratePayrollModal = ({ fetchAllBatches }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Generate Payroll
+                Generate Payroll{" "}
+                {payday && (
+                  <>
+                    for <strong> {payday} </strong>
+                    {currentYear}
+                  </>
+                )}
               </h4>
               <button
                 type="button"

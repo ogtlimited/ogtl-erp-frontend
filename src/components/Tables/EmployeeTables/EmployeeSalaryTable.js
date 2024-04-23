@@ -5,12 +5,13 @@ import usePagination from "../../../pages/HR/Admin/JobApplicantsPagination.Admin
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import helper from "../../../services/helper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { RegeneratePayrollModal } from "../../Modal/RegeneratePayrollModal";
 import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 function EmployeeSalaryTable({
   data,
@@ -43,6 +44,9 @@ function EmployeeSalaryTable({
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [selectedSalarySlip, setSelectedSalarySlip] = useState(null);
+
+  const year = moment().format("YYYY");
+  const currMonth = moment().format("M");
 
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -155,7 +159,20 @@ function EmployeeSalaryTable({
                 </div>
               </div>
             ) : typeof employee[column.dataField] === "number" ? (
-              helper.handleMoneyFormat(employee[column.dataField])
+              <Link
+                className={
+                  column.text === "Disciplinary Deduction"
+                    ? "table_disciplinary_deduction_link"
+                    : "table_disciplinary_deduction"
+                }
+                to={
+                  column.text === "Disciplinary Deduction"
+                    ? `/dashboard/payroll/staff-deductions/${employee?.ogid}/${currMonth}/${year}`
+                    : "#"
+                }
+              >
+                {helper.handleMoneyFormat(employee[column.dataField])}
+              </Link>
             ) : (
               employee[column.dataField]
             )}
