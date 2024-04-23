@@ -1,4 +1,5 @@
 // *IN USE
+/* eslint-disable no-unused-vars */
 
 import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
@@ -482,7 +483,6 @@ const EmployeePayroll = () => {
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
-      link: "/dashboard/payroll/staff-deductions/OG230306/4/2024/"
     },
     {
       dataField: "totalDeductions",

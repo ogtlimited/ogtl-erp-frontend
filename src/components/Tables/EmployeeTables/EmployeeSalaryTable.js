@@ -11,6 +11,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import { EditSalarySlipModal } from "../../Modal/EditSalarySlipModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 function EmployeeSalaryTable({
   data,
@@ -43,6 +44,9 @@ function EmployeeSalaryTable({
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [selectedSalarySlip, setSelectedSalarySlip] = useState(null);
+
+  const year = moment().format("YYYY");
+  const currMonth = moment().format("M");
 
   const currentUserEmail = user?.employee_info?.email;
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -163,13 +167,11 @@ function EmployeeSalaryTable({
                 }
                 to={
                   column.text === "Disciplinary Deduction"
-                    ? `/dashboard/payroll/staff-deductions/${employee?.ogid}/4/2024`
+                    ? `/dashboard/payroll/staff-deductions/${employee?.ogid}/${currMonth}/${year}`
                     : "#"
                 }
               >
                 {helper.handleMoneyFormat(employee[column.dataField])}
-
-                {console.log(employee)}
               </Link>
             ) : (
               employee[column.dataField]
