@@ -1964,3 +1964,21 @@ img {
   margin-right: 0.5rem;
   font-size: 20px;
 }
+
+/*-----------------------------
+      Payroll Table
+-------------------------------*/
+
+.table_disciplinary_deduction,
+.table_disciplinary_deduction:hover{
+  color: #333333;
+}
+ 
+.table_disciplinary_deduction_link {
+  color: #009efb;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.table_disciplinary_deduction_link:hover {
+  color: #1677af;
+}

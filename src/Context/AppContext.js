@@ -59,6 +59,7 @@ const AppProvider = (props) => {
 
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
+  const [announcementWatched, setAnnouncementWatched] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
 
@@ -142,6 +143,18 @@ const AppProvider = (props) => {
       value: false,
     },
   ];
+
+  const generateOrdinal = (day) => {
+    if (day >= 11 && day <= 13) {
+      return `${day}th`;
+    }
+
+    const lastDigit = day % 10;
+    const suffixes = ["st", "nd", "rd"];
+    const suffix = suffixes[lastDigit - 1] || "th";
+
+    return `${day}${suffix}`;
+  };
 
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
@@ -590,9 +603,10 @@ const AppProvider = (props) => {
 
         return {
           label:
-            item?.deduction?.title.replace(/\b\w/g, (char) =>
-              char.toUpperCase()
-            ) +
+            item?.deduction?.title
+              .replace(/_/g, " ")
+              .replace(/^./, (str) => str.toUpperCase())
+              .replace(/\b\w/g, (char) => char.toUpperCase()) +
             " | " +
             item?.office?.title.toUpperCase() +
             " | " +
@@ -807,6 +821,8 @@ const AppProvider = (props) => {
         setAnnouncement,
         loadingAnnouncement,
         setLoadingAnnouncement,
+        announcementWatched,
+        setAnnouncementWatched,
         fetchAnnouncement,
 
         pendingSurveys,
@@ -814,6 +830,7 @@ const AppProvider = (props) => {
         pendingSurveySubmitted,
         setPendingSurveySubmitted,
 
+        generateOrdinal,
         getAvatarColor,
         showProgress,
         uploadProgress,
