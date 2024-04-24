@@ -59,6 +59,7 @@ const AppProvider = (props) => {
 
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
+  const [announcementWatched, setAnnouncementWatched] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
 
@@ -143,18 +144,17 @@ const AppProvider = (props) => {
     },
   ];
 
-  
-const generateOrdinal = (day) => {
-  if (day >= 11 && day <= 13) {
-    return `${day}th`;
-  }
+  const generateOrdinal = (day) => {
+    if (day >= 11 && day <= 13) {
+      return `${day}th`;
+    }
 
-  const lastDigit = day % 10;
-  const suffixes = ["st", "nd", "rd"];
-  const suffix = suffixes[lastDigit - 1] || "th";
+    const lastDigit = day % 10;
+    const suffixes = ["st", "nd", "rd"];
+    const suffix = suffixes[lastDigit - 1] || "th";
 
-  return `${day}${suffix}`;
-};
+    return `${day}${suffix}`;
+  };
 
   // Get Avatar Color Alphabetically:
   const getAvatarColor = (char) => {
@@ -821,6 +821,8 @@ const generateOrdinal = (day) => {
         setAnnouncement,
         loadingAnnouncement,
         setLoadingAnnouncement,
+        announcementWatched,
+        setAnnouncementWatched,
         fetchAnnouncement,
 
         pendingSurveys,

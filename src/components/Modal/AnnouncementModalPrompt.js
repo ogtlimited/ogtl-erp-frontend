@@ -5,12 +5,13 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
 export const AnnouncementModalPrompt = () => {
-  const { loadingAnnouncement, announcement } = useAppContext();
+  const { loadingAnnouncement, announcement, setAnnouncementWatched } = useAppContext();
   const videoRef = useRef(null);
 
   const closeModal = () => {
     $("#AnnouncementModalPrompt").modal("hide");
     secureLocalStorage.setItem("seenAnnouncement", true);
+    setAnnouncementWatched(true);
     if (videoRef.current) {
       videoRef.current.pause();
     }

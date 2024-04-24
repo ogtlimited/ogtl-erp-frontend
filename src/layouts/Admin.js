@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useLocation, Outlet } from "react-router-dom";
 import Header from "../components/Misc/Header";
 import Sidebar from "../components/Misc/Sidebar";
@@ -15,6 +15,7 @@ const AdminLayout = (props) => {
   const {
     showAlertMsg,
     showProgress,
+    announcementWatched,
     pendingSurveys,
     fetchPendingSurveys,
     setPendingSurveySubmitted,
@@ -27,18 +28,36 @@ const AdminLayout = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  useEffect(() => {
-    if (pendingSurveys?.length) {
+  const surveyPopUp = useCallback(() => {
+    const seenAnnouncement = secureLocalStorage.getItem("seenAnnouncement");
+
+    if ((seenAnnouncement || announcementWatched) && pendingSurveys?.length) {
       setPendingSurveySubmitted(false);
-      $("#SurveyFormModalPrompt").modal("show");
-    } else if (
-      pendingSurveys?.length < 1 &&
-      announcement &&
-      !secureLocalStorage.getItem("seenAnnouncement")
-    ) {
-      $("#AnnouncementModalPrompt").modal("show");
+      $("#SurveyFormModalPrompt").modal("toggle");
+    } else {
+      return null;
     }
-  }, [announcement, pendingSurveys?.length, setPendingSurveySubmitted]);
+  }, [announcementWatched, pendingSurveys?.length, setPendingSurveySubmitted]);
+
+  const announcementPopUp = useCallback(() => {
+    const seenAnnouncement = secureLocalStorage.getItem("seenAnnouncement");
+
+    if (announcement && !seenAnnouncement) {
+      $("#AnnouncementModalPrompt").modal("show");
+    } else {
+      surveyPopUp();
+    }
+  }, [announcement, surveyPopUp]);
+
+  useEffect(() => {
+    announcementPopUp();
+  }, [announcementPopUp]);
+
+  useEffect(() => {
+    if (announcementWatched) {
+      window.location.reload();
+    }
+  }, [announcementWatched]);
 
   return (
     <>
