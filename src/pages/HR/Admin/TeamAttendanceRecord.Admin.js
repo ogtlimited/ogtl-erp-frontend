@@ -344,11 +344,11 @@ const TeamAttendanceRecord = () => {
           >
             {value?.charAt(0)}
           </span>
-          <Link
+          {/* <Link
             to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
-          >
-            {value?.toUpperCase()}
-          </Link>
+          > */}
+          {value?.toUpperCase()}
+          {/* </Link> */}
         </h2>
       ),
     },
