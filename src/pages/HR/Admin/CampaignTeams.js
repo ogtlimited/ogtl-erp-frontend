@@ -1,20 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
-import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { useParams, Link } from "react-router-dom";
-import moment from "moment";
 import { TeamForm } from "../../../components/FormJSON/CreateOffices";
 import { TeamFormModal } from "../../../components/Modal/TeamFormModal";
+import axiosInstance from "../../../services/api";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import moment from "moment";
+import $ from "jquery";
 
 const CampaignTeams = () => {
   const { id } = useParams();
-  const { user, ErrorHandler } = useAppContext();
+  const { user, ErrorHandler, goToTop, showAlert } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaignTeams, setCampaignTeams] = useState([]);
   const [mode, setMode] = useState("Add");
   const [office, setOffice] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -82,12 +86,47 @@ const CampaignTeams = () => {
     setOffice(row);
   };
 
+  const handleDeleteTeam = async () => {
+    setIsDeleting(true);
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.delete(
+        `/api/v1/teams/${selectedData.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      goToTop();
+      showAlert(true, "Team deleted successfully!", "alert alert-info");
+      $("#exampleModal").modal("toggle");
+      fetchAllCampaignTeams();
+      setIsDeleting(false);
+    } catch (error) {
+      goToTop();
+      const errorMsg = error.response?.data?.errors;
+      showAlert(
+        true,
+        `${errorMsg || "Unable to delete team"}`,
+        "alert alert-warning"
+      );
+      $("#exampleModal").modal("toggle");
+      setIsDeleting(false);
+    }
+  };
+
   const columns = [
     {
       dataField: "title",
       text: "Team",
       sort: true,
-      headerStyle: { width: "30%" },formatter: (val, row) => (
+      headerStyle: { width: "30%" },
+      formatter: (val, row) => (
         <p>
           <Link
             to={`/dashboard/hr/teams/${row?.title}/${row.id}`}
@@ -118,6 +157,15 @@ const CampaignTeams = () => {
               onClick={() => handleEdit(row)}
             >
               Edit
+            </button>
+
+            <button
+              className="btn btn-sm btn-danger"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => setSelectedData(row)}
+            >
+              Delete
             </button>
           </div>
         </div>
@@ -165,6 +213,16 @@ const CampaignTeams = () => {
         data={office}
         fetchAllTeams={fetchAllCampaignTeams}
         officeType="campaign"
+      />
+
+      <ConfirmModal
+        title="Team"
+        selectedRow={selectedData}
+        deleteFunction={handleDeleteTeam}
+        message={`Are you sure you want to delete ${selectedData?.title?.toUpperCase()}${
+          selectedData?.title?.toUpperCase().includes("TEAM") ? "?" : " team?"
+        }`}
+        isLoading={isDeleting}
       />
     </div>
   );
