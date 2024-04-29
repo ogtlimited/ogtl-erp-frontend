@@ -173,7 +173,7 @@ export const CampaignFormModal = ({ mode, data, fetchAllCampaigns }) => {
                           name="operation_department_id"
                           type="text"
                           className="form-control"
-                          value={title}
+                          value={title?.toUpperCase()}
                           readOnly
                         />
                       </div>
