@@ -144,6 +144,21 @@ const AppProvider = (props) => {
     },
   ];
 
+  const selectOutOfOfficeReasons = [
+    {
+      label: "Sick",
+      value: "sick",
+    },
+    {
+      label: "FAM/PER Emergency",
+      value: "FAM/PER Emergency",
+    },
+    {
+      label: "Holiday",
+      value: "holiday",
+    }
+  ];
+
   const generateOrdinal = (day) => {
     if (day >= 11 && day <= 13) {
       return `${day}th`;
@@ -829,6 +844,8 @@ const AppProvider = (props) => {
         fetchPendingSurveys,
         pendingSurveySubmitted,
         setPendingSurveySubmitted,
+
+        selectOutOfOfficeReasons,
 
         generateOrdinal,
         getAvatarColor,

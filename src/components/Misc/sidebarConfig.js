@@ -54,6 +54,7 @@ const ICONS = {
   survey: getIcon("la-poll"),
   announcement: getIcon("la-bullhorn"),
   deduction: getIcon("la-money-check-alt"),
+  office: getIcon("la-building"),
 };
 
 const buildExternalURL = () => {
@@ -172,6 +173,12 @@ const sidebarConfig = [
         title: "Attendance",
         path: PATH_DASHBOARD.main.employeeAttendance,
         icon: ICONS.userAttendance,
+      },
+      {
+        canView: "all",
+        title: "Out of Office",
+        path: PATH_DASHBOARD.main.outOfOffice,
+        icon: ICONS.office,
       },
       {
         canView: "all",
@@ -351,6 +358,11 @@ const sidebarConfig = [
             canView: "hr",
             title: "Remote Attendance",
             path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
+          },
+          {
+            canView: "hr",
+            title: "Out of Office",
+            path: PATH_DASHBOARD.hr.outOfOffice,
           },
         ],
       },
