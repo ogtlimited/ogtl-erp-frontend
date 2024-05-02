@@ -46,7 +46,7 @@ const OutOfOfficeAdmin = () => {
 
     try {
       const response = await axiosInstance.get(
-        `/api/v1/out_of_office.json?start_date=${fromDate}&end_date=${toDate}`,
+        `/api/v1/out_of_office.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -56,6 +56,8 @@ const OutOfOfficeAdmin = () => {
           params: {
             pages: page,
             limit: sizePerPage,
+            start_date: fromDate,
+            end_date: toDate
           },
         }
       );
