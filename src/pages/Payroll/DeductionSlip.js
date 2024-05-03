@@ -39,16 +39,18 @@ const DeductionSlip = () => {
 
       const resData = res?.data?.data;
 
+      console.log(resData)
+
       const formattedData = resData.map((item) => {
         return {
           ...item,
           deductionDate: moment(item?.deduction?.date_processed)
             .utc()
             .format("YYYY-MM-DD (Do MMM.) - h:mma"),
-          deductionType: item?.deduction_type[0]?.title?.replace(
-            /\b\w/g,
-            (char) => char.toUpperCase()
-          ),
+          deductionType: item?.deduction_type[0]
+            ?.replace(/_/g, " ")
+            ?.replace(/^./, (str) => str.toUpperCase())
+            ?.replace(/\b\w/g, (char) => char.toUpperCase()),
 
           deductionDescription:
             item?.deduction?.category === "disciplinary"
@@ -65,6 +67,7 @@ const DeductionSlip = () => {
         };
       });
 
+      console.log(formattedData)
       setAllDeductions(formattedData);
 
       const owner = resData[0]?.user;

@@ -139,6 +139,7 @@ export default function Router() {
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/deductions", element: <EmployeeDeductions /> },
             { path: "main/resignation", element: <ResignationUser /> },
+            { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
             { path: "main/ticket-management", element: <TicketManagement /> },
@@ -324,6 +325,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="hr">
                   <RemoteAttendanceAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "out-of-office",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <OutOfOfficeAdmin />
                 </GuardedRoute>
               ),
             },
@@ -1236,6 +1245,12 @@ const AttendanceRecord = Loadable(
 );
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
+);
+const OutOfOfficeUsers = Loadable(
+  lazy(() => import("../pages/HR/Users/OutOfOffice.User"))
+);
+const OutOfOfficeAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/OutOfOffice.Admin"))
 );
 const Departments = Loadable(
   lazy(() => import("../pages/HR/Admin/Departments.Admin"))

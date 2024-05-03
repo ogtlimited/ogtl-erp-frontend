@@ -55,7 +55,7 @@ const AdminLayout = (props) => {
 
   useEffect(() => {
     if (announcementWatched) {
-      window.location.reload();
+      // window.location.reload();
     }
   }, [announcementWatched]);
 

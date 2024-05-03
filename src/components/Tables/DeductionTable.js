@@ -86,7 +86,7 @@ const DeductionTable = ({
                   style={{ marginBottom: 15, paddingLeft: "12%" }}
                   className="inputSearch"
                 />
-                <div className="col-md-3">
+                <div className="col-md-4">
                   <div className="form-group">
                     <input
                       type="month"
