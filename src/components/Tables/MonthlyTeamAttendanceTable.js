@@ -150,15 +150,21 @@ const MonthlyTeamAttendanceTable = ({
             ? data?.days[key]?.clock_out
             : null,
           status:
-            data?.days[key] === "absent"
-              ? "Absent"
-              : data?.days[key] === "leave"
-              ? "Leave"
-              : data?.days[key] === "off"
-              ? "Day off"
-              : data?.days[key] === "---"
-              ? "---"
-              : "Present",
+          data?.days[key] === "absent"
+            ? "Absent"
+            : data?.days[key] === "leave"
+            ? "Leave"
+            : data?.days[key] === "off"
+            ? "Day off"
+            : data?.days[key] === "sick"
+            ? "Sick"
+            : data?.days[key] === "FAM/PER Emergency"
+            ? "FAM/PER Emergency"
+            : data?.days[key] === "holiday"
+            ? "Holiday"
+            : data?.days[key] === "---"
+            ? "---"
+            : "Present",
         })),
       }));
 

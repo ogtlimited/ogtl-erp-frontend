@@ -38,7 +38,10 @@ const DeductionType = () => {
           item?.deduction?.office_type.charAt(0).toUpperCase() +
             item?.deduction?.office_type.slice(1) || "N/A",
         officeName: item.office?.title || "-",
-        deductionTitle: item?.deduction?.title,
+        deductionTitle: item?.deduction?.title
+          .replace(/_/g, " ")
+          .replace(/^./, (str) => str.toUpperCase())
+          .replace(/\b\w/g, (char) => char.toUpperCase()),
         deductionDesc: item?.deduction?.description,
         deductionMode:
           item?.deduction?.deduction_mode === "percentage"

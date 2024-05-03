@@ -1,10 +1,11 @@
-/** @format */
+/* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
+import moment from "moment";
 
 export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const {
@@ -16,6 +17,8 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   } = useAppContext();
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const time = new Date().toDateString();
+  const today_date = moment(time).format("yyyy-MM-DD");
 
   const selectDeductionTypeRef = useRef();
 
@@ -45,7 +48,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const handleCreateOutOfOffice = async (e) => {
     e.preventDefault();
 
-    console.log("payload:", formData);
+    console.log("create payload:", formData);
 
     setLoading(true);
     try {
@@ -63,8 +66,6 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
             start_date: formData.start_date,
             end_date: formData.end_date,
             reason: formData.reason,
-            hr_deductions_id: formData.hr_deduction_type_id,
-            status: true 
           },
         }
       );
@@ -74,7 +75,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
         true,
         `${
           formData?.employee_title
-        }'s out of office successfully created!`,
+        }'s Out of Office successfully created!`,
         "alert alert-success"
       );
       refetchData();
@@ -95,7 +96,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const handleEditOutOfOffice = async (e) => {
     e.preventDefault();
 
-    console.log("payload:", formData);
+    console.log("edit payload:", formData);
 
     setLoading(true);
     try {
@@ -223,6 +224,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         value={formData.start_date}
                         onChange={handleFormChange}
                         className="form-control "
+                        min={today_date}
                         required
                       />
                     </div>
@@ -237,12 +239,13 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         value={formData.end_date}
                         onChange={handleFormChange}
                         className="form-control "
+                        min={formData.start_date}
                         required
                       />
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="hr_deduction_type_id">
                         Deduction Type
@@ -263,7 +266,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         style={{ display: "inline-block" }}
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="modal-footer">

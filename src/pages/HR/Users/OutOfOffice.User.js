@@ -7,6 +7,7 @@ import { useAppContext } from "../../../Context/AppContext";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
+import helper from "../../../services/helper";
 
 const OutOfOffice = () => {
   const { user, ErrorHandler, getAvatarColor } = useAppContext();
@@ -29,13 +30,15 @@ const OutOfOffice = () => {
     setToday(today_date);
   }, []);
 
+  const currentUserOgid = user?.employee_info?.ogid;
+
   // Out of Office:
   const fetchOutOfOffice = useCallback(async () => {
     setLoading(false);
 
     try {
       const response = await axiosInstance.get(
-        `/api/v1/out_of_office.json`,
+        `/api/v1/out_of_office/${currentUserOgid}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -61,14 +64,11 @@ const OutOfOffice = () => {
 
       const formattedOutOffOffice = resData.map((e) => ({
         ...e,
-        employeeEE: e?.employee_id,
-        enteredByEE: e?.entered_by_id,
-        employee: "N/A",
-        enteredBy: "N/A",
+        enteredBy: e?.entered_by,
         dateCreated: moment(e?.created_at).format("Do MMMM, YYYY"),
         from: moment(e?.start_date).format("Do MMMM, YYYY"),
         to: moment(e?.end_date).format("Do MMMM, YYYY"),
-        deduction: e?.hr_deductions_id,
+        // deduction: helper.handleMoneyFormat(5000),
       }));
 
       setAllOutOfOffice(formattedOutOffOffice);
@@ -114,22 +114,25 @@ const OutOfOffice = () => {
       text: "Reason",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <span>{value?.replace(/\b\w/g, (char) => char.toUpperCase())}</span>
+      ),
     },
     {
       dataField: "from",
       text: "From",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "to",
       text: "To",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
-      dataField: "status",
-      text: "Status",
+      dataField: "approved",
+      text: "Approved",
       sort: true,
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
@@ -146,12 +149,12 @@ const OutOfOffice = () => {
         </>
       ),
     },
-    {
-      dataField: "deduction",
-      text: "Deduction",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
+    // {
+    //   dataField: "deduction",
+    //   text: "Deduction",
+    //   sort: true,
+    //   headerStyle: { width: "20%" },
+    // },
   ];
 
   return (

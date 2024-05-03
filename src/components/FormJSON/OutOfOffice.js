@@ -3,5 +3,4 @@ export const outOfOfficeForm = {
   start_date: "",
   end_date: "",
   reason: "",
-  status: "",
 };

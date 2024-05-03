@@ -153,6 +153,12 @@ const MonthlyAttendanceTable = ({
               ? "Leave"
               : data?.days[key] === "off"
               ? "Day off"
+              : data?.days[key] === "sick"
+              ? "Sick"
+              : data?.days[key] === "FAM/PER Emergency"
+              ? "FAM/PER Emergency"
+              : data?.days[key] === "holiday"
+              ? "Holiday"
               : data?.days[key] === "---"
               ? "---"
               : "Present",

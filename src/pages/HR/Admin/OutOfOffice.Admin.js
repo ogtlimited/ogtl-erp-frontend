@@ -6,9 +6,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../../Context/AppContext";
 import { OutOfOfficeFormModal } from "./../../../components/Modal/OutOfOfficeFormModal";
 import { outOfOfficeForm } from "../../../components/FormJSON/OutOfOffice";
+import OutOfOfficeApprovalModal from "../../../components/Modal/OutOfOfficeApprovalModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
+import helper from "../../../services/helper";
 
 const OutOfOfficeAdmin = () => {
   const { user, ErrorHandler, getAvatarColor } = useAppContext();
@@ -16,6 +18,8 @@ const OutOfOfficeAdmin = () => {
   const [allOutOfOffice, setAllOutOfOffice] = useState([]);
   const [mode, setMode] = useState("Create");
   const [data, setData] = useState([]);
+  const [modalType, setmodalType] = useState("");
+  const [viewRow, setViewRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -45,22 +49,19 @@ const OutOfOfficeAdmin = () => {
     setLoading(false);
 
     try {
-      const response = await axiosInstance.get(
-        `/api/v1/out_of_office.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            pages: page,
-            limit: sizePerPage,
-            start_date: fromDate,
-            end_date: toDate
-          },
-        }
-      );
+      const response = await axiosInstance.get(`/api/v1/out_of_office.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          pages: page,
+          limit: sizePerPage,
+          start_date: fromDate,
+          end_date: toDate,
+        },
+      });
       const resData = response?.data?.data?.out_of_offices;
       const totalPages = response?.data?.data?.pages;
 
@@ -72,14 +73,12 @@ const OutOfOfficeAdmin = () => {
 
       const formattedOutOffOffice = resData.map((e) => ({
         ...e,
-        employeeEE: e?.employee_id,
-        enteredByEE: e?.entered_by_id,
-        employee: "N/A",
-        enteredBy: "N/A",
+        employee: e?.full_name,
+        enteredBy: e?.entered_by,
         dateCreated: moment(e?.created_at).format("Do MMMM, YYYY"),
         from: moment(e?.start_date).format("Do MMMM, YYYY"),
         to: moment(e?.end_date).format("Do MMMM, YYYY"),
-        deduction: e?.hr_deductions_id,
+        // deduction: helper.handleMoneyFormat(5000),
       }));
 
       setAllOutOfOffice(formattedOutOffOffice);
@@ -101,10 +100,10 @@ const OutOfOfficeAdmin = () => {
     setData(outOfOfficeForm);
   };
 
-  const handleEdit = (row) => {
-    setMode("Edit");
-    setData(row);
-  };
+  // const handleEdit = (row) => {
+  //   setMode("Edit");
+  //   setData(row);
+  // };
 
   const columns = [
     {
@@ -120,9 +119,18 @@ const OutOfOfficeAdmin = () => {
           >
             {value?.charAt(0)}
           </span>
-          {value?.toUpperCase()}
+          <div>
+            {value} <span>{row?.ogid}</span>
+          </div>
         </h2>
       ),
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => <span>{value?.toUpperCase()}</span>,
     },
     {
       dataField: "enteredBy",
@@ -141,6 +149,9 @@ const OutOfOfficeAdmin = () => {
       text: "Reason",
       sort: true,
       headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <span>{value?.replace(/\b\w/g, (char) => char.toUpperCase())}</span>
+      ),
     },
     {
       dataField: "from",
@@ -155,8 +166,8 @@ const OutOfOfficeAdmin = () => {
       headerStyle: { width: "20%" },
     },
     {
-      dataField: "status",
-      text: "Status",
+      dataField: "approved",
+      text: "Approved",
       sort: true,
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
@@ -173,12 +184,12 @@ const OutOfOfficeAdmin = () => {
         </>
       ),
     },
-    {
-      dataField: "deduction",
-      text: "Deduction",
-      sort: true,
-      headerStyle: { width: "20%" },
-    },
+    // {
+    //   dataField: "deduction",
+    //   text: "Deduction",
+    //   sort: true,
+    //   headerStyle: { width: "20%" },
+    // },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
       text: "Action",
@@ -188,12 +199,13 @@ const OutOfOfficeAdmin = () => {
           <div className="leave-user-action-btns">
             {row?.approved ? null : (
               <button
-                className="btn btn-sm btn-primary"
-                data-toggle="modal"
-                data-target="#OutOfOfficeFormModal"
-                onClick={() => handleEdit(row)}
+                className="btn btn-sm btn-success"
+                onClick={() => {
+                  setmodalType("approve");
+                  setViewRow(row);
+                }}
               >
-                Edit
+                Approve
               </button>
             )}
           </div>
@@ -278,6 +290,14 @@ const OutOfOfficeAdmin = () => {
         data={data}
         refetchData={fetchOutOfOffice}
       />
+
+      {modalType === "approve" ? (
+        <OutOfOfficeApprovalModal
+          setmodalType={setmodalType}
+          modalContent={viewRow}
+          refetchData={fetchOutOfOffice}
+        />
+      ) : null}
     </>
   );
 };

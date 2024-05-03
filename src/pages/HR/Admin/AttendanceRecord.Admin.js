@@ -103,6 +103,12 @@ const AttendanceRecord = () => {
                       ? "text-success"
                       : attendanceRecord.status === "Day off"
                       ? "text-secondary"
+                      : attendanceRecord.status === "Sick"
+                      ? "text-warning"
+                      : attendanceRecord.status === "FAM/PER Emergency"
+                      ? "text-info"
+                      : attendanceRecord.status === "Holiday"
+                      ? "text-dark"
                       : attendanceRecord.status === "---"
                       ? "text-muted"
                       : "text-danger"
@@ -274,15 +280,21 @@ const AttendanceRecord = () => {
             ? data?.days[key]?.clock_out
             : null,
           status:
-            data?.days[key] === "absent"
-              ? "Absent"
-              : data?.days[key] === "leave"
-              ? "Leave"
-              : data?.days[key] === "off"
-              ? "Day off"
-              : data?.days[key] === "---"
-              ? "---"
-              : "Present",
+          data?.days[key] === "absent"
+            ? "Absent"
+            : data?.days[key] === "leave"
+            ? "Leave"
+            : data?.days[key] === "off"
+            ? "Day off"
+            : data?.days[key] === "sick"
+            ? "Sick"
+            : data?.days[key] === "FAM/PER Emergency"
+            ? "FAM/PER Emergency"
+            : data?.days[key] === "holiday"
+            ? "Holiday"
+            : data?.days[key] === "---"
+            ? "---"
+            : "Present",
         })),
       }));
 
