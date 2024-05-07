@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
+import moment from "moment";
 import $ from "jquery";
 
 export const GeneratePayrollModal = ({ fetchAllBatches, payday }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentYear = currentDate.getFullYear();
+  const currentMonth = moment().format('MM');
+  const currentYear = moment().format('YYYY');
 
   const [createPayslips, setCreatePayslips] = useState({
     monthAndYear: `${currentYear}-${currentMonth}`,

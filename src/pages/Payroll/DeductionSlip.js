@@ -45,10 +45,10 @@ const DeductionSlip = () => {
           deductionDate: moment(item?.deduction?.date_processed)
             .utc()
             .format("YYYY-MM-DD (Do MMM.) - h:mma"),
-          deductionType: item?.deduction_type[0]?.title?.replace(
-            /\b\w/g,
-            (char) => char.toUpperCase()
-          ),
+          deductionType: item?.deduction_type[0].title
+            ?.replace(/_/g, " ")
+            ?.replace(/^./, (str) => str.toUpperCase())
+            ?.replace(/\b\w/g, (char) => char.toUpperCase()),
 
           deductionDescription:
             item?.deduction?.category === "disciplinary"

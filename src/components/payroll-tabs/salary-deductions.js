@@ -8,6 +8,7 @@ import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
+import moment from "moment";
 
 const Deductions = () => {
   const navigate = useNavigate();
@@ -15,9 +16,8 @@ const Deductions = () => {
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth() + 1;
+  const currentMonth = moment().format('MM');
+  const currentYear = moment().format('YYYY');
   const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -76,7 +76,7 @@ const Deductions = () => {
     const year = date.split("-")[0];
 
     navigate(
-      `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}/`
+      `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}`
     );
   };
 

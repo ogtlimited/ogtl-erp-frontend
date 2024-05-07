@@ -90,13 +90,13 @@ const UniversalPaginatedTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <ExportCSVButton
+              {/* <ExportCSVButton
                 className="float-right btn export-csv"
                 style={{ marginBottom: 15 }}
                 {...props.csvProps}
               >
                 Export CSV
-              </ExportCSVButton>
+              </ExportCSVButton> */}
 
               <div className="hr-filter-select col-12"></div>
 
