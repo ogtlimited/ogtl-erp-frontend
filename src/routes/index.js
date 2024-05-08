@@ -142,11 +142,8 @@ export default function Router() {
             { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
+            { path: "main/tickets", element: <Tickets /> },
             { path: "main/ticket-management", element: <TicketManagement /> },
-            {
-              path: "main/employee-appreciation-eCertificate",
-              element: <EmployeeAppreciation />,
-            },
             { path: "main/international-women's-day", element: <IWDUser /> },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
@@ -195,6 +192,10 @@ export default function Router() {
             { path: "email", element: <Email /> },
             { path: "email/:id", element: <ViewEmail /> },
             { path: "email-signature", element: <SignatureGenerator /> },
+            {
+              path: "employee-appreciation-eCertificate",
+              element: <EmployeeAppreciation />
+            },
             { path: "file-manager", element: <FileManager /> },
             {
               path: "notifications",
@@ -204,7 +205,6 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
-            { path: "tickets", element: <Tickets /> },
             {
               path: "ticket-manager",
               element: (

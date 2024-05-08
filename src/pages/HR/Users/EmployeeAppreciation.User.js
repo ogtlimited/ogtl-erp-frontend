@@ -22,7 +22,7 @@ const EmployeeAppreciation = () => {
           <div className="col">
             <h3 className="page-title">Employee Appreciation eCertificate</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Main</li>
+              <li className="breadcrumb-item">Apps</li>
               <li className="breadcrumb-item active">Employee Appreciation</li>
             </ul>
           </div>

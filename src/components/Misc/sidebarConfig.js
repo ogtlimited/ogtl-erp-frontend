@@ -55,6 +55,7 @@ const ICONS = {
   announcement: getIcon("la-bullhorn"),
   deduction: getIcon("la-money-check-alt"),
   office: getIcon("la-building"),
+  hr: getIcon("la-user-minus"),
 };
 
 const buildExternalURL = () => {
@@ -157,8 +158,8 @@ const sidebarConfig = [
           },
           {
             canView: "all",
-            title: "Ticket",
-            path: PATH_DASHBOARD.apps.tickets,
+            title: "Employee Appreciation",
+            path: PATH_DASHBOARD.apps.eCertificate,
           },
         ],
       },
@@ -176,15 +177,23 @@ const sidebarConfig = [
       },
       {
         canView: "all",
-        title: "Out of Office",
-        path: PATH_DASHBOARD.main.outOfOffice,
-        icon: ICONS.office,
-      },
-      {
-        canView: "all",
-        title: "Leave",
-        path: PATH_DASHBOARD.main.employeeLeave,
+        title: "Time Off",
+        path: PATH_DASHBOARD.main.root,
         icon: ICONS.leave,
+        children: [
+          {
+            canView: "all",
+            title: "Out of Office",
+            path: PATH_DASHBOARD.main.outOfOffice,
+            icon: ICONS.office,
+          },
+          {
+            canView: "all",
+            title: "Leave",
+            path: PATH_DASHBOARD.main.employeeLeave,
+            icon: ICONS.leave,
+          },
+        ],
       },
       {
         canView: "all",
@@ -197,26 +206,6 @@ const sidebarConfig = [
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.resignation,
-      },
-      {
-        canView: CurrentUserRoles?.includes("security_attendance_team")
-          ? "all"
-          : "none",
-        title: "Manual Attendance",
-        path: PATH_DASHBOARD.main.manualAttendance,
-        icon: ICONS.userAttendance,
-      },
-      {
-        canView: "all",
-        title: "Announcement",
-        path: PATH_DASHBOARD.main.announcement,
-        icon: ICONS.announcement,
-      },
-      {
-        canView: "all",
-        title: "Survey",
-        path: PATH_DASHBOARD.main.survey,
-        icon: ICONS.survey,
       },
       {
         canView: "all",
@@ -247,16 +236,43 @@ const sidebarConfig = [
         ],
       },
       {
+        canView: "all",
+        title: "Engage & Feedback",
+        path: PATH_DASHBOARD.main.root,
+        icon: ICONS.announcement,
+        children: [
+          {
+            canView: "all",
+            title: "Ticket",
+            path: PATH_DASHBOARD.main.tickets,
+          },
+          {
+            canView: "all",
+            title: "Survey",
+            path: PATH_DASHBOARD.main.survey,
+            icon: ICONS.survey,
+          },
+          {
+            canView: "all",
+            title: "Announcement",
+            path: PATH_DASHBOARD.main.announcement,
+            icon: ICONS.announcement,
+          },
+        ],
+      },
+      {
+        canView: CurrentUserRoles?.includes("security_attendance_team")
+          ? "all"
+          : "none",
+        title: "Manual Attendance",
+        path: PATH_DASHBOARD.main.manualAttendance,
+        icon: ICONS.userAttendance,
+      },
+      {
         canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
         title: "Ticket Management",
         path: PATH_DASHBOARD.main.ticketManagement,
         icon: ICONS.coaching,
-      },
-      {
-        canView: "all",
-        title: "Employee Appreciation",
-        path: PATH_DASHBOARD.main.eCertificate,
-        icon: ICONS.certificate,
       },
       // {
       //   canView: "all",
