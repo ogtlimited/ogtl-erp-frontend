@@ -1022,8 +1022,8 @@ const LeavesUser = () => {
           <div className="col">
             <h3 className="page-title">Leave Application</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Time Off</li>
-              <li className="breadcrumb-item active">Leave</li>
+              <li className="breadcrumb-item">Main</li>
+              <li className="breadcrumb-item active">Time Off</li>
             </ul>
           </div>
           {loadingUserResignation ? null : (

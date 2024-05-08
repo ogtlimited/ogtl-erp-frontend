@@ -61,6 +61,7 @@ export const PATH_DASHBOARD = {
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
     remoteAttendanceAdmin: path(ROOTS_DASHBOARD, "/hr/remote-attendance"),
     outOfOffice: path(ROOTS_DASHBOARD, "/hr/out-of-office"),
+    publicholiday: path(ROOTS_DASHBOARD, "/hr/public-holiday"),
     departments: path(ROOTS_DASHBOARD, "/hr/departments"),
     campaigns: path(ROOTS_DASHBOARD, "/hr/campaigns"),
     teams: path(ROOTS_DASHBOARD, "/hr/teams"),
@@ -87,7 +88,6 @@ export const PATH_DASHBOARD = {
 
   payroll: {
     root: path(ROOTS_DASHBOARD, "/payroll"),
-    publicholiday: path(ROOTS_DASHBOARD, "/payroll/public-holiday"),
     salary: path(ROOTS_DASHBOARD, "/payroll/salaries"),
     payrollProcessing: path(ROOTS_DASHBOARD, "/payroll/payroll-processing"),
     payday: path(ROOTS_DASHBOARD, "/payroll/payday"),

@@ -380,6 +380,11 @@ const sidebarConfig = [
             title: "Out of Office",
             path: PATH_DASHBOARD.hr.outOfOffice,
           },
+          {
+            canView: 'hr',
+            title: 'Public Holiday',
+            path: PATH_DASHBOARD.hr.publicholiday,
+          },
         ],
       },
 

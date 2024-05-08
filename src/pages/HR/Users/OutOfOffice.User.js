@@ -164,8 +164,8 @@ const OutOfOffice = () => {
           <div className="col">
             <h3 className="page-title">Out Of Office</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">Time Off</li>
-              <li className="breadcrumb-item active">Out Of Office</li>
+              <li className="breadcrumb-item">Main</li>
+              <li className="breadcrumb-item active">Time Off</li>
             </ul>
           </div>
         </div>

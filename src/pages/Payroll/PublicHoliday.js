@@ -1,142 +1,198 @@
-/** @format */
+//* IN-USE
 
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import PublicHolidayModal from '../../components/Modal/PublicHolidayModal';
-import HolidayListModal from '../../components/Modal/PublicHolidayViewModal';
-import PublicHolidayEditModal from '../../components/Modal/PublicHolidayEditModal';
-import { PublicHolidayList } from '../../components/FormJSON/PublicHolidayList';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React, { useState, useEffect, useCallback } from "react";
+import { useAppContext } from "../../Context/AppContext";
+import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
+import { PublicHolidayFormModal } from "../../components/Modal/PublicHolidayFormModal";
+import axiosInstance from "../../services/api";
+import moment from "moment";
 
 const PublicHoliday = () => {
-  const [holidayModal, setHolidayModal] = useState(false);
-  const [viewHoliday, setViewHoliday] = useState(false);
-  const [editModal, setEditModal] = useState(false);
-  const [data] = useState(PublicHolidayList);
-  const [allData, setAllData] = useState([]);
-  const [filterData, setFilterData] = useState(allData);
-  const [list, setList] = useState([]);
+  const { getAvatarColor, user, ErrorHandler } = useAppContext();
+  const [allHolidays, setAllHolidays] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState("Create");
+  const [holiday, setHoliday] = useState([]);
+  const [viewRow, setViewRow] = useState(null);
 
-  // Search Function
-  const handlePublicHolidaySearch = (e) => {
-    const search = e.target.value;
-    const filteredData = allData.filter((data) => {
-      return data.title.toLowerCase().includes(search.toLowerCase());
-    });
-    setFilterData(filteredData);
-  };
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
 
-  // View Public Holiday
-  const handleViewHoliday = (publicHoliday) => () => {
-    setViewHoliday(true);
-    setList(publicHoliday);
-  };
+  const fetchHolidays = useCallback(async () => {
+    setLoading(true);
 
-  //  Delete Public Holiday
-  const handleDeleteHoliday = (publicHolidayToRemove) => () => {
-    setFilterData((holidays) =>
-      holidays.filter((holiday) => holiday.id !== publicHolidayToRemove.id)
-    );
-  };
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        // params: {
+        //   page: page,
+        //   limit: sizePerPage,
+        // },
+      });
 
-  // Edit Public Holiday
-  const handleEditHoliday = (publicHoliday) => () => {
-    setEditModal(true);
-    setList(publicHoliday);
-  };
+      const resData = response?.data?.data?.public_holidays;
+      console.log("holiday resData", resData);
+      const totalPages = response?.data?.data?.pages;
+
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
+
+      const formatted = resData.map((e) => ({
+        ...e,
+        title: e?.public_holidays?.title,
+        from: moment(e?.public_holidays?.start_date).format("Do MMMM, YYYY"),
+        to: moment(e?.public_holidays?.end_date).format("Do MMMM, YYYY"),
+      }));
+
+      setAllHolidays(formatted);
+      setLoading(false);
+    } catch (error) {
+      const component = "Public Holiday | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, sizePerPage]);
 
   useEffect(() => {
-    setAllData(data);
-    setFilterData(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchHolidays();
+  }, [fetchHolidays]);
+
+  const handleCreate = () => {
+    const publicHolidayForm = {
+      title: "",
+      start_date: "",
+      end_date: "",
+      operation_department_id: "",
+      operation_campaign_id: "",
+    };
+
+    setHoliday(publicHolidayForm);
+    setMode("Create");
+  };
+
+  // const handleEdit = (row) => {
+  //   setTicket(row);
+  //   setMode("Edit");
+  // };
+
+  const columns = [
+    {
+      dataField: "title",
+      text: "Public Holiday",
+      sort: true,
+      headerStyle: { width: "30%" },
+    },
+    {
+      dataField: "from",
+      text: "From",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    {
+      dataField: "to",
+      text: "To",
+      sort: true,
+      headerStyle: { width: "20%" },
+    },
+    // {
+    //   dataField: "",
+    //   text: "Action",
+    //   headerStyle: { width: "5%" },
+    //   formatter: (value, row) => (
+    //     <div className="dropdown dropdown-action text-right">
+    //       <a
+    //         href="#"
+    //         className="action-icon dropdown-toggle"
+    //         data-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+    //       </a>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           data-toggle="modal"
+    //           data-target="#generalModal"
+    //           onClick={() => {
+    //             setViewRow(row);
+    //           }}
+    //         >
+    //           <i className="fa fa-eye m-r-5"></i> View
+    //         </a>
+    //         {!row.resolved && (
+    //           <>
+    //             <a
+    //               className="dropdown-item"
+    //               href="#"
+    //               data-toggle="modal"
+    //               data-target="#TicketFormModal"
+    //               onClick={() => handleEdit(row)}
+    //             >
+    //               <i className="fa fa-check m-r-5"></i> Edit
+    //             </a>
+    //           </>
+    //         )}
+    //       </div>
+    //     </div>
+    //   ),
+    // },
+  ];
 
   return (
     <>
-      {holidayModal && <PublicHolidayModal closeModal={setHolidayModal} />}
-      {editModal && (
-        <PublicHolidayEditModal closeModal={setEditModal} list={list} />
-      )}
-      {viewHoliday && (
-        <HolidayListModal closeModal={setViewHoliday} list={list} />
-      )}
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Public Holidays</h3>
+            <h3 className="page-title">Public Holiday</h3>
             <ul className="breadcrumb">
-              <li className="breadcrumb-item">
-                <Link to="/">Dashboard</Link>
-              </li>
-              <li className="breadcrumb-item active"> Public Holiday</li>
+              <li className="breadcrumb-item">HR</li>
+              <li className="breadcrumb-item active">Attendance</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            <button
-              onClick={() => setHolidayModal(true)}
+            <a
+              href="#"
               className="btn add-btn"
               data-toggle="modal"
-              data-target="#add_public_holiday"
+              data-target="#PublicHolidayFormModal"
+              onClick={handleCreate}
             >
-              <i className="fa fa-plus"></i>
-              Add Public Holiday
-            </button>
+              <i className="las la-plus"></i> Create Public Holiday
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Start of Search bar */}
-      <input
-        type="search"
-        className="public-holiday-search"
-        placeholder="Search..."
-        onChange={(e) => handlePublicHolidaySearch(e)}
-      />
-      {/* End of Search bar */}
-
-      <div className="public-holiday-list">
-        <table className="public-holiday-table">
-          <thead className="public-holiday-table-head">
-            <tr className="public-holiday-table-th">
-              <th>Title</th>
-              <th>Date of Application</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody className="public-holiday-table-body">
-            {filterData.length > 0 ? (
-              filterData.map((publicHoliday) => (
-                <tr key={publicHoliday.id} className="public-holiday-table-td">
-                  <td>{publicHoliday.title}</td>
-                  <td>{publicHoliday.date_of_Application}</td>
-                  <button
-                    className="req-table-btn view-holiday-btn"
-                    onClick={handleViewHoliday(publicHoliday)}
-                  >
-                    View
-                  </button>
-                  <button
-                    className="req-table-btn delete-holiday-btn"
-                    onClick={handleDeleteHoliday(publicHoliday)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="req-table-btn edit-holiday-btn"
-                    onClick={handleEditHoliday(publicHoliday)}
-                  >
-                    Edit
-                  </button>
-                </tr>
-              ))
-            ) : (
-              <div className="no-ph-div">
-                <p className="no-ph">No Public Holiday Record</p>
-              </div>
-            )}
-          </tbody>
-        </table>
+      <div className="row">
+        <UniversalPaginatedTable
+          columns={columns}
+          data={allHolidays}
+          loading={loading}
+          setLoading={setLoading}
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
+        />
       </div>
+
+      <PublicHolidayFormModal
+        mode={mode}
+        data={holiday}
+        refetchData={fetchHolidays}
+      />
     </>
   );
 };

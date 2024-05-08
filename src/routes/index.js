@@ -337,6 +337,14 @@ export default function Router() {
               ),
             },
             {
+              path: "public-holiday",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PublicHoliday />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: ":office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -584,14 +592,6 @@ export default function Router() {
             {
               path: "",
               element: <Navigate to="/dashboard/payroll/salaries" replace />,
-            },
-            {
-              path: "public-holiday",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <PublicHoliday />
-                </GuardedRoute>
-              ),
             },
             {
               path: "salaries",
