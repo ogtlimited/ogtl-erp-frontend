@@ -17,6 +17,8 @@ const PublicHolidayUser = () => {
 
   const [currentPublicHoliday, setCurrentPublicHoliday] = useState([]);
 
+  const [statusFilter] = useState("all");
+
   // eslint-disable-next-line no-unused-vars
   const [calendarDate, setCalendarDate] = useState([]);
 
@@ -110,6 +112,40 @@ const PublicHolidayUser = () => {
               <li className="breadcrumb-item active">Time Off</li>
             </ul>
           </div>
+        </div>
+      </div>
+
+      <div className="event_list_content_headers_event_indicator">
+        <div>
+          <span
+            className={`event_list_past_indicator ${
+              statusFilter === "past" || statusFilter === "all"
+                ? "active_status"
+                : ""
+            }`}
+          >
+            Past Holidays
+          </span>
+
+          <span
+            className={`event_list_happening_indicator ${
+              statusFilter === "happening" || statusFilter === "all"
+                ? "active_status"
+                : ""
+            }`}
+          >
+            Happening
+          </span>
+
+          <span
+            className={`event_list_pending_indicator ${
+              statusFilter === "pending" || statusFilter === "all"
+                ? "active_status"
+                : ""
+            }`}
+          >
+            Upcoming Holidays
+          </span>
         </div>
       </div>
 

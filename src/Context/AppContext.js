@@ -338,7 +338,7 @@ const AppProvider = (props) => {
         startTime: `${e?.public_holidays?.start_date}T10:08:06.000Z`,
         endTime: `${e?.public_holidays?.end_date}T21:08:06.000Z`,
         status: 
-        moment(e?.public_holidays?.end_datee).utc().format("yyyy-MM-DD") < today_date
+        moment(e?.public_holidays?.end_date).utc().format("yyyy-MM-DD") < today_date
           ? "past"
           : today_date <
               moment(e?.public_holidays?.start_date).utc().format("yyyy-MM-DD") &&

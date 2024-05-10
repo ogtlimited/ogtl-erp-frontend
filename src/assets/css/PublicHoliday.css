@@ -1,3 +1,82 @@
+.event_list_content_headers_event_indicator {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+}
+
+.event_list_content_headers_event_indicator > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 591px;
+    height: 33px;
+}
+
+.event_list_content_headers_event_indicator > div > span {
+    width: 177px;
+    height: 33px;
+    font-size: 14px;
+    font-style: normal;
+    font-family: Inter !important;
+    border-radius: 9px 9px 0px 0px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    transition: all 0.3s ease-in-out;
+    color: #3b3e45;
+    background-color: #fff;
+    transform: translateY(-2px);
+    /* cursor: pointer; */
+}
+.event_list_content_headers_event_indicator > div > span:hover {
+    transition: all 0.3s ease-in-out;
+}
+
+.event_list_pending_indicator {
+    box-shadow:
+        -3px -3px 5px #e6e4e4,
+        0 3px #ffa246;
+}
+.event_list_happening_indicator {
+    box-shadow:
+        -3px -3px 5px #e6e4e4,
+        0 3px #ff6d6d;
+}
+.event_list_past_indicator {
+    box-shadow:
+        -3px -3px 5px #e6e4e4,
+        0 3px #528dc2;
+}
+
+.event_list_pending_indicator.active_status {
+    color: #fff;
+    background-color: #ffa246;
+}
+.event_list_happening_indicator.active_status {
+    color: #fff;
+    background-color: #ff6d6d;
+}
+.event_list_past_indicator.active_status {
+    color: #fff;
+    background-color: #528dc2;
+}
+
+/*----------------------- 
+    CALENDAR SECTION 
+------------------------*/
+
+.calendar_indicator_section {
+    background-color: #fff;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
 .calendar_section {
     background-color: #fff;
     padding: 1rem;
@@ -134,7 +213,11 @@
 .fc-direction-ltr .fc-daygrid-event.fc-event-start,
 .fc-direction-rtl .fc-daygrid-event.fc-event-end,
 .fc-direction-ltr .fc-daygrid-event.fc-event-end,
-.fc-direction-rtl .fc-daygrid-event.fc-event-start {
+.fc-direction-rtl .fc-daygrid-event.fc-event-start,
+.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-start),
+.fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-end),
+.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-end),
+.fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-start) {
     background-color: transparent !important;
 }
 
