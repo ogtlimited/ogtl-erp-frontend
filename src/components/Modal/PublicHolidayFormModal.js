@@ -8,7 +8,7 @@ import Select from "react-select";
 import moment from "moment";
 
 export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
-  const { selectDepartments, selectCampaigns, showAlert, goToTop } =
+  const { fetchPublicHolidays, selectDepartments, selectCampaigns, showAlert, goToTop } =
     useAppContext();
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,6 +73,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
         "alert alert-success"
       );
       refetchData();
+      fetchPublicHolidays();
       $("#PublicHolidayFormModal").modal("toggle");
 
       setFormData(data);
@@ -180,7 +181,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
                     <div className="form-group">
                       <label htmlFor="start_date">Start</label>
                       <input
-                        type="date"
+                        type="datetime-local"
                         name="start_date"
                         value={formData.start_date}
                         onChange={handleFormChange}
@@ -195,7 +196,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
                     <div className="form-group">
                       <label htmlFor="end_date">End</label>
                       <input
-                        type="date"
+                        type="datetime-local"
                         name="end_date"
                         value={formData.end_date}
                         onChange={handleFormChange}

@@ -32,14 +32,13 @@ const PublicHoliday = () => {
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        // params: {
-        //   page: page,
-        //   limit: sizePerPage,
-        // },
+        params: {
+          page: page,
+          limit: sizePerPage,
+        },
       });
 
       const resData = response?.data?.data?.public_holidays;
-      console.log("holiday resData", resData);
       const totalPages = response?.data?.data?.pages;
 
       setSizePerPage(sizePerPage);

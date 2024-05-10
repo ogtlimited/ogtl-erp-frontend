@@ -7,6 +7,7 @@ import secureLocalStorage from "react-secure-storage";
 import backgroundColors from "../components/Misc/BackgroundColors.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 export default createBrowserHistory();
 const AppContext = createContext();
@@ -49,6 +50,7 @@ const AppProvider = (props) => {
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
+  const [allPublicHolidayEvents, setAllPublicHolidayEvents] = useState([]);
   const [userResignations, setUserResignations] = useState(null);
 
   const isTeamLead = user?.employee_info?.is_lead;
@@ -62,6 +64,9 @@ const AppProvider = (props) => {
   const [announcementWatched, setAnnouncementWatched] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
+  
+  const time = new Date().toDateString();
+  const today_date = moment(time).utc().format("yyyy-MM-DD");
 
   const goToTop = () => {
     window.scrollTo({
@@ -156,7 +161,7 @@ const AppProvider = (props) => {
     {
       label: "Holiday",
       value: "holiday",
-    }
+    },
   ];
 
   const generateOrdinal = (day) => {
@@ -304,6 +309,49 @@ const AppProvider = (props) => {
       setPendingSurveys(resData);
     } catch (error) {
       const component = "Survey Error | ";
+      ErrorHandler(error, component);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // All Public Holidays
+  const fetchPublicHolidays = useCallback(async () => {
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      const resData = response?.data?.data?.public_holidays;
+
+      const formatted = resData.map((e) => ({
+        ...e,
+        ...e?.public_holidays,
+        startTime: `${e?.public_holidays?.start_date}T10:08:06.000Z`,
+        endTime: `${e?.public_holidays?.end_date}T21:08:06.000Z`,
+        status: 
+        moment(e?.public_holidays?.end_datee).utc().format("yyyy-MM-DD") < today_date
+          ? "past"
+          : today_date <
+              moment(e?.public_holidays?.start_date).utc().format("yyyy-MM-DD") &&
+            moment(e?.public_holidays?.start_date).utc().format("yyyy-MM-DD") !==
+              today_date
+          ? "pending"
+          : "happening",
+      }));
+
+      console.log("all formatted holiday resData", formatted);
+      setAllPublicHolidayEvents(formatted);
+    } catch (error) {
+      const component = "Public Holiday | ";
       ErrorHandler(error, component);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -750,6 +798,7 @@ const AppProvider = (props) => {
       fetchStaffResignation();
       fetchAnnouncement();
       fetchPendingSurveys();
+      fetchPublicHolidays();
     }
   }, [
     fetchAllEmployees,
@@ -764,6 +813,7 @@ const AppProvider = (props) => {
     fetchStaffResignation,
     fetchAnnouncement,
     fetchPendingSurveys,
+    fetchPublicHolidays,
     isHr,
     userToken,
     isTeamLead,
@@ -844,6 +894,10 @@ const AppProvider = (props) => {
         fetchPendingSurveys,
         pendingSurveySubmitted,
         setPendingSurveySubmitted,
+
+        allPublicHolidayEvents,
+        setAllPublicHolidayEvents,
+        fetchPublicHolidays,
 
         selectOutOfOfficeReasons,
 

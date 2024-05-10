@@ -26,6 +26,7 @@ export const PATH_DASHBOARD = {
     employeeAttendance: path(ROOTS_DASHBOARD, "/main/attendance"),
     outOfOffice: path(ROOTS_DASHBOARD, "/main/out-of-office"),
     employeeLeave: path(ROOTS_DASHBOARD, "/main/leave"),
+    publicHoliday: path(ROOTS_DASHBOARD, "/main/public-holiday"),
     deductions: path(ROOTS_DASHBOARD, "/main/deductions"),
     resignation: path(ROOTS_DASHBOARD, "/main/resignation"), 
     survey: path(ROOTS_DASHBOARD, "/main/survey"), 

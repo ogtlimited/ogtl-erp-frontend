@@ -140,6 +140,7 @@ export default function Router() {
             { path: "main/deductions", element: <EmployeeDeductions /> },
             { path: "main/resignation", element: <ResignationUser /> },
             { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
+            { path: "main/public-holiday", element: <PublicHolidayUser /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
             { path: "main/tickets", element: <Tickets /> },
@@ -1248,6 +1249,9 @@ const RemoteAttendanceAdmin = Loadable(
 );
 const OutOfOfficeUsers = Loadable(
   lazy(() => import("../pages/HR/Users/OutOfOffice.User"))
+);
+const PublicHolidayUser = Loadable(
+  lazy(() => import("../pages/HR/Users/PublicHoliday.Users"))
 );
 const OutOfOfficeAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/OutOfOffice.Admin"))
