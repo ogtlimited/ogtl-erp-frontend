@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { huddleOptions } from "../FormJSON/CreateEmployeeShift";
 import { useAppContext } from "../../Context/AppContext";
+import { IoIosWarning } from "react-icons/io";
 import axiosInstance from "../../services/api";
 import Select from "react-select";
 import Switch from "@mui/material/Switch";
+import moment from "moment";
 
 export const EditEmployeeShiftModal = ({
   employeeShifts,
@@ -23,6 +25,8 @@ export const EditEmployeeShiftModal = ({
 
   const [loading, setLoading] = useState(false);
   const [scheduleOpts, setScheduleOpts] = useState([]);
+
+  const currentDay = moment().format("dddd");
 
   // * OLD UPDATE FUNCTION!
 
@@ -407,6 +411,11 @@ export const EditEmployeeShiftModal = ({
               </div>
             </div>
 
+            <div className="shift_update_div">
+              <IoIosWarning className="shift_update-warning text-warning" />
+              <p>You can not update today's ({currentDay}) shift</p>
+            </div>
+
             <hr />
 
             <form onSubmit={handleEditEmployeeShift}>
@@ -440,6 +449,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Monday"}
                       />
                     </div>
                   </div>
@@ -460,6 +470,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Monday"}
                       />
                     </div>
                   </div>
@@ -482,6 +493,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateMondayShift?.off,
                         })
                       }
+                      disabled={currentDay === "Monday"}
                     />
                   </div>
                 </div>
@@ -499,11 +511,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateMondayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Monday"}
                     />
                   </div>
                 </div>
                 {!updateMondayShift?.off && updateMondayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -521,6 +534,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Monday"}
                       />
                     </div>
                   </div>
@@ -562,6 +576,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Tuesday"}
                       />
                     </div>
                   </div>
@@ -584,6 +599,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Tuesday"}
                       />
                     </div>
                   </div>
@@ -606,6 +622,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateTuesdayShift.off,
                         })
                       }
+                      disabled={currentDay === "Tuesday"}
                     />
                   </div>
                 </div>
@@ -623,11 +640,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateTuesdayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Tuesday"}
                     />
                   </div>
                 </div>
                 {!updateTuesdayShift?.off && updateTuesdayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -645,6 +663,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Tuesday"}
                       />
                     </div>
                   </div>
@@ -686,6 +705,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Wednesday"}
                       />
                     </div>
                   </div>
@@ -709,6 +729,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Wednesday"}
                       />
                     </div>
                   </div>
@@ -731,6 +752,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateWednesdayShift.off,
                         })
                       }
+                      disabled={currentDay === "Wednesday"}
                     />
                   </div>
                 </div>
@@ -749,11 +771,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateWednesdayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Wednesday"}
                     />
                   </div>
                 </div>
                 {!updateWednesdayShift?.off && updateWednesdayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -771,6 +794,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Wednesday"}
                       />
                     </div>
                   </div>
@@ -812,6 +836,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Thursday"}
                       />
                     </div>
                   </div>
@@ -835,6 +860,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Thursday"}
                       />
                     </div>
                   </div>
@@ -857,6 +883,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateThursdayShift.off,
                         })
                       }
+                      disabled={currentDay === "Thursday"}
                     />
                   </div>
                 </div>
@@ -874,11 +901,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateThursdayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Thursday"}
                     />
                   </div>
                 </div>
                 {!updateThursdayShift?.off && updateThursdayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -896,6 +924,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Thursday"}
                       />
                     </div>
                   </div>
@@ -936,6 +965,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Friday"}
                       />
                     </div>
                   </div>
@@ -958,6 +988,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Friday"}
                       />
                     </div>
                   </div>
@@ -980,6 +1011,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateFridayShift.off,
                         })
                       }
+                      disabled={currentDay === "Friday"}
                     />
                   </div>
                 </div>
@@ -997,11 +1029,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateFridayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Friday"}
                     />
                   </div>
                 </div>
                 {!updateFridayShift?.off && updateFridayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -1019,6 +1052,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Friday"}
                       />
                     </div>
                   </div>
@@ -1060,6 +1094,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Saturday"}
                       />
                     </div>
                   </div>
@@ -1083,6 +1118,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Saturday"}
                       />
                     </div>
                   </div>
@@ -1104,6 +1140,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateSaturdayShift.off,
                         })
                       }
+                      disabled={currentDay === "Saturday"}
                     />
                   </div>
                 </div>
@@ -1121,11 +1158,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateSaturdayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Saturday"}
                     />
                   </div>
                 </div>
                 {!updateSaturdayShift?.off && updateSaturdayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -1143,6 +1181,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Saturday"}
                       />
                     </div>
                   </div>
@@ -1183,6 +1222,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Sunday"}
                       />
                     </div>
                   </div>
@@ -1205,6 +1245,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         required
+                        readOnly={currentDay === "Sunday"}
                       />
                     </div>
                   </div>
@@ -1227,6 +1268,7 @@ export const EditEmployeeShiftModal = ({
                           off: !updateSundayShift.off,
                         })
                       }
+                      disabled={currentDay === "Sunday"}
                     />
                   </div>
                 </div>
@@ -1244,11 +1286,12 @@ export const EditEmployeeShiftModal = ({
                           huddle: !updateSundayShift?.huddle,
                         })
                       }
+                      disabled={currentDay === "Sunday"}
                     />
                   </div>
                 </div>
                 {!updateSundayShift?.off && updateSundayShift?.huddle && (
-                  <div className="col-md-auto">
+                  <div className="col-md-2">
                     <div className="form-group">
                       <label htmlFor="huddle_time">Huddle Time</label>
                       <Select
@@ -1266,6 +1309,7 @@ export const EditEmployeeShiftModal = ({
                           })
                         }
                         style={{ display: "inline-block" }}
+                        isDisabled={currentDay === "Sunday"}
                       />
                     </div>
                   </div>
