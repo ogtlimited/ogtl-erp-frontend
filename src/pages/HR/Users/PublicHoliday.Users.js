@@ -1,11 +1,12 @@
 // *IN USE
 
-import "../../../assets/css/publicHoliday.css";
+import "../../../assets/css/PublicHoliday.css";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppContext } from "../../../Context/AppContext";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import moment from "moment";
 import icon from "../../../assets/img/favicon.ico";
@@ -158,11 +159,16 @@ const PublicHolidayUser = () => {
             </div>
           )}
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              interactionPlugin,
+              listPlugin,
+            ]}
             headerToolbar={{
-              left: "prev title next today",
-              center: "",
-              right: "timeGridDay,timeGridWeek,dayGridMonth",
+              left: "prev today next",
+              center: "title",
+              right: "timeGridDay,timeGridWeek,dayGridMonth,listWeek",
             }}
             initialView="timeGridWeek"
             editable={true}
@@ -178,15 +184,25 @@ const PublicHolidayUser = () => {
             }
             eventsSet={handleEvents}
             dayHeaderContent={(args) => {
-              const date = args.date;
-              const day = date.toLocaleString("default", {
+              const date = args?.date;
+              const day = date?.toLocaleString("default", {
                 weekday: "short",
               });
-              const dayNumber = date.getDate();
+              const dayNumber = date?.getDate();
               return (
                 <div className="calendar_header">
-                  <span className="calendar_header_day">{day}</span>
-                  <span className="calendar_header_dayNumber">{dayNumber}</span>
+                  {args?.view?.type === "timeGridWeek" ? (
+                    <span className="calendar_header_day">{day}</span>
+                  ) : (
+                    <span className="calendar_header_day">
+                      {args?.text}
+                    </span>
+                  )}
+                  {args?.view?.type === "timeGridWeek" && (
+                    <span className="calendar_header_dayNumber">
+                      {dayNumber}
+                    </span>
+                  )}
                 </div>
               );
             }}

@@ -155,7 +155,8 @@
     text-decoration: underline;
 }
 
-.fc .fc-timegrid-axis-cushion {
+.fc .fc-timegrid-axis-cushion,
+.fc .fc-list-event-time  {
     color: #71717a !important;
     height: 72px !important;
     font-family: Inter !important;
@@ -349,7 +350,7 @@
 .fc-toolbar-title {
     color: #3b3e45 !important;
     font-family: Inter !important;
-    font-size: 15px !important;
+    font-size: 20px !important;
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
@@ -373,10 +374,12 @@
     border: 1px solid #0ea5e9;
 }
 
+
 .fc-today-button,
 .fc-timeGridDay-button,
 .fc-timeGridWeek-button,
-.fc-dayGridMonth-button {
+.fc-dayGridMonth-button,
+.fc-listWeek-button {
     text-transform: capitalize !important;
     font-family: Inter !important;
     font-size: 14px !important;
