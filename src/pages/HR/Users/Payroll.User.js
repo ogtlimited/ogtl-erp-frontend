@@ -4,10 +4,28 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../../Context/AppContext";
+import { GiMoneyStack } from "react-icons/gi";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import helper from "../../../services/helper";
+
+function SalaryCard({ iconSrc, label, amount }) {
+  return (
+    <div className="salary_card_container">
+      <div className="salary_card_icon_div">
+        <lord-icon
+          src={iconSrc}
+          trigger="loop"
+          colors="primary:#121331,secondary:#0253cc"
+          style={{ width: "20px", height: "20px" }}
+        ></lord-icon>
+      </div>
+      <p>{label}</p>
+      <h2>{amount}</h2>
+    </div>
+  );
+}
 
 const PayrollUser = () => {
   const { user, ErrorHandler } = useAppContext();
@@ -164,15 +182,34 @@ const PayrollUser = () => {
 
   return (
     <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Salary & Payslips</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">Main</li>
-              <li className="breadcrumb-item active">Payroll</li>
-            </ul>
-          </div>
+      <div className="employee_salary_section">
+        <p>Net Salary</p>
+        <div className="employee_salary_section_top_div">
+          <h1>₦12,876.50</h1>
+          <p>May 01, 2024 - May 31, 2024</p>
+        </div>
+
+        <div className="employee_salary_section_cards">
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/kxockqqi.json"
+            label="Gross"
+            amount="₦15,876.50"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/iawrhwdo.json"
+            label="Tax"
+            amount="₦1,000.00"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/nkfxhqqr.json"
+            label="Pension"
+            amount="₦1,000.00"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/wyqtxzeh.json"
+            label="Total Deduction"
+            amount="₦2,000.00"
+          />
         </div>
       </div>
 

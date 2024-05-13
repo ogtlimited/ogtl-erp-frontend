@@ -46,7 +46,8 @@
   background-color: #ffffff;
   border: 1px solid #ededed;
   border-radius: 5px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   margin: 0 auto;
   overflow: hidden;
@@ -72,26 +73,10 @@
 }
 .account-box .account-btn {
   background: var(--prm-color);
-  background: -moz-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: -webkit-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: -ms-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: linear-gradient(
-    to right,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
+  background: -moz-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -webkit-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -ms-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: linear-gradient(to right, var(--prm-color) 0%, var(--sec-color) 100%);
   border: 0;
   border-radius: 4px;
   display: block;
@@ -156,7 +141,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   border-radius: 15px;
 }
@@ -221,11 +207,13 @@
   padding: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 .rep-siever-status-card:hover {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   transform: scale(1.05);
   transition: all 0.3s ease-in-out;
@@ -338,26 +326,10 @@
   top: -15px;
   right: -15px;
   background: var(--prm-color);
-  background: -moz-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: -webkit-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: -ms-linear-gradient(
-    left,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
-  background: linear-gradient(
-    to right,
-    var(--prm-color) 0%,
-    var(--sec-color) 100%
-  );
+  background: -moz-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -webkit-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: -ms-linear-gradient(left, var(--prm-color) 0%, var(--sec-color) 100%);
+  background: linear-gradient(to right, var(--prm-color) 0%, var(--sec-color) 100%);
   height: 220px;
   width: 25px;
   border-radius: 32px;
@@ -602,7 +574,8 @@ table.custom-table thead th {
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: rgba(67, 71, 85, 0.733) 0px 0px 0.25em,
+  box-shadow:
+    rgba(67, 71, 85, 0.733) 0px 0px 0.25em,
     rgba(90, 124, 188, 0.459) 0px 0.25em 1em;
 }
 
@@ -722,7 +695,6 @@ table.custom-table thead th {
   min-height: 10vh;
 }
 
-
 .monthly-attendance-table > thead > tr > th:first-child,
 .monthly-attendance-table > tbody > tr > td:first-child {
   position: sticky;
@@ -764,7 +736,8 @@ table.custom-table thead th {
   pointer-events: auto;
   background-color: #ffffff;
   background-clip: padding-box;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   outline: 0;
 }
@@ -1058,7 +1031,8 @@ table.custom-table thead th {
   background-size: cover;
   border-radius: 20px;
   height: 82vh;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
@@ -1089,8 +1063,10 @@ table.custom-table thead th {
   border: none;
   background-color: var(--prm-color);
   transition: all 0.3 ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
 .val_pair {
@@ -1125,7 +1101,8 @@ table.custom-table thead th {
   /* background-position: top right 50%; */
   border-radius: 20px;
   height: 95vh;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 
@@ -1348,7 +1325,8 @@ table.custom-table thead th {
     background-size: contain;
     border-radius: 20px;
     height: auto;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    box-shadow:
+      rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
       rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   }
 
@@ -1463,7 +1441,7 @@ table.custom-table thead th {
 }
 
 .IWD_modal {
-  background: #00C5FBcc;
+  background: #00c5fbcc;
   backdrop-filter: blur(10px);
 }
 
@@ -1580,7 +1558,8 @@ table.custom-table thead th {
   cursor: crosshair;
   border-radius: 15px;
   transition: all 0.3s ease-in-out;
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+  box-shadow:
+    rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
 .wtf_wrapper:hover {
@@ -1635,8 +1614,10 @@ img {
 .back_btn:hover {
   color: #fff;
   transition: all 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
 @media only screen and (max-width: 768px) {
@@ -1871,7 +1852,6 @@ img {
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  
 }
 
 .video_info_wrapper > div:last-child > p {
@@ -1904,7 +1884,6 @@ img {
   position: relative;
   white-space: nowrap;
 }
-
 
 /*------------------
       Survey  
@@ -1970,10 +1949,10 @@ img {
 -------------------------------*/
 
 .table_disciplinary_deduction,
-.table_disciplinary_deduction:hover{
+.table_disciplinary_deduction:hover {
   color: #333333;
 }
- 
+
 .table_disciplinary_deduction_link {
   color: #009efb;
   cursor: pointer;
@@ -1983,3 +1962,91 @@ img {
   color: #1677af;
 }
 
+/*-----------------------------
+      Employee Payroll
+-------------------------------*/
+
+.employee_salary_section {
+  background-color: #00c5fb4d;
+  width: 100%;
+  min-height: 200px;
+  margin-bottom: 8rem;
+  padding: 2rem;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+
+.employee_salary_section > p {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.employee_salary_section_top_div {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.employee_salary_section_top_div > h1 {
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.employee_salary_section_top_div > p {
+  margin: 0;
+  color: #4e4e4e;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.employee_salary_section_cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  /* background-color: orange; */
+  position: absolute;
+  width: calc(100% - 4rem);
+}
+
+.salary_card_container {
+  width: 30%;
+  height: 140px;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.salary_card_container:hover {
+  transform: scale(1.05);
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+.salary_card_icon_div {
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.salary_card_container > p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.salary_card_container > h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+}
