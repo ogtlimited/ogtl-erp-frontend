@@ -138,6 +138,7 @@ export default function Router() {
             },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/deductions", element: <EmployeeDeductions /> },
+            { path: "main/Payslips", element: <PayrollUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
             { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
             { path: "main/public-holiday", element: <PublicHolidayUser /> },
@@ -1397,6 +1398,9 @@ const ResignationUser = Loadable(
 );
 const EmployeeDeductions = Loadable(
   lazy(() => import("../pages/HR/Users/Deductions.User"))
+);
+const PayrollUser = Loadable(
+  lazy(() => import("../pages/HR/Users/Payroll.User"))
 );
 const SurveyUser = Loadable(
   lazy(() => import("../pages/HR/Users/Survey.User"))

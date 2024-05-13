@@ -203,9 +203,23 @@ const sidebarConfig = [
       },
       {
         canView: "all",
-        title: "Deductions",
-        path: PATH_DASHBOARD.main.deductions,
-        icon: ICONS.deduction,
+        title: "Payroll",
+        path: PATH_DASHBOARD.main.root,
+        icon: ICONS.payroll,
+        children: [
+          {
+            canView: "all",
+            title: "Payslips",
+            path: PATH_DASHBOARD.main.Payslips,
+            icon: ICONS.payroll,
+          },
+          {
+            canView: "all",
+            title: "Deductions",
+            path: PATH_DASHBOARD.main.deductions,
+            icon: ICONS.deduction,
+          },
+        ],
       },
       {
         canView: "all",
