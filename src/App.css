@@ -3,15 +3,14 @@ html {
 }
 
 :root {
-  --prm-color: #00C5FB;
-  --prm-color-shade: #00C5FB4D;
+  --prm-color: #00c5fb;
+  --prm-color-shade: #00c5fb4d;
   --sidebar-bg-color: #212a36;
-  --sec-color: #0253CC;
-  --sec-color-shade: #0253CC4d;
+  --sec-color: #0253cc;
+  --sec-color-shade: #0253cc4d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
 }
-
 
 .page-wrapper {
   min-height: 643px;
@@ -23,9 +22,6 @@ html {
 .account-wrapper {
   padding: 30px;
 }
-
-
-
 
 @media only screen and (max-width: 767.98px) {
   .page-title,
@@ -129,7 +125,9 @@ a {
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .css-2b097c-container {
@@ -157,7 +155,9 @@ a {
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 .page-item.active .page-link,
 #pageDropDown,
@@ -252,7 +252,7 @@ a {
   font-weight: 500;
   border-right: 5px solid var(--prm-color);
   text-transform: var(--prm-color);
-  color:  var(--prm-color);
+  color: var(--prm-color);
   transition: 0.3s;
 }
 
@@ -270,7 +270,9 @@ a {
 
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   height: 20px !important;
 }
 .form-check-label {
@@ -386,7 +388,8 @@ a.nav-link {
   position: relative;
   border-radius: 16px;
   z-index: 0;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+  box-shadow:
+    rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
   background-color: var(--prm-color-shade);
 }
@@ -442,7 +445,8 @@ a.nav-link {
   min-width: 64px;
   padding: 6px 16px;
   border-radius: 8px;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+  transition:
+    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -655,3 +659,18 @@ a.nav-link {
   background: black;
 }
 /* multi-step form */
+
+.shift_update_div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shift_update-warning {
+  font-size: 18px;
+}
+
+.shift_update_div > p {
+  margin: 0;
+  color: #999;
+}
