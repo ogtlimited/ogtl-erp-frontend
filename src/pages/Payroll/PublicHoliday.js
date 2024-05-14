@@ -5,9 +5,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import { PublicHolidayFormModal } from "../../components/Modal/PublicHolidayFormModal";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
+import PublicHolidayContent from "../../components/ModalContents/PublicHolidayContent";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
+import ViewModal from "../../components/Modal/ViewModal";
 import axiosInstance from "../../services/api";
 import moment from "moment";
-import ConfirmModal from "../../components/Modal/ConfirmModal";
 import $ from "jquery";
 
 const PublicHoliday = () => {
@@ -283,6 +285,11 @@ const PublicHoliday = () => {
         mode={mode}
         data={holiday}
         refetchData={fetchHolidays}
+      />
+
+      <ViewModal
+        title="Public Holiday"
+        content={<PublicHolidayContent data={selectedData} />}
       />
 
       <ConfirmModal
