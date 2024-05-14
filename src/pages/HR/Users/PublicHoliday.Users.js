@@ -8,13 +8,17 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
-import moment from "moment";
 import icon from "../../../assets/img/favicon.ico";
+import PublicHolidayContent from "../../../components/ModalContents/PublicHolidayContent";
+import ViewModal from "../../../components/Modal/ViewModal";
+import moment from "moment";
+import $ from "jquery";
 
 const PublicHolidayUser = () => {
   const { allPublicHolidayEvents } = useAppContext();
   const [PUBLICHOLIDAY, setPUBLICHOLIDAY] = useState([]);
   const [allPublicHolidays, setAllPublicHolidays] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
 
   const [currentPublicHoliday, setCurrentPublicHoliday] = useState([]);
 
@@ -69,12 +73,16 @@ const PublicHolidayUser = () => {
 
   // Handle Modal Event | View Event:
   const handleEventClick = (clickInfo, allEvents) => {
-    const eventId = clickInfo?.event?._def?.publicId;
+    const eventId = +clickInfo?.event?._def?.publicId;
     const event = allEvents;
     const thisEvent = event.find((event) => event?.id === eventId);
 
-    // handleViewEvent(thisEvent);
-    console.log(thisEvent);
+    handleViewEvent(thisEvent);
+  };
+
+  const handleViewEvent = (event) => {
+    setSelectedData(event)
+    $("#generalModal").modal("toggle");
   };
 
   const handleEvents = () => {
@@ -194,9 +202,7 @@ const PublicHolidayUser = () => {
                   {args?.view?.type === "timeGridWeek" ? (
                     <span className="calendar_header_day">{day}</span>
                   ) : (
-                    <span className="calendar_header_day">
-                      {args?.text}
-                    </span>
+                    <span className="calendar_header_day">{args?.text}</span>
                   )}
                   {args?.view?.type === "timeGridWeek" && (
                     <span className="calendar_header_dayNumber">
@@ -215,6 +221,11 @@ const PublicHolidayUser = () => {
           />
         </div>
       </div>
+
+      <ViewModal
+        title="Public Holiday"
+        content={<PublicHolidayContent data={selectedData} />}
+      />
     </>
   );
 };

@@ -6,8 +6,6 @@ import "./ModalContent.css";
 const PublicHolidayContent = ({ data }) => {
   const { title, start_date, end_date, status } = data || {};
 
-  console.log("PH Content:", data);
-
   const statusStyle =
     status === "past"
       ? "alert-info"
@@ -21,10 +19,12 @@ const PublicHolidayContent = ({ data }) => {
         Title <span>{title}</span>
       </p>
       <p className="ticket-info">
-        Start <span>{moment(start_date).format('Do MMMM, YYYY - h:mma')}</span>
+        Start{" "}
+        <span>{moment(start_date).utc().format("Do MMMM, YYYY - h:mma")}</span>
       </p>
       <p className="ticket-info">
-        End <span>{moment(end_date).format('Do MMMM, YYYY - h:mma')}</span>
+        End{" "}
+        <span>{moment(end_date).utc().format("Do MMMM, YYYY - h:mma")}</span>
       </p>
       <div>
         <p className={`display-status ${statusStyle}`}>
