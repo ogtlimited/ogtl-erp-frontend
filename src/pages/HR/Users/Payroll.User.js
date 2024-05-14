@@ -203,12 +203,12 @@ const PayrollUser = () => {
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/nkfxhqqr.json"
             label="Pension"
-            amount="₦1,000.00"
+            amount="₦2,000.00"
           />
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/wyqtxzeh.json"
             label="Total Deduction"
-            amount="₦2,000.00"
+            amount="₦3,000.00"
           />
         </div>
       </div>
