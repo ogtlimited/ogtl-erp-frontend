@@ -41,6 +41,7 @@ const ICONS = {
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
   kpi: getIcon("la-bar-chart"),
+  timeOff: getIcon("la-calendar-day"),
   leave: getIcon("la-calendar-times-o"),
   biometrics: getIcon("la-fingerprint"),
   organizationalStructure: getIcon("la-sitemap"),
@@ -179,7 +180,7 @@ const sidebarConfig = [
         canView: "all",
         title: "Time Off",
         path: PATH_DASHBOARD.main.root,
-        icon: ICONS.leave,
+        icon: ICONS.timeOff,
         children: [
           {
             canView: "all",
@@ -395,6 +396,16 @@ const sidebarConfig = [
             title: "Remote Attendance",
             path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
           },
+        ],
+      },
+
+      // Time Off:
+      {
+        canView: "hr",
+        title: "Time Off",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.timeOff,
+        children: [
           {
             canView: "hr",
             title: "Out of Office",

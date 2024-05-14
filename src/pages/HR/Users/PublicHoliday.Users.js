@@ -47,8 +47,8 @@ const PublicHolidayUser = () => {
         return {
           id: item?.id,
           title: item?.title,
-          start: moment.utc(item?.startTime).format("YYYY-MM-DDTHH:mm:ss"),
-          end: moment.utc(item?.endTime).format("YYYY-MM-DDTHH:mm:ss"),
+          start: moment.utc(item?.start_date).format("YYYY-MM-DDTHH:mm:ss"),
+          end: moment.utc(item?.end_date).format("YYYY-MM-DDTHH:mm:ss"),
         };
       });
       setPUBLICHOLIDAY(publicHoliday);
@@ -93,7 +93,7 @@ const PublicHolidayUser = () => {
           className={`calendar_event_indicator ${dataStatus?.status || "past"}`}
         >
           <b>
-            {moment.utc(dataStatus?.startTime).format("h:mm A")}{" "}
+            {moment.utc(dataStatus?.start_date).format("h:mm A")}{" "}
             <img src={icon} alt="OG Icon" />
           </b>
           <i>{eventInfo?.event?.title}</i>
@@ -168,7 +168,7 @@ const PublicHolidayUser = () => {
             headerToolbar={{
               left: "prev today next",
               center: "title",
-              right: "timeGridDay,timeGridWeek,dayGridMonth,listWeek",
+              right: "timeGridDay,timeGridWeek,dayGridMonth,listMonth",
             }}
             initialView="timeGridWeek"
             editable={true}

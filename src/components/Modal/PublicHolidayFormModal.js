@@ -4,24 +4,26 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
-import Select from "react-select";
 import moment from "moment";
 
 export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
-  const { fetchPublicHolidays, selectDepartments, selectCampaigns, showAlert, goToTop } =
-    useAppContext();
+  const { fetchPublicHolidays, showAlert, goToTop } = useAppContext();
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
-  // const selectDeductionTypeRef = useRef();
-
   useEffect(() => {
-    setFormData(data);
-
-    console.log("edit this public holiday:", data);
-  }, [data]);
+    if (mode === "Create") {
+      setFormData(data);
+    } else {
+      setFormData({
+        ...data,
+        start_date: moment(data?.start_date).utc().format('YYYY-MM-DDTHH:mm'),
+        end_date: moment(data?.end_date).utc().format('YYYY-MM-DDTHH:mm'),
+      })
+    }
+  }, [data, mode]);
 
   const cancelEvent = () => {
     setFormData(data);
@@ -43,8 +45,6 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
   const handleCreatePublicHoliday = async (e) => {
     e.preventDefault();
 
-    console.log("create payload:", formData);
-
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
@@ -60,8 +60,6 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
             title: formData?.title,
             start_date: formData?.start_date,
             end_date: formData?.end_date,
-            operation_department_id: formData?.operation_department_id,
-            operation_campaign_id: formData?.operation_campaign_id,
           },
         }
       );
@@ -72,6 +70,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
         `${formData?.title}'s public holiday successfully created!`,
         "alert alert-success"
       );
+      cancelEvent();
       refetchData();
       fetchPublicHolidays();
       $("#PublicHolidayFormModal").modal("toggle");
@@ -91,13 +90,11 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
   const handleEditPublicHoliday = async (e) => {
     e.preventDefault();
 
-    console.log("edit payload:", formData);
-
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
-        `/api/v1/public_holidays/${formData.id}.json`,
+        `/api/v1/public_holidays/${formData?.id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -105,12 +102,9 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
             "ngrok-skip-browser-warning": "69420",
           },
           payload: {
-            // employee_id: formData.employee_id,
-            // start_date: formData.start_date,
-            // end_date: formData.end_date,
-            // reason: formData.reason,
-            // hr_deductions_id: formData.hr_deduction_type_id,
-            // status: true
+            title: formData?.title,
+            start_date: formData?.start_date,
+            end_date: formData?.end_date,
           },
         }
       );
@@ -122,6 +116,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
         "alert alert-success"
       );
       refetchData();
+      fetchPublicHolidays();
       $("#PublicHolidayFormModal").modal("toggle");
 
       setFormData(data);
@@ -149,7 +144,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {mode} Out of Office
+                {mode} Public Holiday
               </h4>
               <button
                 type="button"
@@ -171,8 +166,9 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
                         name="title"
                         type="text"
                         className="form-control"
-                        value={formData.title}
+                        value={formData?.title}
                         onChange={handleFormChange}
+                        required
                       />
                     </div>
                   </div>
@@ -183,7 +179,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
                       <input
                         type="datetime-local"
                         name="start_date"
-                        value={formData.start_date}
+                        value={formData?.start_date}
                         onChange={handleFormChange}
                         className="form-control "
                         min={today_date}
@@ -198,57 +194,11 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
                       <input
                         type="datetime-local"
                         name="end_date"
-                        value={formData.end_date}
+                        value={formData?.end_date}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={formData.start_date}
+                        min={formData?.start_date}
                         required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="operation_department_id">
-                        Department
-                      </label>
-                      <Select
-                        name="operation_department_id"
-                        options={selectDepartments}
-                        value={{
-                          label: formData?.department,
-                          value: formData?.operation_department_id,
-                        }}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            operation_department_id: e?.value,
-                            department: e?.label,
-                          })
-                        }
-                        style={{ display: "inline-block" }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="operation_campaign_id">Campaign</label>
-                      <Select
-                        name="operation_campaign_id"
-                        options={selectCampaigns}
-                        value={{
-                          label: formData?.campaign,
-                          value: formData?.operation_campaign_id,
-                        }}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            operation_campaign_id: e?.value,
-                            campaign: e?.label,
-                          })
-                        }
-                        style={{ display: "inline-block" }}
                       />
                     </div>
                   </div>

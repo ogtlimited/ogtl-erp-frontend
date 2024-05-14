@@ -379,7 +379,7 @@
 .fc-timeGridDay-button,
 .fc-timeGridWeek-button,
 .fc-dayGridMonth-button,
-.fc-listWeek-button {
+.fc-listMonth-button {
     text-transform: capitalize !important;
     font-family: Inter !important;
     font-size: 14px !important;
@@ -396,8 +396,8 @@
     border: none !important;
     z-index: 5;
     position: absolute !important;
-    top: 70px !important;
-    height: 80% !important;
+    /* top: 70px !important;
+    height: 80% !important; */
 }
 
 .fc-theme-standard .fc-popover-header,

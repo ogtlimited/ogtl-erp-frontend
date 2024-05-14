@@ -331,18 +331,17 @@ const AppProvider = (props) => {
       });
 
       const resData = response?.data?.data?.public_holidays;
+      console.log("all holiday resData", resData);
 
       const formatted = resData.map((e) => ({
         ...e,
-        ...e?.public_holidays,
-        startTime: `${e?.public_holidays?.start_date}T10:08:06.000Z`,
-        endTime: `${e?.public_holidays?.end_date}T21:08:06.000Z`,
+        title: e?.title.replace(/\b\w/g, char => char.toUpperCase()),
         status: 
-        moment(e?.public_holidays?.end_date).utc().format("yyyy-MM-DD") < today_date
+        moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
           ? "past"
           : today_date <
-              moment(e?.public_holidays?.start_date).utc().format("yyyy-MM-DD") &&
-            moment(e?.public_holidays?.start_date).utc().format("yyyy-MM-DD") !==
+              moment(e?.start_date).utc().format("yyyy-MM-DD") &&
+            moment(e?.start_date).utc().format("yyyy-MM-DD") !==
               today_date
           ? "pending"
           : "happening",
