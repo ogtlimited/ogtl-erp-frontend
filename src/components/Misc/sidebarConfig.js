@@ -69,7 +69,6 @@ const buildExternalURL = () => {
     }
 
     const kpiData = tokenService.getKpiUser();
-    console.log("KPI Data: ", kpiData);
 
     const generatedJWT = sign(kpiData, secret);
     const queryParams = `auth_param=${generatedJWT}`;
