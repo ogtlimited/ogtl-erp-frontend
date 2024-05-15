@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import $ from "jquery";
 import moment from "moment";
+import $ from "jquery";
 
 export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
   const { fetchPublicHolidays, showAlert, goToTop } = useAppContext();

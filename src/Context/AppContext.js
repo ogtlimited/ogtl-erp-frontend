@@ -1,6 +1,5 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
-import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
 import secureLocalStorage from "react-secure-storage";
@@ -64,9 +63,8 @@ const AppProvider = (props) => {
   const [announcementWatched, setAnnouncementWatched] = useState(false);
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
-  
-  const time = new Date().toDateString();
-  const today_date = moment(time).utc().format("yyyy-MM-DD");
+
+  const today_date = moment.utc().format("yyyy-MM-DD");
 
   const goToTop = () => {
     window.scrollTo({
@@ -335,16 +333,16 @@ const AppProvider = (props) => {
 
       const formatted = resData.map((e) => ({
         ...e,
-        title: e?.title.replace(/\b\w/g, char => char.toUpperCase()),
-        status: 
-        moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
-          ? "past"
-          : today_date <
-              moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-            moment(e?.start_date).utc().format("yyyy-MM-DD") !==
-              today_date
-          ? "pending"
-          : "happening",
+        title: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
+        status:
+          moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
+            ? "past"
+            : today_date <
+                moment(e?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(e?.start_date).utc().format("yyyy-MM-DD") !==
+                today_date
+            ? "pending"
+            : "happening",
       }));
 
       console.log("all formatted holiday resData", formatted);

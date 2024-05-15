@@ -25,8 +25,7 @@ const PublicHoliday = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  const time = new Date().toDateString();
-  const today_date = moment(time).utc().format("yyyy-MM-DD");
+  const today_date = moment().utc().format("yyyy-MM-DD");
 
   const fetchHolidays = useCallback(async () => {
     setLoading(true);
@@ -61,8 +60,10 @@ const PublicHoliday = () => {
         status:
           moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "past"
-            : today_date < moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-              moment(e?.start_date).utc().format("yyyy-MM-DD") !== today_date
+            : today_date <
+                moment(e?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(e?.start_date).utc().format("yyyy-MM-DD") !==
+                today_date
             ? "pending"
             : "happening",
       }));
