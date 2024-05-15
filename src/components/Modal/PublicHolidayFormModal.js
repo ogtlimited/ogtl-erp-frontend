@@ -7,7 +7,7 @@ import moment from "moment";
 import $ from "jquery";
 
 export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
-  const { fetchPublicHolidays, showAlert, goToTop } = useAppContext();
+  const { fetchPublicHolidays, fetchAllPublicHolidays, showAlert, goToTop } = useAppContext();
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
   const time = new Date().toDateString();
@@ -73,6 +73,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
       cancelEvent();
       refetchData();
       fetchPublicHolidays();
+      fetchAllPublicHolidays();
       $("#PublicHolidayFormModal").modal("toggle");
 
       setFormData(data);

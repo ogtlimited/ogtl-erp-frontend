@@ -15,7 +15,14 @@ import $ from "jquery";
 
 const PublicHoliday = () => {
   const navigate = useNavigate();
-  const { user, showAlert, ErrorHandler, goToTop } = useAppContext();
+  const {
+    user,
+    showAlert,
+    ErrorHandler,
+    goToTop,
+    fetchPublicHolidays,
+    fetchAllPublicHolidays,
+  } = useAppContext();
   const [allHolidays, setAllHolidays] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("Create");
@@ -128,7 +135,10 @@ const PublicHoliday = () => {
         "alert alert-info"
       );
       $("#exampleModal").modal("toggle");
+      
       fetchHolidays();
+      fetchPublicHolidays();
+      fetchAllPublicHolidays();
       setIsDeleting(false);
     } catch (error) {
       goToTop();
@@ -224,15 +234,17 @@ const PublicHoliday = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {CurrentUserCanCreateAndEdit ? <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#PublicHolidayFormModal"
-              onClick={() => handleEdit(row)}
-            >
-              <i className="fa fa-pencil m-r-5"></i> Edit
-            </a> : null}
+            {CurrentUserCanCreateAndEdit ? (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#PublicHolidayFormModal"
+                onClick={() => handleEdit(row)}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </a>
+            ) : null}
 
             {/* {CurrentUserCanCreateAndEdit ? (
               <Link
@@ -244,15 +256,17 @@ const PublicHoliday = () => {
               </Link>
             ) : null} */}
 
-            {CurrentUserCanCreateAndEdit ? <a
-              className="dropdown-item"
-              href="#"
-              data-toggle="modal"
-              data-target="#exampleModal"
-              onClick={() => setSelectedData(row)}
-            >
-              <i className="fa fa-trash m-r-5"></i> Delete
-            </a> : null}
+            {CurrentUserCanCreateAndEdit ? (
+              <a
+                className="dropdown-item"
+                href="#"
+                data-toggle="modal"
+                data-target="#exampleModal"
+                onClick={() => setSelectedData(row)}
+              >
+                <i className="fa fa-trash m-r-5"></i> Delete
+              </a>
+            ) : null}
           </div>
         </div>
       ),
