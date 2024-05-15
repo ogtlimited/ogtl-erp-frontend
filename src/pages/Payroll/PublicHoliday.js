@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../Context/AppContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PublicHolidayFormModal } from "../../components/Modal/PublicHolidayFormModal";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
 import PublicHolidayContent from "../../components/ModalContents/PublicHolidayContent";
@@ -135,7 +135,7 @@ const PublicHoliday = () => {
       const errorMsg = error.response?.data?.errors;
       showAlert(
         true,
-        `${errorMsg || "Unable to delete public holiday"}`,
+        `${errorMsg || "Unable to Delete Public Holiday"}`,
         "alert alert-warning"
       );
       $("#exampleModal").modal("toggle");
@@ -224,7 +224,7 @@ const PublicHoliday = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            {/* <a
+            {CurrentUserCanCreateAndEdit ? <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -232,9 +232,9 @@ const PublicHoliday = () => {
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a> */}
+            </a> : null}
 
-            {CurrentUserCanCreateAndEdit ? (
+            {/* {CurrentUserCanCreateAndEdit ? (
               <Link
                 className="dropdown-item"
                 to="/dashboard/hr/public-holiday/edit"
@@ -242,9 +242,9 @@ const PublicHoliday = () => {
               >
                 <i className="fa fa-pencil m-r-5"></i> Edit
               </Link>
-            ) : null}
+            ) : null} */}
 
-            <a
+            {CurrentUserCanCreateAndEdit ? <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -252,7 +252,7 @@ const PublicHoliday = () => {
               onClick={() => setSelectedData(row)}
             >
               <i className="fa fa-trash m-r-5"></i> Delete
-            </a>
+            </a> : null}
           </div>
         </div>
       ),

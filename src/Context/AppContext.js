@@ -49,6 +49,7 @@ const AppProvider = (props) => {
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
+  const [selectPublicHoliday, setSelectPublicHoliday] = useState([]);
   const [allPublicHolidayEvents, setAllPublicHolidayEvents] = useState([]);
   const [userResignations, setUserResignations] = useState(null);
 
@@ -337,10 +338,8 @@ const AppProvider = (props) => {
         status:
           moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "past"
-            : today_date <
-                moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-              moment(e?.start_date).utc().format("yyyy-MM-DD") !==
-                today_date
+            : today_date < moment(e?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(e?.start_date).utc().format("yyyy-MM-DD") !== today_date
             ? "pending"
             : "happening",
       }));
@@ -573,6 +572,38 @@ const AppProvider = (props) => {
     }
   };
 
+  // All Public Holidays
+  const fetchAllPublicHolidays = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      const resData = response?.data?.data?.public_holidays;
+
+      const formatted = resData.map((e) => ({
+        label: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
+        value: e?.id
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectPublicHoliday(formatted)
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
   // All Job Application Interview Status & Interview Process Stage:
   const fetchAllJobApplicationISandIPS = useCallback(async () => {
     setLoadingJobAppIntOpts(true);
@@ -777,6 +808,7 @@ const AppProvider = (props) => {
         fetchAllBranches();
         fetchDeductionTypes();
         fetchJobOpenings();
+        fetchAllPublicHolidays();
         fetchHRLeavesNotificationCount();
       }
       if (isTeamLead && !isHr) {
@@ -803,6 +835,7 @@ const AppProvider = (props) => {
     fetchAllDepartments,
     fetchAllDesignations,
     fetchAllLeaders,
+    fetchAllPublicHolidays,
     fetchAllLeaveTypes,
     fetchAllTeams,
     fetchDeductionTypes,
@@ -863,6 +896,10 @@ const AppProvider = (props) => {
         selectJobOpenings,
         setSelectJobOpenings,
         fetchJobOpenings,
+
+        selectPublicHoliday, 
+        setSelectPublicHoliday,
+        fetchAllPublicHolidays,
 
         loadingSelect,
         setLoadingSelect,

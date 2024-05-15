@@ -67,7 +67,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
       goToTop();
       showAlert(
         true,
-        `${formData?.title}'s public holiday successfully created!`,
+        `${formData?.title} Public Holiday Successfully Created!`,
         "alert alert-success"
       );
       cancelEvent();
@@ -112,7 +112,7 @@ export const PublicHolidayFormModal = ({ mode, data, refetchData }) => {
       goToTop();
       showAlert(
         true,
-        `${formData?.employee_title}'s public holiday successfully updated!`,
+        `${formData?.title} Public Holiday Successfully Updated!`,
         "alert alert-success"
       );
       refetchData();
