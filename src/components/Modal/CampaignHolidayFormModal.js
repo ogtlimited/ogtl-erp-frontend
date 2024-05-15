@@ -7,7 +7,7 @@ import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
+export const CampaignHolidayFormModal = ({ mode, data, refetchData }) => {
   const { selectPublicHoliday, fetchPublicHolidays, showAlert, goToTop } =
     useAppContext();
   const { id } = useParams();
@@ -28,14 +28,14 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddDepartmentHoliday = async (e) => {
+  const handleAddCampaignHoliday = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(
-        `/api/v1/department_holidays.json`,
+        `/api/v1/campaign_holidays.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
           },
           payload: {
             hr_public_holiday_id: formData?.hr_public_holiday_id,
-            operation_department_ids: [+id],
+            operation_campaign_ids: [+id],
           },
         }
       );
@@ -52,15 +52,16 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
       goToTop();
       showAlert(
         true,
-        `Public Holiday Successfully Added to ${title.replace(/\b\w/g, (char) =>
-          char.toUpperCase()
-        )} Department!`,
+        `Public Holiday Successfully Added to ${title.replace(
+          /\b\w/g,
+          (char) => char.toUpperCase()
+        )} Campaign!`,
         "alert alert-success"
       );
       cancelEvent();
       refetchData();
       fetchPublicHolidays();
-      $("#DepartmentHolidayFormModal").modal("toggle");
+      $("#CampaignHolidayFormModal").modal("toggle");
 
       setFormData(data);
       setLoading(false);
@@ -68,7 +69,7 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
       const errorMsg = error?.response?.data?.errors;
       goToTop();
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      $("#DepartmentHolidayFormModal").modal("toggle");
+      $("#CampaignHolidayFormModal").modal("toggle");
 
       setLoading(false);
     }
@@ -78,7 +79,7 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
     <>
       <div
         className="modal fade"
-        id="DepartmentHolidayFormModal"
+        id="CampaignHolidayFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -100,7 +101,7 @@ export const DepartmentHolidayFormModal = ({ mode, data, refetchData }) => {
             </div>
 
             <div className="modal-body">
-              <form onSubmit={handleAddDepartmentHoliday}>
+              <form onSubmit={handleAddCampaignHoliday}>
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">

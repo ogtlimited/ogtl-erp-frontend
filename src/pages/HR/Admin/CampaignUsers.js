@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import CampaignTeams from "./CampaignTeams";
 import CampaignSupervisor from "./CampaignSupervisors";
 import CampaignEmployees from "./CampaignEmployees";
+import CampaignHolidays from "./CampaignHolidays"
 
 const CampaignUsers = () => {
   const { title } = useParams();
@@ -59,6 +60,16 @@ const CampaignUsers = () => {
                   Employees
                 </a>
               </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_campaign_holidays"
+                >
+                Public Holidays
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -76,6 +87,10 @@ const CampaignUsers = () => {
 
           <div id="tab_campaign_employees" className="col-12 tab-pane">
             <CampaignEmployees />
+          </div>
+
+          <div id="tab_campaign_holidays" className="col-12 tab-pane">
+            <CampaignHolidays />
           </div>
         </div>
       </div>
