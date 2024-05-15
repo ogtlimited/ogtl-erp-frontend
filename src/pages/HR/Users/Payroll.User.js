@@ -4,15 +4,33 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../../Context/AppContext";
+import { GiMoneyStack } from "react-icons/gi";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import helper from "../../../services/helper";
 
-const OutOfOffice = () => {
-  const { user, ErrorHandler, getAvatarColor } = useAppContext();
+function SalaryCard({ iconSrc, label, amount }) {
+  return (
+    <div className="salary_card_container">
+      <div className="salary_card_icon_div">
+        <lord-icon
+          src={iconSrc}
+          trigger="loop"
+          colors="primary:#121331,secondary:#0253cc"
+          style={{ width: "20px", height: "20px" }}
+        ></lord-icon>
+      </div>
+      <p>{label}</p>
+      <h2>{amount}</h2>
+    </div>
+  );
+}
+
+const PayrollUser = () => {
+  const { user, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
-  const [allOutOfOffice, setAllOutOfOffice] = useState([]);
+  const [allPayslips, setAllPayslips] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -32,8 +50,8 @@ const OutOfOffice = () => {
 
   const currentUserOgid = user?.employee_info?.ogid;
 
-  // Out of Office:
-  const fetchOutOfOffice = useCallback(async () => {
+  // Payslips:
+  const fetchPayslips = useCallback(async () => {
     setLoading(false);
 
     try {
@@ -49,7 +67,7 @@ const OutOfOffice = () => {
             pages: page,
             limit: sizePerPage,
             start_date: fromDate,
-            end_date: toDate
+            end_date: toDate,
           },
         }
       );
@@ -62,7 +80,7 @@ const OutOfOffice = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      const formattedOutOffOffice = resData.map((e) => ({
+      const formattedPayslips = resData.map((e) => ({
         ...e,
         enteredBy: e?.entered_by,
         dateCreated: moment(e?.created_at).format("Do MMMM, YYYY"),
@@ -71,10 +89,10 @@ const OutOfOffice = () => {
         // deduction: helper.handleMoneyFormat(5000),
       }));
 
-      setAllOutOfOffice(formattedOutOffOffice);
+      setAllPayslips(formattedPayslips);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Payslips | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -82,92 +100,116 @@ const OutOfOffice = () => {
   }, [page, sizePerPage, fromDate, toDate]);
 
   useEffect(() => {
-    fetchOutOfOffice();
-  }, [fetchOutOfOffice]);
+    fetchPayslips();
+  }, [fetchPayslips]);
 
   const columns = [
     {
-      dataField: "enteredBy",
-      text: "Entered By",
+      dataField: "basic",
+      text: "Basic",
       sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (value, row) => (
-        <h2 className="table-avatar">
-          <span
-            className="avatar-span"
-            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
-          >
-            {value?.charAt(0)}
-          </span>
-          {value?.toUpperCase()}
-        </h2>
-      ),
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "dateCreated",
-      text: "Date Created",
+      dataField: "medical",
+      text: "Medical",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "reason",
-      text: "Reason",
+      dataField: "housing",
+      text: "Housing",
       sort: true,
-      headerStyle: { width: "20%" },
-      formatter: (value, row) => (
-        <span>{value?.replace(/\b\w/g, (char) => char.toUpperCase())}</span>
-      ),
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "from",
-      text: "From",
+      dataField: "transport",
+      text: "Transport",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "to",
-      text: "To",
+      dataField: "other_allowances",
+      text: "Other Allowances",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "100%" },
     },
     {
-      dataField: "approved",
-      text: "Approved",
+      dataField: "gross_salary",
+      text: "Gross Salary",
       sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "tax",
+      text: "Tax",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "pension",
+      text: "Pension",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "total_deductions",
+      text: "Total Deductions",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "net_salary",
+      text: "Net Salary",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
+    {
+      dataField: "",
+      text: "Action",
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
-        <>
-          <span className="btn btn-gray btn-sm btn-rounded">
-            <i
-              className={`fa fa-dot-circle-o ${
-                value ? "text-success" : "text-secondary"
-              } `}
-              style={{ marginRight: "10px" }}
-            ></i>{" "}
-            {value ? "Yes" : "No"}
-          </span>
-        </>
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            {row?.approved ? null : (
+              <button className="btn btn-sm btn-success">View</button>
+            )}
+          </div>
+        </div>
       ),
     },
-    // {
-    //   dataField: "deduction",
-    //   text: "Deduction",
-    //   sort: true,
-    //   headerStyle: { width: "20%" },
-    // },
   ];
 
   return (
     <>
-      <div className="page-header">
-        <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Out Of Office</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">Main</li>
-              <li className="breadcrumb-item active">Time Off</li>
-            </ul>
-          </div>
+      <div className="employee_salary_section">
+        <p>Net Salary</p>
+        <div className="employee_salary_section_top_div">
+          <h1>₦12,876.50</h1>
+          <p>May 01, 2024 - May 31, 2024</p>
+        </div>
+
+        <div className="employee_salary_section_cards">
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/kxockqqi.json"
+            label="Gross"
+            amount="₦15,876.50"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/iawrhwdo.json"
+            label="Tax"
+            amount="₦1,000.00"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/nkfxhqqr.json"
+            label="Pension"
+            amount="₦2,000.00"
+          />
+          <SalaryCard
+            iconSrc="https://cdn.lordicon.com/wyqtxzeh.json"
+            label="Total Deduction"
+            amount="₦3,000.00"
+          />
         </div>
       </div>
 
@@ -202,7 +244,7 @@ const OutOfOffice = () => {
         </div>
 
         <UniversalPaginatedTable
-          data={allOutOfOffice}
+          data={allPayslips}
           columns={columns}
           loading={loading}
           setLoading={setLoading}
@@ -218,4 +260,4 @@ const OutOfOffice = () => {
   );
 };
 
-export default OutOfOffice;
+export default PayrollUser;

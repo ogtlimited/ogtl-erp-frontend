@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import "./TicketContent.css";
+import "./ModalContent.css";
 
 const TicketContent = ({ ticket }) => {
   const { full_name, email, ogid, office, status, date_created, complaint } =

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./dropdownCheckbox.css";
 
 function DropdownCheckbox({
@@ -6,10 +6,24 @@ function DropdownCheckbox({
   options,
   selectedOptions,
   setSelected,
+  closeAll,
+  setViewingOffice,
   onSelectionChange,
   errorIndicator,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (closeAll) {
+      setIsOpen(false);
+    }
+
+    if (isOpen) {
+      setViewingOffice(true);
+    } else {
+      setViewingOffice(false);
+    }
+  }, [closeAll, isOpen, setViewingOffice]);
 
   const toggleDropdown = () => {
     setIsOpen((prevState) => !prevState);
@@ -35,7 +49,7 @@ function DropdownCheckbox({
         onClick={toggleDropdown}
         className={!selectedOptions.length ? errorIndicator : undefined}
       >
-        {isOpen ? "Hide" : "Show"} {office}
+        {isOpen ? "Hide" : "Show"} {office}s
       </button>
       {isOpen && (
         <div

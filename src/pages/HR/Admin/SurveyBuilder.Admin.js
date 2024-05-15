@@ -1,14 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
 import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
 import moment from "moment";
 
 const SurveyBuilder = () => {
-  const navigate = useNavigate();
   const { showAlert, selectDepartments, selectCampaigns, goToTop } =
     useAppContext();
   const [loading, setLoading] = useState(false);
@@ -24,6 +23,8 @@ const SurveyBuilder = () => {
   const [selectedDepartment, setSelectedDepartment] = useState([]);
   const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState([]);
+  const [closeAll, setCloseAll] = useState(false);
+  const [viewingOffice, setViewingOffice] = useState(false);
 
   const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
@@ -145,7 +146,7 @@ const SurveyBuilder = () => {
       </div>
       <div className="column survey_builder">
         {/* Title */}
-        <div className="col-md-3">
+        <div className="col-md-4">
           <div className="form-group">
             <label htmlFor="title">Title</label>
             <input
@@ -163,7 +164,7 @@ const SurveyBuilder = () => {
 
         {/* From & To */}
         <div className="row" style={{ paddingLeft: "1rem" }}>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="from">From</label>
               <input
@@ -178,7 +179,7 @@ const SurveyBuilder = () => {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="to">To</label>
               <input
@@ -197,7 +198,7 @@ const SurveyBuilder = () => {
 
         {/* Offices */}
         <div className="row" style={{ paddingLeft: "1rem" }}>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="applicable_departments">
                 Applicable Departments
@@ -207,13 +208,15 @@ const SurveyBuilder = () => {
                 options={selectDepartments}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedDepartmentOptions(updatedSelectedOptions)
                 }
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox
@@ -221,6 +224,8 @@ const SurveyBuilder = () => {
                 options={selectCampaigns}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedCampaignOptions(updatedSelectedOptions)
                 }
