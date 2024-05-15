@@ -1,14 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axiosInstance from "../../../services/api";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
 import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
 import moment from "moment";
 
 const SurveyBuilder = () => {
-  const navigate = useNavigate();
   const { showAlert, selectDepartments, selectCampaigns, goToTop } =
     useAppContext();
   const [loading, setLoading] = useState(false);
@@ -145,7 +143,7 @@ const SurveyBuilder = () => {
       </div>
       <div className="column survey_builder">
         {/* Title */}
-        <div className="col-md-3">
+        <div className="col-md-4">
           <div className="form-group">
             <label htmlFor="title">Title</label>
             <input
@@ -163,7 +161,7 @@ const SurveyBuilder = () => {
 
         {/* From & To */}
         <div className="row" style={{ paddingLeft: "1rem" }}>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="from">From</label>
               <input
@@ -178,7 +176,7 @@ const SurveyBuilder = () => {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="to">To</label>
               <input
@@ -197,7 +195,7 @@ const SurveyBuilder = () => {
 
         {/* Offices */}
         <div className="row" style={{ paddingLeft: "1rem" }}>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="applicable_departments">
                 Applicable Departments
@@ -213,7 +211,7 @@ const SurveyBuilder = () => {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox

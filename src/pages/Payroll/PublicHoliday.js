@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../Context/AppContext";
+import { useNavigate, Link } from "react-router-dom";
 import { PublicHolidayFormModal } from "../../components/Modal/PublicHolidayFormModal";
 import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedTable";
 import PublicHolidayContent from "../../components/ModalContents/PublicHolidayContent";
@@ -13,7 +14,8 @@ import moment from "moment";
 import $ from "jquery";
 
 const PublicHoliday = () => {
-  const { showAlert, ErrorHandler, goToTop } = useAppContext();
+  const navigate = useNavigate();
+  const { user, showAlert, ErrorHandler, goToTop } = useAppContext();
   const [allHolidays, setAllHolidays] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("Create");
@@ -26,6 +28,13 @@ const PublicHoliday = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const today_date = moment().utc().format("yyyy-MM-DD");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreateAndEdit.includes(role)
+  );
 
   const fetchHolidays = useCallback(async () => {
     setLoading(true);
@@ -60,10 +69,8 @@ const PublicHoliday = () => {
         status:
           moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
             ? "past"
-            : today_date <
-                moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-              moment(e?.start_date).utc().format("yyyy-MM-DD") !==
-                today_date
+            : today_date < moment(e?.start_date).utc().format("yyyy-MM-DD") &&
+              moment(e?.start_date).utc().format("yyyy-MM-DD") !== today_date
             ? "pending"
             : "happening",
       }));
@@ -82,16 +89,16 @@ const PublicHoliday = () => {
     fetchHolidays();
   }, [fetchHolidays]);
 
-  const handleCreate = () => {
-    const publicHolidayForm = {
-      title: "",
-      start_date: "",
-      end_date: "",
-    };
+  // const handleCreate = () => {
+  //   const publicHolidayForm = {
+  //     title: "",
+  //     start_date: "",
+  //     end_date: "",
+  //   };
 
-    setHoliday(publicHolidayForm);
-    setMode("Create");
-  };
+  //   setHoliday(publicHolidayForm);
+  //   setMode("Create");
+  // };
 
   const handleEdit = (row) => {
     setHoliday(row);
@@ -253,7 +260,7 @@ const PublicHoliday = () => {
               <li className="breadcrumb-item active">Time Off</li>
             </ul>
           </div>
-          <div className="col-auto float-right ml-auto">
+          {/* <div className="col-auto float-right ml-auto">
             <a
               href="#"
               className="btn add-btn"
@@ -263,6 +270,16 @@ const PublicHoliday = () => {
             >
               <i className="las la-plus"></i> Create Public Holiday
             </a>
+          </div> */}
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserCanCreateAndEdit ? (
+              <button
+                className="btn add-btn"
+                onClick={() => navigate("/dashboard/hr/public-holiday/create")}
+              >
+                <i className="fa fa-plus"></i> Create Public Holiday
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
