@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import axiosInstance from "../../../services/api";
@@ -22,6 +23,8 @@ const SurveyBuilder = () => {
   const [selectedDepartment, setSelectedDepartment] = useState([]);
   const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState([]);
+  const [closeAll, setCloseAll] = useState(false);
+  const [viewingOffice, setViewingOffice] = useState(false);
 
   const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
@@ -205,6 +208,8 @@ const SurveyBuilder = () => {
                 options={selectDepartments}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedDepartmentOptions(updatedSelectedOptions)
                 }
@@ -219,6 +224,8 @@ const SurveyBuilder = () => {
                 options={selectCampaigns}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedCampaignOptions(updatedSelectedOptions)
                 }

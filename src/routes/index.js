@@ -355,6 +355,14 @@ export default function Router() {
               ),
             },
             {
+              path: "public-holiday/edit",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PublicHolidayEditor />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: ":office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1493,6 +1501,9 @@ const PublicHoliday = Loadable(
 );
 const PublicHolidayCreator = Loadable(
   lazy(() => import("../pages/HR/Admin/PublicHolidayCreator.Admin"))
+);
+const PublicHolidayEditor = Loadable(
+  lazy(() => import("../pages/HR/Admin/PublicHolidayEditor.Admin"))
 );
 const PayrollBatches = Loadable(
   lazy(() => import("../pages/Payroll/PayrollBatches"))

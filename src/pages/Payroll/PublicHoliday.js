@@ -224,7 +224,7 @@ const PublicHoliday = () => {
               <i className="fa fa-eye m-r-5"></i> View
             </a>
 
-            <a
+            {/* <a
               className="dropdown-item"
               href="#"
               data-toggle="modal"
@@ -232,7 +232,17 @@ const PublicHoliday = () => {
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5"></i> Edit
-            </a>
+            </a> */}
+
+            {CurrentUserCanCreateAndEdit ? (
+              <Link
+                className="dropdown-item"
+                to="/dashboard/hr/public-holiday/edit"
+                state={row}
+              >
+                <i className="fa fa-pencil m-r-5"></i> Edit
+              </Link>
+            ) : null}
 
             <a
               className="dropdown-item"
