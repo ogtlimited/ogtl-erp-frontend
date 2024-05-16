@@ -194,12 +194,12 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.main.employeeLeave,
             icon: ICONS.leave,
           },
-          {
-            canView: "all",
-            title: "Public Holiday",
-            path: PATH_DASHBOARD.main.publicHoliday,
-            icon: ICONS.leave,
-          },
+          // {
+          //   canView: "all",
+          //   title: "Public Holiday",
+          //   path: PATH_DASHBOARD.main.publicHoliday,
+          //   icon: ICONS.leave,
+          // },
         ],
       },
       {
@@ -208,12 +208,12 @@ const sidebarConfig = [
         path: PATH_DASHBOARD.main.root,
         icon: ICONS.payroll,
         children: [
-          {
-            canView: "all",
-            title: "Payslips",
-            path: PATH_DASHBOARD.main.Payslips,
-            icon: ICONS.payroll,
-          },
+          // {
+          //   canView: "all",
+          //   title: "Payslips",
+          //   path: PATH_DASHBOARD.main.Payslips,
+          //   icon: ICONS.payroll,
+          // },
           {
             canView: "all",
             title: "Deductions",
