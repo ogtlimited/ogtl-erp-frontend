@@ -1,6 +1,8 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
+import { useAppContext } from "../../Context/AppContext";
+import { useParams } from "react-router-dom";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
@@ -10,8 +12,6 @@ import Stack from "@mui/material/Stack";
 import axiosInstance from "../../services/api";
 import csvDownload from "json-to-csv-export";
 import moment from "moment";
-import { useAppContext } from "../../Context/AppContext";
-import { useParams } from "react-router-dom";
 
 const SurveyTable = ({
   data,
@@ -38,8 +38,7 @@ const SurveyTable = ({
     sizePerPage: 10,
   });
 
-  const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment().utc().format("yyyy-MM-DD");
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {

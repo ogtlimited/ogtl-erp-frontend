@@ -4,16 +4,20 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import SurveyTable from "../../../components/Tables/SurveyTable";
+import csvDownload from "json-to-csv-export";
+import moment from "moment";
 
 const AllSurveyResponsesAdmin = () => {
   const { title, id } = useParams();
-  const { getAvatarColor, ErrorHandler } = useAppContext();
+  const { showAlert, getAvatarColor, ErrorHandler } = useAppContext();
   const [surveyResponse, setSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
+
+  const today_date = moment().utc().format("yyyy-MM-DD");
 
   // All Survey response:
   const fetchSurveyResponse = useCallback(async () => {
@@ -61,12 +65,90 @@ const AllSurveyResponsesAdmin = () => {
     fetchSurveyResponse();
   }, [fetchSurveyResponse]);
 
+  const handleDownloadResponses = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosInstance.get(
+        "/api/v1/survey_response_csv_exports.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            survey_id: id,
+            page: 1,
+            limit: 10000,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.survey_response;
+      const lineSeparator = '—'.repeat(1000);
+
+      const groupedData = resData.reduce((acc, item) => {
+        if (!acc[item.full_name]) {
+          acc[item.full_name] = {
+            full_name: item.full_name,
+            ogid: item.ogid,
+            office: item.office,
+            survey_title: item.survey_title,
+            score: item.score,
+            created_at: item.created_at,
+            questions: [],
+          };
+        }
+        acc[item.full_name].questions.push({
+          question: item.question,
+          answer: item.answer,
+        });
+        return acc;
+      }, {});
+
+      const transformedData = Object.values(groupedData);
+
+      const csvData = transformedData.map((item) => ({
+        STAFF: item.full_name,
+        OGID: item?.ogid,
+        OFFICE: item?.office?.toUpperCase(),
+        "SURVEY TITLE": item.survey_title,
+        SCORE: item.score,
+        "CREATED AT": moment(item.created_at, "mm-dd-YY")
+          .utc()
+          .format("Do, MMM YYYY"),
+        RESPONSE: item.questions
+          .map(
+            (q, index) =>
+              `Question ${index + 1}: ${q.question}\nAnswer: ${
+                q.answer
+              }\n${lineSeparator}`
+          )
+          .join("\n"),
+      }));
+
+      const dataToConvert = {
+        data: csvData,
+        filename: `OGTL - ${title} Survey Response - ${moment(
+          today_date
+        ).format("DD MMM, YYYY")} `,
+        delimiter: ",",
+        useKeysAsHeaders: true,
+      };
+
+      csvDownload(dataToConvert);
+    } catch (error) {
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+    }
+  };
+
   const columns = [
     {
       dataField: "full_name",
       text: "Full Name",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "50%" },
       formatter: (value, row) => (
         <h2 className="table-avatar">
           <span
@@ -83,13 +165,13 @@ const AllSurveyResponsesAdmin = () => {
       dataField: "survey_title",
       text: "Survey Title",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "40%" },
     },
     {
       dataField: "score",
       text: "Score",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "40%" },
       formatter: (value, row) => (
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
@@ -142,8 +224,17 @@ const AllSurveyResponsesAdmin = () => {
             <h3 className="page-title">{title}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">{title} responses</li>
+              <li className="breadcrumb-item active">Survey</li>
+              <li className="breadcrumb-item active">All Surveys</li>
             </ul>
+          </div>
+
+          <div className="col-auto float-right ml-auto">
+            {surveyResponse?.length ? (
+              <button className="btn add-btn" onClick={handleDownloadResponses}>
+                <i className="fa fa-download"></i> Download Responses
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
@@ -160,7 +251,7 @@ const AllSurveyResponsesAdmin = () => {
           setSizePerPage={setSizePerPage}
           totalPages={totalPages}
           setTotalPages={setTotalPages}
-          csvExport={true}
+          csvExport={false}
         />
       </div>
     </>

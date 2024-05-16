@@ -222,7 +222,7 @@ const OutOfOfficeAdmin = () => {
             <h3 className="page-title">Out Of Office</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Out Of Office</li>
+              <li className="breadcrumb-item active">Time Off</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

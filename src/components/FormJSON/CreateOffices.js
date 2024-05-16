@@ -79,6 +79,14 @@ export const TeamMemberForm = {
   team_title: "",
   employee_title: "",
 };
+export const DepartmentHolidayForm = {
+  hr_public_holiday_id: "",
+  operation_department_ids: "",
+};
+export const CampaignHolidayForm = {
+  hr_public_holiday_id: "",
+  operation_campaign_ids: "",
+};
 
 export const officeTypeOptions = [
   {

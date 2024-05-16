@@ -7,7 +7,6 @@ import helper from "../../services/helper";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
-import SalaryDetailsTable from "../../components/Tables/EmployeeTables/salaryDetailsTable";
 import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
 import EmployeeSalaryUpload from "../../components/Modal/EmployeeSalaryUpload";
 import AddNewSalaryForm from "./../../components/Forms/AddNewSalaryForm";

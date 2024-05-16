@@ -138,15 +138,14 @@ export default function Router() {
             },
             { path: "main/leave", element: <LeavesUser /> },
             { path: "main/deductions", element: <EmployeeDeductions /> },
+            { path: "main/Payslips", element: <PayrollUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
             { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
+            { path: "main/public-holiday", element: <PublicHolidayUser /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
+            { path: "main/tickets", element: <Tickets /> },
             { path: "main/ticket-management", element: <TicketManagement /> },
-            {
-              path: "main/employee-appreciation-eCertificate",
-              element: <EmployeeAppreciation />,
-            },
             { path: "main/international-women's-day", element: <IWDUser /> },
             // { path: "main/valentine", element: <ValentineUser /> },
             {
@@ -195,6 +194,10 @@ export default function Router() {
             { path: "email", element: <Email /> },
             { path: "email/:id", element: <ViewEmail /> },
             { path: "email-signature", element: <SignatureGenerator /> },
+            {
+              path: "employee-appreciation-eCertificate",
+              element: <EmployeeAppreciation />
+            },
             { path: "file-manager", element: <FileManager /> },
             {
               path: "notifications",
@@ -204,7 +207,6 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
-            { path: "tickets", element: <Tickets /> },
             {
               path: "ticket-manager",
               element: (
@@ -336,6 +338,30 @@ export default function Router() {
                 </GuardedRoute>
               ),
             },
+            {
+              path: "public-holiday",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PublicHoliday />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "public-holiday/create",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PublicHolidayCreator />
+                </GuardedRoute>
+              ),
+            },
+            // {
+            //   path: "public-holiday/edit",
+            //   element: (
+            //     <GuardedRoute title="" dept="hr">
+            //       <PublicHolidayEditor />
+            //     </GuardedRoute>
+            //   ),
+            // },
             {
               path: ":office_type/employees/:office/:id",
               element: (
@@ -584,14 +610,6 @@ export default function Router() {
             {
               path: "",
               element: <Navigate to="/dashboard/payroll/salaries" replace />,
-            },
-            {
-              path: "public-holiday",
-              element: (
-                <GuardedRoute title="" dept="hr">
-                  <PublicHoliday />
-                </GuardedRoute>
-              ),
             },
             {
               path: "salaries",
@@ -1249,6 +1267,9 @@ const RemoteAttendanceAdmin = Loadable(
 const OutOfOfficeUsers = Loadable(
   lazy(() => import("../pages/HR/Users/OutOfOffice.User"))
 );
+const PublicHolidayUser = Loadable(
+  lazy(() => import("../pages/HR/Users/PublicHoliday.Users"))
+);
 const OutOfOfficeAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/OutOfOffice.Admin"))
 );
@@ -1394,6 +1415,9 @@ const ResignationUser = Loadable(
 const EmployeeDeductions = Loadable(
   lazy(() => import("../pages/HR/Users/Deductions.User"))
 );
+const PayrollUser = Loadable(
+  lazy(() => import("../pages/HR/Users/Payroll.User"))
+);
 const SurveyUser = Loadable(
   lazy(() => import("../pages/HR/Users/Survey.User"))
 );
@@ -1475,6 +1499,12 @@ const WarningLetter = Loadable(
 const PublicHoliday = Loadable(
   lazy(() => import("../pages/Payroll/PublicHoliday"))
 );
+const PublicHolidayCreator = Loadable(
+  lazy(() => import("../pages/HR/Admin/PublicHolidayCreator.Admin"))
+);
+// const PublicHolidayEditor = Loadable(
+//   lazy(() => import("../pages/HR/Admin/PublicHolidayEditor.Admin"))
+// );
 const PayrollBatches = Loadable(
   lazy(() => import("../pages/Payroll/PayrollBatches"))
 );

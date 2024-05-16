@@ -7,6 +7,7 @@ import DepartmentCampaigns from "./DepartmentCampaigns";
 import DepartmentTeams from "./DepartmentTeams";
 import DepartmentEmployees from "./DepartmentEmployees";
 import DepartmentSupervisors from "./DepartmentSupervisors";
+import DepartmentHolidays from "./DepartmentHolidays";
 
 const DepartmentUsers = () => {
   const { title } = useParams();
@@ -70,6 +71,16 @@ const DepartmentUsers = () => {
                   Employees
                 </a>
               </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_department_holidays"
+                >
+                  Public Holidays
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -94,6 +105,10 @@ const DepartmentUsers = () => {
 
           <div id="tab_department_employees" className="col-12 tab-pane">
             <DepartmentEmployees />
+          </div>
+
+          <div id="tab_department_holidays" className="col-12 tab-pane">
+            <DepartmentHolidays />
           </div>
         </div>
       </div>

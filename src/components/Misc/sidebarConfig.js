@@ -41,6 +41,7 @@ const ICONS = {
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
   kpi: getIcon("la-bar-chart"),
+  timeOff: getIcon("la-calendar-day"),
   leave: getIcon("la-calendar-times-o"),
   biometrics: getIcon("la-fingerprint"),
   organizationalStructure: getIcon("la-sitemap"),
@@ -55,6 +56,7 @@ const ICONS = {
   announcement: getIcon("la-bullhorn"),
   deduction: getIcon("la-money-check-alt"),
   office: getIcon("la-building"),
+  hr: getIcon("la-user-minus"),
 };
 
 const buildExternalURL = () => {
@@ -157,8 +159,8 @@ const sidebarConfig = [
           },
           {
             canView: "all",
-            title: "Ticket",
-            path: PATH_DASHBOARD.apps.tickets,
+            title: "Employee Appreciation",
+            path: PATH_DASHBOARD.apps.eCertificate,
           },
         ],
       },
@@ -176,47 +178,55 @@ const sidebarConfig = [
       },
       {
         canView: "all",
-        title: "Out of Office",
-        path: PATH_DASHBOARD.main.outOfOffice,
-        icon: ICONS.office,
+        title: "Time Off",
+        path: PATH_DASHBOARD.main.root,
+        icon: ICONS.timeOff,
+        children: [
+          {
+            canView: "all",
+            title: "Out of Office",
+            path: PATH_DASHBOARD.main.outOfOffice,
+            icon: ICONS.office,
+          },
+          {
+            canView: "all",
+            title: "Leave",
+            path: PATH_DASHBOARD.main.employeeLeave,
+            icon: ICONS.leave,
+          },
+          {
+            canView: "all",
+            title: "Public Holiday",
+            path: PATH_DASHBOARD.main.publicHoliday,
+            icon: ICONS.leave,
+          },
+        ],
       },
       {
         canView: "all",
-        title: "Leave",
-        path: PATH_DASHBOARD.main.employeeLeave,
-        icon: ICONS.leave,
-      },
-      {
-        canView: "all",
-        title: "Deductions",
-        path: PATH_DASHBOARD.main.deductions,
-        icon: ICONS.deduction,
+        title: "Payroll",
+        path: PATH_DASHBOARD.main.root,
+        icon: ICONS.payroll,
+        children: [
+          {
+            canView: "all",
+            title: "Payslips",
+            path: PATH_DASHBOARD.main.Payslips,
+            icon: ICONS.payroll,
+          },
+          {
+            canView: "all",
+            title: "Deductions",
+            path: PATH_DASHBOARD.main.deductions,
+            icon: ICONS.deduction,
+          },
+        ],
       },
       {
         canView: "all",
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.resignation,
-      },
-      {
-        canView: CurrentUserRoles?.includes("security_attendance_team")
-          ? "all"
-          : "none",
-        title: "Manual Attendance",
-        path: PATH_DASHBOARD.main.manualAttendance,
-        icon: ICONS.userAttendance,
-      },
-      {
-        canView: "all",
-        title: "Announcement",
-        path: PATH_DASHBOARD.main.announcement,
-        icon: ICONS.announcement,
-      },
-      {
-        canView: "all",
-        title: "Survey",
-        path: PATH_DASHBOARD.main.survey,
-        icon: ICONS.survey,
       },
       {
         canView: "all",
@@ -247,16 +257,43 @@ const sidebarConfig = [
         ],
       },
       {
+        canView: "all",
+        title: "Engage & Feedback",
+        path: PATH_DASHBOARD.main.root,
+        icon: ICONS.announcement,
+        children: [
+          {
+            canView: "all",
+            title: "Ticket",
+            path: PATH_DASHBOARD.main.tickets,
+          },
+          {
+            canView: "all",
+            title: "Survey",
+            path: PATH_DASHBOARD.main.survey,
+            icon: ICONS.survey,
+          },
+          {
+            canView: "all",
+            title: "Announcement",
+            path: PATH_DASHBOARD.main.announcement,
+            icon: ICONS.announcement,
+          },
+        ],
+      },
+      {
+        canView: CurrentUserRoles?.includes("security_attendance_team")
+          ? "all"
+          : "none",
+        title: "Manual Attendance",
+        path: PATH_DASHBOARD.main.manualAttendance,
+        icon: ICONS.userAttendance,
+      },
+      {
         canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
         title: "Ticket Management",
         path: PATH_DASHBOARD.main.ticketManagement,
         icon: ICONS.coaching,
-      },
-      {
-        canView: "all",
-        title: "Employee Appreciation",
-        path: PATH_DASHBOARD.main.eCertificate,
-        icon: ICONS.certificate,
       },
       // {
       //   canView: "all",
@@ -359,10 +396,25 @@ const sidebarConfig = [
             title: "Remote Attendance",
             path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
           },
+        ],
+      },
+
+      // Time Off:
+      {
+        canView: "hr",
+        title: "Time Off",
+        path: PATH_DASHBOARD.hr.root,
+        icon: ICONS.timeOff,
+        children: [
           {
             canView: "hr",
             title: "Out of Office",
             path: PATH_DASHBOARD.hr.outOfOffice,
+          },
+          {
+            canView: 'hr',
+            title: 'Public Holiday',
+            path: PATH_DASHBOARD.hr.publicholiday,
           },
         ],
       },

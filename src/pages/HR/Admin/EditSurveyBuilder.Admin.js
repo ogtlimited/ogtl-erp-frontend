@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,6 +16,8 @@ const EditSurveyBuilder = () => {
   const { showAlert, selectDepartments, selectCampaigns, goToTop } =
     useAppContext();
   const [loading, setLoading] = useState(false);
+  const [closeAll, setCloseAll] = useState(false);
+  const [viewingOffice, setViewingOffice] = useState(false);
 
   const [title, setTitle] = useState(survey?.title);
   const [from, setFrom] = useState(
@@ -248,6 +251,8 @@ const EditSurveyBuilder = () => {
                 options={selectDepartments}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedDepartmentOptions(updatedSelectedOptions)
                 }
@@ -262,6 +267,8 @@ const EditSurveyBuilder = () => {
                 options={selectCampaigns}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
+                closeAll={closeAll}
+                setViewingOffice={setViewingOffice}
                 onSelectionChange={(updatedSelectedOptions) =>
                   setSelectedCampaignOptions(updatedSelectedOptions)
                 }
