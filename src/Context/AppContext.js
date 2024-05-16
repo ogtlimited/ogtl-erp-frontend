@@ -50,6 +50,7 @@ const AppProvider = (props) => {
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
   const [selectPublicHoliday, setSelectPublicHoliday] = useState([]);
+  const [selectSurvey, setSelectSurvey] = useState([]);
   const [allPublicHolidayEvents, setAllPublicHolidayEvents] = useState([]);
   const [userResignations, setUserResignations] = useState(null);
 
@@ -330,7 +331,6 @@ const AppProvider = (props) => {
       });
 
       const resData = response?.data?.data?.public_holidays;
-      console.log("all holiday resData", resData);
 
       const formatted = resData.map((e) => ({
         ...e,
@@ -572,9 +572,42 @@ const AppProvider = (props) => {
     }
   };
 
+  // All Survey Forms:
+  const fetchAllSurveys = useCallback(async () => {
+    setLoadingSelect(true);
+
+    try {
+      const response = await axiosInstance.get("/api/v1/hr_surveys.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+        params: {
+          page: 1,
+          limit: 10000,
+        },
+      });
+
+      const resData = response?.data?.data?.survey_records?.surveys;
+
+      const formatted = resData.map((survey) => ({
+        label: survey?.title,
+        value: survey?.id,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+      setSelectSurvey(formatted);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
   // All Public Holidays
   const fetchAllPublicHolidays = useCallback(async () => {
     setLoadingSelect(true);
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
@@ -591,13 +624,14 @@ const AppProvider = (props) => {
 
       const resData = response?.data?.data?.public_holidays;
 
-      const formatted = resData.map((e) => ({
-        label: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
-        value: e?.id
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+      const formatted = resData
+        .map((e) => ({
+          label: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
+          value: e?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-      setSelectPublicHoliday(formatted)
+      setSelectPublicHoliday(formatted);
       setLoadingSelect(false);
     } catch (error) {
       setLoadingSelect(false);
@@ -808,6 +842,7 @@ const AppProvider = (props) => {
         fetchAllBranches();
         fetchDeductionTypes();
         fetchJobOpenings();
+        fetchAllSurveys();
         fetchAllPublicHolidays();
         fetchHRLeavesNotificationCount();
       }
@@ -842,6 +877,7 @@ const AppProvider = (props) => {
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
+    fetchAllSurveys,
     fetchPendingSurveys,
     fetchPublicHolidays,
     isHr,
@@ -897,7 +933,11 @@ const AppProvider = (props) => {
         setSelectJobOpenings,
         fetchJobOpenings,
 
-        selectPublicHoliday, 
+        selectSurvey,
+        setSelectSurvey,
+        fetchAllSurveys,
+
+        selectPublicHoliday,
         setSelectPublicHoliday,
         fetchAllPublicHolidays,
 
