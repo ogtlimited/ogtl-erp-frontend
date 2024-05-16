@@ -106,7 +106,7 @@ const CampaignHolidays = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
-        `/api/v1/campaign_holidays.json`,
+        `/api/v1/campaign_holidays/${selectedData?.public_holiday?.id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -114,7 +114,6 @@ const CampaignHolidays = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           payload: {
-            hr_public_holiday_id: selectedData?.public_holiday?.id,
             operation_campaign_ids: [+id],
           },
         }
