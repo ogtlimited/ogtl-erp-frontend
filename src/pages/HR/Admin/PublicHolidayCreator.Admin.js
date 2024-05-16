@@ -47,13 +47,6 @@ const PublicHolidayCreator = () => {
   const handleCreatePublicHoliday = async () => {
     setLoading(true);
 
-    console.log(
-      "publicHolidayData",
-      publicHolidayData,
-      selectedDepartment,
-      selectedCampaign
-    );
-
     try {
       const response = await axiosInstance.post(
         `/api/v1/public_holidays.json`,
