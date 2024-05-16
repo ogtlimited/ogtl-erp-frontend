@@ -104,7 +104,7 @@ const AllSurveyAdmin = () => {
             {CurrentUserCanCreateAndEdit ? (
               <Link
                 className="btn btn-sm btn-info"
-                to={`/dashboard/hr/all-survey/${row?.title}/${row?.id}`}
+                to={`/dashboard/hr/all-survey/${row?.title.replace("/", " -")}/${row?.id}`}
                 state={row}
               >
                 View Responses
@@ -124,7 +124,7 @@ const AllSurveyAdmin = () => {
             <h3 className="page-title">All Surveys</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">All Surveys</li>
+              <li className="breadcrumb-item active">Survey</li>
             </ul>
           </div>
         </div>

@@ -7,8 +7,14 @@ import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
 
 const PublicHolidayCreator = () => {
   const navigate = useNavigate();
-  const { showAlert, selectDepartments, selectCampaigns, goToTop } =
-    useAppContext();
+  const {
+    showAlert,
+    selectDepartments,
+    selectCampaigns,
+    goToTop,
+    fetchPublicHolidays,
+    fetchAllPublicHolidays,
+  } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [closeAll, setCloseAll] = useState(false);
   const [viewingOffice, setViewingOffice] = useState(false);
@@ -40,13 +46,6 @@ const PublicHolidayCreator = () => {
 
   const handleCreatePublicHoliday = async () => {
     setLoading(true);
-
-    console.log(
-      "publicHolidayData",
-      publicHolidayData,
-      selectedDepartment,
-      selectedCampaign
-    );
 
     try {
       const response = await axiosInstance.post(
@@ -121,6 +120,9 @@ const PublicHolidayCreator = () => {
           "alert alert-warning"
         );
       }
+
+      fetchPublicHolidays();
+      fetchAllPublicHolidays();
 
       setPublicHolidayData({
         title: "",

@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import CampaignTeams from "./CampaignTeams";
 import CampaignSupervisor from "./CampaignSupervisors";
 import CampaignEmployees from "./CampaignEmployees";
-import CampaignHolidays from "./CampaignHolidays"
+import CampaignHolidays from "./CampaignHolidays";
 
 const CampaignUsers = () => {
   const { title } = useParams();
@@ -16,9 +16,7 @@ const CampaignUsers = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">
-              {title.toUpperCase()}
-            </h3>
+            <h3 className="page-title">{title.toUpperCase()}</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Campaign</li>
@@ -67,7 +65,7 @@ const CampaignUsers = () => {
                   data-toggle="tab"
                   href="#tab_campaign_holidays"
                 >
-                Public Holidays
+                  Public Holidays
                 </a>
               </li>
             </ul>
