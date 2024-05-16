@@ -106,16 +106,12 @@ const DepartmentHolidays = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
-        `/api/v1/department_holidays.json`,
+        `/api/v1/department_holidays/${selectedData?.id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            hr_public_holiday_id: selectedData?.public_holiday?.id,
-            operation_department_ids: [+id],
           },
         }
       );
