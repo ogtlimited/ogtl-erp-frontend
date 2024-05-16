@@ -6,7 +6,7 @@ import { CampaignHolidayFormModal } from "../../../components/Modal/CampaignHoli
 import { useAppContext } from "../../../Context/AppContext";
 import { CampaignHolidayForm } from "../../../components/FormJSON/CreateOffices";
 import { useParams } from "react-router-dom";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import DeleteModal from "../../../components/Modal/DeleteModal";
 import moment from "moment";
 import $ from "jquery";
 
@@ -106,12 +106,16 @@ const CampaignHolidays = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
-        `/api/v1/campaign_holidays/${selectedData?.id}.json`,
+        `/api/v1/campaign_holidays.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            hr_public_holiday_id: selectedData?.public_holiday?.id,
+            operation_campaign_ids: [+id],
           },
         }
       );
@@ -119,10 +123,10 @@ const CampaignHolidays = () => {
       goToTop();
       showAlert(
         true,
-        "Campaign public holiday deleted successfully!",
+        "Public holiday removed successfully!",
         "alert alert-info"
       );
-      $("#exampleModal").modal("toggle");
+      $("#deleteModal").modal("toggle");
       fetchAllCampaignHolidays();
       setIsDeleting(false);
     } catch (error) {
@@ -130,10 +134,10 @@ const CampaignHolidays = () => {
       const errorMsg = error.response?.data?.errors;
       showAlert(
         true,
-        `${errorMsg || "Unable to Delete Campaign Public Holiday"}`,
+        `${errorMsg || "Unable to remove public holiday"}`,
         "alert alert-warning"
       );
-      $("#exampleModal").modal("toggle");
+      $("#deleteModal").modal("toggle");
       setIsDeleting(false);
     }
   };
@@ -202,7 +206,7 @@ const CampaignHolidays = () => {
             <button
               className="btn btn-sm btn-danger"
               data-toggle="modal"
-              data-target="#exampleModal"
+              data-target="#deleteModal"
               onClick={() => setSelectedData(row)}
             >
               Remove
@@ -254,11 +258,11 @@ const CampaignHolidays = () => {
         refetchData={fetchAllCampaignHolidays}
       />
 
-      <ConfirmModal
+      <DeleteModal
         title="Public Holiday"
         selectedRow={selectedData}
         deleteFunction={handleDeleteCampaignHoliday}
-        message="Are you sure you want to delete this campaign public holiday?"
+        message="Are you sure you want to remove this public holiday?"
         isLoading={isDeleting}
       />
     </div>

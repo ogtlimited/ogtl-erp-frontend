@@ -6,7 +6,7 @@ import { DepartmentHolidayFormModal } from "../../../components/Modal/Department
 import { useAppContext } from "../../../Context/AppContext";
 import { DepartmentHolidayForm } from "../../../components/FormJSON/CreateOffices";
 import { useParams } from "react-router-dom";
-import ConfirmModal from "../../../components/Modal/ConfirmModal";
+import DeleteModal from "../../../components/Modal/DeleteModal";
 import moment from "moment";
 import $ from "jquery";
 
@@ -106,12 +106,16 @@ const DepartmentHolidays = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.delete(
-        `/api/v1/department_holidays/${selectedData?.id}.json`,
+        `/api/v1/department_holidays.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            hr_public_holiday_id: selectedData?.public_holiday?.id,
+            operation_department_ids: [+id],
           },
         }
       );
@@ -119,10 +123,10 @@ const DepartmentHolidays = () => {
       goToTop();
       showAlert(
         true,
-        "Department public holiday deleted successfully!",
+        "Public holiday removed successfully!",
         "alert alert-info"
       );
-      $("#exampleModal").modal("toggle");
+      $("#deleteModal").modal("toggle");
       fetchAllDepartmentHolidays();
       setIsDeleting(false);
     } catch (error) {
@@ -130,10 +134,10 @@ const DepartmentHolidays = () => {
       const errorMsg = error.response?.data?.errors;
       showAlert(
         true,
-        `${errorMsg || "Unable to Delete Department Public Holiday"}`,
+        `${errorMsg || "Unable to remove public holiday"}`,
         "alert alert-warning"
       );
-      $("#exampleModal").modal("toggle");
+      $("#deleteModal").modal("toggle");
       setIsDeleting(false);
     }
   };
@@ -202,7 +206,7 @@ const DepartmentHolidays = () => {
             <button
               className="btn btn-sm btn-danger"
               data-toggle="modal"
-              data-target="#exampleModal"
+              data-target="#deleteModal"
               onClick={() => setSelectedData(row)}
             >
               Remove
@@ -214,54 +218,56 @@ const DepartmentHolidays = () => {
   ];
 
   return (
-    <div className="tab-pane" id="tab_department_holidays">
-      <div style={{ marginBottom: "50px" }}>
-        <div className="row">
-          {CurrentUserCanCreateAndEdit && (
-            <div className="col-auto float-right ml-auto">
-              <a
-                href="#"
-                className="btn add-btn m-r-5"
-                data-toggle="modal"
-                data-target="#DepartmentHolidayFormModal"
-                onClick={handleAdd}
-              >
-                Add Public Holiday
-              </a>
-            </div>
-          )}
+    <>
+      <div className="tab-pane" id="tab_department_holidays">
+        <div style={{ marginBottom: "50px" }}>
+          <div className="row">
+            {CurrentUserCanCreateAndEdit && (
+              <div className="col-auto float-right ml-auto">
+                <a
+                  href="#"
+                  className="btn add-btn m-r-5"
+                  data-toggle="modal"
+                  data-target="#DepartmentHolidayFormModal"
+                  onClick={handleAdd}
+                >
+                  Add Public Holiday
+                </a>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="row">
-        <UniversalPaginatedTable
-          columns={columns}
-          data={departmentHolidays}
-          loading={loading}
-          setLoading={setLoading}
-          page={page}
-          setPage={setPage}
-          sizePerPage={sizePerPage}
-          setSizePerPage={setSizePerPage}
-          totalPages={totalPages}
-          setTotalPages={setTotalPages}
+        <div className="row">
+          <UniversalPaginatedTable
+            columns={columns}
+            data={departmentHolidays}
+            loading={loading}
+            setLoading={setLoading}
+            page={page}
+            setPage={setPage}
+            sizePerPage={sizePerPage}
+            setSizePerPage={setSizePerPage}
+            totalPages={totalPages}
+            setTotalPages={setTotalPages}
+          />
+        </div>
+
+        <DepartmentHolidayFormModal
+          mode={mode}
+          data={holiday}
+          refetchData={fetchAllDepartmentHolidays}
         />
       </div>
 
-      <DepartmentHolidayFormModal
-        mode={mode}
-        data={holiday}
-        refetchData={fetchAllDepartmentHolidays}
-      />
-
-      <ConfirmModal
+      <DeleteModal
         title="Public Holiday"
         selectedRow={selectedData}
         deleteFunction={handleDeleteDepartmentHoliday}
-        message="Are you sure you want to delete this department public holiday?"
+        message="Are you sure you want to remove this public holiday?"
         isLoading={isDeleting}
       />
-    </div>
+    </>
   );
 };
 
