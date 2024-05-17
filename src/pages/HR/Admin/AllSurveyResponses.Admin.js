@@ -12,6 +12,7 @@ const AllSurveyResponsesAdmin = () => {
   const { showAlert, getAvatarColor, ErrorHandler } = useAppContext();
   const [surveyResponse, setSurveyResponse] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -67,6 +68,7 @@ const AllSurveyResponsesAdmin = () => {
 
   const handleDownloadResponses = async (e) => {
     e.preventDefault();
+    setIsDownloading(true);
 
     try {
       const response = await axiosInstance.get(
@@ -86,7 +88,7 @@ const AllSurveyResponsesAdmin = () => {
       );
 
       const resData = response?.data?.data?.survey_response;
-      const lineSeparator = '—'.repeat(1000);
+      const lineSeparator = "—".repeat(1000);
 
       const groupedData = resData.reduce((acc, item) => {
         if (!acc[item.full_name]) {
@@ -138,8 +140,10 @@ const AllSurveyResponsesAdmin = () => {
       };
 
       csvDownload(dataToConvert);
+      setIsDownloading(false);
     } catch (error) {
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      setIsDownloading(false);
     }
   };
 
@@ -232,7 +236,10 @@ const AllSurveyResponsesAdmin = () => {
           <div className="col-auto float-right ml-auto">
             {surveyResponse?.length ? (
               <button className="btn add-btn" onClick={handleDownloadResponses}>
-                <i className="fa fa-download"></i> Download Responses
+                <i className="fa fa-download"></i>{" "}
+                {isDownloading
+                  ? "Downloading Responses..."
+                  : "Download Responses"}
               </button>
             ) : null}
           </div>
