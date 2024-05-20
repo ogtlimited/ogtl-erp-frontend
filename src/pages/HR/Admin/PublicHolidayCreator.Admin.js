@@ -4,7 +4,7 @@ import axiosInstance from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
-import moment from "moment"
+import moment from "moment";
 
 const PublicHolidayCreator = () => {
   const navigate = useNavigate();
@@ -34,6 +34,15 @@ const PublicHolidayCreator = () => {
   const [selectedCampaign, setSelectedCampaign] = useState([]);
 
   const today_date = moment().utc().format("yyyy-MM-DD");
+
+  const formattedDepartmentSelection = [
+    { label: "All", value: "all" },
+    ...selectDepartments,
+  ];
+  const formattedCampaignSelection = [
+    { label: "All", value: "all" },
+    ...selectCampaigns,
+  ];
 
   const handleFormChange = (e) => {
     e.preventDefault();
@@ -225,7 +234,7 @@ const PublicHolidayCreator = () => {
               </label>
               <DropdownCheckbox
                 office="department"
-                options={selectDepartments}
+                options={formattedDepartmentSelection}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
                 closeAll={closeAll}
@@ -241,7 +250,7 @@ const PublicHolidayCreator = () => {
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox
                 office="campaign"
-                options={selectCampaigns}
+                options={formattedCampaignSelection}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
                 closeAll={closeAll}
