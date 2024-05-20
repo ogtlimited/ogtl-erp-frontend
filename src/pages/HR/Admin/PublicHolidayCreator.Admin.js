@@ -4,6 +4,7 @@ import axiosInstance from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
+import moment from "moment";
 
 const PublicHolidayCreator = () => {
   const navigate = useNavigate();
@@ -32,6 +33,17 @@ const PublicHolidayCreator = () => {
   const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState([]);
 
+  const today_date = moment().utc().format("yyyy-MM-DD");
+
+  const formattedDepartmentSelection = [
+    { label: "All", value: "all" },
+    ...selectDepartments,
+  ];
+  const formattedCampaignSelection = [
+    { label: "All", value: "all" },
+    ...selectCampaigns,
+  ];
+
   const handleFormChange = (e) => {
     e.preventDefault();
     setPublicHolidayData({
@@ -47,6 +59,12 @@ const PublicHolidayCreator = () => {
   const handleCreatePublicHoliday = async () => {
     setLoading(true);
 
+    const payload = {
+      ...publicHolidayData,
+      start_date: `${publicHolidayData?.start_date}T00:00`,
+      end_date: `${publicHolidayData?.end_date}T23:59`,
+    };
+
     try {
       const response = await axiosInstance.post(
         `/api/v1/public_holidays.json`,
@@ -56,7 +74,7 @@ const PublicHolidayCreator = () => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
           },
-          payload: publicHolidayData,
+          payload: payload,
         }
       );
 
@@ -181,11 +199,12 @@ const PublicHolidayCreator = () => {
             <div className="form-group">
               <label htmlFor="start_date">Start</label>
               <input
-                type="datetime-local"
+                type="date"
                 name="start_date"
                 value={publicHolidayData?.start_date}
                 onChange={handleFormChange}
                 className="form-control "
+                min={today_date}
                 required
               />
             </div>
@@ -194,11 +213,12 @@ const PublicHolidayCreator = () => {
             <div className="form-group">
               <label htmlFor="end_date">End</label>
               <input
-                type="datetime-local"
+                type="date"
                 name="end_date"
                 value={publicHolidayData?.end_date}
                 onChange={handleFormChange}
                 className="form-control "
+                min={publicHolidayData?.start_date}
                 required
               />
             </div>
@@ -214,7 +234,7 @@ const PublicHolidayCreator = () => {
               </label>
               <DropdownCheckbox
                 office="department"
-                options={selectDepartments}
+                options={formattedDepartmentSelection}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
                 closeAll={closeAll}
@@ -230,7 +250,7 @@ const PublicHolidayCreator = () => {
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox
                 office="campaign"
-                options={selectCampaigns}
+                options={formattedCampaignSelection}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
                 closeAll={closeAll}

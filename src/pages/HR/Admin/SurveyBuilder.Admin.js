@@ -26,6 +26,15 @@ const SurveyBuilder = () => {
   const [closeAll, setCloseAll] = useState(false);
   const [viewingOffice, setViewingOffice] = useState(false);
 
+  const formattedDepartmentSelection = [
+    { label: "All", value: "all" },
+    ...selectDepartments,
+  ];
+  const formattedCampaignSelection = [
+    { label: "All", value: "all" },
+    ...selectCampaigns,
+  ];
+
   const handleSubmitSurvey = async (surveyData) => {
     // Extract relevant survey information
     const { title, from, to, departments, campaigns } = surveyData;
@@ -205,7 +214,7 @@ const SurveyBuilder = () => {
               </label>
               <DropdownCheckbox
                 office="department"
-                options={selectDepartments}
+                options={formattedDepartmentSelection}
                 selectedOptions={selectedDepartmentOptions}
                 setSelected={setSelectedDepartment}
                 closeAll={closeAll}
@@ -221,7 +230,7 @@ const SurveyBuilder = () => {
               <label htmlFor="applicable_campaigns">Applicable Campaign</label>
               <DropdownCheckbox
                 office="campaign"
-                options={selectCampaigns}
+                options={formattedCampaignSelection}
                 selectedOptions={selectedCampaignOptions}
                 setSelected={setSelectedCampaign}
                 closeAll={closeAll}

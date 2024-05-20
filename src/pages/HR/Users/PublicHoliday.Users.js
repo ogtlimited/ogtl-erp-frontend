@@ -182,7 +182,7 @@ const PublicHolidayUser = () => {
             editable={true}
             selectable={true}
             selectMirror={true}
-            dayMaxEventRows={1}
+            dayMaxEventRows={3}
             weekends={true}
             events={PUBLICHOLIDAY}
             select={handleDateSelect}

@@ -31,17 +31,49 @@ function DropdownCheckbox({
 
   const handleCheckboxChange = (event) => {
     const { value } = event.target;
-    const updatedSelectedOptions = selectedOptions.includes(+value)
-      ? selectedOptions.filter((item) => item !== +value)
-      : [...selectedOptions, +value];
+
+    let updatedSelectedOptions;
+
+    if (value === "all") {
+      if (selectedOptions.includes("all")) {
+        updatedSelectedOptions = [];
+      } else {
+        updatedSelectedOptions = options.map((option) => option.value);
+      }
+    } else {
+      updatedSelectedOptions = selectedOptions.includes(+value)
+        ? selectedOptions.filter((item) => item !== +value)
+        : [...selectedOptions, +value];
+
+      if (selectedOptions.includes("all")) {
+        updatedSelectedOptions = updatedSelectedOptions.filter(
+          (option) => option !== "all"
+        );
+      }
+
+      const allSelected = options
+        .filter((option) => option.value !== "all")
+        .every((option) => updatedSelectedOptions.includes(option.value));
+      if (allSelected) {
+        updatedSelectedOptions = options.map((option) => option.value);
+      }
+    }
+
     onSelectionChange(updatedSelectedOptions);
 
     const selectedOffices = options
-      .filter((option) => updatedSelectedOptions.includes(option.value))
+      .filter(
+        (option) =>
+          updatedSelectedOptions.includes(option.value) &&
+          option.value !== "all"
+      )
       .map((selectedOption) => ({ ...selectedOption, office }));
 
     setSelected(selectedOffices);
   };
+
+  const allChecked =
+    options.length > 0 && selectedOptions.length === options.length;
 
   return (
     <div className="dropdown_checkbox">
@@ -62,7 +94,11 @@ function DropdownCheckbox({
               <input
                 type="checkbox"
                 value={option.value}
-                checked={selectedOptions.includes(option.value)}
+                checked={
+                  option.value === "all"
+                    ? allChecked
+                    : selectedOptions.includes(option.value)
+                }
                 onChange={handleCheckboxChange}
                 className=""
               />
