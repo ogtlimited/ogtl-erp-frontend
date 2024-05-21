@@ -1,0 +1,187 @@
+/** @format */
+
+import React, { useState, useEffect } from "react";
+import { useAppContext } from "../../Context/AppContext";
+import axiosInstance from "../../services/api";
+import $ from "jquery";
+import TextEditor from "../Forms/TextEditor";
+
+export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
+  const { showAlert, goToTop } = useAppContext();
+  const [newsletter, setNewsletter] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
+
+  useEffect(() => {
+    setNewsletter(data);
+    setEditorContent(data?.content || "");
+  }, [data]);
+
+  const cancelEvent = () => {
+    setNewsletter(data);
+    setEditorContent("");
+  };
+
+  const handleNewsletterActions = async (e) => {
+    if (mode === "Create") {
+      return handleCreateNewsletter(e);
+    } else {
+      return handleEditNewsletter(e);
+    }
+  };
+
+  const handleCreateNewsletter = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    // try {
+    //   // eslint-disable-next-line no-unused-vars
+    //   const response = await axiosInstance.post(
+    //     `/api/v1/tickets.json`,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         "Access-Control-Allow-Origin": "*",
+    //         "ngrok-skip-browser-warning": "69420",
+    //       },
+    //       payload: {
+    //         ...ticket,
+    //         complaint: editorContent,
+    //       },
+    //     }
+    //   );
+
+    //   showAlert(true, "Ticket successfully created", "alert alert-success");
+    //   fetchDocs();
+    //   $("#DocAnnouncementFormModal").modal("toggle");
+    //   setTicket(data);
+    //   setEditorContent("");
+
+    //   setLoading(false);
+    //   goToTop();
+    // } catch (error) {
+    //   const errorMsg = error?.response?.data?.errors;
+    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
+    //   $("#DocAnnouncementFormModal").modal("toggle");
+    //   goToTop();
+    //   setLoading(false);
+    // }
+  };
+
+  const handleEditNewsletter = async (e) => {
+    e.preventDefault();
+
+    // setLoading(true);
+
+    // try {
+    //   // eslint-disable-next-line no-unused-vars
+    //   const response = await axiosInstance.put(
+    //     `/api/v1/tickets/${ticket?.id}.json`,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         "Access-Control-Allow-Origin": "*",
+    //         "ngrok-skip-browser-warning": "69420",
+    //       },
+    //       payload: {
+    //         // first_name: ticket?.first_name,
+    //         // last_name: ticket?.last_name,
+    //         // ogid: ticket?.ogid,
+    //         // email: ticket?.email,
+    //         complaint: editorContent,
+    //       },
+    //     }
+    //   );
+
+    //   showAlert(true, "Ticket successfully updated", "alert alert-success");
+    //   fetchDocs();
+    //   $("#DocAnnouncementFormModal").modal("toggle");
+    //   setTicket(data);
+    //   setEditorContent("");
+
+    //   setLoading(false);
+    //   goToTop();
+    // } catch (error) {
+    //   const errorMsg = error?.response?.data?.errors;
+    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
+    //   $("#DocAnnouncementFormModal").modal("toggle");
+    //   goToTop();
+    //   setLoading(false);
+    // }
+  };
+
+  return (
+    <>
+      <div
+        className="modal fade"
+        id="DocAnnouncementFormModal"
+        tabIndex="-1"
+        aria-labelledby="FormModalModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title" id="FormModalLabel">
+                {mode} Newsletter
+              </h4>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <form onSubmit={handleNewsletterActions}>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <label htmlFor="content">Content</label>
+                      <TextEditor
+                        editorContent={editorContent}
+                        onContentChange={setEditorContent}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  {mode === "Create" && (
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                      onClick={cancelEvent}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={!editorContent.length}
+                  >
+                    {loading ? (
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    ) : (
+                      "Submit"
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};

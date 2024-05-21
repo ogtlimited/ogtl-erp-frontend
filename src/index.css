@@ -1752,6 +1752,15 @@ img {
   gap: 2rem;
 }
 
+.no_annoucement {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
 .video_good {
   color: green;
 }

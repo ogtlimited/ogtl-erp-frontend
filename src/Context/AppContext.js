@@ -318,7 +318,7 @@ const AppProvider = (props) => {
   const fetchPublicHolidays = useCallback(async () => {
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
+      const response = await axiosInstance.get(`/api/v1/employee_holidays.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -344,8 +344,8 @@ const AppProvider = (props) => {
             : "happening",
       }));
 
-      console.log("all formatted holiday resData", formatted);
-      setAllPublicHolidayEvents(formatted);
+      console.log("all employee holiday resData", formatted);
+      // setAllPublicHolidayEvents(formatted);
     } catch (error) {
       const component = "Public Holiday | ";
       ErrorHandler(error, component);

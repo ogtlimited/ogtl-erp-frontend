@@ -1,21 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
-import { AnnouncementFormModal } from "../../components/Modal/AnnouncementFormModal";
+import { DocAnnouncementFormModal } from "../../components/Modal/DocAnnouncementFormModal";
+// import { AnnouncementViewModal } from "../../components/Modal/VideoAnnouncementViewModal";
 import { BsDot } from "react-icons/bs";
 import moment from "moment";
 import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { AnnouncementViewModal } from "./../../components/Modal/AnnouncementViewModal";
 import $ from "jquery";
 
-const Announcement = () => {
+const DocAnnouncement = () => {
   const { ErrorHandler, user, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
-  const [allAnnouncement, setAllAnnouncement] = useState([]);
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [allDocs, setAllDocs] = useState([]);
+  const [doc, setDoc] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [mode, setMode] = useState("Create");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -25,17 +27,17 @@ const Announcement = () => {
   });
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canUpload = ["hr_manager"];
+  const canUpload = ["hr_manager", "senior_hr_associate"];
   const CurrentUserCanUpload = CurrentUserRoles.some((role) =>
     canUpload.includes(role)
   );
 
-  const fetchAllAnnouncement = useCallback(async () => {
+  const fetchAllDocAnnouncement = useCallback(async () => {
     setLoading(true);
 
     try {
       const response = await axiosInstance.get(
-        `/api/v1/video_announcements.json`,
+        `/api/v1/text_announcements.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -49,19 +51,21 @@ const Announcement = () => {
         }
       );
 
-      const resData = response?.data?.data?.videos_record?.videos;
-      const totalPages = response?.data?.data?.videos_record?.total_page;
+      // const resData = response?.data?.data?.videos_record?.videos;
+      // const totalPages = response?.data?.data?.videos_record?.total_page;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
+      console.log("Newsletter", response?.data?.data);
 
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+      // const thisPageLimit = sizePerPage;
+      // const thisTotalPageSize = totalPages;
 
-      setAllAnnouncement(resData);
+      // setSizePerPage(thisPageLimit);
+      // setTotalPages(thisTotalPageSize);
+
+      // setAllDocs(resData);
       setLoading(false);
     } catch (error) {
-      const component = "All Announcements | ";
+      const component = "All Newsletters | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -69,11 +73,11 @@ const Announcement = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllAnnouncement();
-  }, [fetchAllAnnouncement]);
+    fetchAllDocAnnouncement();
+  }, [fetchAllDocAnnouncement]);
 
   const count = totalPages;
-  const _DATA = usePagination(allAnnouncement, sizePerPage, totalPages);
+  const _DATA = usePagination(allDocs, sizePerPage, totalPages);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -89,31 +93,34 @@ const Announcement = () => {
     setPage(1);
   };
 
-  const handleViewAnnouncement = (announcement) => {
-    $("#AnnouncementViewModal").modal("show");
-    setSelectedVideo(announcement);
+  const handleViewDocAnnouncement = (announcement) => {
+    $("#DocAnnouncementViewModal").modal("show");
+    setSelectedDoc(announcement);
+  };
+
+  const handleCreate = () => {
+    const newsletterModel = {
+      content: "",
+    };
+
+    setDoc(newsletterModel);
+    setMode("Create");
   };
 
   return (
-    <>
+    <div className="tab-pane" id="tab_announcement_docs">
       <div className="page-header">
         <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Announcements</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">Main</li>
-              <li className="breadcrumb-item active">Engage & Feedback</li>
-            </ul>
-          </div>
           {CurrentUserCanUpload ? (
             <div className="col-auto float-right ml-auto">
               <a
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#AnnouncementFormModal"
+                data-target="#DocAnnouncementFormModal"
+                onClick={handleCreate}
               >
-                <i className="las la-file-video"></i> New Video
+                <i className="las la-file"></i> New Newsletter
               </a>
             </div>
           ) : null}
@@ -122,22 +129,22 @@ const Announcement = () => {
 
       <div className="announcement_container">
         {loading ? (
-          <div>
+          <div className="no_annoucement">
             <lord-icon
-              src="https://cdn.lordicon.com/ilsmzilo.json"
+              src="https://cdn.lordicon.com/xsqjakgm.json"
               trigger="loop"
               colors="primary:#00c5fb,secondary:#0253cc"
-              style={{ width: "250px", height: "250px" }}
+              style={{ width: "200px", height: "200px" }}
             ></lord-icon>
           </div>
-        ) : allAnnouncement?.length ? (
+        ) : allDocs?.length ? (
           <>
             <div className="custom-video-field-div">
-              {allAnnouncement.map((announcement, index) => (
+              {allDocs.map((announcement, index) => (
                 <div
                   className="video-field-div"
                   key={index}
-                  onClick={() => handleViewAnnouncement(announcement)}
+                  onClick={() => handleViewDocAnnouncement(announcement)}
                 >
                   <video className="video_player">
                     <source src={announcement?.video_url} type="video/mp4" />
@@ -207,27 +214,31 @@ const Announcement = () => {
             </div>
           </>
         ) : (
-          <div>
+          <div className="no_annoucement">
             <lord-icon
-              src="https://cdn.lordicon.com/ilsmzilo.json"
+              src="https://cdn.lordicon.com/xsqjakgm.json"
               trigger="hover"
               colors="primary:#00c5fb,secondary:#0253cc"
-              style={{ width: "250px", height: "250px" }}
+              style={{ width: "200px", height: "200px" }}
             ></lord-icon>
-            <h3>No Video Announcement</h3>
+            <h3>No Newsletter</h3>
           </div>
         )}
       </div>
 
-      <AnnouncementFormModal fetchAllAnnouncement={fetchAllAnnouncement} />
+      <DocAnnouncementFormModal
+        mode={mode}
+        data={allDocs}
+        fetchDocs={fetchAllDocAnnouncement}
+      />
 
-      <AnnouncementViewModal
+      {/* <AnnouncementViewModal
         loading={loading}
         announcementContent={selectedVideo}
         setSelectedVideo={setSelectedVideo}
-      />
-    </>
+      /> */}
+    </div>
   );
 };
 
-export default Announcement;
+export default DocAnnouncement;

@@ -1,36 +1,35 @@
 import React, { useRef, useEffect } from "react";
-import { BsDot } from "react-icons/bs";
+import secureLocalStorage from "react-secure-storage";
 import moment from "moment";
 import $ from "jquery";
+import { useAppContext } from "../../Context/AppContext";
 
-export const AnnouncementViewModal = ({
-  loading,
-  announcementContent,
-  setSelectedVideo,
-}) => {
+export const VideoAnnouncementModalPrompt = () => {
+  const { loadingAnnouncement, announcement, setAnnouncementWatched } = useAppContext();
   const videoRef = useRef(null);
 
   const closeModal = () => {
-    $("#AnnouncementViewModal").modal("hide");
+    $("#VideoAnnouncementModalPrompt").modal("hide");
+    secureLocalStorage.setItem("seenAnnouncement", true);
+    setAnnouncementWatched(true);
     if (videoRef.current) {
       videoRef.current.pause();
     }
-    setSelectedVideo(null);
   };
 
   useEffect(() => {
-    if (announcementContent && videoRef.current) {
+    if (announcement && videoRef.current) {
       videoRef.current.play().catch((error) => {
         console.error("Autoplay failed:", error);
       });
     }
-  }, [announcementContent]);
+  }, [announcement]);
 
   return (
     <>
       <div
         className="modal fade"
-        id="AnnouncementViewModal"
+        id="VideoAnnouncementModalPrompt"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -47,21 +46,19 @@ export const AnnouncementViewModal = ({
               }}
             >
               <h4 className="modal-title" id="FormModalLabel">
-                {announcementContent?.title}
+                {announcement?.title}
               </h4>
               <p className="modal_uploaded_by">
-                {announcementContent?.uploaded_by} |{" "}
+                By: {announcement?.uploaded_by} |{" "}
                 <span className="payroll_month_indicator">
-                  {moment(announcementContent?.created_at).format("LLL")}
-                  <BsDot className="BsDot span_indicator" />{" "}
-                  {moment(announcementContent?.created_at).fromNow()}
+                  {moment(announcement?.created_at).format("LLL")}
                 </span>
               </p>
             </div>
 
             <div className="modal-body">
               <div>
-                {loading ? (
+                {loadingAnnouncement ? (
                   <div>
                     <lord-icon
                       src="https://cdn.lordicon.com/ilsmzilo.json"
@@ -70,13 +67,10 @@ export const AnnouncementViewModal = ({
                       style={{ width: "250px", height: "250px" }}
                     ></lord-icon>
                   </div>
-                ) : announcementContent ? (
+                ) : announcement ? (
                   <div>
                     <video ref={videoRef} controls className="video_player">
-                      <source
-                        src={announcementContent?.video_url}
-                        type="video/mp4"
-                      />
+                      <source src={announcement.video_url} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   </div>

@@ -6,7 +6,7 @@ import { useAppContext } from "../Context/AppContext";
 import AlertSvg from "./AlertSvg";
 import $ from "jquery";
 import { SurveyFormModalPrompt } from "../components/Modal/SurveyFormModalPrompt";
-import { AnnouncementModalPrompt } from "./../components/Modal/AnnouncementModalPrompt";
+import { VideoAnnouncementModalPrompt } from "../components/Modal/VideoAnnouncementModalPrompt";
 import secureLocalStorage from "react-secure-storage";
 
 const AdminLayout = (props) => {
@@ -43,7 +43,7 @@ const AdminLayout = (props) => {
     const seenAnnouncement = secureLocalStorage.getItem("seenAnnouncement");
 
     if (announcement && !seenAnnouncement) {
-      $("#AnnouncementModalPrompt").modal("show");
+      $("#VideoAnnouncementModalPrompt").modal("show");
     } else {
       surveyPopUp();
     }
@@ -105,7 +105,7 @@ const AdminLayout = (props) => {
         fetchSurveys={fetchPendingSurveys}
       />
 
-      <AnnouncementModalPrompt />
+      <VideoAnnouncementModalPrompt />
     </>
   );
 };
