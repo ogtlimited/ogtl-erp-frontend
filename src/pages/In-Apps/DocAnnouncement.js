@@ -5,7 +5,8 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import { DocAnnouncementFormModal } from "../../components/Modal/DocAnnouncementFormModal";
 // import { AnnouncementViewModal } from "../../components/Modal/VideoAnnouncementViewModal";
-import { BsDot } from "react-icons/bs";
+import { CgNotes } from "react-icons/cg";
+import { HiDotsVertical } from "react-icons/hi";
 import moment from "moment";
 import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
@@ -14,7 +15,7 @@ import Stack from "@mui/material/Stack";
 import $ from "jquery";
 
 const DocAnnouncement = () => {
-  const { ErrorHandler, user, getAvatarColor } = useAppContext();
+  const { ErrorHandler, user } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [allDocs, setAllDocs] = useState([]);
   const [doc, setDoc] = useState([]);
@@ -53,18 +54,18 @@ const DocAnnouncement = () => {
         }
       );
 
-      // const resData = response?.data?.data?.videos_record?.videos;
-      // const totalPages = response?.data?.data?.videos_record?.total_page;
+      const resData = response?.data?.data?.announcements?.announcements;
+      const totalPages = response?.data?.data?.announcements?.total_page;
 
-      console.log("Newsletter", response?.data?.data);
+      const thisPageLimit = sizePerPage;
+      const thisTotalPageSize = totalPages;
 
-      // const thisPageLimit = sizePerPage;
-      // const thisTotalPageSize = totalPages;
+      setSizePerPage(thisPageLimit);
+      setTotalPages(thisTotalPageSize);
 
-      // setSizePerPage(thisPageLimit);
-      // setTotalPages(thisTotalPageSize);
+      console.log("newsletter:", resData);
 
-      // setAllDocs(resData);
+      setAllDocs(resData);
       setLoading(false);
     } catch (error) {
       const component = "All Newsletters | ";
@@ -102,6 +103,7 @@ const DocAnnouncement = () => {
 
   const handleCreate = () => {
     const newsletterModel = {
+      title: "",
       content: "",
     };
 
@@ -129,7 +131,7 @@ const DocAnnouncement = () => {
         </div>
       </div>
 
-      <div className="announcement_container">
+      <div className="newsletter_container">
         {loading ? (
           <div className="no_annoucement">
             <lord-icon
@@ -141,45 +143,40 @@ const DocAnnouncement = () => {
           </div>
         ) : allDocs?.length ? (
           <>
-            <div className="custom-video-field-div">
+            <div className="custom-newsletter-field-div">
               {allDocs.map((announcement, index) => (
                 <div
-                  className="video-field-div"
+                  className="newsletter-field-div"
                   key={index}
                   onClick={() => handleViewDocAnnouncement(announcement)}
                 >
-                  <video className="video_player">
-                    <source src={announcement?.video_url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  <div className="video_player_info">
-                    <div className="video_info_wrapper">
-                      <div
-                        className="video-avatar-span"
-                        style={{
-                          backgroundColor: getAvatarColor(
-                            announcement.uploaded_by?.charAt(0)
-                          ),
-                        }}
-                      >
-                        {announcement.uploaded_by?.charAt(0)}
-                      </div>
+                  <div
+                    className="newsletter_reader"
+                    dangerouslySetInnerHTML={{ __html: announcement?.body }}
+                  />
+                  <div className="newsletter_reader_info">
+                    <h3>
+                      {announcement?.entered_by} - {announcement?.title}
+                    </h3>
+
+                    <div className="newsletter_info_wrapper">
                       <div>
-                        <div>
-                          <h4>
-                            <strong>{announcement.uploaded_by}</strong>{" "}
-                          </h4>
-                          <BsDot className="BsDot span_indicator" />
-                          <span className="span_indicator">
-                            {moment(announcement.created_at).fromNow()}
-                          </span>
-                        </div>
-                        <p className="span_indicator">
-                          {moment(announcement.created_at).format("LLL")}
+                        <CgNotes className="CgNotes" />
+                        <p className="newsletter_span_indicator">
+                          {moment(announcement?.created_at).format("LLL")}
                         </p>
                       </div>
+
+                      <div>
+                        <HiDotsVertical className="HiDotsVertical" />
+                      </div>
                     </div>
-                    <h3>{announcement.title}</h3>
+                  </div>
+
+                  <div className="newsletter_indicator_div">
+                    <span className="newsletter_absolute_span_indicator">
+                      {moment(announcement?.created_at).fromNow()}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -230,7 +227,7 @@ const DocAnnouncement = () => {
 
       <DocAnnouncementFormModal
         mode={mode}
-        data={allDocs}
+        data={doc}
         fetchDocs={fetchAllDocAnnouncement}
       />
 

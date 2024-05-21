@@ -22,6 +22,10 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
     setEditorContent("");
   };
 
+  const handleFormChange = (e) => {
+    setNewsletter({ ...newsletter, [e.target.name]: e.target.value });
+  };
+
   const handleNewsletterActions = async (e) => {
     if (mode === "Create") {
       return handleCreateNewsletter(e);
@@ -32,41 +36,36 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
 
   const handleCreateNewsletter = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.post(
-    //     `/api/v1/tickets.json`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Access-Control-Allow-Origin": "*",
-    //         "ngrok-skip-browser-warning": "69420",
-    //       },
-    //       payload: {
-    //         ...ticket,
-    //         complaint: editorContent,
-    //       },
-    //     }
-    //   );
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        `/api/v1/text_announcements.json?title=${newsletter?.title}&body=${editorContent}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-    //   showAlert(true, "Ticket successfully created", "alert alert-success");
-    //   fetchDocs();
-    //   $("#DocAnnouncementFormModal").modal("toggle");
-    //   setTicket(data);
-    //   setEditorContent("");
+      showAlert(true, "Newsletter successfully created", "alert alert-success");
+      fetchDocs();
+      $("#DocAnnouncementFormModal").modal("toggle");
+      setNewsletter(data);
+      setEditorContent("");
 
-    //   setLoading(false);
-    //   goToTop();
-    // } catch (error) {
-    //   const errorMsg = error?.response?.data?.errors;
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   $("#DocAnnouncementFormModal").modal("toggle");
-    //   goToTop();
-    //   setLoading(false);
-    // }
+      setLoading(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#DocAnnouncementFormModal").modal("toggle");
+      goToTop();
+      setLoading(false);
+    }
   };
 
   const handleEditNewsletter = async (e) => {
@@ -138,6 +137,19 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
 
             <div className="modal-body">
               <form onSubmit={handleNewsletterActions}>
+                <div className="form-group">
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    name="title"
+                    value={newsletter.title}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
