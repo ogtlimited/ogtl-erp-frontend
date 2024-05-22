@@ -6,22 +6,24 @@ import { useAppContext } from "../../Context/AppContext";
 import { DocAnnouncementFormModal } from "../../components/Modal/DocAnnouncementFormModal";
 import { CgNotes } from "react-icons/cg";
 import { HiDotsVertical } from "react-icons/hi";
+import DocAnnouncementContent from "./../../components/ModalContents/DocAnnouncementContent";
 import ViewModal from "../../components/Modal/ViewModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import moment from "moment";
 import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import $ from "jquery";
-import DocAnnouncementContent from "./../../components/ModalContents/DocAnnouncementContent";
 
 const DocAnnouncement = () => {
-  const { ErrorHandler, user } = useAppContext();
+  const { goToTop, showAlert, ErrorHandler, user } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [allDocs, setAllDocs] = useState([]);
   const [doc, setDoc] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [mode, setMode] = useState("Create");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -32,6 +34,7 @@ const DocAnnouncement = () => {
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canUpload = ["hr_manager", "senior_hr_associate"];
+
   const CurrentUserCanUpload = CurrentUserRoles.some((role) =>
     canUpload.includes(role)
   );
@@ -105,11 +108,49 @@ const DocAnnouncement = () => {
   const handleCreate = () => {
     const newsletterModel = {
       title: "",
-      content: "",
+      body: "",
     };
 
     setDoc(newsletterModel);
     setMode("Create");
+  };
+
+  const handleEdit = (newsletter) => {
+    setDoc(newsletter);
+    setMode("Edit");
+  };
+
+  const handleDeleteNewsletter = async () => {
+    setIsDeleting(true);
+
+    try {
+      await axiosInstance.delete(
+        `/api/v1/text_announcements/${selectedDoc.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      goToTop();
+      fetchAllDocAnnouncement();
+      setIsDeleting(false);
+      showAlert(true, "Newsletter deleted successfully!", "alert alert-info");
+      $("#exampleModal").modal("toggle");
+    } catch (error) {
+      goToTop();
+      const errorMsg = error.response?.data?.errors;
+      showAlert(
+        true,
+        `${errorMsg || "Unable to Delete Newsletter"}`,
+        "alert alert-warning"
+      );
+      $("#exampleModal").modal("toggle");
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -165,8 +206,52 @@ const DocAnnouncement = () => {
                         </p>
                       </div>
 
-                      <div>
-                        <HiDotsVertical className="HiDotsVertical" />
+                      <div className="dropdown dropdown-action text-right">
+                        <a
+                          href="#"
+                          className="action-icon dropdown-toggle"
+                          data-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          <HiDotsVertical className="HiDotsVertical" />
+                        </a>
+                        <div className="dropdown-menu dropdown-menu-right">
+                          <a
+                            className="dropdown-item"
+                            href="#"
+                            data-toggle="modal"
+                            data-target="#generalModal"
+                            onClick={() => {
+                              setSelectedDoc(announcement);
+                            }}
+                          >
+                            <i className="fa fa-eye m-r-5"></i> View
+                          </a>
+
+                          {CurrentUserCanUpload ? (
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              data-toggle="modal"
+                              data-target="#DocAnnouncementFormModal"
+                              onClick={() => handleEdit(announcement)}
+                            >
+                              <i className="fa fa-pencil m-r-5"></i> Edit
+                            </a>
+                          ) : null}
+
+                          {CurrentUserCanUpload ? (
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              data-toggle="modal"
+                              data-target="#exampleModal"
+                              onClick={() => setSelectedDoc(announcement)}
+                            >
+                              <i className="fa fa-trash m-r-5"></i> Delete
+                            </a>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -232,11 +317,18 @@ const DocAnnouncement = () => {
       <ViewModal
         title={selectedDoc?.title}
         expand={true}
-        content={
-          <DocAnnouncementContent
-            content={selectedDoc}
-          />
-        }
+        content={<DocAnnouncementContent content={selectedDoc} />}
+      />
+
+      <ConfirmModal
+        title="Newsletter"
+        selectedRow={selectedDoc}
+        deleteFunction={handleDeleteNewsletter}
+        message={`Are you sure you want to delete ${selectedDoc?.title.replace(
+          /\b\w/g,
+          (char) => char.toUpperCase()
+        )} newsletter?`}
+        isLoading={isDeleting}
       />
     </div>
   );

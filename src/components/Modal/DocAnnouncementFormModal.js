@@ -14,7 +14,7 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
 
   useEffect(() => {
     setNewsletter(data);
-    setEditorContent(data?.content || "");
+    setEditorContent(data?.body || "");
   }, [data]);
 
   const cancelEvent = () => {
@@ -74,44 +74,41 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
 
   const handleEditNewsletter = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.post(
+        `/api/v1/text_announcements/${data?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: newsletter.title,
+            body: editorContent,
+          },
+        }
+      );
 
-    // try {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const response = await axiosInstance.put(
-    //     `/api/v1/tickets/${ticket?.id}.json`,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Access-Control-Allow-Origin": "*",
-    //         "ngrok-skip-browser-warning": "69420",
-    //       },
-    //       payload: {
-    //         // first_name: ticket?.first_name,
-    //         // last_name: ticket?.last_name,
-    //         // ogid: ticket?.ogid,
-    //         // email: ticket?.email,
-    //         complaint: editorContent,
-    //       },
-    //     }
-    //   );
+      showAlert(true, "Newsletter successfully created", "alert alert-success");
+      $("#DocAnnouncementFormModal").modal("toggle");
 
-    //   showAlert(true, "Ticket successfully updated", "alert alert-success");
-    //   fetchDocs();
-    //   $("#DocAnnouncementFormModal").modal("toggle");
-    //   setTicket(data);
-    //   setEditorContent("");
+      fetchDocs();
+      setNewsletter(data);
+      setEditorContent("");
 
-    //   setLoading(false);
-    //   goToTop();
-    // } catch (error) {
-    //   const errorMsg = error?.response?.data?.errors;
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   $("#DocAnnouncementFormModal").modal("toggle");
-    //   goToTop();
-    //   setLoading(false);
-    // }
+      setLoading(false);
+      goToTop();
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      $("#DocAnnouncementFormModal").modal("toggle");
+      goToTop();
+      setLoading(false);
+    }
   };
 
   return (
