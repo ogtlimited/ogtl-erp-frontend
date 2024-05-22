@@ -20,18 +20,18 @@ const PublicHolidayContent = ({ data }) => {
       </p>
       <p className="ticket-info">
         Start{" "}
-        <span>{moment(start_date).utc().format("Do MMMM, YYYY - h:mma")}</span>
+        <span>{moment(start_date).utc().format("Do MMMM, YYYY")}</span>
       </p>
       <p className="ticket-info">
         End{" "}
-        <span>{moment(end_date).utc().format("Do MMMM, YYYY - h:mma")}</span>
+        <span>{moment(end_date).utc().format("Do MMMM, YYYY")}</span>
       </p>
       <div>
         <p className={`display-status ${statusStyle}`}>
           {status?.replace(/\b\w/g, (char) => char.toUpperCase())}
         </p>
       </div>
-      <div className="well"></div>
+      {/* <div className="well"></div> */}
     </div>
   );
 };

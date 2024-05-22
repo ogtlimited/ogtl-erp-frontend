@@ -12,7 +12,7 @@ import $ from "jquery";
 
 const CampaignHolidays = () => {
   const { id } = useParams();
-  const { user, ErrorHandler, goToTop, showAlert } = useAppContext();
+  const { user, ErrorHandler, goToTop, showAlert, fetchPublicHolidays } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [campaignHolidays, setCampaignHolidays] = useState([]);
   const [mode, setMode] = useState("Add");
@@ -123,6 +123,7 @@ const CampaignHolidays = () => {
         "alert alert-info"
       );
       $("#deleteModal").modal("toggle");
+      fetchPublicHolidays();
       fetchAllCampaignHolidays();
       setIsDeleting(false);
     } catch (error) {

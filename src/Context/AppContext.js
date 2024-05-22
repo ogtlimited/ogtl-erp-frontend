@@ -320,34 +320,66 @@ const AppProvider = (props) => {
   const fetchPublicHolidays = useCallback(async () => {
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(`/api/v1/employee_holidays.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: 1,
-          limit: 10000,
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/employee_holidays.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-      const resData = response?.data?.data?.public_holidays;
+      const { department_holidays, campaign_holidays } =
+        response.data.data.employee_holidays;
 
-      const formatted = resData.map((e) => ({
-        ...e,
-        title: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
+      const formattedDepartmentHolidays = department_holidays.map((e) => ({
+        ...e?.public_holiday,
+        title: e?.public_holiday?.title.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
+        ),
         status:
-          moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
+          moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
+          today_date
             ? "past"
-            : today_date < moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-              moment(e?.start_date).utc().format("yyyy-MM-DD") !== today_date
+            : today_date <
+                moment(e?.public_holiday?.start_date)
+                  .utc()
+                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") !== today_date
             ? "pending"
             : "happening",
       }));
 
-      console.log("all employee holiday resData", formatted);
-      // setAllPublicHolidayEvents(formatted);
+      const formattedCampaignHolidays = campaign_holidays.map((e) => ({
+        ...e?.public_holiday,
+        title: e?.public_holiday?.title.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
+        ),
+        status:
+          moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
+          today_date
+            ? "past"
+            : today_date <
+                moment(e?.public_holiday?.start_date)
+                  .utc()
+                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") !== today_date
+            ? "pending"
+            : "happening",
+      }));
+
+      const allOffice = [
+        ...formattedDepartmentHolidays,
+        ...formattedCampaignHolidays,
+      ];
+
+      setAllPublicHolidayEvents(allOffice);
     } catch (error) {
       const component = "Public Holiday | ";
       ErrorHandler(error, component);
@@ -593,11 +625,12 @@ const AppProvider = (props) => {
 
       const resData = response?.data?.data?.survey_records?.surveys;
 
-      const formatted = resData.map((survey) => ({
-        label: survey?.title,
-        value: survey?.id,
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+      const formatted = resData
+        .map((survey) => ({
+          label: survey?.title,
+          value: survey?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectSurvey(formatted);
       setLoadingSelect(false);
