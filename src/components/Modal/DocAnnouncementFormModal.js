@@ -78,7 +78,7 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
 
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.put(
         `/api/v1/text_announcements/${data?.id}.json`,
         {
           headers: {
@@ -93,7 +93,7 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
         }
       );
 
-      showAlert(true, "Newsletter successfully created", "alert alert-success");
+      showAlert(true, "Newsletter successfully updated", "alert alert-success");
       $("#DocAnnouncementFormModal").modal("toggle");
 
       fetchDocs();
