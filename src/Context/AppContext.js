@@ -65,8 +65,13 @@ const AppProvider = (props) => {
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
   const [announcementWatched, setAnnouncementWatched] = useState(false);
+
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
+
+  const [newsletter, setNewsletter] = useState(null);
+  const [loadingNewsletter, setLoadingNewsletter] = useState(false);
+  const [newsletterRead, setNewsletterRead] = useState(false);
 
   const today_date = moment.utc().format("yyyy-MM-DD");
 
@@ -289,6 +294,39 @@ const AppProvider = (props) => {
       const component = "Announcement | ";
       ErrorHandler(error, component);
       setLoadingAnnouncement(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Newsletter
+  const fetchNewsletter = useCallback(async () => {
+    setLoadingNewsletter(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/text_announcements.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.announcements?.announcements;
+      if (resData.length > 0) {
+        setNewsletter(resData[0]);
+      }
+      setLoadingNewsletter(false);
+    } catch (error) {
+      const component = "Newsletter | ";
+      ErrorHandler(error, component);
+      setLoadingNewsletter(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -896,6 +934,7 @@ const AppProvider = (props) => {
       fetchAllLeaveTypes();
       fetchStaffResignation();
       fetchAnnouncement();
+      fetchNewsletter();
       fetchPendingSurveys();
       fetchPublicHolidays();
     }
@@ -912,6 +951,7 @@ const AppProvider = (props) => {
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
+    fetchNewsletter,
     fetchAllSurveys,
     fetchPendingSurveys,
     fetchPublicHolidays,
@@ -998,6 +1038,14 @@ const AppProvider = (props) => {
         announcementWatched,
         setAnnouncementWatched,
         fetchAnnouncement,
+
+        newsletter,
+        setNewsletter,
+        loadingNewsletter,
+        setLoadingNewsletter,
+        newsletterRead,
+        setNewsletterRead,
+        fetchNewsletter,
 
         pendingSurveys,
         fetchPendingSurveys,
