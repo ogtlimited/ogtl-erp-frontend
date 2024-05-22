@@ -66,7 +66,7 @@ const AdminLayout = (props) => {
   
   useEffect(() => {
     if (newsletterRead) {
-      window.location.reload();
+      // window.location.reload();
     }
   }, [newsletterRead]);
 
@@ -87,7 +87,7 @@ const AdminLayout = (props) => {
 
   useEffect(() => {
     if (announcementWatched) {
-      window.location.reload();
+      // window.location.reload();
     }
   }, [announcementWatched]);
 
