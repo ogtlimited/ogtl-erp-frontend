@@ -41,12 +41,16 @@ export const DocAnnouncementFormModal = ({ mode, data, fetchDocs }) => {
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(
-        `/api/v1/text_announcements.json?title=${newsletter?.title}&body=${editorContent}`,
+        `/api/v1/text_announcements.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            title: newsletter.title,
+            body: editorContent,
           },
         }
       );

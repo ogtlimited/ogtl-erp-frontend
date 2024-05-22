@@ -92,7 +92,7 @@ const VideoAnnouncement = () => {
   };
 
   const handleViewVideoAnnouncement = (announcement) => {
-    $("#VideoAnnouncementFormModal").modal("show");
+    $("#VideoAnnouncementViewModal").modal("show");
     setSelectedVideo(announcement);
   };
 

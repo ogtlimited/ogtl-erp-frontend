@@ -4,15 +4,16 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import { DocAnnouncementFormModal } from "../../components/Modal/DocAnnouncementFormModal";
-// import { AnnouncementViewModal } from "../../components/Modal/VideoAnnouncementViewModal";
 import { CgNotes } from "react-icons/cg";
 import { HiDotsVertical } from "react-icons/hi";
+import ViewModal from "../../components/Modal/ViewModal";
 import moment from "moment";
 import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import $ from "jquery";
+import DocAnnouncementContent from "./../../components/ModalContents/DocAnnouncementContent";
 
 const DocAnnouncement = () => {
   const { ErrorHandler, user } = useAppContext();
@@ -97,7 +98,7 @@ const DocAnnouncement = () => {
   };
 
   const handleViewDocAnnouncement = (announcement) => {
-    $("#DocAnnouncementViewModal").modal("show");
+    $("#generalModal").modal("show");
     setSelectedDoc(announcement);
   };
 
@@ -145,14 +146,11 @@ const DocAnnouncement = () => {
           <>
             <div className="custom-newsletter-field-div">
               {allDocs.map((announcement, index) => (
-                <div
-                  className="newsletter-field-div"
-                  key={index}
-                  onClick={() => handleViewDocAnnouncement(announcement)}
-                >
+                <div className="newsletter-field-div" key={index}>
                   <div
                     className="newsletter_reader"
                     dangerouslySetInnerHTML={{ __html: announcement?.body }}
+                    onClick={() => handleViewDocAnnouncement(announcement)}
                   />
                   <div className="newsletter_reader_info">
                     <h3>
@@ -231,11 +229,15 @@ const DocAnnouncement = () => {
         fetchDocs={fetchAllDocAnnouncement}
       />
 
-      {/* <AnnouncementViewModal
-        loading={loading}
-        announcementContent={selectedVideo}
-        setSelectedVideo={setSelectedVideo}
-      /> */}
+      <ViewModal
+        title={selectedDoc?.title}
+        expand={true}
+        content={
+          <DocAnnouncementContent
+            content={selectedDoc}
+          />
+        }
+      />
     </div>
   );
 };
