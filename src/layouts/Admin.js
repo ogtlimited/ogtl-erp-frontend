@@ -1,13 +1,14 @@
 import React, { useEffect, useCallback } from "react";
 import { useLocation, Outlet } from "react-router-dom";
-import Header from "../components/Misc/Header";
-import Sidebar from "../components/Misc/Sidebar";
 import { useAppContext } from "../Context/AppContext";
-import AlertSvg from "./AlertSvg";
-import $ from "jquery";
 import { SurveyFormModalPrompt } from "../components/Modal/SurveyFormModalPrompt";
 import { VideoAnnouncementModalPrompt } from "../components/Modal/VideoAnnouncementModalPrompt";
+import { NewsletterModalPrompt } from "../components/Modal/NewsletterModalPrompt";
 import secureLocalStorage from "react-secure-storage";
+import Header from "../components/Misc/Header";
+import Sidebar from "../components/Misc/Sidebar";
+import AlertSvg from "./AlertSvg";
+import $ from "jquery";
 
 const AdminLayout = (props) => {
   const mainContent = React.useRef(null);
@@ -15,11 +16,13 @@ const AdminLayout = (props) => {
   const {
     showAlertMsg,
     showProgress,
-    announcementWatched,
     pendingSurveys,
     fetchPendingSurveys,
     setPendingSurveySubmitted,
     announcement,
+    announcementWatched,
+    newsletter,
+    newsletterRead,
   } = useAppContext();
 
   React.useEffect(() => {
@@ -28,26 +31,55 @@ const AdminLayout = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
+  // Survey Form:
   const surveyPopUp = useCallback(() => {
     const seenAnnouncement = secureLocalStorage.getItem("seenAnnouncement");
+    const seenNewsletter = secureLocalStorage.getItem("seenNewsletter");
 
-    if ((seenAnnouncement || announcementWatched) && pendingSurveys?.length) {
+    if (
+      (seenAnnouncement || announcementWatched) &&
+      (seenNewsletter || newsletterRead) &&
+      pendingSurveys?.length
+    ) {
       setPendingSurveySubmitted(false);
       $("#SurveyFormModalPrompt").modal("toggle");
     } else {
       return null;
     }
-  }, [announcementWatched, pendingSurveys?.length, setPendingSurveySubmitted]);
+  }, [
+    announcementWatched,
+    newsletterRead,
+    pendingSurveys?.length,
+    setPendingSurveySubmitted,
+  ]);
 
+  // Newsletter:
+  const newletterPopUp = useCallback(() => {
+    const seenNewsletter = secureLocalStorage.getItem("seenNewsletter");
+
+    if (newsletter && !seenNewsletter) {
+      $("#NewsletterModalPrompt").modal("show");
+    } else {
+      surveyPopUp();
+    }
+  }, [newsletter, surveyPopUp]);
+  
+  useEffect(() => {
+    if (newsletterRead) {
+      window.location.reload();
+    }
+  }, [newsletterRead]);
+
+  // Announcement:
   const announcementPopUp = useCallback(() => {
     const seenAnnouncement = secureLocalStorage.getItem("seenAnnouncement");
 
     if (announcement && !seenAnnouncement) {
       $("#VideoAnnouncementModalPrompt").modal("show");
     } else {
-      surveyPopUp();
+      newletterPopUp();
     }
-  }, [announcement, surveyPopUp]);
+  }, [announcement, newletterPopUp]);
 
   useEffect(() => {
     announcementPopUp();
@@ -55,7 +87,7 @@ const AdminLayout = (props) => {
 
   useEffect(() => {
     if (announcementWatched) {
-      // window.location.reload();
+      window.location.reload();
     }
   }, [announcementWatched]);
 
@@ -106,6 +138,8 @@ const AdminLayout = (props) => {
       />
 
       <VideoAnnouncementModalPrompt />
+
+      <NewsletterModalPrompt />
     </>
   );
 };
