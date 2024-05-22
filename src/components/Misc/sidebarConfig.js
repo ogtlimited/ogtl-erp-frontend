@@ -275,7 +275,7 @@ const sidebarConfig = [
           },
           {
             canView: "all",
-            title: "Announcement",
+            title: "Announcements",
             path: PATH_DASHBOARD.main.announcement,
             icon: ICONS.announcement,
           },

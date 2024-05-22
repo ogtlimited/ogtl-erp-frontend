@@ -3,7 +3,7 @@ import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 
-export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
+export const VideoAnnouncementFormModal = ({fetchAllAnnouncement}) => {
   const { showAlert, fetchAnnouncement } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(0);
@@ -74,7 +74,7 @@ export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
       );
 
       showAlert(true, "Your Video Upload is Successful", "alert alert-success");
-      $("#AnnouncementFormModal").modal("toggle");
+      $("#VideoAnnouncementFormModal").modal("toggle");
 
       fetchAnnouncement();
       fetchAllAnnouncement();
@@ -83,7 +83,7 @@ export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
       showAlert(true, `${errorMsg}`, "alert alert-warning");
-      $("#AnnouncementFormModal").modal("toggle");
+      $("#VideoAnnouncementFormModal").modal("toggle");
       setLoading(false);
     }
   };
@@ -92,7 +92,7 @@ export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
     <>
       <div
         className="modal fade"
-        id="AnnouncementFormModal"
+        id="VideoAnnouncementFormModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -101,7 +101,7 @@ export const AnnouncementFormModal = ({fetchAllAnnouncement}) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Announcement
+                Video Announcement
               </h4>
               <button
                 type="button"

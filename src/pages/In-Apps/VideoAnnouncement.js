@@ -1,17 +1,19 @@
+// *IN USE
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useCallback, useState, useEffect } from "react";
 import { useAppContext } from "../../Context/AppContext";
-import { AnnouncementFormModal } from "../../components/Modal/AnnouncementFormModal";
+import { VideoAnnouncementFormModal } from "../../components/Modal/VideoAnnouncementFormModal";
+import { VideoAnnouncementViewModal } from "../../components/Modal/VideoAnnouncementViewModal";
 import { BsDot } from "react-icons/bs";
 import moment from "moment";
 import axiosInstance from "../../services/api";
 import usePagination from "../HR/Admin/JobApplicantsPagination.Admin";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { AnnouncementViewModal } from "./../../components/Modal/AnnouncementViewModal";
 import $ from "jquery";
 
-const Announcement = () => {
+const VideoAnnouncement = () => {
   const { ErrorHandler, user, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [allAnnouncement, setAllAnnouncement] = useState([]);
@@ -25,12 +27,12 @@ const Announcement = () => {
   });
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canUpload = ["hr_manager"];
+  const canUpload = ["hr_manager", "senior_hr_associate"];
   const CurrentUserCanUpload = CurrentUserRoles.some((role) =>
     canUpload.includes(role)
   );
 
-  const fetchAllAnnouncement = useCallback(async () => {
+  const fetchAllVideoAnnouncement = useCallback(async () => {
     setLoading(true);
 
     try {
@@ -61,7 +63,7 @@ const Announcement = () => {
       setAllAnnouncement(resData);
       setLoading(false);
     } catch (error) {
-      const component = "All Announcements | ";
+      const component = "All Video Announcements | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -69,8 +71,8 @@ const Announcement = () => {
   }, [page, sizePerPage]);
 
   useEffect(() => {
-    fetchAllAnnouncement();
-  }, [fetchAllAnnouncement]);
+    fetchAllVideoAnnouncement();
+  }, [fetchAllVideoAnnouncement]);
 
   const count = totalPages;
   const _DATA = usePagination(allAnnouncement, sizePerPage, totalPages);
@@ -89,31 +91,24 @@ const Announcement = () => {
     setPage(1);
   };
 
-  const handleViewAnnouncement = (announcement) => {
-    $("#AnnouncementViewModal").modal("show");
+  const handleViewVideoAnnouncement = (announcement) => {
+    $("#VideoAnnouncementViewModal").modal("show");
     setSelectedVideo(announcement);
   };
 
   return (
-    <>
+    <div className="tab-pane" id="tab_announcement_videos">
       <div className="page-header">
         <div className="row align-items-center">
-          <div className="col">
-            <h3 className="page-title">Announcements</h3>
-            <ul className="breadcrumb">
-              <li className="breadcrumb-item">Main</li>
-              <li className="breadcrumb-item active">Engage & Feedback</li>
-            </ul>
-          </div>
           {CurrentUserCanUpload ? (
             <div className="col-auto float-right ml-auto">
               <a
                 href="#"
                 className="btn add-btn"
                 data-toggle="modal"
-                data-target="#AnnouncementFormModal"
+                data-target="#VideoAnnouncementFormModal"
               >
-                <i className="las la-file-video"></i> New Video
+                <i className="las la-video"></i> New Video
               </a>
             </div>
           ) : null}
@@ -122,12 +117,12 @@ const Announcement = () => {
 
       <div className="announcement_container">
         {loading ? (
-          <div>
+          <div className="no_annoucement">
             <lord-icon
               src="https://cdn.lordicon.com/ilsmzilo.json"
               trigger="loop"
               colors="primary:#00c5fb,secondary:#0253cc"
-              style={{ width: "250px", height: "250px" }}
+              style={{ width: "200px", height: "200px" }}
             ></lord-icon>
           </div>
         ) : allAnnouncement?.length ? (
@@ -137,7 +132,7 @@ const Announcement = () => {
                 <div
                   className="video-field-div"
                   key={index}
-                  onClick={() => handleViewAnnouncement(announcement)}
+                  onClick={() => handleViewVideoAnnouncement(announcement)}
                 >
                   <video className="video_player">
                     <source src={announcement?.video_url} type="video/mp4" />
@@ -207,27 +202,29 @@ const Announcement = () => {
             </div>
           </>
         ) : (
-          <div>
+          <div className="no_annoucement">
             <lord-icon
               src="https://cdn.lordicon.com/ilsmzilo.json"
               trigger="hover"
               colors="primary:#00c5fb,secondary:#0253cc"
-              style={{ width: "250px", height: "250px" }}
+              style={{ width: "200px", height: "200px" }}
             ></lord-icon>
             <h3>No Video Announcement</h3>
           </div>
         )}
       </div>
 
-      <AnnouncementFormModal fetchAllAnnouncement={fetchAllAnnouncement} />
+      <VideoAnnouncementFormModal
+        fetchAllAnnouncement={fetchAllVideoAnnouncement}
+      />
 
-      <AnnouncementViewModal
+      <VideoAnnouncementViewModal
         loading={loading}
         announcementContent={selectedVideo}
         setSelectedVideo={setSelectedVideo}
       />
-    </>
+    </div>
   );
 };
 
-export default Announcement;
+export default VideoAnnouncement;
