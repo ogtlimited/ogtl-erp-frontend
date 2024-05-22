@@ -5,7 +5,8 @@ import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
 export const VideoAnnouncementModalPrompt = () => {
-  const { loadingAnnouncement, announcement, setAnnouncementWatched } = useAppContext();
+  const { loadingAnnouncement, announcement, setAnnouncementWatched } =
+    useAppContext();
   const videoRef = useRef(null);
 
   const closeModal = () => {
@@ -59,12 +60,18 @@ export const VideoAnnouncementModalPrompt = () => {
             <div className="modal-body">
               <div>
                 {loadingAnnouncement ? (
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
                       src="https://cdn.lordicon.com/ilsmzilo.json"
                       trigger="loop"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
                   </div>
                 ) : announcement ? (
@@ -75,12 +82,18 @@ export const VideoAnnouncementModalPrompt = () => {
                     </video>
                   </div>
                 ) : (
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
                       src="https://cdn.lordicon.com/ilsmzilo.json"
                       trigger="hover"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
                     <h3>No Video Announcement</h3>
                   </div>
