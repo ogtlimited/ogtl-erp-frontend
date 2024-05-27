@@ -126,7 +126,7 @@ class HelperService {
     return hash;
   }
   handleMoneyFormat(number) {
-    if (number === null || number === undefined) {
+    if (number === null || number === undefined || isNaN(number)) {
       return "₦0.00"
     } else {
       return (

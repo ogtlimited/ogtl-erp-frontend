@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
 import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendanceTable";
+import AttendanceAverageAdmin from "./AttendanceAverage.Admin";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
-import { useAppContext } from "../../../Context/AppContext";
 
 const AttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
@@ -33,13 +34,12 @@ const AttendanceRecord = () => {
   const [totalDepartmentPages, setTotalDepartmentPages] = useState("");
 
   // Daily Attendance Summary:
-  const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const today_date = moment().utc().format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
 
   // Monthly Attendance:
-  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const firstDay = moment().startOf("month").utc().format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").utc().format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
   const [officeType, setOfficeType] = useState("");
@@ -48,6 +48,17 @@ const AttendanceRecord = () => {
     title: "",
     office_type: "",
   });
+
+  // Attendance Average:
+  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const [attendanceAverage, setAttendanceAverage] = useState([]);
+  const [loadingAttendanceAverage, setLoadingAttendanceAverage] =
+    useState(false);
+  const [attendanceAverageFromDate, setAttendanceAverageFromDate] =
+    useState(firstweekDay);
+  const [attendanceAverageToDate, setAttendanceAverageToDate] =
+    useState(lastWeekDay);
 
   useEffect(() => {
     const allDates = Array.from(
@@ -280,21 +291,21 @@ const AttendanceRecord = () => {
             ? data?.days[key]?.clock_out
             : null,
           status:
-          data?.days[key] === "absent"
-            ? "Absent"
-            : data?.days[key] === "leave"
-            ? "Leave"
-            : data?.days[key] === "off"
-            ? "Day off"
-            : data?.days[key] === "sick"
-            ? "Sick"
-            : data?.days[key] === "FAM/PER Emergency"
-            ? "FAM/PER Emergency"
-            : data?.days[key] === "holiday"
-            ? "Holiday"
-            : data?.days[key] === "---"
-            ? "---"
-            : "Present",
+            data?.days[key] === "absent"
+              ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "off"
+              ? "Day off"
+              : data?.days[key] === "sick"
+              ? "Sick"
+              : data?.days[key] === "FAM/PER Emergency"
+              ? "FAM/PER Emergency"
+              : data?.days[key] === "holiday"
+              ? "Holiday"
+              : data?.days[key] === "---"
+              ? "---"
+              : "Present",
         })),
       }));
 
@@ -312,6 +323,38 @@ const AttendanceRecord = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, selectedOffice?.id, officeType, page, sizePerPage, toDate]);
+
+  // Attendance Average:
+  const fetchAttendanceAverage = useCallback(async () => {
+    setLoadingAttendanceAverage(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `api/v1/hr_dashboard/attendance_average_calculations.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            from: moment(attendanceAverageFromDate).utc().format("DD-MM-YYYY"),
+            to: moment(attendanceAverageToDate).utc().format("DD-MM-YYYY"),
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.average_attendance;
+
+      setAttendanceAverage(resData);
+      setLoadingAttendanceAverage(false);
+    } catch (error) {
+      const component = "Attendance Average error | ";
+      ErrorHandler(error, component);
+      setLoadingAttendanceAverage(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attendanceAverageFromDate, attendanceAverageToDate]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -401,6 +444,10 @@ const AttendanceRecord = () => {
   useEffect(() => {
     fetchMonthlyAttendance();
   }, [fetchMonthlyAttendance]);
+
+  useEffect(() => {
+    fetchAttendanceAverage();
+  }, [fetchAttendanceAverage]);
 
   const columns = [
     {
@@ -704,6 +751,16 @@ const AttendanceRecord = () => {
               </li>
 
               <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_attendanceAverage"
+                >
+                  Attendance Average
+                </a>
+              </li>
+
+              <li className="nav-item">
                 <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
                   Campaigns
                 </a>
@@ -756,6 +813,17 @@ const AttendanceRecord = () => {
               setSizePerPage={setSizePerPage}
               totalPages={totalPages}
               setTotalPages={setTotalPages}
+            />
+          </div>
+
+          <div id="tab_attendanceAverage" className="col-12 tab-pane">
+            <AttendanceAverageAdmin
+              fromDate={attendanceAverageFromDate}
+              setFromDate={setAttendanceAverageFromDate}
+              toDate={attendanceAverageToDate}
+              setToDate={setAttendanceAverageToDate}
+              data={attendanceAverage}
+              loading={loadingAttendanceAverage}
             />
           </div>
 

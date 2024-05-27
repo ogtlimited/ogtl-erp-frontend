@@ -143,7 +143,7 @@ const AdminLeavesHistoryTable = ({
                 Export CSV
               </ExportCSVButton>
 
-              <div className="col-12" style={{ marginTop: 30 }}>
+              <div className="col-12 p-0" style={{ marginTop: 30 }}>
                 <MySearch {...props.searchProps} className="inputSearch" />
               </div>
 
