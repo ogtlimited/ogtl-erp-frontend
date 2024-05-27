@@ -43,8 +43,7 @@ const PayrollUser = () => {
   const [today, setToday] = useState(null);
 
   useEffect(() => {
-    const time = new Date().toDateString();
-    const today_date = moment(time).format("yyyy-MM-DD");
+    const today_date = moment().utc().format("yyyy-MM-DD");
     setToday(today_date);
   }, []);
 

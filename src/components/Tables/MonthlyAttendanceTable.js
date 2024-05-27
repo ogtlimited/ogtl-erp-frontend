@@ -230,7 +230,7 @@ const MonthlyAttendanceTable = ({
               ) : null}
 
               <div
-                className="row hr-filter-select col-12"
+                className="row hr-filter-select col-12 p-0"
                 style={{ marginTop: "2rem" }}
               >
                 <div className="col-md-3">

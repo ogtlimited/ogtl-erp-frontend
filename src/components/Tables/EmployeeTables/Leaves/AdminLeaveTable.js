@@ -139,7 +139,7 @@ const AdminLeavesTable = ({
         >
           {(props) => (
             <div className="col-12">
-              <div className="col-12" style={{ marginTop: 30 }}>
+              <div className="col-12 p-0" style={{ marginTop: 30 }}>
                 <ExportCSVButton
                   className="float-right btn export-csv"
                   {...props.csvProps}

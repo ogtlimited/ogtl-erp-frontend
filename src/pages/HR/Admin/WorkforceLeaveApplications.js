@@ -31,8 +31,16 @@ const WorkforceLeaveApplications = () => {
   const [historySizePerPage, setHistorySizePerPage] = useState(10);
   const [historyTotalPages, setHistoryTotalPages] = useState("");
 
-  const time = new Date().toDateString();
-  const today_date = moment(time).format("yyyy-MM-DD");
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+  const [today, setToday] = useState(null);
+
+  useEffect(() => {
+    const today_date = moment().utc().format("yyyy-MM-DD");
+    setToday(today_date);
+  }, []);
 
   const isWorkforceManager = user?.employee_info?.roles.includes("data_manager")
     ? true
@@ -89,7 +97,9 @@ const WorkforceLeaveApplications = () => {
           leave?.first_name.toUpperCase() +
           " " +
           leave?.last_name.toUpperCase(),
-        from_date: moment(leave?.leave?.start_date).format("YYYY, MM (MMM), Do"),
+        from_date: moment(leave?.leave?.start_date).format(
+          "YYYY, MM (MMM), Do"
+        ),
         to_date: moment(leave?.leave?.end_date).format("YYYY, MM (MMM), Do"),
         total_leave_days: calcBusinessDays(
           leave?.leave?.start_date,
@@ -124,6 +134,8 @@ const WorkforceLeaveApplications = () => {
             pages: historyPage,
             limit: historySizePerPage,
             status: historyStatus,
+            from_date: fromDate,
+            to_date: toDate,
           },
         }
       );
@@ -155,12 +167,10 @@ const WorkforceLeaveApplications = () => {
         rejection_reason: leave?.leave?.rejection_reason,
         reason_for_cancellation: leave?.leave?.reason_for_cancellation,
         leave_marker:
-          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today_date
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today
             ? "Leave Ended"
-            : today_date <
-                moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
-              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !==
-                today_date
+            : today < moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !== today
             ? "Scheduled Leave"
             : "On Leave",
       }));
@@ -172,7 +182,7 @@ const WorkforceLeaveApplications = () => {
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
-  }, [historyPage, historySizePerPage, historyStatus, today_date]);
+  }, [historyPage, historySizePerPage, historyStatus, today]);
 
   useEffect(() => {
     if (isWorkforceManager) {
@@ -716,8 +726,37 @@ const WorkforceLeaveApplications = () => {
             setTotalPages={setTotalPages}
           />
         </div>
-
+        
         <div id="tab_hr-leave-history" className="col-12 tab-pane">
+          <div className="row col-md-6">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="fromDate">From</label>
+                <input
+                  type="date"
+                  name="fromDate"
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  className="form-control "
+                  max={today}
+                />
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="toDate">To</label>
+                <input
+                  type="date"
+                  name="toDate"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                  className="form-control "
+                  max={today}
+                />
+              </div>
+            </div>
+          </div>
+
           <AdminLeavesHistoryTable
             columns={historyColumns}
             data={leaveHistory}
