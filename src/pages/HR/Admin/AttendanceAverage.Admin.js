@@ -88,7 +88,7 @@ const AttendanceAverageAdmin = ({
             />
 
             <AttendanceAverageCard
-              iconSrc="https://cdn.lordicon.com/qnthazlv.json"
+              iconSrc="https://cdn.lordicon.com/gbaaxcjq.json"
               label="Total Biometric Attendance Count"
               value={
                 loading ? (
@@ -115,11 +115,7 @@ const AttendanceAverageAdmin = ({
                     style={{ marginTop: "5px", fontSize: "20px" }}
                   />
                 ) : (
-                  <VictoryDougnutChart
-                    percent={parseFloat(
-                      data?.percentage_average?.replace(/%/, "")
-                    )}
-                  />
+                  <VictoryDougnutChart percent={data?.percentage_average} />
                 )}
               </div>
             </div>

@@ -330,7 +330,7 @@ const AttendanceRecord = () => {
 
     try {
       const response = await axiosInstance.get(
-        `api/v1/hr_dashboard/attendance_average_calculations.json`,
+        `/api/v1/hr_dashboard/attendance_average_calculations.json`,
         {
           headers: {
             "Content-Type": "application/json",
