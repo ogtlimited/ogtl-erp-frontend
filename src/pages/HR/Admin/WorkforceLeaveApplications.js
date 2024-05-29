@@ -1,6 +1,5 @@
 //* IN USE
 
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -143,14 +142,16 @@ const WorkforceLeaveApplications = () => {
           "ngrok-skip-browser-warning": "69420",
         },
         params: {
-          pages: page,
-          limit: sizePerPage,
+          pages: approvedPage,
+          limit: approvedSizePerPage,
+          // from_date: fromDate,
+          // to_date: toDate,
         },
       });
       const resData = response?.data?.data?.leaves;
       const totalPages = response?.data?.data?.pages;
 
-      setApprovedSizePerPage(sizePerPage);
+      setApprovedSizePerPage(approvedSizePerPage);
       setApprovedTotalPages(totalPages);
 
       const formatted = resData.map((leave) => ({
@@ -188,7 +189,7 @@ const WorkforceLeaveApplications = () => {
       setLoadingApproved(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage]);
+  }, [approvedPage, approvedSizePerPage, fromDate, toDate, today]);
 
   useEffect(() => {
     if (isWorkforceManager) {
@@ -258,6 +259,7 @@ const WorkforceLeaveApplications = () => {
       ErrorHandler(error, component);
       setLoadingHistory(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [historyPage, historySizePerPage, historyStatus, today]);
 
   useEffect(() => {
@@ -542,19 +544,23 @@ const WorkforceLeaveApplications = () => {
         <>
           {value === "approved" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
+              <i className="fa fa-dot-circle-o text-success"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "cancelled" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+              <i className="fa fa-dot-circle-o text-primary"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "rejected" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+              <i className="fa fa-dot-circle-o text-danger"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "pending" ? (
             <span className="btn btn-gray btn-sm btn-rounded ">
-              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+              <i className="fa fa-dot-circle-o text-warning"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : null}
         </>
@@ -752,19 +758,23 @@ const WorkforceLeaveApplications = () => {
         <>
           {value === "approved" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-success"></i> {value}
+              <i className="fa fa-dot-circle-o text-success"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "cancelled" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-primary"></i> {value}
+              <i className="fa fa-dot-circle-o text-primary"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "rejected" ? (
             <span className="btn btn-gray btn-sm btn-rounded">
-              <i className="fa fa-dot-circle-o text-danger"></i> {value}
+              <i className="fa fa-dot-circle-o text-danger"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : value === "pending" ? (
             <span className="btn btn-gray btn-sm btn-rounded ">
-              <i className="fa fa-dot-circle-o text-warning"></i> {value}
+              <i className="fa fa-dot-circle-o text-warning"></i>{" "}
+              {value?.replace(/\b\w/g, (char) => char.toUpperCase())}
             </span>
           ) : null}
         </>
@@ -948,6 +958,7 @@ const WorkforceLeaveApplications = () => {
             <h3 className="page-title">Leaves</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Data Management</li>
+              <li className="breadcrumb-item">Workforce</li>
               <li className="breadcrumb-item active">Leave Applications</li>
             </ul>
           </div>
@@ -983,7 +994,7 @@ const WorkforceLeaveApplications = () => {
                   href="#tab_workforce-leave-history"
                   onClick={() => setHistoryStatus("rejected")}
                 >
-                  Rejected Leave History
+                  Rejected
                 </a>
               </li>
             </ul>
