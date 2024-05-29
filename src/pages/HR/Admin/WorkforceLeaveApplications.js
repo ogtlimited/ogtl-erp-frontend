@@ -148,35 +148,40 @@ const WorkforceLeaveApplications = () => {
         },
       });
       const resData = response?.data?.data?.leaves;
+      const totalPages = response?.data?.data?.pages;
 
-      console.log("Approved leaves:", resData);
+      setApprovedSizePerPage(sizePerPage);
+      setApprovedTotalPages(totalPages);
 
-      // const totalPages = response?.data?.data?.total_pages;
+      const formatted = resData.map((leave) => ({
+        ...leave,
+        ...leave?.leave,
+        office: leave.office.toUpperCase(),
+        full_name:
+          leave?.first_name.toUpperCase() +
+          " " +
+          leave?.last_name.toUpperCase(),
+        from_date: moment(leave?.leave?.start_date).format(
+          "YYYY, MM (MMM), Do"
+        ),
+        to_date: moment(leave?.leave?.end_date).format("YYYY, MM (MMM), Do"),
+        total_leave_days: calcBusinessDays(
+          leave?.leave?.start_date,
+          leave?.leave?.end_date
+        ),
+        reason: leave?.leave?.reason,
+        leave_marker:
+          moment(leave?.leave?.end_date).format("yyyy-MM-DD") < today
+            ? "Leave Ended"
+            : today < moment(leave?.leave?.start_date).format("yyyy-MM-DD") &&
+              moment(leave?.leave?.start_date).format("yyyy-MM-DD") !== today
+            ? "Scheduled Leave"
+            : "On Leave",
+        date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
+      }));
 
-      // setSizePerPage(sizePerPage);
-      // setTotalPages(totalPages);
-
-      // const formatted = resData.map((leave) => ({
-      //   ...leave,
-      //   ...leave?.leave,
-      //   office: leave.office.toUpperCase(),
-      //   full_name:
-      //     leave?.first_name.toUpperCase() +
-      //     " " +
-      //     leave?.last_name.toUpperCase(),
-      //   from_date: moment(leave?.leave?.start_date).format(
-      //     "YYYY, MM (MMM), Do"
-      //   ),
-      //   to_date: moment(leave?.leave?.end_date).format("YYYY, MM (MMM), Do"),
-      //   total_leave_days: calcBusinessDays(
-      //     leave?.leave?.start_date,
-      //     leave?.leave?.end_date
-      //   ),
-      //   date_applied: moment(leave?.leave?.created_at).format("Do MMM, YYYY"),
-      // }));
-
-      // setallLeaves(formatted);
-      // setLoadingApproved(false);
+      setApprovedLeaves(formatted);
+      setLoadingApproved(false);
     } catch (error) {
       const component = "Approved Leave Error | ";
       ErrorHandler(error, component);
