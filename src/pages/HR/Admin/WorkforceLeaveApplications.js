@@ -144,8 +144,8 @@ const WorkforceLeaveApplications = () => {
         params: {
           pages: approvedPage,
           limit: approvedSizePerPage,
-          // from_date: fromDate,
-          // to_date: toDate,
+          from_date: fromDate,
+          to_date: toDate,
         },
       });
       const resData = response?.data?.data?.leaves;

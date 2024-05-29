@@ -23,7 +23,7 @@ const EmployeeSalary = () => {
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const isAuthorized = ["hr_manager", "accountant"];
+  const isAuthorized = ["hr_manager", "accountant", "payroll_processor"];
 
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
@@ -169,7 +169,7 @@ const EmployeeSalary = () => {
             <a href="#" className="btn add-btn" onClick={downloadTemplate}>
               <i className="fa fa-download"></i> Download Template
             </a>
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserIsAuthorized && (
               <a
                 href="#"
                 className="btn add-btn m-l-15"
@@ -180,7 +180,7 @@ const EmployeeSalary = () => {
                 <i className="fa fa-upload"></i> Upload Salaries
               </a>
             )}
-            {CurrentUserRoles.includes("hr_manager") && (
+            {CurrentUserIsAuthorized && (
               <a
                 href="#"
                 className="btn add-btn m-l-15"
