@@ -66,7 +66,7 @@ const AdminLayout = (props) => {
   
   useEffect(() => {
     if (newsletterRead) {
-      // window.location.reload();
+      window.location.reload();
     }
   }, [newsletterRead]);
 
