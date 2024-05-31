@@ -10,6 +10,7 @@ import UniversalPaginatedTable from "../../components/Tables/UniversalPaginatedT
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ViewModal from "../../components/Modal/ViewModal";
 import TicketContent from "../../components/ModalContents/TicketContent";
+import TicketManagementFeedbackModal from "../../components/Modal/TicketManagementFeedbackModal";
 import moment from "moment";
 import $ from "jquery";
 
@@ -20,6 +21,7 @@ const TicketManagement = () => {
   const [isResolving, setIsResolving] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [viewRow, setViewRow] = useState(null);
+  const [modalType, setmodalType] = useState("");
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -73,39 +75,39 @@ const TicketManagement = () => {
     fetchAllTickets();
   }, [fetchAllTickets]);
 
-  const handleResolveTicket = async () => {
-    setIsResolving(true);
+  // const handleResolveTicket = async () => {
+  //   setIsResolving(true);
 
-    try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.patch(
-        `/api/v1/resolve_tickets/${selectedRow?.id}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            resolved: true,
-          },
-        }
-      );
+  //   try {
+  //     // eslint-disable-next-line no-unused-vars
+  //     const response = await axiosInstance.patch(
+  //       `/api/v1/resolve_tickets/${selectedRow?.id}.json`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Access-Control-Allow-Origin": "*",
+  //           "ngrok-skip-browser-warning": "69420",
+  //         },
+  //         payload: {
+  //           resolved: true,
+  //         },
+  //       }
+  //     );
 
-      goToTop();
-      showAlert(true, "Ticket has been resolved!", "alert alert-success");
-      fetchAllTickets();
-      $("#exampleModal").modal("toggle");
-      setIsResolving(false);
-    } catch (error) {
-      goToTop();
-      const errorMsg = error.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      fetchAllTickets();
-      $("#exampleModal").modal("toggle");
-      setIsResolving(false);
-    }
-  };
+  //     goToTop();
+  //     showAlert(true, "Ticket has been resolved!", "alert alert-success");
+  //     fetchAllTickets();
+  //     $("#exampleModal").modal("toggle");
+  //     setIsResolving(false);
+  //   } catch (error) {
+  //     goToTop();
+  //     const errorMsg = error.response?.data?.errors;
+  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
+  //     fetchAllTickets();
+  //     $("#exampleModal").modal("toggle");
+  //     setIsResolving(false);
+  //   }
+  // };
 
   const columns = [
     {
@@ -131,7 +133,7 @@ const TicketManagement = () => {
       dataField: "date_created",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "email",
@@ -143,13 +145,13 @@ const TicketManagement = () => {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "25%" },
+      headerStyle: { width: "20%" },
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <>
           {value === "Resolved" ? (
@@ -203,9 +205,11 @@ const TicketManagement = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  data-toggle="modal"
-                  data-target="#exampleModal"
-                  onClick={() => setSelectedRow(row)}
+                  onClick={() => {
+                    setmodalType("feedback");
+                    setSelectedRow(row);
+                  }}
+                  // onClick={() => setSelectedRow(row)}
                 >
                   <i className="fa fa-check m-r-5"></i> Resolve
                 </a>
@@ -251,13 +255,21 @@ const TicketManagement = () => {
         content={<TicketContent ticket={viewRow} />}
       />
 
-      <ConfirmModal
+      {modalType === "feedback" ? (
+        <TicketManagementFeedbackModal
+          setmodalType={setmodalType}
+          ticketContent={selectedRow}
+          refetchData={fetchAllTickets}
+        />
+      ) : null}
+
+      {/* <ConfirmModal
         title="Ticket Management"
         selectedRow={selectedRow}
         deleteFunction={handleResolveTicket}
         message="Are you sure this ticket has been resolved?"
         isLoading={isResolving}
-      />
+      /> */}
     </>
   );
 };
