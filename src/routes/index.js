@@ -209,7 +209,7 @@ export default function Router() {
             },
             {
               path: "ticket-manager",
-              element: (
+              element: ( 
                 <GuardedRoute title="" dept="hr">
                   <TicketManager />
                 </GuardedRoute>
@@ -1648,7 +1648,7 @@ const OrientationAndTraining = Loadable(
 );
 
 const Tickets = Loadable(lazy(() => import("../pages/In-Apps/tickets.js")));
-const Announcement = Loadable(lazy(() => import("../pages/In-Apps/Announcement.js")));
+const Announcement = Loadable(lazy(() => import("../pages/HR/Admin/AnnoumentTabs.js")));
 
 const TicketManager = Loadable(
   lazy(() => import("../pages/In-Apps/TicketManager"))

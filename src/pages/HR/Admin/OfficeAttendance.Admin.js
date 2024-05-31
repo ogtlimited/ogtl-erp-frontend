@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
-// import CampaignAttendanceTable from '../../../components/Tables/EmployeeTables/CampaignAttendanceTable';
+import { useAppContext } from "../../../Context/AppContext";
 import DailyAttendanceTable from "../../../components/Tables/EmployeeTables/DailyAttendanceTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
-import { useAppContext } from "../../../Context/AppContext";
+import AttendanceAverageAdmin from "./AttendanceAverage.Admin";
 
 const OfficeAttendanceAdmin = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
@@ -17,6 +17,17 @@ const OfficeAttendanceAdmin = () => {
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
   const [date, setDate] = useState(today_date);
+
+  // Attendance Average:
+  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const [attendanceAverage, setAttendanceAverage] = useState([]);
+  const [loadingAttendanceAverage, setLoadingAttendanceAverage] =
+    useState(false);
+  const [attendanceAverageFromDate, setAttendanceAverageFromDate] =
+    useState(firstweekDay);
+  const [attendanceAverageToDate, setAttendanceAverageToDate] =
+    useState(lastWeekDay);
 
   const fetchEmployeeByOffice = useCallback(async () => {
     try {
@@ -78,6 +89,44 @@ const OfficeAttendanceAdmin = () => {
   useEffect(() => {
     fetchEmployeeByOffice();
   }, [fetchEmployeeByOffice]);
+
+  // Office Attendance Average:
+  const fetchOfficeAverage = useCallback(async () => {
+    setLoadingAttendanceAverage(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/hr_dashboard/office_attendance_average.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            office_type: office_type,
+            office_id: id,
+            from: moment(attendanceAverageFromDate).utc().format("DD-MM-YYYY"),
+            to: moment(attendanceAverageToDate).utc().format("DD-MM-YYYY"),
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.average_attendance;
+
+      setAttendanceAverage(resData);
+      setLoadingAttendanceAverage(false);
+    } catch (error) {
+      const component = "Office Attendance Average error | ";
+      ErrorHandler(error, component);
+      setLoadingAttendanceAverage(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attendanceAverageFromDate, attendanceAverageToDate]);
+
+  useEffect(() => {
+    fetchOfficeAverage();
+  }, [fetchOfficeAverage]);
 
   const columns = [
     {
@@ -165,15 +214,26 @@ const OfficeAttendanceAdmin = () => {
         </div>
       </div>
 
-      <DailyAttendanceTable
-        columns={columns}
-        data={allEmployees}
-        setData={setallEmployees}
-        loading={loading}
-        setLoading={setLoading}
-        date={date}
-        setDate={setDate}
+      <AttendanceAverageAdmin
+        fromDate={attendanceAverageFromDate}
+        setFromDate={setAttendanceAverageFromDate}
+        toDate={attendanceAverageToDate}
+        setToDate={setAttendanceAverageToDate}
+        data={attendanceAverage}
+        loading={loadingAttendanceAverage}
       />
+
+      <div style={{ marginTop: "2rem" }}>
+        <DailyAttendanceTable
+          columns={columns}
+          data={allEmployees}
+          setData={setallEmployees}
+          loading={loading}
+          setLoading={setLoading}
+          date={date}
+          setDate={setDate}
+        />
+      </div>
     </>
   );
 };

@@ -4,12 +4,13 @@ import moment from "moment";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
 
-export const AnnouncementModalPrompt = () => {
-  const { loadingAnnouncement, announcement, setAnnouncementWatched } = useAppContext();
+export const VideoAnnouncementModalPrompt = () => {
+  const { loadingAnnouncement, announcement, setAnnouncementWatched } =
+    useAppContext();
   const videoRef = useRef(null);
 
   const closeModal = () => {
-    $("#AnnouncementModalPrompt").modal("hide");
+    $("#VideoAnnouncementModalPrompt").modal("hide");
     secureLocalStorage.setItem("seenAnnouncement", true);
     setAnnouncementWatched(true);
     if (videoRef.current) {
@@ -29,7 +30,7 @@ export const AnnouncementModalPrompt = () => {
     <>
       <div
         className="modal fade"
-        id="AnnouncementModalPrompt"
+        id="VideoAnnouncementModalPrompt"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -59,12 +60,18 @@ export const AnnouncementModalPrompt = () => {
             <div className="modal-body">
               <div>
                 {loadingAnnouncement ? (
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
                       src="https://cdn.lordicon.com/ilsmzilo.json"
                       trigger="loop"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
                   </div>
                 ) : announcement ? (
@@ -75,12 +82,18 @@ export const AnnouncementModalPrompt = () => {
                     </video>
                   </div>
                 ) : (
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
                       src="https://cdn.lordicon.com/ilsmzilo.json"
                       trigger="hover"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
                     <h3>No Video Announcement</h3>
                   </div>

@@ -1,10 +1,8 @@
 // *IN USE
 
-/*eslint-disable jsx-a11y/anchor-is-valid*/
-
 import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../../Context/AppContext";
-import { GiMoneyStack } from "react-icons/gi";
+import { BsDot } from "react-icons/bs";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
@@ -28,9 +26,11 @@ function SalaryCard({ iconSrc, label, amount }) {
 }
 
 const PayrollUser = () => {
-  const { user, ErrorHandler } = useAppContext();
-  const [loading, setLoading] = useState(false);
+  const { FontAwesomeIcon, faSpinner, ErrorHandler } = useAppContext();
+  const [loadingSalary, setLoadingSalary] = useState(false);
+  const [loadingPayslips, setLoadingPayslips] = useState(false);
   const [allPayslips, setAllPayslips] = useState([]);
+  const [salary, setSalary] = useState([]);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -43,20 +43,45 @@ const PayrollUser = () => {
   const [today, setToday] = useState(null);
 
   useEffect(() => {
-    const time = new Date().toDateString();
-    const today_date = moment(time).format("yyyy-MM-DD");
+    const today_date = moment().utc().format("yyyy-MM-DD");
     setToday(today_date);
   }, []);
 
-  const currentUserOgid = user?.employee_info?.ogid;
+  // Salary:
+  const fetchSalary = useCallback(async () => {
+    setLoadingSalary(true);
+
+    try {
+      const response = await axiosInstance.get(`/api/v1/salary_details.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      const resData = response?.data?.data?.salary;
+
+      setSalary(resData);
+      setLoadingSalary(false);
+    } catch (error) {
+      const component = "Staff Salary | ";
+      ErrorHandler(error, component);
+      setLoadingSalary(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchSalary();
+  }, [fetchSalary]);
 
   // Payslips:
   const fetchPayslips = useCallback(async () => {
-    setLoading(false);
+    setLoadingPayslips(true);
 
     try {
       const response = await axiosInstance.get(
-        `/api/v1/out_of_office/${currentUserOgid}.json`,
+        `/api/v1/employee_salary_slips.json`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,30 +96,47 @@ const PayrollUser = () => {
           },
         }
       );
-      const resData = response?.data?.data?.out_of_offices;
-      const totalPages = response?.data?.data?.pages;
+      const resData = response?.data?.data?.salary_slips;
+      // const totalPages = response?.data?.data?.pages;
 
-      const thisPageLimit = sizePerPage;
-      const thisTotalPageSize = totalPages;
+      console.log("Staff payslips:", resData);
 
-      setSizePerPage(thisPageLimit);
-      setTotalPages(thisTotalPageSize);
+      // const thisPageLimit = sizePerPage;
+      // const thisTotalPageSize = totalPages;
 
-      const formattedPayslips = resData.map((e) => ({
-        ...e,
-        enteredBy: e?.entered_by,
-        dateCreated: moment(e?.created_at).format("Do MMMM, YYYY"),
-        from: moment(e?.start_date).format("Do MMMM, YYYY"),
-        to: moment(e?.end_date).format("Do MMMM, YYYY"),
-        // deduction: helper.handleMoneyFormat(5000),
-      }));
+      // setSizePerPage(thisPageLimit);
+      // setTotalPages(thisTotalPageSize);
 
-      setAllPayslips(formattedPayslips);
-      setLoading(false);
+      // const formattedData = resData?.map((e) => ({
+      //   ...e,
+      //   id: e?.slip?.id,
+      //   employee: e?.user?.first_name + " " + e?.user?.last_name,
+      //   ogid: e?.user?.ogid,
+      //   email: e?.user?.email,
+
+      //   basic: e?.slip?.basic,
+      //   medical: e?.slip?.medical,
+      //   housing: e?.slip?.housing,
+      //   transport: e?.slip?.transport,
+      //   otherAllowances: e?.slip?.other_allowances,
+      //   monthlySalary: e?.slip?.monthly_salary,
+
+      //   tax: e?.slip?.monthly_income_tax,
+      //   pension: e?.slip?.monthly_pension,
+      //   attendance_deduction: e?.slip?.attendance_deduction,
+      //   disciplinary_deductions: e?.slip?.disciplinary_deductions,
+      //   totalDeductions: e?.slip?.total_deductions,
+      //   netPay: e?.slip?.net_pay,
+
+      //   prorate: e?.slip?.prorate ? "Yes" : "No",
+      // }));
+
+      setAllPayslips(resData);
+      setLoadingPayslips(false);
     } catch (error) {
-      const component = "Payslips | ";
+      const component = "Staff Payslips | ";
       ErrorHandler(error, component);
-      setLoading(false);
+      setLoadingPayslips(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage, fromDate, toDate]);
@@ -171,9 +213,7 @@ const PayrollUser = () => {
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
-            {row?.approved ? null : (
-              <button className="btn btn-sm btn-success">View</button>
-            )}
+            <button className="btn btn-sm btn-success">View</button>
           </div>
         </div>
       ),
@@ -185,33 +225,122 @@ const PayrollUser = () => {
       <div className="employee_salary_section">
         <p>Net Salary</p>
         <div className="employee_salary_section_top_div">
-          <h1>₦12,876.50</h1>
-          <p>May 01, 2024 - May 31, 2024</p>
+          <h1>
+            {loadingSalary ? (
+              <FontAwesomeIcon
+                icon={faSpinner}
+                spin
+                pulse
+                style={{ marginTop: "5px", fontSize: "20px" }}
+              />
+            ) : (
+              helper.handleMoneyFormat(salary?.net_pay)
+            )}
+          </h1>
+          <p>
+            {moment(fromDate).utc().format("MMMM DD, YYYY")} -{" "}
+            {moment(toDate).utc().format("MMMM DD, YYYY")}
+          </p>
         </div>
 
         <div className="employee_salary_section_cards">
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/kxockqqi.json"
             label="Gross"
-            amount="₦15,876.50"
+            amount={
+              loadingSalary ? (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  pulse
+                  style={{ marginTop: "5px", fontSize: "20px" }}
+                />
+              ) : (
+                helper.handleMoneyFormat(salary?.monthly_salary)
+              )
+            }
           />
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/iawrhwdo.json"
-            label="Tax"
-            amount="₦1,000.00"
+            label="Basic"
+            amount={
+              loadingSalary ? (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  pulse
+                  style={{ marginTop: "5px", fontSize: "20px" }}
+                />
+              ) : (
+                helper.handleMoneyFormat(salary?.basic)
+              )
+            }
           />
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/nkfxhqqr.json"
-            label="Pension"
-            amount="₦2,000.00"
+            label="Tax"
+            amount={
+              loadingSalary ? (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  pulse
+                  style={{ marginTop: "5px", fontSize: "20px" }}
+                />
+              ) : (
+                helper.handleMoneyFormat(salary?.monthly_income_tax)
+              )
+            }
           />
           <SalaryCard
             iconSrc="https://cdn.lordicon.com/wyqtxzeh.json"
-            label="Total Deduction"
-            amount="₦3,000.00"
+            label="Pension"
+            amount={
+              loadingSalary ? (
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin
+                  pulse
+                  style={{ marginTop: "5px", fontSize: "20px" }}
+                />
+              ) : (
+                helper.handleMoneyFormat(salary?.monthly_pension)
+              )
+            }
           />
         </div>
       </div>
+
+      {loadingSalary ? null : (
+        <div className="emp_salary_alert_container">
+          <div
+            className="alert alert-primary sliding-text payroll_alert_left emp_salary_alert_slider"
+            role="alert"
+          >
+            <div>
+              <span className="salary_span">
+                <p>Other Allowances</p>
+                <h3>{helper.handleMoneyFormat(salary?.other_allowances)}</h3>
+              </span>
+              <BsDot  className="emp_salary_BsDot"/>
+              <span className="salary_span">
+                <p>Housing</p>
+                <h3>{helper.handleMoneyFormat(salary?.housing)}</h3>
+              </span>
+              <BsDot  className="emp_salary_BsDot"/>
+              <span className="salary_span">
+                <p>Medical</p>
+                <h3>{helper.handleMoneyFormat(salary?.medical)}</h3>
+              </span>
+              <BsDot  className="emp_salary_BsDot"/>
+              <span className="salary_span">
+                <p>Transport</p>
+                <h3>{helper.handleMoneyFormat(salary?.transport)}</h3>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="row">
         <div className="row col-md-6">
@@ -246,8 +375,8 @@ const PayrollUser = () => {
         <UniversalPaginatedTable
           data={allPayslips}
           columns={columns}
-          loading={loading}
-          setLoading={setLoading}
+          loading={loadingPayslips}
+          setLoading={setLoadingPayslips}
           page={page}
           setPage={setPage}
           sizePerPage={sizePerPage}

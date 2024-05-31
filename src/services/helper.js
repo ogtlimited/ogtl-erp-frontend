@@ -126,10 +126,18 @@ class HelperService {
     return hash;
   }
   handleMoneyFormat(number) {
-    return "₦" + new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
-      number
-    );
+    if (number === null || number === undefined || isNaN(number)) {
+      return "₦0.00"
+    } else {
+      return (
+        "₦" +
+        new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
+          number
+        )
+      );
+    }
   }
+
   capitalize(str) {
     if (str) {
       return str.charAt(0).toUpperCase() + str.slice(1);

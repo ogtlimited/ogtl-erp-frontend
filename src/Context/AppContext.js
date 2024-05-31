@@ -1,3 +1,5 @@
+// *IN USE
+
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
@@ -63,8 +65,13 @@ const AppProvider = (props) => {
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
   const [announcementWatched, setAnnouncementWatched] = useState(false);
+
   const [pendingSurveys, setPendingSurveys] = useState([]);
   const [pendingSurveySubmitted, setPendingSurveySubmitted] = useState(false);
+
+  const [newsletter, setNewsletter] = useState(null);
+  const [loadingNewsletter, setLoadingNewsletter] = useState(false);
+  const [newsletterRead, setNewsletterRead] = useState(false);
 
   const today_date = moment.utc().format("yyyy-MM-DD");
 
@@ -291,6 +298,39 @@ const AppProvider = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Newsletter
+  const fetchNewsletter = useCallback(async () => {
+    setLoadingNewsletter(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/text_announcements.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            page: 1,
+            limit: 10,
+          },
+        }
+      );
+
+      const resData = response?.data?.data?.announcements?.announcements;
+      if (resData.length > 0) {
+        setNewsletter(resData[0]);
+      }
+      setLoadingNewsletter(false);
+    } catch (error) {
+      const component = "Newsletter | ";
+      ErrorHandler(error, component);
+      setLoadingNewsletter(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // All Pending Surveys:
   const fetchPendingSurveys = useCallback(async () => {
     try {
@@ -318,34 +358,66 @@ const AppProvider = (props) => {
   const fetchPublicHolidays = useCallback(async () => {
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.get(`/api/v1/public_holidays.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: 1,
-          limit: 10000,
-        },
-      });
+      const response = await axiosInstance.get(
+        `/api/v1/employee_holidays.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-      const resData = response?.data?.data?.public_holidays;
+      const { department_holidays, campaign_holidays } =
+        response.data.data.employee_holidays;
 
-      const formatted = resData.map((e) => ({
-        ...e,
-        title: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
+      const formattedDepartmentHolidays = department_holidays.map((e) => ({
+        ...e?.public_holiday,
+        title: e?.public_holiday?.title.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
+        ),
         status:
-          moment(e?.end_date).utc().format("yyyy-MM-DD") < today_date
+          moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
+          today_date
             ? "past"
-            : today_date < moment(e?.start_date).utc().format("yyyy-MM-DD") &&
-              moment(e?.start_date).utc().format("yyyy-MM-DD") !== today_date
+            : today_date <
+                moment(e?.public_holiday?.start_date)
+                  .utc()
+                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") !== today_date
             ? "pending"
             : "happening",
       }));
 
-      console.log("all formatted holiday resData", formatted);
-      setAllPublicHolidayEvents(formatted);
+      const formattedCampaignHolidays = campaign_holidays.map((e) => ({
+        ...e?.public_holiday,
+        title: e?.public_holiday?.title.replace(/\b\w/g, (char) =>
+          char.toUpperCase()
+        ),
+        status:
+          moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
+          today_date
+            ? "past"
+            : today_date <
+                moment(e?.public_holiday?.start_date)
+                  .utc()
+                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") !== today_date
+            ? "pending"
+            : "happening",
+      }));
+
+      const allOffice = [
+        ...formattedDepartmentHolidays,
+        ...formattedCampaignHolidays,
+      ];
+
+      setAllPublicHolidayEvents(allOffice);
     } catch (error) {
       const component = "Public Holiday | ";
       ErrorHandler(error, component);
@@ -591,11 +663,12 @@ const AppProvider = (props) => {
 
       const resData = response?.data?.data?.survey_records?.surveys;
 
-      const formatted = resData.map((survey) => ({
-        label: survey?.title,
-        value: survey?.id,
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+      const formatted = resData
+        .map((survey) => ({
+          label: survey?.title,
+          value: survey?.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
       setSelectSurvey(formatted);
       setLoadingSelect(false);
@@ -861,6 +934,7 @@ const AppProvider = (props) => {
       fetchAllLeaveTypes();
       fetchStaffResignation();
       fetchAnnouncement();
+      fetchNewsletter();
       fetchPendingSurveys();
       fetchPublicHolidays();
     }
@@ -877,6 +951,7 @@ const AppProvider = (props) => {
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
+    fetchNewsletter,
     fetchAllSurveys,
     fetchPendingSurveys,
     fetchPublicHolidays,
@@ -963,6 +1038,14 @@ const AppProvider = (props) => {
         announcementWatched,
         setAnnouncementWatched,
         fetchAnnouncement,
+
+        newsletter,
+        setNewsletter,
+        loadingNewsletter,
+        setLoadingNewsletter,
+        newsletterRead,
+        setNewsletterRead,
+        fetchNewsletter,
 
         pendingSurveys,
         fetchPendingSurveys,

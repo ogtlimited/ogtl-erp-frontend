@@ -1,36 +1,23 @@
-import React, { useRef, useEffect } from "react";
-import { BsDot } from "react-icons/bs";
+import React from "react";
+import { useAppContext } from "../../Context/AppContext";
+import secureLocalStorage from "react-secure-storage";
 import moment from "moment";
 import $ from "jquery";
 
-export const AnnouncementViewModal = ({
-  loading,
-  announcementContent,
-  setSelectedVideo,
-}) => {
-  const videoRef = useRef(null);
+export const NewsletterModalPrompt = () => {
+  const { loadingNewsletter, newsletter, setNewsletterRead } = useAppContext();
 
   const closeModal = () => {
-    $("#AnnouncementViewModal").modal("hide");
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-    setSelectedVideo(null);
+    $("#NewsletterModalPrompt").modal("hide");
+    secureLocalStorage.setItem("seenNewsletter", true);
+    setNewsletterRead(true);
   };
-
-  useEffect(() => {
-    if (announcementContent && videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error("Autoplay failed:", error);
-      });
-    }
-  }, [announcementContent]);
 
   return (
     <>
       <div
         className="modal fade"
-        id="AnnouncementViewModal"
+        id="NewsletterModalPrompt"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -47,48 +34,50 @@ export const AnnouncementViewModal = ({
               }}
             >
               <h4 className="modal-title" id="FormModalLabel">
-                {announcementContent?.title}
+                {newsletter?.title}
               </h4>
               <p className="modal_uploaded_by">
-                {announcementContent?.uploaded_by} |{" "}
+                By: {newsletter?.entered_by} |{" "}
                 <span className="payroll_month_indicator">
-                  {moment(announcementContent?.created_at).format("LLL")}
-                  <BsDot className="BsDot span_indicator" />{" "}
-                  {moment(announcementContent?.created_at).fromNow()}
+                  {moment(newsletter?.created_at).format("LLL")}
                 </span>
               </p>
             </div>
 
             <div className="modal-body">
               <div>
-                {loading ? (
-                  <div>
+                {loadingNewsletter ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
-                      src="https://cdn.lordicon.com/ilsmzilo.json"
+                      src="https://cdn.lordicon.com/xsqjakgm.json"
                       trigger="loop"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
                   </div>
-                ) : announcementContent ? (
-                  <div>
-                    <video ref={videoRef} controls className="video_player">
-                      <source
-                        src={announcementContent?.video_url}
-                        type="video/mp4"
-                      />
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
+                ) : newsletter ? (
+                  <div dangerouslySetInnerHTML={{ __html: newsletter?.body }} />
                 ) : (
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <lord-icon
-                      src="https://cdn.lordicon.com/ilsmzilo.json"
+                      src="https://cdn.lordicon.com/xsqjakgm.json"
                       trigger="hover"
                       colors="primary:#00c5fb,secondary:#0253cc"
-                      style={{ width: "250px", height: "250px" }}
+                      style={{ width: "200px", height: "200px" }}
                     ></lord-icon>
-                    <h3>No Video Announcement</h3>
+                    <h3>No Newsletter</h3>
                   </div>
                 )}
               </div>
