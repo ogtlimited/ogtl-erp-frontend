@@ -86,10 +86,14 @@ const EmployeeSalaryUpload = ({
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420",
         },
-        payload: obj.payload
+        payload: obj.payload,
       })
       .then((res) => {
-        showAlert(true, 'Salaries successfully uploaded', 'alert alert-success');
+        showAlert(
+          true,
+          res?.data?.data?.salary || "Salaries are being generated",
+          "alert alert-success"
+        );
         settoggleModal(false);
         setLoading(false);
         fetchAllSalaries();
@@ -98,7 +102,7 @@ const EmployeeSalaryUpload = ({
       })
       .catch((err) => {
         console.log(err);
-        showAlert(true, err?.response?.data?.errors, 'alert alert-danger');
+        showAlert(true, err?.response?.data?.errors, "alert alert-danger");
         setLoading(false);
         buttonRef.click();
         settoggleModal(false);
@@ -146,13 +150,15 @@ const EmployeeSalaryUpload = ({
                       accept=".csv"
                       onChange={(e) => onFileUpload(e)}
                     />
-                    {!fileName && <div>
-                      <i
-                        style={{ fontSize: "20px" }}
-                        className="fa fa-cloud-upload pr-4"
-                      ></i>
-                      Click to {uploadState}
-                    </div>}
+                    {!fileName && (
+                      <div>
+                        <i
+                          style={{ fontSize: "20px" }}
+                          className="fa fa-cloud-upload pr-4"
+                        ></i>
+                        Click to {uploadState}
+                      </div>
+                    )}
                     <p className="pt-3">{fileName}</p>
                     {invalid ? (
                       <small className="pt-3 text-danger">
