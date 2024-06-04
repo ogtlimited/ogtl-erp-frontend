@@ -57,7 +57,7 @@ const TicketManagement = () => {
         ogid: ticket?.ogid,
         office: ticket?.office?.toUpperCase(),
         status: ticket?.resolved ? "Resolved" : "Pending",
-        date_created: moment(ticket?.created_at).utc().format("Do MMM, YYYY"),
+        date_created: moment(ticket?.date_created).utc().format("Do MMM, YYYY"),
         complaint: ticket?.complaint,
       }));
 

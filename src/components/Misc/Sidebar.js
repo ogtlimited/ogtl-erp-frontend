@@ -154,7 +154,19 @@ const Sidebar = () => {
                                     data-dropdown-key={item.title}
                                   >
                                     {item.icon} <span> {item.title}</span>{" "}
-                                    <span className="menu-arrow"></span>
+                                    {/* <span className="menu-arrow"></span> */}
+                                    <span className="custom-menu-arrow">
+                                      <lord-icon
+                                        src="https://cdn.lordicon.com/fjjamyff.json"
+                                        trigger="loop"
+                                        delay="2000"
+                                        colors="primary:#fff,secondary:#FFDC02,tertiary:#FFDC02,quaternary:#000"
+                                        style={{
+                                          width: "18px",
+                                          height: "18px",
+                                        }}
+                                      ></lord-icon>
+                                    </span>
                                   </a>
                                   <ul
                                     style={{

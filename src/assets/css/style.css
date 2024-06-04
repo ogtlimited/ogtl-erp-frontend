@@ -2614,6 +2614,13 @@ table.dataTable thead > tr > td.sorting {
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
+
+.custom-menu-arrow {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
 .noti-dot:before {
   content: "";
   width: 5px;
