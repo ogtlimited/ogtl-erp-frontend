@@ -12,6 +12,7 @@ import { msalInstance } from "../../authConfig";
 import NotificationSound from "../../assets/notifications/mixkit-positive-notification-951.wav";
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
+import sportLogo from "../../assets/img/themed/sport5.png";
 
 const Header = () => {
   const { count, setDropDownClicked } = useAppContext();
@@ -70,18 +71,18 @@ const Header = () => {
         <div className="header-left">
           <div className="logo">
             <img src={logo} style={{ width: "100px" }} alt="" />
-            {/* <span className="header_logo_icons">
+            <span className="header_logo_icons">
               <lord-icon
-                src="https://cdn.lordicon.com/pyarizrk.json"
+                src="https://cdn.lordicon.com/przqzrpl.json"
                 trigger="loop"
                 delay="2000"
-                colors="primary:#121331,secondary:#f8b9d4,tertiary:#0253CC,quaternary:#000"
+                colors="primary:#FFDC02,secondary:#19AE47,tertiary:#193375,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
               ></lord-icon>
-            </span> */}
+            </span>
           </div>
           <div className="cropped-logo">
-            <img src={cropped} alt="" />
+            {/* <img src={cropped} alt="" /> */}
           </div>
         </div>
 
