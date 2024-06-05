@@ -61,7 +61,7 @@
 .extra_sidebar_styling {
   font-size: 15px !important;
   font-weight: 700 !important;
-  font-family: "Outfit", cursive;
+  font-family: var(--app-font-family);
 }
 
 .EA_styling {

@@ -4,7 +4,7 @@
   flex-direction: row;
   /* justify-content: ; */
   margin-bottom: 30px;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   color: #1f1f1f;
 }
 
@@ -117,7 +117,7 @@
   text-align: center;
   width: 200px;
   bottom: -25%;
-  font-family: outfit;
+  font-family: var(--app-font-family);
   font-weight: 600;
 }
 .create_ticket_div:hover .create_ticket_text {
@@ -382,7 +382,7 @@
   color: #ff4136;
   font-size: 12px;
   font-style: italic;
-  font-family: outfit;
+  font-family: var(--app-font-family);
   font-weight: 600;
 }
 
@@ -684,7 +684,7 @@ table.custom-table thead th {
 .stage_indicator {
   color: #808080;
   font-weight: 500;
-  font-family: "Poppins", sans-serif !important;
+  font-family: var(--app-font-family);
 }
 
 /*------------------------ 
@@ -915,7 +915,7 @@ table.custom-table thead th {
 -------------------- */
 
 .manual-attendance-clock {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1170,7 +1170,7 @@ table.custom-table thead th {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-family: "Raleway", sans-serif;
+  font-family: var(--app-font-family);
   transition: all 1s ease-in-out;
   border-radius: 20px;
   padding: 0 20px;
@@ -1313,7 +1313,7 @@ table.custom-table thead th {
   cursor: pointer;
   box-shadow: 0px 0px 5px 2px rgb(88, 88, 85, 0.4);
   transition: transform 0.5s;
-  font-family: "Outfit", san-serif;
+  font-family: var(--app-font-family);
 }
 
 @media only screen and (max-width: 900px) {
@@ -1456,7 +1456,7 @@ table.custom-table thead th {
 .Toastify__toast-body {
   color: #444c63;
   font-size: 16px;
-  font-family: Outfit, sans-serif !important;
+  font-family: var(--app-font-family);
   padding-left: 20px;
   line-height: 20px;
   padding-top: 25px;
@@ -1494,7 +1494,7 @@ table.custom-table thead th {
   position: absolute;
   color: #333333;
   font-size: 15px;
-  font-family: Outfit, sans-serif;
+  font-family: var(--app-font-family);
   font-weight: 700;
   left: 265px;
   padding-top: 14px !important;
@@ -1516,7 +1516,7 @@ table.custom-table thead th {
 }
 
 .wtf_box > h3 {
-  font-family: outfit;
+  font-family: var(--app-font-family);
   font-weight: 700;
   font-size: 35px;
   color: var(--sec-color);
@@ -1578,7 +1578,7 @@ table.custom-table thead th {
 }
 
 .wtf_p_wrapper > p {
-  font-family: outfit;
+  font-family: var(--app-font-family);
   font-weight: 600;
   font-size: 14px;
   text-align: center;
@@ -1603,7 +1603,7 @@ img {
   width: auto;
   padding: 1rem 3rem;
   border: none;
-  font-family: outfit;
+  font-family: var(--app-font-family);
   color: #fff;
   background-color: var(--sec-color);
   cursor: pointer;

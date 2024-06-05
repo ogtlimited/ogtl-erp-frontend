@@ -12,7 +12,7 @@
 
 .go-to-client > p {
   text-align: center;
-  font-family: "Outfit", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 18px;
 }
 
@@ -160,7 +160,7 @@
   color: #000;
   text-align: center;
   padding: 15% 0 5% 0;
-  font-family: "poppins", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 18px;
   font-weight: 600;
 }
@@ -178,7 +178,7 @@
   border: 1px solid #999;
   border-radius: 5px;
   font-weight: 600;
-  font-family: "Outfit", sans-serif;
+  font-family: var(--app-font-family);
 }
 
 .loading-spinner {
@@ -265,7 +265,7 @@
   border: 1px solid #999;
   border-radius: 5px;
   font-weight: 600;
-  font-family: "Outfit", sans-serif;
+  font-family: var(--app-font-family);
 }
 
 /*------------------------------------
@@ -796,7 +796,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  font-family: "poppins", san-serif;
+  font-family: var(--app-font-family);
 }
 
 .clipboard-notification-icon {
@@ -1013,7 +1013,7 @@ html {
   height: 100%;
 }
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 0.9375rem;
   color: #1f1f1f;
   /* background-color: #f7f7f7; */
@@ -1027,7 +1027,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   margin-top: 0;
   font-weight: 500;
 }
@@ -1129,7 +1129,7 @@ textarea.form-control {
   height: 46px;
 }
 .material-icons {
-  font-family: "Material Icons";
+  font-family: var(--app-font-family);
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -2592,7 +2592,7 @@ table.dataTable thead > tr > td.sorting {
   position: absolute;
   right: 15px;
   display: inline-block;
-  font-family: "FontAwesome";
+  font-family: var(--app-font-family);
   text-rendering: auto;
   line-height: 40px;
   font-size: 18px;
@@ -2818,7 +2818,7 @@ table.dataTable thead > tr > td.sorting {
   color: #979797;
   content: "\f073";
   display: block;
-  font-family: "FontAwesome";
+  font-family: var(--app-font-family);
   font-size: 15px;
   margin: auto;
   position: absolute;
@@ -4321,12 +4321,12 @@ table.dataTable thead > tr > td.sorting {
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   line-height: 30px;
   text-transform: uppercase;
 }
 .fc-day-grid-event .fc-time {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
 }
 .fc-day {
   background: #fff;
@@ -4366,7 +4366,7 @@ table.dataTable thead > tr > td.sorting {
   height: auto !important;
 }
 .fc-text-arrow {
-  font-family: inherit;
+  font-family: var(--app-font-family);
   font-size: 16px;
 }
 .fc-state-hover {
@@ -4449,12 +4449,12 @@ table.dataTable thead > tr > td.sorting {
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
 }
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
 }
 .event-form .input-group .form-control {
   height: 40px;
@@ -6841,7 +6841,7 @@ table.table-inbox tbody tr.checked {
   margin-top: 0;
 }
 .square-list li:before {
-  font-family: "poppins", sans-serif;
+  font-family: var(--app-font-family);
   margin: 0;
   position: relative;
   color: var(--prm-color);
@@ -7381,7 +7381,7 @@ table.table-inbox tbody tr.checked {
   color: #00b7ed;
 }
 .topics .topics-list li:before {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   content: "\f016";
   color: #555;
   font-size: 15px;
@@ -7420,7 +7420,7 @@ table.table-inbox tbody tr.checked {
   position: relative;
 }
 .widget-category li:before {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   content: "\f016";
   color: #555;
   font-size: 18px;
@@ -7640,7 +7640,7 @@ ul.comment-list li ul.children {
   position: relative;
 }
 .faq-card .card .card-header h4 > a:after {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 19px;
   position: absolute;
   right: 0px;
@@ -7663,7 +7663,7 @@ ul.comment-list li ul.children {
   position: relative;
 }
 .faq-card .card .card-header h4 > label:after {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   font-size: 19px;
   position: absolute;
   right: 0px;
@@ -8424,7 +8424,7 @@ ul.comment-list li ul.children {
   color: #fff;
   border: none;
   position: relative;
-  font-family: "Poppins", sans-serif;
+  font-family: var(--app-font-family);
   text-align: center;
   line-height: 16px;
 }
@@ -8980,7 +8980,7 @@ ul.comment-list li ul.children {
   position: absolute;
   font-size: 18px;
   line-height: inherit;
-  font-family: "FontAwesome";
+  font-family: var(--app-font-family);
   transform: translateY(-50%);
 }
 
