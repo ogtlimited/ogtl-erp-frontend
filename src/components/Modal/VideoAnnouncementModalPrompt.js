@@ -52,7 +52,7 @@ export const VideoAnnouncementModalPrompt = () => {
               <p className="modal_uploaded_by">
                 By: {announcement?.uploaded_by} |{" "}
                 <span className="payroll_month_indicator">
-                  {moment(announcement?.created_at).format("LLL")}
+                  {moment(announcement?.created_at).format("LL")}
                 </span>
               </p>
             </div>

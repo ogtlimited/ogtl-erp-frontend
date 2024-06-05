@@ -4,7 +4,7 @@
   flex-direction: row;
   /* justify-content: ; */
   margin-bottom: 30px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   color: #1f1f1f;
 }
 
@@ -684,7 +684,7 @@ table.custom-table thead th {
 .stage_indicator {
   color: #808080;
   font-weight: 500;
-  font-family: "Inter", "san-serif" !important;
+  font-family: "Poppins", sans-serif !important;
 }
 
 /*------------------------ 
@@ -915,7 +915,7 @@ table.custom-table thead th {
 -------------------- */
 
 .manual-attendance-clock {
-  font-family: "Montserrat", "sans-serif";
+  font-family: "Poppins", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;

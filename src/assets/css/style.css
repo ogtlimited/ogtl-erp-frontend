@@ -1013,7 +1013,7 @@ html {
   height: 100%;
 }
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.9375rem;
   color: #1f1f1f;
   /* background-color: #f7f7f7; */
@@ -1027,7 +1027,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   margin-top: 0;
   font-weight: 500;
 }
@@ -4321,12 +4321,12 @@ table.dataTable thead > tr > td.sorting {
 .fc-toolbar h2 {
   font-size: 18px;
   font-weight: 600;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
   line-height: 30px;
   text-transform: uppercase;
 }
 .fc-day-grid-event .fc-time {
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .fc-day {
   background: #fff;
@@ -4449,12 +4449,12 @@ table.dataTable thead > tr > td.sorting {
 .fc-basic-view td.fc-week-number span {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .fc-basic-view td.fc-day-number {
   padding-right: 8px;
   font-weight: 700;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 .event-form .input-group .form-control {
   height: 40px;
@@ -6841,7 +6841,7 @@ table.table-inbox tbody tr.checked {
   margin-top: 0;
 }
 .square-list li:before {
-  font-family: fontawesome;
+  font-family: "poppins", sans-serif;
   margin: 0;
   position: relative;
   color: var(--prm-color);
@@ -7381,7 +7381,7 @@ table.table-inbox tbody tr.checked {
   color: #00b7ed;
 }
 .topics .topics-list li:before {
-  font-family: FontAwesome;
+  font-family: "Poppins", sans-serif;
   content: "\f016";
   color: #555;
   font-size: 15px;
@@ -7420,7 +7420,7 @@ table.table-inbox tbody tr.checked {
   position: relative;
 }
 .widget-category li:before {
-  font-family: FontAwesome;
+  font-family: "Poppins", sans-serif;
   content: "\f016";
   color: #555;
   font-size: 18px;
@@ -7640,7 +7640,7 @@ ul.comment-list li ul.children {
   position: relative;
 }
 .faq-card .card .card-header h4 > a:after {
-  font-family: FontAwesome;
+  font-family: "Poppins", sans-serif;
   font-size: 19px;
   position: absolute;
   right: 0px;
@@ -7663,7 +7663,7 @@ ul.comment-list li ul.children {
   position: relative;
 }
 .faq-card .card .card-header h4 > label:after {
-  font-family: FontAwesome;
+  font-family: "Poppins", sans-serif;
   font-size: 19px;
   position: absolute;
   right: 0px;
@@ -8424,7 +8424,7 @@ ul.comment-list li ul.children {
   color: #fff;
   border: none;
   position: relative;
-  font-family: FontAwesome;
+  font-family: "Poppins", sans-serif;
   text-align: center;
   line-height: 16px;
 }

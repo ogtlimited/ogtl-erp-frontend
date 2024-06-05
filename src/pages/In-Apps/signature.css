@@ -102,18 +102,18 @@ body {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 0;
-  font-family: 'montserrat', sans-serif !important;
+  font-family: "poppins", sans-serif !important;
 }
 
 .s-position {
   color: rgba(0, 0, 0, 0.884);
   font-size: 13px;
   margin-bottom: 0;
-  font-family: 'montserrat', sans-serif !important;
+  font-family: "poppins", sans-serif !important;
 }
 .phone-td {
   font-size: 9px;
-  font-family: 'montserrat', sans-serif !important;
+  font-family: "poppins", sans-serif !important;
   display: flex;
   font-weight: 600;
   align-items: flex-end;
@@ -149,7 +149,7 @@ body {
   margin-left: 3px;
   font-size: 8px;
   height: 100%;
-  font-family: 'montserrat', sans-serif !important;
+  font-family: "poppins", sans-serif !important;
   display: flex;
   align-items: center;
   font-weight: 600;

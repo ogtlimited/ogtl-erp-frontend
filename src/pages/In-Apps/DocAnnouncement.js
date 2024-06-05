@@ -202,7 +202,7 @@ const DocAnnouncement = () => {
                       <div>
                         <CgNotes className="CgNotes" />
                         <p className="newsletter_span_indicator">
-                          {moment(announcement?.created_at).format("LLL")}
+                          {moment(announcement?.created_at).format("LL")}
                         </p>
                       </div>
 
