@@ -10,6 +10,7 @@ import { TicketForm } from "../../components/FormJSON/CreateTicket";
 import config from "../../config.json";
 import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
 import AlertSvg from "./AlertSvg";
+import sportLogo from "../../assets/img/themed/sport5.png"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -245,15 +246,17 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              {/* <span className="login_logo_icons">
-                <lord-icon
+              <span className="login_logo_icons">
+                {/* <lord-icon
                   src="https://cdn.lordicon.com/pyarizrk.json"
                   trigger="loop"
                   delay="2000"
                   colors="primary:#121331,secondary:#f8b9d4,tertiary:#0253CC,quaternary:#00C5FB"
                   style={{ width: "40px", height: "40px" }}
-                ></lord-icon>
-              </span> */}
+                ></lord-icon> */}
+
+                <img src={sportLogo} alt="sport logo" />
+              </span>
             </a>
           </div>
           <div className="account-box">
