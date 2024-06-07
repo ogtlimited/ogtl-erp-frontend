@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 
-:root {
+/* :root {
   --prm-color: #00c5fb;
   --prm-color-shade: #00c5fb4d;
   --sidebar-bg-color: #212a36;
@@ -10,6 +10,18 @@ html {
   --sec-color-shade: #0253cc4d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
+  --app-font-family: "Jost", sans-serif;
+} */
+
+:root {
+  --prm-color: #EB5E28;
+  --prm-color-shade: #EB5E284d;
+  --sidebar-bg-color: #804E49;
+  --sec-color: #FFDC02 ;
+  --sec-color-shade: #FFDC024d;
+  --prm-gray: #b1b1b1;
+  --prm-delete: #d80000;
+  --app-font-family: "Jost", sans-serif;
 }
 
 .page-wrapper {
@@ -65,7 +77,7 @@ a {
 .title-403,
 .rc-404-card .title-404 {
   color: var(--prm-color);
-  font-family: Montserrat;
+  font-family: var(--app-font-family);
   margin-top: 1rem;
   font-size: 37px;
   font-weight: 500;
@@ -74,7 +86,7 @@ a {
 }
 .rc-404-card .access-denied {
   color: #434455;
-  font-family: "Montserrat Medium";
+  font-family: var(--app-font-family);
   font-size: 22px;
   font-weight: 500;
   letter-spacing: 0;
@@ -82,7 +94,7 @@ a {
 }
 .rc-404-card .no-permi {
   color: #878999;
-  font-family: Montserrat;
+  font-family: var(--app-font-family);
   font-size: 12px;
   font-weight: 300;
   letter-spacing: 0;
@@ -96,7 +108,7 @@ a {
   border-radius: 3px;
   background-color: #ffffff;
   color: #161a37 !important;
-  font-family: Montserrat;
+  font-family: var(--app-font-family);
   font-size: 12px;
   letter-spacing: 0;
   line-height: 16px;
@@ -409,7 +421,7 @@ a.nav-link {
   font-weight: 700;
   line-height: 1.5;
   font-size: 1.25rem;
-  font-family: "Public Sans", sans-serif;
+  font-family: var(--app-font-family);
   color: rgb(33, 43, 54) !important;
 }
 
@@ -417,7 +429,7 @@ a.nav-link {
   /* margin: 0px auto; */
   line-height: 1.57143;
   font-size: 0.875rem;
-  font-family: "Public Sans", sans-serif;
+  font-family: var(--app-font-family);
   font-weight: 400;
   max-width: 480px;
   padding-bottom: 24px;
@@ -441,7 +453,7 @@ a.nav-link {
   line-height: 1.71429;
   font-size: 0.875rem;
   text-transform: capitalize;
-  font-family: "Public Sans", sans-serif;
+  font-family: var(--app-font-family);
   min-width: 64px;
   padding: 6px 16px;
   border-radius: 8px;

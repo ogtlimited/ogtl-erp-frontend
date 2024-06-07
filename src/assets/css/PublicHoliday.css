@@ -27,7 +27,7 @@
     height: 33px;
     font-size: 14px;
     font-style: normal;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     border-radius: 9px 9px 0px 0px;
     flex-shrink: 0;
     display: flex;
@@ -115,7 +115,7 @@
     padding: 8px !important;
     flex-direction: column !important;
     align-items: flex-start !important;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
 }
 
 .calendar_header {
@@ -125,7 +125,7 @@
 }
 
 .calendar_header > span {
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     font-style: normal;
 }
 
@@ -159,7 +159,7 @@
 .fc .fc-list-event-time  {
     color: #71717a !important;
     height: 72px !important;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     font-size: 12px !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -171,7 +171,7 @@
     color: #71717a !important;
     width: 100% !important;
     height: 36px !important;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     font-size: 12px !important;
     font-style: normal !important;
     font-weight: 500 !important;
@@ -188,7 +188,7 @@
     flex-direction: column;
     align-items: flex-end;
     color: #71717a;
-    font-family: Inter;
+    font-family: var(--app-font-family);
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -262,7 +262,7 @@
 .calendar_event_indicator > b,
 .calendar_event_indicator > i {
     color: #0369a1;
-    font-family: Inter;
+    font-family: var(--app-font-family);
     font-size: 12px;
     line-height: 16px;
     font-style: normal;
@@ -349,7 +349,7 @@
 
 .fc-toolbar-title {
     color: #3b3e45 !important;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     font-size: 20px !important;
     font-style: normal;
     font-weight: 400;
@@ -381,7 +381,7 @@
 .fc-dayGridMonth-button,
 .fc-listMonth-button {
     text-transform: capitalize !important;
-    font-family: Inter !important;
+    font-family: var(--app-font-family);
     font-size: 14px !important;
 }
 
@@ -426,7 +426,7 @@
 }
 
 .fc .fc-popover-title {
-    font-family: Inter;
+    font-family: var(--app-font-family);
     font-size: 14px;
     font-style: normal;
     font-weight: 500;

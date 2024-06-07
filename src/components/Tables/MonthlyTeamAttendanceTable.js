@@ -133,14 +133,15 @@ const MonthlyTeamAttendanceTable = ({
           data?.lateness_and_absence?.lateness !== undefined
             ? data.lateness_and_absence.lateness
             : 0,
-        NCNS:
+        absence:
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent:
-          data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
-            : 0,
+        // absent:
+        //   data?.lateness_and_absence?.NCNS !== undefined
+        //     ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
+        //     : 0,
+
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
           clock_in: data?.days[key]?.clock_in
@@ -149,22 +150,23 @@ const MonthlyTeamAttendanceTable = ({
           clock_out: data?.days[key]?.clock_out
             ? data?.days[key]?.clock_out
             : null,
+          late: data?.days[key]?.late ? data?.days[key]?.late : false,
           status:
-          data?.days[key] === "absent"
-            ? "Absent"
-            : data?.days[key] === "leave"
-            ? "Leave"
-            : data?.days[key] === "off"
-            ? "Day off"
-            : data?.days[key] === "sick"
-            ? "Sick"
-            : data?.days[key] === "FAM/PER Emergency"
-            ? "FAM/PER Emergency"
-            : data?.days[key] === "holiday"
-            ? "Holiday"
-            : data?.days[key] === "---"
-            ? "---"
-            : "Present",
+            data?.days[key] === "absent"
+              ? "Absent"
+              : data?.days[key] === "leave"
+              ? "Leave"
+              : data?.days[key] === "off"
+              ? "Day off"
+              : data?.days[key] === "sick"
+              ? "Sick"
+              : data?.days[key] === "FAM/PER Emergency"
+              ? "FAM/PER Emergency"
+              : data?.days[key] === "p/holiday"
+              ? "P/Holiday"
+              : data?.days[key] === "---"
+              ? "---"
+              : "Present",
         })),
       }));
 
@@ -174,8 +176,8 @@ const MonthlyTeamAttendanceTable = ({
         EMAIL: item.email,
         "TOTAL HOURS": item.total_hours,
         LATENESS: item.lateness,
-        NCNS: item.NCNS,
-        "NCNS (did not clock out)": item.absent,
+        "ABSENT(NCNS)": item.absence,
+        // "NCNS (did not clock out)": item.absent,
 
         ...item.attendance.reduce(
           (acc, curr) => ({
@@ -183,9 +185,9 @@ const MonthlyTeamAttendanceTable = ({
             [moment(curr.date).format("DD-MMM-YYYY")]:
               curr.status !== "Present"
                 ? curr.status
-                : `IN: ${moment(curr.clock_in, "HH:mm:ss").format(
-                    "hh:mma"
-                  )} - OUT: ${
+                : `IN: ${moment(curr.clock_in, "HH:mm:ss").format("hh:mma")} ${
+                    curr?.late ? "(Late)" : ""
+                  } - OUT: ${
                     curr.clock_out
                       ? moment(curr.clock_out, "HH:mm:ss").format("hh:mma")
                       : "No clock out"

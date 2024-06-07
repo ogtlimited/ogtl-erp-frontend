@@ -161,7 +161,7 @@ const VideoAnnouncement = () => {
                           </span>
                         </div>
                         <p className="span_indicator">
-                          {moment(announcement.created_at).format("LLL")}
+                          {moment(announcement.created_at).format("LL")}
                         </p>
                       </div>
                     </div>

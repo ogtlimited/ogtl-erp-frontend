@@ -11,6 +11,8 @@ import axiosInstance from "../../services/api";
 import { GeneratePayrollModal } from "../../components/Modal/GeneratePayrollModal";
 import { PayrollDatesModal } from "../../components/Modal/PayrollDatesModal";
 import UniversalPaginatedTable from "./../../components/Tables/UniversalPaginatedTable";
+import secureLocalStorage from "react-secure-storage";
+import ProgressBar from "../../components/Modal/ProgressBar";
 
 const PayrollBatches = () => {
   const { user, ErrorHandler, showAlert, getAvatarColor } = useAppContext();
@@ -22,6 +24,11 @@ const PayrollBatches = () => {
 
   const [payday, setPayday] = useState(null);
   const [currentData, setCurrentData] = useState([]);
+
+  const [poolingData, setPoolingData] = useState({
+    processedPayslips: null,
+    expectedPayslips: null,
+  });
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
@@ -151,6 +158,43 @@ const PayrollBatches = () => {
   useEffect(() => {
     fetchAllBatches();
   }, [fetchAllBatches]);
+
+  // // Payslip Pooling:
+  // const handlePayslipPooling = useCallback(async () => {
+  //   const month = secureLocalStorage.getItem("payslipMonth");
+  //   const year = secureLocalStorage.getItem("payslipYear");
+
+  //   try {
+  //     // eslint-disable-next-line no-unused-vars
+  //     const res = await axiosInstance.get(
+  //       `/api/v1/processed_payslips_progress.json?month=${month}&year=${year}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "Access-Control-Allow-Origin": "*",
+  //           "ngrok-skip-browser-warning": "69420",
+  //         },
+  //       }
+  //     );
+
+  //     const resData = res?.data?.data?.record;
+
+  //     setPoolingData({
+  //       processedPayslips: resData?.processed_payslips,
+  //       expectedPayslips: resData?.expected_payslips,
+  //     });
+  //   } catch (error) {
+  //     const errorMsg = error?.response?.data?.errors;
+  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // useEffect(() => {
+  //   if (poolingData.processedPayslips) {
+  //     handlePayslipPooling();
+  //   }
+  // }, [handlePayslipPooling, poolingData.processedPayslips]);
 
   // Handle Edit:
   const handleEdit = (e) => {
@@ -403,6 +447,13 @@ const PayrollBatches = () => {
         </div>
       </div>
 
+      {/* {poolingData.processedPayslips ? (
+        <ProgressBar
+          processedPayslips={poolingData?.processedPayslips}
+          expectedPayslips={poolingData?.expectedPayslips}
+        />
+      ) : null} */}
+
       <div className="row">
         <div className="col-md-12">
           <UniversalPaginatedTable
@@ -420,7 +471,11 @@ const PayrollBatches = () => {
         </div>
       </div>
 
-      <GeneratePayrollModal fetchAllBatches={fetchAllBatches} payday={payday} />
+      <GeneratePayrollModal
+        fetchAllBatches={fetchAllBatches}
+        payday={payday}
+        // handlePayslipPooling={handlePayslipPooling}
+      />
 
       <PayrollDatesModal
         mode={mode}

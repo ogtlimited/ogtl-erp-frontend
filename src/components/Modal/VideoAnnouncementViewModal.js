@@ -52,7 +52,7 @@ export const VideoAnnouncementViewModal = ({
               <p className="modal_uploaded_by">
                 {announcementContent?.uploaded_by} |{" "}
                 <span className="payroll_month_indicator">
-                  {moment(announcementContent?.created_at).format("LLL")}
+                  {moment(announcementContent?.created_at).format("LL")}
                   <BsDot className="BsDot span_indicator" />{" "}
                   {moment(announcementContent?.created_at).fromNow()}
                 </span>

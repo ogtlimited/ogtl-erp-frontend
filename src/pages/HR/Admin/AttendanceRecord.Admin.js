@@ -85,14 +85,20 @@ const AttendanceRecord = () => {
           <div>
             {attendanceRecord.status === "Present" ? (
               <>
-                <span className="btn btn-gray btn-sm btn-rounded">
+                <span
+                  className="btn btn-gray btn-sm btn-rounded"
+                  style={{
+                    backgroundColor: attendanceRecord.late ? "#FFBF00" : "",
+                  }}
+                >
                   <i
                     className="fa fa-dot-circle-o text-info"
                     style={{ marginRight: "10px" }}
                   ></i>{" "}
                   {moment(attendanceRecord.clock_in, "HH:mm:ss").format(
                     "hh:mma"
-                  )}
+                  )}{" "}
+                  {/* -<span>{attendanceRecord.late ? " Late" : ""}</span> */}
                 </span>
                 <span className="btn btn-gray btn-sm btn-rounded">
                   <i
@@ -118,7 +124,7 @@ const AttendanceRecord = () => {
                       ? "text-warning"
                       : attendanceRecord.status === "FAM/PER Emergency"
                       ? "text-info"
-                      : attendanceRecord.status === "Holiday"
+                      : attendanceRecord.status === "P/Holiday"
                       ? "text-dark"
                       : attendanceRecord.status === "---"
                       ? "text-muted"
@@ -245,6 +251,8 @@ const AttendanceRecord = () => {
         }
       );
 
+      // console.log("response", response?.data?.data);
+
       const attendanceRecords =
         typeof response?.data?.data === "string"
           ? []
@@ -273,14 +281,14 @@ const AttendanceRecord = () => {
           data?.lateness_and_absence?.lateness !== undefined
             ? data.lateness_and_absence.lateness
             : 0,
-        NCNS:
+        absence:
           data?.lateness_and_absence?.NCNS !== undefined
             ? data.lateness_and_absence.NCNS
             : 0,
-        absent:
-          data?.lateness_and_absence?.NCNS !== undefined
-            ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
-            : 0,
+        // absent:
+        //   data?.lateness_and_absence?.NCNS !== undefined
+        //     ? data?.lateness_and_absence?.["NCNS(did not clock out)"]
+        //     : 0,
 
         attendance: Object.keys(data?.days).map((key) => ({
           date: key,
@@ -290,6 +298,7 @@ const AttendanceRecord = () => {
           clock_out: data?.days[key]?.clock_out
             ? data?.days[key]?.clock_out
             : null,
+          late: data?.days[key]?.late ? data?.days[key]?.late : false,
           status:
             data?.days[key] === "absent"
               ? "Absent"
@@ -301,8 +310,8 @@ const AttendanceRecord = () => {
               ? "Sick"
               : data?.days[key] === "FAM/PER Emergency"
               ? "FAM/PER Emergency"
-              : data?.days[key] === "holiday"
-              ? "Holiday"
+              : data?.days[key] === "p/holiday"
+              ? "P/Holiday"
               : data?.days[key] === "---"
               ? "---"
               : "Present",
@@ -570,17 +579,17 @@ const AttendanceRecord = () => {
       headerStyle: { width: "100%" },
     },
     {
-      dataField: "NCNS",
-      text: "Absent",
+      dataField: "absence",
+      text: "Absence (NCNS)",
       sort: true,
       headerStyle: { width: "100%" },
     },
-    {
-      dataField: "absent",
-      text: "Absent(did not clock out)",
-      sort: true,
-      headerStyle: { width: "100%" },
-    },
+    // {
+    //   dataField: "absent",
+    //   text: "Absent(did not clock out)",
+    //   sort: true,
+    //   headerStyle: { width: "100%" },
+    // },
     ...dateColumns,
   ];
 

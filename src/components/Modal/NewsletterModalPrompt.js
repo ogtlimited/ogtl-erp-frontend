@@ -39,7 +39,7 @@ export const NewsletterModalPrompt = () => {
               <p className="modal_uploaded_by">
                 By: {newsletter?.entered_by} |{" "}
                 <span className="payroll_month_indicator">
-                  {moment(newsletter?.created_at).format("LLL")}
+                  {moment(newsletter?.created_at).format("LL")}
                 </span>
               </p>
             </div>
