@@ -186,7 +186,7 @@ const MonthlyTeamAttendanceTable = ({
               curr.status !== "Present"
                 ? curr.status
                 : `IN: ${moment(curr.clock_in, "HH:mm:ss").format("hh:mma")} ${
-                    curr?.late ? "(Late)" : null
+                    curr?.late ? "(Late)" : ""
                   } - OUT: ${
                     curr.clock_out
                       ? moment(curr.clock_out, "HH:mm:ss").format("hh:mma")
