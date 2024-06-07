@@ -2315,3 +2315,34 @@ img {
   font-weight: 400;
   line-height: 16.8px;
 }
+
+/*------------------ 
+    Progress Bar 
+-------------------*/
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  background-color: #e0e0df;
+  border-radius: 25px;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.progress-bar__fill {
+  height: 25px;
+  background-color: #10ad5f;
+  width: 0;
+  transition: width 0.2s ease-in-out;
+}
+
+.progress-bar__text {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  top: 0;
+  right: 20px;
+  font-weight: 500;
+  line-height: 25px;
+  color: #000;
+}

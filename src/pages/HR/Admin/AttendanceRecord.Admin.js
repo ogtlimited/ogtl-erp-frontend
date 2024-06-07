@@ -86,9 +86,10 @@ const AttendanceRecord = () => {
             {attendanceRecord.status === "Present" ? (
               <>
                 <span
-                  className={`btn btn-gray btn-sm btn-rounded ${
-                    attendanceRecord.late ? "text-danger" : ""
-                  }`}
+                  className="btn btn-gray btn-sm btn-rounded"
+                  style={{
+                    backgroundColor: attendanceRecord.late ? "#FFBF00" : "",
+                  }}
                 >
                   <i
                     className="fa fa-dot-circle-o text-info"
@@ -96,7 +97,8 @@ const AttendanceRecord = () => {
                   ></i>{" "}
                   {moment(attendanceRecord.clock_in, "HH:mm:ss").format(
                     "hh:mma"
-                  )}
+                  )}{" "}
+                  {/* -<span>{attendanceRecord.late ? " Late" : ""}</span> */}
                 </span>
                 <span className="btn btn-gray btn-sm btn-rounded">
                   <i

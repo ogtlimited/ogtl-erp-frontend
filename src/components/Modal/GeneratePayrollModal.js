@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import moment from "moment";
+import secureLocalStorage from "react-secure-storage";
 import $ from "jquery";
 
-export const GeneratePayrollModal = ({ fetchAllBatches, payday }) => {
+export const GeneratePayrollModal = ({
+  fetchAllBatches,
+  payday,
+  // handlePayslipPooling,
+}) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
 
-  const currentMonth = moment().format('MM');
-  const currentYear = moment().format('YYYY');
+  const currentMonth = moment().format("MM");
+  const currentYear = moment().format("YYYY");
 
   const [createPayslips, setCreatePayslips] = useState({
     monthAndYear: `${currentYear}-${currentMonth}`,
@@ -37,6 +42,9 @@ export const GeneratePayrollModal = ({ fetchAllBatches, payday }) => {
     const month = createPayslips.monthAndYear.split("-")[1];
     const year = createPayslips.monthAndYear.split("-")[0];
 
+    secureLocalStorage.setItem("payslipMonth", month);
+    secureLocalStorage.setItem("payslipYear", year);
+
     try {
       // eslint-disable-next-line no-unused-vars
       const res = await axiosInstance.post(
@@ -50,13 +58,12 @@ export const GeneratePayrollModal = ({ fetchAllBatches, payday }) => {
         }
       );
 
-      showAlert(
-        true,
-        `Salary slips are being generated`,
-        "alert alert-success"
-      );
+      const msg = res?.data?.data?.message;
+
+      showAlert(true, msg, "alert alert-success");
       $("#GeneratePayrollModal").modal("toggle");
       fetchAllBatches();
+      // handlePayslipPooling();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
