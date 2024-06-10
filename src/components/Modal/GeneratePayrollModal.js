@@ -8,7 +8,7 @@ import $ from "jquery";
 export const GeneratePayrollModal = ({
   fetchAllBatches,
   payday,
-  // handlePayslipPooling,
+  handlePayslipPooling,
 }) => {
   const { showAlert } = useAppContext();
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,7 @@ export const GeneratePayrollModal = ({
       showAlert(true, msg, "alert alert-success");
       $("#GeneratePayrollModal").modal("toggle");
       fetchAllBatches();
-      // handlePayslipPooling();
+      handlePayslipPooling();
       setLoading(false);
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;

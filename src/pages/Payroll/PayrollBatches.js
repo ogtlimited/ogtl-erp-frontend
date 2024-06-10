@@ -159,42 +159,52 @@ const PayrollBatches = () => {
     fetchAllBatches();
   }, [fetchAllBatches]);
 
-  // // Payslip Pooling:
-  // const handlePayslipPooling = useCallback(async () => {
-  //   const month = secureLocalStorage.getItem("payslipMonth");
-  //   const year = secureLocalStorage.getItem("payslipYear");
+  // Payslip Pooling:
+  const handlePayslipPooling = useCallback(async () => {
+    const month = secureLocalStorage.getItem("payslipMonth");
+    const year = secureLocalStorage.getItem("payslipYear");
 
-  //   try {
-  //     // eslint-disable-next-line no-unused-vars
-  //     const res = await axiosInstance.get(
-  //       `/api/v1/processed_payslips_progress.json?month=${month}&year=${year}`,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Access-Control-Allow-Origin": "*",
-  //           "ngrok-skip-browser-warning": "69420",
-  //         },
-  //       }
-  //     );
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const res = await axiosInstance.get(
+        `/api/v1/processed_payslips_progress.json?month=${month}&year=${year}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
 
-  //     const resData = res?.data?.data?.record;
+      const resData = res?.data?.data?.record;
+      console.log("pull this", resData);
 
-  //     setPoolingData({
-  //       processedPayslips: resData?.processed_payslips,
-  //       expectedPayslips: resData?.expected_payslips,
-  //     });
-  //   } catch (error) {
-  //     const errorMsg = error?.response?.data?.errors;
-  //     showAlert(true, `${errorMsg}`, "alert alert-warning");
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+      setPoolingData({
+        processedPayslips: resData?.processed_payslips,
+        expectedPayslips: resData?.expected_payslips,
+      });
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // useEffect(() => {
-  //   if (poolingData.processedPayslips) {
-  //     handlePayslipPooling();
-  //   }
-  // }, [handlePayslipPooling, poolingData.processedPayslips]);
+  useEffect(() => {
+    handlePayslipPooling();
+    console.log("PUll poll???", poolingData?.processedPayslips);
+
+    if (poolingData?.processedPayslips) {
+      const intervalId = setInterval(() => {
+        handlePayslipPooling();
+      }, 10000);
+
+      return () => clearInterval(intervalId);
+    } else {
+      return;
+    }
+  }, [handlePayslipPooling, poolingData?.processedPayslips]);
 
   // Handle Edit:
   const handleEdit = (e) => {
@@ -447,12 +457,12 @@ const PayrollBatches = () => {
         </div>
       </div>
 
-      {/* {poolingData.processedPayslips ? (
+      {poolingData.processedPayslips ? (
         <ProgressBar
           processedPayslips={poolingData?.processedPayslips}
           expectedPayslips={poolingData?.expectedPayslips}
         />
-      ) : null} */}
+      ) : null}
 
       <div className="row">
         <div className="col-md-12">
@@ -474,7 +484,7 @@ const PayrollBatches = () => {
       <GeneratePayrollModal
         fetchAllBatches={fetchAllBatches}
         payday={payday}
-        // handlePayslipPooling={handlePayslipPooling}
+        handlePayslipPooling={handlePayslipPooling}
       />
 
       <PayrollDatesModal
