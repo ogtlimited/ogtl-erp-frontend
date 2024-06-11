@@ -996,7 +996,7 @@ table.custom-table thead th {
 .header_logo_icons {
   position: absolute;
   top: 20%;
-  right: 17%;
+  right: 16%;
 }
 
 .valentine_styling_page {
@@ -2323,7 +2323,7 @@ img {
 .progress-bar {
   position: relative;
   width: 100%;
-  background-color: #e0e0df;
+  background-color: #e0e0df !important;
   border-radius: 25px;
   overflow: hidden;
   margin: 2rem 0;

@@ -13,12 +13,23 @@ html {
   --app-font-family: "Jost", sans-serif;
 } */
 
-:root {
+/* :root {
   --prm-color: #EB5E28;
   --prm-color-shade: #EB5E284d;
   --sidebar-bg-color: #804E49;
   --sec-color: #FFDC02 ;
   --sec-color-shade: #FFDC024d;
+  --prm-gray: #b1b1b1;
+  --prm-delete: #d80000;
+  --app-font-family: "Jost", sans-serif;
+} */
+
+:root {
+  --prm-color: #1B7339;
+  --prm-color-shade: #1B73394d;
+  --sidebar-bg-color: #023020;
+  --sec-color: #40B5AD ;
+  --sec-color-shade: #40B5AD4d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;
@@ -685,4 +696,7 @@ a.nav-link {
 .shift_update_div > p {
   margin: 0;
   color: #999;
+}
+
+.dashboard-hero-icon {
 }

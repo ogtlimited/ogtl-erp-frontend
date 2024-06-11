@@ -12,14 +12,18 @@ import moment from "moment";
 // import ERP1 from "../../../assets/img/erp1.png";
 // import ERP2 from "../../../assets/img/erp2.png";
 // import ERP3 from "../../../assets/img/erp3.png";
-import ViewModal from "../../../components/Modal/ViewModal";
-import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
+// import ViewModal from "../../../components/Modal/ViewModal";
+// import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 
-import HeroImage from "../../../assets/img/themed/sport5.png";
-import ERP1 from "../../../assets/img/themed/sport6.png";
-import ERP2 from "../../../assets/img/themed/sport7.png";
-import ERP3 from "../../../assets/img/themed/sport8.png";
+// import HeroImage from "../../../assets/img/themed/sport5.png";
+// import ERP1 from "../../../assets/img/themed/sport6.png";
+// import ERP2 from "../../../assets/img/themed/sport7.png";
+// import ERP3 from "../../../assets/img/themed/sport8.png";
+import HeroImage from "../../../assets/img/themed/democracyday2.jpg";
+import ERP1 from "../../../assets/img/themed/democracyday1.jpg";
+import ERP2 from "../../../assets/img/themed/democracyday3.png";
+import ERP3 from "../../../assets/img/themed/COA1.gif";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -118,10 +122,9 @@ const EmployeeUser = () => {
                 )}
               </>
             </div>
-            <div className="col-md-4">
+            <div className="dashboard-hero-icon col-md-4">
               <img
                 style={{ width: "100%" }}
-                className="mt-4"
                 src={heroIcons.hero}
               />
             </div>
@@ -201,13 +204,13 @@ const EmployeeUser = () => {
         </div>
       </div>
 
-      {modalType === "CEO Message" ? (
+      {/* {modalType === "CEO Message" ? (
         <ViewModal
           title="Message from the CEO"
           expand={true}
           content={<CEOMessageContent />}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 };
