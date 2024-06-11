@@ -10,7 +10,8 @@ import { TicketForm } from "../../components/FormJSON/CreateTicket";
 import config from "../../config.json";
 import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
 import AlertSvg from "./AlertSvg";
-import sportLogo from "../../assets/img/themed/sport5.png"
+// import sportLogo from "../../assets/img/themed/sport5.png"
+import loginLogo from "../../assets/img/themed/nigFlag2.gif"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -255,7 +256,7 @@ const Login = () => {
                   style={{ width: "40px", height: "40px" }}
                 ></lord-icon> */}
 
-                <img src={sportLogo} alt="sport logo" />
+                <img src={loginLogo} alt="login logo" />
               </span>
             </a>
           </div>

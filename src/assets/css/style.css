@@ -2621,6 +2621,12 @@ table.dataTable thead > tr > td.sorting {
   top: 10px;
 }
 
+.custom-menu-arrow.lg {
+  position: absolute;
+  right: 10px;
+  top: -6px;
+}
+
 .noti-dot:before {
   content: "";
   width: 5px;
