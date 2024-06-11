@@ -195,16 +195,23 @@ const PayrollBatches = () => {
     handlePayslipPooling();
     console.log("PUll poll???", poolingData?.processedPayslips);
 
-    if (poolingData?.processedPayslips) {
+    // if (
+    //   poolingData?.processedPayslips &&
+    //   poolingData?.processedPayslips !== poolingData?.expectedPayslips
+    // ) {
       const intervalId = setInterval(() => {
         handlePayslipPooling();
       }, 10000);
 
       return () => clearInterval(intervalId);
-    } else {
-      return;
-    }
-  }, [handlePayslipPooling, poolingData?.processedPayslips]);
+    // } else {
+    //   return;
+    // }
+  }, [
+    handlePayslipPooling,
+    poolingData?.expectedPayslips,
+    poolingData?.processedPayslips,
+  ]);
 
   // Handle Edit:
   const handleEdit = (e) => {
