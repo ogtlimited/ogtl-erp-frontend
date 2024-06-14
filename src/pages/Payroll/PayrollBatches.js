@@ -178,7 +178,7 @@ const PayrollBatches = () => {
       );
 
       const resData = res?.data?.data?.record;
-      console.log("pull this", resData);
+      // console.log("pull this", resData);
 
       setPoolingData({
         processedPayslips: resData?.processed_payslips,
@@ -191,27 +191,27 @@ const PayrollBatches = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   handlePayslipPooling();
-  //   console.log("PUll poll???", poolingData?.processedPayslips);
+  useEffect(() => {
+    handlePayslipPooling();
+    // console.log("PUll poll???", poolingData?.processedPayslips);
 
-  //   // if (
-  //   //   poolingData?.processedPayslips &&
-  //   //   poolingData?.processedPayslips !== poolingData?.expectedPayslips
-  //   // ) {
-  //     const intervalId = setInterval(() => {
-  //       handlePayslipPooling();
-  //     }, 10000);
+    if (
+      poolingData?.processedPayslips &&
+      poolingData?.processedPayslips !== poolingData?.expectedPayslips
+    ) {
+      const intervalId = setInterval(() => {
+        handlePayslipPooling();
+      }, 10000);
 
-  //     return () => clearInterval(intervalId);
-  //   // } else {
-  //   //   return;
-  //   // }
-  // }, [
-  //   handlePayslipPooling,
-  //   poolingData?.expectedPayslips,
-  //   poolingData?.processedPayslips,
-  // ]);
+      return () => clearInterval(intervalId);
+    } else {
+      return;
+    }
+  }, [
+    handlePayslipPooling,
+    poolingData?.expectedPayslips,
+    poolingData?.processedPayslips,
+  ]);
 
   // Handle Edit:
   const handleEdit = (e) => {
