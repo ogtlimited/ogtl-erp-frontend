@@ -160,7 +160,7 @@ const PayrollBatches = () => {
   }, [fetchAllBatches]);
 
   // Payslip Pooling:
-  const handlePayslipPooling = useCallback(async () => {
+  const handlePayslipPooling = useCallback(async (prop) => {
     const month = secureLocalStorage.getItem("payslipMonth");
     const year = secureLocalStorage.getItem("payslipYear");
 
@@ -181,7 +181,7 @@ const PayrollBatches = () => {
       // console.log("pull this", resData);
 
       setPoolingData({
-        processedPayslips: resData?.processed_payslips,
+        processedPayslips: resData?.processed_payslips || (!prop && 1),
         expectedPayslips: resData?.expected_payslips,
       });
     } catch (error) {
@@ -192,7 +192,7 @@ const PayrollBatches = () => {
   }, []);
 
   useEffect(() => {
-    handlePayslipPooling();
+    handlePayslipPooling("default");
     // console.log("PUll poll???", poolingData?.processedPayslips);
 
     if (
