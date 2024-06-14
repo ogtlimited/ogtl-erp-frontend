@@ -194,12 +194,12 @@ const sidebarConfig = [
             path: PATH_DASHBOARD.main.employeeLeave,
             icon: ICONS.leave,
           },
-          // {
-          //   canView: "all",
-          //   title: "Public Holiday",
-          //   path: PATH_DASHBOARD.main.publicHoliday,
-          //   icon: ICONS.leave,
-          // },
+          {
+            canView: "all",
+            title: "Public Holiday",
+            path: PATH_DASHBOARD.main.publicHoliday,
+            icon: ICONS.leave,
+          },
         ],
       },
       {
