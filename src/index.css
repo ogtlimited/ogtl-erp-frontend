@@ -990,13 +990,18 @@ table.custom-table thead th {
 -----------------*/
 
 .login_logo_icons {
-  margin-left: -8px;
+  /* margin-left: -8px; */
+  margin-left: 8px;
+}
+
+.login_logo_icons > img {
+  border-radius: 50%;
 }
 
 .header_logo_icons {
   position: absolute;
   top: 20%;
-  right: 16%;
+  right: 15%;
 }
 
 .valentine_styling_page {
@@ -2320,13 +2325,17 @@ img {
     Progress Bar 
 -------------------*/
 
+.progress-bar-text {
+  margin: 2rem 0 0 0;
+}
+
 .progress-bar {
   position: relative;
   width: 100%;
   background-color: #e0e0df !important;
   border-radius: 25px;
   overflow: hidden;
-  margin: 2rem 0;
+  margin-bottom: 2rem;
 }
 
 .progress-bar__fill {

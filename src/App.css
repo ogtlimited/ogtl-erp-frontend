@@ -25,11 +25,11 @@ html {
 } */
 
 :root {
-  --prm-color: #1B7339;
-  --prm-color-shade: #1B73394d;
+  --prm-color: #0A9264  ;
+  --prm-color-shade: #0A92644d;
   --sidebar-bg-color: #023020;
-  --sec-color: #40B5AD ;
-  --sec-color-shade: #40B5AD4d;
+  --sec-color: #a99549 ;
+  --sec-color-shade: #a995494d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;

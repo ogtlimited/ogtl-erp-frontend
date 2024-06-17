@@ -155,21 +155,21 @@ const Sidebar = () => {
                                   >
                                     {item.icon} <span> {item.title}</span>{" "}
                                     {/* <span className="menu-arrow"></span> */}
-                                    <span className="custom-menu-arrow lg">
+                                    <span className="custom-menu-arrow">
                                       <lord-icon
                                         // src="https://cdn.lordicon.com/fjjamyff.json"
-                                        src="https://cdn.lordicon.com/dgpphngr.json"
+                                        src="https://cdn.lordicon.com/awjihmup.json"
                                         trigger="loop"
                                         delay="2000"
                                         // colors="primary:#fff,secondary:#FFDC02,tertiary:#FFDC02,quaternary:#000"
-                                        colors="primary:#ffffff,secondary:#19AE47,tertiary:#40B5AD,quaternary:#000"
+                                        colors="primary:#ffffff,secondary:#0A9264,tertiary:#a99549,quaternary:#000"
                                         // style={{
                                         //   width: "18px",
                                         //   height: "18px",
                                         // }}
                                         style={{
-                                          width: "30px",
-                                          height: "50px",
+                                          width: "20px",
+                                          height: "20px",
                                         }}
                                       ></lord-icon>
                                     </span>

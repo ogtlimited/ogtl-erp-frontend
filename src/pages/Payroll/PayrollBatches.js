@@ -160,7 +160,7 @@ const PayrollBatches = () => {
   }, [fetchAllBatches]);
 
   // Payslip Pooling:
-  const handlePayslipPooling = useCallback(async () => {
+  const handlePayslipPooling = useCallback(async (prop) => {
     const month = secureLocalStorage.getItem("payslipMonth");
     const year = secureLocalStorage.getItem("payslipYear");
 
@@ -178,10 +178,10 @@ const PayrollBatches = () => {
       );
 
       const resData = res?.data?.data?.record;
-      console.log("pull this", resData);
+      // console.log("pull this", resData);
 
       setPoolingData({
-        processedPayslips: resData?.processed_payslips,
+        processedPayslips: resData?.processed_payslips || (!prop && 1),
         expectedPayslips: resData?.expected_payslips,
       });
     } catch (error) {
@@ -191,27 +191,27 @@ const PayrollBatches = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   handlePayslipPooling();
-  //   console.log("PUll poll???", poolingData?.processedPayslips);
+  useEffect(() => {
+    handlePayslipPooling("default");
+    // console.log("PUll poll???", poolingData?.processedPayslips);
 
-  //   // if (
-  //   //   poolingData?.processedPayslips &&
-  //   //   poolingData?.processedPayslips !== poolingData?.expectedPayslips
-  //   // ) {
-  //     const intervalId = setInterval(() => {
-  //       handlePayslipPooling();
-  //     }, 10000);
+    if (
+      poolingData?.processedPayslips &&
+      poolingData?.processedPayslips !== poolingData?.expectedPayslips
+    ) {
+      const intervalId = setInterval(() => {
+        handlePayslipPooling();
+      }, 10000);
 
-  //     return () => clearInterval(intervalId);
-  //   // } else {
-  //   //   return;
-  //   // }
-  // }, [
-  //   handlePayslipPooling,
-  //   poolingData?.expectedPayslips,
-  //   poolingData?.processedPayslips,
-  // ]);
+      return () => clearInterval(intervalId);
+    } else {
+      return;
+    }
+  }, [
+    handlePayslipPooling,
+    poolingData?.expectedPayslips,
+    poolingData?.processedPayslips,
+  ]);
 
   // Handle Edit:
   const handleEdit = (e) => {
