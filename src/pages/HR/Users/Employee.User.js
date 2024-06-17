@@ -20,10 +20,11 @@ import $ from "jquery";
 // import ERP1 from "../../../assets/img/themed/sport6.png";
 // import ERP2 from "../../../assets/img/themed/sport7.png";
 // import ERP3 from "../../../assets/img/themed/sport8.png";
-import HeroImage from "../../../assets/img/themed/democracyday2.jpg";
-import ERP1 from "../../../assets/img/themed/democracyday1.jpg";
-import ERP2 from "../../../assets/img/themed/democracyday3.png";
-import ERP3 from "../../../assets/img/themed/COA1.gif";
+
+import HeroImage from "../../../assets/img/themed/eid9.jpg";
+import ERP1 from "../../../assets/img/themed/eid10.jpg";
+import ERP2 from "../../../assets/img/themed/eid6.jpg";
+import ERP3 from "../../../assets/img/themed/eid7.jpg";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -123,10 +124,7 @@ const EmployeeUser = () => {
               </>
             </div>
             <div className="dashboard-hero-icon col-md-4">
-              <img
-                style={{ width: "100%" }}
-                src={heroIcons.hero}
-              />
+              <img style={{ width: "100%" }} src={heroIcons.hero} />
             </div>
           </div>
           <div className="row mt-4">

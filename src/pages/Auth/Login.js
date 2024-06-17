@@ -11,7 +11,7 @@ import config from "../../config.json";
 import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
 import AlertSvg from "./AlertSvg";
 // import sportLogo from "../../assets/img/themed/sport5.png"
-import loginLogo from "../../assets/img/themed/nigFlag2.gif"
+import loginLogo from "../../assets/img/themed/eid.gif"
 
 const Login = () => {
   const navigate = useNavigate();
