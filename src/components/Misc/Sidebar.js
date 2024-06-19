@@ -155,7 +155,7 @@ const Sidebar = () => {
                                   >
                                     {item.icon} <span> {item.title}</span>{" "}
                                     {/* <span className="menu-arrow"></span> */}
-                                    <span className="custom-menu-arrow">
+                                    {/* <span className="custom-menu-arrow">
                                       <lord-icon
                                         src="https://cdn.lordicon.com/fjjamyff.json"
                                         trigger="loop"
@@ -166,8 +166,13 @@ const Sidebar = () => {
                                           height: "18px",
                                         }}
                                       ></lord-icon>
+                                    </span> */}
+
+                                    <span className="custom-menu-arrow">
+                                      {item?.navIcon}
                                     </span>
                                   </a>
+                                  
                                   <ul
                                     style={{
                                       display: dropdownStates[item.title]

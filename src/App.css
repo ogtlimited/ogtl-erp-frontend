@@ -14,11 +14,11 @@ html {
 } */
 
 :root {
-  --prm-color: #EB5E28;
-  --prm-color-shade: #EB5E284d;
-  --sidebar-bg-color: #804E49;
-  --sec-color: #FFDC02 ;
-  --sec-color-shade: #FFDC024d;
+  --prm-color: #eb5e28;
+  --prm-color-shade: #eb5e284d;
+  --sidebar-bg-color: #804e49;
+  --sec-color: #ffdc02;
+  --sec-color-shade: #ffdc024d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;
@@ -687,5 +687,46 @@ a.nav-link {
   color: #999;
 }
 
-.dashboard-hero-icon {
+.dashboard-hero-icon > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.sportDayGIF {
+  position: absolute;
+  width: 100px;
+  right: 16%;
+}
+
+.slide-out-left {
+	-webkit-animation: slide-out-left 10s linear infinite both;
+	        animation: slide-out-left 10s linear infinite both;
+}
+
+@-webkit-keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+            transform: translateX(-1000px);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-left {
+  0% {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateX(-1000px);
+            transform: translateX(-1000px);
+    opacity: 1;
+  }
 }
