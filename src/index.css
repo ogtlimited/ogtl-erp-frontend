@@ -996,9 +996,9 @@ table.custom-table thead th {
   margin-left: 8px;
 }
 
-.login_logo_icons > img {
+/* .login_logo_icons > img {
   border-radius: 50%;
-}
+} */
 
 .header_logo_icons {
   position: absolute;

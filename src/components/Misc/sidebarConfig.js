@@ -57,6 +57,14 @@ const ICONS = {
   deduction: getIcon("la-money-check-alt"),
   office: getIcon("la-building"),
   hr: getIcon("la-user-minus"),
+
+  football: getIcon("la-futbol"),
+  rugby: getIcon("la-football-ball"),
+  basketball: getIcon("la-basketball-ball"),
+  tableTennis: getIcon("la-table-tennis"),
+  volleyball: getIcon("la-volleyball-ball"),
+  baseball: getIcon("la-baseball-ball"),
+  sprint: getIcon("la-running"),
 };
 
 const buildExternalURL = () => {
@@ -99,6 +107,7 @@ const sidebarConfig = [
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
             icon: ICONS.dashboard,
+            navIcon: ICONS.football,
             children: [
               {
                 canView: "all",
@@ -118,6 +127,7 @@ const sidebarConfig = [
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
             icon: ICONS.dashboard,
+            navIcon: ICONS.football,
             children: [
               {
                 canView: "all",
@@ -136,6 +146,7 @@ const sidebarConfig = [
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
             icon: ICONS.dashboard,
+            navIcon: ICONS.football,
             children: [
               {
                 canView: "all",
@@ -151,6 +162,7 @@ const sidebarConfig = [
         title: "Apps",
         path: PATH_DASHBOARD.apps.root,
         icon: ICONS.apps,
+        navIcon: ICONS.rugby,
         children: [
           {
             canView: "all",
@@ -181,6 +193,7 @@ const sidebarConfig = [
         title: "Time Off",
         path: PATH_DASHBOARD.main.root,
         icon: ICONS.timeOff,
+        navIcon: ICONS.basketball,
         children: [
           {
             canView: "all",
@@ -207,6 +220,7 @@ const sidebarConfig = [
         title: "Payroll",
         path: PATH_DASHBOARD.main.root,
         icon: ICONS.payroll,
+        navIcon: ICONS.tableTennis,
         children: [
           // {
           //   canView: "all",
@@ -233,6 +247,7 @@ const sidebarConfig = [
         title: "Help Desk",
         path: PATH_DASHBOARD.main.resignation,
         icon: ICONS.helpDesk,
+        navIcon: ICONS.volleyball,
         children: [
           {
             canView: "all",
@@ -261,6 +276,7 @@ const sidebarConfig = [
         title: "Engage & Feedback",
         path: PATH_DASHBOARD.main.root,
         icon: ICONS.announcement,
+        navIcon: ICONS.baseball,
         children: [
           {
             canView: "all",
@@ -321,6 +337,7 @@ const sidebarConfig = [
         title: "Employee",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.user,
+        navIcon: ICONS.sprint,
         children:
           CurrentUserIsLead && userDept !== "hr"
             ? [
@@ -355,6 +372,7 @@ const sidebarConfig = [
         title: "Leadership",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.leader,
+        navIcon: ICONS.football,
         children: [
           {
             canView: "hr",
@@ -370,6 +388,7 @@ const sidebarConfig = [
         title: "Biometrics",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.biometrics,
+        navIcon: ICONS.rugby,
         children: [
           {
             canView: "hr",
@@ -385,6 +404,7 @@ const sidebarConfig = [
         title: "Attendance",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.attendance,
+        navIcon: ICONS.basketball,
         children: [
           {
             canView: "hr",
@@ -405,6 +425,7 @@ const sidebarConfig = [
         title: "Time Off",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.timeOff,
+        navIcon: ICONS.tableTennis,
         children: [
           {
             canView: "hr",
@@ -425,6 +446,7 @@ const sidebarConfig = [
         title: "Leave",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.leave,
+        navIcon: ICONS.volleyball,
         children: [
           {
             canView: "hr",
@@ -445,6 +467,7 @@ const sidebarConfig = [
         title: "Office Structure",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.organizationalStructure,
+        navIcon: ICONS.baseball,
         children: [
           {
             canView: "hr",
@@ -477,6 +500,7 @@ const sidebarConfig = [
         title: "Payroll",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.payroll,
+        navIcon: ICONS.sprint,
         children: [
           {
             canView: "all",
@@ -507,6 +531,7 @@ const sidebarConfig = [
         title: "Reports",
         path: PATH_DASHBOARD.payroll.root,
         icon: ICONS.reports,
+        navIcon: ICONS.football,
         children: [
           {
             canView: "super",
@@ -522,6 +547,7 @@ const sidebarConfig = [
         title: "Recruitment",
         path: PATH_DASHBOARD.recruitment.root,
         icon: ICONS.recruitment,
+        navIcon: ICONS.rugby,
         children: [
           {
             canView: "hr",
@@ -542,6 +568,7 @@ const sidebarConfig = [
         title: "Survey",
         path: PATH_DASHBOARD.hr.survey,
         icon: ICONS.survey,
+        navIcon: ICONS.basketball,
         children: [
           {
             canView: "hr",
@@ -562,6 +589,7 @@ const sidebarConfig = [
         title: "Exit",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.resignation,
+        navIcon: ICONS.tableTennis,
         children: [
           {
             canView: "hr",
@@ -641,6 +669,7 @@ const sidebarConfig = [
         title: "Workforce",
         path: PATH_DASHBOARD.dataManagement.root,
         icon: ICONS.users,
+        navIcon: ICONS.volleyball,
         children: [
           {
             canView: "data management",
@@ -667,6 +696,7 @@ const sidebarConfig = [
         title: "Operation Team",
         path: PATH_DASHBOARD.operations.root,
         icon: ICONS.users,
+        navIcon: ICONS.baseball,
         children: [
           {
             canView: "operations",
@@ -682,6 +712,7 @@ const sidebarConfig = [
         title: "Exit",
         path: PATH_DASHBOARD.operations.root,
         icon: ICONS.resignation,
+        navIcon: ICONS.sprint,
         children: [
           {
             canView: "operations",
@@ -816,6 +847,7 @@ const sidebarConfig = [
         title: "Accounting Reports",
         path: PATH_DASHBOARD.accountingReports.root,
         icon: ICONS.account,
+        navIcon: ICONS.football,
         children: [
           {
             canView: "accounting",

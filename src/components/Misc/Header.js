@@ -13,6 +13,7 @@ import NotificationSound from "../../assets/notifications/mixkit-positive-notifi
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 import sportLogo from "../../assets/img/themed/sport5.png";
+import sportDayGIF from "../../assets/img/themed/sportday0.gif";
 
 const Header = () => {
   const { count, setDropDownClicked } = useAppContext();
@@ -97,6 +98,8 @@ const Header = () => {
         <div className="page-title-box">
           <h3>Outsource Global Technologies</h3>
         </div>
+
+        <img src={sportDayGIF} alt="sport day" className="sportDayGIF slide-out-left" />
 
         <a id="mobile_btn" className="mobile_btn ml-4" href="#sidebar">
           <i className="fa fa-bars"></i>

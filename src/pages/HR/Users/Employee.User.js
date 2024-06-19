@@ -16,10 +16,10 @@ import moment from "moment";
 // import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 
-import HeroImage from "../../../assets/img/themed/sport5.png";
-import ERP1 from "../../../assets/img/themed/sport6.png";
-import ERP2 from "../../../assets/img/themed/sport7.png";
-import ERP3 from "../../../assets/img/themed/sport8.png";
+import HeroImage from "../../../assets/img/themed/sportday2.gif";
+import ERP1 from "../../../assets/img/themed/sportday6.gif";
+import ERP2 from "../../../assets/img/themed/sportday9.gif";
+import ERP3 from "../../../assets/img/themed/sportday11.gif";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -119,7 +119,7 @@ const EmployeeUser = () => {
               </>
             </div>
             <div className="dashboard-hero-icon col-md-4">
-              <img style={{ width: "100%" }} src={heroIcons.hero} />
+              <img src={heroIcons.hero} />
             </div>
           </div>
           <div className="row mt-4">
