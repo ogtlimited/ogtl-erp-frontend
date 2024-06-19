@@ -73,12 +73,10 @@ const Header = () => {
             <img src={logo} style={{ width: "100px" }} alt="" />
             <span className="header_logo_icons">
               <lord-icon
-                // src="https://cdn.lordicon.com/przqzrpl.json"
-                src="https://cdn.lordicon.com/rkdxkmlq.json"
+                src="https://cdn.lordicon.com/przqzrpl.json"
                 trigger="loop"
                 delay="2000"
-                // colors="primary:#FFDC02,secondary:#19AE47,tertiary:#193375,quaternary:#000"
-                colors="primary:#ffffff,secondary:#0A9264,tertiary:#a99549,quaternary:#000"
+                colors="primary:#FFDC02,secondary:#19AE47,tertiary:#193375,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
               ></lord-icon>
             </span>

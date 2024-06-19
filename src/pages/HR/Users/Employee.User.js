@@ -16,15 +16,10 @@ import moment from "moment";
 // import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 
-// import HeroImage from "../../../assets/img/themed/sport5.png";
-// import ERP1 from "../../../assets/img/themed/sport6.png";
-// import ERP2 from "../../../assets/img/themed/sport7.png";
-// import ERP3 from "../../../assets/img/themed/sport8.png";
-
-import HeroImage from "../../../assets/img/themed/eid9.jpg";
-import ERP1 from "../../../assets/img/themed/eid10.jpg";
-import ERP2 from "../../../assets/img/themed/eid6.jpg";
-import ERP3 from "../../../assets/img/themed/eid7.jpg";
+import HeroImage from "../../../assets/img/themed/sport5.png";
+import ERP1 from "../../../assets/img/themed/sport6.png";
+import ERP2 from "../../../assets/img/themed/sport7.png";
+import ERP3 from "../../../assets/img/themed/sport8.png";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();

@@ -157,19 +157,13 @@ const Sidebar = () => {
                                     {/* <span className="menu-arrow"></span> */}
                                     <span className="custom-menu-arrow">
                                       <lord-icon
-                                        // src="https://cdn.lordicon.com/fjjamyff.json"
-                                        src="https://cdn.lordicon.com/awjihmup.json"
+                                        src="https://cdn.lordicon.com/fjjamyff.json"
                                         trigger="loop"
                                         delay="2000"
-                                        // colors="primary:#fff,secondary:#FFDC02,tertiary:#FFDC02,quaternary:#000"
-                                        colors="primary:#ffffff,secondary:#0A9264,tertiary:#a99549,quaternary:#000"
-                                        // style={{
-                                        //   width: "18px",
-                                        //   height: "18px",
-                                        // }}
+                                        colors="primary:#fff,secondary:#FFDC02,tertiary:#FFDC02,quaternary:#000"
                                         style={{
-                                          width: "20px",
-                                          height: "20px",
+                                          width: "18px",
+                                          height: "18px",
                                         }}
                                       ></lord-icon>
                                     </span>

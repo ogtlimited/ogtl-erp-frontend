@@ -10,8 +10,7 @@ import { TicketForm } from "../../components/FormJSON/CreateTicket";
 import config from "../../config.json";
 import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
 import AlertSvg from "./AlertSvg";
-// import sportLogo from "../../assets/img/themed/sport5.png"
-import loginLogo from "../../assets/img/themed/eid.gif"
+import loginLogo from "../../assets/img/themed/sport5.png"
 
 const Login = () => {
   const navigate = useNavigate();
