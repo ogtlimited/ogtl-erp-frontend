@@ -13,23 +13,12 @@ html {
   --app-font-family: "Jost", sans-serif;
 } */
 
-/* :root {
+:root {
   --prm-color: #EB5E28;
   --prm-color-shade: #EB5E284d;
   --sidebar-bg-color: #804E49;
   --sec-color: #FFDC02 ;
   --sec-color-shade: #FFDC024d;
-  --prm-gray: #b1b1b1;
-  --prm-delete: #d80000;
-  --app-font-family: "Jost", sans-serif;
-} */
-
-:root {
-  --prm-color: #0A9264  ;
-  --prm-color-shade: #0A92644d;
-  --sidebar-bg-color: #023020;
-  --sec-color: #a99549 ;
-  --sec-color-shade: #a995494d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;
