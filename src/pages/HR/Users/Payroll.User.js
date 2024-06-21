@@ -1,6 +1,6 @@
 // *IN USE
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAppContext } from "../../../Context/AppContext";
 import { BsDot } from "react-icons/bs";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
@@ -42,6 +42,10 @@ const PayrollUser = () => {
   const [toDate, setToDate] = useState(lastDay);
   const [today, setToday] = useState(null);
 
+  const isEncrypted = useMemo(() => {
+    return true;
+  }, []);
+
   useEffect(() => {
     const today_date = moment().utc().format("yyyy-MM-DD");
     setToday(today_date);
@@ -60,6 +64,8 @@ const PayrollUser = () => {
         },
       });
       const resData = response?.data?.data?.salary;
+
+      console.log("Staff Salary", resData);
 
       setSalary(resData);
       setLoadingSalary(false);
@@ -234,7 +240,7 @@ const PayrollUser = () => {
                 style={{ marginTop: "5px", fontSize: "20px" }}
               />
             ) : (
-              helper.handleMoneyFormat(salary?.net_pay)
+              helper.handleMoneyFormat(salary?.net_pay, isEncrypted)
             )}
           </h1>
           <p>
@@ -256,7 +262,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.monthly_salary)
+                helper.handleMoneyFormat(salary?.monthly_salary, isEncrypted)
               )
             }
           />
@@ -272,7 +278,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.basic)
+                helper.handleMoneyFormat(salary?.basic, isEncrypted)
               )
             }
           />
@@ -288,7 +294,10 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.monthly_income_tax)
+                helper.handleMoneyFormat(
+                  salary?.monthly_income_tax,
+                  isEncrypted
+                )
               )
             }
           />
@@ -304,7 +313,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.monthly_pension)
+                helper.handleMoneyFormat(salary?.monthly_pension, isEncrypted)
               )
             }
           />
@@ -320,22 +329,33 @@ const PayrollUser = () => {
             <div>
               <span className="salary_span">
                 <p>Other Allowances</p>
-                <h3>{helper.handleMoneyFormat(salary?.other_allowances)}</h3>
+                <h3>
+                  {helper.handleMoneyFormat(
+                    salary?.other_allowances,
+                    isEncrypted
+                  )}
+                </h3>
               </span>
-              <BsDot  className="emp_salary_BsDot"/>
+              <BsDot className="emp_salary_BsDot" />
               <span className="salary_span">
                 <p>Housing</p>
-                <h3>{helper.handleMoneyFormat(salary?.housing)}</h3>
+                <h3>
+                  {helper.handleMoneyFormat(salary?.housing, isEncrypted)}
+                </h3>
               </span>
-              <BsDot  className="emp_salary_BsDot"/>
+              <BsDot className="emp_salary_BsDot" />
               <span className="salary_span">
                 <p>Medical</p>
-                <h3>{helper.handleMoneyFormat(salary?.medical)}</h3>
+                <h3>
+                  {helper.handleMoneyFormat(salary?.medical, isEncrypted)}
+                </h3>
               </span>
-              <BsDot  className="emp_salary_BsDot"/>
+              <BsDot className="emp_salary_BsDot" />
               <span className="salary_span">
                 <p>Transport</p>
-                <h3>{helper.handleMoneyFormat(salary?.transport)}</h3>
+                <h3>
+                  {helper.handleMoneyFormat(salary?.transport, isEncrypted)}
+                </h3>
               </span>
             </div>
           </div>

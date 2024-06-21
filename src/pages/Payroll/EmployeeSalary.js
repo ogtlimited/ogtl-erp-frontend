@@ -68,6 +68,8 @@ const EmployeeSalary = () => {
         const formattedData = AllEmployeeSalaries?.map((e) => ({
           ...e,
           employee: e?.first_name + " " + e?.last_name,
+          officeName: e?.office.toUpperCase(),
+          status: e?.salary?.status,
           basic: e?.salary?.basic,
           housing: e?.salary?.housing,
           medical: e?.salary?.medical,
@@ -78,6 +80,8 @@ const EmployeeSalary = () => {
           monthlyEmployeePension: e?.salary?.monthly_pension,
           totalDeductions: e?.salary?.total_deductions,
           netPay: e?.salary?.net_pay,
+
+          salaryStatus: "status",
         }));
 
         setAllSalaries(formattedData);
@@ -102,8 +106,17 @@ const EmployeeSalary = () => {
       idDataField: "ogid",
     },
     {
+      dataField: "officeName",
+      text: "Office",
+    },
+    {
       dataField: "email",
       text: "Email",
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      textDataField: "salaryStatus",
     },
     {
       dataField: "basic",

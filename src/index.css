@@ -674,8 +674,14 @@ table.custom-table thead th {
   display: flex;
   flex-direction: column;
 }
+.payroll-table-avatar-bankDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-.payroll-table-avatar-name > span {
+.payroll-table-avatar-name > span,
+.payroll-table-avatar-bankDetails > span {
   color: #808080;
   font-size: 12px;
 }

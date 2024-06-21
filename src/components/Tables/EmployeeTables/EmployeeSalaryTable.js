@@ -158,6 +158,28 @@ function EmployeeSalaryTable({
                   <span> {employee[column.idDataField]}</span>
                 </div>
               </div>
+            ) : columnIndex === 3 &&
+              employee[column.textDataField] !== "status" ? (
+              <div className="payroll-table-avatar">
+                <div className="payroll-table-avatar-bankDetails">
+                  {employee[column.dataField]}{" "}
+                  <span> {employee[column.idDataField]}</span>
+                </div>
+              </div>
+            ) : employee[column.textDataField] === "status" ? (
+              <span className="btn btn-gray btn-sm btn-rounded">
+                <i
+                  className={`fa fa-dot-circle-o ${
+                    employee[column.dataField] === "active"
+                      ? "text-success"
+                      : "text-secondary"
+                  }`}
+                  style={{ marginRight: "10px" }}
+                ></i>
+                {employee[column.dataField].replace(/\b\w/g, (char) =>
+                  char.toUpperCase()
+                )}
+              </span>
             ) : typeof employee[column.dataField] === "number" ? (
               <Link
                 className={
@@ -253,7 +275,7 @@ function EmployeeSalaryTable({
             <table className="emp_salary_custom_table custom-table">
               <thead className="emp_salary_custom-table-thead">
                 <tr>
-                  <th className="emp_salary_tr_th exempt" colSpan="2"></th>
+                  <th className="emp_salary_tr_th exempt" colSpan="4"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
                   <th colSpan={columns.length <= 12 ? "3" : "5"}>Deductions</th>
