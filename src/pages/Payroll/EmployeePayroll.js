@@ -202,6 +202,10 @@ const EmployeePayroll = () => {
           ogid: e?.user?.ogid,
           email: e?.user?.email,
 
+          designation: e?.user?.designation,
+          bank_name: e?.user?.bank_name || "Not Available",
+          bank_account_number: e?.user?.bank_account_number,
+
           basic: e?.slip?.basic,
           medical: e?.slip?.medical,
           housing: e?.slip?.housing,
@@ -218,6 +222,8 @@ const EmployeePayroll = () => {
 
           prorate: e?.slip?.prorate ? "Yes" : "No",
         }));
+
+        console.log("Formatted Payslip:", formattedData);
 
         setData(formattedData);
         setLoading(false);
@@ -441,8 +447,17 @@ const EmployeePayroll = () => {
       idDataField: "ogid",
     },
     {
+      dataField: "designation",
+      text: "Designation",
+    },
+    {
       dataField: "email",
       text: "Email",
+    },
+    {
+      dataField: "bank_account_number",
+      text: "Bank Details",
+      idDataField: "bank_name",
     },
     {
       dataField: "basic",
