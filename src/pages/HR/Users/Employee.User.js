@@ -16,8 +16,8 @@ import moment from "moment";
 // import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 
-import HeroImage from "../../../assets/img/themed/sportday2.gif";
-import ERP1 from "../../../assets/img/themed/sportday6.gif";
+import HeroImage from "../../../assets/img/themed/sportday6.gif";
+import ERP1 from "../../../assets/img/themed/sportday2.gif";
 import ERP2 from "../../../assets/img/themed/sportday9.gif";
 import ERP3 from "../../../assets/img/themed/sportday11.gif";
 
