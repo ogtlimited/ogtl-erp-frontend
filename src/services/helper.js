@@ -125,19 +125,12 @@ class HelperService {
     delete hash.slug;
     return hash;
   }
-  handleMoneyFormat(number) {
+  handleMoneyFormat(number, encrypted = false) {
     if (number === null || number === undefined || isNaN(number)) {
-      return "₦0.00"
-    } else {
-      return (
-        "₦" +
-        new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
-          number
-        )
-      );
-    }
+      return encrypted ? "******" : "₦0.00";
+    } 
+    return "₦" + new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(number);
   }
-
   capitalize(str) {
     if (str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
