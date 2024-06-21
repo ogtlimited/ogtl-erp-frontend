@@ -223,8 +223,6 @@ const EmployeePayroll = () => {
           prorate: e?.slip?.prorate ? "Yes" : "No",
         }));
 
-        console.log("Formatted Payslip:", formattedData);
-
         setData(formattedData);
         setLoading(false);
       })
@@ -274,7 +272,11 @@ const EmployeePayroll = () => {
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
+        DESIGNATION: data?.user?.designation.toUpperCase(),
         EMAIL: data?.user?.email,
+        "BANK DETAILS": data?.user?.bank_account_number
+          ? data?.user?.bank_account_number + ` (${data?.user?.bank_name})`
+          : "Not Available",
 
         BASIC: helper.handleMoneyFormat(data?.slip?.basic),
         MEDICAL: helper.handleMoneyFormat(data?.slip?.medical),
@@ -303,8 +305,6 @@ const EmployeePayroll = () => {
         "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
       }));
 
-      // console.log("Download this:", formatted);
-
       const dataToConvert = {
         data: formatted,
         filename: `OGTL - Staff Monthly Payslip - ${currMonthName} ${year}`,
@@ -313,6 +313,8 @@ const EmployeePayroll = () => {
       };
 
       csvDownload(dataToConvert);
+
+      // console.log("download this:", formatted);
 
       setLoadingCSV(false);
     } catch (error) {

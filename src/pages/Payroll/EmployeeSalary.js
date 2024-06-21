@@ -84,8 +84,6 @@ const EmployeeSalary = () => {
           salaryStatus: "status",
         }));
 
-        console.log("Formatted Salaries", formattedData)
-
         setAllSalaries(formattedData);
         setLoading(false);
       })
