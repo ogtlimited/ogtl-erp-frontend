@@ -195,10 +195,7 @@ const PayrollBatches = () => {
     handlePayslipPooling();
     // console.log("processedPayslips poll???", poolingData?.processedPayslips);
 
-    if (
-      poolingData?.processedPayslips &&
-      poolingData?.processedPayslips !== poolingData?.expectedPayslips
-    ) {
+    if (poolingData?.processedPayslips !== poolingData?.expectedPayslips) {
       const intervalId = setInterval(() => {
         handlePayslipPooling();
       }, 10000);
