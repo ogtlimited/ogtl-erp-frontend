@@ -102,7 +102,7 @@ const PayrollUser = () => {
           },
         }
       );
-      const resData = response?.data?.data?.salary_slips;
+      const resData = response?.data?.data?.salary_slips?.slip;
       // const totalPages = response?.data?.data?.pages;
 
       console.log("Staff payslips:", resData);

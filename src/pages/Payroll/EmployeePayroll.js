@@ -562,13 +562,13 @@ const EmployeePayroll = () => {
         <div className="hr-employee-card-group" style={{ marginTop: "50px" }}>
           <CardSection
             title="Total Tax"
-            value={totals?.tax}
+            value={totals?.monthly_income_tax}
             loading={loadingTotals}
             helper={helper}
           />
           <CardSection
             title="Total Pension"
-            value={totals?.pension}
+            value={totals?.monthly_pension}
             loading={loadingTotals}
             helper={helper}
           />
