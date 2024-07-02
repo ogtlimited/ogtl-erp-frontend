@@ -113,9 +113,9 @@ function EmployeeSalaryTable({
     return <>{show ? "No Data Available" : null}</>;
   };
 
-  const handleRegeneratePayroll = (employee) => {
-    setUserId(employee?.ogid);
-  };
+  // const handleRegeneratePayroll = (employee) => {
+  //   setUserId(employee?.ogid);
+  // };
 
   const handleAction = (action) => {
     navigate(`/dashboard/payroll/payslip/${action?.id}`);
@@ -203,7 +203,7 @@ function EmployeeSalaryTable({
 
         {viewAction && (
           <td>
-            {regenerate &&
+            {/* {regenerate &&
             currentUserEmail === currentApproverEmail &&
             currentBatchApprovalStatus !== "Approved" ? (
               <a
@@ -216,7 +216,7 @@ function EmployeeSalaryTable({
               >
                 Regenerate
               </a>
-            ) : null}
+            ) : null} */}
 
             {CurrentUserCanNotifyEmployees &&
             currentBatchApprovalStatus === "Approved" ? (

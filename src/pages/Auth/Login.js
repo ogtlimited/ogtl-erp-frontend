@@ -255,7 +255,7 @@ const Login = () => {
                   style={{ width: "40px", height: "40px" }}
                 ></lord-icon> */}
 
-                <img src={loginLogo} alt="login logo" />
+                {/* <img src={loginLogo} alt="login logo" /> */}
               </span>
             </a>
           </div>
