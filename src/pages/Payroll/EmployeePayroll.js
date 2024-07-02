@@ -78,6 +78,7 @@ const EmployeePayroll = () => {
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(20);
   const [totalPages, setTotalPages] = useState("");
+  const [approver, setApprover] = useState([]);
   const [currentApproverEmail, setCurrentApproverEmail] = useState("");
   const [notificationSent, setNotificationSent] = useState(false);
   const [notifyFor, setNotifyFor] = useState(null);
@@ -397,14 +398,20 @@ const EmployeePayroll = () => {
         const sortedData = data.find(
           (data) => data?.current_processor === true
         );
+
+        const thisApprover = data.find(
+          (data) => data?.email === currentUserEmail
+        );
+
         const currentApproverEmail = sortedData?.email;
 
+        setApprover(thisApprover);
         setCurrentApproverEmail(currentApproverEmail);
       })
       .catch((error) => {
         console.error("Error fetching approvers data | ", error);
       });
-  }, [id]);
+  }, [currentUserEmail, id]);
 
   // Fetch Reviewers Data:
   const fetchReviewersData = () => {
@@ -708,7 +715,8 @@ const EmployeePayroll = () => {
 
             <div>
               {currentApproverEmail === currentUserEmail &&
-              currentBatchApprovalStatus !== "Approved" ? (
+              currentBatchApprovalStatus !== "Approved" &&
+              approver.stage > 1 ? (
                 <button
                   className="btn btn-primary"
                   data-toggle="modal"
@@ -737,7 +745,7 @@ const EmployeePayroll = () => {
                   />
                   Downloading...
                 </button>
-              ) : (
+              ) : approver.stage > 1 ? (
                 <button
                   className="btn btn-primary"
                   style={{ margin: "0 1rem 1rem 0" }}
@@ -749,7 +757,7 @@ const EmployeePayroll = () => {
                   ></i>
                   Download Slips
                 </button>
-              )}
+              ) : null}
 
               {currentBatchApprovalStatus === "Approved" &&
               CurrentUserCanNotifyEmployees ? (
