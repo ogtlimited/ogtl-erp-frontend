@@ -12,8 +12,8 @@ import { msalInstance } from "../../authConfig";
 import NotificationSound from "../../assets/notifications/mixkit-positive-notification-951.wav";
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
-import sportLogo from "../../assets/img/themed/sport5.png";
-import sportDayGIF from "../../assets/img/themed/sportday0.gif";
+// import sportLogo from "../../assets/img/themed/sport5.png";
+// import sportDayGIF from "../../assets/img/themed/sportday0.gif";
 
 const Header = () => {
   const { count, setDropDownClicked } = useAppContext();
@@ -73,17 +73,17 @@ const Header = () => {
           <div className="logo">
             <img src={logo} style={{ width: "100px" }} alt="" />
             <span className="header_logo_icons">
-              <lord-icon
+              {/* <lord-icon
                 src="https://cdn.lordicon.com/przqzrpl.json"
                 trigger="loop"
                 delay="2000"
                 colors="primary:#FFDC02,secondary:#19AE47,tertiary:#193375,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
-              ></lord-icon>
+              ></lord-icon> */}
             </span>
           </div>
           <div className="cropped-logo">
-            {/* <img src={cropped} alt="" /> */}
+            <img src={cropped} alt="" />
           </div>
         </div>
 
@@ -99,7 +99,7 @@ const Header = () => {
           <h3>Outsource Global Technologies</h3>
         </div>
 
-        <img src={sportDayGIF} alt="sport day" className="sportDayGIF slide-out-left" />
+        {/* <img src={sportDayGIF} alt="sport day" className="sportDayGIF slide-out-left" /> */}
 
         <a id="mobile_btn" className="mobile_btn ml-4" href="#sidebar">
           <i className="fa fa-bars"></i>

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import cropped from "../../assets/img/cropped-white.png";
 
 import "./Sidebar.css";
 import $ from "jquery";
@@ -167,12 +168,15 @@ const Sidebar = () => {
                                         }}
                                       ></lord-icon>
                                     </span> */}
+                                    {/* <span className="custom-menu-arrow">
+                                      {item?.navIcon}
+                                    </span> */}
 
                                     <span className="custom-menu-arrow">
-                                      {item?.navIcon}
+                                      <img src={cropped} alt="" />
                                     </span>
                                   </a>
-                                  
+
                                   <ul
                                     style={{
                                       display: dropdownStates[item.title]

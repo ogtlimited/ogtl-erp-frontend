@@ -22,8 +22,8 @@ const ResignationStatusAnalytics = () => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
-  // Handle Leave params:
-  const fetchParams = useCallback(() => {
+  // Handle Resignation Header:
+  const formatResignationHeader = useCallback(() => {
     const header = id;
     const Header = header[0].toUpperCase() + header.substring(1);
     setHeader(Header);
@@ -75,6 +75,8 @@ const ResignationStatusAnalytics = () => {
         const resData = res?.data?.data?.resignations;
         const totalPages = res?.data?.data?.total_pages;
 
+        // console.log("viewed Resignations", res)
+
         setSizePerPage(sizePerPage);
         setTotalPages(totalPages);
 
@@ -111,8 +113,8 @@ const ResignationStatusAnalytics = () => {
 
   useEffect(() => {
     fetchResignationStatus();
-    fetchParams();
-  }, [fetchParams, fetchResignationStatus]);
+    formatResignationHeader();
+  }, [formatResignationHeader, fetchResignationStatus]);
 
   const columns = [
     {

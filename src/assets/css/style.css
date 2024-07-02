@@ -2621,6 +2621,10 @@ table.dataTable thead > tr > td.sorting {
   top: 8px;
 }
 
+.custom-menu-arrow > img {
+  width: 15px;
+}
+
 .custom-menu-arrow.lg {
   position: absolute;
   right: 10px;

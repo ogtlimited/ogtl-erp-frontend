@@ -457,6 +457,19 @@ const PayrollBatches = () => {
                 <i className="fa fa-plus"></i> Generate Payroll
               </a>
             )}
+
+            {data?.length && data[0]?.status === "Pending" ? (
+              <a
+                href="#"
+                className="btn add-btn"
+                data-toggle="modal"
+                data-target="#RegeneratePayrollModal"
+                style={{ marginRight: "1rem" }}
+                // onClick={() => handleRegeneratePayroll(employee)}
+              >
+                Regenerate Slips
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
