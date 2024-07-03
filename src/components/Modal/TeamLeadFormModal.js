@@ -77,7 +77,7 @@ export const TeamLeadFormModal = ({ mode, data, teamLead, fetchTeamLead }) => {
         true,
         `${
           office?.lead_title
-        } successfully assigned as ${title?.toUpperCase()} Team Lead`,
+        } successfully assigned as ${title?.toUpperCase()} ${office?.leadership_title}`,
         "alert alert-success"
       );
       fetchTeamLead();
