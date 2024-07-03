@@ -256,6 +256,7 @@ const TeamMembers = () => {
       <TeamLeadFormModal
         mode={mode}
         data={office}
+        teamLead={teamLead}
         fetchTeamLead={fetchTeamLead}
       />
 

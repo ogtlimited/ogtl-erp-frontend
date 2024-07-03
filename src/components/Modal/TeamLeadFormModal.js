@@ -1,19 +1,21 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import { useParams } from "react-router-dom";
 import $ from "jquery";
 import Select from "react-select";
 
-export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
+export const TeamLeadFormModal = ({ mode, data, teamLead, fetchTeamLead }) => {
   const { selectLeaders, selectTeams, showAlert, goToTop, leadershipTypes } =
     useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const teamLeadId = useMemo(() => teamLead[0]?.id, [teamLead]);
 
   useEffect(() => {
     setOffice(data);
@@ -54,7 +56,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
       } else {
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.patch(
-          `/api/v1/teams_leads/${id}.json`,
+          `/api/v1/teams_leads/${teamLeadId}.json`,
           {
             headers: {
               "Content-Type": "application/json",
