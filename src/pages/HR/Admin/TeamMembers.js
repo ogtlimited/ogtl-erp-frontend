@@ -13,6 +13,7 @@ import {
 import { TeamMemberFormModal } from "../../../components/Modal/TeamMembersFormModal";
 import { TeamLeadFormModal } from "../../../components/Modal/TeamLeadFormModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import $ from "jquery";
 
 const TeamMembers = () => {
@@ -20,12 +21,15 @@ const TeamMembers = () => {
   const { title } = useParams();
   const navigate = useNavigate();
 
-  const { user, ErrorHandler, getAvatarColor } = useAppContext();
+  const { user, ErrorHandler, getAvatarColor, goToTop, showAlert } =
+    useAppContext();
   const [loading, setLoading] = useState(false);
   const [teamLead, setTeamLead] = useState({});
   const [teamMembers, setTeamMembers] = useState([]);
   const [mode, setMode] = useState("Create");
   const [office, setOffice] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -125,12 +129,46 @@ const TeamMembers = () => {
     setOffice(TeamMemberForm);
   };
 
+  const handleRemoveEmployee = async () => {
+    setIsRemoving(true);
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.delete(
+        `/api/v1/teams_employees/${selectedData.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      goToTop();
+      showAlert(true, "Team member removed successfully!", "alert alert-info");
+      $("#exampleModal").modal("toggle");
+      fetchAllTeamMembers();
+      setIsRemoving(false);
+    } catch (error) {
+      goToTop();
+      const errorMsg = error.response?.data?.errors;
+      showAlert(
+        true,
+        `${errorMsg || "Unable to remove team member"}`,
+        "alert alert-warning"
+      );
+      $("#exampleModal").modal("toggle");
+      setIsRemoving(false);
+    }
+  };
+
   const columns = [
     {
       dataField: "name",
       text: "Name",
       sort: true,
-      headerStyle: { width: "50%" },
+      headerStyle: { width: "30%" },
       formatter: (val, row) => (
         <h2 className="table-avatar">
           <span
@@ -149,7 +187,26 @@ const TeamMembers = () => {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { width: "50%" },
+      headerStyle: { width: "30%" },
+    },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-secondary"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              onClick={() => setSelectedData(row)}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ),
     },
   ];
 
@@ -256,6 +313,7 @@ const TeamMembers = () => {
       <TeamLeadFormModal
         mode={mode}
         data={office}
+        teamLead={teamLead}
         fetchTeamLead={fetchTeamLead}
       />
 
@@ -263,6 +321,14 @@ const TeamMembers = () => {
         mode={mode}
         data={office}
         fetchAllTeamMembers={fetchAllTeamMembers}
+      />
+
+      <ConfirmModal
+        title="Team Member"
+        selectedRow={selectedData}
+        deleteFunction={handleRemoveEmployee}
+        message={`Are you sure you want to remove ${selectedData?.name} from ${selectedData?.team} `}
+        isLoading={isRemoving}
       />
     </>
   );
