@@ -8,7 +8,7 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
-  const { selectLeaders, selectTeams, showAlert, goToTop } = useAppContext();
+  const { selectLeaders, selectTeams, showAlert, goToTop, leadershipTypes } = useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);
@@ -40,6 +40,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
             payload: {
               operation_team_id: +id,
               team_lead_id: office.team_lead_id,
+              leadership_type: office?.leadership_type
             },
           }
         );
@@ -56,6 +57,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
             payload: {
               operation_team_id: +id,
               team_lead_id: office.team_lead_id,
+              leadership_type: office?.leadership_type
             },
           }
         );
@@ -111,7 +113,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
               <form onSubmit={handleAssignTeamLead}>
                 <div className="row">
                   {mode === "Edit" ? (
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                       <div className="form-group">
                         <label htmlFor="operation_team_id">Team</label>
                         <Select
@@ -133,7 +135,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
                       </div>
                     </div>
                   ) : (
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                       <div className="form-group">
                         <label htmlFor="operation_team_id">Team</label>
                         <input
@@ -147,7 +149,29 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
                     </div>
                   )}
 
-                  <div className="col-md-6">
+                  <div className="col-md-3">
+                    <div className="form-group">
+                      <label htmlFor="leadership_type">Leadership Type</label>
+                      <Select
+                        name="leadership_type"
+                        options={leadershipTypes}
+                        value={{
+                          label: office?.leadership_title,
+                          value: office?.leadership_type,
+                        }}
+                        onChange={(e) =>
+                          setOffice({
+                            ...office,
+                            leadership_type: e?.value,
+                            leadership_title: e?.label,
+                          })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-5">
                     <div className="form-group">
                       <label htmlFor="team_lead_id">Team Lead</label>
                       <Select

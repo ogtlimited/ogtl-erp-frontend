@@ -68,9 +68,11 @@ export const CampaignEmployeeForm = {
 export const TeamLeadForm = {
   operation_team_id: "",
   team_lead_id: "",
+  leadership_type: null,
 
   team_title: "",
   lead_title: "",
+  leadership_title: "",
 };
 export const TeamMemberForm = {
   operation_team_id: "",
