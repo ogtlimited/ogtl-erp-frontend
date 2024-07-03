@@ -208,7 +208,7 @@ const TeamMembers = () => {
             <h4>
               {teamLead[0]?.leadership_type
                 ?.replace(/_/g, " ")
-                ?.replace(/^./, (str) => str?.toUpperCase())}
+                ?.replace(/^./, (str) => str?.toUpperCase()) || "Leader"}
             </h4>
             <p>
               <Link

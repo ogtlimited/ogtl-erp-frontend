@@ -8,7 +8,8 @@ import $ from "jquery";
 import Select from "react-select";
 
 export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
-  const { selectLeaders, selectTeams, showAlert, goToTop, leadershipTypes } = useAppContext();
+  const { selectLeaders, selectTeams, showAlert, goToTop, leadershipTypes } =
+    useAppContext();
   const { id } = useParams();
   const { title } = useParams();
   const [office, setOffice] = useState([]);
@@ -28,22 +29,28 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
     setLoading(true);
     try {
       if (mode === "Assign") {
+        if (!office?.leadership_type) {
+          setLoading(false);
+          return showAlert(
+            true,
+            `Please select a leadership type`,
+            "alert alert-warning"
+          );
+        }
+
         // eslint-disable-next-line no-unused-vars
-        const response = await axiosInstance.post(
-          `/api/v1/teams_leads.json`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
-            },
-            payload: {
-              operation_team_id: +id,
-              team_lead_id: office.team_lead_id,
-              leadership_type: office?.leadership_type
-            },
-          }
-        );
+        const response = await axiosInstance.post(`/api/v1/teams_leads.json`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+          payload: {
+            operation_team_id: +id,
+            team_lead_id: office.team_lead_id,
+            leadership_type: office?.leadership_type,
+          },
+        });
       } else {
         // eslint-disable-next-line no-unused-vars
         const response = await axiosInstance.patch(
@@ -57,7 +64,7 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
             payload: {
               operation_team_id: +id,
               team_lead_id: office.team_lead_id,
-              leadership_type: office?.leadership_type
+              leadership_type: office?.leadership_type,
             },
           }
         );
@@ -66,7 +73,9 @@ export const TeamLeadFormModal = ({ mode, data, fetchTeamLead }) => {
       goToTop();
       showAlert(
         true,
-        `${office?.lead_title} successfully assigned as ${title?.toUpperCase()} Team Lead`,
+        `${
+          office?.lead_title
+        } successfully assigned as ${title?.toUpperCase()} Team Lead`,
         "alert alert-success"
       );
       fetchTeamLead();
