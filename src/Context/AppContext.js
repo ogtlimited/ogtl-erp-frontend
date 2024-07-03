@@ -171,6 +171,21 @@ const AppProvider = (props) => {
     },
   ];
 
+  const leadershipTypes = [
+    {
+      label: "Team Lead",
+      value: 0,
+    },
+    {
+      label: "Supervisor",
+      value: 1,
+    },
+    {
+      label: "Manager",
+      value: 2,
+    },
+  ];
+
   const generateOrdinal = (day) => {
     if (day >= 11 && day <= 13) {
       return `${day}th`;
@@ -1057,6 +1072,7 @@ const AppProvider = (props) => {
         fetchPublicHolidays,
 
         selectOutOfOfficeReasons,
+        leadershipTypes,
 
         generateOrdinal,
         getAvatarColor,

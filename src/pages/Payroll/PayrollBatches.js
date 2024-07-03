@@ -19,6 +19,7 @@ const PayrollBatches = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isRegenerating, setisRegenerating] = useState(false);
   const [mode, setMode] = useState("Create");
   const [dates, setDates] = useState([]);
 
@@ -209,6 +210,42 @@ const PayrollBatches = () => {
     poolingData?.expectedPayslips,
     poolingData?.processedPayslips,
   ]);
+
+  const handleRegeneratePayroll = async () => {
+    const batchId = data[0]?.id;
+    const month = data[0]?.batch?.month;
+    const year = data[0]?.batch?.year;
+
+    secureLocalStorage.setItem("payslipMonth", month);
+    secureLocalStorage.setItem("payslipYear", year);
+
+    setisRegenerating(true);
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const res = await axiosInstance.patch(
+        `api/v1/regenerate_salary_slips/${batchId}.json?month=${month}&year=${year}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          },
+        }
+      );
+
+      const msg = res?.data?.data?.message;
+
+      showAlert(true, msg, "alert alert-success");
+      fetchAllBatches();
+      handlePayslipPooling(month, year);
+      setisRegenerating(false);
+    } catch (error) {
+      const errorMsg = error?.response?.data?.errors;
+      showAlert(true, `${errorMsg}`, "alert alert-warning");
+      setisRegenerating(false);
+    }
+  };
 
   // Handle Edit:
   const handleEdit = (e) => {
@@ -465,9 +502,9 @@ const PayrollBatches = () => {
                 data-toggle="modal"
                 data-target="#RegeneratePayrollModal"
                 style={{ marginRight: "1rem" }}
-                // onClick={() => handleRegeneratePayroll(employee)}
+                onClick={handleRegeneratePayroll}
               >
-                Regenerate Slips
+                {isRegenerating ? "Regenerating..." : "Regenerate Slips"}
               </a>
             ) : null}
           </div>

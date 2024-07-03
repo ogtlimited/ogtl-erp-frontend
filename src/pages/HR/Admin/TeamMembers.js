@@ -19,6 +19,7 @@ const TeamMembers = () => {
   const { id } = useParams();
   const { title } = useParams();
   const navigate = useNavigate();
+
   const { user, ErrorHandler, getAvatarColor } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [teamLead, setTeamLead] = useState({});
@@ -204,7 +205,11 @@ const TeamMembers = () => {
               navigate(`/dashboard/user/profile/${teamLead[0]?.ogid}`)
             }
           >
-            <h4>Team Lead</h4>
+            <h4>
+              {teamLead[0]?.leadership_type
+                ?.replace(/_/g, " ")
+                ?.replace(/^./, (str) => str?.toUpperCase()) || "Leader"}
+            </h4>
             <p>
               <Link
                 className="tl link"
