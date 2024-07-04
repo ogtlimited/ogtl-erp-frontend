@@ -65,7 +65,7 @@ const PayrollUser = () => {
       });
       const resData = response?.data?.data?.salary;
 
-      console.log("Staff Salary", resData);
+      // console.log("Staff Salary", resData);
 
       setSalary(resData);
       setLoadingSalary(false);
@@ -102,10 +102,10 @@ const PayrollUser = () => {
           },
         }
       );
-      const resData = response?.data?.data?.salary_slips?.slip;
+      const resData = response?.data?.data?.salary_slips;
       // const totalPages = response?.data?.data?.pages;
 
-      console.log("Staff payslips:", resData);
+      // console.log("Staff payslips:", response);
 
       // const thisPageLimit = sizePerPage;
       // const thisTotalPageSize = totalPages;

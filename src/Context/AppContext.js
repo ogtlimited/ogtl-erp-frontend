@@ -1,6 +1,6 @@
 // *IN USE
 
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState, useMemo } from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
@@ -26,6 +26,7 @@ const AppProvider = (props) => {
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
+  const [userDp, setUserDp] = useState(null);
   const [count, setCount] = useState(0);
 
   const [isChecked, setIsChecked] = useState(true);
@@ -58,7 +59,7 @@ const AppProvider = (props) => {
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
-  const currentUserOgid = user?.employee_info?.ogid;
+  const currentUserOgid = useMemo(() => user?.employee_info?.ogid, [user?.employee_info?.ogid]);
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
@@ -256,6 +257,27 @@ const AppProvider = (props) => {
       });
     }, 5000);
   };
+
+    // Employee Profile Pic:
+    const fetchUserPic = useCallback(async () => {
+        try {
+          const response = await axiosInstance.get(
+            `/api/v1/employees/${currentUserOgid}.json`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "ngrok-skip-browser-warning": "69420",
+              },
+            }
+          );
+          const pic = response?.data?.data?.employee?.profile_picture;
+
+          setUserDp(pic);
+        } catch (error) {
+          console.error("Profile pic error:", error)
+        }
+      }, [currentUserOgid]);
 
   const fetchHRLeavesNotificationCount = () => {
     axiosInstance
@@ -946,6 +968,7 @@ const AppProvider = (props) => {
         fetchAllEmployees();
       }
 
+      fetchUserPic()
       fetchAllLeaveTypes();
       fetchStaffResignation();
       fetchAnnouncement();
@@ -954,6 +977,7 @@ const AppProvider = (props) => {
       fetchPublicHolidays();
     }
   }, [
+    fetchUserPic,
     fetchAllEmployees,
     fetchAllCampaigns,
     fetchAllDepartments,
@@ -1074,6 +1098,7 @@ const AppProvider = (props) => {
         selectOutOfOfficeReasons,
         leadershipTypes,
 
+        userDp,
         generateOrdinal,
         getAvatarColor,
         showProgress,
