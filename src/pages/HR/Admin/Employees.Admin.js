@@ -90,6 +90,7 @@ const AllEmployeesAdmin = () => {
           officeName: emp?.office?.title,
           designation: emp?.designation,
           company_email: emp?.email,
+          pic: emp?.profile_picture,
         };
       });
 

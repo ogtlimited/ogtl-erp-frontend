@@ -327,12 +327,12 @@ const Profile = () => {
                       {gender === "male" ? (
                         <img
                           alt=""
-                          src={userData?.employee?.image || malePlaceholder}
+                          src={userData?.employee?.profile_picture || malePlaceholder}
                         />
                       ) : gender === "female" ? (
                         <img
                           alt=""
-                          src={userData?.employee?.image || femalePlaceholder}
+                          src={userData?.employee?.profile_picture || femalePlaceholder}
                         />
                       ) : (
                         <img

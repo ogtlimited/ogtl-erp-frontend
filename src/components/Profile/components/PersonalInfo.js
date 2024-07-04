@@ -52,8 +52,10 @@ const PersonalInfo = ({ personalDetails, fetchEmployeeProfile }) => {
             <li>
               <div className="title">Marital status</div>
               <div className="text">
-                {personalDetails?.employee?.personal_detail?.marital_status ||
-                  "Not Available"}
+                {personalDetails?.employee?.personal_detail?.marital_status?.replace(
+                  /\b\w/g,
+                  (char) => char.toUpperCase()
+                ) || "Not Available"}
               </div>
             </li>
             <li>
