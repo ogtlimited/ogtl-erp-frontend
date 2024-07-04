@@ -676,6 +676,14 @@ export default function Router() {
               ),
             },
             {
+              path: "payslip/breakdown",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PaySlipBreakdown />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "payslip/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1439,6 +1447,9 @@ const EmployeePayroll = Loadable(
 );
 const DeductionSlip = Loadable(
   lazy(() => import("../pages/Payroll/DeductionSlip.js"))
+);
+const PaySlipBreakdown = Loadable(
+  lazy(() => import("../pages/HR/Users/PaySlipBreakdown.User"))
 );
 const PaySlip = Loadable(lazy(() => import("../pages/Payroll/PaySlip")));
 const SalaryBreakdown = Loadable(

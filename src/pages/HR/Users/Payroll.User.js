@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useAppContext } from "../../../Context/AppContext";
 import { BsDot } from "react-icons/bs";
-import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import { useNavigate } from "react-router-dom";
+import UniversalTable from "../../../components/Tables/UniversalTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 import helper from "../../../services/helper";
@@ -26,15 +27,17 @@ function SalaryCard({ iconSrc, label, amount }) {
 }
 
 const PayrollUser = () => {
+  const navigate = useNavigate();
+
   const { FontAwesomeIcon, faSpinner, ErrorHandler } = useAppContext();
   const [loadingSalary, setLoadingSalary] = useState(false);
   const [loadingPayslips, setLoadingPayslips] = useState(false);
   const [allPayslips, setAllPayslips] = useState([]);
   const [salary, setSalary] = useState([]);
 
-  const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState("");
+  // const [page, setPage] = useState(1);
+  // const [sizePerPage, setSizePerPage] = useState(10);
+  // const [totalPages, setTotalPages] = useState("");
 
   const firstDay = moment().startOf("month").format("YYYY-MM-DD");
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");
@@ -81,6 +84,12 @@ const PayrollUser = () => {
     fetchSalary();
   }, [fetchSalary]);
 
+  const handleAction = (row) => {
+    navigate(`/dashboard/payroll/payslip/breakdown`,{
+      state: row
+    });
+  };
+
   // Payslips:
   const fetchPayslips = useCallback(async () => {
     setLoadingPayslips(true);
@@ -95,8 +104,8 @@ const PayrollUser = () => {
             "ngrok-skip-browser-warning": "69420",
           },
           params: {
-            pages: page,
-            limit: sizePerPage,
+            // pages: page,
+            // limit: sizePerPage,
             start_date: fromDate,
             end_date: toDate,
           },
@@ -105,39 +114,34 @@ const PayrollUser = () => {
       const resData = response?.data?.data?.salary_slips;
       // const totalPages = response?.data?.data?.pages;
 
-      // console.log("Staff payslips:", response);
-
       // const thisPageLimit = sizePerPage;
       // const thisTotalPageSize = totalPages;
 
       // setSizePerPage(thisPageLimit);
       // setTotalPages(thisTotalPageSize);
 
-      // const formattedData = resData?.map((e) => ({
-      //   ...e,
-      //   id: e?.slip?.id,
-      //   employee: e?.user?.first_name + " " + e?.user?.last_name,
-      //   ogid: e?.user?.ogid,
-      //   email: e?.user?.email,
+      const formattedData = resData?.map((e) => ({
+        ...e,
+        id: e?.slip?.id,
 
-      //   basic: e?.slip?.basic,
-      //   medical: e?.slip?.medical,
-      //   housing: e?.slip?.housing,
-      //   transport: e?.slip?.transport,
-      //   otherAllowances: e?.slip?.other_allowances,
-      //   monthlySalary: e?.slip?.monthly_salary,
+        basic: e?.slip?.basic,
+        medical: e?.slip?.medical,
+        housing: e?.slip?.housing,
+        transport: e?.slip?.transport,
+        otherAllowances: e?.slip?.other_allowances,
+        monthlySalary: e?.slip?.monthly_salary,
 
-      //   tax: e?.slip?.monthly_income_tax,
-      //   pension: e?.slip?.monthly_pension,
-      //   attendance_deduction: e?.slip?.attendance_deduction,
-      //   disciplinary_deductions: e?.slip?.disciplinary_deductions,
-      //   totalDeductions: e?.slip?.total_deductions,
-      //   netPay: e?.slip?.net_pay,
+        tax: e?.slip?.monthly_income_tax,
+        pension: e?.slip?.monthly_pension,
+        attendance_deduction: e?.slip?.attendance_deduction,
+        disciplinary_deductions: e?.slip?.disciplinary_deductions,
+        totalDeductions: e?.slip?.total_deductions,
+        netPay: e?.slip?.net_pay,
 
-      //   prorate: e?.slip?.prorate ? "Yes" : "No",
-      // }));
+        prorate: e?.slip?.prorate ? "Yes" : "No",
+      }));
 
-      setAllPayslips(resData);
+      setAllPayslips(formattedData);
       setLoadingPayslips(false);
     } catch (error) {
       const component = "Staff Payslips | ";
@@ -145,7 +149,7 @@ const PayrollUser = () => {
       setLoadingPayslips(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, sizePerPage, fromDate, toDate]);
+  }, [fromDate, toDate]);
 
   useEffect(() => {
     fetchPayslips();
@@ -157,61 +161,91 @@ const PayrollUser = () => {
       text: "Basic",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
-      dataField: "other_allowances",
+      dataField: "otherAllowances",
       text: "Other Allowances",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
-      dataField: "gross_salary",
+      dataField: "monthlySalary",
       text: "Gross Salary",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
       dataField: "tax",
       text: "Tax",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
       dataField: "pension",
       text: "Pension",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
-      dataField: "total_deductions",
+      dataField: "attendance_deduction",
+      text: "Attendance Deduction",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+    },
+    {
+      dataField: "disciplinary_deductions",
+      text: "Disciplinary Deduction",
+      sort: true,
+      headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+    },
+    {
+      dataField: "totalDeductions",
       text: "Total Deductions",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
     {
-      dataField: "net_salary",
+      dataField: "netPay",
       text: "Net Salary",
       sort: true,
       headerStyle: { width: "100%" },
+      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
     },
+    // {
+    //   dataField: "prorate",
+    //   text: "Prorate",
+    //   sort: true,
+    //   headerStyle: { width: "100%" },
+    // },
     {
       dataField: "",
       text: "Action",
@@ -219,7 +253,8 @@ const PayrollUser = () => {
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
-            <button className="btn btn-sm btn-success">View</button>
+            <button className="btn btn-sm btn-info" 
+              onClick={() => handleAction(row)}>View</button>
           </div>
         </div>
       ),
@@ -392,17 +427,17 @@ const PayrollUser = () => {
           </div>
         </div>
 
-        <UniversalPaginatedTable
+        <UniversalTable
           data={allPayslips}
           columns={columns}
           loading={loadingPayslips}
           setLoading={setLoadingPayslips}
-          page={page}
-          setPage={setPage}
-          sizePerPage={sizePerPage}
-          setSizePerPage={setSizePerPage}
-          totalPages={totalPages}
-          setTotalPages={setTotalPages}
+          // page={page}
+          // setPage={setPage}
+          // sizePerPage={sizePerPage}
+          // setSizePerPage={setSizePerPage}
+          // totalPages={totalPages}
+          // setTotalPages={setTotalPages}
         />
       </div>
     </>
