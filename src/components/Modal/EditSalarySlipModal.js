@@ -18,6 +18,8 @@ export const EditSalarySlipModal = ({
   useEffect(() => {
     setFormData({
       prorate: data?.initialProrate,
+      salary_month: data?.salary_month,
+      year: data?.year,
       // monthly_income_tax: data?.initialTax,
       // monthly_pension: data?.initialPension,
       // basic: data?.initialBasic,
@@ -25,6 +27,8 @@ export const EditSalarySlipModal = ({
     });
   }, [
     data?.initialProrate,
+    data?.salary_month,
+    data?.year
     // data?.initialTax,
     // data?.initialPension,
     // data?.initialBasic,
@@ -34,6 +38,8 @@ export const EditSalarySlipModal = ({
   const clearForm = () => {
     setFormData({
       prorate: data?.initialProrate,
+      salary_month: data?.salary_month,
+      year: data?.year,
       // monthly_income_tax: data?.initialTax,
       // monthly_pension: data?.initialPension,
       // basic: data?.initialBasic,
@@ -71,6 +77,8 @@ export const EditSalarySlipModal = ({
     const formattedData = {
       prorate: formData?.prorate,
       total_days_worked: +totalDaysWorked,
+      salary_month: formData?.salary_month?.toString(),
+      year: formData?.year?.toString(),
     };
 
     try {
