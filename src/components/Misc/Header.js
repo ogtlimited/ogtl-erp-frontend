@@ -16,7 +16,7 @@ import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
 // import sportDayGIF from "../../assets/img/themed/sportday0.gif";
 
 const Header = () => {
-  const { count, setDropDownClicked } = useAppContext();
+  const { count, setDropDownClicked, userDp } = useAppContext();
   const audioPlayer = useRef(null);
   const navigate = useNavigate();
   // const { instance } = useMsal();
@@ -142,9 +142,9 @@ const Header = () => {
               <div className="header_user_profile_div">
                 <div className="profile_image_div">
                   {gender === "male" ? (
-                    <img src={malePlaceholder} alt={malePlaceholder} />
+                    <img src={userDp || malePlaceholder} alt={malePlaceholder} />
                   ) : (
-                    <img src={femalePlaceholder} alt={femalePlaceholder} />
+                    <img src={userDp || femalePlaceholder} alt={femalePlaceholder} />
                   )}
                 </div>
                 <div className="profile_info_div">
