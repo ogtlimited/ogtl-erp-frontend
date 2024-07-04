@@ -163,12 +163,12 @@ const EmployeesTable = ({
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar" onClick={handleNavigate}>
-          <span
+          {row?.pic ? <img src={row?.pic} alt="profile dp" className="avatar-span"/> : <span
             className="avatar-span"
             style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
           >
             {value?.charAt(0)}
-          </span>
+          </span>}
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
             {value} <span>{row?.designation}</span>
           </Link>

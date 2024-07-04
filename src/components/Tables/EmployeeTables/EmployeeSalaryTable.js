@@ -124,6 +124,8 @@ function EmployeeSalaryTable({
   const handleEdit = (employee) => {
     const formattedData = {
       id: employee?.id,
+      salary_month: employee?.slip?.salary_month,
+      year: employee?.slip?.year,
       employeeName: employee?.employee,
       initialTax: +employee?.tax || null,
       initialPension: +employee?.pension || null,
