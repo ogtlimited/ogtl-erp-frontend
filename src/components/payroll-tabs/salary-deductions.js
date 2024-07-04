@@ -16,9 +16,9 @@ const Deductions = () => {
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const currentMonth = moment().format('MM');
-  const currentYear = moment().format('YYYY');
-  const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
+  const currentMonth = moment().format("MM");
+  const currentYear = moment().format("YYYY");
+  // const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -27,19 +27,36 @@ const Deductions = () => {
     canCreateAndEdit.includes(role)
   );
 
+  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
+  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstDay);
+  const [toDate, setToDate] = useState(lastDay);
+  const [today, setToday] = useState(null);
+
+  useEffect(() => {
+    const time = new Date().toDateString();
+    const today_date = moment(time).format("yyyy-MM-DD");
+    setToday(today_date);
+  }, []);
+
   const fetchDeductions = useCallback(async () => {
-    const month = date?.split("-")[1];
-    const year = date?.split("-")[0];
+    // const month = date?.split("-")[1];
+    // const year = date?.split("-")[0];
 
     setLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/v1/deductions.json?month=${month}&year=${year}`,
+        // `/api/v1/deductions.json?month=${month}&year=${year}`,
+        `/api/v1/deductions.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            start_date: fromDate,
+            end_date: toDate,
           },
         }
       );
@@ -64,19 +81,24 @@ const Deductions = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate]);
 
   useEffect(() => {
     fetchDeductions();
   }, [fetchDeductions]);
 
   const handleViewAllBreakdown = (row) => {
-    const month = date.split("-")[1];
-    const year = date.split("-")[0];
+    // const month = date.split("-")[1];
+    // const year = date.split("-")[0];
+    const start = fromDate;
+    const end = toDate;
 
+    // navigate(
+    //   `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}`
+    // );
     navigate(
-      `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}`
+      `/dashboard/payroll/staff-deductions/${row.ogid}/${fromDate}/${toDate}`
     );
   };
 
@@ -155,11 +177,17 @@ const Deductions = () => {
       <div className="row">
         <DeductionTable
           data={deductions}
+          setData={setDeductions}
           columns={columns}
           loading={loading}
           setLoading={setLoading}
-          date={date}
-          setDate={setDate}
+          fromDate={fromDate}
+          toDate={toDate}
+          today={today}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          // date={date}
+          // setDate={setDate}
         />
       </div>
 

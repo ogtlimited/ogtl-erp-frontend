@@ -16,9 +16,15 @@ const DeductionTable = ({
   loading,
   setLoading,
   emptyDataMessage,
+  context,
+
+  fromDate,
+  toDate,
+  today,
+  setFromDate,
+  setToDate,
   date,
   setDate,
-  context,
 }) => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
@@ -83,10 +89,14 @@ const DeductionTable = ({
               <div className="row">
                 <SearchBar
                   {...props.searchProps}
-                  style={{ marginBottom: 15, paddingLeft: "12%" }}
+                  style={{
+                    paddingLeft: "12%",
+                    margin: "2rem 1rem 0 0",
+                  }}
                   className="inputSearch"
                 />
-                <div className="col-md-4">
+
+                {/* <div className="col-md-4">
                   <div className="form-group">
                     <input
                       type="month"
@@ -94,6 +104,38 @@ const DeductionTable = ({
                       value={date}
                       onChange={(e) => setDate(e?.target?.value)}
                       className="form-control "
+                    />
+                  </div>
+                </div> */}
+
+                <div
+                  className="col-md-3"
+                  style={{
+                    marginLeft: "1rem",
+                  }}
+                >
+                  <div className="form-group">
+                    <label htmlFor="fromDate">From</label>
+                    <input
+                      type="date"
+                      name="fromDate"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className="form-control "
+                      max={today}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div className="form-group">
+                    <label htmlFor="toDate">To</label>
+                    <input
+                      type="date"
+                      name="toDate"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className="form-control "
+                      max={today}
                     />
                   </div>
                 </div>
