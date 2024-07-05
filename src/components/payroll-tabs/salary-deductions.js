@@ -16,8 +16,8 @@ const Deductions = () => {
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const currentMonth = moment().format("MM");
-  const currentYear = moment().format("YYYY");
+  // const currentMonth = moment().format("MM");
+  // const currentYear = moment().format("YYYY");
   // const [date, setDate] = useState(`${currentYear}-${currentMonth}`);
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -27,8 +27,8 @@ const Deductions = () => {
     canCreateAndEdit.includes(role)
   );
 
-  const firstDay = moment().startOf("month").format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const firstDay = moment().startOf("month").format("yyyy-MM-DD");
+  const lastDay = moment().endOf("month").format("yyyy-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
   const [today, setToday] = useState(null);
@@ -91,8 +91,6 @@ const Deductions = () => {
   const handleViewAllBreakdown = (row) => {
     // const month = date.split("-")[1];
     // const year = date.split("-")[0];
-    const start = fromDate;
-    const end = toDate;
 
     // navigate(
     //   `/dashboard/payroll/staff-deductions/${row.ogid}/${month}/${year}`

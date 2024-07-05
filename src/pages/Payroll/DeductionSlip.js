@@ -2,15 +2,15 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import moment from "moment";
 import helper from "../../services/helper";
-import { useAppContext } from "../../Context/AppContext";
 import UniversalTable from "../../components/Tables/UniversalTable";
 import DeductionReversalModal from "./../../components/Modal/DeductionReversalModal";
 
 const DeductionSlip = () => {
-  const { id, month, year } = useParams();
+  const { id, start, end } = useParams();
   const { user, ErrorHandler } = useAppContext();
   const [owner, setOwner] = useState({});
   const [allDeductions, setAllDeductions] = useState([]);
@@ -27,12 +27,16 @@ const DeductionSlip = () => {
   const fetchDeductionSlip = useCallback(async () => {
     try {
       const res = await axiosInstance.get(
-        `/api/v1/deductions/${id}.json?month=${month}&year=${year}`,
+        `/api/v1/deductions/${id}.json`,
         {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420",
+          },
+          params: {
+            start_date: start,
+            end_date: end,
           },
         }
       );
@@ -76,8 +80,8 @@ const DeductionSlip = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, month, year]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, end, start]);
 
   useEffect(() => {
     fetchDeductionSlip();
