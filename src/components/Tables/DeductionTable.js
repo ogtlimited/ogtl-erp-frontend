@@ -122,7 +122,7 @@ const DeductionTable = ({
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
                       className="form-control "
-                      max={today}
+                      // max={today}
                     />
                   </div>
                 </div>
@@ -135,7 +135,7 @@ const DeductionTable = ({
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
                       className="form-control "
-                      max={today}
+                      // max={today}
                     />
                   </div>
                 </div>

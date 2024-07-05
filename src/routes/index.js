@@ -652,7 +652,7 @@ export default function Router() {
               ),
             },
             {
-              path: "staff-deductions/:id/:month/:year",
+              path: "staff-deductions/:id/:start/:end",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <DeductionSlip />
