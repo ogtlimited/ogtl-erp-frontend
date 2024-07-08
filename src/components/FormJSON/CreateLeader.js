@@ -29,11 +29,11 @@ export const officeTypeOptions = [
 
 export const leaderTypeOptions = [
   {
-    label: "Supervisor",
-    value: "supervisor",
-  },
-  {
     label: "Team Lead",
     value: "team_lead",
+  },
+  {
+    label: "Supervisor",
+    value: "supervisor",
   },
 ];
