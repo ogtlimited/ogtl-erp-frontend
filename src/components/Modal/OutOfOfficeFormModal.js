@@ -224,7 +224,6 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         value={formData.start_date}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={today_date}
                         required
                       />
                     </div>

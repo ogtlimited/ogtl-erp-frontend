@@ -10,7 +10,6 @@ import OutOfOfficeApprovalModal from "../../../components/Modal/OutOfOfficeAppro
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
-import helper from "../../../services/helper";
 
 const OutOfOfficeAdmin = () => {
   const { user, ErrorHandler, getAvatarColor } = useAppContext();
@@ -29,13 +28,6 @@ const OutOfOfficeAdmin = () => {
   const lastDay = moment().endOf("month").format("YYYY-MM-DD");
   const [fromDate, setFromDate] = useState(firstDay);
   const [toDate, setToDate] = useState(lastDay);
-  const [today, setToday] = useState(null);
-
-  useEffect(() => {
-    const time = new Date().toDateString();
-    const today_date = moment(time).format("yyyy-MM-DD");
-    setToday(today_date);
-  }, []);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -252,7 +244,6 @@ const OutOfOfficeAdmin = () => {
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
                 className="form-control "
-                max={today}
               />
             </div>
           </div>
@@ -265,7 +256,6 @@ const OutOfOfficeAdmin = () => {
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
                 className="form-control "
-                max={today}
               />
             </div>
           </div>
