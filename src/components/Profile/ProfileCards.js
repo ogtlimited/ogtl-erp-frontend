@@ -1,6 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import "./profileCard.css";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  forwardRef
+} from "react";
 import { useReactToPrint } from "react-to-print";
 import PersonalInfo from "./components/PersonalInfo";
 import EmployeeInfo from "./components/EmployeeInfo";
@@ -19,6 +25,19 @@ import { useAppContext } from "../../Context/AppContext";
 import { BsFillPrinterFill } from "react-icons/bs";
 import AttendanceChart from "../charts/attendance-tardiness";
 import axiosInstance from "../../services/api";
+
+const CombinedVirtualID = forwardRef(({ employeeDetails }, ref) => {
+  return (
+    <div ref={ref} className="combined_virtual_id_container">
+      <div className="combined_virtual_id_front">
+        <FrontVirtualID employeeDetails={employeeDetails} />
+      </div>
+      <div  className="combined_virtual_id_back">
+        <BackVirtualID />
+      </div>
+    </div>
+  );
+});
 
 const ProfileCards = ({
   setformType,
@@ -48,9 +67,11 @@ const ProfileCards = ({
   fetchEmployeeAttendance,
   setEmployeeOgid,
   hideAttendanceComponent,
-  hideRemoteShiftComponent,
+  hideRemoteShiftComponent
 }) => {
   const [employeeDetails, setemployeeDetails] = useState({});
+  const combinedVirtualIDRef = useRef();
+
   const { user, isFromBiometrics, isFromBiometricsClockIn, ErrorHandler } =
     useAppContext();
   const [employeeTardiness, setEmployeeTardiness] = useState([]);
@@ -64,14 +85,8 @@ const ProfileCards = ({
 
   const ogid = user?.employee_info?.ogid;
 
-  const FrontVirtualIDRef = useRef();
-  const handlePrintFront = useReactToPrint({
-    content: () => FrontVirtualIDRef.current,
-  });
-
-  const BackVirtualIDRef = useRef();
-  const handlePrintBack = useReactToPrint({
-    content: () => BackVirtualIDRef.current,
+  const handlePrintCombined = useReactToPrint({
+    content: () => combinedVirtualIDRef.current
   });
 
   // Fetch Employee Weekly Attendance Tardiness:
@@ -83,8 +98,8 @@ const ProfileCards = ({
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -240,32 +255,21 @@ const ProfileCards = ({
         >
           <div className="row" style={{ padding: "0 20px" }}>
             {employeeDetails && (
-              <FrontVirtualID
+              <CombinedVirtualID
                 employeeDetails={employeeDetails}
-                ref={FrontVirtualIDRef}
+                ref={combinedVirtualIDRef}
               />
             )}
-            {employeeDetails && <BackVirtualID ref={BackVirtualIDRef} />}
           </div>
 
           <div className="row card-print-btn-div">
             {employeeDetails && (
               <button
                 className="btn btn-primary"
-                onClick={handlePrintFront}
+                onClick={handlePrintCombined}
                 style={{ margin: "10px" }}
               >
-                <BsFillPrinterFill style={{ marginRight: "10px" }} /> Print
-                Front
-              </button>
-            )}
-            {employeeDetails && (
-              <button
-                className="btn btn-primary"
-                onClick={handlePrintBack}
-                style={{ margin: "10px" }}
-              >
-                <BsFillPrinterFill style={{ marginRight: "10px" }} /> Print Back
+                <BsFillPrinterFill style={{ marginRight: "10px" }} /> Print ID
               </button>
             )}
           </div>

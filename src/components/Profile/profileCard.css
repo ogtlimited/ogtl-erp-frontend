@@ -1,8 +1,8 @@
 
 .card-print-btn-div {
-    width: 41vw;
+    width: 540px;
     padding: 10px 0;
-    margin-left: 18px;
+    margin: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: space-around;

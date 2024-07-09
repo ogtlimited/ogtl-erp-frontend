@@ -2364,3 +2364,11 @@ img {
   line-height: 25px;
   color: #000;
 }
+
+/* Virtual ID */
+
+.combined_virtual_id_container {
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 2rem 0.5rem 2rem;
+}
