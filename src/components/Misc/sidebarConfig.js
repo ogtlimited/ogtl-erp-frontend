@@ -222,12 +222,12 @@ const sidebarConfig = [
         icon: ICONS.payroll,
         navIcon: ICONS.tableTennis,
         children: [
-          // {
-          //   canView: "all",
-          //   title: "Payslips",
-          //   path: PATH_DASHBOARD.main.Payslips,
-          //   icon: ICONS.payroll,
-          // },
+          {
+            canView: "all",
+            title: "Payslips",
+            path: PATH_DASHBOARD.main.Payslips,
+            icon: ICONS.payroll,
+          },
           {
             canView: "all",
             title: "Deductions",
