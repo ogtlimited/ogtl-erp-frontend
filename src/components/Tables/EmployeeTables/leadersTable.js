@@ -213,7 +213,7 @@ const LeadersTable = ({
             <div className="col-12">
               <ExportCSVButton
                 className="float-right btn export-csv"
-                style={{ marginBottom: 15 }}
+                style={{ margin: "15px 0" }}
                 {...props.csvProps}
               >
                 Export CSV

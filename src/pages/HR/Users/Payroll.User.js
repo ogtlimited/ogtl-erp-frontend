@@ -135,8 +135,10 @@ const PayrollUser = () => {
         pension: e?.slip?.monthly_pension,
         attendance_deduction: e?.slip?.attendance_deduction,
         disciplinary_deductions: e?.slip?.disciplinary_deductions,
-        totalDeductions: e?.slip?.total_deductions,
+        totalDeductions: e?.slip?.total_deductions || e?.slip?.monthly_income_tax + e?.slip?.monthly_pension + e?.slip?.attendance_deduction + e?.slip?.disciplinary_deductions,
         netPay: e?.slip?.net_pay,
+
+        payslipMonthAndYear: `${moment().month(e?.slip?.salary_month - 1).format("MMMM")}, ${e?.slip?.year}`,
 
         prorate: e?.slip?.prorate ? "Yes" : "No",
       }));
@@ -156,6 +158,12 @@ const PayrollUser = () => {
   }, [fetchPayslips]);
 
   const columns = [
+    {
+      dataField: "payslipMonthAndYear",
+      text: "Payslip",
+      sort: true,
+      headerStyle: { width: "100%" },
+    },
     {
       dataField: "basic",
       text: "Basic",

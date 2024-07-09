@@ -97,6 +97,12 @@ const PaySlipBreakdown = () => {
         case "pension":
           deductions["Employee Pension"] = employeeSalarySlip[e];
           break;
+        case "attendance_deduction":
+          deductions["Attendance Deduction"] = employeeSalarySlip[e];
+          break;
+        case "disciplinary_deductions":
+          deductions["Disciplinary Deductions"] = employeeSalarySlip[e];
+          break;
 
         // Total Deductions:
         case "totalDeductions":
@@ -152,7 +158,7 @@ const PaySlipBreakdown = () => {
               <div className="card-body">
                 <h4 className="payslip-title">
                   Payslip for the month of{" "}
-                  {moment(paySlip?.createdAt).format("MMMM YYYY")}
+                  {paySlip?.payslipMonthAndYear}
                 </h4>
                 <div className="row">
                   <div className="col-sm-6 m-b-20">
@@ -172,7 +178,7 @@ const PaySlipBreakdown = () => {
                           Salary Month:{" "}
                           <span>
                             {" "}
-                            {moment(paySlip?.createdAt).format("MMMM, YYYY")}
+                            {paySlip?.payslipMonthAndYear}
                           </span>
                         </li>
                       </ul>

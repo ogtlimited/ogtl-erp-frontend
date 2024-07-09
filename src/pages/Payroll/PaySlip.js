@@ -187,7 +187,7 @@ const PaySlip = () => {
               <div className="card-body">
                 <h4 className="payslip-title">
                   Payslip for the month of{" "}
-                  {moment(paySlip?.createdAt).format("MMMM YYYY")}
+                  {`${moment().month(paySlip?.salary_month - 1).format("MMMM")}, ${paySlip?.year}`}
                 </h4>
                 <div className="row">
                   <div className="col-sm-6 m-b-20">
@@ -207,7 +207,7 @@ const PaySlip = () => {
                           Salary Month:{" "}
                           <span>
                             {" "}
-                            {moment(paySlip?.createdAt).format("MMMM, YYYY")}
+                            {`${moment().month(paySlip?.salary_month - 1).format("MMMM")}, ${paySlip?.year}`}
                           </span>
                         </li>
                       </ul>
@@ -353,10 +353,7 @@ const PaySlip = () => {
                                   <tr key={index}>
                                     <td>
                                       <strong>
-                                        {breakdownItem.deduction_type[0]?.title.replace(
-                                          /\b\w/g,
-                                          (char) => char.toUpperCase()
-                                        )}
+                                        {breakdownItem.deduction_type[0]?.title.replace(/_/g, " ").replace(/^./, str => str.toUpperCase())}
                                       </strong>{" "}
                                       {
                                         <span

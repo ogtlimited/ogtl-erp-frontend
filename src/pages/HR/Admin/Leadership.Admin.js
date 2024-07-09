@@ -1,16 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
-import axiosInstance from "../../../services/api";
 import { Link } from "react-router-dom";
-import LeadersTable from "../../../components/Tables/EmployeeTables/leadersTable";
 import { AddLeaderModal } from "../../../components/Modal/AddLeaderModal";
 import { useAppContext } from "../../../Context/AppContext";
-import female from "../../../assets/img/female_avatar.png";
-import female2 from "../../../assets/img/female_avatar2.png";
-import female3 from "../../../assets/img/female_avatar3.png";
-import male from "../../../assets/img/male_avater.png";
-import male2 from "../../../assets/img/male_avater2.png";
-import male3 from "../../../assets/img/male_avater3.png";
+import axiosInstance from "../../../services/api";
+import LeadersTable from "../../../components/Tables/EmployeeTables/leadersTable";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import $ from "jquery";
 
@@ -30,9 +24,6 @@ const LeadershipAdmin = () => {
   const [isResolving, setIsResolving] = useState(false);
 
   const [selectedRow, setSelectedRow] = useState(null);
-  const imageUrl = "https://erp.outsourceglobal.com";
-  const males = [male, male2, male3];
-  const females = [female, female2, female3];
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -41,6 +32,7 @@ const LeadershipAdmin = () => {
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [campaignFilter, setCampaignFilter] = useState("");
   const [officeFilter, setOfficeFilter] = useState("");
+  const [tab, setTab] = useState("team_lead");
 
   const CurrentUserRoles = user?.employee_info?.roles;
 
@@ -67,6 +59,7 @@ const LeadershipAdmin = () => {
           page: page,
           limit: sizePerPage,
           office: officeFilter.length ? officeFilter : null,
+          title: tab
         },
       });
 
@@ -93,8 +86,8 @@ const LeadershipAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [officeFilter, page, sizePerPage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [officeFilter, page, sizePerPage, tab]);
 
   useEffect(() => {
     fetchAllLeaders();
@@ -105,6 +98,18 @@ const LeadershipAdmin = () => {
       setLoading(false);
     }, 10000);
   }, []);
+
+    // Handle Viewing Team Leads:
+    const handleViewingTeamLeads = () => {
+      setTab("team_lead");
+      setPage(1);
+    };
+  
+    // Handle Viewing Supervisors:
+    const handleViewingSupervisors = () => {
+      setTab("supervisor");
+      setPage(1);
+    };
 
   //Remove Leader
   const removeLeader = async (row) => {
@@ -220,15 +225,11 @@ const LeadershipAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">
-              Leaders{" "}
-              <span style={{ fontSize: "25px", color: "#999" }}>
-                (Supervisors & Team leads)
-              </span>
-            </h3>
+            <h3 className="page-title">Leaders</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Leadership</li>
+              <li className="breadcrumb-item">Leaders</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
@@ -244,6 +245,36 @@ const LeadershipAdmin = () => {
                 </a>
               </>
             )}
+          </div>
+        </div>
+      </div>
+
+      
+      <div className="page-menu">
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_team-lead"
+                  onClick={handleViewingTeamLeads}
+                >
+                  Team Leads
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_supervisor"
+                  onClick={handleViewingSupervisors}
+                >
+                  Supervisors
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -274,7 +305,7 @@ const LeadershipAdmin = () => {
 
       <ConfirmModal
         title="Leader"
-        message={`Are you sure you want to remove ${selectedRow?.fullName} from leaders?`}
+        message={`Are you sure you want to remove ${selectedRow?.fullName} from being a leader?`}
         selectedRow={selectedRow}
         deleteFunction={removeLeader}
         isLoading={isResolving}

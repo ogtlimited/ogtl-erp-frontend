@@ -3,14 +3,18 @@ import {
   genderOptions,
   bloodGroupOptions,
   maritalStatusOptions,
-  meansOfIdentificationOptions,
+  meansOfIdentificationOptions
 } from "../FormJSON/AddEmployee";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 import { useAppContext } from "../../Context/AppContext";
 
-export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
+export const PersonalDetailsModal = ({
+  data,
+  fetchEmployeeProfile,
+  CurrentUserCanCreateAndEdit
+}) => {
   const { showAlert } = useAppContext();
   const [personalDetails, setPersonalDetails] = useState({});
   const [loading, setLoading] = useState(false);
@@ -36,7 +40,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
     e.preventDefault();
     setPersonalDetails({
       ...personalDetails,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -72,14 +76,14 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data"
           },
           onUploadProgress: (progressEvent) => {
             const progress = Math.round(
               (progressEvent.loaded / progressEvent.total) * 100
             );
             setUploadProgress(progress);
-          },
+          }
         }
       );
 
@@ -132,7 +136,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
                 <div
                   className="col-md-12"
                   style={{
-                    marginBottom: "1rem",
+                    marginBottom: "1rem"
                   }}
                 >
                   <div className="form-group">
@@ -168,7 +172,7 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
                       className="progress-bar"
                       role="progressbar"
                       style={{
-                        width: `${uploadProgress}%`,
+                        width: `${uploadProgress}%`
                       }}
                       aria-valuenow={uploadProgress}
                       aria-valuemin="0"
@@ -179,189 +183,194 @@ export const PersonalDetailsModal = ({ data, fetchEmployeeProfile }) => {
                   </div>
                 </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="first_name">First Name</label>
-                    <input
-                      name="first_name"
-                      type="text"
-                      className="form-control"
-                      value={personalDetails?.first_name || ""}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                {CurrentUserCanCreateAndEdit && (
+                  <>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="first_name">First Name</label>
+                        <input
+                          name="first_name"
+                          type="text"
+                          className="form-control"
+                          value={personalDetails?.first_name || ""}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="middle_name">Middle Name</label>
-                    <input
-                      name="middle_name"
-                      type="text"
-                      className="form-control"
-                      value={personalDetails?.middle_name || ""}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="middle_name">Middle Name</label>
+                        <input
+                          name="middle_name"
+                          type="text"
+                          className="form-control"
+                          value={personalDetails?.middle_name || ""}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="last_name">Last Name</label>
-                    <input
-                      name="last_name"
-                      type="text"
-                      className="form-control"
-                      value={personalDetails?.last_name || ""}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="last_name">Last Name</label>
+                        <input
+                          name="last_name"
+                          type="text"
+                          className="form-control"
+                          value={personalDetails?.last_name || ""}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="gender">Gender</label>
-                    <Select
-                      name="gender"
-                      options={genderOptions}
-                      value={{
-                        label:
-                          personalDetails?.gender?.replace(/\b\w/g, (char) =>
-                            char.toUpperCase()
-                          ) || "Select gender...",
-                        value: personalDetails?.gender,
-                      }}
-                      onChange={(e) =>
-                        setPersonalDetails({
-                          ...personalDetails,
-                          gender: e?.value,
-                        })
-                      }
-                      style={{ display: "inline-block" }}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="gender">Gender</label>
+                        <Select
+                          name="gender"
+                          options={genderOptions}
+                          value={{
+                            label:
+                              personalDetails?.gender?.replace(
+                                /\b\w/g,
+                                (char) => char.toUpperCase()
+                              ) || "Select gender...",
+                            value: personalDetails?.gender
+                          }}
+                          onChange={(e) =>
+                            setPersonalDetails({
+                              ...personalDetails,
+                              gender: e?.value
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="DOB">Date of Birth</label>
-                    <input
-                      name="DOB"
-                      type="date"
-                      className="form-control"
-                      value={personalDetails?.DOB?.split("T")[0] || ""}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="DOB">Date of Birth</label>
+                        <input
+                          name="DOB"
+                          type="date"
+                          className="form-control"
+                          value={personalDetails?.DOB?.split("T")[0] || ""}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="blood_group">Blood Group</label>
-                    <Select
-                      options={bloodGroupOptions}
-                      isSearchable={true}
-                      isClearable={true}
-                      value={{
-                        label:
-                          personalDetails?.blood_group?.replace(
-                            /\b\w/g,
-                            (char) => char.toUpperCase()
-                          ) || "Select blood group...",
-                        value: personalDetails?.blood_group,
-                      }}
-                      onChange={(e) =>
-                        setPersonalDetails({
-                          ...personalDetails,
-                          blood_group: e?.value,
-                        })
-                      }
-                      style={{ display: "inline-block" }}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="blood_group">Blood Group</label>
+                        <Select
+                          options={bloodGroupOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          value={{
+                            label:
+                              personalDetails?.blood_group?.replace(
+                                /\b\w/g,
+                                (char) => char.toUpperCase()
+                              ) || "Select blood group...",
+                            value: personalDetails?.blood_group
+                          }}
+                          onChange={(e) =>
+                            setPersonalDetails({
+                              ...personalDetails,
+                              blood_group: e?.value
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="marital_status">Marital Status</label>
-                    <Select
-                      options={maritalStatusOptions}
-                      isSearchable={true}
-                      isClearable={true}
-                      value={{
-                        label:
-                          personalDetails?.marital_status?.replace(
-                            /\b\w/g,
-                            (char) => char.toUpperCase()
-                          ) || "Select marital status...",
-                        value: personalDetails?.marital_status,
-                      }}
-                      onChange={(e) =>
-                        setPersonalDetails({
-                          ...personalDetails,
-                          marital_status: e?.value,
-                        })
-                      }
-                      style={{ display: "inline-block" }}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="marital_status">Marital Status</label>
+                        <Select
+                          options={maritalStatusOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          value={{
+                            label:
+                              personalDetails?.marital_status?.replace(
+                                /\b\w/g,
+                                (char) => char.toUpperCase()
+                              ) || "Select marital status...",
+                            value: personalDetails?.marital_status
+                          }}
+                          onChange={(e) =>
+                            setPersonalDetails({
+                              ...personalDetails,
+                              marital_status: e?.value
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="means_of_identification">
-                      Means of Identification
-                    </label>
-                    <Select
-                      options={meansOfIdentificationOptions}
-                      isSearchable={true}
-                      isClearable={true}
-                      value={{
-                        label:
-                          personalDetails?.means_of_identification?.replace(
-                            /\b\w/g,
-                            (char) => char.toUpperCase()
-                          ) || "Select means of identification...",
-                        value: personalDetails?.means_of_identification,
-                      }}
-                      onChange={(e) =>
-                        setPersonalDetails({
-                          ...personalDetails,
-                          means_of_identification: e?.value,
-                        })
-                      }
-                      style={{ display: "inline-block" }}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="means_of_identification">
+                          Means of Identification
+                        </label>
+                        <Select
+                          options={meansOfIdentificationOptions}
+                          isSearchable={true}
+                          isClearable={true}
+                          value={{
+                            label:
+                              personalDetails?.means_of_identification?.replace(
+                                /\b\w/g,
+                                (char) => char.toUpperCase()
+                              ) || "Select means of identification...",
+                            value: personalDetails?.means_of_identification
+                          }}
+                          onChange={(e) =>
+                            setPersonalDetails({
+                              ...personalDetails,
+                              means_of_identification: e?.value
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="id_number">ID Number</label>
-                    <input
-                      name="id_number"
-                      type="text"
-                      className="form-control"
-                      value={personalDetails?.id_number || ""}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="id_number">ID Number</label>
+                        <input
+                          name="id_number"
+                          type="text"
+                          className="form-control"
+                          value={personalDetails?.id_number || ""}
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="id_issue_date">ID Issue Date</label>
-                    <input
-                      name="id_issue_date"
-                      type="date"
-                      className="form-control"
-                      value={
-                        personalDetails?.id_issue_date?.split("T")[0] || ""
-                      }
-                      onChange={handleFormChange}
-                    />
-                  </div>
-                </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="id_issue_date">ID Issue Date</label>
+                        <input
+                          name="id_issue_date"
+                          type="date"
+                          className="form-control"
+                          value={
+                            personalDetails?.id_issue_date?.split("T")[0] || ""
+                          }
+                          onChange={handleFormChange}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="modal-footer">
