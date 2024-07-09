@@ -225,15 +225,11 @@ const LeadershipAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">
-              Leaders{" "}
-              <span style={{ fontSize: "25px", color: "#999" }}>
-                (Team leads, Supervisors, & Managers)
-              </span>
-            </h3>
+            <h3 className="page-title">Leaders</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Leadership</li>
+              <li className="breadcrumb-item">Leaders</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

@@ -20,7 +20,7 @@ const PersonalInfo = ({ personalDetails, fetchEmployeeProfile }) => {
         <div className="card-body">
           <h3 className="card-title">
             Personal Details{" "}
-            {CurrentUserCanCreateAndEdit ? (
+            {/* {CurrentUserCanCreateAndEdit ? ( */}
               <a
                 className="edit-icon"
                 data-toggle="modal"
@@ -28,7 +28,7 @@ const PersonalInfo = ({ personalDetails, fetchEmployeeProfile }) => {
               >
                 <i className="fa fa-pencil"></i>
               </a>
-            ) : null}
+            {/* // ) : null} */}
           </h3>
 
           <ul className="personal-info">
@@ -89,6 +89,7 @@ const PersonalInfo = ({ personalDetails, fetchEmployeeProfile }) => {
       <PersonalDetailsModal
         data={personalDetails}
         fetchEmployeeProfile={fetchEmployeeProfile}
+        CurrentUserCanCreateAndEdit={CurrentUserCanCreateAndEdit}
       />
     </>
   );
