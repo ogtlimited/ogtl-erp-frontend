@@ -31,7 +31,7 @@ const CardSection = ({ title, value, loading, helper }) => {
               ></lord-icon>
             </h3>
           ) : (
-            <h3>{value ? helper.handleMoneyFormat(value) : 0}</h3>
+            <h3>{value ? helper.handleMoneyFormat(+value) : 0}</h3>
           )}
         </div>
       </div>
@@ -207,19 +207,19 @@ const EmployeePayroll = () => {
           bank_name: e?.user?.bank_name || "Not Available",
           bank_account_number: e?.user?.bank_account_number,
 
-          basic: e?.slip?.basic,
-          medical: e?.slip?.medical,
-          housing: e?.slip?.housing,
-          transport: e?.slip?.transport,
-          otherAllowances: e?.slip?.other_allowances,
-          monthlySalary: e?.slip?.monthly_salary,
+          basic: +e?.slip?.basic,
+          medical: +e?.slip?.medical,
+          housing: +e?.slip?.housing,
+          transport: +e?.slip?.transport,
+          otherAllowances: +e?.slip?.other_allowances,
+          monthlySalary: +e?.slip?.monthly_salary,
 
-          tax: e?.slip?.monthly_income_tax,
-          pension: e?.slip?.monthly_pension,
-          attendance_deduction: e?.slip?.attendance_deduction,
-          disciplinary_deductions: e?.slip?.disciplinary_deductions,
-          totalDeductions: e?.slip?.total_deductions,
-          netPay: e?.slip?.net_pay,
+          tax: +e?.slip?.monthly_income_tax,
+          pension: +e?.slip?.monthly_pension,
+          attendance_deduction: +e?.slip?.attendance_deduction,
+          disciplinary_deductions: +e?.slip?.disciplinary_deductions,
+          totalDeductions: +e?.slip?.total_deductions,
+          netPay: +e?.slip?.net_pay,
 
           prorate: e?.slip?.prorate ? "Yes" : "No",
         }));
