@@ -31,7 +31,7 @@ const CardSection = ({ title, value, loading, helper }) => {
               ></lord-icon>
             </h3>
           ) : (
-            <h3>{value ? helper.handleMoneyFormat(value) : 0}</h3>
+            <h3>{value ? helper.handleMoneyFormat(+value) : 0}</h3>
           )}
         </div>
       </div>
@@ -40,7 +40,7 @@ const CardSection = ({ title, value, loading, helper }) => {
 };
 
 const EmployeePayroll = () => {
-  const { referenceId, id } = useParams();
+  const { referenceId, id, month, year } = useParams();
   const navigate = useNavigate();
   const {
     selectOfficeTypes,
@@ -51,9 +51,9 @@ const EmployeePayroll = () => {
     showAlert,
     goToTop,
   } = useAppContext();
-  const year = moment().format("YYYY");
-  const currMonth = moment().format("M");
-  const currMonthName = moment().format("MMMM");
+  // const year = moment().format("YYYY");
+  // const currMonth = moment().format("M");
+  // const currMonthName = moment().format("MMMM");
   const [data, setData] = useState([]);
   const [totals, setTotals] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -144,7 +144,7 @@ const EmployeePayroll = () => {
     setLoadingTotals(true);
     try {
       const res = await axiosInstance.get(
-        `/api/v1/total_monthly_salary.json?month=${currMonth}&year=${year}`,
+        `/api/v1/total_monthly_salary.json?month=${month}&year=${year}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -207,19 +207,19 @@ const EmployeePayroll = () => {
           bank_name: e?.user?.bank_name || "Not Available",
           bank_account_number: e?.user?.bank_account_number,
 
-          basic: e?.slip?.basic,
-          medical: e?.slip?.medical,
-          housing: e?.slip?.housing,
-          transport: e?.slip?.transport,
-          otherAllowances: e?.slip?.other_allowances,
-          monthlySalary: e?.slip?.monthly_salary,
+          basic: +e?.slip?.basic,
+          medical: +e?.slip?.medical,
+          housing: +e?.slip?.housing,
+          transport: +e?.slip?.transport,
+          otherAllowances: +e?.slip?.other_allowances,
+          monthlySalary: +e?.slip?.monthly_salary,
 
-          tax: e?.slip?.monthly_income_tax,
-          pension: e?.slip?.monthly_pension,
-          attendance_deduction: e?.slip?.attendance_deduction,
-          disciplinary_deductions: e?.slip?.disciplinary_deductions,
-          totalDeductions: e?.slip?.total_deductions,
-          netPay: e?.slip?.net_pay,
+          tax: +e?.slip?.monthly_income_tax,
+          pension: +e?.slip?.monthly_pension,
+          attendance_deduction: +e?.slip?.attendance_deduction,
+          disciplinary_deductions: +e?.slip?.disciplinary_deductions,
+          totalDeductions: +e?.slip?.total_deductions,
+          netPay: +e?.slip?.net_pay,
 
           prorate: e?.slip?.prorate ? "Yes" : "No",
         }));
@@ -308,7 +308,7 @@ const EmployeePayroll = () => {
 
       const dataToConvert = {
         data: formatted,
-        filename: `OGTL - Staff Monthly Payslip - ${currMonthName} ${year}`,
+        filename: `OGTL - Staff Monthly Payslip - ${moment().month(month - 1).format("MMMM")} ${year}`,
         delimiter: ",",
         useKeysAsHeaders: true,
       };
@@ -529,7 +529,7 @@ const EmployeePayroll = () => {
           <div className="col">
             <h3 className="page-title">
               Staff Monthly Payroll |{" "}
-              <span className="payroll_month_indicator">{currMonthName}</span>
+              <span className="payroll_month_indicator">{moment().month(month - 1).format("MMMM")}</span>
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item ">Payroll</li>

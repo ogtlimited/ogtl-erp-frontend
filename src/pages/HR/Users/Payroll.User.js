@@ -124,19 +124,19 @@ const PayrollUser = () => {
         ...e,
         id: e?.slip?.id,
 
-        basic: e?.slip?.basic,
-        medical: e?.slip?.medical,
-        housing: e?.slip?.housing,
-        transport: e?.slip?.transport,
-        otherAllowances: e?.slip?.other_allowances,
-        monthlySalary: e?.slip?.monthly_salary,
+        basic: +e?.slip?.basic,
+        medical: +e?.slip?.medical,
+        housing: +e?.slip?.housing,
+        transport: +e?.slip?.transport,
+        otherAllowances: +e?.slip?.other_allowances,
+        monthlySalary: +e?.slip?.monthly_salary,
 
-        tax: e?.slip?.monthly_income_tax,
-        pension: e?.slip?.monthly_pension,
-        attendance_deduction: e?.slip?.attendance_deduction,
-        disciplinary_deductions: e?.slip?.disciplinary_deductions,
-        totalDeductions: e?.slip?.total_deductions || e?.slip?.monthly_income_tax + e?.slip?.monthly_pension + e?.slip?.attendance_deduction + e?.slip?.disciplinary_deductions,
-        netPay: e?.slip?.net_pay,
+        tax: +e?.slip?.monthly_income_tax,
+        pension: +e?.slip?.monthly_pension,
+        attendance_deduction: +e?.slip?.attendance_deduction,
+        disciplinary_deductions: +e?.slip?.disciplinary_deductions,
+        totalDeductions: +e?.slip?.total_deductions || +e?.slip?.monthly_income_tax + +e?.slip?.monthly_pension + +e?.slip?.attendance_deduction + +e?.slip?.disciplinary_deductions,
+        netPay: +e?.slip?.net_pay,
 
         payslipMonthAndYear: `${moment().month(e?.slip?.salary_month - 1).format("MMMM")}, ${e?.slip?.year}`,
 
@@ -283,7 +283,7 @@ const PayrollUser = () => {
                 style={{ marginTop: "5px", fontSize: "20px" }}
               />
             ) : (
-              helper.handleMoneyFormat(salary?.net_pay, isEncrypted)
+              helper.handleMoneyFormat(+salary?.net_pay, isEncrypted)
             )}
           </h1>
           <p>
@@ -305,7 +305,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.monthly_salary, isEncrypted)
+                helper.handleMoneyFormat(+salary?.monthly_salary, isEncrypted)
               )
             }
           />
@@ -321,7 +321,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.basic, isEncrypted)
+                helper.handleMoneyFormat(+salary?.basic, isEncrypted)
               )
             }
           />
@@ -338,7 +338,7 @@ const PayrollUser = () => {
                 />
               ) : (
                 helper.handleMoneyFormat(
-                  salary?.monthly_income_tax,
+                  +salary?.monthly_income_tax,
                   isEncrypted
                 )
               )
@@ -356,7 +356,7 @@ const PayrollUser = () => {
                   style={{ marginTop: "5px", fontSize: "20px" }}
                 />
               ) : (
-                helper.handleMoneyFormat(salary?.monthly_pension, isEncrypted)
+                helper.handleMoneyFormat(+salary?.monthly_pension, isEncrypted)
               )
             }
           />
@@ -374,7 +374,7 @@ const PayrollUser = () => {
                 <p>Other Allowances</p>
                 <h3>
                   {helper.handleMoneyFormat(
-                    salary?.other_allowances,
+                    +salary?.other_allowances,
                     isEncrypted
                   )}
                 </h3>
@@ -383,21 +383,21 @@ const PayrollUser = () => {
               <span className="salary_span">
                 <p>Housing</p>
                 <h3>
-                  {helper.handleMoneyFormat(salary?.housing, isEncrypted)}
+                  {helper.handleMoneyFormat(+salary?.housing, isEncrypted)}
                 </h3>
               </span>
               <BsDot className="emp_salary_BsDot" />
               <span className="salary_span">
                 <p>Medical</p>
                 <h3>
-                  {helper.handleMoneyFormat(salary?.medical, isEncrypted)}
+                  {helper.handleMoneyFormat(+salary?.medical, isEncrypted)}
                 </h3>
               </span>
               <BsDot className="emp_salary_BsDot" />
               <span className="salary_span">
                 <p>Transport</p>
                 <h3>
-                  {helper.handleMoneyFormat(salary?.transport, isEncrypted)}
+                  {helper.handleMoneyFormat(+salary?.transport, isEncrypted)}
                 </h3>
               </span>
             </div>
