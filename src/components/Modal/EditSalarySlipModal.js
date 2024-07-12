@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import { useAppContext } from "../../Context/AppContext";
@@ -7,19 +7,20 @@ import Select from "react-select";
 export const EditSalarySlipModal = ({
   data,
   fetchEmployeeSalarySlip,
-  fetchPayrollTotals,
+  fetchPayrollTotals
 }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, ErrorHandler } = useAppContext();
   const [loading, setLoading] = useState(false);
+  const [loadingProrationInfo, setLoadingProrationInfo] = useState(false);
 
   const [formData, setFormData] = useState([]);
-  const [totalDaysWorked, setTotalDaysWorked] = useState(22);
+  const [totalDaysWorked, setTotalDaysWorked] = useState(null);
 
   useEffect(() => {
     setFormData({
       prorate: data?.initialProrate,
       salary_month: data?.salary_month,
-      year: data?.year,
+      year: data?.year
       // monthly_income_tax: data?.initialTax,
       // monthly_pension: data?.initialPension,
       // basic: data?.initialBasic,
@@ -39,7 +40,7 @@ export const EditSalarySlipModal = ({
     setFormData({
       prorate: data?.initialProrate,
       salary_month: data?.salary_month,
-      year: data?.year,
+      year: data?.year
       // monthly_income_tax: data?.initialTax,
       // monthly_pension: data?.initialPension,
       // basic: data?.initialBasic,
@@ -69,6 +70,39 @@ export const EditSalarySlipModal = ({
     }
   };
 
+  // Get Proration Details:
+  const getStaffProration = useCallback(async () => {
+    setLoadingProrationInfo(true);
+
+    try {
+      const res = await axiosInstance.get(
+        `/api/v1/salary_proration_details/${data?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          }
+        }
+      );
+      // eslint-disable-next-line no-unused-vars
+      const resData = res?.data?.data;
+
+      setTotalDaysWorked(resData?.record?.total_days_worked);
+
+      setLoadingProrationInfo(false);
+    } catch (error) {
+      const component = "Employee Proration Error | ";
+      ErrorHandler(error, component);
+      setLoadingProrationInfo(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  useEffect(() => {
+    getStaffProration();
+  }, [getStaffProration]);
+
   // Handle Submit:
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,9 +110,9 @@ export const EditSalarySlipModal = ({
 
     const formattedData = {
       prorate: formData?.prorate,
-      total_days_worked: +totalDaysWorked,
-      salary_month: formData?.salary_month?.toString(),
-      year: formData?.year?.toString(),
+      total_days_worked: +totalDaysWorked
+      // salary_month: formData?.salary_month?.toString(),
+      // year: formData?.year?.toString(),
     };
 
     try {
@@ -88,17 +122,17 @@ export const EditSalarySlipModal = ({
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
-          payload: formattedData,
+          payload: formattedData
         }
       );
       // eslint-disable-next-line no-unused-vars
-      const resData = res.data.data;
+      const resData = res?.data?.data;
 
       fetchEmployeeSalarySlip();
       fetchPayrollTotals();
-      setTotalDaysWorked(22);
+      setTotalDaysWorked(null);
 
       showAlert(
         true,
@@ -171,8 +205,10 @@ export const EditSalarySlipModal = ({
                         className="form-control"
                         value={totalDaysWorked}
                         onChange={handleTotalDaysWorked}
-                        max={22}
+                        placeholder={loadingProrationInfo ? "fetching..." : null}
+                        max={30}
                         step="1"
+                        readOnly
                       />
                     </div>
                   </div>
@@ -184,11 +220,11 @@ export const EditSalarySlipModal = ({
                         name="prorate"
                         options={[
                           { value: true, label: "Yes" },
-                          { value: false, label: "No" },
+                          { value: false, label: "No" }
                         ]}
                         value={{
                           label: formData?.prorate ? "Yes" : "No",
-                          value: formData?.prorate,
+                          value: formData?.prorate
                         }}
                         onChange={(e) =>
                           setFormData({ ...formData, prorate: e.value })
