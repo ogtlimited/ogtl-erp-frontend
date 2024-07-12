@@ -28,7 +28,7 @@ const PayrollBatches = () => {
 
   const [poolingData, setPoolingData] = useState({
     processedPayslips: null,
-    expectedPayslips: null,
+    expectedPayslips: null
   });
 
   const [page, setPage] = useState(1);
@@ -67,8 +67,8 @@ const PayrollBatches = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
 
       const resData = response?.data?.data?.payroll_config;
@@ -78,9 +78,7 @@ const PayrollBatches = () => {
         created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
         paydayRange: `${generateOrdinal(
           data?.from_date
-        )} ${previousMonth} - ${generateOrdinal(
-          data?.to_date
-        )} ${currentMonth}`,
+        )} ${previousMonth} - ${generateOrdinal(data?.to_date)} ${currentMonth}`
       }));
 
       const currentPayday = formatted.slice(0, 1)[0]?.paydayRange;
@@ -109,12 +107,12 @@ const PayrollBatches = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: page,
-          limit: sizePerPage,
-        },
+          limit: sizePerPage
+        }
       })
       .then((res) => {
         const AllBatches = res?.data?.data?.batches;
@@ -142,7 +140,7 @@ const PayrollBatches = () => {
           ogid: e?.current_processor?.ogid,
           designation: e?.current_processor?.designation,
           referenceId: e?.batch?.reference_id,
-          bank3DBatchId: e?.batch?.bank3D_batch_id,
+          bank3DBatchId: e?.batch?.bank3D_batch_id
         }));
 
         setData(formattedData);
@@ -173,8 +171,8 @@ const PayrollBatches = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -183,7 +181,7 @@ const PayrollBatches = () => {
 
       setPoolingData({
         processedPayslips: resData?.processed_payslips,
-        expectedPayslips: resData?.expected_payslips,
+        expectedPayslips: resData?.expected_payslips
       });
     } catch (error) {
       const errorMsg = error?.response?.data?.errors;
@@ -208,7 +206,7 @@ const PayrollBatches = () => {
   }, [
     handlePayslipPooling,
     poolingData?.expectedPayslips,
-    poolingData?.processedPayslips,
+    poolingData?.processedPayslips
   ]);
 
   const handleRegeneratePayroll = async () => {
@@ -229,8 +227,8 @@ const PayrollBatches = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -274,8 +272,8 @@ const PayrollBatches = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -309,25 +307,25 @@ const PayrollBatches = () => {
             {value} <span>{row?.ogid}</span>
           </Link>
         </h2>
-      ),
+      )
     },
     {
       dataField: "designation",
       text: "Designation",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "referenceId",
       text: "Reference ID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "bank3DBatchId",
       text: "Batch ID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "status",
@@ -354,13 +352,13 @@ const PayrollBatches = () => {
             </span>
           )}
         </>
-      ),
+      )
     },
     {
       dataField: "title",
       text: "Title",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "stage",
@@ -377,7 +375,7 @@ const PayrollBatches = () => {
             {value}
           </span>
         </>
-      ),
+      )
     },
     CurrentUserIsAuthorized && {
       dataField: "",
@@ -407,13 +405,13 @@ const PayrollBatches = () => {
             ) : null}
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (
     <>
-      {user?.role?.title === "CEO" ? (
+      {user?.employee_info?.roles.includes("ceo") ? (
         <div className="alert alert-primary sliding-text" role="alert">
           <div>
             <AlertSvg />
@@ -426,7 +424,7 @@ const PayrollBatches = () => {
               <use xlinkHref="#info-fill" />
             </svg>
             <span className="pl-3">
-              Payroll is generated on the {payday} of every month
+              Payroll is generated on the {payday || "25th"} of every month
             </span>
             <span className="pl-3">
               {" "}
@@ -484,7 +482,10 @@ const PayrollBatches = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {user?.role?.title !== "CEO" && (
+            {data?.length &&
+            user?.role?.title !== "CEO" &&
+            data[0]?.stage === 1 &&
+            data[0]?.status === "Pending" ? (
               <a
                 href="#"
                 className="btn add-btn"
@@ -493,9 +494,11 @@ const PayrollBatches = () => {
               >
                 <i className="fa fa-plus"></i> Generate Payroll
               </a>
-            )}
+            ) : null}
 
-            {data?.length && data[0]?.status === "Pending" ? (
+            {data?.length &&
+            data[0]?.stage === 1 &&
+            data[0]?.status === "Pending" ? (
               <a
                 href="#"
                 className="btn add-btn"
