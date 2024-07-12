@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import logo from "../../../assets/img/outsource.png";
 import { useLocation } from "react-router-dom";
-import moment from "moment";
 import helper from "../../../services/helper";
 const ref = React.createRef();
 

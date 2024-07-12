@@ -254,7 +254,7 @@ const PayrollBatches = () => {
   // Handle View Salary Slips:
   const handleViewSalarySlips = async (row) => {
     navigate(
-      `/dashboard/payroll/payroll-processing/batch-slips/${row?.batch?.reference_id}/${row?.id}`
+      `/dashboard/payroll/payroll-processing/batch-slips/${row?.batch?.reference_id}/${row?.id}/${row?.batch?.month}/${row?.batch?.year}`
     );
   };
 
