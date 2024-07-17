@@ -96,12 +96,12 @@ export const EditSalarySlipModal = ({
       ErrorHandler(error, component);
       setLoadingProrationInfo(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useEffect(() => {
-    getStaffProration();
-  }, [getStaffProration]);
+    data?.id && getStaffProration();
+  }, [data?.id, getStaffProration]);
 
   // Handle Submit:
   const handleSubmit = async (e) => {
@@ -205,7 +205,9 @@ export const EditSalarySlipModal = ({
                         className="form-control"
                         value={totalDaysWorked}
                         onChange={handleTotalDaysWorked}
-                        placeholder={loadingProrationInfo ? "fetching..." : null}
+                        placeholder={
+                          loadingProrationInfo ? "fetching..." : null
+                        }
                         max={30}
                         step="1"
                         readOnly
