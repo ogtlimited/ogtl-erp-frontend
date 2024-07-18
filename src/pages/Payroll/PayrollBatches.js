@@ -482,10 +482,11 @@ const PayrollBatches = () => {
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">
-            {data?.length &&
-            user?.role?.title !== "CEO" &&
-            data[0]?.stage === 1 &&
-            data[0]?.status === "Pending" ? (
+            {!data?.length ||
+            (data?.length &&
+              user?.role?.title !== "CEO" &&
+              data[0]?.stage === 1 &&
+              data[0]?.status === "Pending") ? (
               <a
                 href="#"
                 className="btn add-btn"
