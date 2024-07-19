@@ -63,8 +63,8 @@ const PayrollUser = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
       const resData = response?.data?.data?.salary;
 
@@ -85,7 +85,7 @@ const PayrollUser = () => {
   }, [fetchSalary]);
 
   const handleAction = (row) => {
-    navigate(`/dashboard/payroll/payslip/breakdown`,{
+    navigate(`/dashboard/payroll/payslip/breakdown`, {
       state: row
     });
   };
@@ -101,14 +101,14 @@ const PayrollUser = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             // pages: page,
             // limit: sizePerPage,
             start_date: fromDate,
-            end_date: toDate,
-          },
+            end_date: toDate
+          }
         }
       );
       const resData = response?.data?.data?.salary_slips;
@@ -124,23 +124,38 @@ const PayrollUser = () => {
         ...e,
         id: e?.slip?.id,
 
-        basic: +e?.slip?.basic,
-        medical: +e?.slip?.medical,
-        housing: +e?.slip?.housing,
-        transport: +e?.slip?.transport,
-        otherAllowances: +e?.slip?.other_allowances,
-        monthlySalary: +e?.slip?.monthly_salary,
+        basic: +e?.slip?.basic || e?.slip?.basic,
+        medical: +e?.slip?.medical || e?.slip?.medical,
+        housing: +e?.slip?.housing || e?.slip?.housing,
+        transport: +e?.slip?.transport || e?.slip?.transport,
+        otherAllowances:
+          +e?.slip?.other_allowances || e?.slip?.other_allowances,
+        monthlySalary: +e?.slip?.monthly_salary || e?.slip?.monthly_salary,
 
-        tax: +e?.slip?.monthly_income_tax,
-        pension: +e?.slip?.monthly_pension,
-        attendance_deduction: +e?.slip?.attendance_deduction,
-        disciplinary_deductions: +e?.slip?.disciplinary_deductions,
-        totalDeductions: +e?.slip?.total_deductions || +e?.slip?.monthly_income_tax + +e?.slip?.monthly_pension + +e?.slip?.attendance_deduction + +e?.slip?.disciplinary_deductions,
-        netPay: +e?.slip?.net_pay,
+        tax: +e?.slip?.monthly_income_tax || e?.slip?.monthly_income_tax,
+        pension: +e?.slip?.monthly_pension || e?.slip?.monthly_pension,
+        attendance_deduction:
+          +e?.slip?.attendance_deduction || e?.slip?.attendance_deduction,
+        disciplinary_deductions:
+          +e?.slip?.disciplinary_deductions || e?.slip?.disciplinary_deductions,
+        totalDeductions:
+          +e?.slip?.total_deductions ||
+          e?.slip?.total_deductions ||
+          +e?.slip?.monthly_income_tax +
+            +e?.slip?.monthly_pension +
+            +e?.slip?.attendance_deduction +
+            +e?.slip?.disciplinary_deductions ||
+          e?.slip?.monthly_income_tax +
+            e?.slip?.monthly_pension +
+            e?.slip?.attendance_deduction +
+            e?.slip?.disciplinary_deductions,
+        netPay: +e?.slip?.net_pay || e?.slip?.net_pay,
 
-        payslipMonthAndYear: `${moment().month(e?.slip?.salary_month - 1).format("MMMM")}, ${e?.slip?.year}`,
+        payslipMonthAndYear: `${moment()
+          .month(e?.slip?.salary_month - 1)
+          .format("MMMM")}, ${e?.slip?.year}`,
 
-        prorate: e?.slip?.prorate ? "Yes" : "No",
+        prorate: e?.slip?.prorate ? "Yes" : "No"
       }));
 
       setAllPayslips(formattedData);
@@ -162,91 +177,115 @@ const PayrollUser = () => {
       dataField: "payslipMonthAndYear",
       text: "Payslip",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "basic",
       text: "Basic",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "medical",
       text: "Medical",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "housing",
       text: "Housing",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "transport",
       text: "Transport",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "otherAllowances",
       text: "Other Allowances",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "monthlySalary",
       text: "Gross Salary",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "tax",
       text: "Tax",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "pension",
       text: "Pension",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "attendance_deduction",
       text: "Attendance Deduction",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "totalDeductions",
       text: "Total Deductions",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     {
       dataField: "netPay",
       text: "Net Salary",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (value, row) => <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>,
+      formatter: (value, row) => (
+        <h2>{helper.handleMoneyFormat(value, isEncrypted)}</h2>
+      )
     },
     // {
     //   dataField: "prorate",
@@ -261,12 +300,16 @@ const PayrollUser = () => {
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
-            <button className="btn btn-sm btn-info" 
-              onClick={() => handleAction(row)}>View</button>
+            <button
+              className="btn btn-sm btn-info"
+              onClick={() => handleAction(row)}
+            >
+              View
+            </button>
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (

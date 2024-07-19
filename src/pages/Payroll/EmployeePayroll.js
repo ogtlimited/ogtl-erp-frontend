@@ -49,7 +49,7 @@ const EmployeePayroll = () => {
     user,
     ErrorHandler,
     showAlert,
-    goToTop,
+    goToTop
   } = useAppContext();
   // const year = moment().format("YYYY");
   // const currMonth = moment().format("M");
@@ -71,7 +71,7 @@ const EmployeePayroll = () => {
   const [officeType, setOfficeType] = useState("");
   const [officeId, setOfficeId] = useState({
     id: "",
-    title: "",
+    title: ""
   });
   const [prorateFilter, setProrateFilter] = useState("");
 
@@ -105,12 +105,12 @@ const EmployeePayroll = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: 1,
-          limit: 400,
-        },
+          limit: 400
+        }
       })
       .then((res) => {
         const AllBatches = res?.data?.data?.batches;
@@ -149,8 +149,8 @@ const EmployeePayroll = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -177,7 +177,7 @@ const EmployeePayroll = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           batch_id: id,
@@ -186,8 +186,8 @@ const EmployeePayroll = () => {
           name: nameSearch ? nameSearch : null,
           // office_type: officeType ? officeType : null,
           // office_id: officeId?.id ? officeId?.id : null,
-          prorate: prorateFilter ? prorateFilter : null,
-        },
+          prorate: prorateFilter ? prorateFilter : null
+        }
       })
       .then((res) => {
         const AllEmployeeSlips = res?.data?.data?.slips;
@@ -207,21 +207,26 @@ const EmployeePayroll = () => {
           bank_name: e?.user?.bank_name || "Not Available",
           bank_account_number: e?.user?.bank_account_number,
 
-          basic: +e?.slip?.basic,
-          medical: +e?.slip?.medical,
-          housing: +e?.slip?.housing,
-          transport: +e?.slip?.transport,
-          otherAllowances: +e?.slip?.other_allowances,
-          monthlySalary: +e?.slip?.monthly_salary,
+          basic: +e?.slip?.basic || e?.slip?.basic,
+          medical: +e?.slip?.medical || e?.slip?.medical,
+          housing: +e?.slip?.housing || e?.slip?.housing,
+          transport: +e?.slip?.transport || e?.slip?.transport,
+          otherAllowances:
+            +e?.slip?.other_allowances || e?.slip?.other_allowances,
+          monthlySalary: +e?.slip?.monthly_salary || e?.slip?.monthly_salary,
 
-          tax: +e?.slip?.monthly_income_tax,
-          pension: +e?.slip?.monthly_pension,
-          attendance_deduction: +e?.slip?.attendance_deduction,
-          disciplinary_deductions: +e?.slip?.disciplinary_deductions,
-          totalDeductions: +e?.slip?.total_deductions,
-          netPay: +e?.slip?.net_pay,
+          tax: +e?.slip?.monthly_income_tax || e?.slip?.monthly_income_tax,
+          pension: +e?.slip?.monthly_pension || e?.slip?.monthly_pension,
+          attendance_deduction:
+            +e?.slip?.attendance_deduction || e?.slip?.attendance_deduction,
+          disciplinary_deductions:
+            +e?.slip?.disciplinary_deductions ||
+            e?.slip?.disciplinary_deductions,
+          totalDeductions:
+            +e?.slip?.total_deductions || e?.slip?.total_deductions,
+          netPay: +e?.slip?.net_pay || e?.slip?.net_pay,
 
-          prorate: e?.slip?.prorate ? "Yes" : "No",
+          prorate: e?.slip?.prorate ? "Yes" : "No"
         }));
 
         setData(formattedData);
@@ -240,7 +245,7 @@ const EmployeePayroll = () => {
     officeType,
     page,
     prorateFilter,
-    sizePerPage,
+    sizePerPage
   ]);
 
   useEffect(() => {
@@ -257,13 +262,13 @@ const EmployeePayroll = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: page,
           limit: 10000,
-          batch_id: id,
-        },
+          batch_id: id
+        }
       });
 
       const responseData = response?.data?.data?.slips;
@@ -303,14 +308,16 @@ const EmployeePayroll = () => {
         "TOTAL DEDUCTIONS": helper.handleMoneyFormat(
           data?.slip?.total_deductions
         ),
-        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay),
+        "NET PAY": helper.handleMoneyFormat(data?.slip?.net_pay)
       }));
 
       const dataToConvert = {
         data: formatted,
-        filename: `OGTL - Staff Monthly Payslip - ${moment().month(month - 1).format("MMMM")} ${year}`,
+        filename: `OGTL - Staff Monthly Payslip - ${moment()
+          .month(month - 1)
+          .format("MMMM")} ${year}`,
         delimiter: ",",
-        useKeysAsHeaders: true,
+        useKeysAsHeaders: true
       };
 
       csvDownload(dataToConvert);
@@ -390,8 +397,8 @@ const EmployeePayroll = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       })
       .then((res) => {
         const data = res?.data?.data?.payroll_processors;
@@ -420,8 +427,8 @@ const EmployeePayroll = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       })
       .then((res) => {
         const data = res?.data?.data?.processors;
@@ -453,73 +460,73 @@ const EmployeePayroll = () => {
     {
       dataField: "employee",
       text: "Employee",
-      idDataField: "ogid",
+      idDataField: "ogid"
     },
     {
       dataField: "designation",
-      text: "Designation",
+      text: "Designation"
     },
     {
       dataField: "email",
-      text: "Email",
+      text: "Email"
     },
     {
       dataField: "bank_account_number",
       text: "Bank Details",
-      idDataField: "bank_name",
+      idDataField: "bank_name"
     },
     {
       dataField: "basic",
-      text: "Basic",
+      text: "Basic"
     },
     {
       dataField: "medical",
-      text: "Medical",
+      text: "Medical"
     },
     {
       dataField: "housing",
-      text: "Housing",
+      text: "Housing"
     },
     {
       dataField: "transport",
-      text: "Transport",
+      text: "Transport"
     },
     {
       dataField: "otherAllowances",
-      text: "Other Allowances",
+      text: "Other Allowances"
     },
     {
       dataField: "monthlySalary",
-      text: "Gross Salary",
+      text: "Gross Salary"
     },
     {
       dataField: "tax",
-      text: "Tax",
+      text: "Tax"
     },
     {
       dataField: "pension",
-      text: "Pension",
+      text: "Pension"
     },
     {
       dataField: "attendance_deduction",
-      text: "Attendance Deduction",
+      text: "Attendance Deduction"
     },
     {
       dataField: "disciplinary_deductions",
-      text: "Disciplinary Deduction",
+      text: "Disciplinary Deduction"
     },
     {
       dataField: "totalDeductions",
-      text: "Total Deductions",
+      text: "Total Deductions"
     },
     {
       dataField: "netPay",
-      text: "Net Salary",
+      text: "Net Salary"
     },
     {
       dataField: "prorate",
-      text: "Prorate",
-    },
+      text: "Prorate"
+    }
   ];
 
   return (
@@ -529,7 +536,11 @@ const EmployeePayroll = () => {
           <div className="col">
             <h3 className="page-title">
               Staff Monthly Payroll |{" "}
-              <span className="payroll_month_indicator">{moment().month(month - 1).format("MMMM")}</span>
+              <span className="payroll_month_indicator">
+                {moment()
+                  .month(month - 1)
+                  .format("MMMM")}
+              </span>
             </h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item ">Payroll</li>
@@ -596,7 +607,7 @@ const EmployeePayroll = () => {
               className="custom-payroll-search-input"
               style={{
                 backgroundColor: "#ffffff",
-                margin: "0 10px 0 1rem",
+                margin: "0 10px 0 1rem"
               }}
               type="search"
               value={name}
@@ -666,12 +677,12 @@ const EmployeePayroll = () => {
             <Select
               options={[
                 { value: true, label: "Yes" },
-                { value: false, label: "No" },
+                { value: false, label: "No" }
               ]}
               isSearchable={true}
               value={{
                 value: prorateFilter,
-                label: prorateFilter ? "Yes" : "No",
+                label: prorateFilter ? "Yes" : "No"
               }}
               onChange={(e) => setProrateFilter(e?.value)}
               style={{ display: "inline-block" }}

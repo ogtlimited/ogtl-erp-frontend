@@ -45,7 +45,7 @@ class HelperService {
           value: e.value,
           required: e.required ? true : false,
           options: e.options,
-          isMulti: e.isMulti ? true : false,
+          isMulti: e.isMulti ? true : false
         };
       } else {
         objTemplate[e.name] = {
@@ -53,7 +53,7 @@ class HelperService {
           label: e.title,
           value: e.value,
           required: e.required ? true : false,
-          disabled: e.disabled ? true : false,
+          disabled: e.disabled ? true : false
         };
       }
     });
@@ -92,7 +92,7 @@ class HelperService {
       // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex],
-        array[currentIndex],
+        array[currentIndex]
       ];
     }
 
@@ -127,9 +127,14 @@ class HelperService {
   }
   handleMoneyFormat(number, encrypted = false) {
     if (number === null || number === undefined || isNaN(number)) {
-      return encrypted ? "******" : "₦0.00";
-    } 
-    return "₦" + new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(number);
+      return encrypted ? "*********" : "*********";
+    }
+    return (
+      "₦" +
+      new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2 }).format(
+        number
+      )
+    );
   }
   capitalize(str) {
     if (str) {
@@ -147,7 +152,7 @@ class HelperService {
     }
     return years.map((e) => ({
       label: e,
-      value: e,
+      value: e
     }));
   };
 }
