@@ -109,8 +109,9 @@ export const EditSalarySlipModal = ({
     setLoading(true);
 
     const formattedData = {
-      prorate: formData?.prorate,
+      prorate: false,
       total_days_worked: +totalDaysWorked
+      // prorate: formData?.prorate,
       // salary_month: formData?.salary_month?.toString(),
       // year: formData?.year?.toString(),
     };
@@ -161,7 +162,8 @@ export const EditSalarySlipModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Edit{" "}
+                {/* Edit{" "} */}
+                Prorate{" "}
                 {data?.employeeName
                   .toLowerCase()
                   .replace(/(^|\s)\S/g, (match) => match.toUpperCase())}
@@ -194,7 +196,8 @@ export const EditSalarySlipModal = ({
                     </div>
                   </div> */}
 
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6"> */}
+                  <div className="col-md-12">
                     <div className="form-group">
                       <label htmlFor="total_days_worked">
                         Total days worked
@@ -215,7 +218,7 @@ export const EditSalarySlipModal = ({
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  {/* <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="prorate">Prorate</label>
                       <Select
@@ -233,7 +236,7 @@ export const EditSalarySlipModal = ({
                         }
                       />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="modal-footer">

@@ -252,7 +252,8 @@ function EmployeeSalaryTable({
                 data-target="#EditSalarySlipModal"
                 onClick={() => handleEdit(employee)}
               >
-                Edit
+                {/* Edit */}
+                Prorate
               </button>
             ) : null}
           </td>
