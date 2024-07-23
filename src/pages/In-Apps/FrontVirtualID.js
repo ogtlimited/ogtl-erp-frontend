@@ -4,6 +4,7 @@ import React from 'react';
 
 const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
   const data = employeeDetails.employeeDetails;
+  const fullName = `${data?.personal_detail?.first_name?.split(" ")[0]} ${data?.personal_detail?.last_name}`
 
   return (
     <>
@@ -26,9 +27,9 @@ const FrontVirtualID = React.forwardRef((employeeDetails, ref) => {
 
         <div className="front-card-employee-info-container">
           <div className="front-card-employee-info">
-            {!data ? '' : <p>{data?.full_name}</p>}
+            {!data ? '' : <p>{fullName}</p>}
             <p>{data?.designation?.title}</p>
-            <img src="https://res.cloudinary.com/dhantey/image/upload/v1679519740/signature-placeholder_xykxnx.png" alt="Employee Signature" />
+            <img src="https://res.cloudinary.com/dhantey/image/upload/tgmosztscjwd6fxtjvrw.jpg" alt="Employee Signature" />
             <p>Authorized Signature</p>
           </div>
         </div>

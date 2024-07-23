@@ -31,7 +31,7 @@ export const TeamLeadFormModal = ({ mode, data, teamLead, fetchTeamLead }) => {
     setLoading(true);
     try {
       if (mode === "Assign") {
-        if (!office?.leadership_type) {
+        if (office?.leadership_type === null) {
           setLoading(false);
           return showAlert(
             true,
