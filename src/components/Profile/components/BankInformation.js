@@ -1,101 +1,73 @@
 /*eslint-disable jsx-a11y/anchor-is-valid*/
 
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useAppContext } from '../../../Context/AppContext';
-import axiosInstance from '../../../services/api';
-import { canView } from '../../../services/canView';
-import tokenService from '../../../services/token.service';
-import { AddBankInformationModal } from '../../Modal/AddBankInformationModal';
+import React from "react";
+import { useAppContext } from "../../../Context/AppContext";
+import { BankDetailsModal } from "../../Modal/BankDetailsModal";
 
-const BankInformation = ({
-  salaryDetails,
-  handleChange,
-  formValue,
-  submitted,
-  fetchUserInfo,
-  setFormValue,
-}) => {
-  const { id } = useParams();
-  const { showAlert } = useAppContext();
-  const user = tokenService.getUser();
-  useEffect(() => {
-    if (submitted === true) {
-      let obj = {};
-      for (const item in formValue) {
-        if (item !== 'Fields' && item !== 'title') {
-          obj[item] = formValue[item];
-        }
-      }
-      let newFormValue = {
-        _id: salaryDetails?.salaryDetails?._id,
-        employee_id: id,
-        ...obj,
-      };
-      axiosInstance
-        .post('/SalaryDetails', newFormValue)
-        .then((res) => {
-          fetchUserInfo();
-          setFormValue(null);
-          showAlert(true, res.data.message, 'alert alert-success');
-        })
-        .catch((error) => {
-          console.log(error);
-          showAlert(true, error?.response?.data?.message, 'alert alert-danger');
-        });
-    }
-  }, [submitted, formValue, id, salaryDetails?.salaryDetails?._id]);
+const BankInformation = ({ bankDetails, fetchEmployeeProfile }) => {
+  const { user } = useAppContext();
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["accounts_manager"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreate.includes(role)
+  );
 
   return (
     <>
       <div className="card profile-box flex-fill">
         <div className="card-body">
           <h3 className="card-title">
-            Bank information
-            {canView(user, 'HR') && (
+            Bank Details
+            {CurrentUserCanCreateAndEdit ? (
               <a
                 className="edit-icon"
-                // onClick={() => handleChange("SalaryDetails")}
                 data-toggle="modal"
                 data-target="#BankInfoFormModal"
               >
                 <i className="fa fa-pencil"></i>
               </a>
-            )}
+            ) : null}
           </h3>
+
           <ul className="personal-info">
             <li>
               <div className="title">Bank name</div>
               <div className="text">
-                {salaryDetails?.salaryDetails?.bank_name || 'Not Available'}
+                {bankDetails?.employee?.personal_detail?.bank_details
+                  ?.bank_name || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Bank account No.</div>
               <div className="text">
-                {salaryDetails?.salaryDetails?.bank_account_number ||
-                  'Not Available'}
+                {bankDetails?.employee?.personal_detail?.bank_details
+                  ?.bank_account || "Not Available"}
               </div>
             </li>
             <li>
               <div className="title">Bank Code</div>
               <div className="text">
-                {salaryDetails?.salaryDetails?.bank_code || 'Not Available'}
+                {bankDetails?.employee?.personal_detail?.bank_details
+                  ?.bank_code || "Not Available"}
               </div>
             </li>
-            <li>
+            {/* <li>
               <div className="title">Salary Mode</div>
               <div className="text">
-                {salaryDetails?.salaryDetails?.salary_mode || 'Not Available'}
+                {bankDetails?.employee?.personal_detail?.bank_details
+                  ?.salary_mode || "Not Available"}
               </div>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
 
-      <AddBankInformationModal
-        salaryDetails={salaryDetails}
-        fetchUserInfo={fetchUserInfo}
+      <BankDetailsModal
+        data={bankDetails?.employee?.personal_detail?.bank_details}
+        fetchEmployeeProfile={fetchEmployeeProfile}
+        CurrentUserCanCreateAndEdit={CurrentUserCanCreateAndEdit}
       />
     </>
   );

@@ -3,13 +3,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid*/
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
+import { ReportToModal } from "../../components/Modal/ReportToModal";
+import { useAppContext } from "../../Context/AppContext";
 import malePlaceholder from "../../assets/img/male-placeholder.jpeg";
 import femalePlaceholder from "../../assets/img/female-placeholder.jpg";
-import { ReportToModal } from "../../components/Modal/ReportToModal";
 import ProfileCards from "../../components/Profile/ProfileCards";
 import axiosInstance from "../../services/api";
 import moment from "moment";
-import { useAppContext } from "../../Context/AppContext";
 
 const Profile = () => {
   const { id } = useParams();
@@ -46,7 +46,7 @@ const Profile = () => {
     "hr_manager",
     "hr_associate",
     "team_lead",
-    "supervisor",
+    "supervisor"
   ];
 
   const CurrentUserCanEditReportTo = CurrentUserRoles.some((role) =>
@@ -62,8 +62,8 @@ const Profile = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -94,8 +94,8 @@ const Profile = () => {
               headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
+                "ngrok-skip-browser-warning": "69420"
+              }
             }
           );
           const resData = response?.data?.data;
@@ -123,8 +123,8 @@ const Profile = () => {
               headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
+                "ngrok-skip-browser-warning": "69420"
+              }
             }
           );
           const resData = response?.data?.data;
@@ -162,8 +162,8 @@ const Profile = () => {
               headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
+                "ngrok-skip-browser-warning": "69420"
+              }
             }
           );
 
@@ -189,8 +189,8 @@ const Profile = () => {
               headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
+                "ngrok-skip-browser-warning": "69420"
+              }
             }
           );
 
@@ -223,8 +223,8 @@ const Profile = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -300,7 +300,7 @@ const Profile = () => {
     fetchEmployeeProfile,
     fetchEmployeeRemoteShift,
     fetchEmployeeShift,
-    setDropDownClicked,
+    setDropDownClicked
   ]);
 
   return (
@@ -327,12 +327,18 @@ const Profile = () => {
                       {gender === "male" ? (
                         <img
                           alt=""
-                          src={userData?.employee?.profile_picture || malePlaceholder}
+                          src={
+                            userData?.employee?.profile_picture ||
+                            malePlaceholder
+                          }
                         />
                       ) : gender === "female" ? (
                         <img
                           alt=""
-                          src={userData?.employee?.profile_picture || femalePlaceholder}
+                          src={
+                            userData?.employee?.profile_picture ||
+                            femalePlaceholder
+                          }
                         />
                       ) : (
                         <img

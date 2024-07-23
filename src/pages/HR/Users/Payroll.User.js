@@ -80,9 +80,9 @@ const PayrollUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    fetchSalary();
-  }, [fetchSalary]);
+  // useEffect(() => {
+  //   fetchSalary();
+  // }, [fetchSalary]);
 
   const handleAction = (row) => {
     navigate(`/dashboard/payroll/payslip/breakdown`, {
@@ -168,9 +168,9 @@ const PayrollUser = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, toDate]);
 
-  useEffect(() => {
-    fetchPayslips();
-  }, [fetchPayslips]);
+  // useEffect(() => {
+  //   fetchPayslips();
+  // }, [fetchPayslips]);
 
   const columns = [
     {
@@ -314,7 +314,7 @@ const PayrollUser = () => {
 
   return (
     <>
-      <div className="employee_salary_section">
+      {/* <div className="employee_salary_section">
         <p>Net Salary</p>
         <div className="employee_salary_section_top_div">
           <h1>
@@ -404,9 +404,9 @@ const PayrollUser = () => {
             }
           />
         </div>
-      </div>
+      </div> */}
 
-      {loadingSalary ? null : (
+      {/* {loadingSalary ? null : (
         <div className="emp_salary_alert_container">
           <div
             className="alert alert-primary sliding-text payroll_alert_left emp_salary_alert_slider"
@@ -446,9 +446,9 @@ const PayrollUser = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
-      <div className="row">
+      {/* <div className="row">
         <div className="row col-md-6">
           <div className="col-md-6">
             <div className="form-group">
@@ -490,7 +490,7 @@ const PayrollUser = () => {
           // totalPages={totalPages}
           // setTotalPages={setTotalPages}
         />
-      </div>
+      </div> */}
     </>
   );
 };

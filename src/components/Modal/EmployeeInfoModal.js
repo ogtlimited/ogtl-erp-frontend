@@ -21,6 +21,7 @@ export const EmployeeInfoModal = ({
     fetchAllDesignations,
     user,
     showAlert,
+    goToTop
   } = useAppContext();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -107,10 +108,12 @@ export const EmployeeInfoModal = ({
         $("#EmployeeInfoModal").modal("toggle");
         setEmployeeInfo(data);
         setLoading(false);
+        goToTop();
       } catch (error) {
         showAlert(true, error?.response?.data?.errors, "alert alert-warning");
         $("#EmployeeInfoModal").modal("toggle");
         setLoading(false);
+        goToTop();
       }
     } else {
       e.preventDefault();
@@ -148,9 +151,11 @@ export const EmployeeInfoModal = ({
         $("#EmployeeInfoModal").modal("toggle");
         setEmployeeInfo(data);
         setLoading(false);
+        goToTop();
       } catch (error) {
         showAlert(true, error?.response?.data?.errors, "alert alert-warning");
         setLoading(false);
+        goToTop();
       }
     }
   };
