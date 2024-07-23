@@ -76,7 +76,7 @@ const EmployeePayroll = () => {
   const [prorateFilter, setProrateFilter] = useState("");
 
   const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(20);
+  const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
   const [approver, setApprover] = useState([]);
   const [currentApproverEmail, setCurrentApproverEmail] = useState("");
