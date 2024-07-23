@@ -1,6 +1,12 @@
 // *IN USE
 
-import React, { createContext, useCallback, useEffect, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo
+} from "react";
 import { createBrowserHistory } from "history";
 import axiosInstance from "../services/api";
 import tokenService from "../services/token.service";
@@ -17,12 +23,12 @@ const AppProvider = (props) => {
   const [user] = useState(tokenService.getUser());
   const [showProgress, setShowProgress] = useState({
     count: 25,
-    state: false,
+    state: false
   });
   const [showAlertMsg, setShowAlertMsg] = useState({
     state: false,
     msg: "",
-    class: "",
+    class: ""
   });
   const pause = (_) => new Promise((resolve) => setTimeout(resolve, _));
   const [userToken, setuserToken] = useState(null);
@@ -59,7 +65,10 @@ const AppProvider = (props) => {
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
-  const currentUserOgid = useMemo(() => user?.employee_info?.ogid, [user?.employee_info?.ogid]);
+  const currentUserOgid = useMemo(
+    () => user?.employee_info?.ogid,
+    [user?.employee_info?.ogid]
+  );
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
 
@@ -79,112 +88,127 @@ const AppProvider = (props) => {
   const goToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   };
 
   const goToBottom = () => {
     window.scrollTo({
       top: document.body.scrollHeight,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   };
 
   const status = [
     {
       _id: "active",
-      status: "ACTIVE",
+      status: "ACTIVE"
     },
     {
       _id: "left",
-      status: "RESIGNED",
+      status: "RESIGNED"
     },
     {
       _id: "terminated",
-      status: "TERMINATED",
-    },
+      status: "TERMINATED"
+    }
   ];
 
   const resignationStatusTypes = [
     {
       label: "Pending",
-      value: "pending",
+      value: "pending"
     },
     {
       label: "Approved",
-      value: "approved",
+      value: "approved"
     },
     {
       label: "Retracted",
-      value: "retracted",
-    },
+      value: "retracted"
+    }
   ];
 
   const selectOfficeTypes = [
     {
       label: "Department",
-      value: "department",
+      value: "department"
     },
     {
       label: "Campaign",
-      value: "campaign",
-    },
+      value: "campaign"
+    }
   ];
 
   const officeTypeOptions = [
     {
       label: "Department",
-      value: "department",
+      value: "department"
     },
     {
       label: "Campaign",
-      value: "campaign",
+      value: "campaign"
     },
     {
       label: "Team",
-      value: "team",
-    },
+      value: "team"
+    }
   ];
 
   const categoryOptions = [
     {
       label: "Yes",
-      value: true,
+      value: true
     },
     {
       label: "No",
-      value: false,
-    },
+      value: false
+    }
   ];
 
   const selectOutOfOfficeReasons = [
     {
       label: "Sick",
-      value: "sick",
+      value: "sick"
     },
     {
       label: "FAM/PER Emergency",
-      value: "FAM/PER Emergency",
+      value: "FAM/PER Emergency"
     },
     {
       label: "Holiday",
-      value: "holiday",
-    },
+      value: "holiday"
+    }
   ];
 
   const leadershipTypes = [
     {
       label: "Team Lead",
-      value: 0,
+      value: 0
     },
     {
       label: "Supervisor",
-      value: 1,
+      value: 1
     },
     {
       label: "Manager",
-      value: 2,
+      value: 2
+    }
+  ];
+
+  const salaryMode = [
+    {
+      value: "bank",
+      label: "Bank"
     },
+    {
+      value: "cash",
+      label: "Cash"
+    },
+    {
+      value: "cheque",
+      label: "Cheque"
+    }
   ];
 
   const generateOrdinal = (day) => {
@@ -210,7 +234,7 @@ const AppProvider = (props) => {
     console.log(count, state);
     setShowProgress({
       count: count,
-      state: state,
+      state: state
     });
   };
 
@@ -218,19 +242,19 @@ const AppProvider = (props) => {
     await pause(800);
     handleProgress({
       state: true,
-      count: 35,
+      count: 35
     });
 
     await pause(900);
     handleProgress({
       state: true,
-      count: 65,
+      count: 65
     });
 
     await pause(1000);
     handleProgress({
       state: true,
-      count: 85,
+      count: 85
     });
   };
 
@@ -245,7 +269,7 @@ const AppProvider = (props) => {
       msg: msg,
       class: className,
       icon,
-      label,
+      label
     });
     setTimeout(() => {
       setShowAlertMsg({
@@ -253,31 +277,31 @@ const AppProvider = (props) => {
         msg: "",
         class: "",
         icon: "",
-        label: "",
+        label: ""
       });
     }, 5000);
   };
 
-    // Employee Profile Pic:
-    const fetchUserPic = useCallback(async () => {
-        try {
-          const response = await axiosInstance.get(
-            `/api/v1/employees/${currentUserOgid}.json`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                "ngrok-skip-browser-warning": "69420",
-              },
-            }
-          );
-          const pic = response?.data?.data?.employee?.profile_picture;
-
-          setUserDp(pic);
-        } catch (error) {
-          console.error("Profile pic error:", error)
+  // Employee Profile Pic:
+  const fetchUserPic = useCallback(async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/employees/${currentUserOgid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
-      }, [currentUserOgid]);
+      );
+      const pic = response?.data?.data?.employee?.profile_picture;
+
+      setUserDp(pic);
+    } catch (error) {
+      console.error("Profile pic error:", error);
+    }
+  }, [currentUserOgid]);
 
   const fetchHRLeavesNotificationCount = () => {
     axiosInstance
@@ -285,12 +309,12 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       })
       .then((res) => {
         let resData = res?.data?.data?.leaves;
@@ -313,12 +337,12 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             page: 1,
-            limit: 10,
-          },
+            limit: 10
+          }
         }
       );
 
@@ -346,12 +370,12 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             page: 1,
-            limit: 10,
-          },
+            limit: 10
+          }
         }
       );
 
@@ -377,8 +401,8 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -401,8 +425,8 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -426,7 +450,7 @@ const AppProvider = (props) => {
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
             ? "pending"
-            : "happening",
+            : "happening"
       }));
 
       const formattedCampaignHolidays = campaign_holidays.map((e) => ({
@@ -446,12 +470,12 @@ const AppProvider = (props) => {
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
             ? "pending"
-            : "happening",
+            : "happening"
       }));
 
       const allOffice = [
         ...formattedDepartmentHolidays,
-        ...formattedCampaignHolidays,
+        ...formattedCampaignHolidays
       ];
 
       setAllPublicHolidayEvents(allOffice);
@@ -471,19 +495,19 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: 1,
-          limit: 5000,
-        },
+          limit: 5000
+        }
       });
       const resData = response?.data?.data?.employees;
 
       const formattedEmployees = resData
         .map((e) => ({
           label: e?.full_name.toUpperCase(),
-          value: e.ogid,
+          value: e.ogid
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -505,12 +529,12 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       });
       const resData = response?.data?.data?.departments;
       // console.log("All Departments:", resData);
@@ -518,7 +542,7 @@ const AppProvider = (props) => {
       const formattedDepartments = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
-          value: e.id,
+          value: e.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -538,12 +562,12 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       });
       const resData = response?.data?.data?.campaigns;
       // console.log("All Campaigns:", resData);
@@ -551,7 +575,7 @@ const AppProvider = (props) => {
       const formattedCampaigns = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
-          value: e.id,
+          value: e.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -571,19 +595,19 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       });
       const resData = response?.data?.data?.teams;
 
       const formattedTeams = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
-          value: e.id,
+          value: e.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -602,19 +626,19 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       });
       const resData = response?.data?.data?.designations;
 
       const formattedDesignation = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
-          value: e.id,
+          value: e.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -633,19 +657,19 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: 1,
-          limit: 1000,
-        },
+          limit: 1000
+        }
       });
       const resData = response?.data?.data?.leaders;
 
       const formattedLeaders = resData
         .map((e) => ({
           label: e?.first_name + " " + e?.last_name,
-          value: e?.ogid,
+          value: e?.ogid
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -664,14 +688,14 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
       const resData = response?.data?.data?.branches;
 
       const formatted = resData.map((branch) => ({
         label: branch.title,
-        value: branch.id,
+        value: branch.id
       }));
 
       setSelectBranches(formatted);
@@ -690,12 +714,12 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: 1,
-          limit: 10000,
-        },
+          limit: 10000
+        }
       });
 
       const resData = response?.data?.data?.survey_records?.surveys;
@@ -703,7 +727,7 @@ const AppProvider = (props) => {
       const formatted = resData
         .map((survey) => ({
           label: survey?.title,
-          value: survey?.id,
+          value: survey?.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -724,12 +748,12 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: 1,
-          limit: 10000,
-        },
+          limit: 10000
+        }
       });
 
       const resData = response?.data?.data?.public_holidays;
@@ -737,7 +761,7 @@ const AppProvider = (props) => {
       const formatted = resData
         .map((e) => ({
           label: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
-          value: e?.id,
+          value: e?.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -759,8 +783,8 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const resData = response?.data?.data?.statuses;
@@ -770,12 +794,12 @@ const AppProvider = (props) => {
 
       const InterviewStatusOptions = InterviewStatus.map((status) => ({
         label: status,
-        value: status,
+        value: status
       }));
 
       const InterviewProcessStageOptions = processStatus.map((status) => ({
         label: status,
-        value: status,
+        value: status
       }));
 
       setInterviewStatusOptions(InterviewStatusOptions);
@@ -795,15 +819,15 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
       const resData = response?.data?.data?.types;
 
       const formattedLeaveTypes = resData
         .map((e) => ({
           label: e?.title.toUpperCase(),
-          value: e?.id,
+          value: e?.id
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -822,8 +846,8 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
 
       const resData = response?.data?.data?.deduction_types;
@@ -846,7 +870,7 @@ const AppProvider = (props) => {
             item?.office?.title.toUpperCase() +
             " | " +
             deductionValue,
-          value: item?.deduction?.id,
+          value: item?.deduction?.id
         };
       });
 
@@ -865,8 +889,8 @@ const AppProvider = (props) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
       const resData = response?.data?.data?.job_openings;
 
@@ -874,7 +898,7 @@ const AppProvider = (props) => {
         .map((item) => {
           return {
             label: item?.job_title,
-            value: item?.id,
+            value: item?.id
           };
         })
         .sort((a, b) => a.label.localeCompare(b.label));
@@ -896,8 +920,8 @@ const AppProvider = (props) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -968,7 +992,7 @@ const AppProvider = (props) => {
         fetchAllEmployees();
       }
 
-      fetchUserPic()
+      fetchUserPic();
       fetchAllLeaveTypes();
       fetchStaffResignation();
       fetchAnnouncement();
@@ -997,7 +1021,7 @@ const AppProvider = (props) => {
     isHr,
     userToken,
     isTeamLead,
-    isSecurity,
+    isSecurity
   ]);
 
   return (
@@ -1121,10 +1145,11 @@ const AppProvider = (props) => {
         status,
         officeTypeOptions,
         categoryOptions,
+        salaryMode,
         goToTop,
         goToBottom,
         FontAwesomeIcon,
-        faSpinner,
+        faSpinner
       }}
     >
       {props.children}

@@ -10,6 +10,7 @@ import React, {
 import { useReactToPrint } from "react-to-print";
 import PersonalInfo from "./components/PersonalInfo";
 import EmployeeInfo from "./components/EmployeeInfo";
+import BankInformation from "./components/BankInformation";
 // import ContactDetails from "./components/ContactDetails";
 import FrontVirtualID from "../../pages/In-Apps/FrontVirtualID";
 import BackVirtualID from "../../pages/In-Apps/BackVirtualID";
@@ -234,17 +235,14 @@ const ProfileCards = ({
             </div>
           </div>
 
-          {/* <div className="row">
+          <div className="row">
             <div className="col-md-6 d-flex">
-              <ContactDetails
-                contactDetails={userData}
-                submitted={submitted}
-                formValue={formValue}
-                fetchUserInfo={fetchUserInfo}
-                setFormValue={setFormValue}
+              <BankInformation
+                bankDetails={userData}
+                fetchEmployeeProfile={fetchEmployeeProfile}
               />
             </div>
-          </div> */}
+          </div>
         </div>
 
         {/* Virtual ID */}

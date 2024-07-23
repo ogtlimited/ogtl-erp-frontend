@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAppContext } from "../../Context/AppContext";
 import {
   genderOptions,
   bloodGroupOptions,
@@ -8,14 +9,13 @@ import {
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
-import { useAppContext } from "../../Context/AppContext";
 
 export const PersonalDetailsModal = ({
   data,
   fetchEmployeeProfile,
   CurrentUserCanCreateAndEdit
 }) => {
-  const { showAlert } = useAppContext();
+  const { showAlert, goToTop } = useAppContext();
   const [personalDetails, setPersonalDetails] = useState({});
   const [loading, setLoading] = useState(false);
   const [fileInputKey, setFileInputKey] = useState(0);
@@ -96,6 +96,7 @@ export const PersonalDetailsModal = ({
       $("#PersonalDetailsModal").modal("toggle");
       setPersonalDetails(data);
       setLoading(false);
+      goToTop();
     } catch (error) {
       showAlert(
         true,
@@ -104,6 +105,7 @@ export const PersonalDetailsModal = ({
       );
       $("#PersonalDetailsModal").modal("toggle");
       setLoading(false);
+      goToTop();
     }
   };
 
