@@ -15,7 +15,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     showAlert,
     loadingSelect,
     selectDeductionTypes,
-    fetchDeductionTypes,
+    fetchDeductionTypes
   } = useAppContext();
   const selectDeductionTypeRef = useRef();
   const [data, setData] = useState(HR_ADD_DEDUCTION);
@@ -47,13 +47,20 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     selectDeductionTypeRef.current.select.clearValue();
   };
 
+  const handleDateChange = (e) => {
+    e.preventDefault();
+    const selectedDate = e.target.value;
+
+    setData({ ...data, [e.target.name]: selectedDate });
+  };
+
   const handleOfficeTypeChange = (e) => {
     setData({
       ...data,
       operation_office_id: "",
       officeName: "",
       hr_user_id: "",
-      employeeName: "",
+      employeeName: ""
     });
 
     setOfficeType(e?.label);
@@ -67,7 +74,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
       operation_office_id: e?.value,
       officeName: e?.label,
       hr_user_id: "",
-      employeeName: "",
+      employeeName: ""
     });
     setIsOfficeSelected(true);
     fetchAllEmployees(e?.value);
@@ -83,12 +90,12 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
+              "ngrok-skip-browser-warning": "69420"
             },
             params: {
               pages: 1,
-              limit: 1000,
-            },
+              limit: 1000
+            }
           }
         );
 
@@ -97,7 +104,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
         const formattedData = resData
           .map((e) => ({
             label: e?.name,
-            value: e.ogid,
+            value: e.ogid
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -113,12 +120,12 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
+              "ngrok-skip-browser-warning": "69420"
             },
             params: {
               pages: 1,
-              limit: 1000,
-            },
+              limit: 1000
+            }
           }
         );
 
@@ -127,7 +134,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
         const formattedData = resData
           .map((e) => ({
             label: e?.name,
-            value: e.ogid,
+            value: e.ogid
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -143,12 +150,12 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
-              "ngrok-skip-browser-warning": "69420",
+              "ngrok-skip-browser-warning": "69420"
             },
             params: {
               pages: 1,
-              limit: 1000,
-            },
+              limit: 1000
+            }
           }
         );
 
@@ -157,7 +164,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
         const formattedData = resData
           .map((e) => ({
             label: e?.name,
-            value: e.ogid,
+            value: e.ogid
           }))
           .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -177,6 +184,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
     const dataPayload = {
       hr_user_id: data?.hr_user_id,
       hr_deduction_type_id: data?.hr_deduction_type_id,
+      date_processed: data?.date_processed
     };
 
     setLoading(true);
@@ -186,11 +194,11 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         payload: {
-          ...dataPayload,
-        },
+          ...dataPayload
+        }
       });
 
       showAlert(
@@ -237,6 +245,21 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
               {!loadingSelect ? (
                 <form onSubmit={handleAddDeduction}>
                   <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="date_processed">Date Processed</label>
+                        <input
+                          type="date"
+                          name="date_processed"
+                          value={data?.date_processed}
+                          onChange={handleDateChange}
+                          className="form-control "
+                          id="dateInput"
+                          required
+                        />
+                      </div>
+                    </div>
+
                     {/* Office Type */}
                     <div className="col-md-6">
                       <div className="form-group">
@@ -245,7 +268,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                           options={officeTypeOptions}
                           value={{
                             label: officeType,
-                            value: officeType,
+                            value: officeType
                           }}
                           style={{ display: "inline-block" }}
                           onChange={(e) => handleOfficeTypeChange(e)}
@@ -270,7 +293,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                             isSearchable={true}
                             value={{
                               label: data?.officeName,
-                              value: data?.operation_office_id,
+                              value: data?.operation_office_id
                             }}
                             onChange={(e) => handleOfficeChange(e)}
                             style={{ display: "inline-block" }}
@@ -290,13 +313,13 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                             isSearchable={true}
                             value={{
                               value: data?.hr_user_id,
-                              label: data?.employeeName,
+                              label: data?.employeeName
                             }}
                             onChange={(e) =>
                               setData({
                                 ...data,
                                 hr_user_id: e?.value,
-                                employeeName: e?.label,
+                                employeeName: e?.label
                               })
                             }
                             style={{ display: "inline-block" }}
@@ -317,7 +340,7 @@ export const AddDeductionModal = ({ fetchDeductions }) => {
                             setData({
                               ...data,
                               hr_deduction_type_id: e?.value,
-                              deductionTitle: e?.label,
+                              deductionTitle: e?.label
                             })
                           }
                           ref={selectDeductionTypeRef}

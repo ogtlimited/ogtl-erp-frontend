@@ -2,6 +2,7 @@
 export const HR_ADD_DEDUCTION = {
   hr_user_id: "",
   hr_deduction_type_id: "",
+  date_processed: "",
 
   officeName: "",
   employeeName: "",
