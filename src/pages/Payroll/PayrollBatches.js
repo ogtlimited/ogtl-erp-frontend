@@ -1,8 +1,6 @@
 // *IN USE
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import moment from "moment";
 import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
@@ -15,16 +13,22 @@ import secureLocalStorage from "react-secure-storage";
 import ProgressBar from "../../components/Modal/ProgressBar";
 
 const PayrollBatches = () => {
-  const { user, ErrorHandler, showAlert, getAvatarColor } = useAppContext();
+  const {
+    user,
+    ErrorHandler,
+    showAlert,
+    getAvatarColor,
+    payday,
+    loadingPayday,
+    currentPaydayData,
+    fetchAllPayrollDates
+  } = useAppContext();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isRegenerating, setisRegenerating] = useState(false);
   const [mode, setMode] = useState("Create");
   const [dates, setDates] = useState([]);
-
-  const [payday, setPayday] = useState(null);
-  const [currentData, setCurrentData] = useState([]);
 
   const [poolingData, setPoolingData] = useState({
     processedPayslips: null,
@@ -39,65 +43,13 @@ const PayrollBatches = () => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const isAuthorized = ["hr_manager", "payroll_processor"];
 
-  const currentMonth = moment().format("MMMM");
-  const previousMonth = moment().subtract(1, "months").format("MMMM");
-
   const CurrentUserIsAuthorized = CurrentUserRoles.some((role) =>
     isAuthorized.includes(role)
   );
 
-  // Format Generation Dates:
-  const generateOrdinal = (day) => {
-    if (day >= 11 && day <= 13) {
-      return `${day}th`;
-    }
-
-    const lastDigit = day % 10;
-    const suffixes = ["st", "nd", "rd"];
-    const suffix = suffixes[lastDigit - 1] || "th";
-
-    return `${day}${suffix}`;
-  };
-
-  // All Paydays:
-  const fetchAllPayrollDates = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420"
-        }
-      });
-
-      const resData = response?.data?.data?.payroll_config;
-
-      const formatted = resData.map((data) => ({
-        ...data,
-        created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
-        paydayRange: `${generateOrdinal(
-          data?.from_date
-        )} ${previousMonth} - ${generateOrdinal(data?.to_date)} ${currentMonth}`
-      }));
-
-      const currentPayday = formatted.slice(0, 1)[0]?.paydayRange;
-      const currentData = formatted.slice(0, 1)[0];
-
-      setPayday(currentPayday);
-      setCurrentData(currentData);
-      setLoading(false);
-    } catch (error) {
-      const component = "Payroll Dates Error | ";
-      ErrorHandler(error, component);
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchAllPayrollDates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchAllPayrollDates]);
 
   // Fetch Payroll Batches:
   const fetchAllBatches = useCallback(() => {
@@ -247,7 +199,7 @@ const PayrollBatches = () => {
 
   // Handle Edit:
   const handleEdit = (e) => {
-    setDates(currentData);
+    setDates(currentPaydayData);
     setMode("Edit");
   };
 
@@ -413,31 +365,7 @@ const PayrollBatches = () => {
     <>
       {user?.employee_info?.roles.includes("ceo") ? (
         <div className="alert alert-primary sliding-text" role="alert">
-          <div>
-            <AlertSvg />
-            <svg
-              className="bi flex-shrink-0 me-2"
-              width="24"
-              height="24"
-              role="img"
-            >
-              <use xlinkHref="#info-fill" />
-            </svg>
-            <span className="pl-3">
-              Payroll is generated on the {payday || "25th"} of every month
-            </span>
-            <span className="pl-3">
-              {" "}
-              | &nbsp; You can preview and approve payroll once generated
-            </span>
-          </div>
-        </div>
-      ) : (
-        <div className="payroll_alert_container">
-          <div
-            className="alert alert-primary sliding-text payroll_alert_left"
-            role="alert"
-          >
+          {loadingPayday ? null : (
             <div>
               <AlertSvg />
               <svg
@@ -449,17 +377,45 @@ const PayrollBatches = () => {
                 <use xlinkHref="#info-fill" />
               </svg>
               <span className="pl-3">
-                Payroll is generated for the {payday || "25th"}
+                Payroll is generated on the {payday || "25th"} of every month
               </span>
               <span className="pl-3">
                 {" "}
-                | &nbsp; You can click the generate button to generate payroll
-                for the current month
+                | &nbsp; You can preview and approve payroll once generated
               </span>
             </div>
-          </div>
+          )}
+        </div>
+      ) : (
+        <div className="payroll_alert_container">
+          {loadingPayday ? null : (
+            <div
+              className="alert alert-primary sliding-text payroll_alert_left"
+              role="alert"
+            >
+              <div>
+                <AlertSvg />
+                <svg
+                  className="bi flex-shrink-0 me-2"
+                  width="24"
+                  height="24"
+                  role="img"
+                >
+                  <use xlinkHref="#info-fill" />
+                </svg>
+                <span className="pl-3">
+                  Payroll is generated for the {payday || "25th"}
+                </span>
+                <span className="pl-3">
+                  {" "}
+                  | &nbsp; You can click the generate button to generate payroll
+                  for the current month
+                </span>
+              </div>
+            </div>
+          )}
 
-          {CurrentUserIsAuthorized && (
+          {CurrentUserIsAuthorized && !loadingPayday ? (
             <a
               className="edit-icon payday"
               data-toggle="modal"
@@ -468,7 +424,7 @@ const PayrollBatches = () => {
             >
               <i className="fa fa-pencil"></i>
             </a>
-          )}
+          ) : null}
         </div>
       )}
 
@@ -545,11 +501,7 @@ const PayrollBatches = () => {
         handlePayslipPooling={handlePayslipPooling}
       />
 
-      <PayrollDatesModal
-        mode={mode}
-        data={dates}
-        fetchAllPayrollDates={fetchAllPayrollDates}
-      />
+      <PayrollDatesModal mode={mode} data={dates} />
     </>
   );
 };

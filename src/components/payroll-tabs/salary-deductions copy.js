@@ -1,13 +1,14 @@
 // *IN USE
 
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import DeductionTable from "../Tables/DeductionTable";
 import axiosInstance from "../../services/api";
 import { useAppContext } from "../../Context/AppContext";
 import { AddDeductionModal } from "../Modal/AddDeductionModal";
 import { useNavigate } from "react-router-dom";
 import helper from "../../services/helper";
+import secureLocalStorage from "react-secure-storage";
 
 const Deductions = () => {
   const navigate = useNavigate();
@@ -20,20 +21,10 @@ const Deductions = () => {
     setDeductionFromDate,
     deductionToDate,
     setDeductionToDate,
+    fetchAllPayrollDates
   } = useAppContext();
   const [deductions, setDeductions] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const deductionFromDateRef = useRef(deductionFromDate);
-  const deductionToDateRef = useRef(deductionToDate);
-
-  useEffect(() => {
-    deductionFromDateRef.current = deductionFromDate;
-  }, [deductionFromDate]);
-
-  useEffect(() => {
-    deductionToDateRef.current = deductionToDate;
-  }, [deductionToDate]);
 
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
@@ -42,8 +33,24 @@ const Deductions = () => {
     canCreateAndEdit.includes(role)
   );
 
-  // const [fromDate, setFromDate] = useState(deductionFromDate);
-  // const [toDate, setToDate] = useState(deductionToDate);
+  const persistedFromDate = useMemo(
+    () => secureLocalStorage.getItem("deductionFrom"),
+    []
+  );
+  const persistedToDate = useMemo(
+    () => secureLocalStorage.getItem("deductionTo"),
+    []
+  );
+
+  const [fromDate, setFromDate] = useState(deductionFromDate);
+  const [toDate, setToDate] = useState(deductionToDate);
+
+  useEffect(() => {
+    fetchAllPayrollDates();
+
+    setFromDate(deductionFromDate);
+    setToDate(deductionToDate);
+  }, [deductionFromDate, deductionToDate, fetchAllPayrollDates]);
 
   const fetchDeductions = useCallback(async () => {
     setLoading(true);
@@ -55,8 +62,8 @@ const Deductions = () => {
           "ngrok-skip-browser-warning": "69420"
         },
         params: {
-          start_date: deductionFromDate,
-          end_date: deductionToDate
+          start_date: persistedFromDate || fromDate,
+          end_date: persistedToDate || toDate
         }
       });
 
@@ -81,17 +88,11 @@ const Deductions = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deductionFromDate, deductionToDate]);
+  }, [fromDate, toDate]);
 
   useEffect(() => {
     fetchDeductions();
   }, [fetchDeductions]);
-
-  const handleViewAllBreakdown = (row) => {
-    navigate(
-      `/dashboard/payroll/staff-deductions/${row.ogid}/${deductionFromDateRef.current}/${deductionToDateRef.current}`
-    );
-  };
 
   const columns = [
     {
@@ -137,7 +138,11 @@ const Deductions = () => {
               className="btn btn-sm btn-primary"
               data-toggle="modal"
               onClick={() =>
-                handleViewAllBreakdown(row)
+                navigate(
+                  `/dashboard/payroll/staff-deductions/${row.ogid}/${
+                    persistedFromDate || fromDate
+                  }/${persistedToDate || toDate}`
+                )
               }
             >
               View Deductions
@@ -174,10 +179,10 @@ const Deductions = () => {
           columns={columns}
           loading={loading}
           setLoading={setLoading}
-          fromDate={deductionFromDate}
-          toDate={deductionToDate}
-          setFromDate={setDeductionFromDate}
-          setToDate={setDeductionToDate}
+          fromDate={fromDate}
+          toDate={toDate}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
           loadingPayday={loadingPayday}
           // date={date}
           // setDate={setDate}

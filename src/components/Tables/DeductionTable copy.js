@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider, {
   Search,
-  CSVExport,
+  CSVExport
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import secureLocalStorage from "react-secure-storage";
 
 const DeductionTable = ({
   data,
@@ -23,12 +24,15 @@ const DeductionTable = ({
   setToDate,
   loadingPayday,
   date,
-  setDate,
+  setDate
 }) => {
   const { SearchBar } = Search;
   const { ExportCSVButton } = CSVExport;
   const [mobileView, setmobileView] = useState(false);
   const [show, setShow] = useState(false);
+
+  secureLocalStorage.setItem("deductionFrom", fromDate);
+  secureLocalStorage.setItem("deductionTo", toDate);
 
   const resizeTable = () => {
     if (window.innerWidth >= 768) {
@@ -90,7 +94,7 @@ const DeductionTable = ({
                   {...props.searchProps}
                   style={{
                     paddingLeft: "12%",
-                    margin: "2rem 1rem 0 0",
+                    margin: "2rem 1rem 0 0"
                   }}
                   className="inputSearch"
                 />
@@ -110,7 +114,7 @@ const DeductionTable = ({
                 <div
                   className="col-md-3"
                   style={{
-                    marginLeft: "1rem",
+                    marginLeft: "1rem"
                   }}
                 >
                   <div className="form-group">
@@ -119,7 +123,13 @@ const DeductionTable = ({
                       type="date"
                       name="fromDate"
                       value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
+                      onChange={(e) => {
+                        setFromDate(e.target.value);
+                        secureLocalStorage.setItem(
+                          "deductionFrom",
+                          e.target.value
+                        );
+                      }}
                       className="form-control "
                       disabled={loadingPayday}
                     />
@@ -133,7 +143,13 @@ const DeductionTable = ({
                       type="date"
                       name="toDate"
                       value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
+                      onChange={(e) => {
+                        setToDate(e.target.value);
+                        secureLocalStorage.setItem(
+                          "deductionTo",
+                          e.target.value
+                        );
+                      }}
                       className="form-control "
                       disabled={loadingPayday}
                     />
