@@ -42,9 +42,6 @@ const Deductions = () => {
     canCreateAndEdit.includes(role)
   );
 
-  // const [fromDate, setFromDate] = useState(deductionFromDate);
-  // const [toDate, setToDate] = useState(deductionToDate);
-
   const fetchDeductions = useCallback(async () => {
     setLoading(true);
     try {
