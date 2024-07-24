@@ -63,6 +63,19 @@ const AppProvider = (props) => {
   const [allPublicHolidayEvents, setAllPublicHolidayEvents] = useState([]);
   const [userResignations, setUserResignations] = useState(null);
 
+  const currentMonth = moment().format("MMMM");
+  const previousMonth = moment().subtract(1, "months").format("MMMM");
+
+  const [allPayDates, setAllPayDates] = useState([]);
+  const [payday, setPayday] = useState(null);
+  const [loadingPayday, setLoadingPayday] = useState(false);
+  const [currentPaydayData, setCurrentPaydayData] = useState([]);
+
+  const deductionFrom = moment().startOf("month").format("yyyy-MM-DD");
+  const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
+  const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
+  const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
   const currentUserOgid = useMemo(
@@ -71,6 +84,7 @@ const AppProvider = (props) => {
   );
   const CurrentUserRoles = user?.employee_info?.roles;
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
+  const isPayrollProcessor = CurrentUserRoles?.includes("payroll_processor");
 
   const [announcement, setAnnouncement] = useState(null);
   const [loadingAnnouncement, setLoadingAnnouncement] = useState(false);
@@ -485,6 +499,59 @@ const AppProvider = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // All Paydays:
+  const fetchAllPayrollDates = useCallback(async () => {
+    setLoadingPayday(true);
+
+    try {
+      const response = await axiosInstance.get("/api/v1/payroll_configs.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        }
+      });
+
+      const resData = response?.data?.data?.payroll_config;
+
+      const formatted = resData.map((data) => ({
+        ...data,
+        created_at: moment(data.created_at).format("ddd. MMM Do, YYYY"),
+        paydayRange: `${generateOrdinal(
+          data?.from_date
+        )} ${previousMonth} - ${generateOrdinal(data?.to_date)} ${currentMonth}`
+      }));
+
+      const currentPaydayRange = formatted.slice(0, 1)[0]?.paydayRange;
+      const currentPaydayData = formatted.slice(0, 1)[0];
+
+      // For Deduction Table:
+      const currentYear = new Date().getFullYear();
+      const rangeParts = currentPaydayData?.paydayRange?.split(" - ") || "";
+      const deductionFrom = moment(
+        `${rangeParts[0]} ${currentYear}`,
+        "Do MMMM YYYY"
+      );
+      const deductionTo = moment(
+        `${rangeParts[1]} ${currentYear}`,
+        "Do MMMM YYYY"
+      );
+
+      setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+
+      setAllPayDates(formatted);
+      setPayday(currentPaydayRange);
+      setCurrentPaydayData(currentPaydayData);
+      setLoadingPayday(false);
+    } catch (error) {
+      const component = "Payroll Dates Error | ";
+      ErrorHandler(error, component);
+      setLoadingPayday(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentMonth, previousMonth]);
 
   // SELECT APIs
   // All Employees:
@@ -980,6 +1047,7 @@ const AppProvider = (props) => {
         fetchAllPublicHolidays();
         fetchHRLeavesNotificationCount();
       }
+
       if (isTeamLead && !isHr) {
         fetchAllEmployees();
         fetchAllDepartments();
@@ -988,8 +1056,13 @@ const AppProvider = (props) => {
         fetchAllLeaders();
         fetchAllDesignations();
       }
+
       if (isSecurity) {
         fetchAllEmployees();
+      }
+
+      if (isPayrollProcessor) {
+        fetchAllPayrollDates();
       }
 
       fetchUserPic();
@@ -1018,10 +1091,12 @@ const AppProvider = (props) => {
     fetchAllSurveys,
     fetchPendingSurveys,
     fetchPublicHolidays,
+    fetchAllPayrollDates,
     isHr,
     userToken,
     isTeamLead,
-    isSecurity
+    isSecurity,
+    isPayrollProcessor
   ]);
 
   return (
@@ -1121,6 +1196,17 @@ const AppProvider = (props) => {
 
         selectOutOfOfficeReasons,
         leadershipTypes,
+
+        allPayDates,
+        payday,
+        loadingPayday,
+        setLoadingPayday,
+        currentPaydayData,
+        fetchAllPayrollDates,
+        deductionFromDate,
+        setDeductionFromDate,
+        deductionToDate,
+        setDeductionToDate,
 
         userDp,
         generateOrdinal,

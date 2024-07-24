@@ -26,20 +26,17 @@ const DeductionSlip = () => {
 
   const fetchDeductionSlip = useCallback(async () => {
     try {
-      const res = await axiosInstance.get(
-        `/api/v1/deductions/${id}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          params: {
-            start_date: start,
-            end_date: end,
-          },
+      const res = await axiosInstance.get(`/api/v1/deductions/${id}.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        },
+        params: {
+          start_date: start,
+          end_date: end
         }
-      );
+      });
 
       const resData = res?.data?.data;
 
@@ -65,7 +62,7 @@ const DeductionSlip = () => {
             (char) => char.toUpperCase()
           ),
           deductionStatus: item?.deduction?.status ? "Active" : "Inactive",
-          deductionAmount: helper.handleMoneyFormat(item?.deduction?.amount),
+          deductionAmount: helper.handleMoneyFormat(item?.deduction?.amount)
         };
       });
 
@@ -80,7 +77,7 @@ const DeductionSlip = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, end, start]);
 
   useEffect(() => {
@@ -92,31 +89,31 @@ const DeductionSlip = () => {
       dataField: "deductionDate",
       text: "Date Processed",
       sort: true,
-      headerStyle: { width: "25%" },
+      headerStyle: { width: "25%" }
     },
     {
       dataField: "deductionType",
       text: "Title",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "15%" }
     },
     {
       dataField: "deductionDescription",
       text: "Description",
       sort: true,
-      headerStyle: { width: "25%" },
+      headerStyle: { width: "25%" }
     },
     {
       dataField: "deductionCategory",
       text: "Category",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "10%" }
     },
     {
       dataField: "deductionAmount",
       text: "Amount",
       sort: true,
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "10%" }
     },
     {
       dataField: "deductionStatus",
@@ -135,7 +132,7 @@ const DeductionSlip = () => {
             </span>
           )}
         </>
-      ),
+      )
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
@@ -156,8 +153,8 @@ const DeductionSlip = () => {
             </div>
           ) : null}
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (

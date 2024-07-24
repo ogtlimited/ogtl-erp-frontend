@@ -18,8 +18,8 @@ const generateOrdinal = (day) => {
   return `${day}${suffix}`;
 };
 
-export const PayrollDatesModal = ({ mode, data, fetchAllPayrollDates }) => {
-  const { showAlert } = useAppContext();
+export const PayrollDatesModal = ({ mode, data }) => {
+  const { showAlert, fetchAllPayrollDates } = useAppContext();
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fromDateOrdinals, setFromDateOrdinals] = useState("");

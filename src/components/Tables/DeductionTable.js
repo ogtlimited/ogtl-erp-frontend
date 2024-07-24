@@ -7,7 +7,6 @@ import ToolkitProvider, {
   CSVExport,
 } from "react-bootstrap-table2-toolkit";
 import filterFactory from "react-bootstrap-table2-filter";
-
 import paginationFactory from "react-bootstrap-table2-paginator";
 
 const DeductionTable = ({
@@ -20,9 +19,9 @@ const DeductionTable = ({
 
   fromDate,
   toDate,
-  today,
   setFromDate,
   setToDate,
+  loadingPayday,
   date,
   setDate,
 }) => {
@@ -122,10 +121,11 @@ const DeductionTable = ({
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
                       className="form-control "
-                      // max={today}
+                      disabled={loadingPayday}
                     />
                   </div>
                 </div>
+
                 <div className="col-md-3">
                   <div className="form-group">
                     <label htmlFor="toDate">To</label>
@@ -135,7 +135,7 @@ const DeductionTable = ({
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
                       className="form-control "
-                      // max={today}
+                      disabled={loadingPayday}
                     />
                   </div>
                 </div>
