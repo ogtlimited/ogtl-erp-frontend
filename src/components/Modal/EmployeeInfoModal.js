@@ -59,7 +59,8 @@ export const EmployeeInfoModal = ({
   };
 
   const handleEditEmployeeInfo = async (e) => {
-    if (isHr) {
+    // if (isHr) {
+    if (CurrentUserCanView) {
       e.preventDefault();
 
       const editedEmployeeInfo = {
