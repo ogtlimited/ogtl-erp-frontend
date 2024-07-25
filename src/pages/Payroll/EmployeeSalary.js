@@ -48,12 +48,12 @@ const EmployeeSalary = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: page,
-          limit: sizePerPage,
-        },
+          limit: sizePerPage
+        }
       })
       .then((res) => {
         const AllEmployeeSalaries = res?.data?.data?.salaries;
@@ -68,23 +68,29 @@ const EmployeeSalary = () => {
         const formattedData = AllEmployeeSalaries?.map((e) => ({
           ...e,
           employee: e?.first_name + " " + e?.last_name,
-          officeName: e?.office.toUpperCase(),
+          officeName: e?.office?.toUpperCase(),
           status: e?.salary?.status,
           basic: +e?.salary?.basic || e?.salary?.basic,
           housing: +e?.salary?.housing || e?.salary?.housing,
           medical: +e?.salary?.medical || e?.salary?.medical,
           transport: +e?.salary?.transport || e?.salary?.transport,
-          otherAllowances: +e?.salary?.other_allowances || e?.salary?.other_allowances,
-          monthlySalary: +e?.salary?.monthly_salary || e?.salary?.monthly_salary,
-          monthlyIncomeTax: +e?.salary?.monthly_income_tax || e?.salary?.monthly_income_tax,
-          monthlyEmployeePension: +e?.salary?.monthly_pension || e?.salary?.monthly_pension,
-          totalDeductions: +e?.salary?.total_deductions || e?.salary?.total_deductions,
+          otherAllowances:
+            +e?.salary?.other_allowances || e?.salary?.other_allowances,
+          monthlySalary:
+            +e?.salary?.monthly_salary || e?.salary?.monthly_salary,
+          monthlyIncomeTax:
+            +e?.salary?.monthly_income_tax || e?.salary?.monthly_income_tax,
+          monthlyEmployeePension:
+            +e?.salary?.monthly_pension || e?.salary?.monthly_pension,
+          totalDeductions:
+            +e?.salary?.total_deductions || e?.salary?.total_deductions,
           netPay: +e?.salary?.net_pay || e?.salary?.net_pay,
 
-          salaryStatus: "status",
+          salaryStatus: "status"
         }));
 
         setAllSalaries(formattedData);
+
         setLoading(false);
       })
       .catch((error) => {
@@ -103,61 +109,61 @@ const EmployeeSalary = () => {
     {
       dataField: "employee",
       text: "Employee",
-      idDataField: "ogid",
+      idDataField: "ogid"
     },
     {
       dataField: "officeName",
-      text: "Office",
+      text: "Office"
     },
     {
       dataField: "email",
-      text: "Email",
+      text: "Email"
     },
     {
       dataField: "status",
       text: "Status",
-      textDataField: "salaryStatus",
+      textDataField: "salaryStatus"
     },
     {
       dataField: "basic",
-      text: "Basic",
+      text: "Basic"
     },
     {
       dataField: "medical",
-      text: "Medical",
+      text: "Medical"
     },
     {
       dataField: "housing",
-      text: "Housing",
+      text: "Housing"
     },
     {
       dataField: "transport",
-      text: "Transport",
+      text: "Transport"
     },
     {
       dataField: "otherAllowances",
-      text: "Other Allowance",
+      text: "Other Allowance"
     },
     {
       dataField: "monthlySalary",
-      text: "Gross Salary",
+      text: "Gross Salary"
     },
     {
       dataField: "monthlyIncomeTax",
-      text: "Tax",
+      text: "Tax"
     },
     {
       dataField: "monthlyEmployeePension",
-      text: "Pension",
+      text: "Pension"
     },
     {
       dataField: "totalDeductions",
-      text: "Total Deductions",
+      text: "Total Deductions"
     },
     {
       dataField: "netPay",
-      text: "Net Salary",
-    },
+      text: "Net Salary"
+    }
   ];
 
   return (
@@ -176,7 +182,7 @@ const EmployeeSalary = () => {
             style={{
               width: "auto",
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "space-between"
             }}
           >
             <a href="#" className="btn add-btn" onClick={downloadTemplate}>
