@@ -4,7 +4,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
 import helper from "../../services/helper";
-import { Link } from "react-router-dom";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import EmployeeSalaryTable from "../../components/Tables/EmployeeTables/EmployeeSalaryTable";
@@ -19,7 +18,7 @@ const EmployeeSalary = () => {
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(1);
-  const [sizePerPage, setSizePerPage] = useState(25);
+  const [sizePerPage, setSizePerPage] = useState(10);
   const [totalPages, setTotalPages] = useState("");
 
   const CurrentUserRoles = user?.employee_info?.roles;

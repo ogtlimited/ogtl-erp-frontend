@@ -2345,13 +2345,15 @@ img {
   border-radius: 25px;
   overflow: hidden;
   margin-bottom: 2rem;
+  height: 25px;
 }
 
 .progress-bar__fill {
-  height: 25px;
-  background-color: #10ad5f;
-  width: 0;
-  transition: width 0.2s ease-in-out;
+  position: relative;
+  height: 100%;
+  background: linear-gradient(270deg, #10ad5f, #0099ff, #10ad5f);
+  background-size: 200% 100%;
+  animation: flow 2s linear infinite;
 }
 
 .progress-bar__text {
@@ -2365,7 +2367,18 @@ img {
   color: #000;
 }
 
-/* Virtual ID */
+@keyframes flow {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/*----------------- 
+    Virtual ID 
+------------------*/
 
 .combined_virtual_id_container {
   display: flex;
