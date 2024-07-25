@@ -127,7 +127,7 @@ class HelperService {
   }
   handleMoneyFormat(number, encrypted = false) {
     if (number === null || number === undefined || isNaN(number)) {
-      return encrypted ? "*********" : "*********";
+      return encrypted ? "*********" : "-";
     }
     return (
       "₦" +
