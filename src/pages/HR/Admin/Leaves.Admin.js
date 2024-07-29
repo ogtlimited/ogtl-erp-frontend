@@ -53,7 +53,7 @@ const LeavesAdmin = () => {
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreate = ["hr_manager", "senior_hr_associate"];
+  const canCreate = ["hr_manager", "senior_hr_associate", "hr_leave_approver"];
 
   const CurrentUserCanCreateAndActOnLeave = CurrentUserRoles.some((role) =>
     canCreate.includes(role)
