@@ -1002,14 +1002,15 @@ table.custom-table thead th {
   margin-left: 8px;
 }
 
-/* .login_logo_icons > img {
+.login_logo_icons > img {
   border-radius: 50%;
-} */
+  /* border-radius: 0 0 50% 50%; */
+}
 
 .header_logo_icons {
   position: absolute;
   top: 20%;
-  right: 15%;
+  right: 13%;
 }
 
 .valentine_styling_page {

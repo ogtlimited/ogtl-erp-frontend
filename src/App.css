@@ -2,7 +2,7 @@ html {
   scroll-behavior: smooth;
 }
 
-:root {
+/* :root {
   --prm-color: #00c5fb;
   --prm-color-shade: #00c5fb4d;
   --sidebar-bg-color: #212a36;
@@ -11,18 +11,18 @@ html {
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;
-}
+} */
 
-/* :root {
-  --prm-color: #eb5e28;
-  --prm-color-shade: #eb5e284d;
+:root {
+  --prm-color: #f14f4d;
+  --prm-color-shade: #f14f4d4d;
   --sidebar-bg-color: #804e49;
-  --sec-color: #ffdc02;
-  --sec-color-shade: #ffdc024d;
+  --sec-color: #ffa345;
+  --sec-color-shade: #ffa3454d;
   --prm-gray: #b1b1b1;
   --prm-delete: #d80000;
   --app-font-family: "Jost", sans-serif;
-} */
+}
 
 .page-wrapper {
   min-height: 643px;
@@ -690,8 +690,8 @@ a.nav-link {
 .dashboard-hero-icon > img {
   width: 100%;
   height: 100%;
-  /* border-radius: 20px; */
-  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .sportDayGIF {
@@ -701,19 +701,19 @@ a.nav-link {
 }
 
 .slide-out-left {
-	-webkit-animation: slide-out-left 10s linear infinite both;
-	        animation: slide-out-left 10s linear infinite both;
+  -webkit-animation: slide-out-left 10s linear infinite both;
+  animation: slide-out-left 10s linear infinite both;
 }
 
 @-webkit-keyframes slide-out-left {
   0% {
     -webkit-transform: translateX(0);
-            transform: translateX(0);
+    transform: translateX(0);
     opacity: 1;
   }
   100% {
     -webkit-transform: translateX(-1000px);
-            transform: translateX(-1000px);
+    transform: translateX(-1000px);
     opacity: 1;
   }
 }
@@ -721,12 +721,12 @@ a.nav-link {
 @keyframes slide-out-left {
   0% {
     -webkit-transform: translateX(0);
-            transform: translateX(0);
+    transform: translateX(0);
     opacity: 1;
   }
   100% {
     -webkit-transform: translateX(-1000px);
-            transform: translateX(-1000px);
+    transform: translateX(-1000px);
     opacity: 1;
   }
 }

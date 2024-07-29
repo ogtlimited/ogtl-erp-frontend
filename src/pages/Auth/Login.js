@@ -10,7 +10,7 @@ import { TicketForm } from "../../components/FormJSON/CreateTicket";
 import config from "../../config.json";
 import { ExternalTicketFormModal } from "../../components/Modal/ExternalTicketFormModal";
 import AlertSvg from "./AlertSvg";
-import loginLogo from "../../assets/img/themed/sport5.png"
+import loginLogo from "../../assets/img/themed/frnds9.gif";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -246,7 +246,7 @@ const Login = () => {
                 src="/static/media/outsource.2499b5b3.png"
                 alt="Outsource Global Technologies"
               />
-              <span className="login_logo_icons">
+              <span className="login_logo_icons far">
                 {/* <lord-icon
                   src="https://cdn.lordicon.com/pyarizrk.json"
                   trigger="loop"
@@ -255,7 +255,7 @@ const Login = () => {
                   style={{ width: "40px", height: "40px" }}
                 ></lord-icon> */}
 
-                {/* <img src={loginLogo} alt="login logo" /> */}
+                <img src={loginLogo} alt="login logo" />
               </span>
             </a>
           </div>
