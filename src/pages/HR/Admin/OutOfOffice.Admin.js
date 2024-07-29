@@ -30,10 +30,22 @@ const OutOfOfficeAdmin = () => {
   const [toDate, setToDate] = useState(lastDay);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const canCreateAndEdit = ["hr_manager", "senior_hr_associate"];
+  const canCreateAndEdit = [
+    "hr_manager",
+    "senior_hr_associate",
+    "team_lead",
+    "supervisor"
+  ];
+  const canApprove = [
+    "hr_manager",
+    "senior_hr_associate",
+  ];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
+  );
+  const CurrentUserCanApprove = CurrentUserRoles.some((role) =>
+    canApprove.includes(role)
   );
 
   // Out of Office:
@@ -45,14 +57,14 @@ const OutOfOfficeAdmin = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: page,
           limit: sizePerPage,
           start_date: fromDate,
-          end_date: toDate,
-        },
+          end_date: toDate
+        }
       });
       const resData = response?.data?.data?.out_of_offices;
       const totalPages = response?.data?.data?.pages;
@@ -69,7 +81,7 @@ const OutOfOfficeAdmin = () => {
         enteredBy: e?.entered_by,
         dateCreated: moment(e?.created_at).format("Do MMMM, YYYY"),
         from: moment(e?.start_date).format("Do MMMM, YYYY"),
-        to: moment(e?.end_date).format("Do MMMM, YYYY"),
+        to: moment(e?.end_date).format("Do MMMM, YYYY")
         // deduction: helper.handleMoneyFormat(5000),
       }));
 
@@ -115,26 +127,26 @@ const OutOfOfficeAdmin = () => {
             {value} <span>{row?.ogid}</span>
           </div>
         </h2>
-      ),
+      )
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
       headerStyle: { width: "20%" },
-      formatter: (value, row) => <span>{value?.toUpperCase()}</span>,
+      formatter: (value, row) => <span>{value?.toUpperCase()}</span>
     },
     {
       dataField: "enteredBy",
       text: "Entered By",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "20%" }
     },
     {
       dataField: "dateCreated",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "20%" }
     },
     {
       dataField: "reason",
@@ -143,19 +155,19 @@ const OutOfOfficeAdmin = () => {
       headerStyle: { width: "20%" },
       formatter: (value, row) => (
         <span>{value?.replace(/\b\w/g, (char) => char.toUpperCase())}</span>
-      ),
+      )
     },
     {
       dataField: "from",
       text: "From",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "20%" }
     },
     {
       dataField: "to",
       text: "To",
       sort: true,
-      headerStyle: { width: "20%" },
+      headerStyle: { width: "20%" }
     },
     {
       dataField: "approved",
@@ -174,7 +186,7 @@ const OutOfOfficeAdmin = () => {
             {value ? "Yes" : "No"}
           </span>
         </>
-      ),
+      )
     },
     // {
     //   dataField: "deduction",
@@ -182,7 +194,7 @@ const OutOfOfficeAdmin = () => {
     //   sort: true,
     //   headerStyle: { width: "20%" },
     // },
-    CurrentUserCanCreateAndEdit && {
+    CurrentUserCanApprove && {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
@@ -202,8 +214,8 @@ const OutOfOfficeAdmin = () => {
             )}
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -214,7 +226,7 @@ const OutOfOfficeAdmin = () => {
             <h3 className="page-title">Out Of Office</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Time Off</li>
+              <li className="breadcrumb-item active">Time Off Planner</li>
             </ul>
           </div>
           <div className="col-auto float-right ml-auto">

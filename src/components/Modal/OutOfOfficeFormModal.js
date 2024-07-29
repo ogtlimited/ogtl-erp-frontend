@@ -10,23 +10,35 @@ import moment from "moment";
 export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const {
     selectEmployees,
+    selectPublicHoliday,
     selectDeductionTypes,
     selectOutOfOfficeReasons,
     showAlert,
-    goToTop,
+    goToTop
   } = useAppContext();
   const [formData, setFormData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showHolidayOptions, setShowHolidayOptions] = useState(false);
   const time = new Date().toDateString();
   const today_date = moment(time).format("yyyy-MM-DD");
 
   const selectDeductionTypeRef = useRef();
 
+  console.log("filling...:", formData, showHolidayOptions);
+
   useEffect(() => {
     setFormData(data);
 
-    console.log("edit this Out of office:", data)
+    console.log("edit this Out of office:", data);
   }, [data]);
+
+  useEffect(() => {
+    if (formData?.reason === "holiday") {
+      return setShowHolidayOptions(true);
+    } else {
+      return setShowHolidayOptions(false);
+    }
+  }, [formData?.reason]);
 
   const cancelEvent = () => {
     setFormData(data);
@@ -43,7 +55,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
     } else {
       return handleEditOutOfOffice(e);
     }
-  }
+  };
 
   const handleCreateOutOfOffice = async (e) => {
     e.preventDefault();
@@ -53,29 +65,24 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(
-        `/api/v1/out_of_office.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
-          payload: {
-            employee_id: formData.employee_id,
-            start_date: formData.start_date,
-            end_date: formData.end_date,
-            reason: formData.reason,
-          },
+      const response = await axiosInstance.post(`/api/v1/out_of_office.json`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        },
+        payload: {
+          employee_id: formData.employee_id,
+          start_date: formData.start_date,
+          end_date: formData.end_date,
+          reason: formData.reason
         }
-      );
+      });
 
       goToTop();
       showAlert(
         true,
-        `${
-          formData?.employee_title
-        }'s Out of Office successfully created!`,
+        `${formData?.employee_title}'s Out of Office successfully created!`,
         "alert alert-success"
       );
       refetchData();
@@ -107,7 +114,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           payload: {
             employee_id: formData.employee_id,
@@ -115,17 +122,15 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
             end_date: formData.end_date,
             reason: formData.reason,
             hr_deductions_id: formData.hr_deduction_type_id,
-            status: true 
-          },
+            status: true
+          }
         }
       );
 
       goToTop();
       showAlert(
         true,
-        `${
-          formData?.employee_title
-        }'s out of office successfully updated!`,
+        `${formData?.employee_title}'s out of office successfully updated!`,
         "alert alert-success"
       );
       refetchData();
@@ -141,7 +146,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
 
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -179,13 +184,13 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         options={selectEmployees}
                         value={{
                           label: formData?.employee_title,
-                          value: formData?.employee_id,
+                          value: formData?.employee_id
                         }}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
                             employee_id: e?.value,
-                            employee_title: e?.label,
+                            employee_title: e?.label
                           })
                         }
                         style={{ display: "inline-block" }}
@@ -201,13 +206,13 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         options={selectOutOfOfficeReasons}
                         value={{
                           label: formData?.reason_title,
-                          value: formData?.reason,
+                          value: formData?.reason
                         }}
                         onChange={(e) =>
                           setFormData({
                             ...formData,
                             reason: e?.value,
-                            reason_title: e?.label,
+                            reason_title: e?.label
                           })
                         }
                         style={{ display: "inline-block" }}
@@ -215,13 +220,36 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                     </div>
                   </div>
 
+                  {showHolidayOptions ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="public_holiday">
+                          Please select the applicable public holiday
+                        </label>
+                        <Select
+                          name="reason"
+                          options={selectPublicHoliday}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              hr_public_holiday_id: e?.misc?.id,
+                              start_date: e?.misc?.start_date?.split("T")[0],
+                              end_date: e?.misc?.end_date?.split("T")[0]
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
                   <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="start_date">Start</label>
                       <input
                         type="date"
                         name="start_date"
-                        value={formData.start_date}
+                        value={formData?.start_date}
                         onChange={handleFormChange}
                         className="form-control "
                         required
@@ -235,10 +263,10 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                       <input
                         type="date"
                         name="end_date"
-                        value={formData.end_date}
+                        value={formData?.end_date}
                         onChange={handleFormChange}
                         className="form-control "
-                        min={formData.start_date}
+                        min={formData?.start_date}
                         required
                       />
                     </div>
