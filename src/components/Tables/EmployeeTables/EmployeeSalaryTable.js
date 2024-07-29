@@ -37,7 +37,7 @@ function EmployeeSalaryTable({
   fetchPayrollTotals,
   currentApproverEmail,
   currentBatchApprovalStatus,
-  context,
+  context
 }) {
   const navigate = useNavigate();
   const { user, getAvatarColor } = useAppContext();
@@ -58,7 +58,7 @@ function EmployeeSalaryTable({
   );
 
   const [info, setInfo] = useState({
-    sizePerPage: 10,
+    sizePerPage: 10
   });
   const [userId, setUserId] = useState("");
 
@@ -130,7 +130,7 @@ function EmployeeSalaryTable({
       initialTax: +employee?.tax || null,
       initialPension: +employee?.pension || null,
       initialBasic: +employee?.basic || null,
-      initialProrate: employee?.prorate === "Yes" ? true : false,
+      initialProrate: employee?.prorate === "Yes" ? true : false
       // initialSalary: +employee?.monthlySalary || null,
     };
 
@@ -150,7 +150,7 @@ function EmployeeSalaryTable({
                   style={{
                     backgroundColor: getAvatarColor(
                       employee[column.dataField]?.charAt(0)
-                    ),
+                    )
                   }}
                 >
                   {employee[column.dataField]?.charAt(0)}
@@ -244,7 +244,8 @@ function EmployeeSalaryTable({
             </button>
 
             {currentUserEmail === currentApproverEmail &&
-            currentBatchApprovalStatus !== "Approved" ? (
+            currentBatchApprovalStatus !== "Approved" &&
+            employee?.prorate === "Yes" ? (
               <button
                 className="btn btn-sm btn-secondary"
                 style={{ marginLeft: "5px" }}
