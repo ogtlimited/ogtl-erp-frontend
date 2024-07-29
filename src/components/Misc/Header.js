@@ -73,17 +73,17 @@ const Header = () => {
           <div className="logo">
             <img src={logo} style={{ width: "100px" }} alt="" />
             <span className="header_logo_icons">
-              {/* <lord-icon
-                src="https://cdn.lordicon.com/przqzrpl.json"
+              <lord-icon
+                src="https://cdn.lordicon.com/etgnxeer.json"
                 trigger="loop"
                 delay="2000"
                 colors="primary:#FFDC02,secondary:#19AE47,tertiary:#193375,quaternary:#000"
                 style={{ width: "35px", height: "35px" }}
-              ></lord-icon> */}
+              ></lord-icon>
             </span>
           </div>
           <div className="cropped-logo">
-            <img src={cropped} alt="" />
+            {/* <img src={cropped} alt="" /> */}
           </div>
         </div>
 
