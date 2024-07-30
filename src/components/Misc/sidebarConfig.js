@@ -413,6 +413,11 @@ const sidebarConfig = [
           },
           {
             canView: "hr",
+            title: "Lateness Tracker",
+            path: PATH_DASHBOARD.hr.latenessTracker,
+          },
+          {
+            canView: "hr",
             title: "Remote Attendance",
             path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
           },
