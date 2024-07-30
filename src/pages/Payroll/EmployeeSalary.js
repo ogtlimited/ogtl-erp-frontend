@@ -67,7 +67,10 @@ const EmployeeSalary = () => {
         const formattedData = AllEmployeeSalaries?.map((e) => ({
           ...e,
           employee: e?.first_name + " " + e?.last_name,
-          officeName: e?.office?.toUpperCase(),
+          officeName: e?.office
+            ?.toUpperCase()
+            ?.replace(/_/g, " ")
+            .replace(/^./, (str) => str.toUpperCase()),
           status: e?.salary?.status,
           basic: +e?.salary?.basic || e?.salary?.basic,
           housing: +e?.salary?.housing || e?.salary?.housing,
@@ -87,6 +90,8 @@ const EmployeeSalary = () => {
 
           salaryStatus: "status"
         }));
+
+        // console.log("format salary", AllEmployeeSalaries);
 
         setAllSalaries(formattedData);
 

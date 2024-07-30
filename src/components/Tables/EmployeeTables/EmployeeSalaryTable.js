@@ -160,12 +160,12 @@ function EmployeeSalaryTable({
                   <span> {employee[column.idDataField]}</span>
                 </div>
               </div>
-            ) : columnIndex === 3 &&
-              employee[column.textDataField] !== "status" ? (
+            ) : (columnIndex === 1 || columnIndex === 3) &&
+              employee[column?.textDataField] !== "status" ? (
               <div className="payroll-table-avatar">
                 <div className="payroll-table-avatar-bankDetails">
-                  {employee[column.dataField]}{" "}
-                  <span> {employee[column.idDataField]}</span>
+                  {employee[column?.dataField]}{" "}
+                  <span> {employee[column?.idDataField]}</span>
                 </div>
               </div>
             ) : employee[column.textDataField] === "status" ? (
