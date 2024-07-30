@@ -47,25 +47,25 @@ const EmployeesTable = ({
   setSelectedRow,
 
   fetchAllEmployees,
-  context,
+  context
 }) => {
   const status = [
     {
       code: "active",
-      label: "ACTIVE",
+      label: "ACTIVE"
     },
     {
       code: "left",
-      label: "RESIGNED",
+      label: "RESIGNED"
     },
     {
       code: "terminated",
-      label: "TERMINATED",
+      label: "TERMINATED"
     },
     {
       code: "deactivated",
-      label: "DEACTIVATED",
-    },
+      label: "DEACTIVATED"
+    }
   ];
 
   const [dataToFilter, setDataToFilter] = useState("");
@@ -75,7 +75,7 @@ const EmployeesTable = ({
   const { setIsFromBiometrics, showAlert, user, getAvatarColor } =
     useAppContext();
   const [info, setInfo] = useState({
-    sizePerPage: 10,
+    sizePerPage: 10
   });
 
   const CurrentUserRoles = user?.employee_info?.roles;
@@ -139,8 +139,8 @@ const EmployeesTable = ({
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -163,17 +163,21 @@ const EmployeesTable = ({
       headerStyle: { width: "100%" },
       formatter: (value, row) => (
         <h2 className="table-avatar" onClick={handleNavigate}>
-          {row?.pic ? <img src={row?.pic} alt="profile dp" className="avatar-span"/> : <span
-            className="avatar-span"
-            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
-          >
-            {value?.charAt(0)}
-          </span>}
+          {row?.pic ? (
+            <img src={row?.pic} alt="profile dp" className="avatar-span" />
+          ) : (
+            <span
+              className="avatar-span"
+              style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+            >
+              {value?.charAt(0)}
+            </span>
+          )}
           <Link to={`/dashboard/user/profile/${row.ogid}`}>
             {value} <span>{row?.designation}</span>
           </Link>
         </h2>
-      ),
+      )
     },
     {
       dataField: "status",
@@ -208,33 +212,33 @@ const EmployeesTable = ({
             </a>
           )}
         </>
-      ),
+      )
     },
     {
       dataField: "ogid",
       text: "Employee ID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "office",
       text: "Office Type",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>
     },
     {
       dataField: "officeName",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>,
+      formatter: (val, row) => <span>{val?.toUpperCase()}</span>
     },
     {
       dataField: "company_email",
       text: "Company Email",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "",
@@ -317,8 +321,8 @@ const EmployeesTable = ({
             </div>
           ) : null}
         </>
-      ),
-    },
+      )
+    }
   ];
 
   // Search Name:
@@ -349,7 +353,7 @@ const EmployeesTable = ({
             style={{
               backgroundColor: "#ffffff",
               width: "33.5%",
-              marginRight: "20px",
+              marginRight: "20px"
             }}
             ref={(n) => (input = n)}
             type="search"
@@ -382,7 +386,7 @@ const EmployeesTable = ({
       setOfficeFilter,
       setPage,
       setSearchTerm,
-      setStatusFilter,
+      setStatusFilter
     ]
   );
 
@@ -400,7 +404,7 @@ const EmployeesTable = ({
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
 
         params: {
@@ -408,8 +412,8 @@ const EmployeesTable = ({
           limit: sizePerPage,
           name: searchTerm,
           operation_office_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null,
-        },
+          status: statusFilter.length ? statusFilter : null
+        }
       })
       .then((e) => {
         const resData = e?.data?.data?.employees;
@@ -428,7 +432,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email,
+            company_email: emp?.email
           };
         });
 
@@ -455,7 +459,7 @@ const EmployeesTable = ({
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
 
         params: {
@@ -463,8 +467,8 @@ const EmployeesTable = ({
           limit: sizePerPage,
           name: searchTerm,
           operation_office_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null,
-        },
+          status: statusFilter.length ? statusFilter : null
+        }
       })
       .then((e) => {
         const resData = e?.data?.data?.employees;
@@ -483,7 +487,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email,
+            company_email: emp?.email
           };
         });
 
@@ -507,7 +511,7 @@ const EmployeesTable = ({
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
 
         params: {
@@ -516,8 +520,8 @@ const EmployeesTable = ({
           name: searchTerm,
           operation_office_id: officeFilter.length ? officeFilter : null,
           hr_designation_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null,
-        },
+          status: statusFilter.length ? statusFilter : null
+        }
       })
       .then((e) => {
         const resData = e?.data?.data?.employees;
@@ -536,7 +540,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email,
+            company_email: emp?.email
           };
         });
 
@@ -560,7 +564,7 @@ const EmployeesTable = ({
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
 
         params: {
@@ -571,8 +575,8 @@ const EmployeesTable = ({
           hr_designation_id: designationFilter.length
             ? designationFilter
             : null,
-          status: e.target.value,
-        },
+          status: e.target.value
+        }
       })
       .then((e) => {
         const resData = e?.data?.data?.employees;
@@ -591,7 +595,7 @@ const EmployeesTable = ({
             office: emp?.office?.office_type,
             officeName: emp?.office?.title,
             designation: emp?.designation,
-            company_email: emp?.email,
+            company_email: emp?.email
           };
         });
 
@@ -614,38 +618,43 @@ const EmployeesTable = ({
   const handleDownloadCSV = async (e) => {
     e.preventDefault();
     setIsDownloading(true);
+
     try {
-      const response = await axiosInstance.get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        params: {
-          page: page,
-          limit: 10000,
-        },
-      });
+      const response = await axiosInstance.get(
+        "/api/v1/exports/employees.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            status: statusFilter.length ? statusFilter : "active",
+          }
+        }
+      );
 
-      const responseData = response?.data?.data?.employees;
+      console.log("download this", response);
 
-      const formatted = responseData.map((data) => ({
-        "Employee Name": data?.full_name,
-        OGID: data?.ogid,
-        "Office Type": data?.office?.office_type,
-        Office: data?.office?.title,
-        Designation: data?.designation,
-        Email: data?.email,
-      }));
+      // const responseData = response?.data?.data?.employees;
 
-      const dataToConvert = {
-        data: formatted,
-        filename: "OGTL - All Employees Record",
-        delimiter: ",",
-        useKeysAsHeaders: true,
-      };
+      // const formatted = responseData.map((data) => ({
+      //   "Employee Name": data?.full_name,
+      //   OGID: data?.ogid,
+      //   "Office Type": data?.office?.office_type,
+      //   Office: data?.office?.title,
+      //   Designation: data?.designation,
+      //   Email: data?.email,
+      // }));
 
-      csvDownload(dataToConvert);
+      // const dataToConvert = {
+      //   data: formatted,
+      //   filename: "OGTL - All Employees Record",
+      //   delimiter: ",",
+      //   useKeysAsHeaders: true,
+      // };
+
+      // csvDownload(dataToConvert);
 
       setIsDownloading(false);
     } catch (error) {
