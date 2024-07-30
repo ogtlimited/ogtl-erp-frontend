@@ -22,7 +22,7 @@ const HrStaffResignationAdmin = () => {
     getAvatarColor,
     user,
     showAlert,
-    goToTop,
+    goToTop
   } = useAppContext();
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
@@ -58,14 +58,14 @@ const HrStaffResignationAdmin = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             page: page,
             limit: sizePerPage,
             status: statusFilter,
-            stage: "hr_staff",
-          },
+            stage: "hr_staff"
+          }
         }
       );
 
@@ -92,7 +92,7 @@ const HrStaffResignationAdmin = () => {
         last_day_at_work: moment(data?.last_day_at_work).format(
           "ddd, DD MMM YYYY"
         ),
-        reason_for_resignation: data?.resignation_reason,
+        reason_for_resignation: data?.resignation_reason
       }));
 
       setData(formattedData);
@@ -119,8 +119,8 @@ const HrStaffResignationAdmin = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
+          "ngrok-skip-browser-warning": "69420"
+        }
       });
 
       const resData = res?.data?.data?.survey_forms;
@@ -157,8 +157,8 @@ const HrStaffResignationAdmin = () => {
           hr_survey_form_id: resignationSurveyForm[0]?.id,
           answer: Object.entries(formContent).map(([question, answer]) => {
             return { question, answer };
-          }),
-        },
+          })
+        }
       };
 
       setSendingFeedback(true);
@@ -209,8 +209,8 @@ const HrStaffResignationAdmin = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -218,7 +218,7 @@ const HrStaffResignationAdmin = () => {
 
       setViewRow((prevState) => ({
         ...prevState,
-        feedback: resData,
+        feedback: resData
       }));
     } catch (error) {
       const component = "Resignations Feedback Error | ";
@@ -244,32 +244,32 @@ const HrStaffResignationAdmin = () => {
             {row?.full_name} <span>{row?.office}</span>
           </div>
         </h2>
-      ),
+      )
     },
     {
       dataField: "date_applied",
       text: "Date Applied",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "15%" }
     },
     {
       dataField: "stage",
       text: "Stage",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
             <i className="fa fa-dot-circle-o text-primary"></i> {value}
           </span>
         </>
-      ),
+      )
     },
     {
       dataField: "status",
       text: "Status",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <>
           {value === "Approved" ? (
@@ -286,18 +286,18 @@ const HrStaffResignationAdmin = () => {
             </span>
           )}
         </>
-      ),
+      )
     },
     {
       dataField: "last_day_at_work",
       text: "Last Day at Work",
       sort: true,
-      headerStyle: { width: "15%" },
+      headerStyle: { width: "15%" }
     },
     AuthorizedHrRoles && {
       dataField: "",
       text: "Action",
-      headerStyle: { width: "10%" },
+      headerStyle: { width: "20%" },
       csvExport: false,
       formatter: (value, row) => (
         <div className="text-center">
@@ -323,8 +323,9 @@ const HrStaffResignationAdmin = () => {
                   data-target="#ResignationFormModal"
                   onClick={() => setViewRow(row)}
                 >
-                  Approve
+                  Exit Form
                 </button>
+
                 <button
                   className="btn btn-sm btn-secondary"
                   onClick={() => {
@@ -338,8 +339,8 @@ const HrStaffResignationAdmin = () => {
             ) : null}
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -355,7 +356,7 @@ const HrStaffResignationAdmin = () => {
                 value: statusFilter,
                 label: statusFilter.replace(/\b\w/g, (char) =>
                   char.toUpperCase()
-                ),
+                )
               }}
               onChange={(e) => {
                 setStatusFilter(e?.value);
