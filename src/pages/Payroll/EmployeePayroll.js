@@ -203,8 +203,12 @@ const EmployeePayroll = () => {
           ogid: e?.user?.ogid,
           email: e?.user?.email,
 
-          designation: e?.user?.designation,
-          bank_name: e?.user?.bank_name || "Not Available",
+          designation: e?.user?.designation || "Not Available",
+          office: e?.user?.office
+            ?.toUpperCase()
+            ?.replace(/_/g, " ")
+            .replace(/^./, (str) => str.toUpperCase()),
+          bank_name: e?.user?.bank_name || "No bank details",
           bank_account_number: e?.user?.bank_account_number,
 
           basic: +e?.slip?.basic || e?.slip?.basic,
@@ -228,6 +232,8 @@ const EmployeePayroll = () => {
 
           prorate: e?.slip?.prorate ? "Yes" : "No"
         }));
+
+        // console.log("format payslip", formattedData);
 
         setData(formattedData);
         setLoading(false);
@@ -278,7 +284,11 @@ const EmployeePayroll = () => {
       const formatted = responseData.map((data) => ({
         EMPLOYEE: data?.user?.first_name + " " + data?.user?.last_name,
         OGID: data?.user?.ogid,
-        DESIGNATION: data?.user?.designation.toUpperCase(),
+        OFFICE: data?.user?.office
+          ?.toUpperCase()
+          ?.replace(/_/g, " ")
+          .replace(/^./, (str) => str.toUpperCase()),
+        DESIGNATION: data?.user?.designation,
         EMAIL: data?.user?.email,
         "BANK DETAILS": data?.user?.bank_account_number
           ? data?.user?.bank_account_number + ` (${data?.user?.bank_name})`
@@ -463,8 +473,9 @@ const EmployeePayroll = () => {
       idDataField: "ogid"
     },
     {
-      dataField: "designation",
-      text: "Designation"
+      dataField: "office",
+      text: "Office",
+      idDataField: "designation"
     },
     {
       dataField: "email",
