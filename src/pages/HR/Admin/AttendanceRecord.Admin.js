@@ -46,7 +46,7 @@ const AttendanceRecord = () => {
   const [selectedOffice, setSelectedOffice] = useState({
     id: null,
     title: "",
-    office_type: "",
+    office_type: ""
   });
 
   // Attendance Average:
@@ -88,7 +88,7 @@ const AttendanceRecord = () => {
                 <span
                   className="btn btn-gray btn-sm btn-rounded"
                   style={{
-                    backgroundColor: attendanceRecord.late ? "#FFBF00" : "",
+                    backgroundColor: attendanceRecord.late ? "#FFBF00" : ""
                   }}
                 >
                   <i
@@ -137,7 +137,7 @@ const AttendanceRecord = () => {
             )}
           </div>
         );
-      },
+      }
     }));
 
     setDateColumns(dateColumns);
@@ -152,11 +152,11 @@ const AttendanceRecord = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
-            date: date,
-          },
+            date: date
+          }
         }
       );
       const resData = response?.data?.data?.result;
@@ -181,12 +181,12 @@ const AttendanceRecord = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             date: date,
-            limit: 400,
-          },
+            limit: 400
+          }
         }
       );
       const resData =
@@ -196,7 +196,7 @@ const AttendanceRecord = () => {
               ...e,
               idx: index + 1,
               office: e?.office ? e?.office?.toUpperCase() : null,
-              date: moment(e?.date).format("ddd, Do MMM. YYYY"),
+              date: moment(e?.date).format("ddd, Do MMM. YYYY")
             }));
 
       resData.forEach((attendance) => {
@@ -238,7 +238,7 @@ const AttendanceRecord = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             office_type: officeType,
@@ -246,8 +246,8 @@ const AttendanceRecord = () => {
             start_date: fromDate,
             end_date: toDate,
             page: page,
-            limit: sizePerPage,
-          },
+            limit: sizePerPage
+          }
         }
       );
 
@@ -267,7 +267,7 @@ const AttendanceRecord = () => {
         days: attendanceRecords[key].days,
         user: attendanceRecords[key].user,
         total_hours: attendanceRecords[key].total_hours,
-        lateness_and_absence: attendanceRecords[key].lateness_and_absence,
+        lateness_and_absence: attendanceRecords[key].lateness_and_absence
       }));
 
       // console.log("dataArray", dataArray);
@@ -314,8 +314,8 @@ const AttendanceRecord = () => {
               ? "P/Holiday"
               : data?.days[key] === "---"
               ? "---"
-              : "Present",
-        })),
+              : "Present"
+        }))
       }));
 
       // console.log("formatted", formattedData);
@@ -344,12 +344,12 @@ const AttendanceRecord = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             from: moment(attendanceAverageFromDate).utc().format("DD-MM-YYYY"),
-            to: moment(attendanceAverageToDate).utc().format("DD-MM-YYYY"),
-          },
+            to: moment(attendanceAverageToDate).utc().format("DD-MM-YYYY")
+          }
         }
       );
 
@@ -372,12 +372,12 @@ const AttendanceRecord = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: CampaignPage,
-          limit: CampaignSizePerPage,
-        },
+          limit: CampaignSizePerPage
+        }
       });
       const resData = response?.data?.data?.campaigns;
       const totalPages = response?.data?.data?.pages;
@@ -391,7 +391,7 @@ const AttendanceRecord = () => {
       const formattedCampaigns = resData.map((e, index) => ({
         ...e,
         // index: index + 1,
-        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY")
       }));
 
       setCampaigns(formattedCampaigns);
@@ -409,12 +409,12 @@ const AttendanceRecord = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           pages: DepartmentPage,
-          limit: DepartmentSizePerPage,
-        },
+          limit: DepartmentSizePerPage
+        }
       });
       const resData = response?.data?.data?.departments;
       const totalPages = response?.data?.data?.pages;
@@ -427,7 +427,7 @@ const AttendanceRecord = () => {
 
       const formattedDepartments = resData.map((e) => ({
         ...e,
-        created_at: moment(e?.created_at).format("Do MMMM, YYYY"),
+        created_at: moment(e?.created_at).format("Do MMMM, YYYY")
       }));
 
       setDepartments(formattedDepartments);
@@ -447,7 +447,7 @@ const AttendanceRecord = () => {
     fetchDailyAttendanceSummary,
     fetchDailyAttendance,
     fetchAllCampaigns,
-    fetchAllDepartments,
+    fetchAllDepartments
   ]);
 
   useEffect(() => {
@@ -478,25 +478,25 @@ const AttendanceRecord = () => {
             {value?.toUpperCase()}
           </Link>
         </h2>
-      ),
+      )
     },
     {
       dataField: "ogid",
       text: "OGID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "office",
       text: "Office",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "date",
       text: "Date",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "clock_in",
@@ -509,7 +509,7 @@ const AttendanceRecord = () => {
         ) : (
           moment(value, "HH:mm:ss").format("hh:mma")
         );
-      },
+      }
     },
     {
       dataField: "clock_out",
@@ -522,14 +522,14 @@ const AttendanceRecord = () => {
         ) : (
           moment(value, "HH:mm:ss").format("hh:mma")
         );
-      },
+      }
     },
     {
       dataField: "work_hours",
       text: "Work Hours",
       sort: true,
-      headerStyle: { width: "100%" },
-    },
+      headerStyle: { width: "100%" }
+    }
   ];
 
   const monthlyAttendanceColumns = [
@@ -552,37 +552,37 @@ const AttendanceRecord = () => {
             {value?.toUpperCase()} <span>{row?.ogid}</span>
           </Link>
         </h2>
-      ),
+      )
     },
     {
       dataField: "ogid",
       text: "OGID",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "total_hours",
       text: "Total Hours",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "lateness",
       text: "Lateness",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     {
       dataField: "absence",
       text: "Absence (NCNS)",
       sort: true,
-      headerStyle: { width: "100%" },
+      headerStyle: { width: "100%" }
     },
     // {
     //   dataField: "absent",
@@ -590,7 +590,7 @@ const AttendanceRecord = () => {
     //   sort: true,
     //   headerStyle: { width: "100%" },
     // },
-    ...dateColumns,
+    ...dateColumns
   ];
 
   const campaignColumns = [
@@ -608,14 +608,14 @@ const AttendanceRecord = () => {
             {val?.toUpperCase()}
           </Link>
         </p>
-      ),
+      )
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
-    },
+      headerStyle: { width: "20%" }
+    }
   ];
 
   const departmentColumns = [
@@ -633,14 +633,14 @@ const AttendanceRecord = () => {
             {val?.toUpperCase()}
           </Link>
         </p>
-      ),
+      )
     },
     {
       dataField: "created_at",
       text: "Date Created",
       sort: true,
-      headerStyle: { width: "20%" },
-    },
+      headerStyle: { width: "20%" }
+    }
   ];
 
   return (
@@ -770,18 +770,18 @@ const AttendanceRecord = () => {
               </li>
 
               <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
-                  Campaigns
-                </a>
-              </li>
-
-              <li className="nav-item">
                 <a
                   className="nav-link"
                   data-toggle="tab"
                   href="#tab_departments"
                 >
                   Departments
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
+                  Campaigns
                 </a>
               </li>
             </ul>
@@ -836,21 +836,6 @@ const AttendanceRecord = () => {
             />
           </div>
 
-          <div id="tab_campaigns" className="col-12 tab-pane">
-            <UniversalPaginatedTable
-              columns={campaignColumns}
-              data={campaigns}
-              loading={loading}
-              setLoading={setLoading}
-              page={CampaignPage}
-              setPage={setCampaignPage}
-              sizePerPage={CampaignSizePerPage}
-              setSizePerPage={setCampaignSizePerPage}
-              totalPages={totalCampaignPages}
-              setTotalPages={setTotalCampaignPages}
-            />
-          </div>
-
           <div id="tab_departments" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={departmentColumns}
@@ -862,6 +847,21 @@ const AttendanceRecord = () => {
               sizePerPage={CampaignSizePerPage}
               setSizePerPage={setCampaignSizePerPage}
               totalPages={totalDepartmentPages}
+              setTotalPages={setTotalCampaignPages}
+            />
+          </div>
+
+          <div id="tab_campaigns" className="col-12 tab-pane">
+            <UniversalPaginatedTable
+              columns={campaignColumns}
+              data={campaigns}
+              loading={loading}
+              setLoading={setLoading}
+              page={CampaignPage}
+              setPage={setCampaignPage}
+              sizePerPage={CampaignSizePerPage}
+              setSizePerPage={setCampaignSizePerPage}
+              totalPages={totalCampaignPages}
               setTotalPages={setTotalCampaignPages}
             />
           </div>

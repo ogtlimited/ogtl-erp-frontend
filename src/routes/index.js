@@ -323,6 +323,14 @@ export default function Router() {
               ),
             },
             {
+              path: "lateness-tracker",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <LatenessTracker />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "remote-attendance",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1268,6 +1276,9 @@ const AcceptJoboffer = Loadable(
 const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AttendanceRecord = Loadable(
   lazy(() => import("../pages/HR/Admin/AttendanceRecord.Admin"))
+);
+const LatenessTracker = Loadable(
+  lazy(() => import("../pages/HR/Admin/LatenessTracker.Admin"))
 );
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
