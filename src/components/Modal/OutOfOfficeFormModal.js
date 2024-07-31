@@ -9,6 +9,7 @@ import moment from "moment";
 
 export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const {
+    categoryOptions,
     selectEmployees,
     selectPublicHoliday,
     selectDeductionTypes,
@@ -24,12 +25,8 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
 
   const selectDeductionTypeRef = useRef();
 
-  console.log("filling...:", formData, showHolidayOptions);
-
   useEffect(() => {
     setFormData(data);
-
-    console.log("edit this Out of office:", data);
   }, [data]);
 
   useEffect(() => {
@@ -60,23 +57,33 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
   const handleCreateOutOfOffice = async (e) => {
     e.preventDefault();
 
-    console.log("create payload:", formData);
+    const payload = {
+      employee_id: formData?.employee_id,
+      start_date: formData?.start_date,
+      end_date: formData?.end_date,
+      reason: formData?.reason,
+      called_in: formData?.called_in,
+      caller_is_employee: formData?.caller_is_employee,
+      caller: formData?.caller,
+      note: formData?.note,
+      daily_follow_up: {},
+      approved: true
+    };
 
     setLoading(true);
     try {
+      const url = formData?.public_holiday_id
+        ? `/api/v1/out_of_office.json?public_holiday_id=${formData?.public_holiday_id}`
+        : "/api/v1/out_of_office.json";
+
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post(`/api/v1/out_of_office.json`, {
+      const response = await axiosInstance.post(url, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
           "ngrok-skip-browser-warning": "69420"
         },
-        payload: {
-          employee_id: formData.employee_id,
-          start_date: formData.start_date,
-          end_date: formData.end_date,
-          reason: formData.reason
-        }
+        payload
       });
 
       goToTop();
@@ -232,7 +239,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              hr_public_holiday_id: e?.misc?.id,
+                              public_holiday_id: e?.misc?.id,
                               start_date: e?.misc?.start_date?.split("T")[0],
                               end_date: e?.misc?.end_date?.split("T")[0]
                             })
@@ -268,6 +275,101 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                         className="form-control "
                         min={formData?.start_date}
                         required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="called_in">Called in?</label>
+                      <Select
+                        name="called_in"
+                        options={categoryOptions}
+                        value={{
+                          label: formData?.called_in ? "Yes" : "No",
+                          value: formData?.called_in
+                        }}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            called_in: e?.value
+                          })
+                        }
+                        style={{ display: "inline-block" }}
+                      />
+                    </div>
+                  </div>
+
+                  {formData?.called_in ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="caller_is_employee">
+                          Is the caller an employee?
+                        </label>
+                        <Select
+                          name="caller_is_employee"
+                          options={categoryOptions}
+                          value={{
+                            label: formData?.caller_is_employee ? "Yes" : "No",
+                            value: formData?.caller_is_employee
+                          }}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              caller_is_employee: e?.value,
+                              caller: "",
+                              caller_title: ""
+                            })
+                          }
+                          style={{ display: "inline-block" }}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {formData?.called_in ? (
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="caller">Caller</label>
+                        {formData?.caller_is_employee ? (
+                          <Select
+                            name="caller"
+                            options={selectEmployees}
+                            value={{
+                              label: formData?.caller_title,
+                              value: formData?.caller
+                            }}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                caller: e?.value,
+                                caller_title: e?.label
+                              })
+                            }
+                            style={{ display: "inline-block" }}
+                          />
+                        ) : (
+                          <input
+                            type="text"
+                            name="caller"
+                            value={formData?.caller}
+                            onChange={handleFormChange}
+                            placeholder="Enter name of caller"
+                            className="form-control "
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="note">Note</label>
+                      <textarea
+                        name="note"
+                        value={formData.note}
+                        onChange={handleFormChange}
+                        className="form-control "
                       />
                     </div>
                   </div>
