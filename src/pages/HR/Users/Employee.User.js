@@ -8,18 +8,18 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import axios from "axios";
 import moment from "moment";
-// import HeroImage from "../../../assets/img/themed/erp1.gif";
-// import ERP1 from "../../../assets/img/themed/erp8.gif";
-// import ERP2 from "../../../assets/img/erp1.png";
-// import ERP3 from "../../../assets/img/erp3.png";
+import HeroImage from "../../../assets/img/themed/erp1.gif";
+import ERP1 from "../../../assets/img/themed/erp8.gif";
+import ERP2 from "../../../assets/img/erp1.png";
+import ERP3 from "../../../assets/img/erp3.png";
 // import ViewModal from "../../../components/Modal/ViewModal";
 // import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
 
-import HeroImage from "../../../assets/img/themed/frnds4.webp";
-import ERP1 from "../../../assets/img/themed/frnds8.gif";
-import ERP2 from "../../../assets/img/themed/frnds11.gif";
-import ERP3 from "../../../assets/img/themed/frnds12.gif";
+// import HeroImage from "../../../assets/img/themed/frnds4.webp";
+// import ERP1 from "../../../assets/img/themed/frnds8.gif";
+// import ERP2 from "../../../assets/img/themed/frnds11.gif";
+// import ERP3 from "../../../assets/img/themed/frnds12.gif";
 
 const EmployeeUser = () => {
   const date = new Date().toUTCString();
@@ -32,7 +32,7 @@ const EmployeeUser = () => {
     hero: HeroImage,
     erp1: ERP1,
     erp2: ERP2,
-    erp3: ERP3,
+    erp3: ERP3
   });
 
   const isRemoteStaff = user?.employee_info?.remote;
@@ -91,7 +91,7 @@ const EmployeeUser = () => {
       hero: [HeroImage, ERP1, ERP2, ERP3][currentIndex],
       erp1: [ERP1, ERP2, ERP3, HeroImage][currentIndex],
       erp2: [ERP2, ERP3, HeroImage, ERP1][currentIndex],
-      erp3: [HeroImage, ERP1, ERP2, ERP3][currentIndex],
+      erp3: [HeroImage, ERP1, ERP2, ERP3][currentIndex]
     });
   }, [currentIndex]);
 
@@ -118,8 +118,14 @@ const EmployeeUser = () => {
                 )}
               </>
             </div>
-            <div className="dashboard-hero-icon col-md-4">
-              <img src={heroIcons.hero} />
+            <div className="dashboard-hero-icon col-md-4 ">
+              <img
+                src={heroIcons.hero}
+                // style={{
+                //   borderRadius: "20px",
+                //   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"
+                // }}
+              />
             </div>
           </div>
           <div className="row mt-4">
