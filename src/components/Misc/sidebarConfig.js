@@ -57,6 +57,7 @@ const ICONS = {
   deduction: getIcon("la-money-check-alt"),
   office: getIcon("la-building"),
   hr: getIcon("la-user-minus"),
+  approval: getIcon("la-sort-numeric-up-alt"),
 
   football: getIcon("la-futbol"),
   rugby: getIcon("la-football-ball"),
@@ -916,6 +917,12 @@ const sidebarConfig = [
     subheader: "Settings",
     canView: "super",
     items: [
+      {
+        canView: "super",
+        title: "Approval Module",
+        path: PATH_DASHBOARD.settings.approvalModule,
+        icon: ICONS.approval,
+      },
       {
         canView: "super",
         title: "Roles & Permission",

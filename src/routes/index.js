@@ -1114,6 +1114,14 @@ export default function Router() {
               ),
             },
             {
+              path: "approval-module",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <ApprovalModule />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "roles-permissions",
               element: (
                 <GuardedRoute title="" dept="super">
@@ -1365,6 +1373,9 @@ const AllSurveyResponsesAdmin = Loadable(
 );
 const SurveyBuilder = Loadable(
   lazy(() => import("../pages/HR/Admin/SurveyBuilder.Admin"))
+);
+const ApprovalModule = Loadable(
+  lazy(() => import("../pages/HR/Admin/ApprovalModule.Admin"))
 );
 const EditSurveyBuilder = Loadable(
   lazy(() => import("../pages/HR/Admin/EditSurveyBuilder.Admin"))
