@@ -10,7 +10,7 @@ const ResignationAdmin = () => {
   const [viewingStage2, setViewingStage2] = useState(false);
 
   const CurrentUserRoles = user?.employee_info?.roles;
-  const authorizedSeniorRoles = ["hr_manager", "senior_hr_associate"];
+  const authorizedSeniorRoles = ["hr_manager"];
   const authorizedJuniorRoles = ["hr_staff"];
 
   const AuthorizedHrManagerRoles = CurrentUserRoles.some((role) =>
@@ -51,7 +51,12 @@ const ResignationAdmin = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" data-toggle="tab" href="#tab_stage_2" onClick={() => setViewingStage2(true)}>
+                  <a
+                    className="nav-link"
+                    data-toggle="tab"
+                    href="#tab_stage_2"
+                    onClick={() => setViewingStage2(true)}
+                  >
                     Stage 2
                   </a>
                 </li>
