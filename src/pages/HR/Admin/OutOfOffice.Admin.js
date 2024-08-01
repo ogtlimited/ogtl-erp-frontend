@@ -429,7 +429,7 @@ const OutOfOfficeAdmin = () => {
           <div id="tab_staffOnPublicHoliday" className="col-12 tab-pane">
             <div className="row col-md-12" style={{ marginBottom: "2rem" }}>
               <div className="col-md-3">
-                <label htmlFor="public_holiday">Public Holiday</label>
+                <label htmlFor="public_holiday">Public Holiday Filter</label>
                 <Select
                   options={selectPublicHoliday}
                   isSearchable={true}
