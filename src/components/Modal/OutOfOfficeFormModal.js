@@ -7,7 +7,12 @@ import $ from "jquery";
 import Select from "react-select";
 import moment from "moment";
 
-export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
+export const OutOfOfficeFormModal = ({
+  mode,
+  data,
+  refetchData,
+  refectStaffOnHoliday
+}) => {
   const {
     categoryOptions,
     selectEmployees,
@@ -92,7 +97,10 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
         `${formData?.employee_title}'s Out of Office successfully created!`,
         "alert alert-success"
       );
+
       refetchData();
+      refectStaffOnHoliday();
+
       $("#OutOfOfficeFormModal").modal("toggle");
 
       setFormData(data);
@@ -234,7 +242,7 @@ export const OutOfOfficeFormModal = ({ mode, data, refetchData }) => {
                           Please select the applicable public holiday
                         </label>
                         <Select
-                          name="reason"
+                          name="public_holiday"
                           options={selectPublicHoliday}
                           onChange={(e) =>
                             setFormData({

@@ -8,17 +8,30 @@ import { OutOfOfficeFormModal } from "./../../../components/Modal/OutOfOfficeFor
 import { outOfOfficeForm } from "../../../components/FormJSON/OutOfOffice";
 import OutOfOfficeApprovalModal from "../../../components/Modal/OutOfOfficeApprovalModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import UniversalTable from "../../../components/Tables/UniversalTable";
 import axiosInstance from "../../../services/api";
+import OutOfOfficeContent from "../../../components/ModalContents/OutOfOfficeContent";
+import ViewModal from "../../../components/Modal/ViewModal";
+import Select from "react-select";
 import moment from "moment";
 
 const OutOfOfficeAdmin = () => {
-  const { user, ErrorHandler, getAvatarColor } = useAppContext();
+  const { user, ErrorHandler, getAvatarColor, selectPublicHoliday } =
+    useAppContext();
   const [loading, setLoading] = useState(false);
+  const [loadingStaffOnPublicHoliday, setLoadingStaffOnPublicHoliday] =
+    useState(false);
   const [allOutOfOffice, setAllOutOfOffice] = useState([]);
+  const [staffOnPublicHoliday, setStaffOnPublicHoliday] = useState([]);
   const [mode, setMode] = useState("Create");
   const [data, setData] = useState([]);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
+
+  const [holidayId, setHolidayId] = useState({
+    id: null,
+    title: ""
+  });
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -36,10 +49,7 @@ const OutOfOfficeAdmin = () => {
     "team_lead",
     "supervisor"
   ];
-  const canApprove = [
-    "hr_manager",
-    "senior_hr_associate",
-  ];
+  const canApprove = ["hr_manager", "senior_hr_associate"];
 
   const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreateAndEdit.includes(role)
@@ -98,6 +108,49 @@ const OutOfOfficeAdmin = () => {
   useEffect(() => {
     fetchOutOfOffice();
   }, [fetchOutOfOffice]);
+
+  // Staff on Public Holiday:
+  const fetchStaffOnPublicHoliday = useCallback(async () => {
+    setLoadingStaffOnPublicHoliday(false);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/employees_on_public_holidays.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            public_holiday_id: holidayId?.id ? holidayId?.id : null
+          }
+        }
+      );
+
+      const resData = response?.data?.data?.employees;
+
+      console.log(resData);
+
+      const formattedStaffOnHoliday = resData.map((e) => ({
+        ...e,
+        employee: e?.full_name?.toUpperCase(),
+        dateCreated: moment(e?.created_at).format("Do MMMM, YYYY")
+      }));
+
+      setStaffOnPublicHoliday(formattedStaffOnHoliday);
+      setLoadingStaffOnPublicHoliday(false);
+    } catch (error) {
+      const component = "Staff on Public Holiday Error | ";
+      ErrorHandler(error, component);
+      setLoadingStaffOnPublicHoliday(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [holidayId?.id]);
+
+  useEffect(() => {
+    fetchStaffOnPublicHoliday();
+  }, [fetchStaffOnPublicHoliday]);
 
   const handleCreate = () => {
     setMode("Create");
@@ -194,14 +247,26 @@ const OutOfOfficeAdmin = () => {
     //   sort: true,
     //   headerStyle: { width: "20%" },
     // },
-    CurrentUserCanApprove && {
+    {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
       formatter: (value, row) => (
         <div className="text-center">
           <div className="leave-user-action-btns">
-            {row?.approved ? null : (
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType("view-details");
+                setViewRow(row);
+              }}
+            >
+              View
+            </button>
+
+            {CurrentUserCanApprove && !row?.approved ? (
               <button
                 className="btn btn-sm btn-success"
                 onClick={() => {
@@ -211,10 +276,51 @@ const OutOfOfficeAdmin = () => {
               >
                 Approve
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       )
+    }
+  ];
+
+  const staffOnPublicHolidayColumns = [
+    {
+      dataField: "employee",
+      text: "Staff",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <div>
+            {value} <span>{row?.ogid}</span>
+          </div>
+        </h2>
+      )
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => <span>{value?.toUpperCase()}</span>
+    },
+    {
+      dataField: "public_holiday_type",
+      text: "Public Holiday",
+      sort: true,
+      headerStyle: { width: "20%" }
+    },
+    {
+      dataField: "dateCreated",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "20%" }
     }
   ];
 
@@ -245,53 +351,125 @@ const OutOfOfficeAdmin = () => {
         </div>
       </div>
 
-      <div className="row">
-        <div className="row col-md-6">
-          <div className="col-md-6">
-            <div className="form-group">
-              <label htmlFor="fromDate">From</label>
-              <input
-                type="date"
-                name="fromDate"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                className="form-control "
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <label htmlFor="toDate">To</label>
-              <input
-                type="date"
-                name="toDate"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-                className="form-control "
-              />
-            </div>
+      <div className="page-menu" style={{ marginBottom: "2rem" }}>
+        <div className="row">
+          <div className="col-sm-12">
+            <ul className="nav nav-tabs nav-tabs-bottom">
+              <li className="nav-item">
+                <a
+                  className="nav-link active"
+                  data-toggle="tab"
+                  href="#tab_outOfOfficeStaff"
+                >
+                  Out of Office Staff
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_staffOnPublicHoliday"
+                >
+                  Staff on Public Holiday
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
+      </div>
 
-        <UniversalPaginatedTable
-          data={allOutOfOffice}
-          columns={columns}
-          loading={loading}
-          setLoading={setLoading}
-          page={page}
-          setPage={setPage}
-          sizePerPage={sizePerPage}
-          setSizePerPage={setSizePerPage}
-          totalPages={totalPages}
-          setTotalPages={setTotalPages}
-        />
+      <div>
+        <div className="row tab-content">
+          <div
+            id="tab_outOfOfficeStaff"
+            className="col-12 tab-pane show active"
+          >
+            <div className="row col-md-6">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="fromDate">From</label>
+                  <input
+                    type="date"
+                    name="fromDate"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    className="form-control "
+                  />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="toDate">To</label>
+                  <input
+                    type="date"
+                    name="toDate"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="form-control "
+                  />
+                </div>
+              </div>
+            </div>
+
+            <UniversalPaginatedTable
+              data={allOutOfOffice}
+              columns={columns}
+              loading={loading}
+              setLoading={setLoading}
+              page={page}
+              setPage={setPage}
+              sizePerPage={sizePerPage}
+              setSizePerPage={setSizePerPage}
+              totalPages={totalPages}
+              setTotalPages={setTotalPages}
+            />
+          </div>
+
+          <div id="tab_staffOnPublicHoliday" className="col-12 tab-pane">
+            <div className="row col-md-12" style={{ marginBottom: "2rem" }}>
+              <div className="col-md-3">
+                <label htmlFor="public_holiday">Public Holiday</label>
+                <Select
+                  options={selectPublicHoliday}
+                  isSearchable={true}
+                  isClearable={true}
+                  value={{
+                    value: holidayId?.id,
+                    label: holidayId?.title
+                  }}
+                  onChange={(e) =>
+                    setHolidayId({ id: e?.value, title: e?.label })
+                  }
+                  style={{ display: "inline-block" }}
+                />
+              </div>
+            </div>
+
+            <UniversalTable
+              columns={staffOnPublicHolidayColumns}
+              data={staffOnPublicHoliday}
+              setData={setStaffOnPublicHoliday}
+              loading={loadingStaffOnPublicHoliday}
+              setLoading={setLoadingStaffOnPublicHoliday}
+            />
+          </div>
+        </div>
       </div>
 
       <OutOfOfficeFormModal
         mode={mode}
         data={data}
         refetchData={fetchOutOfOffice}
+        refectStaffOnHoliday={fetchStaffOnPublicHoliday}
       />
+
+      {modalType === "view-details" ? (
+        <ViewModal
+          title="Out of Office Details"
+          content={<OutOfOfficeContent Content={viewRow} />}
+        />
+      ) : null}
 
       {modalType === "approve" ? (
         <OutOfOfficeApprovalModal
