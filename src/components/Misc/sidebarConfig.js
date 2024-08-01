@@ -415,6 +415,11 @@ const sidebarConfig = [
             canView: "hr",
             title: "Remote Attendance",
             path: PATH_DASHBOARD.hr.remoteAttendanceAdmin
+          },
+          {
+            canView: "hr",
+            title: "Lateness Tracker",
+            path: PATH_DASHBOARD.hr.latenessTracker
           }
         ]
       },
@@ -433,7 +438,7 @@ const sidebarConfig = [
                   canView: "all",
                   title: "Out of Office",
                   path: PATH_DASHBOARD.hr.outOfOffice
-                },
+                }
                 // {
                 //   canView: "all",
                 //   title: "Public Holiday",

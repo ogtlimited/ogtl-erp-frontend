@@ -1,0 +1,221 @@
+// *IN USE
+
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useAppContext } from "../../../Context/AppContext";
+import { LatenessTrackerForm } from "../../../components/FormJSON/CreateLatenessTracker";
+import { LatenessTrackerModal } from "../../../components/Modal/LatenessTrackerModal";
+import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
+import axiosInstance from "../../../services/api";
+import moment from "moment";
+
+const OfficeLatenessTrackerAdmin = () => {
+  const { office_type, office, id } = useParams();
+  const { user, ErrorHandler, getAvatarColor } = useAppContext();
+
+  const [data, setData] = useState([]);
+  const [mode, setMode] = useState("Create");
+  const [modalData, setModalData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
+
+  const CurrentUserRoles = user?.employee_info?.roles;
+  const canCreate = ["hr_manager", "senior_hr_associate"];
+
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
+    canCreate.includes(role)
+  );
+
+  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstweekDay);
+  const [toDate, setToDate] = useState(lastWeekDay);
+
+  // Office Lateness Tracker:
+  const fetchOfficeLatenessTracker = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/lateness_trackers.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            office_type: office_type,
+            operation_office_id: id,
+            start_date: moment(fromDate).utc().format("DD-MM-YYYY"),
+            end_date: moment(toDate).utc().format("DD-MM-YYYY")
+          }
+        }
+      );
+
+      const resData = response?.data?.data;
+
+      console.log("Lateness Tracker:", resData);
+
+      setData(resData);
+      setLoading(false);
+    } catch (error) {
+      const component = "Office Lateness Tracker error | ";
+      ErrorHandler(error, component);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate, id, office_type]);
+
+  useEffect(() => {
+    fetchOfficeLatenessTracker();
+  }, [fetchOfficeLatenessTracker]);
+
+  const handleCreate = () => {
+    setMode("Create");
+    setModalData(LatenessTrackerForm);
+  };
+
+  const handleEdit = (row) => {
+    setMode("Edit");
+    setModalData(row);
+  };
+
+  const columns = [
+    {
+      dataField: "full_name",
+      text: "Employee",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <Link
+            to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
+          >
+            {value?.toUpperCase()}
+          </Link>
+        </h2>
+      )
+    },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#LatenessTrackerModal"
+              onClick={() => handleEdit(row)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <>
+      <div className="page-header">
+        <div className="row align-items-center">
+          <div className="col">
+            <h3 className="page-title">{office.toUpperCase()}</h3>
+            <ul className="breadcrumb">
+              <li className="breadcrumb-item">
+                <Link to="/dashboard/hr/attendance-record">
+                  Lateness Tracker
+                </Link>
+              </li>
+              <li className="breadcrumb-item active">Staff</li>
+            </ul>
+          </div>
+
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserCanCreateAndEdit && (
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#LatenessTrackerModal"
+                onClick={handleCreate}
+              >
+                <i className="fa fa-plus"> </i> Create Lateness Tracker
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: "2rem" }}>
+        <div className="row" style={{ marginTop: "2rem" }}>
+          <div
+            className="col-md-3"
+            style={{
+              marginLeft: "1rem"
+            }}
+          >
+            <div className="form-group">
+              <label htmlFor="fromDate">From</label>
+              <input
+                type="date"
+                name="fromDate"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="form-control "
+              />
+            </div>
+          </div>
+
+          <div className="col-md-3">
+            <div className="form-group">
+              <label htmlFor="toDate">To</label>
+              <input
+                type="date"
+                name="toDate"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                className="form-control "
+              />
+            </div>
+          </div>
+        </div>
+
+        <UniversalPaginatedTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          setLoading={setLoading}
+          page={page}
+          setPage={setPage}
+          sizePerPage={sizePerPage}
+          setSizePerPage={setSizePerPage}
+          totalPages={totalPages}
+          setTotalPages={setTotalPages}
+        />
+      </div>
+
+      <LatenessTrackerModal
+        mode={mode}
+        data={modalData}
+        refetchData={fetchOfficeLatenessTracker}
+      />
+    </>
+  );
+};
+
+export default OfficeLatenessTrackerAdmin;
