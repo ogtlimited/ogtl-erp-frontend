@@ -281,7 +281,7 @@ const PublicHoliday = () => {
             <h3 className="page-title">Public Holiday</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
-              <li className="breadcrumb-item active">Time Off</li>
+              <li className="breadcrumb-item active">Time Off Planner</li>
             </ul>
           </div>
           {/* <div className="col-auto float-right ml-auto">
