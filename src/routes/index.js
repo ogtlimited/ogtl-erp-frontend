@@ -331,6 +331,14 @@ export default function Router() {
               ),
             },
             {
+              path: ":office_type/employees/:office/:id",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <OfficeLatenessTrackerAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "remote-attendance",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -1346,6 +1354,9 @@ const AllEmployeesDepartmentAdmin = Loadable(
 );
 const OfficeAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/OfficeAttendance.Admin"))
+);
+const OfficeLatenessTrackerAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/OfficeLatenessTracker.Admin.js"))
 );
 const EmployeeAttendanceRecordAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/EmployeeAttendanceRecord.Admin"))

@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import { BranchForm } from "../../../components/FormJSON/CreateBranch";
-import UniversalTable from "../../../components/Tables/UniversalTable";
 import { BranchFormModal } from "../../../components/Modal/BranchFormModal";
+import axiosInstance from "../../../services/api";
+import UniversalTable from "../../../components/Tables/UniversalTable";
 import moment from "moment";
 
 const BranchAdmin = () => {

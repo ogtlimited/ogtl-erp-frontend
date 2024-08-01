@@ -6,7 +6,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
-import { LatenessTrackerModal } from "../../../components/Modal/LatenessTrackerModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
@@ -124,7 +123,7 @@ const LatenessTracker = () => {
       dataField: "title",
       text: "Office",
       sort: true,
-      headerStyle: { width: "35%" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => (
         <p>
           <Link
@@ -135,12 +134,6 @@ const LatenessTracker = () => {
           </Link>
         </p>
       )
-    },
-    {
-      dataField: "created_at",
-      text: "Date Created",
-      sort: true,
-      headerStyle: { width: "20%" }
     }
   ];
 
@@ -149,7 +142,7 @@ const LatenessTracker = () => {
       dataField: "title",
       text: "Office",
       sort: true,
-      headerStyle: { width: "35%" },
+      headerStyle: { width: "100%" },
       formatter: (val, row) => (
         <p>
           <Link
@@ -160,12 +153,6 @@ const LatenessTracker = () => {
           </Link>
         </p>
       )
-    },
-    {
-      dataField: "created_at",
-      text: "Date Created",
-      sort: true,
-      headerStyle: { width: "20%" }
     }
   ];
 
@@ -179,19 +166,6 @@ const LatenessTracker = () => {
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Lateness Tracker</li>
             </ul>
-          </div>
-
-          <div className="col-auto float-right ml-auto">
-            {CurrentUserCanCreate && (
-              <a
-                href="#"
-                className="btn add-btn m-r-5"
-                data-toggle="modal"
-                data-target="#LatenessTrackerModal"
-              >
-                Create Lateness Tracker
-              </a>
-            )}
           </div>
         </div>
       </div>
@@ -221,41 +195,6 @@ const LatenessTracker = () => {
       </div>
 
       <div>
-        <div className="row" style={{marginTop: "2rem"}}>
-          <div
-            className="col-md-3"
-            style={{
-              marginLeft: "1rem"
-            }}
-          >
-            <div className="form-group">
-              <label htmlFor="fromDate">From</label>
-              <input
-                type="date"
-                name="fromDate"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-                className="form-control "
-                // disabled={loadingPayday}
-              />
-            </div>
-          </div>
-
-          <div className="col-md-3">
-            <div className="form-group">
-              <label htmlFor="toDate">To</label>
-              <input
-                type="date"
-                name="toDate"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-                className="form-control "
-                // disabled={loadingPayday}
-              />
-            </div>
-          </div>
-        </div>
-
         <div className="row tab-content">
           <div id="tab_departments" className="col-12 tab-pane show active">
             <UniversalPaginatedTable
@@ -288,12 +227,6 @@ const LatenessTracker = () => {
           </div>
         </div>
       </div>
-
-      <LatenessTrackerModal
-        fetchHRLeaves={null}
-        fetchHRLeaveHistory={null}
-        fetchAllEmpOnLeave={null}
-      />
     </>
   );
 };
