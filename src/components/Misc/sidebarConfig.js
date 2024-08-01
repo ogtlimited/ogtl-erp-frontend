@@ -64,7 +64,7 @@ const ICONS = {
   tableTennis: getIcon("la-table-tennis"),
   volleyball: getIcon("la-volleyball-ball"),
   baseball: getIcon("la-baseball-ball"),
-  sprint: getIcon("la-running"),
+  sprint: getIcon("la-running")
 };
 
 const buildExternalURL = () => {
@@ -112,14 +112,14 @@ const sidebarConfig = [
               {
                 canView: "all",
                 title: "Employee Dashboard",
-                path: PATH_DASHBOARD.main.employeeDashboard,
+                path: PATH_DASHBOARD.main.employeeDashboard
               },
               {
                 canView: "hr",
                 title: "HR Dashboard",
-                path: PATH_DASHBOARD.main.hrDashboard,
-              },
-            ],
+                path: PATH_DASHBOARD.main.hrDashboard
+              }
+            ]
           }
         : userDept === "operations"
         ? {
@@ -132,14 +132,14 @@ const sidebarConfig = [
               {
                 canView: "all",
                 title: "Employee Dashboard",
-                path: PATH_DASHBOARD.main.employeeDashboard,
+                path: PATH_DASHBOARD.main.employeeDashboard
               },
               {
                 canView: "operations",
                 title: "Operations Dashboard",
-                path: PATH_DASHBOARD.main.operationsDashboard,
-              },
-            ],
+                path: PATH_DASHBOARD.main.operationsDashboard
+              }
+            ]
           }
         : {
             canView: "all",
@@ -151,9 +151,9 @@ const sidebarConfig = [
               {
                 canView: "all",
                 title: "Employee Dashboard",
-                path: PATH_DASHBOARD.main.employeeDashboard,
-              },
-            ],
+                path: PATH_DASHBOARD.main.employeeDashboard
+              }
+            ]
           },
 
       // Others:
@@ -167,26 +167,26 @@ const sidebarConfig = [
           {
             canView: "all",
             title: "Email Signature",
-            path: PATH_DASHBOARD.apps.signature,
+            path: PATH_DASHBOARD.apps.signature
           },
           {
             canView: "all",
             title: "Employee Appreciation",
-            path: PATH_DASHBOARD.apps.eCertificate,
-          },
-        ],
+            path: PATH_DASHBOARD.apps.eCertificate
+          }
+        ]
       },
       {
         canView: "all",
         title: "KPI",
         externalLink: buildExternalURL(),
-        icon: ICONS.kpi,
+        icon: ICONS.kpi
       },
       {
         canView: "all",
         title: "Attendance",
         path: PATH_DASHBOARD.main.employeeAttendance,
-        icon: ICONS.userAttendance,
+        icon: ICONS.userAttendance
       },
       {
         canView: "all",
@@ -199,21 +199,21 @@ const sidebarConfig = [
             canView: "all",
             title: "Out of Office",
             path: PATH_DASHBOARD.main.outOfOffice,
-            icon: ICONS.office,
+            icon: ICONS.office
           },
           {
             canView: "all",
             title: "Leave",
             path: PATH_DASHBOARD.main.employeeLeave,
-            icon: ICONS.leave,
+            icon: ICONS.leave
           },
           {
             canView: "all",
             title: "Public Holiday",
             path: PATH_DASHBOARD.main.publicHoliday,
-            icon: ICONS.leave,
-          },
-        ],
+            icon: ICONS.leave
+          }
+        ]
       },
       {
         canView: "all",
@@ -232,15 +232,15 @@ const sidebarConfig = [
             canView: "all",
             title: "Deductions",
             path: PATH_DASHBOARD.main.deductions,
-            icon: ICONS.deduction,
-          },
-        ],
+            icon: ICONS.deduction
+          }
+        ]
       },
       {
         canView: "all",
         title: "Resignation",
         path: PATH_DASHBOARD.main.resignation,
-        icon: ICONS.resignation,
+        icon: ICONS.resignation
       },
       {
         canView: "all",
@@ -252,24 +252,24 @@ const sidebarConfig = [
           {
             canView: "all",
             title: "IT Help Desk",
-            externalLink: "https://sdpondemand.manageengine.com/",
+            externalLink: "https://sdpondemand.manageengine.com/"
           },
           {
             canView: "all",
             title: "Facilities Help Desk",
-            externalLink: "https://ogtl-facilities.on.spiceworks.com/portal/",
+            externalLink: "https://ogtl-facilities.on.spiceworks.com/portal/"
           },
           {
             canView: "all",
             title: "HR Help Desk",
-            externalLink: "https://ogtl-hr.on.spiceworks.com/portal",
+            externalLink: "https://ogtl-hr.on.spiceworks.com/portal"
           },
           {
             canView: "all",
             title: "Complaints Help Desk",
-            externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/",
-          },
-        ],
+            externalLink: "https://ogtl-complaints.on.spiceworks.com/portal/"
+          }
+        ]
       },
       {
         canView: "all",
@@ -281,21 +281,21 @@ const sidebarConfig = [
           {
             canView: "all",
             title: "Ticket",
-            path: PATH_DASHBOARD.main.tickets,
+            path: PATH_DASHBOARD.main.tickets
           },
           {
             canView: "all",
             title: "Survey",
             path: PATH_DASHBOARD.main.survey,
-            icon: ICONS.survey,
+            icon: ICONS.survey
           },
           {
             canView: "all",
             title: "Announcements",
             path: PATH_DASHBOARD.main.announcement,
-            icon: ICONS.announcement,
-          },
-        ],
+            icon: ICONS.announcement
+          }
+        ]
       },
       {
         canView: CurrentUserRoles?.includes("security_attendance_team")
@@ -303,14 +303,14 @@ const sidebarConfig = [
           : "none",
         title: "Manual Attendance",
         path: PATH_DASHBOARD.main.manualAttendance,
-        icon: ICONS.userAttendance,
+        icon: ICONS.userAttendance
       },
       {
         canView: CurrentUserRoles?.includes("erp_team") ? "all" : "none",
         title: "Ticket Management",
         path: PATH_DASHBOARD.main.ticketManagement,
-        icon: ICONS.coaching,
-      },
+        icon: ICONS.coaching
+      }
       // {
       //   canView: "all",
       //   title: "Women's Day",
@@ -323,7 +323,7 @@ const sidebarConfig = [
       //   path: PATH_DASHBOARD.main.valentine,
       //   icon: ICONS.valentine,
       // },
-    ],
+    ]
   },
 
   // HR CONFIG:
@@ -344,26 +344,26 @@ const sidebarConfig = [
                 {
                   canView: "all",
                   title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees,
+                  path: PATH_DASHBOARD.hr.allEmployees
                 },
                 {
                   canView: "all",
                   title: "Departments",
-                  path: PATH_DASHBOARD.hr.departments,
-                },
+                  path: PATH_DASHBOARD.hr.departments
+                }
               ]
             : [
                 {
                   canView: "hr",
                   title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees,
+                  path: PATH_DASHBOARD.hr.allEmployees
                 },
                 {
                   canView: "hr",
                   title: "Add Employee",
-                  path: PATH_DASHBOARD.hr.addEmployees,
-                },
-              ],
+                  path: PATH_DASHBOARD.hr.addEmployees
+                }
+              ]
       },
 
       // Leadership:
@@ -377,9 +377,9 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Leaders",
-            path: PATH_DASHBOARD.hr.leadership,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.leadership
+          }
+        ]
       },
 
       // Biometrics:
@@ -393,9 +393,9 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Captured Biometrics",
-            path: PATH_DASHBOARD.hr.capturedBiometrics,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.capturedBiometrics
+          }
+        ]
       },
 
       // Attendance:
@@ -409,35 +409,49 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Attendance Record",
-            path: PATH_DASHBOARD.hr.attendanceRecord,
+            path: PATH_DASHBOARD.hr.attendanceRecord
           },
           {
             canView: "hr",
             title: "Remote Attendance",
-            path: PATH_DASHBOARD.hr.remoteAttendanceAdmin,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.remoteAttendanceAdmin
+          }
+        ]
       },
 
-      // Time Off:
+      // Time Off Planner:
       {
-        canView: "hr",
-        title: "Time Off",
+        canView: CurrentUserIsLead && userDept !== "hr" ? "all" : "hr",
+        title: "Time Off Planner",
         path: PATH_DASHBOARD.hr.root,
         icon: ICONS.timeOff,
         navIcon: ICONS.tableTennis,
-        children: [
-          {
-            canView: "hr",
-            title: "Out of Office",
-            path: PATH_DASHBOARD.hr.outOfOffice,
-          },
-          {
-            canView: 'hr',
-            title: 'Public Holiday',
-            path: PATH_DASHBOARD.hr.publicholiday,
-          },
-        ],
+        children:
+          CurrentUserIsLead && userDept !== "hr"
+            ? [
+                {
+                  canView: "all",
+                  title: "Out of Office",
+                  path: PATH_DASHBOARD.hr.outOfOffice
+                },
+                // {
+                //   canView: "all",
+                //   title: "Public Holiday",
+                //   path: PATH_DASHBOARD.hr.publicholiday
+                // }
+              ]
+            : [
+                {
+                  canView: "hr",
+                  title: "Out of Office",
+                  path: PATH_DASHBOARD.hr.outOfOffice
+                },
+                {
+                  canView: "hr",
+                  title: "Public Holiday",
+                  path: PATH_DASHBOARD.hr.publicholiday
+                }
+              ]
       },
 
       // Leave:
@@ -451,14 +465,14 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Leave Applications",
-            path: PATH_DASHBOARD.hr.leavesAdmin,
+            path: PATH_DASHBOARD.hr.leavesAdmin
           },
           {
             canView: "hr",
             title: "Leave Types",
-            path: PATH_DASHBOARD.hr.leaveType,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.leaveType
+          }
+        ]
       },
 
       // Organizational Structure:
@@ -472,24 +486,24 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Departments",
-            path: PATH_DASHBOARD.hr.departments,
+            path: PATH_DASHBOARD.hr.departments
           },
           {
             canView: "hr",
             title: "Campaigns",
-            path: PATH_DASHBOARD.hr.campaigns,
+            path: PATH_DASHBOARD.hr.campaigns
           },
           {
             canView: "hr",
             title: "Designations",
-            path: PATH_DASHBOARD.hr.designations,
+            path: PATH_DASHBOARD.hr.designations
           },
           {
             canView: "hr",
             title: "Branch",
-            path: PATH_DASHBOARD.hr.branch,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.branch
+          }
+        ]
       },
 
       // Payroll:
@@ -505,24 +519,24 @@ const sidebarConfig = [
           {
             canView: "all",
             title: "Employee Salary",
-            path: PATH_DASHBOARD.payroll.salary,
+            path: PATH_DASHBOARD.payroll.salary
           },
           {
             canView: "all",
             title: "Payroll Processing",
-            path: PATH_DASHBOARD.payroll.payrollProcessing,
+            path: PATH_DASHBOARD.payroll.payrollProcessing
           },
           {
             canView: "all",
             title: "Payday",
-            path: PATH_DASHBOARD.payroll.payday,
+            path: PATH_DASHBOARD.payroll.payday
           },
           {
             canView: "all",
             title: "Deductions",
-            path: PATH_DASHBOARD.payroll.deductions,
-          },
-        ],
+            path: PATH_DASHBOARD.payroll.deductions
+          }
+        ]
       },
 
       // Reports:
@@ -536,9 +550,9 @@ const sidebarConfig = [
           {
             canView: "super",
             title: "Payslip Reports",
-            path: PATH_DASHBOARD.reports.payslipReport,
-          },
-        ],
+            path: PATH_DASHBOARD.reports.payslipReport
+          }
+        ]
       },
 
       // Recruitment:
@@ -552,14 +566,14 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Job Opening",
-            path: PATH_DASHBOARD.recruitment.jobOpening,
+            path: PATH_DASHBOARD.recruitment.jobOpening
           },
           {
             canView: "hr",
             title: "Job Applications",
-            path: PATH_DASHBOARD.recruitment.jobApplicants,
-          },
-        ],
+            path: PATH_DASHBOARD.recruitment.jobApplicants
+          }
+        ]
       },
 
       // Survey:
@@ -573,14 +587,14 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "All Surveys",
-            path: PATH_DASHBOARD.hr.allSurvey,
+            path: PATH_DASHBOARD.hr.allSurvey
           },
           {
             canView: "hr",
             title: "Survey Forms",
-            path: PATH_DASHBOARD.hr.survey,
-          },
-        ],
+            path: PATH_DASHBOARD.hr.survey
+          }
+        ]
       },
 
       // Exit Management:
@@ -594,11 +608,11 @@ const sidebarConfig = [
           {
             canView: "hr",
             title: "Resignations",
-            path: PATH_DASHBOARD.hr.resignation,
-          },
-        ],
-      },
-    ],
+            path: PATH_DASHBOARD.hr.resignation
+          }
+        ]
+      }
+    ]
   },
 
   // LEADERSHIP CONFIG:
@@ -612,47 +626,47 @@ const sidebarConfig = [
               canView: "lead",
               title: "Team Members",
               path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership,
+              icon: ICONS.leadership
             },
             {
               canView: "lead",
               title: "Campaign Schedule",
               path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule,
+              icon: ICONS.schedule
             },
             {
               canView: "lead",
               title: "Team Attendance",
               path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance,
+              icon: ICONS.teamAttendance
             },
             {
               canView: CurrentUserRoles,
               title: "Remote Attendance",
               path: PATH_DASHBOARD.leadership.remoteAttendance,
-              icon: ICONS.attendance,
-            },
+              icon: ICONS.attendance
+            }
           ]
         : [
             {
               canView: "lead",
               title: "Team Members",
               path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership,
+              icon: ICONS.leadership
             },
             {
               canView: "lead",
               title: "Campaign Schedule",
               path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule,
+              icon: ICONS.schedule
             },
             {
               canView: "lead",
               title: "Team Attendance",
               path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance,
-            },
-          ],
+              icon: ICONS.teamAttendance
+            }
+          ]
   },
 
   // DATA MANAGEMENT CONFIG:
@@ -674,11 +688,11 @@ const sidebarConfig = [
           {
             canView: "data management",
             title: "Leave Applications",
-            path: PATH_DASHBOARD.dataManagement.workforceLeaveApplications,
-          },
-        ],
-      },
-    ],
+            path: PATH_DASHBOARD.dataManagement.workforceLeaveApplications
+          }
+        ]
+      }
+    ]
   },
 
   // OPERATIONS CONFIG:
@@ -701,9 +715,9 @@ const sidebarConfig = [
           {
             canView: "operations",
             title: "Leave Applications",
-            path: PATH_DASHBOARD.operations.operationTeamLeaveApplications,
-          },
-        ],
+            path: PATH_DASHBOARD.operations.operationTeamLeaveApplications
+          }
+        ]
       },
 
       // Exit Management:
@@ -717,10 +731,10 @@ const sidebarConfig = [
           {
             canView: "operations",
             title: "Resignations",
-            path: PATH_DASHBOARD.operations.resignation,
-          },
-        ],
-      },
+            path: PATH_DASHBOARD.operations.resignation
+          }
+        ]
+      }
 
       // {
       //   canView: "super",
@@ -801,7 +815,7 @@ const sidebarConfig = [
       //     },
       //   ],
       // },
-    ],
+    ]
   },
 
   // ACCOUNTING CONFIG:
@@ -852,15 +866,15 @@ const sidebarConfig = [
           {
             canView: "accounting",
             title: "Payslip Reports",
-            path: PATH_DASHBOARD.accountingReports.payslipReport,
-          },
+            path: PATH_DASHBOARD.accountingReports.payslipReport
+          }
           // {
           //   canView: "accounting",
           //   title: "Balance Sheet",
           //   path: PATH_DASHBOARD.accountingReports.balanceSheet,
           // },
-        ],
-      },
+        ]
+      }
       // {
       //   canView: "accounting",
       //   title: "Clients",
@@ -908,7 +922,7 @@ const sidebarConfig = [
       //   path: PATH_DASHBOARD.productItems,
       //   icon: ICONS.productItems,
       // },
-    ],
+    ]
   },
 
   // SETTINGS CONFIG:
@@ -920,10 +934,10 @@ const sidebarConfig = [
         canView: "super",
         title: "Roles & Permission",
         path: PATH_DASHBOARD.settings.rolesPermission,
-        icon: ICONS.rolesPermission,
-      },
-    ],
-  },
+        icon: ICONS.rolesPermission
+      }
+    ]
+  }
 ];
 
 export default sidebarConfig;

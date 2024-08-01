@@ -832,7 +832,8 @@ const AppProvider = (props) => {
       const formatted = resData
         .map((e) => ({
           label: e?.title.replace(/\b\w/g, (char) => char.toUpperCase()),
-          value: e?.id
+          value: e?.id,
+          misc: e
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
 
@@ -1059,6 +1060,7 @@ const AppProvider = (props) => {
         fetchAllTeams();
         fetchAllLeaders();
         fetchAllDesignations();
+        fetchAllPublicHolidays();
       }
 
       if (isSecurity) {
