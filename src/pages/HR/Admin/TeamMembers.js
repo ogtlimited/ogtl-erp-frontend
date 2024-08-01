@@ -8,7 +8,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import {
   TeamLeadForm,
-  TeamMemberForm,
+  TeamMemberForm
 } from "../../../components/FormJSON/CreateOffices";
 import { TeamMemberFormModal } from "../../../components/Modal/TeamMembersFormModal";
 import { TeamLeadFormModal } from "../../../components/Modal/TeamLeadFormModal";
@@ -51,8 +51,8 @@ const TeamMembers = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
       const resData = response?.data?.data?.leads;
@@ -77,12 +77,12 @@ const TeamMembers = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
             pages: page,
-            limit: sizePerPage,
-          },
+            limit: sizePerPage
+          }
         }
       );
 
@@ -96,7 +96,7 @@ const TeamMembers = () => {
       setTotalPages(thisTotalPageSize);
 
       const formattedTeamMembers = resData.map((e) => ({
-        ...e,
+        ...e
       }));
 
       setTeamMembers(formattedTeamMembers);
@@ -140,8 +140,8 @@ const TeamMembers = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
-          },
+            "ngrok-skip-browser-warning": "69420"
+          }
         }
       );
 
@@ -181,13 +181,13 @@ const TeamMembers = () => {
             {val?.toUpperCase()} <span>{row?.ogid}</span>
           </Link>
         </h2>
-      ),
+      )
     },
     {
       dataField: "email",
       text: "Email",
       sort: true,
-      headerStyle: { width: "30%" },
+      headerStyle: { width: "30%" }
     },
     CurrentUserCanCreateAndEdit && {
       dataField: "",
@@ -206,8 +206,8 @@ const TeamMembers = () => {
             </button>
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -264,8 +264,9 @@ const TeamMembers = () => {
           >
             <h4>
               {teamLead[0]?.leadership_type
-                ?.replace(/_/g, " ")
-                ?.replace(/^./, (str) => str?.toUpperCase()) || "Leader"}
+                ?.split("_")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ") || "Leader"}
             </h4>
             <p>
               <Link

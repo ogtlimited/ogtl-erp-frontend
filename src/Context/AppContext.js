@@ -207,6 +207,10 @@ const AppProvider = (props) => {
     {
       label: "Manager",
       value: 2
+    },
+    {
+      label: "Quality Assurance",
+      value: 3
     }
   ];
 
