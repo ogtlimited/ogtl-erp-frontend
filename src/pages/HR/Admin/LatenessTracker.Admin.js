@@ -6,19 +6,30 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
+import { LatenessTrackerForm } from "../../../components/FormJSON/CreateLatenessTracker";
+import { LatenessTrackerModal } from "../../../components/Modal/LatenessTrackerModal";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
 
 const LatenessTracker = () => {
   const { user, ErrorHandler, getAvatarColor } = useAppContext();
-  const [loading, setLoading] = useState(false);
-  const [campaigns, setCampaigns] = useState([]);
-  const [departments, setDepartments] = useState([]);
 
-  // const [page, setPage] = useState(1);
-  // const [sizePerPage, setSizePerPage] = useState(10);
-  // const [totalPages, setTotalPages] = useState("");
+  const [view, setView] = useState("all");
+
+  const [data, setData] = useState([]);
+  const [mode, setMode] = useState("Create");
+  const [modalData, setModalData] = useState([]);
+  const [loadingLatenessTrackers, setLoadingLatenessTrackers] = useState(false);
+
+  const [campaigns, setCampaigns] = useState([]);
+  const [loadingCampaigns, setLoadingCampaigns] = useState(false);
+  const [departments, setDepartments] = useState([]);
+  const [loadingDepartments, setLoadingDepartments] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState("");
 
   const [CampaignPage, setCampaignPage] = useState(1);
   const [CampaignSizePerPage, setCampaignSizePerPage] = useState(10);
@@ -31,14 +42,48 @@ const LatenessTracker = () => {
   const CurrentUserRoles = user?.employee_info?.roles;
   const canCreate = ["hr_manager", "senior_hr_associate"];
 
-  const CurrentUserCanCreate = CurrentUserRoles.some((role) =>
+  const CurrentUserCanCreateAndEdit = CurrentUserRoles.some((role) =>
     canCreate.includes(role)
   );
 
-  const firstDay = moment().startOf("month").utc().format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").utc().format("YYYY-MM-DD");
-  const [fromDate, setFromDate] = useState(firstDay);
-  const [toDate, setToDate] = useState(lastDay);
+  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const [fromDate, setFromDate] = useState(firstweekDay);
+  const [toDate, setToDate] = useState(lastWeekDay);
+
+  // Office Lateness Tracker:
+  const fetchOfficeLatenessTracker = useCallback(async () => {
+    setLoadingLatenessTrackers(true);
+
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/lateness_trackers.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          params: {
+            start_date: moment(fromDate).utc().format("DD-MM-YYYY"),
+            end_date: moment(toDate).utc().format("DD-MM-YYYY")
+          }
+        }
+      );
+
+      const resData = response?.data?.data;
+
+      console.log("Lateness Tracker:", resData);
+
+      setData(resData);
+      setLoadingLatenessTrackers(false);
+    } catch (error) {
+      const component = "Office Lateness Tracker error | ";
+      ErrorHandler(error, component);
+      setLoadingLatenessTrackers(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, toDate]);
 
   // All Campaigns:
   const fetchAllCampaigns = useCallback(async () => {
@@ -70,10 +115,10 @@ const LatenessTracker = () => {
       }));
 
       setCampaigns(formattedCampaigns);
-      setLoading(false);
+      setLoadingCampaigns(false);
     } catch (error) {
       console.log("All Campaigns error:", error);
-      setLoading(false);
+      setLoadingCampaigns(false);
     }
   }, [CampaignPage, CampaignSizePerPage]);
 
@@ -106,10 +151,10 @@ const LatenessTracker = () => {
       }));
 
       setDepartments(formattedDepartments);
-      setLoading(false);
+      setLoadingDepartments(false);
     } catch (error) {
       console.log("All Departments error:", error);
-      setLoading(false);
+      setLoadingDepartments(false);
     }
   }, [DepartmentPage, DepartmentSizePerPage]);
 
@@ -117,6 +162,49 @@ const LatenessTracker = () => {
     fetchAllCampaigns();
     fetchAllDepartments();
   }, [fetchAllCampaigns, fetchAllDepartments]);
+
+  const columns = [
+    {
+      dataField: "full_name",
+      text: "Employee",
+      sort: true,
+      headerStyle: { width: "20%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <span
+            className="avatar-span"
+            style={{ backgroundColor: getAvatarColor(value?.charAt(0)) }}
+          >
+            {value?.charAt(0)}
+          </span>
+          <Link
+            to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
+          >
+            {value?.toUpperCase()}
+          </Link>
+        </h2>
+      )
+    },
+    CurrentUserCanCreateAndEdit && {
+      dataField: "",
+      text: "Action",
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <div className="text-center">
+          <div className="leave-user-action-btns">
+            <button
+              className="btn btn-sm btn-primary"
+              data-toggle="modal"
+              data-target="#LatenessTrackerModal"
+              onClick={() => handleEdit(row)}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      )
+    }
+  ];
 
   const campaignColumns = [
     {
@@ -156,6 +244,16 @@ const LatenessTracker = () => {
     }
   ];
 
+  const handleCreate = () => {
+    setMode("Create");
+    setModalData(LatenessTrackerForm);
+  };
+
+  const handleEdit = (row) => {
+    setMode("Edit");
+    setModalData(row);
+  };
+
   return (
     <>
       <div className="page-header">
@@ -166,6 +264,20 @@ const LatenessTracker = () => {
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Lateness Tracker</li>
             </ul>
+          </div>
+
+          <div className="col-auto float-right ml-auto">
+            {CurrentUserCanCreateAndEdit && view === "all" ? (
+              <a
+                href="#"
+                className="btn add-btn m-r-5"
+                data-toggle="modal"
+                data-target="#LatenessTrackerModal"
+                onClick={handleCreate}
+              >
+                <i className="fa fa-plus"> </i> Create Lateness Tracker
+              </a>
+            ) : null}
           </div>
         </div>
       </div>
@@ -178,14 +290,31 @@ const LatenessTracker = () => {
                 <a
                   className="nav-link active"
                   data-toggle="tab"
+                  href="#tab_all"
+                  onClick={() => setView("all")}
+                >
+                  All Lateness Trackers
+                </a>
+              </li>
+
+              <li className="nav-item">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
                   href="#tab_departments"
+                  onClick={() => setView("office")}
                 >
                   Departments
                 </a>
               </li>
 
               <li className="nav-item">
-                <a className="nav-link" data-toggle="tab" href="#tab_campaigns">
+                <a
+                  className="nav-link"
+                  data-toggle="tab"
+                  href="#tab_campaigns"
+                  onClick={() => setView("office")}
+                >
                   Campaigns
                 </a>
               </li>
@@ -196,12 +325,60 @@ const LatenessTracker = () => {
 
       <div>
         <div className="row tab-content">
-          <div id="tab_departments" className="col-12 tab-pane show active">
+          <div id="tab_all" className="col-12 tab-pane show active">
+            <div className="row" style={{ marginTop: "2rem" }}>
+              <div
+                className="col-md-3"
+                style={{
+                  marginLeft: "1rem"
+                }}
+              >
+                <div className="form-group">
+                  <label htmlFor="fromDate">From</label>
+                  <input
+                    type="date"
+                    name="fromDate"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    className="form-control "
+                  />
+                </div>
+              </div>
+
+              <div className="col-md-3">
+                <div className="form-group">
+                  <label htmlFor="toDate">To</label>
+                  <input
+                    type="date"
+                    name="toDate"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="form-control "
+                  />
+                </div>
+              </div>
+            </div>
+
+            <UniversalPaginatedTable
+              columns={columns}
+              data={data}
+              loading={loadingLatenessTrackers}
+              setLoading={setLoadingLatenessTrackers}
+              page={page}
+              setPage={setPage}
+              sizePerPage={sizePerPage}
+              setSizePerPage={setSizePerPage}
+              totalPages={totalPages}
+              setTotalPages={setTotalPages}
+            />
+          </div>
+
+          <div id="tab_departments" className="col-12 tab-pane">
             <UniversalPaginatedTable
               columns={departmentColumns}
               data={departments}
-              loading={loading}
-              setLoading={setLoading}
+              loading={loadingDepartments}
+              setLoading={setLoadingDepartments}
               page={CampaignPage}
               setPage={setDepartmentPage}
               sizePerPage={CampaignSizePerPage}
@@ -215,8 +392,8 @@ const LatenessTracker = () => {
             <UniversalPaginatedTable
               columns={campaignColumns}
               data={campaigns}
-              loading={loading}
-              setLoading={setLoading}
+              loading={loadingCampaigns}
+              setLoading={setLoadingCampaigns}
               page={CampaignPage}
               setPage={setCampaignPage}
               sizePerPage={CampaignSizePerPage}
@@ -227,6 +404,13 @@ const LatenessTracker = () => {
           </div>
         </div>
       </div>
+
+      <LatenessTrackerModal
+        from="all"
+        mode={mode}
+        data={modalData}
+        refetchData={fetchOfficeLatenessTracker}
+      />
     </>
   );
 };
