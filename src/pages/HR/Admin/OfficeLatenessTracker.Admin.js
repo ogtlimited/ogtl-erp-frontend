@@ -210,6 +210,7 @@ const OfficeLatenessTrackerAdmin = () => {
       </div>
 
       <LatenessTrackerModal
+        from="office"
         mode={mode}
         data={modalData}
         refetchData={fetchOfficeLatenessTracker}
