@@ -3,141 +3,107 @@
 import React, { useState } from "react";
 import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
+import {
+  selectModuleType,
+  officeTypeOptions
+} from "../../../components/FormJSON/Select";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
 import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
+import Select from "react-select";
 import moment from "moment";
 
 const ApprovalModule = () => {
-  const { showAlert, selectDepartments, selectCampaigns, goToTop } =
-    useAppContext();
+  const {
+    showAlert,
+    loadingSelect,
+    selectDepartments,
+    selectCampaigns,
+    goToTop
+  } = useAppContext();
+
   const [loading, setLoading] = useState(false);
-  const today = moment().format("YYYY-MM-DD");
-  const lastDay = moment().endOf("month").format("YYYY-MM-DD");
+  const [formData, setFormData] = useState([]);
 
-  const [title, setTitle] = useState("");
-  const [from, setFrom] = useState(today);
-  const [to, setTo] = useState(lastDay);
-  const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
-    []
-  );
-  const [selectedDepartment, setSelectedDepartment] = useState([]);
-  const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
-  const [selectedCampaign, setSelectedCampaign] = useState([]);
-  const [closeAll, setCloseAll] = useState(false);
-  const [viewingOffice, setViewingOffice] = useState(false);
+  const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
+  const [officeType, setOfficeType] = useState("");
 
-  const formattedDepartmentSelection = [
-    { label: "All", value: "all" },
-    ...selectDepartments,
-  ];
-  const formattedCampaignSelection = [
-    { label: "All", value: "all" },
-    ...selectCampaigns,
-  ];
-
-  const handleSubmitSurvey = async (surveyData) => {
-    // Extract relevant survey information
-    const { title, from, to, departments, campaigns } = surveyData;
-
-    // Reorganize questions data
-    const questions = surveyData.questions.map((question, index) => {
-      const options = question.options.reduce((acc, option, optionIndex) => {
-        acc[String.fromCharCode(97 + optionIndex)] = option.value;
-        return acc;
-      }, {});
-
-      // Find the indices of all correct answers
-      const correctIndices = question.options.reduce(
-        (acc, option, optionIndex) => {
-          if (option.correct) {
-            acc.push(optionIndex);
-          }
-          return acc;
-        },
-        []
-      );
-
-      // Map the indices of correct answers to their corresponding keys
-      const correctKeys = correctIndices.map((index) =>
-        String.fromCharCode(97 + index)
-      );
-
-      return {
-        id: index + 1,
-        question: question.question,
-        question_type: question.options[0].type,
-        options,
-        answers: correctKeys,
-      };
+  const handleOfficeTypeChange = (e) => {
+    setFormData({
+      ...formData,
+      operation_office_id: "",
+      officeName: ""
     });
 
-    // Reorganize applicable offices data
-    const applicable_offices = [];
-    if (departments?.length > 0) {
-      applicable_offices.push(
-        ...departments.map((department) => ({
-          id: department.value,
-          type: "department",
-          name: department.label,
-        }))
-      );
-    }
+    setOfficeType(e?.label);
+    setIsOfficeTypeSelected(true);
+  };
 
-    if (campaigns?.length > 0) {
-      applicable_offices.push(
-        ...campaigns.map((campaign) => ({
-          id: campaign.value,
-          type: "campaign",
-          name: campaign.label,
-        }))
-      );
-    }
+  const handleOfficeChange = (e) => {
+    setFormData({
+      ...formData,
+      operation_office_id: e?.value,
+      officeName: e?.label
+    });
+  };
 
-    // Construct the final survey data object
-    const formattedSurveyData = {
-      title,
-      question_details: {
-        questions,
-      },
-      applicable_offices: {
-        offices: applicable_offices,
-      },
-      from,
-      to,
-    };
+  const handleFormChange = (e) => {
+    e.preventDefault();
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    setLoading(true);
+  // const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
+  //   []
+  // );
+  // const [selectedDepartment, setSelectedDepartment] = useState([]);
+  // const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
+  // const [selectedCampaign, setSelectedCampaign] = useState([]);
+  // const [closeAll, setCloseAll] = useState(false);
+  // const [viewingOffice, setViewingOffice] = useState(false);
 
-    try {
-      const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
-        },
-        payload: formattedSurveyData,
-      });
+  // const formattedDepartmentSelection = [
+  //   { label: "All", value: "all" },
+  //   ...selectDepartments
+  // ];
+  // const formattedCampaignSelection = [
+  //   { label: "All", value: "all" },
+  //   ...selectCampaigns
+  // ];
 
-      showAlert(
-        true,
-        `${response?.data?.data?.message}`,
-        "alert alert-success"
-      );
+  const handleSubmit = async () => {
+    console.log("Submit this module", formData);
 
-      setTitle("");
-      setFrom(today);
-      setTo(lastDay);
-      setSelectedDepartmentOptions([]);
-      setSelectedDepartment([]);
-      setSelectedCampaignOptions([]);
-      setSelectedCampaign([]);
-      setLoading(false);
-    } catch (error) {
-      goToTop();
-      const errorMsg = error?.response?.data?.errors;
-      showAlert(true, `${errorMsg}`, "alert alert-warning");
-      setLoading(false);
-    }
+    // setLoading(true);
+
+    // try {
+    //   const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Access-Control-Allow-Origin": "*",
+    //       "ngrok-skip-browser-warning": "69420"
+    //     },
+    //     payload: formattedSurveyData
+    //   });
+
+    //   showAlert(
+    //     true,
+    //     `${response?.data?.data?.message}`,
+    //     "alert alert-success"
+    //   );
+
+    //   setTitle("");
+    //   setFrom(today);
+    //   setTo(lastDay);
+    //   setSelectedDepartmentOptions([]);
+    //   setSelectedDepartment([]);
+    //   setSelectedCampaignOptions([]);
+    //   setSelectedCampaign([]);
+    //   setLoading(false);
+    // } catch (error) {
+    //   goToTop();
+    //   const errorMsg = error?.response?.data?.errors;
+    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
+    //   setLoading(false);
+    // }
   };
 
   return (
@@ -153,60 +119,113 @@ const ApprovalModule = () => {
           </div>
         </div>
       </div>
+
       <div className="column survey_builder">
-        {/* Title */}
-        <div className="col-md-4">
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <input
-              className="form-control"
-              name="title"
-              type="text"
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              required
-            />
+        <div className="row col-md-12">
+          {/* Module Name */}
+          <div className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="module_name">Module Name</label>
+              <Select
+                options={selectModuleType}
+                isSearchable={true}
+                value={
+                  formData?.module_name
+                    ? {
+                        value: formData?.module_name,
+                        label: formData?.module
+                      }
+                    : null
+                }
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    module_name: e?.value,
+                    module: e?.label
+                  })
+                }
+                style={{ display: "inline-block" }}
+                placeholder={
+                  !selectModuleType?.length
+                    ? "fetching module..."
+                    : "Select Module"
+                }
+              />
+            </div>
+          </div>
+
+          {/* Stages */}
+          <div className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="stages">Stages</label>
+              <input
+                type="number"
+                name="stages"
+                value={formData?.stages}
+                onChange={handleFormChange}
+                className="form-control"
+                required
+              />
+            </div>
           </div>
         </div>
 
-        {/* From & To */}
-        <div className="row" style={{ paddingLeft: "1rem" }}>
+        <div className="row col-md-12">
+          {/* Office Type */}
           <div className="col-md-4">
             <div className="form-group">
-              <label htmlFor="from">From</label>
-              <input
-                type="date"
-                name="from"
-                value={from}
-                onChange={(e) => {
-                  setFrom(e.target.value);
+              <label htmlFor="office_type">Office Type</label>
+              <Select
+                options={officeTypeOptions}
+                value={{
+                  label: officeType,
+                  value: officeType
                 }}
-                className="form-control "
-                required
+                style={{ display: "inline-block" }}
+                onChange={(e) => handleOfficeTypeChange(e)}
               />
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label htmlFor="to">To</label>
-              <input
-                type="date"
-                name="to"
-                value={to}
-                onChange={(e) => {
-                  setTo(e.target.value);
-                }}
-                className="form-control "
-                required
-              />
+
+          {/* Offices */}
+          {isOfficeTypeSelected && (
+            <div className="col-md-4">
+              <div className="form-group">
+                <label htmlFor="operation_office_id">Office</label>
+                <Select
+                  options={
+                    officeType === "Department"
+                      ? selectDepartments
+                      : officeType === "Campaign"
+                      ? selectCampaigns
+                      : null
+                  }
+                  isSearchable={true}
+                  value={
+                    formData?.operation_office_id
+                      ? {
+                          label: formData?.officeName,
+                          value: formData?.operation_office_id
+                        }
+                      : null
+                  }
+                  onChange={(e) => handleOfficeChange(e)}
+                  style={{ display: "inline-block" }}
+                  placeholder={
+                    officeType === "Department" && !selectDepartments?.length
+                      ? "fetching departments..."
+                      : officeType === "Campaign" && !selectCampaigns?.length
+                      ? "fetching campaigns..."
+                      : `Select ${officeType}`
+                  }
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Offices */}
-        <div className="row" style={{ paddingLeft: "1rem" }}>
+        {/* <div className="row" style={{ paddingLeft: "1rem" }}>
           <div className="col-md-4">
             <div className="form-group">
               <label htmlFor="applicable_departments">
@@ -241,22 +260,7 @@ const ApprovalModule = () => {
               />
             </div>
           </div>
-        </div>
-
-        {(selectedDepartmentOptions.length || selectedCampaignOptions.length) &&
-        title.length ? (
-          <div className="column survey_builder_container">
-            <SurveyFormBuilder
-              title={title}
-              from={from}
-              to={to}
-              selectedDepartment={selectedDepartment}
-              selectedCampaign={selectedCampaign}
-              onSubmitSurvey={handleSubmitSurvey}
-              loading={loading}
-            />
-          </div>
-        ) : null}
+        </div> */}
       </div>
     </>
   );
