@@ -71,7 +71,7 @@ const AttendanceAverageAdmin = ({
         <div className="average_attendance_content">
           <div className="ave_att_top_div">
             <AttendanceAverageCard
-              iconSrc="https://cdn.lordicon.com/qnthazlv.json"
+              iconSrc="https://cdn.lordicon.com/qhkvfxpn.json"
               label="Total ERP Expected Attendance Count"
               value={
                 loading ? (
@@ -88,7 +88,7 @@ const AttendanceAverageAdmin = ({
             />
 
             <AttendanceAverageCard
-              iconSrc="https://cdn.lordicon.com/gbaaxcjq.json"
+              iconSrc="https://cdn.lordicon.com/stxfyhky.json"
               label="Total Biometric Attendance Count"
               value={
                 loading ? (

@@ -61,6 +61,7 @@ export const PATH_DASHBOARD = {
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
     attendanceRecord: path(ROOTS_DASHBOARD, "/hr/attendance-record"),
+    latenessTracker: path(ROOTS_DASHBOARD, "/hr/lateness-tracker"),
     remoteAttendanceAdmin: path(ROOTS_DASHBOARD, "/hr/remote-attendance"),
     outOfOffice: path(ROOTS_DASHBOARD, "/hr/out-of-office"),
     publicholiday: path(ROOTS_DASHBOARD, "/hr/public-holiday"),
