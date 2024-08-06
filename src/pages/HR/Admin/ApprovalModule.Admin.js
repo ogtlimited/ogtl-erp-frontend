@@ -9,6 +9,7 @@ import {
 } from "../../../components/FormJSON/Select";
 import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
 import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
+import { MdOutlineAdd } from "react-icons/md";
 import Select from "react-select";
 import moment from "moment";
 
@@ -154,23 +155,6 @@ const ApprovalModule = () => {
             </div>
           </div>
 
-          {/* Stages */}
-          <div className="col-md-4">
-            <div className="form-group">
-              <label htmlFor="stages">Stages</label>
-              <input
-                type="number"
-                name="stages"
-                value={formData?.stages}
-                onChange={handleFormChange}
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="row col-md-12">
           {/* Office Type */}
           <div className="col-md-4">
             <div className="form-group">
@@ -186,7 +170,9 @@ const ApprovalModule = () => {
               />
             </div>
           </div>
+        </div>
 
+        <div className="row col-md-12">
           {/* Offices */}
           {isOfficeTypeSelected && (
             <div className="col-md-4">
@@ -222,6 +208,21 @@ const ApprovalModule = () => {
               </div>
             </div>
           )}
+
+          {/* Stages */}
+          <div className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="stages">Stages</label>
+              <input
+                type="number"
+                name="stages"
+                value={formData?.stages}
+                onChange={handleFormChange}
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
         </div>
 
         {/* Offices */}
@@ -261,6 +262,12 @@ const ApprovalModule = () => {
             </div>
           </div>
         </div> */}
+
+        <div className="col-md-4" style={{ marginTop: "2rem" }}>
+          <button type="button" className="add_btn_new">
+            <MdOutlineAdd /> <span>Add Approver</span>
+          </button>
+        </div>
       </div>
     </>
   );
