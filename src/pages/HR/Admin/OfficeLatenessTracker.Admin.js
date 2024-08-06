@@ -58,9 +58,9 @@ const OfficeLatenessTrackerAdmin = () => {
         }
       );
 
-      const resData = response?.data?.data;
+      const resData = response?.data?.data?.lateness_tracker_records;
 
-      console.log("Lateness Tracker:", resData);
+      console.log("Lateness Tracker:", response?.data?.data);
 
       setData(resData);
       setLoading(false);

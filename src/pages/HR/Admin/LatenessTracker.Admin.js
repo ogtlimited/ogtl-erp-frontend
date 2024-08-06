@@ -46,8 +46,9 @@ const LatenessTracker = () => {
     canCreate.includes(role)
   );
 
-  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
-  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const firstweekDay = moment().utc().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().local().endOf("week").format("YYYY-MM-DD");
+
   const [fromDate, setFromDate] = useState(firstweekDay);
   const [toDate, setToDate] = useState(lastWeekDay);
 
@@ -65,8 +66,8 @@ const LatenessTracker = () => {
             "ngrok-skip-browser-warning": "69420"
           },
           params: {
-            start_date: moment(fromDate).utc().format("DD-MM-YYYY"),
-            end_date: moment(toDate).utc().format("DD-MM-YYYY")
+            start_date: moment(fromDate).format("DD-MM-YYYY"),
+            end_date: moment(toDate).format("DD-MM-YYYY")
           }
         }
       );
@@ -215,7 +216,7 @@ const LatenessTracker = () => {
       formatter: (val, row) => (
         <p>
           <Link
-            to={`/dashboard/hr/campaign/employees/${row?.title}/${row.id}`}
+            to={`/dashboard/hr/lateness/campaign/employees/${row?.title}/${row.id}`}
             className="attendance-record-for-office"
           >
             {val?.toUpperCase()}
@@ -234,7 +235,7 @@ const LatenessTracker = () => {
       formatter: (val, row) => (
         <p>
           <Link
-            to={`/dashboard/hr/department/employees/${row?.title}/${row.id}`}
+            to={`/dashboard/hr/lateness/department/employees/${row?.title}/${row.id}`}
             className="attendance-record-for-office"
           >
             {val?.toUpperCase()}

@@ -19,8 +19,9 @@ const OfficeAttendanceAdmin = () => {
   const [date, setDate] = useState(today_date);
 
   // Attendance Average:
-  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
-  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const firstweekDay = moment().utc().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().local().endOf("week").format("YYYY-MM-DD");
+
   const [attendanceAverage, setAttendanceAverage] = useState([]);
   const [loadingAttendanceAverage, setLoadingAttendanceAverage] =
     useState(false);
@@ -106,8 +107,8 @@ const OfficeAttendanceAdmin = () => {
           params: {
             office_type: office_type,
             office_id: id,
-            from: moment(attendanceAverageFromDate).utc().format("DD-MM-YYYY"),
-            to: moment(attendanceAverageToDate).utc().format("DD-MM-YYYY"),
+            from: moment(attendanceAverageFromDate).format("DD-MM-YYYY"),
+            to: moment(attendanceAverageToDate).format("DD-MM-YYYY"),
           },
         }
       );
