@@ -1,26 +1,23 @@
 import React from "react";
 
-const OutOfOfficeContent = ({ Content = {} }) => {
+const LatenessTrackerContent = ({ Content = {} }) => {
   const filteredApplication = {
     ...Content,
     id: undefined
   };
 
   const orderedKeys = [
-    "full_name",
+    "employee",
     "ogid",
+    "officeType",
     "office",
-    "reason",
-    "from",
-    "to",
-    "called_in",
-    "caller_is_employee",
     "caller",
+    "callerIsEmployee",
+    "modeOfCommunication",
+    "expectedArrivalTime",
+    "willComeIn",
+    "enteredBy",
     "note",
-    "daily_follow_up",
-    "approved",
-    "dateCreated",
-    "enteredBy"
   ];
 
   return (
@@ -65,4 +62,4 @@ const OutOfOfficeContent = ({ Content = {} }) => {
   );
 };
 
-export default OutOfOfficeContent;
+export default LatenessTrackerContent;

@@ -46,8 +46,28 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
   const [allEmployees, setAllEmployees] = useState([]);
 
   useEffect(() => {
-    setFormData(data);
-  }, [data]);
+    if (mode === "Edit") {
+      setFormData({
+        expected_arrival_time: data?.expected_arrival_time,
+        will_come_in: data?.will_come_in,
+        mode_of_communication: data?.mode_of_communication,
+        caller_is_employee: data?.caller_is_employee,
+        caller_name: data?.caller_name,
+        hr_employee_id: null,
+        operation_office_id: data?.employee?.operation_office_id,
+        office_type: data?.office_type,
+        note: data?.note
+      });
+
+      setIsOfficeTypeSelected(true);
+      setIsOfficeSelected(true);
+      setOfficeType(
+        data?.office_type?.replace(/\b\w/g, (char) => char.toUpperCase())
+      );
+    } else {
+      setFormData(data);
+    }
+  }, [data, mode]);
 
   // useEffect(() => {
   //   if (formData.hr_leave_type_id && formData?.hr_user_id) {
@@ -199,7 +219,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     e.preventDefault();
     setLoading(true);
 
-    const dataPayload = {
+    const payload = {
       expected_arrival_time: formData?.expected_arrival_time,
       will_come_in: formData?.will_come_in,
       mode_of_communication: formData?.mode_of_communication,
@@ -208,11 +228,11 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
       hr_employee_id: formData?.hr_employee_id,
       operation_office_id:
         from === "all" ? +formData?.operation_office_id : +id,
-      office_type: from === "all" ? officeType : office_type,
+      office_type:
+        from === "all" ? officeType?.toLowerCase() : office_type?.toLowerCase(),
       note: formData?.note
     };
 
-    setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(
@@ -223,14 +243,14 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420"
           },
-          dataPayload
+          payload
         }
       );
 
       goToTop();
       showAlert(
         true,
-        `Leave Application for ${formData?.employeeName} is successful`,
+        `Lateness Tracker for ${formData?.employeeName} Successfully Created`,
         "alert alert-success"
       );
 
@@ -249,7 +269,59 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     }
   };
 
-  const handleEditLatenessTracker = async (e) => {};
+  const handleEditLatenessTracker = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const payload = {
+      expected_arrival_time: formData?.expected_arrival_time,
+      will_come_in: formData?.will_come_in,
+      mode_of_communication: formData?.mode_of_communication,
+      caller_is_employee: formData?.caller_is_employee,
+      caller_name: formData?.caller_name,
+      hr_employee_id: formData?.hr_employee_id,
+      operation_office_id:
+        from === "all" ? +formData?.operation_office_id : +id,
+      office_type:
+        from === "all" ? officeType?.toLowerCase() : office_type?.toLowerCase(),
+      note: formData?.note
+    };
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(
+        "/api/v1/lateness_trackers.json",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          payload
+        }
+      );
+
+      goToTop();
+      showAlert(
+        true,
+        `Lateness Tracker for ${data?.employee} Successfully Updated`,
+        "alert alert-success"
+      );
+
+      $("#LatenessTrackerModal").modal("toggle");
+
+      refetchData();
+      cancelEvent();
+      setLoading(false);
+    } catch (error) {
+      $("#LatenessTrackerModal").modal("toggle");
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+
+      goToTop();
+      setLoading(false);
+      cancelEvent();
+    }
+  };
 
   return (
     <>
@@ -297,7 +369,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                       </div>
                     ) : null}
 
-                    {isOfficeTypeSelected && (
+                    {isOfficeTypeSelected && from === "all" && (
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="employee_info.operation_office_id">
@@ -329,7 +401,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                                 : officeType === "Campaign" &&
                                   !selectCampaigns?.length
                                 ? "fetching campaigns..."
-                                : "Select Office"
+                                : `Select ${officeType}`
                             }
                           />
                         </div>
@@ -375,7 +447,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                           Expected Arrival Time
                         </label>
                         <input
-                          type="time"
+                          type="datetime-local"
                           name="expected_arrival_time"
                           value={formData?.expected_arrival_time}
                           onChange={handleFormChange}
@@ -417,7 +489,10 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                           name="mode_of_communication"
                           options={modeofCommunicationOptions}
                           value={{
-                            label: formData?.mode_of_communication_title,
+                            label: formData?.mode_of_communication?.replace(
+                              /\b\w/g,
+                              (char) => char.toUpperCase()
+                            ),
                             value: formData?.mode_of_communication
                           }}
                           onChange={(e) =>
