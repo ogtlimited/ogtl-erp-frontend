@@ -156,7 +156,7 @@ const EmployeesTable = ({
 
   const columns = [
     {
-      dataField: "fullName",
+      dataField: "full_name",
       text: "Employee",
       sort: true,
       headerStyle: { width: "100%" },
@@ -221,23 +221,54 @@ const EmployeesTable = ({
     },
     {
       dataField: "office",
-      text: "Office Type",
-      sort: true,
-      headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>
-    },
-    {
-      dataField: "officeName",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
       formatter: (val, row) => <span>{val?.toUpperCase()}</span>
     },
     {
-      dataField: "company_email",
+      dataField: "email",
       text: "Company Email",
       sort: true,
       headerStyle: { width: "100%" }
+    },
+    {
+      dataField: "pensionable",
+      text: "Pensionable",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value ? "text-success" : "text-secondary"
+              } `}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {value ? "Yes" : "No"}
+          </span>
+        </>
+      )
+    },
+    {
+      dataField: "taxable",
+      text: "Taxable",
+      sort: true,
+      headerStyle: { width: "10%" },
+      formatter: (value, row) => (
+        <>
+          <span className="btn btn-gray btn-sm btn-rounded">
+            <i
+              className={`fa fa-dot-circle-o ${
+                value ? "text-success" : "text-secondary"
+              } `}
+              style={{ marginRight: "10px" }}
+            ></i>{" "}
+            {value ? "Yes" : "No"}
+          </span>
+        </>
+      )
     },
     {
       dataField: "",
@@ -512,13 +543,53 @@ const EmployeesTable = ({
     return <>{show ? "No Data Available" : null}</>;
   };
 
+  // const handleExportCSV = async (e) => {
+  //   e.preventDefault();
+  //   setIsDownloading(true);
+
+  //   try {
+  //     const response = await axiosInstance.get("/api/v1/exports/employees.xml", {
+  //       headers: {
+  //         "Content-Type": "application/xml; charset=utf-8",
+  //         "Access-Control-Allow-Origin": "*",
+  //         "ngrok-skip-browser-warning": "69420"
+  //       },
+  //       params: {
+  //         status: statusFilter.length ? statusFilter : "active"
+  //         // office_type: selectedOffice?.office_type,
+  //         // operation_office_id: selectedOffice?.office_type.length
+  //         //   ? selectedOffice?.id
+  //         //   : null
+  //       }
+  //     });
+
+  //     console.log("download this", response);
+
+  //     setIsDownloading(false);
+  //   } catch (error) {
+  //     showAlert(
+  //       true,
+  //       error?.response?.data?.errors || "Error Exporting records",
+  //       "alert alert-warning"
+  //     );
+  //     setIsDownloading(false);
+  //   }
+  // };
+
   const handleDownloadCSV = async (e) => {
     e.preventDefault();
     setIsDownloading(true);
 
     try {
-      const response = await axiosInstance.get("/api/v1/exports/employees", {
+      const response = await axiosInstance.get("/api/v1/employees.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        },
         params: {
+          page: 1,
+          limit: 4000,
           status: statusFilter.length ? statusFilter : "active"
           // office_type: selectedOffice?.office_type,
           // operation_office_id: selectedOffice?.office_type.length
@@ -527,31 +598,42 @@ const EmployeesTable = ({
         }
       });
 
-      console.log("download this", response);
-
       const responseData = response?.data?.data?.employees;
 
-      // const formatted = responseData.map((data) => ({
-      //   "Employee Name": data?.full_name,
-      //   OGID: data?.ogid,
-      //   "Office Type": data?.office?.office_type,
-      //   Office: data?.office?.title,
-      //   Designation: data?.designation,
-      //   Email: data?.email
-      // }));
+      const formatted = responseData.map((data) => ({
+        "EMPLOYEE NAME": data?.full_name,
+        STATUS: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
+        OGID: data?.ogid,
+        OFFICE: data?.office
+          ?.toUpperCase()
+          .replace(/_/g, " ")
+          .replace(/^./, (str) => str.toUpperCase()),
+        DESIGNATION: data?.designation?.toUpperCase(),
+        EMAIL: data?.email,
+        PENSIONABLE: data?.pensionable ? "Yes" : "No",
+        TAXABLE: data?.taxable ? "Yes" : "No"
+      }));
 
-      // const dataToConvert = {
-      //   data: formatted,
-      //   filename: "OGTL - All Employees Record",
-      //   delimiter: ",",
-      //   useKeysAsHeaders: true
-      // };
+      const dataToConvert = {
+        data: formatted,
+        filename: `OGTL - All ${
+          statusFilter.length
+            ? statusFilter.replace(/\b\w/g, (char) => char.toUpperCase())
+            : "Active"
+        } Employees Record`,
+        delimiter: ",",
+        useKeysAsHeaders: true
+      };
 
-      // csvDownload(dataToConvert);
+      csvDownload(dataToConvert);
 
       setIsDownloading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors || "Error Exporting records", "alert alert-warning");
+      showAlert(
+        true,
+        error?.response?.data?.errors || "Error Exporting records",
+        "alert alert-warning"
+      );
       setIsDownloading(false);
     }
   };
@@ -583,12 +665,16 @@ const EmployeesTable = ({
                     Exporting records, please wait...
                   </button>
                 ) : (
-                  <button
-                    onClick={handleDownloadCSV}
-                    className="float-right btn export-csv"
-                  >
-                    Export Employee Records (CSV)
-                  </button>
+                  <>
+                    {data?.length ? (
+                      <button
+                        onClick={handleDownloadCSV}
+                        className="float-right btn export-csv"
+                      >
+                        Export Employee Records (CSV)
+                      </button>
+                    ) : null}
+                  </>
                 )}
 
                 <MySearch

@@ -81,7 +81,6 @@ const AllEmployeesAdmin = () => {
       });
 
       const resData = response?.data?.data?.employees;
-
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -93,11 +92,6 @@ const AllEmployeesAdmin = () => {
       const mapp = resData.map((emp) => {
         return {
           ...emp,
-          fullName: emp?.full_name?.toUpperCase(),
-          office: emp?.office?.office_type,
-          officeName: emp?.office?.title,
-          designation: emp?.designation,
-          company_email: emp?.email,
           pic: emp?.profile_picture
         };
       });
