@@ -18,7 +18,7 @@ const AllEmployeesAdmin = () => {
     user,
     selectDepartments,
     selectCampaigns,
-    selectDesignations,
+    selectDesignations
   } = useAppContext();
   const [allEmployees, setallEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,9 +32,11 @@ const AllEmployeesAdmin = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [designations, setDesignations] = useState([]);
 
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [campaignFilter, setCampaignFilter] = useState("");
-  const [officeFilter, setOfficeFilter] = useState("");
+  const [selectedOffice, setSelectedOffice] = useState({
+    id: null,
+    title: "",
+    office_type: ""
+  });
   const [designationFilter, setDesignationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,22 +60,27 @@ const AllEmployeesAdmin = () => {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420",
+          "ngrok-skip-browser-warning": "69420"
         },
         params: {
           page: page,
           limit: sizePerPage,
           name: searchTerm.length ? searchTerm : null,
-          operation_office_id: officeFilter.length ? officeFilter : null,
+          office_type:
+            selectedOffice?.office_type && selectedOffice?.id
+              ? selectedOffice?.office_type
+              : null,
+          operation_office_id: selectedOffice?.office_type.length
+            ? selectedOffice?.id
+            : null,
           hr_designation_id: designationFilter.length
             ? designationFilter
             : null,
-          status: statusFilter.length ? statusFilter : null,
-        },
+          status: statusFilter.length ? statusFilter : null
+        }
       });
 
       const resData = response?.data?.data?.employees;
-
       const totalPages = response?.data?.data?.pages;
 
       const thisPageLimit = sizePerPage;
@@ -85,12 +92,7 @@ const AllEmployeesAdmin = () => {
       const mapp = resData.map((emp) => {
         return {
           ...emp,
-          fullName: emp?.full_name?.toUpperCase(),
-          office: emp?.office?.office_type,
-          officeName: emp?.office?.title,
-          designation: emp?.designation,
-          company_email: emp?.email,
-          pic: emp?.profile_picture,
+          pic: emp?.profile_picture
         };
       });
 
@@ -104,11 +106,12 @@ const AllEmployeesAdmin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     designationFilter,
-    officeFilter,
     page,
     searchTerm,
+    selectedOffice?.id,
+    selectedOffice?.office_type,
     sizePerPage,
-    statusFilter,
+    statusFilter
   ]);
 
   useEffect(() => {
@@ -135,11 +138,11 @@ const AllEmployeesAdmin = () => {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420",
+            "ngrok-skip-browser-warning": "69420"
           },
           params: {
-            status: modalType,
-          },
+            status: modalType
+          }
         }
       );
 
@@ -217,12 +220,8 @@ const AllEmployeesAdmin = () => {
         setSizePerPage={setSizePerPage}
         totalPages={totalPages}
         setTotalPages={setTotalPages}
-        departmentFilter={departmentFilter}
-        setDepartmentFilter={setDepartmentFilter}
-        campaignFilter={campaignFilter}
-        setCampaignFilter={setCampaignFilter}
-        officeFilter={officeFilter}
-        setOfficeFilter={setOfficeFilter}
+        selectedOffice={selectedOffice}
+        setSelectedOffice={setSelectedOffice}
         designationFilter={designationFilter}
         setDesignationFilter={setDesignationFilter}
         statusFilter={statusFilter}
