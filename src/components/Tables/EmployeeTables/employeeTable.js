@@ -12,6 +12,7 @@ import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import csvDownload from "json-to-csv-export";
+import Select from "react-select";
 
 const EmployeesTable = ({
   data,
@@ -30,12 +31,8 @@ const EmployeesTable = ({
   totalPages,
   setTotalPages,
 
-  departmentFilter,
-  setDepartmentFilter,
-  campaignFilter,
-  setCampaignFilter,
-  officeFilter,
-  setOfficeFilter,
+  selectedOffice,
+  setSelectedOffice,
   designationFilter,
   setDesignationFilter,
   statusFilter,
@@ -68,12 +65,18 @@ const EmployeesTable = ({
     }
   ];
 
-  const [dataToFilter, setDataToFilter] = useState("");
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const { setIsFromBiometrics, showAlert, user, getAvatarColor } =
-    useAppContext();
+  const {
+    setIsFromBiometrics,
+    showAlert,
+    user,
+    getAvatarColor,
+    selectOfficeTypes,
+    selectDepartments,
+    selectCampaigns
+  } = useAppContext();
   const [info, setInfo] = useState({
     sizePerPage: 10
   });
@@ -98,10 +101,6 @@ const EmployeesTable = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobileView]);
-
-  useEffect(() => {
-    setDataToFilter(data);
-  }, [data]);
 
   // Pagination
   const count = totalPages;
@@ -336,9 +335,11 @@ const EmployeesTable = ({
           setPage(1);
           props.onSearch(input.value);
           const searchTerm = input.value;
-          setOfficeFilter("");
-          setCampaignFilter("");
-          setDepartmentFilter("");
+          setSelectedOffice({
+            id: null,
+            title: "",
+            office_type: ""
+          });
           setDesignationFilter("");
           setStatusFilter("");
           setSearchTerm(searchTerm);
@@ -365,9 +366,11 @@ const EmployeesTable = ({
               input.value = "";
               props.onSearch("");
               setSearchTerm("");
-              setOfficeFilter("");
-              setCampaignFilter("");
-              setDepartmentFilter("");
+              setSelectedOffice({
+                id: null,
+                title: "",
+                office_type: ""
+              });
               setDesignationFilter("");
               setStatusFilter("");
               setPage(1);
@@ -379,126 +382,14 @@ const EmployeesTable = ({
       );
     },
     [
-      setCampaignFilter,
-      setDepartmentFilter,
       setDesignationFilter,
       setLoading,
-      setOfficeFilter,
       setPage,
       setSearchTerm,
+      setSelectedOffice,
       setStatusFilter
     ]
   );
-
-  // Filter by Departments:
-  const handleDepartmentFilter = (e) => {
-    setCampaignFilter("");
-    setDesignationFilter("");
-    setDepartmentFilter(e.target.value);
-    setOfficeFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420"
-        },
-
-        params: {
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm,
-          operation_office_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null
-        }
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
-
-  // Filter by Campaigns:
-  const handleCampaignFilter = (e) => {
-    setDepartmentFilter("");
-    setDesignationFilter("");
-    setCampaignFilter(e.target.value);
-    setOfficeFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420"
-        },
-
-        params: {
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm,
-          operation_office_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null
-        }
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
 
   // Filter by Designation:
   const handleDesignationFilter = (e) => {
@@ -518,7 +409,10 @@ const EmployeesTable = ({
           page: page,
           limit: sizePerPage,
           name: searchTerm,
-          operation_office_id: officeFilter.length ? officeFilter : null,
+          office_type: selectedOffice?.office_type,
+          operation_office_id: selectedOffice?.office_type.length
+            ? selectedOffice?.id
+            : null,
           hr_designation_id: e.target.value,
           status: statusFilter.length ? statusFilter : null
         }
@@ -571,7 +465,10 @@ const EmployeesTable = ({
           page: page,
           limit: sizePerPage,
           name: searchTerm.length ? searchTerm : null,
-          operation_office_id: officeFilter.length ? officeFilter : null,
+          office_type: selectedOffice?.office_type,
+          operation_office_id: selectedOffice?.office_type.length
+            ? selectedOffice?.id
+            : null,
           hr_designation_id: designationFilter.length
             ? designationFilter
             : null,
@@ -620,23 +517,19 @@ const EmployeesTable = ({
     setIsDownloading(true);
 
     try {
-      const response = await axiosInstance.get(
-        "/api/v1/exports/employees.json",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420"
-          },
-          params: {
-            status: statusFilter.length ? statusFilter : "active",
-          }
+      const response = await axiosInstance.get("/api/v1/exports/employees", {
+        params: {
+          status: statusFilter.length ? statusFilter : "active"
+          // office_type: selectedOffice?.office_type,
+          // operation_office_id: selectedOffice?.office_type.length
+          //   ? selectedOffice?.id
+          //   : null
         }
-      );
+      });
 
       console.log("download this", response);
 
-      // const responseData = response?.data?.data?.employees;
+      const responseData = response?.data?.data?.employees;
 
       // const formatted = responseData.map((data) => ({
       //   "Employee Name": data?.full_name,
@@ -644,31 +537,31 @@ const EmployeesTable = ({
       //   "Office Type": data?.office?.office_type,
       //   Office: data?.office?.title,
       //   Designation: data?.designation,
-      //   Email: data?.email,
+      //   Email: data?.email
       // }));
 
       // const dataToConvert = {
       //   data: formatted,
       //   filename: "OGTL - All Employees Record",
       //   delimiter: ",",
-      //   useKeysAsHeaders: true,
+      //   useKeysAsHeaders: true
       // };
 
       // csvDownload(dataToConvert);
 
       setIsDownloading(false);
     } catch (error) {
-      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+      showAlert(true, error?.response?.data?.errors || "Error Exporting records", "alert alert-warning");
       setIsDownloading(false);
     }
   };
 
   return (
     <>
-      {dataToFilter && (
+      {data && (
         <ToolkitProvider
           keyField="id"
-          data={loading ? [] : dataToFilter}
+          data={loading ? [] : data}
           columns={columns}
           search
           exportCSV
@@ -687,7 +580,7 @@ const EmployeesTable = ({
                       aria-hidden="true"
                       style={{ marginRight: "10px" }}
                     ></span>
-                    Downloading, please wait
+                    Exporting records, please wait...
                   </button>
                 ) : (
                   <button
@@ -707,42 +600,66 @@ const EmployeesTable = ({
 
               <div className="hr-filter-select col-12">
                 {/* <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDepartmentFilter(e)}
-                    defaultValue={departmentFilter}
-                    value={departmentFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Department
-                    </option>
-                    {departments.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label htmlFor="officeType">Filter By</label>
+                  <Select
+                    options={selectOfficeTypes}
+                    value={
+                      selectedOffice?.office_type
+                        ? {
+                            label: selectedOffice?.office_type.replace(
+                              /\b\w/g,
+                              (char) => char.toUpperCase()
+                            ),
+                            value: selectedOffice?.office_type
+                          }
+                        : null
+                    }
+                    onChange={(e) => {
+                      setSelectedOffice({
+                        id: "",
+                        title: "",
+                        office_type: e.value
+                      });
+                    }}
+                    placeholder="Office Type"
+                    style={{ display: "inline-block" }}
+                  />
                 </div> */}
 
                 {/* <div className="col-md-3">
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleCampaignFilter(e)}
-                    defaultValue={campaignFilter}
-                    value={campaignFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Filter by Campaign
-                    </option>
-                    {campaigns.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label htmlFor="office_id">
+                    {selectedOffice?.office_type.replace(/\b\w/g, (char) =>
+                      char.toUpperCase()
+                    ) || "Office"}
+                  </label>
+                  <Select
+                    options={
+                      selectedOffice?.office_type === "department"
+                        ? selectDepartments
+                        : selectedOffice?.office_type === "campaign"
+                        ? selectCampaigns
+                        : []
+                    }
+                    value={{
+                      value: selectedOffice?.id,
+                      label:
+                        selectedOffice?.title.toUpperCase() || "Office Title"
+                    }}
+                    onChange={(e) =>
+                      setSelectedOffice({
+                        ...selectedOffice,
+                        id: e?.value,
+                        title: e?.label
+                      })
+                    }
+                    placeholder="Office Title"
+                    style={{ display: "inline-block" }}
+                    isSearchable={true}
+                  />
                 </div> */}
 
                 <div className="col-md-3">
+                  <label>Filter By Designation</label>
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleDesignationFilter(e)}
@@ -750,7 +667,7 @@ const EmployeesTable = ({
                     value={designationFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by Designation
+                      Select Designation...
                     </option>
                     {designations.map((option, idx) => (
                       <option key={idx} value={option.value}>
@@ -761,6 +678,7 @@ const EmployeesTable = ({
                 </div>
 
                 <div className="col-md-3">
+                  <label>Filter By Status</label>
                   <select
                     className="leave-filter-control"
                     onChange={(e) => handleStatusFilter(e)}
@@ -768,7 +686,7 @@ const EmployeesTable = ({
                     value={statusFilter}
                   >
                     <option value="" disabled selected hidden>
-                      Filter by Status
+                      Select Status...
                     </option>
                     {status.map((option, index) => (
                       <option key={index} value={option.code}>
