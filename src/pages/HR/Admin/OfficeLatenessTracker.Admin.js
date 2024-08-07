@@ -75,8 +75,11 @@ const OfficeLatenessTrackerAdmin = () => {
 
       const formattedData = resData.map((data) => ({
         ...data,
-        employee: data?.full_name,
+        employee: data?.employee?.first_name + " " + data?.employee?.last_name,
+        ogid: data?.employee?.ogid,
+        designation: data?.employee?.designation,
         officeType: data?.office_type?.toUpperCase(),
+        office: data?.office?.toUpperCase(),
         caller: data?.caller_name,
         callerIsEmployee: data?.caller_is_employee ? "Yes" : "No",
         expectedArrivalTime: moment(data?.expected_arrival_time).format(
@@ -87,7 +90,8 @@ const OfficeLatenessTrackerAdmin = () => {
           /\b\w/g,
           (char) => char.toUpperCase()
         ),
-        enteredBy: data?.entered_by?.fullName
+        enteredBy:
+          data?.entered_by?.first_name + " " + data?.entered_by?.last_name
       }));
 
       setData(formattedData);
@@ -128,12 +132,9 @@ const OfficeLatenessTrackerAdmin = () => {
           >
             {value?.charAt(0)}
           </span>
-          <Link
-            to=""
-            // to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
-          >
-            {value?.toUpperCase()}
-          </Link>
+          <div>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
+          </div>
         </h2>
       )
     },
@@ -142,6 +143,19 @@ const OfficeLatenessTrackerAdmin = () => {
       text: "Office Type",
       sort: true,
       headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <div>
+            {value} <span>{row?.designation}</span>
+          </div>
+        </h2>
+      )
     },
     {
       dataField: "caller",
@@ -162,14 +176,14 @@ const OfficeLatenessTrackerAdmin = () => {
       headerStyle: { width: "15%" }
     },
     {
-      dataField: "expectedArrivalTime",
-      text: "Expected Arrival Time?",
+      dataField: "willComeIn",
+      text: "Will Come In?",
       sort: true,
       headerStyle: { width: "15%" }
     },
     {
-      dataField: "willComeIn",
-      text: "Will Come In?",
+      dataField: "expectedArrivalTime",
+      text: "Expected Arrival Time?",
       sort: true,
       headerStyle: { width: "15%" }
     },

@@ -9,13 +9,14 @@ const LatenessTrackerContent = ({ Content = {} }) => {
   const orderedKeys = [
     "employee",
     "ogid",
+    "designation", 
     "officeType",
     "office",
     "caller",
     "callerIsEmployee",
     "modeOfCommunication",
-    "expectedArrivalTime",
     "willComeIn",
+    "expectedArrivalTime",
     "enteredBy",
     "note",
   ];
