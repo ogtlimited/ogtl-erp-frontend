@@ -32,7 +32,7 @@ jobs:
         node-version: 16.17.0
 
     - name: Install dependencies
-      run: npm install
+      run: npm install --force
 
     - name: Create env
       if: endsWith(github.ref, '/dev')
