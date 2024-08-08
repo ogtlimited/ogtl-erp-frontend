@@ -1,6 +1,6 @@
 //* IN USE
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAppContext } from "../../Context/AppContext";
 import { useParams } from "react-router-dom";
 import { officeTypeOptions } from "../FormJSON/AddDeduction";
@@ -46,16 +46,44 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
   const [allEmployees, setAllEmployees] = useState([]);
 
   useEffect(() => {
-    setFormData(data);
-  }, [data]);
+    if (mode === "Edit") {
+      setFormData({
+        expected_arrival_time: data?.expected_arrival_time,
+        will_come_in: data?.will_come_in,
+        mode_of_communication: data?.mode_of_communication,
+        caller_is_employee: data?.caller_is_employee,
+        caller_name: data?.caller_name,
+        hr_employee_id: data?.ogid,
+        operation_office_id: data?.employee?.operation_office_id,
+        office_type: data?.office_type,
+        office: data?.office,
+        employeeName: data?.employee,
+        note: data?.note
+      });
+
+      setIsOfficeTypeSelected(true);
+      setIsOfficeSelected(true);
+      setOfficeType(
+        data?.office_type?.replace(/\b\w/g, (char) => char.toUpperCase())
+      );
+    } else {
+      setFormData(data);
+
+      if (id) {
+        setOfficeType(
+          office_type.replace(/\b\w/g, (char) => char.toUpperCase())
+        );
+      }
+    }
+  }, [data, id, mode, office_type]);
 
   // useEffect(() => {
-  //   if (formData.hr_leave_type_id && formData?.hr_user_id) {
+  //   if (formData.hr_leave_type_id && formData?.hr_employee_id) {
   //     setIsFormValid(true);
   //   } else {
   //     setIsFormValid(false);
   //   }
-  // }, [formData.hr_leave_type_id, formData.hr_user_id]);
+  // }, [formData.hr_leave_type_id, formData.hr_employee_id]);
 
   const cancelEvent = () => {
     setFormData(data);
@@ -68,8 +96,8 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     setFormData({
       ...formData,
       operation_office_id: "",
-      officeName: "",
-      hr_user_id: "",
+      office: "",
+      hr_employee_id: "",
       employeeName: ""
     });
 
@@ -81,8 +109,8 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     setFormData({
       ...formData,
       operation_office_id: e?.value,
-      officeName: e?.label,
-      hr_user_id: "",
+      office: e?.label,
+      hr_employee_id: "",
       employeeName: ""
     });
 
@@ -90,102 +118,112 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     fetchAllEmployees(e?.value);
   };
 
-  const fetchAllEmployees = async (officeId) => {
-    if (officeType === "Department") {
-      const response = await axiosInstance.get(
-        `/api/v1/departments_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420"
-          },
-          params: {
-            pages: 1,
-            limit: 1000
+  const fetchAllEmployees = useCallback(
+    async (officeId) => {
+
+      if (officeType === "Department") {
+        const response = await axiosInstance.get(
+          `/api/v1/departments_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420"
+            },
+            params: {
+              pages: 1,
+              limit: 1000
+            }
           }
-        }
-      );
+        );
 
-      const resData = response?.data?.data?.employees;
+        const resData = response?.data?.data?.employees;
 
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedData);
-      setLoading(false);
-      return;
-    }
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
 
-    if (officeType === "Campaign") {
-      const response = await axiosInstance.get(
-        `/api/v1/campaign_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420"
-          },
-          params: {
-            pages: 1,
-            limit: 1000
+      if (officeType === "Campaign") {
+        const response = await axiosInstance.get(
+          `/api/v1/campaign_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420"
+            },
+            params: {
+              pages: 1,
+              limit: 1000
+            }
           }
-        }
-      );
+        );
 
-      const resData = response?.data?.data?.employees;
+        const resData = response?.data?.data?.employees;
 
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedData);
-      setLoading(false);
-      return;
-    }
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
 
-    if (officeType === "Team") {
-      const response = await axiosInstance.get(
-        `/api/v1/teams_employees/${officeId}.json`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "ngrok-skip-browser-warning": "69420"
-          },
-          params: {
-            pages: 1,
-            limit: 1000
+      if (officeType === "Team") {
+        const response = await axiosInstance.get(
+          `/api/v1/teams_employees/${officeId}.json`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              "ngrok-skip-browser-warning": "69420"
+            },
+            params: {
+              pages: 1,
+              limit: 1000
+            }
           }
-        }
-      );
+        );
 
-      const resData = response?.data?.data?.employees;
+        const resData = response?.data?.data?.employees;
 
-      const formattedData = resData
-        .map((e) => ({
-          label: e?.name,
-          value: e.ogid
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        const formattedData = resData
+          .map((e) => ({
+            label: e?.name,
+            value: e.ogid
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
 
-      setAllEmployees(formattedData);
-      setLoading(false);
-      return;
-    }
-  };
+        setAllEmployees(formattedData);
+        setLoading(false);
+        return;
+      }
+    },
+    [officeType]
+  );
 
   const handleFormChange = (e) => {
     e.preventDefault();
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    if (id) {
+      fetchAllEmployees(+id);
+    }
+  }, [fetchAllEmployees, id]);
 
   const handleLatenessTrackerActions = async (e) => {
     if (mode === "Create") {
@@ -199,7 +237,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     e.preventDefault();
     setLoading(true);
 
-    const dataPayload = {
+    const payload = {
       expected_arrival_time: formData?.expected_arrival_time,
       will_come_in: formData?.will_come_in,
       mode_of_communication: formData?.mode_of_communication,
@@ -208,11 +246,11 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
       hr_employee_id: formData?.hr_employee_id,
       operation_office_id:
         from === "all" ? +formData?.operation_office_id : +id,
-      office_type: from === "all" ? officeType : office_type,
+      office_type:
+        from === "all" ? officeType?.toLowerCase() : office_type?.toLowerCase(),
       note: formData?.note
     };
 
-    setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.post(
@@ -223,14 +261,14 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
             "Access-Control-Allow-Origin": "*",
             "ngrok-skip-browser-warning": "69420"
           },
-          dataPayload
+          payload
         }
       );
 
       goToTop();
       showAlert(
         true,
-        `Leave Application for ${formData?.employeeName} is successful`,
+        `Lateness Tracker for ${formData?.employeeName} Successfully Created`,
         "alert alert-success"
       );
 
@@ -249,7 +287,63 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
     }
   };
 
-  const handleEditLatenessTracker = async (e) => {};
+  const handleEditLatenessTracker = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const payload = {
+      expected_arrival_time: formData?.expected_arrival_time,
+      will_come_in: formData?.will_come_in,
+      mode_of_communication: formData?.mode_of_communication,
+      caller_is_employee: formData?.caller_is_employee,
+      caller_name: formData?.caller_name,
+      hr_employee_id: formData?.hr_employee_id,
+      operation_office_id:
+        from === "all"
+          ? formData?.operation_office_id
+            ? +formData?.operation_office_id
+            : null
+          : +id,
+      office_type:
+        from === "all" ? officeType?.toLowerCase() : office_type?.toLowerCase(),
+      note: formData?.note
+    };
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const response = await axiosInstance.put(
+        `/api/v1/lateness_trackers/${data?.id}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420"
+          },
+          payload
+        }
+      );
+
+      goToTop();
+      showAlert(
+        true,
+        `Lateness Tracker for ${data?.employee} Successfully Updated`,
+        "alert alert-success"
+      );
+
+      $("#LatenessTrackerModal").modal("toggle");
+
+      refetchData();
+      cancelEvent();
+      setLoading(false);
+    } catch (error) {
+      $("#LatenessTrackerModal").modal("toggle");
+      showAlert(true, error?.response?.data?.errors, "alert alert-warning");
+
+      goToTop();
+      setLoading(false);
+      cancelEvent();
+    }
+  };
 
   return (
     <>
@@ -297,7 +391,7 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                       </div>
                     ) : null}
 
-                    {isOfficeTypeSelected && (
+                    {isOfficeTypeSelected && from === "all" && (
                       <div className="col-md-6">
                         <div className="form-group">
                           <label htmlFor="employee_info.operation_office_id">
@@ -313,9 +407,9 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                             }
                             isSearchable={true}
                             value={
-                              formData?.operation_office_id
+                              formData?.office
                                 ? {
-                                    label: formData?.officeName,
+                                    label: formData?.office,
                                     value: formData?.operation_office_id
                                   }
                                 : null
@@ -329,32 +423,32 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                                 : officeType === "Campaign" &&
                                   !selectCampaigns?.length
                                 ? "fetching campaigns..."
-                                : "Select Office"
+                                : `Select ${officeType}`
                             }
                           />
                         </div>
                       </div>
                     )}
 
-                    {isOfficeSelected && (
+                    {(isOfficeSelected || id) && (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="employee">Employee</label>
+                          <label htmlFor="hr_employee_id">Employee</label>
                           <Select
                             options={allEmployees}
                             isSearchable={true}
                             value={
-                              formData?.hr_user_id
+                              formData?.employeeName
                                 ? {
-                                    value: formData?.hr_user_id,
-                                    label: formData?.employeeName
+                                    label: formData?.employeeName,
+                                    value: formData?.hr_employee_id
                                   }
                                 : null
                             }
                             onChange={(e) =>
                               setFormData({
                                 ...formData,
-                                hr_user_id: e?.value,
+                                hr_employee_id: e?.value,
                                 employeeName: e?.label
                               })
                             }
@@ -368,22 +462,6 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                         </div>
                       </div>
                     )}
-
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label htmlFor="expected_arrival_time">
-                          Expected Arrival Time
-                        </label>
-                        <input
-                          type="time"
-                          name="expected_arrival_time"
-                          value={formData?.expected_arrival_time}
-                          onChange={handleFormChange}
-                          className="form-control"
-                          required
-                        />
-                      </div>
-                    </div>
 
                     <div className="col-md-6">
                       <div className="form-group">
@@ -410,6 +488,22 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
 
                     <div className="col-md-6">
                       <div className="form-group">
+                        <label htmlFor="expected_arrival_time">
+                          Expected Arrival Time
+                        </label>
+                        <input
+                          type="datetime-local"
+                          name="expected_arrival_time"
+                          value={formData?.expected_arrival_time}
+                          onChange={handleFormChange}
+                          className="form-control"
+                          required={formData?.will_come_in}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="form-group">
                         <label htmlFor="mode_of_communication">
                           Mode of Communication
                         </label>
@@ -417,7 +511,10 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                           name="mode_of_communication"
                           options={modeofCommunicationOptions}
                           value={{
-                            label: formData?.mode_of_communication_title,
+                            label: formData?.mode_of_communication?.replace(
+                              /\b\w/g,
+                              (char) => char.toUpperCase()
+                            ),
                             value: formData?.mode_of_communication
                           }}
                           onChange={(e) =>
@@ -458,23 +555,21 @@ export const LatenessTrackerModal = ({ from, mode, data, refetchData }) => {
                     {formData?.caller_is_employee ? (
                       <div className="col-md-6">
                         <div className="form-group">
-                          <label htmlFor="hr_employee_id">Caller's Name</label>
+                          <label htmlFor="caller_name">Caller's Name</label>
                           <Select
-                            name="hr_employee_id"
+                            name="caller_name"
                             options={selectEmployees}
                             value={
-                              formData?.hr_employee_id
+                              formData?.caller_name
                                 ? {
-                                    label: formData?.employee_title,
-                                    value: formData?.hr_employee_id
+                                    label: formData?.caller_name,
+                                    value: formData?.caller_name
                                   }
                                 : null
                             }
                             onChange={(e) =>
                               setFormData({
                                 ...formData,
-                                hr_employee_id: e?.value,
-                                employee_title: e?.label,
                                 caller_name: e?.label
                               })
                             }

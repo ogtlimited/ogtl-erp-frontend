@@ -7,6 +7,8 @@ import { Link, useParams } from "react-router-dom";
 import { useAppContext } from "../../../Context/AppContext";
 import { LatenessTrackerForm } from "../../../components/FormJSON/CreateLatenessTracker";
 import { LatenessTrackerModal } from "../../../components/Modal/LatenessTrackerModal";
+import ViewModal from "../../../components/Modal/ViewModal";
+import LatenessTrackerContent from "../../../components/ModalContents/LatenessTrackerContent";
 import UniversalPaginatedTable from "../../../components/Tables/UniversalPaginatedTable";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
@@ -19,6 +21,8 @@ const OfficeLatenessTrackerAdmin = () => {
   const [mode, setMode] = useState("Create");
   const [modalData, setModalData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [modalType, setmodalType] = useState("");
+  const [viewRow, setViewRow] = useState(null);
 
   const [page, setPage] = useState(1);
   const [sizePerPage, setSizePerPage] = useState(10);
@@ -31,8 +35,9 @@ const OfficeLatenessTrackerAdmin = () => {
     canCreate.includes(role)
   );
 
-  const firstweekDay = moment().startOf("week").format("YYYY-MM-DD");
-  const lastWeekDay = moment().endOf("week").format("YYYY-MM-DD");
+  const firstweekDay = moment().utc().startOf("week").format("YYYY-MM-DD");
+  const lastWeekDay = moment().local().endOf("week").format("YYYY-MM-DD");
+
   const [fromDate, setFromDate] = useState(firstweekDay);
   const [toDate, setToDate] = useState(lastWeekDay);
 
@@ -50,19 +55,46 @@ const OfficeLatenessTrackerAdmin = () => {
             "ngrok-skip-browser-warning": "69420"
           },
           params: {
+            page: page,
+            limit: sizePerPage,
+            start_date: fromDate,
+            end_date: toDate,
             office_type: office_type,
-            operation_office_id: id,
-            start_date: moment(fromDate).utc().format("DD-MM-YYYY"),
-            end_date: moment(toDate).utc().format("DD-MM-YYYY")
+            operation_office_id: id
           }
         }
       );
 
       const resData = response?.data?.data?.lateness_tracker_records;
+      let totalPages = response?.data?.data?.total_pages;
 
-      console.log("Lateness Tracker:", response?.data?.data);
+      setSizePerPage(sizePerPage);
+      setTotalPages(totalPages);
 
-      setData(resData);
+      console.log("Office Lateness Tracker:", response?.data?.data);
+
+      const formattedData = resData.map((data) => ({
+        ...data,
+        employee: data?.employee?.first_name + " " + data?.employee?.last_name,
+        ogid: data?.employee?.ogid,
+        designation: data?.employee?.designation,
+        officeType: data?.office_type?.toUpperCase(),
+        office: data?.office?.toUpperCase(),
+        caller: data?.caller_name,
+        callerIsEmployee: data?.caller_is_employee ? "Yes" : "No",
+        expectedArrivalTime: moment(data?.expected_arrival_time).format(
+          "ddd, DD MMM YYYY - h:mma"
+        ),
+        willComeIn: data?.will_come_in ? "Yes" : "No",
+        modeOfCommunication: data?.mode_of_communication?.replace(
+          /\b\w/g,
+          (char) => char.toUpperCase()
+        ),
+        enteredBy:
+          data?.entered_by?.first_name + " " + data?.entered_by?.last_name
+      }));
+
+      setData(formattedData);
       setLoading(false);
     } catch (error) {
       const component = "Office Lateness Tracker error | ";
@@ -88,7 +120,7 @@ const OfficeLatenessTrackerAdmin = () => {
 
   const columns = [
     {
-      dataField: "full_name",
+      dataField: "employee",
       text: "Employee",
       sort: true,
       headerStyle: { width: "20%" },
@@ -100,15 +132,68 @@ const OfficeLatenessTrackerAdmin = () => {
           >
             {value?.charAt(0)}
           </span>
-          <Link
-            to={`/dashboard/hr/office/employee-attendance/${row?.full_name}/${row?.ogid}`}
-          >
-            {value?.toUpperCase()}
-          </Link>
+          <div>
+            {value?.toUpperCase()} <span>{row?.ogid}</span>
+          </div>
         </h2>
       )
     },
-    CurrentUserCanCreateAndEdit && {
+    {
+      dataField: "officeType",
+      text: "Office Type",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "office",
+      text: "Office",
+      sort: true,
+      headerStyle: { width: "15%" },
+      formatter: (value, row) => (
+        <h2 className="table-avatar">
+          <div>
+            {value} <span>{row?.designation}</span>
+          </div>
+        </h2>
+      )
+    },
+    {
+      dataField: "caller",
+      text: "Caller's Name",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "callerIsEmployee",
+      text: "Caller is Employee?",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "modeOfCommunication",
+      text: "Mode Of Communication",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "willComeIn",
+      text: "Will Come In?",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "expectedArrivalTime",
+      text: "Expected Arrival Time?",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
+      dataField: "enteredBy",
+      text: "Entered By",
+      sort: true,
+      headerStyle: { width: "15%" }
+    },
+    {
       dataField: "",
       text: "Action",
       headerStyle: { width: "10%" },
@@ -116,13 +201,27 @@ const OfficeLatenessTrackerAdmin = () => {
         <div className="text-center">
           <div className="leave-user-action-btns">
             <button
-              className="btn btn-sm btn-primary"
+              className="btn btn-sm btn-info"
               data-toggle="modal"
-              data-target="#LatenessTrackerModal"
-              onClick={() => handleEdit(row)}
+              data-target="#generalModal"
+              onClick={() => {
+                setmodalType("view-details");
+                setViewRow(row);
+              }}
             >
-              Edit
+              View
             </button>
+
+            {CurrentUserCanCreateAndEdit && (
+              <button
+                className="btn btn-sm btn-primary"
+                data-toggle="modal"
+                data-target="#LatenessTrackerModal"
+                onClick={() => handleEdit(row)}
+              >
+                Edit
+              </button>
+            )}
           </div>
         </div>
       )
@@ -208,6 +307,13 @@ const OfficeLatenessTrackerAdmin = () => {
           setTotalPages={setTotalPages}
         />
       </div>
+
+      {modalType === "view-details" ? (
+        <ViewModal
+          title="Lateness Tracker Details"
+          content={<LatenessTrackerContent Content={viewRow} />}
+        />
+      ) : null}
 
       <LatenessTrackerModal
         from="office"
