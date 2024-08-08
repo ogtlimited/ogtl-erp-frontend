@@ -331,7 +331,7 @@ export default function Router() {
               ),
             },
             {
-              path: ":office_type/employees/:office/:id",
+              path: "lateness/:office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OfficeLatenessTrackerAdmin />
@@ -379,7 +379,7 @@ export default function Router() {
             //   ),
             // },
             {
-              path: ":office_type/employees/:office/:id",
+              path: "attendance/:office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />
