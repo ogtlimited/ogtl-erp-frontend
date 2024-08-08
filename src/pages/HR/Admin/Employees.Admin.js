@@ -96,7 +96,10 @@ const AllEmployeesAdmin = () => {
       const mapp = resData.map((emp) => {
         return {
           ...emp,
-          office: emp?.office?.toUpperCase(),
+          office: emp?.office
+            ?.toUpperCase()
+            ?.replace(/_/g, " ")
+            ?.replace(/^./, (str) => str.toUpperCase()),
           designation: emp?.designation?.toUpperCase(),
           pic: emp?.profile_picture
         };
@@ -109,7 +112,7 @@ const AllEmployeesAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     designationFilter?.id,
     page,
