@@ -5,10 +5,9 @@ import axiosInstance from "../../../services/api";
 import { useAppContext } from "../../../Context/AppContext";
 import {
   selectModuleType,
-  officeTypeOptions
+  officeTypeOptions,
+  selectApproverOptions
 } from "../../../components/FormJSON/Select";
-import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
-import SurveyFormBuilder from "../../../components/Forms/SurveyFormBuilder";
 import { MdOutlineAdd } from "react-icons/md";
 import Select from "react-select";
 import moment from "moment";
@@ -27,6 +26,9 @@ const ApprovalModule = () => {
 
   const [isOfficeTypeSelected, setIsOfficeTypeSelected] = useState(false);
   const [officeType, setOfficeType] = useState("");
+
+  const [stage, setStage] = useState(0);
+  const [arroverSection, setApproverSection] = useState(false);
 
   const handleOfficeTypeChange = (e) => {
     setFormData({
@@ -52,23 +54,10 @@ const ApprovalModule = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const [selectedDepartmentOptions, setSelectedDepartmentOptions] = useState(
-  //   []
-  // );
-  // const [selectedDepartment, setSelectedDepartment] = useState([]);
-  // const [selectedCampaignOptions, setSelectedCampaignOptions] = useState([]);
-  // const [selectedCampaign, setSelectedCampaign] = useState([]);
-  // const [closeAll, setCloseAll] = useState(false);
-  // const [viewingOffice, setViewingOffice] = useState(false);
-
-  // const formattedDepartmentSelection = [
-  //   { label: "All", value: "all" },
-  //   ...selectDepartments
-  // ];
-  // const formattedCampaignSelection = [
-  //   { label: "All", value: "all" },
-  //   ...selectCampaigns
-  // ];
+  const handleAddApprover = () => {
+    setStage(stage + 1);
+    setApproverSection(true);
+  };
 
   const handleSubmit = async () => {
     console.log("Submit this module", formData);
@@ -121,7 +110,7 @@ const ApprovalModule = () => {
         </div>
       </div>
 
-      <div className="column survey_builder">
+      <div className="column approval_builder">
         <div className="row col-md-12">
           {/* Module Name */}
           <div className="col-md-4">
@@ -264,11 +253,24 @@ const ApprovalModule = () => {
         </div> */}
 
         <div className="col-md-4" style={{ marginTop: "2rem" }}>
-          <button type="button" className="add_btn_new">
+          <button
+            type="button"
+            className="add_btn_new"
+            onClick={handleAddApprover}
+          >
             <MdOutlineAdd /> <span>Add Approver</span>
           </button>
         </div>
       </div>
+
+      {arroverSection && (
+        <div className="column approval_builder">
+          <div className="row col-md-12">
+            radio goes here
+          </div>
+
+        </div>
+      )}
     </>
   );
 };
