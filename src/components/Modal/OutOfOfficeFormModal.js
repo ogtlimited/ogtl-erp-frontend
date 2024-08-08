@@ -61,6 +61,7 @@ export const OutOfOfficeFormModal = ({
 
   const handleCreateOutOfOffice = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const payload = {
       employee_id: formData?.employee_id,
@@ -72,10 +73,9 @@ export const OutOfOfficeFormModal = ({
       caller: formData?.caller,
       note: formData?.note,
       daily_follow_up: {},
-      approved: true
+      approved: false
     };
 
-    setLoading(true);
     try {
       const url = formData?.public_holiday_id
         ? `/api/v1/out_of_office.json?public_holiday_id=${formData?.public_holiday_id}`
@@ -117,10 +117,8 @@ export const OutOfOfficeFormModal = ({
 
   const handleEditOutOfOffice = async (e) => {
     e.preventDefault();
-
-    console.log("edit payload:", formData);
-
     setLoading(true);
+    
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(

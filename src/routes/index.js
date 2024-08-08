@@ -323,6 +323,22 @@ export default function Router() {
               ),
             },
             {
+              path: "lateness-tracker",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <LatenessTracker />
+                </GuardedRoute>
+              ),
+            },
+            {
+              path: "lateness/:office_type/employees/:office/:id",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <OfficeLatenessTrackerAdmin />
+                </GuardedRoute>
+              ),
+            },
+            {
               path: "remote-attendance",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -363,7 +379,7 @@ export default function Router() {
             //   ),
             // },
             {
-              path: ":office_type/employees/:office/:id",
+              path: "attendance/:office_type/employees/:office/:id",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OfficeAttendanceAdmin />
@@ -1269,6 +1285,9 @@ const Leads = Loadable(lazy(() => import("../pages/Campaigns/Leads")));
 const AttendanceRecord = Loadable(
   lazy(() => import("../pages/HR/Admin/AttendanceRecord.Admin"))
 );
+const LatenessTracker = Loadable(
+  lazy(() => import("../pages/HR/Admin/LatenessTracker.Admin"))
+);
 const RemoteAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/RemoteAttendance.Admin"))
 );
@@ -1335,6 +1354,9 @@ const AllEmployeesDepartmentAdmin = Loadable(
 );
 const OfficeAttendanceAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/OfficeAttendance.Admin"))
+);
+const OfficeLatenessTrackerAdmin = Loadable(
+  lazy(() => import("../pages/HR/Admin/OfficeLatenessTracker.Admin.js"))
 );
 const EmployeeAttendanceRecordAdmin = Loadable(
   lazy(() => import("../pages/HR/Admin/EmployeeAttendanceRecord.Admin"))

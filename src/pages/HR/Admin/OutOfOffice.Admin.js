@@ -130,8 +130,6 @@ const OutOfOfficeAdmin = () => {
 
       const resData = response?.data?.data?.employees;
 
-      console.log(resData);
-
       const formattedStaffOnHoliday = resData.map((e) => ({
         ...e,
         employee: e?.full_name?.toUpperCase(),
