@@ -19,3 +19,29 @@ export const officeTypeOptions = [
     value: "campaign",
   },
 ];
+
+export const selectApproverOptions = [
+  {
+    label: "Leadership",
+    value: "leadership",
+  },
+  {
+    label: "Designation",
+    value: "designation",
+  },
+  {
+    label: "Role",
+    value: "role",
+  },
+];
+
+export const selectLeadershipOptions = [
+  {
+    label: "Supervisor",
+    value: "supervisor",
+  },
+  {
+    label: "Team Lead",
+    value: "teamlead",
+  },
+];
