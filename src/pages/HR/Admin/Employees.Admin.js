@@ -10,6 +10,11 @@ import { useAppContext } from "../../../Context/AppContext";
 import ConfirmModal from "../../../components/Modal/ConfirmModal";
 import $ from "jquery";
 
+const initialState = {
+  id: null,
+  title: ""
+};
+
 const AllEmployeesAdmin = () => {
   const navigate = useNavigate();
   const {
@@ -33,12 +38,11 @@ const AllEmployeesAdmin = () => {
   const [designations, setDesignations] = useState([]);
 
   const [selectedOffice, setSelectedOffice] = useState({
-    id: null,
-    title: "",
+    ...initialState,
     office_type: ""
   });
-  const [designationFilter, setDesignationFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [designationFilter, setDesignationFilter] = useState(initialState);
+  const [statusFilter, setStatusFilter] = useState(initialState);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [modalType, setModalType] = useState("");
@@ -73,10 +77,10 @@ const AllEmployeesAdmin = () => {
           operation_office_id: selectedOffice?.office_type.length
             ? selectedOffice?.id
             : null,
-          hr_designation_id: designationFilter.length
-            ? designationFilter
+          hr_designation_id: designationFilter?.title?.length
+            ? designationFilter?.id
             : null,
-          status: statusFilter.length ? statusFilter : null
+          status: statusFilter?.id?.length ? statusFilter?.id : null
         }
       });
 
@@ -89,9 +93,13 @@ const AllEmployeesAdmin = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
+      console.log("Employee data", resData);
+
       const mapp = resData.map((emp) => {
         return {
           ...emp,
+          office: emp?.office?.toUpperCase(),
+          designation: emp?.designation?.toUpperCase(),
           pic: emp?.profile_picture
         };
       });
@@ -103,15 +111,15 @@ const AllEmployeesAdmin = () => {
       ErrorHandler(error, component);
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    designationFilter,
+    designationFilter?.id,
     page,
     searchTerm,
     selectedOffice?.id,
     selectedOffice?.office_type,
     sizePerPage,
-    statusFilter
+    statusFilter?.id
   ]);
 
   useEffect(() => {
