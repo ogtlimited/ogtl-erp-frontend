@@ -93,8 +93,6 @@ const AllEmployeesAdmin = () => {
       setSizePerPage(thisPageLimit);
       setTotalPages(thisTotalPageSize);
 
-      console.log("Employee data", resData);
-
       const mapp = resData.map((emp) => {
         return {
           ...emp,

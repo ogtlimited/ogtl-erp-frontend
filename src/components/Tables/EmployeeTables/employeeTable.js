@@ -427,62 +427,6 @@ const EmployeesTable = ({
     ]
   );
 
-  // // Filter by Status:
-  // const handleStatusFilter = (e) => {
-  //   setStatusFilter(e.target.value);
-  //   setPage(1);
-  //   setLoading(true);
-
-  //   axiosInstance
-  //     .get("/api/v1/employees.json", {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Access-Control-Allow-Origin": "*",
-  //         "ngrok-skip-browser-warning": "69420"
-  //       },
-
-  //       params: {
-  //         page: page,
-  //         limit: sizePerPage,
-  //         name: searchTerm.length ? searchTerm : null,
-  //         office_type: selectedOffice?.office_type,
-  //         operation_office_id: selectedOffice?.office_type.length
-  //           ? selectedOffice?.id
-  //           : null,
-  //         hr_designation_id: designationFilter.length
-  //           ? designationFilter
-  //           : null,
-  //         status: e.target.value
-  //       }
-  //     })
-  //     .then((e) => {
-  //       const resData = e?.data?.data?.employees;
-  //       const totalPages = e?.data?.data?.pages;
-
-  //       const thisPageLimit = sizePerPage;
-  //       const thisTotalPageSize = totalPages;
-
-  //       setSizePerPage(thisPageLimit);
-  //       setTotalPages(thisTotalPageSize);
-
-  //       const mapp = resData?.map((emp) => {
-  //         return {
-  //           ...emp,
-  //           office: emp?.office?.toUpperCase(),
-  //           designation: emp?.designation?.toUpperCase(),
-  //           pic: emp?.profile_picture
-  //         };
-  //       });
-
-  //       setData(mapp);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       setLoading(false);
-  //     });
-  //   setLoading(false);
-  // };
-
   const showNullMessage = () => {
     setTimeout(() => {
       setShow(true);
@@ -537,7 +481,7 @@ const EmployeesTable = ({
         params: {
           page: 1,
           limit: 4000,
-          status: statusFilter.length ? statusFilter : "active"
+          status: statusFilter?.id?.length ? statusFilter?.id : null
           // office_type: selectedOffice?.office_type,
           // operation_office_id: selectedOffice?.office_type.length
           //   ? selectedOffice?.id
@@ -564,13 +508,15 @@ const EmployeesTable = ({
       const dataToConvert = {
         data: formatted,
         filename: `OGTL - All ${
-          statusFilter.length
-            ? statusFilter.replace(/\b\w/g, (char) => char.toUpperCase())
+          statusFilter?.id?.length
+            ? statusFilter?.id?.replace(/\b\w/g, (char) => char.toUpperCase())
             : "Active"
         } Employees Record`,
         delimiter: ",",
         useKeysAsHeaders: true
       };
+
+      // console.log("dataToConvert", dataToConvert)
 
       csvDownload(dataToConvert);
 
@@ -736,9 +682,7 @@ const EmployeesTable = ({
                     }}
                     style={{ display: "inline-block" }}
                     placeholder={
-                      !status?.length
-                        ? "fetching status..."
-                        : "Select Status"
+                      !status?.length ? "fetching status..." : "Select Status"
                     }
                   />
                 </div>
