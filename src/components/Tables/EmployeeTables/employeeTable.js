@@ -189,7 +189,7 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+              <span className="ml-4 d-block">{value}</span>
             </a>
           ) : value === "left" ? (
             <a href="" className="pos-relative">
@@ -201,13 +201,13 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+              <span className="ml-4 d-block">{value}</span>
             </a>
           ) : (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value.toUpperCase()}</span>
+              <span className="ml-4 d-block">{value}</span>
             </a>
           )}
         </>
@@ -224,7 +224,7 @@ const EmployeesTable = ({
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+      formatter: (val, row) => <span>{val}</span>
     },
     {
       dataField: "email",
