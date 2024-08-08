@@ -73,7 +73,7 @@ export const OutOfOfficeFormModal = ({
       caller: formData?.caller,
       note: formData?.note,
       daily_follow_up: {},
-      approved: true
+      approved: false
     };
 
     try {
