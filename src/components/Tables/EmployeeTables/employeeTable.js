@@ -14,6 +14,30 @@ import { useAppContext } from "../../../Context/AppContext";
 import csvDownload from "json-to-csv-export";
 import Select from "react-select";
 
+const initialState = {
+  id: null,
+  title: ""
+};
+
+const status = [
+  {
+    label: "ACTIVE",
+    value: "active"
+  },
+  {
+    label: "RESIGNED",
+    value: "left"
+  },
+  {
+    label: "TERMINATED",
+    value: "terminated"
+  },
+  {
+    label: "DEACTIVATED",
+    value: "deactivated"
+  }
+];
+
 const EmployeesTable = ({
   data,
   setData,
@@ -46,25 +70,6 @@ const EmployeesTable = ({
   fetchAllEmployees,
   context
 }) => {
-  const status = [
-    {
-      code: "active",
-      label: "ACTIVE"
-    },
-    {
-      code: "left",
-      label: "RESIGNED"
-    },
-    {
-      code: "terminated",
-      label: "TERMINATED"
-    },
-    {
-      code: "deactivated",
-      label: "DEACTIVATED"
-    }
-  ];
-
   const [show, setShow] = useState(false);
   const [mobileView, setmobileView] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -189,7 +194,7 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-online"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value?.toUpperCase()}</span>
             </a>
           ) : value === "left" ? (
             <a href="" className="pos-relative">
@@ -201,13 +206,13 @@ const EmployeesTable = ({
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value?.toUpperCase()}</span>
             </a>
           ) : (
             <a href="" className="pos-relative">
               {" "}
               <span className="status-terminated"></span>{" "}
-              <span className="ml-4 d-block">{value}</span>
+              <span className="ml-4 d-block">{value?.toUpperCase()}</span>
             </a>
           )}
         </>
@@ -371,8 +376,8 @@ const EmployeesTable = ({
             title: "",
             office_type: ""
           });
-          setDesignationFilter("");
-          setStatusFilter("");
+          setDesignationFilter(initialState);
+          setStatusFilter(initialState);
           setSearchTerm(searchTerm);
         }
         setLoading(false);
@@ -402,8 +407,8 @@ const EmployeesTable = ({
                 title: "",
                 office_type: ""
               });
-              setDesignationFilter("");
-              setStatusFilter("");
+              setDesignationFilter(initialState);
+              setStatusFilter(initialState);
               setPage(1);
             }}
           >
@@ -421,120 +426,6 @@ const EmployeesTable = ({
       setStatusFilter
     ]
   );
-
-  // Filter by Designation:
-  const handleDesignationFilter = (e) => {
-    setDesignationFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420"
-        },
-
-        params: {
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm,
-          office_type: selectedOffice?.office_type,
-          operation_office_id: selectedOffice?.office_type.length
-            ? selectedOffice?.id
-            : null,
-          hr_designation_id: e.target.value,
-          status: statusFilter.length ? statusFilter : null
-        }
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
-
-  // Filter by Status:
-  const handleStatusFilter = (e) => {
-    setStatusFilter(e.target.value);
-    setPage(1);
-    setLoading(true);
-
-    axiosInstance
-      .get("/api/v1/employees.json", {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "ngrok-skip-browser-warning": "69420"
-        },
-
-        params: {
-          page: page,
-          limit: sizePerPage,
-          name: searchTerm.length ? searchTerm : null,
-          office_type: selectedOffice?.office_type,
-          operation_office_id: selectedOffice?.office_type.length
-            ? selectedOffice?.id
-            : null,
-          hr_designation_id: designationFilter.length
-            ? designationFilter
-            : null,
-          status: e.target.value
-        }
-      })
-      .then((e) => {
-        const resData = e?.data?.data?.employees;
-        const totalPages = e?.data?.data?.pages;
-
-        const thisPageLimit = sizePerPage;
-        const thisTotalPageSize = totalPages;
-
-        setSizePerPage(thisPageLimit);
-        setTotalPages(thisTotalPageSize);
-
-        const mapp = resData?.map((emp) => {
-          return {
-            ...emp,
-            fullName: emp?.full_name,
-            office: emp?.office?.office_type,
-            officeName: emp?.office?.title,
-            designation: emp?.designation,
-            company_email: emp?.email
-          };
-        });
-
-        setData(mapp);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-    setLoading(false);
-  };
 
   const showNullMessage = () => {
     setTimeout(() => {
@@ -590,7 +481,7 @@ const EmployeesTable = ({
         params: {
           page: 1,
           limit: 4000,
-          status: statusFilter.length ? statusFilter : "active"
+          status: statusFilter?.id?.length ? statusFilter?.id : null
           // office_type: selectedOffice?.office_type,
           // operation_office_id: selectedOffice?.office_type.length
           //   ? selectedOffice?.id
@@ -617,13 +508,15 @@ const EmployeesTable = ({
       const dataToConvert = {
         data: formatted,
         filename: `OGTL - All ${
-          statusFilter.length
-            ? statusFilter.replace(/\b\w/g, (char) => char.toUpperCase())
+          statusFilter?.id?.length
+            ? statusFilter?.id?.replace(/\b\w/g, (char) => char.toUpperCase())
             : "Active"
         } Employees Record`,
         delimiter: ",",
         useKeysAsHeaders: true
       };
+
+      // console.log("dataToConvert", dataToConvert)
 
       csvDownload(dataToConvert);
 
@@ -745,41 +638,53 @@ const EmployeesTable = ({
                 </div> */}
 
                 <div className="col-md-3">
-                  <label>Filter By Designation</label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleDesignationFilter(e)}
-                    defaultValue={designationFilter}
-                    value={designationFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Select Designation...
-                    </option>
-                    {designations.map((option, idx) => (
-                      <option key={idx} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    options={designations}
+                    value={
+                      designationFilter?.title
+                        ? {
+                            label: designationFilter?.title?.toUpperCase(),
+                            value: designationFilter?.id
+                          }
+                        : null
+                    }
+                    onChange={(e) => {
+                      setDesignationFilter({
+                        title: e.label,
+                        id: e.value
+                      });
+                    }}
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !designations?.length
+                        ? "fetching designations..."
+                        : "Select Designation"
+                    }
+                  />
                 </div>
 
                 <div className="col-md-3">
-                  <label>Filter By Status</label>
-                  <select
-                    className="leave-filter-control"
-                    onChange={(e) => handleStatusFilter(e)}
-                    defaultValue={statusFilter}
-                    value={statusFilter}
-                  >
-                    <option value="" disabled selected hidden>
-                      Select Status...
-                    </option>
-                    {status.map((option, index) => (
-                      <option key={index} value={option.code}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    options={status}
+                    value={
+                      statusFilter?.title
+                        ? {
+                            label: statusFilter?.title?.toUpperCase(),
+                            value: statusFilter?.id
+                          }
+                        : null
+                    }
+                    onChange={(e) => {
+                      setStatusFilter({
+                        title: e.label,
+                        id: e.value
+                      });
+                    }}
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !status?.length ? "fetching status..." : "Select Status"
+                    }
+                  />
                 </div>
               </div>
 
