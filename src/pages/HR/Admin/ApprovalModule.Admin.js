@@ -20,6 +20,7 @@ const ApprovalModule = () => {
     selectDepartments,
     selectCampaigns,
     selectDesignations,
+    selectRoles,
     goToTop
   } = useAppContext();
 
@@ -31,6 +32,7 @@ const ApprovalModule = () => {
 
   const [stage, setStage] = useState(0);
   const [arroverSection, setApproverSection] = useState(false);
+  const [notifySection, setNotifySection] = useState(false);
 
   useEffect(() => {
     console.log("show form data:", formData);
@@ -61,46 +63,17 @@ const ApprovalModule = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddApprover = () => {
+  const handleAddApproverSection = () => {
     setStage(stage + 1);
     setApproverSection(true);
   };
 
+  const handleAddNotifySection = () => {
+    setNotifySection(true);
+  };
+
   const handleSubmit = async () => {
     console.log("Submit this module", formData);
-
-    // setLoading(true);
-
-    // try {
-    //   const response = await axiosInstance.post(`/api/v1/hr_surveys.json`, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Access-Control-Allow-Origin": "*",
-    //       "ngrok-skip-browser-warning": "69420"
-    //     },
-    //     payload: formattedSurveyData
-    //   });
-
-    //   showAlert(
-    //     true,
-    //     `${response?.data?.data?.message}`,
-    //     "alert alert-success"
-    //   );
-
-    //   setTitle("");
-    //   setFrom(today);
-    //   setTo(lastDay);
-    //   setSelectedDepartmentOptions([]);
-    //   setSelectedDepartment([]);
-    //   setSelectedCampaignOptions([]);
-    //   setSelectedCampaign([]);
-    //   setLoading(false);
-    // } catch (error) {
-    //   goToTop();
-    //   const errorMsg = error?.response?.data?.errors;
-    //   showAlert(true, `${errorMsg}`, "alert alert-warning");
-    //   setLoading(false);
-    // }
   };
 
   return (
@@ -225,7 +198,7 @@ const ApprovalModule = () => {
           <button
             type="button"
             className={`add_btn_new ${arroverSection && "disabled"}`}
-            onClick={handleAddApprover}
+            onClick={handleAddApproverSection}
             disabled={arroverSection}
           >
             <MdOutlineAdd /> <span>Add Approver</span>
@@ -233,8 +206,16 @@ const ApprovalModule = () => {
         </div>
       </div>
 
+      {/* Approver Section */}
       {arroverSection && (
         <div className="column approval_builder">
+          <h3 className="approval_builder_header">
+            {formData?.approverOption &&
+              formData?.approverOption?.replace(/\b\w/g, (char) =>
+                char.toUpperCase()
+              )}
+          </h3>
+
           <div className="form-radio-group">
             {selectApproverOptions.map((option, index) => (
               <div className="form-radio" key={index}>
@@ -270,7 +251,7 @@ const ApprovalModule = () => {
                   options={selectLeadershipOptions}
                   isSearchable={true}
                   value={
-                    formData?.leadership_option
+                    formData?.leadershipName
                       ? {
                           label: formData?.leadershipName,
                           value: formData?.leadership
@@ -304,7 +285,7 @@ const ApprovalModule = () => {
                   options={selectDesignations}
                   isSearchable={true}
                   value={
-                    formData?.designation_option
+                    formData?.designationName
                       ? {
                           label: formData?.designationName,
                           value: formData?.designation
@@ -321,8 +302,255 @@ const ApprovalModule = () => {
                   style={{ display: "inline-block" }}
                   placeholder={
                     !selectDesignations?.length
-                      ? "fetching designation..."
+                      ? "fetching designations..."
                       : "Select Designation"
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {/* Role Option */}
+          {formData?.approverOption === "role" ? (
+            <div className="col-md-4">
+              <div className="form-group">
+                <label htmlFor="role_option">Role Option</label>
+                <Select
+                  options={selectRoles}
+                  isSearchable={true}
+                  value={
+                    formData?.roleName
+                      ? {
+                          label: formData?.roleName,
+                          value: formData?.role
+                        }
+                      : null
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      roleName: e?.label,
+                      role: e?.value
+                    })
+                  }
+                  style={{ display: "inline-block" }}
+                  placeholder={
+                    !selectRoles?.length ? "fetching roles..." : "Select Role"
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {/* Checkboxes & Confirm Btn*/}
+          {formData?.approverOption?.length ? (
+            <>
+              <div className="form-checkbox-group">
+                <div className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="finalApprover"
+                    name="finalApprover"
+                    className="form-checkbox-input"
+                    checked={formData.finalApprover || false}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        finalApprover: e.target.checked
+                      })
+                    }
+                  />
+                  <label
+                    htmlFor="finalApprover"
+                    className="form-checkbox-label"
+                  >
+                    Final Approver?
+                  </label>
+                </div>
+
+                <div className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="leaveNotes"
+                    name="leaveNotes"
+                    className="form-checkbox-input"
+                    checked={formData.leaveNotes || false}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leaveNotes: e.target.checked
+                      })
+                    }
+                  />
+                  <label htmlFor="leaveNotes" className="form-checkbox-label">
+                    Leave Notes?
+                  </label>
+                </div>
+
+                <div className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="sendBackOption"
+                    name="sendBackOption"
+                    className="form-checkbox-input"
+                    checked={formData.sendBackOption || false}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        sendBackOption: e.target.checked
+                      })
+                    }
+                  />
+                  <label
+                    htmlFor="sendBackOption"
+                    className="form-checkbox-label"
+                  >
+                    Send Back Option?
+                  </label>
+                </div>
+              </div>
+
+              <div className="col-md-4" style={{ marginTop: "2rem" }}>
+                <button
+                  type="button"
+                  className="add_btn_new"
+                  onClick={handleAddNotifySection}
+                >
+                  <span>Confirm</span>
+                </button>
+              </div>
+            </>
+          ) : null}
+        </div>
+      )}
+
+      {/* Notify Section */}
+      {notifySection && (
+        <div className="column approval_builder">
+          <h3 className="approval_builder_header">
+            Copy/Notify on Approval/Refusal
+          </h3>
+
+          <div className="form-radio-group">
+            {selectApproverOptions.map((option, index) => (
+              <div className="form-radio" key={index}>
+                <label
+                  className="form-radio-label"
+                  htmlFor={`notifyOption${index}`}
+                >
+                  {option.label}
+                </label>
+                <input
+                  className="form-radio-input"
+                  type="radio"
+                  name="notifyOption"
+                  id={`notifyOption${index}`}
+                  value={option.value}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      notifyOption: e.target.value
+                    })
+                  }
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Leadership Option */}
+          {formData?.notifyOption === "leadership" ? (
+            <div className="col-md-4">
+              <div className="form-group">
+                <label htmlFor="leadership_option">Leadership Option</label>
+                <Select
+                  options={selectLeadershipOptions}
+                  isSearchable={true}
+                  value={
+                    formData?.leadershipToNotifyTitle
+                      ? {
+                          label: formData?.leadershipToNotifyTitle,
+                          value: formData?.leadershipToNotify
+                        }
+                      : null
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      leadershipToNotifyTitle: e?.label,
+                      leadershipToNotify: e?.value
+                    })
+                  }
+                  style={{ display: "inline-block" }}
+                  placeholder={
+                    !selectLeadershipOptions?.length
+                      ? "fetching leaderships..."
+                      : "Select Leadership"
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {/* Designation Option */}
+          {formData?.notifyOption === "designation" ? (
+            <div className="col-md-4">
+              <div className="form-group">
+                <label htmlFor="designation_option">Designation Option</label>
+                <Select
+                  options={selectDesignations}
+                  isSearchable={true}
+                  value={
+                    formData?.designationToNotifyTitle
+                      ? {
+                          label: formData?.designationToNotifyTitle,
+                          value: formData?.designationToNotify
+                        }
+                      : null
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      designationToNotifyTitle: e?.label,
+                      designationToNotify: e?.value
+                    })
+                  }
+                  style={{ display: "inline-block" }}
+                  placeholder={
+                    !selectDesignations?.length
+                      ? "fetching designations..."
+                      : "Select Designation"
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {/* Role Option */}
+          {formData?.notifyOption === "role" ? (
+            <div className="col-md-4">
+              <div className="form-group">
+                <label htmlFor="role_option">Role Option</label>
+                <Select
+                  options={selectRoles}
+                  isSearchable={true}
+                  value={
+                    formData?.roleToNotifyTitle
+                      ? {
+                          label: formData?.roleToNotifyTitle,
+                          value: formData?.roleToNotify
+                        }
+                      : null
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      roleToNotifyTitle: e?.label,
+                      roleToNotify: e?.value
+                    })
+                  }
+                  style={{ display: "inline-block" }}
+                  placeholder={
+                    !selectRoles?.length ? "fetching roles..." : "Select Role"
                   }
                 />
               </div>
