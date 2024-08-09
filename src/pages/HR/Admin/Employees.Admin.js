@@ -96,10 +96,7 @@ const AllEmployeesAdmin = () => {
       const mapp = resData.map((emp) => {
         return {
           ...emp,
-          office: emp?.office
-            ?.toUpperCase()
-            ?.replace(/_/g, " ")
-            ?.replace(/^./, (str) => str.toUpperCase()),
+          officeTitle: emp?.office?.title ? emp?.office?.title : emp?.office,
           designation: emp?.designation?.toUpperCase(),
           pic: emp?.profile_picture
         };

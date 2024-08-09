@@ -225,11 +225,18 @@ const EmployeesTable = ({
       headerStyle: { width: "100%" }
     },
     {
-      dataField: "office",
+      dataField: "officeTitle",
       text: "Office",
       sort: true,
       headerStyle: { width: "100%" },
-      formatter: (val, row) => <span>{val}</span>
+      formatter: (val, row) => (
+        <span>
+          {val
+            ?.toUpperCase()
+            ?.replace(/_/g, " ")
+            ?.replace(/^./, (str) => str.toUpperCase())}
+        </span>
+      )
     },
     {
       dataField: "email",
@@ -495,10 +502,15 @@ const EmployeesTable = ({
         "EMPLOYEE NAME": data?.full_name,
         STATUS: data?.status.replace(/\b\w/g, (char) => char.toUpperCase()),
         OGID: data?.ogid,
-        OFFICE: data?.office
-          ?.toUpperCase()
-          .replace(/_/g, " ")
-          .replace(/^./, (str) => str.toUpperCase()),
+        OFFICE: data?.office?.title
+          ? data?.office?.title
+              ?.toUpperCase()
+              .replace(/_/g, " ")
+              .replace(/^./, (str) => str.toUpperCase())
+          : data?.office
+              ?.toUpperCase()
+              .replace(/_/g, " ")
+              .replace(/^./, (str) => str.toUpperCase()),
         DESIGNATION: data?.designation?.toUpperCase(),
         EMAIL: data?.email,
         PENSIONABLE: data?.pensionable ? "Yes" : "No",
@@ -516,7 +528,7 @@ const EmployeesTable = ({
         useKeysAsHeaders: true
       };
 
-      // console.log("dataToConvert", dataToConvert)
+      // console.log("dataToConvert", dataToConvert);
 
       csvDownload(dataToConvert);
 
