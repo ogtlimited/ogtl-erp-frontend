@@ -138,6 +138,7 @@ export const PATH_DASHBOARD = {
 
   settings: {
     root: path(ROOTS_DASHBOARD, "/settings"),
+    approvalModule: path(ROOTS_DASHBOARD, "/settings/approval-module"),
     rolesPermission: path(ROOTS_DASHBOARD, "/settings/roles-permissions"),
     rolesAssignment: path(ROOTS_DASHBOARD, "/settings/roles-assignment"),
   },

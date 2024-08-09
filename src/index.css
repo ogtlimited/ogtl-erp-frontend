@@ -2386,3 +2386,117 @@ img {
   gap: 1rem;
   margin: 2rem 2rem 0.5rem 2rem;
 }
+
+/*--------------------- 
+    Approval Module
+-----------------------*/
+
+.add_btn_new {
+  padding: 7px 15px;
+  background-color: var(--prm-color);
+  border: 1px solid var(--prm-color);
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  width: auto !important;
+  gap: 0.5rem;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.2) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+.add_btn_new.disabled {
+  opacity: 0.5;
+  background-color: var(--prm-gray);
+  border: 1px solid var(--prm-gray);
+}
+
+.approval_builder {
+  background-color: #fff;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  margin-bottom: 2rem;
+}
+
+.approval_builder_container {
+  background-color: #fff;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  margin: 0 1rem;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 4px 12px;
+}
+
+.approval_builder_header {
+  margin: 0 0 2rem 1rem;
+}
+
+.form-radio-group {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 5px 10px 5px 20px;
+  border-radius: 15px;
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.form-radio-input {
+  width: 20px !important;
+  color: #495057;
+  background-color: #ffffff;
+  cursor: pointer;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  height: 20px !important;
+}
+
+.form-radio-label,
+.form-checkbox-label {
+  margin-bottom: 0;
+}
+
+.form-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 5px 10px 5px 20px;
+  border-radius: 10px;
+  box-shadow:
+    rgba(65, 67, 70, 0.4) 0px 0px 0px 1px,
+    rgba(65, 67, 70, 0.3) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.329) 0px 1px 0px inset;
+}
+
+.form-checkbox-input {
+  width: 15px !important;
+  color: #495057;
+  background-color: #ffffff;
+  accent-color: green;
+  cursor: pointer;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  height: 15px !important;
+}
