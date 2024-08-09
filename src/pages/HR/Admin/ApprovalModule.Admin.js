@@ -76,6 +76,26 @@ const ApprovalModule = () => {
     console.log("Submit this module", formData);
   };
 
+  const renderSelect = (label, options, value, onChange) => (
+    <div className="col-md-4">
+      <div className="form-group">
+        <label htmlFor={label}>{label}</label>
+        <Select
+          options={options}
+          isSearchable
+          value={value}
+          onChange={onChange}
+          style={{ display: "inline-block" }}
+          placeholder={
+            !options.length
+              ? `fetching ${label.toLowerCase()}...`
+              : `Select ${label}`
+          }
+        />
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div className="page-header">
