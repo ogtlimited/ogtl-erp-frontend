@@ -2438,6 +2438,7 @@ img {
   gap: 2rem;
   padding: 1rem;
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 
 .form-radio {
@@ -2447,24 +2448,26 @@ img {
   padding: 5px 10px 5px 20px;
   border-radius: 15px;
   box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+  cursor: pointer;
 }
 
 .form-radio-input {
   width: 20px !important;
   color: #495057;
   background-color: #ffffff;
-  cursor: pointer;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition:
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
   height: 20px !important;
+  cursor: pointer;
 }
 
 .form-radio-label,
 .form-checkbox-label {
   margin-bottom: 0;
+  cursor: pointer;
 }
 
 .form-checkbox-group {
@@ -2473,11 +2476,13 @@ img {
   gap: 2rem;
   padding: 1rem;
   margin-bottom: 2rem;
+  cursor: pointer;
 }
 
 .form-checkbox {
   display: flex;
   align-items: center;
+  cursor: pointer;
   gap: 0.8rem;
   padding: 5px 10px 5px 20px;
   border-radius: 10px;
