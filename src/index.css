@@ -2523,6 +2523,8 @@ img {
 }
 
 .form_pill_stack {
+  width: 100%;
+  gap: 0.5rem 0.2rem;
   display: flex;
-  gap: 0.5rem;
+  flex-wrap: wrap;
 }

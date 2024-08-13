@@ -37,26 +37,27 @@ const ApprovalModule = () => {
   const [arroverSection, setApproverSection] = useState(false);
   const [sendBackSection, setSendBackSection] = useState(false);
 
-  const [closeAll, setCloseAll] = useState(false);
-  const [viewingLeadershipOptions, setViewingLeadershipOptions] =
-    useState(false);
-  const [selectedLeadershipOptions, setSelectedLeadershipOptions] = useState(
-    []
-  );
-  const [selectedLeadership, setSelectedLeadership] = useState([]);
-
-  const formattedLeaderdshipSelection = [
+  const formattedLeadershipSelection = [
     { label: "All", value: "all" },
     ...selectLeadershipOptions
   ];
-  // const formattedCampaignSelection = [
-  //   { label: "All", value: "all" },
-  //   ...selectCampaigns
-  // ];
+  const formattedDesignationSelection = [
+    { label: "All", value: "all" },
+    ...selectDesignations
+  ];
+  const formattedRoleSelection = [
+    { label: "All", value: "all" },
+    ...selectRoles
+  ];
+
+  const [closeAll, setCloseAll] = useState(false);
+  const [viewingSendBackOptions, setViewingSendBackOptions] = useState(false);
+  const [selectedSendBackOptions, setSelectedSendBackOptions] = useState([]);
+  const [selectedSendBack, setSelectedSendBack] = useState([]);
 
   useEffect(() => {
-    console.log("show form data:", formData);
-  }, [formData]);
+    console.log("show form data:", formData, selectedSendBack);
+  }, [formData, selectedSendBack]);
 
   const handleOfficeTypeChange = (e) => {
     setFormData({
@@ -93,8 +94,18 @@ const ApprovalModule = () => {
   };
 
   const handleDeletePill = (data) => {
-    setSelectedLeadershipOptions(
-      selectedLeadershipOptions.filter((id) => id !== data)
+    console.log("delete selectedSendBackOptions", {
+      data,
+      selectedSendBack,
+      selectedSendBackOptions
+    });
+
+    setSelectedSendBack(
+      selectedSendBack.filter((selected) => selected?.value !== data?.value)
+    );
+
+    setSelectedSendBackOptions(
+      selectedSendBackOptions.filter((id) => id !== data?.value)
     );
   };
 
@@ -474,12 +485,14 @@ const ApprovalModule = () => {
                     name="copyOnApprovalOption"
                     id={`copyOnApprovalOption${index}`}
                     value={option.value}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setFormData({
                         ...formData,
                         copyOnApprovalOption: e.target.value
-                      })
-                    }
+                      });
+                      setSelectedSendBackOptions([]);
+                      setSelectedSendBack([]);
+                    }}
                   />
                 </div>
               ))}
@@ -493,13 +506,13 @@ const ApprovalModule = () => {
                     <label htmlFor="leadership_option">Leadership Option</label>
                     <DropdownCheckboxOptions
                       office="leadership"
-                      options={formattedLeaderdshipSelection}
-                      selectedOptions={selectedLeadershipOptions}
-                      setSelected={setSelectedLeadership}
+                      options={formattedLeadershipSelection}
+                      selectedOptions={selectedSendBackOptions}
+                      setSelected={setSelectedSendBack}
                       closeAll={closeAll}
-                      setViewingOffice={setViewingLeadershipOptions}
+                      setViewingOffice={setViewingSendBackOptions}
                       onSelectionChange={(updatedSelectedOptions) =>
-                        setSelectedLeadershipOptions(updatedSelectedOptions)
+                        setSelectedSendBackOptions(updatedSelectedOptions)
                       }
                     />
                   </div>
@@ -510,17 +523,15 @@ const ApprovalModule = () => {
                     <Stack
                       className="form_pill_stack"
                       direction="row"
-                      spacong={1}
+                      spacing={1}
                     >
-                      {selectedLeadershipOptions.map((leadership, index) => {
+                      {selectedSendBack.map((leadership, index) => {
                         if (leadership === "all") return null;
 
                         return (
                           <Chip
                             key={index}
-                            label={leadership?.replace(/\b\w/g, (char) =>
-                              char.toUpperCase()
-                            )}
+                            label={leadership?.label}
                             onDelete={() => handleDeletePill(leadership)}
                           />
                         );
@@ -531,103 +542,96 @@ const ApprovalModule = () => {
               </>
             ) : null}
 
-            {/* {formData?.copyOnApprovalOption === "leadership" ? (
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="leadership_option">Leadership Option</label>
-                  <Select
-                    options={selectLeadershipOptions}
-                    isSearchable={true}
-                    value={
-                      formData?.leadershipToCopyOnApprovalTitle
-                        ? {
-                            label: formData?.leadershipToCopyOnApprovalTitle,
-                            value: formData?.leadershipToCopyOnApproval
-                          }
-                        : null
-                    }
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        leadershipToCopyOnApprovalTitle: e?.label,
-                        leadershipToCopyOnApproval: e?.value
-                      })
-                    }
-                    style={{ display: "inline-block" }}
-                    placeholder={
-                      !selectLeadershipOptions?.length
-                        ? "fetching leaderships..."
-                        : "Select Leadership"
-                    }
-                  />
-                </div>
-              </div>
-            ) : null} */}
-
             {/* Designation Option */}
             {formData?.copyOnApprovalOption === "designation" ? (
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="designation_option">Designation Option</label>
-                  <Select
-                    options={selectDesignations}
-                    isSearchable={true}
-                    value={
-                      formData?.designationToCopyOnApprovalTitle
-                        ? {
-                            label: formData?.designationToCopyOnApprovalTitle,
-                            value: formData?.designationToCopyOnApproval
-                          }
-                        : null
-                    }
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        designationToCopyOnApprovalTitle: e?.label,
-                        designationToCopyOnApproval: e?.value
-                      })
-                    }
-                    style={{ display: "inline-block" }}
-                    placeholder={
-                      !selectDesignations?.length
-                        ? "fetching designations..."
-                        : "Select Designation"
-                    }
-                  />
+              <>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="designation_option">
+                      Designation Option
+                    </label>
+                    <DropdownCheckboxOptions
+                      office="designation"
+                      options={formattedDesignationSelection}
+                      selectedOptions={selectedSendBackOptions}
+                      setSelected={setSelectedSendBack}
+                      closeAll={closeAll}
+                      setViewingOffice={setViewingSendBackOptions}
+                      onSelectionChange={(updatedSelectedOptions) =>
+                        setSelectedSendBackOptions(updatedSelectedOptions)
+                      }
+                      valueIsNumber={true}
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div className="col-md-12 form_pills_container">
+                  <div className="col-md-12 form_pills_container_inner">
+                    <Stack
+                      className="form_pill_stack"
+                      direction="row"
+                      spacing={1}
+                    >
+                      {selectedSendBack.map((designation, index) => {
+                        if (designation === "all") return null;
+
+                        return (
+                          <Chip
+                            key={index}
+                            label={designation?.label}
+                            onDelete={() => handleDeletePill(designation)}
+                          />
+                        );
+                      })}
+                    </Stack>
+                  </div>
+                </div>
+              </>
             ) : null}
 
             {/* Role Option */}
             {formData?.copyOnApprovalOption === "role" ? (
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="role_option">Role Option</label>
-                  <Select
-                    options={selectRoles}
-                    isSearchable={true}
-                    value={
-                      formData?.roleToCopyOnApprovalTitle
-                        ? {
-                            label: formData?.roleToCopyOnApprovalTitle,
-                            value: formData?.roleToCopyOnApproval
-                          }
-                        : null
-                    }
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        roleToCopyOnApprovalTitle: e?.label,
-                        roleToCopyOnApproval: e?.value
-                      })
-                    }
-                    style={{ display: "inline-block" }}
-                    placeholder={
-                      !selectRoles?.length ? "fetching roles..." : "Select Role"
-                    }
-                  />
+              <>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="role_option">Role Option</label>
+                    <DropdownCheckboxOptions
+                      office="role"
+                      options={formattedRoleSelection}
+                      selectedOptions={selectedSendBackOptions}
+                      setSelected={setSelectedSendBack}
+                      closeAll={closeAll}
+                      setViewingOffice={setViewingSendBackOptions}
+                      onSelectionChange={(updatedSelectedOptions) =>
+                        setSelectedSendBackOptions(updatedSelectedOptions)
+                      }
+                      valueIsNumber={true}
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div className="col-md-12 form_pills_container">
+                  <div className="col-md-12 form_pills_container_inner">
+                    <Stack
+                      className="form_pill_stack"
+                      direction="row"
+                      spacing={1}
+                    >
+                      {selectedSendBack.map((role, index) => {
+                        if (role === "all") return null;
+
+                        return (
+                          <Chip
+                            key={index}
+                            label={role?.label}
+                            onDelete={() => handleDeletePill(role)}
+                          />
+                        );
+                      })}
+                    </Stack>
+                  </div>
+                </div>
+              </>
             ) : null}
           </div>
 

@@ -9,18 +9,14 @@ function DropdownCheckboxOptions({
   closeAll,
   setViewingOffice,
   onSelectionChange,
-  errorIndicator
+  errorIndicator,
+  valueIsNumber = false
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   console.log({
-    office,
     options,
-    selectedOptions,
-    setSelected,
-    closeAll,
-    setViewingOffice,
-    onSelectionChange
+    selectedOptions
   });
 
   useEffect(() => {
@@ -40,7 +36,7 @@ function DropdownCheckboxOptions({
   };
 
   const handleCheckboxChange = (event) => {
-    const { value } = event.target;
+    const value = event.target.value;
 
     let updatedSelectedOptions;
 
@@ -51,9 +47,11 @@ function DropdownCheckboxOptions({
         updatedSelectedOptions = options.map((option) => option.value);
       }
     } else {
-      updatedSelectedOptions = selectedOptions.includes(value)
-        ? selectedOptions.filter((item) => item !== value)
-        : [...selectedOptions, value];
+      const formatedValue = valueIsNumber ? +value : value
+      
+      updatedSelectedOptions = selectedOptions.includes(formatedValue)
+        ? selectedOptions.filter((item) => item !== formatedValue)
+        : [...selectedOptions, formatedValue];
 
       if (selectedOptions.includes("all")) {
         updatedSelectedOptions = updatedSelectedOptions.filter(
