@@ -70,7 +70,7 @@ const LatenessTracker = () => {
             "ngrok-skip-browser-warning": "69420"
           },
           params: {
-            page: page,
+            pages: page,
             limit: sizePerPage,
             start_date: fromDate,
             end_date: toDate
@@ -91,6 +91,7 @@ const LatenessTracker = () => {
         designation: data?.employee?.designation,
         officeType: data?.office_type?.toUpperCase(),
         office: data?.office?.toUpperCase(),
+        dateCreated: moment(data?.created_at).format("Do MMMM, YYYY"),
         caller: data?.caller_name,
         callerIsEmployee: data?.caller_is_employee ? "Yes" : "No",
         expectedArrivalTime: moment(data?.expected_arrival_time).format(
@@ -112,8 +113,8 @@ const LatenessTracker = () => {
       ErrorHandler(error, component);
       setLoadingLatenessTrackers(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fromDate, toDate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fromDate, page, sizePerPage, toDate]);
 
   useEffect(() => {
     fetchLatenessTracker();
@@ -235,6 +236,12 @@ const LatenessTracker = () => {
           </div>
         </h2>
       )
+    },
+    {
+      dataField: "dateCreated",
+      text: "Date Created",
+      sort: true,
+      headerStyle: { width: "15%" }
     },
     {
       dataField: "caller",
