@@ -12,7 +12,9 @@ import {
 import { MdOutlineAdd } from "react-icons/md";
 import Select from "react-select";
 import moment from "moment";
-import DropdownCheckbox from "../../../components/Forms/DropdownCheckbox";
+import DropdownCheckboxOptions from "../../../components/Forms/DropdownCheckboxOptions";
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
 
 const ApprovalModule = () => {
   const {
@@ -33,7 +35,24 @@ const ApprovalModule = () => {
 
   const [stage, setStage] = useState(0);
   const [arroverSection, setApproverSection] = useState(false);
-  const [notifySection, setNotifySection] = useState(false);
+  const [sendBackSection, setSendBackSection] = useState(false);
+
+  const [closeAll, setCloseAll] = useState(false);
+  const [viewingLeadershipOptions, setViewingLeadershipOptions] =
+    useState(false);
+  const [selectedLeadershipOptions, setSelectedLeadershipOptions] = useState(
+    []
+  );
+  const [selectedLeadership, setSelectedLeadership] = useState([]);
+
+  const formattedLeaderdshipSelection = [
+    { label: "All", value: "all" },
+    ...selectLeadershipOptions
+  ];
+  // const formattedCampaignSelection = [
+  //   { label: "All", value: "all" },
+  //   ...selectCampaigns
+  // ];
 
   useEffect(() => {
     console.log("show form data:", formData);
@@ -69,33 +88,19 @@ const ApprovalModule = () => {
     setApproverSection(true);
   };
 
-  const handleAddNotifySection = () => {
-    setNotifySection(true);
+  const handleAddSendBackSection = () => {
+    setSendBackSection(true);
+  };
+
+  const handleDeletePill = (data) => {
+    setSelectedLeadershipOptions(
+      selectedLeadershipOptions.filter((id) => id !== data)
+    );
   };
 
   const handleSubmit = async () => {
     console.log("Submit this module", formData);
   };
-
-  const renderSelect = (label, options, value, onChange) => (
-    <div className="col-md-4">
-      <div className="form-group">
-        <label htmlFor={label}>{label}</label>
-        <Select
-          options={options}
-          isSearchable
-          value={value}
-          onChange={onChange}
-          style={{ display: "inline-block" }}
-          placeholder={
-            !options.length
-              ? `fetching ${label.toLowerCase()}...`
-              : `Select ${label}`
-          }
-        />
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -255,7 +260,9 @@ const ApprovalModule = () => {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      approverOption: e.target.value
+                      approverOption: e.target.value,
+                      approverName: "",
+                      approver: ""
                     })
                   }
                 />
@@ -272,18 +279,18 @@ const ApprovalModule = () => {
                   options={selectLeadershipOptions}
                   isSearchable={true}
                   value={
-                    formData?.leadershipName
+                    formData?.approverName
                       ? {
-                          label: formData?.leadershipName,
-                          value: formData?.leadership
+                          label: formData?.approverName,
+                          value: formData?.approver
                         }
                       : null
                   }
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      leadershipName: e?.label,
-                      leadership: e?.value
+                      approverName: e?.label,
+                      approver: e?.value
                     })
                   }
                   style={{ display: "inline-block" }}
@@ -306,18 +313,18 @@ const ApprovalModule = () => {
                   options={selectDesignations}
                   isSearchable={true}
                   value={
-                    formData?.designationName
+                    formData?.approverName
                       ? {
-                          label: formData?.designationName,
-                          value: formData?.designation
+                          label: formData?.approverName,
+                          value: formData?.approver
                         }
                       : null
                   }
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      designationName: e?.label,
-                      designation: e?.value
+                      approverName: e?.label,
+                      approver: e?.value
                     })
                   }
                   style={{ display: "inline-block" }}
@@ -340,18 +347,18 @@ const ApprovalModule = () => {
                   options={selectRoles}
                   isSearchable={true}
                   value={
-                    formData?.roleName
+                    formData?.approverName
                       ? {
-                          label: formData?.roleName,
-                          value: formData?.role
+                          label: formData?.approverName,
+                          value: formData?.approver
                         }
                       : null
                   }
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      roleName: e?.label,
-                      role: e?.value
+                      approverName: e?.label,
+                      approver: e?.value
                     })
                   }
                   style={{ display: "inline-block" }}
@@ -435,7 +442,7 @@ const ApprovalModule = () => {
                 <button
                   type="button"
                   className="add_btn_new"
-                  onClick={handleAddNotifySection}
+                  onClick={handleAddSendBackSection}
                 >
                   <span>Confirm</span>
                 </button>
@@ -445,140 +452,579 @@ const ApprovalModule = () => {
         </div>
       )}
 
-      {/* Notify Section */}
-      {notifySection && (
-        <div className="column approval_builder">
-          <h3 className="approval_builder_header">
-            Copy/Notify on Approval/Refusal
-          </h3>
+      {/* Send Back Section */}
+      {sendBackSection ? (
+        <>
+          {/* Copy On Approval */}
+          <div className="column approval_builder">
+            <h3 className="approval_builder_header">Copy on Approval</h3>
 
-          <div className="form-radio-group">
-            {selectApproverOptions.map((option, index) => (
-              <div className="form-radio" key={index}>
-                <label
-                  className="form-radio-label"
-                  htmlFor={`notifyOption${index}`}
-                >
-                  {option.label}
-                </label>
-                <input
-                  className="form-radio-input"
-                  type="radio"
-                  name="notifyOption"
-                  id={`notifyOption${index}`}
-                  value={option.value}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      notifyOption: e.target.value
-                    })
-                  }
-                />
+            <div className="form-radio-group">
+              {selectApproverOptions.map((option, index) => (
+                <div className="form-radio" key={index}>
+                  <label
+                    className="form-radio-label"
+                    htmlFor={`copyOnApprovalOption${index}`}
+                  >
+                    {option.label}
+                  </label>
+                  <input
+                    className="form-radio-input"
+                    type="radio"
+                    name="copyOnApprovalOption"
+                    id={`copyOnApprovalOption${index}`}
+                    value={option.value}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        copyOnApprovalOption: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Leadership Option */}
+            {formData?.copyOnApprovalOption === "leadership" ? (
+              <>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="leadership_option">Leadership Option</label>
+                    <DropdownCheckboxOptions
+                      office="leadership"
+                      options={formattedLeaderdshipSelection}
+                      selectedOptions={selectedLeadershipOptions}
+                      setSelected={setSelectedLeadership}
+                      closeAll={closeAll}
+                      setViewingOffice={setViewingLeadershipOptions}
+                      onSelectionChange={(updatedSelectedOptions) =>
+                        setSelectedLeadershipOptions(updatedSelectedOptions)
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="col-md-12 form_pills_container">
+                  <div className="col-md-12 form_pills_container_inner">
+                    <Stack
+                      className="form_pill_stack"
+                      direction="row"
+                      spacong={1}
+                    >
+                      {selectedLeadershipOptions.map((leadership, index) => {
+                        if (leadership === "all") return null;
+
+                        return (
+                          <Chip
+                            key={index}
+                            label={leadership?.replace(/\b\w/g, (char) =>
+                              char.toUpperCase()
+                            )}
+                            onDelete={() => handleDeletePill(leadership)}
+                          />
+                        );
+                      })}
+                    </Stack>
+                  </div>
+                </div>
+              </>
+            ) : null}
+
+            {/* {formData?.copyOnApprovalOption === "leadership" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="leadership_option">Leadership Option</label>
+                  <Select
+                    options={selectLeadershipOptions}
+                    isSearchable={true}
+                    value={
+                      formData?.leadershipToCopyOnApprovalTitle
+                        ? {
+                            label: formData?.leadershipToCopyOnApprovalTitle,
+                            value: formData?.leadershipToCopyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leadershipToCopyOnApprovalTitle: e?.label,
+                        leadershipToCopyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectLeadershipOptions?.length
+                        ? "fetching leaderships..."
+                        : "Select Leadership"
+                    }
+                  />
+                </div>
               </div>
-            ))}
+            ) : null} */}
+
+            {/* Designation Option */}
+            {formData?.copyOnApprovalOption === "designation" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="designation_option">Designation Option</label>
+                  <Select
+                    options={selectDesignations}
+                    isSearchable={true}
+                    value={
+                      formData?.designationToCopyOnApprovalTitle
+                        ? {
+                            label: formData?.designationToCopyOnApprovalTitle,
+                            value: formData?.designationToCopyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        designationToCopyOnApprovalTitle: e?.label,
+                        designationToCopyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectDesignations?.length
+                        ? "fetching designations..."
+                        : "Select Designation"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Role Option */}
+            {formData?.copyOnApprovalOption === "role" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="role_option">Role Option</label>
+                  <Select
+                    options={selectRoles}
+                    isSearchable={true}
+                    value={
+                      formData?.roleToCopyOnApprovalTitle
+                        ? {
+                            label: formData?.roleToCopyOnApprovalTitle,
+                            value: formData?.roleToCopyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        roleToCopyOnApprovalTitle: e?.label,
+                        roleToCopyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectRoles?.length ? "fetching roles..." : "Select Role"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
 
-          {/* Leadership Option */}
-          {formData?.notifyOption === "leadership" ? (
-            <div className="col-md-4">
-              <div className="form-group">
-                <label htmlFor="leadership_option">Leadership Option</label>
-                <Select
-                  options={selectLeadershipOptions}
-                  isSearchable={true}
-                  value={
-                    formData?.leadershipToNotifyTitle
-                      ? {
-                          label: formData?.leadershipToNotifyTitle,
-                          value: formData?.leadershipToNotify
-                        }
-                      : null
-                  }
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      leadershipToNotifyTitle: e?.label,
-                      leadershipToNotify: e?.value
-                    })
-                  }
-                  style={{ display: "inline-block" }}
-                  placeholder={
-                    !selectLeadershipOptions?.length
-                      ? "fetching leaderships..."
-                      : "Select Leadership"
-                  }
-                />
-              </div>
-            </div>
-          ) : null}
+          {/* Copy On Refusal */}
+          <div className="column approval_builder">
+            <h3 className="approval_builder_header">Copy on Refusal</h3>
 
-          {/* Designation Option */}
-          {formData?.notifyOption === "designation" ? (
-            <div className="col-md-4">
-              <div className="form-group">
-                <label htmlFor="designation_option">Designation Option</label>
-                <Select
-                  options={selectDesignations}
-                  isSearchable={true}
-                  value={
-                    formData?.designationToNotifyTitle
-                      ? {
-                          label: formData?.designationToNotifyTitle,
-                          value: formData?.designationToNotify
-                        }
-                      : null
-                  }
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      designationToNotifyTitle: e?.label,
-                      designationToNotify: e?.value
-                    })
-                  }
-                  style={{ display: "inline-block" }}
-                  placeholder={
-                    !selectDesignations?.length
-                      ? "fetching designations..."
-                      : "Select Designation"
-                  }
-                />
-              </div>
+            <div className="form-radio-group">
+              {selectApproverOptions.map((option, index) => (
+                <div className="form-radio" key={index}>
+                  <label
+                    className="form-radio-label"
+                    htmlFor={`copyOnRefusalOption${index}`}
+                  >
+                    {option.label}
+                  </label>
+                  <input
+                    className="form-radio-input"
+                    type="radio"
+                    name="copyOnRefusalOption"
+                    id={`copyOnRefusalOption${index}`}
+                    value={option.value}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        copyOnRefusalOption: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              ))}
             </div>
-          ) : null}
 
-          {/* Role Option */}
-          {formData?.notifyOption === "role" ? (
-            <div className="col-md-4">
-              <div className="form-group">
-                <label htmlFor="role_option">Role Option</label>
-                <Select
-                  options={selectRoles}
-                  isSearchable={true}
-                  value={
-                    formData?.roleToNotifyTitle
-                      ? {
-                          label: formData?.roleToNotifyTitle,
-                          value: formData?.roleToNotify
-                        }
-                      : null
-                  }
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      roleToNotifyTitle: e?.label,
-                      roleToNotify: e?.value
-                    })
-                  }
-                  style={{ display: "inline-block" }}
-                  placeholder={
-                    !selectRoles?.length ? "fetching roles..." : "Select Role"
-                  }
-                />
+            {/* Leadership Option */}
+            {formData?.copyOnRefusalOption === "leadership" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="leadership_option">Leadership Option</label>
+                  <Select
+                    options={selectLeadershipOptions}
+                    isSearchable={true}
+                    value={
+                      formData?.leadershipToCopyOnRefusalTitle
+                        ? {
+                            label: formData?.leadershipToCopyOnRefusalTitle,
+                            value: formData?.leadershipToCopyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leadershipToCopyOnRefusalTitle: e?.label,
+                        leadershipToCopyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectLeadershipOptions?.length
+                        ? "fetching leaderships..."
+                        : "Select Leadership"
+                    }
+                  />
+                </div>
               </div>
+            ) : null}
+
+            {/* Designation Option */}
+            {formData?.copyOnRefusalOption === "designation" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="designation_option">Designation Option</label>
+                  <Select
+                    options={selectDesignations}
+                    isSearchable={true}
+                    value={
+                      formData?.designationToCopyOnRefusalTitle
+                        ? {
+                            label: formData?.designationToCopyOnRefusalTitle,
+                            value: formData?.designationToCopyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        designationToCopyOnRefusalTitle: e?.label,
+                        designationToCopyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectDesignations?.length
+                        ? "fetching designations..."
+                        : "Select Designation"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Role Option */}
+            {formData?.copyOnRefusalOption === "role" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="role_option">Role Option</label>
+                  <Select
+                    options={selectRoles}
+                    isSearchable={true}
+                    value={
+                      formData?.roleToCopyOnRefusalTitle
+                        ? {
+                            label: formData?.roleToCopyOnRefusalTitle,
+                            value: formData?.roleToCopyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        roleToCopyOnRefusalTitle: e?.label,
+                        roleToCopyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectRoles?.length ? "fetching roles..." : "Select Role"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Notify On Approval */}
+          <div className="column approval_builder">
+            <h3 className="approval_builder_header">Notify on Approval</h3>
+
+            <div className="form-radio-group">
+              {selectApproverOptions.map((option, index) => (
+                <div className="form-radio" key={index}>
+                  <label
+                    className="form-radio-label"
+                    htmlFor={`notifyOnApprovalOption${index}`}
+                  >
+                    {option.label}
+                  </label>
+                  <input
+                    className="form-radio-input"
+                    type="radio"
+                    name="notifyOnApprovalOption"
+                    id={`notifyOnApprovalOption${index}`}
+                    value={option.value}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        notifyOnApprovalOption: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              ))}
             </div>
-          ) : null}
-        </div>
-      )}
+
+            {/* Leadership Option */}
+            {formData?.notifyOnApprovalOption === "leadership" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="leadership_option">Leadership Option</label>
+                  <Select
+                    options={selectLeadershipOptions}
+                    isSearchable={true}
+                    value={
+                      formData?.leadershipToNotifyOnApprovalTitle
+                        ? {
+                            label: formData?.leadershipToNotifyOnApprovalTitle,
+                            value: formData?.leadershipToNotifyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leadershipToNotifyOnApprovalTitle: e?.label,
+                        leadershipToNotifyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectLeadershipOptions?.length
+                        ? "fetching leaderships..."
+                        : "Select Leadership"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Designation Option */}
+            {formData?.notifyOnApprovalOption === "designation" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="designation_option">Designation Option</label>
+                  <Select
+                    options={selectDesignations}
+                    isSearchable={true}
+                    value={
+                      formData?.designationToNotifyOnApprovalTitle
+                        ? {
+                            label: formData?.designationToNotifyOnApprovalTitle,
+                            value: formData?.designationToNotifyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        designationToNotifyOnApprovalTitle: e?.label,
+                        designationToNotifyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectDesignations?.length
+                        ? "fetching designations..."
+                        : "Select Designation"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Role Option */}
+            {formData?.notifyOnApprovalOption === "role" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="role_option">Role Option</label>
+                  <Select
+                    options={selectRoles}
+                    isSearchable={true}
+                    value={
+                      formData?.roleToNotifyOnApprovalTitle
+                        ? {
+                            label: formData?.roleToNotifyOnApprovalTitle,
+                            value: formData?.roleToNotifyOnApproval
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        roleToNotifyOnApprovalTitle: e?.label,
+                        roleToNotifyOnApproval: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectRoles?.length ? "fetching roles..." : "Select Role"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Notify On Refusal */}
+          <div className="column approval_builder">
+            <h3 className="approval_builder_header">Notify on Refusal</h3>
+
+            <div className="form-radio-group">
+              {selectApproverOptions.map((option, index) => (
+                <div className="form-radio" key={index}>
+                  <label
+                    className="form-radio-label"
+                    htmlFor={`notifyOnRefusalOption${index}`}
+                  >
+                    {option.label}
+                  </label>
+                  <input
+                    className="form-radio-input"
+                    type="radio"
+                    name="notifyOnRefusalOption"
+                    id={`notifyOnRefusalOption${index}`}
+                    value={option.value}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        notifyOnRefusalOption: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Leadership Option */}
+            {formData?.notifyOnRefusalOption === "leadership" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="leadership_option">Leadership Option</label>
+                  <Select
+                    options={selectLeadershipOptions}
+                    isSearchable={true}
+                    value={
+                      formData?.leadershipToNotifyOnRefusalTitle
+                        ? {
+                            label: formData?.leadershipToNotifyOnRefusalTitle,
+                            value: formData?.leadershipToNotifyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        leadershipToNotifyOnRefusalTitle: e?.label,
+                        leadershipToNotifyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectLeadershipOptions?.length
+                        ? "fetching leaderships..."
+                        : "Select Leadership"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Designation Option */}
+            {formData?.notifyOnRefusalOption === "designation" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="designation_option">Designation Option</label>
+                  <Select
+                    options={selectDesignations}
+                    isSearchable={true}
+                    value={
+                      formData?.designationToNotifyOnRefusalTitle
+                        ? {
+                            label: formData?.designationToNotifyOnRefusalTitle,
+                            value: formData?.designationToNotifyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        designationToNotifyOnRefusalTitle: e?.label,
+                        designationToNotifyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectDesignations?.length
+                        ? "fetching designations..."
+                        : "Select Designation"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Role Option */}
+            {formData?.notifyOnRefusalOption === "role" ? (
+              <div className="col-md-4">
+                <div className="form-group">
+                  <label htmlFor="role_option">Role Option</label>
+                  <Select
+                    options={selectRoles}
+                    isSearchable={true}
+                    value={
+                      formData?.roleToNotifyOnRefusalTitle
+                        ? {
+                            label: formData?.roleToNotifyOnRefusalTitle,
+                            value: formData?.roleToNotifyOnRefusal
+                          }
+                        : null
+                    }
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        roleToNotifyOnRefusalTitle: e?.label,
+                        roleToNotifyOnRefusal: e?.value
+                      })
+                    }
+                    style={{ display: "inline-block" }}
+                    placeholder={
+                      !selectRoles?.length ? "fetching roles..." : "Select Role"
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

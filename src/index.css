@@ -2505,3 +2505,24 @@ img {
     box-shadow 0.15s ease-in-out;
   height: 15px !important;
 }
+
+.form_pills_container {
+  min-height: 100px;
+  padding: 0.5rem 1rem;
+}
+
+.form_pills_container_inner {
+  background: #f5f5f5;
+  min-height: 100px;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid #ececec;
+  box-shadow:
+    rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+.form_pill_stack {
+  display: flex;
+  gap: 0.5rem;
+}
