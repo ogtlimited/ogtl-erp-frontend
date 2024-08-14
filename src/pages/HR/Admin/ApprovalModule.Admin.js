@@ -1049,26 +1049,20 @@ const ApprovalModule = () => {
         <div className="column approval_builder">
           <h3 className="approval_builder_header">Stages of Approvers</h3>
 
-          <div className="column approval_builder_stages">
-            <div className="stages_container">
-              <span>1</span>
-              <p>Stage 1</p>
-              <div className="line"></div>
-            </div>
-            <div className="stages_container">
-              <span>2</span>
-              <p>Stage 2</p>
-              <div className="line"></div>
-            </div>
-            <div className="stages_container">
-              <span>3</span>
-              <p>Stage 3</p>
-              <div className="line"></div>
-            </div>
-            <div className="stages_container">
-              <span>4</span>
-              <p>Stage 4</p>
-            </div>
+          <div
+            className="column approval_builder_stages"
+            style={{
+              display: "flex",
+              justifyContent: +formData?.stages >= 10 ? "flex-start" : "center"
+            }}
+          >
+            {Array.from({ length: +formData?.stages }).map((_, index) => (
+              <div className="stages_container" key={index}>
+                <span>{index + 1}</span>
+                <p>Stage {index + 1}</p>
+                {index < +formData?.stages - 1 && <div className="line"></div>}
+              </div>
+            ))}
           </div>
         </div>
       )}
