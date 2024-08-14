@@ -37,6 +37,8 @@ const ApprovalModule = () => {
   const [arroverSection, setApproverSection] = useState(false);
   const [sendBackSection, setSendBackSection] = useState(false);
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const formattedLeadershipSelection = [
     { label: "All", value: "all" },
     ...selectLeadershipOptions
@@ -51,13 +53,13 @@ const ApprovalModule = () => {
   ];
 
   const [closeAll, setCloseAll] = useState(false);
-  const [viewingSendBackOptions, setViewingSendBackOptions] = useState(false);
-  const [selectedSendBackOptions, setSelectedSendBackOptions] = useState([]);
-  const [selectedSendBack, setSelectedSendBack] = useState([]);
+  const [viewingCOAOptions, setViewingCOAOptions] = useState(false);
+  const [selectedCOAOptions, setSelectedCOAOptions] = useState([]);
+  const [selectedCOA, setSelectedCOA] = useState([]);
 
   useEffect(() => {
-    console.log("show form data:", formData, selectedSendBack);
-  }, [formData, selectedSendBack]);
+    console.log("show COA:", formData, selectedCOA);
+  }, [formData, selectedCOA]);
 
   const handleOfficeTypeChange = (e) => {
     setFormData({
@@ -94,23 +96,24 @@ const ApprovalModule = () => {
   };
 
   const handleDeletePill = (data) => {
-    console.log("delete selectedSendBackOptions", {
+    console.log("delete selectedCOAOptions", {
       data,
-      selectedSendBack,
-      selectedSendBackOptions
+      selectedCOA,
+      selectedCOAOptions
     });
 
-    setSelectedSendBack(
-      selectedSendBack.filter((selected) => selected?.value !== data?.value)
+    setSelectedCOA(
+      selectedCOA.filter((selected) => selected?.value !== data?.value)
     );
 
-    setSelectedSendBackOptions(
-      selectedSendBackOptions.filter((id) => id !== data?.value)
+    setSelectedCOAOptions(
+      selectedCOAOptions.filter((id) => id !== data?.value)
     );
   };
 
   const handleSubmit = async () => {
-    console.log("Submit this module", formData);
+    console.log("Submit this module:", formData);
+    setIsSubmitted(true);
   };
 
   return (
@@ -465,9 +468,9 @@ const ApprovalModule = () => {
 
       {/* Send Back Section */}
       {sendBackSection ? (
-        <>
+        <div className="column approval_builder">
           {/* Copy On Approval */}
-          <div className="column approval_builder">
+          <div className="column approval_builder_inner">
             <h3 className="approval_builder_header">Copy on Approval</h3>
 
             <div className="form-radio-group">
@@ -490,8 +493,8 @@ const ApprovalModule = () => {
                         ...formData,
                         copyOnApprovalOption: e.target.value
                       });
-                      setSelectedSendBackOptions([]);
-                      setSelectedSendBack([]);
+                      setSelectedCOAOptions([]);
+                      setSelectedCOA([]);
                     }}
                   />
                 </div>
@@ -505,14 +508,14 @@ const ApprovalModule = () => {
                   <div className="form-group">
                     <label htmlFor="leadership_option">Leadership Option</label>
                     <DropdownCheckboxOptions
-                      office="leadership"
+                      office="Leadership"
                       options={formattedLeadershipSelection}
-                      selectedOptions={selectedSendBackOptions}
-                      setSelected={setSelectedSendBack}
+                      selectedOptions={selectedCOAOptions}
+                      setSelected={setSelectedCOA}
                       closeAll={closeAll}
-                      setViewingOffice={setViewingSendBackOptions}
+                      setViewingOffice={setViewingCOAOptions}
                       onSelectionChange={(updatedSelectedOptions) =>
-                        setSelectedSendBackOptions(updatedSelectedOptions)
+                        setSelectedCOAOptions(updatedSelectedOptions)
                       }
                     />
                   </div>
@@ -525,7 +528,7 @@ const ApprovalModule = () => {
                       direction="row"
                       spacing={1}
                     >
-                      {selectedSendBack.map((leadership, index) => {
+                      {selectedCOA.map((leadership, index) => {
                         if (leadership === "all") return null;
 
                         return (
@@ -551,14 +554,14 @@ const ApprovalModule = () => {
                       Designation Option
                     </label>
                     <DropdownCheckboxOptions
-                      office="designation"
+                      office="Designation"
                       options={formattedDesignationSelection}
-                      selectedOptions={selectedSendBackOptions}
-                      setSelected={setSelectedSendBack}
+                      selectedOptions={selectedCOAOptions}
+                      setSelected={setSelectedCOA}
                       closeAll={closeAll}
-                      setViewingOffice={setViewingSendBackOptions}
+                      setViewingOffice={setViewingCOAOptions}
                       onSelectionChange={(updatedSelectedOptions) =>
-                        setSelectedSendBackOptions(updatedSelectedOptions)
+                        setSelectedCOAOptions(updatedSelectedOptions)
                       }
                       valueIsNumber={true}
                     />
@@ -572,7 +575,7 @@ const ApprovalModule = () => {
                       direction="row"
                       spacing={1}
                     >
-                      {selectedSendBack.map((designation, index) => {
+                      {selectedCOA.map((designation, index) => {
                         if (designation === "all") return null;
 
                         return (
@@ -596,14 +599,14 @@ const ApprovalModule = () => {
                   <div className="form-group">
                     <label htmlFor="role_option">Role Option</label>
                     <DropdownCheckboxOptions
-                      office="role"
+                      office="Role"
                       options={formattedRoleSelection}
-                      selectedOptions={selectedSendBackOptions}
-                      setSelected={setSelectedSendBack}
+                      selectedOptions={selectedCOAOptions}
+                      setSelected={setSelectedCOA}
                       closeAll={closeAll}
-                      setViewingOffice={setViewingSendBackOptions}
+                      setViewingOffice={setViewingCOAOptions}
                       onSelectionChange={(updatedSelectedOptions) =>
-                        setSelectedSendBackOptions(updatedSelectedOptions)
+                        setSelectedCOAOptions(updatedSelectedOptions)
                       }
                       valueIsNumber={true}
                     />
@@ -617,7 +620,7 @@ const ApprovalModule = () => {
                       direction="row"
                       spacing={1}
                     >
-                      {selectedSendBack.map((role, index) => {
+                      {selectedCOA.map((role, index) => {
                         if (role === "all") return null;
 
                         return (
@@ -636,7 +639,7 @@ const ApprovalModule = () => {
           </div>
 
           {/* Copy On Refusal */}
-          <div className="column approval_builder">
+          <div className="column approval_builder_inner">
             <h3 className="approval_builder_header">Copy on Refusal</h3>
 
             <div className="form-radio-group">
@@ -767,7 +770,7 @@ const ApprovalModule = () => {
           </div>
 
           {/* Notify On Approval */}
-          <div className="column approval_builder">
+          <div className="column approval_builder_inner">
             <h3 className="approval_builder_header">Notify on Approval</h3>
 
             <div className="form-radio-group">
@@ -898,7 +901,7 @@ const ApprovalModule = () => {
           </div>
 
           {/* Notify On Refusal */}
-          <div className="column approval_builder">
+          <div className="column approval_builder_inner">
             <h3 className="approval_builder_header">Notify on Refusal</h3>
 
             <div className="form-radio-group">
@@ -1027,8 +1030,48 @@ const ApprovalModule = () => {
               </div>
             ) : null}
           </div>
-        </>
+
+          {/* Submit Form */}
+          <div className="col-md-12 approval_form_submit_div">
+            <button
+              type="button"
+              className="add_btn_new float-right"
+              onClick={handleSubmit}
+            >
+              <span>Submit</span>
+            </button>
+          </div>
+        </div>
       ) : null}
+
+      {/* Stages of Approvers*/}
+      {isSubmitted && (
+        <div className="column approval_builder">
+          <h3 className="approval_builder_header">Stages of Approvers</h3>
+
+          <div className="column approval_builder_stages">
+            <div className="stages_container">
+              <span>1</span>
+              <p>Stage 1</p>
+              <div className="line"></div>
+            </div>
+            <div className="stages_container">
+              <span>2</span>
+              <p>Stage 2</p>
+              <div className="line"></div>
+            </div>
+            <div className="stages_container">
+              <span>3</span>
+              <p>Stage 3</p>
+              <div className="line"></div>
+            </div>
+            <div className="stages_container">
+              <span>4</span>
+              <p>Stage 4</p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
