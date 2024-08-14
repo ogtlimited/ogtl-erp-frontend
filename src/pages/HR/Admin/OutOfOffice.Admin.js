@@ -349,6 +349,26 @@ const OutOfOfficeAdmin = () => {
         </div>
       </div>
 
+      {/* <div className="hr-employee-card-group" style={{ marginBottom: "3rem" }}>
+        <div className="hr-dashboard-card">
+          <span>Total Out of Office</span>
+          <div className="card-body">
+            <span className="biometrics-widget-icon">
+              <lord-icon
+                src="https://cdn.lordicon.com/peeuicbd.json"
+                colors="primary:#00c5fb,secondary:#0253cc"
+                trigger="loop"
+                delay="2499"
+                style={{ width: "60px", height: "60px" }}
+              ></lord-icon>
+            </span>
+            <div className="card-info">
+              <h3>{0}</h3>
+            </div>
+          </div>
+        </div>
+      </div> */}
+
       <div className="page-menu" style={{ marginBottom: "2rem" }}>
         <div className="row">
           <div className="col-sm-12">
