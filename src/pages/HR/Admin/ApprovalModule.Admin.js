@@ -228,6 +228,7 @@ const ApprovalModule = () => {
                 value={formData?.stages}
                 onChange={handleFormChange}
                 className="form-control"
+                min={0}
                 required
               />
             </div>
@@ -1053,7 +1054,8 @@ const ApprovalModule = () => {
             className="column approval_builder_stages"
             style={{
               display: "flex",
-              justifyContent: +formData?.stages >= 10 ? "flex-start" : "center"
+              justifyContent:
+                +formData?.stages >= 10 ? "flex-start" : "center"
             }}
           >
             {Array.from({ length: +formData?.stages }).map((_, index) => (
