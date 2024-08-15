@@ -84,7 +84,7 @@ const AppProvider = (props) => {
     [user?.employee_info?.ogid]
   );
   const CurrentUserRoles = user?.employee_info?.roles;
-  const isHRManager = CurrentUserRoles.includes("hr_manager");
+  const isHRManager = CurrentUserRoles?.includes("hr_manager");
   const isSecurity = CurrentUserRoles?.includes("security_attendance_team");
   const isPayrollProcessor = CurrentUserRoles?.includes("payroll_processor");
 
