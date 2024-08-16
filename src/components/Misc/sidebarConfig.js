@@ -41,6 +41,7 @@ const ICONS = {
   schedule: getIcon("la-calendar"),
   attendance: getIcon("la-clock-o"),
   kpi: getIcon("la-bar-chart"),
+  qa: getIcon("la-bar-chart"),
   timeOff: getIcon("la-calendar-day"),
   leave: getIcon("la-calendar-times-o"),
   biometrics: getIcon("la-fingerprint"),
@@ -695,6 +696,37 @@ const sidebarConfig = [
             canView: "data management",
             title: "Leave Applications",
             path: PATH_DASHBOARD.dataManagement.workforceLeaveApplications
+          }
+        ]
+      }
+    ]
+  },
+
+  // QA CONFIG:
+  {
+    subheader: "QA",
+    canView: CurrentUserRoles.includes("quality_assurance")
+      ? "quality assurance"
+      : "none",
+    items: [
+      {
+        canView: CurrentUserRoles.includes("quality_assurance")
+          ? "quality assurance"
+          : "none",
+        title: "Quality Assurance",
+        path: PATH_DASHBOARD.qa.root,
+        icon: ICONS.qa,
+        navIcon: ICONS.volleyball,
+        children: [
+          {
+            canView: "hr",
+            title: "All Evaluations",
+            path: PATH_DASHBOARD.qa.allEvaluations
+          },
+          {
+            canView: "quality assurance",
+            title: "Evaluation Form",
+            path: PATH_DASHBOARD.qa.evaluation
           }
         ]
       }

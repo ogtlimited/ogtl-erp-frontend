@@ -55,8 +55,8 @@ export const PATH_DASHBOARD = {
     addEmployees: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/add"),
     leadership: path(ROOTS_DASHBOARD, "/hr/all-employees/employee/leader"),
     leavesAdmin: path(ROOTS_DASHBOARD, "/hr/leaves-admin"),
-    survey: path(ROOTS_DASHBOARD, "/hr/survey"),
     allSurvey: path(ROOTS_DASHBOARD, "/hr/all-survey"),
+    survey: path(ROOTS_DASHBOARD, "/hr/survey"),
     resignation: path(ROOTS_DASHBOARD, "/hr/resignation"),
     attendanceAdmin: path(ROOTS_DASHBOARD, "/hr/attendance-admin"),
     capturedBiometrics: path(ROOTS_DASHBOARD, "/hr/captured-biometrics"),
@@ -148,6 +148,12 @@ export const PATH_DASHBOARD = {
     allCampaign: path(ROOTS_DASHBOARD, "/operations/campaigns"),
     lead: path(ROOTS_DASHBOARD, "/operations/leads"),
     branch: path(ROOTS_DASHBOARD, "/operations/branch"),
+  },
+
+  qa: {
+    root: path(ROOTS_DASHBOARD, "/qa"),
+    allEvaluations: path(ROOTS_DASHBOARD, "/qa/all-evaluations"),
+    evaluation: path(ROOTS_DASHBOARD, "/qa/evaluation"),
   },
 
   dataManagement: {
