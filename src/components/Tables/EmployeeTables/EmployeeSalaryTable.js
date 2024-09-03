@@ -279,7 +279,7 @@ function EmployeeSalaryTable({
             <table className="emp_salary_custom_table custom-table">
               <thead className="emp_salary_custom-table-thead">
                 <tr>
-                  <th className="emp_salary_tr_th exempt" colSpan="4"></th>
+                  <th className="emp_salary_tr_th exempt" colSpan="6"></th>
                   <th colSpan="5">Earnings</th>
                   <th className="emp_salary_tr_th exempt"></th>
                   <th colSpan={columns.length <= 12 ? "3" : "5"}>Deductions</th>
