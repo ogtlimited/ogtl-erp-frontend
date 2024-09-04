@@ -510,6 +510,10 @@ const EmployeePayroll = () => {
       text: "Transport"
     },
     {
+      dataField: "bonuses",
+      text: "Bonuses"
+    },
+    {
       dataField: "otherAllowances",
       text: "Other Allowances"
     },
@@ -532,6 +536,10 @@ const EmployeePayroll = () => {
     {
       dataField: "disciplinary_deductions",
       text: "Disciplinary Deduction"
+    },
+    {
+      dataField: "loans",
+      text: "Loans"
     },
     {
       dataField: "totalDeductions",
