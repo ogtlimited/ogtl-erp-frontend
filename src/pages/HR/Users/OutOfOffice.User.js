@@ -162,7 +162,7 @@ const OutOfOffice = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Out Of Office</h3>
+            <h3 className="page-title">Absence</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">Main</li>
               <li className="breadcrumb-item active">Time Off</li>
