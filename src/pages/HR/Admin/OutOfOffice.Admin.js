@@ -229,9 +229,8 @@ const OutOfOfficeAdmin = () => {
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
             <i
-              className={`fa fa-dot-circle-o ${
-                value ? "text-success" : "text-secondary"
-              } `}
+              className={`fa fa-dot-circle-o ${value ? "text-success" : "text-secondary"
+                } `}
               style={{ marginRight: "10px" }}
             ></i>{" "}
             {value ? "Yes" : "No"}
