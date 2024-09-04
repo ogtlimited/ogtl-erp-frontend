@@ -199,7 +199,7 @@ const sidebarConfig = [
         children: [
           {
             canView: "all",
-            title: "Out of Office",
+            title: "Absence",
             path: PATH_DASHBOARD.main.outOfOffice,
             icon: ICONS.office
           },
@@ -438,7 +438,7 @@ const sidebarConfig = [
             ? [
                 {
                   canView: "all",
-                  title: "Out of Office",
+                  title: "Absence",
                   path: PATH_DASHBOARD.hr.outOfOffice
                 }
                 // {
@@ -450,7 +450,7 @@ const sidebarConfig = [
             : [
                 {
                   canView: "hr",
-                  title: "Out of Office",
+                  title: "Absence",
                   path: PATH_DASHBOARD.hr.outOfOffice
                 },
                 {
