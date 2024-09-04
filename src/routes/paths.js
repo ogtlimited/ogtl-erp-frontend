@@ -96,6 +96,7 @@ export const PATH_DASHBOARD = {
     payday: path(ROOTS_DASHBOARD, "/payroll/payday"),
     payrollBatches: path(ROOTS_DASHBOARD, "/payroll/payroll-batches"),
     deductions: path(ROOTS_DASHBOARD, "/payroll/deductions"),
+    loans: path(ROOTS_DASHBOARD, "/payroll/loans"),
     archive: path(ROOTS_DASHBOARD, "/payroll/archive"),
     payrollNotes: path(ROOTS_DASHBOARD, "/payroll/payroll-notes"),
   },
