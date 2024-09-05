@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { MdDelete } from "react-icons/md";
 
-const formInputTypes = [
-  {
-    label: "Checkbox",
-    value: "checkbox",
-  },
-  {
-    label: "Radio",
-    value: "radio",
-  },
-];
+
 
 const EvaluationQuestionInput = ({
   onAddQuestion,
@@ -122,24 +113,31 @@ const EvaluationQuestionInput = ({
 
   const renderQuestionInput = (question, index) => (
     <div className="question_input_div" key={index}>
-      <input
-        className="col-md-8 form-control"
-        type="text"
-        value={question.title}
-        onChange={(e) => handleQuestionChange(index, "title", e.target.value)}
-        placeholder="Title"
-      />
-      <input
-        className="col-md-3 form-control"
-        type="number"
-        value={question.weight}
-        onChange={(e) => handleQuestionChange(index, "weight", e.target.value)}
-        placeholder="Weight"
-      />
-      <MdDelete
-        className="form_builder_input_delete"
-        onClick={handleDeleteQuestion(index)}
-      />
+      <div className="checkbox_radio_wrapper">
+        <input
+          className="col-md-12 form-control "
+          type="text"
+          value={question.title}
+          onChange={(e) => handleQuestionChange(index, "title", e.target.value)}
+          placeholder="Title"
+        />
+      </div>
+
+      <div className="checkbox_radio_wrapper">
+        <input
+          className="col-md-2 form-control mt-3"
+          type="number"
+          value={question.weight}
+          onChange={(e) => handleQuestionChange(index, "weight", e.target.value)}
+          min={0}
+          placeholder="Weight"
+        />
+        <MdDelete
+          className="form_builder_input_delete mt-2"
+          onClick={handleDeleteQuestion(index)}
+        />
+      </div>
+
     </div>
   );
 
@@ -168,13 +166,7 @@ const EvaluationQuestionInput = ({
         <div className="correct_ans_instruction">{instruction}</div>
       )}
       <div className="form_builder_actions">
-        <Select
-          className="formInputTypeSelect"
-          options={!usedOptionTypes.length ? formInputTypes : []}
-          value={formInputTypes.find((option) => option.value === optionType)}
-          onChange={(option) => setOptionType(option.value)}
-          isDisabled={usedOptionTypes.length}
-        />
+
         <button
           className="btn btn-dark"
           disabled={optionAdded}
@@ -191,7 +183,7 @@ const EvaluationQuestionInput = ({
             : handleQuestionAction("add")
         }
       >
-        {selectedQuestionWithOptions ? "Save Question" : "Add Question"}
+        {selectedQuestionWithOptions ? "Save to Survey" : "Add to Survey"}
       </button>
     </div>
   );

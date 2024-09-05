@@ -72,7 +72,7 @@ const EvaluationFormBuilder = ({
     <div className="form_builder_form">
       {questions.length ? (
         <div className="form_builder_form_sample_wrapper">
-          <h3>Evaluation Form</h3>
+          <h3>Evaluations</h3>
           {questions.map((question, index) => (
             <div className="form_builder_form_sample" key={index}>
               <div className="form_builder_form_sample_question">
