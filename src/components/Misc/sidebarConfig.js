@@ -542,6 +542,11 @@ const sidebarConfig = [
             canView: "all",
             title: "Deductions",
             path: PATH_DASHBOARD.payroll.deductions
+          },
+          {
+            canView: "all",
+            title: "loans",
+            path: PATH_DASHBOARD.payroll.loans
           }
         ]
       },

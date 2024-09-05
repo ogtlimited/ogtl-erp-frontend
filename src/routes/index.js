@@ -848,10 +848,26 @@ export default function Router() {
               )
             },
             {
+              path: "loans",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PayrollLoans />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "staff-deductions/:id/:start/:end",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <DeductionSlip />
+                </GuardedRoute>
+              )
+            },
+            {
+              path: "staff-loans/:id/:start/:end",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <LoanSlip />
                 </GuardedRoute>
               )
             },
@@ -1676,6 +1692,9 @@ const EmployeePayroll = Loadable(
 const DeductionSlip = Loadable(
   lazy(() => import("../pages/Payroll/DeductionSlip.js"))
 );
+const LoanSlip = Loadable(
+  lazy(() => import("../pages/Payroll/LoanSlip.js"))
+);
 const PaySlipBreakdown = Loadable(
   lazy(() => import("../pages/HR/Users/PaySlipBreakdown.User"))
 );
@@ -1752,6 +1771,9 @@ const PayrollDates = Loadable(
 );
 const PayrollDeductions = Loadable(
   lazy(() => import("../pages/Payroll/Deductions"))
+);
+const PayrollLoans = Loadable(
+  lazy(() => import("../pages/Payroll/Loans"))
 );
 const Archive = Loadable(lazy(() => import("../pages/Payroll/Archive")));
 const ScoreCards = Loadable(
