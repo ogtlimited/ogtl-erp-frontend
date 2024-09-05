@@ -378,7 +378,7 @@ const OutOfOfficeAdmin = () => {
                   data-toggle="tab"
                   href="#tab_outOfOfficeStaff"
                 >
-                  Out of Office Staff
+                  Absence
                 </a>
               </li>
 
