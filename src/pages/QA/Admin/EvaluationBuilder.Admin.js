@@ -157,7 +157,7 @@ const EvaluationBuilder = () => {
         {/* Title */}
         <div className="col-md-4">
           <div className="form-group">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title">Evaluation </label>
             <input
               className="form-control"
               name="title"
@@ -171,7 +171,7 @@ const EvaluationBuilder = () => {
           </div>
         </div>
 
-        {/* From & To */}
+        {/* From & To
         <div className="row" style={{ paddingLeft: "1rem" }}>
           <div className="col-md-4">
             <div className="form-group">
@@ -203,7 +203,7 @@ const EvaluationBuilder = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Offices */}
         <div className="row" style={{ paddingLeft: "1rem" }}>
@@ -244,7 +244,7 @@ const EvaluationBuilder = () => {
         </div>
 
         {(selectedDepartmentOptions.length || selectedCampaignOptions.length) &&
-        title.length ? (
+          title.length ? (
           <div className="column survey_builder_container">
             <EvaluationFormBuilder
               title={title}
