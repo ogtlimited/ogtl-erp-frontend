@@ -140,7 +140,7 @@ export default function Router() {
             { path: "main/deductions", element: <EmployeeDeductions /> },
             { path: "main/Payslips", element: <PayrollUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
-            { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
+            { path: "main/absence", element: <OutOfOfficeUsers /> },
             { path: "main/public-holiday", element: <PublicHolidayUser /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
@@ -347,7 +347,7 @@ export default function Router() {
               )
             },
             {
-              path: "out-of-office",
+              path: "absence",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OutOfOfficeAdmin />
