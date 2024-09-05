@@ -14,8 +14,8 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     selectTeams,
     showAlert,
     loadingSelect,
-    selectDeductionTypes,
-    fetchDeductionTypes
+    selectLoanTypes,
+    fetchLoanTypes
   } = useAppContext();
   const selectDeductionTypeRef = useRef();
   const [data, setData] = useState(HR_ADD_DEDUCTION);
@@ -28,8 +28,8 @@ export const AddLoanModal = ({ fetchDeductions }) => {
   const [allEmployees, setAllEmployees] = useState([]);
 
   useEffect(() => {
-    fetchDeductionTypes();
-  }, [fetchDeductionTypes]);
+    fetchLoanTypes();
+  }, [fetchLoanTypes]);
 
   useEffect(() => {
     if (data?.hr_user_id && data?.hr_deduction_type_id) {
@@ -178,19 +178,22 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     }
   };
 
-  const handleAddDeduction = async (e) => {
+  const handleAddLoan = async (e) => {
     e.preventDefault();
 
     const dataPayload = {
       hr_user_id: data?.hr_user_id,
       hr_deduction_type_id: data?.hr_deduction_type_id,// update to loan amount when integrating api
-      date_processed: data?.date_processed
+      date_processed: data?.date_processed,
+      // loan_type_id: 2,
+      // ogid: "OG212414",
+      // monthly_deduction: "20000"
     };
 
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/deductions.json", {
+      const response = await axiosInstance.post("/api/v1/loans.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -243,7 +246,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
             <div className="modal-body">
               {!loadingSelect ? (
-                <form onSubmit={handleAddDeduction}>
+                <form onSubmit={handleAddLoan}>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
@@ -301,8 +304,8 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                               officeType === "Department"
                                 ? selectDepartments
                                 : officeType === "Campaign"
-                                ? selectCampaigns
-                                : selectTeams
+                                  ? selectCampaigns
+                                  : selectTeams
                             }
                             isSearchable={true}
                             value={{
@@ -347,6 +350,30 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                         <label htmlFor="hr_deduction_type_id">
                           Loan Type
                         </label>
+                        <Select
+                          options={selectLoanTypes}
+                          isSearchable={true}
+                          onChange={(e) =>
+                            setData({
+                              ...data,
+                              hr_deduction_type_id: e?.value,
+                              deductionTitle: e?.label
+                            })
+                          }
+                          ref={selectDeductionTypeRef}
+                          defaultValue={null}
+                          placeholder="Select Loan Type"
+                          style={{ display: "inline-block" }}
+                        />
+
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_deduction_type_id">
+                          Loan Amount
+                        </label>
                         {/* <Select
                           options={selectDeductionTypes}
                           isSearchable={true}
@@ -367,7 +394,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                           type="number"
                           placeholder="enter amount"
                           className="form-control"
-                        //   value={data.annual_gross_salary}
+                          //   value={data.annual_gross_salary}
                           onChange={(e) =>
                             setData({
                               ...data,
