@@ -105,26 +105,26 @@ const sidebarConfig = [
     items: [
       userDept === "hr"
         ? {
-            canView: "all",
-            title: "Dashboard",
-            path: PATH_DASHBOARD.main.root,
-            icon: ICONS.dashboard,
-            navIcon: ICONS.football,
-            children: [
-              {
-                canView: "all",
-                title: "Employee Dashboard",
-                path: PATH_DASHBOARD.main.employeeDashboard
-              },
-              {
-                canView: "hr",
-                title: "HR Dashboard",
-                path: PATH_DASHBOARD.main.hrDashboard
-              }
-            ]
-          }
+          canView: "all",
+          title: "Dashboard",
+          path: PATH_DASHBOARD.main.root,
+          icon: ICONS.dashboard,
+          navIcon: ICONS.football,
+          children: [
+            {
+              canView: "all",
+              title: "Employee Dashboard",
+              path: PATH_DASHBOARD.main.employeeDashboard
+            },
+            {
+              canView: "hr",
+              title: "HR Dashboard",
+              path: PATH_DASHBOARD.main.hrDashboard
+            }
+          ]
+        }
         : userDept === "operations"
-        ? {
+          ? {
             canView: "all",
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
@@ -143,7 +143,7 @@ const sidebarConfig = [
               }
             ]
           }
-        : {
+          : {
             canView: "all",
             title: "Dashboard",
             path: PATH_DASHBOARD.main.root,
@@ -343,29 +343,29 @@ const sidebarConfig = [
         children:
           CurrentUserIsLead && userDept !== "hr"
             ? [
-                {
-                  canView: "all",
-                  title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees
-                },
-                {
-                  canView: "all",
-                  title: "Departments",
-                  path: PATH_DASHBOARD.hr.departments
-                }
-              ]
+              {
+                canView: "all",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees
+              },
+              {
+                canView: "all",
+                title: "Departments",
+                path: PATH_DASHBOARD.hr.departments
+              }
+            ]
             : [
-                {
-                  canView: "hr",
-                  title: "All Employees",
-                  path: PATH_DASHBOARD.hr.allEmployees
-                },
-                {
-                  canView: "hr",
-                  title: "Add Employee",
-                  path: PATH_DASHBOARD.hr.addEmployees
-                }
-              ]
+              {
+                canView: "hr",
+                title: "All Employees",
+                path: PATH_DASHBOARD.hr.allEmployees
+              },
+              {
+                canView: "hr",
+                title: "Add Employee",
+                path: PATH_DASHBOARD.hr.addEmployees
+              }
+            ]
       },
 
       // Leadership:
@@ -629,51 +629,51 @@ const sidebarConfig = [
     items:
       (remoteUser && CurrentUserIsLead) || CurrentUserRoles.includes("wfh_lead")
         ? [
-            {
-              canView: "lead",
-              title: "Team Members",
-              path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership
-            },
-            {
-              canView: "lead",
-              title: "Campaign Schedule",
-              path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule
-            },
-            {
-              canView: "lead",
-              title: "Team Attendance",
-              path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance
-            },
-            {
-              canView: CurrentUserRoles,
-              title: "Remote Attendance",
-              path: PATH_DASHBOARD.leadership.remoteAttendance,
-              icon: ICONS.attendance
-            }
-          ]
+          {
+            canView: "lead",
+            title: "Team Members",
+            path: PATH_DASHBOARD.leadership.supervisor,
+            icon: ICONS.leadership
+          },
+          {
+            canView: "lead",
+            title: "Campaign Schedule",
+            path: PATH_DASHBOARD.leadership.campaignSchedule,
+            icon: ICONS.schedule
+          },
+          {
+            canView: "lead",
+            title: "Team Attendance",
+            path: PATH_DASHBOARD.leadership.teamAttendance,
+            icon: ICONS.teamAttendance
+          },
+          {
+            canView: CurrentUserRoles,
+            title: "Remote Attendance",
+            path: PATH_DASHBOARD.leadership.remoteAttendance,
+            icon: ICONS.attendance
+          }
+        ]
         : [
-            {
-              canView: "lead",
-              title: "Team Members",
-              path: PATH_DASHBOARD.leadership.supervisor,
-              icon: ICONS.leadership
-            },
-            {
-              canView: "lead",
-              title: "Campaign Schedule",
-              path: PATH_DASHBOARD.leadership.campaignSchedule,
-              icon: ICONS.schedule
-            },
-            {
-              canView: "lead",
-              title: "Team Attendance",
-              path: PATH_DASHBOARD.leadership.teamAttendance,
-              icon: ICONS.teamAttendance
-            }
-          ]
+          {
+            canView: "lead",
+            title: "Team Members",
+            path: PATH_DASHBOARD.leadership.supervisor,
+            icon: ICONS.leadership
+          },
+          {
+            canView: "lead",
+            title: "Campaign Schedule",
+            path: PATH_DASHBOARD.leadership.campaignSchedule,
+            icon: ICONS.schedule
+          },
+          {
+            canView: "lead",
+            title: "Team Attendance",
+            path: PATH_DASHBOARD.leadership.teamAttendance,
+            icon: ICONS.teamAttendance
+          }
+        ]
   },
 
   // DATA MANAGEMENT CONFIG:
