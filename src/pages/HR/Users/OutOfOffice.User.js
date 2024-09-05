@@ -74,7 +74,7 @@ const OutOfOffice = () => {
       setAllOutOfOffice(formattedOutOffOffice);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Absence Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
