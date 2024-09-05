@@ -183,7 +183,7 @@ const EvaluationQuestionInput = ({
             : handleQuestionAction("add")
         }
       >
-        {selectedQuestionWithOptions ? "Save to Survey" : "Add to Survey"}
+        {selectedQuestionWithOptions ? "Save to Evaluation" : "Add to Evaluation"}
       </button>
     </div>
   );
