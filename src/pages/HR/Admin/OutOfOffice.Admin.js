@@ -98,7 +98,7 @@ const OutOfOfficeAdmin = () => {
       setAllOutOfOffice(formattedOutOffOffice);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Absence Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -341,7 +341,7 @@ const OutOfOfficeAdmin = () => {
                 data-target="#OutOfOfficeFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Create Out of Office
+                <i className="fa fa-plus"></i> Create Absence
               </a>
             ) : null}
           </div>
@@ -483,7 +483,7 @@ const OutOfOfficeAdmin = () => {
 
       {modalType === "view-details" ? (
         <ViewModal
-          title="Out of Office Details"
+          title="Absence Details"
           content={<OutOfOfficeContent Content={viewRow} />}
         />
       ) : null}
