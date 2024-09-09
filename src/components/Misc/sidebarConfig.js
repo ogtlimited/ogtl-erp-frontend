@@ -436,29 +436,29 @@ const sidebarConfig = [
         children:
           CurrentUserIsLead && userDept !== "hr"
             ? [
-                {
-                  canView: "all",
-                  title: "Absence",
-                  path: PATH_DASHBOARD.hr.outOfOffice
-                }
-                // {
-                //   canView: "all",
-                //   title: "Public Holiday",
-                //   path: PATH_DASHBOARD.hr.publicholiday
-                // }
-              ]
+              {
+                canView: "all",
+                title: "Absence",
+                path: PATH_DASHBOARD.hr.outOfOffice
+              }
+              // {
+              //   canView: "all",
+              //   title: "Public Holiday",
+              //   path: PATH_DASHBOARD.hr.publicholiday
+              // }
+            ]
             : [
-                {
-                  canView: "hr",
-                  title: "Absence",
-                  path: PATH_DASHBOARD.hr.outOfOffice
-                },
-                {
-                  canView: "hr",
-                  title: "Public Holiday",
-                  path: PATH_DASHBOARD.hr.publicholiday
-                }
-              ]
+              {
+                canView: "hr",
+                title: "Absence",
+                path: PATH_DASHBOARD.hr.outOfOffice
+              },
+              {
+                canView: "hr",
+                title: "Public Holiday",
+                path: PATH_DASHBOARD.hr.publicholiday
+              }
+            ]
       },
 
       // Leave:
@@ -547,7 +547,13 @@ const sidebarConfig = [
             canView: "all",
             title: "loans",
             path: PATH_DASHBOARD.payroll.loans
+          },
+          {
+            canView: "all",
+            title: "Allowances",
+            path: PATH_DASHBOARD.payroll.allowances
           }
+
         ]
       },
 
