@@ -166,7 +166,9 @@ export const PATH_DASHBOARD = {
   operations: {
     root: path(ROOTS_DASHBOARD, "/operations"),
     operationTeamLeaveApplications: path(ROOTS_DASHBOARD, "/operations/operation-team-leave-applications"),
+    operationTeamTaskManagement: path(ROOTS_DASHBOARD, "/operations/operation-team-task-management"),
     resignation: path(ROOTS_DASHBOARD, "/operations/resignation"),
+
   },
 
   accounts: {

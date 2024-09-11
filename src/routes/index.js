@@ -786,6 +786,14 @@ export default function Router() {
               )
             },
             {
+              path: "operation-team-task-management",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <OperationsTeamTaskManagement />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="operations">
@@ -798,6 +806,7 @@ export default function Router() {
               )
             }
           ]
+
         },
 
         {
@@ -1592,6 +1601,9 @@ const WorkforceLeaveApplications = Loadable(
 );
 const OperationsTeamLeaveApplications = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTeamLeaveApplications.js"))
+);
+const OperationsTeamTaskManagement = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTeamTaskManagement.js"))
 );
 const ResignationStatusAnalytics = Loadable(
   lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))

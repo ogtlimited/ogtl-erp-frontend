@@ -765,6 +765,11 @@ const sidebarConfig = [
             canView: "operations",
             title: "Leave Applications",
             path: PATH_DASHBOARD.operations.operationTeamLeaveApplications
+          },
+          {
+            canView: "operations",
+            title: "Task Management",
+            path: PATH_DASHBOARD.operations.operationTeamTaskManagement
           }
         ]
       },
