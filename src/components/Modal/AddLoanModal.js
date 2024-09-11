@@ -1,7 +1,7 @@
 //* IN USE
 
 import React, { useState, useEffect, useRef } from "react";
-import { HR_ADD_DEDUCTION, officeTypeOptions } from "../FormJSON/AddDeduction";
+import { HR_ADD_LOAN, officeTypeOptions } from "../FormJSON/AddLoan";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
@@ -17,8 +17,8 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     selectLoanTypes,
     fetchLoanTypes
   } = useAppContext();
-  const selectDeductionTypeRef = useRef();
-  const [data, setData] = useState(HR_ADD_DEDUCTION);
+  const selectLoanTypeRef = useRef();
+  const [data, setData] = useState(HR_ADD_LOAN);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,19 +32,19 @@ export const AddLoanModal = ({ fetchDeductions }) => {
   }, [fetchLoanTypes]);
 
   useEffect(() => {
-    if (data?.hr_user_id && data?.hr_deduction_type_id) {
+    if (data?.hr_user_id && data?.hr_loan_type_id) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
     }
-  }, [data?.hr_deduction_type_id, data?.hr_user_id]);
+  }, [data?.hr_loan_type_id, data?.hr_user_id]);
 
   const cancelEvent = () => {
-    setData(HR_ADD_DEDUCTION);
+    setData(HR_ADD_LOAN);
     setOfficeType("");
     setIsOfficeTypeSelected(false);
     setIsOfficeSelected(false);
-    selectDeductionTypeRef.current.select.clearValue();
+    selectLoanTypeRef.current.select.clearValue();
   };
 
   const handleDateChange = (e) => {
@@ -183,7 +183,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
     const dataPayload = {
       hr_user_id: data?.hr_user_id,
-      hr_Loan_type_id: data?.hr_deduction_type_id,// update to loan amount when integrating api
+      hr_Loan_type_id: data?.hr_loan_type_id,// update to loan amount when integrating api
       date_processed: data?.date_processed,
       // loan_type_id: 2,
       // ogid: "OG212414",
@@ -210,10 +210,10 @@ export const AddLoanModal = ({ fetchDeductions }) => {
         "alert alert-success"
       );
       fetchDeductions();
-      $("#AddDeductionModal").modal("toggle");
+      $("#AddLoanModal").modal("toggle");
       cancelEvent();
     } catch (error) {
-      $("#AddDeductionModal").modal("toggle");
+      $("#AddLoanModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
     setLoading(false);
@@ -223,7 +223,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     <>
       <div
         className="modal fade"
-        id="AddDeductionModal"
+        id="AddLoanModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -347,7 +347,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="hr_deduction_type_id">
+                        <label htmlFor="hr_loan_type_id">
                           Loan Type
                         </label>
                         <Select
@@ -360,7 +360,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                               loanTitle: e?.label
                             })
                           }
-                          ref={selectDeductionTypeRef}
+                          ref={selectLoanTypeRef}
                           defaultValue={null}
                           placeholder="Select Loan Type"
                           style={{ display: "inline-block" }}
