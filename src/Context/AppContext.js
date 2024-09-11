@@ -1017,31 +1017,12 @@ const AppProvider = (props) => {
       // });
 
       const resData = response?.data?.data?.loan_types;
-      console.log('nbnbnbbbnbnnb',response);
-
       const formattedData = resData.map((item) => {
-        const deductionValue =
-          item?.deduction?.deduction_mode === "percentage"
-            ? item?.deduction?.value + "%"
-            : item?.deduction?.deduction_mode === "flat_rate"
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
-            : "-";
-
         return {
-          label:
-            item?.deduction?.title
-              .replace(/_/g, " ")
-              .replace(/^./, (str) => str.toUpperCase())
-              .replace(/\b\w/g, (char) => char.toUpperCase()) +
-            " | " +
-            item?.office?.title.toUpperCase() +
-            " | " +
-            deductionValue,
-          value: item?.deduction?.id
+          label: item?.title,
+          value: item?.id
         };
       });
-
-      
 
       setSelectLoanTypes(formattedData);
       setLoadingSelect(false);
