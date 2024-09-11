@@ -55,7 +55,7 @@ const EvaluationFormBuilder = ({
   };
 
   const handleSubmit = () => {
-    const surveyData = {
+    const evaluationData = {
       title: title,
       from: from,
       to: to,
@@ -64,7 +64,9 @@ const EvaluationFormBuilder = ({
       questions: questions,
     };
 
-    onSubmitEvaluation(surveyData);
+
+    console.log("eval data: ", evaluationData)
+    onSubmitEvaluation(evaluationData);
     setQuestions([]);
   };
 
