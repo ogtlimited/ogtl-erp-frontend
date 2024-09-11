@@ -183,7 +183,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
     const dataPayload = {
       hr_user_id: data?.hr_user_id,
-      hr_deduction_type_id: data?.hr_deduction_type_id,// update to loan amount when integrating api
+      hr_Loan_type_id: data?.hr_deduction_type_id,// update to loan amount when integrating api
       date_processed: data?.date_processed,
       // loan_type_id: 2,
       // ogid: "OG212414",
@@ -356,8 +356,8 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                           onChange={(e) =>
                             setData({
                               ...data,
-                              hr_deduction_type_id: e?.value,
-                              deductionTitle: e?.label
+                              hr_loan_type_id: e?.value,
+                              loanTitle: e?.label
                             })
                           }
                           ref={selectDeductionTypeRef}
@@ -399,7 +399,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                             setData({
                               ...data,
                               hr_deduction_type_id: e?.value,
-                              deductionTitle: e?.label
+                              loanAmount: e?.target.value
                             })
                           }
                           required
