@@ -40,36 +40,19 @@ const EvaluationBuilder = () => {
     const { title, from, to, departments, campaigns } = evaluationData;
 
     // Reorganize questions data
-    const questions = evaluationData.questions.map((question, index) => {
-      const options = question.options.reduce((acc, option, optionIndex) => {
-        acc[String.fromCharCode(97 + optionIndex)] = option.value;
-        return acc;
-      }, {});
-
-      // Find the indices of all correct answers
-      const correctIndices = question.options.reduce(
-        (acc, option, optionIndex) => {
-          if (option.correct) {
-            acc.push(optionIndex);
-          }
-          return acc;
-        },
-        []
-      );
-
-      // Map the indices of correct answers to their corresponding keys
-      const correctKeys = correctIndices.map((index) =>
-        String.fromCharCode(97 + index)
-      );
-
-      return {
-        id: index + 1,
-        question: question.question,
-        question_type: question.options[0].type,
-        options,
-        answers: correctKeys
-      };
-    });
+    const questions = evaluationData.questions.map((category, categoryIndex) => {
+      return category.questions.map((question, questionIndex) => {
+        return {
+          id: categoryIndex + 1,
+          question_title: category.question_title,
+          question: question.title,
+          weight: question.weight, // Use 'weight' field for additional data
+          question_type: 'evaluation',
+          options: {},
+          answers: []
+        };
+      });
+    }).flat(); // Flatten the array to get all questions in a single array
 
     // Reorganize applicable offices data
     const applicable_offices = [];
@@ -109,7 +92,7 @@ const EvaluationBuilder = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post(`/api/v1/qa_evaluations.json`, {
+      const response = await axiosInstance.post(`/api/v1/evaluation_config.json`, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",

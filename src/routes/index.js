@@ -17,6 +17,7 @@ import BadGateway from "../pages/Error/BadGateway";
 import InternalServerError from "../pages/Error/InternalServerError.js";
 import PayrollNotes from "../pages/Payroll/PayrollNotes";
 import tokenService from "../services/token.service.js";
+import TaskManagementConfigForm from "../pages/HR/Admin/TaskManagementConfigForm.Admin.js";
 
 const user = tokenService.getUser();
 const CurrentUserIsCOO = user?.employee_info?.roles.includes("coo");
@@ -790,6 +791,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="super">
                   <OperationsTeamTaskManagement />
+                </GuardedRoute>
+              )
+            },
+            {
+              path: "operation-team-task-management/create",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <TaskManagementConfigForm />
                 </GuardedRoute>
               )
             },

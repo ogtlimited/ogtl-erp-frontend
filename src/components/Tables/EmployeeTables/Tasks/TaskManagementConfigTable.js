@@ -25,7 +25,7 @@ const TaskManagementConfigTable = () => {
             dataField: "active",
             text: "Status",
             formatter: (cell) => (
-                <span className={`badge ${cell ? "bg-success" : "bg-danger"}`}>
+                <span className={`badge text-white w-25 p-2 ${cell ? "bg-success" : "bg-danger "}`}>
                     {cell ? "Active" : "Inactive"}
                 </span>
             ),
@@ -119,12 +119,12 @@ const TaskManagementConfigTable = () => {
             >
                 {(props) => (
                     <div className="col-12">
-                        {/* <div className="col-12 p-0" style={{ marginTop: 30 }}>
-                            <ExportCSVButton className="float-right btn export-csv" {...props.csvProps}>
+                        <div className="col-12 p-0" style={{ marginTop: 30 }}>
+                            {/* <ExportCSVButton className="float-right btn export-csv" {...props.csvProps}>
                                 Export CSV
-                            </ExportCSVButton>
+                            </ExportCSVButton> */}
                             <MySearch {...props.searchProps} className="inputSearch" />
-                        </div> */}
+                        </div>
 
                         <div className="custom-table-div" style={{ marginTop: 30 }}>
                             <BootstrapTable
