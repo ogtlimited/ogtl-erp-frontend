@@ -460,17 +460,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const formattedCampaignHolidays = campaign_holidays.map((e) => ({
@@ -480,17 +480,17 @@ const AppProvider = (props) => {
         ),
         status:
           moment(e?.public_holiday?.end_date).utc().format("yyyy-MM-DD") <
-          today_date
+            today_date
             ? "past"
             : today_date <
-                moment(e?.public_holiday?.start_date)
-                  .utc()
-                  .format("yyyy-MM-DD") &&
+              moment(e?.public_holiday?.start_date)
+                .utc()
+                .format("yyyy-MM-DD") &&
               moment(e?.public_holiday?.start_date)
                 .utc()
                 .format("yyyy-MM-DD") !== today_date
-            ? "pending"
-            : "happening"
+              ? "pending"
+              : "happening"
       }));
 
       const allOffice = [
@@ -965,8 +965,8 @@ const AppProvider = (props) => {
           item?.deduction?.deduction_mode === "percentage"
             ? item?.deduction?.value + "%"
             : item?.deduction?.deduction_mode === "flat_rate"
-            ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
-            : "-";
+              ? "₦" + Intl.NumberFormat("en-US").format(item?.deduction?.value)
+              : "-";
 
         return {
           label:

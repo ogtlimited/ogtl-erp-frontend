@@ -9,6 +9,7 @@ import MonthlyAttendanceTable from "../../../components/Tables/MonthlyAttendance
 import AttendanceAverageAdmin from "./AttendanceAverage.Admin";
 import axiosInstance from "../../../services/api";
 import moment from "moment";
+import VictoryDougnutChart from "../../../components/charts/VictoryDougnutChart";
 
 const AttendanceRecord = () => {
   const { ErrorHandler, getAvatarColor } = useAppContext();
@@ -61,6 +62,8 @@ const AttendanceRecord = () => {
   const [attendanceAverageToDate, setAttendanceAverageToDate] =
     useState(lastWeekDay);
 
+  const { FontAwesomeIcon, faSpinner } = useAppContext();
+
   useEffect(() => {
     const allDates = Array.from(
       new Set(
@@ -108,29 +111,28 @@ const AttendanceRecord = () => {
                   ></i>{" "}
                   {attendanceRecord.clock_out
                     ? moment(attendanceRecord.clock_out, "HH:mm:ss").format(
-                        "hh:mma"
-                      )
+                      "hh:mma"
+                    )
                     : "-"}
                 </span>
               </>
             ) : (
               <span className="btn btn-gray btn-sm btn-rounded">
                 <i
-                  className={`fa fa-dot-circle-o ${
-                    attendanceRecord.status === "Leave"
-                      ? "text-success"
-                      : attendanceRecord.status === "Day off"
+                  className={`fa fa-dot-circle-o ${attendanceRecord.status === "Leave"
+                    ? "text-success"
+                    : attendanceRecord.status === "Day off"
                       ? "text-secondary"
                       : attendanceRecord.status === "Sick"
-                      ? "text-warning"
-                      : attendanceRecord.status === "FAM/PER Emergency"
-                      ? "text-info"
-                      : attendanceRecord.status === "P/Holiday"
-                      ? "text-dark"
-                      : attendanceRecord.status === "---"
-                      ? "text-muted"
-                      : "text-danger"
-                  }`}
+                        ? "text-warning"
+                        : attendanceRecord.status === "FAM/PER Emergency"
+                          ? "text-info"
+                          : attendanceRecord.status === "P/Holiday"
+                            ? "text-dark"
+                            : attendanceRecord.status === "---"
+                              ? "text-muted"
+                              : "text-danger"
+                    }`}
                   style={{ marginRight: "10px" }}
                 ></i>{" "}
                 {attendanceRecord.status}
@@ -194,11 +196,11 @@ const AttendanceRecord = () => {
         response?.data?.data?.info === "no record for date"
           ? []
           : response?.data?.data?.info.map((e, index) => ({
-              ...e,
-              idx: index + 1,
-              office: e?.office ? e?.office?.toUpperCase() : null,
-              date: moment(e?.date).format("ddd, Do MMM. YYYY")
-            }));
+            ...e,
+            idx: index + 1,
+            office: e?.office ? e?.office?.toUpperCase() : null,
+            date: moment(e?.date).format("ddd, Do MMM. YYYY")
+          }));
 
       resData.forEach((attendance) => {
         const clockIn = new Date(`2000-01-01 ${attendance.clock_in}`);
@@ -304,18 +306,18 @@ const AttendanceRecord = () => {
             data?.days[key] === "absent"
               ? "Absent"
               : data?.days[key] === "leave"
-              ? "Leave"
-              : data?.days[key] === "off"
-              ? "Day off"
-              : data?.days[key] === "sick"
-              ? "Sick"
-              : data?.days[key] === "FAM/PER Emergency"
-              ? "FAM/PER Emergency"
-              : data?.days[key] === "p/holiday"
-              ? "P/Holiday"
-              : data?.days[key] === "---"
-              ? "---"
-              : "Present"
+                ? "Leave"
+                : data?.days[key] === "off"
+                  ? "Day off"
+                  : data?.days[key] === "sick"
+                    ? "Sick"
+                    : data?.days[key] === "FAM/PER Emergency"
+                      ? "FAM/PER Emergency"
+                      : data?.days[key] === "p/holiday"
+                        ? "P/Holiday"
+                        : data?.days[key] === "---"
+                          ? "---"
+                          : "Present"
         }))
       }));
 
@@ -357,6 +359,7 @@ const AttendanceRecord = () => {
       const resData = response?.data?.data?.average_attendance;
 
       setAttendanceAverage(resData);
+      console.log("resData", resData);
       setLoadingAttendanceAverage(false);
     } catch (error) {
       const component = "Attendance Average error | ";
@@ -734,6 +737,23 @@ const AttendanceRecord = () => {
             </div>
           </div>
         </div>
+
+        <div className="daily-attendance-card">
+          <p>Percentage clock-ins</p>
+          <div className="percentage_average_card_doughnutChart">
+            {loading ? (
+              <FontAwesomeIcon
+                icon={faSpinner}
+                spin
+                pulse
+                style={{ marginTop: "5px", fontSize: "20px" }}
+              />
+            ) : (
+              <VictoryDougnutChart percent={attendanceAverage?.percentage_average || 0} />
+            )}
+          </div>
+        </div>
+
       </div>
 
       <div className="page-menu">
