@@ -58,6 +58,7 @@ const AppProvider = (props) => {
   const [selectBranches, setSelectBranches] = useState([]);
   const [selectLeaveTypes, setSelectLeaveTypes] = useState([]);
   const [selectDeductionTypes, setSelectDeductionTypes] = useState([]);
+  const [selectLoanTypes, setSelectLoanTypes] = useState([]);
   const [selectJobOpenings, setSelectJobOpenings] = useState([]);
   const [selectPublicHoliday, setSelectPublicHoliday] = useState([]);
   const [selectSurvey, setSelectSurvey] = useState([]);
@@ -989,6 +990,47 @@ const AppProvider = (props) => {
     }
   }, []);
 
+
+  // All Deduction Types:
+  const fetchLoanTypes = useCallback(async () => {
+    setLoadingSelect(true);
+    try {
+      const response = await axiosInstance.get("api/v1/loan_types.json", {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "ngrok-skip-browser-warning": "69420"
+        }
+      });
+
+      // const response = await axiosInstance.post("api/v1/loan_types.json", {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Access-Control-Allow-Origin": "*",
+      //     "ngrok-skip-browser-warning": "69420"
+      //   },
+      //   body: {"payload":
+      //     {
+      //         "title": "Housing Loan"
+      //     }
+      //  }
+      // });
+
+      const resData = response?.data?.data?.loan_types;
+      const formattedData = resData.map((item) => {
+        return {
+          label: item?.title,
+          value: item?.id
+        };
+      });
+
+      setSelectLoanTypes(formattedData);
+      setLoadingSelect(false);
+    } catch (error) {
+      setLoadingSelect(false);
+    }
+  }, []);
+
   // All Job Openings:
   const fetchJobOpenings = useCallback(async () => {
     setLoadingSelect(true);
@@ -1083,6 +1125,7 @@ const AppProvider = (props) => {
         fetchAllDesignations();
         fetchAllBranches();
         fetchDeductionTypes();
+        fetchLoanTypes();
         fetchJobOpenings();
         fetchAllSurveys();
         fetchAllPublicHolidays();
@@ -1130,6 +1173,7 @@ const AppProvider = (props) => {
     fetchAllLeaveTypes,
     fetchAllTeams,
     fetchDeductionTypes,
+    fetchLoanTypes,
     fetchJobOpenings,
     fetchStaffResignation,
     fetchAnnouncement,
@@ -1189,6 +1233,11 @@ const AppProvider = (props) => {
         selectDeductionTypes,
         setSelectDeductionTypes,
         fetchDeductionTypes,
+
+        selectLoanTypes,
+        setSelectLoanTypes,
+        fetchLoanTypes,
+
 
         selectJobOpenings,
         setSelectJobOpenings,

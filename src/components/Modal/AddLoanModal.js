@@ -1,24 +1,24 @@
 //* IN USE
 
 import React, { useState, useEffect, useRef } from "react";
-import { HR_ADD_DEDUCTION, officeTypeOptions } from "../FormJSON/AddDeduction";
+import { HR_ADD_LOAN, officeTypeOptions } from "../FormJSON/AddLoan";
 import { useAppContext } from "../../Context/AppContext";
 import axiosInstance from "../../services/api";
 import $ from "jquery";
 import Select from "react-select";
 
-export const AddLoanModal = ({ fetchDeductions }) => {
+export const AddLoanModal = ({ fetchLoans }) => {
   const {
     selectDepartments,
     selectCampaigns,
     selectTeams,
     showAlert,
     loadingSelect,
-    selectDeductionTypes,
-    fetchDeductionTypes
+    selectLoanTypes,
+    fetchLoanTypes
   } = useAppContext();
-  const selectDeductionTypeRef = useRef();
-  const [data, setData] = useState(HR_ADD_DEDUCTION);
+  const selectLoanTypeRef = useRef();
+  const [data, setData] = useState(HR_ADD_LOAN);
   const [isFormValid, setIsFormValid] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -28,23 +28,23 @@ export const AddLoanModal = ({ fetchDeductions }) => {
   const [allEmployees, setAllEmployees] = useState([]);
 
   useEffect(() => {
-    fetchDeductionTypes();
-  }, [fetchDeductionTypes]);
+    fetchLoanTypes();
+  }, [fetchLoanTypes]);
 
   useEffect(() => {
-    if (data?.hr_user_id && data?.hr_deduction_type_id) {
+    if (data?.hr_user_id && data?.hr_loan_type_id) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
     }
-  }, [data?.hr_deduction_type_id, data?.hr_user_id]);
+  }, [data?.hr_loan_type_id, data?.hr_user_id]);
 
   const cancelEvent = () => {
-    setData(HR_ADD_DEDUCTION);
+    setData(HR_ADD_LOAN);
     setOfficeType("");
     setIsOfficeTypeSelected(false);
     setIsOfficeSelected(false);
-    selectDeductionTypeRef.current.select.clearValue();
+    selectLoanTypeRef.current.select.clearValue();
   };
 
   const handleDateChange = (e) => {
@@ -180,17 +180,21 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
   const handleAddDeduction = async (e) => {
     e.preventDefault();
+    console.log(data);
 
     const dataPayload = {
-      hr_user_id: data?.hr_user_id,
-      hr_deduction_type_id: data?.hr_deduction_type_id,// update to loan amount when integrating api
-      date_processed: data?.date_processed
+      start_date: data?.start_date,
+      end_date: data?.end_date,
+      number_of_installment: data?.number_of_installment,
+      ogid: data?.hr_user_id,
+      amount: data?.loanAmount,
+      loan_type_id: data?.hr_loan_type_id,
     };
 
     setLoading(true);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axiosInstance.post("/api/v1/deductions.json", {
+      const response = await axiosInstance.post("/api/v1/loans.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -203,14 +207,14 @@ export const AddLoanModal = ({ fetchDeductions }) => {
 
       showAlert(
         true,
-        `${data?.employeeName} has been added to Loans.`,
+        `${data?.employeeName} has been added to deductions.`,
         "alert alert-success"
       );
-      fetchDeductions();
-      $("#AddDeductionModal").modal("toggle");
+      fetchLoans();
+      $("#AddLoanModal").modal("toggle");
       cancelEvent();
     } catch (error) {
-      $("#AddDeductionModal").modal("toggle");
+      $("#AddLoanModal").modal("toggle");
       showAlert(true, error?.response?.data?.errors, "alert alert-warning");
     }
     setLoading(false);
@@ -220,7 +224,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     <>
       <div
         className="modal fade"
-        id="AddDeductionModal"
+        id="AddLoanModal"
         tabIndex="-1"
         aria-labelledby="FormModalModalLabel"
         aria-hidden="true"
@@ -229,7 +233,7 @@ export const AddLoanModal = ({ fetchDeductions }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                Add Loan
+                Add Deduction
               </h4>
               <button
                 type="button"
@@ -240,18 +244,17 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-
             <div className="modal-body">
               {!loadingSelect ? (
                 <form onSubmit={handleAddDeduction}>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="date_processed">Start Date</label>
+                        <label htmlFor="start_date">Start Date</label>
                         <input
                           type="date"
-                          name="date_processed"
-                          value={data?.date_processed}
+                          name="start_date"
+                          value={data?.start_date}
                           onChange={handleDateChange}
                           className="form-control "
                           id="dateInput"
@@ -259,13 +262,14 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                         />
                       </div>
                     </div>
+
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="date_processed">End Date</label>
+                        <label htmlFor="end_date">End Date</label>
                         <input
                           type="date"
-                          name="date_processed"
-                          value={data?.date_processed}
+                          name="end_date"
+                          value={data?.end_date}
                           onChange={handleDateChange}
                           className="form-control "
                           id="dateInput"
@@ -342,43 +346,73 @@ export const AddLoanModal = ({ fetchDeductions }) => {
                       </div>
                     )}
 
+
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label htmlFor="hr_deduction_type_id">
+                        <label htmlFor="hr_loan_type_id">
                           Loan Type
                         </label>
-                        {/* <Select
-                          options={selectDeductionTypes}
+                        <Select
+                          options={selectLoanTypes}
                           isSearchable={true}
                           onChange={(e) =>
                             setData({
                               ...data,
-                              hr_deduction_type_id: e?.value,
-                              deductionTitle: e?.label
+                              hr_loan_type_id: e?.value,
+                              loanTitle: e?.label
                             })
                           }
-                          ref={selectDeductionTypeRef}
+                          ref={selectLoanTypeRef}
                           defaultValue={null}
-                          placeholder="Title | Office | Deduction Value"
+                          placeholder="Select Loan Type"
                           style={{ display: "inline-block" }}
-                        /> */}
+                        />
+
+                      </div>
+                    </div> 
+
+                     <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_deduction_type_id">
+                          Loan Amount
+                        </label>
                         <input
                           name="loan_amount"
                           type="number"
                           placeholder="enter amount"
                           className="form-control"
-                        //   value={data.annual_gross_salary}
+                          //   value={data.annual_gross_salary}
                           onChange={(e) =>
                             setData({
                               ...data,
-                              hr_deduction_type_id: e?.value,
-                              deductionTitle: e?.label
+                              loanAmount: e?.target.value
                             })
                           }
                           required
                         />
                       </div>
-                    </div>
+                    </div>  
+
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_deduction_type_id">
+                          Installments
+                        </label>
+                        <input
+                          name="installments"
+                          type="number"
+                          placeholder="enter number of installments"
+                          className="form-control"
+                          onChange={(e) =>
+                            setData({
+                              ...data,
+                              number_of_installment: e?.target.value
+                            })
+                          }
+                          required
+                        />
+                      </div>
+                    </div> 
                   </div>
 
                   <div className="modal-footer">
@@ -424,3 +458,6 @@ export const AddLoanModal = ({ fetchDeductions }) => {
     </>
   );
 };
+
+
+ 
