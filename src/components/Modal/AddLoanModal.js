@@ -403,7 +403,6 @@ export const AddLoanModal = ({ fetchLoans }) => {
                           type="number"
                           placeholder="enter number of installments"
                           className="form-control"
-                          //   value={data.annual_gross_salary}
                           onChange={(e) =>
                             setData({
                               ...data,
