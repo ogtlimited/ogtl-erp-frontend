@@ -11,7 +11,7 @@ import SurveyContent from "../../../components/ModalContents/SurveyContent";
 const EvaluationAdmin = () => {
   const navigate = useNavigate();
   const { user, ErrorHandler } = useAppContext();
-  const [allSurveys, setAllSurveys] = useState([]);
+  const [allEvaluations, setAllEvaluations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalType, setmodalType] = useState("");
   const [viewRow, setViewRow] = useState(null);
@@ -28,11 +28,11 @@ const EvaluationAdmin = () => {
   const [totalPages, setTotalPages] = useState("");
 
   // All Surveys:
-  const fetchAllSurveyForms = useCallback(async () => {
+  const fetchAllEvaluationForms = useCallback(async () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get("/api/v1/hr_surveys.json", {
+      const response = await axiosInstance.get("/api/v1/evaluations.json", {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -44,8 +44,8 @@ const EvaluationAdmin = () => {
         },
       });
 
-      const resData = response?.data?.data?.survey_records?.surveys;
-      const totalPages = response?.data?.data?.survey_records?.total_page;
+      const resData = response?.data?.data?.evaluation_records?.surveys;
+      const totalPages = response?.data?.data?.evaluation_records?.total_page;
 
       const thisPageLimit = sizePerPage;
       const thisTotalPageSize = totalPages;
@@ -61,19 +61,19 @@ const EvaluationAdmin = () => {
         to: moment(survey?.to).format("Do MMMM, YYYY"),
       }));
 
-      setAllSurveys(formatted);
+      setAllEvaluations(formatted);
       setLoading(false);
     } catch (error) {
-      const component = "Survey Form Error | ";
+      const component = "Evaluation Form Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, sizePerPage]);
 
-  // useEffect(() => {
-  //   fetchAllSurveyForms();
-  // }, [fetchAllSurveyForms]);
+  useEffect(() => {
+    fetchAllEvaluationForms();
+  }, [fetchAllEvaluationForms]);
 
   const columns = [
     {
@@ -154,7 +154,7 @@ const EvaluationAdmin = () => {
       <div className="row  ">
         <SurveyTable
           columns={columns}
-          data={[]}
+          data={allEvaluations || []}
           loading={loading}
           setLoading={setLoading}
           page={page}

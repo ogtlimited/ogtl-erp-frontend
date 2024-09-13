@@ -140,7 +140,7 @@ export default function Router() {
             { path: "main/deductions", element: <EmployeeDeductions /> },
             { path: "main/Payslips", element: <PayrollUser /> },
             { path: "main/resignation", element: <ResignationUser /> },
-            { path: "main/out-of-office", element: <OutOfOfficeUsers /> },
+            { path: "main/absence", element: <OutOfOfficeUsers /> },
             { path: "main/public-holiday", element: <PublicHolidayUser /> },
             { path: "main/survey", element: <SurveyUser /> },
             { path: "main/announcement", element: <Announcement /> },
@@ -347,7 +347,7 @@ export default function Router() {
               )
             },
             {
-              path: "out-of-office",
+              path: "absence",
               element: (
                 <GuardedRoute title="" dept="hr">
                   <OutOfOfficeAdmin />
@@ -786,6 +786,14 @@ export default function Router() {
               )
             },
             {
+              path: "operation-team-task-management",
+              element: (
+                <GuardedRoute title="" dept="super">
+                  <OperationsTeamTaskManagement />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "resignation",
               element: (
                 <GuardedRoute title="" dept="operations">
@@ -798,6 +806,7 @@ export default function Router() {
               )
             }
           ]
+
         },
 
         {
@@ -856,6 +865,14 @@ export default function Router() {
               )
             },
             {
+              path: "allowances",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <PayrollAllowances />
+                </GuardedRoute>
+              )
+            },
+            {
               path: "staff-deductions/:id/:start/:end",
               element: (
                 <GuardedRoute title="" dept="hr">
@@ -868,6 +885,14 @@ export default function Router() {
               element: (
                 <GuardedRoute title="" dept="hr">
                   <LoanSlip />
+                </GuardedRoute>
+              )
+            },
+            {
+              path: "staff-allowances/:id/:start/:end",
+              element: (
+                <GuardedRoute title="" dept="hr">
+                  <AllowanceSlip />
                 </GuardedRoute>
               )
             },
@@ -1577,6 +1602,9 @@ const WorkforceLeaveApplications = Loadable(
 const OperationsTeamLeaveApplications = Loadable(
   lazy(() => import("../pages/HR/Admin/OperationsTeamLeaveApplications.js"))
 );
+const OperationsTeamTaskManagement = Loadable(
+  lazy(() => import("../pages/HR/Admin/OperationsTeamTaskManagement.js"))
+);
 const ResignationStatusAnalytics = Loadable(
   lazy(() => import("../pages/HR/Admin/ResignationStatusAnalytics.Admin"))
 );
@@ -1695,6 +1723,9 @@ const DeductionSlip = Loadable(
 const LoanSlip = Loadable(
   lazy(() => import("../pages/Payroll/LoanSlip.js"))
 );
+const AllowanceSlip = Loadable(
+  lazy(() => import("../pages/Payroll/AllowanceSlip.js"))
+);
 const PaySlipBreakdown = Loadable(
   lazy(() => import("../pages/HR/Users/PaySlipBreakdown.User"))
 );
@@ -1775,6 +1806,10 @@ const PayrollDeductions = Loadable(
 const PayrollLoans = Loadable(
   lazy(() => import("../pages/Payroll/Loans"))
 );
+const PayrollAllowances = Loadable(
+  lazy(() => import("../pages/Payroll/Allowances"))
+);
+
 const Archive = Loadable(lazy(() => import("../pages/Payroll/Archive")));
 const ScoreCards = Loadable(
   lazy(() => import("../pages/HR/Admin/score-cards"))

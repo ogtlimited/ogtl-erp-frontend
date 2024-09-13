@@ -15,6 +15,9 @@ import ERP3 from "../../../assets/img/erp3.png";
 // import ViewModal from "../../../components/Modal/ViewModal";
 // import CEOMessageContent from "../../../components/ModalContents/CEOMessageContent";
 import $ from "jquery";
+import axiosInstance from "../../../services/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 // import HeroImage from "../../../assets/img/themed/frnds4.webp";
 // import ERP1 from "../../../assets/img/themed/frnds8.gif";
@@ -25,6 +28,8 @@ const EmployeeUser = () => {
   const date = new Date().toUTCString();
   const day = date.split(",")[0].toLowerCase();
   const { user } = useAppContext();
+  const [userData, setUserData] = useState();
+  const [loading, setLoading] = useState(false);
   const [quotes, setQuotes] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [modalType, setmodalType] = useState("CEO Messagez");
@@ -37,10 +42,40 @@ const EmployeeUser = () => {
 
   const isRemoteStaff = user?.employee_info?.remote;
 
+
   useEffect(() => {
     setmodalType("CEO Message");
     $("#generalModal").modal("show");
   }, []);
+
+
+  //fetch refreshed user:
+  const fetchUserData = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `/api/v1/employees/${user?.employee_info?.ogid}.json`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "ngrok-skip-browser-warning": "69420",
+          }
+        }
+
+      );
+
+      const userData = response?.data?.data?.employee;
+      setLoading(false);
+      return userData;
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+
+  }
+
+
 
   // Employee Shift (Today):
   const todayShift = user?.employee_info?.shifts?.filter((e) =>
@@ -66,6 +101,12 @@ const EmployeeUser = () => {
       console.error("Error fetching quote:", error);
     }
   };
+
+  useEffect(() => {
+    fetchUserData().then((data) => {
+      setUserData(data);
+    });
+  }, [user]);
 
   useEffect(() => {
     fetchQuote();
@@ -95,6 +136,8 @@ const EmployeeUser = () => {
     });
   }, [currentIndex]);
 
+
+
   return (
     <>
       <div className="col">
@@ -121,10 +164,10 @@ const EmployeeUser = () => {
             <div className="dashboard-hero-icon col-md-4 ">
               <img
                 src={heroIcons.hero}
-                // style={{
-                //   borderRadius: "20px",
-                //   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"
-                // }}
+              // style={{
+              //   borderRadius: "20px",
+              //   boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"
+              // }}
               />
             </div>
           </div>
@@ -182,7 +225,16 @@ const EmployeeUser = () => {
                     <div className="card-body emp-dashboard-leave-card-body">
                       <div className="time-list">
                         <div className="dash-stats-list ">
-                          <h4>{user?.employee_info?.leave_count}</h4>
+
+                          {loading ? (
+                            <FontAwesomeIcon
+                              icon={faSpinner}
+                              spin
+                              pulse
+                              style={{ marginTop: "5px", fontSize: "20px" }}
+                            />) : (
+                            <h4>{userData?.leave_count}</h4>
+                          )}
                           <p>Remaining</p>
                         </div>
                       </div>

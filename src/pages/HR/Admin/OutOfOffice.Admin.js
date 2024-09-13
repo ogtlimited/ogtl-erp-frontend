@@ -98,7 +98,7 @@ const OutOfOfficeAdmin = () => {
       setAllOutOfOffice(formattedOutOffOffice);
       setLoading(false);
     } catch (error) {
-      const component = "Out of Office Error | ";
+      const component = "Absence Error | ";
       ErrorHandler(error, component);
       setLoading(false);
     }
@@ -229,9 +229,8 @@ const OutOfOfficeAdmin = () => {
         <>
           <span className="btn btn-gray btn-sm btn-rounded">
             <i
-              className={`fa fa-dot-circle-o ${
-                value ? "text-success" : "text-secondary"
-              } `}
+              className={`fa fa-dot-circle-o ${value ? "text-success" : "text-secondary"
+                } `}
               style={{ marginRight: "10px" }}
             ></i>{" "}
             {value ? "Yes" : "No"}
@@ -327,7 +326,7 @@ const OutOfOfficeAdmin = () => {
       <div className="page-header">
         <div className="row align-items-center">
           <div className="col">
-            <h3 className="page-title">Out Of Office</h3>
+            <h3 className="page-title">Absence</h3>
             <ul className="breadcrumb">
               <li className="breadcrumb-item">HR</li>
               <li className="breadcrumb-item active">Time Off Planner</li>
@@ -342,7 +341,7 @@ const OutOfOfficeAdmin = () => {
                 data-target="#OutOfOfficeFormModal"
                 onClick={handleCreate}
               >
-                <i className="fa fa-plus"></i> Create Out of Office
+                <i className="fa fa-plus"></i> Create Absence
               </a>
             ) : null}
           </div>
@@ -379,7 +378,7 @@ const OutOfOfficeAdmin = () => {
                   data-toggle="tab"
                   href="#tab_outOfOfficeStaff"
                 >
-                  Out of Office Staff
+                  Absence
                 </a>
               </li>
 
@@ -484,7 +483,7 @@ const OutOfOfficeAdmin = () => {
 
       {modalType === "view-details" ? (
         <ViewModal
-          title="Out of Office Details"
+          title="Absence Details"
           content={<OutOfOfficeContent Content={viewRow} />}
         />
       ) : null}

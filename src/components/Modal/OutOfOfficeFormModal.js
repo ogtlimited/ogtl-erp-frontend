@@ -94,7 +94,7 @@ export const OutOfOfficeFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${formData?.employee_title}'s Out of Office successfully created!`,
+        `${formData?.employee_title}'s Absence successfully created!`,
         "alert alert-success"
       );
 
@@ -118,7 +118,7 @@ export const OutOfOfficeFormModal = ({
   const handleEditOutOfOffice = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       // eslint-disable-next-line no-unused-vars
       const response = await axiosInstance.put(
@@ -143,7 +143,7 @@ export const OutOfOfficeFormModal = ({
       goToTop();
       showAlert(
         true,
-        `${formData?.employee_title}'s out of office successfully updated!`,
+        `${formData?.employee_title}'s Absence successfully updated!`,
         "alert alert-success"
       );
       refetchData();
@@ -174,7 +174,7 @@ export const OutOfOfficeFormModal = ({
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="FormModalLabel">
-                {mode} Out of Office
+                {mode} Absence
               </h4>
               <button
                 type="button"
