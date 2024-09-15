@@ -32,12 +32,12 @@ export const AddLoanModal = ({ fetchLoans }) => {
   }, [fetchLoanTypes]);
 
   useEffect(() => {
-    if (data?.hr_user_id && data?.hr_loan_type_id) {
+    if (data?.hr_user_id && data?.hr_loan_type_id && data.number_of_installment === data.duration) {
       setIsFormValid(true);
     } else {
       setIsFormValid(false);
     }
-  }, [data?.hr_loan_type_id, data?.hr_user_id]);
+  }, [data?.hr_loan_type_id, data?.hr_user_id, data?.number_of_installment, data?.duration]);
 
   const cancelEvent = () => {
     setData(HR_ADD_LOAN);
@@ -189,6 +189,7 @@ export const AddLoanModal = ({ fetchLoans }) => {
       ogid: data?.hr_user_id,
       amount: data?.loanAmount,
       loan_type_id: data?.hr_loan_type_id,
+      duration: data?.duration
     };
 
     setLoading(true);
@@ -407,6 +408,27 @@ export const AddLoanModal = ({ fetchLoans }) => {
                             setData({
                               ...data,
                               number_of_installment: e?.target.value
+                            })
+                          }
+                          required
+                        />
+                      </div>
+                    </div> 
+
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="hr_deduction_type_id">
+                          Duration
+                        </label>
+                        <input
+                          name="duration"
+                          type="number"
+                          placeholder="enter number of duration"
+                          className="form-control"
+                          onChange={(e) =>
+                            setData({
+                              ...data,
+                              duration: e?.target.value
                             })
                           }
                           required
