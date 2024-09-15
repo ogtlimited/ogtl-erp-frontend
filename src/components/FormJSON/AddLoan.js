@@ -2,12 +2,15 @@
 export const HR_ADD_LOAN = {
     hr_user_id: "",
     hr_loan_type_id: "",
-    date_processed: "",
+    start_date: "",
+    end_date: "",
   
     officeName: "",
     employeeName: "",
     loanTitle: "",
     loanAmount: "",
+    number_of_installment: "",
+    duration: "",
     operation_office_id: "",
   };
   
