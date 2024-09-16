@@ -81,15 +81,15 @@ const AllowancesTab = () => {
         fetchAllowances();
     }, [fetchAllowances]);
 
-    const handleViewAllBreakdown = (row) => {
-        navigate(
-            `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}`
-        );
-    };
+    // const handleViewAllBreakdown = (row) => {
+    //     navigate(
+    //         `/dashboard/payroll/staff-allowances/${row.ogid}/${allowanceFromDateRef.current}/${allowanceToDateRef.current}`
+    //     );
+    // };
 
     const columns = [
         {
-            dataField: "employeeName",
+            dataField: "employee",
             text: "Employee",
             sort: true,
             headerStyle: { width: "30%" },
@@ -107,46 +107,46 @@ const AllowancesTab = () => {
                 </h2>
             )
         },
+        // {
+        //     dataField: "employeeId",
+        //     text: "OGID",
+        //     sort: true,
+        //     headerStyle: { width: "15%" },
+        //     formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+        // },
+        
         {
-            dataField: "employeeId",
-            text: "OGID",
-            sort: true,
-            headerStyle: { width: "15%" },
-            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
-        },
-        {
-            dataField: "office",
-            text: "Office",
-            sort: true,
-            headerStyle: { width: "20%" },
-            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
-        },
-        {
-            dataField: "totalAllowances", // Updated from totalDeductions to totalAllowances
-            text: "Allowance Amount",
+            dataField: "amount", // Updated from totalDeductions to totalAllowances
+            text: "Amount",
             sort: true,
             headerStyle: { width: "20%" }
         },
-        CurrentUserCanCreateAndEdit && {
-            dataField: "",
-            text: "Action",
-            headerStyle: { width: "15%" },
-            formatter: (value, row) => (
-                <div className="text-center">
-                    <div className="leave-user-action-btns">
-                        <button
-                            className="btn btn-sm btn-primary"
-                            data-toggle="modal"
-                            onClick={() =>
-                                handleViewAllBreakdown(row)
-                            }
-                        >
-                            View Allowances
-                        </button>
-                    </div>
-                </div>
-            )
-        }
+        {
+            dataField: "effective_date", // Updated from totalDeductions to totalAllowances
+            text: "Effective Date",
+            sort: true,
+            headerStyle: { width: "20%" }
+        },
+        // CurrentUserCanCreateAndEdit && {
+        //     dataField: "",
+        //     text: "Action",
+        //     headerStyle: { width: "15%" },
+        //     formatter: (value, row) => (
+        //         <div className="text-center">
+        //             <div className="leave-user-action-btns">
+        //                 <button
+        //                     className="btn btn-sm btn-primary"
+        //                     data-toggle="modal"
+        //                     onClick={() =>
+        //                         handleViewAllBreakdown(row)
+        //                     }
+        //                 >
+        //                     View Allowances
+        //                 </button>
+        //             </div>
+        //         </div>
+        //     )
+        // }
     ];
 
     return (

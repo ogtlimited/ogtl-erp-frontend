@@ -77,6 +77,8 @@ const AppProvider = (props) => {
   const deductionTo = moment().endOf("month").format("yyyy-MM-DD");
   const [deductionFromDate, setDeductionFromDate] = useState(deductionFrom);
   const [deductionToDate, setDeductionToDate] = useState(deductionTo);
+  const [allowanceFromDate, setAllowanceFromDate] = useState(deductionFrom);
+  const [allowanceToDate, setAllowanceToDate] = useState(deductionTo);
 
   const isTeamLead = user?.employee_info?.is_lead;
   const isHr = user?.office?.title.toLowerCase() === "hr" ? true : false;
@@ -547,6 +549,9 @@ const AppProvider = (props) => {
 
       setDeductionFromDate(deductionFrom.format("yyyy-MM-DD"));
       setDeductionToDate(deductionTo.format("yyyy-MM-DD"));
+
+      setAllowanceFromDate(deductionFrom.format("yyyy-MM-DD"));
+      setAllowanceToDate(deductionTo.format("yyyy-MM-DD"));
 
       setAllPayDates(formatted);
       setPayday(currentPaydayRange);
@@ -1307,6 +1312,10 @@ const AppProvider = (props) => {
         setDeductionFromDate,
         deductionToDate,
         setDeductionToDate,
+        allowanceFromDate,
+        setAllowanceFromDate,
+        allowanceToDate,
+        setAllowanceToDate,
 
         userDp,
         generateOrdinal,
