@@ -69,7 +69,7 @@ const LoansTab = () => {
                     office: item?.office,
                     loan_amount:
                         helper.handleMoneyFormat(item?.amount) || "-",
-                        installments: item?.number_of_installment
+                    installments: item?.number_of_installment
                 };
             });
 
@@ -98,7 +98,7 @@ const LoansTab = () => {
             dataField: "employeeName",
             text: "Employee",
             sort: true,
-            headerStyle: { width: "30%" },
+            headerStyle: { width: "25%" },
             formatter: (value, row) => (
                 <h2 className="table-avatar">
                     <span
@@ -117,7 +117,7 @@ const LoansTab = () => {
             dataField: "employeeId",
             text: "OGID",
             sort: true,
-            headerStyle: { width: "15%" },
+            headerStyle: { width: "10%" },
             formatter: (val, row) => <span>{val?.toUpperCase()}</span>
         },
         {
@@ -131,13 +131,27 @@ const LoansTab = () => {
             dataField: "loan_amount",// update when integrating with API
             text: "Loan Amount",
             sort: true,
-            headerStyle: { width: "20%" }
+            headerStyle: { width: "15%" }
         },
         {
             dataField: "installments",// update when integrating with API
             text: "Installments",
             sort: true,
-            headerStyle: { width: "15%" }
+            headerStyle: { width: "10%" }
+        },
+        {
+            dataField: "start_date",
+            text: "Start Date",
+            sort: true,
+            headerStyle: { width: "10%" },
+            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
+        },
+        {
+            dataField: "end_date",
+            text: "End Date",
+            sort: true,
+            headerStyle: { width: "10%" },
+            formatter: (val, row) => <span>{val?.toUpperCase()}</span>
         },
         // CurrentUserCanCreateAndEdit && {
         //     dataField: "",
